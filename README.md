@@ -3,7 +3,15 @@
 
 > **Important** - all versions are retained *forever* in history, do not commit dumb stuff that you will regret :D
 
-\[Cool package name] is a **respiration analysis package** for the R programming environment. The package should, once properly coded, be able to measure *any* kind of data that looks at rate of change, but here we are focusing on **the rate of change of oxygen consumption over time**. At least for version 1.0.
+\[Cool package name] is a **respiration analysis package** for the R programming environment.
+
+As of now it is simply a series of scripts. The aim is to package everything into a SHINY interface.
+
+### Usage
+
+The package focuses on the analysis of respiration data. Such data is often recorded as a rate of change of oxygen consumption, over time. The user will be able to easily select data points to run a simple linear regression. The traditional before-after calculation method will also be provided.
+
+> Once we have the interface up and running, we will include examples here.
 
 ### To-do
 
