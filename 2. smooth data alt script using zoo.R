@@ -8,9 +8,9 @@
 
 # Load required libraries in script
 # -----------------------------------------------------------------------------
-library(readr)  # read tabular data properly - for difficult .csv files
+#library(readr)  # read tabular data properly - for difficult .csv files
 library(ggplot2)  # graphing package
-library(cowplot)  # produce print-ready plots
+#library(cowplot)  # produce print-ready plots
 library(zoo)  # indexing and averaging
 
 # Configuration settings
@@ -44,11 +44,18 @@ cp <-  # define combined raw + smoothed plot
   ggplot(NULL, aes(Time, O2)) +
     geom_point(data = raw.plot,
                na.rm = TRUE,
-               colour = "purple") +
+               size= 0.5,
+               colour = "darkorange3") +
     geom_point(data = smoothed.plot,
                na.rm = TRUE,
                size = 0.1,
-               colour = "black") +
+               colour = "blueviolet") +
     ggtitle("Combined Plot")
 
-plot_grid(rp, sp, cp, ncol = 1, nrow = 3)  # grid plots to one screen
+# Plot graphs separately
+cp
+sp
+rp
+
+# Use if cowplot package is activated
+#plot_grid(rp, sp, cp, ncol = 1, nrow = 3)  # grid plots to one screen
