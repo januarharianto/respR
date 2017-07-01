@@ -1,3 +1,6 @@
+
+#' Convert from one oxygen concentration unit, to another, e.g. % to mg/L.
+#'
 # Convert respiration units
 # =========================
 #
@@ -15,7 +18,7 @@
 #                       t           temperature in degree C
 #                       P           pressure in bar
 #
-# Usage:          
+# Usage:
 # Convert raw data units:
 # convUnits(x, from = '%', to = 'mgo2/L')
 # convUnits(x, "mgl-1", "ugl-1")
@@ -33,9 +36,9 @@
 .ug.l  <- (c("ug/L", "ug/l", "ugL-1", "ugl-1", "ug per liter", "ug per litre",
            "µg/L", "µg/l", "µgL-1", "µgl-1", "µg per liter", "µg per litre"))
 .mm.l  <- (c("mmol/L", "mmol/l", "mmolL-1,", "mmoll-1", "mmol per liter", "mmol per litre"))
-.um.l  <- (c("umol/L", "umol/l", "umolL-1", "umoll-1", "µmol/L", "µmol/l", "µmolL-1", "µmoll-1", 
+.um.l  <- (c("umol/L", "umol/l", "umolL-1", "umoll-1", "µmol/L", "µmol/l", "µmolL-1", "µmoll-1",
              "umol per litre","umol per liter", "µmol per litre", "µmol per liter"))
-.ml.l  <- (c("ml/L", "mL/L", "ml/l", "mll-1", "mLl-1", "mLL-1", "mlL-1", 
+.ml.l  <- (c("ml/L", "mL/L", "ml/l", "mll-1", "mLl-1", "mLL-1", "mlL-1",
            "ml per l", "mL per L", "ml per L"))
 .mg.kg <- (c("mg/kg", "mgkg-1", "mg per kg"))
 .ug.kg <- (c("ug/kg", "ugkg-1", "ug per kg", "µg/kg", "µgkg-1", "µg per kg"))
@@ -44,8 +47,8 @@
 .um.kg <- (c("umol/kg", "umol/Kg", "umolkg-1,", "umolKg-1", "umol per kg", "umol per Kg",
             "µmol/kg", "µmol/Kg", "µmolkg-1,", "µmolKg-1", "µmol per kg", "µmol per Kg"))
 .torr  <- (c("torr", "TORR", "Torr", "Tor", "tor"))
-.hPa   <- (c("hPa", "hpa", "Hpa", "HPA", "HPa", "hectopascal", "hpascal")) 
-.kPa   <- (c("kPa", "kpa", "Kpa", "KPA", "KPa", "kilopascal", "kpascal")) 
+.hPa   <- (c("hPa", "hpa", "Hpa", "HPA", "HPa", "hectopascal", "hpascal"))
+.kPa   <- (c("kPa", "kpa", "Kpa", "KPA", "KPa", "kilopascal", "kpascal"))
 .mmHg  <- (c("mmHg", "mmhg", "MMHG", "millimeter of mercury", "mm mercury"))
 .inHg  <- (c("inHg", "inhg", "INHG", "inch of mercury", "inch mercury"))
 
@@ -73,17 +76,17 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
       }
       if (any(from == .mm.l)) {   # VERIFIED - match
             a <- x * o2molWt      # convert mmol/L to mg/L
-      } 
+      }
       if (any(from == .um.l)) {   # VERIFIED - match
             a <- (x / 1e3         # convert umol/L to mmol/L
                     * o2molWt)    # convert mmol/L to mg/L
-      } 
+      }
       if (any(from == .ml.l)) {   # VERIFIED - diff by *0.2%
             a <- (x / 1e3         # convert mL/L to L/L
                     / o2molVol    # convert L/L to mol/L
                     * o2molWt     # convert mol/L to g/L
                     * 1e3)        # convert g/L to mg/L
-      } 
+      }
       if (any(from == .mg.kg)) {  # VERIFIED - diff by -0.008%
             a <- (x * swDensity   # convert mg/kg to mg/1000L
                     / 1e3)        # convert mg/1000L to mg/L
@@ -91,7 +94,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
       if (any(from == .ug.kg)) {  # VERIFIED - diff by -0.008%
             a <- (x * swDensity   # convert ug/kg to ug/1000L
                     / 1e6)        # convert ug/1000L to mg/L
-      } 
+      }
       if (any(from == .ml.kg)) {  # VERIFIED - diff by +0.2%
             a <- (x * o2molWt     # convert mL/kg to mmol/kg
                     / o2molVol    # convert mmol/kg to mg/kg
@@ -108,7 +111,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                     / 1e3         # convert umol/1000L to umol/L
                     * o2molWt     # convert umol/L to ug/L
                     / 1e3)        # convert ug/L to mg/L
-      } 
+      }
       if (any(from == .torr)) {
             a <- (x / 760.000066005 # convert Torr to Atm
                     / (P - o2vapor) # divide by vapor-free pressure
@@ -116,7 +119,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                     * o2gasSat      # multiply by know O2 sat.conc. for proportion (mmol/m^3)
                     * o2molWt       # convert mmol/m^3 to mg/m^3
                     / 1e3)          # convert mg/m^3 to mg/L
-      } 
+      }
       if (any(from == .hPa)) {
             a <- (x / 1013.253      # convert hPa to Atm
                   / (P - o2vapor)   # divide by vapor-free pressure
@@ -124,7 +127,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                   * o2gasSat        # multiply by know O2 sat.conc. for proportion (mmol/m^3)
                   * o2molWt         # convert mmol/m^3 to mg/m^3
                   / 1e3)            # convert mg/m^3 to mg/L
-      } 
+      }
       if (any(from == .kPa)) {
             a <- (x / 101.3253      # convert kPa to Atm
                   / (P - o2vapor)   # divide by vapor-free pressure
@@ -132,7 +135,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                   * o2gasSat        # multiply by know O2 sat.conc. for proportion (mmol/m^3)
                   * o2molWt         # convert mmol/m^3 to mg/m^3
                   / 1e3)            # convert mg/m^3 to mg/L
-      } 
+      }
       if (any(from == .mmHg)) {
             a <- (x / 759.999951996 # convert mmHg to Atm
                   / (P - o2vapor)   # divide by vapor-free pressure
@@ -140,7 +143,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                   * o2gasSat        # multiply by know O2 sat.conc. for proportion (mmol/m^3)
                   * o2molWt         # convert mmol/m^3 to mg/m^3
                   / 1e3)            # convert mg/m^3 to mg/L
-      } 
+      }
       if (any(from == .inHg)) {
             a <- (x / 29.9212583001 # convert inHg to Atm
                   / (P - o2vapor)   # divide by vapor-free pressure
@@ -148,7 +151,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                   * o2gasSat        # multiply by know O2 sat.conc. for proportion (mmol/m^3)
                   * o2molWt         # convert mmol/m^3 to mg/m^3(mg/1000L)
                   / 1e3)            # convert mg/1000L to mg/L
-      } 
+      }
       # Now to conversions
       if (any(to == .pct)) {           # VERIFIED - diff by -0.0003%
             output <- (a * 1e3         # convert mg/L to mg/1000L
@@ -158,17 +161,17 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
       }
       if (any(to == .mg.l)) {          # VERIFIED - match
             output <- a                # output same value
-      }       
+      }
       if (any(to == .ug.l)) {          # VERIFIED - match
             output <- a * 1e3          # convert mg/L to ug/L
-      }  
+      }
       if (any(to == .mm.l)) {          # VERIFIED - match
             output <- a / o2molWt      # convert mg/L to mmol/L
       }
       if (any(to == .um.l)) {          # VERIFIED - match
             output <- (a / o2molWt     # convert mg/L to mmol/L
                          * 1e3)        # convert mmol/L to umol/L
-      } 
+      }
       if (any(to == .ml.l)) {          # VERIFIED - diff by -0.2%
             output <- (a / 1e3         # convert mg/L to g/L
                          / o2molWt     # convert g/L to mol/L
@@ -178,7 +181,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
       if (any(to == .mg.kg)) {
             output <- (a * 1e3         # convert mg/L to mg/1000L
                          / swDensity)  # convert mg/1000L to mg/kg
-      } 
+      }
       if (any(to == .ug.kg)) {
             output <- (a * 1e3         # convert mg/L to mg/1000L
                          / swDensity   # convert mg/1000L to mg/kg
@@ -188,7 +191,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
             output <- (a * 1e3         # convert mg/L to mg/1000L
                          / swDensity   # convert mg/1000L to mg/kg
                          * o2molVol    # convert mg/kg to mmol/kg
-                         / o2molWt)    # convert mmol/kg to mL/kg 
+                         / o2molWt)    # convert mmol/kg to mL/kg
       }
       if (any(to == .mm.kg)) {
             output <- (a / o2molWt     # convert mg/L to mmol/L
@@ -200,12 +203,12 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
                          * 1e3         # convert mmol/L to mmol/1000L
                          / swDensity   # convert mmol/1000L to mmol/kg
                          * 1e3)        # convert mmol/kg to umol/kg
-      }      
+      }
       if (any(to == .torr)) {
             output <- (a * 1e3           # convert mg/L to mg/1000L
                        / o2molWt         # convert mg/1000L to mmol/1000L (mmol/m^3)
                        / o2gasSat        # divide by known O2 sat.conc. (mmol/m^3)
-                       * o2atmComp       #  
+                       * o2atmComp       #
                        * (P - vapor)     # calculate partial pressure in Atm
                        * 760.000066005)  # convert Atm to Torr
       }
@@ -213,7 +216,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
             output <- (a * 1e3           # convert mg/L to mg/1000L
                        / o2molWt         # convert mg/1000L to mmol/1000L (mmol/m^3)
                        / o2gasSat        # divide by known O2 sat.conc. (mmol/m^3)
-                       * o2atmComp       #  
+                       * o2atmComp       #
                        * (P - vapor)     # calculate partial pressure in Atm
                        * 1013.253)       # convert Atm to hPa
       }
@@ -221,7 +224,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
             output <- (a * 1e3           # convert mg/L to mg/1000L
                        / o2molWt         # convert mg/1000L to mmol/1000L (mmol/m^3)
                        / o2gasSat        # divide by known O2 sat.conc. (mmol/m^3)
-                       * o2atmComp       #  
+                       * o2atmComp       #
                        * (P - vapor)     # calculate partial pressure in Atm
                        * 101.3253)       # convert Atm to kPa
       }
@@ -229,7 +232,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
             output <- (a * 1e3           # convert mg/L to mg/1000L
                        / o2molWt         # convert mg/1000L to mmol/1000L (mmol/m^3)
                        / o2gasSat        # divide by known O2 sat.conc. (mmol/m^3)
-                       * o2atmComp       #  
+                       * o2atmComp       #
                        * (P - vapor)     # calculate partial pressure in Atm
                        * 759.999951996)  # convert Atm to mmHg
       }
@@ -237,7 +240,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
             output <- (a * 1e3           # convert mg/L to mg/1000L
                        / o2molWt         # convert mg/1000L to mmol/1000L (mmol/m^3)
                        / o2gasSat        # divide by known O2 sat.conc. (mmol/m^3)
-                       * o2atmComp       #  
+                       * o2atmComp       #
                        * (P - vapor)     # calculate partial pressure in Atm
                        * 29.9212583001)  # convert Atm to inHg
       }
@@ -270,7 +273,7 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
 # respirometry::conv_o2(o2 = 50, from = "mmHg", to = "mg_per_l")
 # convUnits(50, "inhg", "mgl-1") # test inHg
 # respirometry::conv_o2(o2 = 50, from = "inHg", to = "mg_per_l")
-# 
+#
 # # Output Tests, all convert from mg/L
 # convUnits(7, "mg/l", "%") # test %
 # respirometry::conv_o2(o2 = 7, from = "mg_per_l", to = "percent_a.s.")
@@ -288,8 +291,8 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) { # P unit is b
 # respirometry::conv_o2(o2 = 7, from = "mg_per_l", to = "torr")
 
 # References
-# [1] IOC, SCOR, and IAPSO (2010). The international thermodynamic equation of seawater–2010: 
-#     Calculation and use of thermodynamic properties. Technical Report 56, Intergovernmental 
+# [1] IOC, SCOR, and IAPSO (2010). The international thermodynamic equation of seawater–2010:
+#     Calculation and use of thermodynamic properties. Technical Report 56, Intergovernmental
 #     Oceanographic Commission, Manuals and Guide. http://www.teos-10.org/pubs/TEOS-10_Manual.pdf.
 #
 # [2] Weiss R, 1970. The solubility of nitrogen, oxygen, and argon in water and seawater. Deep-Sea
