@@ -1,43 +1,71 @@
+
+# Reset everything before we begin
+closeAllConnections()   # self-explanatory
+rm(list=ls())           # remove all variables in global environment
+cat("\014")             # clear the console
+
 # Load my usual packages and functions
 source("~/Dropbox/R/functions/allFunctions.R")
 loadPackage("tidyverse")  # better code
 loadPackage("cowplot")    # scientific theme for ggplot2
 loadPackage("viridis")    # colour scheme for ggplot2
 
-# Set working directory
-
-
-# Load additional libraries if needed
-
 loadPackage("LoLinR")
+# Check working directory
+getwd()
 
-# Load data
-df <- readr::read_csv("data/hery.csv") %>%
-  dplyr::select(time=1,o2=4) %>%
-  print()
+# Load data --------------------------------------------------------------------
+df <- readr::read_csv("data/smallset.csv")
 df
+ggplot(df, aes(time,o2)) + geom_point()
+nonmon <- read_csv("data/non_monotonic.csv") %>% print()
 
-# Workflow ---------------------------------------------------------------------
+# just testing lolinr
+urchinRegs  <-  rankLocReg(xall=df$time, yall=df$o2, alpha=0.5,
+  method="eq", verbose=TRUE)
+urchinRegs2 <- reRank(urchinRegs, newMethod="pc")
+summary(urchinRegs)
+summary(urchinRegs2)
+
+plot(urchinRegs)
+plot(urchinRegs2)
+
+# Create new environment -------------------------------------------------------
+# This creates a new environment to store variables that are hidden to the user
+.myenv <- new.env()
 
 # prepData function ------------------------------------------------------------
 
 prepData <- function(df) {
-  df <- dplyr::rename_(df, x = names(df)[1], y = names(df)[2])
-
-  # Grab units
+  # rename for better ID
+  names(df) <- c("x", "y")
+  # prompt user for input
   o2time <- as.character(readline("Unit of time (e.g. s, min):"))
   o2unit <- as.character(readline("Unit of O2 conc, (e.g. mgL-1, ug/kg:"))
-  # save values
-  resprdf <<- df %>% print()
-  o2time <<- o2time
-  o2unit <<- o2unit
+  # save values (hidden)
+  .resprdf <<- df
+  .o2time <<- o2time
+  .o2unit <<- o2unit
+  # Checks
+  cat("Checking for missing data...\n")
+  hasNA(df)
+  cat("Checking if time is sequential...\n")
+  evenSpaced(df, 1) %>% print()
+  cat("Checking if response variable is monotonic...\n")
+  monotonic(df) %>% print()
+  cat("Checking if time is evenly spaced...\n")
+  evenSpaced(df) %>% print()
+  # Summarise
+  summary(.resprdf) %>% print()
+  message("New dataframe generated. Please run calcRO2() to process data.")
   # Plot
-  ggplot(df, aes(x, y)) + geom_point()
-  message("Table generated. Please run calcRO2() to process data.")
+  return(ggplot(df, aes(x, y)) + geom_point())
 }
 
 prepData(df)
-resprdf
+prepData(nonmon)
+.resprdf
+
 # calcRate function -------------------------------------------------------------
 
 calcRO2 <- function(start, end, df = resprdf) {
@@ -92,88 +120,8 @@ prepData(df)
 calcRO2(10.1, 30)
 
 
-# Others -----------------------------------------------------------------------
-
-
-
-nonmon <- read_csv("data/non_monotonic.csv") %>% print()
-
-# Check for NA and NaN ---------------------------------------------------------
-# TRUE - there are NA values
-# FALSE - no NA values
-hasNA <- function(dt, summary = F) {
-  check <- any(is.na(dt))
-  if (check == T) {
-    check %>% print()
-  }
-  if (check == F) {
-    check %>% print()
-  }
-  if (summary == T) {
-    which(is.na(dt), arr.ind = T) %>% print()
-  }
-}
-
-# Test
-hasNA(nonmon, T)
-
-# Check for duplicate time -----------------------------------------------------
-?duplicated.array()
-anyDuplicated(nonmon[1])
-nonmon[duplicated(nonmon[,1]),]
-
-dupes <- function(df, summary = F) {
-  check <- duplicated(df[[1]])
-  if (check == T) {
-
-  }
-}
-duplicated(nonmon[[1]])
-which(duplicated(nonmon[[1]]) == T)
-
-# Check for monotonically increasing time --------------------------------------
-# Are all the values in x equal to the cumulative maximum of the same values?
-# https://stackoverflow.com/a/13094801
-
-monotonic <- function(df, summary = F) {
-  x <- df
-  x <- x[[1]]
-  check <- all(x == cummax(x))
-  if (check == T) {
-    check %>% print()
-  }
-  if (check == F) {
-    check %>% print()
-    which(diff(x) < 0) %>% print() # ID rows that return FALSE
-  }
-}
-
-# Test
-monotonic(nonmon)
-
-# Check for evenly spaced time -------------------------------------------------
-# https://stackoverflow.com/a/4752580
-
-evenSpaced <- function(df, col = 1, tol = .Machine$double.eps * 100,
-                       summary = F) {
-  x <- df
-  x <- diff(x[[col]])
-  cond <- range(x) / mean(x)
-  check <- isTRUE(all.equal(cond[1], cond[2], tolerance = tol))
-  if (check == T) {
-    check %>% print()
-  }
-  if (check == F) {
-    check %>% print()
-    # message("The following rows differ from the median interval time:")
-    which(x != median(x)) %>% print() # ID rows that return FALSE
-  }
-}
-
-# Test
-evenSpaced(nonmon, 1)
-evenSpaced(nonmon, 2)
-
 # RespirE
 getRO2closed(df, volume = 200, by = "time", start = 7, end = 30)
 datatest(df)
+
+#
