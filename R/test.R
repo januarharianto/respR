@@ -12,23 +12,22 @@ loadPackage("viridis")    # colour scheme for ggplot2
 
 loadPackage("LoLinR")
 # Check working directory
-getwd()
+setwd("~/Documents/Dev/respiration-R-package/")
 
 # Load data --------------------------------------------------------------------
 df <- readr::read_csv("data/smallset.csv")
 df
-ggplot(df, aes(time,o2)) + geom_point()
+ggplot(df, aes(`time (min)`,`1`)) + geom_point()
 nonmon <- read_csv("data/non_monotonic.csv") %>% print()
 
 # just testing lolinr
-urchinRegs  <-  rankLocReg(xall=df$time, yall=df$o2, alpha=0.5,
+urchinRegs  <-  rankLocReg(xall=df$`time (min)`, yall=df$`1`, alpha=0.8,
   method="eq", verbose=TRUE)
 urchinRegs2 <- reRank(urchinRegs, newMethod="pc")
 summary(urchinRegs)
 summary(urchinRegs2)
 
 plot(urchinRegs)
-plot(urchinRegs2)
 
 # Create new environment -------------------------------------------------------
 # This creates a new environment to store variables that are hidden to the user
@@ -36,30 +35,33 @@ plot(urchinRegs2)
 
 # prepData function ------------------------------------------------------------
 
-prepData <- function(df) {
+prepData <- function(df, plot=F) {
   # rename for better ID
   names(df) <- c("x", "y")
   # prompt user for input
-  o2time <- as.character(readline("Unit of time (e.g. s, min):"))
-  o2unit <- as.character(readline("Unit of O2 conc, (e.g. mgL-1, ug/kg:"))
-  # save values (hidden)
-  .resprdf <<- df
-  .o2time <<- o2time
-  .o2unit <<- o2unit
+  message("Input dataframe units:")
+  o2time <<- as.character(readline("Unit of time (e.g. s, min):"))
+  o2unit <<- as.character(readline("Unit of O2 conc, (e.g. mgL-1, ug/kg:"))
   # Checks
+  message("Performing tests:")
   cat("Checking for missing data...\n")
-  hasNA(df)
-  cat("Checking if time is sequential...\n")
-  evenSpaced(df, 1) %>% print()
-  cat("Checking if response variable is monotonic...\n")
-  monotonic(df) %>% print()
-  cat("Checking if time is evenly spaced...\n")
-  evenSpaced(df) %>% print()
-  # Summarise
-  summary(.resprdf) %>% print()
-  message("New dataframe generated. Please run calcRO2() to process data.")
-  # Plot
-  return(ggplot(df, aes(x, y)) + geom_point())
+  xNA <- hasNA(df,1)
+  yNA <- hasNA(df,2)
+  cat("Checking time data for duplicates...\n")
+  dup <- dupes(df)
+  cat("Checking if O2 data are monotonic...\n")
+  mon <- monotonic(df)
+  cat("Checking if time data are not evenly spaced...\n")
+  spa <- evenSpaced(df)
+  # Summary
+  results <- list(c(xNA, yNA, dup, mon, spa))
+  # All checks passed
+  .resprdf <<- df
+  message("New dataframe generated.")
+  #results
+  cat("Summary:\n")
+# if (plot)
+  #   return(ggplot(df, aes(x, y)) + geom_point())
 }
 
 prepData(df)
