@@ -1,24 +1,19 @@
 # Check for NA and NaN ---------------------------------------------------------
 # TRUE - there are NA values
 # FALSE - no NA values
-hasNA <- function(dt, summary = F) {
-  check <- any(is.na(dt))
-  if (check == T) {
-    check %>% print()
-  }
-  if (check == F) {
-    check %>% print()
-  }
-  if (summary == T) {
-    which(is.na(dt), arr.ind = T) %>% print()
-  }
+hasNA <- function(dt, col=1, summary = F) {
+  x <- df[[col]]
+  check <- any(is.na(x))
+  out <- which(is.na(x))
+  if(summary)
+    return(out)
+  else
+    return(check)
 }
 
+hasNA(df,2)
 
 # Check for duplicate time -----------------------------------------------------
-?duplicated.array()
-anyDuplicated(nonmon[1])
-nonmon[duplicated(nonmon[,1]),]
 
 dupes <- function(df, summary = F) {
   x      <- df[[1]]
