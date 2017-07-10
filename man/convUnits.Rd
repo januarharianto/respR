@@ -27,8 +27,14 @@ be converted is a unit of [O2] or a unit of VO2 or MO2.
 While you could parse an entire raw dataset with this, it is highly
 recommended that unit conversion is conducted at the end of analysis (i.e.
 convert one value once, rather than convert an entire data frame at start),
+OR MAYBE NOT -- just filler text for now.
 }
 \examples{
 convUnits(df, from = '\%', to = 'mg/l')
 convUnits(df, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
+}
+\author{
+Januar Harianto
+
+Nicholas Carey
 }
