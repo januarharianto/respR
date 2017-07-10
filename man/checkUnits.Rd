@@ -9,7 +9,8 @@ checkUnits(unit, type)
 \arguments{
 \item{unit}{Character string. A unit of measurement.}
 
-\item{type}{Numeric. Identifies the type of unit to check. 1: time; 2: O~2~}
+\item{type}{Numeric. Identifies the type of unit to check. 1: time; 2: O~2~
+3: volume; 4: mass.}
 }
 \description{
 Checks input string against a known database and returns a
