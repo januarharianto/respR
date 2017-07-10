@@ -14,38 +14,38 @@ storeUnits <- function(Time, O2, Vol, Mass) {
   # prompt user for input
   if(missing(Time)) {
   Time <- as.character(readline("Unit of time: "))
-  if(checkUnit(Time, 1)[1] == F) {
+  if(checkUnits(Time, 1)[1] == F) {
     message("Time unit not valid, please re-enter.")
     Time <- as.character(readline("Unit of time: "))
     }
   }
   if(missing(O2)) {
     O2 <- as.character(readline("Unit of O2 conc: "))
-    if(checkUnit(O2, 2)[1] == F) {
+    if(checkUnits(O2, 2)[1] == F) {
       message("O2 unit not valid, please re-enter.")
-      runit <- as.character(readline("Unit of O2 conc.: "))
+      O2 <- as.character(readline("Unit of O2 conc.: "))
     }
   }
   if(missing(Vol)) {
     Vol <- as.character(readline("Unit of volume :"))
-    if(checkUnit(Vol, 3)[1] == F) {
+    if(checkUnits(Vol, 3)[1] == F) {
       message("Vol unit not valid, please re-enter.")
-      runit <- as.character(readline("Unit of volume:"))
+      Vol <- as.character(readline("Unit of volume:"))
     }
   }
   if(missing(Mass)) {
     Mass <- as.character(readline("Unit of mass :"))
-    if(checkUnit(Mass, 4)[1] == F) {
+    if(checkUnits(Mass, 4)[1] == F) {
       message("Mass unit not valid, please re-enter.")
-      runit <- as.character(readline("Unit of mass:"))
+      Mass <- as.character(readline("Unit of mass:"))
     }
   }
   # rmass <- as.character(readline("Unit of specimen mass (if used) "))
   # Summary
-  Time <- checkUnit(Time, 1)[2]
-  O2   <- checkUnit(O2, 2)[2]
-  Vol  <- checkUnit(Vol, 3)[2]
-  Mass <- checkUnit(Mass, 4)[2]
+  Time <- checkUnits(Time, 1)[2]
+  O2   <- checkUnits(O2, 2)[2]
+  Vol  <- checkUnits(Vol, 3)[2]
+  Mass <- checkUnits(Mass, 4)[2]
   .runits <<- list(time = Time, o2 = O2, vol = Vol, mass = Mass)
   out <- matrix(c(Time, O2, Vol, Mass), ncol = 4)
   colnames(out) <- c('Time', 'O2', 'Vol', 'Mass')
