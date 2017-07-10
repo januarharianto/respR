@@ -10,6 +10,9 @@
 #' @details While you could parse an entire raw dataset with this, it is highly
 #' recommended that unit conversion is conducted at the end of analysis (i.e.
 #' convert one value once, rather than convert an entire data frame at start),
+#' OR MAYBE NOT -- just filler text for now.
+#' @author Januar Harianto
+#' @author Nicholas Carey
 #' @return NULL
 #' @export
 #' @examples
