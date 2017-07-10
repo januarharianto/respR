@@ -75,7 +75,8 @@ monotonic <- function(df, summary=F){
 
 #' @title Check for evenly spaced time data
 #' @author Januar Harianto
-#' @export# https://stackoverflow.com/a/4752580
+#' @export
+# https://stackoverflow.com/a/4752580
 evenSpaced <- function(df, col=1, tol=.Machine$double.eps * 100){
   x     <- diff(df[[col]])
   cond  <- range(x) / mean(x)
