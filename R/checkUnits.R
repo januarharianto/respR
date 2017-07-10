@@ -72,7 +72,7 @@ checkUnits <- function(unit, type) {
       kg = c('kg', 'KG', 'kilogram', 'kgram'))
   }
     # look for match
-    chk <- lapply(allUnits, function(x) grep(unit, x))
+    chk <- lapply(allUnits, function(x) grep(unit, x, fixed = T))
     chk <- sapply(chk, function(x) length(x) > 0)
     result <- any(chk == T)
     name <- names(chk)[which(chk)]
