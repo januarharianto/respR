@@ -5,6 +5,7 @@
 #' volume (e.g. mL, L) and mass/weight (e.g. kg).
 #' @param unit Character string. A unit of measurement.
 #' @param type Numeric. Identifies the type of unit to check. 1: time; 2: O~2~
+#' 3: volume; 4: mass.
 #' @details This function makes it easier to parse and understand the plethora
 #' of units that a user may provide as inputs while using our functions. The
 #' user may deploy a 'fuzzy' approach during the input of measurement units
@@ -60,9 +61,11 @@ checkUnits <- function(unit, type) {
   }
   if(type == 3) {
     allUnits <- list(
-      uL = c('ul', 'uL'),
-      mL = c('ml', 'mL'),
-      L  = c('l', 'L'))
+      uL = c('ul', 'uL', 'microlitre', 'microliter', 'micro litre',
+             'micro liter'),
+      mL = c('ml', 'mL', 'millilitre', 'milli litre', 'milliliter',
+             'milli liter'),
+      L  = c('l', 'L', 'liter', 'litre', 'Litre', 'Liter'))
   }
   if(type == 4) {
     allUnits <- list(
@@ -75,10 +78,8 @@ checkUnits <- function(unit, type) {
   unit <- paste0('^', unit, '$')  # for exact matching
   chk <- lapply(allUnits, function(x) grep(unit, x))
   chk <- sapply(chk, function(x) length(x) > 0)
-  result <- any(chk == T)
-  name <- names(chk)[which(chk)]
-
-  # print list
-  out <- c(result, name)
+  result <- any(chk == T)  # did a match occur?
+  name <- names(chk)[which(chk)]  # print unit name
+  out <- c(result, name)  # print output
   return(out)
-    }
+}
