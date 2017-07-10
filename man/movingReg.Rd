@@ -21,12 +21,12 @@ how to pluck the relevant datasets associated with each regression. With some
 luck, I may use this to determine basal and max RO2?
 }
 \examples{
-# Load data
-df <- ...
-# Prep data
-dfP <- prepData(df)
-# Run this function
-movingReg(dfP)
+data("sardine")                 # load data
+plot(sardine)                   # preview dataset
+reg <- movingReg(sardine, .2)   # perform rolling regression
+plot(reg$beta)                  # plot change in rate over index of time
+                                # max and min rates can be visualised
+plot(density(reg$beta))         # density plot of rate
 }
 \author{
 Januar Harianto
