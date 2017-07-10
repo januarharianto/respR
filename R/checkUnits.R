@@ -27,7 +27,7 @@ checkUnits <- function(unit, type) {
   }
   if(type == 2) {
     allUnits <- list(
-      'pct %'   = c('%', 'percent', 'percentage', '%o2', '%O2'),
+      '%'       = c('%', 'percent', 'percentage', '%o2', '%O2'),
       'ug/L'    = c('ug/L', 'ug/l', 'ugL-1', 'ugl-1', 'ug per liter',
                     'ug per litre', 'µg/L', 'µg/l', 'µgL-1', 'µgl-1',
                     'µg per liter', 'µg per litre'),
@@ -66,18 +66,19 @@ checkUnits <- function(unit, type) {
   }
   if(type == 4) {
     allUnits <- list(
-      ug = c('ug', 'UG', 'µg', 'ugram'),
-      mg = c('mg', 'MG', 'mgram', 'milligram'),
-      g  = c('g', 'G', 'gram'),
-      kg = c('kg', 'KG', 'kilogram', 'kgram'))
+      ug  = c('ug', 'UG', 'µg', 'ugram', 'microgram'),
+      mg  = c('mg', 'MG', 'mgram', 'milligram'),
+      g   = c('g', 'G', 'gram'),
+      kg  = c('kg', 'KG', 'kilogram', 'kgram'))
   }
-    # look for match
-    chk <- lapply(allUnits, function(x) grep(unit, x, fixed = T))
-    chk <- sapply(chk, function(x) length(x) > 0)
-    result <- any(chk == T)
-    name <- names(chk)[which(chk)]
+  # look for match
+  unit <- paste0('^', unit, '$')  # for exact matching
+  chk <- lapply(allUnits, function(x) grep(unit, x))
+  chk <- sapply(chk, function(x) length(x) > 0)
+  result <- any(chk == T)
+  name <- names(chk)[which(chk)]
 
-    # print list
-    out <- c(result, name)
-    return(out)
+  # print list
+  out <- c(result, name)
+  return(out)
     }
