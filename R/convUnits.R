@@ -1,6 +1,6 @@
 #' @title Convert units or oxygen concentration or respiration
 #' @description This function is able to pick up whether the data that needs to
-#' be converted is a unit of [O2] or a unit of VO2 or MO2.
+#' be converted is a unit of [O2] or a unit of VO2 or MO2 (NOT YET IMPLEMENTED).
 #' @param x Numeric vector of measurement(s).
 #' @param from String. The unit to convert from.
 #' @param to String. The unit to convert into.
