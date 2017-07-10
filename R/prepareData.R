@@ -2,10 +2,6 @@
 #'@export
 prepareData <- function(df, plot=F) {
   names(df) <- c("x", "y")  # rename for better ID
-  # prompt user for input
-  # message("Input dataframe units:")
-  # o2time <<- as.character(readline("Unit of time (e.g. s, min):"))
-  # o2unit <<- as.character(readline("Unit of O2 conc, (e.g. mgL-1, ug/kg:"))
   # Checks
   # message("Performing tests:")
   # cat("Checking for missing data...\n")
