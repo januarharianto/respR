@@ -12,4 +12,4 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Imports: tidyverse
+Imports: tidyverse, gsw, marelac
