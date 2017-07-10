@@ -12,13 +12,15 @@
 #' @author Januar Harianto
 #' @export
 #' @examples
-#' # Load data
-#' df <- ...
-#' # Prep data
-#' dfP <- prepData(df)
-#' # Run this function
-#' movingReg(dfP)
+#' data("sardine")                 # load data
+#' plot(sardine)                   # preview dataset
+#' reg <- movingReg(sardine, .2)   # perform rolling regression
+#' plot(reg$beta)                  # plot change in rate over index of time
+#'                                 # max and min rates can be visualised
+#' plot(density(reg$beta))         # density plot of rate
+
 movingReg <- function(df, span = .1) {
+  names(df) <- c("x", "y")  # rename for better ID
   old <- Sys.time()                   # grab current time (for simple benchmark)
   reg <- lm(y ~ x, df, x = T, y = T)  # define the regression
   x <- reg$x                  # x as vector
@@ -57,5 +59,5 @@ movingReg <- function(df, span = .1) {
    cat(sprintf('%d regressions fitted', countr),   # print # regressions done
        sprintf('in %g seconds', new), '\n')        # print time taken
    class(output) <- 'movingReg'
-   output
+   invisible(output)
 }
