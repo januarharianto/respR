@@ -10,14 +10,18 @@
 #' entire dataset. Defaults to 0.1. Must be between 0 and 1.
 #' @return NULL
 #' @author Januar Harianto
+#' @import ggplot2
 #' @export
 #' @examples
 #' data("sardine")                 # load data
 #' plot(sardine)                   # preview dataset
 #' reg <- movingReg(sardine, .2)   # perform rolling regression
-#' plot(reg$beta)                  # plot change in rate over index of time
-#'                                 # max and min rates can be visualised
-#' plot(density(reg$beta))         # density plot of rate
+#' plot(reg)                       # diagnostic plot
+#'
+#' data("squid")
+#' squid <- prepareData(squid)
+#' reg_sq <- movingReg(squid)
+#' plot(reg_sq)
 
 movingReg <- function(df, span = .1) {
   names(df) <- c("x", "y")  # rename for better ID
@@ -49,15 +53,38 @@ movingReg <- function(df, span = .1) {
   # generate output
   output <-
     list(# coeff = coeff,
-         intercept = intercept,
-         beta = beta,
-         sigma = sigma,
-         r.sq = r.sq,
-         std.err = std.err)
+      x = x[, 2],  # put x and y back into the output in case they're needed
+      y = y,
+      intercept = intercept,  # not really needed, but what the heck.
+      beta = beta,
+      sigma = sigma,
+      r.sq = r.sq,
+      std.err = std.err)
   new <- Sys.time() - old                          # calculate time elapsed
   new <- round(unclass(new)[1], 1)                 # convert to number
    cat(sprintf('%d regressions fitted', countr),   # print # regressions done
        sprintf('in %g seconds', new), '\n')        # print time taken
    class(output) <- 'movingReg'
    invisible(output)
+}
+
+
+#' @export
+# Build a new plot method based on movingReg Class.
+# Just a proof-of-concept thing. Useful practice for later.
+# How do I hide this from the autocomplete? Hm.
+plot.movingReg <- function(x, ...) {
+  rPlot <- data.frame(x$x, x$y)
+  names(rPlot) <- c("x", "y")
+  rPlot <- ggplot(rPlot, aes(x, y)) + geom_point(size = 0.1) +
+    ggtitle("Raw") +
+    ylab("O2") + xlab("Time") +
+    theme_bw(base_size = 16)
+  bPlot <- data.frame(seq_along(x$beta), x$beta)
+  names(bPlot) <- c("x", "y")
+  bPlot <- ggplot(bPlot, aes(x, y)) + geom_point(size = 0.1) +
+    ggtitle("Density") +
+    ylab("RO2") + xlab("Index") +
+    theme_bw(base_size = 16)
+  cowplot::plot_grid(rPlot, bPlot, ncol = 1, align = 'v')
 }
