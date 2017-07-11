@@ -21,7 +21,7 @@ convUnits(x, from, to, S = 35, t = 25, P = 1.013253)
 }
 \description{
 This function is able to pick up whether the data that needs to
-be converted is a unit of [O2] or a unit of VO2 or MO2.
+be converted is a unit of [O2] or a unit of VO2 or MO2 (NOT YET IMPLEMENTED).
 }
 \details{
 While you could parse an entire raw dataset with this, it is highly
