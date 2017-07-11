@@ -20,16 +20,16 @@
 #' convUnits(df, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
 convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
   # ----------------------------------------------------------------------------
-  # Constants/formula data using data taken from 'marelac' and 'gsw'.
+  # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
   # C library: https://www.unidata.ucar.edu/software/udunits/
-  omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L gas
-  omWt <- unname(marelac::molweight('O2'))  # molecular weight of O2
+  omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L vol
+  omWt <- unname(marelac::molweight('O2'))  # molecular weight of O2 in g/mol
   oGas <- unname(marelac::gas_satconc(S, t, P, species = "O2")) # gas sat conc.
-  swDn <- marelac::sw_dens(S = S, t = t, P = P) # seawater density
-  #swDn <- gsw::gsw_rho_t_exact(S, t, (P * 10))  # seawater density
-  vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour
-  oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2
+  swDn <- marelac::sw_dens(S = S, t = t, P = P) # seawater density in kg/m^3
+  #swDn <- gsw::gsw_rho_t_exact(S, t, (P * 10))  # seawater density in kg/m^3
+  vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
+  oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
   # ----------------------------------------------------------------------------
   f <- checkUnits(from, 2)[2]
   # Before conversion, standardise all units to mg/L
