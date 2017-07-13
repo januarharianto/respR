@@ -56,14 +56,13 @@ regLm <- function(indx, df) {
 
 library(zoo) # this is needed
 library(ggplot2) # not needed if we use plot()
-
+library(readr)
 #---------------------------------
 # workflof for pCrit
 # load data
-sample <- read.csv('~/Documents/Dev/pcrit.csv')
+sample <- read_csv('~/Documents/Dev/respiration-R-package/dev/pcrit.csv')
 sample$elapsed <- as.numeric(sample$x - sample$x[1]) # convert date to integer
 sample <- data.frame(x = sample$elapsed, y = sample$y) # rename columns
-
 # perform rolling regression
 # First, width needs to be defined
 # let's default it to 0.1 (but editable)
@@ -77,7 +76,7 @@ rollreg <- rollapply(sample, width, reg, by.column = F)
 rollmean <- rollmean(sample[, 2], width)
 # length(rollmean)
 # bundle into dataframe and re-order. Also, make slopes absolute integers
-mrDO <- data.frame(DO = as.numeric(rollmean), MR = abs(as.numeric(rollreg[, 2])))
+mrDO <- data.frame(DO = rollmean, MR = abs(rollreg[, 2]))
 # sort ascending by DO
 mrDO <- mrDO[order(mrDO$DO), ]
 
@@ -91,8 +90,8 @@ pcrit <- subset(reg, sumRSS == min(sumRSS)) # filters out the row with the lowes
 line1 <- subset(mrDO, DO <= as.numeric(pcrit[2]))
 line2 <- subset(mrDO, DO > as.numeric(pcrit[2]))
 
-lm(MR~DO, line1)
-lm(MR~DO, line2)
+# lm(MR~DO, line1)
+# lm(MR~DO, line2)
 
 ggplot(mrDO, aes(DO, MR)) + geom_point(size = .1) + # this is the basis plot
   geom_smooth(data = line1, aes(DO,MR), method = 'lm') +
@@ -101,5 +100,5 @@ ggplot(mrDO, aes(DO, MR)) + geom_point(size = .1) + # this is the basis plot
   geom_vline(xintercept = ((as.numeric(pcrit[2]) + as.numeric(pcrit[4])) / 2), colour = 'yellow', size = .2) + # 'midpoint approximation' (yeager & ultsch 1989)
   theme_bw()
 
-as.numeric(pcrit[9])
-((as.numeric(pcrit[2]) + as.numeric(pcrit[4])) / 2)
+as.numeric(pcrit[9]) # pcrit (via lm)
+((as.numeric(pcrit[2]) + as.numeric(pcrit[4])) / 2) # pcrit (via midpoint)
