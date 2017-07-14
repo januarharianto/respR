@@ -4,7 +4,7 @@ Title: A package that makes working with respirometry data faster. Yeah, I'll up
 Version: 0.1.0
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
-    "Nicholas Carey <nicholascarey@gmail.com> [aut]"))
+    "Nicholas Carey <nicholascarey@gmail.com> [aut, cre]"))
 Description: We implement a workflow that expedites the analysis of monotonic
     metabolic rate.
 Depends: R (>= 3.4.0)
