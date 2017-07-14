@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @import zoo
 #' @export
 pcrit <- function(df, span = 0.1, MR = F) {
   if (MR == T) {
