@@ -88,3 +88,6 @@ plot.movingReg <- function(x, ...) {
     theme_bw(base_size = 16)
   cowplot::plot_grid(rPlot, bPlot, ncol = 1, align = 'v')
 }
+
+
+
