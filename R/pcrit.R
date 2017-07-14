@@ -1,7 +1,7 @@
 #' @import ggplot2
 #' @import zoo
 #' @export
-pcrit <- function(df, span = 0.1, MR = F) {
+pcrit <- function(df, span = 0.05, MR = FALSE) {
   if (MR == T) {
     mrDo <- df
   }
