@@ -27,9 +27,9 @@ hockeyLm <- function(indx, df) {
   rss1   <- sum(res1 * res1)
   rss2   <- sum(res2 * res2)
   sumRSS <- rss1 + rss2
-  #intersect
+  # calculate intersection between 2 lines
   cm        <- rbind(coef1, coef2)
-  intersect <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1])
+  intersect <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1]) # https://stackoverflow.com/a/7114961
   xint      <- intersect[1]
   yint      <- intersect[2]
   # output
