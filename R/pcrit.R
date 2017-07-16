@@ -4,52 +4,52 @@
 pcrit <- function(df, span = 0.05, MR = FALSE) {
   if (MR == T) {
     mrDo <- df
-  }
+  } # end if
+
   if(MR == F) {
-  # ordf <- df
-  names(df) <- c("x", "y")
-  # convert time to integer, if necessary
-  if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T)
-    df$x <- as.integer(df$x - df$x[1])
-  width <- floor(span * nrow(df))
-  # Rolling regression and mean
-  message("Performing regressions to generate MO2...")
-  old <- Sys.time()  # grab current time (for simple benchmark)
-  reg <- function(x) coef(.lm.fit(cbind(Intercept = 1, x[, 1]), x[, 2]))
-  rollreg <- zoo::rollapply(df, width, reg, by.column = F)
-  rollmean <- zoo::rollmean(df[, 2], width)
-  counts <- length(rollmean)
-  # bundle into dataframe and re-order
-  mrDo <- data.frame(rollmean, abs(rollreg[, 2]))
-  }
+    names(df) <- c("x", "y")
+    # convert time to integer, if necessary
+    if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T) {
+      df$x   <- as.integer(df$x - df$x[1])
+    } # end if
 
-  names(mrDo) <- c("do", "mr")
-  mrDo <- mrDo[order(mrDo$do), ]  # sort (ascending)
-  indices <- spawnIndices(nrow(mrDo))  # create matrix of hockey combinations
+    # otherwise, carry on
+    width    <- floor(span * nrow(df))
+    rollreg  <- movReg(df, span)
+    rollmean <- RcppRoll::roll_mean(df[[2]], width)
+    counts   <- length(rollmean) # for benchmark
+    mrDo     <- data.frame(rollmean, abs(rollreg))
+  } # end if
+
+  # calculate pcrit here
+  names(mrDo) <- c('do', 'mr')
+  mrDo        <- mrDo[order(mrDo$do), ]  # sort (ascending)
+  indices     <- spawnIndices(nrow(mrDo))  # create matrix for hockey method
   message("Performing rolling 'hockey' regressions...")
-  reg <- apply(indices, 1, hockeyLm, df = mrDo)
-  reg <- do.call(rbind.data.frame, reg)  # bind into a dataframe
-  pcrit <- reg[order(reg$sumRSS), ]
+  old         <- Sys.time()  # grab current time (for simple benchmark)
+  reg         <- apply(indices, 1, hockeyLm, df = mrDo)
+  reg         <- do.call(rbind.data.frame, reg)  # bind into a dataframe
+  pcrit       <- reg[order(reg$sumRSS), ]
   pcritRanked <- pcrit[order(pcrit$sumRSS), ] # rank results by RSS
-  best <- pcritRanked[1, ] # best result
-
-  new <- round(unclass(Sys.time() - old)[1], 1)
+  best        <- pcritRanked[1, ] # best result
+  new         <- round(unclass(Sys.time() - old)[1], 1)
   # save data for plots
-  time <- df[[1]]
-  do <- df[[2]]
+  time   <- df[[1]]
+  do     <- df[[2]]
   rolldo <- mrDo[[1]]
   rollmr <- mrDo[[2]]
 
   out <- list(
-    # df = ordf,
     do.mr = mrDo,
     pcrit = pcrit,
     pcritRanked = pcritRanked,
     best = best)
-  message(sprintf("%d regressions fitted ", counts + nrow(mrDo)),
+
+  message(sprintf("%d 'hockey' regressions fitted ",  NROW(pcrit)),
     sprintf("in %g seconds", new), "\n")
   class(out) <- "pcrit"
-  return(out)
+
+  return(invisible(out))
 }
 
 
