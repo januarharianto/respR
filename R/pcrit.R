@@ -9,15 +9,13 @@ pcrit <- function(df, span = 0.05, MR = FALSE) {
   # ordf <- df
   names(df) <- c("x", "y")
   # convert time to integer, if necessary
-  if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) ==
-    T)
+  if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T)
     df$x <- as.integer(df$x - df$x[1])
   width <- floor(span * nrow(df))
   # Rolling regression and mean
   message("Performing regressions to generate MO2...")
   old <- Sys.time()  # grab current time (for simple benchmark)
-  reg <- function(x) coef(.lm.fit(cbind(Intercept = 1, x[,
-    1]), x[, 2]))
+  reg <- function(x) coef(.lm.fit(cbind(Intercept = 1, x[, 1]), x[, 2]))
   rollreg <- zoo::rollapply(df, width, reg, by.column = F)
   rollmean <- zoo::rollmean(df[, 2], width)
   counts <- length(rollmean)
