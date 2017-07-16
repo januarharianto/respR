@@ -2,10 +2,10 @@
 % Please edit documentation in R/movReg.R
 \name{movReg}
 \alias{movReg}
-\title{Moving regressio version 2}
+\title{Moving regression version 2}
 \usage{
 movReg(df, span = 0.1)
 }
 \description{
-Moving regressio version 2
+Moving regression version 2
 }
