@@ -64,9 +64,11 @@ plot.pcrit <- function(x, rank = 1, ...) {
 
   p <-
     ggplot(data, aes(do, mr)) +
-      geom_point(size = 1, colour = 'yellow2', alpha = .1) +
-      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .5, linetype = 6, colour = 'black') +
-      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .5, linetype = 6, colour = 'black') +
+      geom_point(size = 1, colour = 'yellow2', alpha = .5) +
+      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 6, colour = 'gray80') +
+      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 6, colour = 'gray80') +
+      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, linetype = 6, colour = 'black') +
+      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, linetype = 6, colour = 'black') +
       geom_vline(xintercept = x$pcritRanked[5][rank, ], size = .5, linetype = 3, colour = 'darkorchid2') + # pcrit intercept
       geom_vline(xintercept = x$pcritRanked[6][rank, ], size = .5, linetype = 3, colour = 'coral2') + # pcrit midpoint
       annotate('text', x = x$pcritRanked[5][rank, ], y = max(data$mr), label = signif(x$pcritRanked[5][rank, ], 3), angle = 90) +
@@ -74,7 +76,7 @@ plot.pcrit <- function(x, rank = 1, ...) {
       ylab('Metabolic rate') +
       xlab('Oxygen concentration') +
       scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 10), limits = c(0, 1.1 * max((data[2])))) +
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 5), limits = c(0, 1.1 * max((data[2])))) +
       # labs(colour = "Regression") +
       theme_respr() +
       geom_blank()
