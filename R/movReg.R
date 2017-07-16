@@ -1,3 +1,4 @@
+#' Moving regression version 2
 #'
 #'@export
 movReg <- function(df, span = 0.1) {
