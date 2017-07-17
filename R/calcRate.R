@@ -8,6 +8,7 @@
 #' @param ... Additional parameters can be added here, if needed.
 #'
 #' @return A list.
+#' @import ggplot2
 #' @export
 #'
 #' @examples
@@ -118,6 +119,6 @@ plot.calcRate <- function(x, ...) {
     geom_abline(slope = slope, intercept = int, linetype="dashed")
 
   #Output
-  plot_grid(tseries.plot, plot_grid(residual.plot, qq.plot),
+  cowplot::plot_grid(tseries.plot, cowplot::plot_grid(residual.plot, qq.plot),
             ncol = 1, align = 'h')
 }
