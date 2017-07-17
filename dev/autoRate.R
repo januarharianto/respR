@@ -1,3 +1,4 @@
+library(ggplot2)
 autoRate <- function(df, span = 0.2) {
   win <- nrow(df) * span # define window
   reg <- movingReg(df, span) # perform rolling regression on data
@@ -18,7 +19,7 @@ autoRate <- function(df, span = 0.2) {
   p3 <- ggplot(data.frame(slope = slope), aes(x = slope)) + geom_line(stat = 'density', na.rm = T)
   p4 <- ggplot(data.frame(r2 = r2), aes(x = r2)) + geom_line(stat = 'density', na.rm = T)
 
-  plot_grid(p0,p1,p2, plot_grid(p3, p4, ncol = 2), ncol = 1)
+  cowplot::plot_grid(p0,p1,p2, cowplot::plot_grid(p3, p4, ncol = 2), ncol = 1)
 }
 
 
