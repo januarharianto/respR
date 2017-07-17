@@ -62,8 +62,10 @@ movingReg <- function(df, span = .1) {
       std.err = std.err)
   new <- Sys.time() - old                          # calculate time elapsed
   new <- round(unclass(new)[1], 1)                 # convert to number
-   cat(sprintf('%d regressions fitted', countr),   # print # regressions done
-       sprintf('in %g seconds', new), '\n')        # print time taken
+  cat(sprintf('%d regressions fitted.', countr))   # print # regressions done
+
+   # cat(sprintf('%d regressions fitted', countr),   # print # regressions done
+   #     sprintf('in %g seconds', new), '\n')        # print time taken
    class(output) <- 'movingReg'
    invisible(output)
 }
