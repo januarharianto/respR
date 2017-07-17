@@ -7,16 +7,15 @@ prepareData <- function(df, plot = F) {
   # cat("Checking for missing data...\n")
   xNA    <- hasNA(df, 1)
   yNA    <- hasNA(df, 2)
-  if (xNA == T | yNA == T)  # automatically remove NAs. Shouldn't affect data?
+  if (xNA == T | yNA == T)  # automatically remove NAs if detected
   df <- na.omit(df)
   n <- length(attributes(df)$na.action)
   m <- length(attributes(df)$row.names)
-  # cat("Checking time data for duplicates...\n")
-  dup    <- dupes(df)
-  # cat("Checking if O2 data are monotonic...\n")
-  mono   <- monotonic(df)
-  # cat("Checking if time data are not evenly spaced...\n")
-  spaced <- evenSpaced(df)
+
+  dup    <- dupes(df)        # duplicated time
+  mono   <- monotonic(df)    # monotonic
+  spaced <- evenSpaced(df)   # evenly-spaced
+
   # Summary
   message("Summary:")
   cat("Missing values in time data (x):    ", xNA, "\n")
