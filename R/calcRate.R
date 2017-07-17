@@ -59,7 +59,7 @@ calcRate <- function(df, from = NULL, to = NULL, by = "propotion", expt.type = "
   beta <- coef(lmfit)[[2]]  # slope
   r.sq <- summary(lmfit)$r.squared  # r-square
   calcrateout <- list(data = df, subset = subdf, model = lmfit, slope = beta, r.square = r.sq)
-  class(calcrateout) <- append(class(output), "calcRate")
+  class(calcrateout) <- append(class(calcrateout), "calcRate")
   summ <- data.frame(slope = beta, r.sq, from.row, to.row)
   print(summ)
   return(invisible(calcrateout))
