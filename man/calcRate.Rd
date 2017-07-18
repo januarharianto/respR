@@ -4,8 +4,8 @@
 \alias{calcRate}
 \title{Calculate rate over time. Need a better title.}
 \usage{
-calcRate(df, from = NULL, to = NULL, by = "propotion",
-  expt.type = "closed", ...)
+calcRate(df, from = NULL, to = NULL, by = "proportion",
+  expt.type = "closed")
 }
 \arguments{
 \item{df}{Data frame.}
