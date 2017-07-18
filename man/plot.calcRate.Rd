@@ -4,7 +4,7 @@
 \alias{plot.calcRate}
 \title{Plot for class calcRate}
 \usage{
-\method{plot}{calcRate}(x, ...)
+\method{plot}{calcRate}(x)
 }
 \arguments{
 \item{x}{An object of class 'calcRate'.}
