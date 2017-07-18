@@ -21,7 +21,7 @@
 #' sardine.subset <- calcRate(sardine, from = 0.7, to = 0.2)
 #' plot(sardine.subset)
 #'
-calcRate <- function(df, from = NULL, to = NULL, by = "propotion", expt.type = "closed", ...) {
+calcRate <- function(df, from = NULL, to = NULL, by = "proportion", expt.type = "closed") {
   # Subset data -----
   if (is.null(from) && is.null(to)) {  # if these arguments are not used, don't subset the data
     subdf     <- df
@@ -50,10 +50,9 @@ calcRate <- function(df, from = NULL, to = NULL, by = "propotion", expt.type = "
     }
   }
   # Check that the subset meets minimum requirements -----
-  if (nrow(subdf) <= 3)
-    stop("Data subset is too narrow. Please select a larger threshold.")
-  if (max(subdf[, 2]) == min(subdf[, 2]))
-    stop("Min/max O2 in data subset are too close. Please select a larger threshold.")
+  if (nrow(subdf) <= 3) stop("Data subset is too narrow. Please select a larger threshold.")
+  if (max(subdf[, 2]) == min(subdf[, 2])) stop("Min/max O2 in data subset are too close. Please select a larger threshold.")
+
   # Looks good. Perform regression -----
   lmfit <- lm(subdf[[2]] ~ subdf[[1]], subdf)  # perform the lm
   # Generate output -----
@@ -84,16 +83,16 @@ calcRate <- function(df, from = NULL, to = NULL, by = "propotion", expt.type = "
 #'
 plot.calcRate <- function(x, ...) {
   lm <- x$model
-  data <- x$data
-  subset <- x$subset
+  dfdata <- x$data
+  dfsubset <- x$subset
 
   # Timeseries Plot
   tseries.plot <- ggplot() +
-    geom_point(data = data, aes(data[, 1], data[, 2]), shape = 21, size = 3,
+    geom_point(data = dfdata, aes(dfdata[, 1], dfdata[, 2]), shape = 21, size = 3,
       fill = 'darkorchid3', colour = 'darkorchid4', alpha = .4) +
-    geom_point(data = subset, aes(subset[, 1], subset[, 2]), shape = 21,
+    geom_point(data = dfsubset, aes(dfsubset[, 1], dfsubset[, 2]), shape = 21,
       size = 3, fill = 'gold', colour = 'gold2') +
-    stat_smooth(data = subset, aes(subset[, 1], subset[, 2]), method = 'lm',
+    stat_smooth(data = dfsubset, aes(dfsubset[, 1], dfsubset[, 2]), method = 'lm',
       colour = 'black', linetype = 4) +
     labs(x = "Time", y = "DO2")
 
