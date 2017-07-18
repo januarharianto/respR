@@ -81,10 +81,10 @@ calcRate <- function(df, from = NULL, to = NULL, by = "proportion", expt.type = 
 #' sardine.full <- calcRate(sardine) # if you want to run the entire dataset
 #' plot(sardine.full)
 #'
-plot.calcRate <- function(x, ...) {
+plot.calcRate <- function(x) {
   lm <- x$model
-  dfdata <- x$data
-  dfsubset <- x$subset
+  dfdata <- data.frame(sapply(x$data, as.numeric))
+  dfsubset <- data.frame(sapply(x$subset, as.numeric))
 
   # Timeseries Plot
   tseries.plot <- ggplot() +
@@ -107,11 +107,11 @@ plot.calcRate <- function(x, ...) {
   # extract standardized residuals from the fit
   d <- data.frame(std.resid = rstandard(lm))
   # calculate 1Q/4Q line
-  y <- quantile(d$std.resid[!is.na(d$std.resid)], c(0.25, 0.75))
-  x <- qnorm(c(0.25, 0.75))
-  slope <- diff(y)/diff(x)
-  int <- y[1L] - slope * x[1L]
-  qq.plot <- ggplot(data=d, aes(sample=std.resid)) +
+  yx <- quantile(d$std.resid[!is.na(d$std.resid)], c(0.25, 0.75))
+  xx <- qnorm(c(0.25, 0.75))
+  slope <- diff(yx)/diff(xx)
+  int <- yx[1L] - slope * xx[1L]
+  qq.plot <- ggplot(data = d, aes(sample = std.resid)) +
     stat_qq(shape = 21, size = 3, fill = 'darkorchid3', colour = 'darkorchid4',
       alpha = .4) +
     labs(x="Theoretical Quantiles", y="Standardized Residuals") +
