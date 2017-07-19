@@ -102,3 +102,34 @@ Mode <- function(x, na.rm = FALSE) {
 # bench <- function(x){
 #   system.time({x})
 # }
+
+
+
+theme_respr <- function() {
+  theme_bw(base_size = 14) %+replace%
+    theme(
+      panel.background = element_rect(fill = "transparent", colour = NA),
+      plot.background = element_rect(fill = "transparent", colour = NA),
+      #plot.margin = unit(c(10,5,5,5),"mm"),
+
+      panel.border = element_rect(fill = 'transparent', size = 1),
+      # panel.grid.major = element_line(colour="#f0f0f0"),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+
+      axis.text	= element_text(size = rel(1)),
+      axis.title = element_text(face = 'bold', size = rel(1)),
+      # axis.title.y = element_text(angle = 90, margin = margin(0, 25, 0, 0)),
+      # axis.title.x = element_text(margin = margin(25, 0, 0, 0)),
+      axis.ticks = element_line(),
+
+      legend.key = element_rect(colour = NA),
+      legend.position = "bottom",
+      legend.direction = "horizontal",
+      legend.key.size = unit(0.2, "cm"),
+      legend.title = element_text(face="italic"),
+
+      strip.background = element_rect(colour="#f0f0f0",fill="#f0f0f0"),
+      strip.text = element_text(face="bold")
+    )
+}
