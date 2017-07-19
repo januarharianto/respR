@@ -106,7 +106,7 @@ Mode <- function(x, na.rm = FALSE) {
 
 
 theme_respr <- function() {
-  theme_bw(base_size = 14) %+replace%
+  theme_bw(base_size = 12) %+replace%
     theme(
       panel.background = element_rect(fill = "transparent", colour = NA),
       plot.background = element_rect(fill = "transparent", colour = NA),
