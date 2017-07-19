@@ -16,4 +16,7 @@ Imports:
     tidyverse,
     cowplot, 
     marelac,
-    zoo
+    zoo,
+    roll,
+    ggplot2,
+    ggpmisc
