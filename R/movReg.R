@@ -16,7 +16,7 @@ movReg <- function(df, span = 0.1) {
   # b1 <- c(rep(NA, win - 1), (xyBar - xBar * yBar) / (xxBar - xBar * xBar))
   b1 <- (xyBar - xBar * yBar) / (xxBar - xBar * xBar)
   benchEnd <- round(unclass(Sys.time() - benchStart)[1], 1)
-  message(sprintf("%d regressions fitted ", NROW(b1)),
+  cat(sprintf("%d regressions fitted ", NROW(b1)),
     sprintf("in %g seconds", benchEnd), "\n")
   return(b1)
 }
