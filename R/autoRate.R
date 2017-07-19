@@ -23,28 +23,28 @@ autoRate <- function(df, span = 0.3) {
   # indx
 
   # define plotting constants
-  pri <- 'navy'; sec <- 'black'; a <- 0.6
+  c1 <- 'navy'; c2 <- 'black'; a <- 0.6
 
-  pdf <- ggplot(df, aes(df[, 1], df[, 2])) +
-    geom_point(size = 1.5, colour = pri, alpha = a) +
+  pltdf <- ggplot(df, aes(x = df[[1]], y = df[[2]])) +
+    geom_point(size = 1.5, colour = c1, alpha = a) +
     labs(x = 'Time', y = 'DO') +
     theme_respr()
 
   # plot density
   pdens <- ggplot(rdf, aes(slopes)) +
-      stat_density(fill = pri, alpha = a, na.rm = T) +
-      geom_line(stat = 'density', colour = sec, alpha = a, na.rm = T) +
-      labs(x = 'MO2', y = 'Density') +
-      theme_respr()
+    stat_density(fill = c1, alpha = a, na.rm = T) +
+    geom_line(stat = 'density', colour = c2, alpha = a, na.rm = T) +
+    labs(x = 'Time', y = 'MO2') +
+    theme_respr()
 
   # plot slopes
   slopesdf <- data.frame(x = df[,1], y = slopes)
-  pslope <- ggplot(slopesdf, aes(x,y)) +
-      geom_line(size = 1, colour = pri, na.rm = T) +
-      labs(x = 'MO2', y = 'Time') +
-      theme_respr()
+  pslope <- ggplot(slopesdf, aes(slopesdf[, 1], slopesdf[, 2])) +
+    geom_line(size = 1, colour = c1, na.rm = T) +
+    labs(x = 'MO2', y = 'Time') +
+    theme_respr()
 
-  cowplot::plot_grid(pdf, pslope, pdens, nrow = 2, ncol = 2, align = 'hv')
+  cowplot::plot_grid(pltdf, pslope, pdens, nrow = 2, ncol = 2, align = 'hv')
 }
 
 
