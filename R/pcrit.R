@@ -1,6 +1,13 @@
-#' @import ggplot2
-#' @import zoo
+#' Calculate Pcrit
+#'
+#' @param df Data frame.
+#' @param span Numeric.
+#' @param MR Logical.
+#'
+#' @return A value of Pcrit.
 #' @export
+#'
+#'
 pcrit <- function(df, span = 0.05, MR = FALSE) {
   if (MR == T) {
     mrDo <- df
@@ -45,9 +52,13 @@ pcrit <- function(df, span = 0.05, MR = FALSE) {
     pcritRanked = pcritRanked,
     best = best)
 
-  message(sprintf("%d 'hockey' regressions fitted ",  NROW(pcrit)),
-    sprintf("in %g seconds", new), "\n")
+  cat(sprintf("%d 'hockey' regressions fitted ",  NROW(pcrit)),
+    sprintf("in %g seconds", new), "\n\n")
+  cat('Top 6 results:\n')
+  print(head(out$pcritRanked))
+
   class(out) <- "pcrit"
+  print(plot(out, rank = 1))
 
   return(invisible(out))
 }
@@ -64,11 +75,11 @@ plot.pcrit <- function(x, rank = 1, ...) {
 
   p <-
     ggplot(data, aes(do, mr)) +
-      geom_point(size = 1, colour = 'yellow2', alpha = .5) +
-      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 6, colour = 'gray80') +
-      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 6, colour = 'gray80') +
-      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, linetype = 6, colour = 'black') +
-      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, linetype = 6, colour = 'black') +
+      geom_line(size = 1, colour = 'navy') +
+      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 2, colour = 'black', alpha = .1) +
+      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 2, colour = 'black', alpha = .1) +
+      stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, colour = 'firebrick') +
+      stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, colour = 'firebrick') +
       geom_vline(xintercept = x$pcritRanked[5][rank, ], size = .5, linetype = 3, colour = 'darkorchid2') + # pcrit intercept
       geom_vline(xintercept = x$pcritRanked[6][rank, ], size = .5, linetype = 3, colour = 'coral2') + # pcrit midpoint
       annotate('text', x = x$pcritRanked[5][rank, ], y = max(data$mr), label = signif(x$pcritRanked[5][rank, ], 3), angle = 90) +
@@ -76,7 +87,7 @@ plot.pcrit <- function(x, rank = 1, ...) {
       ylab('Metabolic rate') +
       xlab('Oxygen concentration') +
       scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 5), limits = c(0, 1.1 * max((data[2])))) +
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 10), limits = c(0, 1.1 * max((data[2])))) +
       # labs(colour = "Regression") +
       theme_respr() +
       geom_blank()
@@ -84,34 +95,4 @@ plot.pcrit <- function(x, rank = 1, ...) {
   return(p)
 }
 
-
-
-theme_respr <- function() {
-  theme_bw(base_size = 14) %+replace%
-    theme(
-      panel.background = element_rect(fill = "transparent", colour = NA),
-      plot.background = element_rect(fill = "transparent", colour = NA),
-      plot.margin = unit(c(10,5,5,5),"mm"),
-
-      panel.border = element_rect(fill = 'transparent', size = 1),
-      # panel.grid.major = element_line(colour="#f0f0f0"),
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-
-      axis.text	= element_text(size = rel(1)),
-      axis.title = element_text(face = 'bold', size = rel(1)),
-      axis.title.y = element_text(angle = 90, margin = margin(0, 25, 0, 0)),
-      axis.title.x = element_text(margin = margin(25, 0, 0, 0)),
-      axis.ticks = element_line(),
-
-      legend.key = element_rect(colour = NA),
-      legend.position = "bottom",
-      legend.direction = "horizontal",
-      legend.key.size = unit(0.2, "cm"),
-      legend.title = element_text(face="italic"),
-
-      strip.background = element_rect(colour="#f0f0f0",fill="#f0f0f0"),
-      strip.text = element_text(face="bold")
-    )
-}
 
