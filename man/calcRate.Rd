@@ -2,38 +2,32 @@
 % Please edit documentation in R/calcRate.R
 \name{calcRate}
 \alias{calcRate}
-\title{Calculate rate over time. Need a better title.}
+\title{Calculate rate via local linear regression or 2-point slope.}
 \usage{
-calcRate(df, from = NULL, to = NULL, by = "proportion",
-  expt.type = "closed")
+calcRate(df, from = NULL, to = NULL, by = "time")
 }
 \arguments{
-\item{df}{Data frame.}
+\item{df}{Dataframe.}
 
-\item{from}{Numeric.}
+\item{from}{Number, or a list.}
 
-\item{to}{Numeric.}
-
-\item{by}{Character.}
-
-\item{expt.type}{Character. Not yet active.}
-
-\item{...}{Additional parameters can be added here, if needed.}
+\item{to}{Number, or a list.}
 }
 \value{
-A list.
+A summary list.
 }
 \description{
-Calculate rate over time. Need a better title.
+\code{calcRate} parses a dataframe, or its subset(s) to calculate the rate of change of oxygen concentration over time.
 }
 \examples{
-# Load data
 data(sardine)
-sardine.full <- calcRate(sardine) # if you want to run the entire dataset
-plot(sardine.full)
+calcRate(sardine, 200, 1800)                 # default subset by 'time'
+calcRate(sardine, 93, 92, by = 'o2')         # subset by O2
+calcRate(sardine, 200, 1800, by = 'row')     # subset by row
+calcRate(sardine, .8, .2, by = 'proportion') # subset by proportion
 
-# if you want to specify range, include from and to arguments.
-sardine.subset <- calcRate(sardine, from = 0.7, to = 0.2)
-plot(sardine.subset)
+# Using a list in 'from' and 'to' calculates multiple regressions:
+data(intermittent)
+calcRate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 
 }
