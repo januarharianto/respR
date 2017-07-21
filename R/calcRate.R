@@ -95,12 +95,14 @@ linReg <- function(df, lookup, by) {
   }
   if (by == 'o2') {
     from.row <- Position(function(x) x <= from, df[[2]])
-    to.row   <- Position(function(x) x >= to, df[[2]], right = T)
+    to.row   <- Position(function(x) x <= to, df[[2]])
+    # to.row   <- Position(function(x) x >= to, df[[2]], right = T) # alternative
     subdf    <- df[from.row:to.row, ]
   }
   if (by == 'proportion') {
     from.row <- Position(function(x) x <= (from * (max(df[[2]]) - min(df[[2]])) + min(df[[2]])), df[[2]])
-    to.row   <- Position(function(x) x >= (to * (max(df[[2]]) - min(df[[2]])) + min(df[[2]])), df[[2]], right = T)
+    to.row   <- Position(function(x) x <= (to * (max(df[[2]]) - min(df[[2]])) + min(df[[2]])), df[[2]], right = T)
+    # to.row   <- Position(function(x) x >= (to * (max(df[[2]]) - min(df[[2]])) + min(df[[2]])), df[[2]], right = T) # alternative
     subdf    <- df[from.row:to.row, ]
   }
   # check that the subset meets minimum requirements
