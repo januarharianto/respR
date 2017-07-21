@@ -85,7 +85,7 @@ plot.autoRate <- function(x, rank = 1) {
     geom_smooth(method = 'lm', se = F, colour = c2, linetype = 2) +
     ggpmisc::stat_poly_eq(formula = my.formula,
       eq.with.lhs = "italic(hat(y))~`=`~",
-      aes(label = paste(..eq.label.., ..rr.label.., sep = "*plain(\",\")~")),
+      aes(label = paste(..eq.label.., sep = "*plain(\",\")~")),
       label.x.npc = .6,
       parse = TRUE) +
     theme_respr()
@@ -125,7 +125,7 @@ plot.autoRate <- function(x, rank = 1) {
   int <- yx[1L] - slope * xx[1L]
   pqq <- ggplot(data = d, aes(sample = std.resid)) +
     stat_qq(shape = 21, size = 3, fill = c1, colour = c1, alpha = .4) +
-    labs(x="Theoretical Quantiles", y="Standardized Residuals") +
+    labs(x="Theoretical Quantiles", y="Standardised Residuals") +
     geom_abline(slope = slope, intercept = int, linetype = "dashed", colour = c3) +
     theme_respr()
 
