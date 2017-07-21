@@ -41,7 +41,11 @@ calcRate <- function(df, from = NULL, to = NULL, by = 'time') {
   summ <- do.call(rbind, summ) # bind the list into a dataframe
   print(summ)
   # print the rate, or weighted average of the rate:
-
+  w.sum <- (summ$to.time - summ$from.time) # weighted sum
+  av <- mean(summ$b1) # average of slopes
+  w.av <- sum(summ$b1 * w.sum) / sum(w.sum) # weighted average of slopes
+  cat('\n', sprintf('Rate          %g', av))  # print results
+  cat('\n', sprintf('Weighted rate %g', w.av))
   # plot the subset for location check:
   allsets <- lapply(out, '[[', 'subdf') # extract specific sublist from output
   allsets <- do.call(rbind, allsets) # combine subset lists into one dataframe
