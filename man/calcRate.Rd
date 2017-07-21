@@ -12,6 +12,8 @@ calcRate(df, from = NULL, to = NULL, by = "time")
 \item{from}{Number, or a list.}
 
 \item{to}{Number, or a list.}
+
+\item{by}{Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calcRate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.}
 }
 \value{
 A summary list.
