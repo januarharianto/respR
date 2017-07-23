@@ -33,9 +33,9 @@
 calcMO2 <- function(input, from, to, volume, mass = NULL, ...) {
   # check if input is class 'calcRate'
   if (class(input) == 'calcRate') {
-    summtab <- input$summary
-    b1 <- summtab$b1
-    mo2 <- convMO2(b1, from, to, volume, mass)
+    summtab <- input$summary # extract summary table
+    b1 <- summtab$b1 # extract rates
+    mo2 <- convMO2(b1, from, to, volume, mass) # convert rates to MO2
     out <- data.frame(summtab, mo2 = mo2$mo2, units.mo2 = paste(mo2$units, collapse = "/"))
     print(out)
     # recalculate average and intermittent MO2
