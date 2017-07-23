@@ -1,50 +1,68 @@
 #' @import ggplot2 ggpmisc
+#' @importFrom roll roll_lm
 #' @export
 autoRate <- function(df, span = 0.1) {
-  row.names(df) <- NULL # reset row numbers
-  width <- floor(span * nrow(df))
-  slopes <- rollreg(df, span)  # perform rolling regression and output slopes
-  rdf <- data.frame(slopes)  # convert to unique dataframe for later analysis
-  dens <- density(slopes, na.rm = T, bw = 'SJ', n = length(slopes)) # estimate density
-  densBW <- dens$bw  # extract bin width
-  densPeaks <- which.peaks(dens) # find peaks in density
-  rankP <- densPeaks[order(densPeaks$density, decreasing = T), ] # rank results
-  allslopes <- rankP[,1] # list slopes, ranked
+  # prepare the data for analysis
+  row.names(df) <- NULL               # reset row numbers if it's a subset
+  width <- floor(span * nrow(df))     # calculate width from span value
+  slopes <- rollreg(df, span)         # perform rolling regression and output slopes
+  rdf <- data.frame(slopes)           # convert rolling regression output to dataframe for later analysis
 
-  # function to create a list of indices based on best rolling windows:
+  # now that rolling regression is done we can analyse its output.
+  # perform kernel density estimation on regression data:
+  dens <- density(slopes, na.rm = T, bw = 'SJ', n = length(slopes))
+  densPeaks <- which.peaks(dens)                                 # find peaks in density
+  rankP <- densPeaks[order(densPeaks$density, decreasing = T), ] # rank density peaks from highest to lowest
+  allslopes <- rankP[, 1]                                        # extract just the slope values
+  densBW <- dens$bw # extract bin width from kernel density estimation
+
+  # we now define a method to identify the rows in the original dataset that
+  #   correspond to the bin width. This is done for every single peak detected
+  #   as above.
   makeIndex <- function(rdf, x, densBW, width) {
-    # pick windows with slopes within the bin range:
-    picks <- which(rdf <= (x + densBW) & rdf >= (x - densBW))
-    # split windows into groups:
+    # segments of the rolling windows that produced those slopes are
+    #   first identified:
+    picks <- which(rdf <= (x + densBW/2) & rdf >= (x - densBW/2))
+    # the segments may be non-continuous; they are separated into groups:
     allWins <- unname(split(picks, cumsum(c(TRUE, diff(picks) >= width))))
-    # generate index for each group:
+    # index values (which can identify the first and last rows of the original
+    #   dataframe) are generated:
     indx <- do.call(rbind, lapply(allWins, function(l) c((min(l) - width + 1), max(l))))
-    # pick longest index to represent length:
+    # the index with the largest width is selected; the rest are discarded.
+    # a better method would be to analyse each width (upgrade in future?):
     best <- which((indx[, 2] - indx[, 1]) == max((indx[, 2] - indx[, 1])), arr.ind = TRUE)[1]
-    return(indx[best, ])
+    return(indx[best, ]) # the best index is passed on for further analysis below
   }
-  # create ranked indices per peak in density:
+  # link each peak with the best index by applying makeIndex on all density peak results:
   rankedIndices <- lapply(allslopes, makeIndex, densBW = densBW, rdf = rdf, width = width)
-  rankedIndices <- do.call(rbind, rankedIndices)
-  # generate index based on no. of ranked results:
-  glist <- c(1:NROW(rankedIndices))
+  rankedIndices <- do.call(rbind, rankedIndices) # bind the results
 
-  input <- list(df            = df,
-                rankP         = rankP,
-                slopes        = slopes,
-                rdf           = rdf,
+  # now that we have identified the start/end rows in the original dataset for
+  #   each peak, we extract the subsets of the original dataframe that
+  #   correspond to each peak and store them all in a list.
+
+  # first, all data needed for the extraction are aggregated into a list:
+  input <- list(df = df,
+                rankP = rankP,
+                slopes = slopes,
+                rdf    = rdf,
                 rankedIndices = rankedIndices)
-
-  # get all possible outputs, including new lms of subsets obtained from density peaks:
+  # we also create an index to specify how many times we need to subset the data:
+  glist <- c(1:NROW(rankedIndices))
+  # extract subsets and perform a linear regression on each subset. We use these
+  #   linear values for our results instead of the averaged slopes used
+  #   initially to detect the subsets. This gives us greater statistical power.
   allsubs <- lapply(glist, rankedOutput, input = input)
-  names(allsubs)<-sprintf("Rank%i",1:length(allsubs)) # rename the lists to 'ranks'
+  # rename the lists to 'ranks' so that they are easily selected in the output:
+  names(allsubs)<-sprintf("Rank%i",1:length(allsubs))
 
+  # DONE! Now do cleanup and output:
   # bind all lm results into table:
   allSummarylms <- lapply(glist, function(x) allsubs[[x]][[8]])
   allSummarylms <- do.call(rbind, allSummarylms)
   # generate summary:
   summary <- cbind(rankP, bin = densBW, allSummarylms)
-  print(summary)
+  print(head(summary))
   class(allsubs) <- append(class(allsubs), "autoRate")
   message('Please wait while we generate diagnostic plots...')
   print(plot.autoRate(allsubs))
@@ -57,16 +75,16 @@ autoRate <- function(df, span = 0.1) {
 #' @export
 # plot of class autoRate
 plot.autoRate <- function(x, rank = 1) {
-  set <- x[[rank]]
-  df <- set$df
-  subdf <-set$subdf
-  rdf <- set$rdf
-  bestb1 <- signif(set$rankP$b1.reference[1], 3)
-  ggPeaks <- unclass(set$rankP$b1.reference)
-  rPeak <- ggPeaks[rank]
-  slopesdf <- data.frame(x = set$df$Time, y = set$rdf)
-  allslopes <- set$rankP[, 1][rank]
-  lmfit <- set$lmfit
+  set <- x[[rank]]  # grab the data based on rank
+  df <- set$df      # the original dataframe
+  subdf <-set$subdf # the subset
+  rdf <- set$rdf    # rolling dataframe of b1 (slope) data
+  bestb1 <- signif(set$rankP$b1.reference[1], 3) # best b1, rounded to 3 s.f.
+  ggPeaks <- unclass(set$rankP$b1.reference)     # peaks, to label density plot
+  rPeak <- ggPeaks[rank]                         # the above is ranked
+  slopesdf <- data.frame(x = set$df$Time, y = set$rdf)  # create dataframe of slope data vs time data
+  allslopes <- set$rankP[, 1][rank]              # the best slope
+  lmfit <- set$lmfit                             # lmfit
   # define plotting constants
   c1 <- 'navy'; c2 <- 'black'; c3 <- 'goldenrod'; a <- 0.6
 
@@ -172,7 +190,7 @@ rollreg <- function(df, span, intercept = F) {
   x <- matrix(df[[1]])
   y <- matrix(df[[2]])
   width <- floor(span * nrow(df))
-  lm <- roll::roll_lm(x, y, width)
+  lm <- roll_lm(x, y, width)
   slopes <- lm$coefficients[, 2]
   nfits <- length(slopes[!is.na(slopes)])
   message(sprintf('%d regressions fitted.', nfits))
