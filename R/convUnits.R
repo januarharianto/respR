@@ -31,44 +31,44 @@ convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
   vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
   # ----------------------------------------------------------------------------
-  f <- checkUnits(from, 2)[2]
+  f <- checkUnits(from, 'o2')[2]
   # Before conversion, standardise all units to mg/L
   # Step-by-step, verbose conversions (for easier debugging later):
-  if(f == checkUnits('mg/L',    2)[2]) {c <-  x}
-  if(f == checkUnits('ug/L',    2)[2]) {c <-  x / 1e3}
-  if(f == checkUnits('mmol/L',  2)[2]) {c <-  x * omWt}
-  if(f == checkUnits('umol/L',  2)[2]) {c <-  x * omWt / 1e3}
-  if(f == checkUnits('mL/L',    2)[2]) {c <-  x * omWt / omVl}
-  if(f == checkUnits('mg/kg',   2)[2]) {c <-  x * swDn / 1e3}
-  if(f == checkUnits('ug/kg',   2)[2]) {c <-  x * swDn / 1e6}
-  if(f == checkUnits('mmol/kg', 2)[2]) {c <-  x * swDn * omWt / 1e3}
-  if(f == checkUnits('umol/kg', 2)[2]) {c <-  x * swDn * omWt / 1e6}
-  if(f == checkUnits('%',       2)[2]) {c <-  x * oGas * omWt / 1e3 / 100}
-  if(f == checkUnits('mL/kg',   2)[2]) {c <-  x * omWt / omVl * swDn / 1e3}
-  if(f == checkUnits('Torr',    2)[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
-  if(f == checkUnits('hPa',     2)[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
-  if(f == checkUnits('kPa',     2)[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
-  if(f == checkUnits('mmHg',    2)[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
-  if(f == checkUnits('inHg',    2)[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
+  if(f == checkUnits('mg/L',   'o2')[2]) {c <-  x}
+  if(f == checkUnits('ug/L',   'o2')[2]) {c <-  x / 1e3}
+  if(f == checkUnits('mmol/L', 'o2')[2]) {c <-  x * omWt}
+  if(f == checkUnits('umol/L', 'o2')[2]) {c <-  x * omWt / 1e3}
+  if(f == checkUnits('mL/L',   'o2')[2]) {c <-  x * omWt / omVl}
+  if(f == checkUnits('mg/kg',  'o2')[2]) {c <-  x * swDn / 1e3}
+  if(f == checkUnits('ug/kg',  'o2')[2]) {c <-  x * swDn / 1e6}
+  if(f == checkUnits('mmol/kg','o2')[2]) {c <-  x * swDn * omWt / 1e3}
+  if(f == checkUnits('umol/kg','o2')[2]) {c <-  x * swDn * omWt / 1e6}
+  if(f == checkUnits('%',      'o2')[2]) {c <-  x * oGas * omWt / 1e3 / 100}
+  if(f == checkUnits('mL/kg',  'o2')[2]) {c <-  x * omWt / omVl * swDn / 1e3}
+  if(f == checkUnits('Torr',   'o2')[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
+  if(f == checkUnits('hPa',    'o2')[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
+  if(f == checkUnits('kPa',    'o2')[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
+  if(f == checkUnits('mmHg',   'o2')[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
+  if(f == checkUnits('inHg',   'o2')[2]) {c <-  x / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
 
-  t <- checkUnits(to, 2)[2]
+  t <- checkUnits(to,'o2')[2]
   # Step-by-step, verbose conversions (for easier debugging later):
-  if(t == checkUnits('mg/L',    2)[2]) {out <- c}
-  if(t == checkUnits('ug/L',    2)[2]) {out <- c * 1e3}
-  if(t == checkUnits('mmol/L',  2)[2]) {out <- c / omWt}
-  if(t == checkUnits('umol/L',  2)[2]) {out <- c / omWt * 1e3}
-  if(t == checkUnits('mL/L',    2)[2]) {out <- c / omWt * omVl}
-  if(t == checkUnits('mg/kg',   2)[2]) {out <- c / swDn * 1e3}
-  if(t == checkUnits('ug/kg',   2)[2]) {out <- c / swDn * 1e6}
-  if(t == checkUnits('mmol/kg', 2)[2]) {out <- c / omWt / swDn * 1e3}
-  if(t == checkUnits('umol/kg', 2)[2]) {out <- c / omWt / swDn * 1e6}
-  if(t == checkUnits('%',       2)[2]) {out <- c / omWt / oGas * 1e3 * 100}
-  if(t == checkUnits('mL/kg',   2)[2]) {out <- c / swDn * omVl / omWt * 1e3}
-  if(t == checkUnits('Torr',    2)[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
-  if(t == checkUnits('hPa',     2)[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
-  if(t == checkUnits('kPa',     2)[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
-  if(t == checkUnits('mmHg',    2)[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
-  if(t == checkUnits('inHg',    2)[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
+  if(t == checkUnits('mg/L',   'o2')[2]) {out <- c}
+  if(t == checkUnits('ug/L',   'o2')[2]) {out <- c * 1e3}
+  if(t == checkUnits('mmol/L', 'o2')[2]) {out <- c / omWt}
+  if(t == checkUnits('umol/L', 'o2')[2]) {out <- c / omWt * 1e3}
+  if(t == checkUnits('mL/L',   'o2')[2]) {out <- c / omWt * omVl}
+  if(t == checkUnits('mg/kg',  'o2')[2]) {out <- c / swDn * 1e3}
+  if(t == checkUnits('ug/kg',  'o2')[2]) {out <- c / swDn * 1e6}
+  if(t == checkUnits('mmol/kg','o2')[2]) {out <- c / omWt / swDn * 1e3}
+  if(t == checkUnits('umol/kg','o2')[2]) {out <- c / omWt / swDn * 1e6}
+  if(t == checkUnits('%',      'o2')[2]) {out <- c / omWt / oGas * 1e3 * 100}
+  if(t == checkUnits('mL/kg',  'o2')[2]) {out <- c / swDn * omVl / omWt * 1e3}
+  if(t == checkUnits('Torr',   'o2')[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
+  if(t == checkUnits('hPa',    'o2')[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
+  if(t == checkUnits('kPa',    'o2')[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
+  if(t == checkUnits('mmHg',   'o2')[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
+  if(t == checkUnits('inHg',   'o2')[2]) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
 
   return(out)
 }
