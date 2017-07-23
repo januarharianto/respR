@@ -52,9 +52,11 @@ calcRate <- function(df, from = NULL, to = NULL, by = 'time') {
   dplot <- ggplot() +
     geom_point(data = df, aes(df[[1]], df[[2]])) +
     geom_point(data = allsets, aes(allsets[[1]], allsets[[2]]), colour ='goldenrod') +
+    labs(x = 'Time', y = 'DO') +
     theme_respr() +
     geom_blank()
   print(dplot)
+  out <- list(alldata = out, summary = summ, average = av, weighted.average = w.av)
   class(out) <- 'calcRate'
   return(invisible(out))
 }
