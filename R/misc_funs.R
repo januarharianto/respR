@@ -8,12 +8,9 @@
 #' @examples
 #' errorCheck(x > 5, "Value is bigger than 5.")
 # credit to https://stackoverflow.com/a/8345314
-errorCheck <- function (condition, msg) {
-  if (condition)
-    stop(msg, call. = FALSE)
+stop.since <- function (condition, msg) {
+  if (condition) stop(msg, call. = FALSE)
 }
-
-
 
 #' @title Check for NA and NaN
 #' @description Returns TRUE or FALSE. Also prints an index when summary = T.
@@ -53,8 +50,6 @@ dupes <- function(df, summary = F) {
     return(check)
 }
 
-
-
 #' @title Check for monotonically increasing data.
 #' @author Januar Harianto
 #' @export
@@ -71,8 +66,6 @@ monotonic <- function(df, summary=F){
     return(check)
 }
 
-
-
 #' @title Check for evenly spaced time data
 #' @author Januar Harianto
 #' @export
@@ -84,21 +77,3 @@ evenSpaced <- function(df, col=1, tol=.Machine$double.eps * 100){
   return(check)
 }
 
-
-
-#' @title Calculate mode. I may or may not use this...for auto detection of
-#' best regression.
-#' @author Januar Harianto
-#' @export
-Mode <- function(x, na.rm = FALSE) {
-  if(na.rm){
-    x = x[!is.na(x)]
-  }
-  ux <- unique(x)
-  return(ux[which.max(tabulate(match(x, ux)))])
-}
-
-# Just a benchmarking function (VERY SIMPLE), will delete this later -----------
-# bench <- function(x){
-#   system.time({x})
-# }
