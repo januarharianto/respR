@@ -16,7 +16,7 @@ checkUnits(unit, type)
 Checks input string against a known database and returns a
 logical output (i.e. TRUE or FALSE). If TRUE, also prints out the identified
 string. Works for time (e.g min, sec), unit of O2 measurement (e.g. %, mg/L),
-volume (e.g. mL, L) and mass/weight (e.g. kg).
+volume (e.g. mL, L) and weight/mass (e.g. kg).
 }
 \details{
 This function makes it easier to parse and understand the plethora
@@ -25,11 +25,11 @@ user may deploy a 'fuzzy' approach during the input of measurement units
 (e.g. 'mg/l', 'mgL-1', 'mgl-1' and 'mg per litre' all work).
 }
 \examples{
-checkUnits('min', 1)
-checkUnits('notatunit', 1)
+checkUnits('min', 'time')
+checkUnits('notatunit', 'time')
 
-checkUnits('hpa', 2)
-checkUnits('notatunit', 2)
+checkUnits('hpa', 'o2')
+checkUnits('notatunit', 'o2')
 }
 \author{
 Januar Harianto
