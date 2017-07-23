@@ -8,6 +8,7 @@
 #' @param by Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calcRate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.
 #'
 #' @return A summary list.
+#' @import ggplot2 ggpmisc
 #' @export
 #'
 #' @examples
@@ -29,16 +30,14 @@ calcRate <- function(df, from = NULL, to = NULL, by = 'time') {
     by   <- 'row'
   }
   # perform some error checks:
-  if (length(from) != length(to)) # check inputs are of same length
-    stop('Please check \'to\' and \'from\' arguments.')
-  if (!is.numeric(from) | !is.numeric(to)) # check subset inputs are numeric
-    stop('\'to\' and \'from\' arguments must be numeric.')
+  # check subset inputs are numeric:
+  if (!is.numeric(from) | !is.numeric(to)) stop("'to' and 'from' arguments must be numeric.")
   index <- cbind(from, to)   # create matrix of dataframe indices
   # for each row in the matrix, apply the function linReg and list the output:
   out <- apply(index, 1, linReg, df = df, by = by)
   names(out) <- sprintf('rep%i', 1:length(out)) # a list must have a name
-  summ <- lapply(out, '[[', 'wrap') # extract specific sublist from output
-  summ <- do.call(rbind, summ) # bind the list into a dataframe
+  summ <- lapply(out, '[[', 'wrap') # extract summary sublist from output for all reps
+  summ <- do.call(rbind, summ) # bind the sublistslist into a dataframe
   print(summ)
   # print the rate, or weighted average of the rate:
   w.sum <- (summ$to.time - summ$from.time) # weighted sum
@@ -55,7 +54,7 @@ calcRate <- function(df, from = NULL, to = NULL, by = 'time') {
     labs(x = 'Time', y = 'DO') +
     theme_respr() +
     geom_blank()
-  print(dplot)
+  print(dplot) # print out the plot
   out <- list(alldata = out, summary = summ, average = av, weighted.average = w.av)
   class(out) <- 'calcRate'
   return(invisible(out))
@@ -64,7 +63,7 @@ calcRate <- function(df, from = NULL, to = NULL, by = 'time') {
 #' @export
 plot.calcRate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
-  sub <- x[[rep]] # extract list group
+  sub <- x$alldata[[rep]] # extract list group
   df <- sub$df # main df
   sdf <- sub$subdf # sub df
   lmfit <- sub$lmfit # previous lm call
@@ -73,7 +72,7 @@ plot.calcRate <- function(x, rep = 1) {
   p2 <- sub_plot(sdf) # subset plot
   p3 <- residual_plot(lmfit)
   p4 <- qq_plot(lmfit)
-  cowplot::plot_grid(p1, p2, p3, p4, nrow = 2, ncol = 2, align = 'hv')
+  cowplot::plot_grid(p1, p2, p3, p4, nrow = 2, ncol = 2, align = 'hv', labels = c('A', 'B', 'C', 'D'))
 }
 
 
@@ -110,6 +109,8 @@ linReg <- function(df, lookup, by) {
   # check that the subset meets minimum requirements
   if (nrow(subdf) <= 3 | max(subdf[, 2]) == min(subdf[, 2]))
     stop('Data subset is too narrow. Please select a larger threshold.')
+  # check 'from' is earlier than 'to'
+  if (to.row - from.row <= 0) stop("End time/row is earlier than or equal to start time.")
   # extract o2 values associated with 'from' and 'to'
   from.o2 <- df[from.row, ][[2]]
   to.o2   <- df[to.row, ][[2]]
