@@ -45,7 +45,7 @@ main_plot <- function(df, sdf) {
     geom_point(data = df, aes(df[[1]], df[[2]]), alpha = .6, colour = c1) +
     geom_point(data = sdf, aes(sdf[[1]], sdf[[2]]), size = 3, colour = c3) +
     stat_smooth(data = sdf, aes(sdf[[1]], sdf[[2]]), method ='lm', colour = c2, linetype = 6) +
-    labs(x = 'Time', y = 'DO') +
+    labs(x = 'Time', y = 'DO', title = 'Complete Dataset') +
     theme_respr() +
     geom_blank()
 }
@@ -57,7 +57,7 @@ sub_plot <- function(sdf) {
     stat_smooth(method = 'lm', colour = c1, linetype = 6) +
     ggpmisc::stat_poly_eq(formula = y ~ x, eq.with.lhs = "italic(hat(y))~`=`~",
       aes(label = paste(..eq.label.., sep = "*plain(\",\")~")), label.x.npc = .6, parse = T) +
-    labs(x = 'Time', y = 'DO') +
+    labs(x = 'Time', y = 'DO', title = 'Closed-up Region') +
     theme_respr() +
     geom_blank()
 }
@@ -66,7 +66,7 @@ sub_plot <- function(sdf) {
 residual_plot <- function(lmfit) {
   ggplot(lmfit, aes(.fitted, .resid)) +
     geom_point(size = 2, colour = c3, alpha = .6) +
-    labs(x = "Fitted values", y = "Residuals") +
+    labs(x = "Fitted values", y = "Residuals", title = 'Residual Plot') +
     stat_smooth(method = 'loess', colour = c1) +
     theme_respr() +
     geom_blank()
@@ -82,7 +82,7 @@ qq_plot <- function(lmfit) {
   int <- y[1L] - slope * x[1L]
   p4 <- ggplot(data = d, aes(sample = std.resid)) +
     stat_qq(size = 3, colour = c3, alpha = .6) +
-    labs(x="Theoretical Quantiles", y="Standardised Residuals") +
+    labs(x="Theoretical Quantiles", y="Standardised Residuals", title = 'QQ Plot') +
     geom_abline(slope = slope, intercept = int, size = 1, linetype = 5, colour = c1) +
     theme_respr() +
     geom_blank()
