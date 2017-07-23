@@ -9,6 +9,7 @@
 #' @param ... for s, P, t. I'll probably convert this soon (just testing the ... method but it gets unclear)
 #'
 #' @return I'll put something in here soon.
+#' @import stringr
 #' @export
 #'
 #' @examples
