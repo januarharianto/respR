@@ -18,7 +18,7 @@
 #' @examples
 #' convUnits(df, from = '%', to = 'mg/l')
 #' convUnits(df, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
-convUnits <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
+convert.do <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
   # ----------------------------------------------------------------------------
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
