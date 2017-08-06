@@ -54,7 +54,7 @@ pcrit <- function(df, span = 0.05, MR = FALSE) {
   cat('Top 6 results:\n')
   print(head(out$pcritRanked))
 
-  class(out) <- "pcrit"
+  class(out) <- append(class(out),"pcrit")
   print(plot(out, rank = 1))
 
   return(invisible(out))
