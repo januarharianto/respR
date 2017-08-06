@@ -30,10 +30,9 @@ urchin2013
 
 `respiRe` provides the following functions to manipulate and analyse dissolved data:
 
-1. `check.data` checks for structural errors and select individual data from multi-column datasets.
+1. `check.input` checks for structural errors and select individual data from multi-column datasets.
 2. `calc.bg.rate` calculates background changes in DO
 3. `calc.rate` calculates the rate of oxygen flux (i.e. rate of change of dissolved O2 over time) over any specified subset of the data frame.
-4. `auto.rate` (optional) performs rolling regressions of a fixed width across all rows of the entire data frame, and can be used to obtain maximum and minimum rates.
 4. `calc.MO2` converts the output of `calc.rate` for volume and/or weight-specific rates or oxygen flux (e.g. weight-specific metabolic rate).
 
 When performed in order, the above functions represent a typical workflow in the analysis of respirometry or similar data, where a user first checks for errors before perfoming analytic functions to obtain a properly-scaled rate of change in dissolved oxygen (DO) over time.
@@ -43,12 +42,13 @@ In addition, a few useful functions exist for specific data preparation and anal
 1. `convert.units` to convert DO units (e.g.from % to mg/L).
 2. `subsample.data` to thin a large dataset.
 3. `smooth.data` to perform a rolling average on a noisy dataset to produce "smoother" data for analysis.
-4. `pcrit` to calculate the breakpoint in metabolic rate, based on Yeager and Ultsch (1989).
+4. `auto.rate` to perform rolling regressions of a fixed width across all rows of an entire data frame and automatically obtain maximum, or minimum rates.
+5. `pcrit` to calculate the breakpoint in metabolic rate, based on Yeager and Ultsch (1989).
 
 
-### `check.data`
+### `check.input`
 
-`check.data` scans incoming data frames specific to timeseries and DO data for structural errors that may impede further analysis in R. Typically, a user may read data into R from a single spreadsheet file consisting of multiple columns of data. Invoking the function on a data frame perfoms a check on every column testing for data structure and common errors, which include: 
+`check.input` scans incoming data frames specific to timeseries and DO data for structural errors that may impede further analysis in R. Typically, a user may read data into R from a single spreadsheet file consisting of multiple columns of data. Invoking the function on a data frame perfoms a check on every column testing for data structure and common errors, which include: 
 
 - data length, and tests for equal-length columns if a 2-column data frame is read;
 - *NA* checks, which imply missing data;
@@ -56,18 +56,18 @@ In addition, a few useful functions exist for specific data preparation and anal
 - duplicate numbers, which shouldn't happen in time columns; and 
 - evenly-spaced data, which influences subsetting choices in `calc.rate` if time data are not spaced equally. 
 
-A user may not necessarily use `check.data` before running `calc.rate`, although it minimises errors and is useful as an exploratory tool before proceeding with the main analysis.
+A user may not necessarily use `check.input` before running `calc.rate`, although it minimises errors and is useful as an exploratory tool before proceeding with the main analysis.
 
 ```{r, eval=F}
-check.data(urchin2013)
+check.input(urchin2013)
 ```
 
-`check.data` may also be used to subset two individual columns and produce a new data frame, e.g. `check.data(urchin2013, x = 1, y = 15)`. The user could use the function *directly* on a two-column dataset, and not specify the x and y arguments. As long as the first column is a timeseries, and the second column is DO data, the function will be able to successfully check the data for errors or warnings specific to their data types. If data successfully passes the checks, `check.data` produces a data frame object that can be saved and used in subsequenct functions, and also display a scatter plot of the data for visual inspection.
+`check.input` may also be used to subset two individual columns and produce a new data frame, e.g. `check.input(urchin2013, x = 1, y = 15)`. The user could use the function *directly* on a two-column dataset, and not specify the x and y arguments. As long as the first column is a timeseries, and the second column is DO data, the function will be able to successfully check the data for errors or warnings specific to their data types. If data successfully passes the checks, `check.input` produces a data frame object that can be saved and used in subsequenct functions, and also display a scatter plot of the data for visual inspection.
 
 
 ```{r, fig.width=4, fig.height=3}
 # create subset for urchin #15 where column 1 is the time column and column 15 is the data for the urchin
-urchin.n <- check.data(urchin2013, 1, 15)
+urchin.n <- check.input(urchin2013, 1, 15)
 ```
 
 The output plot reveales non-linear irregularities in the data. In this particular case, the sea urchin had climbed on top of the oxygen sensor, blocking it from proper water mixing for about 10 minutes. A linear regression of the entire data will result in an underestimate of the true rate. The user has several options to manage non-linear portions of a dataset once the data is passed on to the main functions, `calc.rate` and `auto.rate`.
@@ -106,6 +106,8 @@ calc.rate(urchin.n, 25, 130, by = 'row')
 
 ```
 
-
 ### `auto.rate`
 
+```{r, fig.width=4, fig.height=3}
+auto.rate(urchin.n)
+```
