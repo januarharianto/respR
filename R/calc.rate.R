@@ -77,15 +77,15 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', background = NULL
 
 #' @export
 print.calc.rate <- function(x) {
-  cat('Results:\n')
+  cat('Coefficients, R-square:\n')
   print(x$results)
-  cat('\nSubsetting locations:\n')
+  cat('\nData location(s):\n')
   print(x$subsets)
   # Now summarise:
   av <- x$average
   w.av <- x$weighted.average
   # before printing summary, indicate if results are background-corrected
-  cat('\nMeans:\n')
+  cat('\nResult:\n')
   if (length(x$results) > 3) {
     cat('(Results have been background-corrected.)\n')
   }
