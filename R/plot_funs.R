@@ -41,10 +41,12 @@ theme_respr <- function() {
 
 # a plot of the main timeseries, with subset superimposed
 main_plot <- function(df, sdf) {
+  names(df) <- c('x', 'y')
+  names(sdf) <- c('x', 'y')
   ggplot() +
-    geom_point(data = df, aes(df[[1]], df[[2]]), alpha = .6, colour = c1) +
-    geom_point(data = sdf, aes(sdf[[1]], sdf[[2]]), size = 3, colour = c3) +
-    stat_smooth(data = sdf, aes(sdf[[1]], sdf[[2]]), method ='lm', colour = c2, linetype = 6) +
+    geom_point(data = df, aes(x, y), alpha = .6, colour = c1) +
+    geom_point(data = sdf, aes(x, y), size = 3, colour = c3) +
+    stat_smooth(data = sdf, aes(x, y), method ='lm', colour = c2, linetype = 6) +
     labs(x = 'Time', y = 'DO', title = 'Complete Dataset') +
     theme_respr() +
     geom_blank()
@@ -80,7 +82,7 @@ qq_plot <- function(lmfit) {
   x <- qnorm(c(0.25, 0.75))
   slope <- diff(y)/diff(x)
   int <- y[1L] - slope * x[1L]
-  p4 <- ggplot(data = d, aes(sample = std.resid)) +
+  ggplot(data = d, aes(sample = std.resid)) +
     stat_qq(size = 3, colour = c3, alpha = .6) +
     labs(x="Theoretical Quantiles", y="Standardised Residuals", title = 'QQ Plot') +
     geom_abline(slope = slope, intercept = int, size = 1, linetype = 5, colour = c1) +
