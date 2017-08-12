@@ -8,7 +8,6 @@
 #' @param by Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calc.rate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.
 #'
 #' @return A summary list.
-#' @import ggplot2 ggpmisc
 #' @export
 #'
 #' @examples
@@ -57,23 +56,14 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', background = NULL
     av <- av - bg
     w.av <- w.av - bg
   }
-
-  # plot the result:
+  # plot the result (this is separate from the print call)
   allsets <- lapply(out, '[[', 'subdf') # extract specific sublist from output
-  allsets <- dplyr::bind_rows(allsets, .id = "rep") # bind into one dataframe, and group them
-  dplot <- ggplot() +
-    geom_point(data = df, aes(df[[1]], df[[2]])) +
-    geom_point(data = allsets, aes(allsets[[2]], allsets[[3]]), colour ='goldenrod') +
-    stat_smooth(method = 'lm', data = allsets, aes(allsets[[2]], allsets[[3]], group = rep), colour = 'navy', linetype = 6) +
-    labs(x = 'Time', y = 'DO') +
-    theme_respr() +
-    geom_blank()
-  if (plot == T) print(dplot) # print out the plot
-  out <- list(alldata = out, plot = dplot, results = results, subsets = subsets, average = av, weighted.average = w.av)
+  #allsets <- dplyr::bind_rows(allsets, .id = "rep") # bind into one dataframe, and group them
+  if (plot == T) multi.p(df, allsets) # print out the plot
+  out <- list(alldata = out, results = results, subsets = subsets, average = av, weighted.average = w.av)
   class(out) <- 'calc.rate'
   return(out)
 }
-
 
 #' @export
 print.calc.rate <- function(x) {
@@ -96,18 +86,20 @@ print.calc.rate <- function(x) {
 }
 
 #' @export
-plot.calc.rate <- function(x, rep = 1) {
+plot.calc.rate <- function(x, rep = 1, method = 'plot') {
   message('Plotting...this may take a while for large datasets.')
   sub <- x$alldata[[rep]] # extract list group
   df <- sub$df # main df
   sdf <- sub$subdf # sub df
   lmfit <- sub$lmfit # previous lm call
   # let's plot:
-  p1 <- main_plot(df, sdf) # main + subset plot
-  p2 <- sub_plot(sdf) # subset plot
-  p3 <- residual_plot(lmfit)
-  p4 <- qq_plot(lmfit)
-  cowplot::plot_grid(p1, p2, p3, p4, nrow = 2, ncol = 2, align = 'hv', labels = c('A', 'B', 'C', 'D'))
+  pardefault <- par(no.readonly = T)  # save original par settings
+  par(mfrow=c(2,2))  # replace par settings
+  multi.p(df, sdf)
+  sub.p(sdf)
+  residual.p(lmfit)
+  qq.p(lmfit)
+  par(pardefault)  # revert par settings to original
 }
 
 
