@@ -15,6 +15,10 @@ calc.rate(df, from = NULL, to = NULL, by = "time", background = NULL,
 \item{to}{Number, or a list.}
 
 \item{by}{Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calc.rate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.}
+
+\item{background}{Number, or an object of class \code{calc.bg.rate}.}
+
+\item{plot}{}
 }
 \value{
 A summary list.
@@ -24,7 +28,7 @@ A summary list.
 }
 \examples{
 data(sardine)
-calc.rate(sardine, 200, 1800)                 # default subset by 'time'
+calc.rate(sardine, from = 200, to = 1800)     # default subset by 'time'
 calc.rate(sardine, 93, 92, by = 'o2')         # subset by O2
 calc.rate(sardine, 200, 1800, by = 'row')     # subset by row
 calc.rate(sardine, .8, .2, by = 'proportion') # subset by proportion
@@ -32,5 +36,14 @@ calc.rate(sardine, .8, .2, by = 'proportion') # subset by proportion
 # Using a list in 'from' and 'to' calculates multiple regressions:
 data(intermittent)
 calc.rate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+
+# calculating rate with background adjustments of known value
+calc.rate(sardine, 200, 800, background = -0.00002)
+
+# calculating rate with background adjustments made from calc.bg.rate
+bg <- calc.bg.rate(urchin2013, 1, 21)
+ureg <- check.input(urchin2013, 1, 2)
+calc.rate(ureg, 20, 40)  # without bg adjustment
+calc.rate(ureg, 20, 40, background = bg) # with bg adjustment
 
 }

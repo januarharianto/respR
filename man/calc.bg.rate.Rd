@@ -4,7 +4,7 @@
 \alias{calc.bg.rate}
 \title{Calculate background respiration}
 \usage{
-calc.bg.rate(df, timecol = 1, bgcol = 2)
+calc.bg.rate(df, timecol = 1, bgcol = 2, plot = T)
 }
 \arguments{
 \item{df}{Data frame.}
@@ -21,6 +21,8 @@ Calculate background respiration
 }
 \examples{
 data(urchin2013)
-calc.background(urchin2013, 1, c(18:21))
+calc.bg.rate(urchin2013, 1, c(18:19))
+# save as object to use in other functions:
+urbg <- calc.bg.rate(urchin2013,1,c(18:19))
 
 }

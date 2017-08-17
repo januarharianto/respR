@@ -30,8 +30,12 @@ convert one value once, rather than convert an entire data frame at start),
 OR MAYBE NOT -- just filler text for now.
 }
 \examples{
-convUnits(df, from = '\%', to = 'mg/l')
-convUnits(df, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
+convert.do(90, from = '\%', to = 'mg/l')
+convert.do(7.7, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
+
+# convert a vector, if necessary
+convert.do(sardine[2], from = '\%', to = 'mg/l')
+
 }
 \author{
 Januar Harianto
