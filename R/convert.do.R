@@ -16,8 +16,12 @@
 #' @return NULL
 #' @export
 #' @examples
-#' convUnits(df, from = '%', to = 'mg/l')
-#' convUnits(df, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
+#' convert.do(90, from = '%', to = 'mg/l')
+#' convert.do(7.7, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
+#'
+#' # convert a vector, if necessary
+#' convert.do(sardine[2], from = '%', to = 'mg/l')
+#'
 convert.do <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
   # ----------------------------------------------------------------------------
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
