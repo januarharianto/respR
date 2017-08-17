@@ -6,13 +6,15 @@
 #' @param from Number, or a list.
 #' @param to Number, or a list.
 #' @param by Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calc.rate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.
+#' @param background Number, or an object of class \code{calc.bg.rate}.
+#' @param plot
 #'
 #' @return A summary list.
 #' @export
 #'
 #' @examples
 #' data(sardine)
-#' calc.rate(sardine, 200, 1800)                 # default subset by 'time'
+#' calc.rate(sardine, from = 200, to = 1800)     # default subset by 'time'
 #' calc.rate(sardine, 93, 92, by = 'o2')         # subset by O2
 #' calc.rate(sardine, 200, 1800, by = 'row')     # subset by row
 #' calc.rate(sardine, .8, .2, by = 'proportion') # subset by proportion
@@ -21,9 +23,18 @@
 #' data(intermittent)
 #' calc.rate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 #'
+#' # calculating rate with background adjustments of known value
+#' calc.rate(sardine, 200, 800, background = -0.00002)
+#'
+#' # calculating rate with background adjustments made from calc.bg.rate
+#' bg <- calc.bg.rate(urchin2013, 1, 21)
+#' ureg <- check.input(urchin2013, 1, 2)
+#' calc.rate(ureg, 20, 40)  # without bg adjustment
+#' calc.rate(ureg, 20, 40, background = bg) # with bg adjustment
+#'
 calc.rate <- function(df, from = NULL, to = NULL, by = 'time', background = NULL, plot = T) {
   # perform lm on entire dataset if subset is not defined:
-  if(is.null(from) && is.null(to)) {
+  if (is.null(from) && is.null(to)) {
     from <- 1; to <- nrow(df); by <- 'row'
   }
   # perform some error checks:
@@ -59,7 +70,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', background = NULL
   # plot the result (this is separate from the print call)
   allsets <- lapply(out, '[[', 'subdf') # extract specific sublist from output
   #allsets <- dplyr::bind_rows(allsets, .id = "rep") # bind into one dataframe, and group them
-  if (plot == T) multi.p(df, allsets) # print out the plot
+  if (plot == T) multi.p(df, allsets, title = F) # print out the plot
   out <- list(alldata = out, results = results, subsets = subsets, average = av, weighted.average = w.av)
   class(out) <- 'calc.rate'
   return(out)
@@ -103,8 +114,10 @@ plot.calc.rate <- function(x, rep = 1, method = 'plot') {
 }
 
 
-
-# Internal function to perform linear regression for calc.rate.
+# ------------------------------------------------------------------------------
+# Internal functions
+# ------------------------------------------------------------------------------
+# perform linear regression for calc.rate.
 linReg <- function(df, lookup, by) {
   # dissect matrix
   from <- lookup[[1]]
