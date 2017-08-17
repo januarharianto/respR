@@ -25,7 +25,7 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
     # if not, terminate the function since more errors will pop up
     message("Non-numeric data detected. Are there typos in your dataset? Check:")
     print(test.class)
-    #    show.notanumber <- lapply(1:length(df), function(x) which(df[x] != 'numeric' && df[x] != 'integer'))
+    # show.notanumber <- lapply(1:length(df), function(x) which(df[x] != 'numeric' && df[x] != 'integer'))
     stop("Function terminated since non-numeric data cannot be processed. ",call. = F)
   }
 
@@ -50,8 +50,8 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
     'NA/NaN',
     'Duplicates',
     'Evenly-spaced')
-  results[results == 'TRUE'] <- 'o'
-  results[results == 'FALSE'] <- 'x'
+  results[results == 'TRUE'] <- ' '
+  results[results == 'FALSE'] <- 'X'
   print(results)
 
   # this activates when a 2-column data is selected, or if x and y are NOT NULL
@@ -85,13 +85,20 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
     message("New dataframe generated.")
 
     # plot
-    if (plot == T) {
-      p1 <- ggplot(df, aes(df[[1]], df[[2]])) +
-        geom_point(size = 2, alpha = .6) +
-        labs(x = 'Time', y = 'DO') +
-        theme_respr()
-      print(p1)
-    }
+    if (plot == T && length(df) == 2) {
+      # p1 <- ggplot(df, aes(df[[1]], df[[2]])) +
+      #   geom_point(size = 2, alpha = .6) +
+      #   labs(x = 'Time', y = 'DO') +
+      #   theme_respr()
+      # print(p1)
+      pardefault <- par(no.readonly = T)  # save original par settings
+      plot(df, xlab = "Time", ylab = "DO", col = r1, pch = 16,
+        panel.first = c(rect(par("usr")[1], par("usr")[3],
+          par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
+            lty = 1, lwd = 1.5)))
+      par(pardefault)  # revert par settings to original
+    } else if (plot == T && length(df) > 2)
+      message("Data frame contains more than 2 columns - plot not generated")
     return(invisible(df))
   }
 }
@@ -99,8 +106,11 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
 
 
 
+# ------------------------------------------------------------------------------
+# internal functions
+# ------------------------------------------------------------------------------
 
-# internal function
+# check equal lenght columns
 equal.lengths <- function(x) {
   if (length(x) == 1) return(TRUE)
   x <- range(x) / mean(x)
