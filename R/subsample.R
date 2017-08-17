@@ -29,10 +29,9 @@ subsample <- function(df, n = 5, random_start = F) {
       size = .5, alpha = .4) +
     labs(x='Time', y='DO2') +
     theme_respr()
-
   print(cowplot::plot_grid(p1, p2, ncol = 1))
-  message(sprintf('Data has been subsampled at every %d rows.', n))
-  message('Showing the first 6 rows:')
-  print(head(subset))
+  # message(sprintf('Data has been subsampled at every %d rows.', n))
+  # message('Showing the first 6 rows:')
+  # print(head(subset))
   return(invisible(subset))
 }
