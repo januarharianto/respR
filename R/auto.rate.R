@@ -31,7 +31,7 @@ auto.rate <- function(df, width = round(0.1 * nrow(df)), logic = 'automatic', ba
   } else if (logic == 'automatic') {
     # EXPERIMENTAL: use rolling regression and density kernel estimation to compute 'best' rate
     # 1. perform kernel density estimation on regression data:
-    dens <- density(allregs$b1, na.rm = T, n = length(allregs$b1))
+    dens <- density(allregs$b1, na.rm = T, bw = "SJ", n = length(allregs$b1))
     # 2. grab peak values and rank them in order of decreasing density
     peaks <- which.peaks(dens) # see below for function usage
     peaks.ranked <- peaks[order(peaks$density, decreasing = T),]
@@ -39,6 +39,7 @@ auto.rate <- function(df, width = round(0.1 * nrow(df)), logic = 'automatic', ba
     bw <- dens$bw
     # 5. using the binwidth, gather all regressions that were used to determine each peak
     match.peaks <- lapply(peaks.ranked[,1], function(x) filter(allregs, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
+    match.peaks <- match.peaks[sapply(match.peaks, nrow) > 0] # remove zero-length values in list
     # 6. the matched areas of the data frame may be fragmented, we list them out
     frags <- lapply(1:length(match.peaks), function(x)
       split(match.peaks[[x]], c(0, cumsum(abs(diff(match.peaks[[x]]$from.time)) > allregs$time.width[1]))))
@@ -50,7 +51,7 @@ auto.rate <- function(df, width = round(0.1 * nrow(df)), logic = 'automatic', ba
     # New data is generated, ranked, and the previous regressions are discarded (since we have longer frags)
     allregs.ranked <- lapply(1:length(frags), function(x)
       calc.rate(df, min(best.frags[[x]]$from.row), max(best.frags[[x]]$to.row), by = 'row', background = background, plot = F))
-    message(sprintf("%d kernel density peaks in rates detected and ranked.", length(allregs.ranked)))
+    message(sprintf("%d kernel density peaks in rates detected and ranked.\n", length(allregs.ranked)))
   } else stop("The 'logic' argument is incorrect. Please check that it is either 'max', 'min' or 'automatic'.", call. = F)
 
   if (logic == 'max' | logic == 'min') {
