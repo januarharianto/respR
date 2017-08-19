@@ -2,7 +2,7 @@
 #'
 #' @param df Data frame.
 #' @param timecol Numeric. Defaults to 1. The column index of the data frame to use as time data.
-#' @param bgcol Numeric or a list. Defaults to 2. The column index/indices of the data frame to use for DO data. A list e.g. `c(2:5)` will calculate the rate for each column individually, and then average the results.
+#' @param bgcol Numeric or vector. Defaults to 2. The column index/indices of the data frame to use for DO data. A list e.g. `c(2:5)` will calculate the rate for each column individually, and then average the results.
 #'
 #' @return A summary list of rates, and the mean rate.
 #' @importFrom dplyr select
