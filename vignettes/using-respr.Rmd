@@ -22,8 +22,11 @@ Here we introduce `respiRe`, an R package that provides a colletion of functions
 
 ## 2. Methods
 
-Rates of oxygen consumption/production, such as respiration rate, are commonly analysed in either of two ways: (1) using a two-point difference of values, over a fixed period of time (e.g. citations); or (2) using ordinary least-squares (OLS) linear regression of data between two points (e.g. citations). The default method for `calc.rate` is OLS linear regression, and there are no plans to implement the two-point method in the future. However, the output of `calc.rate` provides sufficient information on associated row numbers, time and O~2~ data for a user to manually perform a two-point calculation where necessary.
+    Rates of oxygen consumption/production, such as respiration rate, are commonly analysed in either of two ways: (1) using a two-point difference of values, over a fixed period of time (e.g. citations); or (2) using ordinary least-squares (OLS) linear regression of data between two points (e.g. citations). The default method for `calc.rate` is OLS linear regression, and there are no plans to implement the two-point method in the future. However, the output of `calc.rate` provides sufficient information on associated row numbers, time and O~2~ data for a user to manually perform a two-point calculation where necessary.
 
+- go through the regression method briefly (including equation? it will be slightly different from current papers... so maybe a good idea to mark that out)
+- emphasise weighted average method when doing multitle subsets of data (include equation?)
+- mention the typical workflow (maybe also use a flowchart)
 
 ### 2.1 Example data
 
@@ -63,7 +66,7 @@ check.input(urchin2013)
 
 If we call `check.input` over a two-column dataset, the function will automatically identify the first column as time data, and the second column as DO data. Error checks will be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out). We can also subset a large data frame directly by specifying the *x* and *y* arguments that correspond to columns in the data frame. 
 
-With two-column data frames, `check.input` will automatically remove NA data and produce a new data frame that we can use for subsequent analyses, while larger datasets are not modified in any way. A scatterplot of the data is also produced automatically for quick visual inspection.
+With two-column data frames, `check.input` will automatically remove NA data and produce a new data frame that we can use for subsequent analyses. Larger datasets, on the other hand, are not modified in any way, and will not output a data frame for us to save. A scatterplot of the data is also produced automatically for quick visual inspection.
 
 ```{r, fig.width=7, fig.height=7}
 u2 <- check.input(urchin2013, x = 1, y = 15)
@@ -71,7 +74,7 @@ u2 <- check.input(urchin2013, x = 1, y = 15)
 
 From the plot, non-linear irregularities in the data are evident. In this case, there is a change in the rate of oxygen uptake near the end of the timeseries (the sea urchin had climbed on top of the oxygen sensor, blocking it from surrounding water). A linear regression of the data frame would result in an underestimate of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
 
-It should be noted that invoking `check.input` is optional - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data.
+It should be noted that invoking `check.input` is optional - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
 ### 2.3 `calc.bg.rate`
