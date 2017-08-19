@@ -9,9 +9,9 @@ check.input(df, x = NULL, y = NULL, plot = T)
 \arguments{
 \item{df}{a data frame containing at least 2 columns of data.}
 
-\item{x}{a numeric value to subset a data frame with. Corresponds to column number (e.g. \code{x = 1} will subset the first column of the data frame). Must be time data.}
+\item{x}{a numeric value to subset a data frame. Corresponds to column number (e.g. \code{x = 1} will subset the first column of the data frame). Must be time data.}
 
-\item{y}{a numeric value to subset a data frame with. Corresponds to column numbers (e.g. \code{y = 2} will subset the second column of the data frame). Must not be time data.}
+\item{y}{a numeric value to subset a data frame. Corresponds to column number (e.g. \code{y = 2} will subset the second column of the data frame). Must be dissolved oxygen data.}
 
 \item{plot}{logical - defaults to TRUE. A plot of the data is automatically produced if the resultant data frame contains 2 columns. Otherwise, this does nothing.}
 }

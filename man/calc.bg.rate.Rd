@@ -11,7 +11,7 @@ calc.bg.rate(df, timecol = 1, bgcol = 2, plot = T)
 
 \item{timecol}{Numeric. Defaults to 1. The column index of the data frame to use as time data.}
 
-\item{bgcol}{Numeric or a list. Defaults to 2. The column index/indices of the data frame to use for DO data. A list e.g. `c(2:5)` will calculate the rate for each column individually, and then average the results.}
+\item{bgcol}{Numeric or vector. Defaults to 2. The column index/indices of the data frame to use for DO data. A list e.g. `c(2:5)` will calculate the rate for each column individually, and then average the results.}
 }
 \value{
 A summary list of rates, and the mean rate.
