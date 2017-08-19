@@ -1,29 +1,36 @@
-#' Calculate Pcrit
+#' Calculate pcrit
 #'
-#' @param df Data frame.
-#' @param span Numeric.
-#' @param MR Logical.
+#' I need a description for this...
 #'
-#' @return A value of Pcrit.
+#' @param df data frame object
+#' @param span numeric
+#' @param MR logical
+#'
+#' @return NULL
+#' @import parallel
 #' @export
 #'
-#'
-pcrit <- function(df, span = 0.05, MR = FALSE) {
-  if (MR == T) {
-    mrDo <- df
+#' @examples NULL
+pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
+  if (datmr == T) {
+    mrDo <- na.omit(df)
   }
-  if (MR == F) {
+  if (datmr == F) {
     names(df) <- c("x", "y")
-    # convert time to integer, if necessary
+    # Convert time to integer, if necessary. We do this because even though
+    # check.input ensures that a numeric input is in the time column, it is
+    # inevitable that many pcrit experiments use real time (instead of time
+    # elapsed) due to the extended nature of pcrit experiments (hours to more
+    # than a day). We do want to analyse those experiments... :D
     if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T) {
       df$x   <- as.integer(df$x - df$x[1])
     }
     # otherwise, carry on
     width    <- floor(span * nrow(df))
-    rollreg  <- movReg(df, span)
-    rollmean <- RcppRoll::roll_mean(df[[2]], width)
+    rollreg <- roll.reg(df, width)$b1
+    rollmean <- roll::roll_mean(matrix(df[[2]]), width)
     counts   <- length(rollmean) # for benchmark
-    mrDo     <- data.frame(rollmean, abs(rollreg))
+    mrDo     <- na.omit(data.frame(rollmean, abs(rollreg)))
   }
   # calculate pcrit here
   names(mrDo) <- c('do', 'mr')
@@ -31,7 +38,12 @@ pcrit <- function(df, span = 0.05, MR = FALSE) {
   indices     <- spawnIndices(nrow(mrDo))  # create matrix for hockey method
   message("Performing rolling 'hockey' regressions...")
   old         <- Sys.time()  # grab current time (for simple benchmark)
-  reg         <- apply(indices, 1, hockeyLm, df = mrDo)
+  # some parallel computing here (new trick I learned):
+  no_cores <- detectCores() - 1   # calculate the number of cores available
+  cl <- makeCluster(no_cores)   # initiate cluster and use those cores
+  reg <- parApply(cl, indices, 1, hockeyLm, df = mrDo) # perform regressions
+  stopCluster(cl)  # release cores
+
   reg         <- do.call(rbind.data.frame, reg)  # bind into a dataframe
   pcrit       <- reg[order(reg$sumRSS), ]
   pcritRanked <- pcrit[order(pcrit$sumRSS), ] # rank results by RSS
@@ -49,54 +61,44 @@ pcrit <- function(df, span = 0.05, MR = FALSE) {
     pcritRanked = pcritRanked,
     best = best)
 
-  cat(sprintf("%d 'hockey' regressions fitted ",  NROW(pcrit)),
+  cat(sprintf("%d 'hockey' regressions fitted",  NROW(pcrit)),
     sprintf("in %g seconds", new), "\n\n")
-  cat('Top 6 results:\n')
-  print(head(out$pcritRanked))
-
+  # cat('Top 6 results:\n')
+  # print(head(out$pcritRanked))
   class(out) <- append(class(out),"pcrit")
-  print(plot(out, rank = 1))
-
-  return(invisible(out))
+  if (plot == T) plot(out, rank = 1)
+  return(out)
 }
 
-
+#' @export
+print.pcrit <- function(x) {
+  cat("Rank 1 result:\n")
+  print(x$best)
+}
 
 #' @export
 plot.pcrit <- function(x, rank = 1, ...) {
-  data <- x$do.mr  # main plot dataset
-  ref <- x$pcritRanked[1] # reference list to create subsets
-
-  lm1 <- subset(data, do <= as.numeric(ref[rank, ]))
-  lm2 <- subset(data, do >  as.numeric(ref[rank, ]))
-
-  p <-
-    ggplot(data, aes(do, mr)) +
-    geom_line(size = 1, colour = 'navy') +
-    stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 2, colour = 'black', alpha = .1) +
-    stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = T, size = .25, linetype = 2, colour = 'black', alpha = .1) +
-    stat_smooth(data = lm1, aes(do, mr),  na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, colour = 'firebrick') +
-    stat_smooth(data = lm2, aes(do, mr), na.rm=TRUE, se = F, method = 'lm', fullrange = F, size = .5, colour = 'firebrick') +
-    geom_vline(xintercept = x$pcritRanked[5][rank, ], size = .5, linetype = 3, colour = 'darkorchid2') + # pcrit intercept
-    geom_vline(xintercept = x$pcritRanked[6][rank, ], size = .5, linetype = 3, colour = 'coral2') + # pcrit midpoint
-    annotate('text', x = x$pcritRanked[5][rank, ], y = max(data$mr), label = signif(x$pcritRanked[5][rank, ], 3), angle = 90) +
-    annotate('text', x = x$pcritRanked[6][rank, ], y = min(data$mr), label = signif(x$pcritRanked[6][rank, ], 3), angle = 90) +
-    ylab('Metabolic rate') +
-    xlab('Oxygen concentration') +
-    scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
-    scale_y_continuous(breaks = scales::pretty_breaks(n = 10), limits = c(0, 1.1 * max((data[2])))) +
-    # labs(colour = "Regression") +
-    theme_respr() +
-    geom_blank()
-
-  return(p)
+  pcrit.p(x, rank)
 }
 
+# ------------------------------------------------------------------------------
+# Internal functons
+# ------------------------------------------------------------------------------
 
+# generate an index for hockeyLm
+spawnIndices <- function(x, min = 3) {
+  seq1 <- data.frame(1, (seq.int(min, (x-min))))
+  seq2 <- data.frame((seq.int(min, (x-min)) + 1), x)
+  seqs <- unname(as.matrix(cbind(seq1, seq2)))
+  seqs
+}
+
+# perform hockey-stick regressions
 hockeyLm <- function(indx, df) {
   # generate windows
   x1 <- df[, 1][indx[1]:indx[2]] # x-coordinate of line 1
   y1 <- df[, 2][indx[1]:indx[2]] # y-coordinate of line 1
+
   x2 <- df[, 1][indx[3]:indx[4]] # x-coordinate of line 2
   y2 <- df[, 2][indx[3]:indx[4]] # y-coordinate of line 2
   # design matrix of dimension n * p for .lm.fit
@@ -140,3 +142,31 @@ hockeyLm <- function(indx, df) {
     pcrit.mpoint   = (end1 + start2) / 2)
   out
 }
+
+
+
+# # fishpcrit <- fmr
+# # devtools::use_data(fishpcrit)
+# data("fishpcrit")
+# df <- fishpcrit
+# span <- 0.05
+#
+# width <- floor(span * nrow(df))
+# rollreg <- roll.reg(df, width)$b1
+# rollmean <- roll::roll_mean(matrix(df[[2]]), width)
+# counts <- length(rollmean) # for benchmark
+# # create data frame
+# mrDo <- na.omit(data.frame(rollmean, abs(rollreg)))
+#
+# # now we need to perform hockey regression
+# # first generate the index
+# indices <- spawnIndices(nrow(mrDo))
+# seq1 <- data.frame(1, (seq.int(3, (nrow(mrDo)-3))))
+# seq2 <- data.frame((seq.int(3, (nrow(mrDo)-3)) + 1), nrow(mrDo))
+#
+# # we use the index to generate subsets of the data for lm fits
+# # how do we do this FAST?
+#
+# #
+#
+
