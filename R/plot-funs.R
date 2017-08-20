@@ -104,8 +104,4 @@ pcrit.p <- function(x, rank = 1) {
   # text(pc.midpoint, max(data[2]), signif(pc.midpoint, 3))
   legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
     bty = "n")
-  title(main = "This plot needs work...", line = 0.5)
 }
-
-
-
