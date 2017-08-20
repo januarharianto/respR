@@ -8,6 +8,7 @@
 #' @param MR logical
 #'
 #' @return NULL
+#' @importFrom roll roll_mean roll_lm
 #' @import parallel
 #' @export
 #'
@@ -43,7 +44,7 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
     # otherwise, carry on
     width    <- floor(span * nrow(df))
     rollreg <- roll.reg(df, width)$b1
-    rollmean <- roll::roll_mean(matrix(df[[2]]), width)
+    rollmean <- roll_mean(matrix(df[[2]]), width)
     counts   <- length(rollmean) # for benchmark
     mrDo     <- na.omit(data.frame(rollmean, abs(rollreg)))
   }
