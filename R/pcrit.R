@@ -1,7 +1,8 @@
-#' Calculate pcrit
+#' Calculate critical oxygen tension for respirometry
 #'
-#' I need a description for this...
+#' Uses stepwise linear regression to calculate two best-fit lines in a rate data frame, by minimising the total residual sum of squares between both regressions. Method is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling `pcrit` on a data frame `df` of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width `floor(0.05 * nrow(df))` to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument `datmr = TRUE` will perform the stepwise regressions immediately without performing rolling regressions.
 #'
+#' @md
 #' @param df data frame object
 #' @param span numeric
 #' @param MR logical
@@ -10,7 +11,21 @@
 #' @import parallel
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#' # load example data:
+#' data(fishpcrit)
+#' # run pcrit:
+#' pcfish <- pcrit(fishpcrit)
+#' print(pcfish)              # print the rank 1 result
+#' print(pcfish, rank = 1000) # print the rank 1000 result (just to compare)
+#'
+#' plot(pcfish)               # plot the rank 1 result
+#' plot(pcfish, rank = 1000)  # plot the rank 1000 results (just to compare)
+#'
+#' summary(pcfish)            # prints the top 6 results
+#' summary(pcfish, n = 20)    # prints the top 20 results (just to compare)
+#'
+#'
 pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
   if (datmr == T) {
     mrDo <- na.omit(df)
@@ -63,18 +78,23 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
 
   cat(sprintf("%d 'hockey' regressions fitted",  NROW(pcrit)),
     sprintf("in %g seconds", new), "\n\n")
-  # cat('Top 6 results:\n')
-  # print(head(out$pcritRanked))
   class(out) <- append(class(out),"pcrit")
   if (plot == T) plot(out, rank = 1)
   return(out)
 }
 
 #' @export
-print.pcrit <- function(x) {
-  cat("Rank 1 result:\n")
-  print(x$best)
+print.pcrit <- function(x, rank = 1) {
+  cat(sprintf("Rank %d", rank), "result:\n")
+  print(x$pcritRanked[rank,])
 }
+
+#' @export
+summary.pcrit <- function(x, n = 6) {
+  cat(sprintf("Top %d", n), "results:\n")
+  print(head(x$pcritRanked, n))
+}
+
 
 #' @export
 plot.pcrit <- function(x, rank = 1, ...) {
@@ -82,7 +102,7 @@ plot.pcrit <- function(x, rank = 1, ...) {
 }
 
 # ------------------------------------------------------------------------------
-# Internal functons
+# Internals
 # ------------------------------------------------------------------------------
 
 # generate an index for hockeyLm
@@ -142,31 +162,3 @@ hockeyLm <- function(indx, df) {
     pcrit.mpoint   = (end1 + start2) / 2)
   out
 }
-
-
-
-# # fishpcrit <- fmr
-# # devtools::use_data(fishpcrit)
-# data("fishpcrit")
-# df <- fishpcrit
-# span <- 0.05
-#
-# width <- floor(span * nrow(df))
-# rollreg <- roll.reg(df, width)$b1
-# rollmean <- roll::roll_mean(matrix(df[[2]]), width)
-# counts <- length(rollmean) # for benchmark
-# # create data frame
-# mrDo <- na.omit(data.frame(rollmean, abs(rollreg)))
-#
-# # now we need to perform hockey regression
-# # first generate the index
-# indices <- spawnIndices(nrow(mrDo))
-# seq1 <- data.frame(1, (seq.int(3, (nrow(mrDo)-3))))
-# seq2 <- data.frame((seq.int(3, (nrow(mrDo)-3)) + 1), nrow(mrDo))
-#
-# # we use the index to generate subsets of the data for lm fits
-# # how do we do this FAST?
-#
-# #
-#
-
