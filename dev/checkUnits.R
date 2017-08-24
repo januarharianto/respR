@@ -12,7 +12,6 @@
 #' (e.g. 'mg/l', 'mgL-1', 'mgl-1' and 'mg per litre' all work).
 #' @author Januar Harianto
 #' @return NULL
-#' @export
 #' @examples
 #' checkUnits('min', 'time')
 #' checkUnits('notatunit', 'time')
