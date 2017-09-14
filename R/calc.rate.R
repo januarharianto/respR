@@ -1,15 +1,32 @@
-#' Calculate rate via local linear regression or 2-point slope.
+#' Calculate rate of change in oxygen over time
 #'
-#' \code{calc.rate} parses a dataframe, or its subset(s) to calculate the rate of change of oxygen concentration over time.
+#' `calc.rate` calculates the rate of change in oxygen concentration over time in a data frame. You can perform single or multiple regressions on subsets of the data frame by calling the `from` and `to` arguments.
 #'
-#' @param df Dataframe.
-#' @param from Number, or a list.
-#' @param to Number, or a list.
-#' @param by Character. Select method of subsetting. If by \code{'time'}(default) or \code{'row'}, \code{calc.rate} selects the values inclusive. If by \code{'o2'}, the first occurrence of the O2 value in \code{'from'}, and the last occurrence of the O2 value in \code{'to'}, are selected. If by \code{'proportion'}, he proportion, based on the minimum and maximum oxygen concentration. At 1, this selects the highest known oxygen value. At 0, this selects the lowest known oxygen value. Note that due to the noisy nature of respiration data, the lowest known oxygen value may not represent the last row of the dataframe.
-#' @param background Number, or an object of class \code{calc.bg.rate}.
-#' @param plot
+#' There are no units involved in `calc.rate`. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link{calc.mo2}}.
 #'
-#' @return A summary list.
+#' @author Januar Harianto & Nicholas Carey
+#'
+#' @md
+#' @param df data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.
+#' @param from numeric vector. Defines the upper bound(s) of the data frame subset. Defaults to "`NULL`".
+#' @param to numeric vector. Defines the lower bound(s) of the data frame subset. Defaults to "`NULL`".
+#' @param by string. Describes the method used to subset the data frame. Defaults to `"time"`. Available: "`time`", "`o2`", "`proportion`", "`row`".
+#' @param bg numeric, or an output of class \code{\link{calc.bg.rate}}. Value for backgroung respiration.
+#' @param plot logical. When set to "`TRUE`" (default), will plot a quick visual of the data and its subset(s).
+#'
+#' @return An object of class \code{calc.rate} containing a list of outputs:
+#' \describe{
+#' \item{`data.frame`}{The original data frame.}
+#' \item{`subset.df`}{A list of subset data frames used for computations.}
+#' \item{`by`}{The subsetting method. Possible outputs: "`time`", "`o2`", "`proportion`" or "`row`".}
+#' \item{`results`}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
+#' \item{`background`}{Appears only if the argument \code{bg} is not `NULL`. The background rate of change.}
+#' \item{`rate`}{A value for the calculated rate of change in oxygen concentration, averaged if multiple values exist.}
+#' \item{`adj.rate`}{Same as `rate` above, but includes background correction.}
+#' }
+#'
+#' @importFrom dplyr bind_rows mutate select everything
+#' @importFrom tibble as.tibble
 #' @export
 #'
 #' @examples
@@ -32,150 +49,168 @@
 #' calc.rate(ureg, 20, 40)  # without bg adjustment
 #' calc.rate(ureg, 20, 40, background = bg) # with bg adjustment
 #'
-calc.rate <- function(df, from = NULL, to = NULL, by = 'time', background = NULL, plot = T) {
-  # perform lm on entire dataset if subset is not defined:
+calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
+  plot = T, verbose = T) {
+  # Perform lm on entire dataset if "start" and "end" are not defined:
   if (is.null(from) && is.null(to)) {
+    message("Data bounds not set. Performing analysis on entire data frame.")
     from <- 1; to <- nrow(df); by <- 'row'
   }
-  # perform some error checks:
-  # check subset inputs are numeric:
-  if (!is.numeric(from) | !is.numeric(to)) stop("'to' and 'from' arguments must be numeric.")
-  index <- cbind(from, to)   # create matrix of dataframe indices
-  # for each row in the matrix, apply the function linReg and list the output:
-  out <- apply(index, 1, linReg, df = df, by = by)
-  names(out) <- sprintf('rep%i', 1:length(out)) # a list must have a name
-
-  # extract tables and bind them if necessary
-  results <- lapply(out, '[[', 'results') # extract summary sublist from output for all reps
-  results <- do.call(rbind, results) # bind the sublistslist into a dataframe
-  subsets <- lapply(out, '[[', 'subsets')
-  subsets <- do.call(rbind, subsets)
-
-  # now check if there is background rate
-  if (!is.null(background)) {  # if bg is not null, process bg data
-    if (class(background) == 'calc.bg.rate') bg <- background$average
-    if (class(background) == 'numeric') bg <- background
-    results$bg <- bg
-    results$bg.adj.b1 <- results$b1 - bg
+  # Error check: ensure that subset inputs are numeric:
+  if (!is.numeric(from) | !is.numeric(to))
+    stop("'to' and 'from' arguments must be numeric.")
+  # ----------------------------------------------------------------------------
+  # Here we perform the regression and generate the summary results.
+  index <- cbind(from, to)  # identify subset locations
+  locs <- apply(index, 1, locate.subdfs, df = df, by = by)
+  # Perform linear regressions and add data index locations:
+  fits <- lapply(1:length(locs), function(x)
+    data.frame(lmfit(locs[[x]][[3]]),
+      from.row  = locs[[x]][[1]],
+      to.row    = locs[[x]][[2]],
+      from.time = df[locs[[x]][[1]],][,1],
+      to.time   = df[locs[[x]][[2]],][,1],
+      from.o2   = df[locs[[x]][[1]],][,2],
+      to.o2     = df[locs[[x]][[2]],][,2]))
+  fits <- bind_rows(fits)  # bind into data.frame
+  # Add additional calculations:
+  fits <- mutate(fits,
+    row.len  = to.row - from.row + 1,
+    time.len = to.time - from.time)
+  # ----------------------------------------------------------------------------
+  # Include background rate, if provided:
+  if (is.null(bg)) {
+    results <- fits
+  } else if (class(bg) == "calc.bg.rate") {
+    bg <- bg$average
+    results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
+    results <- select(results, b0, b1, bg, `b1-bg`, everything())
+  } else if (class(bg) == "numeric") {
+    results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
+    results <- select(results, b0, b1, bg, `b1-bg`, everything())
   }
-
-  av <- mean(results$b1)  # calculate average
-  w.av <- weighted.mean(results$b1, subsets$time.width)  # calculate weighted average - based on time
-
-  # correct average and weighted average to background, if needed
-  if (!is.null(background)) {
-    av <- av - bg
-    w.av <- w.av - bg
+  # ----------------------------------------------------------------------------
+  # Extract rate and bg rate, also calculate mean if necessary:
+  if (nrow(results) > 1) {
+    rate <- mean(results$b1)
+    if (!is.null(bg)) adj.rate <- mean(results$`b1-bg`)
+  } else {
+    rate <- results$b1
+    if (!is.null(bg)) adj.rate <- results$`b1-bg`
   }
-  # plot the result (this is separate from the print call)
-  allsets <- lapply(out, '[[', 'subdf') # extract specific sublist from output
-  #allsets <- dplyr::bind_rows(allsets, .id = "rep") # bind into one dataframe, and group them
-  if (plot == T) multi.p(df, allsets, title = F) # print out the plot
-  out <- list(alldata = out, results = results, subsets = subsets, average = av, weighted.average = w.av)
-  class(out) <- 'calc.rate'
+  # ----------------------------------------------------------------------------
+  # Plot the result, if set to TRUE
+  alldf <- lapply(1:length(locs), function(x) as.tibble(locs[[x]][[3]]))
+  if (plot == TRUE) multi.p(df, alldf, title = F)
+  # ----------------------------------------------------------------------------
+  # Generate output data:
+  if (is.null(bg)) {
+    # This is generated if there is no "bg" argument:
+    out <- list(
+      data.frame = df,
+      subset.df  = alldf,
+      by       = by,
+      results  = results,
+      rate     = rate,
+      adj.rate = NULL)
+  } else {
+    # This is generated if "bg" argument is included:
+    out <- list(
+      data.frame   = df,
+      subset.df    = alldf,
+      by         = by,
+      results    = results,
+      rate       = rate,
+      background = bg,
+      adj.rate   = adj.rate)
+  }
+  if(verbose == T) message(sprintf("Data subset is by %s.", out$by))
+  if (nrow(out$results) > 1) {
+    message(sprintf("Result are averaged across %g data subsets.",
+      nrow(out$results)))
+  }
+  class(out) <- 'calc.rate'  # classy stuff :D
   return(out)
 }
 
-#' @export
 print.calc.rate <- function(x) {
-  cat('Coefficients, R-square:\n')
-  print(x$results)
-  cat('\nData location(s):\n')
-  print(x$subsets)
-  # Now summarise:
-  av <- x$average
-  w.av <- x$weighted.average
-  # before printing summary, indicate if results are background-corrected
-  cat('\nResult:\n')
-  if (length(x$results) > 3) {
-    cat('(Results have been background-corrected.)\n')
-  }
-  # summary results
-  result <- data.frame(Rate = c(av, w.av))
-  row.names(result) <- c("Mean", "Weighted mean")
-  print(result)
+
+  if(!is.null(x$adj.rate)) {
+    cat(sprintf("Rate      : %f\n", x$rate))
+    cat(sprintf("Background: %f\n", x$background))
+    cat(sprintf("Adj. Rate : %f\n", x$adj.rate))
+  } else cat(sprintf("Rate: %f\n", x$rate))
 }
 
-#' @export
-plot.calc.rate <- function(x, rep = 1, method = 'plot') {
+summary.calc.rate <- function(x) {
+  # cat("Summary\n")
+  print(x$results)
+}
+
+plot.calc.rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
-  sub <- x$alldata[[rep]] # extract list group
-  df <- sub$df # main df
-  sdf <- sub$subdf # sub df
-  lmfit <- sub$lmfit # previous lm call
+  sdf <- x$subset.df[[rep]] # extract data from list
+  df <- x$data.frame # main df
+  lmfit  <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   # let's plot:
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow=c(2,2))  # replace par settings
-  multi.p(df, sdf)
-  sub.p(sdf)
-  residual.p(lmfit)
-  qq.p(lmfit)
+  multi.p(df, sdf)  # full timeseries with lmfit
+  sub.p(sdf)  # subset timeseries
+  residual.p(lmfit)  # residual plot
+  qq.p(lmfit)  # qqplot
   par(pardefault)  # revert par settings to original
 }
 
 
-# ------------------------------------------------------------------------------
 # Internal functions
-# ------------------------------------------------------------------------------
-# perform linear regression for calc.rate.
-linReg <- function(df, lookup, by) {
-  # dissect matrix
-  from <- lookup[[1]]
-  to <- lookup[[2]]
-  # how are we subsetting the data?
-  if (by == 'time') {
-    from.row <- Position(function(x) x >= from, df[[1]])
-    to.row   <- Position(function(x) x <= to, df[[1]], right = T)
-    # generate data frame
-    subdf    <- df[df[, 1] >= from & df[, 1] <= to, ]
-  }
-  if (by == 'row') {
+# ==============================================================================
+# Subset the main data based on the "by" argument. Also saves row index data in
+# the output.
+locate.subdfs <- function(df, index, by) {
+  # Extract index
+  from <- index[[1]]
+  to <- index[[2]]
+  # How are we subsetting the data?
+  if (by == "time") {
+    from.row  <- Position(function(x) x >= from, df[[1]])
+    to.row    <- Position(function(x) x <= to, df[[1]], right = T)
+    subdf     <- df[df[,1] >= from & df[,1] <= to, ]
+  } else if (by == 'row') {
     from.row  <- from
     to.row    <- to
     subdf     <- df[from:to, ] # subset data directly by row
-  }
-  if (by == 'o2') {
-    from.row <- Position(function(x) x <= from, df[[2]])
-    to.row   <- Position(function(x) x <= to, df[[2]])
-    # to.row   <- Position(function(x) x >= to, df[[2]], right = T) # alternative
-    subdf    <- df[from.row:to.row, ]
-  }
-  if (by == 'proportion') {
+  } else if (by == 'o2') {
+    from.row  <- Position(function(x) x <= from, df[[2]])
+    to.row    <- Position(function(x) x <= to, df[[2]])
+    subdf     <- df[from.row:to.row, ]
+  } else if (by == 'proportion') {
     max.x <- max(df[2])
     min.x <- min(df[2])
-    from.row <- Position(function(x) x <= (from * (max.x - min.x) + min.x), df[[2]])
-    to.row   <- Position(function(x) x <= (to * (max.x - min.x) + min.x), df[[2]])
-    # to.row   <- Position(function(x) x >= (to * (max(df[[2]]) - min(df[[2]])) + min(df[[2]])), df[[2]], right = T) # alternative
-    subdf    <- df[from.row:to.row, ]
+    from.row  <- Position(function(x) x <= (from*(max.x-min.x)+min.x), df[[2]])
+    to.row    <- Position(function(x) x <= (to*(max.x-min.x)+min.x), df[[2]])
+    subdf     <- df[from.row:to.row, ]
   }
-  # check that the subset meets minimum requirements
+  # Error checks:
+  # Check that data length is appropriate for further analysis:
   if (nrow(subdf) <= 3 | max(subdf[, 2]) == min(subdf[, 2]))
-    stop('Data subset is too narrow. Please select a larger threshold.')
-  # check 'from' is earlier than 'to'
-  if (to.row - from.row <= 0) stop("End time/row is earlier than or equal to start time.")
-  # extract 'from' and 'to' values associated with 'by'
-  from.o2 <- df[from.row, ][[2]]
-  to.o2   <- df[to.row, ][[2]]
-  from.time <- df[from.row, ][[1]]
-  to.time <- df[to.row, ][[1]]
-
-  # check lengths
-  row.width <- nrow(subdf)
-  time.width <- to.time - from.time
-  o2.width <- from.o2 - to.o2
-
-  # perform regression
-  lmfit <- lm(subdf[[2]] ~ subdf[[1]], subdf)
-  # generate output:
-  b0   <- coef(lmfit)[[1]]
-  b1   <- coef(lmfit)[[2]]  # slope
-  r.sq <- summary(lmfit)$r.squared  # r-square
-  results <- data.frame(b0 = b0, b1 = b1, r.sq)
-  subsets <- data.frame(from.row, to.row,
-    from.time, to.time,
-    from.o2, to.o2,
-    row.width, time.width, o2.width)
-  out  <- list(df = df, subdf = subdf, lmfit = lmfit, results = results, subsets = subsets)
-  return(out)
+    stop('Data subset is too narrow. Select a larger threshold.', call. = F)
+  # Ensure that end time is later than start time:
+  if (to.row - from.row <= 0)
+    stop("End time/row is earlier than or equal to start time.", call. = F)
+  output <- list(from.row, to.row, subdf)
+  return(output)
 }
 
+
+# Perform OLS regression on subset and save b0, b1 and rsq.
+lmfit <- function(x) {
+  time <- x[[1]]
+  o2   <- x[[2]]
+  fit  <- lm(o2 ~ time, x)
+  b0   <- coef(fit)[[1]]
+  b1   <- coef(fit)[[2]]  # slope
+  rsq  <- signif(summary(fit)$r.squared, 3) # r-square
+  out  <- data.frame(b0, b1, rsq)
+  return(out)
+}
