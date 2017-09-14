@@ -1,190 +1,301 @@
-#' Determine min, max or 'ideal' rate
+#' Automatically determine rate of change in oxygen concentration over time
 #'
-#' @param df Data frame.
-#' @param width Numeric.
-#' @param logic Character.
-#' @param background Numeric, or an object of class \code{'calc.bg.rate'}
-#' @param plot Character.
+#' `auto.rate` automatically performs a rolling regression on a data frame to perform determinations of maximum, minimum, interval or "most linear" rate of change in oxygen concentration over time. How these values are obtained are dependent on the "`width`" argument. First, a rolling regression of specified `width` is performed on the entire dataset to obtain all possible values. The computations are then ranked (or, arranged), based on the "`logic`" argument, and the output is summarised.
 #'
-#' @return A summary.
-#' @importFrom dplyr mutate select arrange filter
+#' There are no units of measurements involved in `auto.rate`. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link{calc.mo2}}.
+#'
+#' **Important**: Calling `auto.rate` using the argument `logic = "automatic"` uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results. We intend to refine this technique in a future version of the package.
+#'
+#' @author Januar Harianto
+#'
+#' @md
+#' @param df data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.
+#' @param width numeric. The number of rows (or the time interval, if `by = "time"`) to use when performing the rolling regression.
+#' @param by string. Describes the method used to subset the data frame. Defaults to `"time"`. Available: "`time`", "`row`".
+#' @param logic logical. Determines the type of data to output. Defaults to "`automatic`". Available: "`max`", "`min`", "`interval`", "`automatic`".
+#' @param bg numeric, or an output of class \code{\link{calc.bg.rate}}. Value for backgroung respiration.
+#'
+#' @return An object of class \code{auto.rate} containing a list of outputs:
+#' \describe{
+#' \item{`id`}{Method used to compute the results. Possible outputs: "`maxmin`", "`interval`", or "`automatic`".}
+#' \item{`interval`}{Appears only if the argument `logic = "interval"`. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument `by = "time"` is used, the time interval is converted to the number of rows.}
+#' \item{`main.data`}{The original data frame.}
+#' \item{`kernel.dens`}{Appears only if the argument `logic = "automatic"`. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
+#' \item{`peaks`}{Appears only if the argument `logic = "automatic"`. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
+#' \item{`bin.width`}{Appears only if the argument `logic = "automatic"`. This is the bin.width used to determine the density kernel estimate.}
+#' \item{`regressions`}{An output data frame that summarises the coefficients of all calculated regressions. If `logic = "interval"`, only interval regressions are shown.}
+#' \item{`results`}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
+#' }
+#'
 #' @export
 #'
 #' @examples
-#' TBC
-auto.rate <- function(df, width = round(0.1 * nrow(df)), logic = 'automatic', background = NULL) {
-  # Perform rolling regressions
-  message(sprintf("Performing rolling regressions of width %d (rows)...", width))
-  rollreg <- roll.reg(df, width)  # perform rolling regression
-  allregs <- mutate(rollreg, to.row = row(rollreg)[,1], from.row = to.row-width+1)  # identify row subsets per regression
-  allregs <- na.omit(allregs) # remove NA results, as they are not useful
-  allregs <- mutate(allregs, from.time = df[from.row,][[1]], to.time = df[to.row, ][[1]],
-    from.o2 = df[from.row,][[2]], to.o2 = df[to.row,][[2]],
-    row.width = to.row-from.row+1, time.width = to.time-from.time,
-    o2.width = from.o2-to.o2)  ## append time and o2 indices, and all index widths
-  allregs <- select(allregs, 1:3, 5, 4, 6:12)  # slightly rearrange the data frame
-  message(sprintf("%d regressions fitted,", nrow(allregs)))
-
-  # Determine method to analyse roll outputs, based on 'logic' argument
-  if (logic == 'max') { allregs.ranked <- arrange(allregs, b1)
-  } else if (logic == 'min') { allregs.ranked <- arrange(allregs, desc(b1))
-  } else if (logic == 'automatic') {
-    # EXPERIMENTAL: use rolling regression and density kernel estimation to compute 'best' rate
-    # 1. perform kernel density estimation on regression data:
-    dens <- density(allregs$b1, na.rm = T, bw = "SJ", n = length(allregs$b1))
-    # 2. grab peak values and rank them in order of decreasing density
-    peaks <- which.peaks(dens) # see below for function usage
-    peaks.ranked <- peaks[order(peaks$density, decreasing = T),]
-    # 4. also grab the binwidth used to calculate density:
-    bw <- dens$bw
-    # 5. using the binwidth, gather all regressions that were used to determine each peak
-    match.peaks <- lapply(peaks.ranked[,1], function(x) filter(allregs, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
-    match.peaks <- match.peaks[sapply(match.peaks, nrow) > 0] # remove zero-length values in list
-    # 6. the matched areas of the data frame may be fragmented, we list them out
-    frags <- lapply(1:length(match.peaks), function(x)
-      split(match.peaks[[x]], c(0, cumsum(abs(diff(match.peaks[[x]]$from.time)) > allregs$time.width[1]))))
-    # 7. the largest fragment is retained
-    best <- lapply(1:length(frags), function(x) which.max(do.call(rbind, lapply(frags[[x]], nrow))))
-    best <- do.call(rbind, best)
-    best.frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), best))
-    # 8. perform calc.rate best fragments
-    # New data is generated, ranked, and the previous regressions are discarded (since we have longer frags)
-    allregs.ranked <- lapply(1:length(frags), function(x)
-      calc.rate(df, min(best.frags[[x]]$from.row), max(best.frags[[x]]$to.row), by = 'row', background = background, plot = F))
-    message(sprintf("%d kernel density peaks in rates detected and ranked.\n", length(allregs.ranked)))
-  } else stop("The 'logic' argument is incorrect. Please check that it is either 'max', 'min' or 'automatic'.", call. = F)
-
-  if (logic == 'max' | logic == 'min') {
-    # split the dataframe
-    allregs.results <- select(allregs.ranked, 1:3)
-    rownames(allregs.results) <- sprintf('rank%i', 1:nrow(allregs.results))
-    allregs.subsets <- select(allregs.ranked, 4:12)
-    rownames(allregs.subsets) <- sprintf('rank%i', 1:nrow(allregs.results))
-    # generate the ranked outputs
-    allregs.ranked <-
-      lapply(1:nrow(allregs), function(x)
-        list(results = allregs.results[x,],
-          subsets = allregs.subsets[x,],
-          average = allregs.results[x,]$b1,
-          weighted.average = allregs.results[x,]$b1))
-    names(allregs.ranked) <- sprintf('rank%i', 1:nrow(allregs))
+#' # calculate maximum rate at width 500 (rows):
+#' x <- auto.rate(sardine, width = 500, logic = "max")
+#' print(x)
+#' summary(x)
+#' plot(x)
+#'
+#' # calculate rate at 500-second intervals along the timeseries:
+#' x <- auto.rate(sardine, width = 500, by = "time", logic = "interval")
+#' print(x)
+#' summary(x)
+#' plot(x, rank = 3) # view the diagnostic plot for the 3rd interval
+#'
+#' # Experimental. Automatically calculate the most "linear" section of
+#' timeseries based on kernel density estimates:
+#' x <- auto.rate(sardine)
+#'
+auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
+  logic = 'automatic', bg = NULL) {
+  # How are we subsetting the data?
+  # Note: only "time" and "row" supported here.
+  if (by == "row") {
+    fits <- rollfit(df, width)  # Perform rolling regressions
+  } else if (by == "time") {
+    # we approximate row time interval by looking at total time and dividing by
+    # the total number of rows:
+    row.interval <- floor(max(df[1])/(nrow(df)-1))
+    width <- width/row.interval + 1
+    fits <- rollfit(df, width)
+    # Estimate the no. of rows
+  } else stop("Only 'row'and 'time' arguments are supported in 'by'.", call = F)
+  fits <- tibble::rowid_to_column(fits)  # Append locations to data
+  fits <- na.omit(fits)  # Remove NA results as they're not used
+  # Select method of analysis: "max", "min", "interval" or "automatic":
+  # Minimum rate ---------------------------------------------------------------
+  if (logic == "min") {
+    out <- dplyr::arrange(fits, abs(b1))
+    # Maximum rate ---------------------------------------------------------------
+  } else if (logic == "max") {
+    out <- dplyr::arrange(fits, desc(abs(b1)))
+    # Intervals ------------------------------------------------------------------
+  } else if (logic == "interval") {
+    # Generate the index to subset data for intervals:
+    sequence <- seq(width, nrow(df), width)
+    # Grab the intervals and bind them into a data frame:
+    intv <- lapply(sequence, function(x) dplyr::filter(fits, rowid == x))
+    out  <- dplyr::bind_rows(intv)
+    # Best linear fit ------------------------------------------------------------
+  } else if (logic == "automatic") {
+    # WARNING
+    # This method is still experimental and should not be used to analyse data
+    # unless you know what you are doing.
+    pks <- k.peaks(fits)  # identify the peaks in kernel density estimate
+    out <- match.data(df, fits, pks, width, bg)  # match to roll. reg.
+    # --------------------------------------------------------------------------
+  } else stop("Cannot ID the 'logic' argument. Hint: '?auto.rate'", call. = F)
+  # ----------------------------------------------------------------------------
+  # Format some data here to prepare for output summary:
+  if (logic == "min" | logic == "max" | logic == "interval") {
+    # Calculate data locations:
+    out <- dplyr::mutate(out,
+      from.row  = rowid - width + 1,
+      to.row    = rowid,
+      from.time = df[,1][from.row],
+      to.time   = df[,1][to.row],
+      from.o2   = df[,2][from.row],
+      to.o2     = df[,2][to.row],
+      row.len   = to.row - from.row + 1,
+      time.len  = to.time - from.time)
+  } else if (logic == "automatic") out <- out
+  # ----------------------------------------------------------------------------
+  # Format output based on "logic" argument:
+  if (logic == "max" | logic == "min") {
+    out <- list(
+      id          = "maxmin",
+      main.data   = df,
+      regressions = fits,
+      results     = out)
+    message(sprintf("%d regressions fitted.", nrow(out$results)))
+  } else if (logic == "interval") {
+    out <- list(
+      id = "interval",
+      interval    = width,
+      main.data   = df,
+      regressions = fits,
+      results     = out)
+    message(sprintf("%d regressions fitted.", nrow(out$results)))
+  } else if (logic == "automatic") {
+    out <- list(
+      id = "automatic",
+      main.data   = df,
+      kernel.dens = pks$density,
+      peaks       = pks$peaks,
+      bin.width   = pks$density$bw,
+      regressions = fits,
+      results = out)
+    message(sprintf("%d regressions fitted.", nrow(out$regressions)))
+    message(sprintf("%d kernel density peaks detected and ranked.",
+      nrow(out$results)))
   }
-  if (logic == 'automatic'){
-    out <- list(dataframe = df,  # original dataframe
-                density = dens,
-                rollreg = rollreg,
-                output = allregs.ranked,  # ranked regression results (the summary)
-                peaks = peaks.ranked,
-                binwidth = bw)
-  } else out <- list(dataframe = df,
-                     rollreg = rollreg,
-                     output = allregs.ranked,
-                     binwidth = NULL)
-  class(out) <- 'auto.rate'
+  class(out) <- "auto.rate"
   return(out)
 }
 
 
-#' @export
 print.auto.rate <- function(x, rank = 1) {
-  top.r <- x$output[[rank]]$results
-  top.sub <- x$output[[rank]]$subsets
-  if (is.null(x$binwidth)) {
-    cat(sprintf("Rank %d result:\n", rank))
-  } else {
-    cat(sprintf("Rank %d result based on kernel density",
-      rank), sprintf("estimation of bin width %f (b1):\n",
-        x$binwidth))
-    top.r <- data.frame(top.r, density = x$output[[rank]][2])
+  if (x$id == "maxmin") {
+    if (x$results$b1[1] > x$results$b1[nrow(x$results)]) {
+      cat("Ranked computation of rate of change of O2 concetration (minimum)\n")
+    } else       cat("Ranked computation of rate of change of O2 concetration (maximum)\n")
+    cat(sprintf("--- Result for Rank %d ---\n", rank))
+    cat(sprintf("Intercept (b0): %f", x$results$b0[rank]))
+    cat(sprintf(" | Slope (b1): %f", x$results$b1[rank]))
+    cat(sprintf(" | R-square: %f\n", x$results$rsq[rank]))
+    cat("\n--- Subset Information --- \n")
+    print(dplyr::select(x$results[rank,], -(1:4)))
+
+  } else if (x$id == "interval") {
+    cat("Computation of rate of change of O2 concetration (interval)\n")
+    cat("--- First 6 Results ---\n")
+    print(head(dplyr::select(x$results, 2:4)))
+    cat("\n--- Subset Information ---\n")
+    print(head(dplyr::select(x$results, -(1:4))))
+
+  } else if (x$id == "automatic") {
+    cat("Ranked computation of rate of change of O2 concetration (auto)\n")
+    cat(sprintf("--- Result for Rank %d ---\n", rank))
+    cat(sprintf("Intercept (b0): %f", x$results$b0[rank]))
+    cat(sprintf(" | Slope (b1): %f", x$results$b1[rank]))
+    cat(sprintf(" | R-square: %f\n", x$results$rsq[rank]))
+    cat("\n--- Subset Information ---\n")
+    print(dplyr::select(x$results[rank,], -(1:3)))
   }
-  print(top.r)
-  cat(sprintf("\nData location(s) for rank %d result:\n", rank))
-  print(top.sub)
+}
+
+summary.auto.rate <- function(x, n = 5) {
+  if (x$id == "maxmin") {
+    if (x$results$b1[1] > x$results$b1[nrow(x$results)]) {
+      cat("Method     : Minimum\n")
+    } else cat("Method     : Maximum\n")
+    cat(sprintf("Regressions: %d\n", nrow(x$results)))
+  } else if (x$id == "interval") {
+    cat("Method     : Interval\n")
+    cat(sprintf("Regressions: %d\n", nrow(x$results)))
+  } else if (x$id == "automatic") {
+    cat("Method        : Auto\n")
+    cat(sprintf("Regressions   : %d\n", nrow(x$regressions)))
+    cat(sprintf("Peaks detected: %d\n", nrow(x$peaks)))
+  }
+  if (x$id == "interval") {
+    cat(sprintf("\n--- Summary of all %d regressions ---\n", nrow(x$results)))
+    print(x$results, n)
+  } else {
+    cat(sprintf("\n--- Summary of the first %d results ---\n", n))
+    print(head(x$results, n))
+  }
 }
 
 
-#' @export
-summary.auto.rate <- function(x, rank = 1) {
-  top5.results <- do.call(rbind, lapply(1:5, function(y) x$output[[y]]$results))
-  rownames(top5.results) <- sprintf('rank%i', 1:5)
-  top5.subsets <- do.call(rbind, lapply(1:5, function(y) x$output[[y]]$subsets))
-  rownames(top5.subsets) <- sprintf('rank%i', 1:5)
-  if (is.null(x$binwidth)) {
-    cat("Top 1-5 results:\n")
-  } else {
-    cat(sprintf("Top 1-6 results, based on kernel density estimation of bin width %f (b1):\n", x$binwidth))
-    top5.results <- cbind(top5.results, density = x$ranked.peaks[1:5,][2])
-  }
-  print(top5.results)
-  cat("\nData location(s) for top 1-5 results:\n")
-  print(top5.subsets)
-}
-
-#' @export
 plot.auto.rate <- function(x, rank = 1) {
-  # define the variables
-  from <- x$output[[rank]]$subsets$from.row  # start row (for subset)
-  to <- x$output[[rank]]$subsets$to.row  # end row (for subset)
-  width <- x$output[[rank]]$subsets$row.width  # width of subset
-  df <- x$dataframe  # the original timeseries
-  sdf <- x$dataframe[from:to, ]  # the subset
-  lmfit <- lm(sdf[[2]] ~ sdf[[1]], sdf)  # lm of the subset
-  rolldf <- data.frame(df[[1]], x$rollreg$b1)  # rolling regression data
-  ranked.b1 <- x$output[[rank]]$average
-  # plot
-  if (!is.null(x$binwidth)) {
-    dens <- x$density
-    peaks <- x$peaks
-    # output for 'best' rate
+  # Calculate common variables (should we do this in main function? hmm)
+  df    <- x$main.data  # main timseries
+  from  <- x$results$from.row[rank] # start row
+  to    <- x$results$to.row[rank] # end row
+  sdf   <- df[from:to,] # the subset timeseries after auto detection
+  lmfit <- lm(sdf[[2]] ~ sdf[[1]], sdf)  # lm of subset
+
+  # if max/min
+  if (x$id == "maxmin") {
+    rollwidth <- length(x$main.data[[1]])-length(x$regressions$b1) # roll width
+    rolldf <- data.frame(x = df[(rollwidth + 1):length(x$main.data[[1]]),][[1]],
+      y = x$regressions$b1)
+    ranked.b1 <- x$results$b1[rank]
+
+    mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
+    layout(mat)
+    multi.p(df, sdf)  # full timeseries with lmfit
+    sub.p(sdf) # closed-up (subset timeseries)
+    rollreg.p(rolldf, ranked.b1) # rolling regression series
+    residual.p(lmfit)  # residual plot
+    qq.p(lmfit)  # qq plot
+    layout(1)
+  } else if (x$id == "interval") {
+    intervals <- x$results$to.row
+
     pardefault <- par(no.readonly = T)  # save original par settings
-    par(mfrow = c(2, 3))  # replace par settings
+    par(mfrow = c(2, 2))  # replace par settings
     multi.p(df, sdf)
+    abline(v = 0, lty = 3)
+    abline(v = intervals, lty = 3)
     sub.p(sdf)
-    rollreg.p(rolldf, rollsdf, ranked.b1)
-    density.p(dens, peaks, rank)
     residual.p(lmfit)
     qq.p(lmfit)
     par(pardefault)  # revert par settings to original
-  } else {
-    rollsdf <- rolldf[(from+width/2):(to+width/2),] # if min/max
-    # output for max/min rate
-    mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2,
-      byrow = TRUE)
-    layout(mat)
-    multi.p(df, sdf)
-    sub.p(sdf)
-    rollreg.p(rolldf, rollsdf, ranked.b1)
-    residual.p(lmfit)
-    qq.p(lmfit)
-    layout(1)
+  } else if (x$id == "automatic") {
+    rollwidth <- length(x$main.data[[1]])-length(x$regressions$b1) # roll width
+    rolldf <- data.frame(x = df[(rollwidth + 1):length(x$main.data[[1]]),][[1]],
+      y = x$regressions$b1)
+    ranked.b1 <- x$results$b1[rank]
+    dens <- x$kernel.dens
+    peaks <- x$peaks[2:3]
+
+    pardefault <- par(no.readonly = T)  # save original par settings
+    par(mfrow = c(2, 3))  # replace par settings
+    multi.p(df, sdf)  # full timeseries with lmfit
+    sub.p(sdf)  # closed-up (subset timeseries)
+    rollreg.p(rolldf, ranked.b1)  # rolling regression series with markline
+    density.p(dens, peaks, rank) # density plot
+    residual.p(lmfit) # residual plot
+    qq.p(lmfit  )# qq plot
+    par(pardefault)  # revert par settings to original
   }
 }
 
-
-# ------------------------------------------------------------------------------
 # Internal functions
-# ------------------------------------------------------------------------------
-# perform rolling regressions (auto.rate)
-roll.reg <- function(df, win) {
-  x <- matrix(df[[1]])
+# ==============================================================================
+# perform rolling regression
+rollfit <- function(df, width) {
+  x <- matrix(df[[1]]) # convert data to matrices to work with roll_lm
   y <- matrix(df[[2]])
-  lmfit <- roll::roll_lm(x, y, win)
-  c   <- lmfit$coefficients[,1]
-  b1  <- lmfit$coefficients[,2]
-  rsq <- lmfit$r.squared[,1]
-  # output:
-  out <- data.frame(b0 = c, b1 = b1, r.sq = rsq)
+  rfit <- roll::roll_lm(x, y, width)  # perform the rolling regression here
+  # Bind results into a data frame:
+  out <- cbind.data.frame(rfit$coefficients, rfit$r.squared)
+  names(out) <- c("b0", "b1", "rsq")
   return(out)
 }
 
-# identify peaks in density (auto.rate)
-which.peaks <- function(dens) {
-  d.x <- dens$x
-  d.y <- dens$y
-  df <- data.frame(slope = d.x, density = d.y)
-  all.peaks <- which(diff(sign(diff(d.y)))==-2)+1
-  list.vals <- lapply(all.peaks, function(x) df[x, ])
-  out <- as.data.frame(do.call(rbind, list.vals))
-  names(out) <- c('b1.reference', 'density')
-  out
+# perform kernel density estimation of the data and identify the peaks
+k.peaks <- function(x) {
+  # Perform kernel density estimation:
+  dns <- density(x$b1, na.rm = T, bw = "SJ", n = length(x$b1))
+  pks <- which(diff(sign(diff(dns$y))) == -2) + 1  # ID peaks in density
+  # Match peaks to density data:
+  pks <- dplyr::bind_rows(lapply(pks, function(x)
+    data.frame(index = x, ref.b1 = dns$x, dens = dns$y)[x,]))
+  pks <- dplyr::arrange(pks, desc(dens))  # arrange in descending order
+  output <- list(density = dns, peaks = pks)
+  return(output)
+}
+
+# match peaks to data
+match.data <- function(df, fits, pks, width, bg) {
+  bw <- pks$density$bw  # extract bin width
+  # Match all regressions used to determine each peak using the bin width:
+  mat.regs <- lapply(pks$peaks[,2], function(x)
+    dplyr::filter(fits, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
+  mat.regs <- mat.regs[sapply(mat.regs, nrow) > 0] # remove zero-length matches
+  # Now match to the raw data, using matched regressions:
+  mat.raw <- lapply(1:length(mat.regs), function(x)
+    split(mat.regs[[x]],
+      c(0, cumsum(abs(diff(mat.regs[[x]]$rowid)) > width))))
+  # Identify the best fragments - first grab the index of longest fragments
+  idx <- lapply(1:length(mat.raw), function(x)
+    which.max(dplyr::bind_rows(lapply(mat.raw[[x]], nrow))))
+  idx <- do.call(rbind, idx)
+  # The fragments are identified again:
+  frags <- unname(mapply(function(x, y)
+    mat.raw[[x]][y], 1:length(mat.raw), idx))
+  # Perform calc.rate on all fragments:
+  output <- lapply(1:length(frags), function(x)
+    calc.rate(df = df,
+      from = min(frags[[x]]$rowid - width + 1),
+      to   = max(frags[[x]]$rowid),
+      by   = 'row',
+      bg   = bg,
+      plot = F,
+      verbose = F)$results)
+  output <- dplyr::bind_rows(output)  # bind output to a table
+  return(output)
 }
