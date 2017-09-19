@@ -1,20 +1,23 @@
-#' @title Convert units or oxygen concentration or respiration
-#' @description This function is able to pick up whether the data that needs to
-#' be converted is a unit of [O2] or a unit of VO2 or MO2 (NOT YET IMPLEMENTED).
-#' @param x Numeric vector of measurement(s).
-#' @param from String. The unit to convert from.
-#' @param to String. The unit to convert into.
-#' @param S Numeric. Salinity, default at S = 35.
-#' @param t Numeric. Temperature, default at 25 &deg;C.
-#' @param P Numeric. Pressure. Default at 1.013253 bar.
-#' @details While you could parse an entire raw dataset with this, it is highly
-#' recommended that unit conversion is conducted at the end of analysis (i.e.
-#' convert one value once, rather than convert an entire data frame at start),
-#' OR MAYBE NOT -- just filler text for now.
-#' @author Januar Harianto
-#' @author Nicholas Carey
-#' @return NULL
+#' Convert units of rate of change in oxygen concentration over time
+#'
+#' Basic conversion function for non- volume- or weight-specific rate of change in oxygen concentration over time.
+#'
+#' The user may use [calc.mo2] for conversions involving volume- or weight-specific rate of change in oxygen concentration over time.
+#'
+#' @author Januar Harianto & Nicholas Carey
+#'
+#' @md
+#'
+#' @param x numeric vector. The number to convert.
+#' @param from string. The unit before conversion.
+#' @param to string. The unit after conversion.
+#' @param S numeric. Salinity, defaults to 35.
+#' @param t numeric. Temperature in degrees C, defaults to 25.
+#' @param P numeric. Pressure unit in bar, defaults to 1.013253.
+#'
+#' @return a numeric vector.
 #' @export
+#'
 #' @examples
 #' convert.do(90, from = '%', to = 'mg/l')
 #' convert.do(7.7, from = 'mgl-1', to = 'umol/l', S = 30, t = 20)
@@ -95,6 +98,8 @@ convert.do <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
 #' (e.g. 'mg/l', 'mgL-1', 'mgl-1' and 'mg per litre' all work).
 #' @author Januar Harianto
 #' @return NULL
+#'
+#' @export
 #' @examples
 #' checkUnits('min', 'time')
 #' checkUnits('notatunit', 'time')
