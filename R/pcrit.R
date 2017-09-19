@@ -27,9 +27,12 @@
 #' summary(pcfish, n = 20)    # prints the top 20 results (just to compare)
 #'
 #'
-pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
-  if (datmr == T) {
+pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
+  # if dissolved oxygen to metabolic rate data is already available, skip
+  # rolling regression:
+  if (datmr == TRUE) {
     mrDo <- na.omit(df)
+    df <- NULL
   }
   if (datmr == F) {
     names(df) <- c("x", "y")
@@ -43,7 +46,7 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
     }
     # otherwise, carry on
     width    <- floor(span * nrow(df))
-    rollreg <- roll.reg(df, width)$b1
+    rollreg <- rollfit(df, width)$b1
     rollmean <- roll_mean(matrix(df[[2]]), width)
     counts   <- length(rollmean) # for benchmark
     mrDo     <- na.omit(data.frame(rollmean, abs(rollreg)))
@@ -72,6 +75,7 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = T) {
   rollmr <- mrDo[[2]]
 
   out <- list(
+    df = df,
     do.mr = mrDo,
     pcrit = pcrit,
     pcritRanked = pcritRanked,
@@ -99,12 +103,24 @@ summary.pcrit <- function(x, n = 6) {
 
 #' @export
 plot.pcrit <- function(x, rank = 1, ...) {
-  pcrit.p(x, rank)
+  if (is.null(x$df)) {
+    pcrit.p(x, rank)
+  } else {
+    pardefault <- par(no.readonly = T)  # save original par settings
+    par(mfrow=c(1,2))  # replace par settings
+    plot(x$df,xlab = "Time", ylab = "DO", col = r2, pch = 16, panel.first = c(rect(par("usr")[1],
+      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
+        lty = 1, lwd = 1.5)))
+    # title(main = "Timeseries")
+    abline(h = x$pcritRanked[5][rank, ], lwd = 1.5, col = d1)
+    abline(h = x$pcritRanked[6][rank, ], lwd = 1.5, col = d2)
+    pcrit.p(x, rank = rank)
+    par(pardefault)  # revert par settings to original
+  }
 }
 
-# ------------------------------------------------------------------------------
-# Internals
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# Internal functions
 
 # generate an index for hockeyLm
 spawnIndices <- function(x, min = 3) {
