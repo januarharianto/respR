@@ -51,11 +51,14 @@
 #'
 calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   plot = T, verbose = T) {
-  # Perform lm on entire dataset if "start" and "end" are not defined:
+  # Inform user that lm will be performed on entire dataset if "start" and "end"
+  # are not defined:
   if (is.null(from) && is.null(to)) {
     message("Data bounds not set. Performing analysis on entire data frame.")
     from <- 1; to <- nrow(df); by <- 'row'
   }
+  # Tibbles mess with apply functions, so we convert them into data frames:
+  if (any(class(df) == "tbl")) class(df) <- "data.frame"
   # Error check: ensure that subset inputs are numeric:
   if (!is.numeric(from) | !is.numeric(to))
     stop("'to' and 'from' arguments must be numeric.")
@@ -78,25 +81,23 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
     row.len  = to.row - from.row + 1,
     time.len = to.time - from.time)
   # ----------------------------------------------------------------------------
-  # Include background rate, if provided:
+  # If background (bg) argument is provided, correct for bg and update summary.
+  # Also calculate weighted mean if multiple regressions were specified.
   if (is.null(bg)) {
-    results <- fits
+    results  <- fits
+    rate <- weighted.mean(results$b1, results$time.len)
+    adj.rate <- NULL
   } else if (class(bg) == "calc.bg.rate") {
-    bg <- bg$average
+    bg <- bg$rate
     results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
     results <- select(results, b0, b1, bg, `b1-bg`, everything())
+    rate <- weighted.mean(results$b1, results$time.len)
+    adj.rate <- rate - results$bg[[1]]  # bg-adjust, if needed
   } else if (class(bg) == "numeric") {
     results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
     results <- select(results, b0, b1, bg, `b1-bg`, everything())
-  }
-  # ----------------------------------------------------------------------------
-  # Extract rate and bg rate, also calculate mean if necessary:
-  if (nrow(results) > 1) {
-    rate <- mean(results$b1)
-    if (!is.null(bg)) adj.rate <- mean(results$`b1-bg`)
-  } else {
-    rate <- results$b1
-    if (!is.null(bg)) adj.rate <- results$`b1-bg`
+    rate <- weighted.mean(results$b1, results$time.len)
+    adj.rate <- rate - results$bg[[1]]  # bg-adjust, if needed
   }
   # ----------------------------------------------------------------------------
   # Plot the result, if set to TRUE
@@ -107,46 +108,58 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   if (is.null(bg)) {
     # This is generated if there is no "bg" argument:
     out <- list(
+      id         = "calc.rate",
       data.frame = df,
       subset.df  = alldf,
-      by       = by,
-      results  = results,
-      rate     = rate,
-      adj.rate = NULL)
+      by         = by,
+      results    = results,
+      rate       = rate,
+      adj.rate   = adj.rate)
   } else {
     # This is generated if "bg" argument is included:
     out <- list(
-      data.frame   = df,
-      subset.df    = alldf,
+      id         = "calc.rate",
+      data.frame = df,
+      subset.df  = alldf,
       by         = by,
       results    = results,
       rate       = rate,
       background = bg,
       adj.rate   = adj.rate)
   }
-  if(verbose == T) message(sprintf("Data subset is by %s.", out$by))
+  if(verbose == T) {
+    message(sprintf("Data subset is by %s.", out$by))
+    if(!is.null(bg)) message("Background correction recognised and applied.")
+  }
   if (nrow(out$results) > 1) {
-    message(sprintf("Result are averaged across %g data subsets.",
+    message(sprintf("Result are averaged across %g data subsets, and weighted to time.",
       nrow(out$results)))
   }
   class(out) <- 'calc.rate'  # classy stuff :D
   return(out)
 }
 
+# ==============================================================================
+#' @export
 print.calc.rate <- function(x) {
-
-  if(!is.null(x$adj.rate)) {
-    cat(sprintf("Rate      : %f\n", x$rate))
-    cat(sprintf("Background: %f\n", x$background))
-    cat(sprintf("Adj. Rate : %f\n", x$adj.rate))
-  } else cat(sprintf("Rate: %f\n", x$rate))
+  if(is.null(x$adj.rate)) {
+    cat(sprintf("Rate (b1): %f\n", x$rate))
+  } else {
+    cat(sprintf("Background (bg)  : %f\n", x$background))
+    cat(sprintf("Rate (b1)        : %f\n", x$rate))
+    cat(sprintf("Adj. Rate (b1-bg): %f\n", x$adj.rate))
+  }
 }
 
+# ==============================================================================
+#' @export
 summary.calc.rate <- function(x) {
   # cat("Summary\n")
   print(x$results)
 }
 
+# ==============================================================================
+#' @export
 plot.calc.rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
   sdf <- x$subset.df[[rep]] # extract data from list
@@ -163,8 +176,9 @@ plot.calc.rate <- function(x, rep = 1) {
 }
 
 
-# Internal functions
 # ==============================================================================
+# Internal functions
+
 # Subset the main data based on the "by" argument. Also saves row index data in
 # the output.
 locate.subdfs <- function(df, index, by) {
