@@ -2,28 +2,61 @@
 % Please edit documentation in R/auto.rate.R
 \name{auto.rate}
 \alias{auto.rate}
-\title{Determine min, max or 'ideal' rate}
+\title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto.rate(df, width = round(0.1 * nrow(df)), logic = "automatic",
-  background = NULL)
+auto.rate(df, width = floor(0.1 * nrow(df)), by = "time",
+  logic = "automatic", bg = NULL)
 }
 \arguments{
-\item{df}{Data frame.}
+\item{df}{data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.}
 
-\item{width}{Numeric.}
+\item{width}{numeric. The number of rows (or the time interval, if \code{by = "time"}) to use when performing the rolling regression.}
 
-\item{logic}{Character.}
+\item{by}{string. Describes the method used to subset the data frame. Defaults to \code{"time"}. Available: "\code{time}", "\code{row}".}
 
-\item{background}{Numeric, or an object of class \code{'calc.bg.rate'}}
+\item{logic}{logical. Determines the type of data to output. Defaults to "\code{automatic}". Available: "\code{max}", "\code{min}", "\code{interval}", "\code{automatic}".}
 
-\item{plot}{Character.}
+\item{bg}{numeric, or an output of class \link{calc.bg.rate}. Value for backgroung respiration.}
 }
 \value{
-A summary.
+An object of class \code{auto.rate} containing a list of outputs:
+\describe{
+\item{\code{id}}{Method used to compute the results. Possible outputs: "\code{maxmin}", "\code{interval}", or "\code{automatic}".}
+\item{\code{interval}}{Appears only if the argument \code{logic = "interval"}. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument \code{by = "time"} is used, the time interval is converted to the number of rows.}
+\item{\code{main.data}}{The original data frame.}
+\item{\code{kernel.dens}}{Appears only if the argument \code{logic = "automatic"}. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
+\item{\code{peaks}}{Appears only if the argument \code{logic = "automatic"}. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
+\item{\code{bin.width}}{Appears only if the argument \code{logic = "automatic"}. This is the bin.width used to determine the density kernel estimate.}
+\item{\code{regressions}}{An output data frame that summarises the coefficients of all calculated regressions used to determine the results.}
+\item{\code{results}}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
+}
 }
 \description{
-Determine min, max or 'ideal' rate
+\code{auto.rate} automatically performs a rolling regression on a data frame to perform determinations of maximum, minimum, interval or "most linear" rate of change in oxygen concentration over time. First, a rolling regression of specified \code{width} is performed on the entire dataset to obtain all possible values. The computations are then ranked (or, arranged), based on the "\code{logic}" argument, and the output is summarised.
+}
+\details{
+There are no units of measurements involved in \code{auto.rate}. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link[=calc.mo2]{calc.mo2()}}.
+
+\strong{Important}: Calling \code{auto.rate} using the argument \code{logic = "automatic"} uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results. We intend to refine this technique in a future version of the package.
 }
 \examples{
-TBC
+# calculate maximum rate at width 500 (rows):
+x <- auto.rate(sardine, width = 500, logic = "max")
+print(x)
+summary(x)
+plot(x)
+
+# calculate rate at 500-second intervals along the timeseries:
+x <- auto.rate(sardine, width = 500, by = "time", logic = "interval")
+print(x)
+summary(x)
+plot(x, rank = 3) # view the diagnostic plot for the 3rd interval
+
+# Experimental. Automatically calculate the most "linear" section of
+# timeseries based on kernel density estimates:
+x <- auto.rate(sardine)
+
+}
+\author{
+Januar Harianto & Nicholas Carey
 }

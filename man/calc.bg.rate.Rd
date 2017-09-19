@@ -2,27 +2,46 @@
 % Please edit documentation in R/calc.bg.rate.R
 \name{calc.bg.rate}
 \alias{calc.bg.rate}
-\title{Calculate background respiration}
+\title{Calculate background rate of change of oxygen over time}
 \usage{
-calc.bg.rate(df, timecol = 1, bgcol = 2, plot = T)
+calc.bg.rate(df, xcol = 1, ycol = 2, plot = T)
 }
 \arguments{
-\item{df}{Data frame.}
+\item{df}{data frame. The data frame that contains the data needed for the function \code{calc.bg.rate}.}
 
-\item{timecol}{Numeric. Defaults to 1. The column index of the data frame to use as time data.}
+\item{xcol}{numeric. The time column is specified here. Defaults to "\code{1}".}
 
-\item{bgcol}{Numeric or vector. Defaults to 2. The column index/indices of the data frame to use for DO data. A list e.g. `c(2:5)` will calculate the rate for each column individually, and then average the results.}
+\item{ycol}{numeric vector. The O2 column(s) are specified here. Defaults to "\code{2}".}
+
+\item{plot}{logical. If \code{TRUE}, will plot the rate(s) in xy plot(s).}
 }
 \value{
-A summary list of rates, and the mean rate.
+An object of class \code{calc.bg.rate} containing a list of outputs:
+\tabular{rll}{
+\tab \code{lmfit}   \tab list of objects of class \code{lm}. There are all the regressions. \cr
+\tab \code{results} \tab data frame. A summary of coefficients from each regression. \cr
+\tab \code{rate}    \tab numeric. The output slope or rate of change in oxygen
+concentration. If more than one regression was performed, the average rate
+is displayed.
+}
 }
 \description{
-Calculate background respiration
+\code{calc.bg.rate} uses linear regression to calculate the rate of change of oxygen over time for background corrections of the main data. Can be used on multiple datasets of background measures, as long as the time data are identical between measurements.
+}
+\details{
+The output of \code{calc.bg.rate} can be fed as an argument directly into the functions \link{calc.rate} and \link{auto.rate}.
 }
 \examples{
+# load data
 data(urchin2013)
-calc.bg.rate(urchin2013, 1, c(18:19))
-# save as object to use in other functions:
-urbg <- calc.bg.rate(urchin2013,1,c(18:19))
+bg.u <- calc.bg.rate(urchin2013, xcol = 1, ycol = 18, plot = F)
+bg.u
 
+# run multiple data
+bg.multi <- calc.bg.rate(urchin2013 ,1, c(18:19))
+bg.multi
+
+}
+\author{
+Januar Harianto & Nicholas Carey
 }

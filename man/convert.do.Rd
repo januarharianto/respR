@@ -2,32 +2,31 @@
 % Please edit documentation in R/convert.do.R
 \name{convert.do}
 \alias{convert.do}
-\title{Convert units or oxygen concentration or respiration}
+\title{Convert units of rate of change in oxygen concentration over time}
 \usage{
 convert.do(x, from, to, S = 35, t = 25, P = 1.013253)
 }
 \arguments{
-\item{x}{Numeric vector of measurement(s).}
+\item{x}{numeric vector. The number to convert.}
 
-\item{from}{String. The unit to convert from.}
+\item{from}{string. The unit before conversion.}
 
-\item{to}{String. The unit to convert into.}
+\item{to}{string. The unit after conversion.}
 
-\item{S}{Numeric. Salinity, default at S = 35.}
+\item{S}{numeric. Salinity, defaults to 35.}
 
-\item{t}{Numeric. Temperature, default at 25 &deg;C.}
+\item{t}{numeric. Temperature in degrees C, defaults to 25.}
 
-\item{P}{Numeric. Pressure. Default at 1.013253 bar.}
+\item{P}{numeric. Pressure unit in bar, defaults to 1.013253.}
+}
+\value{
+a numeric vector.
 }
 \description{
-This function is able to pick up whether the data that needs to
-be converted is a unit of [O2] or a unit of VO2 or MO2 (NOT YET IMPLEMENTED).
+Basic conversion function for non- volume- or weight-specific rate of change in oxygen concentration over time.
 }
 \details{
-While you could parse an entire raw dataset with this, it is highly
-recommended that unit conversion is conducted at the end of analysis (i.e.
-convert one value once, rather than convert an entire data frame at start),
-OR MAYBE NOT -- just filler text for now.
+The user may use \link{calc.mo2} for conversions involving volume- or weight-specific rate of change in oxygen concentration over time.
 }
 \examples{
 convert.do(90, from = '\%', to = 'mg/l')
@@ -38,7 +37,5 @@ convert.do(sardine[2], from = '\%', to = 'mg/l')
 
 }
 \author{
-Januar Harianto
-
-Nicholas Carey
+Januar Harianto & Nicholas Carey
 }

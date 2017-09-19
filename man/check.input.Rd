@@ -7,16 +7,20 @@
 check.input(df, x = NULL, y = NULL, plot = T)
 }
 \arguments{
-\item{df}{a data frame containing at least 2 columns of data.}
+\item{df}{data frame. containing at least 2 columns of data.}
 
-\item{x}{a numeric value to subset a data frame. Corresponds to column number (e.g. \code{x = 1} will subset the first column of the data frame). Must be time data.}
+\item{x}{numeric. Corresponds to column number. \code{x = 1} will subset the first
+column of the data frame. Must be time data.}
 
-\item{y}{a numeric value to subset a data frame. Corresponds to column number (e.g. \code{y = 2} will subset the second column of the data frame). Must be dissolved oxygen data.}
+\item{y}{numeric. Corresponds to column number. \code{y = 2} will subset the
+second column of the data frame. Must be dissolved oxygen data.}
 
-\item{plot}{logical - defaults to TRUE. A plot of the data is automatically produced if the resultant data frame contains 2 columns. Otherwise, this does nothing.}
+\item{plot}{logical. When TRUE, a plot of the data is automatically produced
+if the data frame subset contains 2 columns. Otherwise, this does nothing.}
 }
 \value{
-If a 2-column data frame is checked, \code{check.input} returns a data frame.
+If a 2-column data frame is checked, \code{check.input} returns a data
+frame object that can be saved for use in \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}.
 }
 \description{
 \code{check.input} scans a data frame for specific errors that may affect
@@ -31,11 +35,14 @@ the use of functions in \code{respr}. Data checks include:
 }
 }
 \details{
-You may run \code{check.data} on a multi-column data frame. Alternatively, you may run \code{check.data} on a 2-column data frame and it will automatically assume that the first column is time data and the second column, dissolved oxygen data. A 2-column data frame can also be extracted directly from a multi-column data frame if the \code{x} and \code{y} arguments are used within the function. For 2-column data frames, \code{check.input} will automatically remove NAs and produce a new data frame object, as long as no critical errors are found in the data. If critical errors are found (e.g. non numeric data), the function will stop. Two-column checks are more informative - since it is assumed that the x column is time data and y column is dissolved oxygen data, time-specific errors can be called out.
+You may run \code{check.input} on a multi-column data frame. Alternatively, you may run \code{check.input} on a 2-column data frame and it will automatically assume that the first column is time data and the second column, dissolved oxygen data. A 2-column data frame can also be extracted directly from a multi-column data frame if the \code{x} and \code{y} arguments are used within the function. For 2-column data frames, \code{check.input} will automatically remove NAs and produce a new data frame object, as long as no critical errors are found in the data. If critical errors are found (e.g. non numeric data), the function will stop. Two-column checks are more informative - since it is assumed that the x column is time data and y column is dissolved oxygen data, time-specific errors can be called out.
 }
 \examples{
 check.input(urchin2013)  # this does not produce a data frame object
 check.input(urchin2013, x = 1, y = 15)  # this produces a data frame object
 check.input(sardine)  # this produces a data frame object
 
+}
+\author{
+Januar Harianto & Nicholas Carey
 }

@@ -2,34 +2,71 @@
 % Please edit documentation in R/calc.mo2.R
 \name{calc.mo2}
 \alias{calc.mo2}
-\title{Calculate volume and/or mass-specific rate of oxygen flux}
+\title{Calculate volume and/or mass-specific rate of change in oxygen concentration}
 \usage{
 calc.mo2(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
   S = 35, t = 25, P = 1.013253)
 }
 \arguments{
-\item{x}{Number, or an object of class \code{'calc.rate'}}
+\item{x}{numeric, or an object of class \code{calc.rate} or \code{auto.rate}. The input object to calculate the conversion.}
 
-\item{unit.in}{Character.}
+\item{unit.in}{character string. The units to convert from. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
 
-\item{unit.out}{Character.}
+\item{unit.out}{character string. The units to convert into. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
 
-\item{volume}{Numeric. Volume of water in L.}
+\item{volume}{numeric. The volume of medium to correct to. Must be in litres (L).}
 
-\item{mass}{Numeric. Mass/weight of specimen in kg.}
+\item{mass}{numeric (optional). The mass of the speciment to correct to. Must be in kilograms (kg).}
 
-\item{S}{Numeric. Salinity in PSU. Defaults to 35.}
+\item{rank}{numeric (optional). If the input is of class \code{auto.rate}, the user may convert any of the ranked outputs by specifying the rank here. Note: not used for other input types.}
 
-\item{t}{Numeric. temperature in degrees C. Defaults to 25.}
+\item{S}{numeric. Salinity, defaults to 35.}
 
-\item{P}{Numeric. Pressure. Defaults to 1.013253.}
+\item{t}{numeric. Temperature in degrees C, defaults to 25.}
+
+\item{P}{numeric. Pressure unit in bar, defaults to 1.013253.}
 }
 \value{
-A conversion from raw rate to volume and/or mass-specific rate.
+An object containing a list of outputs:
+\describe{
+\item{\code{input.class}}{String. Helps the user identify the source of the input
+\code{x}. Possible values: \code{calc.rate}, \code{auto.rate}, \code{numeric}.}
+\item{\code{input.id}}{String. If the source of the input \code{x} is \code{auto.rate},
+identifies it's ranking method. Possible values: \code{maxmin}, \code{interval},
+\code{automatic}, \code{calc.rate}, \code{numeric}.}
+\item{\code{volume}}{Numeric. Same as above..}
+\item{\code{mass}}{Numeric. Same as above.}
+\item{\code{rank}}{Numeric. Same as above.}
+\item{\code{salinity}}{Numeric. Same as above.}
+\item{\code{temperature}}{Numeric. Same as above.}
+\item{\code{pressure}}{Numeric. Same as above.}
+\item{\code{summary}}{Data frame. Contains all inputs and converted outputs.}
+\item{\code{unit.in}}{String. Input units identified by the function.}
+\item{\code{unit.out}}{String. Output units identified by the function.}
+\item{\code{converted}}{Numeric (vector). Converted value(s).}
+\item{\code{weighted}}{Numeric. The weighted average of conversions (useful for
+intermittent data).}
+}
 }
 \description{
-Calculate volume and/or mass-specific rate of oxygen flux
+This is a conversion function that can convert value(s) of rate of change in oxygen concentration to volume-specific, and/or volume- and mass-specific rate of change in oxygen concentration.
+}
+\details{
+\code{calc.mo2} integrates well with output objects from \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}. Alternatively, the user may convert any numeric vector.
 }
 \examples{
-TBC
+x <- calc.rate(sardine, bg = 0.0001234)
+calc.mo2(x, "\%/s", "mg/s", volume = 1.2)
+
+x <- calc.rate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+calc.mo2(x, "mg/l/s", "mg/s/kg", volume = 1, mass = 1)
+
+x <- auto.rate(squid, logic = "interval")
+calc.mo2(x, "\%/s", "mg/s/g", volume = 1, mass = .5)
+}
+\seealso{
+calc.rate auto.rate
+}
+\author{
+Januar Harianto & Nicholas Carey
 }

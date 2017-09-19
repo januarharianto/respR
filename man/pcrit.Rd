@@ -4,7 +4,7 @@
 \alias{pcrit}
 \title{Calculate critical oxygen tension for respirometry}
 \usage{
-pcrit(df, span = 0.05, datmr = FALSE, plot = T)
+pcrit(df, span = 0.05, datmr = FALSE, plot = F)
 }
 \arguments{
 \item{df}{data frame object}
