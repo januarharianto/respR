@@ -1,5 +1,5 @@
 ---
-title: "respiRe - An R package for processing respirometry data"
+title: "respR - An R package for processing respirometry data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -14,11 +14,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7
 
 ## 1. Introduction
 
-Here we introduce `respiRe`, an R package that provides a colletion of functions to simplify the processing and analysis of respirometry and related experiments.
+Here we introduce `respiRe`, an R package that provides a colletion of functions to simplify the processing and analysis of respirometry and related experiments. 
 
-
-
-
+A full example is avalable at the end of this document.
 
 ## 2. Methods
 
@@ -34,7 +32,7 @@ To explore `respiRe` and its main functions we load the first example data, `urc
 
 
 ```{r}
-library(respr)
+library(respR)
 data(urchin2013)
 urchin2013
 ```
@@ -42,17 +40,17 @@ urchin2013
 `respiRe` provides the following functions to manipulate and analyse dissolved oxygen data:
 
 1. `check.input` checks for structural errors and select individual data from multi-column datasets.
-2. `calc.bg.rate` calculates background changes in dissolverd oxygen (DO).
+2. `calc.bg.rate` calculates background changes in oxygen.
 3. `calc.rate` calculates the rate of change of DO over time in a data frame, or its subset.
-4. `calc.MO2` converts a number, or an object of class of `calc.rate`, to volume and/or weight-specific rates or oxygen consumption/production (e.g. weight-specific metabolic rate).
+4. `calc.mo2` converts a number, or an object of class of `calc.rate`, to volume and/or weight-specific rates or oxygen consumption/production (e.g. weight-specific metabolic rate).
 
 In addition, a few useful functions exist for specific data preparation and analysis scenarios:
 
-5. `convert.units` converts DO units (e.g.from % to mg/L).
+5. `convert.do` converts DO units (e.g. from % to mg/L).
 6. `subsample.data` thins a large dataset by sampling every *n* rows.
-7. `smooth.data` performs a rolling average over a dataset to produce "smoother" data for analysis.
+7. `smooth.data` performs a rolling average over a dataset to produce "smoother" data for analysis. NOT DONE
 8. `auto.rate` automatically determines maximum, minimum, or continuous linear rate of change of DO over time.
-9. `pcrit` calculates the breakpoint in metabolic rate, based on the "hockey stick" method in Yeager and Ultsch (1989).
+9. `pcrit` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
 
 
 ### 2.2. `check.input`
@@ -74,25 +72,21 @@ u2 <- check.input(urchin2013, x = 1, y = 15)
 
 From the plot, non-linear irregularities in the data are evident. In this case, there is a change in the rate of oxygen uptake near the end of the timeseries (the sea urchin had climbed on top of the oxygen sensor, blocking it from surrounding water). A linear regression of the data frame would result in an underestimate of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
 
-It should be noted that invoking `check.input` is optional - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
+**It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
 ### 2.3 `calc.bg.rate`
 
 The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across all datasets to obtain a single correction. 
 
-The function `calc.bg.rate` can be used to simultaneously process single or multiple background rate measurements, provided that the time data is identical between measurements. An OLS linear regression is performed on the entire dataset to obtain background rates and scatterplots of all data may be previewed simultaneously by invoking the argument `plot = TRUE`.
-
-In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data with `calc.bg.rate` and save the output as an object.
+The function `calc.bg.rate` can be used to simultaneously process multiple background rate measurements as long as they share the time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data with `calc.bg.rate` and save the output as an object.
 
 ```{r}
-ubg <- calc.bg.rate(urchin2013, timecol = 1, bgcol = c(18:19), plot = T)
+ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
 print(ubg)
 ```
 
-
 ### 2.4 `calc.rate`
-
 
 The function `calc.rate` performs an OLS linear regression on a data series. Calling the function without any additional arguments will result in a linear regression analysis of the entire data frame.
 
@@ -100,30 +94,64 @@ The function `calc.rate` performs an OLS linear regression on a data series. Cal
 calc.rate(u2)
 ```
 
-In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is beyond a threshold of O~2~ concentration. Interference to sensitive equipment may also cause temporary irregularities or "spikes" in the data, as shown in our example above. However, as long as the rate was consistent before and after a "spike", there is no reason to discard the data. Instead, we can work around the error and subset the regions that are not erroneous, and confidently obtain valid rates (e.g citations). 
+In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is within a threshold of O~2~ concentration. Equipment interference may also cause temporary irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results. 
 
-The `calc.rate` function allows us to subset the data based on the `from` and `to` arguments, in one of 4 ways, to answer different kinds of research questions:
+Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
-1. Time period (`by = "time"`) - "What is the average rate over a 25 minute period?"
-2. Total oxygen consumed/produced (`by = o2`) - "At what rate is oxygen consumed between saturation points of 95% and 80%?"
-3. Proportion based on total oxygen consumed (`by = proportion`) - "What is the rate from halfway down to thre-quarters of the data?"
-4. Precise subsetting by row for any other reason (`by = row`).
+1. Time period (`by = "time"`) - *"What is the average rate over a 25 minute period?"*
+2. Total oxygen consumed/produced (`by = o2`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
+3. Proportion based on total oxygen consumed (`by = proportion`) - *"What is the rate from halfway down the data?"*
+4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
 
 
-Here we subset the data by time and include background respiration that had been saved by `calc.bg.rate` as before. Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
+Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. 
+
 
 ```{r}
-u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", background = ubg)
+u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", bg = ubg)
 print(u.rate)
+```
+
+Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
+```{r}
 plot(u.rate)
 ```
 
+### 2.5 `calc.mo2`
 
+Once the rate of change of oxygen has been determined, the user may either want to calculate:
 
+1. O~2~ consumed per unit time
+2. mass-specific rate of change in O~2~
 
-Now convert to volume-and-weight specific MO~2~.
+By specifying the relevant units and values in the function `calc.mo2`, the user can obtain either output automatically.
+
+For example, the user may convert the output of `calc.rate` to O~2~ consumed over an hour:
+
+```{r}
+calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/h", volume = 1.89)
+```
+
+Or, the user may convert a known rate to a volume-corrected, mass-specific rate:
+
 ```{r}
 calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
 ```
 
+In either case, the conversion is applied as long as the input and output units are identified.
 
+## 3. Further reading
+
+## 4. Example workflow
+
+
+```{r, eval=F}
+data(urchin2013)  # preload data
+u2 <- check.input(df = urchin2013, x = 1, y = 15)  # subset the data and check its validity
+ubg <- calc.bg.rate(urchin2013, timecol = 1, bgcol = c(18:19), plot = T) # calculate background rate
+u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", background = ubg)  # perform regression
+plot(u.rate)  # view plot diagnostics of regression
+# calculate mass-specific MO2, given known volume of container and mass of specimen:
+calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
+
+```
