@@ -9,15 +9,22 @@
 #'   * A test for evenly-spaced data (relevant for time data only).
 #'   * A check for column lengths.
 #'
-#' You may run `check.data` on a multi-column data frame. Alternatively, you may run `check.data` on a 2-column data frame and it will automatically assume that the first column is time data and the second column, dissolved oxygen data. A 2-column data frame can also be extracted directly from a multi-column data frame if the `x` and `y` arguments are used within the function. For 2-column data frames, `check.input` will automatically remove NAs and produce a new data frame object, as long as no critical errors are found in the data. If critical errors are found (e.g. non numeric data), the function will stop. Two-column checks are more informative - since it is assumed that the x column is time data and y column is dissolved oxygen data, time-specific errors can be called out.
+#' You may run `check.input` on a multi-column data frame. Alternatively, you may run `check.input` on a 2-column data frame and it will automatically assume that the first column is time data and the second column, dissolved oxygen data. A 2-column data frame can also be extracted directly from a multi-column data frame if the `x` and `y` arguments are used within the function. For 2-column data frames, `check.input` will automatically remove NAs and produce a new data frame object, as long as no critical errors are found in the data. If critical errors are found (e.g. non numeric data), the function will stop. Two-column checks are more informative - since it is assumed that the x column is time data and y column is dissolved oxygen data, time-specific errors can be called out.
+#'
+#' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
-#' @param df a data frame containing at least 2 columns of data.
-#' @param x a numeric value to subset a data frame. Corresponds to column number (e.g. `x = 1` will subset the first column of the data frame). Must be time data.
-#' @param y a numeric value to subset a data frame. Corresponds to column number (e.g. `y = 2` will subset the second column of the data frame). Must be dissolved oxygen data.
-#' @param plot logical - defaults to TRUE. A plot of the data is automatically produced if the resultant data frame contains 2 columns. Otherwise, this does nothing.
+#' @param df data frame. containing at least 2 columns of data.
+#' @param x numeric. Corresponds to column number. `x = 1` will subset the first
+#'   column of the data frame. Must be time data.
+#' @param y numeric. Corresponds to column number. `y = 2` will subset the
+#'   second column of the data frame. Must be dissolved oxygen data.
+#' @param plot logical. When TRUE, a plot of the data is automatically produced
+#'   if the data frame subset contains 2 columns. Otherwise, this does nothing.
 #'
-#' @return If a 2-column data frame is checked, \code{check.input} returns a data frame.
+#' @return If a 2-column data frame is checked, `check.input` returns a data
+#' frame object that can be saved for use in [calc.rate()] and [auto.rate()].
+#'
 #' @export
 #'
 #' @examples
@@ -132,9 +139,8 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
 
 
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # internal functions
-# ------------------------------------------------------------------------------
 
 # check equal lenght columns
 equal.lengths <- function(x) {
