@@ -1,6 +1,6 @@
-Package: respr
+Package: respR
 Type: Package
-Title: A package that makes working with respirometry data faster. Yeah, I'll update this and make it better.
+Title: Methods to reproducibly process resporimetry and related data, using subsetting and regression techniques.
 Version: 0.1.0
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
@@ -21,5 +21,6 @@ Imports:
     ggplot2,
     ggpmisc
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
