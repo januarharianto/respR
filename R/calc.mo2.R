@@ -1,56 +1,129 @@
-#' Calculate volume and/or mass-specific rate of oxygen flux
+#' Calculate volume and/or mass-specific rate of change in oxygen concentration
 #'
-#' @param x Number, or an object of class \code{'calc.rate'}
-#' @param unit.in Character.
-#' @param unit.out Character.
-#' @param volume Numeric. Volume of water in L.
-#' @param mass Numeric. Mass/weight of specimen in kg.
-#' @param S Numeric. Salinity in PSU. Defaults to 35.
-#' @param t Numeric. temperature in degrees C. Defaults to 25.
-#' @param P Numeric. Pressure. Defaults to 1.013253.
+#' This is a conversion function that can convert value(s) of rate of change in oxygen concentration to volume-specific, and/or volume- and mass-specific rate of change in oxygen concentration.
 #'
-#' @return A conversion from raw rate to volume and/or mass-specific rate.
+#' `calc.mo2` integrates well with output objects from [calc.rate()] and [auto.rate()]. Alternatively, the user may convert any numeric vector.
+#'
+#' @author Januar Harianto & Nicholas Carey
+#'
+#' @md
+#' @param x numeric, or an object of class `calc.rate` or `auto.rate`. The input object to calculate the conversion.
+#' @param unit.in character string. The units to convert from. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
+#' @param unit.out character string. The units to convert into. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
+#' @param volume numeric. The volume of medium to correct to. Must be in litres (L).
+#' @param mass numeric (optional). The mass of the speciment to correct to. Must be in kilograms (kg).
+#' @param rank numeric (optional). If the input is of class `auto.rate`, the user may convert any of the ranked outputs by specifying the rank here. Note: not used for other input types.
+#' @param S numeric. Salinity, defaults to 35.
+#' @param t numeric. Temperature in degrees C, defaults to 25.
+#' @param P numeric. Pressure unit in bar, defaults to 1.013253.
+#'
+#' @return An object containing a list of outputs:
+#' \describe{
+#' \item{`input.class`}{String. Helps the user identify the source of the input
+#'   `x`. Possible values: `calc.rate`, `auto.rate`, `numeric`.}
+#' \item{`input.id`}{String. If the source of the input `x` is `auto.rate`,
+#'   identifies it's ranking method. Possible values: `maxmin`, `interval`,
+#'   `automatic`, `calc.rate`, `numeric`.}
+#' \item{`volume`}{Numeric. Same as above..}
+#' \item{`mass`}{Numeric. Same as above.}
+#' \item{`rank`}{Numeric. Same as above.}
+#' \item{`salinity`}{Numeric. Same as above.}
+#' \item{`temperature`}{Numeric. Same as above.}
+#' \item{`pressure`}{Numeric. Same as above.}
+#' \item{`summary`}{Data frame. Contains all inputs and converted outputs.}
+#' \item{`unit.in`}{String. Input units identified by the function.}
+#' \item{`unit.out`}{String. Output units identified by the function.}
+#' \item{`converted`}{Numeric (vector). Converted value(s).}
+#' \item{`weighted`}{Numeric. The weighted average of conversions (useful for
+#'   intermittent data).}
+#' }
+#'
+#' @seealso calc.rate auto.rate
 #' @importFrom stringr str_extract
 #' @export
 #'
 #' @examples
-#' TBC
-calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
-  S = 35, t = 25, P = 1.013253) {
-  # check that the user has the right inputs
+#' x <- calc.rate(sardine, bg = 0.0001234)
+#' calc.mo2(x, "%/s", "mg/s", volume = 1.2)
+#'
+#' x <- calc.rate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+#' calc.mo2(x, "mg/l/s", "mg/s/kg", volume = 1, mass = 1)
+#'
+#' x <- auto.rate(squid, logic = "interval")
+#' calc.mo2(x, "%/s", "mg/s/g", volume = 1, mass = .5)
+calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
+  rank = 1, S = 35, t = 25, P = 1.013253) {
+  # Extract the object class for use later:
+  input.class <- class(x)
+  # Check that the user has the right inputs:
   if (is.null(volume))
     stop("Input argument for 'volume' must not be empty.", call. = F)
-  # check if input is class 'calc.rate' - if it is, we extract the results
-  if (class(x) == "calc.rate") {
-    b1 <- x$results$b1
-  } else if (class(x) == "auto.rate") {
-    b1 <- x$output[[rank]]$results$b1
-  } else b1 <- x  # otherwise, use the input given
-
-  # let's convert the DO/time to MO2 first we identify the units based on whether
-  # they are input or output:
+  # Save input ID if it is from calc.rate or auto.rate
+  if (class(x) == "numeric") {
+    input.id <- "numeric"
+  } else input.id <- x$id
+  # ----------------------------------------------------------------------------
+  # Extract the rate(s)
+  # First, check if x is numeric. If it is, just use it:
+  if (class(x) == "numeric") {
+    b1 <- x
+    # ----------------------------------------------------------------------------
+    # Otherwise, check if x is class "calc.rate" or "auto.rate":
+  } else if (class(x) == "calc.rate" | class(x) == "auto.rate") {
+    # Extract rate(s) based on object 'id' and if outputs contain bg rates.
+    # These were previously determined in their respective functions, so it
+    # is just a matter of identifying them:
+    if (x$id == "calc.rate" | x$id == "automatic") {
+      if (length(x$results) == 11) b1 <- x$results$b1
+      if (length(x$results) == 13) b1 <- x$results$`b1-bg`
+    } else if (x$id == "maxmin" | x$id == "interval") {
+      if (length(x$results) == 12) b1 <- x$results$b1
+      if (length(x$results) == 14) b1 <- x$results$`b1-bg`
+    }
+    # ----------------------------------------------------------------------------
+    # In the worst case scenario, input is not right; stop running:
+  } else {
+    stop("Input a numeric, `calc.rate` or `auto.rate` object, for `x`.",
+      call. = F)
+  }
+  # ----------------------------------------------------------------------------
+  # Let's convert the DO/time to MO2 first.
+  # We identify the input units:
   u.in <- id.unit(unit.in, "input")  # should identify 2 units
+  # Then we identify the output units:
   u.out <- id.unit(unit.out, "output")  # should identify 2-3 units
-  # for output:
+  if (length(u.out) == 3 && is.null(mass))
+    stop("Output units specify mass, however mass is not defined (i.e. NULL)",
+      call. = F)
+  if (length(u.out) == 2 && !is.null(mass))
+    stop("Output units did not specify mass, but a mass value was detected.",
+      call. = F)
+  # Format the units (for display later):
   o2.unit <- paste(u.in, collapse = "/")
   mo2.unit <- paste(u.out, collapse = "/")
-
-  # check if 'u.out' requires 'mass' argument, or not
-  if (is.null(mass) && length(u.out) == 3)
+  # ----------------------------------------------------------------------------
+  # Error checks.
+  # If output unit requires mass, check if user has that input:
+  has.mass <- length(u.out) == 3
+  if (is.null(mass) && has.mass)
     stop("Please include 'mass' argument.", call. = F)
-  if (is.numeric(mass) && length(u.out) == 2)
+  if (is.numeric(mass) && has.mass == F)
     stop("Mass input detected, but 'to' argument is missing a unit.", call. = F)
-
-  # now check that the unit types match:
-  s <- "[.][:alnum:]*"  # this is the string to match
+  # Now check that the incoming and outgoing unit types are in the same group
+  # This is an internal check. We want to ensure that we're not trying to
+  # convert something unexpected.
+  s <- "[.][:alnum:]*"  # the string to match
   o2.match <- all.equal(str_extract(u.in[1], s), str_extract(u.out[1], s))
   time.match <- all.equal(str_extract(u.in[2], s), str_extract(u.out[2], s))
   if (o2.match == FALSE)
-    stop("O2 units don't match.")
+    stop("Input and output O2 units cannot be converted!", call = F)
   if (time.match == FALSE)
-    stop("Time units don't match.")
-
-  # convert to 'standard' units first based on input
+    stop("Input and output time units don't match! This shouldn't happen.",
+      call = F)
+  # ----------------------------------------------------------------------------
+  # Time to do the conversions.
+  # First convert to 'standard' units first based on input. This makes the
+  # second conversion easier. Also, multiply by volume.
   if (u.out[1] == "mmol.o2" | u.out[1] == "umol.o2") {
     result <- convert.do(b1, u.in[1], "mmol/L", S, t, P) * volume
     result <- scale.unit(result, "mmol.o2", u.out[1])
@@ -60,57 +133,129 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
   } else if (u.out[1] == "ml.o2") {
     result <- convert.do(b1, u.in[1], "mL/L", S, t, P) * volume
     result <- scale.unit(result, "ml.o2", u.out[1])
-  } else stop("Units of pressure are currently not supported.", call. = F)
+  } else stop("Units of pressure are currently not supported. Sorry!",
+    call. = F)
+  # ----------------------------------------------------------------------------
+  # Scale other units
+  # Convert time unit (e.g. sec to min)
+  vo2 <- scale.unit(result, u.in[2], u.out[2])
+  m.vo2 <- mean(vo2)
+  if (!class(x) == "numeric") wm.vo2 <- weighted.mean(vo2, x$results$time.len)
 
-  # scale time unit (e.g. sec to min)
-  result <- scale.unit(result, u.in[2], u.out[2])
-  # scale mass unit, if provided (note, mass MUST be in kg)
-  if (!is.null(mass))
-    result <- scale.unit(result/mass, "kg", u.out[3])
+  # If output is mass-specific, then scale to mass as well:
+  if (has.mass) {
+    mo2 <- scale.unit((result/mass), "kg", u.out[3])
+    m.mo2 <- mean(mo2)
+    if (!class(x) == "numeric") wm.mo2 <- weighted.mean(mo2, x$results$time.len)
+  }
+  # CONVERSION COMPLETE
 
-  # check if multiple values are calculated - if so, also calculate average
-  if (length(result) > 1) {
-    mean <- mean(result)
-    w.mean <- weighted.mean(result, x$subsets$row.width)
-  } else {mean = NULL; w.mean = NULL}
-  out <- list(input.rate = b1,
-    input.unit = o2.unit,
-    output.rate = result,
-    output.unit = mo2.unit,
-    mean = mean,
-    weighted.mean = w.mean)
+  # ----------------------------------------------------------------------------
+  # Prepare data for output:
+  if (!class(x) == "numeric") {
+    ro2 <- x$results$b1  # grab the original input(s)
+  } else ro2 <- x; w.rate = NULL
+  # Generate the summary table and rates:
+  if (has.mass) {
+    summary <- data.frame(RO2 = ro2, VO2 = vo2, MO2 = mo2)
+    rate   <- mo2
+    if (!class(x) == "numeric") w.rate <- wm.mo2
+  } else {
+    summary <- data.frame(RO2 = ro2, VO2 = vo2)
+    rate   <- vo2
+    if (!class(x) == "numeric") w.rate <- wm.vo2
+  }
+  # If input if of class "auto.rate", pick the ranked result:
+  if (class(x) == "auto.rate") {
+    if (has.mass) rate <- mo2
+    if (has.mass == F) rate <- vo2
+  }
+  # ----------------------------------------------------------------------------
+  # Generate output:
+  if (class(x) == "auto.rate") {
+    out <- list(
+      input.class = input.class,
+      input.id    = input.id,
+      volume      = volume,
+      mass        = mass,
+      rank        = rank,
+      salinity    = S,
+      temperature = t,
+      pressure    = P,
+      summary     = summary,
+      unit.in     = o2.unit,
+      unit.out    = mo2.unit,
+      converted   = rate
+    )
+    # For all other outputs, we just need to figure if the rate is mass-specific
+    # or not.
+  } else {
+    out <- list(
+      input.class = input.class,
+      input.id    = input.id,
+      volume      = volume,
+      mass        = mass,
+      rank        = rank,
+      salinity    = S,
+      temperature = t,
+      pressure    = P,
+      summary     = summary,
+      unit.in     = o2.unit,
+      unit.out    = mo2.unit,
+      converted   = rate,
+      weighted    = w.rate
+    )
+  }
   class(out) <- "calc.mo2"
   return(out)
 }
 
+# ==============================================================================
 #' @export
-print.calc.mo2 <- function(x) {
-  results <- data.frame(input = x$input.rate, converted = x$output.rate)
-  units <- data.frame(x$input.unit, x$output.unit)
-  if (nrow(results) > 1) {
-    mean <- x$mean
-    w.mean <- x$weighted.mean
+print.calc.mo2 <- function(x, rank = 1) {
+  if (length(x$summary) == 2) Output <- x$summary$VO2
+  if (length(x$summary) == 3) Output <- x$summary$MO2
+  # output for ranked results in auto.rate
+  if (x$input.class == "auto.rate" && !x$input.id == "interval") {
+    message(sprintf("Rank %g result", rank))
+    cat(sprintf("Input : %f\n", x$summary$RO2[rank]))
+    cat(sprintf("Output: %f\n", x$converted[rank]))
+  } else {
+    result <- data.frame(Input = x$summary$RO2, Output)
+    if(nrow(x$summary) > 6) {
+      cat("Showing only first 6 results:\n")
+      print(head(result))
+    } else {
+      print(result)
+    }
   }
-  cat("MO2:\n")
-  print(results)
-  cat(sprintf("\nInput units:     %s", x$input.unit))
-  cat(sprintf("\nConverted units: %s \n", x$output.unit))
+  cat(sprintf("\nInput unit : %s", x$unit.in))
+  cat(sprintf("\nOutput unit: %s", x$unit.out))
+}
 
-  if (nrow(results) > 1) {
-    cat(sprintf("\nMean:           %f",mean))
-    cat(sprintf("\nWeighted mean:  %f \n", w.mean))
-  }
+# ==============================================================================
+#' @export
+summary.calc.mo2 <- function(x) {
+  cat(sprintf("Data was converted from object of class %s.\n", x$input.class))
+  if (x$input.class == "auto.rate")
+    cat("Ranking method:", x$input.id, "\n")
+  cat("\nRO2: rate before conversion\n")
+  if(length(x$summary) > 2)
+    cat("VO2: rate after volume and time conversion\n")
+  cat("MO2: rate after volume, time and mass conversion\n\n")
+  if (nrow(x$summary) > 6) {
+    cat("Showing on the first 6 results in summary:\n")
+    print(head(x$summary))
+  } else print(x$summary)
+  cat(sprintf("\nInput unit : %s", x$unit.in))
+  cat(sprintf("\nOutput unit: %s", x$unit.out))
 }
 
 
+# ==============================================================================
+# Internal Functions
 
-
-# internal function use for calc.mo2 only!!!  This function calculates a 'scale
-# factor' for a unit, based on the prefix of both 'unit.in' and 'unit.out'
-# strings. Then, it uses the scale factor to convert a measurement number that
-# may consist of 2-3 dimensional units. It's just something that can convert mg/s
-# to mg/hr, or mmol/s to umol/hr, and so on, in calc.mo2.
-
+# Scale units of the same base., e.g. x/s to x/h, or mmol/x to umol/x/
 scale.unit <- function(b1, unit.in, unit.out) {
   # create database of terms for matching
   prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour")
@@ -133,17 +278,7 @@ scale.unit <- function(b1, unit.in, unit.out) {
   return(b1 * (factor.in/factor.out))
 }
 
-
-
-# internal function use for calc.mo2 only!!!  This function parses a character
-# string e.g. mg/l/s and identifies the units in the string. The 'cond' argument
-# checks whether the string is an input or output string. Generally, an input
-# string is 2-dimensional. However the DO2 units may itself consist of 2 units,
-# e.g. mg/l, ml/kg. Thus if the string is an 'input', and 3 units are detected,
-# the function merges the first 2 units, before it tries to identify it e.g.
-# mg/l/s will be identified as mg/l and s.  For an 'output' string, units are
-# always 3-dimensional, so no string manipulation is needed before processing.
-# cond: 'input', 'output'
+# Identify units in a character string for conversions.
 id.unit <- function(string, cond) {
   units <- read.table(text = gsub("(?:-1|[/.[:space:]])+", " ", string), header = FALSE)
   units <- matrix(as.matrix(units), ncol = ncol(units))
