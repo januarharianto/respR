@@ -48,7 +48,7 @@ residual.p <- function(fit) {
     col = r2, pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
   lines(loess.smooth(fit$fitted.values, fit$residuals), col = "black", lwd = 3)
-  title(main = "Residual", line = 0.5)
+  title(main = "Residuals", line = 0.5)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
 
@@ -72,7 +72,7 @@ density.p <- function(dens, peaks, rank = 1) {
 }
 
 # rolling regression
-rollreg.p <- function(rolldf, peaks, ranked.b1) {
+rollreg.p <- function(rolldf, ranked.b1) {
   plot(rolldf, type = "l", xlab = "Time", ylab = "Rate", col = "black", pch = 16,
     lwd = 1, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
@@ -91,7 +91,7 @@ pcrit.p <- function(x, rank = 1) {
   pc.intercept <- x$pcritRanked[5][rank, ]
   pc.midpoint <- x$pcritRanked[6][rank, ]
   # plot:
-  plot(data, col = r2, pch = 16, xlab = "Dissolved Oxygen", ylab = "Metabolic Rate",
+  plot(data, col = r2, pch = 16, xlab = "DO", ylab = "MR",
     lwd = 2, xlim = c(min(data[[1]]), max(data[[1]], pc.intercept, pc.midpoint)),
     ylim = c(min(data[[2]]), ((max(data[[2]]) - min(data[[2]])) * 1.2 + min(data[[2]]))),
     panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
@@ -102,6 +102,7 @@ pcrit.p <- function(x, rank = 1) {
   # text(pc.intercept, min(data[2]), signif(pc.intercept, 3))
   abline(v = pc.midpoint, col = d2, lwd = 3)
   # text(pc.midpoint, max(data[2]), signif(pc.midpoint, 3))
+  # title(main = "Pcrit")
   legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
     bty = "n")
 }
