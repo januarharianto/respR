@@ -1,43 +1,31 @@
 # Welcome
-> This is just a basic introduction. Once we go public, a lot of text will probably change.
 
-> **Important** - all versions are retained *forever* in history, do not commit dumb stuff that you will regret :D
+**RespR** is an R package that analyses respirometry-related data. You start with `calc.rate()` or `auto.rate()` to obtain the rate of change of oxygen concentration on a subset, or multiple subsets of the data. You then convert the rate to volume- and/or weight-specific rate using `calc.mo2()` using the very robust conversion function of `convert.do()`.
 
-\[Cool package name] is a **respiration analysis package** for the R programming environment.
+There are other useful functions. For example, `calc.bg.rate()` allows you to calculate background rate, which is easily called in `calc.rate()` and `auto.rate()`, while `pcrit()` is useful to determine critical oxygen tension.
 
-As of now it is simply a series of scripts. The aim is to package everything into a SHINY interface.
+More information about the functions are in our vignettes.
+
+### Installation
+You can either install the stable version from CRAN (recommended), or play around with the developmental version here on GitHub.
+
+    # CRAN Installation:
+    install.packages("RespR")
+
+The `devtools` package will need to be installed if you wish to grab our developmental version.
+
+    # GitHub Installation:
+    install.packages("devtools")
+    devtools::install_github("januarharianto/RespR")
 
 ### Usage
+We have prepared a series of vignettes that can help you get up to speed with the package based on simple scenarios. A good place to start is the introductory vignette [RespR - An R package for processing respirometry data]() (link will appear soon). Other vignettes are linked to this one, and provided below for your convenience:
 
-The package focuses on the analysis of respiration data. Such data is often recorded as a rate of change of oxygen consumption, over time. The user will be able to easily select data points to run a simple linear regression. The traditional before-after calculation method will also be provided.
-
-> Once we have the interface up and running, we will include examples here.
-
-### To-do
-
-This will update frequently, but the initial to-do list:
-
-- [x] Upload files to Github before we lose track of everything
-- [x] Write an initial README just to motivate ourselves (and set expectations)
-- [ ] Write function for conversion between cO~2~ units
-- [ ] Create inputs: °C, salinity, atm pressure, etc., ideally at the beginning (and not have to deal with it later)
-- [ ] function for getting running uptake rate for long term data
-- [ ] function for pCrit.
-- [ ] calculate running lm's of width n.
-- [ ] identify region of max slope changes?
-- [ ] Sensitivity thresholds.
-- [ ] Maybe inset plot for lmmethod to show fit of the lm more clearly.
-- [ ] SHINY implementation
-
-### Instructions
-
-Documentetion will go here - maybe a CRAN link as well, will discuss (focus on finalising script).
-
-1. Install RStudio.
+- [Working with intermittent data]() (link will appear soon). If you're working on intermittent respirometry, or wish to subset multiple sections of a dataset, read this.
+- [Maximum, minimum and interval analysis]() (link will appear soon). Use `auto.rate()` to efficiently run rolling regressions on your data and rank them.
+- [Running pcrit analyses]() (link will appear soon). How to load data for automatic pcrit determination.
 
 ### Collaborators
 
 - Nicholas **Carey**
 - Januar **Harianto**
-
-[//]: # "Link List"
