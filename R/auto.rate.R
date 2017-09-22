@@ -4,7 +4,7 @@
 #'
 #' There are no units of measurements involved in `auto.rate`. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in [calc.mo2()].
 #'
-#' **Important**: Calling `auto.rate` using the argument `logic = "automatic"` uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results. We intend to refine this technique in a future version of the package.
+#' **Important**: Calling `auto.rate` using the argument `logic = "automatic"` uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results, although it did work as intended for all the sample data that we threw at it. We plan to refine this technique in a future version of the package.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
@@ -27,7 +27,9 @@
 #' \item{`results`}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
 #' }
 #'
-#' @importFrom dplyr bind_rows mutate select everything
+#' @importFrom dplyr arrange bind_rows mutate select everything
+#' @importFrom tibble rowid_to_column
+#' @importFrom roll roll_lm
 #' @export
 #'
 #' @examples
@@ -43,9 +45,19 @@
 #' summary(x)
 #' plot(x, rank = 3) # view the diagnostic plot for the 3rd interval
 #'
-#' # Experimental. Automatically calculate the most "linear" section of
-#' # timeseries based on kernel density estimates:
+#' # Automatically calculate the most "linear" section of a timeseries
+#' # based on kernel density estimates. When width is not specified, it
+#' # is automatically set to 10% of the total length of data:
 #' x <- auto.rate(sardine)
+#'
+#' # Automatically calculate the most "linear" section, where the rolling
+#' # regression is calculated based on time instead of row. Background
+#' # resporation can also be added for automatic correction:
+#' x <- auto.rate(df = sardine, width = 600, by = "time", logic = "automatic",
+#'   bg = 0.0002525)
+#' print(x)
+#' summary(x)
+#' plot(x, rank = 1)
 #'
 auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
   logic = 'automatic', bg = NULL) {
@@ -61,22 +73,22 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
     fits <- rollfit(df, width)
     # Estimate the no. of rows
   } else stop("Only 'row'and 'time' arguments are supported in 'by'.", call = F)
-  fits <- tibble::rowid_to_column(fits)  # Append locations to data
+  fits <- rowid_to_column(fits)  # Append locations to data
   fits <- na.omit(fits)  # Remove NA results as they're not used
   # Select method of analysis: "max", "min", "interval" or "automatic":
   # Minimum rate ---------------------------------------------------------------
   if (logic == "min") {
-    out <- dplyr::arrange(fits, abs(b1))
+    out <- arrange(fits, abs(b1))
     # Maximum rate ---------------------------------------------------------------
   } else if (logic == "max") {
-    out <- dplyr::arrange(fits, desc(abs(b1)))
+    out <- arrange(fits, desc(abs(b1)))
     # Intervals ------------------------------------------------------------------
   } else if (logic == "interval") {
     # Generate the index to subset data for intervals:
     sequence <- seq(width, nrow(df), width)
     # Grab the intervals and bind them into a data frame:
     intv <- lapply(sequence, function(x) dplyr::filter(fits, rowid == x))
-    out  <- dplyr::bind_rows(intv)
+    out  <- bind_rows(intv)
     # Best linear fit ------------------------------------------------------------
   } else if (logic == "automatic") {
     # WARNING
@@ -89,7 +101,7 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
   # ----------------------------------------------------------------------------
   # Format some data here to prepare for output summary:
   if (logic == "min" | logic == "max" | logic == "interval") {
-    # Calculate data locations:
+    # Calculate data locations using mutate::
     out <- mutate(out,
       from.row  = rowid - width + 1,
       to.row    = rowid,
@@ -107,13 +119,13 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
   } else if (class(bg) == "calc.bg.rate") {
     bg <- bg$rate
     out <- mutate(out, bg = bg, "b1-bg" = b1 - bg)
-    out <- select(out, b0, b1, bg, `b1-bg`, everything())
+    out <- select(out, b0, b1, bg, `b1-bg`, everything())  # rearrange
   } else if (class(bg) == "numeric") {
     out <- mutate(out, bg = bg, "b1-bg" = b1 - bg)
-    out <- select(out, b0, b1, bg, `b1-bg`, everything())
+    out <- select(out, b0, b1, bg, `b1-bg`, everything())  # rearrange
   }
   # ----------------------------------------------------------------------------
-    # Format output based on "logic" argument:
+  # Format output based on "logic" argument:
   if (logic == "max" | logic == "min") {
     out <- list(
       id          = "maxmin",
@@ -289,7 +301,7 @@ plot.auto.rate <- function(x, rank = 1) {
 rollfit <- function(df, width) {
   x <- matrix(df[[1]]) # convert data to matrices to work with roll_lm
   y <- matrix(df[[2]])
-  rfit <- roll::roll_lm(x, y, width)  # perform the rolling regression here
+  rfit <- roll_lm(x, y, width)  # perform the rolling regression here
   # Bind results into a data frame:
   out <- cbind.data.frame(rfit$coefficients, signif(rfit$r.squared, 3))
   names(out) <- c("b0", "b1", "rsq")
@@ -302,9 +314,9 @@ k.peaks <- function(x) {
   dns <- density(x$b1, na.rm = T, bw = "SJ", n = length(x$b1))
   pks <- which(diff(sign(diff(dns$y))) == -2) + 1  # ID peaks in density
   # Match peaks to density data:
-  pks <- dplyr::bind_rows(lapply(pks, function(x)
+  pks <- bind_rows(lapply(pks, function(x)
     data.frame(index = x, ref.b1 = dns$x, dens = dns$y)[x,]))
-  pks <- dplyr::arrange(pks, desc(dens))  # arrange in descending order
+  pks <- arrange(pks, desc(dens))  # arrange in descending order
   output <- list(density = dns, peaks = pks)
   return(output)
 }
@@ -322,7 +334,7 @@ match.data <- function(df, fits, pks, width, bg) {
       c(0, cumsum(abs(diff(mat.regs[[x]]$rowid)) > width))))
   # Identify the best fragments - first grab the index of longest fragments
   idx <- lapply(1:length(mat.raw), function(x)
-    which.max(dplyr::bind_rows(lapply(mat.raw[[x]], nrow))))
+    which.max(bind_rows(lapply(mat.raw[[x]], nrow))))
   idx <- do.call(rbind, idx)
   # The fragments are identified again:
   frags <- unname(mapply(function(x, y)
@@ -336,6 +348,6 @@ match.data <- function(df, fits, pks, width, bg) {
       bg   = bg,
       plot = F,
       verbose = F)$results)
-  output <- dplyr::bind_rows(output)  # bind output to a table
+  output <- bind_rows(output)  # bind output to a table
   return(output)
 }
