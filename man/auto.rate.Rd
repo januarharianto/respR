@@ -37,7 +37,7 @@ An object of class \code{auto.rate} containing a list of outputs:
 \details{
 There are no units of measurements involved in \code{auto.rate}. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link[=calc.mo2]{calc.mo2()}}.
 
-\strong{Important}: Calling \code{auto.rate} using the argument \code{logic = "automatic"} uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results. We intend to refine this technique in a future version of the package.
+\strong{Important}: Calling \code{auto.rate} using the argument \code{logic = "automatic"} uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results, although it did work as intended for all the sample data that we threw at it. We plan to refine this technique in a future version of the package.
 }
 \examples{
 # calculate maximum rate at width 500 (rows):
@@ -52,9 +52,19 @@ print(x)
 summary(x)
 plot(x, rank = 3) # view the diagnostic plot for the 3rd interval
 
-# Experimental. Automatically calculate the most "linear" section of
-# timeseries based on kernel density estimates:
+# Automatically calculate the most "linear" section of a timeseries
+# based on kernel density estimates. When width is not specified, it
+# is automatically set to 10\% of the total length of data:
 x <- auto.rate(sardine)
+
+# Automatically calculate the most "linear" section, where the rolling
+# regression is calculated based on time instead of row. Background
+# resporation can also be added for automatic correction:
+x <- auto.rate(df = sardine, width = 600, by = "time", logic = "automatic",
+  bg = 0.0002525)
+print(x)
+summary(x)
+plot(x, rank = 1)
 
 }
 \author{

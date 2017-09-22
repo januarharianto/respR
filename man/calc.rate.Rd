@@ -43,20 +43,23 @@ data(sardine)
 calc.rate(sardine, from = 200, to = 1800)     # default subset by 'time'
 calc.rate(sardine, 93, 92, by = 'o2')         # subset by O2
 calc.rate(sardine, 200, 1800, by = 'row')     # subset by row
-calc.rate(sardine, .8, .2, by = 'proportion') # subset by proportion
+x <- calc.rate(sardine, .8, .2, by = 'proportion') # subset by proportion
+x
+summary(x)
+plot(x)
 
 # Using a list in 'from' and 'to' calculates multiple regressions:
 data(intermittent)
 calc.rate(intermittent, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 
 # calculating rate with background adjustments of known value
-calc.rate(sardine, 200, 800, background = -0.00002)
+calc.rate(sardine, 200, 800, bg = -0.00002)
 
 # calculating rate with background adjustments made from calc.bg.rate
-bg <- calc.bg.rate(urchin2013, 1, 21)
+bg <- calc.bg.rate(urchin2013, 1, 19)
 ureg <- check.input(urchin2013, 1, 2)
 calc.rate(ureg, 20, 40)  # without bg adjustment
-calc.rate(ureg, 20, 40, background = bg) # with bg adjustment
+calc.rate(ureg, 20, 40, bg = bg) # with bg adjustment
 
 }
 \author{
