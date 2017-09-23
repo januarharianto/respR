@@ -1,11 +1,6 @@
 # Welcome
 
-**RespR** is an R package that consists of a collection of functions that, when used together, provide a complete and structured workflow for the analysis of respirometry-related data.
-
-## Collaborators
-
-- Nicholas **Carey**
-- Januar **Harianto**
+**RespR** is an R package that consists of a collection of functions that provide a structured workflow for the analysis of respirometry-related data.
 
 
 ## Installation
@@ -27,6 +22,12 @@ A good place to start is the introductory vignette, [respR - An R package for pr
 1. [Intermittent data](https://github.com/januarharianto/respr).
 2. [Maximum, minimum and interval analyses](https://github.com/januarharianto/respr).
 3. [Running pcrit analyses](https://github.com/januarharianto/respr).
+
+
+## Collaborators
+
+- Nicholas **Carey**
+- Januar **Harianto**
 
 ## Citations
 We'll probably update this when the package is published in the intended journal.
