@@ -7,17 +7,14 @@
 pcrit(df, span = 0.05, datmr = FALSE, plot = F)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame object}
 
-\item{span}{numeric.}
+\item{span}{numeric}
 
-\item{MR}{logical.}
+\item{MR}{logical}
 }
 \description{
-Uses stepwise linear regression to calculate two best-fit lines in a rate data frame, by minimising the total residual sum of squares between both regressions.
-}
-\details{
-The method used in this function is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling \code{pcrit} on a data frame \code{df} of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width \code{floor(0.05 * nrow(df))} to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument \code{datmr = TRUE} will perform the stepwise regressions immediately without performing rolling regressions.
+Uses stepwise linear regression to calculate two best-fit lines in a rate data frame, by minimising the total residual sum of squares between both regressions. Method is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling \code{pcrit} on a data frame \code{df} of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width \code{floor(0.05 * nrow(df))} to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument \code{datmr = TRUE} will perform the stepwise regressions immediately without performing rolling regressions.
 }
 \examples{
 # load example data:

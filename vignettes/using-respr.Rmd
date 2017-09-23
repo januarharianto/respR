@@ -3,41 +3,25 @@ title: "respR - An R package for processing respirometry data"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{respiRe - An R package for processing oxygen flux data}
+  %\VignetteIndexEntry{respR - An R package for processing respirometry data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo=F}
+```{r, echo = F}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7)
 ```
 
-## 1. Introduction
+# Introduction
 
-Here we introduce `respiRe`, an R package that provides a colletion of functions to simplify the processing and analysis of respirometry and related experiments. 
-
-A full example is avalable at the end of this document.
-
-## 2. Methods
-
-    Rates of oxygen consumption/production, such as respiration rate, are commonly analysed in either of two ways: (1) using a two-point difference of values, over a fixed period of time (e.g. citations); or (2) using ordinary least-squares (OLS) linear regression of data between two points (e.g. citations). The default method for `calc.rate` is OLS linear regression, and there are no plans to implement the two-point method in the future. However, the output of `calc.rate` provides sufficient information on associated row numbers, time and O~2~ data for a user to manually perform a two-point calculation where necessary.
-
-- go through the regression method briefly (including equation? it will be slightly different from current papers... so maybe a good idea to mark that out)
-- emphasise weighted average method when doing multitle subsets of data (include equation?)
-- mention the typical workflow (maybe also use a flowchart)
-
-### 2.1 Example data
-
-To explore `respiRe` and its main functions we load the first example data, `urchin2013`. The dataset contains measurements of oxygen consumption in 16 individual sea urchins (*Heliocidaris erythrogramma*) and 2 "blank" measurements of background respiration (Harianto, *unpublished*). Detailed information about the data, including its source and methods, can be obtained with the command `?urchin2013`.
+Here we introduce `respR`, an R package that provides a structural workflow to the processing and analysis of respirometry and related experiments.
+Let's link to the other file [here](intermittent-data.html)
 
 
-```{r}
-library(respR)
-data(urchin2013)
-urchin2013
-```
+# Methods
+`respR` implements linear regression techniques to determine the rates of change in oxygen concentration over time. For the automated function `auto.rate()`, 
 
-`respiRe` provides the following functions to manipulate and analyse dissolved oxygen data:
+# Functions
 
 1. `check.input` checks for structural errors and select individual data from multi-column datasets.
 2. `calc.bg.rate` calculates background changes in oxygen.
@@ -48,12 +32,23 @@ In addition, a few useful functions exist for specific data preparation and anal
 
 5. `convert.do` converts DO units (e.g. from % to mg/L).
 6. `subsample.data` thins a large dataset by sampling every *n* rows.
-7. `smooth.data` performs a rolling average over a dataset to produce "smoother" data for analysis. NOT DONE
-8. `auto.rate` automatically determines maximum, minimum, or continuous linear rate of change of DO over time.
-9. `pcrit` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
+7. `auto.rate` automatically determines maximum, minimum, or continuous linear rate of change of DO over time.
+8. `pcrit` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
 
 
-### 2.2. `check.input`
+# Example data
+
+To explore `respR` and its main functions we load the first example data, `urchin2013`. The dataset contains measurements of oxygen consumption in 16 individual sea urchins (*Heliocidaris erythrogramma*) and 2 "blank" measurements of background respiration (Harianto, *unpublished*). Detailed information about the data, including its source and methods, can be obtained with the command `?urchin2013`.
+
+
+```{r}
+library(respR)
+data(urchin2013)
+urchin2013
+```
+
+
+## Check for common errors using `check.input()`
 
 We first use `check.input` to scan the dataset for missing data, non-numeric data equal data lengths. Duplicate and unevenly-spaced data, specific to time, are also examined. Checks are performed on all columns in the data, regardless of data type:
 
@@ -62,7 +57,7 @@ check.input(urchin2013)
 ```
 
 
-If we call `check.input` over a two-column dataset, the function will automatically identify the first column as time data, and the second column as DO data. Error checks will be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out). We can also subset a large data frame directly by specifying the *x* and *y* arguments that correspond to columns in the data frame. 
+If we call `check.input` over a two-column dataset, the function will automatically identify the first column as time data, and the second column as DO data. Error checks will be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out). We can also subset a large data frame directly by specifying the *x* and *y* arguments that correspond to columns in the data frame.
 
 With two-column data frames, `check.input` will automatically remove NA data and produce a new data frame that we can use for subsequent analyses. Larger datasets, on the other hand, are not modified in any way, and will not output a data frame for us to save. A scatterplot of the data is also produced automatically for quick visual inspection.
 
@@ -75,9 +70,9 @@ From the plot, non-linear irregularities in the data are evident. In this case, 
 **It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
-### 2.3 `calc.bg.rate`
+## Batch process background rates using `calc.bg.rate`
 
-The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across all datasets to obtain a single correction. 
+The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across all datasets to obtain a single correction.
 
 The function `calc.bg.rate` can be used to simultaneously process multiple background rate measurements as long as they share the time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data with `calc.bg.rate` and save the output as an object.
 
@@ -86,7 +81,7 @@ ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
 print(ubg)
 ```
 
-### 2.4 `calc.rate`
+## Process main data using `calc.rate`
 
 The function `calc.rate` performs an OLS linear regression on a data series. Calling the function without any additional arguments will result in a linear regression analysis of the entire data frame.
 
@@ -94,7 +89,7 @@ The function `calc.rate` performs an OLS linear regression on a data series. Cal
 calc.rate(u2)
 ```
 
-In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is within a threshold of O~2~ concentration. Equipment interference may also cause temporary irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results. 
+In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is within a threshold of O~2~ concentration. Equipment interference may also cause temporary irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results.
 
 Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
@@ -104,7 +99,7 @@ Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate d
 4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
 
 
-Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. 
+Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`.
 
 
 ```{r}
@@ -117,7 +112,7 @@ Plotting the output provides a series of diagnostic plots of the data subset tha
 plot(u.rate)
 ```
 
-### 2.5 `calc.mo2`
+## Scale to volume- and/or mass-specific rate using `calc.mo2`
 
 Once the rate of change of oxygen has been determined, the user may either want to calculate:
 
@@ -140,9 +135,9 @@ calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass =
 
 In either case, the conversion is applied as long as the input and output units are identified.
 
-## 3. Further reading
+# Further reading
 
-## 4. Example workflow
+# Example workflow
 
 
 ```{r, eval=F}
