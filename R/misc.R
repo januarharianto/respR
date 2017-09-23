@@ -1,10 +1,24 @@
+# This file contains functions used to plot all the figures in the package. We have grouped all of these together so that we can edit the functions easily. They are not to be used on their own, and will not be exported for use in the package.
+
+# We have also deliberately decided to use base graphics, as ggplot2 was too slow when plotting large datasets. Unless ggplot2 improves, we will probably not use that. Maybe skip to ggvis once it's mature?
+
 # define colours
 r1 <- adjustcolor("darkslateblue", alpha.f = 0.4)  # primary colour
 r2 <- adjustcolor("goldenrod1", alpha.f = 0.7)  # secondary colour
 r3 <- adjustcolor("lavenderblush", alpha.f = 0.8)  # plot background colour
 d1 <- adjustcolor("tomato", alpha.f = 0.75)
 d2 <- adjustcolor("darkslateblue", alpha.f = 0.75)
-# plot of main series with subset (highlighted)
+
+
+
+#' Plot the main data, and the subset data, in the same window.
+#'
+#' @param df data frame.
+#' @param sdf data frame.
+#' @param title logical.
+#'
+#' @return A plot.
+#'
 multi.p <- function(df, sdf, title = T) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
