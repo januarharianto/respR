@@ -1,7 +1,9 @@
 ---
 title: "respR - An R package for processing respirometry-related data"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{respR - An R package for processing respirometry-related data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,10 +14,10 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7)
 ```
 
-## 1. Introduction
+## Introduction
 `respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the 6 main functions in `respR` will work for any serial measurements of oxygen concentration (e.g. oxygen flux or photosynthesis data).
 
-### 1.1 Installation
+### Installation
 
 The stable version of `respR` is available on GitHub and (soon) CRAN (recommended).
 
@@ -29,7 +31,7 @@ devtools::install_github("januarharianto/respR")
 ```
 
 
-### 1.2 Usage
+### Usage
 When working with respirometry data, you will often need to:
 
 1. Ensure that the data, or at least a subset of the data, is representative of the research question of interest.
@@ -42,7 +44,7 @@ The `respR` package contains several functions to make these actions quick and e
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked maximum, minimum or best fit sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
 
-### 1.3 Functions
+### Functions
 
 There are 6 main functions in `respR`:
 
@@ -58,7 +60,7 @@ In addition, a few useful functions exist for specific data preparation and anal
 8. `subsample.data()` thins a large dataset by sampling every *n* rows.
 9. `pcrit()` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
 
-## 2. A typical workflow
+## A typical workflow
 
 To explore `respR` and its main functions we load the first example data, `urchin2013`. The dataset contains measurements of oxygen consumption in 16 individual sea urchins (*Heliocidaris erythrogramma*) and 2 "blank" measurements of background respiration (Harianto, *unpublished*). Detailed information about the data, including its source and methods, can be obtained with the command `?urchin2013`.
 
@@ -70,7 +72,7 @@ urchin2013
 ```
 
 
-### 2.1 Use `check.input()` to check for common errors
+### Use `check.input()` to check for common errors
 
 We first use `check.input` to scan the dataset for missing data, non-numeric data equal data lengths. Duplicate and unevenly-spaced data, specific to time, are also examined. Checks are performed on all columns in the data, regardless of data type:
 
@@ -91,7 +93,7 @@ From the plot, non-linear irregularities in the data are evident. In this case, 
 **It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
-### 2.2 Use `calc.bg.rate()` to process background rates for later use
+### Use `calc.bg.rate()` to process background rates for later use
 
 The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
@@ -102,7 +104,7 @@ ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
 print(ubg)
 ```
 
-### 2.3 Use `calc.rate()` to perform the linear regression
+### Use `calc.rate()` to perform the linear regression
 
 Calling the function `calc.rate()` on a data frame, with no additional arguments, will prompt the function to perform a linear regression on the entire data frame.
 
@@ -135,7 +137,7 @@ Plotting the output provides a series of diagnostic plots of the data subset tha
 plot(u.rate)
 ```
 
-### 2.4 Use `calc.mo2()` to scale to volume- and/or mass-specific rates
+### Use `calc.mo2()` to scale to volume- and/or mass-specific rates
 
 Once the rate of change of oxygen has been determined, the user may either want to calculate:
 
@@ -158,7 +160,7 @@ calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass =
 
 In either case, the conversion is applied as long as the input and output units are identified.
 
-## 3. Reproducibility
+## Reproducibility
 
 We have ensured that any computational analysis performed by `respR` can be reproduced by another user. The main functions all produce an output list object which contains all the data and variables needed to re-analyse the results, within R or in other software. Individual objects in the list can be extracted using `$` for verification or further data manipulation, which include the original and subset data frames.
 
@@ -168,7 +170,7 @@ u.rate$results
 ```
 
 
-## 4. Further reading
+## Further reading
 
 This document introduces to you the basic methods of analysing respirometry data, but there are many other functions and user cases not explored. The following vignettes provide additional example workflows based on user needs, and may be useful to you:
 
@@ -177,7 +179,7 @@ This document introduces to you the basic methods of analysing respirometry data
 3. Pcrit setup and analyses
 
 
-## 5. Code
+## Code
 
 ```{r, eval=F}
 data(urchin2013)  # preload data
