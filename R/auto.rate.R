@@ -130,6 +130,9 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
     out <- list(
       id          = "maxmin",
       main.data   = df,
+      width       = width,
+      by          = by,
+      logic       = logic,
       regressions = fits,
       results     = out)
     message(sprintf("%d regressions fitted.", nrow(out$results)))
@@ -138,6 +141,8 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
     out <- list(
       id = "interval",
       interval    = width,
+      by          = by,
+      logic       = logic,
       main.data   = df,
       regressions = fits,
       results     = out)
@@ -147,6 +152,9 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
     out <- list(
       id = "automatic",
       main.data   = df,
+      width       = width,
+      by          = by,
+      logic       = logic,
       kernel.dens = pks$density,
       peaks       = pks$peaks,
       bin.width   = pks$density$bw,
