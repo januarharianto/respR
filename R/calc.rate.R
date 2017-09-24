@@ -19,6 +19,8 @@
 #' \item{`data.frame`}{The original data frame.}
 #' \item{`subset.df`}{A list of subset data frames used for computations.}
 #' \item{`by`}{The subsetting method. Possible outputs: "`time`", "`o2`", "`proportion`" or "`row`".}
+#' \item{`from`}{a numeric vector. Defines the upper bound(s) of the data frame subset.}
+#' \item{`to`}{A numeric vector. Defines the lower bound(s) of the data frame subset.}
 #' \item{`results`}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
 #' \item{`background`}{Appears only if the argument \code{bg} is not `NULL`. The background rate of change.}
 #' \item{`rate`}{A value for the calculated rate of change in oxygen concentration, averaged if multiple values exist.}
