@@ -12,14 +12,17 @@
 #' @param df data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.
 #' @param width numeric. The number of rows (or the time interval, if `by = "time"`) to use when performing the rolling regression.
 #' @param by string. Describes the method used to subset the data frame. Defaults to `"time"`. Available: "`time`", "`row`".
-#' @param logic logical. Determines the type of data to output. Defaults to "`automatic`". Available: "`max`", "`min`", "`interval`", "`automatic`".
+#' @param logic logical. Determines the ranking algorithm to use. Defaults to "`automatic`". Available: "`max`", "`min`", "`interval`", "`automatic`".
 #' @param bg numeric, or an output of class [calc.bg.rate]. Value for backgroung respiration.
 #'
 #' @return An object of class `auto.rate` containing a list of outputs:
 #' \describe{
 #' \item{`id`}{Method used to compute the results. Possible outputs: "`maxmin`", "`interval`", or "`automatic`".}
-#' \item{`interval`}{Appears only if the argument `logic = "interval"`. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument `by = "time"` is used, the time interval is converted to the number of rows.}
 #' \item{`main.data`}{The original data frame.}
+#' \item{`width`}{Numeric. The width, in rows, of the rolling window or interval used.}
+#' \item{`by`}{String. The method used to subset the data frame.}
+#' \item{`logic`}{The selected ranking algorithm used to produce the results.}
+#' \item{`interval`}{Appears only if the argument `logic = "interval"`. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument `by = "time"` is used, the time interval is converted to the number of rows.}
 #' \item{`kernel.dens`}{Appears only if the argument `logic = "automatic"`. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
 #' \item{`peaks`}{Appears only if the argument `logic = "automatic"`. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
 #' \item{`bin.width`}{Appears only if the argument `logic = "automatic"`. This is the bin.width used to determine the density kernel estimate.}
@@ -139,18 +142,18 @@ auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
     if(!is.null(bg)) message("Background correction recognised and applied.")
   } else if (logic == "interval") {
     out <- list(
-      id = "interval",
+      id          = "interval",
+      main.data   = df,
       interval    = width,
       by          = by,
       logic       = logic,
-      main.data   = df,
       regressions = fits,
       results     = out)
     message(sprintf("%d regressions fitted.", nrow(out$results)))
     if(!is.null(bg)) message("Background correction recognised and applied.")
   } else if (logic == "automatic") {
     out <- list(
-      id = "automatic",
+      id          = "automatic",
       main.data   = df,
       width       = width,
       by          = by,
