@@ -14,7 +14,7 @@ auto.rate(df, width = floor(0.1 * nrow(df)), by = "time",
 
 \item{by}{string. Describes the method used to subset the data frame. Defaults to \code{"time"}. Available: "\code{time}", "\code{row}".}
 
-\item{logic}{logical. Determines the type of data to output. Defaults to "\code{automatic}". Available: "\code{max}", "\code{min}", "\code{interval}", "\code{automatic}".}
+\item{logic}{logical. Determines the ranking algorithm to use. Defaults to "\code{automatic}". Available: "\code{max}", "\code{min}", "\code{interval}", "\code{automatic}".}
 
 \item{bg}{numeric, or an output of class \link{calc.bg.rate}. Value for backgroung respiration.}
 }
@@ -22,8 +22,11 @@ auto.rate(df, width = floor(0.1 * nrow(df)), by = "time",
 An object of class \code{auto.rate} containing a list of outputs:
 \describe{
 \item{\code{id}}{Method used to compute the results. Possible outputs: "\code{maxmin}", "\code{interval}", or "\code{automatic}".}
-\item{\code{interval}}{Appears only if the argument \code{logic = "interval"}. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument \code{by = "time"} is used, the time interval is converted to the number of rows.}
 \item{\code{main.data}}{The original data frame.}
+\item{\code{width}}{Numeric. The width, in rows, of the rolling window or interval used.}
+\item{\code{by}}{String. The method used to subset the data frame.}
+\item{\code{logic}}{The selected ranking algorithm used to produce the results.}
+\item{\code{interval}}{Appears only if the argument \code{logic = "interval"}. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument \code{by = "time"} is used, the time interval is converted to the number of rows.}
 \item{\code{kernel.dens}}{Appears only if the argument \code{logic = "automatic"}. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
 \item{\code{peaks}}{Appears only if the argument \code{logic = "automatic"}. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
 \item{\code{bin.width}}{Appears only if the argument \code{logic = "automatic"}. This is the bin.width used to determine the density kernel estimate.}

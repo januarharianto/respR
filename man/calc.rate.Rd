@@ -26,6 +26,8 @@ An object of class \code{calc.rate} containing a list of outputs:
 \item{\code{data.frame}}{The original data frame.}
 \item{\code{subset.df}}{A list of subset data frames used for computations.}
 \item{\code{by}}{The subsetting method. Possible outputs: "\code{time}", "\code{o2}", "\code{proportion}" or "\code{row}".}
+\item{\code{from}}{a numeric vector. Defines the upper bound(s) of the data frame subset.}
+\item{\code{to}}{A numeric vector. Defines the lower bound(s) of the data frame subset.}
 \item{\code{results}}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
 \item{\code{background}}{Appears only if the argument \code{bg} is not \code{NULL}. The background rate of change.}
 \item{\code{rate}}{A value for the calculated rate of change in oxygen concentration, averaged if multiple values exist.}
