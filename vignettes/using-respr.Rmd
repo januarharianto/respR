@@ -120,7 +120,7 @@ Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate d
 4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
 
 
-Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. Calling `summary()` shows a summary of data subset locations for reproducibility.
+Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. Calling `summary()` shows a summary of data subset locations. 
 
 
 ```{r}
@@ -158,7 +158,10 @@ calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass =
 
 In either case, the conversion is applied as long as the input and output units are identified.
 
-## Further reading
+## 3. Reproducibility
+All functions within the `respR` package have been designed with reproducibility in mind. 
+
+## 4. Further reading
 
 This document introduces to you the basic methods of analysing respirometry data, but there are many other functions and user cases not explored. The following vignettes provide additional example workflows based on user needs, and may be useful to you:
 
@@ -167,7 +170,7 @@ This document introduces to you the basic methods of analysing respirometry data
 3. Pcrit setup and analyses
 
 
-## Example workflow
+## 5. Code
 
 ```{r, eval=F}
 data(urchin2013)  # preload data
