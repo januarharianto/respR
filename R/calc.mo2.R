@@ -227,6 +227,7 @@ print.calc.mo2 <- function(x, rank = 1) {
       print(head(result))
     } else {
       print(result)
+      cat(sprintf("\nMean (weighted) : %f", x$weighted))
     }
   }
   cat(sprintf("\nInput unit : %s", x$unit.in))
