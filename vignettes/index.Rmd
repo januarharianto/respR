@@ -159,13 +159,20 @@ calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass =
 In either case, the conversion is applied as long as the input and output units are identified.
 
 ## 3. Reproducibility
-All functions within the `respR` package have been designed with reproducibility in mind. 
+
+We have ensured that any computational analysis performed by `respR` can be reproduced by another user. The main functions all produce an output list object which contains all the data and variables needed to re-analyse the results, within R or in other software. Individual objects in the list can be extracted using `$` for verification or further data manipulation, which include the original and subset data frames.
+
+```{r}
+# grab subset locations that were used to subset the main data frame:
+u.rate$results
+```
+
 
 ## 4. Further reading
 
 This document introduces to you the basic methods of analysing respirometry data, but there are many other functions and user cases not explored. The following vignettes provide additional example workflows based on user needs, and may be useful to you:
 
-1. Measuring intermittent data
+1. [Measuring intermittent data](intermittent.html).
 2. Maximum, minimum and interval analyses.
 3. Pcrit setup and analyses
 

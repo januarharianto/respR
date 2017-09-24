@@ -8,3 +8,5 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## This is just a test
+For now, just checking if cross-linking works as intended.
