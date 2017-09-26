@@ -7,14 +7,17 @@
 pcrit(df, span = 0.05, datmr = FALSE, plot = F)
 }
 \arguments{
-\item{df}{data frame object}
+\item{df}{data frame. If data is already in the form of oxygen concentration ~ metabolic rate, set \code{datmr} to \code{TRUE}.}
 
-\item{span}{numeric}
+\item{span}{numeric. The width to use, as a proportion of nrow(df), for rolling regressionss. Defaults to 0.05.}
 
-\item{MR}{logical}
+\item{datmr}{logical. If \code{TRUE}, will skip rolling regressions. Defaults to \code{FALSE}.}
 }
 \description{
-Uses stepwise linear regression to calculate two best-fit lines in a rate data frame, by minimising the total residual sum of squares between both regressions. Method is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling \code{pcrit} on a data frame \code{df} of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width \code{floor(0.05 * nrow(df))} to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument \code{datmr = TRUE} will perform the stepwise regressions immediately without performing rolling regressions.
+Uses a simple "stepwise" linear regression technique to calculate two best-fit lines in a data frame, by minimising the total residual sum of squares between both regressions.
+}
+\details{
+The method used in the current function is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling \code{pcrit()} on a data frame \code{df} of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width "\code{floor(0.05 * nrow(df))}" to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument \code{datmr = TRUE} will skip rolling regressions.
 }
 \examples{
 # load example data:
@@ -31,4 +34,7 @@ summary(pcfish)            # prints the top 6 results
 summary(pcfish, n = 20)    # prints the top 20 results (just to compare)
 
 
+}
+\references{
+Nickerson, D. M., Facey, D. E., & Grossman, G. D. (1989). Estimating physiological thresholds with continuous two-phase regression. Physiological Zoology, 62(4), 866–887.
 }

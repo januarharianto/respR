@@ -36,17 +36,22 @@ subsample <- function(df, n = 5, random_start = F) {
   # performance.
   subset <- df[seq.int(start, nrow(df), n), ]
   # Create the plots
-  p1 <- ggplot() +
-    geom_point(data = df, aes(df[[1]], df[[2]]), shape = 21, size = .5
-      , alpha = .4) +
-    labs(x='Time', y='DO2')
-  p2 <- ggplot() +
-    geom_point(data = subset, aes(subset[[1]], subset[[2]]), shape = 21,
-      size = .5, alpha = .4) +
-    labs(x='Time', y='DO2')
-    print(cowplot::plot_grid(p1, p2, ncol = 1))
-  # message(sprintf('Data has been subsampled at every %d rows.', n))
-  # message('Showing the first 6 rows:')
-  # print(head(subset))
+  pardefault <- par(no.readonly = T)  # save original par settings
+  par(mfrow=c(1,2))  # replace par settings
+  plot(df, xlab = "Time", ylab = "Oxygen", col = r1, pch = 16,
+    panel.first = c(rect(par("usr")[1],
+      par("usr")[3],
+      par("usr")[2],
+      par("usr")[4], col = r3), grid(col = "white",
+        lty = 1, lwd = 1.5)))
+  title(main = "Full Timeseries", line = 0.5)
+  plot(subset, xlab = "Time", ylab = "Oxygen", col = r1, pch = 16,
+    panel.first = c(rect(par("usr")[1],
+      par("usr")[3],
+      par("usr")[2],
+      par("usr")[4], col = r3), grid(col = "white",
+        lty = 1, lwd = 1.5)))
+  title(main = "Subsample Timeseries", line = 0.5)
+  par(pardefault)  # revert par settings to original
   return(invisible(subset))
 }

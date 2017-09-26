@@ -1,15 +1,18 @@
 #' Calculate critical oxygen tension for respirometry
 #'
-#' Uses stepwise linear regression to calculate two best-fit lines in a rate data frame, by minimising the total residual sum of squares between both regressions. Method is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling `pcrit` on a data frame `df` of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width `floor(0.05 * nrow(df))` to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument `datmr = TRUE` will perform the stepwise regressions immediately without performing rolling regressions.
+#' Uses a simple "stepwise" linear regression technique to calculate two best-fit lines in a data frame, by minimising the total residual sum of squares between both regressions.
+#'
+#' The method used in the current function is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling `pcrit()` on a data frame `df` of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width "`floor(0.05 * nrow(df))`" to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument `datmr = TRUE` will skip rolling regressions.
 #'
 #' @md
-#' @param df data frame object
-#' @param span numeric
-#' @param MR logical
+#' @param df data frame. If data is already in the form of oxygen concentration ~ metabolic rate, set `datmr` to `TRUE`.
+#' @param span numeric. The width to use, as a proportion of nrow(df), for rolling regressionss. Defaults to 0.05.
+#' @param datmr logical. If `TRUE`, will skip rolling regressions. Defaults to `FALSE`.
 #'
 #' @return NULL
 #' @importFrom roll roll_mean roll_lm
 #' @import parallel
+#' @references Nickerson, D. M., Facey, D. E., & Grossman, G. D. (1989). Estimating physiological thresholds with continuous two-phase regression. Physiological Zoology, 62(4), 866–887.
 #' @export
 #'
 #' @examples
@@ -40,7 +43,7 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
     # check.input ensures that a numeric input is in the time column, it is
     # inevitable that many pcrit experiments use real time (instead of time
     # elapsed) due to the extended nature of pcrit experiments (hours to more
-    # than a day). We do want to analyse those experiments... :D
+    # than a day). We do want to analyse those experiments.
     if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T) {
       df$x   <- as.integer(df$x - df$x[1])
     }
@@ -75,11 +78,13 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
   rollmr <- mrDo[[2]]
 
   out <- list(
-    df = df,
-    do.mr = mrDo,
-    pcrit = pcrit,
+    df          = df,
+    span        = span,
+    width       = width,
+    do.mr       = mrDo,
+    pcrit       = pcrit,
     pcritRanked = pcritRanked,
-    best = best)
+    best        = best)
 
   cat(sprintf("%d 'hockey' regressions fitted",  NROW(pcrit)),
     sprintf("in %g seconds", new), "\n\n")
@@ -88,12 +93,14 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
   return(out)
 }
 
+# ==============================================================================
 #' @export
 print.pcrit <- function(x, rank = 1) {
   cat(sprintf("Rank %d", rank), "result:\n")
   print(x$pcritRanked[rank,])
 }
 
+# ==============================================================================
 #' @export
 summary.pcrit <- function(x, n = 6) {
   cat(sprintf("Top %d", n), "results:\n")
@@ -101,16 +108,22 @@ summary.pcrit <- function(x, n = 6) {
 }
 
 
+# ==============================================================================
 #' @export
 plot.pcrit <- function(x, rank = 1, ...) {
   if (is.null(x$df)) {
     pcrit.p(x, rank)
   } else {
     pardefault <- par(no.readonly = T)  # save original par settings
-    par(mfrow=c(1,2))  # replace par settings
-    plot(x$df,xlab = "Time", ylab = "DO", col = r2, pch = 16, panel.first = c(rect(par("usr")[1],
-      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-        lty = 1, lwd = 1.5)))
+    par(mfrow=c(2,1))  # replace par settings
+    plot(x$df,xlab = "Time", ylab = "DO", col = r2, pch = 16,
+      panel.first = c(rect(
+        par("usr")[1],
+        par("usr")[3],
+        par("usr")[2],
+        par("usr")[4],
+        col = r3),
+        grid(col = "white", lty = 1, lwd = 1.5)))
     # title(main = "Timeseries")
     abline(h = x$pcritRanked[5][rank, ], lwd = 1.5, col = d1)
     abline(h = x$pcritRanked[6][rank, ], lwd = 1.5, col = d2)
