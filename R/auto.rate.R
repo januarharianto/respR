@@ -62,8 +62,10 @@
 #' summary(x)
 #' plot(x, rank = 1)
 #'
-auto.rate <- function(df, width = floor(0.1 * nrow(df)), by = "time",
+auto.rate <- function(df, width = NULL, by = "row",
   logic = 'automatic', bg = NULL) {
+  # First, check if width is NULL. If it is, use default value
+  if (is.null(width)) width <- floor(0.2 * nrow(df))
   # How are we subsetting the data?
   # Note: only "time" and "row" supported here.
   if (by == "row") {
