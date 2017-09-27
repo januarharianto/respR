@@ -188,6 +188,12 @@ auto.rate <- function(df, width = NULL, by = "row",
 
 
 # ==============================================================================
+#' print() for object of class `auto.rate`
+#'
+#' @param x object of class `auto.rate`.
+#' @param rank numeric. Defaults to 1. Changing this number will allow user to view other ranked results.
+#'
+#' @importFrom dplyr select
 #' @export
 print.auto.rate <- function(x, rank = 1) {
   if (x$id == "maxmin") {
@@ -206,15 +212,15 @@ print.auto.rate <- function(x, rank = 1) {
     cat("\n--- Subset Information --- \n")
     # add background rate stuff if it exists
     if (length(x$results) == 14) {
-      print(dplyr::select(x$results[rank,], -(1:6)))
-    } else print(dplyr::select(x$results[rank,], -(1:4)))
+      print(select(x$results[rank,], -(1:6)))
+    } else print(select(x$results[rank,], -(1:4)))
 
   } else if (x$id == "interval") {
     cat("Computation of rate of change of O2 concetration (interval)\n")
     cat("--- First 6 Results ---\n")
-    print(head(dplyr::select(x$results, 2:4)))
+    print(head(select(x$results, 2:4)))
     cat("\n--- Subset Information ---\n")
-    print(head(dplyr::select(x$results, -(1:4))))
+    print(head(select(x$results, -(1:4))))
 
   } else if (x$id == "automatic") {
     cat("Ranked computation of rate of change of O2 concetration (auto)\n")
@@ -230,8 +236,8 @@ print.auto.rate <- function(x, rank = 1) {
     cat("\n--- Subset Information ---\n")
     # add background rate stuff if it exists
     if (length(x$results) == 13) {
-      print(dplyr::select(x$results[rank,], -(1:5)))
-    } else print(dplyr::select(x$results[rank,], -(1:3)))
+      print(select(x$results[rank,], -(1:5)))
+    } else print(select(x$results[rank,], -(1:3)))
   }
 }
 
