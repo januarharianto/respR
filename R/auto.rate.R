@@ -73,7 +73,6 @@ auto.rate <- function(df, width = NULL, by = "row",
       call. = F)
   # If subsetting by time, time must be evenly spaced.
   if (by == "time") {
-    check.space <- sapply(1:length(df), function(x) equal.lengths(diff(df[[x]])))
     if (equal.lengths(diff(df[[1]])) == F)
       stop("Time intervals are not evenly spaced. Please subset by `row`.",
         call. = F)
