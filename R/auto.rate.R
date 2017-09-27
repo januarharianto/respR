@@ -64,8 +64,19 @@
 #'
 auto.rate <- function(df, width = NULL, by = "row",
   logic = 'automatic', bg = NULL) {
-  # First, check if width is NULL. If it is, use default value
-  if (is.null(width)) width <- floor(0.2 * nrow(df))
+  # if subsetting by row, and width is NULL, automatically set the width to
+  #   20% of the total length of the dataset.
+  if (is.null(width) && by == "row") width <- floor(0.2 * nrow(df))
+  # If subsetting by time, width must NOT be null:
+  if (is.null(width) && by == "time")
+    stop("Please supply a `width` argument. It is currently NULL by default.",
+      call. = F)
+  # If subsetting by time, time must be evenly spaced.
+  if (by == "time") {
+    if (equal.lengths(diff(df[[1]])) == F)
+      stop("Time intervals are not evenly spaced. Please subset by `row`.",
+        call. = F)
+      }
   # How are we subsetting the data?
   # Note: only "time" and "row" supported here.
   if (by == "row") {
@@ -241,10 +252,15 @@ summary.auto.rate <- function(x, n = 5) {
     cat(sprintf("Peaks detected: %d\n", nrow(x$peaks)))
   }
   if (x$id == "interval") {
+    if (nrow(x$results) < 11) {
     cat(sprintf("\n--- Summary of all %d regressions ---\n", nrow(x$results)))
     print(x$results, n)
+    } else {
+      cat(sprintf("\n--- Summary of the first %d regressions ---\n", n))
+      print(head(x$results, n))
+      }
   } else {
-    cat(sprintf("\n--- Summary of the first %d results ---\n", n))
+    cat(sprintf("\n--- Summary of the first %d regressions ---\n", n))
     print(head(x$results, n))
   }
 }
