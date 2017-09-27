@@ -252,10 +252,15 @@ summary.auto.rate <- function(x, n = 5) {
     cat(sprintf("Peaks detected: %d\n", nrow(x$peaks)))
   }
   if (x$id == "interval") {
+    if (nrow(x$results) < 11) {
     cat(sprintf("\n--- Summary of all %d regressions ---\n", nrow(x$results)))
     print(x$results, n)
+    } else {
+      cat(sprintf("\n--- Summary of the first %d regressions ---\n", n))
+      print(head(x$results, n))
+      }
   } else {
-    cat(sprintf("\n--- Summary of the first %d results ---\n", n))
+    cat(sprintf("\n--- Summary of the first %d regressions ---\n", n))
     print(head(x$results, n))
   }
 }
