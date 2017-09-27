@@ -69,7 +69,15 @@ auto.rate <- function(df, width = NULL, by = "row",
   if (is.null(width) && by == "row") width <- floor(0.2 * nrow(df))
   # If subsetting by time, width must NOT be null:
   if (is.null(width) && by == "time")
-    stop("The width argument must not be NULL.", call. = F)
+    stop("Please supply a `width` argument. It is currently NULL by default.",
+      call. = F)
+  # If subsetting by time, time must be evenly spaced.
+  if (by == "time") {
+    check.space <- sapply(1:length(df), function(x) equal.lengths(diff(df[[x]])))
+    if (equal.lengths(diff(df[[1]])) == F)
+      stop("Time intervals are not evenly spaced. Please subset by `row`.",
+        call. = F)
+      }
   # How are we subsetting the data?
   # Note: only "time" and "row" supported here.
   if (by == "row") {
