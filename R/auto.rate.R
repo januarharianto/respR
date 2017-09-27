@@ -64,7 +64,8 @@
 #'
 auto.rate <- function(df, width = NULL, by = "row",
   logic = 'automatic', bg = NULL) {
-  # First, check if width is NULL. If it is, use default value:
+  # if subsetting by row, and width is NULL, automatically set the width to
+  #   20% of the total length of the dataset.
   if (is.null(width) && by == "row") width <- floor(0.2 * nrow(df))
   # If subsetting by time, width must NOT be null:
   if (is.null(width) && by == "time")
