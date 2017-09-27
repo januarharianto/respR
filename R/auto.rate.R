@@ -64,8 +64,11 @@
 #'
 auto.rate <- function(df, width = NULL, by = "row",
   logic = 'automatic', bg = NULL) {
-  # First, check if width is NULL. If it is, use default value
-  if (is.null(width)) width <- floor(0.2 * nrow(df))
+  # First, check if width is NULL. If it is, use default value:
+  if (is.null(width) && by == "row") width <- floor(0.2 * nrow(df))
+  # If subsetting by time, width must NOT be null:
+  if (is.null(width) && by == "time")
+    stop("The width argument must not be NULL.", call. = F)
   # How are we subsetting the data?
   # Note: only "time" and "row" supported here.
   if (by == "row") {
