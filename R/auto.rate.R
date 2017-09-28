@@ -188,12 +188,17 @@ auto.rate <- function(df, width = NULL, by = "row",
 
 
 # ==============================================================================
-#' print() for object of class `auto.rate`
+#' Print an object of class `auto.rate`
 #'
+#' @md
 #' @param x object of class `auto.rate`.
 #' @param rank numeric. Defaults to 1. Changing this number will allow user to view other ranked results.
 #'
+#' @return a print output.
+#'
 #' @importFrom dplyr select
+#'
+#' @keywords internal
 #' @export
 print.auto.rate <- function(x, rank = 1) {
   if (x$id == "maxmin") {
@@ -242,6 +247,15 @@ print.auto.rate <- function(x, rank = 1) {
 }
 
 # ==============================================================================
+#' Summarise an object of class `auto.rate`
+#'
+#' @md
+#' @param x object of class `auto.rate`.
+#' @param n numeric. Defaults to 5. The number of results to show.
+#'
+#' @return a summary output.
+#'
+#' @keywords internal
 #' @export
 summary.auto.rate <- function(x, n = 5) {
   if (x$id == "maxmin") {
@@ -273,6 +287,15 @@ summary.auto.rate <- function(x, n = 5) {
 
 
 # ==============================================================================
+#' Plot an object of class `auto.rate`
+#'
+#' @md
+#' @param x object of class `auto.rate`.
+#' @param rank numeric. Defaults to 1. Changing this number will allow user to view other ranked results.
+#'
+#' @return a plot output.
+#'
+#' @keywords internal
 #' @export
 plot.auto.rate <- function(x, rank = 1) {
   # Calculate common variables (should we do this in main function? hmm)
@@ -330,9 +353,19 @@ plot.auto.rate <- function(x, rank = 1) {
 }
 
 # ==============================================================================
-# Internal functions
+# Internal functions. I've taken these out to simplify the code and make code
+# optimisation easier, if necessary, later on.
 
-# perform rolling regression
+#' Perform rolling regressions of specific width
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @md
+#' @param df data frame. The data to perform rolling regressions on.
+#' @param width numeric. The rolling window.
+#'
+#' @return A data frame of coefficients.
+#'
 rollfit <- function(df, width) {
   x <- matrix(df[[1]]) # convert data to matrices to work with roll_lm
   y <- matrix(df[[2]])
@@ -343,7 +376,16 @@ rollfit <- function(df, width) {
   return(out)
 }
 
-# perform kernel density estimation of the data and identify the peaks
+
+#' Perform kernel density estimation of the data and identify the peaks
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @md
+#' @param x data frame. Makes sense only if it this was an output of `rollfit()`.
+#'
+#' @return A list of 2 objects, "density" and "peaks".
+#'
 k.peaks <- function(x) {
   # Perform kernel density estimation:
   dns <- density(x$b1, na.rm = T, bw = "SJ", n = length(x$b1))
@@ -356,7 +398,21 @@ k.peaks <- function(x) {
   return(output)
 }
 
-# match peaks to data
+
+#' Match peaks to original data frame
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' This function uses the the peak values and bin width of the kernel density estimate to match the results to the data in the original data frame.
+#'
+#' @param df data frame.
+#' @param fits data frame.
+#' @param pks numeric vector.
+#' @param width numeric.
+#' @param bg numeric.
+#'
+#' @return a data frame.
+#'
 match.data <- function(df, fits, pks, width, bg) {
   bw <- pks$density$bw  # extract bin width
   # Match all regressions used to determine each peak using the bin width:
