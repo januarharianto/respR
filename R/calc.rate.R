@@ -1,29 +1,46 @@
 #' Calculate rate of change in oxygen over time
 #'
-#' `calc.rate` calculates the rate of change in oxygen concentration over time in a data frame. You can perform single or multiple regressions on subsets of the data frame by calling the `from` and `to` arguments.
+#' `calc.rate` calculates the rate of change in oxygen concentration over time
+#' in a data frame. You can perform single or multiple regressions on subsets of
+#' the data frame by calling the `from` and `to` arguments.
 #'
-#' There are no units involved in `calc.rate`. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link{calc.mo2}}.
+#' There are no units involved in `calc.rate`. This is a deliberate decision.
+#' Units are called in a later function when volume- and/or weight-specific
+#' rates of oxygen concentration are computed in [calc.mo2()].
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
-#' @param df data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.
-#' @param from numeric vector. Defines the upper bound(s) of the data frame subset. Defaults to "`NULL`".
-#' @param to numeric vector. Defines the lower bound(s) of the data frame subset. Defaults to "`NULL`".
-#' @param by string. Describes the method used to subset the data frame. Defaults to `"time"`. Available: "`time`", "`o2`", "`proportion`", "`row`".
-#' @param bg numeric, or an output of class \code{\link{calc.bg.rate}}. Value for backgroung respiration.
-#' @param plot logical. When set to "`TRUE`" (default), will plot a quick visual of the data and its subset(s).
+#' @param df data frame. Should contain time (column 1) vs oxygen concentration
+#'   (column 2) data.
+#' @param from numeric vector. Defines the upper bound(s) of the data frame
+#'   subset. Defaults to "`NULL`".
+#' @param to numeric vector. Defines the lower bound(s) of the data frame
+#'   subset. Defaults to "`NULL`".
+#' @param by string. Describes the method used to subset the data frame.
+#'   Defaults to `"time"`. Available: "`time`", "`o2`", "`proportion`", "`row`".
+#' @param bg numeric, or an output of class `calc.bg.rate`. Value for backgroung
+#'   respiration.
+#' @param plot logical. When set to "`TRUE`" (default), will plot a quick visual
+#'   of the data and its subset(s).
 #'
-#' @return An object of class \code{calc.rate} containing a list of outputs:
+#' @return An object of class `calc.rate` containing a list of outputs:
 #' \describe{
 #' \item{`data.frame`}{The original data frame.}
 #' \item{`subset.df`}{A list of subset data frames used for computations.}
-#' \item{`by`}{The subsetting method. Possible outputs: "`time`", "`o2`", "`proportion`" or "`row`".}
-#' \item{`from`}{a numeric vector. Defines the upper bound(s) of the data frame subset.}
-#' \item{`to`}{A numeric vector. Defines the lower bound(s) of the data frame subset.}
-#' \item{`results`}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
-#' \item{`background`}{Appears only if the argument \code{bg} is not `NULL`. The background rate of change.}
-#' \item{`rate`}{A value for the calculated rate of change in oxygen concentration, averaged if multiple values exist.}
+#' \item{`by`}{The subsetting method. Possible outputs: "`time`", "`o2`",
+#' "`proportion`" or "`row`".}
+#' \item{`from`}{a numeric vector. Defines the upper bound(s) of the data frame
+#' subset.}
+#' \item{`to`}{A numeric vector. Defines the lower bound(s) of the data frame
+#' subset.}
+#' \item{`results`}{A data frame summary of the result(s), which include
+#' regression coefficients and subset locations.}
+#' \item{`background`}{Appears only if the argument `bg` is not `NULL`. The
+#' background rate of change.}
+#' \item{`rate`}{A value for the calculated rate of change in oxygen
+#' concentration, averaged if multiple values exist. The average is weighted to
+#' time.}
 #' \item{`adj.rate`}{Same as `rate` above, but includes background correction.}
 #' }
 #'
@@ -31,6 +48,7 @@
 #' @importFrom tibble as.tibble
 #' @export
 #'
+#' @seealso [calc.bg.rate()]
 #' @examples
 #' data(sardine)
 #' calc.rate(sardine, from = 200, to = 1800)     # default subset by 'time'
@@ -148,7 +166,14 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   return(out)
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
+
 #' @export
 print.calc.rate <- function(x) {
   if(is.null(x$adj.rate)) {
@@ -160,14 +185,27 @@ print.calc.rate <- function(x) {
   }
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
 #' @export
 summary.calc.rate <- function(x) {
   # cat("Summary\n")
   print(x$results)
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
+
 #' @export
 plot.calc.rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
@@ -185,11 +223,28 @@ plot.calc.rate <- function(x, rep = 1) {
 }
 
 
+
+
+
+
+
+
 # ==============================================================================
 # Internal functions
 
-# Subset the main data based on the "by" argument. Also saves row index data in
-# the output.
+
+#' Subset the main data based on the "by" argument.
+#'
+#' Also saves row index data in the output.
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @md
+#' @param df data frame.
+#' @param index data frame.
+#' @param by string.
+#' @return A list object.
+#'
 locate.subdfs <- function(df, index, by) {
   # Extract index
   from <- index[[1]]
@@ -226,7 +281,22 @@ locate.subdfs <- function(df, index, by) {
 }
 
 
-# Perform OLS regression on subset and save b0, b1 and rsq.
+
+
+
+
+
+
+
+#' Perform OLS regression on subset and save b0, b1 and rsq.
+#'
+#' Used within `calc.rate()`.
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @param x data frame.
+#' @return a data frame.
+#'
 lmfit <- function(x) {
   time <- x[[1]]
   o2   <- x[[2]]

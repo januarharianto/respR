@@ -9,7 +9,17 @@
 #'   * A test for evenly-spaced data (relevant for time data only).
 #'   * A check for column lengths.
 #'
-#' You may run `check.input` on a multi-column data frame. Alternatively, you may run `check.input` on a 2-column data frame and it will automatically assume that the first column is time data and the second column, oxygen concentration data. A 2-column data frame can also be extracted directly from a multi-column data frame if the `x` and `y` arguments are used within the function. For 2-column data frames, `check.input` will automatically remove NAs and produce a new data frame object, as long as no critical errors are found in the data. If critical errors are found (e.g. non numeric data), the function will stop. Two-column checks are more informative - since it is assumed that the x column is time data and y column is dissolved oxygen data, time-specific errors can be called out.
+#' You may run `check.input` on a multi-column data frame. Alternatively, you
+#' may run `check.input` on a 2-column data frame and it will automatically
+#' assume that the first column is time data and the second column, oxygen
+#' concentration data. A 2-column data frame can also be extracted directly from
+#' a multi-column data frame if the `x` and `y` arguments are used within the
+#' function. For 2-column data frames, `check.input` will automatically remove
+#' NAs and produce a new data frame object, as long as no critical errors are
+#' found in the data. If critical errors are found (e.g. non numeric data), the
+#' function will stop. Two-column checks are more informative - since it is
+#' assumed that the x column is time data and y column is dissolved oxygen data,
+#' time-specific errors can be called out.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
@@ -23,7 +33,7 @@
 #'   if the data frame subset contains 2 columns. Otherwise, this does nothing.
 #'
 #' @return If a 2-column data frame is checked, `check.input` returns a data
-#' frame object that can be saved for use in [calc.rate()] and [auto.rate()].
+#'   frame object that can be saved for use in [calc.rate()] and [auto.rate()].
 #'
 #' @export
 #'

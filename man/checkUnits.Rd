@@ -12,6 +12,10 @@ checkUnits(unit, type)
 \item{type}{Numeric. Identifies the type of unit to check. 1: time; 2: O~2~
 3: volume; 4: mass.}
 }
+\value{
+vector output of logical (TRUE or FALSE), specifying whether the unit
+  ID is successful, and the unit identified.
+}
 \description{
 Checks input string against a known database and returns a
 logical output (i.e. TRUE or FALSE). If TRUE, also prints out the identified
@@ -34,3 +38,4 @@ checkUnits('notatunit', 'o2')
 \author{
 Januar Harianto
 }
+\keyword{internal}

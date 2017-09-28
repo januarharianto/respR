@@ -24,12 +24,12 @@
 #' \item{`input.id`}{String. If the source of the input `x` is `auto.rate`,
 #'   identifies it's ranking method. Possible values: `maxmin`, `interval`,
 #'   `automatic`, `calc.rate`, `numeric`.}
-#' \item{`volume`}{Numeric. Same as above..}
-#' \item{`mass`}{Numeric. Same as above.}
-#' \item{`rank`}{Numeric. Same as above.}
-#' \item{`salinity`}{Numeric. Same as above.}
-#' \item{`temperature`}{Numeric. Same as above.}
-#' \item{`pressure`}{Numeric. Same as above.}
+#' \item{`volume`}{Numeric. Same as input parameter.}
+#' \item{`mass`}{Numeric. Same as input parameter.}
+#' \item{`rank`}{Numeric. Same as input parameter.}
+#' \item{`salinity`}{Numeric. Same as input parameter.}
+#' \item{`temperature`}{Numeric. Same as input parameter.}
+#' \item{`pressure`}{Numeric. Same as input parameter.}
 #' \item{`summary`}{Data frame. Contains all inputs and converted outputs.}
 #' \item{`unit.in`}{String. Input units identified by the function.}
 #' \item{`unit.out`}{String. Output units identified by the function.}
@@ -38,7 +38,7 @@
 #'   intermittent data).}
 #' }
 #'
-#' @seealso calc.rate auto.rate
+#' @seealso [calc.rate] auto.rate
 #' @importFrom stringr str_extract
 #' @export
 #'
@@ -210,7 +210,20 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
   return(out)
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
+
+
+#' Print output with rank argument
+#'
+#' @param x object of rank `calc.mo2`.
+#' @param rank numeric.
+#'
 #' @export
 print.calc.mo2 <- function(x, rank = 1) {
   if (length(x$summary) == 2) Output <- x$summary$VO2
@@ -234,7 +247,13 @@ print.calc.mo2 <- function(x, rank = 1) {
   cat(sprintf("\nOutput unit: %s", x$unit.out))
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
 #' @export
 summary.calc.mo2 <- function(x) {
   cat(sprintf("Data was converted from object of class %s.\n", x$input.class))
@@ -253,10 +272,30 @@ summary.calc.mo2 <- function(x) {
 }
 
 
+
+
+
+
+
+
+
+
 # ==============================================================================
 # Internal Functions
 
-# Scale units of the same base., e.g. x/s to x/h, or mmol/x to umol/x/
+#
+#' Scale units of the same base.
+#'
+#' This function performs simple conversion in units with the same base, e.g. x/s to x/h, or mmol/x to umol/x.
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @md
+#' @param b1 numeric vector.
+#' @param unit.in character string.
+#' @param unit.out character string.
+#' @return numeric vector.
+#'
 scale.unit <- function(b1, unit.in, unit.out) {
   # create database of terms for matching
   prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour")
@@ -279,7 +318,23 @@ scale.unit <- function(b1, unit.in, unit.out) {
   return(b1 * (factor.in/factor.out))
 }
 
-# Identify units in a character string for conversions.
+
+
+
+
+
+
+
+#' Identify units in a character string for conversions.
+#'
+#' Checks strings and match them to a known database. The database is highly specific - and is divided into "input" or "output" groups.
+#'
+#' This is an internal function. The typical user should not see this.
+#'
+#' @md
+#' @param string character string.
+#' @param cond string. `"input"` or `"output"`.
+#' @return A character string.
 id.unit <- function(string, cond) {
   units <- read.table(text = gsub("(?:-1|[/.[:space:]])+", " ", string), header = FALSE)
   units <- matrix(as.matrix(units), ncol = ncol(units))
