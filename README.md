@@ -17,9 +17,9 @@ Otherwise, use the `devtools` package to grab the developmental version from her
 ## Usage
 We have prepared a series of vignettes that can help you get up to speed with the package based on user case scenarios.
 
-A good place to start is the introductory vignette, [respR - An R package for processing respirometry data](https://github.com/januarharianto/respr) (link will appear soon). Other vignettes are linked to this one, and provided below for your convenience:
+A good place to start is the introductory vignette, [respR - An R package for processing respirometry data](https://januarharianto.github.io/respR/). Other vignettes are linked to this one, and provided below for your convenience:
 
-1. [Intermittent data](https://github.com/januarharianto/respr).
+1. [Intermittent data](https://januarharianto.github.io/respR/intermittent.html).
 2. [Maximum, minimum and interval analyses](https://github.com/januarharianto/respr).
 3. [Running pcrit analyses](https://github.com/januarharianto/respr).
 

@@ -34,12 +34,12 @@ An object containing a list of outputs:
 \item{\code{input.id}}{String. If the source of the input \code{x} is \code{auto.rate},
 identifies it's ranking method. Possible values: \code{maxmin}, \code{interval},
 \code{automatic}, \code{calc.rate}, \code{numeric}.}
-\item{\code{volume}}{Numeric. Same as above..}
-\item{\code{mass}}{Numeric. Same as above.}
-\item{\code{rank}}{Numeric. Same as above.}
-\item{\code{salinity}}{Numeric. Same as above.}
-\item{\code{temperature}}{Numeric. Same as above.}
-\item{\code{pressure}}{Numeric. Same as above.}
+\item{\code{volume}}{Numeric. Same as input parameter.}
+\item{\code{mass}}{Numeric. Same as input parameter.}
+\item{\code{rank}}{Numeric. Same as input parameter.}
+\item{\code{salinity}}{Numeric. Same as input parameter.}
+\item{\code{temperature}}{Numeric. Same as input parameter.}
+\item{\code{pressure}}{Numeric. Same as input parameter.}
 \item{\code{summary}}{Data frame. Contains all inputs and converted outputs.}
 \item{\code{unit.in}}{String. Input units identified by the function.}
 \item{\code{unit.out}}{String. Output units identified by the function.}
@@ -65,7 +65,7 @@ x <- auto.rate(squid, logic = "interval")
 calc.mo2(x, "\%/s", "mg/s/g", volume = 1, mass = .5)
 }
 \seealso{
-calc.rate auto.rate
+\link{calc.rate} auto.rate
 }
 \author{
 Januar Harianto & Nicholas Carey

@@ -4,8 +4,7 @@
 \alias{auto.rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto.rate(df, width = floor(0.1 * nrow(df)), by = "time",
-  logic = "automatic", bg = NULL)
+auto.rate(df, width = NULL, by = "row", logic = "automatic", bg = NULL)
 }
 \arguments{
 \item{df}{data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.}
