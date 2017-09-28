@@ -23,10 +23,12 @@ convert.do(x, from, to, S = 35, t = 25, P = 1.013253)
 a numeric vector.
 }
 \description{
-Basic conversion function for non- volume- or weight-specific rate of change in oxygen concentration over time.
+Basic conversion function for non- volume- or weight-specific rate of change
+in oxygen concentration over time.
 }
 \details{
-The user may use \link{calc.mo2} for conversions involving volume- or weight-specific rate of change in oxygen concentration over time.
+The user may use \link{calc.mo2} for conversions involving volume- or
+weight-specific rate of change in oxygen concentration over time.
 }
 \examples{
 convert.do(90, from = '\%', to = 'mg/l')

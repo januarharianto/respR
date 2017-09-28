@@ -17,3 +17,4 @@ a plot output.
 \description{
 Plot an object of class \code{auto.rate}
 }
+\keyword{internal}

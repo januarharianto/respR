@@ -8,37 +8,54 @@ calc.rate(df, from = NULL, to = NULL, by = "time", bg = NULL,
   plot = T, verbose = T)
 }
 \arguments{
-\item{df}{data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.}
+\item{df}{data frame. Should contain time (column 1) vs oxygen concentration
+(column 2) data.}
 
-\item{from}{numeric vector. Defines the upper bound(s) of the data frame subset. Defaults to "\code{NULL}".}
+\item{from}{numeric vector. Defines the upper bound(s) of the data frame
+subset. Defaults to "\code{NULL}".}
 
-\item{to}{numeric vector. Defines the lower bound(s) of the data frame subset. Defaults to "\code{NULL}".}
+\item{to}{numeric vector. Defines the lower bound(s) of the data frame
+subset. Defaults to "\code{NULL}".}
 
-\item{by}{string. Describes the method used to subset the data frame. Defaults to \code{"time"}. Available: "\code{time}", "\code{o2}", "\code{proportion}", "\code{row}".}
+\item{by}{string. Describes the method used to subset the data frame.
+Defaults to \code{"time"}. Available: "\code{time}", "\code{o2}", "\code{proportion}", "\code{row}".}
 
-\item{bg}{numeric, or an output of class \code{\link{calc.bg.rate}}. Value for backgroung respiration.}
+\item{bg}{numeric, or an output of class \code{calc.bg.rate}. Value for backgroung
+respiration.}
 
-\item{plot}{logical. When set to "\code{TRUE}" (default), will plot a quick visual of the data and its subset(s).}
+\item{plot}{logical. When set to "\code{TRUE}" (default), will plot a quick visual
+of the data and its subset(s).}
 }
 \value{
 An object of class \code{calc.rate} containing a list of outputs:
 \describe{
 \item{\code{data.frame}}{The original data frame.}
 \item{\code{subset.df}}{A list of subset data frames used for computations.}
-\item{\code{by}}{The subsetting method. Possible outputs: "\code{time}", "\code{o2}", "\code{proportion}" or "\code{row}".}
-\item{\code{from}}{a numeric vector. Defines the upper bound(s) of the data frame subset.}
-\item{\code{to}}{A numeric vector. Defines the lower bound(s) of the data frame subset.}
-\item{\code{results}}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
-\item{\code{background}}{Appears only if the argument \code{bg} is not \code{NULL}. The background rate of change.}
-\item{\code{rate}}{A value for the calculated rate of change in oxygen concentration, averaged if multiple values exist.}
+\item{\code{by}}{The subsetting method. Possible outputs: "\code{time}", "\code{o2}",
+"\code{proportion}" or "\code{row}".}
+\item{\code{from}}{a numeric vector. Defines the upper bound(s) of the data frame
+subset.}
+\item{\code{to}}{A numeric vector. Defines the lower bound(s) of the data frame
+subset.}
+\item{\code{results}}{A data frame summary of the result(s), which include
+regression coefficients and subset locations.}
+\item{\code{background}}{Appears only if the argument \code{bg} is not \code{NULL}. The
+background rate of change.}
+\item{\code{rate}}{A value for the calculated rate of change in oxygen
+concentration, averaged if multiple values exist. The average is weighted to
+time.}
 \item{\code{adj.rate}}{Same as \code{rate} above, but includes background correction.}
 }
 }
 \description{
-\code{calc.rate} calculates the rate of change in oxygen concentration over time in a data frame. You can perform single or multiple regressions on subsets of the data frame by calling the \code{from} and \code{to} arguments.
+\code{calc.rate} calculates the rate of change in oxygen concentration over time
+in a data frame. You can perform single or multiple regressions on subsets of
+the data frame by calling the \code{from} and \code{to} arguments.
 }
 \details{
-There are no units involved in \code{calc.rate}. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link{calc.mo2}}.
+There are no units involved in \code{calc.rate}. This is a deliberate decision.
+Units are called in a later function when volume- and/or weight-specific
+rates of oxygen concentration are computed in \code{\link[=calc.mo2]{calc.mo2()}}.
 }
 \examples{
 data(sardine)
@@ -63,6 +80,9 @@ ureg <- check.input(urchin2013, 1, 2)
 calc.rate(ureg, 20, 40)  # without bg adjustment
 calc.rate(ureg, 20, 40, bg = bg) # with bg adjustment
 
+}
+\seealso{
+\code{\link[=calc.bg.rate]{calc.bg.rate()}}
 }
 \author{
 Januar Harianto & Nicholas Carey

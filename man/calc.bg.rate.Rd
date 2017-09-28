@@ -7,29 +7,37 @@
 calc.bg.rate(df, xcol = 1, ycol = 2, plot = T)
 }
 \arguments{
-\item{df}{data frame. The data frame that contains the data needed for the function \code{calc.bg.rate}.}
+\item{df}{data frame. The data frame that contains the data needed for the
+function \code{calc.bg.rate}.}
 
 \item{xcol}{numeric. The time column is specified here. Defaults to "\code{1}".}
 
-\item{ycol}{numeric vector. The O2 column(s) are specified here. Defaults to "\code{2}".}
+\item{ycol}{numeric vector. The O2 column(s) are specified here. Defaults to
+"\code{2}". You can put a number, or a vector e.g. \code{c(2:4)}.}
 
 \item{plot}{logical. If \code{TRUE}, will plot the rate(s) in xy plot(s).}
 }
 \value{
 An object of class \code{calc.bg.rate} containing a list of outputs:
 \tabular{rll}{
-\tab \code{lmfit}   \tab list of objects of class \code{lm}. There are all the regressions. \cr
-\tab \code{results} \tab data frame. A summary of coefficients from each regression. \cr
+\tab \code{lmfit}   \tab list of objects of class \code{lm}. There are all the
+regressions. \cr
+\tab \code{results} \tab data frame. A summary of coefficients from each
+regression. \cr
 \tab \code{rate}    \tab numeric. The output slope or rate of change in oxygen
 concentration. If more than one regression was performed, the average rate
 is displayed.
 }
 }
 \description{
-\code{calc.bg.rate} uses linear regression to calculate the rate of change of oxygen over time for background corrections of the main data. Can be used on multiple datasets of background measures, as long as the time data are identical between measurements.
+\code{calc.bg.rate} uses linear regression to calculate the rate of change of
+oxygen over time for background corrections of the main data. Can be used on
+multiple datasets of background measures, as long as the time data are
+identical between measurements.
 }
 \details{
-The output of \code{calc.bg.rate} can be fed as an argument directly into the functions \link{calc.rate} and \link{auto.rate}.
+The output of \code{calc.bg.rate} can be fed as an argument directly into the
+functions \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}.
 }
 \examples{
 # load data

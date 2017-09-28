@@ -17,3 +17,4 @@ a print output.
 \description{
 Print an object of class \code{auto.rate}
 }
+\keyword{internal}
