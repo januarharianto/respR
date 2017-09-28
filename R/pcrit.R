@@ -1,20 +1,45 @@
 #' Calculate critical oxygen tension for respirometry
 #'
-#' Uses a simple "stepwise" linear regression technique to calculate two best-fit lines in a data frame, by minimising the total residual sum of squares between both regressions.
+#' Uses a simple "stepwise" linear regression technique to calculate two
+#' best-fit lines in a data frame, by minimising the total residual sum of
+#' squares between both regressions.
 #'
-#' The method used in the current function is based on Yeager and Ultsch (1989) to calculate critical oxygen tension. Calling `pcrit()` on a data frame `df` of dissolved oxygen (DO) by time will prompt the function to first perform a rolling regression of width "`floor(0.05 * nrow(df))`" to obtain the necessary metabolic rate (MR) data. If the user already has MR data, calling the function with the argument `datmr = TRUE` will skip rolling regressions.
+#' The method used in the current function is based on Yeager and Ultsch (1989)
+#' to calculate critical oxygen tension. Calling `pcrit()` on a data frame `df`
+#' of dissolved oxygen (DO) by time will prompt the function to first perform a
+#' rolling regression of width "`floor(0.05 * nrow(df))`" to obtain the
+#' necessary metabolic rate (MR) data. If the user already has MR data, calling
+#' the function with the argument `datmr = TRUE` will skip rolling regressions.
 #'
 #' @md
-#' @param df data frame. If data is already in the form of oxygen concentration ~ metabolic rate, set `datmr` to `TRUE`.
-#' @param span numeric. The width to use, as a proportion of nrow(df), for rolling regressionss. Defaults to 0.05.
-#' @param datmr logical. If `TRUE`, will skip rolling regressions. Defaults to `FALSE`.
+#' @param df data frame. If data is already in the form of oxygen concentration
+#'   ~ metabolic rate, set `datmr` to `TRUE`.
+#' @param span numeric. The width to use, as a proportion of nrow(df), for
+#'   rolling regressionss. Defaults to 0.05.
+#' @param datmr logical. If `TRUE`, will skip rolling regressions. Defaults to
+#'   `FALSE`.
 #'
-#' @return NULL
+#' @return An object of class `pcrit` containing a list of outputs:
+#' \describe{
+#' \item{`df`}{The original data frame.}
+#' \item{`span`}{Numeric. Same as input parameter.}
+#' \item{`width`}{Numeric. The width, in rows, of the rolling window.}
+#' \item{`do.mr`}{Data frame. Output of the rolling regression..}
+#' \item{`pcrit`}{Data frame. The results.}
+#' \item{`pcritRanked`}{Data frame. The results, ranked by the total residual
+#' sum of squares.}
+#' \item{`best`}{Data frame. The top result.}
+#' }
+#'
 #' @importFrom roll roll_mean roll_lm
 #' @import parallel
-#' @references Nickerson, D. M., Facey, D. E., & Grossman, G. D. (1989). Estimating physiological thresholds with continuous two-phase regression. Physiological Zoology, 62(4), 866–887.
+#'
 #' @export
 #'
+#' @references Nickerson, D. M., Facey, D. E., & Grossman, G. D. (1989).
+#'   Estimating physiological thresholds with continuous two-phase regression.
+#'   Physiological Zoology, 62(4), 866–887.
+#' #'
 #' @examples
 #' # load example data:
 #' data(fishpcrit)

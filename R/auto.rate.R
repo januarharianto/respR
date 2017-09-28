@@ -187,7 +187,12 @@ auto.rate <- function(df, width = NULL, by = "row",
 }
 
 
-# ==============================================================================
+
+
+
+
+
+
 #' Print an object of class `auto.rate`
 #'
 #' @md
@@ -246,7 +251,13 @@ print.auto.rate <- function(x, rank = 1) {
   }
 }
 
-# ==============================================================================
+
+
+
+
+
+
+
 #' Summarise an object of class `auto.rate`
 #'
 #' @md
@@ -286,7 +297,12 @@ summary.auto.rate <- function(x, n = 5) {
 }
 
 
-# ==============================================================================
+
+
+
+
+
+
 #' Plot an object of class `auto.rate`
 #'
 #' @md
@@ -352,6 +368,13 @@ plot.auto.rate <- function(x, rank = 1) {
   }
 }
 
+
+
+
+
+
+
+
 # ==============================================================================
 # Internal functions. I've taken these out to simplify the code and make code
 # optimisation easier, if necessary, later on.
@@ -365,6 +388,7 @@ plot.auto.rate <- function(x, rank = 1) {
 #' @param width numeric. The rolling window.
 #'
 #' @return A data frame of coefficients.
+#' @keywords internal
 #'
 rollfit <- function(df, width) {
   x <- matrix(df[[1]]) # convert data to matrices to work with roll_lm
@@ -377,6 +401,12 @@ rollfit <- function(df, width) {
 }
 
 
+
+
+
+
+
+
 #' Perform kernel density estimation of the data and identify the peaks
 #'
 #' This is an internal function. The typical user should not see this.
@@ -385,6 +415,7 @@ rollfit <- function(df, width) {
 #' @param x data frame. Makes sense only if it this was an output of `rollfit()`.
 #'
 #' @return A list of 2 objects, "density" and "peaks".
+#' @keywords internal
 #'
 k.peaks <- function(x) {
   # Perform kernel density estimation:
@@ -397,6 +428,12 @@ k.peaks <- function(x) {
   output <- list(density = dns, peaks = pks)
   return(output)
 }
+
+
+
+
+
+
 
 
 #' Match peaks to original data frame
@@ -412,6 +449,7 @@ k.peaks <- function(x) {
 #' @param bg numeric.
 #'
 #' @return a data frame.
+#' @keywords internal
 #'
 match.data <- function(df, fits, pks, width, bg) {
   bw <- pks$density$bw  # extract bin width

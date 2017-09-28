@@ -1,8 +1,10 @@
 #' Convert units of rate of change in oxygen concentration over time
 #'
-#' Basic conversion function for non- volume- or weight-specific rate of change in oxygen concentration over time.
+#' Basic conversion function for non- volume- or weight-specific rate of change
+#' in oxygen concentration over time.
 #'
-#' The user may use [calc.mo2] for conversions involving volume- or weight-specific rate of change in oxygen concentration over time.
+#' The user may use [calc.mo2] for conversions involving volume- or
+#' weight-specific rate of change in oxygen concentration over time.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
@@ -97,9 +99,11 @@ convert.do <- function(x, from, to, S = 35, t = 25, P = 1.013253) {
 #' user may deploy a 'fuzzy' approach during the input of measurement units
 #' (e.g. 'mg/l', 'mgL-1', 'mgl-1' and 'mg per litre' all work).
 #' @author Januar Harianto
-#' @return NULL
+#' @return vector output of logical (TRUE or FALSE), specifying whether the unit
+#'   ID is successful, and the unit identified.
 #'
 #' @export
+#' @keywords internal
 #' @examples
 #' checkUnits('min', 'time')
 #' checkUnits('notatunit', 'time')
