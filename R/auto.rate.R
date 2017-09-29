@@ -337,7 +337,7 @@ plot.auto.rate <- function(x, rank = 1) {
     qq.p(lmfit)  # qq plot
     layout(1)
   } else if (x$id == "interval") {
-    intervals <- x$results$to.row
+    intervals <- x$results$to.time
 
     pardefault <- par(no.readonly = T)  # save original par settings
     par(mfrow = c(2, 2))  # replace par settings
