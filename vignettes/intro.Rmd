@@ -184,7 +184,10 @@ Or, the user may convert a known rate to a volume-corrected, mass-specific rate:
 calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
 ```
 
-<!-- Ok, so i think we need to change how this works.  Phrasing the rate of change as mg/l/s - or really (mg/l)/s - i have not seen done before, and i think it will be very confusing. I think we need separate input units in for conc and time. So o2.unit and time.unit (I don't think we need the 'in') and then unit.out as you have it (or maybe output.unit for consistency). I think that will be much easier to understand. Users will instinctively know - or should - the two units thier original data is in, so much easier to have them input those, than have them parse them mentally into a rate. This is the first time we ask them to consider units so need to keep it simple. 
+Note, values for volume and mass should be entered in SI units of litres (l) and grams (g).
+<!-- or kg? -->
+
+<!-- Ok, so i think we need to change how this works.  Putting the rate as mg/l/s - or really (mg/l)/s - i have not seen done before, and i think it will be very confusing. I think we need separate input units in for conc and time. So o2.unit and time.unit (I don't think we need the 'in') and then unit.out as you have it (or maybe output.unit for consistency). I think that will be much easier to understand. Users will instinctively know - or should - the two units thier original data is in, so much easier to have them input those, than have them parse them mentally into a rate. This is the first time we ask them to consider units so need to keep it simple. 
 
 It also means the function can be used with a metadata object for different experiments which has the units in it as variables. So like o2.unit = exp.variables[1,2] where that's a field that has % or mg/L or whatever in it. -->
 
