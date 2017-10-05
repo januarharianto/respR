@@ -70,6 +70,8 @@ check.input <- function(df, x = NULL, y = NULL, plot = T) {
     print(test.class)
     # show.notanumber <- lapply(1:length(df), function(x) which(df[x] != 'numeric' && df[x] != 'integer'))
     stop("Function terminated since non-numeric data cannot be processed. ",call. = F)
+
+    ## NC - Can we add to this error message and specify which columns have the non-numeric data?
   }
 
   # check for NA

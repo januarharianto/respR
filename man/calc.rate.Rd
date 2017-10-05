@@ -20,7 +20,7 @@ subset. Defaults to "\code{NULL}".}
 \item{by}{string. Describes the method used to subset the data frame.
 Defaults to \code{"time"}. Available: "\code{time}", "\code{o2}", "\code{proportion}", "\code{row}".}
 
-\item{bg}{numeric, or an output of class \code{calc.bg.rate}. Value for backgroung
+\item{bg}{numeric, or an output of class \code{calc.bg.rate}. Value for background
 respiration.}
 
 \item{plot}{logical. When set to "\code{TRUE}" (default), will plot a quick visual
