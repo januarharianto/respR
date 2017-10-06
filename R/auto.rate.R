@@ -25,7 +25,7 @@
 #' \item{`by`}{String. The method used to subset the data frame.}
 #' \item{`logic`}{The selected ranking algorithm used to produce the results.}
 #' \item{`interval`}{Appears only if the argument `logic = "interval"`. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument `by = "time"` is used, the time interval is converted to the number of rows.}
-#' ## I'm unclear about what the interval option does. And is time conversion to rows.
+#' ## I'm unclear about what the interval option does.
 #' \item{`kernel.dens`}{Appears only if the argument `logic = "automatic"`. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
 #' \item{`peaks`}{Appears only if the argument `logic = "automatic"`. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
 #' \item{`bin.width`}{Appears only if the argument `logic = "automatic"`. This is the bin.width used to determine the density kernel estimate.}
