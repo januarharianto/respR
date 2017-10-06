@@ -111,7 +111,7 @@ u2 <- check.input(urchin2013, x = 1, y = 15)
 ```
 <!-- see above. I would use Y/N. And for this no point doing the dupe/spacing test for the O2 data at all, so leave blank or use '-' in output. Also change to xcol and ycol to be consistent with calc.bg.rate below --> 
 
-From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore result in an erroneous calculation of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
+From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
 
 **It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
@@ -120,12 +120,14 @@ From the plot, we can see irregularities in these data near the end of the times
 
 The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and users may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
-The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the same time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object.
+The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the same time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object. 
 
 ```{r}
 ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
 print(ubg)
 ```
+<!--  Change 'Average Rate' to 'Average Background Rate' in the summary. Since they are used a lot I think we also need to clarify what b0 and b1 represent in these summaries. Or rename them. b0 is really of no interest, it's b1 is the important one  -->
+<!--  Also does this support subsetting too? We might need that - ability to easily specify section of the data to use/trim data. Not a priority though. For now, maybe we can just specify this to be done manually before use. -->
 
 ### Use `calc.rate()` to perform the linear regression
 
@@ -140,14 +142,17 @@ In many cases, there is a need to truncate or subset the data before rate is det
 Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
 1. Time period (`by = "time"`) - *"What is the average rate over a 25 minute period?"*
-2. Total oxygen consumed/produced (`by = o2`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
-3. Proportion based on total oxygen consumed (`by = proportion`) - *"What is the rate from halfway down the data?"*
-4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
+2. Total oxygen consumed/produced (`by = "o2"`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
+3. Proportion based on total oxygen consumed (`by = "proportion"`) - *"What is the rate from halfway down the data?"*
+4. Precise subsetting by row for any other reason (`by = "row"`). - *"I'd like to subset between rows 11 and 273."*
 
+Note that for `by = "time"` and `by = "o2"` inputs, exact matching values need not necessarily exist in the experimental data. The function identifies the closest matching `time` or `o2` values to the inputs and uses these for all subsequent calculations. 
+<!--  This is true for both, yeah? Seems to be from my testing -->
 
-Here we subset the data by time, and include the background rate saved from `calc.bg.rate`. Note that a user may also enter background adjustments manually as long as this rate has been determined using the same units e.g. `background = 0.001`. Calling `summary()` shows a summary of data subset locations. 
+Here we subset the data by time, and include the background rate saved from `calc.bg.rate`. Note that a user may also enter background adjustments manually as long as this rate has been determined using the same units e.g. `background = -0.001`. Care should be taken to ensure this value has the correct, *negative* sign since it typically represents a rate of subtraction of oxygen from the medium.  Calling `summary()` shows a summary of data subset locations. 
 
 <!-- just changed that background rate value to match rounding up the average from ubg --> 
+<!-- ALSO NEED TO BE REALLY CAREFUL WITH +/-!!! --> 
 
 ```{r}
 u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", bg = ubg)
