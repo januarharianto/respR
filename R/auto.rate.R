@@ -4,25 +4,28 @@
 #'
 #' There are no units of measurements involved in `auto.rate`. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in [calc.mo2()].
 #'
-#' **Important**: Calling `auto.rate` using the argument `logic = "automatic"` uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results, although it did work as intended for all the sample data that we threw at it. We plan to refine this technique in a future version of the package.
+#' **Important**: Calling `auto.rate` using the argument `logic = "automatic"` uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and should be used with caution. We plan to refine this method in a future version of the package.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
 #' @param df data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.
 #' @param width numeric. The number of rows (or the time interval, if `by = "time"`) to use when performing the rolling regression.
+#' ## I think the above should probably default to by time. And does this function handle unevenly spaced time data okay?
 #' @param by string. Describes the method used to subset the data frame. Defaults to `"time"`. Available: "`time`", "`row`".
 #' @param logic logical. Determines the ranking algorithm to use. Defaults to "`automatic`". Available: "`max`", "`min`", "`interval`", "`automatic`".
-#' @param bg numeric, or an output of class [calc.bg.rate]. Value for backgroung respiration.
+#' @param bg numeric, or an output of class [calc.bg.rate]. Value for background respiration. Should be negative, to represent rate of removal of o2.
 #'
 #' @return An object of class `auto.rate` containing a list of outputs:
 #' \describe{
 #' \item{`id`}{Method used to compute the results. Possible outputs: "`maxmin`", "`interval`", or "`automatic`".}
 #' \item{`main.data`}{The original data frame.}
 #' \item{`width`}{Numeric. The width, in rows, of the rolling window or interval used.}
+#'  ## Or presumably time if it's by time. See comment above
 #' \item{`by`}{String. The method used to subset the data frame.}
 #' \item{`logic`}{The selected ranking algorithm used to produce the results.}
 #' \item{`interval`}{Appears only if the argument `logic = "interval"`. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument `by = "time"` is used, the time interval is converted to the number of rows.}
+#' ## I'm unclear about what the interval option does. And is time conversion to rows.
 #' \item{`kernel.dens`}{Appears only if the argument `logic = "automatic"`. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
 #' \item{`peaks`}{Appears only if the argument `logic = "automatic"`. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
 #' \item{`bin.width`}{Appears only if the argument `logic = "automatic"`. This is the bin.width used to determine the density kernel estimate.}
