@@ -15,7 +15,7 @@ auto.rate(df, width = NULL, by = "row", logic = "automatic", bg = NULL)
 
 \item{logic}{logical. Determines the ranking algorithm to use. Defaults to "\code{automatic}". Available: "\code{max}", "\code{min}", "\code{interval}", "\code{automatic}".}
 
-\item{bg}{numeric, or an output of class \link{calc.bg.rate}. Value for backgroung respiration.}
+\item{bg}{numeric, or an output of class \link{calc.bg.rate}. Value for background changes in O~2~ concentration. Should be negative, to represent rate of removal of o2. May also be positive in some cases, depending on your experimental setup.}
 }
 \value{
 An object of class \code{auto.rate} containing a list of outputs:
@@ -34,12 +34,26 @@ An object of class \code{auto.rate} containing a list of outputs:
 }
 }
 \description{
-\code{auto.rate} automatically performs a rolling regression on a data frame to perform determinations of maximum, minimum, interval or "most linear" rate of change in oxygen concentration over time. First, a rolling regression of specified \code{width} is performed on the entire dataset to obtain all possible values. The computations are then ranked (or, arranged), based on the "\code{logic}" argument, and the output is summarised.
+\code{auto.rate} automatically performs a rolling regression on a data frame to perform determinations of maximum, minimum, interval or "best fit" linear rate of change in oxygen concentration over time. First, a rolling regression of specified \code{width} is performed on the entire dataset to obtain all possible values. The computations are then ranked (or, arranged), based on the "\code{logic}" argument, and the output is summarised.
 }
 \details{
+\strong{Units}
+
 There are no units of measurements involved in \code{auto.rate}. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link[=calc.mo2]{calc.mo2()}}.
 
-\strong{Important}: Calling \code{auto.rate} using the argument \code{logic = "automatic"} uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and may have unintended results, although it did work as intended for all the sample data that we threw at it. We plan to refine this technique in a future version of the package.
+\strong{Assumptions}
+
+This function currently assumes that your data is evenly-spaced in time. A future version of this function will be able to accurately perform regressions of varying row widths due to unevenly-spaced time values.
+
+\emph{\strong{Ranking algorithms}}
+
+For now, \code{auto.rate()} contains four ranking algorithms that can be called with the argument "\code{logic}":
+\itemize{
+\item \code{max} - regressions are arranged from highest absolute values, to the lowest.
+\item \code{min} - regressions are arranged from lowest absolute values, to the highest.
+\item \code{interval} - non-overlapping regressions are extracted from the rolled regrssions. They are not ranked.
+\item \code{automatic} - uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and should be used with caution. We plan to refine this method in a future version of the package.
+}
 }
 \examples{
 # calculate maximum rate at width 500 (rows):
