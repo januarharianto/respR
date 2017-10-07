@@ -35,12 +35,13 @@ devtools::install_github("januarharianto/respR")
 When working with respirometry data, you will often need to:
 
 1. Ensure that the data, or at least a subset of the data, is representative of the research question of interest.
-2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration.
-3. Correct for background changes in oxygen concentration, and then scale the result to the volume (of the medium) and mass (of the animal).
+2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.
+3. Correct for background usage of oxygen by micro-organisms.
+4. Scale the resulting usage rate to the volume (of the medium) and mass (of the animal), and convert to appropriate units.
 
 The `respR` package contains several functions to make these actions quick and easy:
 
-- It provides quick visual feedbacks and diagnostic plots to help you subset and analyse your data.
+- It provides visual feedbacks and diagnostic plots to help you subset and analyse your data.
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked maximum, minimum or best fit sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
 
@@ -49,10 +50,10 @@ The `respR` package contains several functions to make these actions quick and e
 There are 6 main functions in `respR`:
 
 1. `check.input()` checks for structural errors and select individual data from multi-column datasets.
-2. `calc.bg.rate()` calculates background changes in oxygen concentration.
+2. `calc.bg.rate()` calculates background changes in oxygen concentration, e.g. from 'blank' experiments.
 3. `calc.rate()` calculates the rate of change of oxygen concentration over time in a data frame, or its subset.
 5. `auto.rate()` automatically determines maximum, minimum, or "best fit" rate of change of DO over time.
-6. `calc.mo2()` converts a number, or an object of class of `calc.rate`, to volume and/or weight-specific rates of change in oxygen concentration.
+6. `calc.mo2()` converts a number, or an object of class `auto.rate` or `calc.rate`, to volume and/or weight-specific rates of change in oxygen concentration.
 
 In addition, a few useful functions exist for specific data preparation and analysis scenarios:
 
@@ -74,13 +75,13 @@ urchin2013
 
 ### Use `check.input()` to check for common errors
 
-We first use `check.input` to scan the dataset for missing data, non-numeric data equal data lengths. Duplicate and unevenly-spaced data, specific to time, are also examined. Checks are performed on all columns in the data, regardless of data type:
+We first use `check.input` to scan the dataset for missing data, non-numeric data and equal data lengths. Two checks intended only for time data are also performed: checks for duplicate and unevenly-spaced data. However, all checks are performed on all columns in the data, regardless of data type.
 
 ```{r, eval=FALSE}
 check.input(urchin2013)
 ```
 
-We can also subset a 2-column data frame from the dataset directly, by specifying the *x* and *y* arguments that correspond to columns in the data frame. The function will automatically identify the first column as time data, and the second column as oxygen concentration data. Error checks will be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out).
+We can also subset a 2-column data frame from the dataset directly, by specifying the *x* and *y* arguments that correspond to columns in the data frame. The function will automatically consider the first column (x) as time data, and the second column (y) as oxygen concentration data. Error checks will therefore be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out).
 
 With two-column data, `check.input()` will automatically remove NA data and produce a new data frame that we can use for subsequent analyses. A scatterplot of the data is produced automatically for quick visual inspection.
 
@@ -88,14 +89,14 @@ With two-column data, `check.input()` will automatically remove NA data and prod
 u2 <- check.input(urchin2013, x = 1, y = 15)
 ```
 
-From the plot, non-linear irregularities in the data are evident. In this case, there is a change in the rate of oxygen uptake near the end of the timeseries (the sea urchin had climbed on top of the oxygen sensor, blocking it from surrounding water). A linear regression of the data frame would result in an underestimate of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
+From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
 
 **It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
 ### Use `calc.bg.rate()` to process background rates for later use
 
-The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
+The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and we may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
 The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object.
 
@@ -112,7 +113,7 @@ Calling the function `calc.rate()` on a data frame, with no additional arguments
 calc.rate(u2)
 ```
 
-In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is within a threshold of O~2~ concentration. Equipment interference may also cause temporary irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results.
+In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may also cause irregularities or “spikes” in the data. We can work around the error(s) and subset the regions that are not erroneous and still obtain valid results.
 
 Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
@@ -121,8 +122,9 @@ Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate d
 3. Proportion based on total oxygen consumed (`by = proportion`) - *"What is the rate from halfway down the data?"*
 4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
 
+Note that for by = "time" and by = "o2" inputs, exact matching values need not necessarily exist in the experimental data. The function identifies the closest matching time or o2 values to the inputs and uses these for all subsequent calculations.
 
-Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. Calling `summary()` shows a summary of data subset locations. 
+Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate()`. Note that we may also enter background adjustments manually as long as this rate has been determined using the same units e.g. `background = -0.001`. Care should be taken to ensure this value has the correct sign. For example, background respiration typically represents a rate of subtraction of O~2~ from the medium, and is therefore a negative value. Calling `summary()` shows a summary of data subset locations. 
 
 
 ```{r}
@@ -139,26 +141,29 @@ plot(u.rate)
 
 ### Use `calc.mo2()` to scale to volume- and/or mass-specific rates
 
-Once the rate of change of oxygen has been determined, the user may either want to calculate:
+Once the rate of change of oxygen has been determined, we may either want to calculate:
 
-1. O~2~ consumed per unit time
-2. mass-specific rate of change in O~2~
+1. Total change in O~2~ per unit time; or
+2. Mass-specific rate of change in O~2~.
 
-By specifying the relevant units and values in the function `calc.mo2()`, the user can obtain either output automatically.
+The function `calc.mo2()` can be used to scale $\Delta O_2$ to volume and/or mass.  using a string matching algorithm that recognises variations in base units automatically. For example, `"ml"`, `"mL"`, `"milliliter"`, and `"millilitre"` are all equally identified as `mL`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`.
+
+Due to the "fuzzy" approach in the matching algorithm, writing unit strings for `calc.mo2()` should come naturally for most people. 
+As long as the input and output units are identified, the conversion will be applied automatically. In the function, the argument "`unit.in`" is where we provide the units of O~2~ concentration and time that were used in the experiment. The user 
+
 
 For example, the user may convert the output of `calc.rate` to O~2~ consumed over an hour:
 
 ```{r}
-calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/h", volume = 1.89)
+calc.mo2(u.rate, unit.in = "mg/l s-1", unit.out = "mg/h", volume = 1.89)
 ```
 
 Or, the user may convert a known rate to a volume-corrected, mass-specific rate:
 
 ```{r}
-calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
+calc.mo2(u.rate, unit.in = "mg/L/second", unit.out = "mg s-1 kg-1", volume = 1.89, mass = 0.13)
 ```
 
-In either case, the conversion is applied as long as the input and output units are identified.
 
 ## Reproducibility
 
