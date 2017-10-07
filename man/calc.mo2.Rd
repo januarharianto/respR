@@ -4,13 +4,11 @@
 \alias{calc.mo2}
 \title{Calculate volume and/or mass-specific rate of change in oxygen concentration}
 \usage{
-calc.mo2(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
-  S = 35, t = 25, P = 1.013253)
+calc.mo2(x, z, unit.out, volume = NULL, mass = NULL, rank = 1, S = 35,
+  t = 25, P = 1.013253)
 }
 \arguments{
 \item{x}{numeric, or an object of class \code{calc.rate} or \code{auto.rate}. The input object to calculate the conversion.}
-
-\item{unit.in}{character string. The units to convert from. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
 
 \item{unit.out}{character string. The units to convert into. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
 
@@ -25,6 +23,8 @@ calc.mo2(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
 \item{t}{numeric. Temperature in degrees C, defaults to 25.}
 
 \item{P}{numeric. Pressure unit in bar, defaults to 1.013253.}
+
+\item{unit.in}{character string. The units to convert from. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
 }
 \value{
 An object containing a list of outputs:
