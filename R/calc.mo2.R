@@ -40,6 +40,7 @@
 #'
 #' @seealso [calc.rate] auto.rate
 #' @importFrom stringr str_extract
+#' @importFrom stringr str_extract str_replace
 #' @export
 #'
 #' @examples
