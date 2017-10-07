@@ -35,12 +35,13 @@ devtools::install_github("januarharianto/respR")
 When working with respirometry data, you will often need to:
 
 1. Ensure that the data, or at least a subset of the data, is representative of the research question of interest.
-2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration.
-3. Correct for background changes in oxygen concentration, and then scale the result to the volume (of the medium) and mass (of the animal).
+2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.
+3. Correct for background usage of oxygen by micro-organisms.
+4. Scale the resulting usage rate to the volume (of the medium) and mass (of the animal), and convert to appropriate units
 
 The `respR` package contains several functions to make these actions quick and easy:
 
-- It provides quick visual feedbacks and diagnostic plots to help you subset and analyse your data.
+- It provides visual feedbacks and diagnostic plots to help you subset and analyse your data.
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked maximum, minimum or best fit sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
 
@@ -49,20 +50,24 @@ The `respR` package contains several functions to make these actions quick and e
 There are 6 main functions in `respR`:
 
 1. `check.input()` checks for structural errors and select individual data from multi-column datasets.
-2. `calc.bg.rate()` calculates background changes in oxygen concentration.
+2. `calc.bg.rate()` calculates background changes in oxygen concentration from 'blank' experiments.
 3. `calc.rate()` calculates the rate of change of oxygen concentration over time in a data frame, or its subset.
-5. `auto.rate()` automatically determines maximum, minimum, or "best fit" rate of change of DO over time.
-6. `calc.mo2()` converts a number, or an object of class of `calc.rate`, to volume and/or weight-specific rates of change in oxygen concentration.
+4. `auto.rate()` automatically determines maximum, minimum, or "best fit" rate of change of DO over time.
+5. `calc.mo2()` converts a number, or an object of class of `calc.rate`, to volume and/or mass-specific rates of change in oxygen concentration.
+6. `pcrit()` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
+<!-- We should definitley push PCrit as a major part of the package --> 
 
 In addition, a few useful functions exist for specific data preparation and analysis scenarios:
 
 7. `convert.do()` converts dissolved oxygen units (e.g. from % to mg/L).
 8. `subsample.data()` thins a large dataset by sampling every *n* rows.
-9. `pcrit()` calculates the breakpoint in metabolic rate, based on methods in Yeager and Ultsch (1989).
+<!-- 9. smooth data?? I know there are many R packages to do this, and smoothed data really shouldn't give different results from our functions. But it can be useful in visualisation of very noisy data. And we want R noobs to use this too, so would be useful to have. Even just my function that did moving average and loess smoothing could be dropped in here --> 
+<!-- Also maybe something here about future planned functionality? Or leave it to somewhere else in teh docs?--> 
 
 ## A typical workflow
 
 To explore `respR` and its main functions we load the first example data, `urchin2013`. The dataset contains measurements of oxygen consumption in 16 individual sea urchins (*Heliocidaris erythrogramma*) and 2 "blank" measurements of background respiration (Harianto, *unpublished*). Detailed information about the data, including its source and methods, can be obtained with the command `?urchin2013`.
+<!-- I guess you know, but this isn't working...  --> 
 
 
 ```{r}
@@ -74,35 +79,55 @@ urchin2013
 
 ### Use `check.input()` to check for common errors
 
-We first use `check.input` to scan the dataset for missing data, non-numeric data equal data lengths. Duplicate and unevenly-spaced data, specific to time, are also examined. Checks are performed on all columns in the data, regardless of data type:
+We first use `check.input` to scan the dataset for missing data, non-numeric data, and equal data lengths. Two checks intended only for time data are also performed; checks for duplicate and unevenly-spaced data. However, all checks are performed on all columns in the data, regardless of data type. 
 
 ```{r, eval=FALSE}
 check.input(urchin2013)
 ```
 
-We can also subset a 2-column data frame from the dataset directly, by specifying the *x* and *y* arguments that correspond to columns in the data frame. The function will automatically identify the first column as time data, and the second column as oxygen concentration data. Error checks will be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out).
+<!-- Here we need short explanation of what the output actually means. I also think the notation in this function should be changed to Y/N or Y/blank/-. The X is confusing - you mean it to mean a yes, but i would read it as a no. And i woiuld include results in the 'Data are numeric' row. Titles are not clear also  - is this testing FOR duplicates or for NO duplicates. 
+
+So i would suggest|: Y = Yes/Test Passed, N or blank = No/Test Failed, 
+
+Length of data - as is 
+Data are numeric - should read 'Y' in every cell if passed
+NA/NaN - renamed to "NA/NaN not present" or "No NA/NaN detected", and 'Y' in every cell if passed 
+Duplicates - renamed to "Duplicates detected", Y or N/blank
+Evenly-spaced - renamed to "UNevenly spaced", Y or N/blank
+
+User is basically looking for all Y's to know data is ok to use, EXCEPT for time columns where a Y in either of the last two means they need to think about/fix their data. I've gone back and forward a bit thinking about it while I'm writing this, so not convinced this is best...
+
+Ideally the function would be told which columns were time and O2 to avoid doing the dupe/spacing tests on O2 data, but i can see you are avoiding making the user do that, so that's fine. I would probably force them to keep the time in column 1, but i can see how this makes the function more capable/practical. (and yeah, you address some of this in following)
+-->
+
+
+
+We can also subset a 2-column data frame from the dataset directly, by specifying the *x* and *y* arguments that correspond to columns in the data frame. The function will automatically consider the first column (x) as time data, and the second column (y) as oxygen concentration data. Error checks will therefore be specific to the data types, and error messages are more informative (e.g. duplicates in time data will be called out).
 
 With two-column data, `check.input()` will automatically remove NA data and produce a new data frame that we can use for subsequent analyses. A scatterplot of the data is produced automatically for quick visual inspection.
 
 ```{r, fig.width=7, fig.height=7}
 u2 <- check.input(urchin2013, x = 1, y = 15)
 ```
+<!-- see above. I would use Y/N. And for this no point doing the dupe/spacing test for the O2 data at all, so leave blank or use '-' in output. Also change to xcol and ycol to be consistent with calc.bg.rate below --> 
 
-From the plot, non-linear irregularities in the data are evident. In this case, there is a change in the rate of oxygen uptake near the end of the timeseries (the sea urchin had climbed on top of the oxygen sensor, blocking it from surrounding water). A linear regression of the data frame would result in an underestimate of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
+From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. We have several options to manage irregular, or non-linear portions of the data. For now, the data frame is saved as an object for later analysis.
 
 **It should be noted that invoking `check.input` is optional** - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running `check.input` is a qualitative step that simply flags potential issues about the data before it is analysed.
 
 
 ### Use `calc.bg.rate()` to process background rates for later use
 
-The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and some users may want to account for background rates while running the main experiment. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
+The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and users may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called "blank" experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
-The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object.
+The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the same time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object. 
 
 ```{r}
 ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
 print(ubg)
 ```
+<!--  Change 'Average Rate' to 'Average Background Rate' in the summary. Since they are used a lot I think we also need to clarify what b0 and b1 represent in these summaries. Or rename them. b0 is really of no interest, it's b1 is the important one  -->
+<!--  Also does this support subsetting too? We might need that - ability to easily specify section of the data to use/trim data. Not a priority though. For now, maybe we can just specify this to be done manually before use. -->
 
 ### Use `calc.rate()` to perform the linear regression
 
@@ -112,18 +137,22 @@ Calling the function `calc.rate()` on a data frame, with no additional arguments
 calc.rate(u2)
 ```
 
-In many cases, there is a need to truncate the data before rate could be determined, and the reasons for doing so may depend on the goal of the study being conducted. For example, a user may want to determine rate over an exact period of time, or only estimate the rate that is within a threshold of O~2~ concentration. Equipment interference may also cause temporary irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results.
+In many cases, there is a need to truncate or subset the data before rate is determined. For example, a user may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may also cause irregularities or "spikes" in the data. We can work around the error and subset the regions that are not erroneous and still obtain valid results.
 
 Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
 1. Time period (`by = "time"`) - *"What is the average rate over a 25 minute period?"*
-2. Total oxygen consumed/produced (`by = o2`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
-3. Proportion based on total oxygen consumed (`by = proportion`) - *"What is the rate from halfway down the data?"*
-4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
+2. Total oxygen consumed/produced (`by = "o2"`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
+3. Proportion based on total oxygen consumed (`by = "proportion"`) - *"What is the rate from halfway down the data?"*
+4. Precise subsetting by row for any other reason (`by = "row"`). - *"I'd like to subset between rows 11 and 273."*
 
+Note that for `by = "time"` and `by = "o2"` inputs, exact matching values need not necessarily exist in the experimental data. The function identifies the closest matching `time` or `o2` values to the inputs and uses these for all subsequent calculations. 
+<!--  This is true for both, yeah? Seems to be from my testing -->
 
-Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate`. Note that a user may also include background adjustments by including it as a number as long as the units match e.g. `background = 0.1`. Calling `summary()` shows a summary of data subset locations. 
+Here we subset the data by time, and include the background rate saved from `calc.bg.rate`. Note that a user may also enter background adjustments manually as long as this rate has been determined using the same units e.g. `background = -0.001`. Care should be taken to ensure this value has the correct, *negative* sign since it typically represents a rate of subtraction of oxygen from the medium.  Calling `summary()` shows a summary of data subset locations. 
 
+<!-- just changed that background rate value to match rounding up the average from ubg --> 
+<!-- ALSO NEED TO BE REALLY CAREFUL WITH +/-!!! --> 
 
 ```{r}
 u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", bg = ubg)
@@ -131,22 +160,24 @@ print(u.rate)
 
 summary(u.rate)
 ```
+<!-- change the column names in this summary output to match those in the printed one - i.e. Adj. Rate etc. And again, maybe quick description of the output --> 
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
 ```{r}
 plot(u.rate)
 ```
+<!--  In these plots (and other summary plots) - change title to 'Close-up Region' (not Closed-up). And also add the rsq to the regr equation -->
 
 ### Use `calc.mo2()` to scale to volume- and/or mass-specific rates
 
-Once the rate of change of oxygen has been determined, the user may either want to calculate:
+Once the rate of change of oxygen has been determined, the user may want to calculate:
 
 1. O~2~ consumed per unit time
 2. mass-specific rate of change in O~2~
 
-By specifying the relevant units and values in the function `calc.mo2()`, the user can obtain either output automatically.
+The user can obtain these by specifying the relevant units and values in the function `calc.mo2()`.
 
-For example, the user may convert the output of `calc.rate` to O~2~ consumed over an hour:
+For example, the user may convert the output of `calc.rate` to O~2~ consumed per hour:
 
 ```{r}
 calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/h", volume = 1.89)
@@ -158,11 +189,19 @@ Or, the user may convert a known rate to a volume-corrected, mass-specific rate:
 calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
 ```
 
+Note, values for volume and mass should be entered in SI units of litres (l) and grams (g).
+<!-- or kg? -->
+
+<!-- Ok, so i think we need to change how this works.  Putting the rate as mg/l/s - or really (mg/l)/s - i have not seen done before, and i think it will be very confusing. I think we need separate input units in for conc and time. So o2.unit and time.unit (I don't think we need the 'in') and then unit.out as you have it (or maybe output.unit for consistency). I think that will be much easier to understand. Users will instinctively know - or should - the two units thier original data is in, so much easier to have them input those, than have them parse them mentally into a rate. This is the first time we ask them to consider units so need to keep it simple. 
+
+It also means the function can be used with a metadata object for different experiments which has the units in it as variables. So like o2.unit = exp.variables[1,2] where that's a field that has % or mg/L or whatever in it. -->
+
 In either case, the conversion is applied as long as the input and output units are identified.
+<!--  not really sure what this sentance adds -->
 
 ## Reproducibility
 
-We have ensured that any computational analysis performed by `respR` can be reproduced by another user. The main functions all produce an output list object which contains all the data and variables needed to re-analyse the results, within R or in other software. Individual objects in the list can be extracted using `$` for verification or further data manipulation, which include the original and subset data frames.
+We have ensured that any analyses performed by `respR` can be reproduced by another user. The main functions all produce an output list object which contains all the data and variables needed to repeat the analyses, within R or in other software. Individual objects in the list can be extracted using `$` for verification or further data manipulation, which include the original and subset data frames.
 
 ```{r}
 # grab subset locations that were used to subset the main data frame:
@@ -172,7 +211,7 @@ u.rate$results
 
 ## Further reading
 
-This document introduces to you the basic methods of analysing respirometry data, but there are many other functions and user cases not explored. The following vignettes provide additional example workflows based on user needs, and may be useful to you:
+This document introduces the basic analysis of respirometry data using respR, but there are many other functions and user cases. The following vignettes provide additional example workflows based on user needs, and may be useful to you:
 
 1. [Measuring intermittent data](intermittent.html).
 2. Maximum, minimum and interval analyses.
