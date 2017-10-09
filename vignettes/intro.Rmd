@@ -19,11 +19,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7
 
 ### Installation
 
-The stable version of `respR` is available on GitHub and (soon) CRAN (recommended).
+The stable version of `respR` is available on GitHub and (soon) CRAN.
 
 ```{r, eval=F}
 # CRAN
-install.packages("respR")
+# install.packages("respR")  # preparing for submission, does not work
 #
 # GitHub
 # install.packages("devtools")  # run if devtools is not installed
@@ -101,13 +101,13 @@ The presence of microorganisms in the respirometry medium may be a potential sou
 The function `calc.bg.rate()` can be used to simultaneously process multiple background rate measurements as long as they share the time data. In `urchin2013`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc.bg.rate()` and save the output as an object.
 
 ```{r}
-ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = T)
-print(ubg)
+ubg <- calc.bg.rate(urchin2013, xcol = 1, ycol = c(18:19), plot = F) # use "plot = T"" to see the plots
+ubg # print
 ```
 
 ### Use `calc.rate()` to perform the linear regression
 
-Calling the function `calc.rate()` on a data frame, with no additional arguments, will prompt the function to perform a linear regression on the entire data frame.
+Calling the function `calc.rate()` on a data frame, with no additional arguments, will prompt the function to perform a linear regression on the entire data frame. The function will automatically consider the first column as time data, and the second column as oxygen concentration data.
 
 ```{r}
 calc.rate(u2)
@@ -117,20 +117,19 @@ In many cases, there is a need to truncate or subset the data before rate is det
 
 Based on the `from` and `to` arguments, a user may use `calc.rate` to truncate data in any of 4 ways:
 
-1. Time period (`by = "time"`) - *"What is the average rate over a 25 minute period?"*
-2. Total oxygen consumed/produced (`by = o2`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
-3. Proportion based on total oxygen consumed (`by = proportion`) - *"What is the rate from halfway down the data?"*
-4. Precise subsetting by row for any other reason (`by = row`). - *"I'd like to subset between rows 11 and 273."*
+1. **Time period** (`by = "time"`) - *"What is the average rate over a 25 minute period?"*
+2. **Total oxygen consumed/produced** (`by = "o2"`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
+3. **Proportion based on total oxygen consumed** (`by = "proportion"`) - *"What is the rate from halfway down the data?"*
+4. **Precise subsetting by row** (`by = "row"`). - *"I'd like to subset between rows 11 and 273."*
 
-Note that for by = "time" and by = "o2" inputs, exact matching values need not necessarily exist in the experimental data. The function identifies the closest matching time or o2 values to the inputs and uses these for all subsequent calculations.
+Note that for values of O~2~ and time that do not match any value in the data, the function will identify the closest matching time or O~2~ values to the inputs, rounded down, and uses these for subsequent calculations.
 
-Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate()`. Note that we may also enter background adjustments manually as long as this rate has been determined using the same units e.g. `background = -0.001`. Care should be taken to ensure this value has the correct sign. For example, background respiration typically represents a rate of subtraction of O~2~ from the medium, and is therefore a negative value. Calling `summary()` shows a summary of data subset locations. 
+Here we subset the data by time, and include background respiration that had been saved by `calc.bg.rate()`. We may also enter background adjustments manually, as long as this rate has been determined using the same units e.g. `background = -0.001`. Care should be taken to ensure this value has the correct sign. For example, background respiration typically represents a rate of subtraction of O~2~ from the medium, and is therefore a negative value. Calling `summary()` shows a summary of data subset locations. 
 
 
 ```{r}
 u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", bg = ubg)
-print(u.rate)
-
+u.rate # print
 summary(u.rate)
 ```
 
@@ -146,22 +145,28 @@ Once the rate of change of oxygen has been determined, we may either want to cal
 1. Total change in O~2~ per unit time; or
 2. Mass-specific rate of change in O~2~.
 
-The function `calc.mo2()` can be used to scale $\Delta O_2$ to volume and/or mass.  using a string matching algorithm that recognises variations in base units automatically. For example, `"ml"`, `"mL"`, `"milliliter"`, and `"millilitre"` are all equally identified as `mL`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`.
-
-Due to the "fuzzy" approach in the matching algorithm, writing unit strings for `calc.mo2()` should come naturally for most people. 
-As long as the input and output units are identified, the conversion will be applied automatically. In the function, the argument "`unit.in`" is where we provide the units of O~2~ concentration and time that were used in the experiment. The user 
-
+The function `calc.mo2()` can be used to scale rate values to volume and/or mass. 
 
 For example, the user may convert the output of `calc.rate` to O~2~ consumed over an hour:
 
 ```{r}
-calc.mo2(u.rate, unit.in = "mg/l s-1", unit.out = "mg/h", volume = 1.89)
+calc.mo2(u.rate, o2.unit = "mg/L", time.unit = "sec", output.unit = "mg/s", 
+  volume = 1.89)
 ```
 
 Or, the user may convert a known rate to a volume-corrected, mass-specific rate:
 
 ```{r}
-calc.mo2(u.rate, unit.in = "mg/L/second", unit.out = "mg s-1 kg-1", volume = 1.89, mass = 0.13)
+calc.mo2(u.rate, o2.unit = "mgl-1", time.unit = "s", output.unit = "mg/s/kg",
+  volume = 1.89, mass = 0.13)
+```
+
+A string matching algorithm is used to automatically recognise variations in base units. For example, `"ml/s"`, `"mL/sec"`, `"milliliter/s"`, and `"millilitre/second"` are all equally identified as `mL/s`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`.
+
+Due to the "fuzzy" approach in the matching algorithm, writing unit strings for `calc.mo2()` should come naturally and intuitively for most people. As long as the units are recognised by the function, the conversion will take place. If we need a reminder on what units are available to use, we can call `unit.args()`:
+
+```{r}
+unit.args()
 ```
 
 
@@ -193,6 +198,7 @@ ubg <- calc.bg.rate(urchin2013, timecol = 1, bgcol = c(18:19), plot = T) # calcu
 u.rate <- calc.rate(u2, from = 4, to = 29, by = "time", background = ubg)  # perform regression
 plot(u.rate)  # view plot diagnostics of regression
 # calculate mass-specific MO2, given known volume of container and mass of specimen:
-calc.mo2(u.rate, unit.in = "mg/l/s", unit.out = "mg/s/kg", volume = 1.89, mass = 0.13)
+calc.mo2(u.rate, o2.unit = "mgl-1", time.unit = "s", output.unit = "mg/s/kg", 
+  volume = 1.89, mass = 0.13)
 
 ```
