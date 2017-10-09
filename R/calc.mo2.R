@@ -7,15 +7,17 @@
 #' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
+#'
 #' @param x numeric, or an object of class `calc.rate` or `auto.rate`. The input object to calculate the conversion.
-#' @param unit.in character string. The units to convert from. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
-#' @param unit.out character string. The units to convert into. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
 #' @param volume numeric. The volume of medium to correct to. Must be in litres (L).
 #' @param mass numeric (optional). The mass of the speciment to correct to. Must be in kilograms (kg).
 #' @param rank numeric (optional). If the input is of class `auto.rate`, the user may convert any of the ranked outputs by specifying the rank here. Note: not used for other input types.
 #' @param S numeric. Salinity, defaults to 35.
 #' @param t numeric. Temperature in degrees C, defaults to 25.
 #' @param P numeric. Pressure unit in bar, defaults to 1.013253.
+#' @param o2.unit character string. Your unit for oxygen concentration. Defaults to `"mg/l"`. Options can be viewed by calling `check.units()`.
+#' @param time.unit character string. Your unit for time. Defaults to `"s"`. Options can be viewed by calling `check.units()`.
+#' @param output.unit character string. Your unit for output. Defaults to `"mg/s/kg"`. Options can be viewed by calling `check.units()`.
 #'
 #' @return An object containing a list of outputs:
 #' \describe{
