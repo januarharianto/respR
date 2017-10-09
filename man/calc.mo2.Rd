@@ -55,7 +55,17 @@ intermittent data).}
 This is a conversion function that can convert value(s) of rate of change in oxygen concentration to volume-specific, and/or volume- and mass-specific rate of change in oxygen concentration.
 }
 \details{
-\code{calc.mo2} integrates well with output objects from \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}. Alternatively, the user may convert any numeric vector.
+\strong{Integration}
+
+\code{calc.mo2()} integrates well with output objects from \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}. Alternatively, the user may convert any numeric vector.
+
+\strong{String matching}
+
+A string-matching algorithm is used to identify the units for \code{o2.unit}, \code{time.unit} and \code{output.unit}. First of all, the most common styles of writing units are supported. For example, these are all the same: \code{mg/L; mg/l, mg L-1, mgL-1, mg per litre, mg.l-1, mg.L-1}. Similarly for time, these are all the same: \code{s, second, sec}. Therefore, an outpot for weight-specific rate of change in O~2~ concentration can be provided intuitively, e.g. \code{"mg/s/kg"} or \code{"mg s-1 kg-1"}, and the function should accept variations in style without error.
+
+\strong{Support}
+
+Supported units can be viewed by calling the function \code{\link[=unit.args]{unit.args()}}. As of now, we do not support conversions for units of pressure, e.g. mmHg, Torr, but are planning to do so in a future version.
 }
 \examples{
 x <- calc.rate(sardine, bg = 0.0001234)
@@ -69,7 +79,7 @@ calc.mo2(x, "\%/s", "mg/s/g", volume = 1, mass = .5)
 
 }
 \seealso{
-\link{calc.rate} auto.rate
+\code{\link[=calc.rate]{calc.rate()}}, \code{\link[=auto.rate]{auto.rate()}}, \code{\link[=unit.args]{unit.args()}}
 }
 \author{
 Januar Harianto & Nicholas Carey
