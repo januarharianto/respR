@@ -99,7 +99,7 @@ check.input <- function(df, xcol = NULL, ycol = NULL, plot = T) {
 
   # this activates when a 2-column data is selected, or if x and y are NOT NULL
   # the function will process the data frame i.e. convert numeric, remove NAs
-  if (length(df) == 2 | !is.null(x) | !is.null(y)) {
+  if (length(df) == 2 | !is.null(xcol) | !is.null(ycol)) {
     if (test.lens == F) stop("Data columns are not of equal length.\nDataframe NOT generated.", call. = F)
 
     if(test.class[1] == 'integer' | test.class[2] == 'integer') {
