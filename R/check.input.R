@@ -25,9 +25,9 @@
 #'
 #' @md
 #' @param df data frame. containing at least 2 columns of data.
-#' @param x numeric. Corresponds to column number. `x = 1` will subset the first
-#'   column of the data frame. Must be time data.
-#' @param y numeric. Corresponds to column number. `y = 2` will subset the
+#' @param xcol numeric. Corresponds to column number. `xcol = 1` will subset the
+#'   first column of the data frame. Must be time data.
+#' @param ycol numeric. Corresponds to column number. `ycol = 2` will subset the
 #'   second column of the data frame. Must be dissolved oxygen data.
 #' @param plot logical. When TRUE, a plot of the data is automatically produced
 #'   if the data frame subset contains 2 columns. Otherwise, this does nothing.
@@ -39,18 +39,18 @@
 #'
 #' @examples
 #' check.input(urchin2013)  # this does not produce a data frame object
-#' check.input(urchin2013, x = 1, y = 15)  # this produces a data frame object
+#' check.input(urchin2013, xcol = 1, ycol = 15)  # this produces a data frame object
 #' check.input(sardine)  # this produces a data frame object
 #'
-check.input <- function(df, x = NULL, y = NULL, plot = T) {
+check.input <- function(df, xcol = NULL, ycol = NULL, plot = T) {
   df <- tibble::as_tibble(df)
   # if no columns are selected
-  if (is.null(x) && is.null(y)) {
+  if (is.null(xcol) && is.null(ycol)) {
     df <- df
-  } else if (is.numeric(x) && is.numeric(y)) {
+  } else if (is.numeric(xcol) && is.numeric(ycol)) {
     # otherwise, select columns
-    x <- df[,x]
-    y <- df[,y]
+    x <- df[,xcol]
+    y <- df[,ycol]
     df <- data.frame(x, y)
   } else stop("The arguments 'x' and/or 'y' must be numeric.")
 
