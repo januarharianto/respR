@@ -89,7 +89,14 @@ auto.rate <- function(df, width = NULL, by = "row",
     if (equal.lengths(diff(df[[1]])) == F)
       stop("Time intervals are not evenly spaced. Please subset by `row`.",
         call. = F)
-      }
+  }
+  # Check that df is a data.frame object:
+  if (any(class(df) != "data.frame"))
+    stop("Input must be a data.frame object.")
+  # Make sure that `logic` is correct:
+  if (!(logic == "automatic" | logic == "max" | logic == "min" |
+      logic == "interval"))
+    stop("The `logic` argument can only be 'automatic', 'max', 'min' or 'interval'.")
   # How are we subsetting the data?
   # Note: only "time" and "row" supported here.
   if (by == "row") {
