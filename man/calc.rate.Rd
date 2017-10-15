@@ -25,6 +25,8 @@ respiration.}
 
 \item{plot}{logical. When set to "\code{TRUE}" (default), will plot a quick visual
 of the data and its subset(s).}
+
+\item{verbose}{logical. Set to FALSE to surpress messages. Defaults to TRUE.}
 }
 \value{
 An object of class \code{calc.rate} containing a list of outputs:
