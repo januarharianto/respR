@@ -76,6 +76,24 @@
 #'
 calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   plot = T, verbose = T) {
+  # ======================
+  # Catch input errors
+  # There's probably a better way to do this... but here goes:
+  # Check that df is a data.frame object:
+  if (any(class(df) != "data.frame"))
+    stop("Input must be a data.frame object.")
+  # Check `from` and `to` are correct:
+  if (is.numeric(from) && is.numeric(to)) {
+    if (by == "time" | by == "row") {
+      if (from > to)
+        stop("The `from` argument must not be bigger than the `to` argument.")
+    }
+  }
+  # Make sure that `by` is correct:
+  if (!(by == "time" | by == "row" | by == "o2" | by == "proportion"))
+    stop("The `by` argument can only be 'time', 'row', 'o2' or 'proportion'.")
+
+  # ======================
   # Inform user that lm will be performed on entire dataset if "start" and "end"
   # are not defined:
   if (is.null(from) && is.null(to)) {
