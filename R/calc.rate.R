@@ -11,6 +11,7 @@
 #' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
+#'
 #' @param df data frame. Should contain time (column 1) vs oxygen concentration
 #'   (column 2) data.
 #' @param from numeric vector. Defines the upper bound(s) of the data frame
@@ -23,6 +24,7 @@
 #'   respiration.
 #' @param plot logical. When set to "`TRUE`" (default), will plot a quick visual
 #'   of the data and its subset(s).
+#' @param verbose logical. Set to FALSE to surpress messages. Defaults to TRUE.
 #'
 #' @return An object of class `calc.rate` containing a list of outputs:
 #' \describe{
