@@ -85,7 +85,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # Check `from` and `to` are correct:
   if (is.numeric(from) && is.numeric(to)) {
     if (by == "time" | by == "row") {
-      if (from > to)
+      if (any(from > to))
         stop("The `from` argument must not be bigger than the `to` argument.")
     }
   }
