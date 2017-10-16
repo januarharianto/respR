@@ -126,22 +126,25 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
     rate.2pt = (to.o2 - from.o2) / time.len)
   # ----------------------------------------------------------------------------
   # If background (bg) argument is provided, correct for bg and update summary.
-  # Also calculate weighted mean if multiple regressions were specified.
+  # Also calculate mean and weighted mean if multiple regressions were made:
   if (is.null(bg)) {
-    results  <- fits
-    rate <- weighted.mean(results$b1, results$time.len)
-    adj.rate <- NULL
+    results <- fits
+    rate    <- mean(results$b1)
+    w.rate  <- weighted.mean(results$b1, results$time.len)
+    adj.w.rate <- NULL
   } else if (class(bg) == "calc.bg.rate") {
     bg <- bg$rate
     results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
     results <- select(results, b0, b1, bg, `b1-bg`, everything())
-    rate <- weighted.mean(results$b1, results$time.len)
-    adj.rate <- rate - results$bg[[1]]  # bg-adjust, if needed
+    rate    <- mean(results$b1)
+    w.rate  <- weighted.mean(results$b1, results$time.len)
+    adj.w.rate <- w.rate - results$bg[[1]]  # bg-adjust, if needed
   } else if (class(bg) == "numeric") {
     results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
     results <- select(results, b0, b1, bg, `b1-bg`, everything())
-    rate <- weighted.mean(results$b1, results$time.len)
-    adj.rate <- rate - results$bg[[1]]  # bg-adjust, if needed
+    rate    <- mean(results$b1)
+    w.rate  <- weighted.mean(results$b1, results$time.len)
+    adj.w.rate <- w.rate - results$bg[[1]]  # bg-adjust, if needed
   }
   # ----------------------------------------------------------------------------
   # Plot the result, if set to TRUE
@@ -160,7 +163,8 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
       to         = to,
       results    = results,
       rate       = rate,
-      adj.rate   = adj.rate)
+      w.rate     = w.rate,
+      adj.w.rate = adj.w.rate)
   } else {
     # This is generated if "bg" argument is included:
     out <- list(
@@ -172,8 +176,9 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
       by         = by,
       results    = results,
       rate       = rate,
+      w.rate     = w.rate,
       background = bg,
-      adj.rate   = adj.rate)
+      adj.w.rate = adj.w.rate)
   }
   if(verbose == T) {
     message(sprintf("Data subset is by %s.", out$by))
