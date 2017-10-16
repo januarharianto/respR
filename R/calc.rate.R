@@ -122,7 +122,8 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # Add additional calculations:
   fits <- mutate(fits,
     row.len  = to.row - from.row + 1,
-    time.len = to.time - from.time)
+    time.len = to.time - from.time,
+    rate.2pt = (to.o2 - from.o2) / time.len)
   # ----------------------------------------------------------------------------
   # If background (bg) argument is provided, correct for bg and update summary.
   # Also calculate weighted mean if multiple regressions were specified.
