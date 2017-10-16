@@ -439,7 +439,7 @@ rollfit <- function(df, width) {
 #'
 k.peaks <- function(x) {
   # Perform kernel density estimation:
-  dns <- density(x$b1, na.rm = T, bw = "nrd0", n = length(x$b1))
+  dns <- density(x$b1, na.rm = T, bw = "SJ-ste", n = length(x$b1))
   pks <- which(diff(sign(diff(dns$y))) == -2) + 1  # ID peaks in density
   # Match peaks to density data:
   pks <- bind_rows(lapply(pks, function(x)
