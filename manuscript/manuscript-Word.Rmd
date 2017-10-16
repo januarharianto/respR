@@ -1,0 +1,26 @@
+---
+title: "Manuscript_Word"
+author: "Januar Harianto"
+date: "13/10/2017"
+output: 
+  word_document:
+    reference_docx: "styles/styles-manuscript-Word.docx"
+---
+
+```{r setup, include=FALSE}
+library(respR)
+library(knitr)
+library(readr)
+
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
