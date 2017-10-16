@@ -6,3 +6,6 @@
 .DS_Store
 inst/doc
 .Rapp.history
+*.html
+/manuscript/manuscript-Word.docx
+/manuscript/manuscript-HTML.html
