@@ -56,13 +56,13 @@ To explore `respR` and its main functions we have provided example data that can
 
 ## Data import and exploration
 
-Data should be formatted correctly before use in `respR`. The function `check.input()` performs error checks on a data frame of any size, and can extract a two-column data frame for data exploration and subsequent analyses. Data must be numeric, because `respR` has limited support for date/time data (e.g. `POSIXct` and `POSIXlt` classes) and performing calculations on different time formats have many caveats that are beyond the scope of the package. Time data, being a continuous variable, should be sequential, without duplicates. Ideally, time data should also be evenly-spaced, that is, the time period between samples are equal, as this has important ramifications on data extraction methods later on and substantial errors may occur if data is analysed by rows instead of time. The function summarises error checks in the R console (see supplementary material) and plot of the data is shown for visual inspection (e.g. Fig. 1).
+Data should be formatted correctly before use in `respR`. The function `check.input()` performs error checks on a data frame of any size, and can extract a two-column data frame for data exploration and subsequent analyses. Data must be numeric, because `respR` has limited support for date/time data (e.g. `POSIXct` and `POSIXlt` classes) and performing calculations on different time formats have many caveats that are beyond the scope of the package. Time data, being a continuous variable, should be sequential, without duplicates. Ideally, time data should also be evenly-spaced, that is, the time period between samples are equal, as this has important ramifications on data extraction methods later on, and substantial errors may occur if data is analysed by rows instead of time. The function summarises error checks in the R console (see supplementary material) and plot of the data is shown for visual inspection (e.g. Fig. 1).
 
-It should be noted that invoking `check.input()` is optional -- the main functions in our package will readily accept any data frame as long as data are numeric. Running `check.input` is an exploratory step that flags potential issues about the data before it is further analysed.  
+It should be noted that invoking `check.input` is optional -- the main functions in our package will readily accept any data frame as long as data are numeric. Running `check.input` is an exploratory step that flags potential issues about the data before it is further analysed.  
 
 ## Estimating $RO_2$
 
-The functions `calc.bg.rate()`, `calc.rate()`, `auto.rate()`, `calc.rate.ft()` and `pcrit()` are used to process raw respirometry data. For delibrate reasons, units of measurements are not specified in any of these functions. Instead, they are specified only during unit conversions in `convert.do()`, or when units are scaled to volume and mass in `calc.mo2()`. Separating the 
+The functions `calc.bg.rate()`, `calc.rate()`, `auto.rate()`, `calc.rate.ft()` and `pcrit()` are used to process raw respirometry data. For delibrate reasons, units of measurements are not required in any of these functions. 
 
 ### Analysing background changes in $RO_2$
 
