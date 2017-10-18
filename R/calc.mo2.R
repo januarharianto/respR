@@ -2,20 +2,32 @@
 #'
 #' This is a conversion function that can convert value(s) of rate of change in oxygen concentration to volume-specific, and/or volume- and mass-specific rate of change in oxygen concentration.
 #'
-#' `calc.mo2` integrates well with output objects from [calc.rate()] and [auto.rate()]. Alternatively, the user may convert any numeric vector.
+#' **Integration**
+#'
+#' `calc.mo2()` integrates well with output objects from [calc.rate()] and [auto.rate()]. Alternatively, the user may convert any numeric vector.
+#'
+#' **String matching**
+#'
+#' A string-matching algorithm is used to identify the units for `o2.unit`, `time.unit` and `output.unit`. First of all, the most common styles of writing units are supported. For example, these are all the same: `mg/L; mg/l, mg L-1, mgL-1, mg per litre, mg.l-1, mg.L-1`. Similarly for time, these are all the same: `s, second, sec`. Therefore, an outpot for weight-specific rate of change in O~2~ concentration can be provided intuitively, e.g. `"mg/s/kg"` or `"mg s-1 kg-1"`, and the function should accept variations in style without error.
+#'
+#' **Support**
+#'
+#' Supported units can be viewed by calling the function [unit.args()]. As of now, we do not support conversions for units of pressure, e.g. mmHg, Torr, but are planning to do so in a future version.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
 #' @md
+#'
 #' @param x numeric, or an object of class `calc.rate` or `auto.rate`. The input object to calculate the conversion.
-#' @param unit.in character string. The units to convert from. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
-#' @param unit.out character string. The units to convert into. Units can be separated by a space, e.g. "`mg l-1 s-1`", a slash, e.g. "mg/l/s". More information about unit strings in [convert.do()].
 #' @param volume numeric. The volume of medium to correct to. Must be in litres (L).
 #' @param mass numeric (optional). The mass of the speciment to correct to. Must be in kilograms (kg).
 #' @param rank numeric (optional). If the input is of class `auto.rate`, the user may convert any of the ranked outputs by specifying the rank here. Note: not used for other input types.
 #' @param S numeric. Salinity, defaults to 35.
 #' @param t numeric. Temperature in degrees C, defaults to 25.
 #' @param P numeric. Pressure unit in bar, defaults to 1.013253.
+#' @param o2.unit character string. Your unit for oxygen concentration. Defaults to `"mg/l"`. Options can be viewed by calling `check.units()`.
+#' @param time.unit character string. Your unit for time. Defaults to `"s"`. Options can be viewed by calling `check.units()`.
+#' @param output.unit character string. Your unit for output. Defaults to `"mg/s/kg"`. Options can be viewed by calling `check.units()`.
 #'
 #' @return An object containing a list of outputs:
 #' \describe{
@@ -38,8 +50,8 @@
 #'   intermittent data).}
 #' }
 #'
-#' @seealso [calc.rate] auto.rate
-#' @importFrom stringr str_extract
+#' @seealso [calc.rate()], [auto.rate()], [unit.args()]
+#' @importFrom stringr str_extract str_replace
 #' @export
 #'
 #' @examples
@@ -51,8 +63,10 @@
 #'
 #' x <- auto.rate(squid, logic = "interval")
 #' calc.mo2(x, "%/s", "mg/s/g", volume = 1, mass = .5)
-calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
-  rank = 1, S = 35, t = 25, P = 1.013253) {
+#'
+calc.mo2 <- function(x, o2.unit = "mg/l", time.unit = "s",
+                     output.unit = "mg/s/kg", volume = NULL, mass = NULL,
+                     rank = 1, S = 35, t = 25, P = 1.013253) {
   # Extract the object class for use later:
   input.class <- class(x)
   # Check that the user has the right inputs:
@@ -89,9 +103,16 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
   # ----------------------------------------------------------------------------
   # Let's convert the DO/time to MO2 first.
   # We identify the input units:
-  u.in <- id.unit(unit.in, "input")  # should identify 2 units
+  o2 <- checkUnits(o2.unit, "o2")
+  time <- checkUnits(time.unit, "time")
+  # Check that they match the database
+  if (o2[1] == F) stop("Input oxygen unit not recognised.", call. = F)
+  if (time[1] == F) stop("input time unit not recognised.", call = F)
+  # Merge the units for checking
+  u.in <- as.matrix(data.frame(unit1 = o2[2], unit2 = time[2]))
+  # --------
   # Then we identify the output units:
-  u.out <- id.unit(unit.out, "output")  # should identify 2-3 units
+  u.out <- id.unit(output.unit, "output")  # should identify 2-3 units
   if (length(u.out) == 3 && is.null(mass))
     stop("Output units specify mass, however mass is not defined (i.e. NULL)",
       call. = F)
@@ -99,8 +120,8 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
     stop("Output units did not specify mass, but a mass value was detected.",
       call. = F)
   # Format the units (for display later):
-  o2.unit <- paste(u.in, collapse = "/")
-  mo2.unit <- paste(u.out, collapse = "/")
+  mo2.unit <- stringr::str_replace(u.out,"\\..*","")
+  mo2.unit <- paste(mo2.unit, collapse = "/")
   # ----------------------------------------------------------------------------
   # Error checks.
   # If output unit requires mass, check if user has that input:
@@ -113,8 +134,8 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
   # This is an internal check. We want to ensure that we're not trying to
   # convert something unexpected.
   s <- "[.][:alnum:]*"  # the string to match
-  o2.match <- all.equal(str_extract(u.in[1], s), str_extract(u.out[1], s))
-  time.match <- all.equal(str_extract(u.in[2], s), str_extract(u.out[2], s))
+  o2.match <- all.equal(stringr::str_extract(u.in[1], s), stringr::str_extract(u.out[1], s))
+  time.match <- all.equal(stringr::str_extract(u.in[2], s), stringr::str_extract(u.out[2], s))
   if (o2.match == FALSE)
     stop("Input and output O2 units cannot be converted!", call = F)
   if (time.match == FALSE)
@@ -183,7 +204,8 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
       temperature = t,
       pressure    = P,
       summary     = summary,
-      unit.in     = o2.unit,
+      o2.unit     = str_replace(o2[2],"\\..*",""),
+      time.unit   = str_replace(time[2],"\\..*",""),
       unit.out    = mo2.unit,
       converted   = rate
     )
@@ -200,7 +222,8 @@ calc.mo2 <- function(x, unit.in, unit.out, volume = NULL, mass = NULL,
       temperature = t,
       pressure    = P,
       summary     = summary,
-      unit.in     = o2.unit,
+      o2.unit     = str_replace(o2[2],"\\..*",""),
+      time.unit   = str_replace(time[2],"\\..*",""),
       unit.out    = mo2.unit,
       converted   = rate,
       weighted    = w.rate
@@ -243,8 +266,9 @@ print.calc.mo2 <- function(x, rank = 1) {
       cat(sprintf("\nMean (weighted) : %f", x$weighted))
     }
   }
-  cat(sprintf("\nInput unit : %s", x$unit.in))
-  cat(sprintf("\nOutput unit: %s", x$unit.out))
+  cat(sprintf("\nInput O2 unit   : %s", x$o2.unit))
+  cat(sprintf("\nInput time unit : %s", x$time.unit))
+  cat(sprintf("\nOutput unit     : %s", x$unit.out))
 }
 
 

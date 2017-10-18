@@ -4,15 +4,18 @@
 \alias{calc.mo2}
 \title{Calculate volume and/or mass-specific rate of change in oxygen concentration}
 \usage{
-calc.mo2(x, unit.in, unit.out, volume = NULL, mass = NULL, rank = 1,
-  S = 35, t = 25, P = 1.013253)
+calc.mo2(x, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/s/kg",
+  volume = NULL, mass = NULL, rank = 1, S = 35, t = 25,
+  P = 1.013253)
 }
 \arguments{
 \item{x}{numeric, or an object of class \code{calc.rate} or \code{auto.rate}. The input object to calculate the conversion.}
 
-\item{unit.in}{character string. The units to convert from. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
+\item{o2.unit}{character string. Your unit for oxygen concentration. Defaults to \code{"mg/l"}. Options can be viewed by calling \code{check.units()}.}
 
-\item{unit.out}{character string. The units to convert into. Units can be separated by a space, e.g. "\code{mg l-1 s-1}", a slash, e.g. "mg/l/s". More information about unit strings in \code{\link[=convert.do]{convert.do()}}.}
+\item{time.unit}{character string. Your unit for time. Defaults to \code{"s"}. Options can be viewed by calling \code{check.units()}.}
+
+\item{output.unit}{character string. Your unit for output. Defaults to \code{"mg/s/kg"}. Options can be viewed by calling \code{check.units()}.}
 
 \item{volume}{numeric. The volume of medium to correct to. Must be in litres (L).}
 
@@ -52,7 +55,17 @@ intermittent data).}
 This is a conversion function that can convert value(s) of rate of change in oxygen concentration to volume-specific, and/or volume- and mass-specific rate of change in oxygen concentration.
 }
 \details{
-\code{calc.mo2} integrates well with output objects from \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}. Alternatively, the user may convert any numeric vector.
+\strong{Integration}
+
+\code{calc.mo2()} integrates well with output objects from \code{\link[=calc.rate]{calc.rate()}} and \code{\link[=auto.rate]{auto.rate()}}. Alternatively, the user may convert any numeric vector.
+
+\strong{String matching}
+
+A string-matching algorithm is used to identify the units for \code{o2.unit}, \code{time.unit} and \code{output.unit}. First of all, the most common styles of writing units are supported. For example, these are all the same: \code{mg/L; mg/l, mg L-1, mgL-1, mg per litre, mg.l-1, mg.L-1}. Similarly for time, these are all the same: \code{s, second, sec}. Therefore, an outpot for weight-specific rate of change in O~2~ concentration can be provided intuitively, e.g. \code{"mg/s/kg"} or \code{"mg s-1 kg-1"}, and the function should accept variations in style without error.
+
+\strong{Support}
+
+Supported units can be viewed by calling the function \code{\link[=unit.args]{unit.args()}}. As of now, we do not support conversions for units of pressure, e.g. mmHg, Torr, but are planning to do so in a future version.
 }
 \examples{
 x <- calc.rate(sardine, bg = 0.0001234)
@@ -63,9 +76,10 @@ calc.mo2(x, "mg/l/s", "mg/s/kg", volume = 1, mass = 1)
 
 x <- auto.rate(squid, logic = "interval")
 calc.mo2(x, "\%/s", "mg/s/g", volume = 1, mass = .5)
+
 }
 \seealso{
-\link{calc.rate} auto.rate
+\code{\link[=calc.rate]{calc.rate()}}, \code{\link[=auto.rate]{auto.rate()}}, \code{\link[=unit.args]{unit.args()}}
 }
 \author{
 Januar Harianto & Nicholas Carey

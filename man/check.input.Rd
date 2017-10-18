@@ -4,15 +4,15 @@
 \alias{check.input}
 \title{Check data frame for structural errors}
 \usage{
-check.input(df, x = NULL, y = NULL, plot = T)
+check.input(df, xcol = NULL, ycol = NULL, plot = T)
 }
 \arguments{
 \item{df}{data frame. containing at least 2 columns of data.}
 
-\item{x}{numeric. Corresponds to column number. \code{x = 1} will subset the first
-column of the data frame. Must be time data.}
+\item{xcol}{numeric. Corresponds to column number. \code{xcol = 1} will subset the
+first column of the data frame. Must be time data.}
 
-\item{y}{numeric. Corresponds to column number. \code{y = 2} will subset the
+\item{ycol}{numeric. Corresponds to column number. \code{ycol = 2} will subset the
 second column of the data frame. Must be dissolved oxygen data.}
 
 \item{plot}{logical. When TRUE, a plot of the data is automatically produced
@@ -49,7 +49,7 @@ time-specific errors can be called out.
 }
 \examples{
 check.input(urchin2013)  # this does not produce a data frame object
-check.input(urchin2013, x = 1, y = 15)  # this produces a data frame object
+check.input(urchin2013, xcol = 1, ycol = 15)  # this produces a data frame object
 check.input(sardine)  # this produces a data frame object
 
 }
