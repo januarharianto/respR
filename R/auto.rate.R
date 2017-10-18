@@ -468,7 +468,7 @@ match.data <- function(df, fits, pks, width, bg) {
   bw <- pks$density$bw  # extract bin width
   # Match all regressions used to determine each peak using the bin width:
   mat.regs <- lapply(pks$peaks[,2], function(x)
-    dplyr::filter(fits, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
+    dplyr::filter(fits, b1 <= (x+bw*.03) & b1 >= (x-bw*.03)))
   mat.regs <- mat.regs[sapply(mat.regs, nrow) > 0] # remove zero-length matches
   # Now match to the raw data, using matched regressions:
   mat.raw <- lapply(1:length(mat.regs), function(x)
