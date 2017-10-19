@@ -90,18 +90,21 @@ The function `calc.rate.ft()` is used to specifically analyse flowthrough respir
 
 ## Estimating critical oxygen tension, $P_{crit}$
 
-We provide two methods of estimating $P_{crit}$. The first is a "broken-stick" regression (BSR) approach, adopted from Yeager and Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point. The second method is the segmented, or "broken-line" regression approach, presented by Muggeo (2003) which estimates the critical point by iteratively fitting two intersecting models on the data, and picking the point that minimises the "gap" between the two fitted lines. To determine $P_{crit}$, $RO_2$ (or $MO_2$) and ambient oxygen concentration ($PO_2$) must be provided. If $RO_2$ has not been calculated, `pcrit()` can automatically perform a rolling regression directly from raw respirometry data to generate the data and arrange it against $PO_2$, and then use one of the two methods to estimate the value (Fig. 4).
+We provide two methods of estimating $P_{crit}$. The first is a "broken-stick" regression (BSR) approach, adopted from Yeager and Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point. The second method is the segmented, or "broken-line" regression approach, presented by Muggeo (2003) which estimates the critical point by iteratively fitting two intersecting models on the data, and picking the point that minimises the "gap" between the two fitted lines. To determine $P_{crit}$, $RO_2$ (or $MO_2$) and ambient oxygen concentration ($PO_2$) must be provided. If $RO_2$ has not been calculated, `pcrit()` can automatically perform a rolling regression directly from raw respirometry data to generate the data and arrange it against $PO_2$, and then use one of the two methods to estimate the value (Fig. 4). 
 
 
 ## Converting units of $RO_2$ to $VO_2$ and $MO_2$
 
-For delibrate reasons, units of measurements are not used in any of the functions `calc.bg.rate()`, `calc.rate()`, `auto.rate()`, `calc.rate.ft()` and `pcrit()`. This is because
- 
+For delibrate reasons, units of measurements are not used in any of the functions `calc.bg.rate()`, `calc.rate()`, `auto.rate()`, `calc.rate.ft()` and `pcrit()`. Instead, two functions, `convert.do()` and `calc.mo2()`, need to be called separately to convert units and to perform volumetric or mass-specific scaling. This unique approach has the advantage of allowing us to perform "dimensionless" rate calculations for data that may not be fully supported by the entire `respR` workflow. For example, measurements of respiration can be scaled to surface area (diatoms, Iversen & Ploug, 2013, Naumann et al., 2014), volume (copepod eggs, Hammervold et al., 2015), or density (sea urchin larvae, Stumpp et al., 2011).
 
+The function `convert.do()` is used to convert units of oxygen concentration (e.g. mg/L or %), while `calc.mo2()` directly accepts object outputs from prior rate-calculating functions and performs unit conversions, volumetric and mass-specific conversions at the same time.
 
-# Reproducibility and data accesibility
+# Reproducibility and data accessibility
 
 We have ensured that any computational analysis performed by `respR` are fully reproducible. All main functions produce an output object of class `list`, which contains all the data and variables needed to re-analyse the results, within R or in other software.
+
+# Concluding remarks and future improvements
+
 
 # Tables & Figures
 
@@ -136,3 +139,6 @@ knitr::include_graphics("figs/fig3.png")
 ```
 
 **Fig. 3** Selected output plots from the function `calc.rate()` for the analysis of the data frame `urchin2013`. 
+
+
+# Supplementary Material
