@@ -97,7 +97,9 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # Inform user that lm will be performed on entire dataset if "start" and "end"
   # are not defined:
   if (is.null(from) && is.null(to)) {
+    if (verbose) {
     message("Data bounds not set. Performing analysis on entire data frame.")
+    }
     from <- 1; to <- nrow(df); by <- 'row'
   }
   # Tibbles mess with apply functions, so we convert them into data frames:
@@ -149,7 +151,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # ----------------------------------------------------------------------------
   # Plot the result, if set to TRUE
   alldf <- lapply(1:length(locs), function(x) as.tibble(locs[[x]][[3]]))
-  if (plot == TRUE) multi.p(df, alldf, title = F)
+  if (plot) multi.p(df, alldf, title = F)
   # ----------------------------------------------------------------------------
   # Generate output data:
   if (is.null(bg)) {
@@ -180,7 +182,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
       background = bg,
       adj.w.rate = adj.w.rate)
   }
-  if(verbose == T) {
+  if(verbose) {
     message(sprintf("Data subset is by %s.", out$by))
     if(!is.null(bg)) message("Background correction recognised and applied.")
   }
