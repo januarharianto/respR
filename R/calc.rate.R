@@ -80,7 +80,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # Catch input errors
   # There's probably a better way to do this... but here goes:
   # Check that df is a data.frame object:
-  if (any(class(df) != "data.frame"))
+  if (any(class(df) == "data.frame") == FALSE)
     stop("Input must be a data.frame object.")
   # Check `from` and `to` are correct:
   if (is.numeric(from) && is.numeric(to)) {
