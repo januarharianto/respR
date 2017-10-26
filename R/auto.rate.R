@@ -129,7 +129,7 @@ auto.rate <- function(df, width = NULL, by = "row",
     pks <- k.peaks(fits)  # identify the peaks in kernel density estimate
     out <- match.data(df, fits, pks, width, bg)  # match to roll. reg.
     # --------------------------------------------------------------------------
-  } else stop("Cannot ID the 'logic' argument. Hint: '?auto.rate'".)
+  } else stop("Cannot ID the 'logic' argument. Hint: '?auto.rate'")
   # ----------------------------------------------------------------------------
   # Format some data here to prepare for output summary:
   if (logic == "min" | logic == "max" | logic == "interval") {
