@@ -16,11 +16,8 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports:
     dplyr,
-    data.table, 
     marelac,
-    roll,
-    ggplot2,
-    ggpmisc
+    roll
 Suggests: 
     knitr,
     rmarkdown,
