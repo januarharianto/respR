@@ -104,6 +104,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   }
   # Tibbles mess with apply functions, so we convert them into data frames:
   if (any(class(df) == "tbl")) class(df) <- "data.frame"
+  if (any(class(df) == "data.table")) class(df) <- "data.frame"
   # Error check: ensure that subset inputs are numeric:
   if (!is.numeric(from) | !is.numeric(to))
     stop("'to' and 'from' arguments must be numeric.")
@@ -114,18 +115,18 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
   # Perform linear regressions and add data index locations:
   fits <- lapply(1:length(locs), function(x)
     data.frame(lmfit(locs[[x]][[3]]),
-      from.row  = locs[[x]][[1]],
-      to.row    = locs[[x]][[2]],
-      from.time = df[locs[[x]][[1]],][,1],
-      to.time   = df[locs[[x]][[2]],][,1],
-      from.o2   = df[locs[[x]][[1]],][,2],
-      to.o2     = df[locs[[x]][[2]],][,2]))
+      row     = locs[[x]][[1]],
+      endrow  = locs[[x]][[2]],
+      time    = df[locs[[x]][[1]],][,1],
+      endtime = df[locs[[x]][[2]],][,1],
+      oxy     = df[locs[[x]][[1]],][,2],
+      endoxy  = df[locs[[x]][[2]],][,2]))
   fits <- bind_rows(fits)  # bind into data.frame
   # Add additional calculations:
   fits <- mutate(fits,
-    row.len  = to.row - from.row + 1,
-    time.len = to.time - from.time,
-    rate.2pt = (to.o2 - from.o2) / time.len)
+    row.len  = endrow - row + 1,
+    time.len = endtime - time,
+    rate.2pt = (endoxy - oxy) / time.len)
   # ----------------------------------------------------------------------------
   # If background (bg) argument is provided, correct for bg and update summary.
   # Also calculate mean and weighted mean if multiple regressions were made:
@@ -279,32 +280,32 @@ locate.subdfs <- function(df, index, by) {
   to <- index[[2]]
   # How are we subsetting the data?
   if (by == "time") {
-    from.row  <- Position(function(x) x >= from, df[[1]])
-    to.row    <- Position(function(x) x <= to, df[[1]], right = T)
+    row  <- Position(function(x) x >= from, df[[1]])
+    endrow    <- Position(function(x) x <= to, df[[1]], right = T)
     subdf     <- df[df[,1] >= from & df[,1] <= to, ]
   } else if (by == 'row') {
-    from.row  <- from
-    to.row    <- to
+    row  <- from
+    endrow    <- to
     subdf     <- df[from:to, ] # subset data directly by row
   } else if (by == 'o2') {
-    from.row  <- Position(function(x) x <= from, df[[2]])
-    to.row    <- Position(function(x) x <= to, df[[2]])
-    subdf     <- df[from.row:to.row, ]
+    row  <- Position(function(x) x <= from, df[[2]])
+    endrow    <- Position(function(x) x <= to, df[[2]])
+    subdf     <- df[row:endrow, ]
   } else if (by == 'proportion') {
     max.x <- max(df[2])
     min.x <- min(df[2])
-    from.row  <- Position(function(x) x <= (from*(max.x-min.x)+min.x), df[[2]])
-    to.row    <- Position(function(x) x <= (to*(max.x-min.x)+min.x), df[[2]])
-    subdf     <- df[from.row:to.row, ]
+    row  <- Position(function(x) x <= (from*(max.x-min.x)+min.x), df[[2]])
+    endrow    <- Position(function(x) x <= (to*(max.x-min.x)+min.x), df[[2]])
+    subdf     <- df[row:endrow, ]
   }
   # Error checks:
   # Check that data length is appropriate for further analysis:
   if (nrow(subdf) <= 3 | max(subdf[, 2]) == min(subdf[, 2]))
     stop('Data subset is too narrow. Select a larger threshold.', call. = F)
   # Ensure that end time is later than start time:
-  if (to.row - from.row <= 0)
+  if (endrow - row <= 0)
     stop("End time/row is earlier than or equal to start time.", call. = F)
-  output <- list(from.row, to.row, subdf)
+  output <- list(row, endrow, subdf)
   return(output)
 }
 
