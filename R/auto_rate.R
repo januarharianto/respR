@@ -96,6 +96,7 @@ auto_rate <- function(df, width = NULL, by = "time", method = "default",
   elapsed <- round(toc(), 2)
   message(iters, " regressions performed in ", elapsed, " seconds")
   class(out) <- "auto_rate"
+  if (plot) plot(out)
   return(out)
 }
 
