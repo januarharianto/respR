@@ -82,14 +82,10 @@ auto.rate <- function(df, width = NULL, by = "row",
   if (is.null(width) && by == "row") width <- floor(0.2 * nrow(df))
   # If subsetting by time, width must NOT be null:
   if (is.null(width) && by == "time")
-    stop("Please supply a `width` argument. It is currently NULL by default.",
-      call. = F)
+    stop("Please supply a `width` argument. It is currently NULL by default.")
   # If subsetting by time, time must be evenly spaced.
-  if (by == "time") {
-    if (equal.lengths(diff(df[[1]])) == F)
-      stop("Time intervals are not evenly spaced. Please subset by `row`.",
-        call. = F)
-  }
+  if (by == "time") if (equal.lengths(diff(df[[1]])) == F)
+      warning("Time intervals are not evenly spaced.")
   # Check that df is a data.frame object:
   if (any(class(df) != "data.frame"))
     stop("Input must be a data.frame object.")
@@ -108,7 +104,7 @@ auto.rate <- function(df, width = NULL, by = "row",
     width <- round(width/row.interval + 1)
     fits <- rollfit(df, width)
     # Estimate the no. of rows
-  } else stop("Only 'row'and 'time' arguments are supported in 'by'.", call = F)
+  } else stop("Only 'row'and 'time' arguments are supported in 'by'.")
   fits <- rowid_to_column(fits)  # Append locations to data
   fits <- na.omit(fits)  # Remove NA results as they're not used
   # Select method of analysis: "max", "min", "interval" or "automatic":
@@ -133,7 +129,7 @@ auto.rate <- function(df, width = NULL, by = "row",
     pks <- k.peaks(fits)  # identify the peaks in kernel density estimate
     out <- match.data(df, fits, pks, width, bg)  # match to roll. reg.
     # --------------------------------------------------------------------------
-  } else stop("Cannot ID the 'logic' argument. Hint: '?auto.rate'", call. = F)
+  } else stop("Cannot ID the 'logic' argument. Hint: '?auto.rate'")
   # ----------------------------------------------------------------------------
   # Format some data here to prepare for output summary:
   if (logic == "min" | logic == "max" | logic == "interval") {
@@ -475,7 +471,7 @@ match.data <- function(df, fits, pks, width, bg) {
   bw <- pks$density$bw  # extract bin width
   # Match all regressions used to determine each peak using the bin width:
   mat.regs <- lapply(pks$peaks[,2], function(x)
-    dplyr::filter(fits, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
+    dplyr::filter(fits, b1 <= (x+bw*.03) & b1 >= (x-bw*.03)))
   mat.regs <- mat.regs[sapply(mat.regs, nrow) > 0] # remove zero-length matches
   # Now match to the raw data, using matched regressions:
   mat.raw <- lapply(1:length(mat.regs), function(x)

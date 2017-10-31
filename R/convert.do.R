@@ -17,7 +17,10 @@
 #' @param t numeric. Temperature in degrees C, defaults to 25.
 #' @param P numeric. Pressure unit in bar, defaults to 1.013253.
 #'
+#'
 #' @return a numeric vector.
+#'
+#' @import marelac
 #' @export
 #'
 #' @examples

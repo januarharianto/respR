@@ -1,4 +1,3 @@
-.Rproj
 .Rproj.user
 .Rhistory
 .RData
@@ -6,6 +5,5 @@
 .DS_Store
 inst/doc
 .Rapp.history
-*.html
-/manuscript/manuscript-Word.docx
 /manuscript/manuscript-HTML.html
+/manuscript/manuscript-Word.docx

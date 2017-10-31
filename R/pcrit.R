@@ -55,47 +55,47 @@
 #' summary(pcfish, n = 20)    # prints the top 20 results (just to compare)
 #'
 #'
-pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
-  # if dissolved oxygen to metabolic rate data is already available, skip
-  # rolling regression:
-  if (datmr == TRUE) {
+pcrit <- function(df, from, to, width = (.1 * nrow(df)), has.rate = FALSE,
+  plot = F) {
+  # if rate is provided, skip
+  if (has.rate) {
     mrDo <- na.omit(df)
     df <- NULL
   }
-  if (datmr == F) {
+  # if rate is not provided, we generate it using rolling regression
+  if (has.rate == F) {
     names(df) <- c("x", "y")
     # Convert time to integer, if necessary. We do this because even though
     # check.input ensures that a numeric input is in the time column, it is
     # inevitable that many pcrit experiments use real time (instead of time
     # elapsed) due to the extended nature of pcrit experiments (hours to more
     # than a day). We do want to analyse those experiments.
-    if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))) == T) {
-      df$x   <- as.integer(df$x - df$x[1])
-    }
-    # otherwise, carry on
-    width    <- floor(span * nrow(df))
-    rollreg <- rollfit(df, width)$b1
-    rollmean <- roll_mean(matrix(df[[2]]), width)
+    # Works only for POSIXct and POSIXt classes for now.
+    if (any(inherits(df$x, "POSIXct"), (inherits(df$x, "POSIXt"))))
+      df$x <- as.integer(df$x - df$x[1])
+    #
+    rollreg  <- rollfit(df, width)$b1  # rolling regression to get rate
+    rollmean <- roll_mean(matrix(df[[2]]), width)  # roll mean to match roll reg
     counts   <- length(rollmean) # for benchmark
     mrDo     <- na.omit(data.frame(rollmean, abs(rollreg)))
   }
   # calculate pcrit here
   names(mrDo) <- c('do', 'mr')
-  mrDo        <- mrDo[order(mrDo$do), ]  # sort (ascending)
+  mrDo        <- mrDo[order(mrDo$do), ]  # sort ascending
   indices     <- spawnIndices(nrow(mrDo))  # create matrix for hockey method
-  message("Performing rolling 'hockey' regressions...")
+  message("Performing rolling 'broken-stick' regressions...")
   old         <- Sys.time()  # grab current time (for simple benchmark)
   # some parallel computing here (new trick I learned):
   no_cores <- detectCores() - 1   # calculate the number of cores available
-  cl <- makeCluster(no_cores)   # initiate cluster and use those cores
+  cl <- makeCluster(no_cores)     # initiate cluster and use those cores
   reg <- parApply(cl, indices, 1, hockeyLm, df = mrDo) # perform regressions
   stopCluster(cl)  # release cores
 
   reg         <- do.call(rbind.data.frame, reg)  # bind into a dataframe
   pcrit       <- reg[order(reg$sumRSS), ]
-  pcritRanked <- pcrit[order(pcrit$sumRSS), ] # rank results by RSS
-  best        <- pcritRanked[1, ] # best result
-  new         <- round(unclass(Sys.time() - old)[1], 1)
+  pcritRanked <- pcrit[order(pcrit$sumRSS), ]  # rank results by RSS
+  best        <- pcritRanked[1, ]  # best result
+  new         <- round(unclass(Sys.time() - old)[1], 1)  # for benchmark
   # save data for plots
   time   <- df[[1]]
   do     <- df[[2]]
@@ -104,7 +104,6 @@ pcrit <- function(df, span = 0.05, datmr = FALSE, plot = F) {
 
   out <- list(
     df          = df,
-    span        = span,
     width       = width,
     do.mr       = mrDo,
     pcrit       = pcrit,
@@ -213,7 +212,7 @@ hockeyLm <- function(indx, df) {
     slope2         = b1b,
     sumRSS         = sumRSS,
     # xint         = yint,
-    pcrit.lm       = xint,
+    pcrit.intercept= xint,
     pcrit.mpoint   = (end1 + start2) / 2)
   out
 }
