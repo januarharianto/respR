@@ -11,12 +11,9 @@
 #' @examples
 inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) {
   # CHECK INPUTS
-  if (!is.data.frame(df)) {
-    stop("Test FAILED. `df` input must be a data frame object.")
-  }
-  if (!is.numeric(xcol) | !is.numeric(ycol)) {
-    stop("Test FAILED.'xcol' and 'ycol' inputs must be numeric.")
-  }
+  if (!is.data.frame(df)) stop("Test FAILED. `df` input must be a data frame object.")
+  if (!is.numeric(xcol) | !is.numeric(ycol)) stop("Test FAILED.'xcol' and 'ycol' inputs must be numeric.")
+
   # FORMAT DATA (just in case)
   df <- data.frame(df)
   df <- df[c(xcol, ycol)]
@@ -24,20 +21,15 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
   y <- df[, 2]
   df.len <- nrow(df)
 
-  # PERFORM CHECKS INPUT CHECKS Rule: if logical result is TRUE, the test is a
-  # FAIL. i.e. TRUE = FAIL
+  # PERFORM CHECKS INPUT CHECKS
+  # Rule: if logical result is TRUE, the test is a FAIL. i.e. TRUE = FAIL
 
   # Data columns. Are data numeric or a POSIX class?
   column.check <- test.cols(df)
   # Convert time to numeric if integer:
-  if (column.check$is.x.integer) {
-    df <- column.check$x
-  }
-  if (column.check$test.x) {
-    stop("Test FAILED. Time column (xcol) must be numeric or POSIX.", call. = F)
-  } else if (column.check$test.y) {
-    stop("Test FAILED. Data column (ycol) must be numeric.", call. = F)
-  }
+  if (column.check$is.x.integer) df <- column.check$x
+  if (column.check$test.x) stop("Test FAILED. Time column (xcol) must be numeric or POSIX.", call. = F)
+  if (column.check$test.y) stop("Test FAILED. Data column (ycol) must be numeric.", call. = F)
   # All data. Are there NA/NaN values?
   na.x <- test.na(x)
   na.y <- test.na(y)
@@ -65,35 +57,23 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
 
   if (na.x$check) {
     warning("Time column (xcol) contains NA or NaN data.", call. = F)
-    if (highlight)
-      cat("NA/NaN location(s) in time (xcol), by row:\n", na.x$highlight, "\n")
+    if (highlight) cat("NA/NaN location(s) in time (xcol), by row:\n", na.x$highlight, "\n")
   }
   if (na.y$check) {
     warning("O2 column (ycol) contains NA or NaN data.", call. = F)
-    if (highlight)
-      cat("NA/NaN location(s) in O2 (ycol), by row:\n", na.y$highlight, "\n")
+    if (highlight) cat("NA/NaN location(s) in O2 (ycol), by row:\n", na.y$highlight, "\n")
   }
   if (seq.x$check) {
-    if (highlight) {
-      cat("Non-sequential time (xcol) location(s), by row:\n", seq.x$highlight,
-        "\n")
-    }
-    stop("Test FAILED. Time data (xcol) are not sequential.", " Please check the order of the data.",
-      call. = F)
+    if (highlight) cat("Non-sequential time (xcol) location(s), by row:\n", seq.x$highlight, "\n")
+    stop("Test FAILED. Time data (xcol) are not sequential.", " Please check the order of the data.", call. = F)
   }
   if (dup.x$check) {
-    if (highlight) {
-      cat("Duplicate time data (xcol) location(s), by row:\n", dup.x$highlight,
-        "\n")
-    }
+    if (highlight) cat("Duplicate time data (xcol) location(s), by row:\n", dup.x$highlight, "\n")
     stop("Test FAILED. Duplicate time data (xcol) detected.", call. = F)
   }
   if (equal.x$check) {
-    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you know what you are doing.",
-      call. = F)
-    if (highlight)
-      cat("Unevenly-spaced time (xcol) location(s), by row:\n", equal.x$highlight,
-        "\n")
+    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you know what you are doing.", call. = F)
+    if (highlight) cat("Unevenly-spaced time (xcol) location(s), by row:\n", equal.x$highlight, "\n")
   }
   # Finally, if df is to be generated, remove NA
   if (na.x$check | na.y$check) {
