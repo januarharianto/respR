@@ -21,9 +21,9 @@ auto_rate <- function(df, width = NULL, by = "time", method = "default",
     stop("Invalid `method` input value")
   if (is.null(width)) {
     if (by == "time") {
-      width <- floor(0.2 * max(df[[1]]))
+      width <- floor(0.25 * max(df[[1]]))
     } else if (by == "row") {
-      width <- floor(0.2 * nrow(df))
+      width <- floor(0.25 * nrow(df))
     }
   }
 
@@ -94,7 +94,8 @@ auto_rate <- function(df, width = NULL, by = "time", method = "default",
   }
   iters <- nrow(dt) - max(dt[, which(x <= width)]) + 1
   elapsed <- round(toc(), 2)
-  message(iters, " regressions performed in ", elapsed, " seconds")
+  message(iters, " regressions performed in ", elapsed, " seconds.")
+  if (method == "linear") message(nrow(result), " kernel density peaks detected and ranked.")
   class(out) <- "auto_rate"
   if (plot) plot(out)
   return(out)
@@ -282,7 +283,7 @@ time.roll <- function(dt, width) {
 
 # Perform kernel density estimate and fitting
 kde.fit <- function(dt, roll, width, by) {
-  bw <- "SJ-ste"
+  bw <- "nrd0" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
   dens <- density(roll$rate, na.rm = T, bw = bw, n = length(roll$rate))
   # Identify peaks
   peaks <- which(diff(sign(diff(dens$y))) == -2) + 1
@@ -291,7 +292,7 @@ kde.fit <- function(dt, roll, width, by) {
     peak.b1 = dens$x, density = dens$y)[x, ])
   match.peaks <- data.table::rbindlist(match.peaks)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
-  bin <- dens$bw * 0.3
+  bin <- dens$bw * .09
   match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate <= (x + bin)][rate >= (x - bin * 0.3)])
   # Make sure that the data is continuous. If not, split into
   # fragments
