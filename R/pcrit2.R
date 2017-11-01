@@ -24,6 +24,7 @@ pcrit2 <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
     stop("Input must be data.frame object.")
   if (width > nrow(df))
     stop("Width input is too large. Please choose a smaller value.")
+  df <- data.frame(df)
   # If the user only has raw data in the df, we use it to generate rate data
   if (has.rate == F) {
     # Extract columns
@@ -31,12 +32,16 @@ pcrit2 <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
     y <- df[, 2]
     # Check that x is numeric
     if (any(class(x) == "POSIXct") | any(class(x) == "POSIXt"))
-      x <- as.numeric(x) - min(as.numeric(x))
-    x <- roll::roll_mean(matrix(y), width)  # Perform rolling mean for new x
-    y <- rollfit(df, width)$b1  # Perform rolling regression for new y
+      x <- as.numeric(x) - min(as.numeric(x)) # convert data/time to number
+    # x <- roll::roll_mean(matrix(y), width, complete_obs = T)  # Perform rolling mean for new x
+    x <- roll::roll_mean(matrix(df[,2]), width) # Perform rolling mean for new x
+    x <- na.omit(x)
+    # y <- rollfit(df, width)$b1  # Perform rolling regression for new y
+    y <- static.roll(df, width)[[2]]
     counts <- length(y)
     # Create the new df for analysis
-    mr.df <- na.omit(data.frame(x, y = abs(y)))
+    # mr.df <- na.omit(data.frame(x, y = abs(y)))
+    mr.df <- data.frame(x, y = abs(y))
     mr.df <- dplyr::arrange(mr.df, x)
   } else {
     mr.df <- df    # re-assign df to mr.df
@@ -134,7 +139,7 @@ plot.pcrit2 <- function(x) {
   abline(v = x$bstick.intercept, col = "forestgreen", lwd = 3, lty = 1)
   abline(v = x$bstick.midpoint, col = "steelblue", lwd = 3, lty = 1)
   legend("bottom", c(sprintf("Intercept, %g", signif(x$bstick.intercept, 3)), sprintf("Midpoint, %g",
-    signif(x$bstick.midpoint, 3))), col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "o",
+    signif(x$bstick.midpoint, 3))), col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
     cex = 0.8, horiz = F)
 
   # Plot for segmented
@@ -144,7 +149,7 @@ plot.pcrit2 <- function(x) {
   lines(x$bpoint.fit.df, lwd = 2, col = "gray35")
   abline(v = x$bpoint.result, col = "red", lwd = 3, lty = 1)
   legend("bottom", sprintf("Breakpoint, %g", signif(x$bpoint.result, 3)), col = "red",
-    lty = 1, lwd = 2, bty = "o", cex = 0.8, horiz = F)
+    lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
 
   par(pardefault)  # revert par settings to original
 }
