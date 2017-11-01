@@ -332,8 +332,8 @@ summary.auto.rate <- function(x, n = 5) {
 plot.auto.rate <- function(x, rank = 1) {
   # Calculate common variables (should we do this in main function? hmm)
   df    <- x$main.data  # main timseries
-  from  <- x$results$from.row[rank] # start row
-  to    <- x$results$to.row[rank] # end row
+  from  <- x$results$row[rank] # start row
+  to    <- x$results$endrow[rank] # end row
   sdf   <- df[from:to,] # the subset timeseries after auto detection
   lmfit <- lm(sdf[[2]] ~ sdf[[1]], sdf)  # lm of subset
 
@@ -471,7 +471,7 @@ match.data <- function(df, fits, pks, width, bg) {
   bw <- pks$density$bw  # extract bin width
   # Match all regressions used to determine each peak using the bin width:
   mat.regs <- lapply(pks$peaks[,2], function(x)
-    dplyr::filter(fits, b1 <= (x+bw*.03) & b1 >= (x-bw*.03)))
+    dplyr::filter(fits, b1 <= (x+bw/2) & b1 >= (x-bw/2)))
   mat.regs <- mat.regs[sapply(mat.regs, nrow) > 0] # remove zero-length matches
   # Now match to the raw data, using matched regressions:
   mat.raw <- lapply(1:length(mat.regs), function(x)
