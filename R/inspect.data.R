@@ -84,7 +84,7 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
 
   ## PLOT
   if (plot) {
-    plot(df, xlab = "Time", ylab = "PO_2", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
+    plot(df, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
       par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
       lty = 1, lwd = 1.5)))
   }
