@@ -1,4 +1,4 @@
 library(testthat)
-library(respr)
+library(respR)
 
-test_check("respr")
+test_check("respR")
