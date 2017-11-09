@@ -2,87 +2,23 @@
 % Please edit documentation in R/auto.rate.R
 \name{auto.rate}
 \alias{auto.rate}
-\title{Automatically determine rate of change in oxygen concentration over time}
+\title{auto.rate version 2}
 \usage{
-auto.rate(df, width = NULL, by = "row", logic = "automatic", bg = NULL)
+auto.rate(df, width = NULL, by = "time", method = "default",
+  plot = TRUE)
 }
 \arguments{
-\item{df}{data frame. Should contain time (column 1) vs oxygen concentration (column 2) data.}
+\item{df}{NULL}
 
-\item{width}{numeric. The number of rows (or the time interval, if \code{by = "time"}) to use when performing the rolling regression.}
+\item{width}{NULL}
 
-\item{by}{string. Describes the method used to subset the data frame. Defaults to \code{"time"}. Available: "\code{time}", "\code{row}".}
+\item{by}{NULL}
 
-\item{logic}{logical. Determines the ranking algorithm to use. Defaults to "\code{automatic}". Available: "\code{max}", "\code{min}", "\code{interval}", "\code{automatic}".}
-
-\item{bg}{numeric, or an output of class \link{calc.bg.rate}. Value for background changes in O~2~ concentration. Should be negative, to represent rate of removal of o2. May also be positive in some cases, depending on your experimental setup.}
-}
-\value{
-An object of class \code{auto.rate} containing a list of outputs:
-\describe{
-\item{\code{id}}{Method used to compute the results. Possible outputs: "\code{maxmin}", "\code{interval}", or "\code{automatic}".}
-\item{\code{main.data}}{The original data frame.}
-\item{\code{width}}{Numeric. The width, in rows, of the rolling window or interval used.}
-\item{\code{by}}{String. The method used to subset the data frame.}
-\item{\code{logic}}{The selected ranking algorithm used to produce the results.}
-\item{\code{interval}}{Appears only if the argument \code{logic = "interval"}. This is the interval used to calculate the regressions and is specified by the number of rows in the original data frame. If the argument \code{by = "time"} is used, the time interval is converted to the number of rows.}
-\item{\code{kernel.dens}}{Appears only if the argument \code{logic = "automatic"}. This is the output of the kernel density estimation analysis used to analyse the data for peak detection.}
-\item{\code{peaks}}{Appears only if the argument \code{logic = "automatic"}. A data frame that contains density peak values that were detected from the kernel density estimate, identified by their index location, the slope (b1) at each peak, and the density calculated for each slope (dens).}
-\item{\code{bin.width}}{Appears only if the argument \code{logic = "automatic"}. This is the bin.width used to determine the density kernel estimate.}
-\item{\code{regressions}}{An output data frame that summarises the coefficients of all calculated regressions used to determine the results.}
-\item{\code{results}}{A data frame summary of the result(s), which include regression coefficients and subset locations.}
-}
+\item{method}{NULL}
 }
 \description{
-\code{auto.rate} automatically performs a rolling regression on a data frame to perform determinations of maximum, minimum, interval or "best fit" linear rate of change in oxygen concentration over time. First, a rolling regression of specified \code{width} is performed on the entire dataset to obtain all possible values. The computations are then ranked (or, arranged), based on the "\code{logic}" argument, and the output is summarised.
-}
-\details{
-\strong{Units}
-
-There are no units of measurements involved in \code{auto.rate}. This is a deliberate decision. Units are called in a later function when volume- and/or weight-specific rates of oxygen concentration are computed in \code{\link[=calc.mo2]{calc.mo2()}}.
-
-\strong{Assumptions}
-
-This function currently assumes that your data is evenly-spaced in time. A future version of this function will be able to accurately perform regressions of varying row widths due to unevenly-spaced time values.
-
-\emph{\strong{Ranking algorithms}}
-
-For now, \code{auto.rate()} contains four ranking algorithms that can be called with the argument "\code{logic}":
-\itemize{
-\item \code{max} - regressions are arranged from highest absolute values, to the lowest.
-\item \code{min} - regressions are arranged from lowest absolute values, to the highest.
-\item \code{interval} - non-overlapping regressions are extracted from the rolled regrssions. They are not ranked.
-\item \code{automatic} - uses kernel density estimation to detect the most "linear" sections of the timeseries in descending order. This is an experimental technique and should be used with caution. We plan to refine this method in a future version of the package.
-}
+auto.rate version 2
 }
 \examples{
-# calculate maximum rate at width 500 (rows):
-x <- auto.rate(sardine, width = 500, logic = "max")
-print(x)
-summary(x)
-plot(x)
-
-# calculate rate at 500-second intervals along the timeseries:
-x <- auto.rate(sardine, width = 500, by = "time", logic = "interval")
-print(x)
-summary(x)
-plot(x, rank = 3) # view the diagnostic plot for the 3rd interval
-
-# Automatically calculate the most "linear" section of a timeseries
-# based on kernel density estimates. When width is not specified, it
-# is automatically set to 10\% of the total length of data:
-x <- auto.rate(sardine)
-
-# Automatically calculate the most "linear" section, where the rolling
-# regression is calculated based on time instead of row. Background
-# resporation can also be added for automatic correction:
-x <- auto.rate(df = sardine, width = 600, by = "time", logic = "automatic",
-  bg = 0.0002525)
-print(x)
-summary(x)
-plot(x, rank = 1)
-
-}
-\author{
-Januar Harianto & Nicholas Carey
+NULL
 }

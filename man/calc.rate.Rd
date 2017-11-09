@@ -4,8 +4,8 @@
 \alias{calc.rate}
 \title{Calculate rate of change in oxygen over time}
 \usage{
-calc.rate(df, from = NULL, to = NULL, by = "time", bg = NULL,
-  plot = T, verbose = T)
+calc.rate(df, from = NULL, to = NULL, by = "time", plot = T,
+  verbose = T)
 }
 \arguments{
 \item{df}{data frame. Should contain time (column 1) vs oxygen concentration
@@ -19,9 +19,6 @@ subset. Defaults to "\code{NULL}".}
 
 \item{by}{string. Describes the method used to subset the data frame.
 Defaults to \code{"time"}. Available: "\code{time}", "\code{o2}", "\code{proportion}", "\code{row}".}
-
-\item{bg}{numeric, or an output of class \code{calc.bg.rate}. Value for backgroung
-respiration.}
 
 \item{plot}{logical. When set to "\code{TRUE}" (default), will plot a quick visual
 of the data and its subset(s).}
@@ -82,9 +79,6 @@ ureg <- check.input(urchin2013, 1, 2)
 calc.rate(ureg, 20, 40)  # without bg adjustment
 calc.rate(ureg, 20, 40, bg = bg) # with bg adjustment
 
-}
-\seealso{
-\code{\link[=calc.bg.rate]{calc.bg.rate()}}
 }
 \author{
 Januar Harianto & Nicholas Carey
