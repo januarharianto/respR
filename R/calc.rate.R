@@ -194,7 +194,7 @@ plot.calc.rate <- function(x, rep = 1) {
   lmfit  <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   # let's plot:
   pardefault <- par(no.readonly = T)  # save original par settings
-  par(mfrow=c(2,2))  # replace par settings
+  par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   multi.p(df, sdf)  # full timeseries with lmfit
   sub.p(sdf)  # subset timeseries
   residual.p(lmfit)  # residual plot
