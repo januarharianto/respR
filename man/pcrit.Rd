@@ -2,65 +2,31 @@
 % Please edit documentation in R/pcrit.R
 \name{pcrit}
 \alias{pcrit}
-\title{Calculate critical oxygen tension for respirometry}
+\title{Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}}
 \usage{
-pcrit(df, from, to, width = (0.1 * nrow(df)), has.rate = FALSE, plot = F)
+pcrit(df, width = floor(0.1 * nrow(df)), has.rate = F, plot = T)
 }
 \arguments{
-\item{df}{data frame. If data is already in the form of oxygen concentration
-~ metabolic rate, set \code{datmr} to \code{TRUE}.}
+\item{df}{data frame.}
 
-\item{span}{numeric. The width to use, as a proportion of nrow(df), for
-rolling regressionss. Defaults to 0.05.}
+\item{width}{numeric.}
 
-\item{datmr}{logical. If \code{TRUE}, will skip rolling regressions. Defaults to
-\code{FALSE}.}
+\item{has.rate}{logical.}
+
+\item{plot}{logical.}
 }
 \value{
-An object of class \code{pcrit} containing a list of outputs:
-\describe{
-\item{\code{df}}{The original data frame.}
-\item{\code{span}}{Numeric. Same as input parameter.}
-\item{\code{width}}{Numeric. The width, in rows, of the rolling window.}
-\item{\code{do.mr}}{Data frame. Output of the rolling regression..}
-\item{\code{pcrit}}{Data frame. The results.}
-\item{\code{pcritRanked}}{Data frame. The results, ranked by the total residual
-sum of squares.}
-\item{\code{best}}{Data frame. The top result.}
-}
+A list object.
 }
 \description{
-Uses a simple "stepwise" linear regression technique to calculate two
-best-fit lines in a data frame, by minimising the total residual sum of
-squares between both regressions.
+Critical oxygen tension can be calculated either by the "broken-stick" regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the segmented regression approach, presented by Muggeo (2003).
 }
 \details{
-The method used in the current function is based on Yeager and Ultsch (1989)
-to calculate critical oxygen tension. Calling \code{pcrit()} on a data frame \code{df}
-of dissolved oxygen (DO) by time will prompt the function to first perform a
-rolling regression of width "\code{floor(0.05 * nrow(df))}" to obtain the
-necessary metabolic rate (MR) data. If the user already has MR data, calling
-the function with the argument \code{datmr = TRUE} will skip rolling regressions.
+To determine P_crit, the rate of change in oxygen, RO_2 (or its mass-specific variation, MO_2) and ambient oxygen concentration (PO_2) must be provided. If RO_2 has not been calculated, `pcrit()`` can automatically generate the data by performing a rolling regression of the PO_2 values.
 }
 \examples{
-# load example data:
-data(fishpcrit)
-# run pcrit:
-pcfish <- pcrit(fishpcrit)
-print(pcfish)              # print the rank 1 result
-print(pcfish, rank = 1000) # print the rank 1000 result (just to compare)
-
-plot(pcfish)               # plot the rank 1 result
-plot(pcfish, rank = 1000)  # plot the rank 1000 results (just to compare)
-
-summary(pcfish)            # prints the top 6 results
-summary(pcfish, n = 20)    # prints the top 20 results (just to compare)
-
-
+NULL
 }
-\references{
-Nickerson, D. M., Facey, D. E., & Grossman, G. D. (1989).
-Estimating physiological thresholds with continuous two-phase regression.
-Physiological Zoology, 62(4), 866–887.
-#'
+\author{
+Januar Harianto & Nicholas Carey
 }

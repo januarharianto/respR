@@ -1,9 +1,10 @@
 #' Title
 #'
-#' @param df
-#' @param xcol
-#' @param ycol
-#' @param plot
+#' @param df data frame.
+#' @param xcol numeric.
+#' @param ycol numaric.
+#' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors.
+#' @param plot logical. Defaults to TRUE.
 #'
 #' @return
 #' @export

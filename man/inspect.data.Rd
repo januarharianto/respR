@@ -7,7 +7,15 @@
 inspect.data(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE)
 }
 \arguments{
-\item{plot}{}
+\item{df}{data frame.}
+
+\item{xcol}{numeric.}
+
+\item{ycol}{numaric.}
+
+\item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors.}
+
+\item{plot}{logical. Defaults to TRUE.}
 }
 \description{
 Title

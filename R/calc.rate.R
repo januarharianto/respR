@@ -20,8 +20,6 @@
 #'   subset. Defaults to "`NULL`".
 #' @param by string. Describes the method used to subset the data frame.
 #'   Defaults to `"time"`. Available: "`time`", "`o2`", "`proportion`", "`row`".
-#' @param bg numeric, or an output of class `calc.bg.rate`. Value for backgroung
-#'   respiration.
 #' @param plot logical. When set to "`TRUE`" (default), will plot a quick visual
 #'   of the data and its subset(s).
 #' @param verbose logical. Set to FALSE to surpress messages. Defaults to TRUE.
@@ -50,7 +48,6 @@
 #' @importFrom tibble as.tibble
 #' @export
 #'
-#' @seealso [calc.bg.rate()]
 #' @examples
 #' data(sardine)
 #' calc.rate(sardine, from = 200, to = 1800)     # default subset by 'time'
@@ -74,40 +71,27 @@
 #' calc.rate(ureg, 20, 40)  # without bg adjustment
 #' calc.rate(ureg, 20, 40, bg = bg) # with bg adjustment
 #'
-calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
-  plot = T, verbose = T) {
-  # ======================
-  # Catch input errors
-  # There's probably a better way to do this... but here goes:
-  # Check that df is a data.frame object:
-  if (any(class(df) == "data.frame") == FALSE)
-    stop("Input must be a data.frame object.")
-  # Check `from` and `to` are correct:
-  if (is.numeric(from) && is.numeric(to)) {
-    if (by == "time" | by == "row") {
-      if (any(from > to))
-        stop("The `from` argument must not be bigger than the `to` argument.")
-    }
-  }
-  # Make sure that `by` is correct:
-  if (!(by == "time" | by == "row" | by == "o2" | by == "proportion"))
-    stop("The `by` argument can only be 'time', 'row', 'o2' or 'proportion'.")
+calc.rate <- function(df, from = NULL, to = NULL, by = 'time', plot = T,
+  verbose = T) {
 
-  # ======================
-  # Inform user that lm will be performed on entire dataset if "start" and "end"
-  # are not defined:
+  # Import from other function(s)
+  if(any(class(df) %in% "inspect.data")) df <- df$df
+
+  # VALIDATE INPUT
+
+  if (!is.data.frame(df)) stop("Input must be a data.frame object.")
+  if (!(by %in% c("time", "row", "o2", "proportion")))
+    stop("the `by` argument can only be 'time', 'row', 'o2' or 'proportion'.")
+
+  # Run all data if `from` and `to` are NULL:
   if (is.null(from) && is.null(to)) {
-    if (verbose) {
-    message("Data bounds not set. Performing analysis on entire data frame.")
-    }
+    if (verbose) message("Data bounds are NULL. Running analysis on all data.")
     from <- 1; to <- nrow(df); by <- 'row'
   }
-  # Tibbles mess with apply functions, so we convert them into data frames:
-  if (any(class(df) == "tbl")) class(df) <- "data.frame"
-  if (any(class(df) == "data.table")) class(df) <- "data.frame"
-  # Error check: ensure that subset inputs are numeric:
-  if (!is.numeric(from) | !is.numeric(to))
-    stop("'to' and 'from' arguments must be numeric.")
+  if (by %in% c("time", "row")) if (any(from > to))
+    stop("`from` should not be smaller than `to`.")
+
+  df <- as.data.frame(df)
   # ----------------------------------------------------------------------------
   # Here we perform the regression and generate the summary results.
   index <- cbind(from, to)  # identify subset locations
@@ -121,71 +105,35 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
       endtime = df[locs[[x]][[2]],][,1],
       oxy     = df[locs[[x]][[1]],][,2],
       endoxy  = df[locs[[x]][[2]],][,2]))
-  fits <- bind_rows(fits)  # bind into data.frame
+  fits <- dplyr::bind_rows(fits)  # bind into data.frame
   # Add additional calculations:
   fits <- mutate(fits,
     row.len  = endrow - row + 1,
     time.len = endtime - time,
     rate.2pt = (endoxy - oxy) / time.len)
   # ----------------------------------------------------------------------------
-  # If background (bg) argument is provided, correct for bg and update summary.
-  # Also calculate mean and weighted mean if multiple regressions were made:
-  if (is.null(bg)) {
-    results <- fits
-    rate    <- mean(results$b1)
-    w.rate  <- weighted.mean(results$b1, results$time.len)
-    adj.w.rate <- NULL
-  } else if (class(bg) == "calc.bg.rate") {
-    bg <- bg$rate
-    results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
-    results <- select(results, b0, b1, bg, `b1-bg`, everything())
-    rate    <- mean(results$b1)
-    w.rate  <- weighted.mean(results$b1, results$time.len)
-    adj.w.rate <- w.rate - results$bg[[1]]  # bg-adjust, if needed
-  } else if (class(bg) == "numeric") {
-    results <- mutate(fits, bg = bg, "b1-bg" = b1 - bg)
-    results <- select(results, b0, b1, bg, `b1-bg`, everything())
-    rate    <- mean(results$b1)
-    w.rate  <- weighted.mean(results$b1, results$time.len)
-    adj.w.rate <- w.rate - results$bg[[1]]  # bg-adjust, if needed
-  }
+  # Calculate mean and weighted mean if multiple regressions were made:
+  rate    <- mean(fits$b1)
+  w.rate  <- weighted.mean(fits$b1, fits$time.len)
   # ----------------------------------------------------------------------------
   # Plot the result, if set to TRUE
   alldf <- lapply(1:length(locs), function(x) as.tibble(locs[[x]][[3]]))
   if (plot) multi.p(df, alldf, title = F)
   # ----------------------------------------------------------------------------
   # Generate output data:
-  if (is.null(bg)) {
-    # This is generated if there is no "bg" argument:
-    out <- list(
-      id         = "calc.rate",
-      data.frame = df,
-      subset.df  = alldf,
-      by         = by,
-      from       = from,
-      to         = to,
-      results    = results,
-      rate       = rate,
-      w.rate     = w.rate,
-      adj.w.rate = adj.w.rate)
-  } else {
-    # This is generated if "bg" argument is included:
-    out <- list(
-      id         = "calc.rate",
-      data.frame = df,
-      subset.df  = alldf,
-      from       = from,
-      to         = to,
-      by         = by,
-      results    = results,
-      rate       = rate,
-      w.rate     = w.rate,
-      background = bg,
-      adj.w.rate = adj.w.rate)
-  }
+  out <- list(
+    id = "calc.rate",
+    data.frame = df,
+    subset.df = alldf,
+    by = by,
+    from = from,
+    to = to,
+    results = fits,
+    rate = rate,
+    w.rate = w.rate)
+
   if(verbose) {
     message(sprintf("Data subset is by %s.", out$by))
-    if(!is.null(bg)) message("Background correction recognised and applied.")
   }
   if (nrow(out$results) > 1) {
     message(sprintf("Result are averaged across %g data subsets, and weighted to time.",
@@ -203,16 +151,19 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', bg = NULL,
 
 
 
+
 #' @export
-print.calc.rate <- function(x) {
-  if(is.null(x$adj.rate)) {
-    cat(sprintf("Rate (b1): %f\n", x$rate))
-  } else {
-    cat(sprintf("Background (bg)  : %f\n", x$background))
-    cat(sprintf("Rate (b1)        : %f\n", x$rate))
-    cat(sprintf("Adj. Rate (b1-bg): %f\n", x$adj.rate))
+print.calc.rate <- function(x, rep = 1) {
+  cat("  rate (b1):", x$results$b1[rep])
+  if (length(x$results) > 1) {
+    cat("\n    average:", mean(x$results$b1))
+    cat("\nweighted av:", x$results$b1[rep])
   }
+  cat("\n\nsamples (in rep):", nrow(x$subset.df[[rep]]))
+  cat("\n")
 }
+
+
 
 
 
