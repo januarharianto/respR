@@ -12,6 +12,9 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
 
+  # Import from other functions
+  if (class(x) %in% "calc.rate") x <- x$rate
+
   # Validate input:
   if (!is.character(from)) stop("`from` unit should be character string")
   if (!is.character(to)) stop("`to` unit should be character string")
