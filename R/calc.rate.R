@@ -79,7 +79,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', plot = T,
 
   # VALIDATE INPUT
 
-  # if (!is.data.frame(df)) stop("Input must be a data.frame object.")
+  if (!is.data.frame(df)) stop("Input must be a data.frame object.")
   if (!(by %in% c("time", "row", "o2", "proportion")))
     stop("the `by` argument can only be 'time', 'row', 'o2' or 'proportion'.")
 
@@ -112,8 +112,7 @@ calc.rate <- function(df, from = NULL, to = NULL, by = 'time', plot = T,
     time.len = endtime - time,
     rate.2pt = (endoxy - oxy) / time.len)
   # ----------------------------------------------------------------------------
-  # If background (bg) argument is provided, correct for bg and update summary.
-  # Also calculate mean and weighted mean if multiple regressions were made:
+  # Calculate mean and weighted mean if multiple regressions were made:
   rate    <- mean(fits$b1)
   w.rate  <- weighted.mean(fits$b1, fits$time.len)
   # ----------------------------------------------------------------------------
