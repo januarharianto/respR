@@ -23,7 +23,7 @@ multi.p <- function(df, sdf, title = T) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
-  plot(df, xlab = "Time", ylab = "DO", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
+  plot(df, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
     par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
     lty = 1, lwd = 1.5)))
   invisible(lapply(sdf, function(x) points(x, col = r2, pch = 16)))
@@ -33,7 +33,7 @@ multi.p <- function(df, sdf, title = T) {
     abline(lm(y ~ x, z), lwd = 2, lty = 3)
   }))
   if (title == T)
-    title(main = "Full Timeseries", line = 0.5)
+    title(main = "Full Timeseries", line = 0.3)
 }
 
 # a plot of the subset only
@@ -47,41 +47,40 @@ sub.p <- function(sdf, rep = 1, title = T) {
   eq <- paste0("y = ", cf[1], ifelse(sign(cf[2]) == 1, " + ", " - "), abs(cf[2]),
     " x ")
   # plot the graph
-  plot(sdf, xlab = "Time", ylab = "DO", col = r2, pch = 16, panel.first = c(rect(par("usr")[1],
+  plot(sdf, xlab = "", ylab = "", col = r2, pch = 16, panel.first = c(rect(par("usr")[1],
     par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
     lty = 1, lwd = 1.5)))
   abline(fit, lwd = 1.5, lty = 2)
-  if (title == T)
-    title(main = "Closed-up Region", line = 0.5)
+  if (title == T) title(main = "Close-up Region", line = 0.3)
   title(main = eq, line = -1.5, font.main = 1)
 }
 
 # a plot of residuals
 residual.p <- function(fit) {
-  plot(fit$fitted.values, fit$residuals, xlab = "Fitted Values", ylab = "Standardised Residuals",
+  plot(fit$fitted.values, fit$residuals, xlab = "", ylab = "",
     col = r2, pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
   lines(loess.smooth(fit$fitted.values, fit$residuals), col = "black", lwd = 3)
-  title(main = "Residuals", line = 0.5)
+  title(main = "Std. Residuals vs Fitted Values", line = 0.3)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
 
 # a q-q plot
 qq.p <- function(fit) {
-  qqnorm(rstandard(fit), main = "", ylab = "Standardised Residuals", col = r2,
+  qqnorm(rstandard(fit), main = "", xlab = "", ylab = "", col = r2,
     pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  title(main = "Q-Q", line = 0.5)
+  title(main = "Theoretical Q. vs Std. Residuals", line = 0.3)
   qqline(rstandard(fit), lty = 3, lwd = 1.5)
 }
 
 # kernel density plot
 density.p <- function(dens, peaks, rank = 1) {
-  plot(dens, main = "", xlab = "Rate", ylab = "Density", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
+  plot(dens, main = "", xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
     par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
     lty = 1, lwd = 1.5)))
   polygon(dens, col = r2)
-  title(main = "Peak Density", line = 0.5)
+  title(main = "Density vs Rate (b1)", line = 0.3)
   abline(v = peaks[rank, ][1], lty = 2)  # indicate position on density plot
 }
 
@@ -91,7 +90,7 @@ rollreg.p <- function(rolldf, ranked.b1) {
     lwd = 1, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
   abline(h = ranked.b1, lty = 3)
-  title(main = "Rolling Regression", line = 0.5)
+  title(main = "Rolling Regressions (Rate)", line = 0.3)
 }
 
 # pcrit plot
