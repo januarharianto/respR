@@ -26,7 +26,7 @@ auto.rate <- function(df, width = NULL, by = "time", method = "default",
   if (!method %in% c("default", "linear", "max", "min", "interval"))
     stop("Invalid `method` input value.")
 
- # Convert time to numeric2
+ # Convert time to numeric
   if (any(class(df[[1]]) %in% c("POSIXct", "POSIXt"))) {
    df$std.time <- as.numeric(df$std.time) - min(as.numeric(df$std.time))
  }
@@ -48,7 +48,7 @@ auto.rate <- function(df, width = NULL, by = "time", method = "default",
     roll <- static.roll(dt, width)
   }
 
-  # Check if method is interval. If it is, skip rolls.
+  # TODO Check if method is interval. If it is, skip rolls.
 
 
   # ATTACH ROW AND TIME INDEX
@@ -75,9 +75,9 @@ auto.rate <- function(df, width = NULL, by = "time", method = "default",
     kdefit <- kde.fit(dt, roll, width, by)
     result <- kdefit$result
   } else if (method == "min") {
-    result <- roll[order(-rank(rate))]
+    result <- roll[order(-rank(rate_b1))]
   } else if (method == "max") {
-    result <- roll[order(rate)]
+    result <- roll[order(rate_b1)]
   } else if (method == "interval") {
     if (by == "row") {
       sequence <- seq(width, nrow(dt), width)
@@ -102,7 +102,7 @@ auto.rate <- function(df, width = NULL, by = "time", method = "default",
     method  = method,
     roll    = roll,
     summary = result,
-    rate    = result$rate)
+    rate    = result$rate_b1)
 
   if (method == "linear") {
     # append extra items to output if using linear method
@@ -137,13 +137,13 @@ print.auto.rate <- function(x, pos = 1) {
   if (method == "default") {
 
     cat("\n=== Result", pos, "of", nrow(x$summary), "===\n")
-    cat("Rate:", x$summary$rate[pos], "\n")
+    cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", x$summary$rsq[pos])
 
   } else if (method %in% c("max", "min", "linear")) {
 
     cat("\n=== Rank", pos, "of", nrow(x$summary), "===\n")
-    cat("Rate:", x$summary$rate[pos], "\n")
+    cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", x$summary$rsq[pos], "\n")
     cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
     cat("Time:", x$summary$time[pos], "to", x$summary$endtime[pos], "\n")
@@ -198,7 +198,7 @@ plot.auto.rate <- function(x, pos = 1) {
   end <- x$summary$endrow[pos]
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
-  rate <- x$summary$rate[pos]
+  rate <- x$summary$rate_b1[pos]
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt)  # lm of subset
 
   # PLOT BASED ON METHOD
@@ -291,14 +291,14 @@ time.lm <- function(df, start, end) {
   sdt <- dt[x >= start & x <= end]
   fit <- .lm.fit(cbind(1, sdt[[1]]), sdt[[2]])  # perform lm
   coef <- coef(fit)
-  intercept <- coef[1]
-  rate <- coef[2]
+  intercept_b0 <- coef[1]
+  rate_b1 <- coef[2]
   # Calculate coef of determination (rsq) manually
   ybar <- sdt[, mean(y)]
   sst <- sum(sdt[, (y-ybar)*(y-ybar)])
   ssr <- sum((fit$residuals)*(fit$residuals))
   rsq <- 1-(ssr/sst)
-  out <- data.table::data.table(intercept, rate, rsq)
+  out <- data.table::data.table(intercept_b0, rate_b1, rsq)
   return(out)
 }
 
@@ -306,8 +306,9 @@ time.lm <- function(df, start, end) {
 
 # Perform kernel density estimate and fitting
 kde.fit <- function(dt, roll, width, by) {
+  dt <- data.table::data.table(dt)
   bw <- "nrd0" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
-  dens <- density(roll$rate, na.rm = T, bw = bw, n = length(roll$rate))
+  dens <- density(roll$rate_b1, na.rm = T, bw = bw, n = length(roll$rate_b1))
   # Identify peaks
   peaks <- which(diff(sign(diff(dens$y))) == -2) + 1
   # Match peaks to roll data, and order by density size
@@ -316,7 +317,7 @@ kde.fit <- function(dt, roll, width, by) {
   match.peaks <- data.table::rbindlist(match.peaks)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
   bin <- dens$bw * .09
-  match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate <= (x + bin)][rate >= (x - bin * 0.3)])
+  match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin * 0.3)])
   # Make sure that the data is continuous. If not, split into
   # fragments
   if (by == "time") {
@@ -326,13 +327,27 @@ kde.fit <- function(dt, roll, width, by) {
     match.raw <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
       sc(0, cumsum(abs(diff(match.regs[[x]]$row)) > width))))
   }
-  # Perform lm on each fragment
+
+  # Obtain rolling fragments
   raw.frags <- unname(unlist(match.raw, recursive = F))
   raw.frags <- raw.frags[sapply(raw.frags, nrow) > 0] # remove zero-length matches
-  result <- data.table::rbindlist(lapply(1:length(raw.frags),
-    function(x) calc.rate(df = dt, from = min(raw.frags[[x]]$time),
-      to = max(raw.frags[[x]]$endtime), by = "time", plot = FALSE,
-      verbose = FALSE)$results))
+
+  # Convert fragments to subsets
+  subsets <- lapply(1:length(raw.frags), function(x)
+    subset.data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
+
+  # Perform lm on each subset
+  lapply(1:length(subsets), function(z)
+    calc.rate(subsets[[z]], by = "row", plot = F))
+
+  calc.rate(subsets[[1]])
+  subsets[[1]]
+
+    result <- data.table::rbindlist(lapply(1:length(raw.frags),
+    function(z) calc.rate(dt, from = min(raw.frags[[z]]$time),
+      to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
+
+  # Generate output
   out <- list(density = dens, peaks = match.peaks, bandwidth = bin,
     result = result)
   return(out)
