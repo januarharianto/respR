@@ -85,9 +85,20 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
 
   ## PLOT
   if (plot) {
+    # Calculate rolling regression
+    roll <- static.roll(df, floor(0.2*nrow(df)))$rate_b1
+
+    pardefault <- par(no.readonly = T)  # save original par settings
+    par(mfrow = c(1, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
     plot(df, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
       par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
       lty = 1, lwd = 1.5)))
+    title(main = "Full Timeseries", line = 0.3)
+    plot(roll, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
+      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
+        lty = 1, lwd = 1.5)))
+    title(main = "Rolling Regression of Rate vs Index (Row No.)", line = 0.3)
+    par(pardefault)  # revert par settings to original
   }
   out <- list(df = df, check.columns = column.check, check.na.x = na.x, check.na.y = na.y,
     check.sequential = seq.x, check.dupe = dup.x, check.uneven.spacing = equal.x)
