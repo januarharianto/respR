@@ -1,8 +1,24 @@
+#' Title
+#'
+#' @param x
+#' @param o2.unit
+#' @param time.unit
+#' @param output.unit
+#' @param volume
+#' @param mass
+#' @param S
+#' @param t
+#' @param P
+#'
+#' @return
 #' @export
+#'
+#' @examples
 scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
-  volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253) {
+                        volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253) {
+
   # Validate inputs
-  # ----------------------------------------------------------------------------
+  # If units are set to NULL, use default values.
   if (is.null(o2.unit)) {
     warning("`o2.unit` is not provided, using `mg/L`.", call. = F)
     o2.unit <- "mg/L"
@@ -11,72 +27,96 @@ scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
     warning("'time.unit' is not provided, using 's'.", call. = F)
     time.unit <- "s"
   }
-  if (is.null(volume)) stop("Input argument for 'volume' must not be empty.")
-  # if x is an object of previous function, grab the rate value only
-  if (class(x) %in% c("calc.rate", "auto_rate", "auto.rate")) x <- x$rate
-  # check o2.unit and time.unit
-  oxy  <- verify.units(o2.unit, "o2")
-  time <- verify.units(time.unit, "time")
-  if (oxy[1] == FALSE) stop("'o2.unit' not recognised.")
-  if (time[1] == FALSE) stop("'time.unit' not recognised.")
   if (is.null(output.unit)) {
-    warning("`output.unit' is not provided, using 'mg/h/kg.'", call. = F)
+    warning("'output.unit' is not provided, using 'mg/h/kg`.", call. = F)
     output.unit <- "mg/h/kg"
   }
- # check output.unit
-  uo <- id.unit(output.unit, "output")  # should identify 2-3 units
-  if (length(uo) == 3 && is.null(mass))
-    stop("Output units require mass input, however 'mass' is NULL.")
-  if (length(uo) == 2 && !is.null(mass))
-    stop("'mass' input provided, but output units do not seem to need it.")
-  # End input validation
-  # ----------------------------------------------------------------------------
 
-  # Format the units (for display later):
-  o2.unit <- stringr::str_replace(oxy[2],"\\..*","")
-  time.unit <- stringr::str_replace(time[2],"\\..*","")
-  end.unit <- stringr::str_replace(uo,"\\..*","")
-  end.unit <- paste(end.unit, collapse = "/")
+  # Volume must not be NULL
+  if (is.null(volume)) stop("Input argument for 'volume' must not be empty.")
 
-  s <- "[.][:alnum:]*"  # the string to match
-  o2.match <- all.equal(stringr::str_extract(oxy[2], s),
-                        stringr::str_extract(uo[1], s))
-  time.match <- all.equal(stringr::str_extract(time[2], s),
-                          stringr::str_extract(uo[2], s))
-  if (!o2.match) stop("Input and output O2 units cannot be converted!")
-  if (!time.match) stop("Input and output time units don't match.")
+  # Validate rate value based on object class
+  if (is.numeric(x)) {
+    rate <- x
+  } else if (class(x) %in% c("calc.rate", "auto.rate")) {
+    rate <- x$rate
+  } else if (class(x) %in% "adjust.rate") {
+    rate <- x$adjusted
+  } else stop("`x` input is not valid.")
 
-  # 1. Convert the O2 unit
-  if (uo[1] %in% c("mmol.o2", "umol.o2")) {
-    rate <- convert.rate(x, oxy[2], "mmol/L", S, t, P)
-    rate <- adjust.multiplier(rate, "mmol.o2", uo[1])
-  } else if (uo[1] %in% c("mg.o2", "ug.o2")) {
-    rate <- convert.rate(x, oxy[2], "mg/L", S, t, P)
-    rate <- adjust.multiplier(rate, "mg.o2", uo[1])
-  } else if (uo[1] == "ml.o2") {
-    rate <- convert.rate(x, oxy[2], "mL/L", S, t, P)
-    rate <- adjust.multiplier(rate, "ml.o2", uo[1])
+  # Validate o2.unit & time.unit
+  oxy  <- verify.units(o2.unit, "o2")
+  time <- verify.units(time.unit, "time")
+
+  # Validate output.unit
+  ou <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+", " ",
+    output.unit), header = FALSE))
+  is.MO2 <- length(ou) == 3
+  A <- verify.units(ou[1], "o1")
+  B <- verify.units(ou[2], "time")
+  if (is.MO2) {
+    C <- verify.units(ou[3], "mass")
+    ou <- as.matrix(data.frame(A, B, C))
+  } else ou <- as.matrix(data.frame(A, B))
+
+  # Verify if mass is needed
+  if (is.MO2 && is.null(mass)) stop("'output.unit' needs a value for 'mass'.")
+  if (!is.MO2 && is.numeric(mass))
+    warning("mass' is ignored as `output.unit` does not require it.", call. = F)
+
+  # Format unit strings to look nicer
+  o2.unit <- stringr::str_replace(oxy,"\\..*","")
+  time.unit <- stringr::str_replace(time,"\\..*","")
+  output.unit <- stringr::str_replace(ou,"\\..*","")
+  output.unit <- paste(output.unit, collapse = "/")
+
+  # Convert DO unit first
+  if (A %in% c("mmol.o2", "umol.o2")) {
+    RO2 <- convert.rate(rate, oxy, "mmol/L", S, t, P)
+    RO2 <- adjust.multiplier(RO2$converted, "mmol.o2", A)
+  } else if (A %in% c("mg.o2", "ug.o2")) {
+    RO2 <- convert.rate(rate, oxy, "mg/L", S, t, P)
+    RO2 <- adjust.multiplier(RO2$output, "mg.o2", A)
+  } else if (A == "ml.o2") {
+    RO2 <- convert.rate(rate, oxy, "mL/L", S, t, P)
+    RO2 <- adjust.multiplier(RO2$output, "ml.o2", A)
   }
-  # 2. Convert the Time unit
-  rate <- adjust.multiplier(rate, time[2], uo[2])
-  # 3. Scale to volume
-  VO2 <- rate * volume
-  # 4. Scale to mass
-  if (!is.null(mass)) {
+
+  # Then, convert time unit
+  RO2 <- adjust.multiplier(RO2, time, B)
+
+  # Then, scale to volune
+  VO2 <- RO2 * volume
+
+  # Then, scale to mass
+  if(is.MO2) {
     MO2 <- VO2 / mass
-    MO2 <- adjust.multiplier(MO2, "kg", uo[3])
+    MO2 <- adjust.multiplier(MO2, "kg.mass", C)
   }
-  # Output
-  out <- list(VO2 = VO2)
-  if (!is.null(mass)) {
-    MO2 <- list(MO2 = MO2)
-    out <- c(out, MO2)
-  }
-  unit <- list(input.o2.unit = o2.unit, input.time.unit = time.unit,
-    output.unit = end.unit)
-  out <- c(out, unit)
+
+  # Generate output
+  summary <- data.frame(
+    input.rate = rate,
+    converted.rate = RO2,
+    volumetric = VO2)
+  if (is.MO2) {
+    summary <- data.frame(summary, mass.specific = MO2)
+    converted <- MO2
+  } else converted <- VO2
+
+  out <- list(
+    input = rate,
+    output = converted,
+    summary = summary,
+    input.o2.unit = o2.unit,
+    input.time.unit = time.unit,
+    output.unit = output.unit
+  )
+
   return(out)
 }
+
+
 
 
 
@@ -103,48 +143,3 @@ adjust.multiplier <- function(x, input, output) {
   return(out)
 }
 
-
-
-# Also unused, now
-# id.unit <- function(string, cond) {
-#   units <- read.table(text = gsub("(?:-1|[/.[:space:]])+", " ", string), header = FALSE)
-#   units <- matrix(as.matrix(units), ncol = ncol(units))
-#   # This deals with 'mg/l/s', 'ug l-1 s-1'
-#   if (cond == "input" && length(units) == 3) {
-#     unit1 <- paste0(units[1], "/", units[2])
-#     unit1 <- checkUnits(unit1, "o2")[2]
-#     unit2 <- units[3]
-#     unit2 <- checkUnits(unit2, "time")[2]
-#     out <- data.frame(unit1, unit2)
-#     # this deals with '%/s'
-#   } else if (cond == "input" && length(units) == 2) {
-#     unit1 <- units[1]
-#     unit1 <- checkUnits(unit1, "o2")[2]
-#     unit2 <- units[2]
-#     unit2 <- checkUnits(unit2, "time")[2]
-#     out <- data.frame(unit1, unit2)
-#   } else if (cond == "output" && length(units) == 3) {
-#     unit1 <- units[1]
-#     unit1 <- checkUnits(unit1, "o1")[2]
-#     unit2 <- units[2]
-#     unit2 <- checkUnits(unit2, "time")[2]
-#     unit3 <- units[3]
-#     unit3 <- checkUnits(unit3, "mass")[2]
-#     out <- data.frame(unit1, unit2, unit3)
-#   } else if (cond == "output" && length(units) == 2) {
-#     unit1 <- units[1]
-#     unit1 <- checkUnits(unit1, "o1")[2]
-#     unit2 <- units[2]
-#     unit2 <- checkUnits(unit2, "time")[2]
-#     out <- data.frame(unit1, unit2)
-#   }
-#   return(as.matrix(out))
-# }
-
-
-# unused (may use later)
-# identify.units <- function(x) {
-#   out <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+", " ", x),
-#     header = FALSE))
-#   out
-# }
