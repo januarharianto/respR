@@ -4,7 +4,7 @@
 \alias{linear.fit}
 \title{Title}
 \usage{
-linear.fit(x)
+linear.fit(dt)
 }
 \arguments{
 \item{x}{}
