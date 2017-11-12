@@ -31,7 +31,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", tidy = TRUE, highlight = TRUE)
 
 2. Here we describe the `respR` R package, a collection of functions that implement a workflow-based approach to automate the analysis and visualisation of respirometry data. The package can be used for closed, intermittent flow, flow-through and open respirometry and uses well-defined sets of rules to reliably and rapidly generate reproducible results.
 
-3. We demonstrate how `respR` uses novel and parallelised computing methods such as rolling regressions and kernel density estimates to reliably detect maximum, minimum and most linear sections of the data, and critical oxygen tension, $P_{crit}$.
+3. We demonstrate how `respR` uses novel computing methods such as rolling regressions and kernel density estimates to reliably detect maximum, minimum and most linear sections of the data, and critical oxygen tension, $P_{crit}$.
 
 4. Although designed specifically with aquatic respirometry in mind, the object-oriented approach of the package and the unitless nature of its analytical functions mean that parts of the package can easily be used to estimate any other linear relationships in other research disciplines.
 
@@ -95,7 +95,7 @@ Data should be formatted correctly before use in `respR`. The function `inspect.
 Using `inspect.data()` is optional -- the main functions in our package will readily work with data frames that were not processed by the function. Running `inspect.data()` is an exploratory step that flags potential issues before analysis. Error check results are summarised in the R console and all tests are saved in the output object with the locations (i.e. row numbers) of the errors:
 
 ```{r}
-inspect.data(squid, xcol = 2, ycol = 3, plot = FALSE, highlight = T)
+inspect.data(squid, plot = F)
 ```
 
 ## Data analysis
