@@ -8,3 +8,17 @@ inst/doc
 /manuscript/manuscript-HTML.html
 /manuscript/manuscript-Word.docx
 *.pdf
+/manuscript/figs/Figure 1.eps
+/manuscript/figs/Figure 2.eps
+/manuscript/figs/Figure 3.eps
+/manuscript/.texpadtmp
+/manuscript/styles/.texpadtmp
+*.aux
+*.bbl
+*.blg
+*.log
+*.gz
+*.out
+*.toc
+manuscript.html
+manuscript.tex
