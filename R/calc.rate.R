@@ -44,6 +44,9 @@ calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
   # Extract data.frame if from object inspect.data
   if(any(class(x) %in% "inspect.data")) x <- x$df
 
+  # By now, x input must be a data frame object
+  if(!is.data.frame(x)) stop("Input must be a data.frame object.")
+
   # Format as data.table
   x <- data.table::data.table(x)
   x <- x[,1:2] # if data is > 2 columns, pick the first 2
