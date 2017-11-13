@@ -92,20 +92,20 @@ calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
 }
 
 
-
+#' @export
 print.calc.rate <- function(x) {
   cat("Rate(s):\n")
   print(x$rate)
 }
 
 
-
+#' @export
 summary.calc.rate <- function(x) {
   cat("Summary:\n")
   print(x$summary)
 }
 
-
+#' @export
 plot.calc.rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
   df  <- x$data

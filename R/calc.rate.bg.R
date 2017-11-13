@@ -47,15 +47,14 @@ calc.rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
 }
 
 
-
+#' @export
 print.calc.rate.bg <- function(x) {
   cat("Rate(s):\n")
   print(x$bgrate)
 }
 
-
+#' @export
 plot.calc.rate.bg <- function(x) {
-
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings

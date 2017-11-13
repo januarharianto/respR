@@ -88,6 +88,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
   return(out)
 }
 
+#' @export
 print.pcrit <- function(x) {
   cat("--Broken stick (Yeager & Ultsch 1989)--\n")
   cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
@@ -99,7 +100,7 @@ print.pcrit <- function(x) {
   cat(sprintf("Breakpoint  %g\n", x$result.segmented))
 }
 
-
+#' @export
 plot.pcrit <- function(x) {
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]

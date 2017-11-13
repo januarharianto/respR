@@ -36,7 +36,7 @@ adjust.rate <- function(df, by) {
   return(out)
 }
 
-
+#' @export
 print.adjust.rate <- function(x) {
   cat("Note: please consider the sign of the value while correcting the rate.")
   cat("\nInput rate:", x$rate)
