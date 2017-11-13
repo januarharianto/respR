@@ -112,7 +112,7 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
       call. = F)
   }
   if (equal.x$check) {
-    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you fully understand the consequences.",
+    warning("Time data (xcol) is irregular. Subsetting by `row` may result in irregular durations.",
       call. = F)
     if (highlight)
       if(length(equal.x$highlight) > 50) {
