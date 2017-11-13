@@ -59,15 +59,20 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
   if (!method %in% c("default", "linear", "max", "min", "interval"))
     stop("Invalid `method` input value.")
 
- # Convert time to numeric
+  # Convert time to numeric
   if (any(class(df[[1]]) %in% c("POSIXct", "POSIXt"))) {
-   df$std.time <- as.numeric(df$std.time) - min(as.numeric(df$std.time))
- }
+    df <- data.frame(V1 = as.numeric(df[[1]]) - min(as.numeric(df[[1]])),
+                     V2 = df[[2]])
+  }
 
+  # Check if time is uneven - if it is, give warning
+  uneven <- test.space(df[[1]])
+  if (uneven$check) warning("Time data is irregular. Please use `by = 'time'.")
 
+  # Generate defauly width for  rolling regression
   if (is.null(width)) {
-    if (by == "time") width <- floor(0.25 * max(df[[1]]))
-    if (by == "row") width <- floor(0.25 * nrow(df))
+    if (by == "time") width <- floor(0.2 * max(df[[1]]))
+    if (by == "row") width <- floor(0.2 * nrow(df))
   }
 
   # FORMAT INPUTS
