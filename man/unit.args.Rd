@@ -2,7 +2,8 @@
 % Please edit documentation in R/unit.args.R
 \name{unit.args}
 \alias{unit.args}
-\title{Print examples for unit arguments in \code{calc.mo2()}}
+\title{Print examples of unit arguments for use in \code{\link[=convert.rate]{convert.rate()}} and
+\code{\link[=scale.rate]{scale.rate()}}}
 \usage{
 unit.args()
 }
@@ -10,7 +11,29 @@ unit.args()
 A list.
 }
 \description{
-Print examples for unit arguments in \code{calc.mo2()}
+This is a simple function, requiring no argument. It shows available units
+that can be used in the functions \code{\link[=convert.rate]{convert.rate()}} and \code{\link[=scale.rate]{scale.rate()}}.
+}
+\details{
+Available units for \code{\link[=convert.rate]{convert.rate()}}:
+
+"mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
+"umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
+
+Available units for \code{\link[=scale.rate]{scale.rate()}}:
+
+\strong{O2}
+
+"mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
+"umol/kg", "mL/kg", "Torr", "hPa", "kPa", "mmHg", "inHg"
+
+\strong{time}
+
+"s", "m", "h"
+
+\strong{mass}
+
+"ug", "mg", "g", "kg"
 }
 \examples{
 unit.args()
