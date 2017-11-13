@@ -12,10 +12,11 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
 
-  if (is.numeric(x)) z <- x
   # Import from other functions
   if (class(x) %in% c("calc.rate","auto.rate")) z <- x$rate
-  if (class(x) %in% "adjust.rate") z <- x$adjusted
+  if (class(x) %in% "adjust.rate") z <- x$corrected
+
+  if (is.numeric(x)) z <- x
 
   # Validate input:
   if (!is.character(from)) stop("`from` unit should be character string.")
