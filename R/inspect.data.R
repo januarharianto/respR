@@ -1,36 +1,62 @@
-#' Title
+#' Check for common errors in respirometry data
 #'
-#' @param df data frame.
-#' @param xcol numeric.
-#' @param ycol numaric.
-#' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors.
-#' @param plot logical. Defaults to TRUE.
+#' `inspect.data()` scans a data frame for specific errors that may affect the
+#' use of functions in `respR`. Data checks include:
+#' * A test for NA/NaN inputs.
+#' * A test for numeric data.
+#' * A test for sequential time data.
+#' * A test for duplicate time data.
+#' * A test for evenly-spaced time data.
 #'
-#' @return
+#' Once data checks are complete, the function produces a list object which may be directly loaded into [calc.rate()], [calc.rate.bg()], [auto.rate()] and [pcrit()] for further analyses.
+#'
+#' @md
+#' @param df data frame. Accepts data frame object of any size.
+#' @param xcol numeric. Defaults to `1`.
+#' @param ycol numaric. Defaults to `2`.
+#' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
+#'   detected by the function.
+#' @param plot logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.
+#'
+#' @return A list object of class `adjust.rate`.
 #' @export
 #'
 #' @examples
-inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) {
-  # CHECK INPUTS
-  if (!is.data.frame(df)) stop("Test FAILED. `df` input must be a data frame object.")
-  if (!is.numeric(xcol) | !is.numeric(ycol)) stop("Test FAILED.'xcol' and 'ycol' inputs must be numeric.")
+#' inspect.data(sardine.rd)
+#' inspect.data(urchins, 1, 5, highlight = FALSE)
+#'
+#' # It is also possible to load the function directly into respR's other functions:
+#' calc.rate(inspect.data(sardine, highlight = FALSE, plot = FALSE),
+#'           from = 3000, to = 4000, by = "time")
+inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
+  plot = TRUE) {
+  # Validate inputs
+  if (!is.data.frame(df))
+    stop("Test FAILED. `df` input must be a data frame object.")
+  if (!is.numeric(xcol) | !is.numeric(ycol))
+    stop("Test FAILED.'xcol' and 'ycol' inputs must be numeric.")
 
-  # FORMAT DATA (just in case)
+  # Format data (just in case)
   df <- data.frame(df)
   df <- df[c(xcol, ycol)]
   x <- df[, 1]
   y <- df[, 2]
   df.len <- nrow(df)
 
-  # PERFORM CHECKS INPUT CHECKS
-  # Rule: if logical result is TRUE, the test is a FAIL. i.e. TRUE = FAIL
+  # PERFORM CHECKS Rule: if logical result is TRUE, the test is
+  # a FAIL.
 
   # Data columns. Are data numeric or a POSIX class?
   column.check <- test.cols(df)
   # Convert time to numeric if integer:
-  if (column.check$is.x.integer) df <- column.check$x
-  if (column.check$test.x) stop("Test FAILED. Time column (xcol) must be numeric or POSIX.", call. = F)
-  if (column.check$test.y) stop("Test FAILED. Data column (ycol) must be numeric.", call. = F)
+  if (column.check$is.x.integer)
+    df <- column.check$x
+  if (column.check$test.x)
+    stop("Test FAILED. Time column (xcol) must be numeric or POSIX.",
+      call. = F)
+  if (column.check$test.y)
+    stop("Test FAILED. Data column (ycol) must be numeric.",
+      call. = F)
   # All data. Are there NA/NaN values?
   na.x <- test.na(x)
   na.y <- test.na(y)
@@ -45,10 +71,11 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
     # Print summary
     print(ls.str(df))
     cat("---\n")
-    summary <- noquote(rbind(na.x$check, na.y$check, seq.x$check, dup.x$check,
-      equal.x$check))
+    summary <- noquote(rbind(na.x$check, na.y$check, seq.x$check,
+      dup.x$check, equal.x$check))
     rownames(summary) <- c("No NA/NaN in Time (xcol)", "No NA/NaN in O2 (ycol)",
-      "Sequential Time (xcol)", "Non-duplicated Time", "Evenly-spaced Time")
+      "Sequential Time (xcol)", "Non-duplicated Time",
+      "Evenly-spaced Time")
     colnames(summary) <- "Score"
     summary[summary == "TRUE"] <- "FAIL***"
     summary[summary == "FALSE"] <- "PASS"
@@ -57,51 +84,81 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
   }
 
   if (na.x$check) {
-    warning("Time column (xcol) contains NA or NaN data.", call. = F)
-    if (highlight) cat("NA/NaN location(s) in time (xcol), by row:\n", na.x$highlight, "\n")
+    warning("Time column (xcol) contains NA or NaN data.",
+      call. = F)
+    if (highlight)
+      cat("NA/NaN location(s) in time (xcol), by row:\n",
+        na.x$highlight, "\n")
   }
   if (na.y$check) {
-    warning("O2 column (ycol) contains NA or NaN data.", call. = F)
-    if (highlight) cat("NA/NaN location(s) in O2 (ycol), by row:\n", na.y$highlight, "\n")
+    warning("O2 column (ycol) contains NA or NaN data.",
+      call. = F)
+    if (highlight)
+      cat("NA/NaN location(s) in O2 (ycol), by row:\n",
+        na.y$highlight, "\n")
   }
   if (seq.x$check) {
-    if (highlight) cat("Non-sequential time (xcol) location(s), by row:\n", seq.x$highlight, "\n")
-    stop("Test FAILED. Time data (xcol) are not sequential.", " Please check the order of the data.", call. = F)
+    if (highlight)
+      cat("Non-sequential time (xcol) location(s), by row:\n",
+        seq.x$highlight, "\n")
+    stop("Test FAILED. Time data (xcol) are not sequential.",
+      " Please check the order of the data.", call. = F)
   }
   if (dup.x$check) {
-    if (highlight) cat("Duplicate time data (xcol) location(s), by row:\n", dup.x$highlight, "\n")
-    stop("Test FAILED. Duplicate time data (xcol) detected.", call. = F)
+    if (highlight)
+      cat("Duplicate time data (xcol) location(s), by row:\n",
+        dup.x$highlight, "\n")
+    stop("Test FAILED. Duplicate time data (xcol) detected.",
+      call. = F)
   }
   if (equal.x$check) {
-    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you know what you are doing.", call. = F)
-    if (highlight) cat("Unevenly-spaced time (xcol) location(s), by row:\n", equal.x$highlight, "\n")
+    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you know what you are doing.",
+      call. = F)
+    if (highlight)
+      cat("Unevenly-spaced time (xcol) location(s), by row:\n",
+        equal.x$highlight, "\n")
   }
   # Finally, if df is to be generated, remove NA
   if (na.x$check | na.y$check) {
     df <- na.omit(df)  # remove NA rows
-    warning("Rows containing NA values have been automatically removed.", call. = F)
+    warning("Rows containing NA values have been automatically removed.",
+      call. = F)
   }
   message("New dataframe generated.")
 
   ## PLOT
   if (plot) {
     # Calculate rolling regression
-    roll <- static.roll(df, floor(0.2*nrow(df)))$rate_b1
+    roll <- static.roll(df, floor(0.1 * nrow(df)))$rate_b1
+
+    # # Perform rolling mean
+    # rmean <- roll::roll_mean(matrix(df[,2]), floor(0.2 * nrow(df)))
+    # rmean <- na.omit(rmean)
+    # mr.df <- data.frame(rmean, roll = abs(roll))
+    # mr.df <- dplyr::arrange(mr.df, rmean)
+
 
     pardefault <- par(no.readonly = T)  # save original par settings
-    par(mfrow = c(1, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
+    par(mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
+      cex = 1, cex.main = 1)
     plot(df, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
-      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-      lty = 1, lwd = 1.5)))
+      par("usr")[3], par("usr")[2], par("usr")[4], col = r3),
+      grid(col = "white", lty = 1, lwd = 1.5)))
     title(main = "Full Timeseries", line = 0.3)
-    plot(roll, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
-      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
+    plot(abs(roll), xlab = "", ylab = "", col = r1, pch = 16,
+      panel.first = c(rect(par("usr")[1], par("usr")[3],
+        par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
         lty = 1, lwd = 1.5)))
-    title(main = "Rolling Regression of Rate vs Index (Row No.)", line = 0.3)
+    title(main = "Rolling Regression of Rate vs Index (Row No.)",
+      line = 0.3)
+    # plot(mr.df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2, panel.first = c(rect(par("usr")[1],
+    #   par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white", lty = 1,
+    #     lwd = 1.5)))
     par(pardefault)  # revert par settings to original
   }
-  out <- list(df = df, check.columns = column.check, check.na.x = na.x, check.na.y = na.y,
-    check.sequential = seq.x, check.dupe = dup.x, check.uneven.spacing = equal.x)
+  out <- list(df = df, check.columns = column.check, check.na.x = na.x,
+    check.na.y = na.y, check.sequential = seq.x, check.dupe = dup.x,
+    check.uneven.spacing = equal.x)
 
 
   class(out) <- "inspect.data"
@@ -109,6 +166,8 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE) 
 }
 
 
+# These functions are only used for `inspect.data()`, and will not be visible to
+# the default user.
 
 # test column classes
 test.cols <- function(x) {
@@ -125,10 +184,11 @@ test.cols <- function(x) {
     names(x) <- cnames
   }
   # check that xcol is numeric or date/time
-  test.x <- !any(class(x[, 1]) %in% c("numeric", "POSIXct", "POSIXt"))
+  test.x <- !any(class(x[, 1]) %in% c("numeric", "POSIXct",
+    "POSIXt"))
   test.y <- !is.numeric(x[, 2])
-  out <- list(x = x, class.xcol = class.xcol, class.ycol = class.ycol, is.x.integer = is.x.integer,
-    test.x = test.x, test.y = test.y)
+  out <- list(x = x, class.xcol = class.xcol, class.ycol = class.ycol,
+    is.x.integer = is.x.integer, test.x = test.x, test.y = test.y)
   return(invisible(out))
 }
 
@@ -172,7 +232,8 @@ test.space <- function(x) {
   mod <- calc.mode(spacing)
 
   test <- spacing != mod
-  # if spacing is even, there should only be 1 interval detected:
+  # If spacing is even, there should only be 1 interval
+  # detected:
   check <- length(unique(spacing)) > 1
 
   test <- ifelse(is.na(test), TRUE, test)  # convert NA values to FALSE
