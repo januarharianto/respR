@@ -2,13 +2,24 @@
 % Please edit documentation in R/calc.rate.bg.R
 \name{subset.data}
 \alias{subset.data}
-\title{Title}
+\title{Truncate a data frame to create a subset of the data}
 \usage{
 \method{subset}{data}(x, from, to, by)
 }
 \arguments{
-\item{by}{}
+\item{x}{data frame.}
+
+\item{from}{numeric.}
+
+\item{to}{numeric.}
+
+\item{by}{string. "time", "row", "o2" or "proportion".}
+}
+\value{
+A \code{data.table} object.
 }
 \description{
-Title
+This is an internal function. This function extracts a subset data frame
+based on a given set of rules.
 }
+\keyword{internal}

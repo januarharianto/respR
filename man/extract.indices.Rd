@@ -2,13 +2,22 @@
 % Please edit documentation in R/calc.rate.R
 \name{extract.indices}
 \alias{extract.indices}
-\title{Title}
+\title{Extract row, time and DO indices from a subset dataframe}
 \usage{
 extract.indices(x, subsets, n)
 }
 \arguments{
-\item{n}{}
+\item{x}{data frame.}
+
+\item{subsets}{list of data frames.}
+
+\item{n}{numeric. Choose which subset in the list to extract data from.}
+}
+\value{
+A `data.table`` object.
 }
 \description{
-Title
+This is an internal function. Extracts row, time and DO values from a data
+subset in a list.
 }
+\keyword{internal}

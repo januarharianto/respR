@@ -1,17 +1,50 @@
-#' auto.rate version 2
+#' Automatically determine rate of change in oxygen concentration over time
 #'
-#' @param df NULL
-#' @param width NULL
-#' @param by NULL
-#' @param method NULL
+#' `auto.rate` automatically performs a rolling regression on a data frame to
+#' perform determinations of maximum, minimum, interval or "best fit" linear
+#' rate of change in oxygen concentration over time. First, a rolling regression
+#' of specified `width` is performed on the entire dataset to obtain all
+#' possible values. The computations are then ranked (or, arranged), based on
+#' the "`logic`" argument, and the output is summarised.
 #'
-#' @return NULL
-#' @import data.table
+#' **Units**
+#'
+#' There are no units of measurements involved in `auto.rate`. This is a
+#' deliberate decision. Units are called in a later function when volume- and/or
+#' weight-specific rates of oxygen concentration are computed in
+#' [convert.rate()] and [scale.rate()].
+#'
+#'
+#' ***Ranking algorithms***
+#'
+#' For now, `auto.rate()` contains four ranking algorithms that can be called
+#' with the argument "`logic`":
+#'
+#' - `max`: regressions are arranged from highest absolute values, to the
+#' lowest.
+#' - `min`: regressions are arranged from lowest absolute values, to the
+#' highest.
+#' - `interval`: non-overlapping regressions are extracted from the rolled
+#' regrssions. They are not ranked.
+#' - `linear`: Buses kernel density estimation to detect the most "linear"
+#' sections of the timeseries in descending order.
+#'
+#' @param df data frame.
+#' @param width numeric. Defaults to 25 percent of width if NULL.
+#' @param by string. "row" or "time". Defaults to "row".
+#' @param method string. "linear", "max", "min" or "interval".
+#'
+#' @return A list object of class `auto.rate`.
+#'
+#' @importFrom data.table data.table rbindlist setnames
 #' @import parallel
 #' @export
 #'
-#' @examples NULL
-auto.rate <- function(df, width = NULL, by = "time", method = "default",
+#' @examples
+#' auto.rate(sardine.rd)
+#' auto.rate(squid.rd)
+#' auto.rate(inspect.data(urchins.rd, 1, 15))
+auto.rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE) {
   tic()  # start time
 
@@ -253,6 +286,13 @@ plot.auto.rate <- function(x, pos = 1) {
 }
 
 
+static.roll <- function(df, width) {
+  x <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width)
+  out <- na.omit(cbind(x$coefficients,x$r.squared))
+  out <- data.table::data.table(out)
+  data.table::setnames(out, 1:3, c("intercept_b0", "rate_b1", "rsq"))
+  return(out)
+}
 
 
 
@@ -325,7 +365,7 @@ kde.fit <- function(dt, roll, width, by) {
       c(0, cumsum(abs(diff(match.regs[[x]]$time)) > width))))
   } else if (by == "row") {
     match.raw <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
-      sc(0, cumsum(abs(diff(match.regs[[x]]$row)) > width))))
+      c(0, cumsum(abs(diff(match.regs[[x]]$row)) > width))))
   }
 
   # Obtain rolling fragments

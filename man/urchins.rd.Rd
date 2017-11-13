@@ -3,8 +3,11 @@
 \docType{data}
 \name{urchins.rd}
 \alias{urchins.rd}
-\title{Multi-column respirometry data of the sea urchin, \emph{Heliocidaris Erythrogramma}, including background respiration}
-\format{A data frame object consisting of one column of time, 16 columns of urchin oxygen consumption (a-p) and 2 columns of background oxygen consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.}
+\title{Multi-column respirometry data of the sea urchin, \emph{Heliocidaris
+Erythrogramma}, including background respiration}
+\format{A data frame object consisting of one column of time, 16 columns of
+urchin oxygen consumption (a-p) and 2 columns of background oxygen
+consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.}
 \source{
 \url{http://www.diamondse.info/}
 }
@@ -12,7 +15,10 @@
 urchins.rd
 }
 \description{
-Oxygen consumption data of 16 individual \emph{Heliocidaris erythrogramma} specimens. In addition, there are 2 measurements of background respiration. These were trial runs to determine the precision of the new Vernier Optical DO probes (ODO-BTA).
+Oxygen consumption data of 16 individual \emph{Heliocidaris erythrogramma}
+specimens. In addition, there are 2 measurements of background respiration.
+These were trial runs to determine the precision of the new Vernier Optical
+DO probes (ODO-BTA).
 }
 \author{
 Januar Harianto

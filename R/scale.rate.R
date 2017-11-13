@@ -1,19 +1,31 @@
-#' Title
+#' Scale rate value to volume and/or mass
 #'
-#' @param x
-#' @param o2.unit
-#' @param time.unit
-#' @param output.unit
-#' @param volume
-#' @param mass
-#' @param S
-#' @param t
-#' @param P
+#' This is a conversion function. It can convert a unit of rate, RO_2, into
+#' volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
+#' specimen), MO_2 rate.
 #'
-#' @return
+#' The function uses an inernal database and a fuzzy string matching algorithm
+#' to accept various unit formatting styles. For example, `"mg/l", "mg/L", "mg
+#' L-1", "mg l-1", "mg.l-1"` are all the same `o2.unit`. Use [unit.args()] to
+#' view a list of usable unit strings.
+#'
+#' @param x numeric, or objects of class [calc.rate()], [auto.rate()] or
+#'   [adjust.rate()].
+#' @param o2.unit string. Check [unit.args()].
+#' @param time.unit string. Check [unit.args()].
+#' @param output.unit string. Check [unit.args()].
+#' @param volume numeric. Volume in LITRES.
+#' @param mass numeric. Mass/weight in KG.
+#' @param S numeric. Salinity. Defaults to 35.
+#' @param t numeric. Temperature. Defaults to 25 (degress celcius).
+#' @param P numeric. Air pressure. Defaults to 1.013253.
+#'
+#' @return A list object.
 #' @export
 #'
 #' @examples
+#' scale.rate(7.5, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/min/kg",
+#'            volume = 1.2, mass = 0.5)
 scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
                         volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253) {
 
@@ -120,7 +132,19 @@ scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
 
 
 
-# Convert between multipliers of the same unit, e.g. mg to kg
+#' Convert between multipliers of the same unit, e.g. mg to kg
+#'
+#' This is an internal function. Converts units of the same scale, e.g. mg to
+#' kg, or mL to L.
+#'
+#' @param x numeric.
+#' @param input string.
+#' @param output string.
+#'
+#' @keywords internal
+#'
+#' @return A numeric.
+#' @export
 adjust.multiplier <- function(x, input, output) {
   # Create database of terms for matching
   prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour")

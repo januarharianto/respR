@@ -2,15 +2,46 @@
 % Please edit documentation in R/scale.rate.R
 \name{scale.rate}
 \alias{scale.rate}
-\title{Title}
+\title{Scale rate value to volume and/or mass}
 \usage{
 \method{scale}{rate}(x, o2.unit = NULL, time.unit = NULL,
   output.unit = NULL, volume = NULL, mass = NULL, S = 35, t = 25,
   P = 1.013253)
 }
 \arguments{
-\item{P}{}
+\item{x}{numeric, or objects of class \code{\link[=calc.rate]{calc.rate()}}, \code{\link[=auto.rate]{auto.rate()}} or
+\code{\link[=adjust.rate]{adjust.rate()}}.}
+
+\item{o2.unit}{string. Check \code{\link[=unit.args]{unit.args()}}.}
+
+\item{time.unit}{string. Check \code{\link[=unit.args]{unit.args()}}.}
+
+\item{output.unit}{string. Check \code{\link[=unit.args]{unit.args()}}.}
+
+\item{volume}{numeric. Volume in LITRES.}
+
+\item{mass}{numeric. Mass/weight in KG.}
+
+\item{S}{numeric. Salinity. Defaults to 35.}
+
+\item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
+
+\item{P}{numeric. Air pressure. Defaults to 1.013253.}
+}
+\value{
+A list object.
 }
 \description{
-Title
+This is a conversion function. It can convert a unit of rate, RO_2, into
+volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
+specimen), MO_2 rate.
+}
+\details{
+The function uses an inernal database and a fuzzy string matching algorithm
+to accept various unit formatting styles. For example, \code{"mg/l", "mg/L", "mg L-1", "mg l-1", "mg.l-1"} are all the same \code{o2.unit}. Use \code{\link[=unit.args]{unit.args()}} to
+view a list of usable unit strings.
+}
+\examples{
+scale.rate(7.5, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/min/kg",
+           volume = 1.2, mass = 0.5)
 }

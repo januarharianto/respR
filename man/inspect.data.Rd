@@ -2,21 +2,44 @@
 % Please edit documentation in R/inspect.data.R
 \name{inspect.data}
 \alias{inspect.data}
-\title{Title}
+\title{Check for common errors in respirometry data}
 \usage{
 inspect.data(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame. Accepts data frame object of any size.}
 
-\item{xcol}{numeric.}
+\item{xcol}{numeric. Defaults to \code{1}.}
 
-\item{ycol}{numaric.}
+\item{ycol}{numaric. Defaults to \code{2}.}
 
-\item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors.}
+\item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors
+detected by the function.}
 
-\item{plot}{logical. Defaults to TRUE.}
+\item{plot}{logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.}
+}
+\value{
+A list object of class \code{adjust.rate}.
 }
 \description{
-Title
+\code{inspect.data()} scans a data frame for specific errors that may affect the
+use of functions in \code{respR}. Data checks include:
+\itemize{
+\item A test for NA/NaN inputs.
+\item A test for numeric data.
+\item A test for sequential time data.
+\item A test for duplicate time data.
+\item A test for evenly-spaced time data.
+}
+}
+\details{
+Once data checks are complete, the function produces a list object which may be directly loaded into \code{\link[=calc.rate]{calc.rate()}}, \code{\link[=calc.rate.bg]{calc.rate.bg()}}, \code{\link[=auto.rate]{auto.rate()}} and \code{\link[=pcrit]{pcrit()}} for further analyses.
+}
+\examples{
+inspect.data(sardine.rd)
+inspect.data(urchins, 1, 5, highlight = FALSE)
+
+# It is also possible to load the function directly into respR's other functions:
+calc.rate(inspect.data(sardine, highlight = FALSE, plot = FALSE),
+          from = 3000, to = 4000, by = "time")
 }

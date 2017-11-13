@@ -2,13 +2,25 @@
 % Please edit documentation in R/adjust.rate.R
 \name{adjust.rate}
 \alias{adjust.rate}
-\title{Title}
+\title{Simple rate adjustment function for background correction or open respirometry oxygen flux}
 \usage{
-adjust.rate(x, by)
+adjust.rate(df, by)
 }
 \arguments{
-\item{by}{}
+\item{df}{data frame, or any object of class \code{c("calc.rate", "auto.rate")}}
+
+\item{by}{either a numeric, or an object of class `calc.bg.rate``}
+}
+\value{
+A list object of class \code{adjust.rate}.
 }
 \description{
-Title
+A simple rate correction function. \strong{Important:} Please note that the sign of the number must be considered in the correction. Respiration is normally a negative number, while oxygen flux may or may not be negative!
+}
+\examples{
+adjust.rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
+
+bg <- calc.rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
+rt <- calc.rate(inspect.data(urchins.rd, 1, 5))
+adjust.rate(rt, bg)
 }

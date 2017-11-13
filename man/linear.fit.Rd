@@ -2,13 +2,18 @@
 % Please edit documentation in R/calc.rate.R
 \name{linear.fit}
 \alias{linear.fit}
-\title{Title}
+\title{Perform a linear regression on a data frame}
 \usage{
 linear.fit(dt)
 }
 \arguments{
-\item{x}{}
+\item{dt}{data frame.}
+}
+\value{
+A data frame object of \code{lm()} coefficients.
 }
 \description{
-Title
+This is an internal function. Performs \code{lm} on a data frame object and returns
+its coefficients.
 }
+\keyword{internal}

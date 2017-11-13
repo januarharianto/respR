@@ -3,7 +3,7 @@
 \docType{data}
 \name{squid.rd}
 \alias{squid.rd}
-\title{Measurement of P_crit in the squid, \emph{Doryteuthis opalescens}}
+\title{Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit}
 \format{A data frame}
 \source{
 \url{http://www.diamondse.info/}
@@ -12,7 +12,7 @@
 squid.rd
 }
 \description{
-Measurement of P_crit in the squid, \emph{Doryteuthis opalescens}
+Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit
 }
 \author{
 Nicholas Carey

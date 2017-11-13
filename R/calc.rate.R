@@ -1,19 +1,40 @@
 
-#' Title
+#' Calculate rate of change in oxygen over time
 #'
-#' @param x
-#' @param from
-#' @param to
-#' @param by
-#' @param plot
+#' #' `calc.rate` calculates the rate of change in oxygen concentration over
+#' time in a data frame. You can perform single or multiple regressions on
+#' subsets of the data frame by calling the `from` and `to` arguments.
+#'
+#' There are no units involved in `calc.rate`. This is a deliberate decision.
+#' Units are called in a later function when volume- and/or weight-specific
+#' rates of oxygen concentration are computed in [convert.rate()] and
+#' [scale.rate()].
+#'
+#' @param x data frame or object of class [adjust.rate()].
+#' @param from numeric vector.
+#' @param to numeric vector.
+#' @param by string. "time", "row", "o2" or "proportion".
+#' @param plot logical. Defaults to TRUE.
 #'
 #' @importFrom data.table data.table rbindlist
 #'
-#' @return
+#' @return A list object of class `calc.rate`.
 #' @export
 #'
 #' @examples
-calc.rate <- function(x, from = NULL, to = NULL, by = 'time', plot = T) {
+#' data(sardine.rd)
+#' calc.rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
+#' calc.rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
+#' calc.rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
+#' x <- calc.rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
+#' x
+#' summary(x)
+#' plot(x)
+#'
+#' # Using a list in 'from' and 'to' calculates multiple regressions:
+#' data(intermittent.rd)
+#' calc.rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
@@ -21,10 +42,11 @@ calc.rate <- function(x, from = NULL, to = NULL, by = 'time', plot = T) {
   if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
 
   # Extract data.frame if from object inspect.data
-  if(any(class(df) %in% "inspect.data")) x <- x$df
+  if(any(class(x) %in% "inspect.data")) x <- x$df
 
   # Format as data.table
   x <- data.table::data.table(x)
+  x <- x[,1:2] # if data is > 2 columns, pick the first 2
 
   # If 'from' and 'to' are NULL, we assume that the user is analysing all data
   if (all(sapply(list(from, to), is.null))) {
@@ -37,7 +59,7 @@ calc.rate <- function(x, from = NULL, to = NULL, by = 'time', plot = T) {
   # Perform lm on data and extract coefficients
   coefs <- lapply(1:length(to), function(z) linear.fit(dt[[z]]))
 
-    # Extract row, time and DO indices from subsets
+  # Extract row, time and DO indices from subsets
   indices <- lapply(1:length(dt), function(z) extract.indices(x, dt, z))
 
   # Extract row, time and DO indices from subsets and add to results
@@ -70,40 +92,19 @@ calc.rate <- function(x, from = NULL, to = NULL, by = 'time', plot = T) {
 }
 
 
-# print -------------------------------------------------------------------
 
-#' Title
-#'
-#' @param x
-#'
-#' @return
-#' @export
-#'
-#' @examples
 print.calc.rate <- function(x) {
   cat("Rate(s):\n")
   print(x$rate)
 }
 
 
-# summary -----------------------------------------------------------------
 
-#' Title
-#'
-#' @param x
-#'
-#' @return
-#' @export
-#'
-#' @examples
 summary.calc.rate <- function(x) {
   cat("Summary:\n")
   print(x$summary)
 }
 
-
-
-# plot --------------------------------------------------------------------
 
 plot.calc.rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
@@ -119,16 +120,21 @@ plot.calc.rate <- function(x, rep = 1) {
   qq.p(fit)  # qqplot
   par(pardefault)  # revert par settings to original
 }
+
+
 # linear.fit --------------------------------------------------------------
 
-#' Title
+#' Perform a linear regression on a data frame
 #'
-#' @param x
+#' This is an internal function. Performs `lm` on a data frame object and returns
+#' its coefficients.
 #'
-#' @return
+#' @param dt data frame.
+#'
+#' @keywords internal
+#'
+#' @return A data frame object of `lm()` coefficients.
 #' @export
-#'
-#' @examples
 linear.fit <- function(dt) {
   fit <- lm(dt[[2]] ~ dt[[1]], dt)
   b0   <- coef(fit)[[1]]
@@ -141,16 +147,19 @@ linear.fit <- function(dt) {
 
 # extract.indices ---------------------------------------------------------
 
-#' Title
+#' Extract row, time and DO indices from a subset dataframe
 #'
-#' @param x
-#' @param subsets
-#' @param n
+#' This is an internal function. Extracts row, time and DO values from a data
+#' subset in a list.
 #'
-#' @return
+#' @param x data frame.
+#' @param subsets list of data frames.
+#' @param n numeric. Choose which subset in the list to extract data from.
+#'
+#' @keywords internal
+#'
+#' @return A `data.table`` object.
 #' @export
-#'
-#' @examples
 extract.indices <- function(x, subsets, n) {
   # This grabs the first and last-row data
   fl <- subsets[[n]][, .SD[c(1, .N)]]

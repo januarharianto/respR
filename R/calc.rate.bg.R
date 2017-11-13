@@ -1,19 +1,30 @@
-#' Title
+#' Calculate background respiration rates
 #'
-#' @param x
-#' @param xcol
-#' @param ycol
-#' @param from
-#' @param to
-#' @param by
-#' @param plot
+#' This function uses simple linear regression to automatically calculate the
+#' rate of change of oxygen over time for background corrections of the main
+#' data. Can be used on multiple datasets of background measures, as long as the
+#' time data are identical between measurements.
+#'
+#' #' There are no units involved in `calc.rate.bg()`. This is a deliberate
+#' decision. Units are called in a later function when volume- and/or
+#' weight-specific rates of oxygen concentration are computed in
+#' [convert.rate()] and [scale.rate()].
+#'
+#' @param x data frame.
+#' @param xcol numeric. Defaults to `1`.
+#' @param ycol numeric vector. Defaults to `2`. Can have length > 1.
+#' @param from numeric.
+#' @param to numeric.
+#' @param by string. "time" or "row". Defaults to "time".
+#' @param plot logical. Defaults to TRUE.
 #'
 #' @importFrom data.table data.table
 #'
-#' @return
+#' @return A list object of class `calc.bg.rate`.
 #' @export
 #'
 #' @examples
+#' calc.rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time")
 calc.rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   to = NULL, by = "time", plot = T) {
   # Extract data:
@@ -37,33 +48,12 @@ calc.rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
 
 
 
-# print -------------------------------------------------------------------
-
-#' Title
-#'
-#' @param x
-#'
-#' @return
-#' @export
-#'
-#' @examples
 print.calc.rate.bg <- function(x) {
   cat("Rate(s):\n")
   print(x$bgrate)
 }
 
 
-
-# plot --------------------------------------------------------------------
-
-#' Title
-#'
-#' @param x
-#'
-#' @return
-#' @export
-#'
-#' @examples
 plot.calc.rate.bg <- function(x) {
 
   pardefault <- par(no.readonly = T)  # save original par settings
@@ -79,17 +69,20 @@ plot.calc.rate.bg <- function(x) {
 
 # subset.data -------------------------------------------------------------
 
-#' Title
+#' Truncate a data frame to create a subset of the data
 #'
-#' @param x
-#' @param from
-#' @param to
-#' @param by
+#' This is an internal function. This function extracts a subset data frame
+#' based on a given set of rules.
 #'
-#' @return
+#' @param x data frame.
+#' @param from numeric.
+#' @param to numeric.
+#' @param by string. "time", "row", "o2" or "proportion".
+#'
+#' @keywords internal
+#'
+#' @return A `data.table` object.
 #' @export
-#'
-#' @examples
 subset.data <- function(x, from, to, by) {
   dt <- data.table::as.data.table(x)
   if (by == "time") {

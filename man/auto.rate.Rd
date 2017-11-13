@@ -2,23 +2,55 @@
 % Please edit documentation in R/auto.rate.R
 \name{auto.rate}
 \alias{auto.rate}
-\title{auto.rate version 2}
+\title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto.rate(df, width = NULL, by = "time", method = "default",
-  plot = TRUE)
+auto.rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
 }
 \arguments{
-\item{df}{NULL}
+\item{df}{data frame.}
 
-\item{width}{NULL}
+\item{width}{numeric. Defaults to 25 percent of width if NULL.}
 
-\item{by}{NULL}
+\item{by}{string. "row" or "time". Defaults to "row".}
 
-\item{method}{NULL}
+\item{method}{string. "linear", "max", "min" or "interval".}
+}
+\value{
+A list object of class \code{auto.rate}.
 }
 \description{
-auto.rate version 2
+\code{auto.rate} automatically performs a rolling regression on a data frame to
+perform determinations of maximum, minimum, interval or "best fit" linear
+rate of change in oxygen concentration over time. First, a rolling regression
+of specified \code{width} is performed on the entire dataset to obtain all
+possible values. The computations are then ranked (or, arranged), based on
+the "\code{logic}" argument, and the output is summarised.
+}
+\details{
+\strong{Units}
+
+There are no units of measurements involved in \code{auto.rate}. This is a
+deliberate decision. Units are called in a later function when volume- and/or
+weight-specific rates of oxygen concentration are computed in
+\code{\link[=convert.rate]{convert.rate()}} and \code{\link[=scale.rate]{scale.rate()}}.
+
+\emph{\strong{Ranking algorithms}}
+
+For now, \code{auto.rate()} contains four ranking algorithms that can be called
+with the argument "\code{logic}":
+\itemize{
+\item \code{max}: regressions are arranged from highest absolute values, to the
+lowest.
+\item \code{min}: regressions are arranged from lowest absolute values, to the
+highest.
+\item \code{interval}: non-overlapping regressions are extracted from the rolled
+regrssions. They are not ranked.
+\item \code{linear}: Buses kernel density estimation to detect the most "linear"
+sections of the timeseries in descending order.
+}
 }
 \examples{
-NULL
+auto.rate(sardine.rd)
+auto.rate(squid.rd)
+auto.rate(inspect.data(urchins.rd, 1, 15))
 }
