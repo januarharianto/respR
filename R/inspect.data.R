@@ -112,11 +112,16 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
       call. = F)
   }
   if (equal.x$check) {
-    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you know what you are doing.",
+    warning("Time data (xcol) is irregular. Avoid subsetting by `row` unless you fully understand the consequences.",
       call. = F)
     if (highlight)
+      if(length(equal.x$highlight) > 50) {
+        cat("Unevenly-spaced time (xcol) location(s), by row (first 50):\n",
+          head(equal.x$highlight, 50), "\n")
+      } else {
       cat("Unevenly-spaced time (xcol) location(s), by row:\n",
         equal.x$highlight, "\n")
+      }
   }
   # Finally, if df is to be generated, remove NA
   if (na.x$check | na.y$check) {
