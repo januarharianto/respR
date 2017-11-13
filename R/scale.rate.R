@@ -53,7 +53,7 @@ scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
   } else if (class(x) %in% c("calc.rate", "auto.rate")) {
     rate <- x$rate
   } else if (class(x) %in% "adjust.rate") {
-    rate <- x$adjusted
+    rate <- x$corrected
   } else stop("`x` input is not valid.")
 
   # Validate o2.unit & time.unit
