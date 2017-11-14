@@ -5,4 +5,5 @@
 ^NEWS\.md$          # A news file written in Markdown
 ^\.travis\.yml$     # Used for continuous integration testing with travis
 ^manuscript$        # Folder that contains the files for the manuscript
-^docs$              # Folder that stores the generated HTML vignettes (for online publishing)
+^docs$              # Folder that stores HTML vignettes
+^_gh-pages$
