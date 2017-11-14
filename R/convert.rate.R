@@ -9,6 +9,7 @@
 #' @param P numeric. Pressure. Defaults to 1.013253 (kPa).
 #'
 #' @return A list.
+#' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
 #' @export
 #'
 #' @examples

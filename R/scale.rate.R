@@ -21,6 +21,8 @@
 #' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
 #'
 #' @return A list object.
+#'
+#' @importFrom stringr str_replace
 #' @export
 #'
 #' @examples
@@ -144,6 +146,8 @@ scale.rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
 #' @keywords internal
 #'
 #' @return A numeric.
+#'
+#' @importFrom stringr str_replace
 #' @export
 adjust.multiplier <- function(x, input, output) {
   # Create database of terms for matching

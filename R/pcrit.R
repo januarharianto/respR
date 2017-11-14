@@ -14,6 +14,11 @@
 #' @param plot logical.
 #'
 #' @return A list object.
+#'
+#' @importFrom dplyr filter arrange
+#' @importFrom segmented segmented
+#' @importFrom roll roll_mean
+#' @importFrom parallel makeCluster detectCores parApply stopCluster
 #' @export
 #'
 #' @examples
@@ -177,6 +182,7 @@ gen.index <- function(x, min = 3) {
   seqs <- unname(as.matrix(cbind(seq1, seq2)))
   return(seqs)
 }
+
 
 # perform broken-stick regressions
 broken.stick <- function(indx, df) {

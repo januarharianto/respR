@@ -159,6 +159,8 @@ linear.fit <- function(dt) {
 #' @param subsets list of data frames.
 #' @param n numeric. Choose which subset in the list to extract data from.
 #'
+#' @importFrom data.table data.table
+#'
 #' @keywords internal
 #'
 #' @return A `data.table`` object.
