@@ -11,14 +11,6 @@ d2 <- adjustcolor("darkslateblue", alpha.f = 0.75)
 
 
 
-#' Plot the main data, and the subset data, in the same window.
-#'
-#' @param df data frame.
-#' @param sdf data frame.
-#' @param title logical.
-#'
-#' @return A plot.
-#'
 multi.p <- function(df, sdf, title = T) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))

@@ -41,11 +41,9 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
     # Check that x is numeric
     if (any(class(x) %in% c("POSIXct", "POSIXt")))
       x <- as.numeric(x) - min(as.numeric(x)) # convert data/time to number
-    # x <- roll::roll_mean(matrix(y), width, complete_obs = T)  # Perform rolling mean for new x
     x <- roll::roll_mean(matrix(df[,2]), width) # Perform rolling mean for new x
     x <- na.omit(x)
-    # y <- rollfit(df, width)$b1  # Perform rolling regression for new y
-    y <- static.roll(df, width)[[2]]
+    y <- static_roll(df, width)[[2]]
     counts <- length(y)
     # Create the new df for analysis
     # mr.df <- na.omit(data.frame(x, y = abs(y)))
@@ -59,10 +57,10 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
   # ---------------------
   # Broken stick RSS method
   message("Performing broken-stick analysis...")
-  index <- gen.index(nrow(mr.df))  # create matrix for sampling
+  index <- gen_index(nrow(mr.df))  # create matrix for sampling
   no_cores <- parallel::detectCores() - 1  # use n-1 cores
   cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
-  reg <- parallel::parApply(cl, index, 1, broken.stick, df = mr.df)
+  reg <- parallel::parApply(cl, index, 1, broken_stick, df = mr.df)
   parallel::stopCluster(cl)  # release cores
   reg <- dplyr::bind_rows(reg)
   reg <- dplyr::arrange(reg, sumRSS)
@@ -175,8 +173,13 @@ plot.pcrit <- function(x) {
 
 
 
+
+
+
+
+
 # generate an index for hockeyLm
-gen.index <- function(x, min = 3) {
+gen_index <- function(x, min = 3) {
   seq1 <- data.frame(1, (seq.int(min, (x-min))))
   seq2 <- data.frame((seq.int(min, (x-min)) + 1), x)
   seqs <- unname(as.matrix(cbind(seq1, seq2)))
@@ -184,8 +187,14 @@ gen.index <- function(x, min = 3) {
 }
 
 
+
+
+
+
+
+
 # perform broken-stick regressions
-broken.stick <- function(indx, df) {
+broken_stick <- function(indx, df) {
   # generate windows
   x1 <- df[, 1][indx[1]:indx[2]] # x-coordinate of line 1
   y1 <- df[, 2][indx[1]:indx[2]] # y-coordinate of line 1

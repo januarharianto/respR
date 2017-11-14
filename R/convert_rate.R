@@ -13,16 +13,13 @@
 #' @export
 #'
 #' @examples
-#' # Convert an object of class `calc.rate`:
 #' x <- calc.rate(sardine.rd)
-#' convert.rate(x, from = "%", to = "mg/L")
+#' convert_rate(x, from = "percent", to = "mg L-1")
 #'
-#' # Convert a numeric:
-#' convert.rate(100, from = "%", to = "mg/L", S = 33, t = 18)
+#' convert_rate(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 #'
-#' Convert a numeric vector:
-#' convert.rate(sardine.rd[[2]], from = "%", to = "torr")
-convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
+#' convert_rate(sardine.rd[[2]], from = "percent", to = "torr")
+convert_rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
                          P = 1.013253) {
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
@@ -36,8 +33,8 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
 
   # Import from other functions
-  if (class(x) %in% c("calc.rate","auto.rate")) z <- x$rate
-  if (class(x) %in% "adjust.rate") z <- x$corrected
+  if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
+  if (class(x) %in% "adjust_rate") z <- x$corrected
 
   if (is.numeric(x)) z <- x
 
@@ -47,45 +44,45 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   if (!is.numeric(z)) stop("input units must be numeric.")
 
   # Verify the units:
-  f <- verify.units(from, 'o2')
-  t <- verify.units(to,'o2')
+  f <- verify_units(from, 'o2')
+  t <- verify_units(to,'o2')
 
   # Perform conversions
   # First we convert all values to a standard unit, mg/L:
-  if (f == verify.units('mg/L',   'o2')) {c <-  z}
-  if (f == verify.units('ug/L',   'o2')) {c <-  z / 1e3}
-  if (f == verify.units('mmol/L', 'o2')) {c <-  z * omWt}
-  if (f == verify.units('umol/L', 'o2')) {c <-  z * omWt / 1e3}
-  if (f == verify.units('mL/L',   'o2')) {c <-  z * omWt / omVl}
-  if (f == verify.units('mg/kg',  'o2')) {c <-  z * swDn / 1e3}
-  if (f == verify.units('ug/kg',  'o2')) {c <-  z * swDn / 1e6}
-  if (f == verify.units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
-  if (f == verify.units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
-  if (f == verify.units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
-  if (f == verify.units('mL/kg',  'o2')) {c <-  z * omWt / omVl * swDn / 1e3}
-  if (f == verify.units('Torr',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
-  if (f == verify.units('hPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
-  if (f == verify.units('kPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
-  if (f == verify.units('mmHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
-  if (f == verify.units('inHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
+  if (f == verify_units('mg/L',   'o2')) {c <-  z}
+  if (f == verify_units('ug/L',   'o2')) {c <-  z / 1e3}
+  if (f == verify_units('mmol/L', 'o2')) {c <-  z * omWt}
+  if (f == verify_units('umol/L', 'o2')) {c <-  z * omWt / 1e3}
+  if (f == verify_units('mL/L',   'o2')) {c <-  z * omWt / omVl}
+  if (f == verify_units('mg/kg',  'o2')) {c <-  z * swDn / 1e3}
+  if (f == verify_units('ug/kg',  'o2')) {c <-  z * swDn / 1e6}
+  if (f == verify_units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
+  if (f == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
+  if (f == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
+  if (f == verify_units('mL/kg',  'o2')) {c <-  z * omWt / omVl * swDn / 1e3}
+  if (f == verify_units('Torr',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
+  if (f == verify_units('hPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
+  if (f == verify_units('kPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
+  if (f == verify_units('mmHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
+  if (f == verify_units('inHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
 
   # Then we convert mg/L to the final desired unit:
-  if(t == verify.units('mg/L',   'o2')) {out <- c}
-  if(t == verify.units('ug/L',   'o2')) {out <- c * 1e3}
-  if(t == verify.units('mmol/L', 'o2')) {out <- c / omWt}
-  if(t == verify.units('umol/L', 'o2')) {out <- c / omWt * 1e3}
-  if(t == verify.units('mL/L',   'o2')) {out <- c / omWt * omVl}
-  if(t == verify.units('mg/kg',  'o2')) {out <- c / swDn * 1e3}
-  if(t == verify.units('ug/kg',  'o2')) {out <- c / swDn * 1e6}
-  if(t == verify.units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
-  if(t == verify.units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
-  if(t == verify.units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
-  if(t == verify.units('mL/kg',  'o2')) {out <- c / swDn * omVl / omWt * 1e3}
-  if(t == verify.units('Torr',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
-  if(t == verify.units('hPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
-  if(t == verify.units('kPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
-  if(t == verify.units('mmHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
-  if(t == verify.units('inHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
+  if(t == verify_units('mg/L',   'o2')) {out <- c}
+  if(t == verify_units('ug/L',   'o2')) {out <- c * 1e3}
+  if(t == verify_units('mmol/L', 'o2')) {out <- c / omWt}
+  if(t == verify_units('umol/L', 'o2')) {out <- c / omWt * 1e3}
+  if(t == verify_units('mL/L',   'o2')) {out <- c / omWt * omVl}
+  if(t == verify_units('mg/kg',  'o2')) {out <- c / swDn * 1e3}
+  if(t == verify_units('ug/kg',  'o2')) {out <- c / swDn * 1e6}
+  if(t == verify_units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
+  if(t == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
+  if(t == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
+  if(t == verify_units('mL/kg',  'o2')) {out <- c / swDn * omVl / omWt * 1e3}
+  if(t == verify_units('Torr',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
+  if(t == verify_units('hPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
+  if(t == verify_units('kPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
+  if(t == verify_units('mmHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
+  if(t == verify_units('inHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
 
   # Generate output
   out <- list(input = z, output = out, input.unit = from, output.unit = to)
@@ -93,14 +90,14 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   #   out <- c(input = x, out)
   #   } else out <- c(x, out)
 
-  class(out) <- "convert.rate"
+  class(out) <- "convert_rate"
   return(out)
 }
 
 
 
 #' @export
-print.convert.rate <- function(x) {
+print.convert_rate <- function(x) {
   if(length(x$output >= 20)) {
     cat("Showing only the first 20 conversions:\n")
     print(head(x$output, 20))
@@ -110,9 +107,9 @@ print.convert.rate <- function(x) {
   cat("\n")
 }
 
-
-
-verify.units <- function(unit, is) {
+#' @keywords internal
+#' @export
+verify_units <- function(unit, is) {
   # Not sure if worth ID'ing some of these using regex (too many variations)
   # EDIT: ok it's worth it, but I've come too far.... will fix in future version
   # Doing it the stupid way:

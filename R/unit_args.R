@@ -28,9 +28,9 @@
 #' @export
 #'
 #' @examples
-#' unit.args()
+#' unit_args()
 #'
-unit.args <- function() {
+unit_args <- function() {
   cat("Note: A string-matchin algorithm is used to identify units. e.g. all of these are the same: ")
   cat("mg/L; mg/l, mg L-1, mgL-1, mg per litre, mg.l-1, mg.L-1\n\n")
 

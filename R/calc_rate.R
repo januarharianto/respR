@@ -1,11 +1,11 @@
 
 #' Calculate rate of change in oxygen over time
 #'
-#' #' `calc.rate` calculates the rate of change in oxygen concentration over
+#' #' `calc_rate` calculates the rate of change in oxygen concentration over
 #' time in a data frame. You can perform single or multiple regressions on
 #' subsets of the data frame by calling the `from` and `to` arguments.
 #'
-#' There are no units involved in `calc.rate`. This is a deliberate decision.
+#' There are no units involved in `calc_rate`. This is a deliberate decision.
 #' Units are called in a later function when volume- and/or weight-specific
 #' rates of oxygen concentration are computed in [convert.rate()] and
 #' [scale.rate()].
@@ -18,23 +18,23 @@
 #'
 #' @importFrom data.table data.table rbindlist
 #'
-#' @return A list object of class `calc.rate`.
+#' @return A list object of class `calc_rate`.
 #' @export
 #'
 #' @examples
 #' data(sardine.rd)
-#' calc.rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
-#' calc.rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
-#' calc.rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
-#' x <- calc.rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
+#' calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
+#' calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
+#' calc_rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
+#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
 #' x
 #' summary(x)
 #' plot(x)
 #'
 #' # Using a list in 'from' and 'to' calculates multiple regressions:
 #' data(intermittent.rd)
-#' calc.rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
-calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
+#' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
@@ -42,7 +42,7 @@ calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
   if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
 
   # Extract data.frame if from object inspect.data
-  if(any(class(x) %in% "inspect.data")) x <- x$df
+  if(any(class(x) %in% "inspect_data")) x <- x$df
 
   # By now, x input must be a data frame object
   if(!is.data.frame(x)) stop("Input must be a data.frame object.")
@@ -60,10 +60,10 @@ calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
   dt <- lapply(1:length(from), function(z) subset.data(x, from[z], to[z], by))
 
   # Perform lm on data and extract coefficients
-  coefs <- lapply(1:length(to), function(z) linear.fit(dt[[z]]))
+  coefs <- lapply(1:length(to), function(z) linear_fit(dt[[z]]))
 
   # Extract row, time and DO indices from subsets
-  indices <- lapply(1:length(dt), function(z) extract.indices(x, dt, z))
+  indices <- lapply(1:length(dt), function(z) extract_indices(x, dt, z))
 
   # Extract row, time and DO indices from subsets and add to results
   rdt <- data.table::rbindlist(lapply(1:length(to), function(x)
@@ -90,26 +90,26 @@ calc.rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
     rate = rate
     )
 
-  class(out) <- "calc.rate"
+  class(out) <- "calc_rate"
   return(out)
 }
 
 
 #' @export
-print.calc.rate <- function(x) {
+print.calc_rate <- function(x) {
   cat("Rate(s):\n")
   print(x$rate)
 }
 
 
 #' @export
-summary.calc.rate <- function(x) {
+summary.calc_rate <- function(x) {
   cat("Summary:\n")
   print(x$summary)
 }
 
 #' @export
-plot.calc.rate <- function(x, rep = 1) {
+plot.calc_rate <- function(x, rep = 1) {
   message('Plotting...this may take a while for large datasets.')
   df  <- x$data
   sdf <- x$subsets[[rep]]
@@ -125,7 +125,7 @@ plot.calc.rate <- function(x, rep = 1) {
 }
 
 
-# linear.fit --------------------------------------------------------------
+# linear_fit --------------------------------------------------------------
 
 #' Perform a linear regression on a data frame
 #'
@@ -138,7 +138,7 @@ plot.calc.rate <- function(x, rep = 1) {
 #'
 #' @return A data frame object of `lm()` coefficients.
 #' @export
-linear.fit <- function(dt) {
+linear_fit <- function(dt) {
   fit <- lm(dt[[2]] ~ dt[[1]], dt)
   b0   <- coef(fit)[[1]]
   b1   <- coef(fit)[[2]]  # slope
@@ -148,7 +148,7 @@ linear.fit <- function(dt) {
 }
 
 
-# extract.indices ---------------------------------------------------------
+# extract_indices ---------------------------------------------------------
 
 #' Extract row, time and DO indices from a subset dataframe
 #'
@@ -165,7 +165,7 @@ linear.fit <- function(dt) {
 #'
 #' @return A `data.table`` object.
 #' @export
-extract.indices <- function(x, subsets, n) {
+extract_indices <- function(x, subsets, n) {
   # This grabs the first and last-row data
   fl <- subsets[[n]][, .SD[c(1, .N)]]
   # Add row indices while flattening data into a row:

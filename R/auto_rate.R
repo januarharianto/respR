@@ -1,6 +1,6 @@
 #' Automatically determine rate of change in oxygen concentration over time
 #'
-#' `auto.rate` automatically performs a rolling regression on a data frame to
+#' `auto_rate` automatically performs a rolling regression on a data frame to
 #' perform determinations of maximum, minimum, interval or "best fit" linear
 #' rate of change in oxygen concentration over time. First, a rolling regression
 #' of specified `width` is performed on the entire dataset to obtain all
@@ -9,7 +9,7 @@
 #'
 #' **Units**
 #'
-#' There are no units of measurements involved in `auto.rate`. This is a
+#' There are no units of measurements involved in `auto_rate`. This is a
 #' deliberate decision. Units are called in a later function when volume- and/or
 #' weight-specific rates of oxygen concentration are computed in
 #' [convert.rate()] and [scale.rate()].
@@ -17,7 +17,7 @@
 #'
 #' ***Ranking algorithms***
 #'
-#' For now, `auto.rate()` contains four ranking algorithms that can be called
+#' For now, `auto_rate()` contains four ranking algorithms that can be called
 #' with the argument "`logic`":
 #'
 #' - `max`: regressions are arranged from highest absolute values, to the
@@ -34,26 +34,25 @@
 #' @param by string. "row" or "time". Defaults to "row".
 #' @param method string. "linear", "max", "min" or "interval".
 #'
-#' @return A list object of class `auto.rate`.
+#' @return A list object of class `auto_rate`.
 #'
 #' @importFrom data.table data.table rbindlist setnames
 #' @import parallel
 #' @export
 #'
 #' @examples
-#' auto.rate(sardine.rd)
-#' auto.rate(squid.rd)
-#' auto.rate(inspect.data(urchins.rd, 1, 15))
-auto.rate <- function(df, width = NULL, by = "row", method = "linear",
+#' auto_rate(sardine.rd)
+#' auto_rate(inspect.data(urchins.rd, 1, 15))
+auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE) {
   tic()  # start time
 
   # Import from previous function(s)
-  if(any(class(df) %in% "inspect.data")) df <- df$df
+  if(any(class(df) %in% "inspect_data")) df <- df$df
 
   # Input checks
   if(!is.data.frame(df))
-    stop("`df` must be data frame, or an object of class `inspect.data`.")
+    stop("`df` must be data frame, or an object of class `inspect_data`.")
 
   if (!by %in% c("time", "row")) stop("Invalid 'by' input value")
   if (!method %in% c("default", "linear", "max", "min", "interval"))
@@ -66,7 +65,7 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
   }
 
   # Check if time is uneven - if it is, give warning
-  uneven <- test.space(df[[1]])
+  uneven <- test_space(df[[1]])
   if (uneven$check) warning("Time data is irregular. Please use `by = 'time'.")
 
   # Generate defauly width for  rolling regression
@@ -81,9 +80,9 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # DETERMINE ROLL STYLE
   if (by == "time") {
-    roll <- time.roll(dt, width)
+    roll <- time_roll(dt, width)
   } else if (by == "row") {
-    roll <- static.roll(dt, width)
+    roll <- static_roll(dt, width)
   }
 
   # TODO Check if method is interval. If it is, skip rolls.
@@ -110,7 +109,7 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
   if (method == "default") {
     result <- roll
   } else if (method == "linear") {
-    kdefit <- kde.fit(dt, roll, width, by)
+    kdefit <- kde_fit(dt, roll, width, by)
     result <- kdefit$result
   } else if (method == "min") {
     result <- roll[order(-rank(rate_b1))]
@@ -154,7 +153,7 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
   elapsed <- round(toc(), 2)
   message(iters, " regressions performed in ", elapsed, " seconds.")
   if (method == "linear") message(nrow(result), " kernel density peaks detected and ranked.")
-  class(out) <- "auto.rate"
+  class(out) <- "auto_rate"
   if (plot) plot(out)
   return(out)
 }
@@ -163,7 +162,7 @@ auto.rate <- function(df, width = NULL, by = "row", method = "linear",
 
 
 #' @export
-print.auto.rate <- function(x, pos = 1) {
+print.auto_rate <- function(x, pos = 1) {
   method <- x$method
   cat("Data is subset by", x$by, "using width of", x$width, "\n")
   cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
@@ -205,7 +204,7 @@ print.auto.rate <- function(x, pos = 1) {
 
 
 #' @export
-summary.auto.rate <- function(x) {
+summary.auto_rate <- function(x) {
   cat("Regressions :", nrow(x$roll))
   cat(" | Results :", nrow(x$summary))
   cat(" | Method :", x$method)
@@ -229,7 +228,7 @@ summary.auto.rate <- function(x) {
 
 
 #' @export
-plot.auto.rate <- function(x, pos = 1) {
+plot.auto_rate <- function(x, pos = 1) {
   # DEFINE OBJECTS
   dt <- x$df
   start <- x$summary$row[pos]
@@ -291,7 +290,7 @@ plot.auto.rate <- function(x, pos = 1) {
 }
 
 
-static.roll <- function(df, width) {
+static_roll <- function(df, width) {
   x <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width)
   out <- na.omit(cbind(x$coefficients,x$r.squared))
   out <- data.table::data.table(out)
@@ -304,7 +303,7 @@ static.roll <- function(df, width) {
 
 
 # Perform time-width rolling regression
-time.roll <- function(dt, width) {
+time_roll <- function(dt, width) {
   # Use parallel if df > 500 rows
   cutoff <- nrow(dt) - max(dt[, which(x <= width)]) + 1
   if (cutoff > 500) {
@@ -312,12 +311,12 @@ time.roll <- function(dt, width) {
     if (os() == "win") {
       cl <- parallel::makeCluster(no_cores)
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-    parallel::clusterExport(cl, "time.lm")
-    out <- parallel::parLapply(cl, 1:cutoff, function(x) time.lm(dt,
+    parallel::clusterExport(cl, "time_lm")
+    out <- parallel::parLapply(cl, 1:cutoff, function(x) time_lm(dt,
       dt[[1]][x], dt[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
   } else {
-    out <- lapply(1:cutoff, function(x) time.lm(dt, dt[[1]][x],
+    out <- lapply(1:cutoff, function(x) time_lm(dt, dt[[1]][x],
       dt[[1]][x] + width))
   }
   out <- data.table::rbindlist(out)
@@ -329,8 +328,8 @@ time.roll <- function(dt, width) {
 
 
 # Subset data by time and perform a linear regression. Used
-# in conjunction with time.roll
-time.lm <- function(df, start, end) {
+# in conjunction with time_roll
+time_lm <- function(df, start, end) {
   names(df) <- c("x", "y")
   dt <- data.table::data.table(df)
   sdt <- dt[x >= start & x <= end]
@@ -350,7 +349,7 @@ time.lm <- function(df, start, end) {
 
 
 # Perform kernel density estimate and fitting
-kde.fit <- function(dt, roll, width, by) {
+kde_fit <- function(dt, roll, width, by) {
   dt <- data.table::data.table(dt)
   bw <- "nrd0" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
   dens <- density(roll$rate_b1, na.rm = T, bw = bw, n = length(roll$rate_b1))
@@ -383,13 +382,13 @@ kde.fit <- function(dt, roll, width, by) {
 
   # Perform lm on each subset
   lapply(1:length(subsets), function(z)
-    calc.rate(subsets[[z]], by = "row", plot = F))
+    calc_rate(subsets[[z]], by = "row", plot = F))
 
-  calc.rate(subsets[[1]])
+  calc_rate(subsets[[1]])
   subsets[[1]]
 
     result <- data.table::rbindlist(lapply(1:length(raw.frags),
-    function(z) calc.rate(dt, from = min(raw.frags[[z]]$time),
+    function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
       to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
 
   # Generate output
