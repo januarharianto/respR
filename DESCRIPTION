@@ -28,5 +28,6 @@ Suggests:
     rmarkdown,
     testthat,
     packagedocs
-VignetteBuilder: knitr,
+VignetteBuilder: 
+    knitr,
     packagedocs
