@@ -40,7 +40,7 @@
 #' @source \url{http://www.diamondse.info/}
 "squid.rd"
 
-#' Respirometry data 0f tye sardine, *Species*
+#' Respirometry data of the sardine, *Species*
 #'
 #' @md
 #' @author Nicholas Carey
