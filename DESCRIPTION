@@ -23,8 +23,10 @@ Imports:
     stringr,
     data.table,
     segmented
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
-    testthat
-VignetteBuilder: knitr
+    testthat,
+    packagedocs
+VignetteBuilder: knitr,
+    packagedocs
