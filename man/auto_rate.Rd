@@ -32,7 +32,7 @@ the "\code{logic}" argument, and the output is summarised.
 There are no units of measurements involved in \code{auto_rate}. This is a
 deliberate decision. Units are called in a later function when volume- and/or
 weight-specific rates of oxygen concentration are computed in
-\code{\link[=convert.rate]{convert.rate()}} and \code{\link[=scale.rate]{scale.rate()}}.
+\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 
 \emph{\strong{Ranking algorithms}}
 
@@ -51,5 +51,6 @@ sections of the timeseries in descending order.
 }
 \examples{
 auto_rate(sardine.rd)
-auto_rate(inspect.data(urchins.rd, 1, 15))
+auto_rate(inspect_data(urchins.rd, 1, 15))
+auto_rate(inspect_data(urchins.rd, 1, 15), by = "time")
 }

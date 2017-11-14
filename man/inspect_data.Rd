@@ -19,7 +19,7 @@ detected by the function.}
 \item{plot}{logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.}
 }
 \value{
-A list object of class \code{adjust.rate}.
+A list object of class \code{adjust_rate}.
 }
 \description{
 \code{inspect_data()} scans a data frame for specific errors that may affect the
@@ -33,13 +33,13 @@ use of functions in \code{respR}. Data checks include:
 }
 }
 \details{
-Once data checks are complete, the function produces a list object which may be directly loaded into \code{\link[=calc.rate]{calc.rate()}}, \code{\link[=calc.rate.bg]{calc.rate.bg()}}, \code{\link[=auto.rate]{auto.rate()}} and \code{\link[=pcrit]{pcrit()}} for further analyses.
+Once data checks are complete, the function produces a list object which may be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}} and \code{\link[=pcrit]{pcrit()}} for further analyses.
 }
 \examples{
 inspect_data(sardine.rd)
 inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 
 # It is also possible to load the function directly into respR's other functions:
-calc.rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
+calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
           from = 3000, to = 4000, by = "time")
 }

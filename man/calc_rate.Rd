@@ -7,7 +7,7 @@
 calc_rate(x, from = NULL, to = NULL, by = "time", plot = T)
 }
 \arguments{
-\item{x}{data frame or object of class \code{\link[=adjust.rate]{adjust.rate()}}.}
+\item{x}{data frame or object of class \code{\link[=adjust_rate]{adjust_rate()}}.}
 
 \item{from}{numeric vector.}
 
@@ -21,15 +21,15 @@ calc_rate(x, from = NULL, to = NULL, by = "time", plot = T)
 A list object of class \code{calc_rate}.
 }
 \description{
-#' \code{calc_rate} calculates the rate of change in oxygen concentration over
+\code{calc_rate} calculates the rate of change in oxygen concentration over
 time in a data frame. You can perform single or multiple regressions on
 subsets of the data frame by calling the \code{from} and \code{to} arguments.
 }
 \details{
 There are no units involved in \code{calc_rate}. This is a deliberate decision.
 Units are called in a later function when volume- and/or weight-specific
-rates of oxygen concentration are computed in \code{\link[=convert.rate]{convert.rate()}} and
-\code{\link[=scale.rate]{scale.rate()}}.
+rates of oxygen concentration are computed in \code{\link[=convert_rate]{convert_rate()}} and
+\code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
 data(sardine.rd)

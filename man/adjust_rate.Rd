@@ -7,9 +7,9 @@
 adjust_rate(df, by)
 }
 \arguments{
-\item{df}{data frame, or any object of class \code{c("calc.rate", "auto.rate")}}
+\item{df}{data frame, or any object of class \code{calc_rate} or \code{auto_rate}}
 
-\item{by}{either a numeric, or an object of class `calc.bg.rate``}
+\item{by}{either a numeric, or an object of class \code{calc_rate.bg}.}
 }
 \value{
 A list object of class \code{adjust_rate}.
@@ -20,7 +20,7 @@ A simple rate correction function. \strong{Important:} Please note that the sign
 \examples{
 adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
 
-bg <- calc.rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
-rt <- calc.rate(inspect.data(urchins.rd, 1, 5))
+bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
+rt <- calc_rate(inspect_data(urchins.rd, 1, 5))
 adjust_rate(rt, bg)
 }

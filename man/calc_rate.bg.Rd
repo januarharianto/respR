@@ -23,7 +23,7 @@ calc_rate.bg(x, xcol = 1, ycol = 2, from = NULL, to = NULL,
 \item{plot}{logical. Defaults to TRUE.}
 }
 \value{
-A list object of class \code{calc.bg.rate}.
+A list object of class \code{calc_bg.rate}.
 }
 \description{
 This function uses simple linear regression to automatically calculate the
@@ -32,10 +32,10 @@ data. Can be used on multiple datasets of background measures, as long as the
 time data are identical between measurements.
 }
 \details{
-#' There are no units involved in \code{calc_rate.bg()}. This is a deliberate
+There are no units involved in \code{calc_rate.bg()}. This is a deliberate
 decision. Units are called in a later function when volume- and/or
 weight-specific rates of oxygen concentration are computed in
-\code{\link[=convert.rate]{convert.rate()}} and \code{\link[=scale.rate]{scale.rate()}}.
+\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
 calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time")

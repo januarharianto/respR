@@ -2,34 +2,45 @@
 % Please edit documentation in R/convert_rate.R
 \name{convert_rate}
 \alias{convert_rate}
-\title{Convert units of dissolved oxygen.}
+\title{Scale rate value to volume and/or mass}
 \usage{
-convert_rate(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
+convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
+  volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
 }
 \arguments{
-\item{x}{numeric vector or object of class \code{calc.rate}, \code{auto.rate} or \code{adjust.rate}.}
+\item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}} or \code{\link[=adjust_rate]{adjust_rate()}}.}
 
-\item{from}{string.}
+\item{o2.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
 
-\item{to}{string.}
+\item{time.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
+
+\item{output.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
+
+\item{volume}{numeric. Volume in LITRES.}
+
+\item{mass}{numeric. Mass/weight in KG.}
 
 \item{S}{numeric. Salinity. Defaults to 35.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (degrees celcius).}
+\item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (kPa).}
+\item{P}{numeric. Air pressure. Defaults to 1.013253 (kPa).}
 }
 \value{
-A list.
+A list object.
 }
 \description{
-Convert units of dissolved oxygen.
+This is a conversion function. It can convert a unit of rate, RO_2, into
+volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
+specimen), MO_2 rate.
+}
+\details{
+The function uses an inernal database and a fuzzy string matching algorithm
+to accept various unit formatting styles.
+
+For example, \code{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same.
+Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
 }
 \examples{
-x <- calc.rate(sardine.rd)
-convert_rate(x, from = "percent", to = "mg L-1")
-
-convert_rate(100, from = "percent", to = "mg L-1", S = 33, t = 18)
-
-convert_rate(sardine.rd[[2]], from = "percent", to = "torr")
+convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 }
