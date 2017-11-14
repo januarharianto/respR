@@ -26,7 +26,7 @@
 
 \item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
 
-\item{P}{numeric. Air pressure. Defaults to 1.013253.}
+\item{P}{numeric. Air pressure. Defaults to 1.013253 (kPa).}
 }
 \value{
 A list object.
