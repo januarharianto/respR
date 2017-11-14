@@ -18,7 +18,7 @@
 #' @param mass numeric. Mass/weight in KG.
 #' @param S numeric. Salinity. Defaults to 35.
 #' @param t numeric. Temperature. Defaults to 25 (degress celcius).
-#' @param P numeric. Air pressure. Defaults to 1.013253.
+#' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
 #'
 #' @return A list object.
 #' @export
