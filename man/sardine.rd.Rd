@@ -3,7 +3,7 @@
 \docType{data}
 \name{sardine.rd}
 \alias{sardine.rd}
-\title{Respirometry data 0f tye sardine, \emph{Species}}
+\title{Respirometry data of the sardine, \emph{Species}}
 \format{A data frame}
 \source{
 \url{http://www.diamondse.info/}
@@ -12,7 +12,7 @@
 sardine.rd
 }
 \description{
-Respirometry data 0f tye sardine, \emph{Species}
+Respirometry data of the sardine, \emph{Species}
 }
 \author{
 Nicholas Carey
