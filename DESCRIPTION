@@ -21,8 +21,8 @@ Imports:
     roll,
     parallel,
     stringr,
-    tibble,
-    data.table
+    data.table,
+    segmented
 Suggests: 
     knitr,
     rmarkdown,
