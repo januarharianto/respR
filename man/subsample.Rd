@@ -17,15 +17,15 @@ subsample(df, n = 5, random_start = F)
 A data frame object.
 }
 \description{
-A simple function that selects every "\code{n}" rows in a data frame to create a new data frame object. Effectifely "thins" large datasets.
+A simple function that selects every "\code{n}" rows in a data frame to create a
+new data frame object. Effectifely "thins" large datasets.
 }
 \examples{
 # Subsample every 10 rows:
-subsample(squid, n = 10)
+subsample(squid.rd, n = 10)
 
 # Subsample with random first value:
-subsample(sardine, 3, T)
-
+subsample(sardine.rd, 3, T)
 }
 \author{
 Januar Harianto & Nicholas Carey
