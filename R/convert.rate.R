@@ -1,4 +1,26 @@
+
+#' Convert units of dissolved oxygen.
+#'
+#' @param x numeric vector or object of class `calc.rate`, `auto.rate` or `adjust.rate`.
+#' @param from string.
+#' @param to string.
+#' @param S numeric. Salinity. Defaults to 35.
+#' @param t numeric. Temperature. Defaults to 25 (degrees celcius).
+#' @param P numeric. Pressure. Defaults to 1.013253 (kPa).
+#'
+#' @return A list.
 #' @export
+#'
+#' @examples
+#' # Convert an object of class `calc.rate`:
+#' x <- calc.rate(sardine.rd)
+#' convert.rate(x, from = "%", to = "mg/L")
+#'
+#' # Convert a numeric:
+#' convert.rate(100, from = "%", to = "mg/L", S = 33, t = 18)
+#'
+#' Convert a numeric vector:
+#' convert.rate(sardine.rd[[2]], from = "%", to = "torr")
 convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
                          P = 1.013253) {
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
@@ -69,7 +91,22 @@ convert.rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
   # if (is.numeric(x)) {
   #   out <- c(input = x, out)
   #   } else out <- c(x, out)
+
+  class(out) <- "convert.rate"
   return(out)
+}
+
+
+
+#' @export
+print.convert.rate <- function(x) {
+  if(length(x$output >= 20)) {
+    cat("Showing only the first 20 conversions:\n")
+    print(head(x$output, 20))
+  } else print(x$output)
+  cat("\n Input unit:", x$input.unit)
+  cat("\nOutput unit:", x$output.unit)
+  cat("\n")
 }
 
 
@@ -173,3 +210,6 @@ verify.units <- function(unit, is) {
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }
+
+
+
