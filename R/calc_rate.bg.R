@@ -5,10 +5,10 @@
 #' data. Can be used on multiple datasets of background measures, as long as the
 #' time data are identical between measurements.
 #'
-#' #' There are no units involved in `calc_rate.bg()`. This is a deliberate
+#' There are no units involved in `calc_rate.bg()`. This is a deliberate
 #' decision. Units are called in a later function when volume- and/or
 #' weight-specific rates of oxygen concentration are computed in
-#' [convert.rate()] and [scale.rate()].
+#' [convert_rate()] and [convert_DO()].
 #'
 #' @param x data frame.
 #' @param xcol numeric. Defaults to `1`.
@@ -20,7 +20,7 @@
 #'
 #' @importFrom data.table data.table
 #'
-#' @return A list object of class `calc.bg.rate`.
+#' @return A list object of class `calc_bg.rate`.
 #' @export
 #'
 #' @examples

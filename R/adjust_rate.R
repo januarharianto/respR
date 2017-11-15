@@ -3,8 +3,8 @@
 #' A simple rate correction function. **Important:** Please note that the sign of the number must be considered in the correction. Respiration is normally a negative number, while oxygen flux may or may not be negative!
 #'
 #' @md
-#' @param df data frame, or any object of class `c("calc.rate", "auto.rate")`
-#' @param by either a numeric, or an object of class `calc.bg.rate``
+#' @param df data frame, or any object of class `calc_rate` or `auto_rate`
+#' @param by either a numeric, or an object of class `calc_rate.bg`.
 #'
 #' @return A list object of class `adjust_rate`.
 #' @export
@@ -12,14 +12,14 @@
 #' @examples
 #' adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
 #'
-#' bg <- calc.rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
-#' rt <- calc.rate(inspect.data(urchins.rd, 1, 5))
+#' bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
+#' rt <- calc_rate(inspect_data(urchins.rd, 1, 5))
 #' adjust_rate(rt, bg)
 adjust_rate <- function(df, by) {
 
   if (class(by) %in% "calc_rate.bg") by = by$bgrate
   if (!is.numeric(by))
-    stop("'by' must be numeric or object of class 'calc.rate.bg'.")
+    stop("'by' must be numeric or object of class 'calc_rate.bg'.")
 
   # Use mean value of bgrate for correction
   by <- mean(by)

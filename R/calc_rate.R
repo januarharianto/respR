@@ -1,16 +1,16 @@
 
 #' Calculate rate of change in oxygen over time
 #'
-#' #' `calc_rate` calculates the rate of change in oxygen concentration over
+#' `calc_rate` calculates the rate of change in oxygen concentration over
 #' time in a data frame. You can perform single or multiple regressions on
 #' subsets of the data frame by calling the `from` and `to` arguments.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
 #' Units are called in a later function when volume- and/or weight-specific
-#' rates of oxygen concentration are computed in [convert.rate()] and
-#' [scale.rate()].
+#' rates of oxygen concentration are computed in [convert_rate()] and
+#' [convert_DO()].
 #'
-#' @param x data frame or object of class [adjust.rate()].
+#' @param x data frame or object of class [adjust_rate()].
 #' @param from numeric vector.
 #' @param to numeric vector.
 #' @param by string. "time", "row", "o2" or "proportion".

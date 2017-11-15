@@ -8,7 +8,7 @@
 #' * A test for duplicate time data.
 #' * A test for evenly-spaced time data.
 #'
-#' Once data checks are complete, the function produces a list object which may be directly loaded into [calc.rate()], [calc.rate.bg()], [auto.rate()] and [pcrit()] for further analyses.
+#' Once data checks are complete, the function produces a list object which may be directly loaded into [calc_rate()], [calc_rate.bg()], [auto_rate()] and [pcrit()] for further analyses.
 #'
 #' @md
 #' @param df data frame. Accepts data frame object of any size.
@@ -18,7 +18,7 @@
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.
 #'
-#' @return A list object of class `adjust.rate`.
+#' @return A list object of class `adjust_rate`.
 #' @export
 #'
 #' @examples
@@ -26,7 +26,7 @@
 #' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 #'
 #' # It is also possible to load the function directly into respR's other functions:
-#' calc.rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
+#' calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
 #'           from = 3000, to = 4000, by = "time")
 inspect_data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
   plot = TRUE) {
@@ -215,7 +215,13 @@ test_seq <- function(x) {
   return(invisible(out))
 }
 
-# Test for duplicate time
+
+#' Test for duplicate time
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
 test_dupe <- function(x) {
   test <- x %in% unique(x[duplicated(x, incomparables = NA)])
   check <- any(test)
@@ -230,7 +236,13 @@ calc_mode <- function(x) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-# Test for evenly-spaced time
+
+#' Test for evenly-spaced time
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
 test_space <- function(x) {
   spacing <- diff(as.numeric(x))
   mod <- calc_mode(spacing)
