@@ -1,10 +1,10 @@
 #' Subsample a data frame object
 #'
-#' A simple function that selects every "`n`" rows in a data frame to create a new data frame object. Effectifely "thins" large datasets.
+#' A simple function that selects every "`n`" rows in a data frame to create a
+#' new data frame object. Effectifely "thins" large datasets.
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
-#' @md
 #' @param df data frame.
 #' @param n numeric.
 #' @param random_start logical.
@@ -14,11 +14,10 @@
 #'
 #' @examples
 #' # Subsample every 10 rows:
-#' subsample(squid, n = 10)
+#' subsample(squid.rd, n = 10)
 #'
 #' # Subsample with random first value:
-#' subsample(sardine, 3, T)
-#'
+#' subsample(sardine.rd, 3, T)
 subsample <- function(df, n = 5, random_start = F) {
   # First check if [random_start] is true. If true, the
   # function will randomise the value taken from row 1:[n] and

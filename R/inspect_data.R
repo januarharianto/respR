@@ -1,6 +1,6 @@
 #' Check for common errors in respirometry data
 #'
-#' `inspect.data()` scans a data frame for specific errors that may affect the
+#' `inspect_data()` scans a data frame for specific errors that may affect the
 #' use of functions in `respR`. Data checks include:
 #' * A test for NA/NaN inputs.
 #' * A test for numeric data.
@@ -8,7 +8,7 @@
 #' * A test for duplicate time data.
 #' * A test for evenly-spaced time data.
 #'
-#' Once data checks are complete, the function produces a list object which may be directly loaded into [calc.rate()], [calc.rate.bg()], [auto.rate()] and [pcrit()] for further analyses.
+#' Once data checks are complete, the function produces a list object which may be directly loaded into [calc_rate()], [calc_rate.bg()], [auto_rate()] and [pcrit()] for further analyses.
 #'
 #' @md
 #' @param df data frame. Accepts data frame object of any size.
@@ -18,17 +18,17 @@
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.
 #'
-#' @return A list object of class `adjust.rate`.
+#' @return A list object of class `adjust_rate`.
 #' @export
 #'
 #' @examples
-#' inspect.data(sardine.rd)
-#' inspect.data(urchins, 1, 5, highlight = FALSE)
+#' inspect_data(sardine.rd)
+#' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 #'
 #' # It is also possible to load the function directly into respR's other functions:
-#' calc.rate(inspect.data(sardine, highlight = FALSE, plot = FALSE),
+#' calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
 #'           from = 3000, to = 4000, by = "time")
-inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
+inspect_data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
   plot = TRUE) {
   # Validate inputs
   if (!is.data.frame(df))
@@ -58,14 +58,14 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
     stop("Test FAILED. Data column (ycol) must be numeric.",
       call. = F)
   # All data. Are there NA/NaN values?
-  na.x <- test.na(x)
-  na.y <- test.na(y)
+  na.x <- test_na(x)
+  na.y <- test_na(y)
   # Time data. Is time not sequential?
-  seq.x <- test.seq(x)
+  seq.x <- test_seq(x)
   # Time data. Are there duplicate time values?
-  dup.x <- test.dupe(x)
+  dup.x <- test_dupe(x)
   # Time data. Is time not evenly spaced?
-  equal.x <- test.space(x)
+  equal.x <- test_space(x)
 
   if (highlight) {
     # Print summary
@@ -134,7 +134,7 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
   ## PLOT
   if (plot) {
     # Calculate rolling regression
-    roll <- static.roll(df, floor(0.1 * nrow(df)))$rate_b1
+    roll <- static_roll(df, floor(0.1 * nrow(df)))$rate_b1
 
     # # Perform rolling mean
     # rmean <- roll::roll_mean(matrix(df[,2]), floor(0.2 * nrow(df)))
@@ -166,12 +166,12 @@ inspect.data <- function(df, xcol = 1, ycol = 2, highlight = TRUE,
     check.uneven.spacing = equal.x)
 
 
-  class(out) <- "inspect.data"
+  class(out) <- "inspect_data"
   return(invisible(out))
 }
 
 
-# These functions are only used for `inspect.data()`, and will not be visible to
+# These functions are only used for `inspect_data()`, and will not be visible to
 # the default user.
 
 # test column classes
@@ -189,8 +189,7 @@ test.cols <- function(x) {
     names(x) <- cnames
   }
   # check that xcol is numeric or date/time
-  test.x <- !any(class(x[, 1]) %in% c("numeric", "POSIXct",
-    "POSIXt"))
+  test.x <- !any(class(x[, 1]) %in% c("numeric", "POSIXct", "POSIXt"))
   test.y <- !is.numeric(x[, 2])
   out <- list(x = x, class.xcol = class.xcol, class.ycol = class.ycol,
     is.x.integer = is.x.integer, test.x = test.x, test.y = test.y)
@@ -198,7 +197,7 @@ test.cols <- function(x) {
 }
 
 # Test for NA/NaN
-test.na <- function(x) {
+test_na <- function(x) {
   test <- is.na(x)
   check <- any(test)
   highlight <- which(test)
@@ -207,7 +206,7 @@ test.na <- function(x) {
 }
 
 # Test for sequential time
-test.seq <- function(x) {
+test_seq <- function(x) {
   test <- diff(x) < 0
   test <- ifelse(is.na(test), FALSE, test)  # convert NA values to FALSE
   check <- any(test)
@@ -216,8 +215,14 @@ test.seq <- function(x) {
   return(invisible(out))
 }
 
-# Test for duplicate time
-test.dupe <- function(x) {
+
+#' Test for duplicate time
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
+test_dupe <- function(x) {
   test <- x %in% unique(x[duplicated(x, incomparables = NA)])
   check <- any(test)
   highlight <- which(test)
@@ -226,15 +231,21 @@ test.dupe <- function(x) {
 }
 
 # Calculate mode value in a list
-calc.mode <- function(x) {
+calc_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-# Test for evenly-spaced time
-test.space <- function(x) {
+
+#' Test for evenly-spaced time
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
+test_space <- function(x) {
   spacing <- diff(as.numeric(x))
-  mod <- calc.mode(spacing)
+  mod <- calc_mode(spacing)
 
   test <- spacing != mod
   # If spacing is even, there should only be 1 interval
