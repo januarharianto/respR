@@ -79,7 +79,9 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
   rate <- rdt[,rate_b1]
 
   # Plot if TRUE
-  if (plot) multi.p(x, dt, title = F)
+  if (plot) {
+    multi.p(x, dt)
+  }
 
   # Generate output
   out <- list(
