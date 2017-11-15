@@ -12,7 +12,7 @@
 #' There are no units of measurements involved in `auto_rate`. This is a
 #' deliberate decision. Units are called in a later function when volume- and/or
 #' weight-specific rates of oxygen concentration are computed in
-#' [convert.rate()] and [scale.rate()].
+#' [convert_rate()] and [convert_DO()].
 #'
 #'
 #' ***Ranking algorithms***
@@ -42,7 +42,8 @@
 #'
 #' @examples
 #' auto_rate(sardine.rd)
-#' auto_rate(inspect.data(urchins.rd, 1, 15))
+#' auto_rate(inspect_data(urchins.rd, 1, 15))
+#' auto_rate(inspect_data(urchins.rd, 1, 15), by = "time")
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE) {
   tic()  # start time
@@ -66,7 +67,8 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # Check if time is uneven - if it is, give warning
   uneven <- test_space(df[[1]])
-  if (uneven$check) warning("Time data is irregular. Please use `by = 'time'.")
+  if (uneven$check && by == "row")
+    warning("Time data is irregular. Please use `by = 'time'.", call. = F)
 
   # Generate defauly width for  rolling regression
   if (is.null(width)) {
@@ -143,21 +145,20 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   if (method == "linear") {
     # append extra items to output if using linear method
-    append <- list(
+    appendthis <- list(
       density = kdefit$density,
       peaks = kdefit$peaks,
       bandwidth = kdefit$bandwidth)
-    out <- c(out, append)
+    out <- c(out, appendthis)
   }
-  iters <- nrow(dt) - max(dt[, which(x <= width)]) + 1
+
   elapsed <- round(toc(), 2)
-  message(iters, " regressions performed in ", elapsed, " seconds.")
-  if (method == "linear") message(nrow(result), " kernel density peaks detected and ranked.")
+  if (method == "linear")
+    message(nrow(result), " kernel density peaks detected and ranked.")
   class(out) <- "auto_rate"
   if (plot) plot(out)
   return(out)
 }
-
 
 
 
@@ -290,6 +291,12 @@ plot.auto_rate <- function(x, pos = 1) {
 }
 
 
+#' Normal rolling regression
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
 static_roll <- function(df, width) {
   x <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width)
   out <- na.omit(cbind(x$coefficients,x$r.squared))
@@ -302,23 +309,31 @@ static_roll <- function(df, width) {
 
 
 
-# Perform time-width rolling regression
+
+#' Perform time-width rolling regression
+#'
+#' @keywords internal
+#' @export
 time_roll <- function(dt, width) {
+  dt <- data.table::data.table(dt)
+  data.table::setnames(dt, 1:2, c("V1", "V2"))
   # Use parallel if df > 500 rows
-  cutoff <- nrow(dt) - max(dt[, which(x <= width)]) + 1
-  if (cutoff > 500) {
+  # The cutoff specifies where to stop the rolling regression, based on width
+  time_cutoff <- max(dt[,1]) - width
+  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
+  # if (cutoff > 500) {
     no_cores <- parallel::detectCores()  # calc the no. of cores available
     if (os() == "win") {
       cl <- parallel::makeCluster(no_cores)
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
     parallel::clusterExport(cl, "time_lm")
-    out <- parallel::parLapply(cl, 1:cutoff, function(x) time_lm(dt,
+    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
       dt[[1]][x], dt[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
-  } else {
-    out <- lapply(1:cutoff, function(x) time_lm(dt, dt[[1]][x],
-      dt[[1]][x] + width))
-  }
+  # } else {
+  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt, dt[[1]][x],
+  #     dt[[1]][x] + width))
+  # }
   out <- data.table::rbindlist(out)
   return(out)
 }
@@ -326,9 +341,12 @@ time_roll <- function(dt, width) {
 
 
 
-
-# Subset data by time and perform a linear regression. Used
-# in conjunction with time_roll
+#' Subset data by time and perform a linear regression.
+#'
+#' Used with `time_roll`.
+#'
+#' @keywords internal
+#' @export
 time_lm <- function(df, start, end) {
   names(df) <- c("x", "y")
   dt <- data.table::data.table(df)
@@ -348,7 +366,13 @@ time_lm <- function(df, start, end) {
 
 
 
-# Perform kernel density estimate and fitting
+
+#' Perform kernel density estimate and fitting
+#'
+#' This is an internal function.
+#'
+#' @keywords internal
+#' @export
 kde_fit <- function(dt, roll, width, by) {
   dt <- data.table::data.table(dt)
   bw <- "nrd0" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
