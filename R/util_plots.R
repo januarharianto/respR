@@ -52,7 +52,7 @@ residual.p <- function(fit) {
   plot(fit$fitted.values, fit$residuals, xlab = "", ylab = "",
     col = r2, pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  lines(loess.smooth(fit$fitted.values, fit$residuals), col = "black", lwd = 3)
+  lines(suppressWarnings(loess.smooth(fit$fitted.values, fit$residuals)), col = "black", lwd = 3)
   title(main = "Std. Residuals vs Fitted Values", line = 0.3)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
