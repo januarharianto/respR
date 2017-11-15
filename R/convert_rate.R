@@ -1,94 +1,126 @@
-
-#' Convert units of dissolved oxygen.
+#' Scale rate value to volume and/or mass
 #'
-#' @param x numeric vector or object of class `calc.rate`, `auto.rate` or `adjust.rate`.
-#' @param from string.
-#' @param to string.
+#' This is a conversion function. It can convert a unit of rate, RO_2, into
+#' volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
+#' specimen), MO_2 rate.
+#'
+#' The function uses an inernal database and a fuzzy string matching algorithm
+#' to accept various unit formatting styles.
+#'
+#' For example, `'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'` are all the same.
+#' Use [unit_args()] to view a list of usable unit strings.
+#'
+#' @param x numeric, or objects of class [calc_rate()], [auto_rate()] or [adjust_rate()].
+#' @param o2.unit string. Check [unit_args()].
+#' @param time.unit string. Check [unit_args()].
+#' @param output.unit string. Check [unit_args()].
+#' @param volume numeric. Volume in LITRES.
+#' @param mass numeric. Mass/weight in KG.
 #' @param S numeric. Salinity. Defaults to 35.
-#' @param t numeric. Temperature. Defaults to 25 (degrees celcius).
-#' @param P numeric. Pressure. Defaults to 1.013253 (kPa).
+#' @param t numeric. Temperature. Defaults to 25 (degress celcius).
+#' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
 #'
-#' @return A list.
-#' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
+#' @return A list object.
+#'
+#' @importFrom stringr str_replace
 #' @export
 #'
 #' @examples
-#' x <- calc.rate(sardine.rd)
-#' convert_rate(x, from = "percent", to = "mg L-1")
-#'
-#' convert_rate(100, from = "percent", to = "mg L-1", S = 33, t = 18)
-#'
-#' convert_rate(sardine.rd[[2]], from = "percent", to = "torr")
-convert_rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
-                         P = 1.013253) {
-  # Constants/formula data using data taken from 'marelac' (gsw removed atm).
-  # Conversion factors between pressure units are obtained from the udunits2
-  # C library: https://www.unidata.ucar.edu/software/udunits/
-  omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L vol
-  omWt <- unname(marelac::molweight('O2'))  # molecular weight of O2 in g/mol
-  oGas <- unname(marelac::gas_satconc(S, t, P, species = "O2")) # gas sat conc.
-  swDn <- marelac::sw_dens(S = S, t = t, P = P) # seawater density in kg/m^3
-  #swDn <- gsw::gsw_rho_t_exact(S, t, (P * 10))  # seawater density in kg/m^3
-  vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
-  oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
+#' convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
+convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
+  volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253) {
 
-  # Import from other functions
-  if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
-  if (class(x) %in% "adjust_rate") z <- x$corrected
+  # Validate inputs If units are set to NULL, use default values.
+  if (is.null(o2.unit)) {
+    warning("`o2.unit` is not provided, using `mg/L`.", call. = F)
+    o2.unit <- "mg/L"
+  }
+  if (is.null(time.unit)) {
+    warning("'time.unit' is not provided, using 's'.", call. = F)
+    time.unit <- "s"
+  }
+  if (is.null(output.unit)) {
+    warning("'output.unit' is not provided, using 'mg/h/kg`.",
+      call. = F)
+    output.unit <- "mg/h/kg"
+  }
 
-  if (is.numeric(x)) z <- x
+  # Volume must not be NULL
+  if (is.null(volume))
+    stop("Input argument for 'volume' must not be empty.")
 
-  # Validate input:
-  if (!is.character(from)) stop("`from` unit should be character string.")
-  if (!is.character(to)) stop("`to` unit should be character string.")
-  if (!is.numeric(z)) stop("input units must be numeric.")
+  # Validate rate value based on object class
+  if (is.numeric(x)) {
+    rate <- x
+  } else if (class(x) %in% c("calc_rate", "auto_rate")) {
+    rate <- x$rate
+  } else if (class(x) %in% "adjust_rate") {
+    rate <- x$corrected
+  } else stop("`x` input is not valid.")
 
-  # Verify the units:
-  f <- verify_units(from, 'o2')
-  t <- verify_units(to,'o2')
+  # Validate o2.unit & time.unit
+  oxy <- verify_units(o2.unit, "o2")
+  time <- verify_units(time.unit, "time")
 
-  # Perform conversions
-  # First we convert all values to a standard unit, mg/L:
-  if (f == verify_units('mg/L',   'o2')) {c <-  z}
-  if (f == verify_units('ug/L',   'o2')) {c <-  z / 1e3}
-  if (f == verify_units('mmol/L', 'o2')) {c <-  z * omWt}
-  if (f == verify_units('umol/L', 'o2')) {c <-  z * omWt / 1e3}
-  if (f == verify_units('mL/L',   'o2')) {c <-  z * omWt / omVl}
-  if (f == verify_units('mg/kg',  'o2')) {c <-  z * swDn / 1e3}
-  if (f == verify_units('ug/kg',  'o2')) {c <-  z * swDn / 1e6}
-  if (f == verify_units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
-  if (f == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
-  if (f == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
-  if (f == verify_units('mL/kg',  'o2')) {c <-  z * omWt / omVl * swDn / 1e3}
-  if (f == verify_units('Torr',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
-  if (f == verify_units('hPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
-  if (f == verify_units('kPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
-  if (f == verify_units('mmHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
-  if (f == verify_units('inHg',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
+  # Validate output.unit
+  ou <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+",
+    " ", output.unit), header = FALSE))
+  is.MO2 <- length(ou) == 3
+  A <- verify_units(ou[1], "o1")
+  B <- verify_units(ou[2], "time")
+  if (is.MO2) {
+    C <- verify_units(ou[3], "mass")
+    ou <- as.matrix(data.frame(A, B, C))
+  } else ou <- as.matrix(data.frame(A, B))
 
-  # Then we convert mg/L to the final desired unit:
-  if(t == verify_units('mg/L',   'o2')) {out <- c}
-  if(t == verify_units('ug/L',   'o2')) {out <- c * 1e3}
-  if(t == verify_units('mmol/L', 'o2')) {out <- c / omWt}
-  if(t == verify_units('umol/L', 'o2')) {out <- c / omWt * 1e3}
-  if(t == verify_units('mL/L',   'o2')) {out <- c / omWt * omVl}
-  if(t == verify_units('mg/kg',  'o2')) {out <- c / swDn * 1e3}
-  if(t == verify_units('ug/kg',  'o2')) {out <- c / swDn * 1e6}
-  if(t == verify_units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
-  if(t == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
-  if(t == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
-  if(t == verify_units('mL/kg',  'o2')) {out <- c / swDn * omVl / omWt * 1e3}
-  if(t == verify_units('Torr',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
-  if(t == verify_units('hPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
-  if(t == verify_units('kPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
-  if(t == verify_units('mmHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
-  if(t == verify_units('inHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
+  # Verify if mass is needed
+  if (is.MO2 && is.null(mass))
+    stop("'output.unit' needs a value for 'mass'.")
+  if (!is.MO2 && is.numeric(mass))
+    warning("mass' is ignored as `output.unit` does not require it.",
+      call. = F)
+
+  # Format unit strings to look nicer
+  o2.unit <- stringr::str_replace(oxy, "\\..*", "")
+  time.unit <- stringr::str_replace(time, "\\..*", "")
+  output.unit <- stringr::str_replace(ou, "\\..*", "")
+  output.unit <- paste(output.unit, collapse = "/")
+
+  # Convert DO unit first
+  if (A %in% c("mmol.o2", "umol.o2")) {
+    RO2 <- convert_rate(rate, oxy, "mmol/L", S, t, P)
+    RO2 <- adjust_scale(RO2$converted, "mmol.o2", A)
+  } else if (A %in% c("mg.o2", "ug.o2")) {
+    RO2 <- convert_DO(rate, oxy, "mg/L", S, t, P)
+    RO2 <- adjust_scale(RO2$output, "mg.o2", A)
+  } else if (A == "ml.o2") {
+    RO2 <- convert_DO(rate, oxy, "mL/L", S, t, P)
+    RO2 <- adjust_scale(RO2$output, "ml.o2", A)
+  }
+
+  # Then, convert time unit
+  RO2 <- adjust_scale(RO2, time, B)
+
+  # Then, scale to volune
+  VO2 <- RO2 * volume
+
+  # Then, scale to mass
+  if (is.MO2) {
+    MO2 <- VO2/mass
+    MO2 <- adjust_scale(MO2, "kg.mass", C)
+  }
 
   # Generate output
-  out <- list(input = z, output = out, input.unit = from, output.unit = to)
-  # if (is.numeric(x)) {
-  #   out <- c(input = x, out)
-  #   } else out <- c(x, out)
+  summary <- data.frame(input.rate = rate, converted.rate = RO2,
+    volumetric = VO2)
+  if (is.MO2) {
+    summary <- data.frame(summary, mass.specific = MO2)
+    converted <- MO2
+  } else converted <- VO2
+
+  out <- list(input = rate, output = converted, summary = summary,
+    input.o2.unit = o2.unit, input.time.unit = time.unit,
+    output.unit = output.unit)
 
   class(out) <- "convert_rate"
   return(out)
@@ -96,118 +128,42 @@ convert_rate <- function(x, from = NULL, to = NULL, S = 35, t = 25,
 
 
 
-#' @export
-print.convert_rate <- function(x) {
-  if(length(x$output >= 20)) {
-    cat("Showing only the first 20 conversions:\n")
-    print(head(x$output, 20))
-  } else print(x$output)
-  cat("\n Input unit:", x$input.unit)
-  cat("\nOutput unit:", x$output.unit)
-  cat("\n")
-}
 
+
+#' Convert between multipliers of the same unit, e.g. mg to kg
+#'
+#' This is an internal function. Converts units of the same scale, e.g. mg to
+#' kg, or mL to L.
+#'
+#' @param x numeric.
+#' @param input string.
+#' @param output string.
+#'
 #' @keywords internal
+#'
+#' @return A numeric.
+#'
+#' @importFrom stringr str_replace
 #' @export
-verify_units <- function(unit, is) {
-  # Not sure if worth ID'ing some of these using regex (too many variations)
-  # EDIT: ok it's worth it, but I've come too far.... will fix in future version
-  # Doing it the stupid way:
-  # time units
-  if (is == 'time') {
-    all.units <- list(
-      hour.time = c('hour', 'hr', 'h'),
-      min.time  = c('minute', 'min', 'm'),
-      sec.time  = c('second', 'sec', 's'))
-  }
-  # 2-dimensional o2 units, and pressure
-  if (is == 'o2') {
-    all.units <- list(
-      '%.o2' = c('%.o2','%','percent','percentage','%o2','%O2'),
-
-      'ug/L.o2' = c('ug/L.o2','ug/L','ug/l','ug / L','ug / l','ugL-1',
-                    'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre'),
-
-      'mmol/L.o2' = c('mmol/L.o2','mmol/L','mmol/l','mmol / L','mmol / l',
-                      'mmolL-1,','mmoll-1','mmol L-1,','mmol l-1',
-                      'mmol per liter','mmol per litre'),
-
-      'umol/L.o2' = c('umol/L.o2','umol/L','umol/l','umolL-1','umoll-1',
-                      'umol / L','umol / l','umol L-1','umol l-1',
-                      'umol per litre','umol per liter'),
-
-      'mL/L.o2' = c('mL/L.o2','ml/L','mL/L','mL/l','ml/l','mll-1','mLl-1',
-                    'mLL-1','mlL-1','ml / L','mL / L','mL / l','ml / l',
-                    'ml l-1','mL l-1','mL L-1','ml L-1','ml per l','mL per L',
-                    'ml per L'),
-
-      'mg/L.o2' = c('mg/L.o2','mg/L','mg/l','mg / l','mg / L','mgL-1','mgl-1',
-                    'mg L-1','mg l-1','mg per litre','mg per liter'),
-
-      'mg/kg.o2' = c('mg/kg.o2','mg/kg','mg / kg','mgkg-1','mg kg-1',
-                     'mg per kg'),
-
-      'ug/kg.o2' = c('ug/kg.o2','ug/kg','ugkg-1','ug / kg','ug kg-1',
-                     'ug per kg'),
-
-      'mL/kg.o2' = c('mL/kg.o2','ml/kg','mL/kg','mlkg-1','mLkg-1','ml / kg',
-                     'mL / kg','ml kg-1','mL kg-1','ml per kg'),
-
-      'mmol/kg.o2' = c('mmol/kg.o2','mmol/kg','mmol/Kg','mmolkg-1','mmolKg-1',
-                       'mmol / kg','mmol / Kg','mmol kg-1','mmol Kg-1',
-                       'mmol per kg','mmol per Kg'),
-
-      'umol/kg.o2' = c('umol/kg.o2','umol/kg','umol/Kg','umolkg-1,','umolKg-1',
-                       'umol / kg','umol / Kg','umol kg-1,','umol Kg-1',
-                       'umol per kg','umol per Kg'),
-
-      'Torr.o2p' = c('Torr.o2p','torr','TORR','Torr','Tor','tor'),
-
-      'hPa.o2p' = c('hPa.o2p','hPa','hpa','Hpa','HPA','HPa','hectopascal',
-                    'hpascal'),
-
-      'kPa.o2p' = c('kPa.o2p','kPa','kpa','Kpa','KPA','KPa','kilopascal',
-                    'kpascal'),
-
-      'mmHg.o2p' = c('mmHg.o2p','mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG',
-                     'millimeter of mercury','mm mercury'),
-
-      'inHg.o2p' = c('inHg.o2p','inHg','in Hg','inhg','in hg','INHG','IN HG',
-                     'inch of mercury','inch mercury'))
-  }
-  if (is == 'vol') {
-    all.units <- list(
-      uL.vol = c('ul.vol','ul','uL','microlitre','microliter',
-                 'micro litre','micro liter'),
-      mL.vol = c('mL.vol','ml','mL','millilitre','milli litre','milliliter',
-                 'milli liter'),
-      L.vol  = c('L.vol','l','L','liter','litre','Litre','Liter'))
-  }
-  if (is == 'mass') {
-    all.units <- list(
-      ug.mass  = c('ug.mass','ug','UG','µg','ugram','microgram'),
-      mg.mass  = c('mg.mass','mg','MG','mgram','milligram'),
-      g.mass   = c('g.mass','g','G','gram'),
-      kg.mass  = c('kg.mass','kg','KG','kilogram','kgram'))
-  }
-  if (is == 'o1') {
-    all.units <-  list(
-      'mg.o2'   = c('mg.o2','mg','milligram'),
-      'ug.o2'   = c('ug.o2','ug','microgram'),
-      'mmol.o2' = c('mmol.o2','mmol','millimol'),
-      'umol.o2' = c('umol.o2','umol','micromol'),
-      'ml.o2'   = c('ml.o2','ml','mL','millil'))
-  }
-  # Look for match
-  string <- paste0('^', unit, '$')  # for exact matching
-  chk <- lapply(all.units, function(x) grep(string, x))
-  chk <- sapply(chk, function(x) length(x) > 0)
-  result <- any(chk == T)  # did a match occur?
-  if (result == FALSE)
-    stop("unit '", unit, "' is not in the respR unit database.", call. = F)
-  out <- names(chk)[which(chk)]  # print unit name
+adjust_scale <- function(x, input, output) {
+  # Create database of terms for matching
+  prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour")
+  suffix <- c("mol", "g", "L", "l", "")
+  multip <- c(1e-19, 1e-06, 0.001, 1, 1000, 3600, 60, 1)
+  string <- "^(n|u|m||k|sec|min|hour)?(mol|g|L|l|)$"
+  # Clean and extract input strings
+  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
+  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
+  # Clean and extract output strings
+  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
+  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
+  # Check that conversion is possible
+  if (bef[3] != aft[3])
+    stop("Units do not match and cannot be converted.", call. = F)
+  # Convert!
+  a <- multip[match(bef[2], prefix)]  # get multiplier from input
+  b <- multip[match(aft[2], prefix)]  # get multiplier from output
+  out <- x * (a/b)  # convert
   return(out)
 }
-
-
 
