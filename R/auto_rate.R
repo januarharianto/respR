@@ -408,9 +408,6 @@ kde_fit <- function(dt, roll, width, by) {
   lapply(1:length(subsets), function(z)
     calc_rate(subsets[[z]], by = "row", plot = F))
 
-  calc_rate(subsets[[1]])
-  subsets[[1]]
-
     result <- data.table::rbindlist(lapply(1:length(raw.frags),
     function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
       to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
