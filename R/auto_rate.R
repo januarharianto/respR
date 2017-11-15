@@ -348,8 +348,8 @@ time_roll <- function(dt, width) {
 #' @keywords internal
 #' @export
 time_lm <- function(df, start, end) {
-  names(df) <- c("x", "y")
   dt <- data.table::data.table(df)
+  data.table::setnames(dt, 1:2, c("x", "y"))
   sdt <- dt[x >= start & x <= end]
   fit <- .lm.fit(cbind(1, sdt[[1]]), sdt[[2]])  # perform lm
   coef <- coef(fit)
