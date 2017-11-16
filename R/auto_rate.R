@@ -70,27 +70,25 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   if (uneven$check && by == "row")
     warning("Time data is irregular. Please use `by = 'time'.", call. = F)
 
-  # Generate defauly width for  rolling regression
-  if (is.null(width)) {
+  # Generate default width for rolling regression. This also applies if
+  # "linear" method sis selected.
+  if (is.null(width) | method == "linear") {
     if (by == "time") width <- floor(0.2 * max(df[[1]]))
     if (by == "row") width <- floor(0.2 * nrow(df))
   }
 
-  # FORMAT INPUTS
+  # Format the data
   dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
 
-  # DETERMINE ROLL STYLE
+  # Check if we are doing rolling regressions by row (fast) or time (slower).
   if (by == "time") {
     roll <- time_roll(dt, width)
   } else if (by == "row") {
     roll <- static_roll(dt, width)
   }
 
-  # TODO Check if method is interval. If it is, skip rolls.
-
-
-  # ATTACH ROW AND TIME INDEX
+  # Attach row and time indices to the roll data.
   if (by == "time") {
     roll[, `:=`(row, seq_len(.N))]  # first index by row
     # extract end rows by time
@@ -107,7 +105,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
       dt[roll[, endrow], x])]
   }
 
-  # PROCESS BY METHOD
+  # Process the data based on "method".
   if (method == "default") {
     result <- roll
   } else if (method == "linear") {
@@ -129,12 +127,13 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     }
   }
 
-  # GENERATE OUTPUT
+  # Generate output
   if (method != "linear") {
     # add row length and time length if NOT using linear method
     result[, `:=`(row.len, endrow - row + 1)][, `:=`(time.len,
       endtime - time)]
   }
+
   out <- list(df = dt,
     width   = width,
     by      = by,
@@ -308,10 +307,9 @@ static_roll <- function(df, width) {
 
 
 
-
-
 #' Perform time-width rolling regression
 #'
+#' This is an internal function. Used by [auto_rate()].
 #' @keywords internal
 #' @export
 time_roll <- function(dt, width) {
@@ -343,7 +341,7 @@ time_roll <- function(dt, width) {
 
 #' Subset data by time and perform a linear regression.
 #'
-#' Used with `time_roll`.
+#' This is an internal function. Used with [time_roll()] and [auto_rate()].
 #'
 #' @keywords internal
 #' @export
@@ -369,7 +367,7 @@ time_lm <- function(df, start, end) {
 
 #' Perform kernel density estimate and fitting
 #'
-#' This is an internal function.
+#' This is an internal function and is used by [auto.rate()].
 #'
 #' @keywords internal
 #' @export
@@ -408,7 +406,7 @@ kde_fit <- function(dt, roll, width, by) {
   lapply(1:length(subsets), function(z)
     calc_rate(subsets[[z]], by = "row", plot = F))
 
-    result <- data.table::rbindlist(lapply(1:length(raw.frags),
+  result <- data.table::rbindlist(lapply(1:length(raw.frags),
     function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
       to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
 
