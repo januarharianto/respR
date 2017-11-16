@@ -219,6 +219,7 @@ summary.auto_rate <- function(x) {
   cat("\n=== Summary of Results ===\n\n")
   print(data.table::data.table(x$summary))
 
+  return(invisible(x$summary))
 }
 
 

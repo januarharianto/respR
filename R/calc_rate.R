@@ -108,6 +108,7 @@ print.calc_rate <- function(x) {
 summary.calc_rate <- function(x) {
   cat("Summary:\n")
   print(x$summary)
+  return(invisible(x$summary))
 }
 
 #' @export

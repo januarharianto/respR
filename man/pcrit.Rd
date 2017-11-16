@@ -23,3 +23,6 @@ Critical oxygen tension can be calculated either by the "broken-stick"
 regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
 segmented regression approach, presented by Muggeo (2003).
 }
+\examples{
+pcrit(squid.rd)
+}
