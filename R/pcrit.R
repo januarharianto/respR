@@ -15,41 +15,43 @@
 #' @importFrom data.table data.table setnames setorder rbindlist
 #' @importFrom parallel detectCores makeCluster clusterExport parLapply
 #'   stopCluster
+#'
 #' @export
 #'
 #' @examples
+#' pcrit(squid.rd)
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
 
-  # Data validation
+  # Data validation.
   if (any(class(df) %in% "inspect.data")) df <- df$df
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
   if (width > nrow(df)) stop("`width` input is bigger than  length of data.")
 
-  # Format data
+  # Format data.
   dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
 
-  # Check if rate is provided in "has.rate"
+  # Check if rate is provided in "has.rate".
   if (!has.rate) {
     rdt <- generate_mrdf(dt, width)
   } else rdt <- dt
 
-  # Arrange the dataset in ascending order by x to prep for broken-stick model
+  # Arrange the dataset in ascending order by x to prep for broken-stick model.
   data.table::setorder(rdt, "x")
 
   # BROKEN-STICK
   message("Performing broken-stick analysis...")
 
-  # We can speed up really large datasets by subsampling them first
+  # We can speed up really large datasets by subsampling them first.
   limit <- 1000
   if (nrow(rdt) > limit) {
     srdt <- subsample(rdt, n = round(nrow(rdt)/limit), plot = F)
   } else srdt <- rdt
 
-  # Generate index for iterative sampling
+  # Generate index for iterative sampling.
   lseq <- seq.int(3, nrow(srdt) - 2) # generate sequence for lm
 
-  # Then, peform broken-stick using parallelisation
+  # Then, perform broken-stick estimates.
   no_cores <- parallel::detectCores() - 1  # use n-1 cores
   cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
   parallel::clusterExport(cl, "broken_stick") # import function to use
