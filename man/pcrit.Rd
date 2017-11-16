@@ -9,24 +9,17 @@ pcrit(df, width = floor(0.1 * nrow(df)), has.rate = F, plot = T)
 \arguments{
 \item{df}{data frame.}
 
-\item{width}{numeric.}
+\item{width}{numeric. Defaults to \code{floor(0.1*nrow(df))}.}
 
-\item{has.rate}{logical.}
+\item{has.rate}{logical. Defaults to FALSE.}
 
-\item{plot}{logical.}
+\item{plot}{logical. Defaults to TRUE.}
 }
 \value{
-A list object.
+A list object of class \code{pcrit}.
 }
 \description{
-Critical oxygen tension can be calculated either by the "broken-stick" regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the segmented regression approach, presented by Muggeo (2003).
-}
-\details{
-To determine P_crit, the rate of change in oxygen, RO_2 (or its mass-specific variation, MO_2) and ambient oxygen concentration (PO_2) must be provided. If RO_2 has not been calculated, \code{\link[=pcrit]{pcrit()}} can automatically generate the data by performing a rolling regression of the PO_2 values.
-}
-\examples{
-NULL
-}
-\author{
-Januar Harianto & Nicholas Carey
+Critical oxygen tension can be calculated either by the "broken-stick"
+regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
+segmented regression approach, presented by Muggeo (2003).
 }

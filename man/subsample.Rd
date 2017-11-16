@@ -4,7 +4,7 @@
 \alias{subsample}
 \title{Subsample a data frame object}
 \usage{
-subsample(df, n = 5, random_start = F)
+subsample(df, n = 5, random_start = F, plot = T)
 }
 \arguments{
 \item{df}{data frame.}
