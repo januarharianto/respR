@@ -110,6 +110,13 @@ print.pcrit <- function(x) {
   cat(sprintf("Breakpoint  %g\n", x$result.segmented))
 }
 
+#' @export
+summary.pcrit <- function(x) {
+  cat("Top Result for all Methods:\n")
+  summ <- cbind(x$bstick.summary[1], pcrit.segmented = x$result.segmented)
+  print(summ)
+  return(invisible(summ))
+}
 
 
 
