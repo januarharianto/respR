@@ -38,7 +38,7 @@
 #' # Using a list in 'from' and 'to' calculates multiple regressions:
 #' data(intermittent.rd)
 #' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
-calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
+calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
@@ -109,10 +109,10 @@ print.calc_rate <- function(x, ...) {
 
 
 #' @export
-summary.calc_rate <- function(x, ...) {
+summary.calc_rate <- function(object, ...) {
   cat("Summary:\n")
-  print(x$summary)
-  return(invisible(x$summary))
+  print(object$summary)
+  return(invisible(object$summary))
 }
 
 #' @export

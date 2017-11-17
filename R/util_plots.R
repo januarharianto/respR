@@ -11,7 +11,7 @@ d2 <- adjustcolor("darkslateblue", alpha.f = 0.75)
 
 
 
-multi.p <- function(df, sdf, title = T) {
+multi.p <- function(df, sdf, title = TRUE) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
