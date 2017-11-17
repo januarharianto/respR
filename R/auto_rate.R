@@ -42,9 +42,9 @@
 #' @export
 #'
 #' @examples
-#' auto_rate(sardine.rd)
+#' auto_rate(sardine.rd, parallel = FALSE)
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
-  plot = TRUE) {
+  plot = TRUE, parallel = TRUE) {
   tic()  # start time
 
   # Import from previous function(s)
@@ -82,7 +82,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # Check if we are doing rolling regressions by row (fast) or time (slower).
   if (by == "time") {
-    roll <- time_roll(dt, width)
+    roll <- time_roll(dt, width, parallel)
   } else if (by == "row") {
     roll <- static_roll(dt, width)
   }
