@@ -4,7 +4,8 @@
 \alias{auto_rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
+auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
+  parallel = TRUE)
 }
 \arguments{
 \item{df}{data frame.}
@@ -16,6 +17,9 @@ auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
 \item{method}{string. "linear", "max", "min" or "interval".}
 
 \item{plot}{logical. Defaults to TRUE. Automatically plot the results.}
+
+\item{parallel}{logical. Defaults to TRUE. Should parallel processes be
+implemented to speed things up?}
 }
 \value{
 A list object of class \code{auto_rate}.
@@ -41,13 +45,12 @@ algorithms that can be called with the argument "\code{logic}":
 lowest.
 \item \code{min}: regressions are arranged from lowest absolute values, to the
 highest.
-\item \code{interval}: non-overlapping regressions are extracted from the
-rolled regrssions. They are not ranked.
-\item \code{linear}: Buses kernel density
-estimation to detect the most "linear" sections of the timeseries in
-descending order.
+\item \code{interval}: non-overlapping regressions are extracted from the rolled
+regrssions. They are not ranked.
+\item \code{linear}: Buses kernel density estimation to detect the most "linear"
+sections of the timeseries in descending order.
 }
 }
 \examples{
-auto_rate(sardine.rd)
+auto_rate(sardine.rd, parallel = FALSE)
 }

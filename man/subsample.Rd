@@ -4,7 +4,7 @@
 \alias{subsample}
 \title{Subsample a data frame object}
 \usage{
-subsample(df, n = 5, random_start = F, plot = T)
+subsample(df, n = 5, random_start = FALSE, plot = TRUE)
 }
 \arguments{
 \item{df}{data frame.}
@@ -27,7 +27,7 @@ new data frame object. Effectifely "thins" large datasets.
 subsample(squid.rd, n = 10)
 
 # Subsample with random first value:
-subsample(sardine.rd, 3, T)
+subsample(sardine.rd, 3, TRUE)
 }
 \author{
 Januar Harianto & Nicholas Carey

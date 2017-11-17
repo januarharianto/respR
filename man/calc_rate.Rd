@@ -4,7 +4,7 @@
 \alias{calc_rate}
 \title{Calculate rate of change in oxygen over time}
 \usage{
-calc_rate(x, from = NULL, to = NULL, by = "time", plot = T)
+calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE)
 }
 \arguments{
 \item{x}{data frame or object of class \code{\link[=adjust_rate]{adjust_rate()}}.}

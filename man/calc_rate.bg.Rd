@@ -5,7 +5,7 @@
 \title{Calculate background respiration rates}
 \usage{
 calc_rate.bg(x, xcol = 1, ycol = 2, from = NULL, to = NULL,
-  by = "time", plot = T)
+  by = "time", plot = TRUE)
 }
 \arguments{
 \item{x}{data frame.}

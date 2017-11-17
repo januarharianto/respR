@@ -39,7 +39,8 @@ Once data checks are complete, the function produces a list object which may be 
 inspect_data(sardine.rd)
 inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 
-# It is also possible to load the function directly into respR's other functions:
+# It is also possible to load the function directly into respR's
+# other functions:
 calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
           from = 3000, to = 4000, by = "time")
 }

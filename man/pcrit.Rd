@@ -4,7 +4,8 @@
 \alias{pcrit}
 \title{Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}}
 \usage{
-pcrit(df, width = floor(0.1 * nrow(df)), has.rate = F, plot = T)
+pcrit(df, width = floor(0.1 * nrow(df)), has.rate = FALSE, plot = TRUE,
+  parallel = TRUE)
 }
 \arguments{
 \item{df}{data frame.}
@@ -14,6 +15,8 @@ pcrit(df, width = floor(0.1 * nrow(df)), has.rate = F, plot = T)
 \item{has.rate}{logical. Defaults to FALSE.}
 
 \item{plot}{logical. Defaults to TRUE.}
+
+\item{parallel}{logical. Defaults to TRUE.}
 }
 \value{
 A list object of class \code{pcrit}.
@@ -24,5 +27,5 @@ regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
 segmented regression approach, presented by Muggeo (2003).
 }
 \examples{
-pcrit(squid.rd)
+pcrit(squid.rd, parallel = FALSE)
 }
