@@ -96,7 +96,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = 35, t = 25,
 
 
 #' @export
-print.convert_DO <- function(x) {
+print.convert_DO <- function(x, ...) {
   if(length(x$output >= 20)) {
     cat("Showing only the first 20 conversions:\n")
     print(head(x$output, 20))
@@ -106,6 +106,8 @@ print.convert_DO <- function(x) {
   cat("\n")
 }
 
+#' Check unit string against a known database
+#'
 #' @keywords internal
 #' @export
 verify_units <- function(unit, is) {
@@ -184,7 +186,7 @@ verify_units <- function(unit, is) {
   }
   if (is == 'mass') {
     all.units <- list(
-      ug.mass  = c('ug.mass','ug','UG','µg','ugram','microgram'),
+      ug.mass  = c('ug.mass','ug','UG','ugram','microgram'),
       mg.mass  = c('mg.mass','mg','MG','mgram','milligram'),
       g.mass   = c('g.mass','g','G','gram'),
       kg.mass  = c('kg.mass','kg','KG','kilogram','kgram'))

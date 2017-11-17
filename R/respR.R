@@ -8,5 +8,5 @@
 #' for background corrections and unit conversions are included.
 #'
 #' @author Januar Harianto & Nicholas Carey
-#'
-"_PACKAGE"
+#' @docType package
+#' @name respR

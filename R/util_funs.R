@@ -26,3 +26,9 @@ toc <- function() {
   return(elapsed)
 }
 
+
+
+# Deal with pesky "no visible binding for global variable.." checks
+x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL
+rowlength = NULL; endrow = NULL; timelength = NULL; rate_twopoint = NULL
+endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL

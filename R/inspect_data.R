@@ -19,6 +19,10 @@
 #' @param plot logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.
 #'
 #' @return A list object of class `adjust_rate`.
+#'
+#' @import utils
+#' @import stats
+#' @import graphics
 #' @export
 #'
 #' @examples
