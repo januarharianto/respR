@@ -2,13 +2,8 @@
 % Please edit documentation in R/unit_args.R
 \name{unit_args}
 \alias{unit_args}
-<<<<<<< HEAD:man/unit_args.Rd
 \title{Print examples of unit arguments for use in \code{\link[=convert_rate]{convert_rate()}} and
 \code{\link[=scale_rate]{scale_rate()}}}
-=======
-\title{Print examples of unit arguments for use in \code{\link[=convert_DO]{convert_DO()}} and
-\code{\link[=convert_rate]{convert_rate()}}}
->>>>>>> develop:man/unit_args.Rd
 \usage{
 unit_args()
 }
@@ -17,26 +12,15 @@ A list.
 }
 \description{
 This is a simple function, requiring no argument. It shows available units
-<<<<<<< HEAD:man/unit_args.Rd
 that can be used in the functions \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=scale_rate]{scale_rate()}}.
 }
 \details{
 Available units for \code{\link[=convert_rate]{convert_rate()}}:
-=======
-that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}.
-}
-\details{
-Available units for \code{\link[=convert_DO]{convert_DO()}}:
->>>>>>> develop:man/unit_args.Rd
 
 "mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
 "umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
 
-<<<<<<< HEAD:man/unit_args.Rd
 Available units for \code{\link[=scale_rate]{scale_rate()}}:
-=======
-Available units for \code{\link[=convert_rate]{convert_rate()}}:
->>>>>>> develop:man/unit_args.Rd
 
 \strong{O2}
 

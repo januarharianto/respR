@@ -7,10 +7,6 @@
 time_lm(df, start, end)
 }
 \description{
-<<<<<<< HEAD
 Used with \code{time_roll}.
-=======
-This is an internal function. Used with \code{\link[=time_roll]{time_roll()}} and \code{\link[=auto_rate]{auto_rate()}}.
->>>>>>> develop
 }
 \keyword{internal}

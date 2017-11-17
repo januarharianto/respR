@@ -7,10 +7,6 @@
 kde_fit(dt, roll, width, by)
 }
 \description{
-<<<<<<< HEAD
 This is an internal function.
-=======
-This is an internal function and is used by \code{\link[=auto_rate]{auto_rate()}}.
->>>>>>> develop
 }
 \keyword{internal}

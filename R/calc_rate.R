@@ -17,10 +17,6 @@
 #' @param plot logical. Defaults to TRUE.
 #'
 #' @importFrom data.table data.table rbindlist
-#' @import utils
-#' @import stats
-#' @import graphics
-#' @import grDevices
 #'
 #' @return A list object of class `calc_rate`.
 #' @export
@@ -61,7 +57,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
   }
 
   # Subset the data:
-  dt <- lapply(1:length(from), function(z) subset_data(x, from[z], to[z], by))
+  dt <- lapply(1:length(from), function(z) subset.data(x, from[z], to[z], by))
 
   # Perform lm on data and extract coefficients
   coefs <- lapply(1:length(to), function(z) linear_fit(dt[[z]]))
@@ -102,33 +98,20 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
 
 
 #' @export
-<<<<<<< HEAD:R/calc_rate.R
 print.calc_rate <- function(x) {
-=======
-print.calc_rate <- function(x, ...) {
->>>>>>> develop:R/calc_rate.R
   cat("Rate(s):\n")
   print(x$rate)
 }
 
 
 #' @export
-<<<<<<< HEAD:R/calc_rate.R
 summary.calc_rate <- function(x) {
-=======
-summary.calc_rate <- function(x, ...) {
->>>>>>> develop:R/calc_rate.R
   cat("Summary:\n")
   print(x$summary)
-  return(invisible(x$summary))
 }
 
 #' @export
-<<<<<<< HEAD:R/calc_rate.R
 plot.calc_rate <- function(x, rep = 1) {
-=======
-plot.calc_rate <- function(x, rep = 1, ...) {
->>>>>>> develop:R/calc_rate.R
   message('Plotting...this may take a while for large datasets.')
   df  <- x$data
   sdf <- x$subsets[[rep]]
