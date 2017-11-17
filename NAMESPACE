@@ -3,6 +3,7 @@
 S3method(plot,auto_rate)
 S3method(plot,calc_rate)
 S3method(plot,calc_rate.bg)
+S3method(plot,pcrit)
 S3method(print,adjust_rate)
 S3method(print,auto_rate)
 S3method(print,calc_rate)
