@@ -7,6 +7,6 @@
 time_roll(dt, width)
 }
 \description{
-This is an internal function. Used by \code{\link[=auto_rate]{auto_rate()}}.
+Perform time-width rolling regression
 }
 \keyword{internal}

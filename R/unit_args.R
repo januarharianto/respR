@@ -1,15 +1,15 @@
-#' Print examples of unit arguments for use in [convert_DO()] and
-#' [convert_rate()]
+#' Print examples of unit arguments for use in [convert_rate()] and
+#' [scale_rate()]
 #'
 #' This is a simple function, requiring no argument. It shows available units
-#' that can be used in the functions [convert_DO()] and [convert_rate()].
+#' that can be used in the functions [convert_rate()] and [scale_rate()].
 #'
-#' Available units for [convert_DO()]:
+#' Available units for [convert_rate()]:
 #'
 #' "mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
 #' "umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
 #'
-#' Available units for [convert_rate()]:
+#' Available units for [scale_rate()]:
 #'
 #' **O2**
 #'

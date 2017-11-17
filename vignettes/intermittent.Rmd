@@ -1,0 +1,115 @@
+---
+title: "respR - Measuring intermittent-flow data"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{respR - Measuring intermittent-flow data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7)
+```
+
+## Introduction
+`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. 
+
+For users who have already read the [introductory vignette](intro.html), this document provides additional documentation related to the analysis of **intermittent-flow** data.
+
+More information about the package, including additional documentation, can be found on the `respR` page on [GitHub](https://github.com/januarharianto/respR).
+
+## Intermittent-flow respirometry
+
+The example data, `intermittent`, contains multiple measurements of oxygen consumption in the (animal name), (genus, species) conducted in a single session (Carey, *unpublished*). Detailed information about the data, including its source and methods, can be obtained with the command `?intermittent`. We use `check.input()` to quickly scan for errors in the data frame and to preview the data in a plot.
+
+```{r}
+library(respR)
+data(intermittent)
+# check the data for errors:
+check.input(intermittent, plot = T)
+```
+
+
+Analysis of the data would require the user to only use sections of the data where oxygen concentration is decreasing. We can use `calc.rate()` to analyse the sections simultaneously.
+
+By specifying a vector of numbers in the arguments `from` and `to`, the function will recognise that multiple subsets of the data are to be analysed. Subsetting the data is then a matter of matching the vector elements by position.
+
+For example, using the arguments `from = c(200, 2300, 4100)`, and `to = c(1800, 3200, 4600)`, with the method `by = "time"` will analyse the data at 3 subset locations: from between 200 and 1800 s, 2300 and 3200 s, & 4100 and 4600 s. The results are automatically averaged. Weighting the results ensure that the results contribute fairly to the mean value, since the subset lengths tend to differ and should not carry equal weight (i.e. a subset that runs for 20 minutes should not be equal to a subset that runs for 2 minutes).
+
+
+```{r}
+# calculate rate
+rate <- calc.rate(intermittent, from = c(200, 2300, 4100), 
+  to = c(1800, 3200, 4600), by = 'time')
+print(rate)
+```
+
+Calling `summary()` will show the coefficients and locations of each subset.
+
+```{r}
+summary(rate)
+```
+
+You can also use `plot()` to view the diagnostic plots of any individual subset. The argument `rep` determines the data subset to plot.
+
+```{r}
+plot(rate)           # view the first subset
+plot(rate, rep = 2)  # view the second subset
+```
+
+If background rate is provided, add it as an argument and the results will reflect the correction.
+
+
+```{r}
+# just showing background-corrected output:
+ratebg <- calc.rate(intermittent, from = c(200, 2300, 4100), 
+  to = c(1800, 3200, 4600), by = 'time', bg = 0.000121, plot = F)
+ratebg
+```
+
+Once the rate has been determined, you can calculate the volume- or weight-specific rate using `calc.mo2()`. The `print()` call will list up to 6 regressions and the weighted mean of the results are also given.
+
+```{r}
+# calculate volume-specific rate only (not scaled to weight):
+vo2 <- calc.mo2(rate, unit.in = "mg/l/s", unit.out = "mg/h", volume = 1.81)
+vo2
+```
+
+## Further reading
+
+This document provides sample code to analyse a typical intermittent-flow respirometry dataset. For more information about the package, including additional documentation, navigate to the `respR` page on [GitHub](https://github.com/januarharianto/respR). The following vignettes provide additional example workflows based on user needs, and may be useful to you:
+
+1. Maximum, minimum, and interval analyses.
+2. Pcrit analyses.
+
+## Code
+```{r, eval=F}
+library(respR)
+data(intermittent)
+# check the data for errors:
+check.input(intermittent, plot = T)
+
+# calculate rate
+rate <- calc.rate(intermittent, from = c(200, 2300, 4100), 
+  to = c(1800, 3200, 4600), by = 'time')
+print(rate)
+summary(rate)
+plot(rate)           # view the first subset
+plot(rate, rep = 2)  # view the second subset
+
+# just showing background-corrected output:
+ratebg <- calc.rate(intermittent, from = c(200, 2300, 4100), 
+  to = c(1800, 3200, 4600), by = 'time', bg = 0.000121, plot = F)
+ratebg
+
+
+# calculate volume-specific rate only (not scaled to weight):
+vo2 <- calc.mo2(rate, unit.in = "mg/l/s", unit.out = "mg/h", volume = 1.81)
+vo2
+
+```
+
+

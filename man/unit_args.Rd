@@ -2,8 +2,8 @@
 % Please edit documentation in R/unit_args.R
 \name{unit_args}
 \alias{unit_args}
-\title{Print examples of unit arguments for use in \code{\link[=convert_DO]{convert_DO()}} and
-\code{\link[=convert_rate]{convert_rate()}}}
+\title{Print examples of unit arguments for use in \code{\link[=convert_rate]{convert_rate()}} and
+\code{\link[=scale_rate]{scale_rate()}}}
 \usage{
 unit_args()
 }
@@ -12,15 +12,15 @@ A list.
 }
 \description{
 This is a simple function, requiring no argument. It shows available units
-that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}.
+that can be used in the functions \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=scale_rate]{scale_rate()}}.
 }
 \details{
-Available units for \code{\link[=convert_DO]{convert_DO()}}:
+Available units for \code{\link[=convert_rate]{convert_rate()}}:
 
 "mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
 "umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
 
-Available units for \code{\link[=convert_rate]{convert_rate()}}:
+Available units for \code{\link[=scale_rate]{scale_rate()}}:
 
 \strong{O2}
 
