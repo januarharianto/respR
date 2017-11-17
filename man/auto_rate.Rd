@@ -14,6 +14,8 @@ auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
 \item{by}{string. "row" or "time". Defaults to "row".}
 
 \item{method}{string. "linear", "max", "min" or "interval".}
+
+\item{plot}{logical. Defaults to TRUE. Automatically plot the results.}
 }
 \value{
 A list object of class \code{auto_rate}.
@@ -27,26 +29,23 @@ possible values. The computations are then ranked (or, arranged), based on
 the "\code{logic}" argument, and the output is summarised.
 }
 \details{
-\strong{Units}
-
-There are no units of measurements involved in \code{auto_rate}. This is a
-deliberate decision. Units are called in a later function when volume- and/or
-weight-specific rates of oxygen concentration are computed in
+\strong{Units} There are no units of measurements involved in \code{auto_rate}. This is
+a deliberate decision. Units are called in a later function when volume-
+and/or weight-specific rates of oxygen concentration are computed in
 \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 
-\emph{\strong{Ranking algorithms}}
-
-For now, \code{auto_rate()} contains four ranking algorithms that can be called
-with the argument "\code{logic}":
+\emph{\strong{Ranking algorithms}} For now, \code{auto_rate()} contains four ranking
+algorithms that can be called with the argument "\code{logic}":
 \itemize{
 \item \code{max}: regressions are arranged from highest absolute values, to the
 lowest.
 \item \code{min}: regressions are arranged from lowest absolute values, to the
 highest.
-\item \code{interval}: non-overlapping regressions are extracted from the rolled
-regrssions. They are not ranked.
-\item \code{linear}: Buses kernel density estimation to detect the most "linear"
-sections of the timeseries in descending order.
+\item \code{interval}: non-overlapping regressions are extracted from the
+rolled regrssions. They are not ranked.
+\item \code{linear}: Buses kernel density
+estimation to detect the most "linear" sections of the timeseries in
+descending order.
 }
 }
 \examples{

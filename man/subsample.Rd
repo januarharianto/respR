@@ -12,6 +12,8 @@ subsample(df, n = 5, random_start = F, plot = T)
 \item{n}{numeric.}
 
 \item{random_start}{logical.}
+
+\item{plot}{logical. Defaults to TRUE. Plots the data automatically.}
 }
 \value{
 A data frame object.
