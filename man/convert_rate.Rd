@@ -8,7 +8,12 @@ convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
   volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
 }
 \arguments{
+<<<<<<< HEAD
 \item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}} or \code{\link[=adjust_rate]{adjust_rate()}}.}
+=======
+\item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}} or
+\code{\link[=adjust_rate]{adjust_rate()}}.}
+>>>>>>> develop
 
 \item{o2.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
 
@@ -42,5 +47,10 @@ For example, \code{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same
 Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
 }
 \examples{
+<<<<<<< HEAD
 convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
+=======
+convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
+  output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
+>>>>>>> develop
 }

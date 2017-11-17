@@ -7,8 +7,12 @@
 #' possible values. The computations are then ranked (or, arranged), based on
 #' the "`logic`" argument, and the output is summarised.
 #'
-#' **Units**
+#' **Units** There are no units of measurements involved in `auto_rate`. This is
+#' a deliberate decision. Units are called in a later function when volume-
+#' and/or weight-specific rates of oxygen concentration are computed in
+#' [convert_rate()] and [convert_DO()].
 #'
+<<<<<<< HEAD:R/auto_rate.R
 #' There are no units of measurements involved in `auto_rate`. This is a
 #' deliberate decision. Units are called in a later function when volume- and/or
 #' weight-specific rates of oxygen concentration are computed in
@@ -19,31 +23,44 @@
 #'
 #' For now, `auto_rate()` contains four ranking algorithms that can be called
 #' with the argument "`logic`":
+=======
+#'
+#' ***Ranking algorithms*** For now, `auto_rate()` contains four ranking
+#' algorithms that can be called with the argument "`logic`":
+>>>>>>> develop:R/auto_rate.R
 #'
 #' - `max`: regressions are arranged from highest absolute values, to the
 #' lowest.
+#'
 #' - `min`: regressions are arranged from lowest absolute values, to the
 #' highest.
-#' - `interval`: non-overlapping regressions are extracted from the rolled
-#' regrssions. They are not ranked.
-#' - `linear`: Buses kernel density estimation to detect the most "linear"
-#' sections of the timeseries in descending order.
+#'
+#' - `interval`: non-overlapping regressions are extracted from the
+#' rolled regrssions. They are not ranked.
+#'
+#' - `linear`: Buses kernel density
+#' estimation to detect the most "linear" sections of the timeseries in
+#' descending order.
 #'
 #' @param df data frame.
 #' @param width numeric. Defaults to 25 percent of width if NULL.
 #' @param by string. "row" or "time". Defaults to "row".
 #' @param method string. "linear", "max", "min" or "interval".
+#' @param plot logical. Defaults to TRUE. Automatically plot the results.
 #'
 #' @return A list object of class `auto_rate`.
 #'
-#' @importFrom data.table data.table rbindlist setnames
+#' @import data.table
 #' @import parallel
 #' @export
 #'
 #' @examples
 #' auto_rate(sardine.rd)
+<<<<<<< HEAD:R/auto_rate.R
 #' auto_rate(inspect_data(urchins.rd, 1, 15))
 #' auto_rate(inspect_data(urchins.rd, 1, 15), by = "time")
+=======
+>>>>>>> develop:R/auto_rate.R
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE) {
   tic()  # start time
@@ -70,44 +87,42 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   if (uneven$check && by == "row")
     warning("Time data is irregular. Please use `by = 'time'.", call. = F)
 
-  # Generate defauly width for  rolling regression
-  if (is.null(width)) {
+  # Generate default width for rolling regression. This also applies if
+  # "linear" method sis selected.
+  if (is.null(width) | method == "linear") {
     if (by == "time") width <- floor(0.2 * max(df[[1]]))
     if (by == "row") width <- floor(0.2 * nrow(df))
   }
 
-  # FORMAT INPUTS
+  # Format the data
   dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
 
-  # DETERMINE ROLL STYLE
+  # Check if we are doing rolling regressions by row (fast) or time (slower).
   if (by == "time") {
     roll <- time_roll(dt, width)
   } else if (by == "row") {
     roll <- static_roll(dt, width)
   }
 
-  # TODO Check if method is interval. If it is, skip rolls.
-
-
-  # ATTACH ROW AND TIME INDEX
+  # Attach row and time indices to the roll data.
   if (by == "time") {
-    roll[, `:=`(row, seq_len(.N))]  # first index by row
+    roll[, row := seq_len(.N)]
     # extract end rows by time
     endrow <- sapply(dt[roll[, row], x], function(z) max(dt[,
       which(x <= z + width)]))
-    roll[, `:=`(endrow, endrow)]
-    roll[, `:=`(time, dt[roll[, row], x])][, `:=`(endtime,
-      dt[roll[, endrow], x])]
+    roll[, endrow := endrow]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
 
   } else if (by == "row") {
-    roll[, `:=`(row, seq_len(.N))][, `:=`(endrow, roll[,
-      row] + width - 1)]
-    roll[, `:=`(time, dt[roll[, row], x])][, `:=`(endtime,
-      dt[roll[, endrow], x])]
+    roll[, row := seq_len(.N)]
+    roll[, endrow := roll[, row] + width - 1]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
   }
 
-  # PROCESS BY METHOD
+  # Process the data based on "method".
   if (method == "default") {
     result <- roll
   } else if (method == "linear") {
@@ -129,12 +144,13 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     }
   }
 
-  # GENERATE OUTPUT
+  # Generate output
   if (method != "linear") {
     # add row length and time length if NOT using linear method
     result[, `:=`(row.len, endrow - row + 1)][, `:=`(time.len,
       endtime - time)]
   }
+
   out <- list(df = dt,
     width   = width,
     by      = by,
@@ -163,7 +179,11 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
 
 #' @export
+<<<<<<< HEAD:R/auto_rate.R
 print.auto_rate <- function(x, pos = 1) {
+=======
+print.auto_rate <- function(x, pos = 1, ...) {
+>>>>>>> develop:R/auto_rate.R
   method <- x$method
   cat("Data is subset by", x$by, "using width of", x$width, "\n")
   cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
@@ -205,7 +225,11 @@ print.auto_rate <- function(x, pos = 1) {
 
 
 #' @export
+<<<<<<< HEAD:R/auto_rate.R
 summary.auto_rate <- function(x) {
+=======
+summary.auto_rate <- function(x, ...) {
+>>>>>>> develop:R/auto_rate.R
   cat("Regressions :", nrow(x$roll))
   cat(" | Results :", nrow(x$summary))
   cat(" | Method :", x$method)
@@ -220,6 +244,7 @@ summary.auto_rate <- function(x) {
   cat("\n=== Summary of Results ===\n\n")
   print(data.table::data.table(x$summary))
 
+  return(invisible(x$summary))
 }
 
 
@@ -229,7 +254,11 @@ summary.auto_rate <- function(x) {
 
 
 #' @export
+<<<<<<< HEAD:R/auto_rate.R
 plot.auto_rate <- function(x, pos = 1) {
+=======
+plot.auto_rate <- function(x, pos = 1, ...) {
+>>>>>>> develop:R/auto_rate.R
   # DEFINE OBJECTS
   dt <- x$df
   start <- x$summary$row[pos]
@@ -308,10 +337,16 @@ static_roll <- function(df, width) {
 
 
 
+<<<<<<< HEAD:R/auto_rate.R
 
 
 #' Perform time-width rolling regression
 #'
+=======
+#' Perform time-width rolling regression
+#'
+#' This is an internal function. Used by [auto_rate()].
+>>>>>>> develop:R/auto_rate.R
 #' @keywords internal
 #' @export
 time_roll <- function(dt, width) {
@@ -343,7 +378,11 @@ time_roll <- function(dt, width) {
 
 #' Subset data by time and perform a linear regression.
 #'
+<<<<<<< HEAD:R/auto_rate.R
 #' Used with `time_roll`.
+=======
+#' This is an internal function. Used with [time_roll()] and [auto_rate()].
+>>>>>>> develop:R/auto_rate.R
 #'
 #' @keywords internal
 #' @export
@@ -369,7 +408,11 @@ time_lm <- function(df, start, end) {
 
 #' Perform kernel density estimate and fitting
 #'
+<<<<<<< HEAD:R/auto_rate.R
 #' This is an internal function.
+=======
+#' This is an internal function and is used by [auto_rate()].
+>>>>>>> develop:R/auto_rate.R
 #'
 #' @keywords internal
 #' @export
@@ -402,13 +445,17 @@ kde_fit <- function(dt, roll, width, by) {
 
   # Convert fragments to subsets
   subsets <- lapply(1:length(raw.frags), function(x)
-    subset.data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
+    subset_data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
 
   # Perform lm on each subset
   lapply(1:length(subsets), function(z)
     calc_rate(subsets[[z]], by = "row", plot = F))
 
+<<<<<<< HEAD:R/auto_rate.R
     result <- data.table::rbindlist(lapply(1:length(raw.frags),
+=======
+  result <- data.table::rbindlist(lapply(1:length(raw.frags),
+>>>>>>> develop:R/auto_rate.R
     function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
       to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
 

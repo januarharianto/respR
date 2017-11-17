@@ -1,6 +1,6 @@
 Package: respR
 Type: Package
-Title: Analyse, Convert, and Automate Respirometry-Related Data.
+Title: Analyse, Convert, and Automate Respirometry-Related Data
 Version: 0.0.0.9000
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
@@ -16,6 +16,10 @@ LazyData: true
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
 Imports:
+    grDevices,
+    graphics,
+    stats,
+    utils,
     dplyr,
     marelac,
     roll,

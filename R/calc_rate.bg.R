@@ -31,7 +31,7 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   dt <- data.table(x[c(xcol, ycol)])
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
-    dt <- subset.data(dt, from, to, by)
+    dt <- subset_data(dt, from, to, by)
   # Perform lm fit on each column:
   fit <- lapply(1:length(ycol), function(x) lm(dt[[x + 1]] ~ dt[[1]]))
   # Extract coefficients:
@@ -48,13 +48,21 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
 
 
 #' @export
+<<<<<<< HEAD:R/calc_rate.bg.R
 print.calc_rate.bg <- function(x) {
+=======
+print.calc_rate.bg <- function(x, ...) {
+>>>>>>> develop:R/calc_rate.bg.R
   cat("Rate(s):\n")
   print(x$bgrate)
 }
 
 #' @export
+<<<<<<< HEAD:R/calc_rate.bg.R
 plot.calc_rate.bg <- function(x) {
+=======
+plot.calc_rate.bg <- function(x, ...) {
+>>>>>>> develop:R/calc_rate.bg.R
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
@@ -66,7 +74,6 @@ plot.calc_rate.bg <- function(x) {
 
 
 
-# subset.data -------------------------------------------------------------
 
 #' Truncate a data frame to create a subset of the data
 #'
@@ -82,7 +89,7 @@ plot.calc_rate.bg <- function(x) {
 #'
 #' @return A `data.table` object.
 #' @export
-subset.data <- function(x, from, to, by) {
+subset_data <- function(x, from, to, by) {
   dt <- data.table::as.data.table(x)
   if (by == "time") {
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]

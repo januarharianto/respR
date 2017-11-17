@@ -10,7 +10,12 @@
 #' For example, `'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'` are all the same.
 #' Use [unit_args()] to view a list of usable unit strings.
 #'
+<<<<<<< HEAD:R/convert_rate.R
 #' @param x numeric, or objects of class [calc_rate()], [auto_rate()] or [adjust_rate()].
+=======
+#' @param x numeric, or objects of class [calc_rate()], [auto_rate()] or
+#'   [adjust_rate()].
+>>>>>>> develop:R/convert_rate.R
 #' @param o2.unit string. Check [unit_args()].
 #' @param time.unit string. Check [unit_args()].
 #' @param output.unit string. Check [unit_args()].
@@ -26,9 +31,17 @@
 #' @export
 #'
 #' @examples
+<<<<<<< HEAD:R/convert_rate.R
 #' convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
   volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253) {
+=======
+#' convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
+#'   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
+convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
+  output.unit = NULL, volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
+  {
+>>>>>>> develop:R/convert_rate.R
 
   # Validate inputs If units are set to NULL, use default values.
   if (is.null(o2.unit)) {
