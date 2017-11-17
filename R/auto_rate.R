@@ -22,18 +22,19 @@
 #' - `min`: regressions are arranged from lowest absolute values, to the
 #' highest.
 #'
-#' - `interval`: non-overlapping regressions are extracted from the
-#' rolled regrssions. They are not ranked.
+#' - `interval`: non-overlapping regressions are extracted from the rolled
+#' regrssions. They are not ranked.
 #'
-#' - `linear`: Buses kernel density
-#' estimation to detect the most "linear" sections of the timeseries in
-#' descending order.
+#' - `linear`: Buses kernel density estimation to detect the most "linear"
+#' sections of the timeseries in descending order.
 #'
 #' @param df data frame.
 #' @param width numeric. Defaults to 25 percent of width if NULL.
 #' @param by string. "row" or "time". Defaults to "row".
 #' @param method string. "linear", "max", "min" or "interval".
 #' @param plot logical. Defaults to TRUE. Automatically plot the results.
+#' @param parallel logical. Defaults to TRUE. Should parallel processes be
+#'   implemented to speed things up?
 #'
 #' @return A list object of class `auto_rate`.
 #'
