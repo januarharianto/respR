@@ -204,22 +204,22 @@ print.auto_rate <- function(x, pos = 1, ...) {
 
 
 #' @export
-summary.auto_rate <- function(x, ...) {
-  cat("Regressions :", nrow(x$roll))
-  cat(" | Results :", nrow(x$summary))
-  cat(" | Method :", x$method)
-  cat(" | Roll width :", x$width)
-  cat(" | Roll type :", x$by, "\n")
+summary.auto_rate <- function(object, ...) {
+  cat("Regressions :", nrow(object$roll))
+  cat(" | Results :", nrow(object$summary))
+  cat(" | Method :", object$method)
+  cat(" | Roll width :", object$width)
+  cat(" | Roll type :", object$by, "\n")
 
-  if(x$method == "linear") {
+  if(object$method == "linear") {
     cat("\n=== Kernel Density ===")
-    print(x$density)
+    print(object$density)
   }
 
   cat("\n=== Summary of Results ===\n\n")
-  print(data.table::data.table(x$summary))
+  print(data.table::data.table(object$summary))
 
-  return(invisible(x$summary))
+  return(invisible(object$summary))
 }
 
 
