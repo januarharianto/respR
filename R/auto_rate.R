@@ -37,14 +37,12 @@
 #'
 #' @return A list object of class `auto_rate`.
 #'
-#' @importFrom data.table data.table rbindlist setnames
+#' @import data.table
 #' @import parallel
 #' @export
 #'
 #' @examples
 #' auto_rate(sardine.rd)
-#' auto_rate(inspect_data(urchins.rd, 1, 15))
-#' auto_rate(inspect_data(urchins.rd, 1, 15), by = "time")
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE) {
   tic()  # start time
@@ -91,19 +89,19 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # Attach row and time indices to the roll data.
   if (by == "time") {
-    roll[, `:=`(row, seq_len(.N))]  # first index by row
+    roll[, row := seq_len(.N)]
     # extract end rows by time
     endrow <- sapply(dt[roll[, row], x], function(z) max(dt[,
       which(x <= z + width)]))
-    roll[, `:=`(endrow, endrow)]
-    roll[, `:=`(time, dt[roll[, row], x])][, `:=`(endtime,
-      dt[roll[, endrow], x])]
+    roll[, endrow := endrow]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
 
   } else if (by == "row") {
-    roll[, `:=`(row, seq_len(.N))][, `:=`(endrow, roll[,
-      row] + width - 1)]
-    roll[, `:=`(time, dt[roll[, row], x])][, `:=`(endtime,
-      dt[roll[, endrow], x])]
+    roll[, row := seq_len(.N)]
+    roll[, endrow := roll[, row] + width - 1]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
   }
 
   # Process the data based on "method".
@@ -163,7 +161,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
 
 #' @export
-print.auto_rate <- function(x, pos = 1) {
+print.auto_rate <- function(x, pos = 1, ...) {
   method <- x$method
   cat("Data is subset by", x$by, "using width of", x$width, "\n")
   cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
@@ -205,7 +203,7 @@ print.auto_rate <- function(x, pos = 1) {
 
 
 #' @export
-summary.auto_rate <- function(x) {
+summary.auto_rate <- function(x, ...) {
   cat("Regressions :", nrow(x$roll))
   cat(" | Results :", nrow(x$summary))
   cat(" | Method :", x$method)
@@ -230,7 +228,7 @@ summary.auto_rate <- function(x) {
 
 
 #' @export
-plot.auto_rate <- function(x, pos = 1) {
+plot.auto_rate <- function(x, pos = 1, ...) {
   # DEFINE OBJECTS
   dt <- x$df
   start <- x$summary$row[pos]
@@ -402,7 +400,7 @@ kde_fit <- function(dt, roll, width, by) {
 
   # Convert fragments to subsets
   subsets <- lapply(1:length(raw.frags), function(x)
-    subset.data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
+    subset_data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
 
   # Perform lm on each subset
   lapply(1:length(subsets), function(z)

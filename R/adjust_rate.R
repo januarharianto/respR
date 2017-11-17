@@ -13,10 +13,6 @@
 #'
 #' @examples
 #' adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
-#'
-#' bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
-#' rt <- calc_rate(inspect_data(urchins.rd, 1, 5))
-#' adjust_rate(rt, bg)
 adjust_rate <- function(df, by) {
 
   if (class(by) %in% "calc_rate.bg") by = by$bgrate
@@ -42,7 +38,7 @@ adjust_rate <- function(df, by) {
 
 
 #' @export
-print.adjust_rate <- function(x) {
+print.adjust_rate <- function(x, ...) {
   cat("Note: please consider the sign of the value while correcting the rate.")
   cat("\nInput rate:", x$rate)
   cat("\nAdjustment:", x$adjustment)

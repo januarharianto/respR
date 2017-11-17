@@ -99,7 +99,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
 
 
 #' @export
-print.pcrit <- function(x) {
+print.pcrit <- function(x, ...) {
   cat("--Broken stick (Yeager & Ultsch 1989)--\n")
   cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
   cat(sprintf("Intercept   %g\n", x$result.intercept))
@@ -111,7 +111,7 @@ print.pcrit <- function(x) {
 }
 
 #' @export
-summary.pcrit <- function(x) {
+summary.pcrit <- function(x, ...) {
   cat("Top Result for all Methods:\n")
   summ <- cbind(x$bstick.summary[1], pcrit.segmented = x$result.segmented)
   print(summ)
@@ -122,7 +122,7 @@ summary.pcrit <- function(x) {
 
 
 #' @export
-plot.pcrit <- function(x) {
+plot.pcrit <- function(x, ...) {
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
   segment1 <- x$mr.df[x <= cutoff]
