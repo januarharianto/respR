@@ -7,32 +7,33 @@
 #' possible values. The computations are then ranked (or, arranged), based on
 #' the "`logic`" argument, and the output is summarised.
 #'
-#' **Units**
-#'
-#' There are no units of measurements involved in `auto_rate`. This is a
-#' deliberate decision. Units are called in a later function when volume- and/or
-#' weight-specific rates of oxygen concentration are computed in
+#' **Units** There are no units of measurements involved in `auto_rate`. This is
+#' a deliberate decision. Units are called in a later function when volume-
+#' and/or weight-specific rates of oxygen concentration are computed in
 #' [convert_rate()] and [convert_DO()].
 #'
 #'
-#' ***Ranking algorithms***
-#'
-#' For now, `auto_rate()` contains four ranking algorithms that can be called
-#' with the argument "`logic`":
+#' ***Ranking algorithms*** For now, `auto_rate()` contains four ranking
+#' algorithms that can be called with the argument "`logic`":
 #'
 #' - `max`: regressions are arranged from highest absolute values, to the
 #' lowest.
+#'
 #' - `min`: regressions are arranged from lowest absolute values, to the
 #' highest.
-#' - `interval`: non-overlapping regressions are extracted from the rolled
-#' regrssions. They are not ranked.
-#' - `linear`: Buses kernel density estimation to detect the most "linear"
-#' sections of the timeseries in descending order.
+#'
+#' - `interval`: non-overlapping regressions are extracted from the
+#' rolled regrssions. They are not ranked.
+#'
+#' - `linear`: Buses kernel density
+#' estimation to detect the most "linear" sections of the timeseries in
+#' descending order.
 #'
 #' @param df data frame.
 #' @param width numeric. Defaults to 25 percent of width if NULL.
 #' @param by string. "row" or "time". Defaults to "row".
 #' @param method string. "linear", "max", "min" or "interval".
+#' @param plot logical. Defaults to TRUE. Automatically plot the results.
 #'
 #' @return A list object of class `auto_rate`.
 #'
@@ -368,7 +369,7 @@ time_lm <- function(df, start, end) {
 
 #' Perform kernel density estimate and fitting
 #'
-#' This is an internal function and is used by [auto.rate()].
+#' This is an internal function and is used by [auto_rate()].
 #'
 #' @keywords internal
 #' @export

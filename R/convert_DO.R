@@ -106,6 +106,8 @@ print.convert_DO <- function(x) {
   cat("\n")
 }
 
+#' Check unit string against a known database
+#'
 #' @keywords internal
 #' @export
 verify_units <- function(unit, is) {

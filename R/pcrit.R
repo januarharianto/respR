@@ -121,7 +121,7 @@ summary.pcrit <- function(x) {
 
 
 
-#'@ export
+#' @export
 plot.pcrit <- function(x) {
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]

@@ -8,6 +8,7 @@
 #' @param df data frame.
 #' @param n numeric.
 #' @param random_start logical.
+#' @param plot logical. Defaults to TRUE. Plots the data automatically.
 #'
 #' @return A data frame object.
 #' @export
