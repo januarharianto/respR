@@ -50,6 +50,4 @@ descending order.
 }
 \examples{
 auto_rate(sardine.rd)
-auto_rate(inspect_data(urchins.rd, 1, 15))
-auto_rate(inspect_data(urchins.rd, 1, 15), by = "time")
 }

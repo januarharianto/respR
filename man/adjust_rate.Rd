@@ -22,8 +22,4 @@ Users may want to perform rate corrections due to background respiration or to a
 }
 \examples{
 adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
-
-bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19)
-rt <- calc_rate(inspect_data(urchins.rd, 1, 5))
-adjust_rate(rt, bg)
 }
