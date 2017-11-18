@@ -30,7 +30,6 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat,
     testit
 VignetteBuilder: 
     knitr

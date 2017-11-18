@@ -1,9 +1,8 @@
 library(testit)
 
 rate <- suppressMessages(auto_rate(sardine.rd))
-
 assert(
-  "auto_rate works by default",
+  "auto_rate works using default arguments",
   class(rate) == "auto_rate",
   is.numeric(rate$rate),
   is.data.frame(rate$df)
