@@ -9,6 +9,33 @@ assert(
   )
 
 assert(
+  "auto_rate will perform time-based rolling regression",
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, by = "time")))
+  )
+
+assert(
+  "auto_rate works by default with `max` and `min` arguments",
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, method = "max", plot = F))),
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, width = 7500, by = "time", method = "max", plot = F)
+    )),
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, method = "min", plot = F))),
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, width = 7500, by = "time", method = "min", plot = F)
+  ))
+)
+
+assert(
+  "auto_rate will perform interval method using default values",
+  !has_error(suppressMessages(
+    auto_rate(sardine.rd, method = "interval", plot = F)
+  ))
+)
+
+assert(
   "auto_rate can be plotted",
   !has_error(plot(rate))
 )
