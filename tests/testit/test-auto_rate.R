@@ -11,21 +11,21 @@ assert(
 assert(
   "auto_rate works by default with `max` and `min` arguments",
   !has_error(suppressMessages(
-    auto_rate(sardine.rd, method = "max", plot = F))),
+    auto_rate(sardine.rd, method = "max", plot = F, parallel = F))),
   !has_error(suppressMessages(
-    auto_rate(sardine.rd, width = 7500, by = "time", method = "max", plot = F)
-    )),
+    auto_rate(sardine.rd, width = 7500, by = "time", method = "max", plot = F,
+      parallel = F))),
   !has_error(suppressMessages(
-    auto_rate(sardine.rd, method = "min", plot = F))),
+    auto_rate(sardine.rd, method = "min", plot = F, parallel = F))),
   !has_error(suppressMessages(
-    auto_rate(sardine.rd, width = 7500, by = "time", method = "min", plot = F)
-  ))
+    auto_rate(sardine.rd, width = 7500, by = "time", method = "min", plot = F,
+      parallel = F)))
 )
 
 assert(
   "auto_rate will perform interval method using default values",
   !has_error(suppressMessages(
-    auto_rate(sardine.rd, method = "interval", plot = F)
+    auto_rate(sardine.rd, method = "interval", plot = F, parallel = F)
   ))
 )
 
@@ -63,5 +63,3 @@ assert(
   "time_lm (auto_rate) produces data.frame object",
   is.data.frame(tlm)
 )
-
-# TODO kde_fit
