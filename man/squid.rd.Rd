@@ -5,9 +5,6 @@
 \alias{squid.rd}
 \title{Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit}
 \format{A data frame}
-\source{
-\url{http://www.diamondse.info/}
-}
 \usage{
 squid.rd
 }
