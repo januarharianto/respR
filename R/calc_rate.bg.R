@@ -10,13 +10,18 @@
 #' weight-specific rates of oxygen concentration are computed in
 #' [convert_rate()] and [convert_DO()].
 #'
-#' @param x data frame.
-#' @param xcol numeric. Defaults to `1`.
-#' @param ycol numeric vector. Defaults to `2`. Can have length > 1.
-#' @param from numeric.
-#' @param to numeric.
-#' @param by string. "time" or "row". Defaults to "time".
-#' @param plot logical. Defaults to TRUE.
+#' @param x data frame. This is the data to process.
+#' @param xcol numeric. Defaults to `1`. This is the time column.
+#' @param ycol numeric vector. Defaults to `2`. Can have length > 1. This is the
+#'   O2 data.
+#' @param from numeric. Defaults to NULL. Defines the upper bound(s) of the data
+#'   frame to subset. Subsetting is based on the argument: `by`.
+#' @param to numeric. Defaults to NULL. Defines the upper bound(s) of the data
+#'   frame to subset. Subsetting is based on the argument: `by`.
+#' @param by string. `"time"` or `"row"` Defaults to `"time"`. This is the
+#'   method used to subset the data.
+#' @param plot logical. Defaults to TRUE. Will plot the results for visual
+#'   inspection.
 #'
 #' @importFrom data.table data.table
 #'
@@ -26,7 +31,7 @@
 #' @examples
 #' calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time")
 calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
-  to = NULL, by = "time", plot = T) {
+  to = NULL, by = "time", plot = TRUE) {
   # Extract data:
   dt <- data.table(x[c(xcol, ycol)])
   # Subset data if needed:

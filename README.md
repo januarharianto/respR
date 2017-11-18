@@ -1,5 +1,7 @@
 # Welcome
 
+[![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR)
+
 **RespR** is an R package that consists of a collection of functions that provide a structured workflow for the analysis of respirometry-related data.
 
 

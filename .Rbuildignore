@@ -7,3 +7,4 @@
 ^manuscript$        # Folder that contains the files for the manuscript
 ^docs$              # Folder that stores HTML vignettes
 ^_gh-pages$
+^\.travis\.yml$

@@ -5,9 +5,10 @@
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
-#' @param df data frame.
-#' @param n numeric.
-#' @param random_start logical.
+#' @param df data frame. The data to process.
+#' @param n numeric. This will prompt the function to extract every "`n`" rows.
+#' @param random_start logical. Defaults to FALSE. If TRUE, randomises the start
+#'   row of the data.
 #' @param plot logical. Defaults to TRUE. Plots the data automatically.
 #'
 #' @return A data frame object.
@@ -18,8 +19,8 @@
 #' subsample(squid.rd, n = 10)
 #'
 #' # Subsample with random first value:
-#' subsample(sardine.rd, 3, T)
-subsample <- function(df, n = 5, random_start = F, plot = T) {
+#' subsample(sardine.rd, 3, TRUE)
+subsample <- function(df, n = 5, random_start = FALSE, plot = TRUE) {
   # First check if [random_start] is true. If true, the
   # function will randomise the value taken from row 1:[n] and
   # insert it into the [from] argument in [seq].

@@ -7,33 +7,45 @@
 #' possible values. The computations are then ranked (or, arranged), based on
 #' the "`logic`" argument, and the output is summarised.
 #'
-#' **Units** There are no units of measurements involved in `auto_rate`. This is
-#' a deliberate decision. Units are called in a later function when volume-
-#' and/or weight-specific rates of oxygen concentration are computed in
+#' **Units**
+#'
+#' There are no units of measurements involved in `auto_rate`. This is a
+#' deliberate decision. Units are called in a later function when volume- and/or
+#' weight-specific rates of oxygen concentration are computed in
 #' [convert_rate()] and [convert_DO()].
 #'
 #'
-#' ***Ranking algorithms*** For now, `auto_rate()` contains four ranking
-#' algorithms that can be called with the argument "`logic`":
+#' ***Ranking algorithms***
 #'
-#' - `max`: regressions are arranged from highest absolute values, to the
-#' lowest.
+#' For now, `auto_rate()` contains four ranking algorithms that can be called
+#' with the argument "`method`":
 #'
-#' - `min`: regressions are arranged from lowest absolute values, to the
-#' highest.
+#' - `"linear"`: Uses kernel density estimation (KDE) to detect the most
+#' "linear" sections of the timeseries. This is achieved by using the smoothing
+#' bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
+#' regions in the data.
 #'
-#' - `interval`: non-overlapping regressions are extracted from the
-#' rolled regrssions. They are not ranked.
+#' - `"max"`: regressions are arranged from highest values, to the lowest.
 #'
-#' - `linear`: Buses kernel density
-#' estimation to detect the most "linear" sections of the timeseries in
-#' descending order.
+#' - `"min"`: regressions are arranged from lowest values, to the highest.
 #'
-#' @param df data frame.
-#' @param width numeric. Defaults to 25 percent of width if NULL.
-#' @param by string. "row" or "time". Defaults to "row".
-#' @param method string. "linear", "max", "min" or "interval".
-#' @param plot logical. Defaults to TRUE. Automatically plot the results.
+#' - `"interval"`: non-overlapping regressions are extracted from the rolled
+#' regrssions. They are not ranked.
+#'
+#' @param df data frame, or object of class `adjust_rate`. This is the data to
+#'   process.
+#' @param width numeric. Defaults to `floor(0.2 * length of data` if NULL. The
+#'   length of data can either be time or row, as defined by the `by` argument
+#'   (see below).
+#' @param by string. `"row"` or `"time"`. Defaults to `"row"`. However, if the
+#'   function detects an irregular time series, a warning will be issued to
+#'   recommend changing this argument to `"time"`.
+#' @param method string. `"linear"`, `"max"`, `"min"` or `"interval"`. Defaults
+#'   to `linear`. Note that if `"linear"` is selected, the argument `width` will
+#'   be set to default.
+#' @param plot logical. Defaults to TRUE. Plot the results.
+#' @param parallel logical. Defaults to TRUE. Should parallel processing be
+#'   used?
 #'
 #' @return A list object of class `auto_rate`.
 #'
@@ -42,9 +54,9 @@
 #' @export
 #'
 #' @examples
-#' auto_rate(sardine.rd)
+#' auto_rate(sardine.rd, parallel = FALSE)
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
-  plot = TRUE) {
+  plot = TRUE, parallel = TRUE) {
   tic()  # start time
 
   # Import from previous function(s)
@@ -82,7 +94,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # Check if we are doing rolling regressions by row (fast) or time (slower).
   if (by == "time") {
-    roll <- time_roll(dt, width)
+    roll <- time_roll(dt, width, parallel)
   } else if (by == "row") {
     roll <- static_roll(dt, width)
   }
@@ -203,22 +215,22 @@ print.auto_rate <- function(x, pos = 1, ...) {
 
 
 #' @export
-summary.auto_rate <- function(x, ...) {
-  cat("Regressions :", nrow(x$roll))
-  cat(" | Results :", nrow(x$summary))
-  cat(" | Method :", x$method)
-  cat(" | Roll width :", x$width)
-  cat(" | Roll type :", x$by, "\n")
+summary.auto_rate <- function(object, ...) {
+  cat("Regressions :", nrow(object$roll))
+  cat(" | Results :", nrow(object$summary))
+  cat(" | Method :", object$method)
+  cat(" | Roll width :", object$width)
+  cat(" | Roll type :", object$by, "\n")
 
-  if(x$method == "linear") {
+  if(object$method == "linear") {
     cat("\n=== Kernel Density ===")
-    print(x$density)
+    print(object$density)
   }
 
   cat("\n=== Summary of Results ===\n\n")
-  print(data.table::data.table(x$summary))
+  print(data.table::data.table(object$summary))
 
-  return(invisible(x$summary))
+  return(invisible(object$summary))
 }
 
 
@@ -312,30 +324,29 @@ static_roll <- function(df, width) {
 #' This is an internal function. Used by [auto_rate()].
 #' @keywords internal
 #' @export
-time_roll <- function(dt, width) {
+time_roll <- function(dt, width, parallel) {
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
-  # Use parallel if df > 500 rows
-  # The cutoff specifies where to stop the rolling regression, based on width
-  time_cutoff <- max(dt[,1]) - width
-  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
-  # if (cutoff > 500) {
+  if (parallel) {
+
+    # The cutoff specifies where to stop the rolling regression, based on width
+    time_cutoff <- max(dt[,1]) - width
+    row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
     no_cores <- parallel::detectCores()  # calc the no. of cores available
+
     if (os() == "win") {
       cl <- parallel::makeCluster(no_cores)
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
+
     parallel::clusterExport(cl, "time_lm")
     out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
       dt[[1]][x], dt[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
-  # } else {
-  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt, dt[[1]][x],
-  #     dt[[1]][x] + width))
-  # }
+  }
+
   out <- data.table::rbindlist(out)
   return(out)
 }
-
 
 
 

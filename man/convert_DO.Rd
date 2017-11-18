@@ -7,11 +7,12 @@
 convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
 }
 \arguments{
-\item{x}{numeric vector or object of class \code{calc_rate}, \code{auto_rate} or \code{adjust_rate}.}
+\item{x}{numeric vector or object of class \code{calc_rate}, \code{auto_rate} or
+\code{adjust_rate}. This is the value(s) that you want to convert from.}
 
-\item{from}{string.}
+\item{from}{string. The unit to convert from. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{to}{string.}
+\item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
 \item{S}{numeric. Salinity. Defaults to 35.}
 
@@ -23,12 +24,15 @@ convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
 A list.
 }
 \description{
-Convert units of dissolved oxygen.
+This is a conversion function that performs basic conversions between units
+of dissolved oxygen in aquatic respirometry.
 }
 \examples{
+# Perform conversion on an object of class `calc_rate`:
 x <- calc_rate(sardine.rd)
 convert_DO(x, from = "percent", to = "mg L-1")
 
+# Or, perform on a numeric
 convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 
 convert_DO(sardine.rd[[2]], from = "percent", to = "torr")

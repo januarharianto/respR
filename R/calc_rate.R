@@ -1,20 +1,24 @@
 
 #' Calculate rate of change in oxygen over time
 #'
-#' `calc_rate` calculates the rate of change in oxygen concentration over
-#' time in a data frame. You can perform single or multiple regressions on
-#' subsets of the data frame by calling the `from` and `to` arguments.
+#' `calc_rate` calculates the rate of change in oxygen concentration over time
+#' in a data frame. You can perform single or multiple regressions on subsets of
+#' the data frame by calling the `from` and `to` arguments.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
 #' Units are called in a later function when volume- and/or weight-specific
 #' rates of oxygen concentration are computed in [convert_rate()] and
 #' [convert_DO()].
 #'
-#' @param x data frame or object of class [adjust_rate()].
-#' @param from numeric vector.
-#' @param to numeric vector.
-#' @param by string. "time", "row", "o2" or "proportion".
-#' @param plot logical. Defaults to TRUE.
+#' @param x data frame. or object of class `adjust_rate`. This is the data to
+#'   process.
+#' @param from numeric vector. Defaults to NULL. Defines the upper bound(s) of
+#'   the data frame to subset. Subsetting is based on the argument: `by`.
+#' @param to numeric vector. Defaults to NULL. Defines the lower bound(s) of the
+#'   data frame to subset. Subsetting is based on the argument: `by`.
+#' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"` Defaults to
+#'   `"time"`.This is the method used to subset the data.
+#' @param plot logical. Defaults to TRUE. Plot the results.
 #'
 #' @importFrom data.table data.table rbindlist
 #' @import utils
@@ -26,7 +30,6 @@
 #' @export
 #'
 #' @examples
-#' data(sardine.rd)
 #' calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
 #' calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
 #' calc_rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
@@ -35,10 +38,10 @@
 #' summary(x)
 #' plot(x)
 #'
-#' # Using a list in 'from' and 'to' calculates multiple regressions:
+#' # Using a list in 'from' and 'to' perform repeated measurements:
 #' data(intermittent.rd)
 #' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
-calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = T) {
+calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
@@ -109,10 +112,10 @@ print.calc_rate <- function(x, ...) {
 
 
 #' @export
-summary.calc_rate <- function(x, ...) {
+summary.calc_rate <- function(object, ...) {
   cat("Summary:\n")
-  print(x$summary)
-  return(invisible(x$summary))
+  print(object$summary)
+  return(invisible(object$summary))
 }
 
 #' @export
