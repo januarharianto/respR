@@ -4,11 +4,23 @@
 #' regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
 #' segmented regression approach, presented by Muggeo (2003).
 #'
+#' To calculate Pcrit, it is necessary to provide data in the form of the rate
+#' of change in oxygen (RO2/MO2) against dissolved oxygen (DO) concentration. If
+#' you have a single dataset that only measured DO over time, [pcrit()] can
+#' still automatically determine RO2/MO2 against DO by performing a rolling
+#' regression of the data and match it agains the rolling mean of the DO data.
+#' This is also the default method. If you already have calculated RO2/MO2
+#' elsewhere, the argument `has.rate = "TRUE"` must be used. The width of the
+#' rolling regression is determined by the `width` argument. In most cases, the
+#' default width works well.
 #'
-#' @param df data frame.
+#' @param df data frame or object of class `inspect_data`. This is the data to
+#'   analyse.
 #' @param width numeric. Defaults to `floor(0.1*nrow(df))`.
 #' @param has.rate logical. Defaults to FALSE.
 #' @param plot logical. Defaults to TRUE.
+#' @param parallel logical. Defaults to TRUE. Should parallel processing be
+#'   used?
 #'
 #' @return A list object of class `pcrit`.
 #'
@@ -18,9 +30,17 @@
 #'
 #' @export
 #'
+#' @references Yeager DP, Ultsch GR (1989) Physiological regulation and
+#'   conformation: A BASIC program for the determination of critical points.
+#'   Physiological Zoology 62:888–907. doi: 10.1086/physzool.62.4.30157935
+#'
+#'   Muggeo V (2008) Segmented: an R package to fit regression models with
+#'   broken-line relationships. R News 8:20–25.
+#'
 #' @examples
-#' pcrit(squid.rd)
-pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
+#' pcrit(squid.rd, parallel = FALSE)
+pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
+  plot = TRUE, parallel = TRUE) {
 
   # Data validation.
   if (any(class(df) %in% "inspect.data")) df <- df$df
@@ -52,11 +72,16 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = F, plot = T) {
   lseq <- seq.int(3, nrow(srdt) - 2) # generate sequence for lm
 
   # Then, perform broken-stick estimates.
-  no_cores <- parallel::detectCores() - 1  # use n-1 cores
-  cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
-  parallel::clusterExport(cl, "broken_stick") # import function to use
-  brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(srdt, z))
-  parallel::stopCluster(cl)  # release cores
+  if (parallel) {
+    no_cores <- parallel::detectCores() - 1  # use n-1 cores
+    cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
+    parallel::clusterExport(cl, "broken_stick") # import function to use
+    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(srdt, z))
+    parallel::stopCluster(cl)  # release cores
+  } else {
+    brstick <- lapply(lseq, function(z) broken_stick(srdt,z))
+  }
+
   brstick <- data.table::rbindlist(brstick)
 
   # Arrange by increasing total sum of squares of residuals
@@ -111,9 +136,12 @@ print.pcrit <- function(x, ...) {
 }
 
 #' @export
-summary.pcrit <- function(x, ...) {
+summary.pcrit <- function(object, ...) {
   cat("Top Result for all Methods:\n")
-  summ <- cbind(x$bstick.summary[1], pcrit.segmented = x$result.segmented)
+  summ <- cbind(
+    object$bstick.summary[1],
+    pcrit.segmented = object$result.segmented)
+
   print(summ)
   return(invisible(summ))
 }

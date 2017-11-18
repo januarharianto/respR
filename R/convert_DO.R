@@ -1,8 +1,12 @@
 #' Convert units of dissolved oxygen.
 #'
-#' @param x numeric vector or object of class `calc_rate`, `auto_rate` or `adjust_rate`.
-#' @param from string.
-#' @param to string.
+#' This is a conversion function that performs basic conversions between units
+#' of dissolved oxygen in aquatic respirometry.
+#'
+#' @param x numeric vector or object of class `calc_rate`, `auto_rate` or
+#'   `adjust_rate`. This is the value(s) that you want to convert from.
+#' @param from string. The unit to convert from. See [unit_args()] for details.
+#' @param to string. The unit to convert to. See [unit_args()] for details.
 #' @param S numeric. Salinity. Defaults to 35.
 #' @param t numeric. Temperature. Defaults to 25 (degrees celcius).
 #' @param P numeric. Pressure. Defaults to 1.013253 (kPa).
@@ -12,9 +16,11 @@
 #' @export
 #'
 #' @examples
+#' # Perform conversion on an object of class `calc_rate`:
 #' x <- calc_rate(sardine.rd)
 #' convert_DO(x, from = "percent", to = "mg L-1")
 #'
+#' # Or, perform on a numeric
 #' convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 #'
 #' convert_DO(sardine.rd[[2]], from = "percent", to = "torr")

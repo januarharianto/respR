@@ -4,18 +4,29 @@
 \alias{auto_rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
+auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
+  parallel = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
+process.}
 
-\item{width}{numeric. Defaults to 25 percent of width if NULL.}
+\item{width}{numeric. Defaults to \code{floor(0.2 * length of data} if NULL. The
+length of data can either be time or row, as defined by the \code{by} argument
+(see below).}
 
-\item{by}{string. "row" or "time". Defaults to "row".}
+\item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. However, if the
+function detects an irregular time series, a warning will be issued to
+recommend changing this argument to \code{"time"}.}
 
-\item{method}{string. "linear", "max", "min" or "interval".}
+\item{method}{string. \code{"linear"}, \code{"max"}, \code{"min"} or \code{"interval"}. Defaults
+to \code{linear}. Note that if \code{"linear"} is selected, the argument \code{width} will
+be set to default.}
 
-\item{plot}{logical. Defaults to TRUE. Automatically plot the results.}
+\item{plot}{logical. Defaults to TRUE. Plot the results.}
+
+\item{parallel}{logical. Defaults to TRUE. Should parallel processing be
+used?}
 }
 \value{
 A list object of class \code{auto_rate}.
@@ -29,25 +40,28 @@ possible values. The computations are then ranked (or, arranged), based on
 the "\code{logic}" argument, and the output is summarised.
 }
 \details{
-\strong{Units} There are no units of measurements involved in \code{auto_rate}. This is
-a deliberate decision. Units are called in a later function when volume-
-and/or weight-specific rates of oxygen concentration are computed in
+\strong{Units}
+
+There are no units of measurements involved in \code{auto_rate}. This is a
+deliberate decision. Units are called in a later function when volume- and/or
+weight-specific rates of oxygen concentration are computed in
 \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 
-\emph{\strong{Ranking algorithms}} For now, \code{auto_rate()} contains four ranking
-algorithms that can be called with the argument "\code{logic}":
+\emph{\strong{Ranking algorithms}}
+
+For now, \code{auto_rate()} contains four ranking algorithms that can be called
+with the argument "\code{method}":
 \itemize{
-\item \code{max}: regressions are arranged from highest absolute values, to the
-lowest.
-\item \code{min}: regressions are arranged from lowest absolute values, to the
-highest.
-\item \code{interval}: non-overlapping regressions are extracted from the
-rolled regrssions. They are not ranked.
-\item \code{linear}: Buses kernel density
-estimation to detect the most "linear" sections of the timeseries in
-descending order.
+\item \code{"linear"}: Uses kernel density estimation (KDE) to detect the most
+"linear" sections of the timeseries. This is achieved by using the smoothing
+bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
+regions in the data.
+\item \code{"max"}: regressions are arranged from highest values, to the lowest.
+\item \code{"min"}: regressions are arranged from lowest values, to the highest.
+\item \code{"interval"}: non-overlapping regressions are extracted from the rolled
+regrssions. They are not ranked.
 }
 }
 \examples{
-auto_rate(sardine.rd)
+auto_rate(sardine.rd, parallel = FALSE)
 }

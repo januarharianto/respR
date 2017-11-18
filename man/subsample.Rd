@@ -4,14 +4,15 @@
 \alias{subsample}
 \title{Subsample a data frame object}
 \usage{
-subsample(df, n = 5, random_start = F, plot = T)
+subsample(df, n = 5, random_start = FALSE, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame. The data to process.}
 
-\item{n}{numeric.}
+\item{n}{numeric. This will prompt the function to extract every "\code{n}" rows.}
 
-\item{random_start}{logical.}
+\item{random_start}{logical. Defaults to FALSE. If TRUE, randomises the start
+row of the data.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data automatically.}
 }
@@ -27,7 +28,7 @@ new data frame object. Effectifely "thins" large datasets.
 subsample(squid.rd, n = 10)
 
 # Subsample with random first value:
-subsample(sardine.rd, 3, T)
+subsample(sardine.rd, 3, TRUE)
 }
 \author{
 Januar Harianto & Nicholas Carey

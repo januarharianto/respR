@@ -12,11 +12,15 @@
 #'
 #' @param x numeric, or objects of class [calc_rate()], [auto_rate()] or
 #'   [adjust_rate()].
-#' @param o2.unit string. Check [unit_args()].
-#' @param time.unit string. Check [unit_args()].
-#' @param output.unit string. Check [unit_args()].
-#' @param volume numeric. Volume in LITRES.
-#' @param mass numeric. Mass/weight in KG.
+#' @param o2.unit string. The dissolved oxygen unit to convert from. Check
+#'   [unit_args()].
+#' @param time.unit string. The time unit to convert from. Check [unit_args()].
+#' @param output.unit string. The output unit to convert to. Check
+#'   [unit_args()].
+#' @param volume numeric. Volume in litres. This is the volume of the
+#'   respirometry chamber, not the specimen(s).
+#' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
+#'   you wish to calculate mass-specific rates.
 #' @param S numeric. Salinity. Defaults to 35.
 #' @param t numeric. Temperature. Defaults to 25 (degress celcius).
 #' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
