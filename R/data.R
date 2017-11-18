@@ -13,6 +13,8 @@
 #'   oxygen) and 4831 rows (approx 80 min of data).
 "intermittent.rd"
 
+
+
 #' Multi-column respirometry data of the sea urchin, *Heliocidaris
 #' Erythrogramma*, including background respiration
 #'
@@ -27,8 +29,9 @@
 #'   urchin oxygen consumption (a-p) and 2 columns of background oxygen
 #'   consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.
 #'
-#' @source \url{http://www.diamondse.info/}
 "urchins.rd"
+
+
 
 #' Respirometry data of the squid, *Doryteuthis opalescens*, with P_crit
 #'
@@ -37,13 +40,13 @@
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame
-#' @source \url{http://www.diamondse.info/}
 "squid.rd"
+
+
 
 #' Respirometry data of the sardine, *Species*
 #'
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame
-#' @source \url{http://www.diamondse.info/}
 "sardine.rd"
