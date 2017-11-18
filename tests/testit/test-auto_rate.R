@@ -1,17 +1,11 @@
 library(testit)
 
-rate <- suppressMessages(auto_rate(sardine.rd))
+rate <- suppressMessages(auto_rate(sardine.rd, parallel = F))
 assert(
   "auto_rate works using default arguments",
   class(rate) == "auto_rate",
   is.numeric(rate$rate),
   is.data.frame(rate$df)
-  )
-
-assert(
-  "auto_rate will perform time-based rolling regression",
-  !has_error(suppressMessages(
-    auto_rate(sardine.rd, by = "time")))
   )
 
 assert(
