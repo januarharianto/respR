@@ -2,24 +2,34 @@
 % Please edit documentation in R/adjust_rate.R
 \name{adjust_rate}
 \alias{adjust_rate}
-\title{Simple rate adjustment function for background correction or open respirometry oxygen flux}
+\title{Simple rate adjustment function (background or oxygen flux)}
 \usage{
 adjust_rate(df, by)
 }
 \arguments{
-\item{df}{data frame, or any object of class \code{calc_rate} or \code{auto_rate}. This object should contain the rate that has not been adjusted, yet.}
+\item{df}{data frame, or any object of class \code{calc_rate} or \code{auto_rate}. This
+object contains the value that needs to be adjusted.}
 
-\item{by}{either a numeric, or an object of class \code{calc_rate.bg}. This is the value to adjust the value with.}
+\item{by}{either a numeric, or an object of class \code{calc_rate.bg}. This is the
+value that is used to perform the correction/adjustment.}
 }
 \value{
 A list object of class \code{adjust_rate}.
 }
 \description{
-A simple rate correction function. \strong{Important:} Please note that the sign of the number must be considered in the correction. Respiration is normally a negative number, while oxygen flux may or may not be negative!
+A simple rate correction function. Please note that the \strong{sign} of the
+number must be considered in the correction. Respiration is normally a
+negative number, while oxygen flux may or may not be negative.
 }
 \details{
-Users may want to perform rate corrections due to background respiration or to account for oxygen flux in open respirometry experiments. We have provided a simple function to perform either, or both, corrections. This function is open to improvements and enhancements (thus, it is a separate function even though it performs a relatively rudimentary calculation).
+To account for background respiration and/or oxygen flux in open respirometry
+experiments, we have provided a simple function to perform either, or both,
+corrections. As a separate function we may develop this to support more
+complex correction methods in the future.
 }
 \examples{
-adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
+#'
+# Note that respiration is negative by default (since it represents a
+# decrease in dissolved oxygen), so both values are negative!
+adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40
 }

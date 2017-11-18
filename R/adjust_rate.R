@@ -1,18 +1,28 @@
-#' Simple rate adjustment function for background correction or open respirometry oxygen flux
+#' Simple rate adjustment function (background or oxygen flux)
 #'
-#' A simple rate correction function. **Important:** Please note that the sign of the number must be considered in the correction. Respiration is normally a negative number, while oxygen flux may or may not be negative!
+#' A simple rate correction function. Please note that the **sign** of the
+#' number must be considered in the correction. Respiration is normally a
+#' negative number, while oxygen flux may or may not be negative.
 #'
-#' Users may want to perform rate corrections due to background respiration or to account for oxygen flux in open respirometry experiments. We have provided a simple function to perform either, or both, corrections. This function is open to improvements and enhancements (thus, it is a separate function even though it performs a relatively rudimentary calculation).
+#' To account for background respiration and/or oxygen flux in open respirometry
+#' experiments, we have provided a simple function to perform either, or both,
+#' corrections. As a separate function we may develop this to support more
+#' complex correction methods in the future.
 #'
 #' @md
-#' @param df data frame, or any object of class `calc_rate` or `auto_rate`. This object should contain the rate that has not been adjusted, yet.
-#' @param by either a numeric, or an object of class `calc_rate.bg`. This is the value to adjust the value with.
+#' @param df data frame, or any object of class `calc_rate` or `auto_rate`. This
+#'   object contains the value that needs to be adjusted.
+#' @param by either a numeric, or an object of class `calc_rate.bg`. This is the
+#'   value that is used to perform the correction/adjustment.
 #'
 #' @return A list object of class `adjust_rate`.
 #' @export
 #'
-#' @examples
-#' adjust_rate(7.44, -0.04) # this is simply 7.44 - 0.04 = 7.40
+#' @examples#'
+#' # Note that respiration is negative by default (since it represents a
+#' # decrease in dissolved oxygen), so both values are negative!
+#' adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40
+
 adjust_rate <- function(df, by) {
 
   if (class(by) %in% "calc_rate.bg") by = by$bgrate

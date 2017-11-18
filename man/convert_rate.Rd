@@ -11,15 +11,19 @@ convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
 \item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}} or
 \code{\link[=adjust_rate]{adjust_rate()}}.}
 
-\item{o2.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
+\item{o2.unit}{string. The dissolved oxygen unit to convert from. Check
+\code{\link[=unit_args]{unit_args()}}.}
 
-\item{time.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
+\item{time.unit}{string. The time unit to convert from. Check \code{\link[=unit_args]{unit_args()}}.}
 
-\item{output.unit}{string. Check \code{\link[=unit_args]{unit_args()}}.}
+\item{output.unit}{string. The output unit to convert to. Check
+\code{\link[=unit_args]{unit_args()}}.}
 
-\item{volume}{numeric. Volume in LITRES.}
+\item{volume}{numeric. Volume in litres. This is the volume of the
+respirometry chamber, not the specimen(s).}
 
-\item{mass}{numeric. Mass/weight in KG.}
+\item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
+you wish to calculate mass-specific rates.}
 
 \item{S}{numeric. Salinity. Defaults to 35.}
 

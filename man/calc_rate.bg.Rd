@@ -8,19 +8,24 @@ calc_rate.bg(x, xcol = 1, ycol = 2, from = NULL, to = NULL,
   by = "time", plot = TRUE)
 }
 \arguments{
-\item{x}{data frame.}
+\item{x}{data frame. This is the data to process.}
 
-\item{xcol}{numeric. Defaults to \code{1}.}
+\item{xcol}{numeric. Defaults to \code{1}. This is the time column.}
 
-\item{ycol}{numeric vector. Defaults to \code{2}. Can have length > 1.}
+\item{ycol}{numeric vector. Defaults to \code{2}. Can have length > 1. This is the
+O2 data.}
 
-\item{from}{numeric.}
+\item{from}{numeric. Defaults to NULL. Defines the upper bound(s) of the data
+frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{to}{numeric.}
+\item{to}{numeric. Defaults to NULL. Defines the upper bound(s) of the data
+frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{by}{string. "time" or "row". Defaults to "time".}
+\item{by}{string. \code{"time"} or \code{"row"} Defaults to \code{"time"}. This is the
+method used to subset the data.}
 
-\item{plot}{logical. Defaults to TRUE.}
+\item{plot}{logical. Defaults to TRUE. Will plot the results for visual
+inspection.}
 }
 \value{
 A list object of class \code{calc_bg.rate}.

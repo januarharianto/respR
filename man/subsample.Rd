@@ -7,11 +7,12 @@
 subsample(df, n = 5, random_start = FALSE, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame. The data to process.}
 
-\item{n}{numeric.}
+\item{n}{numeric. This will prompt the function to extract every "\code{n}" rows.}
 
-\item{random_start}{logical.}
+\item{random_start}{logical. Defaults to FALSE. If TRUE, randomises the start
+row of the data.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data automatically.}
 }

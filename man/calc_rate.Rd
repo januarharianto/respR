@@ -7,23 +7,27 @@
 calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE)
 }
 \arguments{
-\item{x}{data frame or object of class \code{\link[=adjust_rate]{adjust_rate()}}.}
+\item{x}{data frame. or object of class \code{adjust_rate}. This is the data to
+process.}
 
-\item{from}{numeric vector.}
+\item{from}{numeric vector. Defaults to NULL. Defines the upper bound(s) of
+the data frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{to}{numeric vector.}
+\item{to}{numeric vector. Defaults to NULL. Defines the lower bound(s) of the
+data frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{by}{string. "time", "row", "o2" or "proportion".}
+\item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"} Defaults to
+\code{"time"}.This is the method used to subset the data.}
 
-\item{plot}{logical. Defaults to TRUE.}
+\item{plot}{logical. Defaults to TRUE. Plot the results.}
 }
 \value{
 A list object of class \code{calc_rate}.
 }
 \description{
-\code{calc_rate} calculates the rate of change in oxygen concentration over
-time in a data frame. You can perform single or multiple regressions on
-subsets of the data frame by calling the \code{from} and \code{to} arguments.
+\code{calc_rate} calculates the rate of change in oxygen concentration over time
+in a data frame. You can perform single or multiple regressions on subsets of
+the data frame by calling the \code{from} and \code{to} arguments.
 }
 \details{
 There are no units involved in \code{calc_rate}. This is a deliberate decision.
@@ -32,7 +36,6 @@ rates of oxygen concentration are computed in \code{\link[=convert_rate]{convert
 \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
-data(sardine.rd)
 calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
 calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
 calc_rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
@@ -41,7 +44,7 @@ x
 summary(x)
 plot(x)
 
-# Using a list in 'from' and 'to' calculates multiple regressions:
+# Using a list in 'from' and 'to' perform repeated measurements:
 data(intermittent.rd)
 calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 }

@@ -7,34 +7,45 @@
 #' possible values. The computations are then ranked (or, arranged), based on
 #' the "`logic`" argument, and the output is summarised.
 #'
-#' **Units** There are no units of measurements involved in `auto_rate`. This is
-#' a deliberate decision. Units are called in a later function when volume-
-#' and/or weight-specific rates of oxygen concentration are computed in
+#' **Units**
+#'
+#' There are no units of measurements involved in `auto_rate`. This is a
+#' deliberate decision. Units are called in a later function when volume- and/or
+#' weight-specific rates of oxygen concentration are computed in
 #' [convert_rate()] and [convert_DO()].
 #'
 #'
-#' ***Ranking algorithms*** For now, `auto_rate()` contains four ranking
-#' algorithms that can be called with the argument "`logic`":
+#' ***Ranking algorithms***
 #'
-#' - `max`: regressions are arranged from highest absolute values, to the
-#' lowest.
+#' For now, `auto_rate()` contains four ranking algorithms that can be called
+#' with the argument "`method`":
 #'
-#' - `min`: regressions are arranged from lowest absolute values, to the
-#' highest.
+#' - `"linear"`: Uses kernel density estimation (KDE) to detect the most
+#' "linear" sections of the timeseries. This is achieved by using the smoothing
+#' bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
+#' regions in the data.
 #'
-#' - `interval`: non-overlapping regressions are extracted from the rolled
+#' - `"max"`: regressions are arranged from highest values, to the lowest.
+#'
+#' - `"min"`: regressions are arranged from lowest values, to the highest.
+#'
+#' - `"interval"`: non-overlapping regressions are extracted from the rolled
 #' regrssions. They are not ranked.
 #'
-#' - `linear`: Buses kernel density estimation to detect the most "linear"
-#' sections of the timeseries in descending order.
-#'
-#' @param df data frame.
-#' @param width numeric. Defaults to 25 percent of width if NULL.
-#' @param by string. "row" or "time". Defaults to "row".
-#' @param method string. "linear", "max", "min" or "interval".
-#' @param plot logical. Defaults to TRUE. Automatically plot the results.
-#' @param parallel logical. Defaults to TRUE. Should parallel processes be
-#'   implemented to speed things up?
+#' @param df data frame, or object of class `adjust_rate`. This is the data to
+#'   process.
+#' @param width numeric. Defaults to `floor(0.2 * length of data` if NULL. The
+#'   length of data can either be time or row, as defined by the `by` argument
+#'   (see below).
+#' @param by string. `"row"` or `"time"`. Defaults to `"row"`. However, if the
+#'   function detects an irregular time series, a warning will be issued to
+#'   recommend changing this argument to `"time"`.
+#' @param method string. `"linear"`, `"max"`, `"min"` or `"interval"`. Defaults
+#'   to `linear`. Note that if `"linear"` is selected, the argument `width` will
+#'   be set to default.
+#' @param plot logical. Defaults to TRUE. Plot the results.
+#' @param parallel logical. Defaults to TRUE. Should parallel processing be
+#'   used?
 #'
 #' @return A list object of class `auto_rate`.
 #'

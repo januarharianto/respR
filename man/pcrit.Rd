@@ -8,7 +8,8 @@ pcrit(df, width = floor(0.1 * nrow(df)), has.rate = FALSE, plot = TRUE,
   parallel = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame or object of class \code{inspect_data}. This is the data to
+analyse.}
 
 \item{width}{numeric. Defaults to \code{floor(0.1*nrow(df))}.}
 
@@ -16,7 +17,8 @@ pcrit(df, width = floor(0.1 * nrow(df)), has.rate = FALSE, plot = TRUE,
 
 \item{plot}{logical. Defaults to TRUE.}
 
-\item{parallel}{logical. Defaults to TRUE.}
+\item{parallel}{logical. Defaults to TRUE. Should parallel processing be
+used?}
 }
 \value{
 A list object of class \code{pcrit}.
@@ -26,6 +28,25 @@ Critical oxygen tension can be calculated either by the "broken-stick"
 regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
 segmented regression approach, presented by Muggeo (2003).
 }
+\details{
+To calculate Pcrit, it is necessary to provide data in the form of the rate
+of change in oxygen (RO2/MO2) against dissolved oxygen (DO) concentration. If
+you have a single dataset that only measured DO over time, \code{\link[=pcrit]{pcrit()}} can
+still automatically determine RO2/MO2 against DO by performing a rolling
+regression of the data and match it agains the rolling mean of the DO data.
+This is also the default method. If you already have calculated RO2/MO2
+elsewhere, the argument \code{has.rate = "TRUE"} must be used. The width of the
+rolling regression is determined by the \code{width} argument. In most cases, the
+default width works well.
+}
 \examples{
 pcrit(squid.rd, parallel = FALSE)
+}
+\references{
+Yeager DP, Ultsch GR (1989) Physiological regulation and
+conformation: A BASIC program for the determination of critical points.
+Physiological Zoology 62:888–907. doi: 10.1086/physzool.62.4.30157935
+
+Muggeo V (2008) Segmented: an R package to fit regression models with
+broken-line relationships. R News 8:20–25.
 }

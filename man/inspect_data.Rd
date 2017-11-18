@@ -9,31 +9,31 @@ inspect_data(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE)
 \arguments{
 \item{df}{data frame. Accepts data frame object of any size.}
 
-\item{xcol}{numeric. Defaults to \code{1}.}
+\item{xcol}{numeric. Defaults to \code{1}. This is the time data.}
 
-\item{ycol}{numaric. Defaults to \code{2}.}
+\item{ycol}{numaric. Defaults to \code{2}. This is the dissolved oxygen data.}
 
 \item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors
 detected by the function.}
 
-\item{plot}{logical. Defaults to TRUE. Produces 2 plots for quick visual diagnostics.}
+\item{plot}{logical. Defaults to TRUE. Produces plots for quick visual
+diagnostics.}
 }
 \value{
 A list object of class \code{adjust_rate}.
 }
 \description{
 \code{inspect_data()} scans a data frame for specific errors that may affect the
-use of functions in \code{respR}. Data checks include:
+use of functions in \code{respR}. Data checks include: * A test for NA/NaN inputs.
 \itemize{
-\item A test for NA/NaN inputs.
-\item A test for numeric data.
-\item A test for sequential time data.
-\item A test for duplicate time data.
-\item A test for evenly-spaced time data.
+\item A test for numeric data. * A test for sequential time data. * A test for
+duplicate time data. * A test for evenly-spaced time data.
 }
 }
 \details{
-Once data checks are complete, the function produces a list object which may be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}} and \code{\link[=pcrit]{pcrit()}} for further analyses.
+Once data checks are complete, the function produces a list object which may
+be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}} and
+\code{\link[=pcrit]{pcrit()}} for further analyses.
 }
 \examples{
 inspect_data(sardine.rd)

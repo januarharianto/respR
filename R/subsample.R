@@ -5,9 +5,10 @@
 #'
 #' @author Januar Harianto & Nicholas Carey
 #'
-#' @param df data frame.
-#' @param n numeric.
-#' @param random_start logical.
+#' @param df data frame. The data to process.
+#' @param n numeric. This will prompt the function to extract every "`n`" rows.
+#' @param random_start logical. Defaults to FALSE. If TRUE, randomises the start
+#'   row of the data.
 #' @param plot logical. Defaults to TRUE. Plots the data automatically.
 #'
 #' @return A data frame object.
