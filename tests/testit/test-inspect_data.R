@@ -2,8 +2,9 @@ library(testit)
 
 assert(
   "inspect_data works on 2-column data",
-  suppressMessages(
-    suppressWarnings(inspect_data(sardine.rd)))
+  !has_error(suppressMessages(
+    suppressWarnings(
+      capture.output(inspect_data(sardine.rd)))))
 )
 
 
