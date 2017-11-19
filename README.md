@@ -8,14 +8,14 @@
 ## Installation
 We are currently about to submit to CRAN.
 
-Meanwhile, use the `devtools` package to grab the developmental version from here:
+Meanwhile, use the `devtools` package to grab the **stable** version from here:
 
     install.packages("devtools")
     devtools::install_github("januarharianto/respR")
 
 
 ## Usage
-A good place to start is the introductory vignette, [respR - An R package for processing respirometry data](https://januarharianto.github.io/respR/).
+A good place to start is the introductory vignette, [respR - An R package for processing respirometry data](https://januarharianto.github.io/respR/). Link is currently down due to v0.0.0.9000 release - a major update/release - we are updating it as quickly as we can.
 
 We are in the process of creating more vignettes (and improving the current one). Please stay tuned.
 
