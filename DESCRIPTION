@@ -30,8 +30,6 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat,
-    packagedocs
+    testit
 VignetteBuilder: 
-    knitr,
-    packagedocs
+    knitr

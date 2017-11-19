@@ -28,7 +28,6 @@ corrections. As a separate function we may develop this to support more
 complex correction methods in the future.
 }
 \examples{
-#'
 # Note that respiration is negative by default (since it represents a
 # decrease in dissolved oxygen), so both values are negative!
 adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40

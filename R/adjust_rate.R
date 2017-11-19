@@ -18,7 +18,7 @@
 #' @return A list object of class `adjust_rate`.
 #' @export
 #'
-#' @examples#'
+#' @examples
 #' # Note that respiration is negative by default (since it represents a
 #' # decrease in dissolved oxygen), so both values are negative!
 #' adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40
@@ -39,7 +39,7 @@ adjust_rate <- function(df, by) {
     corrected <- unname(unlist(rate - by))
 
   # Append the results to the object
-  out <- c(df, list(adjustment = by, corrected = corrected))
+  out <- c(input = df, list(adjustment = by, corrected = corrected))
   class(out) <- "adjust_rate"
   return(out)
 }
