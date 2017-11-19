@@ -173,4 +173,3 @@ adjust_scale <- function(x, input, output) {
   out <- x * (a/b)  # convert
   return(out)
 }
-
