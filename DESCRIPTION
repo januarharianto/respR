@@ -18,13 +18,13 @@ Roxygen: list(markdown = TRUE)
 Imports:
     grDevices,
     graphics,
+    parallel,
     stats,
     utils,
     dplyr,
-    marelac,
     roll,
-    parallel,
     stringr,
+    marelac,
     data.table,
     segmented
 Suggests:

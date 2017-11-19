@@ -38,7 +38,9 @@
 #'   broken-line relationships. R News 8:20–25.
 #'
 #' @examples
-#' pcrit(squid.rd, parallel = FALSE)
+#' # The example below should work (uncomment to run)
+#' # pcrit(squid.rd)
+#'
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
 
