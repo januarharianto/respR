@@ -4,7 +4,7 @@
 \alias{time_roll}
 \title{Perform time-width rolling regression}
 \usage{
-time_roll(dt, width, parallel)
+time_roll(dt, width, parallel = T)
 }
 \description{
 This is an internal function. Used by \code{\link[=auto_rate]{auto_rate()}}.

@@ -324,25 +324,25 @@ static_roll <- function(df, width) {
 #' This is an internal function. Used by [auto_rate()].
 #' @keywords internal
 #' @export
-time_roll <- function(dt, width, parallel) {
+time_roll <- function(dt, width, parallel = T) {
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
+
+  # The cutoff specifies where to stop the rolling regression, based on width
+  time_cutoff <- max(dt[,1]) - width
+  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
+
   if (parallel) {
-
-    # The cutoff specifies where to stop the rolling regression, based on width
-    time_cutoff <- max(dt[,1]) - width
-    row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
     no_cores <- parallel::detectCores()  # calc the no. of cores available
-
     if (os() == "win") {
       cl <- parallel::makeCluster(no_cores)
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-
     parallel::clusterExport(cl, "time_lm")
     out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
       dt[[1]][x], dt[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
-  }
+  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+    dt[[1]][x], dt[[1]][x] + width))
 
   out <- data.table::rbindlist(out)
   return(out)

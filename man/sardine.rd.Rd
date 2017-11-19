@@ -5,9 +5,6 @@
 \alias{sardine.rd}
 \title{Respirometry data of the sardine, \emph{Species}}
 \format{A data frame}
-\source{
-\url{http://www.diamondse.info/}
-}
 \usage{
 sardine.rd
 }
