@@ -18,7 +18,7 @@ assert(
   all.equal(round(convert_DO(10, "%", "mmHg")$output, 3), 15.642),
   all.equal(round(convert_DO(10, "%", "inHg")$output, 3), 0.616),
   all.equal(round(convert_DO(10, "%", "Torr")$output, 3), 15.642)
-)
+  )
 
 assert(
   "check that `from` arguments do not produce error",
@@ -26,6 +26,7 @@ assert(
   !has_error(convert_DO(10, "ug/l", "mg/l")),
   !has_error(convert_DO(10, "mmol/l", "mg/l")),
   !has_error(convert_DO(10, "umol/l", "mg/l")),
+  !has_error(convert_DO(10, "ml/l", "mg/l")),
   !has_error(convert_DO(10, "mg/kg", "mg/l")),
   !has_error(convert_DO(10, "ug/kg", "mg/l")),
   !has_error(convert_DO(10, "mmol/kg", "mg/l")),
@@ -37,7 +38,7 @@ assert(
   !has_error(convert_DO(10, "kPa", "mg/l")),
   !has_error(convert_DO(10, "mmHg", "mg/l")),
   !has_error(convert_DO(10, "inHg", "mg/l"))
-)
+  )
 
 assert(
   "conversion works with changing salinity value",
@@ -46,15 +47,29 @@ assert(
   all.equal(round(convert_DO(7.5, "%", "mg/l", S = 15)$output, 3), 0.567),
   all.equal(round(convert_DO(7.5, "%", "mg/l", S = 5)$output, 3), 0.601),
   all.equal(round(convert_DO(7.5, "%", "mg/l", S = 0)$output, 3), 0.618)
-)
+  )
 
 assert(
   "conversion works with changing pressure value",
   all.equal(round(convert_DO(7.5, "%", "mg/l", P = 0.337)$output, 3), 0.168)
-)
+  )
 
 assert(
   "conversion works with changing temperature",
   all.equal(round(convert_DO(100, "%", "mg/l", t = 25)$output, 3), 6.751),
   all.equal(round(convert_DO(100, "%", "mg/l", t = 20)$output, 3), 7.377)
+  )
+
+assert(
+  "verify_units should work...",
+  is.character(verify_units("mg/l", "o2")),
+  is.character(verify_units("ml", "vol")),
+  is.character(verify_units("mg", "mass")),
+  is.character(verify_units("mg", "o1"))
 )
+
+assert(
+  "convert_DO will print",
+  !has_error(print(convert_DO(10, "inHg", "mg/l")))
+  )
+
