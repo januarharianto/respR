@@ -30,6 +30,3 @@ subsample(squid.rd, n = 10)
 # Subsample with random first value:
 subsample(sardine.rd, 3, TRUE)
 }
-\author{
-Januar Harianto & Nicholas Carey
-}
