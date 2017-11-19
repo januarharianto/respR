@@ -15,7 +15,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -55,41 +55,60 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
-    <div id="welcome" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#welcome" class="anchor"></a>Welcome</h1></div>
+  <div class="col-md-9">
+    
 
-<p><strong>RespR</strong> is an R package that consists of a collection of functions that provide a structured workflow for the analysis of respirometry-related data.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>We are currently about to submit to CRAN.</p>
-<p>Meanwhile, use the <code>devtools</code> package to grab the <strong>stable</strong> version from here:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
-devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"januarharianto/respR"</span>)</code></pre></div>
+    
+    
+<div class="contents">
+<div id="introduction-to-respr" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#introduction-to-respr" class="anchor"></a>Introduction to <code>respR</code>
+</h1></div>
+<p><code>respR</code> is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in <code>respR</code> will process any data, as long as it is a <code>data.frame</code> object.</p>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<p>A good place to start is the introductory vignette, <a href="https://januarharianto.github.io/respR/">respR - An R package for processing respirometry data</a>. Link is currently down due to v0.0.0.9000 release - a major update/release - we are updating it as quickly as we can.</p>
-<p>We are in the process of creating more vignettes (and improving the current one). Please stay tuned.</p>
+<div id="before-we-begin" class="section level1">
+<h1 class="hasAnchor">
+<a href="#before-we-begin" class="anchor"></a>Before we begin</h1>
+<p>It is recommend that you download the latest versions of RStudio (<a href="https://shiny.rstudio.com/" class="uri">https://shiny.rstudio.com/</a>) and R (<a href="http://www.r-project.org/" class="uri">http://www.r-project.org/</a>). If you already have RStudio installed, go to the Help menu and click “Check for Updates”.</p>
+<p>You are expected to at least have a basic understanding of R to use this package. If you know how to read Excel and/or .csv files and store them as data.frame objects in R, you should be able to use <code>respR</code> with relative ease.</p>
 </div>
-<div id="collaborators" class="section level2">
-<h2 class="hasAnchor">
-<a href="#collaborators" class="anchor"></a>Collaborators</h2>
+<div id="package-installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#package-installation" class="anchor"></a>Package Installation</h1>
+<p>The latest version of <code>respR</code> can be installed from our GitHub repository. The installation process is easy with the <code>devtools</code> package, which needs to be installed first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)</code></pre></div>
+<p>You can then install and load <code>respR</code> by running the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install respR</span>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"januarharianto/respR"</span>)
+
+<span class="co"># Load the package:</span>
+<span class="kw">library</span>(respR)</code></pre></div>
+<p>Please note that the installation will also download all the dependencies required to run the package.</p>
+</div>
+<div id="usage" class="section level1">
+<h1 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h1>
+<p>When working with respirometry data, you will often need to:</p>
+<ol style="list-style-type: decimal">
+<li>Ensure that the data, or at least a subset of the data, is representative of the research question of interest.</li>
+<li>Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.</li>
+<li>Correct for background usage of oxygen by micro-organisms.</li>
+<li>Scale the resulting usage rate to the volume (of the medium) and mass (of the animal), and convert to appropriate units.</li>
+</ol>
+<p>The <code>respR</code> package contains several functions to make these actions quick and easy:</p>
 <ul>
-<li>Januar <strong>Harianto</strong>
-</li>
-<li>Nicholas <strong>Carey</strong>
-</li>
+<li>It provides visual feedbacks and diagnostic plots to help you subset and analyse your data.</li>
+<li>It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked maximum, minimum or best fit sections of the data.</li>
+<li>By separating the workflow into a series of connected functions, you can “mix and match” functions to help you achieve your result.</li>
 </ul>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3" id="sidebar">
-    <h2>Links</h2>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/januarharianto/respr">https://​github.com/​januarharianto/​respr</a>
 </li>
@@ -101,13 +120,8 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <li>Januar Harianto <br><small class="roles"> Author, maintainer </small> </li>
 <li>Nicholas Carey <br><small class="roles"> Author </small> </li>
 </ul>
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=respR"><img src="http://www.r-pkg.org/badges/version/respR" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://travis-ci.org/januarharianto/respR"><img src="https://travis-ci.org/januarharianto/respR.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://codecov.io/gh/januarharianto/respR"><img src="https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg" alt="codecov"></a></li>
-</ul>
 </div>
+
 </div>
 
 
