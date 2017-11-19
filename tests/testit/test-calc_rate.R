@@ -17,8 +17,9 @@ assert(
 rate <- calc_rate(sardine.rd, from = 2000, to = 4000, plot = F)
 assert(
   "calc_rate S3 generics work",
-  !has_error(capture.output(print(rate))),
-  !has_error(capture.output(summary(rate)))
+  !has_error(print(rate)),
+  !has_error(summary(rate)),
+  !has_error(plot(rate))
 )
 
 assert(

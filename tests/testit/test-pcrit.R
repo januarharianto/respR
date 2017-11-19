@@ -14,7 +14,13 @@ assert(
 # works with has.rate = TRUE.
 assert(
   "pcrit parses input with has.rate properly",
-    !has_error(
-      suppressMessages(
-        pcrit(squid, has.rate = T, plot = F, parallel = F)))
+    !has_error(pcrit(squid, has.rate = T, parallel = F))
+)
+
+pcr <- pcrit(squid, parallel = F)
+assert(
+  "pcrit S3 generics work",
+  !has_error(print(pcr)),
+  !has_error(summary(pcr)),
+  !has_error(plot(pcr))
 )
