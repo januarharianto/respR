@@ -40,7 +40,9 @@ rolling regression is determined by the \code{width} argument. In most cases, th
 default width works well.
 }
 \examples{
-pcrit(squid.rd, parallel = FALSE)
+# The example below should work (uncomment to run)
+# pcrit(squid.rd)
+
 }
 \references{
 Yeager DP, Ultsch GR (1989) Physiological regulation and
