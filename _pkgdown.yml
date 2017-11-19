@@ -1,0 +1,27 @@
+url: http://januarharianto.github.io/respR
+
+template:
+  params:
+  bootswatch: cerulean
+
+reference:
+  - title: "Pre-processing"
+    contents:
+      - inspect_data
+      - subsample
+  - title: "Analytical"
+    contents:
+      - calc_rate
+      - calc_rate.bg
+      - auto_rate
+      - pcrit
+  - title: "Conversion"
+    contents:
+      - convert_DO
+      - convert_rate
+  - title: "Example Data"
+    contents:
+      - urchins.rd
+      - intermittent.rd
+      - squid.rd
+      - sardine.rd
