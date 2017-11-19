@@ -6,8 +6,15 @@ assert(
   "pcrit works with default values",
   !has_error(
     suppressMessages(
-      pcrit(squid, plot = F, parallel = F)
-    )
-  )
+      pcrit(squid, plot = F, parallel = F)))
 )
 
+
+# This analysis does not make sense, but we are just testing that the function
+# works with has.rate = TRUE.
+assert(
+  "pcrit parses input with has.rate properly",
+    !has_error(
+      suppressMessages(
+        pcrit(squid, has.rate = T, plot = F, parallel = F)))
+)
