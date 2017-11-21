@@ -4,11 +4,11 @@
 
 # Welcome
 
-`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in `respR` will process any data that is linear.
+`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in `respR` will process linear relationships in any related data, such as oxygen flux or photosynthesis.
 
 
 ## Installation
-`respR` is not yet published in CRAN, but it will be. Meanwhile, use the `devtools` package to grab the **stable** version:
+`respR` is not yet published in CRAN. For now, use the `devtools` package to grab the **stable** version:
 
 ```r
 install.packages("devtools")
@@ -17,13 +17,16 @@ devtools::install_github("januarharianto/respR")
 
 ## Usage
 
-A good place to start is our [online vignette](https://januarharianto.github.io/respR/index.html). For a quick evaluation of the package, try out the following code:
+A good place to start is our [online vignette](https://januarharianto.github.io/respR/) (click on "[Get Started](https://januarharianto.github.io/respR/articles/respR.html)"). For a quick evaluation of the package, try out the following code:
 
 ```r
 library(respR) # load the library
-    
+
+# As lazy loading is in place, we do not need to call example data explicitly.
+# This example will use the `sardine.rd` example data.
+
 # 1. Check data for errors
-x <- inspect_dat(sardine.rd)
+x <- inspect_data(sardine.rd)
 
 # 2. Manual rate calculations
 calc_rate(x, from = 2000, to = 4000)
@@ -41,8 +44,6 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
              volume = 1.2, mass = 0.8)
 
 ```
- 
-
 
 ## Collaborators
 
