@@ -3,7 +3,8 @@
 #' This function uses simple linear regression to automatically calculate the
 #' rate of change of oxygen over time for background corrections of the main
 #' data. Can be used on multiple datasets of background measures, as long as the
-#' time data are identical between measurements.
+#' time data are identical between measurements. In addition, the data must be 
+#' in the same units as the data to be corrected.
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
 #' decision. Units are called in a later function when volume- and/or

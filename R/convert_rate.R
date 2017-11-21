@@ -1,8 +1,8 @@
 #' Scale rate value to volume and/or mass
 #'
-#' This is a conversion function. It can convert a unit of rate, RO_2, into
-#' volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
-#' specimen), MO_2 rate.
+#' This is a conversion function. It can convert a dimensionless unit of rate, 
+#' derived from `calc_rate` into volume-adjusted (e.g to the container), VO_2 or
+#' mass specific (i.e. to the specimen), MO_2 rate.
 #'
 #' The function uses an inernal database and a fuzzy string matching algorithm
 #' to accept various unit formatting styles.
