@@ -58,6 +58,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/respR.html">Get Started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -133,18 +136,18 @@ rates of oxygen concentration are computed in <code><a href='convert_rate.html'>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>1800</span>)     <span class='co'># default subset by 'time'</span></div><div class='img'><img src='calc_rate-21.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
-#&gt; [1] -0.0009793698</div><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='fl'>93</span>, <span class='fl'>92</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'o2'</span>)         <span class='co'># subset by O2</span></div><div class='img'><img src='calc_rate-22.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
-#&gt; [1] -0.0007229508</div><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='fl'>200</span>, <span class='fl'>1800</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'row'</span>)     <span class='co'># subset by row</span></div><div class='img'><img src='calc_rate-23.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+    <pre class="examples"><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>1800</span>)     <span class='co'># default subset by 'time'</span></div><div class='img'><img src='calc_rate-6.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+#&gt; [1] -0.0009793698</div><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='fl'>93</span>, <span class='fl'>92</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'o2'</span>)         <span class='co'># subset by O2</span></div><div class='img'><img src='calc_rate-7.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+#&gt; [1] -0.0007229508</div><div class='input'><span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='fl'>200</span>, <span class='fl'>1800</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'row'</span>)     <span class='co'># subset by row</span></div><div class='img'><img src='calc_rate-8.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
 #&gt; [1] -0.0009788756</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>calc_rate</span>(<span class='no'>sardine.rd</span>, <span class='fl'>.8</span>, <span class='fl'>.2</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'proportion'</span>) <span class='co'># subset by proportion</span></div><div class='input'><span class='no'>x</span></div><div class='output co'>#&gt; Rate(s):
 #&gt; [1] -0.0007168829</div><div class='input'><span class='fu'>summary</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; Summary:
 #&gt;    intercept_b0       rate_b1  rsq row endrow time endtime  oxy endoxy
 #&gt; 1:     95.19487 -0.0007168829 0.99 994   5726  993    5725 94.5   90.9
 #&gt;    rowlength timelength rate_twopoint
-#&gt; 1:      4732       4732      90.88003</div><div class='input'><span class='fu'>plot</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting...this may take a while for large datasets.</span></div><div class='img'><img src='calc_rate-24.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+#&gt; 1:      4732       4732      90.88003</div><div class='input'><span class='fu'>plot</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting...this may take a while for large datasets.</span></div><div class='img'><img src='calc_rate-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Using a list in 'from' and 'to' perform repeated measurements:</span>
 <span class='fu'>data</span>(<span class='no'>intermittent.rd</span>)
-<span class='fu'>calc_rate</span>(<span class='no'>intermittent.rd</span>, <span class='fu'>c</span>(<span class='fl'>200</span>,<span class='fl'>2300</span>,<span class='fl'>4100</span>), <span class='fu'>c</span>(<span class='fl'>1800</span>,<span class='fl'>3200</span>,<span class='fl'>4600</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'time'</span>)</div><div class='img'><img src='calc_rate-25.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+<span class='fu'>calc_rate</span>(<span class='no'>intermittent.rd</span>, <span class='fu'>c</span>(<span class='fl'>200</span>,<span class='fl'>2300</span>,<span class='fl'>4100</span>), <span class='fu'>c</span>(<span class='fl'>1800</span>,<span class='fl'>3200</span>,<span class='fl'>4600</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'time'</span>)</div><div class='img'><img src='calc_rate-10.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
 #&gt; [1] -0.0005734109 -0.0006097325 -0.0006539752</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -1,5 +1,6 @@
 urls:
   reference: http://januarharianto.github.io/respR/reference
   article: http://januarharianto.github.io/respR/articles
-articles: {}
+articles:
+  respR: respR.html
 
