@@ -1,6 +1,11 @@
-# This file contains functions used to plot all the figures in the package. We have grouped all of these together so that we can edit the functions easily. They are not to be used on their own, and will not be exported for use in the package.
+# This file contains functions used to plot all the figures in the package. We
+# have grouped all of these together so that we can edit the functions easily.
+# They are not to be used on their own, and will not be exported for use in the
+# package.
 
-# We have also deliberately decided to use base graphics, as ggplot2 was too slow when plotting large datasets. Unless ggplot2 improves, we will probably not use that. Maybe skip to ggvis once it's mature?
+# We have also deliberately decided to use base graphics, as ggplot2 was too
+# slow when plotting large datasets. Unless ggplot2 improves, we will probably
+# never use that. Maybe skip to ggvis once it's mature?
 
 # define colours
 r1 <- adjustcolor("darkslateblue", alpha.f = 0.4)  # primary colour
@@ -85,29 +90,30 @@ rollreg.p <- function(rolldf, ranked.b1) {
   title(main = "Rolling Regressions (Rate)", line = 0.3)
 }
 
-# pcrit plot
-pcrit.p <- function(x, rank = 1) {
-  data <- x$do.mr  # main plot dataset
-  ref <- x$pcritRanked[1]  # reference list to create subsets
-  set1 <- dplyr::filter(data, do <= as.numeric(ref[rank, ]))
-  lm1 <- lm(set1[[2]] ~ set1[[1]], set1)
-  set2 <- dplyr::filter(data, do > as.numeric(ref[rank, ]))
-  lm2 <- lm(set2[[2]] ~ set2[[1]], set2)
-  pc.intercept <- x$pcritRanked[5][rank, ]
-  pc.midpoint <- x$pcritRanked[6][rank, ]
-  # plot:
-  plot(data, col = r2, pch = 16, xlab = "DO", ylab = "MR",
-    lwd = 2, xlim = c(min(data[[1]]), max(data[[1]], pc.intercept, pc.midpoint)),
-    ylim = c(min(data[[2]]), ((max(data[[2]]) - min(data[[2]])) * 1.2 + min(data[[2]]))),
-    panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
-      col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  abline(lm1, lwd = 1.5, lty = 4)
-  abline(lm2, lwd = 1.5, lty = 4)
-  abline(v = pc.intercept, col = d1, lwd = 3)
-  # text(pc.intercept, min(data[2]), signif(pc.intercept, 3))
-  abline(v = pc.midpoint, col = d2, lwd = 3)
-  # text(pc.midpoint, max(data[2]), signif(pc.midpoint, 3))
-  # title(main = "Pcrit")
-  legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
-    bty = "n")
-}
+# Unused, but maybe for next time?
+# # pcrit plot
+# pcrit.p <- function(x, rank = 1) {
+#   data <- x$do.mr  # main plot dataset
+#   ref <- x$pcritRanked[1]  # reference list to create subsets
+#   set1 <- dplyr::filter(data, do <= as.numeric(ref[rank, ]))
+#   lm1 <- lm(set1[[2]] ~ set1[[1]], set1)
+#   set2 <- dplyr::filter(data, do > as.numeric(ref[rank, ]))
+#   lm2 <- lm(set2[[2]] ~ set2[[1]], set2)
+#   pc.intercept <- x$pcritRanked[5][rank, ]
+#   pc.midpoint <- x$pcritRanked[6][rank, ]
+#   # plot:
+#   plot(data, col = r2, pch = 16, xlab = "DO", ylab = "MR",
+#     lwd = 2, xlim = c(min(data[[1]]), max(data[[1]], pc.intercept, pc.midpoint)),
+#     ylim = c(min(data[[2]]), ((max(data[[2]]) - min(data[[2]])) * 1.2 + min(data[[2]]))),
+#     panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
+#       col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
+#   abline(lm1, lwd = 1.5, lty = 4)
+#   abline(lm2, lwd = 1.5, lty = 4)
+#   abline(v = pc.intercept, col = d1, lwd = 3)
+#   # text(pc.intercept, min(data[2]), signif(pc.intercept, 3))
+#   abline(v = pc.midpoint, col = d2, lwd = 3)
+#   # text(pc.midpoint, max(data[2]), signif(pc.midpoint, 3))
+#   # title(main = "Pcrit")
+#   legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
+#     bty = "n")
+# }
