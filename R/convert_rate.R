@@ -108,13 +108,14 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   # Then, convert time unit
   RO2 <- adjust_scale(RO2, time, B)
 
-  # Then, scale to volune
+  # Then, scale to volume
   VO2 <- RO2 * volume
 
   # Then, scale to mass
   if (is.MO2) {
-    MO2 <- VO2/mass
-    MO2 <- adjust_scale(MO2, "kg.mass", C)
+    # adjust mass multiplier
+    multm <- adjust_scale(mass, "kg.mass", C)
+    MO2 <- VO2/multm # ok
   }
 
   # Generate output
