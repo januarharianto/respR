@@ -1,0 +1,17 @@
+---
+title: "Your title here"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Your title here}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE)
+```
+
