@@ -66,6 +66,16 @@
 
 
 #' Respirometry data of the sardine, *Sardinops sagax*
+#' 
+#' Dissolved oxygen units: %
+#' Temperature: ??
+#' Salinity: 35
+#' Atm. Pressure: ??
+#' Time units: seconds
+#' Chamber volume (L): ??
+#' Specimen wet mass (g): ??
+#' 
+#' Conducted at Hopkins Marine Station, Stanford University. 
 #'
 #' @md
 #' @author Nicholas Carey

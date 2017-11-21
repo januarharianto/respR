@@ -75,6 +75,7 @@ The function also warns us that time data is not evenly-spaced, however this doe
 The presence of microorganisms in the respirometry medium may be a potential source of experimental bias, and we may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
 The function `calc_rate.bg()` can be used to simultaneously process multiple background rate measurements as long as they share the **same units** of time and oxygen data as the experiments they will be used to correct. In `urchins.rd`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc_rate.bg()` and save the output as an object. This object contains both individual background rates for each data column enetered, and an averaged rate which is used as the correction rate. 
+** Need to explain how the converted rate is appended to the object for passing to next stage. Do you have to save/assign it manually to a new object??**
 
 ```{r}
 # Note that the data is truncated by time, from 5 to 40 minutes 

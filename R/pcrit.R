@@ -12,7 +12,7 @@
 #' This is also the default method. If you already have calculated RO2/MO2
 #' elsewhere, the argument `has.rate = "TRUE"` must be used. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
-#' default width works well.
+#' default width (10% of the data length) works well.
 #'
 #' @param df data frame or object of class `inspect_data`. This is the data to
 #'   analyse.
