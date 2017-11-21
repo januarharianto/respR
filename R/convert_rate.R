@@ -133,8 +133,26 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   return(out)
 }
 
+#' @export
+print.convert_rate <- function(x, ...) {
+  cat("Input:\n")
+  print(x$input)
+  print(c(x$input.o2.unit, x$input.time.unit))
+  cat("Output:\n")
+  print(x$output)
+  print(x$output.unit)
+}
 
 
+#' @export
+summary.convert_rate <- function(object, ...) {
+  out <- (data.frame(t(c(object$summary,
+    input.o2.unit = object$input.o2.unit,
+    input.time.unit = object$input.time.unit,
+    output.unit = object$output.unit)))
+    )
+  return(out)
+}
 
 
 #' Convert between multipliers of the same unit, e.g. mg to kg
