@@ -31,8 +31,8 @@ vignettes/*.build.timestamp
 *.utf8.md
 *.knit.md
 
-# Preview files created by R markdown
-*.html
+# Preview file created by R markdown
+README.html
 
 # macOS temporary files
 .DS_Store
