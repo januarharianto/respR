@@ -7,9 +7,9 @@
 #'   `adjust_rate`. This is the value(s) that you want to convert from.
 #' @param from string. The unit to convert from. See [unit_args()] for details.
 #' @param to string. The unit to convert to. See [unit_args()] for details.
-#' @param S numeric. Salinity. Defaults to 35. Used only in conversion of % data
-#' @param t numeric. Temperature. Defaults to 25 (°C). Used only in conversion of % data
-#' @param P numeric. Pressure. Defaults to 1.013253 (kPa). Used only in conversion of % data
+#' @param S numeric. Salinity. Defaults to 35. Used only in conversion of \% data.
+#' @param t numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.
+#' @param P numeric. Pressure. Defaults to 1.013253 (kPa). Used only in conversion of \% data.
 #'
 #' @return A list.
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp

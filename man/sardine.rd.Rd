@@ -3,13 +3,22 @@
 \docType{data}
 \name{sardine.rd}
 \alias{sardine.rd}
-\title{Respirometry data of the sardine, \emph{Species}}
+\title{Respirometry data of the sardine, \emph{Sardinops sagax}}
 \format{A data frame}
 \usage{
 sardine.rd
 }
 \description{
-Respirometry data of the sardine, \emph{Species}
+Dissolved oxygen units: %
+Temperature: ??
+Salinity: 35
+Atm. Pressure: ??
+Time units: seconds
+Chamber volume (L): ??
+Specimen wet mass (g): ??
+}
+\details{
+Conducted at Hopkins Marine Station, Stanford University.
 }
 \author{
 Nicholas Carey

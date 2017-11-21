@@ -17,6 +17,12 @@ specimens. In addition, there are 2 measurements of background respiration.
 These were trial runs to determine the precision of the new Vernier Optical
 DO probes (ODO-BTA).
 }
+\details{
+Dissolved oxygen units: mg/L
+Time units: minutes
+Chamber volumes (L): ????
+Specimen masses (g): ????
+}
 \author{
 Januar Harianto
 }

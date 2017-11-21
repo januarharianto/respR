@@ -14,11 +14,11 @@ convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
 
 \item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{S}{numeric. Salinity. Defaults to 35.}
+\item{S}{numeric. Salinity. Defaults to 35. Used only in conversion of \% data.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (degrees celcius).}
+\item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (kPa).}
+\item{P}{numeric. Pressure. Defaults to 1.013253 (kPa). Used only in conversion of \% data.}
 }
 \value{
 A list.
