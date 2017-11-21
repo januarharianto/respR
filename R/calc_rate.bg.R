@@ -45,7 +45,8 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   rownames(coefs) <- c("Intercept", "Rate")
   # Generate output:
   bg <- unname(coefs[2, ])
-  out <- list(data = dt, lm = fit, results = coefs, bgrate = bg)
+  out <- list(data = dt, lm = fit, results = coefs, bgrate = bg,
+    mean = mean(bg))
   class(out) <- "calc_rate.bg"
   # Plot data:
   if (plot) plot(out)
@@ -57,6 +58,8 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
 print.calc_rate.bg <- function(x, ...) {
   cat("Rate(s):\n")
   print(x$bgrate)
+  cat("Average bg rate:\n")
+  print(mean(x$bgrate))
 }
 
 #' @export
