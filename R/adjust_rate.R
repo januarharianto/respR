@@ -23,23 +23,25 @@
 #' # decrease in dissolved oxygen), so both values are negative!
 #' adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40
 
-adjust_rate <- function(df, by) {
+adjust_rate <- function(x, by) {
 
-  if (class(by) %in% "calc_rate.bg") by = by$bgrate
+  if (class(by) %in% "calc_rate.bg") by <-  by$bgrate
   if (!is.numeric(by))
     stop("'by' must be numeric or object of class 'calc_rate.bg'.")
 
   # Use mean value of bgrate for correction
   by <- mean(by)
 
+  # Determine rate input
+  if (class(x) %in% c("calc_rate", "auto_rate")) {
+    rate <- x$rate
+  } else rate <- x
+
   # Perform correction
-  if (class(df) %in% c("calc_rate", "auto_rate")) {
-    rate <- df$rate
-  } else rate <- df
-    corrected <- unname(unlist(rate - by))
+  corrected <- unname(unlist(rate - by))
 
   # Append the results to the object
-  out <- c(input = df, list(adjustment = by, corrected = corrected))
+  out <- c(input = x, list(adjustment = by, corrected = corrected))
   class(out) <- "adjust_rate"
   return(out)
 }
@@ -50,7 +52,9 @@ adjust_rate <- function(df, by) {
 #' @export
 print.adjust_rate <- function(x, ...) {
   cat("Note: please consider the sign of the value while correcting the rate.")
-  cat("\nInput rate:", x$input.rate)
+  if (length(x) == 3) {
+    cat("\nInput rate:", x$input)
+  } else cat("\nInput rate:", x$input.rate)
   cat("\nAdjustment:", x$adjustment)
   cat("\n Adj. rate:", x$corrected)
 }
