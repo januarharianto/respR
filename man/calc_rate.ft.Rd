@@ -4,34 +4,58 @@
 \alias{calc_rate.ft}
 \title{Calculate flowthrough rate of change in dissolved oxygen}
 \usage{
-calc_rate.ft(df = NULL, in.col = 1, out.col = 2, inflow = NULL,
-  outflow = NULL, delta = NULL, flowrate = NULL)
+calc_rate.ft(df = NULL, from = NULL, to = NULL, by = "row",
+  inflow.col = NULL, outflow.col = NULL, inflow.o2 = NULL,
+  outflow.o2 = NULL, delta.o2 = NULL, flowrate = NULL, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame.}
+\item{df}{data frame. Defaults to NULL. Will process a data frame if it is
+provided here.}
 
-\item{in.col}{numeric. Used only if df is not NULL. Selects the inflow data
-by column number.}
+\item{from}{numeric. Defaults to NULL. Defines the upper bound of the data
+frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{out.col}{numeric. Used only if df is not NULL. Selects the outflow data
-by column number.}
+\item{to}{numeric. Defaults to NULL. Defines the lower bound of the data
+frame to subset. Subsetting is based on the argument: \code{by}.}
 
-\item{inflow}{numeric vector. Incurrent oxygen concentration.}
+\item{by}{character. Defaults to "row".}
 
-\item{outflow}{numeric vector. Excurrent oxygen concentration.}
+\item{inflow.col}{numeric. Defaults to NULL. This selects the incurrent
+column if a data frame ('df') is provided.}
 
-\item{delta}{numeric vector. The O2 differential between inflow and outflow.}
+\item{outflow.col}{numeric. Defaults to NULL. This selects the outcurrent
+column if a data frame ('df') is provided.}
+
+\item{inflow.o2}{numeric. Single value or vector. Incurrent oxygen
+concentration. If outflow.o2 is a vector, this must be a single value or a
+vector of equal length.}
+
+\item{outflow.o2}{numeric. Single value or vector. Excurrent oxygen
+concentration.}
+
+\item{delta.o2}{numeric. Single value or vector. An O2 differential between
+inflow and outflow O₂. Used only if inflow.o2 and outflow.o2 are NULL.}
 
 \item{flowrate}{numeric vector. The flow rate. No unit of measurement is
-expected, although you will specify it when you perform conversions later
-on.}
+expected; you will specify it when you perform conversions later on.}
+
+\item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
 \value{
 An object of class "calc_rate.ft".
 }
 \description{
-I need a description here.
+Calculates rate of O₂ uptake in flowthrough respirometry given either:
+}
+\details{
+\enumerate{
+\item A flow-rate and both inflow and outflow oxygen concentrations 2. A
+flow-rate and an O₂ differential between inflow and outflow concentrations
+}
+
+Can return a single value, or multiple and mean values based on continuous
+data.
 }
 \examples{
-
+NULL
 }

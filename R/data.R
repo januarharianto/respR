@@ -5,8 +5,8 @@
 #' The experiment was conducted at the Sydney Institute of Marine Science in
 #' Sydney, Australia. There are a total of 3 replicates where the respirometry
 #' chamber was flushed. Data was collected using a Vernier Optical DO probe
-#' (ODO-BTA). 
-#' 
+#' (ODO-BTA).
+#'
 #' Dissolved oxygen units: mg/L
 #' Time units: seconds
 #' Chamber volume (L): 2.379
@@ -26,11 +26,10 @@
 #' Oxygen consumption data of 16 individual *Heliocidaris erythrogramma*
 #' specimens. In addition, there are 2 measurements of background respiration.
 #' These were trial runs to determine the precision of the new Vernier Optical
-#' DO probes (ODO-BTA).
-#' 
-#' Dissolved oxygen units: mg/L
-#' Time units: minutes
-#' Chamber volumes (L): ????
+#' DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
+#' recorded.
+#'
+#' Dissolved oxygen units: mg/L Time units: minutes Chamber volumes (L): ????
 #' Specimen masses (g): ????
 #'
 #' @md
@@ -45,17 +44,17 @@
 
 #' Respirometry data of the squid, *Doryteuthis opalescens*, with P_crit
 #'
-#' A single experiment on the squid species *Doryteuthis opalescens* in a 
-#' Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment 
-#' conducted at Hopkins Marine Station, Stanford University, Pacific Grove, 
+#' A single experiment on the squid species *Doryteuthis opalescens* in a
+#' Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment
+#' conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 #' California.
-#' 
+#'
 #' Dissolved oxygen units: mg/L
 #' Time units: seconds
 #' Chamber volume (L): 12.3
 #' Specimen wet mass (g): 21.41
-#' 
-#' Data kindly supplied by Ben Burford, Hopkins Marine Station, 
+#'
+#' Data kindly supplied by Ben Burford, Hopkins Marine Station,
 #' Stanford University. <bburford@stanford.edu>
 #'
 #' @md
@@ -66,7 +65,7 @@
 
 
 #' Respirometry data of the sardine, *Sardinops sagax*
-#' 
+#'
 #' Dissolved oxygen units: %
 #' Temperature: ??
 #' Salinity: 35
@@ -74,10 +73,29 @@
 #' Time units: seconds
 #' Chamber volume (L): ??
 #' Specimen wet mass (g): ??
-#' 
-#' Conducted at Hopkins Marine Station, Stanford University. 
+#'
+#' Conducted at Hopkins Marine Station, Stanford University.
 #'
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame
 "sardine.rd"
+
+
+#' Flowthrough respirometry data
+#'
+#' Dissolved oxygen units: ??
+#' Temperature: ??
+#' Salinity: ??
+#' Atm. Pressure: ??
+#' Time units: seconds
+#' Chamber volume (L): ??
+#' Specimen wet mass (g): ??
+#'
+#' Conducted at ??.
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame
+"flowthrough.rd"
+
