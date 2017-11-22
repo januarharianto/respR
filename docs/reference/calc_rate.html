@@ -144,7 +144,7 @@ rates of oxygen concentration are computed in <code><a href='convert_rate.html'>
 #&gt;    intercept_b0       rate_b1  rsq row endrow time endtime  oxy endoxy
 #&gt; 1:     95.19487 -0.0007168829 0.99 994   5726  993    5725 94.5   90.9
 #&gt;    rowlength timelength rate_twopoint
-#&gt; 1:      4732       4732      90.88003</div><div class='input'><span class='fu'>plot</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting...this may take a while for large datasets.</span></div><div class='img'><img src='calc_rate-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+#&gt; 1:      4732       4732 -0.0007607777</div><div class='input'><span class='fu'>plot</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span class='message'>Plotting...this may take a while for large datasets.</span></div><div class='img'><img src='calc_rate-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># Using a list in 'from' and 'to' perform repeated measurements:</span>
 <span class='fu'>data</span>(<span class='no'>intermittent.rd</span>)
 <span class='fu'>calc_rate</span>(<span class='no'>intermittent.rd</span>, <span class='fu'>c</span>(<span class='fl'>200</span>,<span class='fl'>2300</span>,<span class='fl'>4100</span>), <span class='fu'>c</span>(<span class='fl'>1800</span>,<span class='fl'>3200</span>,<span class='fl'>4600</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>'time'</span>)</div><div class='img'><img src='calc_rate-10.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):

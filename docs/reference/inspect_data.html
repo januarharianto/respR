@@ -88,10 +88,7 @@
 
     
     <p><code>inspect_data()</code> scans a data frame for specific errors that may affect the
-use of functions in <code>respR</code>. Data checks include: * A test for NA/NaN inputs.</p><ul>
-<li><p>A test for numeric data. * A test for sequential time data. * A test for
-duplicate time data. * A test for evenly-spaced time data.</p></li>
-</ul>
+use of functions in <code>respR</code>. Data checks include:</p>
     
 
     <pre class="usage"><span class='fu'>inspect_data</span>(<span class='no'>df</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
@@ -129,9 +126,16 @@ diagnostics.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <ul>
+<li><p>A test for NA/NaN inputs.</p></li>
+<li><p>A test for numeric data.</p></li>
+<li><p>A test for sequential time data.</p></li>
+<li><p>A test for duplicate time data.</p></li>
+<li><p>A test for evenly-spaced time data.</p></li>
+</ul>
     <p>Once data checks are complete, the function produces a list object which may
 be directly loaded into <code><a href='calc_rate.html'>calc_rate()</a></code>, <code><a href='calc_rate.bg.html'>calc_rate.bg()</a></code>, <code><a href='auto_rate.html'>auto_rate()</a></code> and
-<code><a href='pcrit.html'>pcrit()</a></code> for further analyses.</p>
+<code><a href='pcrit.html'>pcrit()</a></code> (NC - i don't think this last one works) for further analyses.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
