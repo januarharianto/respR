@@ -15,12 +15,11 @@ urchins.rd
 Oxygen consumption data of 16 individual \emph{Heliocidaris erythrogramma}
 specimens. In addition, there are 2 measurements of background respiration.
 These were trial runs to determine the precision of the new Vernier Optical
-DO probes (ODO-BTA).
+DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
+recorded.
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: minutes
-Chamber volumes (L): ????
+Dissolved oxygen units: mg/L Time units: minutes Chamber volumes (L): ????
 Specimen masses (g): ????
 }
 \author{
