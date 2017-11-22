@@ -210,10 +210,8 @@ verify_units <- function(unit, is) {
   chk <- lapply(all.units, function(x) grep(string, x))
   chk <- sapply(chk, function(x) length(x) > 0)
   result <- any(chk == T)  # did a match occur?
-  if (result == FALSE) {
-    warning("unit '", unit, "' is not in the respR unit database.", call. = F)
-    stop("Output unit cannot be recognised.", call. = F)
-  }
+  if (result == FALSE)
+    stop("unit '", unit, "' cannot be recognised. Please check unit strings.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }
