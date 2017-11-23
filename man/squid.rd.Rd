@@ -9,9 +9,21 @@
 squid.rd
 }
 \description{
-Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit
+A single experiment on the squid species \emph{Doryteuthis opalescens} in a
+Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment
+conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
+California.
+}
+\details{
+Dissolved oxygen units: mg/L
+Time units: seconds
+Chamber volume (L): 12.3
+Specimen wet mass (g): 21.41
+
+Data kindly supplied by Ben Burford, Hopkins Marine Station,
+Stanford University. \href{mailto:bburford@stanford.edu}{bburford@stanford.edu}
 }
 \author{
-Nicholas Carey
+Ben Burford
 }
 \keyword{datasets}

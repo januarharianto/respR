@@ -24,16 +24,20 @@ A list object of class \code{adjust_rate}.
 }
 \description{
 \code{inspect_data()} scans a data frame for specific errors that may affect the
-use of functions in \code{respR}. Data checks include: * A test for NA/NaN inputs.
-\itemize{
-\item A test for numeric data. * A test for sequential time data. * A test for
-duplicate time data. * A test for evenly-spaced time data.
-}
+use of functions in \code{respR}. Data checks include:
 }
 \details{
+\itemize{
+\item A test for NA/NaN inputs.
+\item A test for numeric data.
+\item A test for sequential time data.
+\item A test for duplicate time data.
+\item A test for evenly-spaced time data.
+}
+
 Once data checks are complete, the function produces a list object which may
 be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}} and
-\code{\link[=pcrit]{pcrit()}} for further analyses.
+\code{\link[=pcrit]{pcrit()}} (NC - i don't think this last one works) for further analyses.
 }
 \examples{
 inspect_data(sardine.rd)

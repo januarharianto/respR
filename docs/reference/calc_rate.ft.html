@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate background respiration rates — calc_rate.bg • respR</title>
+<title>Calculate flowthrough rate of change in dissolved oxygen — calc_rate.ft • respR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -83,75 +83,92 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate background respiration rates</h1>
+    <h1>Calculate flowthrough rate of change in dissolved oxygen</h1>
     </div>
 
     
-    <p>This function uses simple linear regression to automatically calculate the
-rate of change of oxygen over time for background corrections of the main
-data. Can be used on multiple datasets of background measures, as long as the
-time data are identical between measurements. In addition, the data must be
-in the same units as the data to be corrected.</p>
+    <p>Calculates rate of O₂ uptake in flowthrough respirometry given either:</p>
     
 
-    <pre class="usage"><span class='fu'>calc_rate.bg</span>(<span class='no'>x</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>calc_rate.ft</span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"row"</span>,
+  <span class='kw'>inflow.col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>outflow.col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>delta.o2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>data frame. This is the data to process.</p></td>
-    </tr>
-    <tr>
-      <th>xcol</th>
-      <td><p>numeric. Defaults to <code>1</code>. This is the time column.</p></td>
-    </tr>
-    <tr>
-      <th>ycol</th>
-      <td><p>numeric vector. Defaults to <code>2</code>. Can have length &gt; 1. This is the
-O2 data.</p></td>
+      <th>df</th>
+      <td><p>data frame. Defaults to NULL. Will process a data frame if it is
+provided here.</p></td>
     </tr>
     <tr>
       <th>from</th>
-      <td><p>numeric. Defaults to NULL. Defines the upper bound(s) of the data
+      <td><p>numeric. Defaults to NULL. Defines the upper bound of the data
 frame to subset. Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
       <th>to</th>
-      <td><p>numeric. Defaults to NULL. Defines the upper bound(s) of the data
+      <td><p>numeric. Defaults to NULL. Defines the lower bound of the data
 frame to subset. Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
       <th>by</th>
-      <td><p>string. <code>"time"</code> or <code>"row"</code> Defaults to <code>"time"</code>. This is the
-method used to subset the data.</p></td>
+      <td><p>character. Defaults to "row".</p></td>
+    </tr>
+    <tr>
+      <th>inflow.col</th>
+      <td><p>numeric. Defaults to NULL. This selects the incurrent
+column if a data frame ('df') is provided.</p></td>
+    </tr>
+    <tr>
+      <th>outflow.col</th>
+      <td><p>numeric. Defaults to NULL. This selects the outcurrent
+column if a data frame ('df') is provided.</p></td>
+    </tr>
+    <tr>
+      <th>inflow.o2</th>
+      <td><p>numeric. Single value or vector. Incurrent oxygen
+concentration. If outflow.o2 is a vector, this must be a single value or a
+vector of equal length.</p></td>
+    </tr>
+    <tr>
+      <th>outflow.o2</th>
+      <td><p>numeric. Single value or vector. Excurrent oxygen
+concentration.</p></td>
+    </tr>
+    <tr>
+      <th>delta.o2</th>
+      <td><p>numeric. Single value or vector. An O2 differential between
+inflow and outflow O₂. Used only if inflow.o2 and outflow.o2 are NULL.</p></td>
+    </tr>
+    <tr>
+      <th>flowrate</th>
+      <td><p>numeric vector. The flow rate. No unit of measurement is
+expected; you will specify it when you perform conversions later on.</p></td>
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>logical. Defaults to TRUE. Will plot the results for visual
-inspection.</p></td>
+      <td><p>logical. Defaults to TRUE. Plots the data.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list object of class <code>calc_bg.rate</code>.</p>
+    <p>An object of class "calc_rate.ft".</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>There are no units involved in <code>calc_rate.bg()</code>. This is a deliberate
-decision. Units are called in a later function when volume- and/or
-weight-specific rates of oxygen concentration are computed in
-<code><a href='convert_rate.html'>convert_rate()</a></code> and <code><a href='convert_DO.html'>convert_DO()</a></code>.</p>
+    <ol>
+<li><p>A flow-rate and both inflow and outflow oxygen concentrations 2. A
+flow-rate and an O₂ differential between inflow and outflow concentrations</p></li>
+</ol>
+    <p>Can return a single value, or multiple and mean values based on continuous
+data.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>calc_rate.bg</span>(<span class='no'>urchins.rd</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>18</span>:<span class='fl'>19</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='img'><img src='calc_rate.bg-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
-#&gt; [1] -0.0007723979 -0.0008328292
-#&gt; Average bg rate:
-#&gt; [1] -0.0008026135</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

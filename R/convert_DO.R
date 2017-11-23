@@ -7,9 +7,9 @@
 #'   `adjust_rate`. This is the value(s) that you want to convert from.
 #' @param from string. The unit to convert from. See [unit_args()] for details.
 #' @param to string. The unit to convert to. See [unit_args()] for details.
-#' @param S numeric. Salinity. Defaults to 35.
-#' @param t numeric. Temperature. Defaults to 25 (degrees celcius).
-#' @param P numeric. Pressure. Defaults to 1.013253 (kPa).
+#' @param S numeric. Salinity. Defaults to 35. Used only in conversion of \% data.
+#' @param t numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.
+#' @param P numeric. Pressure. Defaults to 1.013253 (kPa). Used only in conversion of \% data.
 #'
 #' @return A list.
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
@@ -211,7 +211,7 @@ verify_units <- function(unit, is) {
   chk <- sapply(chk, function(x) length(x) > 0)
   result <- any(chk == T)  # did a match occur?
   if (result == FALSE)
-    stop("unit '", unit, "' is not in the respR unit database.", call. = F)
+    stop("unit '", unit, "' cannot be recognised. Please check unit strings.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }

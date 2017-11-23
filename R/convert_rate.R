@@ -1,8 +1,8 @@
 #' Scale rate value to volume and/or mass
 #'
-#' This is a conversion function. It can convert a unit of rate, RO_2, into
-#' volume-adjusted (e.g to the container), VO_2 or mass specific (i.e. to the
-#' specimen), MO_2 rate.
+#' This is a conversion function. It can convert a dimensionless unit of rate, 
+#' derived from `calc_rate` into volume-adjusted (e.g to the container), VO_2 or
+#' mass specific (i.e. to the specimen), MO_2 rate.
 #'
 #' The function uses an inernal database and a fuzzy string matching algorithm
 #' to accept various unit formatting styles.
@@ -108,13 +108,14 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   # Then, convert time unit
   RO2 <- adjust_scale(RO2, time, B)
 
-  # Then, scale to volune
+  # Then, scale to volume
   VO2 <- RO2 * volume
 
   # Then, scale to mass
   if (is.MO2) {
-    MO2 <- VO2/mass
-    MO2 <- adjust_scale(MO2, "kg.mass", C)
+    # adjust mass multiplier
+    multm <- adjust_scale(mass, "kg.mass", C)
+    MO2 <- VO2/multm # ok
   }
 
   # Generate output
