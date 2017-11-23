@@ -41,7 +41,7 @@ We have provided example data that can be used immediately once `respR` is loade
 
 # The typical respR workflow
 
-`respR` was designed to work best with data frame objects, including objects of class `data.frame`, `data.table` and `tibble`, containing numeric time and oxygen data. At this time, `respR` does not support parsing date-time data (e.g. class `POSIX.ct`) to numeric, and this should be done prior to use with the package (see packages such as  `lubridate`).
+`respR` was designed to work best with data frame objects, including objects of class `data.frame`, `data.table` and `tibble`, containing numeric time and oxygen data. At this time, `respR` does not support parsing date-time data (e.g. class `POSIXt` or `POSIXct`) to numeric, and this should be done prior to use with the package (see packages such as  [`lubridate`](https://cran.r-project.org/package=lubridate)).
 
 Here we describe a typical workflow for a **closed respirometry** experiment. See the references to `calc_rate()`, `calc_rate.ft()` and `pcrit()` for examples of analysis of intermittent and flowthrough respirometry data, and determination of $P_{crit}$.  The example data used here is `urchins.rd`, where the first column of the data frame is time data, while the remaining 18 columns are dissolved $O_2$ data. Columns `b1` and `b2` contain background respiration.
 
