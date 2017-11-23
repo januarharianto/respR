@@ -66,7 +66,7 @@ urchin <- inspect_data(urchins.rd, xcol =  1, ycol = 15)
 
 From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so for this experiment this section would be suitable for analysis.
 
-The function also warns us that time data is not evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in `respR` use actual time datapoints for analyses and calculations, and so irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, `urchin`.
+The function also warns us that time data is not evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in `respR` are able to use actual time datapoints for analyses and calculations, and so irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, `urchin`.
 
 **It should be noted that using `inspect_data` is optional** - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running `inspect_data` is a qualitative, exploratory step that highlights potential issues about the data before analysis.
 
@@ -74,8 +74,8 @@ The function also warns us that time data is not evenly-spaced, however this doe
 
 The presence of microorganisms in the respirometry medium may be a potential source of experimental bias, and we may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
 
-The function `calc_rate.bg()` can be used to simultaneously process multiple background rate measurements as long as they share the **same units** of time and oxygen data as the experiments they will be used to correct. In `urchins.rd`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc_rate.bg()` and save the output as an object. This object contains both individual background rates for each data column enetered, and an averaged rate which is used as the correction rate. 
-** Need to explain how the converted rate is appended to the object for passing to next stage. Do you have to save/assign it manually to a new object??**
+The function `calc_rate.bg()` can be used to simultaneously process multiple background rate measurements as long as they share the **same units** of time and oxygen data as the experiments they will be used to correct. In `urchins.rd`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using `calc_rate.bg()` and save the output as an object. This object contains both individual background rates for each data column enetered, and an averaged rate which is used as the correction rate.
+
 
 ```{r}
 # Note that the data is truncated by time, from 5 to 40 minutes 
@@ -87,17 +87,17 @@ print(bg)
 
 ## Step 3: Estimate rate
 
-Calling the function `calc_rate()` on your data, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. The function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.
+Calling the function `calc_rate()` on our data, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. The function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.
 
 ```{r}
 calc_rate(urchin) # same as: calc_rate(urchin$df)
 ```
 
-Note how the function can recognise and extract data from the output object of `inspect_data()`. Alternatively, you can specify a `data.frame` object containing raw Time ~ O~2~ data. 
+Note how the function can recognise and extract data from the output object of `inspect_data()`. Alternatively, we can specify a `data.frame` object containing raw Time ~ O~2~ data. 
 
 In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may also cause irregularities in the data. We can work around the error(s) and subset the regions that are not erroneous, and still obtain valid results.
 
-Based on the `from` and `to` arguments, a user may use `calc_rate()` to truncate data in any of 4 ways:
+Based on the `from` and `to` arguments, we may use `calc_rate()` to truncate data in any of 4 ways:
 
 1. **Time period** (`by = "time"`) - *"What is the rate over a specific 25 minute period?"*
 2. **Total oxygen consumed/produced** (`by = "o2"`) - *"At what rate is oxygen consumed between saturation points of 95% and 80%?"*
@@ -120,6 +120,7 @@ summary(rate)
 The output also includes a `rate_twopoint` output. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time, and can be useful in determining rate where only a limited number of data points are available, such as in 'closed bottle' respirometry. 
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
+
 ```{r}
 plot(rate)
 ```
@@ -134,6 +135,7 @@ a.rate
 ```
 
 If we want to, we can adjust the two-point results by calling it directly:
+
 ```{r}
 a.rate <- adjust_rate(rate$rate_2pt, bg)
 a.rate
@@ -183,4 +185,12 @@ A "fuzzy" string matching algorithm is used to automatically recognise variation
 
 ```{r}
 unit_args()
+```
+
+# Session info
+
+This document is reproducible based on the session information below:
+
+```{r, echo = FALSE}
+sessionInfo()
 ```
