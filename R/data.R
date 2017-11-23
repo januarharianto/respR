@@ -10,7 +10,7 @@
 #' Dissolved oxygen units: mg/L
 #' Time units: seconds
 #' Chamber volume (L): 2.379
-#' Specimen ash-free dry mass (g): 6.955
+#' Specimen ash-free dry mass (kg): 0.006955
 #'
 #' @md
 #' @author Nicholas Carey
@@ -29,8 +29,10 @@
 #' DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
 #' recorded.
 #'
-#' Dissolved oxygen units: mg/L Time units: minutes Chamber volumes (L): ????
-#' Specimen masses (g): ????
+#' Dissolved oxygen units: mg/L 
+#' Time units: minutes 
+#' Chamber volumes (L): ????
+#' Specimen masses (kg): ????
 #'
 #' @md
 #' @author Januar Harianto
@@ -52,7 +54,7 @@
 #' Dissolved oxygen units: mg/L
 #' Time units: seconds
 #' Chamber volume (L): 12.3
-#' Specimen wet mass (g): 21.41
+#' Specimen wet mass (kg): 0.02141
 #'
 #' Data kindly supplied by Ben Burford, Hopkins Marine Station,
 #' Stanford University. <bburford@stanford.edu>
@@ -66,15 +68,18 @@
 
 #' Respirometry data of the sardine, *Sardinops sagax*
 #'
-#' Dissolved oxygen units: %
-#' Temperature: ??
-#' Salinity: 35
-#' Atm. Pressure: ??
-#' Time units: seconds
-#' Chamber volume (L): ??
-#' Specimen wet mass (g): ??
+#' A single experiment on the sardine species *Sardinops saga* in a
+#' Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment
+#' conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
+#' California.
 #'
-#' Conducted at Hopkins Marine Station, Stanford University.
+#' Dissolved oxygen units: %
+#' Temperature: 15
+#' Salinity: 35
+#' Atm. Pressure: 1.013253
+#' Time units: seconds
+#' Chamber volume (L): 12.3
+#' Specimen wet mass (kg): 0.0477
 #'
 #' @md
 #' @author Nicholas Carey
@@ -84,15 +89,14 @@
 
 #' Flowthrough respirometry data
 #'
-#' Dissolved oxygen units: ??
-#' Temperature: ??
-#' Salinity: ??
-#' Atm. Pressure: ??
+#' A single experiment on the chiton species *Mopalia lignosa* in a 
+#' custom-built flowthrough respirometry system. 
+#' Conducted at University of British Columbia, Vancouver, BC, Canada. 
+#' 
+#' Dissolved oxygen units: mg/L
 #' Time units: seconds
-#' Chamber volume (L): ??
-#' Specimen wet mass (g): ??
-#'
-#' Conducted at ??.
+#' Flow rate (L/s): 0.000039
+#' Specimen ash-free dry mass (kg): 0.000070
 #'
 #' @md
 #' @author Nicholas Carey
