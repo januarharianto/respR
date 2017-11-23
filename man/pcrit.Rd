@@ -37,7 +37,7 @@ regression of the data and match it agains the rolling mean of the DO data.
 This is also the default method. If you already have calculated RO2/MO2
 elsewhere, the argument \code{has.rate = "TRUE"} must be used. The width of the
 rolling regression is determined by the \code{width} argument. In most cases, the
-default width works well.
+default width (10% of the data length) works well.
 }
 \examples{
 # The example below should work (uncomment to run)

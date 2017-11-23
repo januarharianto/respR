@@ -3,7 +3,8 @@
 #' This function uses simple linear regression to automatically calculate the
 #' rate of change of oxygen over time for background corrections of the main
 #' data. Can be used on multiple datasets of background measures, as long as the
-#' time data are identical between measurements.
+#' time data are identical between measurements. In addition, the data must be 
+#' in the same units as the data to be corrected.
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
 #' decision. Units are called in a later function when volume- and/or
@@ -44,7 +45,8 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   rownames(coefs) <- c("Intercept", "Rate")
   # Generate output:
   bg <- unname(coefs[2, ])
-  out <- list(data = dt, lm = fit, results = coefs, bgrate = bg)
+  out <- list(data = dt, lm = fit, results = coefs, bgrate = bg,
+    mean = mean(bg))
   class(out) <- "calc_rate.bg"
   # Plot data:
   if (plot) plot(out)
@@ -56,6 +58,8 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
 print.calc_rate.bg <- function(x, ...) {
   cat("Rate(s):\n")
   print(x$bgrate)
+  cat("Average bg rate:\n")
+  print(mean(x$bgrate))
 }
 
 #' @export

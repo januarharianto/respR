@@ -80,7 +80,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   rdt[, rowlength := endrow - row]
   rdt[, timelength := endtime - time]
-  rdt[, rate_twopoint := (endoxy - oxy / timelength)]
+  rdt[, rate_twopoint := ((endoxy - oxy) / timelength)]
 
   # Extract rate_b1
   rate <- rdt[,rate_b1]
@@ -96,7 +96,8 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
     from = from, to = to, by = by,
     subsets = dt,
     summary = rdt,
-    rate = rate
+    rate = rate,
+    rate_2pt = rdt$rate_twopoint
     )
 
   class(out) <- "calc_rate"

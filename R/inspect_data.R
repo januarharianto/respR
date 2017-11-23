@@ -1,14 +1,17 @@
 #' Check for common errors in respirometry data
 #'
 #' `inspect_data()` scans a data frame for specific errors that may affect the
-#' use of functions in `respR`. Data checks include: * A test for NA/NaN inputs.
-#' * A test for numeric data. * A test for sequential time data. * A test for
-#' duplicate time data. * A test for evenly-spaced time data.
-#'
+#' use of functions in `respR`. Data checks include: 
+#' 
+#' * A test for NA/NaN inputs.
+#' * A test for numeric data. 
+#' * A test for sequential time data. 
+#' * A test for duplicate time data. 
+#' * A test for evenly-spaced time data.
 #'
 #' Once data checks are complete, the function produces a list object which may
 #' be directly loaded into [calc_rate()], [calc_rate.bg()], [auto_rate()] and
-#' [pcrit()] for further analyses.
+#' [pcrit()] (NC - i don't think this last one works) for further analyses.
 #'
 #' @md
 #' @param df data frame. Accepts data frame object of any size.

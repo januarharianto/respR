@@ -71,18 +71,21 @@
 <div id="introduction-to-respr" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction-to-respr" class="anchor"></a>Introduction to respR</h1>
-<p>When working with aquatic respirometry data, you will often need to:</p>
+<p><code>respR</code> is a package designed to process the data from closed, intermittent, flowthrough and open tank respirometry. It is designed primarily for aquatic respirometry, although as many of the main functions are unitless it is adaptable for use with gaseous respirometry, and indeed analysis of other data where a parameter may change over time.</p>
+<p>When working with respirometry data, you will often need to:</p>
 <ol style="list-style-type: decimal">
 <li>Ensure that the data, or at least a subset of the data, is representative of the research question of interest.</li>
 <li>Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.</li>
 <li>Depending on the experimental setup, correct for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.</li>
 <li>Scale the resulting usage rate to the volume (of the medium) and mass (of the animal), and convert to appropriate units.</li>
 </ol>
-<p>The <code>respR</code> package contains several functions to make these actions quick and easy:</p>
+<p>The <code>respR</code> package allows determination of common metrics such as MO2, MO2max, MO2min, and PCrit, and contains several functions to make this process quick and easy:</p>
 <ul>
 <li>It provides visual feedbacks and diagnostic plots to help you subset and analyse your data.</li>
-<li>It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked maximum, minimum or best fit sections of the data.</li>
+<li>It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked <strong>maximum</strong>, <strong>minimum</strong> or <strong>best fit</strong> sections of the data.</li>
 <li>By separating the workflow into a series of connected functions, you can “mix and match” functions to help you achieve your result.</li>
+<li>The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions</li>
+<li>These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results allowing for a fully documented and reproducibile analysis of respirometry data</li>
 </ul>
 </div>
 <div id="example-data" class="section level1">
@@ -93,7 +96,8 @@
 <div id="the-typical-respr-workflow" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-typical-respr-workflow" class="anchor"></a>The typical respR workflow</h1>
-<p><code>respR</code> was designed to work best with data frame objects. This includes objects of class <code>data.frame</code>, <code>data.table</code> and <code>tibble</code>. The user should already know how to import data into these formats as they are fundemental data structures in R. Here we describe a typical workflow in the analysis of respirometry data once it has been loaded into R. The example data used is <code>urchins.rd</code>, where the first column of the data frame is time data, while the remaining 18 columns are dissolved <span class="math inline">\(O_2\)</span> data. Columns <code>b1</code> and <code>b2</code> contain background respiration.</p>
+<p><code>respR</code> was designed to work best with data frame objects, including objects of class <code>data.frame</code>, <code>data.table</code> and <code>tibble</code>, containing numeric time and oxygen data. At this time, <code>respR</code> does not support parsing date-time data (e.g. class <code>POSIX.ct</code>) to numeric, and this should be done prior to use with the package (see packages such as <code>lubridate</code>).</p>
+<p>Here we describe a typical workflow for a <strong>closed respirometry</strong> experiment. See the references to <code><a href="../reference/calc_rate.html">calc_rate()</a></code>, <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code> and <code><a href="../reference/pcrit.html">pcrit()</a></code> for examples of analysis of intermittent and flowthrough respirometry data, and determination of <span class="math inline">\(P_{crit}\)</span>. The example data used here is <code>urchins.rd</code>, where the first column of the data frame is time data, while the remaining 18 columns are dissolved <span class="math inline">\(O_2\)</span> data. Columns <code>b1</code> and <code>b2</code> contain background respiration.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(urchins.rd)
 <span class="co">#&gt;   time.min    a    b    c    d    e    f    g    h    i    j    k    l</span>
 <span class="co">#&gt; 1      0.0 7.86 7.86 7.64 7.65 7.87 7.74 7.62 7.65 7.96 7.75 7.72 7.71</span>
@@ -114,12 +118,12 @@
 <a href="#step-1-check-for-common-errors" class="anchor"></a>Step 1: Check for common errors</h2>
 <p>We first use <code><a href="../reference/inspect_data.html">inspect_data()</a></code> on the data frame to scan for:</p>
 <ul>
-<li>Missing/non numeric (<code>NA</code>/<code>NaN</code>) data;</li>
+<li>missing/non numeric (<code>NA</code>/<code>NaN</code>) data;</li>
 <li>sequential time data;</li>
 <li>duplicates in time data; and</li>
 <li>evenly-spaced time data.</li>
 </ul>
-<p>By default, the function always assumes the first column (<code>xcol</code>) is time data, while the second column (<code>ycol</code>) is <span class="math inline">\(O_2\)</span> data. In the case of <code>urchins.rd</code> where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the <code>xcol</code> and <code>ycol</code> arguments to modify that behaviour.</p>
+<p>By default, the function assumes the first column (<code>xcol</code>) is time data, while the second column (<code>ycol</code>) is <span class="math inline">\(O_2\)</span> data. In the case of <code>urchins.rd</code> where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the <code>xcol</code> and <code>ycol</code> arguments to modify that behaviour.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(urchins.rd, <span class="dt">xcol =</span> <span class="dv">1</span>, <span class="dt">ycol =</span> <span class="dv">15</span>)
 <span class="co">#&gt; n :  num [1:271] 7.61 7.61 7.65 7.67 7.62 7.61 7.62 7.64 7.64 7.62 ...</span>
 <span class="co">#&gt; time.min :  num [1:271] 0 0.2 0.3 0.5 0.7 0.8 1 1.2 1.3 1.5 ...</span>
@@ -137,36 +141,39 @@
 <span class="co">#&gt;  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 50 53</span>
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<p>From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. The function also warns us that time data is not evenly-spaced. We have several options to manage non-linear and irregular timeseries data. For now, the data frame is saved as an object, <code>urchin</code>.</p>
-<p><strong>It should be noted that using <code>inspect_data</code> is optional</strong> - the main functions in our package will readily accept any data frame as long as data are all numeric and error-free. Running the function is a qualitative step that simply flags potential issues about the data before it is analysed.</p>
+<p>From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so for this experiment this section would be suitable for analysis.</p>
+<p>The function also warns us that time data is not evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in <code>respR</code> use actual time datapoints for analyses and calculations, and so irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, <code>urchin</code>.</p>
+<p><strong>It should be noted that using <code>inspect_data</code> is optional</strong> - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running <code>inspect_data</code> is a qualitative, exploratory step that highlights potential issues about the data before analysis.</p>
 </div>
 <div id="step-2-process-background-respiration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-2-process-background-respiration" class="anchor"></a>Step 2: Process background respiration</h2>
-<p>The presence of microorganisms in the respirometry medium may be a potential source of significant experimental bias, and we may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.</p>
-<p>The function <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> can be used to simultaneously process multiple background rate measurements as long as they share the time data. In <code>urchins.rd</code>, background respiration was recorded and saved in columns 18 and 19. We analyse the data using <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> and save the output as an object.</p>
+<p>The presence of microorganisms in the respirometry medium may be a potential source of experimental bias, and we may want to account for background rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.</p>
+<p>The function <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> can be used to simultaneously process multiple background rate measurements as long as they share the <strong>same units</strong> of time and oxygen data as the experiments they will be used to correct. In <code>urchins.rd</code>, background respiration was recorded and saved in columns 18 and 19. We analyse the data using <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> and save the output as an object. This object contains both individual background rates for each data column enetered, and an averaged rate which is used as the correction rate. ** Need to explain how the converted rate is appended to the object for passing to next stage. Do you have to save/assign it manually to a new object??**</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Note that the data is truncated by time, from 5 to 40 minutes (instead of</span>
 <span class="co"># 0 to 45).</span>
 bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span>(urchins.rd, <span class="dt">xcol =</span> <span class="dv">1</span>, <span class="dt">ycol =</span> <span class="dv">18</span><span class="op">:</span><span class="dv">19</span>, <span class="dt">from =</span> <span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">40</span>, <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bg)
 <span class="co">#&gt; Rate(s):</span>
-<span class="co">#&gt; [1] -0.0008733404 -0.0007841207</span></code></pre></div>
+<span class="co">#&gt; [1] -0.0008733404 -0.0007841207</span>
+<span class="co">#&gt; Average bg rate:</span>
+<span class="co">#&gt; [1] -0.0008287306</span></code></pre></div>
 </div>
 <div id="step-3-estimate-rate" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-3-estimate-rate" class="anchor"></a>Step 3: Estimate rate</h2>
-<p>Calling the function <code><a href="../reference/calc_rate.html">calc_rate()</a></code> on your data, with no additional arguments, will prompt the function to perform a linear regression on the entire data. The function will automatically consider the first column as time data, and the second column as dissolved <span class="math inline">\(O_2\)</span> data.</p>
+<p>Calling the function <code><a href="../reference/calc_rate.html">calc_rate()</a></code> on your data, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. The function will automatically consider the first column as time data, and the second column as dissolved <span class="math inline">\(O_2\)</span> data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin)  <span class="co"># same as: calc_rate(urchin$df)</span></code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <pre><code>#&gt; Rate(s):
 #&gt; [1] -0.01749242</code></pre>
-<p>Note how the function can recognise and extract data from the output object of <code><a href="../reference/inspect_data.html">inspect_data()</a></code>. Alternatively, you can also use a <code>data.frame</code> object to run other analyses using the same function.</p>
-<p>In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O<sub>2</sub> concentrations. Equipment interference or other factors may also cause irregularities or “spikes” in the data. We can work around the error(s) and subset the regions that are not erroneous and still obtain valid results.</p>
+<p>Note how the function can recognise and extract data from the output object of <code><a href="../reference/inspect_data.html">inspect_data()</a></code>. Alternatively, you can specify a <code>data.frame</code> object containing raw Time ~ O<sub>2</sub> data.</p>
+<p>In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O<sub>2</sub> concentrations. Equipment interference or other factors may also cause irregularities in the data. We can work around the error(s) and subset the regions that are not erroneous, and still obtain valid results.</p>
 <p>Based on the <code>from</code> and <code>to</code> arguments, a user may use <code><a href="../reference/calc_rate.html">calc_rate()</a></code> to truncate data in any of 4 ways:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Time period</strong> (<code>by = "time"</code>) - <em>“What is the average rate over a 25 minute period?”</em>
+<strong>Time period</strong> (<code>by = "time"</code>) - <em>“What is the rate over a specific 25 minute period?”</em>
 </li>
 <li>
 <strong>Total oxygen consumed/produced</strong> (<code>by = "o2"</code>) - <em>“At what rate is oxygen consumed between saturation points of 95% and 80%?”</em>
@@ -175,10 +182,10 @@ bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rat
 <strong>Proportion based on total oxygen consumed</strong> (<code>by = "proportion"</code>) - <em>“What is the rate from halfway down the data?”</em>
 </li>
 <li>
-<strong>Precise subsetting by row</strong> (<code>by = "row"</code>). - <em>“I’d like to subset between rows 11 and 273.”</em>
+<strong>Precise subsetting by row</strong> (<code>by = "row"</code>). - <em>“I’d like to determine rate between rows 11 and 273.”</em>
 </li>
 </ol>
-<p>Note that for values of O<sub>2</sub> and time that do not match any value in the data, the function will identify the closest matching time or O<sub>2</sub> values to the inputs, rounded down, and uses these for subsequent calculations.</p>
+<p>We do not need to be overly precise; for input values of O<sub>2</sub> and time that do not match exactly to a value in the data, the function will identify the closest matching time or O<sub>2</sub> values to the inputs, rounded down, and uses these for subsequent calculations.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin, <span class="dt">from =</span> <span class="dv">4</span>, <span class="dt">to =</span> <span class="dv">29</span>, <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rate  <span class="co"># print(rate)</span>
@@ -191,7 +198,8 @@ bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rat
 <span class="co">#&gt;    intercept_b0     rate_b1   rsq row endrow time endtime  oxy endoxy</span>
 <span class="co">#&gt; 1:     7.636454 -0.02177588 0.987  25    175    4      29 7.58   6.98</span>
 <span class="co">#&gt;    rowlength timelength rate_twopoint</span>
-<span class="co">#&gt; 1:       150         25        6.6768</span></code></pre></div>
+<span class="co">#&gt; 1:       150         25        -0.024</span></code></pre></div>
+<p>The output also includes a <code>rate_2pt</code> output. This is the rate determined by simple two-point calculation of difference in O<sub>2</sub> divided by difference in Time, and can be useful in determining rate where only a limited number of data points are available, such as in ‘closed bottle’ respirometry.</p>
 <p>Plotting the output provides a series of diagnostic plots of the data subset that was analysed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(rate)
 <span class="co">#&gt; Plotting...this may take a while for large datasets.</span></code></pre></div>
@@ -200,42 +208,64 @@ bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rat
 <div id="step-4-adjust-for-background-respiration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-4-adjust-for-background-respiration" class="anchor"></a>Step 4: Adjust for background respiration</h2>
-<p>Since background rate has been calculated in <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code>, adjustment is straightforward:</p>
+<p>Since background rate has been calculated in <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code>, adjustment is straightforward using the function <code>adjust_rate</code>. The <code>rate</code> input can be an object of class <code>calc_rate</code> or <code>auto_rate</code>, or any numeric value.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(rate, bg)
 a.rate
 <span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
 <span class="co">#&gt; Input rate: -0.02177588</span>
 <span class="co">#&gt; Adjustment: -0.0008287306</span>
 <span class="co">#&gt;  Adj. rate: -0.02094715</span></code></pre></div>
+<p>If we want to, we can adjust the two-point results by calling it directly:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(rate<span class="op">$</span>rate_2pt, bg)
+a.rate
+<span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
+<span class="co">#&gt; Input rate: -0.024</span>
+<span class="co">#&gt; Adjustment: -0.0008287306</span>
+<span class="co">#&gt;  Adj. rate: -0.02317127</span></code></pre></div>
+<p>A background correction can also be entered manually. Care should be taken to include the correct, typically negative, sign.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(rate, <span class="op">-</span><span class="fl">0.00083</span>)
+a.rate
+<span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
+<span class="co">#&gt; Input rate: -0.02177588</span>
+<span class="co">#&gt; Adjustment: -0.00083</span>
+<span class="co">#&gt;  Adj. rate: -0.02094588</span></code></pre></div>
+<p>For experiments where there is a quantified background <strong>input</strong> of oxygen, such as in open tank respirometry, <code>adjust_rate</code> can be used to correct rates using a positive background value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a.rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(rate, <span class="fl">0.002</span>)
+a.rate
+<span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
+<span class="co">#&gt; Input rate: -0.02177588</span>
+<span class="co">#&gt; Adjustment: 0.002</span>
+<span class="co">#&gt;  Adj. rate: -0.02377588</span></code></pre></div>
 </div>
 <div id="step-5-convert-the-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-5-convert-the-results" class="anchor"></a>Step 5: Convert the results</h2>
-<p>Once the rate of change of oxygen has been determined, we may either want to calculate:</p>
+<p>Note, up until this point <code>respR</code> has not required units of time or oxygen to be entered. Here, we convert calculated, dimensionless rates to specified output units.</p>
+<p>For example, we may want to calculate:</p>
 <ol style="list-style-type: decimal">
-<li>Total change in O<sub>2</sub> per unit time; or</li>
-<li>Mass-specific rate of change in O<sub>2</sub>.</li>
+<li>Total change in O<sub>2</sub> per unit time within the chamber; or</li>
+<li>Mass-specific rate of change in O<sub>2</sub> per unit time of the specimen.</li>
 </ol>
-<p>The function <code><a href="../reference/convert_rate.html">convert_rate()</a></code> can be used to scale rate values to chamber volume and/or specimen mass. For example, the user may convert the output of <code><a href="../reference/calc_rate.html">calc_rate()</a></code> to O<sub>2</sub> consumed over an hour:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(a.rate, <span class="dt">o2.unit =</span> <span class="st">"mg/L"</span>, <span class="dt">time.unit =</span> <span class="st">"sec"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/s"</span>, 
+<p>The function <code><a href="../reference/convert_rate.html">convert_rate()</a></code> can be used to scale rate values to chamber volume and/or specimen mass, given inputs for the units of the original data (<code>o2.unit</code>, <code>time.unit</code>), and in SI units (L, g) the <code>volume</code> of the chamber and <code>mass</code> of the specimen.</p>
+<p>For example, we may convert the output of <code><a href="../reference/calc_rate.html">calc_rate()</a></code> to O<sub>2</sub> consumed per hour:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(a.rate, <span class="dt">o2.unit =</span> <span class="st">"mg/L"</span>, <span class="dt">time.unit =</span> <span class="st">"min"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h"</span>, 
     <span class="dt">volume =</span> <span class="fl">1.09</span>)
 <span class="co">#&gt; Input:</span>
-<span class="co">#&gt; [1] -0.02094715</span>
-<span class="co">#&gt; [1] "mg/L" "sec" </span>
+<span class="co">#&gt; [1] -0.02377588</span>
+<span class="co">#&gt; [1] "mg/L" "min" </span>
 <span class="co">#&gt; Output:</span>
-<span class="co">#&gt; [1] -0.02283239</span>
-<span class="co">#&gt; [1] "mg/sec"</span></code></pre></div>
-<p>Or, the user may convert a known rate to a volume-corrected, mass-specific rate:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(a.rate, <span class="dt">o2.unit =</span> <span class="st">"mgl-1"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/s/kg"</span>, 
+<span class="co">#&gt; [1] -1.554943</span>
+<span class="co">#&gt; [1] "mg/hour"</span></code></pre></div>
+<p>Or, we may convert a known rate to a volume-corrected, mass-specific rate:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(a.rate, <span class="dt">o2.unit =</span> <span class="st">"mgl-1"</span>, <span class="dt">time.unit =</span> <span class="st">"m"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/s/kg"</span>, 
     <span class="dt">volume =</span> <span class="fl">1.09</span>, <span class="dt">mass =</span> <span class="fl">0.19</span>)
 <span class="co">#&gt; Input:</span>
-<span class="co">#&gt; [1] -0.02094715</span>
-<span class="co">#&gt; [1] "mg/L" "sec" </span>
+<span class="co">#&gt; [1] -0.02377588</span>
+<span class="co">#&gt; [1] "mg/L" "min" </span>
 <span class="co">#&gt; Output:</span>
-<span class="co">#&gt; [1] -0.1201705</span>
+<span class="co">#&gt; [1] -0.002273308</span>
 <span class="co">#&gt; [1] "mg/sec/kg"</span></code></pre></div>
-<p>A string matching algorithm is used to automatically recognise variations in base units. For example, <code>"ml/s"</code>, <code>"mL/sec"</code>, <code>"milliliter/s"</code>, and <code>"millilitre/second"</code> are all equally identified as <code>mL/s</code>. Unit delimiters can be any combination of a space, dot (<code>.</code>), forward-slash (<code>/</code>), or the “per” unit (<code>-1</code>). Thus, <code>"ml/kg"</code>, <code>"mL / kg"</code>, <code>"mL /kilogram"</code>, <code>"ml kg-1"</code> or <code>"ml.kg-1"</code> are equally recognised as <code>mL/kg</code>.</p>
-<p>Due to the “fuzzy” approach in the matching algorithm, writing unit strings for <code><a href="../reference/convert_rate.html">convert_rate()</a></code> should come naturally and intuitively for most people. As long as the units are recognised by the function, the conversion will take place. If we need a reminder on what units are available to use, we can call <code><a href="../reference/unit_args.html">unit_args()</a></code>:</p>
+<p>A “fuzzy” string matching algorithm is used to automatically recognise variations in base units, allowing natural, intuitive input of units. For example, <code>"ml/s"</code>, <code>"mL/sec"</code>, <code>"milliliter/s"</code>, and <code>"millilitre/second"</code> are all equally identified as <code>mL/s</code>. Unit delimiters can be any combination of a space, dot (<code>.</code>), forward-slash (<code>/</code>), or the “per” unit (<code>-1</code>). Thus, <code>"ml/kg"</code>, <code>"mL / kg"</code>, <code>"mL /kilogram"</code>, <code>"ml kg-1"</code> or <code>"ml.kg-1"</code> are equally recognised as <code>mL/kg</code>. If we need a reminder on what units are available to use, we can call <code><a href="../reference/unit_args.html">unit_args()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/unit_args.html">unit_args</a></span>()
 <span class="co">#&gt; Note: A string-matchin algorithm is used to identify units. e.g. all of these are the same: mg/L; mg/l, mg L-1, mgL-1, mg per litre, mg.l-1, mg.L-1</span>
 <span class="co">#&gt; </span>

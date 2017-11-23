@@ -44,6 +44,11 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
              volume = 1.2, mass = 0.8)
 
 ```
+## Feedback and contributions
+
+We would love for you to help us improve this (relatively new) package! If you find a bug, have suggestions to improve our output, or want new features let us know by [opening an issue](https://github.com/januarharianto/respr/issues).
+
+Alternatively, you can fork this project and create a pull request. 
 
 ## Collaborators
 

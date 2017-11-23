@@ -12,7 +12,7 @@
 #' This is also the default method. If you already have calculated RO2/MO2
 #' elsewhere, the argument `has.rate = "TRUE"` must be used. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
-#' default width works well.
+#' default width (10% of the data length) works well.
 #'
 #' @param df data frame or object of class `inspect_data`. This is the data to
 #'   analyse.
@@ -169,15 +169,17 @@ plot.pcrit <- function(x, ...) {
   if (x$has.rate) {
     # No plot here :D
   } else {
-    plot(x$df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2, panel.first = c(rect(par("usr")[1],
-      par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-        lty = 1, lwd = 1.5)))
+    plot(x$df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
+      panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
+        par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
     abline(h = x$result.intercept, col = "forestgreen", lwd = 3, lty = 1)
     abline(h = x$result.midpoint, col = "steelblue", lwd = 3, lty = 1)
     abline(h = x$result.segmented, col = "red", lwd = 3, lty = 1)
-    legend("top", c(sprintf("Breakpoint, %g", signif(x$result.segmented, 3)), sprintf("Intercept, %g", signif(x$result.intercept, 3)), sprintf("Midpoint, %g",
-      signif(x$result.midpoint, 3))), col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
-      cex = 0.8, horiz = F)
+    legend("top", c(sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
+      sprintf("Intercept, %g", signif(x$result.intercept, 3)),
+      sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
+      col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2,
+      bty = "n", cex = 0.8, horiz = F)
     title(main = "Original Series", line = 0.3)
   }
 

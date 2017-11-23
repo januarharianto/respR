@@ -81,8 +81,16 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   if (uneven$check && by == "row")
     warning("Time data is irregular. Please use `by = 'time'.", call. = F)
 
+  # Warn if method == "linear" -- width is default and has different meaning
+  if (method == "linear") {
+    if (by == "time" && is.numeric(width) && width != floor(0.2 * max(df[[1]])))
+      warning("Width value not applied - when method = 'linear', width is determined by the function.")
+    if (by == "row" && is.numeric(width) && width != floor(0.2 * nrow(df)))
+      warning("Width value not applied - when method = 'linear', width is determined by the function.")
+  }
+
   # Generate default width for rolling regression. This also applies if
-  # "linear" method sis selected.
+  # "linear" method is selected.
   if (is.null(width) | method == "linear") {
     if (by == "time") width <- floor(0.2 * max(df[[1]]))
     if (by == "row") width <- floor(0.2 * nrow(df))
