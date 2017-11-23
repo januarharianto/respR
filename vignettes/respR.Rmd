@@ -117,7 +117,7 @@ Calling `summary()` will produce a `data.frame` object that can be saved directl
 summary(rate)
 ```
 
-The output also includes a `rate_2pt` output. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time, and can be useful in determining rate where only a limited number of data points are available, such as in 'closed bottle' respirometry. 
+The output also includes a `rate_twopoint` output. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time, and can be useful in determining rate where only a limited number of data points are available, such as in 'closed bottle' respirometry. 
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
 ```{r}
