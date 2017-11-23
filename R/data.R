@@ -61,7 +61,8 @@
 #'
 #' @md
 #' @author Ben Burford
-#' @format A data frame
+#' @format A data frame object consisting of 2 columns (time and dissolved
+#'   oxygen) and 34120 rows (approx 9.5h of data).
 "squid.rd"
 
 
@@ -69,11 +70,14 @@
 #' Respirometry data of the sardine, *Sardinops sagax*
 #'
 #' A single experiment on the sardine species *Sardinops saga* in a
-#' Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment
-#' conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
+#' Loligo Systems swim tunnel and Witrox oxygen probe system. Oxygen content
+#' recorded in \% oxygen saturation. Temperature, salinity and atmospheric 
+#' pressure are supplied below to allow for conversion to concentration units.
+#' 
+#' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 #' California.
 #'
-#' Dissolved oxygen units: %
+#' Dissolved oxygen units: \% O₂ saturation
 #' Temperature: 15
 #' Salinity: 35
 #' Atm. Pressure: 1.013253
@@ -83,7 +87,8 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame
+#' @format A data frame object consisting of 2 columns (time and \% oxygen 
+#'   saturation) and 7513 rows (approx 2.1h of data).
 "sardine.rd"
 
 
@@ -96,10 +101,12 @@
 #' Dissolved oxygen units: mg/L
 #' Time units: seconds
 #' Flow rate (L/s): 0.000039
+#' Inflow oxygen concentration (mg/L): 8.88
 #' Specimen ash-free dry mass (kg): 0.000070
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame
+#' @format A data frame object consisting of ??? columns (time and oxygen 
+#'   outflow concentration) and 935 rows (approx 16 mins of data).
 "flowthrough.rd"
 
