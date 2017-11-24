@@ -4,21 +4,28 @@
 \name{sardine.rd}
 \alias{sardine.rd}
 \title{Respirometry data of the sardine, \emph{Sardinops sagax}}
-\format{A data frame}
+\format{A data frame object consisting of 2 columns (time and \% oxygen
+saturation) and 7513 rows (approx 2.1h of data).}
 \usage{
 sardine.rd
 }
 \description{
-Dissolved oxygen units: %
-Temperature: ??
-Salinity: 35
-Atm. Pressure: ??
-Time units: seconds
-Chamber volume (L): ??
-Specimen wet mass (g): ??
+A single experiment on the sardine species \emph{Sardinops sagax} in a
+Loligo Systems swim tunnel and Witrox oxygen probe system. Oxygen content
+recorded in \% oxygen saturation. Temperature, salinity and atmospheric
+pressure are supplied below to allow for conversion to concentration units.
 }
 \details{
-Conducted at Hopkins Marine Station, Stanford University.
+Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
+California.
+
+Dissolved oxygen units: \% O₂ saturation
+Temperature (°C): 15
+Salinity: 35
+Atm. Pressure (kPa): 1.013253
+Time units: seconds
+Chamber volume (L): 12.3
+Specimen wet mass (kg): 0.0477
 }
 \author{
 Nicholas Carey
