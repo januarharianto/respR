@@ -19,7 +19,7 @@ pressure are supplied below to allow for conversion to concentration units.
 Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 California.
 
-Dissolved oxygen units: \% O₂ saturation
+Dissolved oxygen units: \% $O_2$ saturation
 Temperature (°C): 15
 Salinity: 35
 Atm. Pressure (kPa): 1.013253
