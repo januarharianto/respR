@@ -34,7 +34,7 @@ vector of equal length.}
 concentration.}
 
 \item{delta.o2}{numeric. Single value or vector. An O2 differential between
-inflow and outflow O₂. Used only if inflow.o2 and outflow.o2 are NULL.}
+inflow and outflow $O_2$. Used only if inflow.o2 and outflow.o2 are NULL.}
 
 \item{flowrate}{numeric vector. The flow rate. No unit of measurement is
 expected; you will specify it when you perform conversions later on.}
@@ -45,12 +45,12 @@ expected; you will specify it when you perform conversions later on.}
 An object of class "calc_rate.ft".
 }
 \description{
-Calculates rate of O₂ uptake in flowthrough respirometry given either:
+Calculates rate of $O_2$ uptake in flowthrough respirometry given either:
 }
 \details{
 \enumerate{
 \item A flow-rate and both inflow and outflow oxygen concentrations 2. A
-flow-rate and an O₂ differential between inflow and outflow concentrations
+flow-rate and an $O_2$ differential between inflow and outflow concentrations
 }
 
 Can return a single value, or multiple and mean values based on continuous
