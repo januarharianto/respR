@@ -124,14 +124,18 @@ Similar to the other respirometry methods, a background rate value (typically ne
 ``` {r}
 adjust_rate(chiton.ft.rate$mean, by = -0.000001)
 ```
+`respR` does not currently have a specialised background function for flowthrough data. However the main `calc_rate.ft` function can be used to examine data from 'blank' experiments for background rates, and these (or an average of several) can be entered as above. The user should however be aware that only background rates determined at the *same flow rate* should be used.
 
 ### Converting rates
 
-The `convert_rate` function is used to convert rates to particular units. Converting flowthrough rates requires the `o2.unit` of the data, and a flow rate unit, `flow.unit`. However, inputs for `volume` or `time.unit` are not required since these are incorporated into the flow rate unit (e.g. L/s). The `flow.unit` must be in SI units of litres per unit time; L/s, L/m, or L/h. The function returns a rate for the whole specimen, and if a `mass` is entered it returns a mass-specific rate. 
+The `convert_rate` function is used to convert rates to particular units. Converting flowthrough rates requires the `o2.unit` of the data, and a flow rate unit, `flow.unit`. However, inputs for `volume` or `time.unit` are not required since these are incorporated into the flow rate unit (e.g. L/s). The `flow.unit` must be in SI units of litres per unit time; L/s, L/m, or L/h. If an object of class `calc_rate.ft` is used, the function will prompt the user for the correct inputs. 
+
+The function returns a rate for the whole specimen, and if a `mass` is entered (kg) it returns a mass-specific rate. 
 
 ```{r}
 # obviously not yet working
 #convert_rate(chiton.ft.rate$mean, o2.unit = 'mg/l', flow.unit = "l/s", output.unit = "mg/h")
-#convert_rate(chiton.ft.rate$mean, o2.unit = 'mg/l', flow.unit = "l/s", mass = output.unit = "mg/h/g")
+#convert_rate(chiton.ft.rate$mean, o2.unit = 'mg/l', flow.unit = "l/s", mass = 0.000070, output.unit = "mg/h/g")
 ```
 
+## so this funtion should then know from either a `flow.unit` being entered, or the object is class `calc_rate.ft` to do the correct conversion... I don't think it needs the actual flow rate since that's already been used to get the rate.....?????
