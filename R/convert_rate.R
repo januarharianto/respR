@@ -18,8 +18,8 @@
 #' @param output.unit string. The output unit to convert to. Units must be in the  
 #'   order O2-Time, or for mass-specific rates, O2-Time-Mass. Check
 #'   [unit_args()].
-#' @param volume numeric. Volume in litres. This is the volume of the
-#'   respirometry chamber, not the specimen(s).
+#' @param volume numeric. Volume in litres. This is the volume of fluid in 
+#'   the respirometry chamber, not the specimen(s). 
 #' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
 #'   you wish to calculate mass-specific rates.
 #' @param S numeric. Salinity. Defaults to 35.
