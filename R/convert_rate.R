@@ -15,7 +15,8 @@
 #' @param o2.unit string. The dissolved oxygen unit to convert from. Check
 #'   [unit_args()].
 #' @param time.unit string. The time unit to convert from. Check [unit_args()].
-#' @param output.unit string. The output unit to convert to. Check
+#' @param output.unit string. The output unit to convert to. Units must be in the  
+#'   order O2-Time, or for mass-specific rates, O2-Time-Mass. Check
 #'   [unit_args()].
 #' @param volume numeric. Volume in litres. This is the volume of the
 #'   respirometry chamber, not the specimen(s).
