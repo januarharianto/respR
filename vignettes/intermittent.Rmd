@@ -107,7 +107,7 @@ print(urchin_int_rates_adj)
 We can see each individual rate has been adjusted, and the new rates can be extracted from the resulting object using `$corrected`. 
 
 ### Converting rates
-Once the rates have been determined, they can be converted to volume-corrected or mass-specific rates using `convert_rate`. The `print()` call will list up to 6 regressions and the weighted mean of the results are also given.
+Once the rates have been determined, they can be converted to volume-corrected or mass-specific rates using `convert_rate`. 
 
 ```{r}
 convert_rate(urchin_int_rates_adj, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
