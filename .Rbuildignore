@@ -8,5 +8,5 @@
 ^docs$              # Folder that stores HTML vignettes
 ^\.travis\.yml$     # Travis files
 ^vignettes$         # Vignettes folder
-^_pkgdown\.yml$     # The pkgdown yml
+^_pkgdown\.yml$
 ^index\.Rmd$
