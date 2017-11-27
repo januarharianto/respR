@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/twopoint.html">Two-point analyses</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -87,7 +99,7 @@
     </div>
 
     
-    <p>Calculates rate of O₂ uptake in flowthrough respirometry given either:</p>
+    <p>Calculates rate of $O_2$ uptake in flowthrough respirometry given either:</p>
     
 
     <pre class="usage"><span class='fu'>calc_rate.ft</span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"row"</span>,
@@ -140,7 +152,7 @@ concentration.</p></td>
     <tr>
       <th>delta.o2</th>
       <td><p>numeric. Single value or vector. An O2 differential between
-inflow and outflow O₂. Used only if inflow.o2 and outflow.o2 are NULL.</p></td>
+inflow and outflow $O_2$. Used only if inflow.o2 and outflow.o2 are NULL.</p></td>
     </tr>
     <tr>
       <th>flowrate</th>
@@ -161,7 +173,7 @@ expected; you will specify it when you perform conversions later on.</p></td>
 
     <ol>
 <li><p>A flow-rate and both inflow and outflow oxygen concentrations 2. A
-flow-rate and an O₂ differential between inflow and outflow concentrations</p></li>
+flow-rate and an $O_2$ differential between inflow and outflow concentrations</p></li>
 </ol>
     <p>Can return a single value, or multiple and mean values based on continuous
 data.</p>
