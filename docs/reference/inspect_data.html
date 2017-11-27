@@ -71,6 +71,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
     </li>
   </ul>
@@ -160,11 +163,11 @@ be directly loaded into <code><a href='calc_rate.html'>calc_rate()</a></code>, <
 #&gt; Sequential Time (xcol)   PASS 
 #&gt; Non-duplicated Time      PASS 
 #&gt; Evenly-spaced Time       PASS 
-#&gt; ---</div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>inspect_data</span>(<span class='no'>urchins.rd</span>, <span class='fl'>1</span>, <span class='fl'>5</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time data (xcol) is irregular. Subsetting by `row` may result in irregular durations.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+#&gt; ---</div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>inspect_data</span>(<span class='no'>urchins.rd</span>, <span class='fl'>1</span>, <span class='fl'>5</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time data (xcol) is irregular. Subsetting by `row` may result in irregular durations.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># It is also possible to load the function directly into respR's</span>
 <span class='co'># other functions:</span>
 <span class='fu'><a href='calc_rate.html'>calc_rate</a></span>(<span class='fu'>inspect_data</span>(<span class='no'>sardine.rd</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-          <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>3000</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>4000</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time column (xcol) is of class `integer' and has been converted to `numeric`.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-6.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+          <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>3000</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>4000</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time column (xcol) is of class `integer' and has been converted to `numeric`.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-9.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
 #&gt; [1] -0.0007059132</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
