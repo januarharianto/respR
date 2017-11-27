@@ -77,7 +77,7 @@ Results of `pcrit` analyses can be extracted from the results object via the fol
 ```{r}
 # Broken-stick regression (Yeager & Ultsch, 1989)
 market.squid.pcrit$result.intercept
-market.squid.pcrit$result.midpoint
+
 # Segmented regression (Muggeo 2003).
 market.squid.pcrit$result.segmented
 ```
