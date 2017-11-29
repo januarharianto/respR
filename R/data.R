@@ -7,10 +7,10 @@
 #' chamber was flushed. Data was collected using a Vernier Optical DO probe
 #' (ODO-BTA).
 #'
-#' Dissolved oxygen units: mg/L
-#' Time units: seconds
-#' Chamber volume (L): 2.379
-#' Specimen ash-free dry mass (kg): 0.006955
+#' - Dissolved oxygen units: mg/L
+#' - Time units: seconds
+#' - Chamber volume (L): 2.379
+#' - Specimen ash-free dry mass (kg): 0.006955
 #'
 #' @md
 #' @author Nicholas Carey
@@ -29,10 +29,10 @@
 #' DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
 #' recorded.
 #'
-#' Dissolved oxygen units: mg/L
-#' Time units: minutes
-#' Chamber volumes (L): ????
-#' Specimen masses (kg): ????
+#' - Dissolved oxygen units: mg/L
+#' - Time units: minutes
+#' - Chamber volumes (L): ????
+#' - Specimen masses (kg): ????
 #'
 #' @md
 #' @author Januar Harianto
@@ -51,10 +51,10 @@
 #' conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 #' California.
 #'
-#' Dissolved oxygen units: mg/L
-#' Time units: seconds
-#' Chamber volume (L): 12.3
-#' Specimen wet mass (kg): 0.02141
+#' - Dissolved oxygen units: mg/L
+#' - Time units: seconds
+#' - Chamber volume (L): 12.3
+#' - Specimen wet mass (kg): 0.02141
 #'
 #' Data kindly supplied by Ben Burford, Hopkins Marine Station,
 #' Stanford University. <bburford@stanford.edu>
@@ -77,13 +77,13 @@
 #' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 #' California.
 #'
-#' Dissolved oxygen units: \% $O_2$ saturation
-#' Temperature (°C): 15
-#' Salinity: 35
-#' Atm. Pressure (kPa): 1.013253
-#' Time units: seconds
-#' Chamber volume (L): 12.3
-#' Specimen wet mass (kg): 0.0477
+#' - Dissolved oxygen units: \% $O_2$ saturation
+#' - Temperature (°C): 15
+#' - Salinity: 35
+#' - Atm. Pressure (kPa): 1.013253
+#' - Time units: seconds
+#' - Chamber volume (L): 12.3
+#' - Specimen wet mass (kg): 0.0477
 #'
 #' @md
 #' @author Nicholas Carey
@@ -98,16 +98,16 @@
 #' custom-built flowthrough respirometry system.
 #' Conducted at University of British Columbia, Vancouver, BC, Canada.
 #'
-#' Dissolved oxygen units: mg/L
-#' Time units: seconds
-#' Flow rate (L/s): 0.000039
-#' Inflow oxygen concentration (mean, mg/L): 8.88
-#' Specimen ash-free dry mass (kg): 0.000070
+#' - Dissolved oxygen units: mg/L
+#' - Time units: seconds
+#' - Flow rate (L/s): 0.000039
+#' - Inflow oxygen concentration (mean, mg/L): 8.88
+#' - Specimen ash-free dry mass (kg): 0.000070
 #'
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of and 935 rows (approx 16 mins of data),and
-#' 4 columns: Time, oxygen inflow and outflow concentrations, and oxygen delta
-#' (the difference between inflow and outflow concentrations) .
+#' 4 columns: time, oxygen inflow and outflow concentrations, and oxygen delta
+#' (the difference between inflow and outflow concentrations).
 "flowthrough.rd"
 

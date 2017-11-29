@@ -4,37 +4,24 @@
 \alias{calc_rate.ft}
 \title{Calculate flowthrough rate of change in dissolved oxygen}
 \usage{
-calc_rate.ft(df = NULL, from = NULL, to = NULL, by = "row",
-  inflow.col = NULL, outflow.col = NULL, inflow.o2 = NULL,
-  outflow.o2 = NULL, delta.o2 = NULL, flowrate = NULL, plot = TRUE)
+calc_rate.ft(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
+  flowrate = NULL, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame. Defaults to NULL. Will process a data frame if it is
-provided here.}
+\item{x}{data frame or object of class \code{inspect_data}. Defaults to NULL. Will
+process a data frame if it is provided here.}
 
-\item{from}{numeric. Defaults to NULL. Defines the upper bound of the data
-frame to subset. Subsetting is based on the argument: \code{by}.}
+\item{time}{numeric. Defaults to NULL. This selects the time column if
+a data frame ('df') is provided. Otherwise, this is a numeric vector for
+time data.}
 
-\item{to}{numeric. Defaults to NULL. Defines the lower bound of the data
-frame to subset. Subsetting is based on the argument: \code{by}.}
+\item{inflow.o2}{numeric. Defaults to NULL. This selects the incurrent column if
+a data frame ('df') is provided. Otherwise, this is a numeric vector for
+incurrent oxygen concentration.}
 
-\item{by}{character. Defaults to "row".}
-
-\item{inflow.col}{numeric. Defaults to NULL. This selects the incurrent
-column if a data frame ('df') is provided.}
-
-\item{outflow.col}{numeric. Defaults to NULL. This selects the outcurrent
-column if a data frame ('df') is provided.}
-
-\item{inflow.o2}{numeric. Single value or vector. Incurrent oxygen
-concentration. If outflow.o2 is a vector, this must be a single value or a
-vector of equal length.}
-
-\item{outflow.o2}{numeric. Single value or vector. Excurrent oxygen
-concentration.}
-
-\item{delta.o2}{numeric. Single value or vector. An O2 differential between
-inflow and outflow $O_2$. Used only if inflow.o2 and outflow.o2 are NULL.}
+\item{outflow.o2}{numeric. Defaults to NULL. This selects the outcurrent column
+if a data frame ('df') is provided.  Otherwise, this is a numeric vector
+for extcurrent oxygen concentration.}
 
 \item{flowrate}{numeric vector. The flow rate. No unit of measurement is
 expected; you will specify it when you perform conversions later on.}
@@ -45,14 +32,10 @@ expected; you will specify it when you perform conversions later on.}
 An object of class "calc_rate.ft".
 }
 \description{
-Calculates rate of $O_2$ uptake in flowthrough respirometry given either:
+Calculates rate of $O_2$ uptake in flowthrough respirometry given a flow-rate
+and both inflow.o2 and outflow.o2 oxygen concentrations.
 }
 \details{
-\enumerate{
-\item A flow-rate and both inflow and outflow oxygen concentrations 2. A
-flow-rate and an $O_2$ differential between inflow and outflow concentrations
-}
-
 Can return a single value, or multiple and mean values based on continuous
 data.
 }

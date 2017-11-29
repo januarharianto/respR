@@ -3,7 +3,7 @@ author: "Januar Harianto"
 title: "respR Workflow"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pkgdown}
+  %\VignetteIndexEntry{respR Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -61,7 +61,7 @@ We first use `inspect_data()` on the data frame to scan for:
 By default, the function assumes the first column (`xcol`) is time data, while the second column (`ycol`) is $O_2$ data. In the case of `urchins.rd` where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the `xcol` and `ycol` arguments to modify that behaviour.
 
 ```{r}
-urchin <- inspect_data(urchins.rd, xcol =  1, ycol = 15)
+urchin <- inspect_data(urchins.rd, time =  1, oxygen = 15)
 ```
 
 From the plot, we can see irregularities in these data near the end of the timeseries (in this case the sea urchin had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so for this experiment this section would be suitable for analysis.

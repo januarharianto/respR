@@ -63,6 +63,21 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/twopoint.html">Two-point analyses</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -114,13 +129,14 @@ mass specific (i.e. to the specimen), MO_2 rate.</p>
     </tr>
     <tr>
       <th>output.unit</th>
-      <td><p>string. The output unit to convert to. Check
+      <td><p>string. The output unit to convert to. Units must be in the
+order O2-Time, or for mass-specific rates, O2-Time-Mass. Check
 <code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
     </tr>
     <tr>
       <th>volume</th>
-      <td><p>numeric. Volume in litres. This is the volume of the
-respirometry chamber, not the specimen(s).</p></td>
+      <td><p>numeric. Volume in litres. This is the volume of fluid in
+the respirometry chamber, not the specimen(s).</p></td>
     </tr>
     <tr>
       <th>mass</th>

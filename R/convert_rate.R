@@ -1,6 +1,6 @@
 #' Scale rate value to volume and/or mass
 #'
-#' This is a conversion function. It can convert a dimensionless unit of rate, 
+#' This is a conversion function. It can convert a dimensionless unit of rate,
 #' derived from `calc_rate` into volume-adjusted (e.g to the container), VO_2 or
 #' mass specific (i.e. to the specimen), MO_2 rate.
 #'
@@ -23,7 +23,7 @@
 #'   you wish to calculate mass-specific rates.
 #' @param S numeric. Salinity. Defaults to 35.
 #' @param t numeric. Temperature. Defaults to 25 (degress celcius).
-#' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
+#' @param P numeric. Air pressure. Defaults to 1.013253 (bar).
 #'
 #' @return A list object.
 #'

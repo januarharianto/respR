@@ -5,8 +5,8 @@
 \alias{flowthrough.rd}
 \title{Flowthrough respirometry data}
 \format{A data frame object consisting of and 935 rows (approx 16 mins of data),and
-4 columns: Time, oxygen inflow and outflow concentrations, and oxygen delta
-(the difference between inflow and outflow concentrations) .}
+4 columns: time, oxygen inflow and outflow concentrations, and oxygen delta
+(the difference between inflow and outflow concentrations).}
 \usage{
 flowthrough.rd
 }
@@ -16,11 +16,13 @@ custom-built flowthrough respirometry system.
 Conducted at University of British Columbia, Vancouver, BC, Canada.
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: seconds
-Flow rate (L/s): 0.000039
-Inflow oxygen concentration (mean, mg/L): 8.88
-Specimen ash-free dry mass (kg): 0.000070
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: seconds
+\item Flow rate (L/s): 0.000039
+\item Inflow oxygen concentration (mean, mg/L): 8.88
+\item Specimen ash-free dry mass (kg): 0.000070
+}
 }
 \author{
 Nicholas Carey

@@ -1,0 +1,115 @@
+---
+title: "Analysis of intermittent-flow data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Analysis of intermittent-flow data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(respR)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7)
+```
+
+### Intermittent-flow respirometry
+
+Intermittent-flow respirometry involves obtaining multiple replicates in an experiment by periodically flushing the respirometer with fresh treatment water or air after a set period of time or $O_2$ decrease. Typically, the oxygen sensing system is left recording during flushes. If the dataset is not split into the separate replicates, this results in an dataset with oscillating levels of oxygen, which may be tricky to analyse.  
+
+The example data, `intermittent.rd`, contains intermittent-flow measurements of oxygen consumption in the sea urchin *Heliocidaris erythrogramma*. Detailed information about the data, including its source and methods, can be obtained with the command `?intermittent.rd`. 
+
+We can use `inspect_data()` to scan for errors in the data frame and preview the data.
+
+```{r} 
+urchin_int <- inspect_data(intermittent.rd)
+```
+
+We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom rate plot, however uptake rates appear to be consistent within each experimental replicate. 
+
+### Using `calc_rate` on intermittent-flow data
+While we intend in the future to support intermittent data directly with a dedicated function to automatically identify and subset replicates, intermittent data can be analysed quite easily via the main `calc_rate` function with a little organisation.
+
+#### Subsetting by row and time
+The `calc_rate` function supports input of multiple subset regions by `row` or `time`. The `from` and `to` operators can be vectors with paired values:
+
+```{r fig.width=7, fig.height=3.5}
+urchin_int_rates <- calc_rate(urchin_int, from = c(200, 2300, 4100), to = c(1800, 3200, 4600), by = "time")
+print(urchin_int_rates)
+```
+
+Calling `summary()` will show the coefficients and locations of each subset:
+```{r}
+summary(urchin_int_rates)
+```
+
+We can also use `plot()` to view the diagnostic plots of any individual replicate. The argument `rep` determines which data subset to plot:
+```{r}
+plot(urchin_int_rates, rep = 2)
+```
+
+We can also query multiple regions of each replicate (which could overlap, although this would obscure the output plot):
+```{r fig.width=7, fig.height=3.5}
+calc_rate(urchin_int, from = c(200, 900, 2300, 2900, 4000, 4400), to = c(700, 1700, 2700, 3300, 4300, 4700), by = "time")
+```
+
+
+
+Rates can be easily extracted for further analysis or selection. For instance, we may be interested in the lowest rate, the one most representative of basal metabolic rates. Of course because rates are negative, the minimum *value* in negative terms would actually represent the highest rate, so we should extract the maximum (least negative) value, or transform the rates first: 
+```{r}
+urchin_int_rates$rate
+min(-1*urchin_int_rates$rate)
+```
+Or we may be more interested in the mean rate:
+```{r}
+mean(urchin_int_rates$rate)
+
+```
+
+
+#### Subsetting by oxygen 
+If we are interested in looking at rates over particular oxygen ranges within each replicate, `calc_rate` will find the first match to the range entered:
+```{r fig.width=7, fig.height=3.5}
+calc_rate(urchin_int, from = 7, to = 6.6, by = "o2")
+```
+
+To examine the same range in each replicate, we can follow a number of approaches. We can call the data range containing another replicate directly from the original dataset, or `inspect_data` object element:
+
+```{r fig.keep="none"}
+calc_rate(intermittent.rd[2100:3500,], from = 7, to = 6.6, by = "o2")
+calc_rate(urchin_int$df[2100:3500,], from = 7, to = 6.6, by = "o2")
+```
+```{r echo=F, message=FALSE, warning=FALSE, results = "hide", fig.width=7, fig.height=3.5}
+calc_rate(urchin_int$df[2100:3500,], from = 7, to = 6.6, by = "o2")
+```
+
+Or we can subset them manually into new dataframes, and process them separately through the entire workflow. This would also be a necessary procedure to examine each replicate in `auto_rate` to determine minimum, maximum or best fit rates within each. 
+```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
+# Create separate replicate data frames
+u_rep1 <- intermittent.rd[1:1900,]
+u_rep2 <- intermittent.rd[2100:3500,]
+u_rep3 <- intermittent.rd[3700:4831,]
+
+# Process one in `inspect_data` (output not shown)
+u_rep3_c <- inspect_data(u_rep3)
+```
+```{r fig.width=7, fig.height=3.5}
+calc_rate(u_rep3_c, from = 7, to = 6.6, by = "o2")
+```
+
+### Background adjustments
+The `adjust_rate` function can be used on `calc_rate` objects containing multiple rate values:
+```{r}
+urchin_int_rates_adj <- adjust_rate(urchin_int_rates, by = -0.00005)
+print(urchin_int_rates_adj)
+```
+We can see each individual rate has been adjusted, and the new rates can be extracted from the resulting object using `$corrected`. 
+
+### Converting rates
+Once the rates have been determined, they can be converted to volume-corrected or mass-specific rates using `convert_rate`. 
+
+```{r}
+convert_rate(urchin_int_rates_adj, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+```
+
