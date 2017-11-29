@@ -77,7 +77,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   }
 
   # Check if time is uneven - if it is, give warning
-  uneven <- test_space(df[[1]])
+  uneven <- check_evn(df[[1]])
   if (uneven$check && by == "row")
     warning("Time data is irregular. Please use `by = 'time'.", call. = F)
 

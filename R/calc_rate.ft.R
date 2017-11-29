@@ -1,31 +1,19 @@
 #' Calculate flowthrough rate of change in dissolved oxygen
 #'
-#' Calculates rate of $O_2$ uptake in flowthrough respirometry given either:
-#'
-#' 1. A flow-rate and both inflow and outflow oxygen concentrations 2. A
-#' flow-rate and an $O_2$ differential between inflow and outflow concentrations
+#' Calculates rate of $O_2$ uptake in flowthrough respirometry given a flow-rate
+#' and both inflow and outflow oxygen concentrations.
 #'
 #' Can return a single value, or multiple and mean values based on continuous
 #' data.
 #'
-#' @param df data frame. Defaults to NULL. Will process a data frame if it is
-#'   provided here.
-#' @param from numeric. Defaults to NULL. Defines the upper bound of the data
-#'   frame to subset. Subsetting is based on the argument: `by`.
-#' @param to numeric. Defaults to NULL. Defines the lower bound of the data
-#'   frame to subset. Subsetting is based on the argument: `by`.
-#' @param by character. Defaults to "row".
-#' @param inflow.col numeric. Defaults to NULL. This selects the incurrent
-#'   column if a data frame ('df') is provided.
-#' @param outflow.col numeric. Defaults to NULL. This selects the outcurrent
-#'   column if a data frame ('df') is provided.
-#' @param inflow.o2 numeric. Single value or vector. Incurrent oxygen
-#'   concentration. If outflow.o2 is a vector, this must be a single value or a
-#'   vector of equal length.
-#' @param outflow.o2 numeric. Single value or vector. Excurrent oxygen
-#'   concentration.
-#' @param delta.o2 numeric. Single value or vector. An O2 differential between
-#'   inflow and outflow $O_2$. Used only if inflow.o2 and outflow.o2 are NULL.
+#' @param x data frame or object of class `inspect_data`. Defaults to NULL. Will
+#'   process a data frame if it is provided here.
+#' @param inflow numeric. Defaults to NULL. This selects the incurrent column if
+#'   a data frame ('df') is provided. Otherwise, this is a numeric vector for
+#'   incurrent oxygen concentration.
+#' @param outflow numeric. Defaults to NULL. This selects the outcurrent column
+#'   if a data frame ('df') is provided.  Otherwise, this is a numeric vector
+#'   for extcurrent oxygen concentration.
 #' @param flowrate numeric vector. The flow rate. No unit of measurement is
 #'   expected; you will specify it when you perform conversions later on.
 #' @param plot logical. Defaults to TRUE. Plots the data.
@@ -35,68 +23,89 @@
 #'
 #' @examples
 #' NULL
-calc_rate.ft <- function(df = NULL, from = NULL, to = NULL, by = "row",
-  inflow.col = NULL, outflow.col = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
-  delta.o2 = NULL, flowrate = NULL, plot = TRUE) {
+calc_rate.ft <- function(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
+  flowrate = NULL, plot = TRUE) {
 
   # Validate inputs
-  has.df  <- is.data.frame(df)
-  has.incol <- is.numeric(inflow.col)
-  has.outcol <- is.numeric(outflow.col)
-  has.in  <- is.numeric(inflow.o2)
-  has.out <- is.numeric(outflow.o2)
-  has.delta   <- is.numeric(delta.o2)
+  if (!is.numeric(flowrate)) stop("numeric 'flowrate' value must be provided.")
 
-  has.from <- is.numeric(from)
-  has.to   <- is.numeric(to)
+  # Extract individual data
+  if (any(class(x) %in% "inspect_data")) {
 
-  # Is flowrate numeric?
-  if(!is.numeric(flowrate)) stop("The argument 'flowrate' must be numeric.")
+    # Object is of class `inspect_data`. Extract data from object.
+    df      <- x$df
+    time    <- df$time
+    inflow  <- df$inflow
+    outflow <- df$outflow
+    message("object of class `inspect_data` detected.")
+    delta <- inflow - outflow
 
-  # Subset data if necessary:
+  } else if (is.data.frame(x) && is.null(time)) {
 
-  # Check that subset is only by time or row since the others don't make sense.
-  if (!(by %in% c("row", "time")))
-    stop("You can only subset by 'time' or 'row.")
+    # Object is data frame. Time is not provided. Extract data from data frame.
+    df <- x
+    inflow <- df[[inflow]]
+    outflow <- df[[outflow]]
+    message("'data.frame' object detected. Values in 'inflow' and 'outflow' are used as column indices to to extract data from the data frame.")
+    delta <- inflow - outflow
 
-  # Check that if by time, the first column contains sequential time data.
-  if (has.df && has.from && has.to && by == "time") {
-    if (test_seq(df[[1]])$check)
-      stop("Is the first column of the data frame sequential time data?")
-  }
+  } else if (is.data.frame(x) && !is.null(time)) {
 
-  # Ok, good to subset, make sure 'from' and 'to' arguments are supplied.
-  if (has.df && has.from && has.to) {
-    df <- subset_data(df, from, to, by)
-  }
+    # Object is data frame. Time is provided. Extract data from data frame.
+    df <- x
+    time <- df[[time]]
+    inflow <- df[[inflow]]
+    outflow <- df[[outflow]]
+    message("'data.frame' object detected. Values in 'time', inflow' and 'outflow' are used as column indices to extract data from the data frame.")
+    delta <- inflow - outflow
 
-  # Extrat O2 differential ('o2.delta') if it is not provided.
-  # Nested choices (first come, first serve)
-  if (has.df && has.incol && has.outcol) {
-    delta.o2 <- -abs(df[[inflow.col]] - df[[outflow.col]])
-  } else if (has.df && has.incol && has.out) {
-    delta.o2 <- -abs(df[[inflow.col]] - outflow.o2)
-  } else if (has.df && has.outcol && has.in) {
-    delta.o2 <- -abs(inflow.o2 - df[[outflow.col]])
-  } else if (has.in && has.out) {
-    delta.o2 <- -abs(inflow.o2 - outflow.o2)
-  } else if (has.delta) {
-    NULL # this just checks that delta is numeric and passes it on
-  } else stop("Input values cannot be identified. Please check documentation.")
+  } else if (is.null(x) && is.null(time) && is.numeric(inflow) &&
+      is.numeric(outflow)) {
+
+    # No data frame is provided. Time is not provided.
+    df <- data.table::data.table(inflow = inflow, outflow = outflow)
+    message("calculating from numeric rate values provided in 'inflow' and 'outflow'.")
+    delta <- inflow - outflow
+
+  } else if (is.null(x) && !is.null(time) && is.numeric(inflow) &&
+      is.numeric(outflow)) {
+
+    # No data frame is provided. Time is provided. Essentiall same as above.
+    df <- data.table::data.table(time = time, inflow = inflow, outflow = outflow)
+    message("calculating from numeric rate values provided in 'inflow' and 'outflow'.")
+    delta <- inflow - outflow
+
+  } else if ((is.null(inflow) && !is.null(outflow)) |
+      (!is.null(inflow) && is.null(outflow))) {
+
+    # If inflow is provided, outflow should be provided too. And vice versa.
+    stop("Both 'inflow' and 'outflow' inputs should have a value.")
+
+  } else stop("Unable to process data. Please double check input arguments.")
 
   # Calculate rate
-  rate <- delta.o2 * flowrate
+  rate <- delta * flowrate
+  mean <- mean(rate)
+
+  # Generate summary
+  input <- df
+  summary <-  data.table::data.table(inflow, outflow, flowrate, rate)
 
   # Generate output
-  out <- list(df = df,
-    inflow.o2 = inflow.o2,
-    outflow.o2 = outflow.o2,
-    delta.o2 = delta.o2,
-    flowrate = flowrate,
-    rate = rate,
-    mean = mean(rate))
+  out <-
+    list(
+      input = input,
+      flowrate = flowrate,
+      summary = summary,
+      rate = rate,
+      mean = mean)
   class(out) <- "calc_rate.ft"
-  if(plot) plot(out)
+
+  # Plot
+  if (plot) {
+    if (length(rate) == 1) NULL else plot(out)
+  }
+
   return(out)
 }
 
@@ -121,38 +130,23 @@ print.calc_rate.ft <- function(x, ...) {
 
 #' @export
 summary.calc_rate.ft <- function(object, ...) {
-  if (length(object$delta.o2) < 6) {
-    cat("O2 diff.:\n")
-    print(object$delta.o2)
-  } else {
-    cat("\nO2.diff. (first 6):\n")
-    print(head(object$delta.o2, 6))
-  }
-
-  if (length(object$rate) < 6) {
-    cat("Rate:\n")
-    print(object$rate)
-  } else {
-    cat("\nRate (first 6):\n")
-    print(head(object$rate, 6))
-  }
-
-  if (length(object$rate) > 1) {
-    cat("\nMean:\n")
-    print(object$mean)
-  }
-
-  out <- object$rate
+  out <- object$summary
+  print(out)
   return(invisible(out))
 }
 
 
 #' @export
 plot.calc_rate.ft <- function(x, ...) {
-  if (length(x$rate) == 1) cat("Only 1 data point available.")
+  if (length(x$input) == 2) {
   plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16,
     panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
+  } else {
+    plot(x$input$time, x$rate, xlab = "", ylab = "", col = r1, pch = 16,
+      panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
+        par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
+  }
   abline(h = x$mean, lwd = 1.5, lty = 2)
   title(main = "Row Index ~ Rate", line = 0.3)
 }
