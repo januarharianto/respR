@@ -62,7 +62,7 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
     inflow <- df[[inflow]]
     outflow <- df[[outflow]]
     message("'data.frame' object detected. Values in 'time', inflow' and 'outflow' are used as column indices to extract data from the data frame.")
-    delta <- inflow - outflow
+    delta <- outflow - inflow
 
   } else if (is.null(x) && is.null(time) && is.numeric(inflow) &&
       is.numeric(outflow)) {
@@ -70,7 +70,7 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
     # No data frame is provided. Time is not provided.
     df <- data.table::data.table(inflow = inflow, outflow = outflow)
     message("calculating from numeric rate values provided in 'inflow' and 'outflow'.")
-    delta <- inflow - outflow
+    delta <- outflow - inflow
 
   } else if (is.null(x) && !is.null(time) && is.numeric(inflow) &&
       is.numeric(outflow)) {
@@ -78,7 +78,7 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
     # No data frame is provided. Time is provided. Essentiall same as above.
     df <- data.table::data.table(time = time, inflow = inflow, outflow = outflow)
     message("calculating from numeric rate values provided in 'inflow' and 'outflow'.")
-    delta <- inflow - outflow
+    delta <- outflow - inflow
 
   } else if ((is.null(inflow) && !is.null(outflow)) |
       (!is.null(inflow) && is.null(outflow))) {
