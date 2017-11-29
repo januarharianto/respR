@@ -38,7 +38,7 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = N
   if (any(class(x) %in% "inspect_data")) {
 
     # Object is of class `inspect_data`. Validate.
-    if (length(x) < 3)
+    if (length(x$df) < 3)
       stop("Looks like you used the wrong `inspect_data` object here.")
 
     # Extract data from object.
