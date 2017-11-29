@@ -18,8 +18,8 @@
 #' @param df data frame. Accepts data frame object of any size.
 #' @param time numeric. Defaults to NULL. This is the time data.
 #' @param oxygen numaric. Defaults to NULL. This is the dissolved oxygen data.
-#' @param inflow numeric. Defaults to NULL. This is the incurrent oxygen data.
-#' @param outflow numeric. Defaults to NULL. This is the excurrent oxygen data.
+#' @param inflow.o2 numeric. Defaults to NULL. This is the incurrent oxygen data.
+#' @param outflow.o2 numeric. Defaults to NULL. This is the excurrent oxygen data.
 #' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces plots for quick visual
@@ -36,8 +36,11 @@
 #' @examples
 #' inspect_data(sardine.rd)
 #' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
-inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
-  outflow = NULL, highlight = TRUE, plot = TRUE) {
+inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
+  outflow.o2 = NULL, highlight = TRUE, plot = TRUE) {
+
+  inflow <- inflow.o2
+  outflow <-outflow.o2
 
   # Validate inputs
   has.time <- is.numeric(time)
