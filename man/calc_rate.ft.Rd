@@ -11,6 +11,10 @@ calc_rate.ft(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
 \item{x}{data frame or object of class \code{inspect_data}. Defaults to NULL. Will
 process a data frame if it is provided here.}
 
+\item{time}{numeric. Defaults to NULL. This selects the time column if
+a data frame ('df') is provided. Otherwise, this is a numeric vector for
+time data.}
+
 \item{inflow}{numeric. Defaults to NULL. This selects the incurrent column if
 a data frame ('df') is provided. Otherwise, this is a numeric vector for
 incurrent oxygen concentration.}
