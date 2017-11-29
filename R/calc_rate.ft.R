@@ -37,7 +37,11 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = N
   # Extract individual data
   if (any(class(x) %in% "inspect_data")) {
 
-    # Object is of class `inspect_data`. Extract data from object.
+    # Object is of class `inspect_data`. Validate.
+    if (length(x) < 3)
+      stop("Looks like you used the wrong `inspect_data` object here.")
+
+    # Extract data from object.
     df      <- x$df
     time    <- df$time
     inflow.o2  <- df$inflow.o2
