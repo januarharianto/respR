@@ -4,8 +4,8 @@
 \alias{inspect_data}
 \title{Check for common errors in respirometry data}
 \usage{
-inspect_data(df, time = NULL, oxygen = NULL, inflow = NULL,
-  outflow = NULL, highlight = TRUE, plot = TRUE)
+inspect_data(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
+  outflow.o2 = NULL, highlight = TRUE, plot = TRUE)
 }
 \arguments{
 \item{df}{data frame. Accepts data frame object of any size.}
@@ -14,9 +14,9 @@ inspect_data(df, time = NULL, oxygen = NULL, inflow = NULL,
 
 \item{oxygen}{numaric. Defaults to NULL. This is the dissolved oxygen data.}
 
-\item{inflow}{numeric. Defaults to NULL. This is the incurrent oxygen data.}
+\item{inflow.o2}{numeric. Defaults to NULL. This is the incurrent oxygen data.}
 
-\item{outflow}{numeric. Defaults to NULL. This is the excurrent oxygen data.}
+\item{outflow.o2}{numeric. Defaults to NULL. This is the excurrent oxygen data.}
 
 \item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors
 detected by the function.}

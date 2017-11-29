@@ -4,7 +4,7 @@
 \alias{calc_rate.ft}
 \title{Calculate flowthrough rate of change in dissolved oxygen}
 \usage{
-calc_rate.ft(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
+calc_rate.ft(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
   flowrate = NULL, plot = TRUE)
 }
 \arguments{
@@ -15,11 +15,11 @@ process a data frame if it is provided here.}
 a data frame ('df') is provided. Otherwise, this is a numeric vector for
 time data.}
 
-\item{inflow}{numeric. Defaults to NULL. This selects the incurrent column if
+\item{inflow.o2}{numeric. Defaults to NULL. This selects the incurrent column if
 a data frame ('df') is provided. Otherwise, this is a numeric vector for
 incurrent oxygen concentration.}
 
-\item{outflow}{numeric. Defaults to NULL. This selects the outcurrent column
+\item{outflow.o2}{numeric. Defaults to NULL. This selects the outcurrent column
 if a data frame ('df') is provided.  Otherwise, this is a numeric vector
 for extcurrent oxygen concentration.}
 
@@ -33,7 +33,7 @@ An object of class "calc_rate.ft".
 }
 \description{
 Calculates rate of $O_2$ uptake in flowthrough respirometry given a flow-rate
-and both inflow and outflow oxygen concentrations.
+and both inflow.o2 and outflow.o2 oxygen concentrations.
 }
 \details{
 Can return a single value, or multiple and mean values based on continuous
