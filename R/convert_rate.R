@@ -1,6 +1,6 @@
 #' Scale rate value to volume and/or mass
 #'
-#' This is a conversion function. It can convert a dimensionless unit of rate, 
+#' This is a conversion function. It can convert a dimensionless unit of rate,
 #' derived from `calc_rate` into volume-adjusted (e.g to the container), VO_2 or
 #' mass specific (i.e. to the specimen), MO_2 rate.
 #'
@@ -15,16 +15,15 @@
 #' @param o2.unit string. The dissolved oxygen unit to convert from. Check
 #'   [unit_args()].
 #' @param time.unit string. The time unit to convert from. Check [unit_args()].
-#' @param output.unit string. The output unit to convert to. Units must be in the  
-#'   order O2-Time, or for mass-specific rates, O2-Time-Mass. Check
+#' @param output.unit string. The output unit to convert to. Check
 #'   [unit_args()].
-#' @param volume numeric. Volume in litres. This is the volume of fluid in 
-#'   the respirometry chamber, not the specimen(s). 
+#' @param volume numeric. Volume in litres. This is the volume of the
+#'   respirometry chamber, not the specimen(s).
 #' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
 #'   you wish to calculate mass-specific rates.
 #' @param S numeric. Salinity. Defaults to 35.
 #' @param t numeric. Temperature. Defaults to 25 (degress celcius).
-#' @param P numeric. Air pressure. Defaults to 1.013253 (kPa).
+#' @param P numeric. Air pressure. Defaults to 1.013253 (bar).
 #'
 #' @return A list object.
 #'

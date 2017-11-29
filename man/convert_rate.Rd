@@ -16,12 +16,11 @@ convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
 
 \item{time.unit}{string. The time unit to convert from. Check \code{\link[=unit_args]{unit_args()}}.}
 
-\item{output.unit}{string. The output unit to convert to. Units must be in the
-order O2-Time, or for mass-specific rates, O2-Time-Mass. Check
+\item{output.unit}{string. The output unit to convert to. Check
 \code{\link[=unit_args]{unit_args()}}.}
 
-\item{volume}{numeric. Volume in litres. This is the volume of fluid in
-the respirometry chamber, not the specimen(s).}
+\item{volume}{numeric. Volume in litres. This is the volume of the
+respirometry chamber, not the specimen(s).}
 
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
@@ -30,7 +29,7 @@ you wish to calculate mass-specific rates.}
 
 \item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
 
-\item{P}{numeric. Air pressure. Defaults to 1.013253 (kPa).}
+\item{P}{numeric. Air pressure. Defaults to 1.013253 (bar).}
 }
 \value{
 A list object.
