@@ -18,7 +18,7 @@ convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
 
 \item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (kPa). Used only in conversion of \% data.}
+\item{P}{numeric. Pressure. Defaults to 1.013253 (bar). Used only in conversion of \% data.}
 }
 \value{
 A list.
