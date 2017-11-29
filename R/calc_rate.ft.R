@@ -44,8 +44,8 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = N
     # Extract data from object.
     df      <- x$df
     time    <- df$time
-    inflow.o2  <- df$inflow.o2
-    outflow.o2 <- df$outflow.o2
+    inflow.o2  <- df$inflow
+    outflow.o2 <- df$outflow
     message("object of class `inspect_data` detected.")
     delta <- inflow.o2 - outflow.o2
 
