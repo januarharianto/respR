@@ -31,6 +31,8 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow = NULL, outflow = NULL,
 
   # Validate inputs
   if (!is.numeric(flowrate)) stop("numeric 'flowrate' value must be provided.")
+  if (is.data.frame(x) && is.null(inflow) && is.null(outflow))
+    stop("You must provide subset locations (row number) for 'inflow' and 'outflow'.")
 
   # Extract individual data
   if (any(class(x) %in% "inspect_data")) {
@@ -141,15 +143,9 @@ summary.calc_rate.ft <- function(object, ...) {
 
 #' @export
 plot.calc_rate.ft <- function(x, ...) {
-  if (length(x$input) == 2) {
   plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16,
     panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  } else {
-    plot(x$input$time, x$rate, xlab = "", ylab = "", col = r1, pch = 16,
-      panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-        par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  }
   abline(h = x$mean, lwd = 1.5, lty = 2)
   title(main = "Row Index ~ Rate", line = 0.3)
 }
