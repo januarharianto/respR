@@ -21,7 +21,6 @@ Imports:
     parallel,
     stats,
     utils,
-    dplyr,
     roll,
     stringr,
     marelac,

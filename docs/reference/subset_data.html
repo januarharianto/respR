@@ -63,6 +63,24 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/twopoint.html">Two-point analyses</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -98,15 +116,17 @@ based on a given set of rules.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>data frame.</p></td>
+      <td><p>data frame. The data to subset.</p></td>
     </tr>
     <tr>
       <th>from</th>
-      <td><p>numeric.</p></td>
+      <td><p>numeric. Defines the upper bound(s) of the data frame to subset.
+Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
       <th>to</th>
-      <td><p>numeric.</p></td>
+      <td><p>numeric. Defines the lower bound(s) of the data frame to subset.
+Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
       <th>by</th>

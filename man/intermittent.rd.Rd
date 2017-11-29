@@ -18,10 +18,12 @@ chamber was flushed. Data was collected using a Vernier Optical DO probe
 (ODO-BTA).
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: seconds
-Chamber volume (L): 2.379
-Specimen ash-free dry mass (g): 6.955
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: seconds
+\item Chamber volume (L): 2.379
+\item Specimen ash-free dry mass (kg): 0.006955
+}
 }
 \author{
 Nicholas Carey

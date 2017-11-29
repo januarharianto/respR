@@ -19,8 +19,12 @@ DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
 recorded.
 }
 \details{
-Dissolved oxygen units: mg/L Time units: minutes Chamber volumes (L): ????
-Specimen masses (g): ????
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: minutes
+\item Chamber volumes (L): ????
+\item Specimen masses (kg): ????
+}
 }
 \author{
 Januar Harianto

@@ -4,7 +4,8 @@
 \name{squid.rd}
 \alias{squid.rd}
 \title{Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit}
-\format{A data frame}
+\format{A data frame object consisting of 2 columns (time and dissolved
+oxygen) and 34120 rows (approx 9.5h of data).}
 \usage{
 squid.rd
 }
@@ -15,10 +16,12 @@ conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 California.
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: seconds
-Chamber volume (L): 12.3
-Specimen wet mass (g): 21.41
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: seconds
+\item Chamber volume (L): 12.3
+\item Specimen wet mass (kg): 0.02141
+}
 
 Data kindly supplied by Ben Burford, Hopkins Marine Station,
 Stanford University. \href{mailto:bburford@stanford.edu}{bburford@stanford.edu}

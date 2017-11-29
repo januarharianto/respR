@@ -29,7 +29,7 @@ you wish to calculate mass-specific rates.}
 
 \item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
 
-\item{P}{numeric. Air pressure. Defaults to 1.013253 (kPa).}
+\item{P}{numeric. Air pressure. Defaults to 1.013253 (bar).}
 }
 \value{
 A list object.
