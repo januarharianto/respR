@@ -3,7 +3,7 @@
 #' This function uses simple linear regression to automatically calculate the
 #' rate of change of oxygen over time for background corrections of the main
 #' data. Can be used on multiple datasets of background measures, as long as the
-#' time data are identical between measurements. In addition, the data must be 
+#' time data are identical between measurements. In addition, the data must be
 #' in the same units as the data to be corrected.
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
@@ -71,45 +71,5 @@ plot.calc_rate.bg <- function(x, ...) {
     x$data[[z + 1]]), title = F))
   par(pardefault)  # revert par settings to original
 
-}
-
-
-
-
-#' Truncate a data frame to create a subset of the data
-#'
-#' This is an internal function. This function extracts a subset data frame
-#' based on a given set of rules.
-#'
-#' @param x data frame.
-#' @param from numeric.
-#' @param to numeric.
-#' @param by string. "time", "row", "o2" or "proportion".
-#'
-#' @keywords internal
-#'
-#' @return A `data.table` object.
-#' @export
-subset_data <- function(x, from, to, by) {
-  dt <- data.table::as.data.table(x)
-  if (by == "time") {
-    out <- dt[dt[[1]] >= from & dt[[1]] <= to]
-  }
-  if (by == "row") {
-    out <- dt[from:to]
-  }
-  if (by == "o2" & length(x) == 2) {
-    top <- Position(function(z) z <= from, dt[[2]])
-    bot <- Position(function(z) z <= to, dt[[2]])
-    out <- dt[top:bot]
-  }
-  if (by == "proportion") {
-    mx <- max(dt[[2]])
-    mn <- min(dt[[2]])
-    top <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])
-    bot <- Position(function(z) z <= (to * (mx - mn) + mn), dt[[2]])
-    out <- dt[top:bot]
-  }
-  return(out)
 }
 
