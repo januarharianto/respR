@@ -107,7 +107,7 @@
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of and 935 rows (approx 16 mins of data),and
-#' 4 columns: Time, oxygen inflow and outflow concentrations, and oxygen delta
-#' (the difference between inflow and outflow concentrations) .
+#' 4 columns: time, oxygen inflow and outflow concentrations, and oxygen delta
+#' (the difference between inflow and outflow concentrations).
 "flowthrough.rd"
 
