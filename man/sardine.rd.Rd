@@ -18,14 +18,15 @@ pressure are supplied below to allow for conversion to concentration units.
 \details{
 Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 California.
-
-Dissolved oxygen units: \% $O_2$ saturation
-Temperature (°C): 15
-Salinity: 35
-Atm. Pressure (kPa): 1.013253
-Time units: seconds
-Chamber volume (L): 12.3
-Specimen wet mass (kg): 0.0477
+\itemize{
+\item Dissolved oxygen units: \% $O_2$ saturation
+\item Temperature (°C): 15
+\item Salinity: 35
+\item Atm. Pressure (kPa): 1.013253
+\item Time units: seconds
+\item Chamber volume (L): 12.3
+\item Specimen wet mass (kg): 0.0477
+}
 }
 \author{
 Nicholas Carey
