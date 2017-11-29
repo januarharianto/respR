@@ -8,6 +8,9 @@
 #'
 #' @param x data frame or object of class `inspect_data`. Defaults to NULL. Will
 #'   process a data frame if it is provided here.
+#' @param time numeric. Defaults to NULL. This selects the time column if
+#'   a data frame ('df') is provided. Otherwise, this is a numeric vector for
+#'   time data.
 #' @param inflow numeric. Defaults to NULL. This selects the incurrent column if
 #'   a data frame ('df') is provided. Otherwise, this is a numeric vector for
 #'   incurrent oxygen concentration.
