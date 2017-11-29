@@ -157,8 +157,6 @@ plot.pcrit <- function(x, ...) {
   cutoff <- x$bstick.summary$splitpoint[1]
   segment1 <- x$mr.df[x <= cutoff]
   segment2 <- x$mr.df[x > cutoff]
-  # segment1 <- dplyr::filter(x$mr.df, x <= cutoff)
-  # segment2 <- dplyr::filter(x$mr.df, x > cutoff)
   intercept <- x$result.intercept
 
   # Plot settings
@@ -210,7 +208,7 @@ plot.pcrit <- function(x, ...) {
 
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
-  subdf <- dplyr::filter(x$mr.df, x > min(aps) * 0.99 & x < max(aps) * 1.01)
+  subdf <- x$mr.df[x > min(aps) * 0.99][x < max(aps) *1.01]
   plot(subdf, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
     panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
       par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
