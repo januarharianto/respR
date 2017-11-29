@@ -87,7 +87,7 @@
 <div id="two-point-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#two-point-data" class="anchor"></a>Two-point data</h3>
-<p>Simple two-point data can be entered into <code>calc.rate</code> in a 2x2 data frame created via typical R syntax:</p>
+<p>Simple two-point data can be entered into <code>calc.rate</code> in a 2x2 data frame (here created via typical R syntax):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_pt_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">time =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="dt">o2 =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="fl">6.3</span>))
 two_pt_data
 <span class="co">#&gt;   time  o2</span>
@@ -107,10 +107,18 @@ two_pt_data
 <div id="working-around-erroneous-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#working-around-erroneous-data" class="anchor"></a>Working around erroneous data</h3>
-<p>More useful is using two-point calculations to work around cases of partially erroneous data. Often we can still extract perfectly valid rates as long as the investigator knows <em>some</em> of the data contains the true oxygen values. The following example uses a dataset where interference has caused regions of erroneous data, however the intitial and end conditions are known to be reliable recordings.</p>
+<p>More useful is using two-point calculations to work around cases of partially erroneous data. Often we can still extract perfectly valid rates as long as the investigator knows <em>some</em> of the data contains the true oxygen values. In the following example we will use the <code>urchin.rd</code> data to simulate a dataset where interference has caused regions of erroneous data, but where the intitial and end conditions are known to be reliable recordings.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## extract some rows of time and one O2 column
+urchin_mod &lt;-<span class="st"> </span>urchins.rd[<span class="dv">1</span><span class="op">:</span><span class="dv">150</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">15</span>)]
+
+## simulate sensor dropout
+urchin_mod[<span class="dv">30</span><span class="op">:</span><span class="dv">49</span>, <span class="dv">2</span>] &lt;-<span class="st"> </span>urchin_mod[<span class="dv">30</span><span class="op">:</span><span class="dv">49</span>, <span class="dv">2</span>] <span class="op">-</span><span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.46</span>, <span class="fl">0.046</span>), <span class="kw">rev</span>(<span class="kw">seq</span>(<span class="fl">0.02</span>, 
+    <span class="fl">0.46</span>, <span class="fl">0.046</span>)))
+urchin_mod[<span class="dv">70</span><span class="op">:</span><span class="dv">89</span>, <span class="dv">2</span>] &lt;-<span class="st"> </span>urchin_mod[<span class="dv">70</span><span class="op">:</span><span class="dv">89</span>, <span class="dv">2</span>] <span class="op">-</span><span class="st"> </span><span class="kw">c</span>(<span class="kw">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.36</span>, <span class="fl">0.036</span>), <span class="kw">rev</span>(<span class="kw">seq</span>(<span class="fl">0.02</span>, 
+    <span class="fl">0.36</span>, <span class="fl">0.036</span>)))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(urchin_mod)</code></pre></div>
 <p><img src="twopoint_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
-<p>Here we can see there are two erroneous regions. We could remove these sections, or use the lower section of the data, but we can also use the subsetting operators of <code>calc_rate</code> to select data that starts and ends where we know valid O₂ recordings were made:</p>
+<p>Here we can see our two erroneous regions. We could remove these sections, or only use the lower section of the data, but we can also use the subsetting operators of <code>calc_rate</code> to select data that starts and ends where we know valid O₂ recordings were made:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_pt_result &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_mod, <span class="dt">from =</span> <span class="dv">2</span>, <span class="dt">to =</span> <span class="dv">23</span>, <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="twopoint_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(two_pt_result)
@@ -124,7 +132,7 @@ two_pt_data
 <div id="processing-two-point-rates" class="section level3">
 <h3 class="hasAnchor">
 <a href="#processing-two-point-rates" class="anchor"></a>Processing two-point rates</h3>
-<p>Two-point rates can be passed to <code>adjust_rate</code> for background corrections, and <code>convert_rate</code> for conversion to the desired output units. However, they must be specifically called using <code>$rate_2pt</code> or, by default, these functions will operate using the linear regression derived rate.</p>
+<p>Two-point rates can be passed to <code>adjust_rate</code> for background corrections, and <code>convert_rate</code> for conversion to the desired output units. However, if using an object of class <code>calc_rate</code> they must be specifically called using <code>$rate_2pt</code> or, by default, the adjustment or conversion will operate on the linear regression derived rate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(two_pt_result<span class="op">$</span>rate_2pt, <span class="dt">by =</span> <span class="op">-</span><span class="fl">0.001</span>)
 <span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
 <span class="co">#&gt; Input rate: -0.02238095</span>
