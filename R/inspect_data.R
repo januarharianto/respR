@@ -16,10 +16,10 @@
 #' @md
 #'
 #' @param df data frame. Accepts data frame object of any size.
-#' @param time numeric. Defaults to `1`. This is the time data.
-#' @param oxygen numaric. Defaults to `2`. This is the dissolved oxygen data.
-#' @param inflow
-#' @param outflow
+#' @param time numeric. Defaults to NULL. This is the time data.
+#' @param oxygen numaric. Defaults to NULL. This is the dissolved oxygen data.
+#' @param inflow numeric. Defaults to NULL. This is the incurrent oxygen data.
+#' @param outflow numeric. Defaults to NULL. This is the excurrent oxygen data.
 #' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces plots for quick visual
@@ -36,11 +36,6 @@
 #' @examples
 #' inspect_data(sardine.rd)
 #' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
-#'
-#' # It is also possible to load the function directly into respR's
-#' # other functions:
-#' calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
-#'           from = 3000, to = 4000, by = "time")
 inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
   outflow = NULL, highlight = TRUE, plot = TRUE) {
 
@@ -65,7 +60,7 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
     dt <- data.table::data.table(time = df[[time]], inflow = df[[inflow]],
       outflow = df[[outflow]])
     type <- "flowthrough"
-  } else stop("Input arguments are invalid. Check ?inspect_data if unsure.")
+  } else stop("Check inputs...")
 
   # First, convert time to numeric if it is integer
   if (any(class(dt[,1]) %in% "integer")) dt$Time <- as.numeric(dt$Time)
@@ -75,17 +70,13 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
     time <- as.numeric(dt[[1]])
   } else time <- dt[[1]]
 
-  # # Create data series for checking
-  # if (type == "default") {
-  #   deet <- dt[[2]]
-  # } else deet <- dt[,-1] # (flowthrough)
-
   # PERFORM CHECKS -------------------------------------
   # Rule: if logical result is TRUE, the test is a FAIL.
 
   # Test NA
   test_na <- lapply(dt, function(x) check_na(x))
   time_na <- test_na$time
+
   if (type == "default") {
     oxy_na <- test_na$oxygen
   } else {
@@ -129,8 +120,7 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
       cat("NA/NaN location(s) in time, by row:\n",
         time_na$which, "\n")
   }
-
-  if (hasArg(oxy_na)) {
+  if (type == "default") {
     if (oxy_na$check) {
       warning("dissolved oxygen column contains NA or NaN data.", call. = F)
       if (highlight)
@@ -139,7 +129,7 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
     }
   }
 
-  if (hasArg(inflow_na)) {
+  if (type == "flowthrough") {
     if (inflow_na$check) {
       warning("inflow data contains NA/NaN.", call. = F)
       if (highlight)
@@ -148,7 +138,7 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
     }
   }
 
-  if (hasArg(outflow_na)) {
+  if (type == "flowthrough") {
     if (outflow_na$check) {
       warning("outflow data contains NA/NaN.", call. = F)
       if (highlight)
@@ -188,13 +178,11 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow = NULL,
   }
 
   # Collate highlights
-  if (highlight) {
     if (type == "default") {
       highlights <- list(time_na$which, oxy_na$which, time_seq$which,
         time_dup$which, time_evn$which)
     } else highlights <- list(time_na$which, inflow_na$which, outflow_na$which,
       time_seq$which, time_dup$which, time_evn$which)
-  }
 
   # Finally, if df is to be generated, remove NA
   if (any(is.na(dt))) {
