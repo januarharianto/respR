@@ -4,14 +4,19 @@
 \alias{inspect_data}
 \title{Check for common errors in respirometry data}
 \usage{
-inspect_data(df, xcol = 1, ycol = 2, highlight = TRUE, plot = TRUE)
+inspect_data(df, time = NULL, oxygen = NULL, inflow = NULL,
+  outflow = NULL, highlight = TRUE, plot = TRUE)
 }
 \arguments{
 \item{df}{data frame. Accepts data frame object of any size.}
 
-\item{xcol}{numeric. Defaults to \code{1}. This is the time data.}
+\item{time}{numeric. Defaults to NULL. This is the time data.}
 
-\item{ycol}{numaric. Defaults to \code{2}. This is the dissolved oxygen data.}
+\item{oxygen}{numaric. Defaults to NULL. This is the dissolved oxygen data.}
+
+\item{inflow}{numeric. Defaults to NULL. This is the incurrent oxygen data.}
+
+\item{outflow}{numeric. Defaults to NULL. This is the excurrent oxygen data.}
 
 \item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors
 detected by the function.}
@@ -42,9 +47,4 @@ be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc
 \examples{
 inspect_data(sardine.rd)
 inspect_data(urchins.rd, 1, 5, highlight = FALSE)
-
-# It is also possible to load the function directly into respR's
-# other functions:
-calc_rate(inspect_data(sardine.rd, highlight = FALSE, plot = FALSE),
-          from = 3000, to = 4000, by = "time")
 }

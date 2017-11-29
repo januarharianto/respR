@@ -16,10 +16,12 @@ conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
 California.
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: seconds
-Chamber volume (L): 12.3
-Specimen wet mass (kg): 0.02141
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: seconds
+\item Chamber volume (L): 12.3
+\item Specimen wet mass (kg): 0.02141
+}
 
 Data kindly supplied by Ben Burford, Hopkins Marine Station,
 Stanford University. \href{mailto:bburford@stanford.edu}{bburford@stanford.edu}

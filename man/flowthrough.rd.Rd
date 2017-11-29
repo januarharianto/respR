@@ -16,11 +16,13 @@ custom-built flowthrough respirometry system.
 Conducted at University of British Columbia, Vancouver, BC, Canada.
 }
 \details{
-Dissolved oxygen units: mg/L
-Time units: seconds
-Flow rate (L/s): 0.000039
-Inflow oxygen concentration (mean, mg/L): 8.88
-Specimen ash-free dry mass (kg): 0.000070
+\itemize{
+\item Dissolved oxygen units: mg/L
+\item Time units: seconds
+\item Flow rate (L/s): 0.000039
+\item Inflow oxygen concentration (mean, mg/L): 8.88
+\item Specimen ash-free dry mass (kg): 0.000070
+}
 }
 \author{
 Nicholas Carey
