@@ -89,18 +89,15 @@
 <p>The example data, <code>intermittent.rd</code>, contains intermittent-flow measurements of oxygen consumption in the sea urchin <em>Heliocidaris erythrogramma</em>. Detailed information about the data, including its source and methods, can be obtained with the command <code><a href="../reference/intermittent.rd.html">?intermittent.rd</a></code>.</p>
 <p>We can use <code><a href="../reference/inspect_data.html">inspect_data()</a></code> to scan for errors in the data frame and preview the data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(intermittent.rd)
-<span class="co">#&gt; Warning: Time column (xcol) is of class `integer' and has been converted to</span>
-<span class="co">#&gt; `numeric`.</span>
 <span class="co">#&gt; O2 :  num [1:4831] 7.17 7.17 7.18 7.16 7.2 7.2 7.16 7.16 7.19 7.18 ...</span>
-<span class="co">#&gt; Time :  num [1:4831] 0 1 2 3 4 5 6 7 8 9 ...</span>
+<span class="co">#&gt; Time :  int [1:4831] 0 1 2 3 4 5 6 7 8 9 ...</span>
 <span class="co">#&gt; ---</span>
-<span class="co">#&gt;                          Score</span>
-<span class="co">#&gt; No NA/NaN in Time (xcol) PASS </span>
-<span class="co">#&gt; No NA/NaN in O2 (ycol)   PASS </span>
-<span class="co">#&gt; Sequential Time (xcol)   PASS </span>
-<span class="co">#&gt; Non-duplicated Time      PASS </span>
-<span class="co">#&gt; Evenly-spaced Time       PASS </span>
-<span class="co">#&gt; ---</span>
+<span class="co">#&gt;                     Score</span>
+<span class="co">#&gt; No NA/NaN in time   PASS </span>
+<span class="co">#&gt; No NA/NaN in Oxygen PASS </span>
+<span class="co">#&gt; Sequential Time     PASS </span>
+<span class="co">#&gt; Non-duplicated Time PASS </span>
+<span class="co">#&gt; Evenly-spaced Time  PASS</span>
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
 <p><img src="intermittent_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
 <p>We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom rate plot, however uptake rates appear to be consistent within each experimental replicate.</p>
