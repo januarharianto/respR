@@ -1,12 +1,14 @@
 #' Truncate a data frame to create a subset of the data
 #'
-#' This is an internal function. This function extracts a subset data frame
-#' based on a given set of rules.
+#' This function extracts a subset data frame based on a given 
+#' set of rules. Can subset data based on ranges of: time, oxygen, 
+#' row number, or proportion. Function assumes time is in the first 
+#' column, and oxygen in the second column. 
 #'
 #' @param x data frame. The data to subset.
-#' @param from numeric. Defines the upper bound(s) of the data frame to subset.
+#' @param from numeric. Defines the lower bound(s) of the data frame to subset.
 #'   Subsetting is based on the argument: `by`.
-#' @param to numeric. Defines the lower bound(s) of the data frame to subset.
+#' @param to numeric. Defines the upper bound(s) of the data frame to subset.
 #'   Subsetting is based on the argument: `by`.
 #' @param by string. "time", "row", "o2" or "proportion".
 #'
