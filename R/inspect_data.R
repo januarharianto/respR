@@ -198,11 +198,16 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
   ## PLOT
   if (plot) {
     # Calculate rolling regression
-    roll <- static_roll(df, floor(0.1 * nrow(df)))$rate_b1
+    if (type == "default") {
+
+      roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
+    } else {
+      roll <- static_roll(dt[, 1:2], floor(0.1 * nrow(dt)))$rate_b1
+    }
     pardefault <- par(no.readonly = T)  # save original par settings
     par(mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
       cex = 1, cex.main = 1)
-    plot(df[[1]], df[[2]], xlab = "", ylab = "", col = r1, pch = 16,
+    plot(dt[[1]], dt[[2]], xlab = "", ylab = "", col = r1, pch = 16,
       panel.first = c(rect(par("usr")[1],
         par("usr")[3], par("usr")[2], par("usr")[4], col = r3),
         grid(col = "white", lty = 1, lwd = 1.5)))

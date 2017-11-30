@@ -1,2 +1,5 @@
-# respR v0.0.0.9000
-- Initial dev release. All functions should work within appropriate limits.
+# Version 0.0.0.9000
+- Dev release on Github.
+
+# Version 0.0.1
+- Stable release.
