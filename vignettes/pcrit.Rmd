@@ -16,7 +16,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7,
 
 ### Introduction
 
-$P_{crit}$ is the concentration above which oxygen uptake is independent of the concentration. In some species - oxyconformers - routine oxygen uptake is proportional to oxygen concentration, and so at 50\% $O_2$, the uptake rate will be half that at 100\% $O_2$. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although, in reality there is a continuum of responses and intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of $O_2$, or simply $P_{crit}$. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to $O_2$. 
+$P_{crit}$ is the $O_2$ concentration above which oxygen uptake rate is independent of the concentration. In some species - oxyconformers - routine uptake is proportional to oxygen concentration, and so at 50\% $O_2$, the uptake rate will be half that at 100\% $O_2$. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although there is a continuum of responses between these extremes and intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of $O_2$, or simply $P_{crit}$. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to $O_2$. 
 
 ### Example data
 
@@ -37,11 +37,11 @@ We can inspect the dataset using the `inspect_data` function.
 market.squid <- inspect_data(squid.rd)
 ```
 
-We can see from the bottom plot the uptake rate is relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what $O_2$ concentration this represents. For now, we can see the dataset is sound so we can pass the saved `market.squid` object to the next function. 
+We can see from the bottom plot the uptake rate stays relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what $O_2$ concentration this represents. For now, we can see the dataset is sound so we can pass the saved `market.squid` object to the dedicated $P_{crit}$ function. 
 
 ### $P_{crit}$ function
 
-The `pcrit` function uses two methods to estimate the breakpoint in the rate~$O_2$ relationship. The first is a “broken-stick” regression (BSR) approach, adapted from Yeager & Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point. The second  is a wrapper for the segmented, or “broken-line” regression approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines (see `?pcrit` for full references). 
+The `pcrit` function uses two methods to estimate the breakpoint in the rate~$O_2$ relationship. The first is a “broken-stick” regression (BSR) approach, adapted from Yeager & Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point. The second  is a wrapper for the segmented, or “broken-line” regression approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines (see `?pcrit` for full citations). 
 
 We will pass the data frame contained in `market.squid` to `pcrit` with the default operators:
 
