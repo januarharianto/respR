@@ -86,10 +86,10 @@ The `flowrate` operator is required by the function, and it is assumed it will b
 The `calc_rate.ft` function currently does not support subsetting. The dedicated `subset_data` function can be used, or we can do straightforward subsetting as follows. We saw earlier how rates between rows 200 and 300 appeared to be most consistent. We will calculate rates both from the entire dataset, and from this data region using the object we saved earlier. 
 
 ```{r}
-chiton.ft.rate <- calc_rate.ft(chiton.ft,  flowrate = 0.000039)
-print(chiton.ft.rate)
-chiton.ft.rate.sub <- calc_rate.ft(chiton.ft$df[200:300],  flowrate = 0.000039)
-print(chiton.ft.rate.sub)
+#chiton.ft.rate <- calc_rate.ft(chiton.ft,  flowrate = 0.000039)
+#print(chiton.ft.rate)
+#chiton.ft.rate.sub <- calc_rate.ft(chiton.ft$df[200:300],  flowrate = 0.000039)
+#print(chiton.ft.rate.sub)
 ```
 
 The output objects include all calculated rates within the subset and a mean rate.
@@ -98,7 +98,7 @@ The output objects include all calculated rates within the subset and a mean rat
 
 Similar to the other respirometry methods, a background rate value (typically negative) can be used to adjust flowthrough rates. 
 ``` {r}
-adjust_rate(chiton.ft.rate.sub$mean, by = -0.000001)
+#adjust_rate(chiton.ft.rate.sub$mean, by = -0.000001)
 ```
 `respR` does not currently have a specialised background function for flowthrough data. However the main `calc_rate.ft` function can be used to examine data from 'blank' experiments for background rates, and these (or an average of several) can be entered as above. The user should however be aware that only background rates determined at the *same flow rate* should be used.
 
