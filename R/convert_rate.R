@@ -80,6 +80,9 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
     rate <- x$rate
   } else if (class(x) %in% "adjust_rate") {
     rate <- x$corrected
+  } else if (class(x) %in% "calc_rate.ft") {
+    rate <- x$mean
+    message("object of class `calc_rate.ft` detected. Automatically using mean value.")
   } else stop("`x` input is not valid.")
 
   # Validate o2.unit & time.unit
