@@ -1,10 +1,9 @@
 ---
 title: "Flowthrough respirometry"
 output: 
-  rmarkdown::html_vignette:
-    toc: true
+  rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{respR - Measuring intermittent-flow data}
+  %\VignetteIndexEntry{Flowthrough respirometry}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -62,22 +61,37 @@ Rates can be detemined from flowthrough data using the `calc_rate.ft` function. 
 
 1. Single values of inflow and outflow concentrations:
 
-    ```calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)```
+    ```{r, eval = FALSE}
+    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
+    ```
 
 2. Combinations of single or vector values. Vector inputs must be of equal length:
 
-    ```calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = c(8,17, 8.16, 8.15), flowrate = 0.000039)```  
-    ```calc_rate.ft(inflow.o2 = c(8.88, 8.87, 8.89), outflow.o2 = c(8,17, 8.16, 8.15), flowrate = 0.000039)```   
-    ```calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in, flowrate = 0.000039)```
-    ```calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in, outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)```
+    ```{r, eval = FALSE}
+    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = c(8,17, 8.16, 8.15), 
+      flowrate = 0.000039)
+    
+    calc_rate.ft(inflow.o2 = c(8.88, 8.87, 8.89), 
+      outflow.o2 = c(8,17, 8.16, 8.15), flowrate = 0.000039)  
+    
+    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in, 
+      flowrate = 0.000039)
+    
+    calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in, outflow.o2 = 
+        flowthrough.rd$o2.out, flowrate = 0.000039)
+    ```
 
 4. A data frame containing columns of paired outflow and inflow $O_2$ values, with column identifiers:
 
-    ```calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)```
+    ```{r, eval = FALSE}
+    calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
+    ```
 
 5. An object of class `inspect_data`:
 
-    ```calc_rate.ft(chiton.ft, flowrate = 0.00039)```  
+    ```{r, eval = FALSE}
+    calc_rate.ft(chiton.ft, flowrate = 0.00039)
+    ```  
     
 
 The `flowrate` operator is required by the function, and it is assumed it will be an unvarying parameter within each separate experiment. Recordings at different flow rates should be analysed separately. Units for flow rate will be specified when rates are converted later (see below), but they should be in units of volume (in L) per unit time (s,m,h), for example `L/s`.
