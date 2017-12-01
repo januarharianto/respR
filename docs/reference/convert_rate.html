@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scale rate value to volume and/or mass — convert_rate • respR</title>
+<title>Convert rate value to volumetric and/or mass-specific — convert_rate • respR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -101,13 +101,14 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Scale rate value to volume and/or mass</h1>
+    <h1>Convert rate value to volumetric and/or mass-specific</h1>
     </div>
 
     
     <p>This is a conversion function. It can convert a dimensionless unit of rate,
-derived from <code>calc_rate</code> into volume-adjusted (e.g to the container), VO_2 or
-mass specific (i.e. to the specimen), MO_2 rate.</p>
+derived from <code>calc_rate</code>, <code>calc_rate.ft</code>, <code>auto_rate</code>, or <code>adjust_rate</code> into
+volume-adjusted (i.e. to the container), VO_2 or mass-specific (i.e. to the
+specimen mass), MO_2 rate.</p>
     
 
     <pre class="usage"><span class='fu'>convert_rate</span>(<span class='no'>x</span>, <span class='kw'>o2.unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time.unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output.unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -118,27 +119,28 @@ mass specific (i.e. to the specimen), MO_2 rate.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>numeric, or objects of class <code><a href='calc_rate.html'>calc_rate()</a></code>, <code><a href='auto_rate.html'>auto_rate()</a></code> or
-<code><a href='adjust_rate.html'>adjust_rate()</a></code>.</p></td>
+      <td><p>numeric, or objects of class <code><a href='calc_rate.html'>calc_rate()</a></code>, <code><a href='calc_rate.ft.html'>calc_rate.ft()</a></code>,
+<code><a href='auto_rate.html'>auto_rate()</a></code> or <code><a href='adjust_rate.html'>adjust_rate()</a></code>.</p></td>
     </tr>
     <tr>
       <th>o2.unit</th>
-      <td><p>string. The dissolved oxygen unit to convert from. Check
-<code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
+      <td><p>string. The dissolved oxygen unit of the data used to
+determine rate. Check <code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
     </tr>
     <tr>
       <th>time.unit</th>
-      <td><p>string. The time unit to convert from. Check <code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
+      <td><p>string. The time unit of the data used to determine rate.
+Check <code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
     </tr>
     <tr>
       <th>output.unit</th>
-      <td><p>string. The output unit to convert to. Check
+      <td><p>string. The output unit to convert rate to. Check
 <code><a href='unit_args.html'>unit_args()</a></code>.</p></td>
     </tr>
     <tr>
       <th>volume</th>
-      <td><p>numeric. Volume in litres. This is the volume of the
-respirometry chamber, not the specimen(s).</p></td>
+      <td><p>numeric. Volume in litres. This is the volume of fluid in the
+respirometry chamber, not the specimen volume.</p></td>
     </tr>
     <tr>
       <th>mass</th>
@@ -147,15 +149,18 @@ you wish to calculate mass-specific rates.</p></td>
     </tr>
     <tr>
       <th>S</th>
-      <td><p>numeric. Salinity. Defaults to 35.</p></td>
+      <td><p>numeric. Salinity. Defaults to 35. Used only in conversion of %
+data.</p></td>
     </tr>
     <tr>
       <th>t</th>
-      <td><p>numeric. Temperature. Defaults to 25 (degress celcius).</p></td>
+      <td><p>numeric. Temperature. Defaults to 25 (°C). Used only in conversion
+of % data.</p></td>
     </tr>
     <tr>
       <th>P</th>
-      <td><p>numeric. Air pressure. Defaults to 1.013253 (bar).</p></td>
+      <td><p>numeric. Pressure. Defaults to 1.013253 (bar). Used only in
+conversion of % data.</p></td>
     </tr>
     </table>
     
@@ -165,20 +170,34 @@ you wish to calculate mass-specific rates.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function uses an inernal database and a fuzzy string matching algorithm
+    <p>The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles.</p>
 <p>For example, <code>'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'</code> are all the same.
 Use <code><a href='unit_args.html'>unit_args()</a></code> to view a list of usable unit strings.</p>
+<p>Output units (<code>output.unit</code>) must be in the sequence O2-Time (e.g. mg/h,
+mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
+mg/h/kg).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>convert_rate</span>(<span class='fl'>7.5</span>, <span class='kw'>o2.unit</span> <span class='kw'>=</span> <span class='st'>'mg/l'</span>, <span class='kw'>time.unit</span> <span class='kw'>=</span> <span class='st'>'s'</span>,
+    <pre class="examples"><div class='input'><span class='co'># Manually enter values</span>
+<span class='fu'>convert_rate</span>(<span class='fl'>7.5</span>, <span class='kw'>o2.unit</span> <span class='kw'>=</span> <span class='st'>'mg/l'</span>, <span class='kw'>time.unit</span> <span class='kw'>=</span> <span class='st'>'s'</span>,
   <span class='kw'>output.unit</span> <span class='kw'>=</span> <span class='st'>'mg/min/kg'</span>, <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fl'>1.2</span>, <span class='kw'>mass</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='output co'>#&gt; Input:
 #&gt; [1] 7.5
 #&gt; [1] "mg/L" "sec" 
 #&gt; Output:
 #&gt; [1] 1080
-#&gt; [1] "mg/min/kg"</div></pre>
+#&gt; [1] "mg/min/kg"</div><div class='input'>
+<span class='co'># Use example data</span>
+<span class='fu'>data</span>(<span class='no'>sardine.rd</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='calc_rate.html'>calc_rate</a></span>(<span class='no'>sardine.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>1800</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='img'><img src='convert_rate-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>convert_rate</span>(<span class='no'>x</span>, <span class='kw'>o2.unit</span> <span class='kw'>=</span> <span class='st'>'%'</span>, <span class='kw'>time.unit</span> <span class='kw'>=</span> <span class='st'>'s'</span>,
+  <span class='kw'>output.unit</span> <span class='kw'>=</span> <span class='st'>'mg/h/g'</span>, <span class='kw'>volume</span> <span class='kw'>=</span> <span class='fl'>12.3</span>, <span class='kw'>mass</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>S</span> <span class='kw'>=</span><span class='fl'>35</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>P</span> <span class='kw'>=</span> <span class='fl'>1.013</span>)</div><div class='output co'>#&gt; Input:
+#&gt; [1] -0.0009793698
+#&gt; [1] "%"   "sec"
+#&gt; Output:
+#&gt; [1] -0.07044579
+#&gt; [1] "mg/hour/g"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -131,6 +131,12 @@
         </tr><tr>
           <!--  -->
           <td>
+            <p><code><a href="subset_data.html">subset_data</a></code> </p>
+          </td>
+          <td><p>Truncate a data frame to create a subset of the data</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
             <p><code><a href="subsample.html">subsample</a></code> </p>
           </td>
           <td><p>Subsample a data frame object</p></td>
@@ -145,6 +151,12 @@
         <tr>
           <!--  -->
           <td>
+            <p><code><a href="auto_rate.html">auto_rate</a></code> </p>
+          </td>
+          <td><p>Automatically determine rate of change in oxygen concentration over time</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
             <p><code><a href="calc_rate.html">calc_rate</a></code> </p>
           </td>
           <td><p>Calculate rate of change in oxygen over time</p></td>
@@ -157,9 +169,9 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="auto_rate.html">auto_rate</a></code> </p>
+            <p><code><a href="calc_rate.ft.html">calc_rate.ft</a></code> </p>
           </td>
-          <td><p>Automatically determine rate of change in oxygen concentration over time</p></td>
+          <td><p>Calculate rate of change in oxygen in flowthrough respirometry</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -170,11 +182,17 @@
       </tbody><tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-conversion" class="hasAnchor"><a href="#section-conversion" class="anchor"></a>Conversion</h2>
+            <h2 id="section-adjust-convert" class="hasAnchor"><a href="#section-adjust-convert" class="anchor"></a>Adjust/Convert</h2>
             <p class="section-desc"></p>
           </th>
         </tr>
         <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="adjust_rate.html">adjust_rate</a></code> </p>
+          </td>
+          <td><p>Simple rate adjustment function (background or oxygen flux)</p></td>
+        </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="convert_DO.html">convert_DO</a></code> </p>
@@ -185,7 +203,14 @@
           <td>
             <p><code><a href="convert_rate.html">convert_rate</a></code> </p>
           </td>
-          <td><p>Scale rate value to volume and/or mass</p></td>
+          <td><p>Convert rate value to volumetric and/or mass-specific</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="unit_args.html">unit_args</a></code> </p>
+          </td>
+          <td><p>Print examples of unit arguments for use in <code><a href='reference/convert_DO.html'>convert_DO()</a></code> and
+<code><a href='reference/convert_rate.html'>convert_rate()</a></code></p></td>
         </tr>
       </tbody><tbody>
         <tr>
@@ -195,13 +220,6 @@
           </th>
         </tr>
         <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="urchins.rd.html">urchins.rd</a></code> </p>
-          </td>
-          <td><p>Multi-column respirometry data of the sea urchin, <em>Heliocidaris
-Erythrogramma</em>, including background respiration</p></td>
-        </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="intermittent.rd.html">intermittent.rd</a></code> </p>
@@ -219,6 +237,19 @@ Erythrogramma</em>, including background respiration</p></td>
             <p><code><a href="sardine.rd.html">sardine.rd</a></code> </p>
           </td>
           <td><p>Respirometry data of the sardine, <em>Sardinops sagax</em></p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="urchins.rd.html">urchins.rd</a></code> </p>
+          </td>
+          <td><p>Multi-column respirometry data of the sea urchin, <em>Heliocidaris
+Erythrogramma</em>, including background respiration</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
+          </td>
+          <td><p>Flowthrough respirometry data</p></td>
         </tr>
       </tbody>
       </table>
@@ -230,7 +261,7 @@ Erythrogramma</em>, including background respiration</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#section-pre-processing">Pre-processing</a></li>
       <li><a href="#section-analytical">Analytical</a></li>
-      <li><a href="#section-conversion">Conversion</a></li>
+      <li><a href="#section-adjust-convert">Adjust/Convert</a></li>
       <li><a href="#section-example-data">Example Data</a></li>
     </ul>
   </div>

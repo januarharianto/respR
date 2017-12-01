@@ -105,9 +105,11 @@
     </div>
 
     
-    <p>Critical oxygen tension can be calculated either by the "broken-stick"
-regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
-segmented regression approach, presented by Muggeo (2003).</p>
+    <p>A function to calculate the critical oxygen tension, or the O2 concentration
+below which uptake rate becomes dependent upon oxygen concentration. It is
+calculated by both the "broken-stick" regression (BSR) approach, adopted from
+Yeager and Ultsch (1989), and the segmented regression approach, presented by
+Muggeo (2003).</p>
     
 
     <pre class="usage"><span class='fu'>pcrit</span>(<span class='no'>df</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fu'>floor</span>(<span class='fl'>0.1</span> * <span class='fu'>nrow</span>(<span class='no'>df</span>)), <span class='kw'>has.rate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -123,11 +125,14 @@ analyse.</p></td>
     </tr>
     <tr>
       <th>width</th>
-      <td><p>numeric. Defaults to <code>floor(0.1*nrow(df))</code>.</p></td>
+      <td><p>numeric. Number of rows over which to perform the rolling
+regression. Defaults to <code>floor(0.1*nrow(df))</code>, or 10% of total rows.</p></td>
     </tr>
     <tr>
       <th>has.rate</th>
-      <td><p>logical. Defaults to FALSE.</p></td>
+      <td><p>logical. Defaults to FALSE. If you already possess a rate~DO
+dataset, change this to TRUE to process it without performing rolling
+regressions.</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -146,15 +151,18 @@ used?</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>To calculate Pcrit, it is necessary to provide data in the form of the rate
-of change in oxygen (RO2/MO2) against dissolved oxygen (DO) concentration. If
-you have a single dataset that only measured DO over time, <code>pcrit()</code> can
-still automatically determine RO2/MO2 against DO by performing a rolling
-regression of the data and match it agains the rolling mean of the DO data.
-This is also the default method. If you already have calculated RO2/MO2
-elsewhere, the argument <code>has.rate = "TRUE"</code> must be used. The width of the
+    <p>To calculate Pcrit, the function requires data in the form of the rate of
+oxygen uptake against dissolved oxygen (DO) concentration. The default data
+input is a data frame of DO against time (e.g. <code>squid.rd</code>). The function
+performs a rolling regression to determine rates, and matches these against a
+rolling mean of the DO data. The function then performs the two
+\(P_{crit}\) analyses methods on these data. The width of the
 rolling regression is determined by the <code>width</code> argument. In most cases, the
-default width (10<!-- % of the data length) works well. --></p>
+default width (10% of the data length) works well, but this may vary with
+data that has abrupt changes in rate, or is particularly noisy.</p>
+<p>Alternatively, existing rate~DO data may be used, with the argument <code>has.rate = "TRUE"</code>, in which case the function performs the two
+\(P_{crit}\) analyses on these data directly without any
+processing.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -166,7 +174,7 @@ broken-line relationships. R News 8:20–25.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># The example below should work (uncomment to run)
+    <pre class="examples"><div class='input'># Uncomment to run. Intensive, so may take some time.
 # pcrit(squid.rd)
 
 </div></pre>
