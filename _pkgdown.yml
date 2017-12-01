@@ -8,20 +8,25 @@ reference:
   - title: "Pre-processing"
     contents:
       - inspect_data
+      - subset_data
       - subsample
   - title: "Analytical"
     contents:
+      - auto_rate
       - calc_rate
       - calc_rate.bg
-      - auto_rate
+      - calc_rate.ft
       - pcrit
-  - title: "Conversion"
+  - title: "Adjust/Convert"
     contents:
+      - adjust_rate
       - convert_DO
       - convert_rate
+      - unit_args
   - title: "Example Data"
     contents:
-      - urchins.rd
       - intermittent.rd
       - squid.rd
       - sardine.rd
+      - urchins.rd
+      - flowthrough.rd
