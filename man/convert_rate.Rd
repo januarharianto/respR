@@ -2,51 +2,68 @@
 % Please edit documentation in R/convert_rate.R
 \name{convert_rate}
 \alias{convert_rate}
-\title{Scale rate value to volume and/or mass}
+\title{Convert rate value to volumetric and/or mass-specific}
 \usage{
 convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
   volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
 }
 \arguments{
-\item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}} or
-\code{\link[=adjust_rate]{adjust_rate()}}.}
+\item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
+\code{\link[=auto_rate]{auto_rate()}} or \code{\link[=adjust_rate]{adjust_rate()}}.}
 
-\item{o2.unit}{string. The dissolved oxygen unit to convert from. Check
+\item{o2.unit}{string. The dissolved oxygen unit of the data used to
+determine rate. Check \code{\link[=unit_args]{unit_args()}}.}
+
+\item{time.unit}{string. The time unit of the data used to determine rate.
+Check \code{\link[=unit_args]{unit_args()}}.}
+
+\item{output.unit}{string. The output unit to convert rate to. Check
 \code{\link[=unit_args]{unit_args()}}.}
 
-\item{time.unit}{string. The time unit to convert from. Check \code{\link[=unit_args]{unit_args()}}.}
-
-\item{output.unit}{string. The output unit to convert to. Check
-\code{\link[=unit_args]{unit_args()}}.}
-
-\item{volume}{numeric. Volume in litres. This is the volume of the
-respirometry chamber, not the specimen(s).}
+\item{volume}{numeric. Volume in litres. This is the volume of fluid in the
+respirometry chamber, not the specimen volume.}
 
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
 
-\item{S}{numeric. Salinity. Defaults to 35.}
+\item{S}{numeric. Salinity. Defaults to 35. Used only in conversion of \%
+data.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (degress celcius).}
+\item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion
+of \% data.}
 
-\item{P}{numeric. Air pressure. Defaults to 1.013253 (bar).}
+\item{P}{numeric. Pressure. Defaults to 1.013253 (bar). Used only in
+conversion of \% data.}
 }
 \value{
 A list object.
 }
 \description{
 This is a conversion function. It can convert a dimensionless unit of rate,
-derived from \code{calc_rate} into volume-adjusted (e.g to the container), VO_2 or
-mass specific (i.e. to the specimen), MO_2 rate.
+derived from \code{calc_rate}, \code{calc_rate.ft}, \code{auto_rate}, or \code{adjust_rate} into
+volume-adjusted (i.e. to the container), VO_2 or mass-specific (i.e. to the
+specimen mass), MO_2 rate.
 }
 \details{
-The function uses an inernal database and a fuzzy string matching algorithm
+The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles.
 
 For example, \code{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same.
 Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
+
+Output units (\code{output.unit}) must be in the sequence O2-Time (e.g. mg/h,
+mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
+mg/h/kg).
 }
 \examples{
+# Manually enter values
 convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
+
+# Use example data
+data(sardine.rd)
+x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
+convert_rate(x, o2.unit = '\%', time.unit = 's',
+  output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
+  S =35, t = 15, P = 1.013)
 }

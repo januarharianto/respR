@@ -71,7 +71,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -125,15 +131,17 @@ use of functions in <code>respR</code>. Data checks include:</p>
     </tr>
     <tr>
       <th>oxygen</th>
-      <td><p>numaric. Defaults to NULL. This is the dissolved oxygen data.</p></td>
+      <td><p>numeric. Defaults to NULL. This is the dissolved oxygen data.</p></td>
     </tr>
     <tr>
       <th>inflow.o2</th>
-      <td><p>numeric. Defaults to NULL. This is the incurrent oxygen data.</p></td>
+      <td><p>numeric. Defaults to NULL. This is inflow oxygen data.
+Used only for flowthrough respirometry data.</p></td>
     </tr>
     <tr>
       <th>outflow.o2</th>
-      <td><p>numeric. Defaults to NULL. This is the excurrent oxygen data.</p></td>
+      <td><p>numeric. Defaults to NULL. This is outflow oxygen data.
+Used only for flowthrough respirometry data.</p></td>
     </tr>
     <tr>
       <th>highlight</th>
@@ -161,8 +169,8 @@ diagnostics.</p></td>
 <li><p>A test for evenly-spaced time data.</p></li>
 </ul>
     <p>Once data checks are complete, the function produces a list object which may
-be directly loaded into <code><a href='calc_rate.html'>calc_rate()</a></code>, <code><a href='calc_rate.bg.html'>calc_rate.bg()</a></code>, <code><a href='auto_rate.html'>auto_rate()</a></code> and
-<code><a href='pcrit.html'>pcrit()</a></code> (NC - i don't think this last one works) for further analyses.</p>
+be directly loaded into <code><a href='calc_rate.html'>calc_rate()</a></code>, <code><a href='calc_rate.bg.html'>calc_rate.bg()</a></code>, <code><a href='calc_rate.ft.html'>calc_rate.ft()</a></code>,
+and <code><a href='auto_rate.html'>auto_rate()</a></code> for further analyses.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

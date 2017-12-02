@@ -10,8 +10,11 @@ vignette: >
 ---
 
 ```{r, echo = F}
-library(respR)
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=7, fig.height=7)
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
 ### Intermittent-flow respirometry

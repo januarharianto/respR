@@ -10,16 +10,18 @@
 #' * A test for evenly-spaced time data.
 #'
 #' Once data checks are complete, the function produces a list object which may
-#' be directly loaded into [calc_rate()], [calc_rate.bg()], [auto_rate()] and
-#' [pcrit()] (NC - i don't think this last one works) for further analyses.
+#' be directly loaded into [calc_rate()], [calc_rate.bg()], [calc_rate.ft()],
+#' and [auto_rate()] for further analyses.
 #'
 #' @md
 #'
 #' @param df data frame. Accepts data frame object of any size.
 #' @param time numeric. Defaults to NULL. This is the time data.
-#' @param oxygen numaric. Defaults to NULL. This is the dissolved oxygen data.
-#' @param inflow.o2 numeric. Defaults to NULL. This is the incurrent oxygen data.
-#' @param outflow.o2 numeric. Defaults to NULL. This is the excurrent oxygen data.
+#' @param oxygen numeric. Defaults to NULL. This is the dissolved oxygen data.
+#' @param inflow.o2 numeric. Defaults to NULL. This is inflow oxygen data. 
+#'   Used only for flowthrough respirometry data. 
+#' @param outflow.o2 numeric. Defaults to NULL. This is outflow oxygen data. 
+#'   Used only for flowthrough respirometry data. 
 #' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces plots for quick visual

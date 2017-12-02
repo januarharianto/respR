@@ -48,7 +48,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -102,7 +108,7 @@
 <span class="co">#&gt; Non-duplicated Time PASS </span>
 <span class="co">#&gt; Evenly-spaced Time  PASS</span>
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <p>We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom rate plot, however uptake rates appear to be consistent within each experimental replicate.</p>
 </div>
 <div id="using-calc_rate-on-intermittent-flow-data" class="section level3">
@@ -113,7 +119,8 @@
 <h4 class="hasAnchor">
 <a href="#subsetting-by-row-and-time" class="anchor"></a>Subsetting by row and time</h4>
 <p>The <code>calc_rate</code> function supports input of multiple subset regions by <code>row</code> or <code>time</code>. The <code>from</code> and <code>to</code> operators can be vectors with paired values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">2300</span>, <span class="dv">4100</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="dv">1800</span>, <span class="dv">3200</span>, <span class="dv">4600</span>), <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">2300</span>, <span class="dv">4100</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="dv">1800</span>, 
+    <span class="dv">3200</span>, <span class="dv">4600</span>), <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="intermittent_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(urchin_int_rates)
 <span class="co">#&gt; Rate(s):</span>
@@ -132,9 +139,10 @@
 <p>We can also use <code>plot()</code> to view the diagnostic plots of any individual replicate. The argument <code>rep</code> determines which data subset to plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(urchin_int_rates, <span class="dt">rep =</span> <span class="dv">2</span>)
 <span class="co">#&gt; Plotting...this may take a while for large datasets.</span></code></pre></div>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>We can also query multiple regions of each replicate (which could overlap, although this would obscure the output plot):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">900</span>, <span class="dv">2300</span>, <span class="dv">2900</span>, <span class="dv">4000</span>, <span class="dv">4400</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="dv">700</span>, <span class="dv">1700</span>, <span class="dv">2700</span>, <span class="dv">3300</span>, <span class="dv">4300</span>, <span class="dv">4700</span>), <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">900</span>, <span class="dv">2300</span>, <span class="dv">2900</span>, <span class="dv">4000</span>, <span class="dv">4400</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="dv">700</span>, 
+    <span class="dv">1700</span>, <span class="dv">2700</span>, <span class="dv">3300</span>, <span class="dv">4300</span>, <span class="dv">4700</span>), <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="intermittent_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
 <pre><code>#&gt; Rate(s):
 #&gt; [1] -0.0006790314 -0.0005463056 -0.0005853780 -0.0005705494 -0.0006845746
@@ -142,7 +150,7 @@
 <p>Rates can be easily extracted for further analysis or selection. For instance, we may be interested in the lowest rate, the one most representative of basal metabolic rates. Of course because rates are negative, the minimum <em>value</em> in negative terms would actually represent the highest rate, so we should extract the maximum (least negative) value, or transform the rates first:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int_rates<span class="op">$</span>rate
 <span class="co">#&gt; [1] -0.0005734109 -0.0006097325 -0.0006539752</span>
-<span class="kw">min</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>urchin_int_rates<span class="op">$</span>rate)
+<span class="kw">min</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>urchin_int_rates<span class="op">$</span>rate)
 <span class="co">#&gt; [1] 0.0005734109</span></code></pre></div>
 <p>Or we may be more interested in the mean rate:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(urchin_int_rates<span class="op">$</span>rate)
@@ -157,18 +165,18 @@
 <pre><code>#&gt; Rate(s):
 #&gt; [1] -0.0006191943</code></pre>
 <p>To examine the same range in each replicate, we can follow a number of approaches. We can call the data range containing another replicate directly from the original dataset, or <code>inspect_data</code> object element:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(intermittent.rd[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>,], <span class="dt">from =</span> <span class="dv">7</span>, <span class="dt">to =</span> <span class="fl">6.6</span>, <span class="dt">by =</span> <span class="st">"o2"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(intermittent.rd[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>, ], <span class="dt">from =</span> <span class="dv">7</span>, <span class="dt">to =</span> <span class="fl">6.6</span>, <span class="dt">by =</span> <span class="st">"o2"</span>)
 <span class="co">#&gt; Rate(s):</span>
 <span class="co">#&gt; [1] -0.000615731</span>
-<span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int<span class="op">$</span>df[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>,], <span class="dt">from =</span> <span class="dv">7</span>, <span class="dt">to =</span> <span class="fl">6.6</span>, <span class="dt">by =</span> <span class="st">"o2"</span>)
+<span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int<span class="op">$</span>df[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>, ], <span class="dt">from =</span> <span class="dv">7</span>, <span class="dt">to =</span> <span class="fl">6.6</span>, <span class="dt">by =</span> <span class="st">"o2"</span>)
 <span class="co">#&gt; Rate(s):</span>
 <span class="co">#&gt; [1] -0.000615731</span></code></pre></div>
 <p><img src="intermittent_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 <p>Or we can subset them manually into new dataframes, and process them separately through the entire workflow. This would also be a necessary procedure to examine each replicate in <code>auto_rate</code> to determine minimum, maximum or best fit rates within each.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create separate replicate data frames</span>
-u_rep1 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">1</span><span class="op">:</span><span class="dv">1900</span>,]
-u_rep2 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>,]
-u_rep3 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">3700</span><span class="op">:</span><span class="dv">4831</span>,]
+u_rep1 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">1</span><span class="op">:</span><span class="dv">1900</span>, ]
+u_rep2 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">2100</span><span class="op">:</span><span class="dv">3500</span>, ]
+u_rep3 &lt;-<span class="st"> </span>intermittent.rd[<span class="dv">3700</span><span class="op">:</span><span class="dv">4831</span>, ]
 
 <span class="co"># Process one in `inspect_data` (output not shown)</span>
 u_rep3_c &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(u_rep3)</code></pre></div>
@@ -182,7 +190,7 @@ u_rep3_c &lt;-<span class="st"> </span><span class="kw"><a href="../reference/in
 <h3 class="hasAnchor">
 <a href="#background-adjustments" class="anchor"></a>Background adjustments</h3>
 <p>The <code>adjust_rate</code> function can be used on <code>calc_rate</code> objects containing multiple rate values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int_rates_adj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(urchin_int_rates, <span class="dt">by =</span> <span class="op">-</span><span class="fl">0.00005</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int_rates_adj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(urchin_int_rates, <span class="dt">by =</span> <span class="op">-</span><span class="fl">5e-05</span>)
 <span class="kw">print</span>(urchin_int_rates_adj)
 <span class="co">#&gt; Note: please consider the sign of the value while correcting the rate.</span>
 <span class="co">#&gt; Input rate: -0.0005734109 -0.0006097325 -0.0006539752</span>
@@ -194,7 +202,8 @@ u_rep3_c &lt;-<span class="st"> </span><span class="kw"><a href="../reference/in
 <h3 class="hasAnchor">
 <a href="#converting-rates" class="anchor"></a>Converting rates</h3>
 <p>Once the rates have been determined, they can be converted to volume-corrected or mass-specific rates using <code>convert_rate</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(urchin_int_rates_adj, <span class="dt">o2.unit =</span> <span class="st">"mg/L"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h/g"</span>, <span class="dt">volume =</span> <span class="fl">2.379</span>, <span class="dt">mass =</span> <span class="fl">0.006955</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(urchin_int_rates_adj, <span class="dt">o2.unit =</span> <span class="st">"mg/L"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h/g"</span>, 
+    <span class="dt">volume =</span> <span class="fl">2.379</span>, <span class="dt">mass =</span> <span class="fl">0.006955</span>)
 <span class="co">#&gt; Input:</span>
 <span class="co">#&gt; [1] -0.0005234109 -0.0005597325 -0.0006039752</span>
 <span class="co">#&gt; [1] "mg/L" "sec" </span>

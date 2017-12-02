@@ -48,7 +48,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="articles/twopoint.html">Two-point analyses</a>
@@ -93,7 +99,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>A good place to start is our <a href="https://januarharianto.github.io/respR/">online vignette</a> (click on “<a href="https://januarharianto.github.io/respR/articles/respR.html">Get Started</a>”). For a quick evaluation of the package, try out the following code:</p>
+<p>A good place to start is our <a href="https://januarharianto.github.io/respR/articles/respR.html">online vignette</a>. For a quick evaluation of the package, try out the following code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(respR) <span class="co"># load the library</span>
 
 <span class="co"># As lazy loading is in place, we do not need to call example data explicitly.</span>
@@ -114,25 +120,53 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="reference/auto_rate.ht
 <span class="kw"><a href="reference/auto_rate.html">auto_rate</a></span>(x, <span class="dt">width =</span> <span class="dv">1000</span>, <span class="dt">method =</span> <span class="st">"interval"</span>)
 
 <span class="co"># 4. Conversions</span>
-<span class="kw"><a href="reference/convert_rate.html">convert_rate</a></span>(y, <span class="dt">o2.unit =</span> <span class="st">"%"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h/kg"</span>, 
+<span class="kw"><a href="reference/convert_rate.html">convert_rate</a></span>(y, <span class="dt">o2.unit =</span> <span class="st">"%"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h/kg"</span>,
              <span class="dt">volume =</span> <span class="fl">1.2</span>, <span class="dt">mass =</span> <span class="fl">0.8</span>)</code></pre></div>
 </div>
 <div id="feedback-and-contributions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#feedback-and-contributions" class="anchor"></a>Feedback and contributions</h2>
-<p>We would love for you to help us improve this (relatively new) package! If you find a bug, have suggestions to improve our output, or want new features let us know by <a href="https://github.com/januarharianto/respr/issues">opening an issue</a>.</p>
-<p>Alternatively, you can fork this project and create a pull request.</p>
+<p><code>respR</code> is under continuous development. If you have any bugs or feedback, you can contact us easily by <a href="https://github.com/januarharianto/respr/issues">opening an issue</a>. Alternatively, you can fork this project and create a pull request.</p>
 </div>
 <div id="collaborators" class="section level2">
 <h2 class="hasAnchor">
 <a href="#collaborators" class="anchor"></a>Collaborators</h2>
 <ul>
-<li>Januar <strong>Harianto</strong>
-</li>
-<li>Nicholas <strong>Carey</strong>
-</li>
+<li>Januar <strong>Harianto</strong>, University of Sydney</li>
+<li>Nicholas <strong>Carey</strong>, Stanford University</li>
+<li>Maria <strong>Byrne</strong>, University of Sydney</li>
 </ul>
 </div>
+</div>
+<div id="acknowledgements" class="section level1">
+<h1 class="hasAnchor">
+<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h1>
+<p>The design of this package would not have been possible without inspiration from the following authors and their packages:</p>
+<ul>
+<li>
+<a href="https://cran.r-project.org/package=respirometry">respirometry</a> - Matthew A. Birk</li>
+<li>
+<a href="https://cran.r-project.org/package=rMR">rMR</a> - Tyler L. Moulton</li>
+<li>
+<a href="https://github.com/colin-olito/LoLinR">LoLinR</a> - Colin Olito and Diego Barneche</li>
+<li>
+<a href="https://cran.r-project.org/package=segmented">segmented</a> - Vito M. R. Muggeo</li>
+</ul>
+</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<p>Clark, T. D., Sandblom, E., &amp; Jutfelt, F. (2013). Aerobic scope measurements of fishes in an era of climate change: respirometry, relevance and recommendations. Journal of Experimental Biology, 216(15), 2771–2782. <a href="https://doi.org/10.1242/Jeb.084251">doi: 10.1242/Jeb.084251</a></p>
+<p>Gamble, S., Carton, A. G., &amp; Pirozzi, I. (2014). Open-top static respirometry is a reliable method to determine the routine metabolic rate of barramundi, Lates calcarifer. Marine and Freshwater Behaviour and Physiology, 47(1), 19–28. <a href="https://doi.org/10.1080/10236244.2013.874119">doi: 10.1080/10236244.2013.874119</a></p>
+<p>Leclercq, N., Gattuso, J.-P. &amp; Jaubert, J. (1999). Measurement of oxygen metabolism in open-top aquatic mesocosms: Application to a coral reef community. Marine Ecology Progress Series, 177, 299–304. <a href="https://doi.org/10.3354/meps177299">doi: 10.3354/meps177299</a></p>
+<p>Lighton, J.R.B. (2008). Measuring Metabolic Rates: A Manual for Scientists. Oxford University Press, USA.</p>
+<p>Muggeo, V.M.R. (2003). Estimating regression models with unknown break-points. Statistics in Medicine, 22, 3055–3071. <a href="https://doi.org/10.1002/sim.1545">doi: 10.1002/sim.1545</a></p>
+<p>Muggeo, V. (2008). Segmented: An R package to fit regression models with broken-line relationships. R News, 8, 20–25.</p>
+<p>Silverman, B.W. (1986). Density Estimation for Statistics and Data Analysis. Chapman; Hall/CRC Press.</p>
+<p>Steffensen, J. F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiology and Biochemistry, 6(1), 49–59. <a href="https://doi.org/10.1007/BF02995809">doi: 10.1007/BF02995809</a></p>
+<p>Svendsen, M.B.S., Bushnell, P.G. &amp; Steffensen, J.F. (2016). Design and setup of intermittent-flow respirometry system for aquatic organisms. Journal of Fish Biology, 88, 26–50. <a href="https://doi.org/10.1111/jfb.12797">doi: 10.1111/jfb.12797</a></p>
+<p>White, C.R. &amp; Kearney, M.R. (2013). Determinants of inter-specific variation in basal metabolic rate. Journal of Comparative Physiology B: Biochemical, Systemic, and Environmental Physiology, 183, 1–26. <a href="https://doi.org/10.1007/s00360-012-0676-5">doi: 10.1007/s00360-012-0676-5</a></p>
+<p>Yeager, D.P. &amp; Ultsch, G.R. (1989). Physiological regulation and conformation: A BASIC program for the determination of critical points. Physiological Zoology, 62, 888–907. <a href="https://doi.org/10.1086/physzool.62.4.30157935">doi: 10.1086/physzool.62.4.30157935</a></p>
 </div>
 
   </div>

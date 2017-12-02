@@ -6,15 +6,14 @@
 #' the data frame by calling the `from` and `to` arguments.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
-#' Units are called in a later function when volume- and/or weight-specific
-#' rates of oxygen concentration are computed in [convert_rate()] and
-#' [convert_DO()].
+#' Units are called in a later function when volumetric and/or mass-specific
+#' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
 #'
-#' @param x data frame. or object of class `adjust_rate`. This is the data to
+#' @param x data frame or object of class `adjust_rate`. This is the data to
 #'   process.
-#' @param from numeric vector. Defaults to NULL. Defines the upper bound(s) of
+#' @param from numeric vector. Defaults to NULL. Defines the lower bound(s) of
 #'   the data frame to subset. Subsetting is based on the argument: `by`.
-#' @param to numeric vector. Defaults to NULL. Defines the lower bound(s) of the
+#' @param to numeric vector. Defaults to NULL. Defines the upper bound(s) of the
 #'   data frame to subset. Subsetting is based on the argument: `by`.
 #' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"` Defaults to
 #'   `"time"`.This is the method used to subset the data.
@@ -38,7 +37,7 @@
 #' summary(x)
 #' plot(x)
 #'
-#' # Using a list in 'from' and 'to' perform repeated measurements:
+#' # Using a vector in 'from' and 'to' perform multiple measurements:
 #' data(intermittent.rd)
 #' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
