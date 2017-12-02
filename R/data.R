@@ -92,7 +92,7 @@
 "sardine.rd"
 
 
-#' Flowthrough respirometry data
+#' Flowthrough respirometry data on the chiton, *Mopalia lignosa*
 #'
 #' A single experiment on the chiton species *Mopalia lignosa* in a
 #' custom-built flowthrough respirometry system.
