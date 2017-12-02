@@ -1,7 +1,7 @@
 #' Subsample a data frame object
 #'
 #' A simple function that selects every "`n`" rows in a data frame to create a
-#' new data frame object. Effectifely "thins" large datasets.
+#' new data frame object. Effectively "thins" large datasets.
 #'
 #' @param df data frame. The data to process.
 #' @param n numeric. This will prompt the function to extract every "`n`" rows.

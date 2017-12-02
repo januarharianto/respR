@@ -33,24 +33,24 @@ A list object of class \code{auto_rate}.
 }
 \description{
 \code{auto_rate} automatically performs a rolling regression on a data frame to
-perform determinations of maximum, minimum, interval or "best fit" linear
-rate of change in oxygen concentration over time. First, a rolling regression
-of specified \code{width} is performed on the entire dataset to obtain all
-possible values. The computations are then ranked (or, arranged), based on
-the "\code{logic}" argument, and the output is summarised.
+determine maximum, minimum, interval or "best fit" linear rate of change
+in oxygen concentration over time. First, a rolling regression of specified
+\code{width} is performed on the entire dataset to obtain all possible values.
+The computations are then ranked (or, arranged), based on the "\code{logic}"
+argument, and the output is summarised.
 }
 \details{
 \strong{Units}
 
-There are no units of measurements involved in \code{auto_rate}. This is a
-deliberate decision. Units are called in a later function when volume- and/or
-weight-specific rates of oxygen concentration are computed in
+There are no units of measurement involved in \code{auto_rate}. This is a
+deliberate decision. Units are called in a later function when volumetric
+and/or mass-specific rates of oxygen use are computed in
 \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 
 \emph{\strong{Ranking algorithms}}
 
-For now, \code{auto_rate()} contains four ranking algorithms that can be called
-with the argument "\code{method}":
+At present, \code{auto_rate()} contains four ranking algorithms that can be called
+with the argument \code{method}:
 \itemize{
 \item \code{"linear"}: Uses kernel density estimation (KDE) to detect the most
 "linear" sections of the timeseries. This is achieved by using the smoothing
@@ -63,5 +63,10 @@ regrssions. They are not ranked.
 }
 }
 \examples{
+# most linear section of the entire data
 auto_rate(sardine.rd, parallel = FALSE)
+# what is the lowest rate over a 10 minute (600s) period?
+auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
+# what is the highest rate over a 10 minute (600s) period?
+auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
 }

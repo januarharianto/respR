@@ -11,9 +11,12 @@ pcrit(df, width = floor(0.1 * nrow(df)), has.rate = FALSE, plot = TRUE,
 \item{df}{data frame or object of class \code{inspect_data}. This is the data to
 analyse.}
 
-\item{width}{numeric. Defaults to \code{floor(0.1*nrow(df))}.}
+\item{width}{numeric. Number of rows over which to perform the rolling
+regression. Defaults to \code{floor(0.1*nrow(df))}, or 10\% of total rows.}
 
-\item{has.rate}{logical. Defaults to FALSE.}
+\item{has.rate}{logical. Defaults to FALSE. If you already possess a rate~DO
+dataset, change this to TRUE to process it without performing rolling
+regressions.}
 
 \item{plot}{logical. Defaults to TRUE.}
 
@@ -24,23 +27,29 @@ used?}
 A list object of class \code{pcrit}.
 }
 \description{
-Critical oxygen tension can be calculated either by the "broken-stick"
-regression (BSR) approach, adopted from Yeager and Ultsch (1989), or the
-segmented regression approach, presented by Muggeo (2003).
+A function to calculate the critical oxygen tension, or the O2 concentration
+below which uptake rate becomes dependent upon oxygen concentration. It is
+calculated by both the "broken-stick" regression (BSR) approach, adopted from
+Yeager and Ultsch (1989), and the segmented regression approach, presented by
+Muggeo (2003).
 }
 \details{
-To calculate Pcrit, it is necessary to provide data in the form of the rate
-of change in oxygen (RO2/MO2) against dissolved oxygen (DO) concentration. If
-you have a single dataset that only measured DO over time, \code{\link[=pcrit]{pcrit()}} can
-still automatically determine RO2/MO2 against DO by performing a rolling
-regression of the data and match it agains the rolling mean of the DO data.
-This is also the default method. If you already have calculated RO2/MO2
-elsewhere, the argument \code{has.rate = "TRUE"} must be used. The width of the
+To calculate Pcrit, the function requires data in the form of the rate of
+oxygen uptake against dissolved oxygen (DO) concentration. The default data
+input is a data frame of DO against time (e.g. \code{squid.rd}). The function
+performs a rolling regression to determine rates, and matches these against a
+rolling mean of the DO data. The function then performs the two
+\eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 rolling regression is determined by the \code{width} argument. In most cases, the
-default width (10% of the data length) works well.
+default width (10\% of the data length) works well, but this may vary with
+data that has abrupt changes in rate, or is particularly noisy.
+
+Alternatively, existing rate~DO data may be used, with the argument \code{has.rate = "TRUE"}, in which case the function performs the two
+\eqn{P_{crit}}{P[crit]} analyses on these data directly without any
+processing.
 }
 \examples{
-# The example below should work (uncomment to run)
+# Uncomment to run. Intensive, so may take some time.
 # pcrit(squid.rd)
 
 }

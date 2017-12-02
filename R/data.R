@@ -26,13 +26,13 @@
 #' Oxygen consumption data of 16 individual *Heliocidaris erythrogramma*
 #' specimens. In addition, there are 2 measurements of background respiration.
 #' These were trial runs to determine the precision of the new Vernier Optical
-#' DO probes (ODO-BTA), and thus chamber volumes and specimen mass were not
+#' DO probes (ODO-BTA), and thus chamber volumes and specimen masses were not
 #' recorded.
 #'
 #' - Dissolved oxygen units: mg/L
 #' - Time units: minutes
-#' - Chamber volumes (L): ????
-#' - Specimen masses (kg): ????
+#' - Chamber volumes (L): N/A
+#' - Specimen masses (kg): N/A
 #'
 #' @md
 #' @author Januar Harianto
@@ -92,7 +92,7 @@
 "sardine.rd"
 
 
-#' Flowthrough respirometry data
+#' Flowthrough respirometry data on the chiton, *Mopalia lignosa*
 #'
 #' A single experiment on the chiton species *Mopalia lignosa* in a
 #' custom-built flowthrough respirometry system.

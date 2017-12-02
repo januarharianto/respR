@@ -71,7 +71,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -106,11 +112,11 @@
 
     
     <p><code>auto_rate</code> automatically performs a rolling regression on a data frame to
-perform determinations of maximum, minimum, interval or "best fit" linear
-rate of change in oxygen concentration over time. First, a rolling regression
-of specified <code>width</code> is performed on the entire dataset to obtain all
-possible values. The computations are then ranked (or, arranged), based on
-the "<code>logic</code>" argument, and the output is summarised.</p>
+determine maximum, minimum, interval or "best fit" linear rate of change
+in oxygen concentration over time. First, a rolling regression of specified
+<code>width</code> is performed on the entire dataset to obtain all possible values.
+The computations are then ranked (or, arranged), based on the "<code>logic</code>"
+argument, and the output is summarised.</p>
     
 
     <pre class="usage"><span class='fu'>auto_rate</span>(<span class='no'>df</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"row"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"linear"</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -160,13 +166,13 @@ used?</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><strong>Units</strong></p>
-<p>There are no units of measurements involved in <code>auto_rate</code>. This is a
-deliberate decision. Units are called in a later function when volume- and/or
-weight-specific rates of oxygen concentration are computed in
+<p>There are no units of measurement involved in <code>auto_rate</code>. This is a
+deliberate decision. Units are called in a later function when volumetric
+and/or mass-specific rates of oxygen use are computed in
 <code><a href='convert_rate.html'>convert_rate()</a></code> and <code><a href='convert_DO.html'>convert_DO()</a></code>.
     <em><strong>Ranking algorithms</strong></em></p>
-<p>For now, <code>auto_rate()</code> contains four ranking algorithms that can be called
-with the argument "<code>method</code>":</p><ul>
+<p>At present, <code>auto_rate()</code> contains four ranking algorithms that can be called
+with the argument <code>method</code>:</p><ul>
 <li><p><code>"linear"</code>: Uses kernel density estimation (KDE) to detect the most
 "linear" sections of the timeseries. This is achieved by using the smoothing
 bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
@@ -179,7 +185,8 @@ regrssions. They are not ranked.</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>11 kernel density peaks detected and ranked.</span></div><div class='img'><img src='auto_rate-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by row using width of 1502 
+    <pre class="examples"><div class='input'><span class='co'># most linear section of the entire data</span>
+<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>11 kernel density peaks detected and ranked.</span></div><div class='img'><img src='auto_rate-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by row using width of 1502 
 #&gt; Rates were computed using 'linear' method.
 #&gt; 11 linear regions detected in the kernel density estimate.
 #&gt; 
@@ -187,7 +194,23 @@ regrssions. They are not ranked.</p></li>
 #&gt; Rate: -0.0006634868 
 #&gt; R.sq: 0.988 
 #&gt; Rows: 3571 to 7233 
-#&gt; Time: 3570 to 7232 </div></pre>
+#&gt; Time: 3570 to 7232 </div><div class='input'><span class='co'># what is the lowest rate over a 10 minute (600s) period?</span>
+<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"min"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='auto_rate-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by time using width of 600 
+#&gt; Rates were computed using 'min' method.
+#&gt; 
+#&gt; === Rank 1 of 6913 ===
+#&gt; Rate: -0.0005403066 
+#&gt; R.sq: 0.5867958 
+#&gt; Rows: 2259 to 2859 
+#&gt; Time: 2258 to 2858 </div><div class='input'><span class='co'># what is the highest rate over a 10 minute (600s) period?</span>
+<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"max"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='auto_rate-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by time using width of 600 
+#&gt; Rates were computed using 'max' method.
+#&gt; 
+#&gt; === Rank 1 of 6913 ===
+#&gt; Rate: -0.001193863 
+#&gt; R.sq: 0.8595803 
+#&gt; Rows: 791 to 1391 
+#&gt; Time: 790 to 1390 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

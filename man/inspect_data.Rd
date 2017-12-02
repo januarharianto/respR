@@ -12,11 +12,13 @@ inspect_data(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
 
 \item{time}{numeric. Defaults to NULL. This is the time data.}
 
-\item{oxygen}{numaric. Defaults to NULL. This is the dissolved oxygen data.}
+\item{oxygen}{numeric. Defaults to NULL. This is the dissolved oxygen data.}
 
-\item{inflow.o2}{numeric. Defaults to NULL. This is the incurrent oxygen data.}
+\item{inflow.o2}{numeric. Defaults to NULL. This is inflow oxygen data.
+Used only for flowthrough respirometry data.}
 
-\item{outflow.o2}{numeric. Defaults to NULL. This is the excurrent oxygen data.}
+\item{outflow.o2}{numeric. Defaults to NULL. This is outflow oxygen data.
+Used only for flowthrough respirometry data.}
 
 \item{highlight}{logical. Defaults to TRUE. Prints location (row #) of errors
 detected by the function.}
@@ -41,8 +43,8 @@ use of functions in \code{respR}. Data checks include:
 }
 
 Once data checks are complete, the function produces a list object which may
-be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}} and
-\code{\link[=pcrit]{pcrit()}} (NC - i don't think this last one works) for further analyses.
+be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
+and \code{\link[=auto_rate]{auto_rate()}} for further analyses.
 }
 \examples{
 inspect_data(sardine.rd)

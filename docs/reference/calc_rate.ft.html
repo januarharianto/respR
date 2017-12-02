@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate flowthrough rate of change in dissolved oxygen — calc_rate.ft • respR</title>
+<title>Calculate rate of change in oxygen in flowthrough respirometry — calc_rate.ft • respR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -71,7 +71,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -101,7 +107,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate flowthrough rate of change in dissolved oxygen</h1>
+    <h1>Calculate rate of change in oxygen in flowthrough respirometry</h1>
     </div>
 
     
@@ -128,20 +134,21 @@ time data.</p></td>
     </tr>
     <tr>
       <th>inflow.o2</th>
-      <td><p>numeric. Defaults to NULL. This selects the incurrent column if
-a data frame ('df') is provided. Otherwise, this is a numeric vector for
-incurrent oxygen concentration.</p></td>
+      <td><p>numeric. Defaults to NULL. This selects the inflow O2 column
+if a data frame ('df') is provided. Otherwise, this is a numeric vector for
+inflow oxygen concentration.</p></td>
     </tr>
     <tr>
       <th>outflow.o2</th>
-      <td><p>numeric. Defaults to NULL. This selects the outcurrent column
+      <td><p>numeric. Defaults to NULL. This selects the outflow O2 column
 if a data frame ('df') is provided.  Otherwise, this is a numeric vector
-for extcurrent oxygen concentration.</p></td>
+for outflow oxygen concentration.</p></td>
     </tr>
     <tr>
       <th>flowrate</th>
       <td><p>numeric vector. The flow rate. No unit of measurement is
-expected; you will specify it when you perform conversions later on.</p></td>
+expected; you will specify it when you perform conversions later on. However,
+it must be in L per unit time (s,m,h), for example L/s.</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -157,10 +164,35 @@ expected; you will specify it when you perform conversions later on.</p></td>
 
     <p>Can return a single value, or multiple and mean values based on continuous
 data.</p>
+<p>There are no units involved in <code>calc_rate.ft</code>. This is a deliberate decision.
+Units are called in a later function when volumetric and/or mass-specific
+rates of oxygen use are computed in <code><a href='convert_rate.html'>convert_rate()</a></code> and <code><a href='convert_DO.html'>convert_DO()</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Single numeric values</span>
+<span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.88</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.17</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='output co'>#&gt; Rate:
+#&gt; [1] -2.769e-05</div><div class='input'><span class='co'># Numeric values and vector</span>
+<span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.88</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.in</span>,
+  <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='img'><img src='calc_rate.ft-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
+#&gt; [1] -1.196231e-08  1.833994e-07  7.964244e-07  1.182957e-08  2.262682e-07
+#&gt; [6]  4.350694e-07
+#&gt; 
+#&gt; Mean:
+#&gt; [1] 1.74903e-08</div><div class='input'><span class='co'># Vectors</span>
+<span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.in</span>,
+  <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.out</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='img'><img src='calc_rate.ft-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
+#&gt; [1] -2.768858e-05 -2.784439e-05 -2.852644e-05 -2.767369e-05 -2.776415e-05
+#&gt; [6] -2.823009e-05
+#&gt; 
+#&gt; Mean:
+#&gt; [1] -2.752597e-05</div><div class='input'><span class='co'># A data frame</span>
+<span class='fu'>calc_rate.ft</span>(<span class='no'>flowthrough.rd</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.00039</span>)</div><div class='output co'>#&gt; <span class='message'>'data.frame' object detected. Values in 'time', inflow.o2' and 'outflow.o2' are used as column indices to extract data from the data frame.</span></div><div class='img'><img src='calc_rate.ft-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
+#&gt; [1] -0.0002768858 -0.0002784439 -0.0002852644 -0.0002767369 -0.0002776415
+#&gt; [6] -0.0002823009
+#&gt; 
+#&gt; Mean:
+#&gt; [1] -0.0002752597</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

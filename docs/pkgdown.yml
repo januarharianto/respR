@@ -2,7 +2,9 @@ urls:
   reference: http://januarharianto.github.io/respR/reference
   article: http://januarharianto.github.io/respR/articles
 articles:
+  flowthrough: flowthrough.html
   intermittent: intermittent.html
+  pcrit: pcrit.html
   respR: respR.html
   twopoint: twopoint.html
 

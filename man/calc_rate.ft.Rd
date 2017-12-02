@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_rate.ft.R
 \name{calc_rate.ft}
 \alias{calc_rate.ft}
-\title{Calculate flowthrough rate of change in dissolved oxygen}
+\title{Calculate rate of change in oxygen in flowthrough respirometry}
 \usage{
 calc_rate.ft(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
   flowrate = NULL, plot = TRUE)
@@ -15,16 +15,17 @@ process a data frame if it is provided here.}
 a data frame ('df') is provided. Otherwise, this is a numeric vector for
 time data.}
 
-\item{inflow.o2}{numeric. Defaults to NULL. This selects the incurrent column if
-a data frame ('df') is provided. Otherwise, this is a numeric vector for
-incurrent oxygen concentration.}
+\item{inflow.o2}{numeric. Defaults to NULL. This selects the inflow O2 column
+if a data frame ('df') is provided. Otherwise, this is a numeric vector for
+inflow oxygen concentration.}
 
-\item{outflow.o2}{numeric. Defaults to NULL. This selects the outcurrent column
+\item{outflow.o2}{numeric. Defaults to NULL. This selects the outflow O2 column
 if a data frame ('df') is provided.  Otherwise, this is a numeric vector
-for extcurrent oxygen concentration.}
+for outflow oxygen concentration.}
 
 \item{flowrate}{numeric vector. The flow rate. No unit of measurement is
-expected; you will specify it when you perform conversions later on.}
+expected; you will specify it when you perform conversions later on. However,
+it must be in L per unit time (s,m,h), for example L/s.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
@@ -38,7 +39,20 @@ and both inflow.o2 and outflow.o2 oxygen concentrations.
 \details{
 Can return a single value, or multiple and mean values based on continuous
 data.
+
+There are no units involved in \code{calc_rate.ft}. This is a deliberate decision.
+Units are called in a later function when volumetric and/or mass-specific
+rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
-NULL
+# Single numeric values
+calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
+# Numeric values and vector
+calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in, 
+  flowrate = 0.000039)
+# Vectors
+calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in, 
+  outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
+# A data frame
+calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
 }

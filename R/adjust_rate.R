@@ -1,8 +1,8 @@
 #' Simple rate adjustment function (background or oxygen flux)
 #'
 #' A simple rate correction function. Please note that the **sign** of the
-#' number must be considered in the correction. Respiration is normally a
-#' negative number, while oxygen flux may or may not be negative.
+#' number must be considered in the correction. Background respiration is 
+#' normally a negative number, while oxygen flux may or may not be negative.
 #'
 #' To account for background respiration and/or oxygen flux in open respirometry
 #' experiments, we have provided a simple function to perform either, or both,
@@ -21,7 +21,10 @@
 #' @examples
 #' # Note that respiration is negative by default (since it represents a
 #' # decrease in dissolved oxygen), so both values are negative!
-#' adjust_rate(7.44, -0.04) # this is simply (-7.44) - (-0.04) = 7.40
+#' # Background respiration correction 
+#' adjust_rate(-7.44, -0.04) # this is (-7.44) - (-0.04) = -7.40
+#' # Oxygen flux correction
+#' adjust_rate(-7.44, 0.1) # this is (-7.44) - (0.1) = -7.54
 
 adjust_rate <- function(x, by) {
 

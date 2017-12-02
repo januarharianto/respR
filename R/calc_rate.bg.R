@@ -4,18 +4,20 @@
 #' rate of change of oxygen over time for background corrections of the main
 #' data. Can be used on multiple datasets of background measures, as long as the
 #' time data are identical between measurements. In addition, the data must be
-#' in the same units as the data to be corrected.
+#' in the same time and oxygen units as the data to be corrected. Data can be 
+#' subset using the `from`, `to`, and `by` arguments. If multiple datasets are 
+#' included, all are subset by the same criteria. 
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
-#' decision. Units are called in a later function when volume- and/or
-#' weight-specific rates of oxygen concentration are computed in
+#' decision. Units are called in a later function when volumetric and/or
+#' mass-specific rates of oxygen use are computed in
 #' [convert_rate()] and [convert_DO()].
 #'
 #' @param x data frame. This is the data to process.
 #' @param xcol numeric. Defaults to `1`. This is the time column.
 #' @param ycol numeric vector. Defaults to `2`. Can have length > 1. This is the
 #'   O2 data.
-#' @param from numeric. Defaults to NULL. Defines the upper bound(s) of the data
+#' @param from numeric. Defaults to NULL. Defines the lower bound(s) of the data
 #'   frame to subset. Subsetting is based on the argument: `by`.
 #' @param to numeric. Defaults to NULL. Defines the upper bound(s) of the data
 #'   frame to subset. Subsetting is based on the argument: `by`.

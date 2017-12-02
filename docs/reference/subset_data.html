@@ -71,7 +71,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
+    </li>
+    <li>
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
+    </li>
+    <li>
+      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -105,8 +111,12 @@
     </div>
 
     
-    <p>This is an internal function. This function extracts a subset data frame
-based on a given set of rules.</p>
+    <p>This function extracts a subset data frame based on a given set of rules. Can
+subset data based on ranges of: time, oxygen, row number, or proportion. To
+subset by 'time' and by 'o2', the function assumes time is in the first
+column, and oxygen in the second column. To subset by 'proportion', the
+function calculates proportion data from the oxygen column. <strong>This function
+can subset any data frame by 'row'.</strong></p>
     
 
     <pre class="usage"><span class='fu'>subset_data</span>(<span class='no'>x</span>, <span class='no'>from</span>, <span class='no'>to</span>, <span class='no'>by</span>)</pre>
@@ -120,12 +130,12 @@ based on a given set of rules.</p>
     </tr>
     <tr>
       <th>from</th>
-      <td><p>numeric. Defines the upper bound(s) of the data frame to subset.
+      <td><p>numeric. Defines the lower bound(s) of the data frame to subset.
 Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
       <th>to</th>
-      <td><p>numeric. Defines the lower bound(s) of the data frame to subset.
+      <td><p>numeric. Defines the upper bound(s) of the data frame to subset.
 Subsetting is based on the argument: <code>by</code>.</p></td>
     </tr>
     <tr>
@@ -139,6 +149,60 @@ Subsetting is based on the argument: <code>by</code>.</p></td>
     <p>A <code>data.table</code> object.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Subset by time:</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>subset_data</span>(<span class='no'>squid.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>4000</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)
+<span class='fu'>plot</span>(<span class='no'>x</span>)</div><div class='img'><img src='subset_data-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>subset_data</span>(<span class='no'>flowthrough.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='output co'>#&gt;      time   o2.out    o2.in  o2.delta
+#&gt;   1:   50 8.175106 8.891686 0.7165791
+#&gt;   2:   51 8.185150 8.875577 0.6904272
+#&gt;   3:   52 8.169389 8.866245 0.6968564
+#&gt;   4:   53 8.171207 8.867015 0.6958078
+#&gt;   5:   54 8.185559 8.869824 0.6842647
+#&gt;  ---                                 
+#&gt; 547:  596 8.163015 8.883244 0.7202298
+#&gt; 548:  597 8.161863 8.863015 0.7011523
+#&gt; 549:  598 8.162757 8.879525 0.7167682
+#&gt; 550:  599 8.176023 8.875059 0.6990357
+#&gt; 551:  600 8.166706 8.874728 0.7080218</div><div class='input'>
+<span class='co'># Subset by O_2:</span>
+<span class='fu'>subset_data</span>(<span class='no'>sardine.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>94</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>91</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"o2"</span>)</div><div class='output co'>#&gt;       Time Oxygen
+#&gt;    1: 1458   94.0
+#&gt;    2: 1459   94.2
+#&gt;    3: 1460   94.3
+#&gt;    4: 1461   94.2
+#&gt;    5: 1462   94.2
+#&gt;   ---            
+#&gt; 4150: 5607   91.3
+#&gt; 4151: 5608   91.2
+#&gt; 4152: 5609   91.3
+#&gt; 4153: 5610   91.3
+#&gt; 4154: 5611   91.0</div><div class='input'>
+<span class='co'># Subset by proportion:</span>
+<span class='fu'>subset_data</span>(<span class='no'>sardine.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>0.4</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"proportion"</span>)</div><div class='output co'>#&gt;       Time Oxygen
+#&gt;    1:  993   94.5
+#&gt;    2:  994   94.7
+#&gt;    3:  995   94.9
+#&gt;    4:  996   94.7
+#&gt;    5:  997   94.7
+#&gt;   ---            
+#&gt; 3069: 4061   92.2
+#&gt; 3070: 4062   92.2
+#&gt; 3071: 4063   92.3
+#&gt; 3072: 4064   92.2
+#&gt; 3073: 4065   92.1</div><div class='input'>
+<span class='co'># Subset by row:</span>
+<span class='fu'>subset_data</span>(<span class='no'>flowthrough.rd</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>750</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"row"</span>)</div><div class='output co'>#&gt;      time   o2.out    o2.in  o2.delta
+#&gt;   1:    9 8.179554 8.876309 0.6967551
+#&gt;   2:   10 8.173299 8.890710 0.7174111
+#&gt;   3:   11 8.175234 8.874112 0.6988774
+#&gt;   4:   12 8.174258 8.899150 0.7248912
+#&gt;   5:   13 8.179218 8.874918 0.6956997
+#&gt;  ---                                 
+#&gt; 737:  745 8.183364 8.877864 0.6945004
+#&gt; 738:  746 8.187118 8.885425 0.6983078
+#&gt; 739:  747 8.189569 8.879658 0.6900891
+#&gt; 740:  748 8.180551 8.861813 0.6812617
+#&gt; 741:  749 8.195288 8.892014 0.6967263</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -146,7 +210,9 @@ Subsetting is based on the argument: <code>by</code>.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

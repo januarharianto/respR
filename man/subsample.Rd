@@ -21,7 +21,7 @@ A data frame object.
 }
 \description{
 A simple function that selects every "\code{n}" rows in a data frame to create a
-new data frame object. Effectifely "thins" large datasets.
+new data frame object. Effectively "thins" large datasets.
 }
 \examples{
 # Subsample every 10 rows:
