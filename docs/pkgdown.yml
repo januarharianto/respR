@@ -4,6 +4,7 @@ urls:
 articles:
   flowthrough: flowthrough.html
   intermittent: intermittent.html
+  pcrit: pcrit.html
   respR: respR.html
   twopoint: twopoint.html
 
