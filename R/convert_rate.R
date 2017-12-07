@@ -2,8 +2,8 @@
 #'
 #' This is a conversion function. It can convert a dimensionless unit of rate,
 #' derived from `calc_rate`, `calc_rate.ft`, `auto_rate`, or `adjust_rate` into
-#' volume-adjusted (i.e. to the container), VO_2 or mass-specific (i.e. to the
-#' specimen mass), MO_2 rate.
+#' volume-adjusted (i.e. to the container), VO2 or mass-specific (i.e. to the
+#' specimen mass), MO2 rate.
 #'
 #' The function uses an internal database and a fuzzy string matching algorithm
 #' to accept various unit formatting styles.

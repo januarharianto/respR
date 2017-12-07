@@ -100,7 +100,7 @@
 #'
 #' - Dissolved oxygen units: mg/L
 #' - Time units: seconds
-#' - Flow rate (L/s): 0.000039
+#' - Flow rate (L/min): 0.00234
 #' - Inflow oxygen concentration (mean, mg/L): 8.88
 #' - Specimen ash-free dry mass (kg): 0.000070
 #'

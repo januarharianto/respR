@@ -10,8 +10,8 @@
 #' complex correction methods (e.g. non-linear) in the future.
 #'
 #' @md
-#' @param x data frame, or any object of class `calc_rate` or `auto_rate`. This
-#'   object contains the rate value that needs to be adjusted.
+#' @param x numeric. A single value, or any object of class `calc_rate` or `auto_rate`. 
+#'   This object contains the rate value that needs to be adjusted.
 #' @param by either a numeric, or an object of class `calc_rate.bg`. This is the
 #'   value that is used to perform the correction/adjustment.
 #'
