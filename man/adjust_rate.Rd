@@ -7,8 +7,8 @@
 adjust_rate(x, by)
 }
 \arguments{
-\item{x}{data frame, or any object of class \code{calc_rate} or \code{auto_rate}. This
-object contains the rate value that needs to be adjusted.}
+\item{x}{numeric. A single value, or any object of class \code{calc_rate} or \code{auto_rate}.
+This object contains the rate value that needs to be adjusted.}
 
 \item{by}{either a numeric, or an object of class \code{calc_rate.bg}. This is the
 value that is used to perform the correction/adjustment.}

@@ -62,7 +62,7 @@ We first use `inspect_data()` on the data frame to scan for:
 - duplicates in time data
 - evenly-spaced time data
 
-By default, the function assumes the first column (`xcol`) is time data, while the second column (`ycol`) is $O_2$ data. In the case of `urchins.rd` where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the `xcol` and `ycol` arguments to modify that behaviour to select particular columns.
+By default, the function assumes the first column (`time`) is time data, while the second column (`oxygen`) is $O_2$ data. In the case of `urchins.rd` where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the `time` and `oxygen` arguments to modify that behaviour to select particular columns.
 
 ```{r}
 urchin <- inspect_data(urchins.rd, time =  1, oxygen = 15)
@@ -70,7 +70,7 @@ urchin <- inspect_data(urchins.rd, time =  1, oxygen = 15)
 
 From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.
 
-The function also warns us that time data is not evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in `respR` use actual time datapoints for analyses and calculations, and so even irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
+The function also warns us that time data is not numerically evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in `respR` use actual time datapoints for analyses and calculations, and so even irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
 
 **It should be noted that using `inspect_data` is optional** - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running `inspect_data` is a qualitative, exploratory step that highlights potential issues about the data before analysis.
 
@@ -98,7 +98,7 @@ calc_rate(urchin) # same as: calc_rate(urchin$df)
 
 Note how the function can recognise and extract data from the output object of `inspect_data()`. Alternatively, you can specify a `data.frame` object containing raw Time ~ O~2~ data. 
 
-In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around suchs errors by subsetting the regions that are not erroneous and still obtain valid results.
+In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around such errors by subsetting the regions that are not erroneous and still obtain valid results.
 
 Based on the `from` and `to` arguments, a user may use `calc_rate()` to subset data in any of 4 ways:
 
@@ -107,7 +107,7 @@ Based on the `from` and `to` arguments, a user may use `calc_rate()` to subset d
 3. **Proportion based on total oxygen consumed** (`by = "proportion"`) - *"What is the rate from halfway down the data?"*
 4. **Precise subsetting by row** (`by = "row"`). - *"I'd like to determine rate between rows 11 and 273."*
 
-We do not need to be overly precise; if input values of O~2~ and time that do not match exactly to a value in the data, the function will identify the closest matching values, rounded down, and use these for subsequent calculations.
+We do not need to be overly precise; if input values of O~2~ and time do not match exactly to a value in the data, the function will identify the closest matching values, rounded down, and use these for subsequent calculations.
 
 Here we'll select a 25 minute period before the interference occurred:
 ```{r}
@@ -117,8 +117,11 @@ rate # print(rate)
 
 Calling `summary()` will produce a `data.frame` object that can be saved directly into a file.
 ```{r}
-# uncomment to run and save file
+# uncomment to run and save as file
+
 # write.csv(summary(rate), file = "results.csv")
+
+
 summary(rate)
 ```
 

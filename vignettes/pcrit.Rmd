@@ -1,5 +1,5 @@
 ---
-title: "Determining Critical Oxygen Tension, Pcrit"
+title: "Determining Pcrit"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -19,7 +19,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ### Introduction
 
-$P_{crit}$ is the $O_2$ concentration above which oxygen uptake rate is independent of the concentration. In some species - oxyconformers - routine uptake is proportional to oxygen concentration, and so at 50\% $O_2$, the uptake rate will be half that at 100\% $O_2$. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although there is a continuum of responses between these extremes and intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of $O_2$, or simply $P_{crit}$. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to $O_2$. 
+$P_{crit}$ is the $O_2$ concentration above which oxygen uptake rate is independent of the concentration. In some species - oxyconformers - routine uptake is proportional to oxygen concentration, and so at 50\% $O_2$, the uptake rate will be half that at 100\% $O_2$. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although there is a continuum of responses between these extremes, with intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of $O_2$, or simply $P_{crit}$. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to $O_2$. 
 
 ### Example data
 
@@ -34,13 +34,13 @@ head(squid.rd)
 This dataset is extremely large; over 34000 rows representing 9.5h of data. The functions in `respR` are highly optimised and efficient, but users on older machines may want to use the `subsample` function to thin the dataset before running the following code. 
 
 ### Inspecting data
-We can inspect the dataset using the `inspect_data` function. 
+We can examine the dataset using the `inspect_data` function. 
 
 ```{r}
 market.squid <- inspect_data(squid.rd)
 ```
 
-We can see from the bottom plot the uptake rate stays relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what $O_2$ concentration this represents. For now, we can see the dataset is sound so we can pass the saved `market.squid` object to the dedicated $P_{crit}$ function. 
+We can see from the bottom plot the uptake rate is relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what $O_2$ concentration this represents. For now, we can see the dataset is sound so we can pass the saved `market.squid` object to the dedicated $P_{crit}$ function. 
 
 ### $P_{crit}$ function
 
@@ -68,7 +68,12 @@ print(market.squid.pcrit)
 
 The output figure shows both methods and their metrics plotted against the original data and on a rate~$O_2$ plot. The `print` summary shows that, in this case, both methods give very similar values for the $P_{crit}$: 2.61 and 2.62 mg/L. We should note that for some data, depending on various characteristics, such as noisyness, abruptness of the break, etc. the two methods may provide results that differ. The plots will allow the user to judge which method works better at identifying the 'true' $P_{crit}$ value. We should also note the `width` operator, which controls the width of the rolling regressions used to calculate the rolling rate values, will also affect estimations of the $P_{crit}$. The default value of 0.1 of the total length of data in our testing seems to provide good results, but in some data changing this may give better results. 
 
+Also important to note is that the segmented (Muggeo) method sometimes gives a different result when the exact same code is run. See the documentation for the `segmented` package and publications by Muggeo for the details of why this is, but briefly, it comes from a randomisation of the starting point for the initial analysis. The differences introduced by this are usually minor. 
+
 This example used raw Time~$O_2$ data, and so the function calculated a rolling rate internally. However, the user can input already calculated rate~$O_2$ data using the argument `has.rate = TRUE`, and the function will determine Pcrit using these data directly. These data can be either whole specimen rates ("$VO_2$"), or mass-specific rates ("$MO_2$"); both give identical results. 
+
+The `pcrit` function also includes a default `parallel = TRUE` argument. This instructs the function to use paralell processing to speed up the analysis, if your system supports it. In the case of any o
+errors or problems using the function, changing this to `FALSE` is a good first step in diagnosing the problem.
 
 ### Adjustments
 The `pcrit` function does not support adjusting rates for background effects. Background $O_2$ uptake should not affect $P_{crit}$ as it is typically assumed to be uniform over the course of an experiment. Users should be aware that rates extracted from objects of class `pcrit` will not have been background-corrected.
@@ -89,6 +94,8 @@ We can also export the results into a .csv file using the `summary()` function:
 
 ```{r}
 summary(market.squid.pcrit)
-# Not run
+
+# Uncomment to run
+
 # write.csv(summary(market.squid.pcrit), "results.csv")
 ```
