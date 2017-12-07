@@ -1,5 +1,5 @@
 # Version 0.0.3
-- FIX: More updates to documentation. This mike take a while...
+- FIX: More updates to documentation.
 - FIX: Workaround to show `pcrit()` example on website.
 
 # Version 0.0.2
