@@ -50,8 +50,9 @@ processing.
 }
 \examples{
 # Intensive, and a large dataset, so may take some time.
+\dontrun{
 pcrit(squid.rd)
-
+}
 }
 \references{
 Yeager DP, Ultsch GR (1989) Physiological regulation and

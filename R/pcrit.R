@@ -49,8 +49,9 @@
 #'
 #' @examples
 #' # Intensive, and a large dataset, so may take some time.
+#' \dontrun{
 #' pcrit(squid.rd)
-#'
+#' }
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
 
