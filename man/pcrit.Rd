@@ -49,8 +49,8 @@ Alternatively, existing rate~DO data may be used, with the argument \code{has.ra
 processing.
 }
 \examples{
-# Uncomment to run. Intensive, so may take some time.
-# pcrit(squid.rd)
+# Intensive, and a large dataset, so may take some time.
+pcrit(squid.rd)
 
 }
 \references{

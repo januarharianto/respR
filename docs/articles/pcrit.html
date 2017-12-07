@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Determining Critical Oxygen Tension, Pcrit • respR</title>
+<title>Determining Pcrit • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -54,7 +54,7 @@
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
+      <a href="../articles/pcrit.html">Determining Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -84,7 +84,7 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>Determining Critical Oxygen Tension, Pcrit</h1>
+      <h1>Determining Pcrit</h1>
             
           </div>
 
@@ -94,7 +94,7 @@
 <div id="introduction" class="section level3">
 <h3 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h3>
-<p><span class="math inline">\(P_{crit}\)</span> is the <span class="math inline">\(O_2\)</span> concentration above which oxygen uptake rate is independent of the concentration. In some species - oxyconformers - routine uptake is proportional to oxygen concentration, and so at 50% <span class="math inline">\(O_2\)</span>, the uptake rate will be half that at 100% <span class="math inline">\(O_2\)</span>. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although there is a continuum of responses between these extremes and intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of <span class="math inline">\(O_2\)</span>, or simply <span class="math inline">\(P_{crit}\)</span>. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to <span class="math inline">\(O_2\)</span>.</p>
+<p><span class="math inline">\(P_{crit}\)</span> is the <span class="math inline">\(O_2\)</span> concentration above which oxygen uptake rate is independent of the concentration. In some species - oxyconformers - routine uptake is proportional to oxygen concentration, and so at 50% <span class="math inline">\(O_2\)</span>, the uptake rate will be half that at 100% <span class="math inline">\(O_2\)</span>. Many species however - oxyregulators - are able to regulate uptake, and maintain routine rates as oxygen decreases (although there is a continuum of responses between these extremes, with intermediate cases). The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of <span class="math inline">\(O_2\)</span>, or simply <span class="math inline">\(P_{crit}\)</span>. It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and identifying the breakpoint in the relationship of uptake rate to <span class="math inline">\(O_2\)</span>.</p>
 </div>
 <div id="example-data" class="section level3">
 <h3 class="hasAnchor">
@@ -115,7 +115,7 @@
 <div id="inspecting-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#inspecting-data" class="anchor"></a>Inspecting data</h3>
-<p>We can inspect the dataset using the <code>inspect_data</code> function.</p>
+<p>We can examine the dataset using the <code>inspect_data</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">market.squid &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(squid.rd)
 <span class="co">#&gt; o2 :  num [1:34120] 7.73 7.73 7.73 7.73 7.73 ...</span>
 <span class="co">#&gt; Time :  int [1:34120] 0 1 2 3 4 5 6 7 8 9 ...</span>
@@ -128,7 +128,7 @@
 <span class="co">#&gt; Evenly-spaced Time  PASS</span>
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
 <p><img src="pcrit_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<p>We can see from the bottom plot the uptake rate stays relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what <span class="math inline">\(O_2\)</span> concentration this represents. For now, we can see the dataset is sound so we can pass the saved <code>market.squid</code> object to the dedicated <span class="math inline">\(P_{crit}\)</span> function.</p>
+<p>We can see from the bottom plot the uptake rate is relatively consistent to around the 10,000th row (this will differ in thinned data), after which it declines steadily, but we do not know from this plot what <span class="math inline">\(O_2\)</span> concentration this represents. For now, we can see the dataset is sound so we can pass the saved <code>market.squid</code> object to the dedicated <span class="math inline">\(P_{crit}\)</span> function.</p>
 </div>
 <div id="p_crit-function" class="section level3">
 <h3 class="hasAnchor">
@@ -150,7 +150,9 @@
 #&gt; Std. Err.   0.00998917
 #&gt; Breakpoint  2.62006</code></pre>
 <p>The output figure shows both methods and their metrics plotted against the original data and on a rate~<span class="math inline">\(O_2\)</span> plot. The <code>print</code> summary shows that, in this case, both methods give very similar values for the <span class="math inline">\(P_{crit}\)</span>: 2.61 and 2.62 mg/L. We should note that for some data, depending on various characteristics, such as noisyness, abruptness of the break, etc. the two methods may provide results that differ. The plots will allow the user to judge which method works better at identifying the ‘true’ <span class="math inline">\(P_{crit}\)</span> value. We should also note the <code>width</code> operator, which controls the width of the rolling regressions used to calculate the rolling rate values, will also affect estimations of the <span class="math inline">\(P_{crit}\)</span>. The default value of 0.1 of the total length of data in our testing seems to provide good results, but in some data changing this may give better results.</p>
+<p>Also important to note is that the segmented (Muggeo) method sometimes gives a different result when the exact same code is run. See the documentation for the <code>segmented</code> package and publications by Muggeo for the details of why this is, but briefly, it comes from a randomisation of the starting point for the initial analysis. The differences introduced by this are usually minor.</p>
 <p>This example used raw Time~<span class="math inline">\(O_2\)</span> data, and so the function calculated a rolling rate internally. However, the user can input already calculated rate~<span class="math inline">\(O_2\)</span> data using the argument <code>has.rate = TRUE</code>, and the function will determine Pcrit using these data directly. These data can be either whole specimen rates (“<span class="math inline">\(VO_2\)</span>”), or mass-specific rates (“<span class="math inline">\(MO_2\)</span>”); both give identical results.</p>
+<p>The <code>pcrit</code> function also includes a default <code>parallel = TRUE</code> argument. This instructs the function to use paralell processing to speed up the analysis, if your system supports it. In the case of any o errors or problems using the function, changing this to <code>FALSE</code> is a good first step in diagnosing the problem.</p>
 </div>
 <div id="adjustments" class="section level3">
 <h3 class="hasAnchor">
@@ -173,7 +175,10 @@ market.squid.pcrit<span class="op">$</span>result.segmented
 <span class="co">#&gt; Top Result for all Methods:</span>
 <span class="co">#&gt;    splitpoint       sumRSS pcrit.intercept pcrit.mpoint pcrit.segmented</span>
 <span class="co">#&gt; 1:    2.60432 1.268899e-07        2.609219      2.60805        2.620064</span>
-<span class="co"># Not run write.csv(summary(market.squid.pcrit), 'results.csv')</span></code></pre></div>
+
+<span class="co"># Uncomment to run</span>
+
+<span class="co"># write.csv(summary(market.squid.pcrit), 'results.csv')</span></code></pre></div>
 </div>
 </div>
   </div>

@@ -41,8 +41,8 @@ A list object.
 \description{
 This is a conversion function. It can convert a dimensionless unit of rate,
 derived from \code{calc_rate}, \code{calc_rate.ft}, \code{auto_rate}, or \code{adjust_rate} into
-volume-adjusted (i.e. to the container), VO_2 or mass-specific (i.e. to the
-specimen mass), MO_2 rate.
+volume-adjusted (i.e. to the container), VO2 or mass-specific (i.e. to the
+specimen mass), MO2 rate.
 }
 \details{
 The function uses an internal database and a fuzzy string matching algorithm

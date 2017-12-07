@@ -77,7 +77,7 @@
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
+      <a href="../articles/pcrit.html">Determining Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -180,8 +180,15 @@ broken-line relationships. R News 8:20–25.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># Uncomment to run. Intensive, so may take some time.
-# pcrit(squid.rd)
+    <pre class="examples"><div class='input'><span class='co'># Intensive, and a large dataset, so may take some time.</span>
+<span class='fu'>pcrit</span>(<span class='no'>squid.rd</span>)</div><div class='output co'>#&gt; <span class='message'>Performing broken-stick analysis...</span></div><div class='output co'>#&gt; <span class='message'>Performing segmented (breakpoint) analysis...</span></div><div class='output co'>#&gt; <span class='message'>Convergence attained in 2 iterations.</span></div><div class='img'><img src='pcrit-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; --Broken stick (Yeager &amp; Ultsch 1989)--
+#&gt; Sum RSS     1.2689e-07
+#&gt; Intercept   2.60922
+#&gt; Midpoint    2.60805
+#&gt; 
+#&gt; --Segmented (Muggeo 2003)--
+#&gt; Std. Err.   0.00998917
+#&gt; Breakpoint  2.62006</div><div class='input'>
 
 </div></pre>
   </div>

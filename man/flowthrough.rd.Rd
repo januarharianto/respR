@@ -19,7 +19,7 @@ Conducted at University of British Columbia, Vancouver, BC, Canada.
 \itemize{
 \item Dissolved oxygen units: mg/L
 \item Time units: seconds
-\item Flow rate (L/s): 0.000039
+\item Flow rate (L/min): 0.00234
 \item Inflow oxygen concentration (mean, mg/L): 8.88
 \item Specimen ash-free dry mass (kg): 0.000070
 }

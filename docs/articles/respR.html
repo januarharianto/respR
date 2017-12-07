@@ -54,7 +54,7 @@
       <a href="../articles/intermittent.html">Analysis of intermittent-flow data</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Determining Critical Oxygen Tension, Pcrit</a>
+      <a href="../articles/pcrit.html">Determining Pcrit</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -148,7 +148,7 @@
 <li>duplicates in time data</li>
 <li>evenly-spaced time data</li>
 </ul>
-<p>By default, the function assumes the first column (<code>xcol</code>) is time data, while the second column (<code>ycol</code>) is <span class="math inline">\(O_2\)</span> data. In the case of <code>urchins.rd</code> where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the <code>xcol</code> and <code>ycol</code> arguments to modify that behaviour to select particular columns.</p>
+<p>By default, the function assumes the first column (<code>time</code>) is time data, while the second column (<code>oxygen</code>) is <span class="math inline">\(O_2\)</span> data. In the case of <code>urchins.rd</code> where a multi-column dataset is provided, the function also defaults to the processing of just the first 2 columns. You can use the <code>time</code> and <code>oxygen</code> arguments to modify that behaviour to select particular columns.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(urchins.rd, <span class="dt">time =</span> <span class="dv">1</span>, <span class="dt">oxygen =</span> <span class="dv">15</span>)
 <span class="co">#&gt; a :  num [1:271] 7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...</span>
 <span class="co">#&gt; b :  num [1:271] 7.86 7.79 7.7 7.68 7.64 7.69 7.69 7.66 7.65 7.64 ...</span>
@@ -183,7 +183,7 @@
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <p>From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.</p>
-<p>The function also warns us that time data is not evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in <code>respR</code> use actual time datapoints for analyses and calculations, and so even irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, <code>urchin</code> which contains the original data columns we selected coerced into a data frame, and various other metadata.</p>
+<p>The function also warns us that time data is not numerically evenly-spaced, however this does not mean the data cannot be processed. Rather than make assumptions about datapoints being evenly spaced with regard to time, all functions in <code>respR</code> use actual time datapoints for analyses and calculations, and so even irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, <code>urchin</code> which contains the original data columns we selected coerced into a data frame, and various other metadata.</p>
 <p><strong>It should be noted that using <code>inspect_data</code> is optional</strong> - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running <code>inspect_data</code> is a qualitative, exploratory step that highlights potential issues about the data before analysis.</p>
 </div>
 <div id="step-2-process-background-respiration" class="section level2">
@@ -209,7 +209,7 @@
 <pre><code>#&gt; Rate(s):
 #&gt; [1] -0.01749242</code></pre>
 <p>Note how the function can recognise and extract data from the output object of <code><a href="../reference/inspect_data.html">inspect_data()</a></code>. Alternatively, you can specify a <code>data.frame</code> object containing raw Time ~ O<sub>2</sub> data.</p>
-<p>In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O<sub>2</sub> concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around suchs errors by subsetting the regions that are not erroneous and still obtain valid results.</p>
+<p>In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O<sub>2</sub> concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around such errors by subsetting the regions that are not erroneous and still obtain valid results.</p>
 <p>Based on the <code>from</code> and <code>to</code> arguments, a user may use <code><a href="../reference/calc_rate.html">calc_rate()</a></code> to subset data in any of 4 ways:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -225,7 +225,7 @@
 <strong>Precise subsetting by row</strong> (<code>by = "row"</code>). - <em>“I’d like to determine rate between rows 11 and 273.”</em>
 </li>
 </ol>
-<p>We do not need to be overly precise; if input values of O<sub>2</sub> and time that do not match exactly to a value in the data, the function will identify the closest matching values, rounded down, and use these for subsequent calculations.</p>
+<p>We do not need to be overly precise; if input values of O<sub>2</sub> and time do not match exactly to a value in the data, the function will identify the closest matching values, rounded down, and use these for subsequent calculations.</p>
 <p>Here we’ll select a 25 minute period before the interference occurred:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin, <span class="dt">from =</span> <span class="dv">4</span>, <span class="dt">to =</span> <span class="dv">29</span>, <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
@@ -233,8 +233,11 @@
 <span class="co">#&gt; Rate(s):</span>
 <span class="co">#&gt; [1] -0.02177588</span></code></pre></div>
 <p>Calling <code>summary()</code> will produce a <code>data.frame</code> object that can be saved directly into a file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># uncomment to run and save file write.csv(summary(rate), file =</span>
-<span class="co"># 'results.csv')</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># uncomment to run and save as file</span>
+
+<span class="co"># write.csv(summary(rate), file = 'results.csv')</span>
+
+
 <span class="kw">summary</span>(rate)
 <span class="co">#&gt; Summary:</span>
 <span class="co">#&gt;    intercept_b0     rate_b1   rsq row endrow time endtime  oxy endoxy</span>
