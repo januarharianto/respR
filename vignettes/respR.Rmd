@@ -45,7 +45,7 @@ As well as through invoking the `?` command in R, documentation for the function
 
 # A typical respR workflow: Closed respirometry
 
-`respR` was designed to work best with data frame objects, including objects of class `data.frame`, `data.table` and `tibble`, containing numeric time and oxygen data. At this time, `respR` does not support parsing date-time data (e.g. class `POSIX.ct`) to numeric, and this should be done prior to use with the package (see packages such as  `lubridate`).
+`respR` was designed to work best with data frame objects, including objects of class `data.frame`, `data.table` and `tibble`, containing numeric time and oxygen data. The function `format_time` (see **Reference** section above) will help you prepare your time data if it is not in numeric form. It can automatically convert many date-time formats data to numeric time.
 
 Here we describe a typical workflow for a **closed respirometry** experiment. The example data used here is `urchins.rd`, where the first column of the data frame is time data, while the remaining 18 columns are dissolved $O_2$ data. Columns `b1` and `b2` contain background respiration. The units are minutes and mg/L of $O_2$, however all analyses in `respR` are unitless, and we only consider units when we later come to convert rates.
 
