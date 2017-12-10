@@ -1,14 +1,19 @@
 #' @title Parse date-time data to numeric
 #'
 #' @description
-#' \code{format_time} is a function to parse class POSIX.ct or text strings of date-time data to numeric time
-#' for use in `respR` functions. 
+#' \code{format_time} is a function to parse class POSIX.ct or text strings of date-time data 
+#' to numeric time for use in `respR` functions. 
 #'
 #' @details
 #' 
 #' ***Date-Time data inputs***
 #' 
-#' Input can be a vector, or data frame. If data frame, assumes date-times are in column 1. 
+#' Input can be a vector, or data frame. If a data frame, assumes date-time is in column 1. 
+#' Ideal structure for further processing in `respR` is a 2 column data frame of Time and O2, 
+#' however any multiple column data frame can be used as long as the date-time to be parsed 
+#' is in column 1. The output data frame will be identical, except the original date-time 
+#' column will be replaced by the new numeric time data, and named `Time`. 
+#' 
 #' Date-time data can be unspaced or separated by any combination of spaces, forward slashes, 
 #' hyphens, dots, commas, colons, semicolons, or underscores.  \cr
 #' E.g. all these are parsed as the same date-time:  \cr
@@ -23,7 +28,7 @@
 #' - AM/PM take precedence over 24H formatting for 01-12h \cr
 #' E.g. "1:10:23 PM" and "01:10:23 PM" are both same as "13:10:23"
 #' 
-#' - However 24H formatting for 13-24h takes precedence over AM/PM \cr
+#' - However, 24H formatting for 13-24h takes precedence over AM/PM \cr
 #' E.g. "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #' 
 #' Regardless of input, all data are parsed to numeric time data in seconds duration from 
@@ -67,14 +72,42 @@
 #' @param event_times String or class POSIX.ct date/time data matching the events in 
 #'  `event_names`. Must be same format as in `...`
 #'
-#' @return A vector or data frame, depending on input.
+#' @return A vector or data frame, depending on input. If a data frame, the output data 
+#'  frame is identical, except the original date-time data in column 1 will be replaced
+#'  by a new column, `Time`, of numeric time data in seconds. 
 #' 
 #' @import glue
 #' @import lubridate
 #' @export
+#' 
+#' @examples
+#' #Default time_format, data as vector
+#' 
+#' dates_vector <- c("2010-12-01 11:10:23", "2010-12-01 12:10:23",
+#'                  "2010-12-01 13:10:23", "2010-12-01 14:10:23",
+#'                  "2010-12-01 15:10:23")
+#' format_time(dates_vector)
+#' 
+#' # Time only, 12h format, altered start time
+#' times_vector <- c("11:10:23 AM", "12:10:23 PM",
+#'              "1:10:23 PM", "2:10:23 PM",
+#'              "3:10:23 PM")
+#' format_time(times_vector, time_format = "hms", start = 1000)
+#' 
+#' # A data frame, different date structure
+#' dates_df <- data.frame(time = c("01-12-2010 11:10:23", "01-12-2010 12:10:23",
+#'    "01-12-2010 13:10:23", "01-12-2010 14:10:23","01-12-2010 15:10:23"), 
+#'    o2 = c(100,90,80,70,60))
+#' format_time(dates_df, time_format = "dmy_hms")
+#' 
+#' # A data frame, different times over multiple days
+#' days_df <- data.frame(time = c("01-12-2010 11:10:23", "02-12-2010 12:14:23",
+#'    "03-12-2010 22:00:23", "04-12-2010 08:19:23","05-12-2010 23:55:23"), 
+#'    o2 = c(100,90,80,70,60))
+#' format_time(days_df, time_format = "dmy_hms")
 
 ## To do
-## add check for negative results in output? - one indicator of bad formatting
+## add check for negative results in output? - one indicator of mistakes in formatting
 ## support mins and hrs as output? - need extra argument
 
 format_time <- function(x, time_format = "ymd_hms", start = 0, event_names = NULL, event_times = NULL){
@@ -122,10 +155,13 @@ format_time <- function(x, time_format = "ymd_hms", start = 0, event_names = NUL
     
   } else {
     
+    ## replace original date-time column
     results_df <- data.frame(times_numeric, x[,-1])
-    names(results_df) <- names(x) 
-    # ^ possibly should rename 1st col 'numeric_time' or something similar. 
-    # Original name might be inappropriate
+
+    ## rename it
+    names(results_df) <- c("Time", names(x[-1]))
+
+    ## return
     return(results_df)
     
     # For when we want to support passing this to inspect_data
