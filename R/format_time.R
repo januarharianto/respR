@@ -102,11 +102,11 @@
 #'    o2 = c(100,90,80,70,60))
 #' format_time(dates_df, time_format = "dmy_hms")
 #' 
-#' # A data frame, different times over multiple days
-#' days_df <- data.frame(time = c("01-12-2010 11:10:23", "02-12-2010 12:14:23",
-#'    "03-12-2010 22:00:23", "04-12-2010 08:19:23","05-12-2010 23:55:23"), 
+#' # A data frame, different times over multiple days, hours-minutes only
+#' days_df <- data.frame(time = c("01-12-2010 11:10", "02-12-2010 12:14",
+#'    "03-12-2010 22:00", "04-12-2010 08:19","05-12-2010 23:55"), 
 #'    o2 = c(100,90,80,70,60))
-#' format_time(days_df, time_format = "dmy_hms")
+#' format_time(days_df, time_format = "dmy_hm")
 
 ## To do
 ## add check for negative results in output? - one indicator of mistakes in formatting
