@@ -15,7 +15,7 @@
 #' AM/PM take precedence over 24H formatting for 01-12h.
 #' E.g. "1:10:23 PM" and "01:10:23 PM" are both same as "13:10:23"
 #' 
-#' However 24H formatting for 13-24h takes take over AM/PM
+#' However 24H formatting for 13-24h takes precedence over AM/PM
 #' E.g. "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #' 
 #' Regardless of input, all data are parsed to numeric time data in seconds duration from 
@@ -29,12 +29,12 @@
 #' Time format considerations
 #' - Should be formatted as date (in lowercase y, m, d) and time (h, m, s) separated by 
 #' an underscore. 
-#' - E.g. "2010-02-28 13:10:23" would be ymd_hms
+#' - E.g. "2010-02-28 13:10:23" would be "ymd_hms"
 #' - Year-Month-Day can be in any order (ymd, ydm, dmy, etc.).
 #' - Hours-minutes-seconds not required, but if present must be in correct order:
 #' hms, hm, or h
 #' - Time data without date can be supplied (format = "hms", "hm", "h"), but must not 
-#' cross midnight, or dates are required.. It should be formatted as 24h time, or if 
+#' cross midnight, or dates are required. It should be formatted as 24h time, or if 
 #' longer than 12h have AM/PM appended. 
 #' 
 #' Not implemented yet
@@ -105,7 +105,7 @@ format_data <- function(x, time_format = "ymd_hms", start = 0, event_names = NUL
     
     results_df <- data.frame(times_numeric, x[,-1])
     names(results_df) <- names(x) 
-    # ^ possibly should rename 1st col 'new'numeric_time' or something similar. 
+    # ^ possibly should rename 1st col 'numeric_time' or something similar. 
     # Original name might be inappropriate
     return(results_df)
     
