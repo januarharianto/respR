@@ -108,3 +108,6 @@ days_df <- data.frame(time = c("01-12-2010 11:10:23", "02-12-2010 12:14:23",
    o2 = c(100,90,80,70,60))
 format_time(days_df, time_format = "dmy_hms")
 }
+\seealso{
+\code{\link{lubridate}}
+}

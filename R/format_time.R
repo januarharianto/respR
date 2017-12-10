@@ -57,6 +57,8 @@
 #' associated with original times in the experiment can be easily associated with new
 #' time data.
 #'
+#' @seealso \code{\link{lubridate}}
+#' 
 #' @usage
 #' format_time(..., time_format = "ymd_hms", start = 0, event_names = NULL, event_times = NULL)
 #' 
