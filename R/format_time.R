@@ -51,16 +51,10 @@
 #' - Obviously, single experiments will not be conducted across different time zones, so 
 #' if a time zone is present, it is ignored for the purposes of calculating numeric times. 
 #' 
-#' ***Not implemented yet***
-#' 
-#' `event_names` and `event_times` are so events (e.g. flushes, changes in conditions) 
-#' associated with original times in the experiment can be easily associated with new
-#' time data.
-#'
 #' @seealso \code{\link{lubridate}}
 #' 
 #' @usage
-#' format_time(..., time_format = "ymd_hms", start = 0, event_names = NULL, event_times = NULL)
+#' format_time(..., time_format = "ymd_hms", start = 0)
 #' 
 #' @md
 #' @param ... vector or data frame containing strings or class POSIX.ct date-time data 
@@ -69,10 +63,6 @@
 #'  Directly relates to functions in the package `lubridate`
 #' @param start numeric. Default = 0. At what time (in seconds) should the formatted time 
 #'  data start?
-#' @param event_names String. Names for events during the experiment at the times in 
-#'  `event_times`. E.g. "First flush", "Water speed to 5 cm/s". 
-#' @param event_times String or class POSIX.ct date/time data matching the events in 
-#'  `event_names`. Must be same format as in `...`
 #'
 #' @return A vector or data frame, depending on input. If a data frame, the output data 
 #'  frame is identical, except the original date-time data in column 1 will be replaced
@@ -108,11 +98,21 @@
 #'    o2 = c(100,90,80,70,60))
 #' format_time(days_df, time_format = "dmy_hm")
 
-## To do
-## add check for negative results in output? - one indicator of mistakes in formatting
-## support mins and hrs as output? - need extra argument
+## Future possible functionality
+## - Add check for negative results in output? - one indicator of mistakes in formatting
+## - Support mins and hrs as output? - need extra argument
+## - Events? Possibly not necessary. Event times can be converted by the function if they 
+## are in a separate vector, as long as in same format and same inputs used. 
+## Will address in a vignette. Docs text saved below for future reference
+## #' `event_names` and `event_times` are so events (e.g. flushes, changes in conditions) 
+## #' associated with original times in the experiment can be easily associated with new
+## #' time data.
+## #' @param event_names String. Names for events during the experiment at the times in 
+## #'  `event_times`. E.g. "First flush", "Water speed to 5 cm/s". 
+## #' @param event_times String or class POSIX.ct date/time data matching the events in 
+## #'  `event_names`. Must be same format as in `...`
 
-format_time <- function(x, time_format = "ymd_hms", start = 0, event_names = NULL, event_times = NULL){
+format_time <- function(x, time_format = "ymd_hms", start = 0){
   
   require(lubridate)
   require(glue)

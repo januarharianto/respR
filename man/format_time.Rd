@@ -4,7 +4,7 @@
 \alias{format_time}
 \title{Parse date-time data to numeric}
 \usage{
-format_time(..., time_format = "ymd_hms", start = 0, event_names = NULL, event_times = NULL)
+format_time(..., time_format = "ymd_hms", start = 0)
 }
 \arguments{
 \item{time_format}{string. Code describing structure of date-time data. See details.
@@ -12,12 +12,6 @@ Directly relates to functions in the package \code{lubridate}}
 
 \item{start}{numeric. Default = 0. At what time (in seconds) should the formatted time
 data start?}
-
-\item{event_names}{String. Names for events during the experiment at the times in
-\code{event_times}. E.g. "First flush", "Water speed to 5 cm/s".}
-
-\item{event_times}{String or class POSIX.ct date/time data matching the events in
-\code{event_names}. Must be same format as in \code{...}}
 
 \item{...}{vector or data frame containing strings or class POSIX.ct date-time data
 to be converted to numeric. If a data frame, assumes these data are in column 1.}
@@ -75,12 +69,6 @@ appended.
 \item Obviously, single experiments will not be conducted across different time zones, so
 if a time zone is present, it is ignored for the purposes of calculating numeric times.
 }
-
-\emph{\strong{Not implemented yet}}
-
-\code{event_names} and \code{event_times} are so events (e.g. flushes, changes in conditions)
-associated with original times in the experiment can be easily associated with new
-time data.
 }
 \examples{
 #Default time_format, data as vector
