@@ -11,10 +11,11 @@ auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
 process.}
 
-\item{width}{numeric. Defaults to \code{floor(0.2 * length of data} if NULL. The
-length of data can either be time or row, as defined by the \code{by} argument
-(see below). If a number is supplied, the function automatically applies
-the equation \code{floor(width * length of data} if \code{width < 1}.}
+\item{width}{numeric. Width of the rolling regression. Defaults to `floor(0.2
+\itemize{
+\item length of data\code{if NULL. The length of data can either be time or row, as defined by the}by\code{argument. If a number is supplied and it is less than 1, the function automatically applies the equation}floor(width * length of
+data`. Otherwise it will simply use the number as the width.
+}}
 
 \item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. However, if the
 function detects an irregular time series, a warning will be issued to
