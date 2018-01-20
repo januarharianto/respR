@@ -4,97 +4,114 @@
 \alias{format_time}
 \title{Parse date-time data to numeric}
 \usage{
-format_time(..., time_format = "ymd_hms", start = 0)
+format_time(x, format = "ymdHMS", start = 0)
 }
 \arguments{
-\item{time_format}{string. Code describing structure of date-time data. See details.
-Directly relates to functions in the package \code{lubridate}}
+\item{x}{vector or data frame containing strings or class POSIX.ct date-time
+data to be converted to numeric. If a data frame, assumes these data are in
+column 1.}
 
-\item{start}{numeric. Default = 0. At what time (in seconds) should the formatted time
-data start?}
+\item{format}{string. Code describing structure of date-time data. See
+details. Directly relates to functions in the package \code{lubridate}}
 
-\item{...}{vector or data frame containing strings or class POSIX.ct date-time data
-to be converted to numeric. If a data frame, assumes these data are in column 1.}
+\item{start}{numeric. Default = 0. At what time (in seconds) should the
+formatted time data start?}
 }
 \value{
-A vector or data frame, depending on input. If a data frame, the output data
-frame is identical, except the original date-time data in column 1 will be replaced
-by a new column, \code{Time}, of numeric time data in seconds.
+A vector or data frame, depending on input. If a data frame, the
+output data frame is identical, except the original date-time data in
+column 1 will be replaced by a new column, \code{Time}, of numeric time data in
+seconds.
 }
 \description{
-\code{format_time} is a function to parse class POSIX.ct or text strings of date-time data
-to numeric time for use in \code{respR} functions.
+A function to parse class POSIX.ct or text strings of date-time data to
+numeric time for use in \code{respR} functions.
 }
 \details{
-\emph{\strong{Date-Time data inputs}}
+\strong{Input}
 
-Input can be a vector, or data frame. If a data frame, assumes date-time is in column 1.
-Ideal structure for further processing in \code{respR} is a 2 column data frame of Time and O2,
-however any multiple column data frame can be used as long as the date-time to be parsed
-is in column 1. The output data frame will be identical, except the original date-time
-column will be replaced by the new numeric time data, and named \code{Time}.
+Input can be a vector, or data frame. If a data frame, assumes date-time is
+in column 1. Ideal structure for further processing in \code{respR} is a 2 column
+data frame of Time and O2, however any multiple column data frame can be used
+as long as the date-time to be parsed is in column 1. The output data frame
+will be identical, except the original date-time column will be replaced by
+the new numeric time data.
 
-Date-time data can be unspaced or separated by any combination of spaces, forward slashes,
-hyphens, dots, commas, colons, semicolons, or underscores.  \cr
-E.g. all these are parsed as the same date-time:  \cr
-"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23".
+Date-time data can be unspaced or separated by any combination of spaces,
+forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
+
+E.g. all these are parsed as the same date-time: \code{"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23"}.
 \itemize{
-\item Times can be in 24H or 12H with AM/PM \cr
-E.g. "2010-02-28 13:10:23" or "2010-02-28 1:10:23 PM"
-\item Times without initial zero are parsed as 24H time \cr
-E.g. "1:10:23" is same as "1:10:23 AM" or "01:10:23"
-\item AM/PM take precedence over 24H formatting for 01-12h \cr
-E.g. "1:10:23 PM" and "01:10:23 PM" are both same as "13:10:23"
-\item However, 24H formatting for 13-24h takes precedence over AM/PM \cr
-E.g. "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
+\item Times can be in 24H or 12H with AM/PM \cr E.g. "2010-02-28 13:10:23" or
+"2010-02-28 1:10:23 PM"
+\item Times without initial zero are parsed as 24H time \cr E.g. "1:10:23" is
+same as "1:10:23 AM" or "01:10:23"
+\item AM/PM take precedence over 24H formatting for 01-12h \cr E.g. "1:10:23 PM"
+and "01:10:23 PM" are both same as "13:10:23"
+\item However, 24H formatting for 13-24h takes precedence over AM/PM \cr E.g.
+"13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 }
 
-Regardless of input, all data are parsed to numeric time data in seconds duration from
-the first entry, unless a \code{start} number is specified, in which case the series starts at
-that number (in seconds) and all subsequent times are shifted forward by the same amount.
+Regardless of input, all data are parsed to numeric time data in seconds
+duration from the first entry, unless a \code{start} number is specified, in which
+case the series starts at that number (in seconds) and all subsequent times
+are shifted forward by the same amount.
 
-\emph{\strong{Date-Time formatting syntax}}
+\strong{Syntax}
 
-\code{time_format} directly corresponds to functions in \code{lubridate}
-\itemize{
-\item Should be formatted as date (in lowercase y, m, d) and time (h, m, s) separated by
-an underscore.
-\item E.g. "2010-02-28 13:10:23" would be \code{time_format = "ymd_hms"}
-\item Year-Month-Day can be in any order (ymd, ydm, dmy, etc.).
-\item Hours-minutes-seconds optional, but if present must be in correct order:
-hms, hm, or h
-\item Time data without date can be supplied (\code{time_format = "hms", "hm", "h"}), but must
-not cross midnight. It should be formatted as 24h time, or if longer than 12h have AM/PM
-appended.
-\item Obviously, single experiments will not be conducted across different time zones, so
-if a time zone is present, it is ignored for the purposes of calculating numeric times.
-}
+Simply identify the order which the year, month, day, and time appears in
+your date-time input.
+
+\describe{ \item{\code{d}}{Day of the month as decimal number (01--31 or 0--31).}
+\item{\code{m}}{Month of the year as decimal number (01--12 or 1--12).}
+\item{\code{y}}{Year (2010, 2001, 1989).} \item{\code{H}}{Hour, must be capitalised
+(\code{H}, not \code{h}). Decimal number (00--24 or 0--24).} \item{\code{M}}{Minute, must be
+capitalised (\code{M}, not \code{m}). Decimal number (00--59 or 0--59).}
+\item{\code{S}}{Second, must be capitalised (\code{S}, not \code{s}). Decimal number (00--59
+or 0--59).} \item{\code{p}}{AM/PM indicator. Adding this will format the data as
+12-h date-time format.} }
+
+Print the order in the \code{format} string argument, using separators if you
+choose to (optional): \code{"dmyHMS"}; \code{"dmy_HMS"} and \code{"d m y H M S"} are all the
+same. Obviously, single experiments will not be conducted across different time
+zones, so if a time zone is present, it is ignored for the purposes of
+calculating numeric times.
 }
 \examples{
-#Default time_format, data as vector
+# convert year-month-day hour-min-sec
+x <- c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11")
+format_time(x)
+## [1]    0 3600 4440
 
-dates_vector <- c("2010-12-01 11:10:23", "2010-12-01 12:10:23",
-                 "2010-12-01 13:10:23", "2010-12-01 14:10:23",
-                 "2010-12-01 15:10:23")
-format_time(dates_vector)
+# convert day-month-year hour-min
+x <- c("03-02-09 01:11", "03-02-09 02:11","03-02-09 02:25")
+format_time(x, format = "dmyHM")
+format_time(x, "dmy HM")
+format_time(x, "dmy_HM")
+format_time(x, "d m y H M")
+## [1]    0 3600 4440
 
-# Time only, 12h format, altered start time
-times_vector <- c("11:10:23 AM", "12:10:23 PM",
-             "1:10:23 PM", "2:10:23 PM",
-             "3:10:23 PM")
-format_time(times_vector, time_format = "hms", start = 1000)
+# convert when AM/PM is present
+x <- c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM")
+format_time(x, format = "dmyHMS") # this is wrong
+format_time(x, "dmyHMSp")
+format_time(x, "dmy HMS p")
+format_time(x, "dmy_HMS_p")
+format_time(x, "d m y H M S p")
+## [1]    0 3600 8040
 
-# A data frame, different date structure
-dates_df <- data.frame(time = c("01-12-2010 11:10:23", "01-12-2010 12:10:23",
-   "01-12-2010 13:10:23", "01-12-2010 14:10:23","01-12-2010 15:10:23"),
-   o2 = c(100,90,80,70,60))
-format_time(dates_df, time_format = "dmy_hms")
+# convert dataframe with year-month-day hour-min-sec
+x <- data.frame(
+  x = c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11"),
+  y = c(23, 34, 45))
+format_time(x)
 
-# A data frame, different times over multiple days, hours-minutes only
-days_df <- data.frame(time = c("01-12-2010 11:10", "02-12-2010 12:14",
-   "03-12-2010 22:00", "04-12-2010 08:19","05-12-2010 23:55"),
-   o2 = c(100,90,80,70,60))
-format_time(days_df, time_format = "dmy_hm")
+# convert dataframe with multiple columns and non-default format
+x <- data.frame(
+  x = c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM"),
+  y = c(23, 34, 45),
+  z = c(56, 67, 78))
+format_time(x, format = "dmyHMSp")
 }
 \seealso{
 \code{\link{lubridate}}
