@@ -5,7 +5,9 @@
 #'
 #' With the help of the excellent \pkg{lubridate} package, you can simplify time
 #' conversion of dates and time into numeric format by speficying the formats in
-#' the `format` argument, without the need to include separators and % prefix.
+#' the `format` argument, without the need to include separators and \% prefix.
+#' Simply identify the order which the year, month, day, and time appears in
+#' your string.
 #'
 #' \describe{
 #' \item{`d`}{Day of the month as decimal number (01--31 or 0--31).}
