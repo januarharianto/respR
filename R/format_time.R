@@ -105,54 +105,25 @@
 #'   y = c(23, 34, 45),
 #'   z = c(56, 67, 78))
 #' format_time(x, format = "dmyHMSp")
+format_time <- function(x, format = "ymdHMS", start = 0) {
   ## take out date/times
   if(is.data.frame(x)){
     times <- x[,1]
   } else {
     times <- x
   }
+  dates <- lubridate::parse_date_time(times, format) # format to datetime
+  # convert to numeric:
+  times_numeric <- as.numeric(dates) - min(as.numeric(dates))
+  out <- times_numeric + start # adjust start time, if needed
 
-  ## if only Times supplied (time_format = "hms", "hm", or "h"), add in a dummy year-date
-  if(time_format == "hms" || time_format == "hm" || time_format == "h"){
-    ## need to makes times as.character first because R makes it a factor,
-    ## so glueing doesn't work properly
-    times <- sapply(as.character(times), function(y) glue::glue("1900-01-01 ", y))
-  }
-
-  ## if only Times supplied, use appropriate lubridate function
-  if(time_format == "hms") {
-    times_posixct <- ymd_hms(times)
-  } else if(time_format == "hm") {
-    times_posixct <- ymd_hm(times)
-  } else if(time_format == "h") {
-    times_posixct <- ymd_h(times)
-  # else glue (paste) time_format as lubridate function name
-  # and run it with get
+  # output - return vector or df
+  if(is.vector(x)) {
+    return(out)
   } else {
-    times_posixct <- get(glue::glue(time_format))(times)}
-
-  # make new posix time vector into numeric time difference from first entry
-  times_numeric <- as.numeric(difftime(times_posixct,
-                                       times_posixct[1], units="secs"))
-
-  ## fix for start time
-  times_numeric <- times_numeric + start
-
-  # if input is a vector, return a vector, otherwise return a df
-  if(is.vector(x) == TRUE){
-
-    return(times_numeric)
-
-  } else {
-
-    ## replace original date-time column
-    results_df <- data.frame(times_numeric, x[,-1])
-
-    ## rename it
-    names(results_df) <- c("Time", names(x[-1]))
-
-    ## return
-    return(results_df)
+    out <- data.frame(times_numeric, x[,-1]) # replace original date-time column
+    names(out) <- names(x)  # rename
+    return(out)
   }
 
 }
