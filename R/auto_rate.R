@@ -1,18 +1,18 @@
 #' Automatically determine rate of change in oxygen concentration over time
 #'
 #' `auto_rate` automatically performs a rolling regression on a data frame to
-#' determine maximum, minimum, interval or "best fit" linear rate of change 
-#' in oxygen concentration over time. First, a rolling regression of specified 
-#' `width` is performed on the entire dataset to obtain all possible values. 
-#' The computations are then ranked (or, arranged), based on the "`logic`" 
-#' argument, and the output is summarised.
+#' determine maximum, minimum, interval or "best fit" linear rate of change in
+#' oxygen concentration over time. First, a rolling regression of specified
+#' `width` is performed on the entire dataset to obtain all possible values. The
+#' computations are then ranked (or, arranged), based on the "`logic`" argument,
+#' and the output is summarised.
 #'
 #' **Units**
 #'
 #' There are no units of measurement involved in `auto_rate`. This is a
-#' deliberate decision. Units are called in a later function when volumetric 
-#' and/or mass-specific rates of oxygen use are computed in
-#' [convert_rate()] and [convert_DO()].
+#' deliberate decision. Units are called in a later function when volumetric
+#' and/or mass-specific rates of oxygen use are computed in [convert_rate()] and
+#' [convert_DO()].
 #'
 #'
 #' ***Ranking algorithms***
@@ -34,9 +34,11 @@
 #'
 #' @param df data frame, or object of class `adjust_rate`. This is the data to
 #'   process.
-#' @param width numeric. Defaults to `floor(0.2 * length of data` if NULL. The
-#'   length of data can either be time or row, as defined by the `by` argument
-#'   (see below).
+#' @param width numeric. Width of the rolling regression. Defaults to `floor(0.2
+#'   * length of data` if NULL. The length of data can either be time or row, as
+#'   defined by the `by` argument. If a number is supplied and it is less than
+#'   1, the function automatically applies the equation `floor(width * length of
+#'   data`. Otherwise it will simply use the number as the width.
 #' @param by string. `"row"` or `"time"`. Defaults to `"row"`. However, if the
 #'   function detects an irregular time series, a warning will be issued to
 #'   recommend changing this argument to `"time"`.
@@ -84,23 +86,30 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   }
 
   # Check if time is uneven - if it is, give warning
-  uneven <- check_evn(df[[1]])
-  if (uneven$check && by == "row")
-    warning("Time data is irregular. Please use `by = 'time'.", call. = F)
-
-  # Warn if method == "linear" -- width is default and has different meaning
-  if (method == "linear") {
-    if (by == "time" && is.numeric(width) && width != floor(0.2 * max(df[[1]])))
-      warning("Width value not applied - when method = 'linear', width is determined by the function.")
-    if (by == "row" && is.numeric(width) && width != floor(0.2 * nrow(df)))
-      warning("Width value not applied - when method = 'linear', width is determined by the function.")
-  }
+  # uneven <- check_evn(df[[1]])
+  # if (uneven$check && by == "row")
+  #   warning("Time data is irregular. Please use `by = 'time'.", call. = F)
+  #
+  # # Warn if method == "linear" -- width is default and has different meaning
+  # if (method == "linear") {
+  #   if (by == "time" && is.numeric(width) && width != floor(0.2 * max(df[[1]])))
+  #     warning("Width value not applied - when method = 'linear', width is determined by the function.")
+  #   if (by == "row" && is.numeric(width) && width != floor(0.2 * nrow(df)))
+  #     warning("Width value not applied - when method = 'linear', width is determined by the function.")
+  # }
 
   # Generate default width for rolling regression. This also applies if
   # "linear" method is selected.
-  if (is.null(width) | method == "linear") {
+  if (is.null(width)) {
     if (by == "time") width <- floor(0.2 * max(df[[1]]))
     if (by == "row") width <- floor(0.2 * nrow(df))
+  }
+
+  # Automatically determine if width is a fraction, or not. If fraction,
+  # multiply by the length of the data. If not, use it as it is.
+  if (width < 1) {
+    if (by == "time") width <- floor(width * max(df[[1]]))
+    if (by == "row") width <- floor(width * nrow(df))
   }
 
   # Format the data
