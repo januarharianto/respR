@@ -1,72 +1,73 @@
 #' @title Parse date-time data to numeric
 #'
-#' @description
-#' \code{format_time} is a function to parse class POSIX.ct or text strings of date-time data
-#' to numeric time for use in `respR` functions.
+#' @description \code{format_time} is a function to parse class POSIX.ct or text
+#' strings of date-time data to numeric time for use in `respR` functions.
 #'
 #' @details
 #'
 #' ***Date-Time data inputs***
 #'
-#' Input can be a vector, or data frame. If a data frame, assumes date-time is in column 1.
-#' Ideal structure for further processing in `respR` is a 2 column data frame of Time and O2,
-#' however any multiple column data frame can be used as long as the date-time to be parsed
-#' is in column 1. The output data frame will be identical, except the original date-time
-#' column will be replaced by the new numeric time data, and named `Time`.
+#' Input can be a vector, or data frame. If a data frame, assumes date-time is
+#' in column 1. Ideal structure for further processing in `respR` is a 2 column
+#' data frame of Time and O2, however any multiple column data frame can be used
+#' as long as the date-time to be parsed is in column 1. The output data frame
+#' will be identical, except the original date-time column will be replaced by
+#' the new numeric time data, and named `Time`.
 #'
-#' Date-time data can be unspaced or separated by any combination of spaces, forward slashes,
-#' hyphens, dots, commas, colons, semicolons, or underscores.  \cr
-#' E.g. all these are parsed as the same date-time:  \cr
-#' "2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23".
+#' Date-time data can be unspaced or separated by any combination of spaces,
+#' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
+#' \cr E.g. all these are parsed as the same date-time:  \cr "2010-02-28
+#' 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23".
 #'
-#' - Times can be in 24H or 12H with AM/PM \cr
-#' E.g. "2010-02-28 13:10:23" or "2010-02-28 1:10:23 PM"
+#' - Times can be in 24H or 12H with AM/PM \cr E.g. "2010-02-28 13:10:23" or
+#' "2010-02-28 1:10:23 PM"
 #'
-#' - Times without initial zero are parsed as 24H time \cr
-#' E.g. "1:10:23" is same as "1:10:23 AM" or "01:10:23"
+#' - Times without initial zero are parsed as 24H time \cr E.g. "1:10:23" is
+#' same as "1:10:23 AM" or "01:10:23"
 #'
-#' - AM/PM take precedence over 24H formatting for 01-12h \cr
-#' E.g. "1:10:23 PM" and "01:10:23 PM" are both same as "13:10:23"
+#' - AM/PM take precedence over 24H formatting for 01-12h \cr E.g. "1:10:23 PM"
+#' and "01:10:23 PM" are both same as "13:10:23"
 #'
-#' - However, 24H formatting for 13-24h takes precedence over AM/PM \cr
-#' E.g. "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
+#' - However, 24H formatting for 13-24h takes precedence over AM/PM \cr E.g.
+#' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
-#' Regardless of input, all data are parsed to numeric time data in seconds duration from
-#' the first entry, unless a `start` number is specified, in which case the series starts at
-#' that number (in seconds) and all subsequent times are shifted forward by the same amount.
+#' Regardless of input, all data are parsed to numeric time data in seconds
+#' duration from the first entry, unless a `start` number is specified, in which
+#' case the series starts at that number (in seconds) and all subsequent times
+#' are shifted forward by the same amount.
 #'
 #' ***Date-Time formatting syntax***
 #'
 #' `time_format` directly corresponds to functions in `lubridate`
 #'
-#' - Should be formatted as date (in lowercase y, m, d) and time (h, m, s) separated by
-#' an underscore.
-#' - E.g. "2010-02-28 13:10:23" would be `time_format = "ymd_hms"`
-#' - Year-Month-Day can be in any order (ymd, ydm, dmy, etc.).
-#' - Hours-minutes-seconds optional, but if present must be in correct order:
-#' hms, hm, or h
-#' - Time data without date can be supplied (`time_format = "hms", "hm", "h"`), but must
-#' not cross midnight. It should be formatted as 24h time, or if longer than 12h have AM/PM
-#' appended.
-#' - Obviously, single experiments will not be conducted across different time zones, so
-#' if a time zone is present, it is ignored for the purposes of calculating numeric times.
+#' - Should be formatted as date (in lowercase y, m, d) and time (h, m, s)
+#' separated by an underscore. - E.g. "2010-02-28 13:10:23" would be
+#' `time_format = "ymd_hms"` - Year-Month-Day can be in any order (ymd, ydm,
+#' dmy, etc.). - Hours-minutes-seconds optional, but if present must be in
+#' correct order: hms, hm, or h - Time data without date can be supplied
+#' (`time_format = "hms", "hm", "h"`), but must not cross midnight. It should be
+#' formatted as 24h time, or if longer than 12h have AM/PM appended. -
+#' Obviously, single experiments will not be conducted across different time
+#' zones, so if a time zone is present, it is ignored for the purposes of
+#' calculating numeric times.
 #'
 #' @seealso \code{\link{lubridate}}
 #'
-#' @usage
-#' format_time(..., time_format = "ymd_hms", start = 0)
+#' @usage format_time(..., time_format = "ymd_hms", start = 0)
 #'
 #' @md
-#' @param ... vector or data frame containing strings or class POSIX.ct date-time data
-#'  to be converted to numeric. If a data frame, assumes these data are in column 1.
-#' @param time_format string. Code describing structure of date-time data. See details.
-#'  Directly relates to functions in the package `lubridate`
-#' @param start numeric. Default = 0. At what time (in seconds) should the formatted time
-#'  data start?
+#' @param ... vector or data frame containing strings or class POSIX.ct
+#'   date-time data to be converted to numeric. If a data frame, assumes these
+#'   data are in column 1.
+#' @param time_format string. Code describing structure of date-time data. See
+#'   details. Directly relates to functions in the package `lubridate`
+#' @param start numeric. Default = 0. At what time (in seconds) should the
+#'   formatted time data start?
 #'
-#' @return A vector or data frame, depending on input. If a data frame, the output data
-#'  frame is identical, except the original date-time data in column 1 will be replaced
-#'  by a new column, `Time`, of numeric time data in seconds.
+#' @return A vector or data frame, depending on input. If a data frame, the
+#'   output data frame is identical, except the original date-time data in
+#'   column 1 will be replaced by a new column, `Time`, of numeric time data in
+#'   seconds.
 #'
 #' @importFrom glue glue
 #' @importFrom lubridate ymd_hms ymd_hm ymd_h
