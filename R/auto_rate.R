@@ -417,8 +417,8 @@ kde_fit <- function(dt, roll, width, by) {
     peak.b1 = dens$x, density = dens$y)[x, ])
   match.peaks <- data.table::rbindlist(match.peaks)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
-  bin <- dens$bw * .09
-  match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin * 0.3)])
+  bin <- dens$bw * 0.25
+  match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin)])
   # Make sure that the data is continuous. If not, split into
   # fragments
   if (by == "time") {
