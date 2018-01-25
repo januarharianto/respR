@@ -19,8 +19,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ## Introduction
 
-The function `auto_rate()` uses rolling regressions to automatically determine the *maximum*, *minimum*, or *most linear* sections of an oxygen time-series over a specific sampling window. In addition, to detect linear sections of the data an additional kernel density estimate is performed on the rolling regression output, and the kernel bandwidth, which is 
-and the optimal bandwidth is then used to re-sample overlapping rolling regression windows as a whole.
+The function `auto_rate()` uses rolling regression to automatically determine the *maximum*, *minimum*, or *most linear* sections of an oxygen time-series over a specific sampling window. In addition, to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to detect linear regions of the data (Fig 1). The linear regions are re-analysed, again, using linear regression. The process is fully unsupervised and automated, requiring little to no input from the user.
 
 <!-- ### Working in the Tidyverse -->
 
@@ -35,7 +34,7 @@ and the optimal bandwidth is then used to re-sample overlapping rolling regressi
 <!-- ``` -->
 
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Fig 1. Methods used by `auto_rate()` to process data."}
 library(DiagrammeR)
 grViz("
 digraph a_nice_graph {
@@ -48,19 +47,21 @@ rd [label = 'Raw Data']
 node [fontname = Helvetica, shape = rectangle]        
 rr [label = '1. Rolling linear regression']
 kd [label = '2. Kernel density\nestimates']
-ar [label = '4. Rank']
-fi [label = '5. Filter']
 re [label = '3. Bin resampling']
+lr [label = '4. Linear regression']
+ar [label = '5. Rank']
+fi [label = '6. Filter']
 
 node [fontname = Menlo, shape = none]
+au [label = 'auto_rate()']
 li [label = 'linear']
 mm [label = 'max, min']
 in [label = 'interval']
 
 # edge definitions with the node IDs
 
-rd -> rr -> ar -> mm
-rr -> kd -> re -> ar -> li
+rd -> au -> rr -> ar -> mm
+rr -> kd -> re -> lr -> ar -> li
 rr -> fi -> in
 
 }")
@@ -69,13 +70,13 @@ rr -> fi -> in
 
 ### 1. Rolling linear regression
 
-The use rolling linear regression techniques to automatically estimate metabolic parameters is not common in the current literature. Yet the technique is an ubiquitous tool in financial statistitical analysis as it can easily and automatically assess model stability. Since respirometry data also relies on the key assumption that regression coefficients over a rolling window are constant over time (i.e. data is linear), rolling regression is an ideal analytical technique to assess data linearity and detect common metabolic parameters more accurately than commonly used empirical methods. 
+Using rolling linear regression techniques to automatically estimate *metabolic* parameters is uncommon in the current literature. Yet, the technique is an ubiquitous tool in financial statistitical analysis as it can accurately extract common parameters (max, min) and assess model stability with great efficiency. As respirometry data also relies on the key assumption that regression coefficients over a rolling window are constant over time (i.e. data is linear), rolling regression is an ideal analytical technique to detect common metabolic parameters and assess data linearty more accurately than commonly used empirical methods. 
 
-A rolling regression performs *all* possible ordinary least-squares (OLS) linear regressions $(y = \beta X + \epsilon)$ of a specific width across a data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, the total length of the dataset, $y_t(n)$ is the vector of observations on the response, $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression parameters and $\epsilon_t(n)$ is a vector of error terms.
+A rolling regression performs *all* possible ordinary least-squares (OLS) linear regressions $(y = \beta X + \epsilon)$ of a specific width across a data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations on the response, $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression parameters and $\epsilon_t(n)$ is a vector of error terms.
 
-By default, `auto_rate()` performs the rolling regression at a fixed window, $n$, that is one-fifth of the total length of the number of data points (`by = "row"`) or total time elapsed (`by = "time"`). However, that value can be modified using the `width` argument (e.g. as a proportion, `width = 0.1`; as a fixed value, `width = 600`).
+By default, `auto_rate()` performs the rolling regression at a fixed window, $n$, at one-fifth of the total length of the number of data samples (`by = "row"`) or total time elapsed (`by = "time"`). However, that value can be modified using the `width` argument as as a proportion, (`width = 0.1`) or as a fixed value  (`width = 600`).
 
-If `auto_rate()` is used to simply estimate maximum, minimum or interval rates, no further transformation of the data is necessary. The regression coefficients are automatically filtered and ranked to produce the parameter of interest.
+If `auto_rate()` is used to estimate maximum, minimum or interval rates, no further transformation of the data is necessary. The regression coefficients are automatically filtered and ranked to produce the parameter of interest. Otherwise, additional computations are performed to estimate the most linear rate (see below). 
 
 <!-- Any value less than 1 is automatically assumed to define a proportion, and is multiplied by the total number of samples (or total time elapsed) in the data before it is used.  -->
 
@@ -83,15 +84,13 @@ If `auto_rate()` is used to simply estimate maximum, minimum or interval rates, 
 ### 2. Kernel density estimates
 
 <!-- The analysis of time-series data in both fields rely on the *same* key assumption that their parameters are constant over time (i.e. data is linear).  -->
-When paired with kernel density estimation, the process of detecting linear stability and identifying the most linear (stable) sections of respirometry data can be automated.
+<!-- When paired with kernel density estimation, the process of detecting linear stability and identifying the most linear (stable) sections of respirometry data can be automated. -->
 
+A truly linear dataset should be reflected by a consistently stable rate over the rolling window after rolling regression has been performed. If the rate changes at some point during the sampling, then the variability should be detected in the rolling coefficients. Consequently, one may empirically select stable regions in the dataset by observing the rolling regression data and picking out regions that show stable values. 
 
+We automate the above procedure by implementing Gaussian Kernel Density Estimation (KDE), a powerful technique that takes an unsupervised approach to estimate the underlying probability density function of the rolling regression dataset. KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically. KDE can simply be expressed as: $$\hat{p}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $p$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the smoothing bandwidth. 
 
-We take advantage of the fact that a truly linear dataset should be reflected by a consistently stable (i.e. flat) rate over the rolling window. If the rate changes at some point during the sampling, then the variability should be detected in the rolling estimates. Consequently, one may empirically select stable regions in the dataset by observing the rolling regression data and selecting regions that are stable. 
-
-We standardise and automate this process using Gaussian Kernel Density Estimation (KDE), a powerful technique that takes an unsupervised approach to detect linear regions of a dataset. Because KDE is a non-parametric estimator, it determines the density of the most common A linear
-
-Kernel density estimation (KDE) is, in simple terms, an algorithm that models the probability distribution of a continuous random variable. When used on a rolling regression output of $\beta$ coefficients (i.e. calculated rates)
+In R, KDE is implemented using the base `density()` function and implmented using the `bw.nrd0` kernel bandwidth selector, based on Silverman's "rule of thumb" (Silverman, 1986).
 
 ### 3. Bin resampling
 
