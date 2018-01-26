@@ -70,6 +70,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   # Import from previous function(s)
   if(any(class(df) %in% "inspect_data")) df <- df$df
+  if(any(class(df) %in% "inspect")) df <- df$dataframe
 
   # Input checks
   if(!is.data.frame(df))
