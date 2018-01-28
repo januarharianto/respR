@@ -18,10 +18,10 @@
 #' @param df data frame. Accepts data frame object of any size.
 #' @param time numeric. Defaults to NULL. This is the time data.
 #' @param oxygen numeric. Defaults to NULL. This is the dissolved oxygen data.
-#' @param inflow.o2 numeric. Defaults to NULL. This is inflow oxygen data. 
-#'   Used only for flowthrough respirometry data. 
-#' @param outflow.o2 numeric. Defaults to NULL. This is outflow oxygen data. 
-#'   Used only for flowthrough respirometry data. 
+#' @param inflow.o2 numeric. Defaults to NULL. This is inflow oxygen data.
+#'   Used only for flowthrough respirometry data.
+#' @param outflow.o2 numeric. Defaults to NULL. This is outflow oxygen data.
+#'   Used only for flowthrough respirometry data.
 #' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
 #'   detected by the function.
 #' @param plot logical. Defaults to TRUE. Produces plots for quick visual
@@ -226,54 +226,4 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
 
   class(out) <- "inspect_data"
   return(invisible(out))
-}
-
-
-
-# check for NA values
-check_na <- function(x) {
-  test <- is.na(x)
-  check <- any(test)
-  highlight <- which(test)
-  out <- list(check = check, which = highlight)
-  return(out)
-}
-
-# Check for sequential (monotonic) data
-check_seq <- function(x) {
-  test <- diff(x) < 0
-  test <- ifelse(is.na(test), FALSE, test)  # convert NA values to FALSE
-  check <- any(test)
-  highlight <- which(test)
-  out <- list(check = check, which = highlight)
-  return(out)
-}
-
-# Check for duplicate data
-check_dup <- function(x) {
-  test <- x %in% unique(x[duplicated(x, incomparables = NA)])
-  check <- any(test)
-  highlight <- which(test)
-  out <- list(check = check, which = highlight)
-  return(out)
-}
-
-# Calculate mode
-calc_mode <- function(x) {
-  ux <- unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
-
-check_evn <- function(x) {
-  spacing <- diff(as.numeric(x))
-  mod <- calc_mode(spacing)
-
-  test <- spacing != mod
-  # If spacing is even, there should only be 1 interval detected:
-  check <- length(unique(spacing)) > 1
-
-  test <- ifelse(is.na(test), TRUE, test)  # convert NA values to FALSE
-  highlight <- which(test)
-  out <- list(check = check, which = highlight)
-  return(out)
 }
