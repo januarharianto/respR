@@ -21,10 +21,10 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ## Introduction
 
-The function `auto_rate()` uses rolling regression techniques to automatically determine the *maximum*, *minimum*, *interval* rate, or the *most linear* sections of an oxygen time-series over a specific sampling window. 
-In addition, when used to detect linear sections of the data, a **kernel density estimate** is performed on the rolling regression output and the **kernel bandwidth** used to automatically sample linear regions of the data. 
-The linear regions are then re-analysed using linear regression. 
-The process is fully unsupervised and automated, requiring little to no input from the user:
+The function `auto_rate()` uses rolling regression techniques to automatically estimate the *maximum*, *minimum*, *interval* rate, or the *most linear* sections of an oxygen time-series over a specific sampling window. 
+In addition, when used to detect linear sections of the data, a **kernel density estimate** is performed on the rolling regression output and the **kernel bandwidth** used to re-sample linear regions of the data for re-analysis. 
+
+<!-- The diagram below illustrates the main processes involved in producing the different outputs of the function: -->
 
 <!-- ### Working in the Tidyverse -->
 
@@ -39,143 +39,66 @@ The process is fully unsupervised and automated, requiring little to no input fr
 <!-- ``` -->
 
 
-```{r, echo = F}
-library(DiagrammeR)
-grViz("
-digraph a_nice_graph {
+<!-- ```{r, echo = F} -->
+<!-- library(DiagrammeR) -->
+<!-- grViz(" -->
+<!-- digraph a_nice_graph { -->
 
-# node definitions with substituted label text
+<!-- # node definitions with substituted label text -->
 
-node [fontname = Helvetica, shape = circle]        
-rd [label = 'Raw Data']
+<!-- node [fontname = Helvetica, shape = circle]         -->
+<!-- rd [label = 'Raw Data'] -->
 
-node [fontname = Helvetica, shape = rectangle]        
-rr [label = '1. Rolling linear regression']
-kd [label = '2. Kernel density\nestimates']
-re [label = '3. Bin resampling']
-lr [label = '4. Linear regression']
-ar [label = '5. Rank']
-fi [label = '6. Filter']
+<!-- node [fontname = Helvetica, shape = rectangle]         -->
+<!-- rr [label = '1. Rolling linear regression'] -->
+<!-- kd [label = '2. Kernel density\nestimates'] -->
+<!-- re [label = '3. Bin resampling'] -->
+<!-- lr [label = '4. Linear regression'] -->
+<!-- ar [label = '5. Rank'] -->
+<!-- fi [label = '6. Filter'] -->
 
-node [fontname = Menlo, shape = none]
-au [label = 'auto_rate()']
-li [label = 'linear']
-mm [label = 'max, min']
-in [label = 'interval']
+<!-- node [fontname = Menlo, shape = none] -->
+<!-- au [label = 'auto_rate()'] -->
+<!-- li [label = 'linear'] -->
+<!-- mm [label = 'max, min'] -->
+<!-- in [label = 'interval'] -->
 
-# edge definitions with the node IDs
+<!-- # edge definitions with the node IDs -->
 
-rd -> au -> rr -> ar -> mm
-rr -> kd -> re -> lr -> ar -> li
-rr -> fi -> in
+<!-- rd -> au -> rr -> ar -> mm -->
+<!-- rr -> kd -> re -> lr -> ar -> li -->
+<!-- rr -> fi -> in -->
 
-}")
-```
+<!-- }") -->
+<!-- ``` -->
 
 
-### Rolling linear regression
+## Rolling linear regression
 
-A rolling regression runs *all* possible ordinary least-squares (OLS) linear regressions $(y = \beta X + \epsilon)$ of a specific width across a data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations on the response, $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression paramters and $\epsilon_t(n)$ is a vector of error terms. 
+Regardless of the method called, `auto_rate()` always performs a rolling linear regression on the data before additional methods are applied. 
+The rolling regression runs all possible ordinary least-squares (OLS) linear regressions $(y = \beta_0 + \beta_1 X + \epsilon)$ of a fixed sample width across the entire data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations on the response, $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression paramters and $\epsilon_t(n)$ is a vector of error terms. 
 
 <!-- Commonly applied in financial statistics, rolling regression can be used to rapidly assess trends and stability in time-series datasets.  -->
 
-By default, `auto_rate()` uses a rolling window of 0.2 multiplied by the total length of the number of data samples (`by = "row"`) or total time elapsed (`by = "time"`). This can be adjusted using the `width` argument as a proportion (`width = 0.1`) or a fixed number (`width = 2000`). The rolling regression is performed regardless of the `method` argument when the function is called, and the rolling coefficients are stored in a `data.table` object for further analyses.
+<!-- By default, `auto_rate()` uses a rolling window of 0.2 multiplied by the total length of the number of data samples, or total time elapsed. This can be adjusted using the `width` argument as a proportion (`width = 0.1`) or a fixed number (`width = 2000`). -->
 
-### Estimating maximum and minimum rates
+To determine the maximum or minimum rate in the data series, no further transformation of the data is necessary. 
+All possible fixed-width regressions have been captured and ranked by size to accurately determine those values.
+The interval rate is also obtained by filtering the rolling regressions at specific time or row intervals.
 
-When estimating the maximum (`method = "max"`) or minimum (`method = "min"`) rate, no further transformation of the data is necessary. All possible fixed-width regressions have been captured, and the $\beta$ regression coefficient ("`rate_b1`"), is ordered by size before the results are printed:
+## Kernel density estimation 
 
-```{r, warning = F}
-x <- auto_rate(sardine.rd, width = 1500, method = "max")
-```
+Additional methods are automatically applied when we use `auto_rate()` to detect linear sections of the data. 
+First, a Gaussian kernel density estimate (KDE) is used to process the regression coefficient $\beta$, based on the key assumption that linear sections of the data are reflected by relatively stable parameters across the rolling estimates.
+This assumption is used often in financial statistics to evaluate stability and make predictions on time-series data.
+Here, KDE automatically aggregates stable (i.e. linear) sections as they naturally form one or more local maximums ("modes") in the probability density estimate, and if the distribution is multimodal, the modes are ranked by size.
 
-All rolling coefficients are automatically ranked and stored. We can view the results by calling the `print()` command and selecting the desired rank using the `pos` argument: 
+KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically without supervision.
+KDE can be expressed as: $$\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $f$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the optimal smoothing bandwidth.
+The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples. 
 
-```{r}
-print(x, pos = 2) 
-
-# also the minimum rate, similar to the argument call: `method = "min"`:
-print(x, 6014) 
-```
-### Estimating the most linear sections of the data
-
-To estimate most linear sections of a data series, we must first detect those sections. 
-Here we provide a stimulated dataset to demonstrate the techniques used to detect linear data (but see below for real data examples).
-
-```{r}
-updown <- data.frame(c(1:500), jitter(c(1:250, seq(250,125.5, -0.5)), 10))
-plot(updown)
-```
-
-A Gaussian Kernel Density Estimation (KDE) is used on the stored $\beta$ coefficients of the rolling regression, where similar regression values naturally form local maximums ("modes") in density.
-For a truly linear dataset, there should be only one mode. 
-However, it is likely that the distribution is multimodal. 
-KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically.
-KDE can simply be expressed as: $$\hat{p}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $p$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the smoothing bandwidth.
-
-We use an adjusted kernel bandwidth selector based on Silverman's "rule of thumb" (Silverman, 1986) to automatically detect the optimum smoothing bandwidth of the kernel.
-The bandwidth is then used to select the range of $\beta$ values used to construct each mode. 
-Those values are extracted 
-
-<!-- For example, using the `urchins.rd` dataset, we can use `inspect()` to visualise the data: -->
-
-<!-- ```{r, message = F, results = "hide", warning = F} -->
-<!-- inspect(urchins.rd, 1, 9) -->
-<!-- ``` -->
-
-<!-- A simple plot of the rolling $\beta$ coefficient against rolling sample number (bottom plot) is automatically produced when the function is called. -->
-<!-- From the plots, it is obvious that a non-linear change in the rate of oxygen uptake is clearly captured by the rolling estimates. -->
-
-<!-- One of the easiest methods to visualise the stability of a dataset is to construct a histogram of the rolling regression coefficient produced, $\beta$.  -->
-<!-- The analysis of rolling regression data relies on the key assumption that the regression coefficients across the rolling windows are constant over time (i.e. data is linear). -->
-
-<!-- Thus if the rate changes at some point across the roll, the variability should also be detected in the regression estimates.  -->
-<!-- Consequently, one may empirically select stable regions in the dataset by observing the rolling regression data and picking out regions that show stable values.  -->
-
-
-
-
-
-<!-- We automate the above procedure by implementing Gaussian Kernel Density Estimation (KDE), a powerful technique that takes an unsupervised approach to estimate the underlying probability density function of the rolling regression dataset.  -->
-<!-- Equal rate values are automatically grouped together to form local maximums ("peaks") in the estimate, based on how frequently they are encountered. -->
-
-
-
-<!-- As far as non-parametric density estimators go, a KDE is basically a histogram, but with a Gaussian kernel function applied generate a smoother distribution of density.  -->
-<!-- We can construct a histogram of the rolling regression data, but unlike in KDE, the bin size (i.e. intervals) and the end-points of the bins must be manually selected, and the data is presented as discontinuous blocks: -->
-
-<!-- ```{r} -->
-<!-- library(dplyr) -->
-<!-- x <- urchins.rd %>% -->
-<!--   select(1,9) %>% -->
-<!--   static_roll(0.2*nrow(.)) %>% -->
-<!--   select(2) %>% -->
-<!--   unlist() -->
-<!-- hist(x, breaks = 50, main = "") -->
-<!-- ``` -->
-
-<!-- Without choosing the appropriate bin size, the density estimate may become completely different, as exaggerated in the example below: -->
-
-<!-- ```{r} -->
-<!-- hist(x, breaks = 1, main = "") -->
-<!-- ``` -->
-
-<!-- Using KDE automatically optimises the bin size and the bin end-points (also known as "bandwidth"). -->
-<!-- In R, KDE is implemented using the base `density()` function using : -->
-
-
-<!-- ```{r, echo = F, results = "hide", warning = F} -->
-<!-- urchins.rd %>% -->
-<!--   select(1,9) %>% -->
-<!--   static_roll(0.2*nrow(.)) %>% -->
-<!--   select(2) %>% -->
-<!--   unlist() %>% -->
-<!--   density(na.rm = T, bw = "nrd0", n = length(.)) %>% -->
-<!--   plot(main = "") -->
-
-<!-- ``` -->
-
-<!-- Once the KDE is computed, peaks in the density  -->
+Using the parameter $h$, it is possible to group rolling parameters that determine each mode of the density estimate ($mode \pm 0.5h$).
+Grouped rolling estimates with overlapping windows are merged and the re-constructed windows are re-analysed using linear regression.
 
 ## Examples
 
