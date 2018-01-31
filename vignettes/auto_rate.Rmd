@@ -12,8 +12,8 @@ vignette: >
 ```{r, echo = F, warning = F, message = F}
 library(knitr) # load knitr to enable options
 library(respR) # load respR
-library(dplyr) # for some piping exercises
-library(DiagrammeR) # flowcharts... and more
+# library(dplyr) # for some piping exercises
+# library(DiagrammeR) # flowcharts... and more
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
   highlight = TRUE, fig.width = 7.1, fig.height = 6)
@@ -100,10 +100,6 @@ Grouped rolling estimates with overlapping windows are merged and the re-constru
 
 By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. This can be changed by changing the `width` argument, to a proportion (`width = 0.1`) or a fixed number (`width = 3000`). The `width` argument also determines the minimum window size of the linear data obtained, but does not have any control over the maximum window size as that is determined by KDE.
 
-## Parallelisation
-
-If we use `by = "time"` to determine rolling windows, `auto_rate()` automatically uses parallelisation techniques to speed up data processing. This may be disabled by setting the option `parallel = FALSE`.
-
 ## Examples
 
 The function `auto_rate()` performs automatic detection of linear data by default:
@@ -113,12 +109,14 @@ auto_rate(sardine.rd)
 ```
 
 
-We can customise the rolling window size and type by adding the `width` and `by` arguments: 
+We can customise the rolling window size and type by adding the `width` and `by` arguments. Note that using time-based rolling regression takes a bit more processing time: 
 ```{r}
 auto_rate(sardine.rd, width = 2500, by = "time")
 ```
 
-## Comparison to other methods and packages {#compare}
+
+
+<!-- ## Comparison to other methods and packages {#compare} -->
 
 
 
