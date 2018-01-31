@@ -15,7 +15,7 @@ library(respR) # load respR
 library(dplyr) # for some piping exercises
 library(DiagrammeR) # flowcharts... and more
 
-opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
   highlight = TRUE, fig.width = 7.1, fig.height = 6)
 ```
 
@@ -78,10 +78,6 @@ In addition, when used to detect linear sections of the data, a **kernel density
 Regardless of the method called, `auto_rate()` always performs a rolling linear regression on the data before additional methods are applied. 
 The rolling regression runs all possible ordinary least-squares (OLS) linear regressions $(y = \beta_0 + \beta_1 X + \epsilon)$ of a fixed sample width across the entire data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations on the response, $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression paramters and $\epsilon_t(n)$ is a vector of error terms. 
 
-<!-- Commonly applied in financial statistics, rolling regression can be used to rapidly assess trends and stability in time-series datasets.  -->
-
-<!-- By default, `auto_rate()` uses a rolling window of 0.2 multiplied by the total length of the number of data samples, or total time elapsed. This can be adjusted using the `width` argument as a proportion (`width = 0.1`) or a fixed number (`width = 2000`). -->
-
 To determine the maximum or minimum rate in the data series, no further transformation of the data is necessary. 
 All possible fixed-width regressions have been captured and ranked by size to accurately determine those values.
 The interval rate is also obtained by filtering the rolling regressions at specific time or row intervals.
@@ -98,9 +94,31 @@ KDE can be expressed as: $$\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\
 The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples. 
 
 Using the parameter $h$, it is possible to group rolling parameters that determine each mode of the density estimate ($mode \pm 0.5h$).
-Grouped rolling estimates with overlapping windows are merged and the re-constructed windows are re-analysed using linear regression.
+Grouped rolling estimates with overlapping windows are merged and the re-constructed windows are re-analysed using linear regression, then saved in the output.
+
+## Adjusting the width of rolling regressions
+
+By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. This can be changed by changing the `width` argument, to a proportion (`width = 0.1`) or a fixed number (`width = 3000`). The `width` argument also determines the minimum window size of the linear data obtained, but does not have any control over the maximum window size as that is determined by KDE.
+
+## Parallelisation
+
+If we use `by = "time"` to determine rolling windows, `auto_rate()` automatically uses parallelisation techniques to speed up data processing. This may be disabled by setting the option `parallel = FALSE`.
 
 ## Examples
 
+The function `auto_rate()` performs automatic detection of linear data by default:
+
+```{r}
+auto_rate(sardine.rd)
+```
+
+
+We can customise the rolling window size and type by adding the `width` and `by` arguments: 
+```{r}
+auto_rate(sardine.rd, width = 2500, by = "time")
+```
+
 ## Comparison to other methods and packages {#compare}
+
+
 
