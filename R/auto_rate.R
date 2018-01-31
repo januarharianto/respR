@@ -357,18 +357,25 @@ time_roll <- function(dt, width, parallel = T) {
   time_cutoff <- max(dt[,1]) - width
   row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
 
-  if (parallel) {
-    no_cores <- parallel::detectCores()  # calc the no. of cores available
-    if (os() == "win") {
-      cl <- parallel::makeCluster(no_cores)
-    } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-    parallel::clusterExport(cl, "time_lm")
-    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
-      dt[[1]][x], dt[[1]][x] + width))
-    parallel::stopCluster(cl)  # stop cluster (release cores)
-  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-    dt[[1]][x], dt[[1]][x] + width))
+  # Parallel is unstable on some machines tested. Not sure why (was good before)
+  # Let's disable it while I debug the issues...
+  # TODO: implement new parallelisation code that works
 
+  # if (parallel) {
+  #   no_cores <- parallel::detectCores()  # calc the no. of cores available
+  #   if (os() == "win") {
+  #     cl <- parallel::makeCluster(no_cores)
+  #   } else cl <- parallel::makeCluster(no_cores, type = "FORK")
+  #   parallel::clusterExport(cl, "time_lm")
+  #   out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+  #     dt[[1]][x], dt[[1]][x] + width))
+  #   parallel::stopCluster(cl)  # stop cluster (release cores)
+  # } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+  #   dt[[1]][x], dt[[1]][x] + width))
+  if (parallel) NULL
+
+  out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+    dt[[1]][x], dt[[1]][x] + width))
   out <- data.table::rbindlist(out)
   return(out)
 }
