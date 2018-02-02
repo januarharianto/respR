@@ -21,7 +21,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
 
 ## Introduction
 
-The function `auto_rate()` uses rolling regression techniques to automatically estimate the *maximum*, *minimum*, *interval* rate, or the *most linear* sections of an oxygen time-series over a specific sampling window. 
+The function `auto_rate()` uses rolling regression techniques to automatically estimate the *maximum*, *minimum*, *interval* rate, or linear sections of an oxygen time-series over a specific sampling window. 
 In addition, when used to detect linear sections of the data, a **kernel density estimate** is performed on the rolling regression output and the **kernel bandwidth** used to re-sample linear regions of the data for re-analysis. 
 
 <!-- The diagram below illustrates the main processes involved in producing the different outputs of the function: -->
@@ -84,24 +84,38 @@ The interval rate is also obtained by filtering the rolling regressions at speci
 
 ## Kernel density estimation 
 
+<!-- Additional methods are automatically applied when we use `auto_rate()` to detect linear sections of the data.  -->
+<!-- First, a Gaussian kernel density estimate (KDE) is used to process the regression coefficient $\beta$, based on the key assumption that linear sections of the data are reflected by relatively stable parameters across the rolling estimates. -->
+<!-- This assumption is used often in financial statistics to evaluate stability and make predictions on time-series data. -->
+<!-- Here, KDE automatically aggregates stable (i.e. linear) sections as they naturally form one or more local maximums ("modes") in the probability density estimate, and if the distribution is multimodal, the modes are ranked by size. -->
+
 Additional methods are automatically applied when we use `auto_rate()` to detect linear sections of the data. 
-First, a Gaussian kernel density estimate (KDE) is used to process the regression coefficient $\beta$, based on the key assumption that linear sections of the data are reflected by relatively stable parameters across the rolling estimates.
-This assumption is used often in financial statistics to evaluate stability and make predictions on time-series data.
-Here, KDE automatically aggregates stable (i.e. linear) sections as they naturally form one or more local maximums ("modes") in the probability density estimate, and if the distribution is multimodal, the modes are ranked by size.
+First, we take advantage of the key assumption that linear sections of a data series are reflected by stable parameters across the rolling estimates, an assumption often used in financial statistics to evaluate model stability and make forward predictions on time-series data (see Zivot and Wang 2006).
+We then use kernel density estimation (KDE) techniques, often applied invarious inference procedures such as machine learning, pattern recognition and computer vision, to automatically aggregrate stable (i.e. linear) segments as they naturally form one or more local maximums ("modes") in the probability density estimate.
 
-KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically without supervision.
-KDE can be expressed as: $$\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $f$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the optimal smoothing bandwidth.
-The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples. 
+KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically without supervision. 
+KDE can be expressed as: $$\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $f$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the optimal smoothing bandwidth. The smoothing bandwidth is computed using the solve-the-equation *plug-in* method (Jones et al 1996, Sheather and Jones 1991), rather than the default "rule-of-thumb" method (Silverman, 1986), as it is currently considered to be more accurate when dealing with multimodal or non-normal densities (Raykar and Duraiswami 2006).
 
-Using the parameter $h$, it is possible to group rolling parameters that determine each mode of the density estimate ($mode \pm 0.5h$).
-Grouped rolling estimates with overlapping windows are merged and the re-constructed windows are re-analysed using linear regression, then saved in the output.
+<!-- The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples.  -->
+
+ 
+
+With $h$, it is possible to automatically group rolling parameters that determine each mode of any multimodal density estimate ($mode \pm 0.5h$).
+Grouped rolling estimates with overlapping windows are merged, and the re-constructed windows are re-analysed using linear regression.
 
 ## Adjusting the width of rolling regressions
 
-By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. This can be changed by changing the `width` argument, to a proportion (`width = 0.1`) or a fixed number (`width = 3000`). The `width` argument also determines the minimum window size of the linear data obtained, but does not have any control over the maximum window size as that is determined by KDE.
+By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. This can be changed by changing the `width` argument, to a proportion (`width = 0.1`) or a fixed number (`width = 3000`). The `width` argument also determines the minimum window size of the linear data obtained, but does not have any control over the maximum window size, since that is automatically computed by KDE.
 
 ## Examples
 
+### Maxiumum/minimum rate
+
+
+### Interval rate
+
+
+### Rate for linear regions
 The function `auto_rate()` performs automatic detection of linear data by default:
 
 ```{r}
@@ -111,12 +125,14 @@ auto_rate(sardine.rd)
 
 We can customise the rolling window size and type by adding the `width` and `by` arguments. Note that using time-based rolling regression takes a bit more processing time: 
 ```{r}
-auto_rate(sardine.rd, width = 2500, by = "time")
+auto_rate(sardine.rd, width = 2500, by = "row")
 ```
 
 
 
-<!-- ## Comparison to other methods and packages {#compare} -->
+## Performance
+
+
 
 
 

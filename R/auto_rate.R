@@ -347,6 +347,7 @@ static_roll <- function(df, width) {
 #' Perform time-width rolling regression
 #'
 #' This is an internal function. Used by [auto_rate()].
+#'
 #' @keywords internal
 #' @export
 time_roll <- function(dt, width, parallel = T) {
@@ -416,7 +417,7 @@ time_lm <- function(df, start, end) {
 #' @export
 kde_fit <- function(dt, roll, width, by) {
   dt <- data.table::data.table(dt)
-  bw <- "nrd0" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
+  bw <- "SJ-ste" # "nrd"  "ucv"  "bcv"  "SJ-ste"  "SJ-dpi"
   dens <- density(roll$rate_b1, na.rm = T, bw = bw, n = length(roll$rate_b1))
   # Identify peaks
   peaks <- which(diff(sign(diff(dens$y))) == -2) + 1
@@ -425,7 +426,7 @@ kde_fit <- function(dt, roll, width, by) {
     peak.b1 = dens$x, density = dens$y)[x, ])
   match.peaks <- data.table::rbindlist(match.peaks)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
-  bin <- dens$bw * 0.25
+  bin <- dens$bw * 0.475
   match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin)])
   # Make sure that the data is continuous. If not, split into
   # fragments
@@ -444,10 +445,6 @@ kde_fit <- function(dt, roll, width, by) {
   # Convert fragments to subsets
   subsets <- lapply(1:length(raw.frags), function(x)
     subset_data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
-
-  # Perform lm on each subset
-  lapply(1:length(subsets), function(z)
-    calc_rate(subsets[[z]], by = "row", plot = F))
 
   result <- data.table::rbindlist(lapply(1:length(raw.frags),
     function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
