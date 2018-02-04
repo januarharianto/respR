@@ -422,36 +422,41 @@ kde_fit <- function(dt, roll, width, by) {
   # Identify peaks
   peaks <- which(diff(sign(diff(dens$y))) == -2) + 1
   # Match peaks to roll data, and order by density size
-  match.peaks <- lapply(peaks, function(x) data.table::data.table(index = x,
+  peak_match <- lapply(peaks, function(x) data.table::data.table(index = x,
     peak.b1 = dens$x, density = dens$y)[x, ])
-  match.peaks <- data.table::rbindlist(match.peaks)[order(-rank(density))] # ok so far
+  peak_match <- data.table::rbindlist(peak_match)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
-  bin <- dens$bw * 0.475
-  match.regs <- lapply(match.peaks$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin)])
-  # Make sure that the data is continuous. If not, split into
-  # fragments
+  bin <- dens$bw * 0.1
+  match.regs <- lapply(peak_match$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin)])
+  # Make sure that the data is continuous. If not, split into fragments
+
+  ## TODO: fragments should be ranked by size. Right now if a fragment is split
+  ## into a short fragment first, then a long one, the short one is picked.
   if (by == "time") {
-    match.raw <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
+    raw_match <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
       c(0, cumsum(abs(diff(match.regs[[x]]$time)) > width))))
   } else if (by == "row") {
-    match.raw <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
+    raw_match <- lapply(1:length(match.regs), function(x) split(match.regs[[x]],
       c(0, cumsum(abs(diff(match.regs[[x]]$row)) > width))))
   }
 
-  # Obtain rolling fragments
-  raw.frags <- unname(unlist(match.raw, recursive = F))
-  raw.frags <- raw.frags[sapply(raw.frags, nrow) > 0] # remove zero-length matches
+  # Identify the best fragments - first grab the index of longest fragments
+  idx <- do.call(rbind, (lapply(1:length(raw_match), function(x)
+    which.max(bind_rows(lapply(raw_match[[x]], nrow))))))
+  # The fragments are identified again:
+  raw.frags <- unname(mapply(function(x, y)
+    raw_match[[x]][y], 1:length(raw_match), idx))
 
-  # Convert fragments to subsets
-  subsets <- lapply(1:length(raw.frags), function(x)
-    subset_data(dt, min(raw.frags[[x]]$row), max(raw.frags[[x]]$endrow), "row"))
+  # remove 0-length matches
+  raw.frags <- raw.frags[sapply(raw.frags, nrow) > 0]
 
+  # Perform calc_rate() on each fragment
   result <- data.table::rbindlist(lapply(1:length(raw.frags),
     function(z) calc_rate(dt, from = min(raw.frags[[z]]$time),
       to = max(raw.frags[[z]]$endtime), by = "time", plot = F)$summary))
 
   # Generate output
-  out <- list(density = dens, peaks = match.peaks, bandwidth = bin,
+  out <- list(density = dens, peaks = peak_match, bandwidth = bin,
     result = result)
   return(out)
 }
