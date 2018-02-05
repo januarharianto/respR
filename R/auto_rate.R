@@ -66,7 +66,7 @@
 
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   plot = TRUE, parallel = TRUE) {
-  tic()  # start time
+  # tic()  # start time
 
   # Import from previous function(s)
   if(any(class(df) %in% "inspect_data")) df <- df$df
@@ -174,7 +174,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     out <- c(out, appendthis)
   }
 
-  elapsed <- round(toc(), 2)
+  # elapsed <- round(toc(), 2)
   if (method == "linear")
     message(nrow(result), " kernel density peaks detected and ranked.")
   class(out) <- "auto_rate"
