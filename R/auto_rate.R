@@ -429,7 +429,7 @@ kde_fit <- function(dt, roll, width, by) {
 
   # Identify the best fragments - first grab the index of longest fragments
   idx <- do.call(rbind, (lapply(1:length(raw_match), function(x)
-    which.max(bind_rows(lapply(raw_match[[x]], nrow))))))
+    which.max(do.call(rbind,(lapply(raw_match[[x]], nrow)))))))
   # The fragments are identified again:
   raw.frags <- unname(mapply(function(x, y)
     raw_match[[x]][y], 1:length(raw_match), idx))
