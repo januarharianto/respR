@@ -252,7 +252,7 @@ summary.auto_rate <- function(object, ...) {
 
 
 #' @export
-plot.auto_rate <- function(x, pos = 1, ...) {
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   # DEFINE OBJECTS
   dt <- x$df
   start <- x$summary$row[pos]
@@ -261,56 +261,57 @@ plot.auto_rate <- function(x, pos = 1, ...) {
   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
   rate <- x$summary$rate_b1[pos]
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt)  # lm of subset
+  interval <- x$summary$endtime
+  startint <- min(interval) - x$width
+  dens <- x$density
+  peaks <- x$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
   if (x$method %in% c("default", "max", "min")) {
-
-    mat <- matrix(c(1,1,1, 2,2,2, 3,3, 4,4, 5,5), nrow = 2, byrow = TRUE)
-    pardefault <- par(no.readonly = T)  # save original par settings
-    layout(mat)
-    par(mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
-    multi.p(dt, sdt)
-    sub.p(sdt)
-    rollreg.p(rolldt, rate)
-    residual.p(fit)
-    qq.p(fit)
-    layout(1)
-    par(pardefault)  # revert par settings to original
-
+    if (choose == FALSE) {
+      mat <- matrix(c(1,1,1, 2,2,2, 3,3, 4,4, 5,5), nrow = 2, byrow = TRUE)
+      pardefault <- par(no.readonly = T)  # save original par settings
+      layout(mat)
+      par(mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt)
+      sub.p(sdt)
+      rollreg.p(rolldt, rate)
+      residual.p(fit)
+      qq.p(fit)
+      layout(1)
+      par(pardefault)  # revert par settings to original
+    }
 
   } else if (x$method == "interval") {
-
-    interval <- x$summary$endtime
-    startint <- min(interval) - x$width
-
-    pardefault <- par(no.readonly = T)  # save original par settings
-    # par(mfrow = c(2, 2))  # replace par settings
-    par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
-    multi.p(dt, sdt)
-    abline(v = startint, lty = 3)
-    abline(v = interval, lty = 3)
-    sub.p(sdt)
-    residual.p(fit)
-    qq.p(fit)
-    par(pardefault)  # revert par settings to original
+    if (choose == FALSE) {
+      pardefault <- par(no.readonly = T)  # save original par settings
+      # par(mfrow = c(2, 2))  # replace par settings
+      par(mfrow = c(2, 2), mai=c(.4,.4,.3,.3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt)
+      abline(v = startint, lty = 3)
+      abline(v = interval, lty = 3)
+      sub.p(sdt)
+      residual.p(fit)
+      qq.p(fit)
+      par(pardefault)  # revert par settings to original
+    }
 
   } else if (x$method == "linear") {
-
-    dens <- x$density
-    peaks <- x$peaks[, 2:3]
-
-    pardefault <- par(no.readonly = T)  # save original par settings
-    # par(mfrow = c(2, 3))  # replace par settings
-    par(mfrow = c(2, 3), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
-    multi.p(dt, sdt)  # full timeseries with lmfit
-    sub.p(sdt)  # closed-up (subset timeseries)
-    rollreg.p(rolldt, rate)  # rolling regression series with markline
-    density.p(dens, peaks, pos) # density plot
-    residual.p(fit) # residual plot
-    qq.p(fit) # qq plot
-    par(pardefault)  # revert par settings to original
-
+    if (choose == FALSE) {
+      pardefault <- par(no.readonly = T)  # save original par settings
+      # par(mfrow = c(2, 3))  # replace par settings
+      par(mfrow = c(2, 3), mai=c(.4,.4,.3,.3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt)  # full timeseries with lmfit
+      sub.p(sdt)  # closed-up (subset timeseries)
+      rollreg.p(rolldt, rate)  # rolling regression series with markline
+      density.p(dens, peaks, pos) # density plot
+      residual.p(fit) # residual plot
+      qq.p(fit) # qq plot
+      par(pardefault)  # revert par settings to original
+    }
   }
+
+  if (choose == 1) multi.p(dt, sdt) # full timeseries with lmfit
 }
 
 
@@ -413,7 +414,7 @@ kde_fit <- function(dt, roll, width, by) {
     peak.b1 = dens$x, density = dens$y)[x, ])
   peak_match <- data.table::rbindlist(peak_match)[order(-rank(density))] # ok so far
   # Use kde bandwidth to identify matching rate values
-  bin <- dens$bw * 0.1
+  bin <- dens$bw * 0.15
   match.regs <- lapply(peak_match$peak.b1, function(x) roll[rate_b1 <= (x + bin)][rate_b1 >= (x - bin)])
   # Make sure that the data is continuous. If not, split into fragments
 
