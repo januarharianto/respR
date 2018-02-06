@@ -69,13 +69,13 @@
 
 #' Respirometry data of the sardine, *Sardinops sagax*
 #'
-#' A single experiment on the sardine species *Sardinops sagax* in a
-#' Loligo Systems swim tunnel and Witrox oxygen probe system. Oxygen content
-#' recorded in \% oxygen saturation. Temperature, salinity and atmospheric
-#' pressure are supplied below to allow for conversion to concentration units.
+#' A single experiment on the sardine species *Sardinops sagax* in a Loligo
+#' Systems swim tunnel and Witrox oxygen probe system. Oxygen content recorded
+#' in \% oxygen saturation. Temperature, salinity and atmospheric pressure are
+#' supplied below to allow for conversion to concentration units.
 #'
-#' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
-#' California.
+#' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
+#' Grove, California.
 #'
 #' - Dissolved oxygen units: \% $O_2$ saturation
 #' - Temperature (°C): 15
@@ -94,9 +94,9 @@
 
 #' Flowthrough respirometry data on the chiton, *Mopalia lignosa*
 #'
-#' A single experiment on the chiton species *Mopalia lignosa* in a
-#' custom-built flowthrough respirometry system.
-#' Conducted at University of British Columbia, Vancouver, BC, Canada.
+#' A single experiment on the chiton species *Mopalia lignosa* in a custom-built
+#' flowthrough respirometry system. Conducted at University of British Columbia,
+#' Vancouver, BC, Canada.
 #'
 #' - Dissolved oxygen units: mg/L
 #' - Time units: seconds
@@ -106,8 +106,46 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of and 935 rows (approx 16 mins of data),and
-#' 4 columns: time, oxygen inflow and outflow concentrations, and oxygen delta
-#' (the difference between inflow and outflow concentrations).
+#' @format A data frame object consisting of and 935 rows (approx 16 mins of
+#'   data),and 4 columns: time, oxygen inflow and outflow concentrations, and
+#'   oxygen delta (the difference between inflow and outflow concentrations).
 "flowthrough.rd"
 
+
+#' Output object for the function `test_lin()` for "default" data
+#'
+#' This is the output data for the performance check on `auto_rate()`'s linear
+#' detection algorithm. Data was randomly-generated, then tested, using the code
+#' `test_lin(reps = 1000, len = 300, type = "default")`. Contain 1,000
+#' iterations of the same test. For more information about the properties of
+#' "default" data, please read our vignette on `auto_rate()`.
+#'
+#' @author Januar Harianto
+#' @format A list object containing a dataframe object and an `lm` object.
+"default1k"
+
+
+#' Output object for the function `test_lin()` for "corrupted" data
+#'
+#' This is the output data for the performance check on `auto_rate()`'s linear
+#' detection algorithm. Data was randomly-generated, then tested, using the code
+#' `test_lin(reps = 1000, len = 300, type = "corrupted")`. Contain 1,000
+#' iterations of the same test. For more information about the properties of
+#' "corrupted" data, please read our vignette on `auto_rate()`.
+#'
+#' @author Januar Harianto
+#' @format A list object containing a dataframe object and an `lm` object.
+"corrupted1k"
+
+
+#' Output object for the function `test_lin()` for "segmented" data
+#'
+#' This is the output data for the performance check on `auto_rate()`'s linear
+#' detection algorithm. Data was randomly-generated, then tested, using the code
+#' `test_lin(reps = 1000, len = 300, type = "segmented")`. Contain 1,000
+#' iterations of the same test. For more information about the properties of
+#' "segmented" data, please read our vignette on `auto_rate()`.
+#'
+#' @author Januar Harianto
+#' @format A list object containing a dataframe object and an `lm` object.
+"segmented1k"
