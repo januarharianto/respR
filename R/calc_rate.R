@@ -88,7 +88,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Plot if TRUE
   if (plot) {
-    multi.p(x, dt)
+    multi.p(x, dt, title = FALSE)
   }
 
   # Generate output
