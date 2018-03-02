@@ -4,8 +4,7 @@
 \alias{auto_rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
-  parallel = TRUE)
+auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
 }
 \arguments{
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
@@ -19,7 +18,10 @@ data`. Otherwise it will simply use the number as the width.
 
 \item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. However, if the
 function detects an irregular time series, a warning will be issued to
-recommend changing this argument to \code{"time"}.}
+recommend changing this argument to \code{"time"}. In most cases \code{"row"} is used
+by default as it is efficient. Switching to \code{"time"} causes the function to
+perform checks for irregular time at every iteration of the rolling
+regression, even if time is evenly spaced, which adds to computation time.}
 
 \item{method}{string. \code{"linear"}, \code{"max"}, \code{"min"} or \code{"interval"}. Defaults
 to \code{linear}. Note that if \code{"linear"} is selected, the argument \code{width} will
