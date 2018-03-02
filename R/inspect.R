@@ -30,6 +30,8 @@
 #'   diagnosis. Works only when the subset dataframe contains exactly 2 columns.
 #'
 #' @return A list object of class `inspect`.
+#'
+#' @importFrom data.table data.table
 #' @export
 #'
 #' @examples
@@ -56,7 +58,14 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   ## set default values if NULL
   if (is.null(time) & is.null(oxygen)) {
     time <- 1
-    oxygen <- 2
+    listcols <- seq.int(1, ncol(df))
+    oxygen <- listcols[!listcols %in% 1]
+  }
+  ## if only time is provided, assume check is for all data
+  if (is.numeric(time) & is.null(oxygen)) {
+    time <- time
+    listcols <- seq.int(1, ncol(df))
+    oxygen <- listcols[!listcols %in% time]
   }
 
   if (!is.data.frame(df)) stop("`df` must be data.frame object.")
@@ -100,7 +109,7 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   }
 
   # save new data frame and create output object
-  dataframe <- cbind(df[time], df[oxygen])
+  dataframe <- data.table(cbind(df[time], df[oxygen]))
   out <-
     list(dataframe = dataframe, checks = checks, list_raw = locs, list = list)
   class(out) <- "inspect"
@@ -163,6 +172,7 @@ print.inspect <- function(x, ...) {
       print(head(ynan, 20))
     }
   }
+  return(invisible(x))
 }
 
 
@@ -181,30 +191,17 @@ plot.inspect <- function(x, ...) {
     cex = 1, cex.main = 1
   )
   plot(
-    dt[[1]], dt[[2]], xlab = "", ylab = "", col = r1, pch = 16,
-    panel.first = c(
-      rect(
-        par("usr")[1],
-        par("usr")[3], par("usr")[2], par("usr")[4], col = r3
-      ),
-      grid(col = "white", lty = 1, lwd = 1.5)
-    )
-  )
+    dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
+    panel.first = grid())
   title(main = "Full Timeseries", line = 0.3)
   plot(
-    abs(roll), xlab = "", ylab = "", col = r1, pch = 16,
-    panel.first = c(rect(
-      par("usr")[1], par("usr")[3],
-      par("usr")[2], par("usr")[4], col = r3
-    ), grid(
-      col = "white",
-      lty = 1, lwd = 1.5
-    ))
-  )
+    abs(roll), xlab = "", ylab = "", pch = 16, cex = .5,
+    panel.first = grid())
   title(
     main = "Rolling Regression of Rate vs Index (Row No.)",
     line = 0.3
   )
   par(pardefault) # revert par settings to original
-  } else message("Plot is only avalilable for a 2-column dataframe output.")
+  } else
+    message("inspect: Plot is only avalilable for a 2-column dataframe output.")
 }
