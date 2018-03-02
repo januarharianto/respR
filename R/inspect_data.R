@@ -209,16 +209,12 @@ inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
     pardefault <- par(no.readonly = T)  # save original par settings
     par(mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
       cex = 1, cex.main = 1)
-    plot(dt[[1]], dt[[2]], xlab = "", ylab = "", col = r1, pch = 16,
-      panel.first = c(rect(par("usr")[1],
-        par("usr")[3], par("usr")[2], par("usr")[4], col = r3),
-        grid(col = "white", lty = 1, lwd = 1.5)))
+    plot(dt[[1]], dt[[2]], xlab = "", ylab = "", col = r1, pch = 16, cex = .5,
+      panel.first = grid(lwd = .7))
     title(main = "Full Timeseries", line = 0.3)
-    plot(abs(roll), xlab = "", ylab = "", col = r1, pch = 16,
-      panel.first = c(rect(par("usr")[1], par("usr")[3],
-        par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-          lty = 1, lwd = 1.5)))
-    title(main = "Rolling Regression of Rate vs Index (Row No.)",
+    plot(abs(roll), xlab = "", ylab = "", col = r1, pch = 16, cex = .5,
+      panel.first = grid(lwd = .7))
+    title(main = "Rolling Regression of Rate vs Index (Row No.) at .2 width",
       line = 0.3)
     par(pardefault)  # revert par settings to original
   }
