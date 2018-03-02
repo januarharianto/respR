@@ -4,7 +4,8 @@
 \alias{auto_rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE)
+auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
+  parallel = FALSE)
 }
 \arguments{
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
