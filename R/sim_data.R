@@ -71,11 +71,19 @@
 #' sim_data(sd = 0)
 sim_data <- function(len = 300, type = "default", sd = .05, preview = TRUE) {
 
+  # snipR::refresh()
+  # len = 300
+  # type = "segmented"
+  # sd = .05
+  # preview = TRUE
+
   ## generate start curve segment at approx 25 percent of total length
   n <- floor(abs(rnorm(1, .25*len, .05*len)))                 # generate length
   ampli <- rnorm(1, .8, .05)                                  # generate height
-  dip <- ampli * cos(seq(0, pi, length = n)) - 1 + ampli      # generate dip
-  ris <- ampli * sin(seq(0, pi/2, length = n))^2 - 1 - ampli  # generate rise
+  ## dip or rise, based on whether slope is negative or positive
+  dip <- ampli * cos(seq(0, pi/2, length = n)) - 1 + ampli      # generate dip
+  ris <- ampli * cos(seq(pi, pi/2, length = n)) - ampli  # generate rise
+  ris <- ris - max(ris)
 
   ## generate corruption (random dip) at approx 25 percent of total length
   cor <- cos(seq(0, 2 * pi, length = rnorm(1, .25 * len, .05 * len)))
@@ -84,15 +92,17 @@ sim_data <- function(len = 300, type = "default", sd = .05, preview = TRUE) {
   len_x <- len - n
 
   ## if type is not defualt, generate length for the second distort
-  if (any(type == "corrupted")) len_z <- floor(rnorm(1, .25 * len_x, .02 * len_x))
-  if (any(type == "segmented")) len_z <- floor(rnorm(1, .35 * len_x, .02 * len_x))
+  if (any(type == "corrupted"))
+    len_z <- floor(rnorm(1, .25 * len_x, .02 * len_x))
+  if (any(type == "segmented"))
+    len_z <- floor(rnorm(1, .35 * len_x, .02 * len_x))
 
   ## adjust length of main linear segment, if needed
   if (!any(type == "default")) len_x <- len_x - len_z
 
   ## ok, generate the main linear segment
   x <- seq(1, len_x)
-  b_1 <- rnorm(1, 0, 0.025)  # randomly pick the slope
+  b_1 <- rnorm(1, 0, 0.020)  # randomly pick the slope
   y <- b_1 * x  # generate y values based on x and slope
 
   ## generate second distort, if needed
@@ -111,7 +121,7 @@ sim_data <- function(len = 300, type = "default", sd = .05, preview = TRUE) {
 
   ## append dip if negative slope, rise if positive
   if (b_1 >= 0) {
-    joined <- c(ris, y + tail(dip, 1))
+    joined <- c(ris, y)
   } else joined <- c(dip, y + tail(dip, 1))
 
   noise <- rnorm(length(joined), 0, sd)
@@ -121,14 +131,35 @@ sim_data <- function(len = 300, type = "default", sd = .05, preview = TRUE) {
     y = dat
   ) # convert to data frame
   if (preview) {
-    plot(df, xlab = "", ylab = "", cex = .5, mgp = c(0,0,0), tck = .01,
-      pch = 21, col = "gray50", bg ="gray50")
+    plot(df, xlab = "", ylab = "", cex = .75, mgp = c(0,0,0), tck = .01,
+      pch = 16, panel.first = grid())
   }
+
+  ## Grab indices for benchmark tests
+
+  if (type == "default") {
+    linseg <- max(seq(1,n)) + seq(1, len_x)
+
+  } else if (type == "corrupted") {
+    seg2 <- seq(n+1, poke+n) # linear segment before corruption
+    seg3 <- seq(max(seg2)+1+len_z, len) # linear segment after corruption
+    if (length(seg2) > length(seg3)) {
+      linseg <- seg2
+    }else linseg <- seg3
+
+  } else if (type == "segmented") {
+    linseg <- seq(n+1, len_x+n)
+  }
+
+  ## let's grab and measure the slope of the linear line after noise
+  lindf <- df[linseg, ]
+  coefi <- lm(y~x, lindf)$coefficients[[2]]
 
   out <- list(
     df = df,
-    coef = b_1,
-    len_main = len_x
+    coef = coefi,
+    len_main = len_x,
+    seg_index = linseg
   )
   return(invisible(out))
 }
