@@ -176,25 +176,25 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
       # xlab = expression(Delta*n*"%"),
       ylab = "Density", line = 1.5)
     title(main = "A", cex.main = 1.8, adj = 0)
-    title(main = "Proportion of linear segment correctly identified",
-          cex.main = .9)
+    title(main = "Proportion of lin. seg. correctly identified",
+          cex.main = .8)
   }
 
-  # plot B: distribution density of detected rate around the true rate
+  # plot B: density of incorrectly sampled data as a proportion of the data
   if (any(show %in% c("all", "b"))) {
     plot(d2, main = "", xlab = "", ylab = "", xaxt = "n", yaxt = "n",
-         # xlim = c(2, -2),
          panel.first = grid())
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))
     polygon(d2, col = c1, border = c1)
     abline(v = 0, lty = 2)
     title(
-      xlab = expression("Proportion"~(beta[true]*"-"*beta[detected])*"/"*beta[true]),
+      # xlab = expression("Proportion"~(beta[true]*"-"*beta[detected])*"/"*beta[true]),
+      xlab = "Proportion",
       ylab = "Density", line = 1.5
     )
     title(main = "B", cex.main = 1.8, adj = 0)
-    title(main = "")
+    title(main = "Proportion of incorrectly sampled data", cex.main = .8)
   }
 
 
@@ -217,10 +217,10 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
       ylab = expression("Rate ("~beta[detected]*")"), line = 1.5
     )
     title(main = "C", cex.main = 1.8, adj = 0)
-    # title(main = "True v. detected")
+    title(main = "True v. detected", cex.main = .8)
   }
 
-  # plot D: difference of detected rate from true rate
+  # plot D: difference of detected rate from true rate (like a residual plot)
   if (any(show %in% c("all", "d"))) {
     plot(
       df$real, (df$real - df$measured), main = "", xlab = "", ylab = "",
@@ -239,10 +239,10 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     title(
       xlab = expression("Rate ("~beta[true]*")"),
       ylab = expression("d"
-      ~(beta[true]*","~beta[detected])), line = 1.5
+      ~(beta[true]*" -"~beta[detected])), line = 1.5
     )
     title(main = "D", cex.main = 1.8, adj = 0)
-    # title(main = "Difference v. true")
+    title(main = "Deviation from true rate", cex.main = .8)
   }
 
   # # plot C: proportional difference of detected rate from true rate
@@ -269,6 +269,6 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   #   # title(main = "Proportion")
   # }
 
-  par(pardefault) # revert par settings to original
+  if (any(show %in% "all")) par(pardefault) # revert par settings to original
   return(invisible(x))
 }
