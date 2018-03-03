@@ -112,40 +112,14 @@
 "flowthrough.rd"
 
 
-#' Output object for the function `test_lin()` for "default" data
+#' Output objects for the function `test_lin()`
 #'
-#' This is the output data for the performance check on `auto_rate()`'s linear
-#' detection algorithm. Data was randomly-generated, then tested, using the code
-#' `test_lin(reps = 1000, len = 300, type = "default")`. Contain 1,000
-#' iterations of the same test. For more information about the properties of
-#' "default" data, please read our vignette on `auto_rate()`.
-#'
-#' @author Januar Harianto
-#' @format A list object containing a dataframe object and an `lm` object.
-"default1k"
-
-
-#' Output object for the function `test_lin()` for "corrupted" data
-#'
-#' This is the output data for the performance check on `auto_rate()`'s linear
-#' detection algorithm. Data was randomly-generated, then tested, using the code
-#' `test_lin(reps = 1000, len = 300, type = "corrupted")`. Contain 1,000
-#' iterations of the same test. For more information about the properties of
-#' "corrupted" data, please read our vignette on `auto_rate()`.
+#' This data contains the results of 9 separate performance checks
+#' on `auto_rate()`'s linear detection algorithm (i.e. `method = "linear"`).
+#' These test results are used to assess and discuss the performance of
+#' `auto_rate()` in our online vignette.
 #'
 #' @author Januar Harianto
-#' @format A list object containing a dataframe object and an `lm` object.
-"corrupted1k"
+#' @format List of multiple output objects of class `test_lin`.
+"test_lin_data"
 
-
-#' Output object for the function `test_lin()` for "segmented" data
-#'
-#' This is the output data for the performance check on `auto_rate()`'s linear
-#' detection algorithm. Data was randomly-generated, then tested, using the code
-#' `test_lin(reps = 1000, len = 300, type = "segmented")`. Contain 1,000
-#' iterations of the same test. For more information about the properties of
-#' "segmented" data, please read our vignette on `auto_rate()`.
-#'
-#' @author Januar Harianto
-#' @format A list object containing a dataframe object and an `lm` object.
-"segmented1k"

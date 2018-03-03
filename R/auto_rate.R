@@ -88,6 +88,10 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   dt <- data.table(df) # convert to data.table object
   setnames(dt, 1:2, c("x", "y"))
 
+  # linear detection is always by "row" since linear detection is not dependent
+  # on time but more on the stability of the data
+  if (method == "linear") by <- "row"
+
   if (method != "linear") {
     reg <- rolling_reg(dt, width, by, method)
     win <- reg$win
