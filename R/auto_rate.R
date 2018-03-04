@@ -98,19 +98,20 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     roll <- reg$roll
   }
   if (method == "max") {
-    rankroll <- reg$roll[order(rank(rate_b1))]
+    rankroll <- reg$roll[order(rank(rate_b1))]  # order by size (from biggest)
   } else if (method == "min") {
-    rankroll <- reg$roll[order(-rank(rate_b1))]
+    rankroll <- reg$roll[order(-rank(rate_b1))] # order by size (from smallest)
   } else if (method == "interval") {
     if (by == "row") {
-      sequence <- seq(win, nrow(dt), win)
+      sequence <- seq(win, nrow(dt), win)  # generate the sequence interval
+      # then subset the data based on the interval
       rankroll <- reg$roll[(seq(win, nrow(dt), win) - win + 1), ]
     } else if (by == "time") {
-      sequence <- seq.int(min(dt[, x]), max(dt[, x]), by = win)
-      rankroll <- reg$roll[time %in% sequence]
+      sequence <- seq.int(min(dt[, x]), max(dt[, x]), by = win) # generate
+      rankroll <- reg$roll[time %in% sequence] # subset
     }
   } else if (method == "linear") {
-    kde <- kde_fit(dt, width, by, method, use = "all")
+    kde <- kde_fit(dt, width, by, method, use = "all")  # use KDE technique
     win <- kde$win
     roll <- kde$roll
     rankroll <- sapply(1:length(kde$subsets), function(x)
