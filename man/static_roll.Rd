@@ -4,7 +4,7 @@
 \alias{static_roll}
 \title{Normal rolling regression}
 \usage{
-static_roll(df, width)
+static_roll(df, win)
 }
 \description{
 This is an internal function.

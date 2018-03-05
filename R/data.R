@@ -69,13 +69,13 @@
 
 #' Respirometry data of the sardine, *Sardinops sagax*
 #'
-#' A single experiment on the sardine species *Sardinops sagax* in a
-#' Loligo Systems swim tunnel and Witrox oxygen probe system. Oxygen content
-#' recorded in \% oxygen saturation. Temperature, salinity and atmospheric
-#' pressure are supplied below to allow for conversion to concentration units.
+#' A single experiment on the sardine species *Sardinops sagax* in a Loligo
+#' Systems swim tunnel and Witrox oxygen probe system. Oxygen content recorded
+#' in \% oxygen saturation. Temperature, salinity and atmospheric pressure are
+#' supplied below to allow for conversion to concentration units.
 #'
-#' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
-#' California.
+#' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
+#' Grove, California.
 #'
 #' - Dissolved oxygen units: \% $O_2$ saturation
 #' - Temperature (°C): 15
@@ -94,9 +94,9 @@
 
 #' Flowthrough respirometry data on the chiton, *Mopalia lignosa*
 #'
-#' A single experiment on the chiton species *Mopalia lignosa* in a
-#' custom-built flowthrough respirometry system.
-#' Conducted at University of British Columbia, Vancouver, BC, Canada.
+#' A single experiment on the chiton species *Mopalia lignosa* in a custom-built
+#' flowthrough respirometry system. Conducted at University of British Columbia,
+#' Vancouver, BC, Canada.
 #'
 #' - Dissolved oxygen units: mg/L
 #' - Time units: seconds
@@ -106,8 +106,20 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of and 935 rows (approx 16 mins of data),and
-#' 4 columns: time, oxygen inflow and outflow concentrations, and oxygen delta
-#' (the difference between inflow and outflow concentrations).
+#' @format A data frame object consisting of and 935 rows (approx 16 mins of
+#'   data),and 4 columns: time, oxygen inflow and outflow concentrations, and
+#'   oxygen delta (the difference between inflow and outflow concentrations).
 "flowthrough.rd"
+
+
+#' Output objects for the function `test_lin()`
+#'
+#' This data contains the results of 9 separate performance checks
+#' on `auto_rate()`'s linear detection algorithm (i.e. `method = "linear"`).
+#' These test results are used to assess and discuss the performance of
+#' `auto_rate()` in our online vignette.
+#'
+#' @author Januar Harianto
+#' @format List of multiple output objects of class `test_lin`.
+"test_lin_data"
 

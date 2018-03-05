@@ -2,11 +2,11 @@
 % Please edit documentation in R/auto_rate.R
 \name{kde_fit}
 \alias{kde_fit}
-\title{Perform kernel density estimate and fitting}
+\title{Kernel density estimation and fitting}
 \usage{
-kde_fit(dt, roll, width, by)
+kde_fit(dt, width, by, method, use = "all")
 }
 \description{
-This is an internal function and is used by \code{\link[=auto_rate]{auto_rate()}}.
+Kernel density estimation and fitting
 }
 \keyword{internal}

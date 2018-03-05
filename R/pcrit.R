@@ -171,6 +171,7 @@ plot.pcrit <- function(x, ...) {
   intercept <- x$result.intercept
 
   # Plot settings
+  c1 <- adjustcolor("orange", alpha.f = 1)
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
 
@@ -178,56 +179,50 @@ plot.pcrit <- function(x, ...) {
   if (x$has.rate) {
     # No plot here :D
   } else {
-    plot(x$df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
-      panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-        par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-    abline(h = x$result.intercept, col = "forestgreen", lwd = 3, lty = 1)
-    abline(h = x$result.midpoint, col = "steelblue", lwd = 3, lty = 1)
-    abline(h = x$result.segmented, col = "red", lwd = 3, lty = 1)
+    plot(x$df, col = c1, pch = 21, xlab = "", ylab = "", cex = .8,
+      panel.first = grid(lwd = .7))
+    abline(h = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+    abline(h = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
+    abline(h = x$result.segmented, col = "red", lwd = 2, lty = 4)
     legend("top", c(sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
       sprintf("Intercept, %g", signif(x$result.intercept, 3)),
       sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
       col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2,
       bty = "n", cex = 0.8, horiz = F)
-    title(main = "Original Series", line = 0.3)
+    title(main = expression("Original Series"), line = 0.5)
   }
 
   # Plot for broken-stick
-  plot(x$mr.df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
-    panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  abline(lm(y ~ x, segment1), lwd = 1.5, lty = 4, col = "gray35")
-  abline(lm(y ~ x, segment2), lwd = 1.5, lty = 4, col = "gray35")
-  abline(v = x$result.intercept, col = "forestgreen", lwd = 3, lty = 1)
-  abline(v = x$result.midpoint, col = "steelblue", lwd = 3, lty = 1)
+  plot(x$mr.df, col = c1, pch = 21, xlab = "", ylab = "", cex = .8,
+    panel.first = grid(lwd = .7))
+  abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
+  abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
+  abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+  abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
   legend("bottom", c(sprintf("Intercept, %g", signif(x$result.intercept, 3)),
     sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
     col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
     cex = 0.8, horiz = F)
-  title(main = expression(bold('Rate vs PO'[2] * ', Broken-Stick')), line = 0.5)
+  title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
 
-  # Plot for segmented
-  plot(x$mr.df, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
-    panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  lines(x$bpoint.fit.df, lwd = 2, col = "gray35")
-  abline(v = x$result.segmented, col = "red", lwd = 3, lty = 1)
+  # Plot for segmented (breakpoint)
+  plot(x$mr.df, col = c1, pch = 21, xlab = "", ylab = "", lwd = 2, cex = .8,
+    panel.first = grid(lwd = .7))
+  lines(x$bpoint.fit.df, lwd = 1, lty = 4)
+  abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   legend("bottom", sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
     col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
-  # title(main = "Rate vs PO2, Segmented", line = 0.5)
-  title(main = expression(bold('Rate vs PO'[2] * ', Segmented')), line = 0.5)
+  title(main = expression('Rate vs PO'[2] * ', Segmented'), line = 0.5)
 
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
   subdf <- x$mr.df[x > min(aps) * 0.99][x < max(aps) *1.01]
-  plot(subdf, col = r2, pch = 16, xlab = "", ylab = "", lwd = 2,
-    panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  abline(v = x$result.intercept, col = "forestgreen", lwd = 3, lty = 1)
-  abline(v = x$result.midpoint, col = "steelblue", lwd = 3, lty = 1)
-  abline(v = x$result.segmented, col = "red", lwd = 3, lty = 1)
-  title(main = expression(bold('Rate vs PO'[2] * ', All (Close-Up)')),
-    line = 0.5)
+  plot(subdf, col = c1, pch = 21, xlab = "", ylab = "", cex = 2,
+    panel.first = grid(lwd = .7))
+  abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+  abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
+  abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
+  title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
   par(pardefault)  # revert par settings to original
 }

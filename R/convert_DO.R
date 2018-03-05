@@ -103,7 +103,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = 35, t = 25,
 
 #' @export
 print.convert_DO <- function(x, ...) {
-  if(length(x$output >= 20)) {
+  if(length(x$output) >= 20) {
     cat("Showing only the first 20 conversions:\n")
     print(head(x$output, 20))
   } else print(x$output)

@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,7 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="All news" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -71,6 +74,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry parameters</a>
+    </li>
+    <li>
       <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
@@ -78,6 +84,9 @@
     </li>
     <li>
       <a href="../articles/pcrit.html">Determining Pcrit</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Assessing the performance of respR's auto_rate function in detecting linear data</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -112,15 +121,45 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-0-5" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-0-5" class="anchor"></a>Version 0.0.5</h1>
+<ul>
+<li>NEW: Added new function <code><a href="../reference/format_time.html">format_time()</a></code>. This function is a wrapper for <code>lubridate</code> functions and is used specifically to convert date-time to numeric time.</li>
+<li>NEW: Added replacement function <code><a href="../reference/inspect.html">inspect()</a></code> that contains much cleaner code. The old function <code><a href="../reference/inspect_data.html">inspect_data()</a></code> was tough to fix. It will be deprecated in a future update, but will still be supported for at least 18 months after we announce the deprecation. For now, users need not worry about using either function.</li>
+<li>Updated: <code><a href="../reference/calc_rate.html">calc_rate()</a></code>, <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code>, <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code>, and <code><a href="../reference/auto_rate.html">auto_rate()</a></code> are updated to work with <code><a href="../reference/inspect.html">inspect()</a></code>. (TODO: <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code> still needs to be fixed.)</li>
+<li>NEW: Vignette for <code><a href="../reference/auto_rate.html">auto_rate()</a></code> is now available.</li>
+<li>NEW: Performance benchmark vignette for <code><a href="../reference/auto_rate.html">auto_rate()</a></code>’s linear detection method is now available.</li>
+<li>NEW: <code><a href="../reference/sim_data.html">sim_data()</a></code> function: simulate data for benchmark analyses.</li>
+<li>NEW: <code><a href="../reference/test_lin.html">test_lin()</a></code> function: perform benchmark analyses specific for <code><a href="../reference/auto_rate.html">auto_rate()</a></code>’s linear detection (i.e. <code>methods = "linear"</code>).</li>
+<li>UPDATE: All plot outputs in the package have been updated. They are now “cleaner”. Users are encouraged to provide feedback on our plot outputs as we can update them easily without changing the underlying analyses.</li>
+<li>FIX: Rogue parenthesis code in <code><a href="../reference/auto_rate.html">auto_rate()</a></code> fixed (it was messing with <code>print()</code> commands).</li>
+</ul>
+</div>
+    <div id="version-0-0-4" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-0-4" class="anchor"></a>Version 0.0.4</h1>
+<ul>
+<li>HOTFIX: <code><a href="../reference/convert_rate.html">convert_rate()</a></code> fails when output contains “mmol”. Fixed.</li>
+</ul>
+</div>
+    <div id="version-0-0-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-0-3" class="anchor"></a>Version 0.0.3</h1>
+<ul>
+<li>FIX: More updates to documentation.</li>
+<li>FIX: Workaround to show <code><a href="../reference/pcrit.html">pcrit()</a></code> example on website.</li>
+</ul>
+</div>
     <div id="version-0-0-2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-0-2" class="anchor"></a>Version 0.0.2</h1>
 <ul>
-<li>Major updates to documentation.</li>
+<li>FIX: Major updates to documentation.</li>
 <li>NEW: <code><a href="../reference/subset_data.html">subset_data()</a></code> now contains examples.</li>
 <li>NEW: Flowthrough vignette is now integrated into website.</li>
-<li>HOTFIX: <code><a href="../reference/inspect_data.html">inspect_data()</a></code> plot output was plotting only columns 1 and 2 by default, even when other columns are selected in arguments.</li>
-<li>HOTFIX: <code><a href="../reference/convert_rate.html">convert_rate()</a></code> was not accepting objects of class <code>calc_rate.ft</code>.</li>
+<li>FIX: <code><a href="../reference/inspect_data.html">inspect_data()</a></code> plot output was plotting only columns 1 and 2 by default, even when other columns are selected in arguments.</li>
+<li>FIX: <code><a href="../reference/convert_rate.html">convert_rate()</a></code> was not accepting objects of class <code>calc_rate.ft</code>.</li>
 </ul>
 </div>
     <div id="version-0-0-1" class="section level1">
@@ -144,6 +183,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-0-5">0.0.5</a></li>
+        <li><a href="#version-0-0-4">0.0.4</a></li>
+        <li><a href="#version-0-0-3">0.0.3</a></li>
         <li><a href="#version-0-0-2">0.0.2</a></li>
         <li><a href="#version-0-0-1">0.0.1</a></li>
         <li><a href="#version-0-0-0-9000">0.0.0.9000</a></li>
@@ -159,7 +201,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

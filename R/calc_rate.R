@@ -47,8 +47,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Ensure "from" and "to" are same length:
   if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
 
-  # Extract data.frame if from object inspect.data
-  if(any(class(x) %in% "inspect_data")) x <- x$df
+  # Extract data.frame from inspect functions
+  if(any(class(x) %in% "inspect_data")) x <- x$df # this will be removed later
+  if(any(class(x) %in% "inspect")) x <- x$dataframe
+
 
   # By now, x input must be a data frame object
   if(!is.data.frame(x)) stop("Input must be a data.frame object.")
@@ -86,7 +88,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Plot if TRUE
   if (plot) {
-    multi.p(x, dt)
+    multi.p(x, dt, title = FALSE)
   }
 
   # Generate output
