@@ -34,10 +34,10 @@ data required to plot diagnostics.
 }
 \description{
 Randomly generate a dataset and runs \code{auto_rate()} on the data to detect
-linear regions (with \code{method = "linear"}). This is an internal function not
-meant for public use. The function plots 4 exploratory graphs and outputs the
-results of a linear regression between detected rate and true (known) rate,
-which can demonstrate how much the function is able to predict true rate.
+linear regions (with \code{method = "linear"}). The function plots 4 exploratory
+graphs and outputs the results of a linear regression between detected rate
+and true (known) rate, which can demonstrate how much the function is able to
+predict true rate.
 }
 \examples{
 # run using default values:
