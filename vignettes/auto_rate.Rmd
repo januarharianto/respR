@@ -37,40 +37,40 @@ auto_rate(x)
 ```
 
 
-The diagram below illustrates the main processes involved in producing the different outputs of the function:
+<!-- The diagram below illustrates the main processes involved in producing the different outputs of the function: -->
 
-```{r, echo = F}
-library(DiagrammeR)
-grViz("
-digraph a_nice_graph {
+<!-- ```{r, echo = F} -->
+<!-- library(DiagrammeR) -->
+<!-- grViz(" -->
+<!-- digraph a_nice_graph { -->
 
-# node definitions with substituted label text
+<!-- # node definitions with substituted label text -->
 
-node [fontname = Helvetica, shape = circle]
-rd [label = 'Raw Data']
+<!-- node [fontname = Helvetica, shape = circle] -->
+<!-- rd [label = 'Raw Data'] -->
 
-node [fontname = Helvetica, shape = rectangle]
-rr [label = '1. Rolling linear regression']
-kd [label = '2. Kernel density\nestimates']
-re [label = '3. Bandwidth resampling']
-lr [label = '4. Linear regression']
-ar [label = '5. Rank']
-fi [label = '6. Filter']
+<!-- node [fontname = Helvetica, shape = rectangle] -->
+<!-- rr [label = '1. Rolling linear regression'] -->
+<!-- kd [label = '2. Kernel density\nestimates'] -->
+<!-- re [label = '3. Bandwidth resampling'] -->
+<!-- lr [label = '4. Linear regression'] -->
+<!-- ar [label = '5. Rank'] -->
+<!-- fi [label = '6. Filter'] -->
 
-node [fontname = Menlo, shape = none]
-au [label = 'auto_rate()']
-li [label = 'linear']
-mm [label = 'max, min']
-in [label = 'interval']
+<!-- node [fontname = Menlo, shape = none] -->
+<!-- au [label = 'auto_rate()'] -->
+<!-- li [label = 'linear'] -->
+<!-- mm [label = 'max, min'] -->
+<!-- in [label = 'interval'] -->
 
-# edge definitions with the node IDs
+<!-- # edge definitions with the node IDs -->
 
-rd -> au -> rr -> ar -> mm
-rr -> kd -> re -> lr -> ar -> li
-rr -> fi -> in
+<!-- rd -> au -> rr -> ar -> mm -->
+<!-- rr -> kd -> re -> lr -> ar -> li -->
+<!-- rr -> fi -> in -->
 
-}")
-```
+<!-- }") -->
+<!-- ``` -->
 
 <!-- ### Working in the Tidyverse -->
 
