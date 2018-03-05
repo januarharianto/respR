@@ -10,3 +10,4 @@
 ^vignettes$         # Vignettes folder
 ^_pkgdown\.yml$
 ^index\.Rmd$
+^data-raw$

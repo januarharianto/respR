@@ -5,7 +5,7 @@
 #'
 #' Can return a single value, or multiple and mean values based on continuous
 #' data.
-#' 
+#'
 #' There are no units involved in `calc_rate.ft`. This is a deliberate decision.
 #' Units are called in a later function when volumetric and/or mass-specific
 #' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
@@ -15,7 +15,7 @@
 #' @param time numeric. Defaults to NULL. This selects the time column if
 #'   a data frame ('df') is provided. Otherwise, this is a numeric vector for
 #'   time data.
-#' @param inflow.o2 numeric. Defaults to NULL. This selects the inflow O2 column 
+#' @param inflow.o2 numeric. Defaults to NULL. This selects the inflow O2 column
 #'   if a data frame ('df') is provided. Otherwise, this is a numeric vector for
 #'   inflow oxygen concentration.
 #' @param outflow.o2 numeric. Defaults to NULL. This selects the outflow O2 column
@@ -33,10 +33,10 @@
 #' # Single numeric values
 #' calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
 #' # Numeric values and vector
-#' calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in, 
+#' calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in,
 #'   flowrate = 0.000039)
 #' # Vectors
-#' calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in, 
+#' calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
 #'   outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
 #' # A data frame
 #' calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
@@ -161,9 +161,8 @@ summary.calc_rate.ft <- function(object, ...) {
 
 #' @export
 plot.calc_rate.ft <- function(x, ...) {
-  plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16,
-    panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
+  plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16, cex = .7,
+    panel.first = grid(lwd = .7))
   abline(h = x$mean, lwd = 1.5, lty = 2)
   title(main = "Row Index ~ Rate", line = 0.3)
 }

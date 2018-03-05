@@ -5,32 +5,35 @@
 
 # We have also deliberately decided to use base graphics, as ggplot2 was too
 # slow when plotting large datasets. Unless ggplot2 improves, we will probably
-# never use that. Maybe skip to ggvis once it's mature?
+# not switch to it.
 
 # define colours
-r1 <- adjustcolor("darkslateblue", alpha.f = 0.4)  # primary colour
-r2 <- adjustcolor("goldenrod1", alpha.f = 0.7)  # secondary colour
-r3 <- adjustcolor("lavenderblush", alpha.f = 0.8)  # plot background colour
-d1 <- adjustcolor("tomato", alpha.f = 0.75)
-d2 <- adjustcolor("darkslateblue", alpha.f = 0.75)
+r1 <- adjustcolor("black", alpha.f = .9)  # primary colour
+r2 <- adjustcolor("goldenrod1", alpha.f = 1)  # secondary colour
+r3 <- adjustcolor("darkgrey", alpha.f = .2)  # plot background colour
+d1 <- adjustcolor("tomato", alpha.f = .75)
+d2 <- adjustcolor("darkslateblue", alpha.f = .75)
 
-
+# panel <- c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
+#   par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5))
+pch <- 21
+cex <- .5
 
 multi.p <- function(df, sdf, title = TRUE) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
-  plot(df, xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
-    par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-    lty = 1, lwd = 1.5)))
-  invisible(lapply(sdf, function(x) points(x, col = r2, pch = 16)))
+  plot(df, xlab = "", ylab = "", bg = r1, col = r1, pch = pch, cex = .3,
+    panel.first = grid(lwd = .7))
+  invisible(lapply(sdf, function(x) points(x, pch = pch, bg = r2, col = r2,
+    cex = cex)))
   invisible(lapply(sdf, function(z) {
     names(z) <- c("x", "y")  # rename columns, in case they're not x and y
     clip(min(z$x), max(z$x), min(z$y), max(z$y))
-    abline(lm(y ~ x, z), lwd = 2, lty = 3)
+    abline(lm(y ~ x, z), lwd = 1.2, lty = 3)
   }))
   if (title == T)
-    title(main = "Full Timeseries", line = 0.3)
+    title(main = expression("Full Timeseries"), line = 0.5)
 }
 
 # a plot of the subset only
@@ -41,53 +44,51 @@ sub.p <- function(sdf, rep = 1, title = T) {
   fit <- lm(y ~ x, sdf)
   # generate equation to paste into plot
   cf <- signif(coef(fit), 3)
-  eq <- paste0("y = ", cf[1], ifelse(sign(cf[2]) == 1, " + ", " - "), abs(cf[2]),
-    " x ")
+  eq <- paste0("y = ", cf[1], ifelse(sign(cf[2]) == 1, " + ", " - "),
+    abs(cf[2]), " x ")
   # plot the graph
-  plot(sdf, xlab = "", ylab = "", col = r2, pch = 16, panel.first = c(rect(par("usr")[1],
-    par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-    lty = 1, lwd = 1.5)))
+  plot(sdf, xlab = "", ylab = "", pch = pch, bg = r2, col = r2, cex = cex,
+    panel.first = grid(lwd = .7))
   abline(fit, lwd = 1.5, lty = 2)
-  if (title == T) title(main = "Close-up Region", line = 0.3)
+  if (title == T) title(main = expression("Close-up Region"), line = 0.5)
   title(main = eq, line = -1.5, font.main = 1)
 }
 
 # a plot of residuals
 residual.p <- function(fit) {
-  plot(fit$fitted.values, fit$residuals, xlab = "", ylab = "",
-    col = r2, pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  lines(suppressWarnings(loess.smooth(fit$fitted.values, fit$residuals)), col = "black", lwd = 3)
-  title(main = "Std. Residuals vs Fitted Values", line = 0.3)
+  plot(fit$fitted.values, fit$residuals, xlab = "", ylab = "", bg = r2,
+    col = r2, ylim = c(max(fit$residuals), -max(fit$residuals)),
+    pch = pch, cex = cex, panel.first = grid(lwd = .7))
+  lines(suppressWarnings(loess.smooth(fit$fitted.values, fit$residuals)),
+    col = "black", lwd = 2)
+  title(main = expression("Std. Residuals vs Fitted Values"), line = 0.5)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
 
 # a q-q plot
 qq.p <- function(fit) {
-  qqnorm(rstandard(fit), main = "", xlab = "", ylab = "", col = r2,
-    pch = 16, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  title(main = "Theoretical Q. vs Std. Residuals", line = 0.3)
+  qqnorm(rstandard(fit), main = "", xlab = "", ylab = "", bg = r2, col = r2,
+    pch = pch, cex = cex, panel.first = grid(lwd = .7))
+  title(main = expression("Theoretical Q. vs Std. Residuals"), line = 0.5)
   qqline(rstandard(fit), lty = 3, lwd = 1.5)
 }
 
 # kernel density plot
 density.p <- function(dens, peaks, rank = 1) {
-  plot(dens, main = "", xlab = "", ylab = "", col = r1, pch = 16, panel.first = c(rect(par("usr")[1],
-    par("usr")[3], par("usr")[2], par("usr")[4], col = r3), grid(col = "white",
-    lty = 1, lwd = 1.5)))
-  polygon(dens, col = r2)
-  title(main = "Density vs Rate (b1)", line = 0.3)
-  abline(v = peaks[rank, ][1], lty = 2)  # indicate position on density plot
+  plot(dens, main = "", xlab = "", ylab = "", panel.first = grid(lwd = .7))
+  polygon(dens, col = r2, border = r2)
+  title(main = expression("Density of Rolling"~beta[1]), line = 0.5)
+  abline(v = peaks[rank, ][1][,1], lty = 2)  # indicate position on density plot
 }
 
 # rolling regression
 rollreg.p <- function(rolldf, ranked.b1) {
-  plot(rolldf, type = "l", xlab = "Time", ylab = "Rate", col = "black", pch = 16,
-    lwd = 1, panel.first = c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
-      par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5)))
-  abline(h = ranked.b1, lty = 3)
-  title(main = "Rolling Regressions (Rate)", line = 0.3)
+  plot(rolldf, xlab = "Time", ylab = "Rate", bg = r2, col = r2,
+    pch = pch,
+    lwd = 1, cex = cex, panel.first = grid(lwd = .7))
+  # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
+  abline(h = ranked.b1, lty = 2)
+  title(main = expression("Rolling Regression"~beta[1]), line = 0.5)
 }
 
 # Unused, but maybe for next time?

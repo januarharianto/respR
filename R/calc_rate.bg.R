@@ -35,6 +35,10 @@
 #' calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time")
 calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   to = NULL, by = "time", plot = TRUE) {
+
+  # Import x from inspect function
+  if(any(class(x) %in% "inspect")) x <- x$dataframe
+
   # Extract data:
   dt <- data.table(x[c(xcol, ycol)])
   # Subset data if needed:
