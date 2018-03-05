@@ -140,7 +140,7 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   # Calculate the proportional difference of the detected rate from the true
   # (known) rate. The plot from this will show how spread out the detected rate
   # is from the true rate.
-  d2 <- density(x$df$length_incorrect / x$df$length_line)
+  d2 <- density(x$df$length_incorrect / x$df$length_detected)
 
   # Linear regression results a calculated from `sim_data()`:
   ls <- x$results
@@ -183,6 +183,7 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   # plot B: density of incorrectly sampled data as a proportion of the data
   if (any(show %in% c("all", "b"))) {
     plot(d2, main = "", xlab = "", ylab = "", xaxt = "n", yaxt = "n",
+         # xlim = c(min(d2$x), 2),
          panel.first = grid())
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))
