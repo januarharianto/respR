@@ -26,7 +26,7 @@ Olito et al. (2016) describes a different, though very robust, method to detect 
 A brief comparison of `auto_rate()` and `LoLinR`'s methods are discussed at the end of this document.
 
 
-## Testing the linear detection method of `auto_rate()`
+## Testing the linear detection method of auto_rate
 
 To ensure that `auto_rate()` performs as intended, we created two internal functions designed to test the accuracy of our KDE techniques to detect linear data. 
 The first function, `sim_data()`, generates a random dataset which contains both linear and non-linear segments. 
