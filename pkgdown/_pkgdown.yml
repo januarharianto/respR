@@ -2,7 +2,7 @@ url: http://januarharianto.github.io/respR
 
 template:
   params:
-  bootswatch: cerulean
+  bootswatch: cosmo
 
 reference:
   - title: "Pre-processing"
