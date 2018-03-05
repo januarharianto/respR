@@ -43,6 +43,17 @@ auto_rate(x, width = 1000, method = "interval")
 convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
              volume = 1.2, mass = 0.8)
 
+
+## Alternatively, use pipes:
+library(dplyr) # load to activate pipe operators
+
+urchins.rd %>%         # using the urchins dataset,
+  select(1, 15) %>%    # select rows 1 and 5
+  inspect_data() %>%   # inspect the data, then
+  auto_rate() %>%      # automatically determine most linear segment
+  print() %>%          # just a quick preview
+  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert data
+  
 ```
 ## Feedback and contributions
 
