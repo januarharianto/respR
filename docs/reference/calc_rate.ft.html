@@ -185,21 +185,21 @@ rates of oxygen use are computed in <code><a href='convert_rate.html'>convert_ra
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Single numeric values</span>
 <span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.88</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.17</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='output co'>#&gt; Rate:
-#&gt; [1] -0.00002769</div><div class='input'><span class='co'># Numeric values and vector</span>
+#&gt; [1] -2.769e-05</div><div class='input'><span class='co'># Numeric values and vector</span>
 <span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>8.88</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.in</span>,
   <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='img'><img src='calc_rate.ft-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
-#&gt; [1] -0.00000001196231  0.00000018339940  0.00000079642439  0.00000001182957
-#&gt; [5]  0.00000022626822  0.00000043506942
+#&gt; [1] -1.196231e-08  1.833994e-07  7.964244e-07  1.182957e-08  2.262682e-07
+#&gt; [6]  4.350694e-07
 #&gt; 
 #&gt; Mean:
-#&gt; [1] 0.0000000174903</div><div class='input'><span class='co'># Vectors</span>
+#&gt; [1] 1.74903e-08</div><div class='input'><span class='co'># Vectors</span>
 <span class='fu'>calc_rate.ft</span>(<span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.in</span>,
   <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='no'>flowthrough.rd</span>$<span class='no'>o2.out</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.000039</span>)</div><div class='output co'>#&gt; <span class='message'>calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.</span></div><div class='img'><img src='calc_rate.ft-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
-#&gt; [1] -0.00002768858 -0.00002784439 -0.00002852644 -0.00002767369 -0.00002776415
-#&gt; [6] -0.00002823009
+#&gt; [1] -2.768858e-05 -2.784439e-05 -2.852644e-05 -2.767369e-05 -2.776415e-05
+#&gt; [6] -2.823009e-05
 #&gt; 
 #&gt; Mean:
-#&gt; [1] -0.00002752597</div><div class='input'><span class='co'># A data frame</span>
+#&gt; [1] -2.752597e-05</div><div class='input'><span class='co'># A data frame</span>
 <span class='fu'>calc_rate.ft</span>(<span class='no'>flowthrough.rd</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>flowrate</span> <span class='kw'>=</span> <span class='fl'>0.00039</span>)</div><div class='output co'>#&gt; <span class='message'>'data.frame' object detected. Values in 'time', inflow.o2' and 'outflow.o2' are used as column indices to extract data from the data frame.</span></div><div class='img'><img src='calc_rate.ft-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate (first 6):
 #&gt; [1] -0.0002768858 -0.0002784439 -0.0002852644 -0.0002767369 -0.0002776415
 #&gt; [6] -0.0002823009

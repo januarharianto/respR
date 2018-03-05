@@ -7,6 +7,7 @@ articles:
   intermittent: intermittent.html
   pcrit: pcrit.html
   performance: performance.html
+  performance.html: performance.html
   respR: respR.html
   twopoint: twopoint.html
 urls:
