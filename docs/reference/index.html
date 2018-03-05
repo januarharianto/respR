@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,7 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="Function reference" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -71,6 +74,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry parameters</a>
+    </li>
+    <li>
       <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
@@ -78,6 +84,9 @@
     </li>
     <li>
       <a href="../articles/pcrit.html">Determining Pcrit</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Assessing the performance of respR's auto_rate function in detecting linear data</a>
     </li>
     <li>
       <a href="../articles/twopoint.html">Two-point analyses</a>
@@ -109,7 +118,7 @@
     <div class="page-header">
       <h1>
         Reference
-        <small>version&nbsp;0.0.0.9000</small>
+        <small>version&nbsp;0.0.3</small>
       </h1>
     </div>
 
@@ -129,6 +138,12 @@
           </th>
         </tr>
         <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="format_time.html">format_time</a></code> </p>
+          </td>
+          <td><p>Parse date-time data to numeric</p></td>
+        </tr><tr>
           <!--  -->
           <td>
             <p><code><a href="inspect_data.html">inspect_data</a></code> </p>
@@ -256,6 +271,12 @@ Erythrogramma</em>, including background respiration</p></td>
             <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
           </td>
           <td><p>Flowthrough respirometry data on the chiton, <em>Mopalia lignosa</em></p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="test_lin_data.html">test_lin_data</a></code> </p>
+          </td>
+          <td><p>Output objects for the function <code>test_lin()</code></p></td>
         </tr>
       </tbody>
       </table>
@@ -279,7 +300,7 @@ Erythrogramma</em>, including background respiration</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

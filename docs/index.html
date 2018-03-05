@@ -8,8 +8,13 @@
 <title>Analyse, Convert, and Automate Respirometry-Related Data • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Analyse, Convert, and Automate Respirometry-Related Data">
+<meta property="og:description" content="A collection of functions that, when used together, provide a 
+    complete and structured workflow for the analysis of respirometry-related
+    data. See the respR GitHub webpage for documentation and examples.">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -48,6 +53,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/auto_rate.html">Automatic detection of respirometry parameters</a>
+    </li>
+    <li>
       <a href="articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
@@ -55,6 +63,9 @@
     </li>
     <li>
       <a href="articles/pcrit.html">Determining Pcrit</a>
+    </li>
+    <li>
+      <a href="articles/performance.html">Assessing the performance of respR's auto_rate function in detecting linear data</a>
     </li>
     <li>
       <a href="articles/twopoint.html">Two-point analyses</a>
@@ -121,7 +132,19 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="reference/auto_rate.ht
 
 <span class="co"># 4. Conversions</span>
 <span class="kw"><a href="reference/convert_rate.html">convert_rate</a></span>(y, <span class="dt">o2.unit =</span> <span class="st">"%"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h/kg"</span>,
-             <span class="dt">volume =</span> <span class="fl">1.2</span>, <span class="dt">mass =</span> <span class="fl">0.8</span>)</code></pre></div>
+             <span class="dt">volume =</span> <span class="fl">1.2</span>, <span class="dt">mass =</span> <span class="fl">0.8</span>)
+
+
+## Alternatively, use pipes:
+<span class="kw">library</span>(dplyr) <span class="co"># load to activate pipe operators</span>
+
+urchins.rd <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># using the urchins dataset,</span>
+<span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">select</a></span>(<span class="dv">1</span>, <span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># select rows 1 and 5</span>
+<span class="st">  </span><span class="kw"><a href="reference/inspect_data.html">inspect_data</a></span>() <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># inspect the data, then</span>
+<span class="st">  </span><span class="kw"><a href="reference/auto_rate.html">auto_rate</a></span>() <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># automatically determine most linear segment</span>
+<span class="st">  </span><span class="kw">print</span>() <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># just a quick preview</span>
+<span class="st">  </span><span class="kw"><a href="reference/convert_rate.html">convert_rate</a></span>(<span class="st">"mg/l"</span>, <span class="st">"s"</span>, <span class="st">"mg/h/kg"</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>) <span class="co"># convert data</span>
+  </code></pre></div>
 </div>
 <div id="feedback-and-contributions" class="section level2">
 <h2 class="hasAnchor">
@@ -181,8 +204,8 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="reference/auto_rate.ht
 <p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Januar Harianto <br><small class="roles"> Author, maintainer </small> </li>
-<li>Nicholas Carey <br><small class="roles"> Author </small> </li>
+<li>Januar Harianto <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Nicholas Carey <br><small class="roles"> Author </small>  </li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
@@ -199,7 +222,7 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="reference/auto_rate.ht
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
