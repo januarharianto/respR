@@ -89,7 +89,7 @@ pardefault
 Same as `"default"`, but the data is modified to contain two linear segments. 
 The slope of the second linear segment is randomly chosen at approximately 0.5$\times$ to 0.6$\times$ of the first linear segment (i.e the slope is always a magnitude smaller than the first linear segment). 
 
-Thus, to detect the correct linear segment, `auto_rate()` would need to correctly omit the initial non-linear segment, and also, not sample the end segment of the data as it has a different slope.
+Thus, to detect the correct linear segment, `auto_rate()` would need to correctly omit the initial non-linear segment, and also, ignore the end segment of the data as it has a different slope.
 Here we show 25 randomly-generated plots created by the method:
 
 ```{r segdata, echo=F, results='hide'}
@@ -111,7 +111,7 @@ The parameters include:
 2. The length of the detected segment that is correctly sampled ($len_c$). Here, we also call such data "true";
 4. The length of the detected segment that is *incorrectly* sampled ($len_i$). Here, we also call such data "other";
 5. The slope of the true segment ($\beta_{true}$; or true rate); and
-6. The slope of the detected segment ($\beta_{detected}, or detected rate$).
+6. The slope of the detected segment ($\beta_{detected}$, or detected rate).
 
 From the above data, we can generate four kinds of performance metrics for visualisation: 
 

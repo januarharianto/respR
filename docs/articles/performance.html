@@ -131,7 +131,7 @@
 <a href="#segmented-data" class="anchor"></a>“Segmented” data</h3>
 <p><code><a href="../reference/sim_data.html">sim_data(method = "segmented")</a></code></p>
 <p>Same as <code>"default"</code>, but the data is modified to contain two linear segments. The slope of the second linear segment is randomly chosen at approximately 0.5<span class="math inline">\(\times\)</span> to 0.6<span class="math inline">\(\times\)</span> of the first linear segment (i.e the slope is always a magnitude smaller than the first linear segment).</p>
-<p>Thus, to detect the correct linear segment, <code><a href="../reference/auto_rate.html">auto_rate()</a></code> would need to correctly omit the initial non-linear segment, and also, not sample the end segment of the data as it has a different slope. Here we show 25 randomly-generated plots created by the method:</p>
+<p>Thus, to detect the correct linear segment, <code><a href="../reference/auto_rate.html">auto_rate()</a></code> would need to correctly omit the initial non-linear segment, and also, ignore the end segment of the data as it has a different slope. Here we show 25 randomly-generated plots created by the method:</p>
 <p><img src="performance_files/figure-html/segdata-1.png" width="681.6"></p>
 </div>
 </div>
@@ -144,7 +144,7 @@
 <li>The length of the detected segment that is correctly sampled (<span class="math inline">\(len_c\)</span>). Here, we also call such data “true”;</li>
 <li>The length of the detected segment that is <em>incorrectly</em> sampled (<span class="math inline">\(len_i\)</span>). Here, we also call such data “other”;</li>
 <li>The slope of the true segment (<span class="math inline">\(\beta_{true}\)</span>; or true rate); and</li>
-<li>The slope of the detected segment (<span class="math inline">\(\beta_{detected}, or detected rate\)</span>).</li>
+<li>The slope of the detected segment (<span class="math inline">\(\beta_{detected}\)</span>, or detected rate).</li>
 </ol>
 <p>From the above data, we can generate four kinds of performance metrics for visualisation:</p>
 <ol style="list-style-type: decimal">
