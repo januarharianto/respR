@@ -1,10 +1,10 @@
 #' Perform `auto_rate()` iteratively and extract performance metrics
 #'
 #' Randomly generate a dataset and runs `auto_rate()` on the data to detect
-#' linear regions (with `method = "linear"`). This is an internal function not
-#' meant for public use. The function plots 4 exploratory graphs and outputs the
-#' results of a linear regression between detected rate and true (known) rate,
-#' which can demonstrate how much the function is able to predict true rate.
+#' linear regions (with `method = "linear"`). The function plots 4 exploratory
+#' graphs and outputs the results of a linear regression between detected rate
+#' and true (known) rate, which can demonstrate how much the function is able to
+#' predict true rate.
 #'
 #' @param reps numeric. Number of times to iterate `auto_rate()` on a randomly
 #'   generated dataset. Defaults to 1.
@@ -130,25 +130,14 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   # bw <- "nrd0" # "nrd" "SJ-ste"
   c1 <- adjustcolor("peru", alpha.f = .4)
 
-  # Calculate density based on length of subset detected as a proportion of
-  # known linear region. Note that it does not represent proportion of linear
-  # section detected (since it may detect other regions). The plot from this is
-  # most useful to see if over-detection occurs, since under-detecting the
-  # linear region is fine since the rate should be the same.
+  # proportion of true linear region that was correctly sampled (detected):
   d1 <- density(df$length_detected / df$length_line)
 
-  # Calculate the proportional difference of the detected rate from the true
-  # (known) rate. The plot from this will show how spread out the detected rate
-  # is from the true rate.
+  # proportion of the detected segment that contains incorrect data:
   d2 <- density(x$df$length_incorrect / x$df$length_detected)
 
   # Linear regression results a calculated from `sim_data()`:
   ls <- x$results
-
-  # Calculate the percentage of measured values that are within 10 percent of the
-  # true rate.
-  devp <- data.table::data.table(x = (x$df$real - x$df$measured)/x$df$real*100)
-  dev5 <- nrow(devp[x <= 5][x >= -5])/nrow(devp)
 
   options(scipen = 5) # adjust threshold for scientific notation
   pardefault <- par(no.readonly = T) # save original par settings
@@ -245,30 +234,6 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     title(main = "D", cex.main = 1.8, adj = 0)
     title(main = "Deviation from true rate", cex.main = .8)
   }
-
-  # # plot C: proportional difference of detected rate from true rate
-  # if (any(show %in% c("all", "d"))) {
-  #   plot(
-  #     df$real, ((df$real - df$measured)/df$real), main = "", xlab = "",
-  #     ylab = "", pch = 21, bg = c1, col = c1, cex = .6,
-  #     xlim = c(max(abs(df$real)),-max(abs(df$real))),
-  #     ylim = c(-.25,.25)
-  #   )
-  #   abline(h = .05, lty = 3)
-  #   abline(h = -.05, lty = 3)
-  #   lines(
-  #     suppressWarnings(loess.smooth(df$real, (df$real-df$measured)/df$real)),
-  #     col = "black", lwd = 1.5
-  #   )
-  #   text(min(x$df$real)*0.7, .04, round(dev5,2), cex = 1)
-  #   title(
-  #     xlab = expression("Rate ("~beta[true]*")"),
-  #     ylab = expression("% d"
-  #       ~(beta[true]*","~beta[detected])), line = 2
-  #   )
-  #   title(main = "C", cex.main = 1.8, adj = 0)
-  #   # title(main = "Proportion")
-  # }
 
   if (any(show %in% "all")) par(pardefault) # revert par settings to original
   return(invisible(x))
