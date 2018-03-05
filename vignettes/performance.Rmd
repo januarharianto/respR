@@ -179,22 +179,6 @@ x <- test_lin(reps = 20, len = 500, type = "segmented", plot = TRUE)
 
 ## Results
 
-<!-- Overall, `auto_rate()`'s linear detection algorithms performed relatively well across all three different data scenarios.  -->
-<!-- Linear regressions results comparing $\beta_{true}$ to $\beta_{detected}$ were overwhelmingly significant (Figs 2D, 3D, 4D), with $R^2$ at 0.999 for all tests.  -->
-
-<!-- Detecting a shorter segment of the linear data does not necessarily have a negative impact on the detected slope, but over-detection should generally be avoided since it results in an over or under-estimate the true slope.  -->
-<!-- `auto_rate()` performed satisfactorily in detecting linear segments of the simulated data, and rarely oversampled the linear segments (Figs 2A, 3A).  -->
-<!-- However, it oversampled more when used on "segmented" data (Fig 4A), due to the increased difficulty in correctly distinguishing both ends of the linear segment.  -->
-<!-- Regardless, the oversampling was not meaningful enough to alter the calculated slopes drastically, as shown by the mostly narrow differences between $\beta_{true}$ and $\beta_{detected}$ across the datasets (Fig 4B, E) and the strong results of the linear regression analysis. -->
-<!-- For "corrupted" data, there was evidence that `auto_rate()` sometimes sampled the wrong segments, or oversampled the data, resulting in the larger deviations from $\beta_{true}$ (Fig 3E). We recommend users to exercise caution when running `auto_rate()'`s linear detection on data that contains major artefacts or non-biological noise, and to always inspect the exploratory plots produced whenever they run `auto_rate()` on such data. -->
-
-<!-- For slope values approaching zero, `auto_rate()` continued to perform well as shown by the relatively narrow distribution of $d$ across all data types tested (Figs 2E, 3E, 4E).  -->
-<!-- The large \% differences between $\beta_{true}$ and $\beta_{detected}$ as the slope approached zero (Figs 1C, 2C, 3C) were expected, since minor differences in values approaching zero are greatly amplified (e.g. 0.00002 is a 100% increase from 0.00001, whereas 0.20002 is just a 0.005\% increase from 0.20001). -->
-<!-- Despite the weighted influence of smaller slope values when calculating \% difference between $\beta_{true}$ and $\beta_{detected}$, detected slope values were overwhelmingly close to the known values, with more than 78\% -- 87\% of the values within 5\% of the known slopes (Figs 2C, 3C, 4C). -->
-
-<!-- In general, `auto_rate()`'s performance was not affected whether the slope was positive, negative or approaching zero, with no visible skewness in the normal distribution of error across all data scenarios that were simulated here (Figs 2B, 3B, 4B). -->
-<!-- The tests performed and the results obtained indicated that `auto_rate()`'s linear detection methods hold promise and are potentially reliable techniques, at least for the types of data simulated for this exercise. We encourage users to evaluate the function with real data and send us feedback should `auto_rate()`'s linear detection fails. -->
-
 
 ### "Default" data
 
@@ -256,16 +240,18 @@ We did not report any of the results for 200-sample size datasets, but users are
 
 ## Linear detection in other packages and software
 
-Currently and to our knowledge, only one other software, `LoLinR` (Olito et al. 2017), also an R package, performs linear detection techniques on serial data. 
-This is not a coincidence - many of the data reporting and visualisations of `auto_rate()` are, in fact, inspired by our own experiences with LoLinR. 
-However, we created the function with a completely different aim in mind (i.e. to be a part of a larger ecosystem of respirometry analysis), of which linear data detection is but one of many features availabe. 
-LoLinR is focused on one task: obtaining the best-fit linear segments from any serial data. 
-<!-- The design of our package however also allows the auto_rate function to be applied to any serial data, not just respirometry data.  -->
-It is up to users to decide whether to use `LoLinR` or `respR'`s `auto_rate()` function for linear detection, but we list some very important differences specific only to `auto_rate()`'s linear detection method and `LoLinR`'s:
 
-1. `auto_rate()` detects linear segments first, and then performs linear regressions on the data. `LoLinR`, in contrast, performs all possible linear regressions on the data first, before implementing a ranking algorithm to rank all linear segment(s). Thus both methods use different implementations and techniques. We have discussed `auto_rate()`'s advantages and pitfalls in this document; users are encouraged to also view `LoLinR`'s online vignette (here)[https://januarharianto.github.io/respR/reference/index.html], and their paper linked in their document, which includes benchmark results.
+
+To our current knowledge, one other software, [`LoLinR`](https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html) (Olito et al. 2017), an R package, performs linear detection techniques on serial data. 
+<!-- This is not a coincidence - many of the data reporting and visualisations of `auto_rate()` are, in fact, inspired by our own experiences with LoLinR.  -->
+<!-- However, we created the function with a completely different aim in mind (i.e. to be a part of a larger ecosystem of respirometry analysis), of which linear data detection is but one of many features availabe.  -->
+<!-- LoLinR is focused on one task: obtaining the best-fit linear segments from any serial data.  -->
+<!-- The design of our package however also allows the auto_rate function to be applied to any serial data, not just respirometry data.  -->
+Here, we list some very important differences between `auto_rate()`'s linear detection method and `LoLinR`'s:
+
+1. `auto_rate()` detects linear segments first before running linear regressions on the data. `LoLinR`, in contrast, performs all possible linear regressions on the data first, before implementing a ranking algorithm to rank all linear segment(s). We have discussed `auto_rate()`'s advantages and pitfalls in this document; users are encouraged to also view `LoLinR`'s online vignette [here](https://github.com/colin-olito/LoLinR), and their paper linked in their document, which includes benchmark results.
 2. `LoLinR`'s algorithms uses three different metrics to select linear data, in which at least one performs very well to detect linear segments -- even if a small amount data is provided (<100 samples). In comparison, `auto_rate()` performs less accurately at such small sample sizes, but that accuracy increases greatly with more data available.
-3. `auto_rate()` is blazingly *fast*, even as it performs hundreds to thousands of rolling regressions in some cases. It is perhaps ideal for large data, while LoLinR might be the function of choice for smaller datasets since its speed decreases exponentially as data gets bigger. If processing time is not an issue, users may still use `LoLinR` to analyse bigger data.
+3. `auto_rate()` is blazingly *fast*, even as it performs hundreds to thousands of rolling regressions at a time. It is perhaps ideal for large data, while LoLinR might be the function of choice for smaller datasets since its speed decreases exponentially as data gets bigger. If processing time is not an issue, users may still use `LoLinR` to analyse bigger data. Users may also find use in utilising `LoLinR`'s `thinData()` function to deal with big datasets.
 
 ## References
 
