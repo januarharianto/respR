@@ -1,5 +1,5 @@
 ---
-title: "`auto_rate()`"
+title: "Automatic detection of respirometry parameters"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -21,8 +21,15 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
 
 ## Introduction
 
-Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the *maximum*, *minimum*, *interval* rate over a specific sampling window. 
-In addition, when used to detect linear sections of the data, a **kernel density estimate** is performed on the rolling regression output and the **kernel bandwidth** used to re-sample linear regions of the data for re-analysis. 
+In respirometry, we often want to report oxygen uptake rates that represent experimentally important stages or physiological states. These include:
+
+- minimum rates observed, often most representative of resting or maintenance metabolism;
+- maximum rates observed, representative of active or maximal metabolic rates; and  
+- the most consistent rates observed, often most representative of standard metabolic rates. 
+
+Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the estimate the most linear rates over a specific sampling window. 
+In addition, it identifies maximum, minimum, and interval rates. 
+When used to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.
 
 ```{r, results="hide"}
 x <- urchins.rd[,c(1,15)]
@@ -30,7 +37,40 @@ auto_rate(x)
 ```
 
 
-<!-- The diagram below illustrates the main processes involved in producing the different outputs of the function: -->
+The diagram below illustrates the main processes involved in producing the different outputs of the function:
+
+```{r, echo = F}
+library(DiagrammeR)
+grViz("
+digraph a_nice_graph {
+
+# node definitions with substituted label text
+
+node [fontname = Helvetica, shape = circle]
+rd [label = 'Raw Data']
+
+node [fontname = Helvetica, shape = rectangle]
+rr [label = '1. Rolling linear regression']
+kd [label = '2. Kernel density\nestimates']
+re [label = '3. Bandwidth resampling']
+lr [label = '4. Linear regression']
+ar [label = '5. Rank']
+fi [label = '6. Filter']
+
+node [fontname = Menlo, shape = none]
+au [label = 'auto_rate()']
+li [label = 'linear']
+mm [label = 'max, min']
+in [label = 'interval']
+
+# edge definitions with the node IDs
+
+rd -> au -> rr -> ar -> mm
+rr -> kd -> re -> lr -> ar -> li
+rr -> fi -> in
+
+}")
+```
 
 <!-- ### Working in the Tidyverse -->
 
@@ -45,45 +85,11 @@ auto_rate(x)
 <!-- ``` -->
 
 
-<!-- ```{r, echo = F} -->
-<!-- library(DiagrammeR) -->
-<!-- grViz(" -->
-<!-- digraph a_nice_graph { -->
-
-<!-- # node definitions with substituted label text -->
-
-<!-- node [fontname = Helvetica, shape = circle]         -->
-<!-- rd [label = 'Raw Data'] -->
-
-<!-- node [fontname = Helvetica, shape = rectangle]         -->
-<!-- rr [label = '1. Rolling linear regression'] -->
-<!-- kd [label = '2. Kernel density\nestimates'] -->
-<!-- re [label = '3. Bin resampling'] -->
-<!-- lr [label = '4. Linear regression'] -->
-<!-- ar [label = '5. Rank'] -->
-<!-- fi [label = '6. Filter'] -->
-
-<!-- node [fontname = Menlo, shape = none] -->
-<!-- au [label = 'auto_rate()'] -->
-<!-- li [label = 'linear'] -->
-<!-- mm [label = 'max, min'] -->
-<!-- in [label = 'interval'] -->
-
-<!-- # edge definitions with the node IDs -->
-
-<!-- rd -> au -> rr -> ar -> mm -->
-<!-- rr -> kd -> re -> lr -> ar -> li -->
-<!-- rr -> fi -> in -->
-
-<!-- }") -->
-<!-- ``` -->
-
-
 ## Rolling linear regression
 
-For more complex respirometry parameters, the function `auto_rate()` uses a novel method of combining rolling regression and kernel density estimate algorithms to detect patterns in respirometry data. 
+The function `auto_rate()` uses a novel method of combining rolling regression and kernel density estimate algorithms to detect patterns in respirometry data. 
 First, `auto_rate()` always performs a rolling linear regression on the data before additional methods are applied. 
-The rolling regression runs all possible ordinary least-squares (OLS) linear regressions $(y = \beta_0 + \beta_1 X + \epsilon)$ of a fixed sample width across the entire data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations (e.g. oxygen concentration), $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression paramters and $\epsilon_t(n)$ is a vector of error terms.
+The rolling regression runs all possible ordinary least-squares (OLS) linear regressions $(y = \beta_0 + \beta_1 X + \epsilon)$ of a fixed sample width across the entire data series, and is expressed as: $$y_t(n) = X_t(n) \beta (n) + \epsilon_t(n), \ t = n,\ ...,\ T$$ where $n$ is the window of width $n < T$, $T$ is the total length of the dataset, $y_t(n)$ is the vector of observations (e.g. oxygen concentration), $X_t(n)$ is the matrix of explanatory variables, $\beta (n)$ is a vector of regression parameters and $\epsilon_t(n)$ is a vector of error terms.
 Thus, a total of $(T - n) + 1$ number of overlapping regressions are fitted, which are then ranked to obtain maximum and minimum values.
 If an interval-based regression is required, we select the `"interval"` method when calling the function, and it automatically selects non-overlapping sections of the data for regressions.
 
@@ -96,11 +102,11 @@ If an interval-based regression is required, we select the `"interval"` method w
 
 Additional analytical techniques are automatically applied when we use `auto_rate()` to detect linear sections of the data. 
 First, we take advantage of the key assumption that linear sections of a data series are reflected by stable parameters across the rolling estimates, a property that is often applied in financial statistics to evaluate model stability and make forward predictions on time-series data (see Zivot and Wang 2006).
-We use kernel density estimation (KDE) techniques, often applied in various inference procedures such as machine learning, pattern recognition and computer vision, to automatically aggregrate stable (i.e. linear) segments as they naturally form one or more local maximums ("modes") in the probability density estimate.
+We use kernel density estimation (KDE) techniques, often applied in various inference procedures such as machine learning, pattern recognition and computer vision, to automatically aggregate stable (i.e. linear) segments as they naturally form one or more local maximums ("modes") in the probability density estimate.
 
 KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically without supervision. 
 KDE can be expressed as: $$\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)$$ where $f$ is the density function from an unknown distribution $P$ for $X_1,...,X_n$, $K$ is the kernel function and $h$ is the optimal smoothing bandwidth. 
-The smoothing bandwidth is computed using the solve-the-equation *plug-in* method (Jones et al 1996, Sheather and Jones 1991) which works well with multimodal or non-normal densities (Raykar and Duraiswami 2006).
+The smoothing bandwidth is computed using the solve-the-equation *plug-in* method (Sheather et al. 1996, Sheather and Jones 1991) which works well with multimodal or non-normal densities (Raykar and Duraiswami 2006).
 
 <!-- The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples.  -->
 
@@ -110,13 +116,18 @@ The rolling estimates are discarded, while the newly detected data segments are 
 
 ## Adjusting the width of rolling regressions
 
-By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. This can be changed by changing the `width` argument, to a proportion relative to the total size of the data (`width = 0.1`) or a fixed number (`width = 3000`). 
+By default, `auto_rate()`'s rolling regression uses a rolling window value of `0.2` multiplied by the total length of the number of samples, or total time elapsed. 
+This can be changed by changing the `width` argument, to a proportion relative to the total size of the data (`width = 0.1`) or a fixed number (`width = 3000`). 
 
-It is important to note that the width determines the exact width of the data segments produced for `max`, `min` and `interva`l rates, but does *not* restrict the maximum width of the segments produced for linear detection. 
-**We advise users to use caution when changing the `width` argument if using `method = "linear"`.** Choosing an inappropriate width value tends to over-fit the data for rolling regression. Below, we show the differences in the shape of the rolling regressions when using a `width` of `0.6` to analyse `sardine.rd`:
+It is important to note that the width determines the exact width of the data segments produced for `max`, `min` and `interva`l rates. This allows the user to consitently report results across experiments, such as reporting the maximum or minimum rates sustained over a specified time period. 
+
+Importantly, the `width` does *not* restrict the maximum width of the segments produced for linear detection. 
+**We advise users to use caution when changing the `width` argument if using `method = "linear"`.** Choosing an inappropriate width value tends to over-fit the data for rolling regression. 
+
+Below, we show the differences in the shape of the rolling regressions when using a `width` of `0.6` to analyse `sardine.rd`:
 
 ```{r rollreg_demo}
-# Perform linear detection using default values:
+# Perform linear detection; default width (when not specified) is 0.2:
 normx <- auto_rate(sardine.rd, plot = FALSE)
 
 # Perform linear detection using manual width of 0.6:
@@ -129,7 +140,11 @@ plot(normx, choose = 3)
 plot(overx, choose = 3)
 ```
 
-Poor selection of the `width` value may result in a badly-characterised rolling estimate output, and the KDE method will not have the appropriate information necessary to correctly detect patterns in the data.
+Under perfectly linear conditions, we would expect the rolling regression output to produce a straight, horizontal line with a slope of 0, i.e. a very stable plot.
+Since KDE automatically aggregates stable values, a poor selection of the `width` value may result in a badly-characterised rolling estimate output.
+In the example presented above, while the default width showed a pattern of relative stability after 3,000 seconds, that information was lost when a `width` of `0.6` was used.
+Thus, the KDE technique would not have had the appropriate information necessary to correctly detect any linear patterns in the same data.
+
 
 <!-- ## Examples -->
 <!-- Usage examples for `auto_rate()` can be found by invoking `?auto_rate` in the R console. -->
@@ -170,213 +185,19 @@ Poor selection of the `width` value may result in a badly-characterised rolling 
 <!-- x <- auto_rate(sardine.rd) -->
 <!-- ``` -->
 
+## Examples
 
-## Performance
-
-`auto_rate()` use both rolling regression and kernel density estimation techniques to detect and analyse linear data. 
-To our limited knowledge, the methods described in this paper have never been used in past publications involving linear data detection and analysis.
-Olito et al. (2016) describes an different, but very robust, method to detect and rank linear methods in the data using their R package `LoLinR`. A quick comparison between `auto_rate()` and `LoLinR`'s methods are discussed at the end of this document.
-
-### Testing the linear detection method of `auto_rate()`
-
-To ensure that `auto_rate()` performs as intended, we created two internal functions designed to test the accuracy of our KDE techniques to detect linear data. 
-The first function, `sim_data()`, generates a random dataset which contains both linear and non-linear segments. 
-The second function, `test_lin()`, specifically performs `auto_rate()` repeatedly on randomly generated data to assess the accuracy of the KDE technique.
-The performance tests that we provide are by no means comprehensive, but provide a starting point in generating the data necessary for users to make informed decisions on using and further testing `auto_rate()` for their own purposes.
+Examples are available in the [reference section](https://januarharianto.github.io/respR/reference/index.html). You may also run `?auto_rate` in the R console to access some examples in the help file.
 
 
-### Generating simulated data for tests
+## References
 
-`sim_data()` is used to randomly generate three kinds of data based on the `method` argument, which we briefly describe below.
+Jones, M. C., Marron, J. S., & Sheather, S. J. (1996). A Brief Survey of Bandwidth Selection for Density Estimation. Journal of the American Statistical Association, 91(433), 401–407. doi:10.1080/01621459.1996.10476701
 
-### `sim_data(method = "default")`
+Olito, C., White, C. R., Marshall, D. J., & Barneche, D. R. (2017). Estimating monotonic rates from biological data using local linear regression. The Journal of Experimental Biology, jeb.148775-jeb.148775. doi:10.1242/jeb.148775
 
-A non-linear segment is first generated using a sine or cosine function with a random length of `floor(abs(rnorm(1, .25*len, .05*len)))`, where `len` is the total number of observations in the data defined in the function argument, and a random amplitude of `rnorm(1, .8, .05)`. 
-This data segment is appended to a linear segment with a randomly-generated slope computed using `rnorm(1, 0, 0.02)`.
-The shape of the dataset is designed to mimic common respirometry data whereby the initial sections of the data are often non-linear. 
-Here we show 25 randomly-generated plots created by the method:
+Raykar, V., & Duraiswami, R. (2006). Fast optimal bandwidth selection for kernel density estimation. In Proceedings of the Sixth SIAM International Conference on Data Mining (Vol. 2006). doi:10.1137/1.9781611972764.53
 
-```{r defaultdata, echo=F, results='hide'}
-set.seed(117)
-pardefault <- par(no.readonly = T)  # save original par settings
-par(mfrow = c(5, 5), mai=c(.2,.2,0,0), oma = c(2,2,1,1), ps = 8, cex = 1,
-  cex.main = 1)
-# set.seed(990)
-replicate(25, sim_data(len = 100, type = "default"))
-pardefault
-```
+Sheather, S. J., & Jones, M. C. (1991). A Reliable Data-Based Bandwidth Selection Method for Kernel Density Estimation. Journal of the Royal Statistical Society. Series B (Methodological), 53(3), 683–690.
 
-### `sim_data(method = "corrupted")`
-
-Same as `"default"`, but "corrupted" data is inserted randomly at any point in the linear segment.
-The data corruption is depicted by a sudden dip in the reading, which recovers. 
-This event mimics equipment interference that does not necessarily invalidate the dataset if the corrupted section is omitted from analysis. 
-The dip is generated by a cosine function of fixed amplitude of 1, and the length is randomly generated using `floor(rnorm(1, .25 * len_x, .02 * len_x))`, where `len_x` is the length of the linear segment.
-Thus to detect the right linear segment, `auto_rate()` will need to omit the initial non-linear segment, ignore the dip, and then pick the longer of the 2 remaining linear segments that are separated by the dip.
-Here we show 25 randomly-generated plots created by the method:
-
-```{r corruptdata, echo=F, results='hide'}
-set.seed(654)
-pardefault <- par(no.readonly = T)  # save original par settings
-par(mfrow = c(5, 5), mai=c(.2,.2,0,0), oma = c(2,2,1,1), ps = 8, cex = 1,
-  cex.main = 1)
-# set.seed(880)
-replicate(25, sim_data(len = 100, type = "corrupted"))
-pardefault
-```
-
-### `sim_data(method = "segmented")`
-
-Same as `"default"`, but the data is modified to contain two linear segments. 
-The slope of the second linear segment is randomly chosen at approximately 0.5$\times$ to 0.6$\times$ of the first linear segment (i.e the slope is always a magnitude smaller than the first linear segment). 
-Thus, to detect the right linear segment, `auto_rate()` would need to correctly omit the initial non-linear segment, and also, not sample the end segment of the data as it has a different slope.
-Here we show 25 randomly-generated plots created by the method:
-
-```{r segdata, echo=F, results='hide'}
-set.seed(291)
-pardefault <- par(no.readonly = T)  # save original par settings
-par(mfrow = c(5, 5), mai=c(.2,.2,0,0), oma = c(2,2,1,1), ps = 8, cex = 1,
-  cex.main = 1)
-# set.seed(880)
-replicate(25, sim_data(len = 100, type = "segmented"))
-pardefault
-```
-
-### Test conditions
-
-To quantify the performance and accuracy of `auto_rate()`'s linear detection technique, the function `test_lin()` runs the linear detection technique (`method = "linear"`) iteratively and extracts specific output parameter for analysis.
-The parameters include: 
-
-1. The length of the true segment ($len_t$);
-2. The length of the detected segment that is correctly sampled ($len_c$);
-4. The length of the detected segment that is *incorrectly* sampled ($len_i$);
-5. The slope of the true segment($\beta_{true}$); and
-6. The slope of the detected segment ($\beta_{detected}$).
-
-
-From the above data, we can generate four kinds of performance metrics for visualisation: 
-
-1. A density plot of the proportion of the linear segment correctly identified. Each data point is a measure of ${len_c}\div{len_t}$.
-2. A density plot of the proportion of incorrectly-sampled data. Each data point is a measure of ${len_i}\div{len_t}$.
-3. A linear regression plot, where each data point is a measure of of $\beta_{detected}$ (y) as a function of $\beta_{true}$ (x);
-4. An x-y plot of the deviation between $\beta_{detected}$ and $\beta_{true}$. Each data point is a measure of $\beta_{true} - \beta_{detected}$.
-
-
-We performed `test_lin()` with 1,000 iterations, for all of the three kinds of data produced by `sim_data()` (`"default", "corrupted"`, and `"segmented"`). 
-To check performance on different data lengths, we repeated the tests using 100, 200 and 500 data points. The output of our performance test is readily avaliable from within the package as a data object called `test_lin_data`.
-
-```{r benchmarks, eval = F}
-# NOTE: Functions take some time to run
-
-# Test on data of length 100 samples -------------------------------------------
-# This performs 1,000 iterations of auto_rate on a "default"-type data
-set.seed(123)
-default100 <- test_lin(reps = 1000, len = 100, type = "default")
-
-# This performs 1,000 iterations of auto_rate on a "corrupted"-type data
-set.seed(456)
-corrupted100 <- test_lin(reps = 1000, len = 100, type = "corrupted")
-
-# This performs 1,000 iterations of auto_rate on a "segmented"-type data
-set.seed(789)
-segmented100 <- test_lin(reps = 1000, len = 100, type = "segmented")
-
-# Test on data of length 200 samples -------------------------------------------
-# This performs 1,000 iterations of auto_rate on a "default"-type data
-set.seed(123)
-default200 <- test_lin(reps = 1000, len = 200, type = "default")
-
-# This performs 1,000 iterations of auto_rate on a "corrupted"-type data
-set.seed(456)
-corrupted200 <- test_lin(reps = 1000, len = 200, type = "corrupted")
-
-# This performs 1,000 iterations of auto_rate on a "segmented"-type data
-set.seed(789)
-segmented200 <- test_lin(reps = 1000, len = 200, type = "segmented")
-
-# Test on data of length 500 samples -------------------------------------------
-# This performs 1,000 iterations of auto_rate on a "default"-type data
-set.seed(123)
-default500 <- test_lin(reps = 1000, len = 500, type = "default")
-
-# This performs 100 iterations of auto_rate on a "corrupted"-type data
-set.seed(456)
-corrupted500 <- test_lin(reps = 1000, len = 500, type = "corrupted")
-
-# This performs 100 iterations of auto_rate on a "segmented"-type data
-set.seed(789)
-segmented500 <- test_lin(reps = 1000, len = 500, type = "segmented")
-
-```
-
-### Results
-
-<!-- Overall, `auto_rate()`'s linear detection algorithms performed relatively well across all three different data scenarios.  -->
-<!-- Linear regressions results comparing $\beta_{true}$ to $\beta_{detected}$ were overwhelmingly significant (Figs 2D, 3D, 4D), with $R^2$ at 0.999 for all tests.  -->
-
-<!-- Detecting a shorter segment of the linear data does not necessarily have a negative impact on the detected slope, but over-detection should generally be avoided since it results in an over or under-estimate the true slope.  -->
-<!-- `auto_rate()` performed satisfactorily in detecting linear segments of the simulated data, and rarely oversampled the linear segments (Figs 2A, 3A).  -->
-<!-- However, it oversampled more when used on "segmented" data (Fig 4A), due to the increased difficulty in correctly distinguishing both ends of the linear segment.  -->
-<!-- Regardless, the oversampling was not meaningful enough to alter the calculated slopes drastically, as shown by the mostly narrow differences between $\beta_{true}$ and $\beta_{detected}$ across the datasets (Fig 4B, E) and the strong results of the linear regression analysis. -->
-<!-- For "corrupted" data, there was evidence that `auto_rate()` sometimes sampled the wrong segments, or oversampled the data, resulting in the larger deviations from $\beta_{true}$ (Fig 3E). We recommend users to exercise caution when running `auto_rate()'`s linear detection on data that contains major artefacts or non-biological noise, and to always inspect the exploratory plots produced whenever they run `auto_rate()` on such data. -->
-
-<!-- For slope values approaching zero, `auto_rate()` continued to perform well as shown by the relatively narrow distribution of $d$ across all data types tested (Figs 2E, 3E, 4E).  -->
-<!-- The large \% differences between $\beta_{true}$ and $\beta_{detected}$ as the slope approached zero (Figs 1C, 2C, 3C) were expected, since minor differences in values approaching zero are greatly amplified (e.g. 0.00002 is a 100% increase from 0.00001, whereas 0.20002 is just a 0.005\% increase from 0.20001). -->
-<!-- Despite the weighted influence of smaller slope values when calculating \% difference between $\beta_{true}$ and $\beta_{detected}$, detected slope values were overwhelmingly close to the known values, with more than 78\% -- 87\% of the values within 5\% of the known slopes (Figs 2C, 3C, 4C). -->
-
-<!-- In general, `auto_rate()`'s performance was not affected whether the slope was positive, negative or approaching zero, with no visible skewness in the normal distribution of error across all data scenarios that were simulated here (Figs 2B, 3B, 4B). -->
-<!-- The tests performed and the results obtained indicated that `auto_rate()`'s linear detection methods hold promise and are potentially reliable techniques, at least for the types of data simulated for this exercise. We encourage users to evaluate the function with real data and send us feedback should `auto_rate()`'s linear detection fails. -->
-
-
-#### "Default" data
-
-Results were generally positive; when run on data with a sample size of 100, in most cases, **(A)** `auto_rate()` correctly detected a large proportion of the true data, and **(B)** incorrectly sampled only a small amount of other data. **(C)** Comparison of $\beta_{detected}$ against $\beta_{true}$ showed very stable detection across all slopes, even when slope values approached zero. This is evident in **(D)** where roughly, the maximum $\beta_{detected}$ values had $\pm 0.004$ deviation from the $\beta_{detected}$ values across all values of $\pm 0.06$, even for values close to zero:
-
-```{r plotdefault100, fig.cap=""}
-plot(test_lin_data$default100)
-```
-
-Tests on larger sample data sizes of 200 and 500 revealed that `auto_rate()` performed even better when provided with bigger data. For example, with 500 samples, `auto_rate()` generally **(A)** detected a larger proportion of the true data and **(B)** was less prone to sampling incorrect portions of the data. **(C)** Linear regression had a $R^2$ of 0.999, and **(D)** deviation was 10$\times$ smaller than when sample size was at 100:
-
-```{r plotdefault500, fig.cap=""}
-plot(test_lin_data$default500)
-```
-
-#### "Corrupted" data
-
-In this challenging data scenario `auto_rate()` had a tendency to under-sample the linear segment. As this particular type of data consisted of two linear segments separated by a "dip", the function also sometimes **(A)** detected the shorter segment as the top-ranked result, resulting in the correct estimate of $\beta_{true}$, but zero data actually identified from the longer segment. Thus the function may incorrectly sample up to the entire data as seen in **(B)**, but only rarely; in most cases, it incorrectly sampled only a small amount of data. **(C)** Comparison of $\beta_{detected}$ against $\beta_{true}$ showed stable, but slightly noisy detection of the true rate across all slopes, where performance was poorer at values close to zero **(D)**.
-
-```{r plotcorrupted100, fig.cap=""}
-plot(test_lin_data$corrupted100)
-```
-
-However, `auto_rate()` again performed better at larger sample sizes. With 500 samples the same issue of incorrectly selecting the shorter linear segment still persists **(A)**, but **(B)** the function sampled incorrect segments less often, **(C)** linear regression of $\beta_{detected}$ against $\beta_{true}$ had a better goodness of fit and **(D)** deviation values from $\beta_{true}$ were substantially smaller with seemingly fewer poor estimates at values close to zero. 
-
-```{r plotcorrupted500, fig.cap=""}
-plot(test_lin_data$corrupted500)
-```
-
-#### "Segmented" data
-
-This type of data is the most difficult to handle as `auto_rate()` needed to disregard the curved, but increasingly-linear top portion of the data, and also discard the slight degree of change in slope towards the end of the data from its sampling. `auto_rate()` therefore performed well in many cases, but poorly in others. In the majority of cases, **(A)** when it managed to sample the linear segment, it did so for a very large fraction of the data. **(B)** It performed less well at avoiding incorrect sampling, since it sometimes selected the other linear segment. However, **(C)** the plot of $\beta_{detected}$ against $\beta_{true}$ showed that it still performed surprisingly well most of the time, despite the errors, and **(D)** the deviance from the true rate appeared to be poorer when slope values are closer to zero.
-
-```{r plotsegmented100, fig.cap=""}
-plot(test_lin_data$segmented100)
-```
-
-Again, with a larger dataset, `auto_rate()` performs even better. At a sample size of 500, many of the issues that occured in the previous test were pretty much resolved. The function **(A)** correctly sampled the right segment most of the time, and rarely sampled other data or the other linear segment **(B)**. **(C)** Linear regression had a $R^2$ of 0.999, and **(D)** deviations from $\beta_{true}$ were much smaller in magnitude.
-
-```{r plotsegmented500, fig.cap=""}
-plot(test_lin_data$segmented500)
-```
-
-## Comparison of `auto_rate()`'s linear detection to other packages and software
-
-Currently and to our knowledge, only one other software, `LoLinR` (Olito et al. 2017), also an R package, performs linear detection techniques on serial data in a manner that is similar to `auto_rate()`'s linear detection. This is not a coincidence - many of the data reporting and visualisations of `auto_rate()` were in fact, inspired by our own experiences with their package. However we have created the function with a completely different aim in mind (i.e. to be a part of a larger ecosystem of respirometry analysis, of which linear detection is but one of its capabilities). In contrast, `LoLinR` is focused on detecting linear segments from data.
-
-We leave it to users to decide whether to use `LoLinR` or `respR'`s `auto_rate()` function for linear detection, but here we list some very important differences:
-
-1. `auto_rate()` detects linear segments, first, and then performs linear regressions on the data. `LoLinR`, on the other hand, performs all possible linear regressions first, before implementing a ranking algorithm to pick the most linear segment.
-2. `auto_rate()` performs increasingly well with larger data with minimal impact to computational time. `LoLinR` suffers from large processing times that increase exponentially as data sizes increase.
-3. `LoLinR` performs consistently for all data sizes, despite its speed; `auto_rate()` performs poorly when data size is small, but becomes more accurate with increasing data size.
-4. Both functions use fundamentally different techniques at linear detection. `auto_rate()` uses seemingly empirical, but automated techniques to detect linear segments of data. `LoLinR`'s methods are more grounded in statistics and uses more robust techniques to determine linearty in data segments.
+Zivot, E., & Wang, J. (2006). Modeling Financial Time Series with S-PLUS (2nd ed.). New York: Springer-Verlag.
