@@ -120,6 +120,28 @@
     </div>
 
 
+<div id="version-0-0-5" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-0-5" class="anchor"></a>Version 0.0.5</h1>
+<ul>
+<li>NEW: Added new function <code><a href="reference/format_time.html">format_time()</a></code>. This function is a wrapper for <code>lubridate</code> functions and is used specifically to convert date-time to numeric time.</li>
+<li>NEW: Added replacement function <code><a href="reference/inspect.html">inspect()</a></code> that contains much cleaner code. The old function <code><a href="reference/inspect_data.html">inspect_data()</a></code> was tough to fix. It will be deprecated in a future update, but will still be supported for at least 18 months after we announce the deprecation. For now, users need not worry about using either function.</li>
+<li>Updated: <code><a href="reference/calc_rate.html">calc_rate()</a></code>, <code><a href="reference/calc_rate.bg.html">calc_rate.bg()</a></code>, <code><a href="reference/calc_rate.ft.html">calc_rate.ft()</a></code>, and <code><a href="reference/auto_rate.html">auto_rate()</a></code> are updated to work with <code><a href="reference/inspect.html">inspect()</a></code>. (TODO: <code><a href="reference/calc_rate.ft.html">calc_rate.ft()</a></code> still needs to be fixed.)</li>
+<li>NEW: Vignette for <code><a href="reference/auto_rate.html">auto_rate()</a></code> is now available.</li>
+<li>NEW: Performance benchmark vignette for <code><a href="reference/auto_rate.html">auto_rate()</a></code>’s linear detection method is now available.</li>
+<li>NEW: <code><a href="reference/sim_data.html">sim_data()</a></code> function: simulate data for benchmark analyses.</li>
+<li>NEW: <code><a href="reference/test_lin.html">test_lin()</a></code> function: perform benchmark analyses specific for <code><a href="reference/auto_rate.html">auto_rate()</a></code>’s linear detection (i.e. <code>methods = "linear"</code>).</li>
+<li>UPDATE: All plot outputs in the package have been updated. They are now “cleaner”. Users are encouraged to provide feedback on our plot outputs as we can update them easily without changing the underlying analyses.</li>
+<li>FIX: Rogue parenthesis code in <code><a href="reference/auto_rate.html">auto_rate()</a></code> fixed (it was messing with <code>print()</code> commands).</li>
+</ul>
+</div>
+<div id="version-0-0-4" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-0-4" class="anchor"></a>Version 0.0.4</h1>
+<ul>
+<li>HOTFIX: <code><a href="reference/convert_rate.html">convert_rate()</a></code> fails when output contains “mmol”. Fixed.</li>
+</ul>
+</div>
 <div id="version-0-0-3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-0-3" class="anchor"></a>Version 0.0.3</h1>

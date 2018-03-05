@@ -90,8 +90,7 @@
 <!--/.navbar -->
 
       
-      </header><script src="auto_rate_files/htmlwidgets-1.0/htmlwidgets.js"></script><script src="auto_rate_files/viz-0.3/viz.js"></script><link href="auto_rate_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="auto_rate_files/grViz-binding-1.0.0/grViz.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Automatic detection of respirometry parameters</h1>
@@ -116,9 +115,40 @@
 <span class="kw"><a href="../reference/auto_rate.html">auto_rate</a></span>(x)
 <span class="co">#&gt; 10 kernel density peaks detected and ranked.</span></code></pre></div>
 <p><img src="auto_rate_files/figure-html/unnamed-chunk-1-1.png" width="681.6"></p>
-<p>The diagram below illustrates the main processes involved in producing the different outputs of the function:</p>
-<div id="htmlwidget-b1ac5174771139ad5757" style="width:681.6px;height:576px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b1ac5174771139ad5757">{"x":{"diagram":"\ndigraph a_nice_graph {\n\n# node definitions with substituted label text\n\nnode [fontname = Helvetica, shape = circle]\nrd [label = \"Raw Data\"]\n\nnode [fontname = Helvetica, shape = rectangle]\nrr [label = \"1. Rolling linear regression\"]\nkd [label = \"2. Kernel density\nestimates\"]\nre [label = \"3. Bandwidth resampling\"]\nlr [label = \"4. Linear regression\"]\nar [label = \"5. Rank\"]\nfi [label = \"6. Filter\"]\n\nnode [fontname = Menlo, shape = none]\nau [label = \"auto_rate()\"]\nli [label = \"linear\"]\nmm [label = \"max, min\"]\nin [label = \"interval\"]\n\n# edge definitions with the node IDs\n\nrd -> au -> rr -> ar -> mm\nrr -> kd -> re -> lr -> ar -> li\nrr -> fi -> in\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><!-- ### Working in the Tidyverse --><!-- `respR` integrates nicely in the [Tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book. --><!-- We load the data, `sardine.rd`, which contains approximately 2.1 hours (7,513 data points) of a single respirometry experiment. --><!-- ```{r} --><!-- library(respR) --><!-- data("sardine.rd") --><!-- ?sardine.rd # run this to see notes about the dataset --><!-- ``` -->
+<!-- The diagram below illustrates the main processes involved in producing the different outputs of the function: -->
+<!-- ```{r, echo = F} -->
+<!-- library(DiagrammeR) -->
+<!-- grViz(" -->
+<!-- digraph a_nice_graph { -->
+<!-- # node definitions with substituted label text -->
+<!-- node [fontname = Helvetica, shape = circle] -->
+<!-- rd [label = 'Raw Data'] -->
+<!-- node [fontname = Helvetica, shape = rectangle] -->
+<!-- rr [label = '1. Rolling linear regression'] -->
+<!-- kd [label = '2. Kernel density\nestimates'] -->
+<!-- re [label = '3. Bandwidth resampling'] -->
+<!-- lr [label = '4. Linear regression'] -->
+<!-- ar [label = '5. Rank'] -->
+<!-- fi [label = '6. Filter'] -->
+<!-- node [fontname = Menlo, shape = none] -->
+<!-- au [label = 'auto_rate()'] -->
+<!-- li [label = 'linear'] -->
+<!-- mm [label = 'max, min'] -->
+<!-- in [label = 'interval'] -->
+<!-- # edge definitions with the node IDs -->
+<!-- rd -> au -> rr -> ar -> mm -->
+<!-- rr -> kd -> re -> lr -> ar -> li -->
+<!-- rr -> fi -> in -->
+<!-- }") -->
+<!-- ``` -->
+<!-- ### Working in the Tidyverse -->
+<!-- `respR` integrates nicely in the [Tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book. -->
+<!-- We load the data, `sardine.rd`, which contains approximately 2.1 hours (7,513 data points) of a single respirometry experiment. -->
+<!-- ```{r} -->
+<!-- library(respR) -->
+<!-- data("sardine.rd") -->
+<!-- ?sardine.rd # run this to see notes about the dataset -->
+<!-- ``` -->
 </div>
 <div id="rolling-linear-regression" class="section level2">
 <h2 class="hasAnchor">

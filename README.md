@@ -48,7 +48,7 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
 library(dplyr) # load to activate pipe operators
 
 urchins.rd %>%         # using the urchins dataset,
-  select(1, 15) %>%    # select rows 1 and 5
+  select(1, 15) %>%    # select rows 1 and 15
   inspect_data() %>%   # inspect the data, then
   auto_rate() %>%      # automatically determine most linear segment
   print() %>%          # just a quick preview

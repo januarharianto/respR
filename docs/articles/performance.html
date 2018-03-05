@@ -103,8 +103,7 @@
 <p>The function <code><a href="../reference/auto_rate.html">auto_rate()</a></code> uses rolling regression and kernel density estimation techniques to automatically detect the most linear sections of respirometry data. The dimensionless nature of the function, however, also allows it to be applied to any serial data. To our knowledge, the methods we use here are novel, and not reported in past publications involving linear data detection and analysis of biological data. Olito et al. (2016) describes a different, though very robust, method to detect and rank linear segments in data using their R package, <code>LoLinR</code>. A brief comparison of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code>’s methods are discussed at the end of this document.</p>
 <div id="testing-the-linear-detection-method-of-auto_rate" class="section level2">
 <h2 class="hasAnchor">
-<a href="#testing-the-linear-detection-method-of-auto_rate" class="anchor"></a>Testing the linear detection method of <code><a href="../reference/auto_rate.html">auto_rate()</a></code>
-</h2>
+<a href="#testing-the-linear-detection-method-of-auto_rate" class="anchor"></a>Testing the linear detection method of auto_rate</h2>
 <p>To ensure that <code><a href="../reference/auto_rate.html">auto_rate()</a></code> performs as intended, we created two internal functions designed to test the accuracy of our KDE techniques to detect linear data. The first function, <code><a href="../reference/sim_data.html">sim_data()</a></code>, generates a random dataset which contains both linear and non-linear segments. The second function, <code><a href="../reference/test_lin.html">test_lin()</a></code>, specifically performs <code><a href="../reference/auto_rate.html">auto_rate()</a></code> repeatedly on randomly generated data and aggregates the performance metrics obtained to assess and visualise the accuracy of the KDE technique. Both functions are published with the <code>respR</code> package, thus anyone can use them – as we show below – or run them with their own input paramters.</p>
 <p>The performance tests that we provide are by no means comprehensive, but provide a starting point in generating the data necessary for users to make informed decisions on using and further testing <code><a href="../reference/auto_rate.html">auto_rate()</a></code> for their own purposes.</p>
 </div>
@@ -276,7 +275,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/test_lin.
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#testing-the-linear-detection-method-of-auto_rate">Testing the linear detection method of <code><a href="--/reference/auto_rate-html">auto_rate()</a></code></a></li>
+<li><a href="#testing-the-linear-detection-method-of-auto_rate">Testing the linear detection method of auto_rate</a></li>
       <li><a href="#generating-simulated-data-for-tests">Generating simulated data for tests</a></li>
       <li><a href="#test-conditions">Test conditions</a></li>
       <li><a href="#how-do-i-know-if-the-tests-are-actually-running-and-detecting-segments">How do I know if the tests are actually running and detecting segments?</a></li>
