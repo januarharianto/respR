@@ -25,9 +25,9 @@ In respirometry, we often want to report oxygen uptake rates that represent expe
 
 - minimum rates observed, often most representative of resting or maintenance metabolism;
 - maximum rates observed, representative of active or maximal metabolic rates; and  
-- the most consistent rates observed, often most representative of standard metabolic rates. 
+- the most consistent rates observed, often most representative of routine metabolic rates. 
 
-Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the estimate the most linear rates over a specific sampling window. 
+Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the most linear rates over a specific sampling window. 
 In addition, it identifies maximum, minimum, and interval rates. 
 When used to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.
 
