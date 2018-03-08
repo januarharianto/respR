@@ -39,7 +39,7 @@ The performance tests that we provide are by no means comprehensive, but provide
 ## Generating simulated data for tests
 
 `sim_data()` is used to randomly generate three kinds of data based on the `method` argument, which we briefly describe below. 
-It accepts inputs to customise the length of the data (no. of samples), the type of data (described below), the degree of noise ad specified by the standard deviation of the data (default 0.05), and a preview toggle to plot and visualise the simulated dataset.
+It accepts inputs to customise the length of the data (no. of samples), the type of data (described below), the degree of noise as specified by the standard deviation of the data (default 0.05), and a preview toggle to plot and visualise the simulated dataset.
 
 ### "Default" data
 
@@ -110,7 +110,7 @@ The parameters include:
 1. The length of the true segment ($len_t$);
 2. The length of the detected segment that is correctly sampled ($len_c$). Here, we also call such data "true";
 4. The length of the detected segment that is *incorrectly* sampled ($len_i$). Here, we also call such data "other";
-5. The slope of the true segment ($\beta_{true}$; or true rate); and
+5. The slope of the true segment ($\beta_{true}$, or true rate); and
 6. The slope of the detected segment ($\beta_{detected}$, or detected rate).
 
 From the above data, we can generate four kinds of performance metrics for visualisation: 
@@ -182,7 +182,7 @@ x <- test_lin(reps = 20, len = 500, type = "segmented", plot = TRUE)
 
 ### "Default" data
 
-Results were generally positive; when run on data with 100 samples, **(A)** `auto_rate()` correctly detected a large proportion of the true segment in general, and **(B)** incorrectly sampled only a small amount of other data. 
+Results were very encouraging; when run on data with 100 samples, **(A)** `auto_rate()` correctly detected a large proportion of the true segment in general, and **(B)** incorrectly sampled only a small amount of other data. 
 **(C)** Comparison of $\beta_{detected}$ against $\beta_{true}$ showed very stable detection across all slopes, even when slope values approached zero. 
 This was evident in **(D)** where roughly, the maximum $\beta_{detected}$ values had $\pm 0.004$ deviation from the $\beta_{detected}$ values across all values of $\pm 0.06$, even for values close to zero:
 
