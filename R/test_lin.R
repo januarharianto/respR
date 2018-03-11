@@ -171,7 +171,9 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   # plot B: density of incorrectly sampled data as a proportion of the data
   if (any(show %in% c("all", "b"))) {
     plot(d2, main = "", xlab = "", ylab = "", xaxt = "n", yaxt = "n",
-         # xlim = c(min(d2$x), 2),
+         xlim = c(min(d2$x),
+           if (max(d2$x > 3)) 3 else max(d2$x)
+           ),
          panel.first = grid())
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))
