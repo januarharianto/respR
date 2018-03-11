@@ -131,7 +131,9 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   d1 <- density(df$length_detected / df$length_line)
 
   # proportion of the detected segment that contains incorrect data:
-  d2 <- density(x$df$length_incorrect / x$df$length_detected)
+  incorrect <- x$df$length_incorrect / x$df$length_line
+  incorrect[is.infinite(incorrect)] <- 0
+  d2 <- density(incorrect)
 
   # Linear regression results a calculated from `sim_data()`:
   ls <- x$results
