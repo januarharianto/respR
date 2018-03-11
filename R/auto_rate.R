@@ -115,10 +115,12 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     }
   } else if (method == "linear") {
     kde <- kde_fit(dt, width, by, method, use = "all")  # use KDE technique
-    win <- kde$win
-    roll <- kde$roll
+    # verify KDE technique:
+    win <- floor(kde$win * .9)
+    roll <- kde$roll # extract roll
+    # double-check KDE:
     rankroll <- sapply(1:length(kde$subsets), function(x)
-      kde_fit(kde$subsets[[x]], width, by, method, use = "top")$subsets)
+      kde_fit(kde$subsets[[x]], win, by, method, use = "top")$subsets)
 
     # perform calc_rate on each subset generated
     rankroll <- rbindlist(lapply(1:length(rankroll), function(xi)
