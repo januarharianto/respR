@@ -28,18 +28,15 @@
 #' @keywords internal
 #'
 #' @examples
-#' # run using default values:
-#' test_lin(plot = TRUE)
-#'
 #' # run 5 iterations (please run at least 1000 times for more reliable visuals)
-#' x <- test_lin(reps = 5)
-#' plot(x)
-#' plot(x, "a")  # view only plot "A"
-#' plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
+#' x <- test_lin(reps = 3)
+#' # plot(x)
+#' # plot(x, "a")  # view only plot "A"
+#' # plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
 #'
 #' # run using randomly-generated "corrupted" datasets
-#' x <- test_lin(reps = 5, type = "corrupted")
-#' plot(x)
+#' x <- test_lin(reps = 3, type = "corrupted")
+#' # plot(x)
 test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
                      preview = FALSE, plot = FALSE) {
 
