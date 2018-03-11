@@ -2,6 +2,9 @@
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
 
+
+**This package is under active development, but is currently stable.**
+
 # Welcome
 
 `respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in `respR` will process linear relationships in any related data, such as oxygen flux or photosynthesis.
