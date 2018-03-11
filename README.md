@@ -61,10 +61,10 @@ urchins.rd %>%         # using the urchins dataset,
 
 ## Todo
 
-[X] Integration into tidyverse, via `dplyr` pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as `adjust_rate()` and `calc_rate.bg()`.
-[ ] Better output for `calc_rate.ft()`
-[ ] Parallisation optimisations. Currently broken.... oops
-[ ] Better `inspect_data()` output. Feedback says it is sometimes too verbose
+- [X] Integration into tidyverse, via `dplyr` pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as `adjust_rate()` and `calc_rate.bg()`.
+- [ ] Better output for `calc_rate.ft()`
+- [ ] Parallisation optimisations. Currently broken.... oops
+- [ ] Better `inspect_data()` output. Feedback says it is sometimes too verbose
 
 
 ## Feedback and contributions
