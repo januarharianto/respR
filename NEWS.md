@@ -1,7 +1,7 @@
 # Version 0.0.6
 We are getting close to a 0.1 release, which will be ready for CRAN.
 
-- HOTFIX: More robust method of parsing data-time data to start at the defined start time in format_time(), which fixes some errors with zeroing in some numeric data.
+- HOTFIX: More robust method of parsing data-time data to start at the defined start time in `format_time()`, which fixes some errors with zeroing in some numeric data.
 
 # Version 0.0.5
 - NEW: Added new function `format_time()`. This function is a wrapper for `lubridate` functions and is used specifically to convert date-time to numeric time.
