@@ -39,6 +39,7 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   # Import x from inspect function
   if(any(class(x) %in% "inspect")) x <- as.data.table(x$dataframe)
   if(any(class(x) %in% "inspect_data")) x <- as.data.table(x$df)
+  x <- as.data.table(x)
 
   # Extract data:
   xval <- x[, ..xcol]
