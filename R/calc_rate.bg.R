@@ -40,7 +40,7 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   if(any(class(x) %in% "inspect")) x <- x$dataframe
 
   # Extract data:
-  dt <- data.table(x[,c(xcol, ycol)])
+  dt <- data.table(x[c(xcol, ycol)])
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
     dt <- subset_data(dt, from, to, by)
