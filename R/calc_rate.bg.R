@@ -37,10 +37,13 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   to = NULL, by = "time", plot = TRUE) {
 
   # Import x from inspect function
-  if(any(class(x) %in% "inspect")) x <- x$dataframe
+  if(any(class(x) %in% "inspect")) x <- as.data.table(x$dataframe)
+  if(any(class(x) %in% "inspect_data")) x <- as.data.table(x$df)
 
   # Extract data:
-  dt <- data.table(x[c(xcol, ycol)])
+  xval <- x[, ..xcol]
+  yval <- x[, ..ycol]
+  dt <- data.table(xval, yval)
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
     dt <- subset_data(dt, from, to, by)
