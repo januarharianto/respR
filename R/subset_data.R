@@ -36,8 +36,8 @@
 subset_data <- function(x, from, to, by) {
   
   # import from other respR functions
-  if (any(class(df) %in% "inspect_data")) x <- x$df
-  if (any(class(df) %in% "inspect")) x <- x$dataframe
+  if (any(class(x) %in% "inspect_data")) x <- x$df
+  if (any(class(x) %in% "inspect")) x <- x$dataframe
   
   dt <- data.table::as.data.table(x)
   if (by == "time") {
