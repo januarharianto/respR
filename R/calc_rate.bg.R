@@ -4,9 +4,9 @@
 #' rate of change of oxygen over time for background corrections of the main
 #' data. Can be used on multiple datasets of background measures, as long as the
 #' time data are identical between measurements. In addition, the data must be
-#' in the same time and oxygen units as the data to be corrected. Data can be 
-#' subset using the `from`, `to`, and `by` arguments. If multiple datasets are 
-#' included, all are subset by the same criteria. 
+#' in the same time and oxygen units as the data to be corrected. Data can be
+#' subset using the `from`, `to`, and `by` arguments. If multiple datasets are
+#' included, all are subset by the same criteria.
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
 #' decision. Units are called in a later function when volumetric and/or
@@ -37,10 +37,14 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   to = NULL, by = "time", plot = TRUE) {
 
   # Import x from inspect function
-  if(any(class(x) %in% "inspect")) x <- x$dataframe
+  if(any(class(x) %in% "inspect")) x <- as.data.table(x$dataframe)
+  if(any(class(x) %in% "inspect_data")) x <- as.data.table(x$df)
+  x <- as.data.table(x)
 
   # Extract data:
-  dt <- data.table(x[c(xcol, ycol)])
+  xval <- x[, ..xcol]
+  yval <- x[, ..ycol]
+  dt <- data.table(xval, yval)
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
     dt <- subset_data(dt, from, to, by)

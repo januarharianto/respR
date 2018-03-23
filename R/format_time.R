@@ -114,7 +114,7 @@ format_time <- function(x, format = "ymdHMS", start = 0) {
   }
   dates <- lubridate::parse_date_time(times, format) # format to datetime
   # convert to numeric:
-  times_numeric <- as.numeric(dates) - min(as.numeric(dates))
+  times_numeric <- as.numeric(difftime(dates, dates[1], units="secs"))
   out <- times_numeric + start # adjust start time, if needed
 
   # output - return vector or df
