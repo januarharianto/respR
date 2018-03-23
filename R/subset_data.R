@@ -34,6 +34,11 @@
 #' # Subset by row:
 #' subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 subset_data <- function(x, from, to, by) {
+  
+  # import from other respR functions
+  if (any(class(df) %in% "inspect_data")) x <- x$df
+  if (any(class(df) %in% "inspect")) x <- x$dataframe
+  
   dt <- data.table::as.data.table(x)
   if (by == "time") {
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]
