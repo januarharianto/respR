@@ -55,7 +55,8 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   "%!in%" <- function(x, y) !("%in%"(x, y))
 
   # validate inputs
-  ## set default values if NULL
+  ## set default values if NULL, which selects first column as time, and
+  ## everything else as oxygen
   if (is.null(time) & is.null(oxygen)) {
     time <- 1
     listcols <- seq.int(1, ncol(df))
@@ -182,7 +183,9 @@ print.inspect <- function(x, ...) {
 
 #' @export
 plot.inspect <- function(x, ...) {
+  # extract data frame
   dt <- x$dataframe
+  # perform rolling regression (quick one)
   roll <- static_roll(dt, floor(0.2 * nrow(dt)))$rate_b1
 
   if (length(x$dataframe) == 2) {
