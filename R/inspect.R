@@ -72,6 +72,8 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   if (!is.numeric(time)) stop("`time` must be numeric integer.")
   if (!is.numeric(oxygen)) stop("`oxygen` must be numeric integer.")
   # more validations in a bit
+  
+  df <- as.data.frame(df)
 
   # extract data
   x <- lapply(1:length(df[time]), function(y) df[time][[y]])
