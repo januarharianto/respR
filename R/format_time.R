@@ -108,7 +108,7 @@
 format_time <- function(x, format = "ymdHMS", start = 0) {
   ## take out date/times
   if(is.data.frame(x)){
-    times <- x[,1]
+    times <- x[[1]]
   } else {
     times <- x
   }
