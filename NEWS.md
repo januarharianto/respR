@@ -1,3 +1,6 @@
+# Version 0.0.7
+- HOTFIX: `calc_rate.bg()` did not subset data properly in certain usage scenarios (see #49)
+
 # Version 0.0.6
 We are getting close to a 0.1 release, which will be ready for CRAN.
 

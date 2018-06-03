@@ -32,6 +32,11 @@ adjust_rate <- function(x, by) {
   if (!is.numeric(by))
     stop("'by' must be numeric or object of class 'calc_rate.bg'.")
 
+  # TODO check that x is ok, too
+  # for piping
+  # fix at some point
+  # if (class(x) %in% "calc_rate")
+
   # Use mean value of bgrate for correction
   by <- mean(by)
 
