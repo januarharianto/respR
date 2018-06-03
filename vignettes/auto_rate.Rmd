@@ -25,9 +25,9 @@ In respirometry, we often want to report oxygen uptake rates that represent expe
 
 - minimum rates observed, often most representative of resting or maintenance metabolism;
 - maximum rates observed, representative of active or maximal metabolic rates; and  
-- the most consistent rates observed, often most representative of standard metabolic rates. 
+- the most consistent rates observed, often most representative of routine metabolic rates. 
 
-Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the estimate the most linear rates over a specific sampling window. 
+Here were present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically estimate the most linear rates over a specific sampling window. 
 In addition, it identifies maximum, minimum, and interval rates. 
 When used to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.
 
@@ -111,8 +111,8 @@ The smoothing bandwidth is computed using the solve-the-equation *plug-in* metho
 <!-- The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples.  -->
 
 We then use $h$ to select all values in the rolling regression output that match the range of values around each mode ($\theta_n$) of the KDE (i.e. $\theta_n \pm h$).
-These rolling estimates are grouped and the upper and lower bounds of the data windows they represent are used to re-select the linear segment of the original data series. 
-The rolling estimates are discarded, while the newly detected data segments are analysed using linear regression. 
+These rolling estimates are grouped and ranked by size, and the upper and lower bounds of the data windows they represent are used to re-select the linear segment of the original data series. 
+The rolling estimates are then discarded while the detected data segments are analysed using linear regression. 
 
 ## Adjusting the width of rolling regressions
 

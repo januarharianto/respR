@@ -92,6 +92,9 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
   # on time but more on the stability of the data
   if (method == "linear") by <- "row"
 
+  # determine absolute width value if fraction
+  width <- calc_window(dt, width, by)
+
   if (method != "linear") {
     reg <- rolling_reg(dt, width, by, method)
     win <- reg$win
@@ -112,10 +115,12 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     }
   } else if (method == "linear") {
     kde <- kde_fit(dt, width, by, method, use = "all")  # use KDE technique
-    win <- kde$win
-    roll <- kde$roll
+    # verify KDE technique:
+    win <- floor(kde$win * .9)
+    roll <- kde$roll # extract roll
+    # double-check KDE:
     rankroll <- sapply(1:length(kde$subsets), function(x)
-      kde_fit(kde$subsets[[x]], width, by, method, use = "top")$subsets)
+      kde_fit(kde$subsets[[x]], win, by, method, use = "top")$subsets)
 
     # perform calc_rate on each subset generated
     rankroll <- rbindlist(lapply(1:length(rankroll), function(xi)
@@ -403,43 +408,54 @@ kde_fit <- function(dt, width, by, method, use = "all") {
   reg <- rolling_reg(dt, width, by, method)
   roll <- reg$roll
   win <- reg$win
-  d <- density(roll$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
-  peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
-  peaks <- lapply(peaks, function(x)
-    data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]) # match to roll
-  if (use == "all") {
-    peaks <- rbindlist(peaks)[order(-rank(density))] # rank by size
+
+  # If entire width of data frame is selected, there's nothing to detect!
+  if (nrow(roll) == 1) {
+    subsets <- list(subset_data(dt, roll$row, roll$endrow, "row"))
+    d <- NULL
+    peaks <- roll$rate_b1
+    bw <- NULL
+
   } else {
-    peaks <- rbindlist(peaks)[order(-rank(density))][1]
+    d <- density(roll$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
+    bw <- d$bw
+    peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
+    peaks <- lapply(peaks, function(x)
+      data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]) # match to roll
+    if (use == "all") {
+      peaks <- rbindlist(peaks)[order(-rank(density))] # rank by size
+    } else {
+      peaks <- rbindlist(peaks)[order(-rank(density))][1]
+    }
+    # match peaks to roll data
+    frags <- lapply(
+      peaks$peak_b1,
+      function(x) roll[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)]
+    )
+    # split non-overlapping rolls by window size
+    if (by == "row") {
+      frags <- lapply(1:length(frags), function(x) split(
+        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > win))
+      ))
+    } else {
+      frags <- lapply(1:length(frags), function(x) split(
+        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$time)) > win))
+      ))
+    }
+    # select longest fragments
+    i <- sapply(1:length(frags), function(x) which.max(sapply(frags[[x]], nrow)))
+    frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
+    frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
+    # Convert fragments to subsets
+    subsets <- lapply(1:length(frags), function(x)
+      subset_data(
+        dt, min(frags[[x]]$row),
+        max(frags[[x]]$endrow), "row"
+      ))
   }
-  # match peaks to roll data
-  frags <- lapply(
-    peaks$peak_b1,
-    function(x) roll[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)]
-  )
-  # split non-overlapping rolls by window size
-  if (by == "row") {
-    frags <- lapply(1:length(frags), function(x) split(
-      frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > win))
-    ))
-  } else {
-    frags <- lapply(1:length(frags), function(x) split(
-      frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$time)) > win))
-    ))
-  }
-  # select longest fragments
-  i <- sapply(1:length(frags), function(x) which.max(sapply(frags[[x]], nrow)))
-  frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
-  frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
-  # Convert fragments to subsets
-  subsets <- lapply(1:length(frags), function(x)
-    subset_data(
-      dt, min(frags[[x]]$row),
-      max(frags[[x]]$endrow), "row"
-    ))
   out <- list(
     win = win, roll = roll, subsets = subsets, density = d,
-    peaks = peaks, bandwidth = d$bw
+    peaks = peaks, bandwidth = bw
   )
   return(out)
 }
