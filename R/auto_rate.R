@@ -60,10 +60,14 @@
 #' @examples
 #' # most linear section of the entire data
 #' auto_rate(sardine.rd, parallel = FALSE)
+#' 
+#' # LONG EXAMPLES
+#' \dontrun{
 #' # what is the lowest rate over a 10 minute (600s) period?
 #' auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
 #' # what is the highest rate over a 10 minute (600s) period?
 #' auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
+#' }
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
                       plot = TRUE, parallel = FALSE) {
   # Import and format data
