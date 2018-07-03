@@ -47,7 +47,7 @@ import_file <- function(path) {
     # OXY10v3 sensor
     #################
     cat("PRESENS OXY10 detected.\n")
-    raw_df <- fread(path, autostart = 18)
+    raw_df <- fread(path, skip = 18)
     # create timestamp
     datetime <- paste(raw_df[[1]], raw_df[[2]])
     timestamp <- data.table(time = format_time(datetime, " mdyHMSp!"))
