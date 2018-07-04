@@ -21,10 +21,13 @@ import_file <- function(path) {
 
   # Extract metadata to identify file type
   if (tools::file_ext(path) %in% c("txt", "TXT")) {
+    ## support for text files - maybe .log files fit in here too?
+    # TODO
     con <- file(path, "r")
     id <- readLines(con, n = 1)
     close(con)
   } else if (tools::file_ext(path) %in% c("xls", "xlsx")) {
+    ## support for microsoft excel files
     id <- names(readxl::read_excel(path)[1])
   }
 
