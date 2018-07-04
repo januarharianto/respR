@@ -63,7 +63,7 @@ import_file <- function(path) {
     # timestamp is already available in min
     # if (summarise) df <- df[, c()]
   } else {
-    stop("Source file cannot be identified. Process stopped.")
+    stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
   }
 
   #####
