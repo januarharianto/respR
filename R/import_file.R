@@ -57,7 +57,7 @@ import_file <- function(path) {
     df <- cbind(timestamp, raw_df)
     # if summarise is TRUE, select only time (absolute) and DO columns
     # if (summarise) df <- df[, c(1, 5)]
-  } else if (grepl("Measurement Name", line1, fixed = TRUE)) {
+  } else if (grepl("Measurement Name", id, fixed = TRUE)) {
     ###################################
     # Loligo microplate sensor (maybe)
     ###################################
@@ -71,6 +71,12 @@ import_file <- function(path) {
 
   #####
   # Other sensors will follow!
+  # TODO
+  #
+  # Firesting
+  # Vernier
+  # More Loligo
+  #
   #####
 
   return(df)
