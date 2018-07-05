@@ -276,7 +276,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
 }
 
 #' @export
-summary.auto_rate <- function(object, ...) {
+summary.auto_rate <- function(object, pos = NULL,...) {
   cat("Regressions :", nrow(object$roll))
   cat(" | Results :", nrow(object$summary))
   cat(" | Method :", object$method)
@@ -287,9 +287,13 @@ summary.auto_rate <- function(object, ...) {
     cat("\n=== Kernel Density ===")
     print(object$density)
   }
-
-  cat("\n=== Summary of Results ===\n\n")
-  print(data.table::data.table(object$summary))
+  if (is.null(pos)) {
+    cat("\n=== Summary of Results ===\n\n")
+    print(data.table::data.table(object$summary))
+  } else {
+    cat("\n=== Summary of Ranked ",pos, "Result ===\n\n")
+    print(data.table::data.table(object$summary)[pos])
+  }
 
   return(invisible(object))
 }

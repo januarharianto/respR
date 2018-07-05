@@ -23,6 +23,7 @@ Imports:
     utils,
     roll,
     stringr,
+    readxl,
     marelac,
     data.table,
     lubridate,
