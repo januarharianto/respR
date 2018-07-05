@@ -4,7 +4,8 @@
 #' most commercial DO sensors available in the market with little input from the
 #' user. This is done by performing simple regular expressions to identify the
 #' file source by extracting the first line of the file and matching unique
-#' strings.
+#' strings. It's a simple procedure for now, but once we have a large database
+#' of files we will optimise the code.
 #'
 #' @param path string. Path to file.
 #'
@@ -34,9 +35,9 @@ import_file <- function(path) {
 
   # Create data.table object based on text in first line
   if (grepl("MiniDOT", id, fixed = TRUE)) {
-    #################
-    # MiniDOT sensor
-    #################
+    ###########################################
+    # PME MiniDOT sensor
+    ###########################################
     cat("MiniDOT sensor detected.\n")
     # first read the file, and remove first row after column headers
     raw_df <- fread(path)[-1]
@@ -47,9 +48,9 @@ import_file <- function(path) {
     # if summarise is TRUE, select only time (absolute) and DO columns
     # if (summarise) df <- df[, c(1, 7)]
   } else if (grepl("OXY10v3", id, fixed = TRUE)) {
-    #################
-    # OXY10v3 sensor
-    #################
+    ###########################################
+    # PRESENS OXY10v3 sensor
+    ###########################################
     cat("PRESENS OXY10 detected.\n")
     raw_df <- fread(path, skip = 18)
     # create timestamp
@@ -59,9 +60,9 @@ import_file <- function(path) {
     # if summarise is TRUE, select only time (absolute) and DO columns
     # if (summarise) df <- df[, c(1, 5)]
   } else if (grepl("Measurement Name", id, fixed = TRUE)) {
-    ###################################
-    # Loligo microplate sensor (maybe)
-    ###################################
+    ###########################################
+    # Loligo microplate sensor (EXCEL OUTPUT)
+    ###########################################
     cat("Loligo Microplate Systwm detected.\n")
     df <- as.data.table(read_excel(path, skip = 12))
     # timestamp is already available in min
