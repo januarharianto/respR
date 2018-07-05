@@ -20,6 +20,7 @@
 import_file <- function(path) {
 
   # Extract metadata to identify file type
+  # Once file is identified, extract the first line for ID
   if (tools::file_ext(path) %in% c("txt", "TXT")) {
     ## support for text files - maybe .log files fit in here too?
     # TODO
@@ -31,7 +32,7 @@ import_file <- function(path) {
     id <- names(read_excel(path)[1])
   }
 
-  # Create data.table object based on file detected
+  # Create data.table object based on text in first line
   if (grepl("MiniDOT", id, fixed = TRUE)) {
     #################
     # MiniDOT sensor
