@@ -11,7 +11,7 @@
 #' @return a data frame object of time (absolute)
 #'
 #' @importFrom data.table data.table fread
-#' @importFrom readr read_excel
+#' @importFrom readxl read_excel
 #'
 #' @export
 #'
@@ -28,7 +28,7 @@ import_file <- function(path) {
     close(con)
   } else if (tools::file_ext(path) %in% c("xls", "xlsx")) {
     ## support for microsoft excel files
-    id <- names(readxl::read_excel(path)[1])
+    id <- names(read_excel(path)[1])
   }
 
   # Create data.table object based on file detected
@@ -62,7 +62,7 @@ import_file <- function(path) {
     # Loligo microplate sensor (maybe)
     ###################################
     cat("Loligo Microplate Systwm detected.\n")
-    df <- as.data.table(readxl::read_excel(path, skip = 12))
+    df <- as.data.table(read_excel(path, skip = 12))
     # timestamp is already available in min
     # if (summarise) df <- df[, c()]
   } else {
