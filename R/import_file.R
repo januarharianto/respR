@@ -36,7 +36,7 @@ import_file <- function(path) {
   # Create data.table object based on text in first line
   if (grepl("MiniDOT", id, fixed = TRUE)) {
     ###########################################
-    # PME MiniDOT sensor
+    # PME MiniDOT sensor (TXT file)
     ###########################################
     cat("MiniDOT sensor detected.\n")
     # first read the file, and remove first row after column headers
@@ -49,7 +49,7 @@ import_file <- function(path) {
     # if (summarise) df <- df[, c(1, 7)]
   } else if (grepl("OXY10v3", id, fixed = TRUE)) {
     ###########################################
-    # PRESENS OXY10v3 sensor
+    # PRESENS OXY10v3 sensor (TXT file)
     ###########################################
     cat("PRESENS OXY10 detected.\n")
     raw_df <- fread(path, skip = 18)

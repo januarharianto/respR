@@ -17,7 +17,8 @@ Automatically read and clean data from sensor output. The aim is to work with
 most commercial DO sensors available in the market with little input from the
 user. This is done by performing simple regular expressions to identify the
 file source by extracting the first line of the file and matching unique
-strings.
+strings. It's a simple procedure for now, but once we have a large database
+of files we will optimise the code.
 }
 \examples{
 NULL
