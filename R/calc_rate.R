@@ -114,10 +114,12 @@ print.calc_rate <- function(x, ...) {
 
 
 #' @export
-summary.calc_rate <- function(object, ...) {
+summary.calc_rate <- function(object, export = FALSE, ...) {
   cat("Summary:\n")
   print(object$summary)
-  return(invisible(object$summary))
+  if (export) {
+    return(invisible(object$summary))
+  } else return(invisible(object))
 }
 
 #' @export
