@@ -55,12 +55,13 @@
 #'
 #' @import data.table
 #' @import parallel
+#'
 #' @export
 #'
 #' @examples
 #' # most linear section of the entire data
 #' auto_rate(sardine.rd, parallel = FALSE)
-#' 
+#'
 #' # LONG EXAMPLES
 #' \dontrun{
 #' # what is the lowest rate over a 10 minute (600s) period?
@@ -276,7 +277,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
 }
 
 #' @export
-summary.auto_rate <- function(object, pos = NULL,...) {
+summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
   cat("Regressions :", nrow(object$roll))
   cat(" | Results :", nrow(object$summary))
   cat(" | Method :", object$method)
@@ -288,14 +289,20 @@ summary.auto_rate <- function(object, pos = NULL,...) {
     print(object$density)
   }
   if (is.null(pos)) {
+    # if no row is specified, return all results
     cat("\n=== Summary of Results ===\n\n")
-    print(data.table::data.table(object$summary))
+    print(data.table(object$summary))
+    if (export) {
+      return(invisible(data.table(object$summary)))
+    } else return(invisible(object))
   } else {
+    # otherwise, return row specified by `pos`
     cat("\n=== Summary of Ranked ",pos, "Result ===\n\n")
     print(data.table::data.table(object$summary)[pos])
+    if (export) {
+      return(invisible(data.table(object$summary)[pos]))
+    } else return(invisible(object))
   }
-
-  return(invisible(object))
 }
 
 #' Normal rolling regression
