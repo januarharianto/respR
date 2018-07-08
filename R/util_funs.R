@@ -4,6 +4,17 @@ rowlength = NULL; endrow = NULL; timelength = NULL; rate_twopoint = NULL
 endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL;
 ..xcol = NULL; ..ycol = NULL
 
+#' Pipe graphics
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @export
+NULL
+
+#' Select columns
+#' @importFrom dplyr select
+#' @name select
+#' @export
+NULL
 
 # check os
 os <- function() {
