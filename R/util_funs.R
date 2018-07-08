@@ -16,7 +16,7 @@ NULL
 #' @export
 NULL
 
-# check os
+# check os - useful for parallel functions
 os <- function() {
   if (.Platform$OS.type == "windows")
     "win" else if (Sys.info()["sysname"] == "Darwin")
@@ -45,8 +45,8 @@ toc <- function() {
 }
 
 
+# checks for `inspect()` functions --------------------------------
 
-# checks for `inspect` functions
 ## combined check:
 check_timeseries <- function(x, type = "time") {
   if (type == "time") {
@@ -79,7 +79,7 @@ check_timeseries <- function(x, type = "time") {
   return(list(checks, locs))
 }
 
-## check for NA values
+## check for NA values - used in the function `inspect()`
 check_na <- function(x) {
   test <- is.na(x)
   check <- any(test)
@@ -88,7 +88,7 @@ check_na <- function(x) {
   return(out)
 }
 
-## check for sequential (monotonic) data
+## check for sequential (monotonic) data - used in the function `inspect()`
 check_seq <- function(x) {
   test <- diff(x) < 0
   test <- ifelse(is.na(test), FALSE, test)  # convert NA values to FALSE
@@ -98,7 +98,7 @@ check_seq <- function(x) {
   return(out)
 }
 
-# check for duplicate data (time)
+# check for duplicate data (time) - used in the function `inspect()`
 check_dup <- function(x) {
   test <- x %in% unique(x[duplicated(x, incomparables = NA)])
   check <- any(test)
@@ -107,13 +107,13 @@ check_dup <- function(x) {
   return(out)
 }
 
-## calculate mode
+## calculate mode - used in the function `inspect()`
 calc_mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-## check for evenly-spaced data (time)
+## check for evenly-spaced data (time) - used in the function `inspect()`
 check_evn <- function(x) {
   spacing <- diff(as.numeric(x))
   mod <- calc_mode(spacing)
