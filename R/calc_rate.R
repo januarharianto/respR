@@ -110,6 +110,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 print.calc_rate <- function(x, ...) {
   cat("Rate(s):\n")
   print(x$rate)
+  return(invisible(x))
 }
 
 
