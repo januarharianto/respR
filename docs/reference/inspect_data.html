@@ -21,17 +21,23 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Check for common errors in respirometry data — inspect_data" />
 
 <meta property="og:description" content="inspect_data() scans a data frame for specific errors that may affect the
 use of functions in respR. Data checks include:" />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -54,8 +60,12 @@ use of functions in respR. Data checks include:" />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -65,7 +75,7 @@ use of functions in respR. Data checks include:" />
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -98,7 +108,7 @@ use of functions in respR. Data checks include:" />
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -110,6 +120,7 @@ use of functions in respR. Data checks include:" />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -117,21 +128,25 @@ use of functions in respR. Data checks include:" />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for common errors in respirometry data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/januarharianto/respr/blob/master/R/inspect_data.R'><code>R/inspect_data.R</code></a></small>
+    <div class="hidden name"><code>inspect_data.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p><code>inspect_data()</code> scans a data frame for specific errors that may affect the
 use of functions in <code>respR</code>. Data checks include:</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>inspect_data</span>(<span class='no'>df</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>oxygen</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inflow.o2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>outflow.o2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -195,7 +210,7 @@ and <code><a href='auto_rate.html'>auto_rate()</a></code> for further analyses.<
 #&gt; No NA/NaN in Oxygen PASS 
 #&gt; Sequential Time     PASS 
 #&gt; Non-duplicated Time PASS 
-#&gt; Evenly-spaced Time  PASS </div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>inspect_data</span>(<span class='no'>urchins.rd</span>, <span class='fl'>1</span>, <span class='fl'>5</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; a :  num [1:271] 7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...
+#&gt; Evenly-spaced Time  PASS </div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>inspect_data</span>(<span class='no'>urchins.rd</span>, <span class='fl'>1</span>, <span class='fl'>5</span>, <span class='kw'>highlight</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; a :  num [1:271] 7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...
 #&gt; b :  num [1:271] 7.86 7.79 7.7 7.68 7.64 7.69 7.69 7.66 7.65 7.64 ...
 #&gt; b1 :  num [1:271] 7.9 7.89 7.9 7.89 7.9 7.9 7.92 7.91 7.86 7.89 ...
 #&gt; b2 :  num [1:271] 7.7 7.7 7.69 7.69 7.68 7.67 7.68 7.69 7.69 7.66 ...
@@ -220,7 +235,7 @@ and <code><a href='auto_rate.html'>auto_rate()</a></code> for further analyses.<
 #&gt; No NA/NaN in Oxygen PASS   
 #&gt; Sequential Time     PASS   
 #&gt; Non-duplicated Time PASS   
-#&gt; Evenly-spaced Time  FAIL***</div><div class='output co'>#&gt; <span class='warning'>Warning: Time data is irregular. Subsetting by `row` may result in irregular durations.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+#&gt; Evenly-spaced Time  FAIL***</div><div class='output co'>#&gt; <span class='warning'>Warning: Time data is irregular. Subsetting by `row` may result in irregular durations.</span></div><div class='output co'>#&gt; <span class='message'>New dataframe generated.</span></div><div class='img'><img src='inspect_data-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -249,5 +264,8 @@ and <code><a href='auto_rate.html'>auto_rate()</a></code> for further analyses.<
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

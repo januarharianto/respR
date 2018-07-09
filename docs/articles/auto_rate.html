@@ -8,8 +8,8 @@
 <title>Automatic detection of respirometry parameters • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Automatic detection of respirometry parameters">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Automatic detection of respirometry parameters">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -38,7 +42,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -71,7 +75,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -91,15 +95,18 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Automatic detection of respirometry parameters</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/januarharianto/respr/blob/master/vignettes/auto_rate.Rmd"><code>vignettes/auto_rate.Rmd</code></a></small>
+      <div class="hidden name"><code>auto_rate.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
@@ -108,9 +115,9 @@
 <li>minimum rates observed, often most representative of resting or maintenance metabolism;</li>
 <li>maximum rates observed, representative of active or maximal metabolic rates; and<br>
 </li>
-<li>the most consistent rates observed, often most representative of standard metabolic rates.</li>
+<li>the most consistent rates observed, often most representative of routine metabolic rates.</li>
 </ul>
-<p>Here were present <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, a function in the <code>respR</code> package that uses rolling regression techniques to automatically estimate the estimate the most linear rates over a specific sampling window. In addition, it identifies maximum, minimum, and interval rates. When used to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.</p>
+<p>Here were present <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, a function in the <code>respR</code> package that uses rolling regression techniques to automatically estimate the most linear rates over a specific sampling window. In addition, it identifies maximum, minimum, and interval rates. When used to detect linear sections of the data, a kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span>urchins.rd[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">15</span>)]
 <span class="kw"><a href="../reference/auto_rate.html">auto_rate</a></span>(x)
 <span class="co">#&gt; 10 kernel density peaks detected and ranked.</span></code></pre></div>
@@ -165,7 +172,7 @@
 <p>Additional analytical techniques are automatically applied when we use <code><a href="../reference/auto_rate.html">auto_rate()</a></code> to detect linear sections of the data. First, we take advantage of the key assumption that linear sections of a data series are reflected by stable parameters across the rolling estimates, a property that is often applied in financial statistics to evaluate model stability and make forward predictions on time-series data (see Zivot and Wang 2006). We use kernel density estimation (KDE) techniques, often applied in various inference procedures such as machine learning, pattern recognition and computer vision, to automatically aggregate stable (i.e. linear) segments as they naturally form one or more local maximums (“modes”) in the probability density estimate.</p>
 <p>KDE requires no assumption that the data is from a parametric family, and learns the shape of the density automatically without supervision. KDE can be expressed as: <span class="math display">\[\hat{f}(x) = \frac{1}{nh^d}\sum_{i = 1}^{n} K \left(\frac{x - X_i}{h} \right)\]</span> where <span class="math inline">\(f\)</span> is the density function from an unknown distribution <span class="math inline">\(P\)</span> for <span class="math inline">\(X_1,...,X_n\)</span>, <span class="math inline">\(K\)</span> is the kernel function and <span class="math inline">\(h\)</span> is the optimal smoothing bandwidth. The smoothing bandwidth is computed using the solve-the-equation <em>plug-in</em> method (Sheather et al. 1996, Sheather and Jones 1991) which works well with multimodal or non-normal densities (Raykar and Duraiswami 2006).</p>
 <!-- The smoothing bandwidth $h$ is computed using an adjusted kernel bandwidth selector based on Silvermans "rule of thumb" (Silverman, 1986): $$h = \left(\frac{4\hat{\sigma}^5}{3n} \right)^{\frac{1}{5}} \approx 1.06\hat{\sigma}n^{-\frac{1}{5}}$$ where $\hat{\sigma}$ is the standard deviation of the samples and $n$ is the total number of samples.  -->
-<p>We then use <span class="math inline">\(h\)</span> to select all values in the rolling regression output that match the range of values around each mode (<span class="math inline">\(\theta_n\)</span>) of the KDE (i.e. <span class="math inline">\(\theta_n \pm h\)</span>). These rolling estimates are grouped and the upper and lower bounds of the data windows they represent are used to re-select the linear segment of the original data series. The rolling estimates are discarded, while the newly detected data segments are analysed using linear regression.</p>
+<p>We then use <span class="math inline">\(h\)</span> to select all values in the rolling regression output that match the range of values around each mode (<span class="math inline">\(\theta_n\)</span>) of the KDE (i.e. <span class="math inline">\(\theta_n \pm h\)</span>). These rolling estimates are grouped and ranked by size, and the upper and lower bounds of the data windows they represent are used to re-select the linear segment of the original data series. The rolling estimates are then discarded while the detected data segments are analysed using linear regression.</p>
 </div>
 <div id="adjusting-the-width-of-rolling-regressions" class="section level2">
 <h2 class="hasAnchor">
@@ -231,7 +238,6 @@ overx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/auto_
 <p>Sheather, S. J., &amp; Jones, M. C. (1991). A Reliable Data-Based Bandwidth Selection Method for Kernel Density Estimation. Journal of the Royal Statistical Society. Series B (Methodological), 53(3), 683–690.</p>
 <p>Zivot, E., &amp; Wang, J. (2006). Modeling Financial Time Series with S-PLUS (2nd ed.). New York: Springer-Verlag.</p>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -262,6 +268,8 @@ overx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/auto_
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

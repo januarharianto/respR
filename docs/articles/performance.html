@@ -8,8 +8,8 @@
 <title>Assessing the performance of respR’s auto_rate function in detecting linear data • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Assessing the performance of respR’s auto_rate function in detecting linear data">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Assessing the performance of respR’s auto_rate function in detecting linear data">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -38,7 +42,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -71,7 +75,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -91,15 +95,18 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Assessing the performance of respR’s auto_rate function in detecting linear data</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/januarharianto/respr/blob/master/vignettes/performance.Rmd"><code>vignettes/performance.Rmd</code></a></small>
+      <div class="hidden name"><code>performance.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <p>The function <code><a href="../reference/auto_rate.html">auto_rate()</a></code> uses rolling regression and kernel density estimation techniques to automatically detect the most linear sections of respirometry data. The dimensionless nature of the function, however, also allows it to be applied to any serial data. To our knowledge, the methods we use here are novel, and not reported in past publications involving linear data detection and analysis of biological data. Olito et al. (2016) describes a different, though very robust, method to detect and rank linear segments in data using their R package, <code>LoLinR</code>. A brief comparison of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code>’s methods are discussed at the end of this document.</p>
 <div id="testing-the-linear-detection-method-of-auto_rate" class="section level2">
 <h2 class="hasAnchor">
@@ -110,7 +117,7 @@
 <div id="generating-simulated-data-for-tests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-simulated-data-for-tests" class="anchor"></a>Generating simulated data for tests</h2>
-<p><code><a href="../reference/sim_data.html">sim_data()</a></code> is used to randomly generate three kinds of data based on the <code>method</code> argument, which we briefly describe below. It accepts inputs to customise the length of the data (no. of samples), the type of data (described below), the degree of noise ad specified by the standard deviation of the data (default 0.05), and a preview toggle to plot and visualise the simulated dataset.</p>
+<p><code><a href="../reference/sim_data.html">sim_data()</a></code> is used to randomly generate three kinds of data based on the <code>method</code> argument, which we briefly describe below. It accepts inputs to customise the length of the data (no. of samples), the type of data (described below), the degree of noise as specified by the standard deviation of the data (default 0.05), and a preview toggle to plot and visualise the simulated dataset.</p>
 <div id="default-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#default-data" class="anchor"></a>“Default” data</h3>
@@ -143,7 +150,7 @@
 <li>The length of the true segment (<span class="math inline">\(len_t\)</span>);</li>
 <li>The length of the detected segment that is correctly sampled (<span class="math inline">\(len_c\)</span>). Here, we also call such data “true”;</li>
 <li>The length of the detected segment that is <em>incorrectly</em> sampled (<span class="math inline">\(len_i\)</span>). Here, we also call such data “other”;</li>
-<li>The slope of the true segment (<span class="math inline">\(\beta_{true}\)</span>; or true rate); and</li>
+<li>The slope of the true segment (<span class="math inline">\(\beta_{true}\)</span>, or true rate); and</li>
 <li>The slope of the detected segment (<span class="math inline">\(\beta_{detected}\)</span>, or detected rate).</li>
 </ol>
 <p>From the above data, we can generate four kinds of performance metrics for visualisation:</p>
@@ -208,7 +215,7 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/test_lin.
 <div id="default-data-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#default-data-1" class="anchor"></a>“Default” data</h3>
-<p>Results were generally positive; when run on data with 100 samples, <strong>(A)</strong> <code><a href="../reference/auto_rate.html">auto_rate()</a></code> correctly detected a large proportion of the true segment in general, and <strong>(B)</strong> incorrectly sampled only a small amount of other data. <strong>(C)</strong> Comparison of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> showed very stable detection across all slopes, even when slope values approached zero. This was evident in <strong>(D)</strong> where roughly, the maximum <span class="math inline">\(\beta_{detected}\)</span> values had <span class="math inline">\(\pm 0.004\)</span> deviation from the <span class="math inline">\(\beta_{detected}\)</span> values across all values of <span class="math inline">\(\pm 0.06\)</span>, even for values close to zero:</p>
+<p>Results were very encouraging; when run on data with 100 samples, <strong>(A)</strong> <code><a href="../reference/auto_rate.html">auto_rate()</a></code> correctly detected a large proportion of the true segment in general, and <strong>(B)</strong> incorrectly sampled only a small amount of other data. <strong>(C)</strong> Comparison of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> showed very stable detection across all slopes, even when slope values approached zero. This was evident in <strong>(D)</strong> where roughly, the maximum <span class="math inline">\(\beta_{detected}\)</span> values had <span class="math inline">\(\pm 0.004\)</span> deviation from the <span class="math inline">\(\beta_{detected}\)</span> values across all values of <span class="math inline">\(\pm 0.06\)</span>, even for values close to zero:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(test_lin_data<span class="op">$</span>default100)</code></pre></div>
 <p><img src="performance_files/figure-html/plotdefault100-1.png" width="681.6"></p>
 <p>Tests on larger sample data sizes of 200 and 500 revealed that <code><a href="../reference/auto_rate.html">auto_rate()</a></code> performed better when provided with bigger data. When used on data with 500 samples, <code><a href="../reference/auto_rate.html">auto_rate()</a></code> generally <strong>(A)</strong> detected a larger proportion of the true data and <strong>(B)</strong> was less prone to sampling incorrect portions of the data. <strong>(C)</strong> Linear regression had a <span class="math inline">\(R^2\)</span> of 0.999, and <strong>(D)</strong> deviation was 10<span class="math inline">\(\times\)</span> smaller than when sample size was at 100:</p>
@@ -255,7 +262,6 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/test_lin.
 <a href="#references" class="anchor"></a>References</h2>
 <p>Olito, C., White, C. R., Marshall, D. J., &amp; Barneche, D. R. (2017). Estimating monotonic rates from biological data using local linear regression. The Journal of Experimental Biology, jeb.148775-jeb.148775. <a href="doi:10.1242/jeb.148775" class="uri">doi:10.1242/jeb.148775</a></p>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -287,6 +293,8 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/test_lin.
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

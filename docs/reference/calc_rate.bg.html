@@ -21,12 +21,15 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Calculate background respiration rates — calc_rate.bg" />
 
 <meta property="og:description" content="This function uses simple linear regression to automatically calculate the
@@ -37,6 +40,9 @@ in the same time and oxygen units as the data to be corrected. Data can be
 subset using the from, to, and by arguments. If multiple datasets are
 included, all are subset by the same criteria." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -59,8 +65,12 @@ included, all are subset by the same criteria." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -70,7 +80,7 @@ included, all are subset by the same criteria." />
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -103,7 +113,7 @@ included, all are subset by the same criteria." />
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -115,6 +125,7 @@ included, all are subset by the same criteria." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -122,12 +133,15 @@ included, all are subset by the same criteria." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate background respiration rates</h1>
+    <small class="dont-index">Source: <a href='https://github.com/januarharianto/respr/blob/master/R/calc_rate.bg.R'><code>R/calc_rate.bg.R</code></a></small>
+    <div class="hidden name"><code>calc_rate.bg.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function uses simple linear regression to automatically calculate the
 rate of change of oxygen over time for background corrections of the main
@@ -137,11 +151,12 @@ in the same time and oxygen units as the data to be corrected. Data can be
 subset using the <code>from</code>, <code>to</code>, and <code>by</code> arguments. If multiple datasets are
 included, all are subset by the same criteria.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>calc_rate.bg</span>(<span class='no'>x</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -192,7 +207,7 @@ mass-specific rates of oxygen use are computed in
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>calc_rate.bg</span>(<span class='no'>urchins.rd</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>18</span>:<span class='fl'>19</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='img'><img src='calc_rate.bg-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Rate(s):
+    <pre class="examples"><div class='input'><span class='fu'>calc_rate.bg</span>(<span class='no'>urchins.rd</span>, <span class='kw'>xcol</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ycol</span> <span class='kw'>=</span> <span class='fl'>18</span>:<span class='fl'>19</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Both 'xcol' and '..xcol' exist in calling scope. Please remove the '..xcol' variable in calling scope for clarity.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Both 'ycol' and '..ycol' exist in calling scope. Please remove the '..ycol' variable in calling scope for clarity.</span></div><div class='img'><img src='calc_rate.bg-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Rate(s):
 #&gt; [1] -0.0007723979 -0.0008328292
 #&gt; Average bg rate:
 #&gt; [1] -0.0008026135</div></pre>
@@ -224,5 +239,8 @@ mass-specific rates of oxygen use are computed in
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

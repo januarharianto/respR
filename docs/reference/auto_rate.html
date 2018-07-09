@@ -21,21 +21,27 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Automatically determine rate of change in oxygen concentration over time — auto_rate" />
 
 <meta property="og:description" content="auto_rate automatically performs a rolling regression on a data frame to
-determine maximum, minimum, interval or "best fit" linear rate of change in
+determine maximum, minimum, interval or &quot;best fit&quot; linear rate of change in
 oxygen concentration over time. First, a rolling regression of specified
 width is performed on the entire dataset to obtain all possible values. The
-computations are then ranked (or, arranged), based on the "logic" argument,
+computations are then ranked (or, arranged), based on the &quot;logic&quot; argument,
 and the output is summarised." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -58,8 +64,12 @@ and the output is summarised." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -69,7 +79,7 @@ and the output is summarised." />
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -102,7 +112,7 @@ and the output is summarised." />
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -114,6 +124,7 @@ and the output is summarised." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -121,12 +132,15 @@ and the output is summarised." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Automatically determine rate of change in oxygen concentration over time</h1>
+    <small class="dont-index">Source: <a href='https://github.com/januarharianto/respr/blob/master/R/auto_rate.R'><code>R/auto_rate.R</code></a></small>
+    <div class="hidden name"><code>auto_rate.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p><code>auto_rate</code> automatically performs a rolling regression on a data frame to
 determine maximum, minimum, interval or "best fit" linear rate of change in
@@ -135,11 +149,12 @@ oxygen concentration over time. First, a rolling regression of specified
 computations are then ranked (or, arranged), based on the "<code>logic</code>" argument,
 and the output is summarised.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>auto_rate</span>(<span class='no'>df</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"row"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"linear"</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -190,8 +205,8 @@ used?</p></td>
 <p>There are no units of measurement involved in <code>auto_rate</code>. This is a
 deliberate decision. Units are called in a later function when volumetric
 and/or mass-specific rates of oxygen use are computed in <code><a href='convert_rate.html'>convert_rate()</a></code> and
-<code><a href='convert_DO.html'>convert_DO()</a></code>.
-    <em><strong>Ranking algorithms</strong></em></p>
+<code><a href='convert_DO.html'>convert_DO()</a></code>.</p>
+<p><em><strong>Ranking algorithms</strong></em></p>
 <p>At present, <code>auto_rate()</code> contains four ranking algorithms that can be called
 with the argument <code>method</code>:</p><ul>
 <li><p><code>"linear"</code>: Uses kernel density estimation (KDE) to detect the most
@@ -207,31 +222,22 @@ regrssions. They are not ranked.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># most linear section of the entire data</span>
-<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>46 kernel density peaks detected and ranked.</span></div><div class='img'><img src='auto_rate-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by row using width of 1502 
+<span class='fu'>auto_rate</span>(<span class='no'>flowthrough.rd</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>auto_rate: Large dataframe detected. Selecting first 2 columns by default.</span></div><div class='output co'>#&gt; <span class='message'>8 kernel density peaks detected and ranked.</span></div><div class='img'><img src='auto_rate-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Data is subset by row using width of 168 
 #&gt; Rates were computed using 'linear' method
-#&gt; 46 linear regions detected in the kernel density estimate
+#&gt; 8 linear regions detected in the kernel density estimate
 #&gt; 
-#&gt; === Rank 1 of 46 ===
-#&gt; Rate: -0.0006290986 
-#&gt; R.sq: 0.926 
-#&gt; Rows: 5047 to 6569 
-#&gt; Time: 5046 to 6568 </div><div class='input'><span class='co'># what is the lowest rate over a 10 minute (600s) period?</span>
-<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"min"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='auto_rate-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by time using width of 600 
-#&gt; Rates were computed using 'min' method
-#&gt; 
-#&gt; === Rank 1 of 6913 ===
-#&gt; Rate: -0.0005403066 
-#&gt; R.sq: 0.5867958 
-#&gt; Rows: 2259 to 2859 
-#&gt; Time: 2258 to 2858 </div><div class='input'><span class='co'># what is the highest rate over a 10 minute (600s) period?</span>
-<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"max"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='auto_rate-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; Data is subset by time using width of 600 
-#&gt; Rates were computed using 'max' method
-#&gt; 
-#&gt; === Rank 1 of 6913 ===
-#&gt; Rate: -0.001193863 
-#&gt; R.sq: 0.8595803 
-#&gt; Rows: 791 to 1391 
-#&gt; Time: 790 to 1390 </div></pre>
+#&gt; === Rank 1 of 8 ===
+#&gt; Rate: -2.094525e-05 
+#&gt; R.sq: 0.34 
+#&gt; Rows: 30 to 616 
+#&gt; Time: 29 to 615 </div><div class='input'>
+# LONG EXAMPLES
+</div><span class='co'># NOT RUN {</span>
+<span class='co'># what is the lowest rate over a 10 minute (600s) period?</span>
+<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"min"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># what is the highest rate over a 10 minute (600s) period?</span>
+<span class='fu'>auto_rate</span>(<span class='no'>sardine.rd</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"max"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -260,5 +266,8 @@ regrssions. They are not ranked.</p></li>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
