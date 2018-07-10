@@ -189,7 +189,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
   } else if (method %in% c("max", "min", "linear")) {
     cat("\n=== Rank", pos, "of", nrow(x$summary), "===\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
-    cat("R.sq:", x$summary$rsq[pos], "\n")
+    cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
     cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
     cat("Time:", x$summary$time[pos], "to", x$summary$endtime[pos], "\n")
   } else if (method == "interval") {
@@ -213,6 +213,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
   rate <- x$summary$rate_b1[pos]
+  rsq <- x$summary$rsq[pos]
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
   interval <- x$summary$endtime
   startint <- min(interval) - x$width
@@ -226,7 +227,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       pardefault <- par(no.readonly = T) # save original par settings
       layout(mat)
       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt)
+      multi.p(dt, sdt, rsq)
       sub.p(sdt)
       rollreg.p(rolldt, rate)
       residual.p(fit)
@@ -238,7 +239,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
     if (choose == FALSE) {
       pardefault <- par(no.readonly = T) # save original par settings
       par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt)
+      multi.p(dt, sdt, rsq)
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
       sub.p(sdt)
@@ -251,7 +252,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       pardefault <- par(no.readonly = T) # save original par settings
       # par(mfrow = c(2, 3))  # replace par settings
       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt) # full timeseries with lmfit
+      multi.p(dt, sdt, rsq) # full timeseries with lmfit
       sub.p(sdt) # closed-up (subset timeseries)
       rollreg.p(rolldt, rate) # rolling regression series with markline
       density.p(dens, peaks, pos) # density plot
@@ -262,7 +263,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   }
 
   if (choose == 1) {
-    multi.p(dt, sdt)  # full timeseries with lmfit
+    multi.p(dt, sdt, rsq) # full timeseries with lmfit
     if (x$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)

@@ -19,7 +19,7 @@ d2 <- adjustcolor("darkslateblue", alpha.f = .75)
 pch <- 21
 cex <- .5
 
-multi.p <- function(df, sdf, title = TRUE) {
+multi.p <- function(df, sdf, rsq, title = TRUE) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
@@ -34,6 +34,7 @@ multi.p <- function(df, sdf, title = TRUE) {
   }))
   if (title == T)
     title(main = expression("Full Timeseries"), line = 0.5)
+  title(main = paste0("r2 = ", signif(rsq, 3)), line = -1.5, font.main = 1)
 }
 
 # a plot of the subset only
