@@ -129,11 +129,12 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   df  <- x$data
   sdf <- x$subsets[[rep]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
+  rsq <- summary(fit)$r.squared
 
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   multi.p(df, sdf)  # full timeseries with lmfit
-  sub.p(sdf)  # subset timeseries
+  sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   par(pardefault)  # revert par settings to original

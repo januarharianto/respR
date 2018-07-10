@@ -34,11 +34,11 @@ multi.p <- function(df, sdf, rsq, title = TRUE) {
   }))
   if (title == T)
     title(main = expression("Full Timeseries"), line = 0.5)
-  title(main = paste0("r2 = ", signif(rsq, 3)), line = -1.5, font.main = 1)
+  # title(main = paste0("r2 = ", signif(rsq, 3)), line = -1.5, font.main = 1)
 }
 
 # a plot of the subset only
-sub.p <- function(sdf, rep = 1, title = T) {
+sub.p <- function(sdf, rep = 1, rsq, title = T) {
   if (is.null(nrow(sdf)))
     sdf <- sdf[[rep]]
   names(sdf) <- c("x", "y")
@@ -53,6 +53,7 @@ sub.p <- function(sdf, rep = 1, title = T) {
   abline(fit, lwd = 1.5, lty = 2)
   if (title == T) title(main = expression("Close-up Region"), line = 0.5)
   title(main = eq, line = -1.5, font.main = 1)
+  if (!is.null(rsq)) title(main = paste0("r2 = ", rsq), line = -2.5, font.main = 1)
 }
 
 # a plot of residuals

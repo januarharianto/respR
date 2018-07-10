@@ -227,8 +227,8 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       pardefault <- par(no.readonly = T) # save original par settings
       layout(mat)
       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt, rsq)
-      sub.p(sdt)
+      multi.p(dt, sdt)
+      sub.p(sdt, rsq = rsq)
       rollreg.p(rolldt, rate)
       residual.p(fit)
       qq.p(fit)
@@ -239,10 +239,10 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
     if (choose == FALSE) {
       pardefault <- par(no.readonly = T) # save original par settings
       par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt, rsq)
+      multi.p(dt, sdt)
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
-      sub.p(sdt)
+      sub.p(sdt, rsq = rsq)
       residual.p(fit)
       qq.p(fit)
       par(pardefault) # revert par settings to original
@@ -252,8 +252,8 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       pardefault <- par(no.readonly = T) # save original par settings
       # par(mfrow = c(2, 3))  # replace par settings
       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt, rsq) # full timeseries with lmfit
-      sub.p(sdt) # closed-up (subset timeseries)
+      multi.p(dt, sdt) # full timeseries with lmfit
+      sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
       rollreg.p(rolldt, rate) # rolling regression series with markline
       density.p(dens, peaks, pos) # density plot
       residual.p(fit) # residual plot
@@ -263,13 +263,13 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   }
 
   if (choose == 1) {
-    multi.p(dt, sdt, rsq) # full timeseries with lmfit
+    multi.p(dt, sdt) # full timeseries with lmfit
     if (x$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
     }
   }
-  if (choose == 2) sub.p(sdt)  # subset plot
+  if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
   if (choose == 4) density.p(dens, peaks, pos)  # density
   if (choose == 5) residual.p(fit)  # residual plot
