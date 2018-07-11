@@ -1,3 +1,19 @@
+# Version 1.0.0
+The big update! Maybe it's time to submit to CRAN?
+
+- UPDATE: We edited some examples to reduce processing times during R CMD checks.
+- UPDATE: The packages `dplyr` and `magrittr` are now imported into `respR`.
+- UPDATE: Now requires R 3.5.0
+- NEW: `import_file()`: automatically import and format raw files from common devices. This function is not complete but needs to be put out there for user feedback. It's stable, just doesn't support all available machines yet. We expect this function to be improved dramatically once users send in feedback and sample files.
+- FIX: `dplyr` pipes now work after `print()` and `summary()` commands. Will add support for `plot()` depending on feedback.
+- FIX: `adjust_rate()`: minor print issue (new line required) that was messing with the console output.
+- UPDATE: `adjust_rate()` documentation has been updated.
+
+# Version 0.1.0
+- Updates to documentation and a couple of stability fixes to improve performance. We will push the CRAN submission at version 1.0.0 now, while we work on a few more things.
+- FIX: `inspect()` should now work with pipes.
+- FIX: `inspect()` had issues with `data.table` objects, so we switched to `data.frame`.
+
 # Version 0.0.7
 - HOTFIX: `calc_rate.bg()` did not subset data properly in certain usage scenarios (see #49)
 
@@ -12,8 +28,8 @@ We are getting close to a 0.1 release, which will be ready for CRAN.
 - Updated: `calc_rate()`, `calc_rate.bg()`, `calc_rate.ft()`, and `auto_rate()` are updated to work with `inspect()`. (TODO: `calc_rate.ft()` still needs to be fixed.)
 - NEW: Vignette for `auto_rate()` is now available. 
 - NEW: Performance benchmark vignette for `auto_rate()`'s linear detection method is now available.
-- NEW: `sim_data()` function: simulate data for benchmark analyses.
-- NEW: `test_lin()` function: perform benchmark analyses specific for `auto_rate()`'s linear detection (i.e. `methods = "linear"`).
+- NEW: `sim_data()`: simulate data for benchmark analyses.
+- NEW: `test_lin()`: perform benchmark analyses specific for `auto_rate()`'s linear detection (i.e. `methods = "linear"`).
 - UPDATE: All plot outputs in the package have been updated. They are now "cleaner". Users are encouraged to provide feedback on our plot outputs as we can update them easily without changing the underlying analyses.
 - FIX: Rogue parenthesis code in `auto_rate()` fixed (it was messing with `print()` commands). 
 

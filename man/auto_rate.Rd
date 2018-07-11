@@ -69,7 +69,7 @@ regrssions. They are not ranked.
 }
 \examples{
 # most linear section of the entire data
-auto_rate(sardine.rd, parallel = FALSE)
+auto_rate(flowthrough.rd, parallel = FALSE)
 
 # LONG EXAMPLES
 \dontrun{

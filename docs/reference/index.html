@@ -21,13 +21,19 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -50,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -61,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -94,7 +104,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -106,6 +116,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -113,174 +124,170 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.0.3</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-pre-processing" class="hasAnchor"><a href="#section-pre-processing" class="anchor"></a>Pre-processing</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="format_time.html">format_time</a></code> </p>
-          </td>
-          <td><p>Parse date-time data to numeric</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="inspect_data.html">inspect_data</a></code> </p>
-          </td>
-          <td><p>Check for common errors in respirometry data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="subset_data.html">subset_data</a></code> </p>
-          </td>
-          <td><p>Truncate a data frame to create a subset of the data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="subsample.html">subsample</a></code> </p>
-          </td>
-          <td><p>Subsample a data frame object</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-analytical" class="hasAnchor"><a href="#section-analytical" class="anchor"></a>Analytical</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="auto_rate.html">auto_rate</a></code> </p>
-          </td>
-          <td><p>Automatically determine rate of change in oxygen concentration over time</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="calc_rate.html">calc_rate</a></code> </p>
-          </td>
-          <td><p>Calculate rate of change in oxygen over time</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="calc_rate.bg.html">calc_rate.bg</a></code> </p>
-          </td>
-          <td><p>Calculate background respiration rates</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="calc_rate.ft.html">calc_rate.ft</a></code> </p>
-          </td>
-          <td><p>Calculate rate of change in oxygen in flowthrough respirometry</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="pcrit.html">pcrit</a></code> </p>
-          </td>
-          <td><p>Calculate critical oxygen tension, \(P_{crit}\)</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-adjust-convert" class="hasAnchor"><a href="#section-adjust-convert" class="anchor"></a>Adjust/Convert</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="adjust_rate.html">adjust_rate</a></code> </p>
-          </td>
-          <td><p>Simple rate adjustment function (background or oxygen flux)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="convert_DO.html">convert_DO</a></code> </p>
-          </td>
-          <td><p>Convert units of dissolved oxygen.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="convert_rate.html">convert_rate</a></code> </p>
-          </td>
-          <td><p>Convert rate value to volumetric and/or mass-specific</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="unit_args.html">unit_args</a></code> </p>
-          </td>
-          <td><p>Print examples of unit arguments for use in <code><a href='reference/convert_DO.html'>convert_DO()</a></code> and
-<code><a href='reference/convert_rate.html'>convert_rate()</a></code></p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-example-data" class="hasAnchor"><a href="#section-example-data" class="anchor"></a>Example Data</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="intermittent.rd.html">intermittent.rd</a></code> </p>
-          </td>
-          <td><p>Respirometry data of the sea urchin, <em>Heliocidaris Erythrogramma</em></p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="squid.rd.html">squid.rd</a></code> </p>
-          </td>
-          <td><p>Respirometry data of the squid, <em>Doryteuthis opalescens</em>, with P_crit</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="sardine.rd.html">sardine.rd</a></code> </p>
-          </td>
-          <td><p>Respirometry data of the sardine, <em>Sardinops sagax</em></p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="urchins.rd.html">urchins.rd</a></code> </p>
-          </td>
-          <td><p>Multi-column respirometry data of the sea urchin, <em>Heliocidaris
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-pre-processing" class="hasAnchor"><a href="#section-pre-processing" class="anchor"></a>Pre-processing</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="format_time.html">format_time()</a></code> </p>
+        </td>
+        <td><p>Parse date-time data to numeric</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="inspect_data.html">inspect_data()</a></code> </p>
+        </td>
+        <td><p>Check for common errors in respirometry data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subset_data.html">subset_data()</a></code> </p>
+        </td>
+        <td><p>Truncate a data frame to create a subset of the data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subsample.html">subsample()</a></code> </p>
+        </td>
+        <td><p>Subsample a data frame object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-analytical" class="hasAnchor"><a href="#section-analytical" class="anchor"></a>Analytical</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="auto_rate.html">auto_rate()</a></code> </p>
+        </td>
+        <td><p>Automatically determine rate of change in oxygen concentration over time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc_rate.html">calc_rate()</a></code> </p>
+        </td>
+        <td><p>Calculate rate of change in oxygen over time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc_rate.bg.html">calc_rate.bg()</a></code> </p>
+        </td>
+        <td><p>Calculate background respiration rates</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc_rate.ft.html">calc_rate.ft()</a></code> </p>
+        </td>
+        <td><p>Calculate rate of change in oxygen in flowthrough respirometry</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pcrit.html">pcrit()</a></code> </p>
+        </td>
+        <td><p>Calculate critical oxygen tension, \(P_{crit}\)</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-adjust-convert" class="hasAnchor"><a href="#section-adjust-convert" class="anchor"></a>Adjust/Convert</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="adjust_rate.html">adjust_rate()</a></code> </p>
+        </td>
+        <td><p>Simple rate adjustment function (background or oxygen flux)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="convert_DO.html">convert_DO()</a></code> </p>
+        </td>
+        <td><p>Convert units of dissolved oxygen.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="convert_rate.html">convert_rate()</a></code> </p>
+        </td>
+        <td><p>Convert rate value to volumetric and/or mass-specific</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="unit_args.html">unit_args()</a></code> </p>
+        </td>
+        <td><p>Print examples of unit arguments for use in <code>convert_DO()</code> and
+<code>convert_rate()</code></p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-example-data" class="hasAnchor"><a href="#section-example-data" class="anchor"></a>Example Data</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="intermittent.rd.html">intermittent.rd</a></code> </p>
+        </td>
+        <td><p>Respirometry data of the sea urchin, <em>Heliocidaris Erythrogramma</em></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="squid.rd.html">squid.rd</a></code> </p>
+        </td>
+        <td><p>Respirometry data of the squid, <em>Doryteuthis opalescens</em>, with P_crit</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sardine.rd.html">sardine.rd</a></code> </p>
+        </td>
+        <td><p>Respirometry data of the sardine, <em>Sardinops sagax</em></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="urchins.rd.html">urchins.rd</a></code> </p>
+        </td>
+        <td><p>Multi-column respirometry data of the sea urchin, <em>Heliocidaris
 Erythrogramma</em>, including background respiration</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
-          </td>
-          <td><p>Flowthrough respirometry data on the chiton, <em>Mopalia lignosa</em></p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="test_lin_data.html">test_lin_data</a></code> </p>
-          </td>
-          <td><p>Output objects for the function <code>test_lin()</code></p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
+        </td>
+        <td><p>Flowthrough respirometry data on the chiton, <em>Mopalia lignosa</em></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="test_lin_data.html">test_lin_data</a></code> </p>
+        </td>
+        <td><p>Output objects for the function <code>test_lin()</code></p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -306,5 +313,8 @@ Erythrogramma</em>, including background respiration</p></td>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

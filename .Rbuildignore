@@ -6,6 +6,7 @@
 ^\.travis\.yml$     # Used for continuous integration testing with travis
 ^manuscript$        # Folder that contains the files for the manuscript
 ^docs$              # Folder that stores HTML vignettes
+^doc$               # Folder that stores HTML vignettes
 ^\.travis\.yml$     # Travis files
 ^vignettes$         # Vignettes folder
 ^_pkgdown\.yml$

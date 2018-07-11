@@ -55,12 +55,13 @@
 #'
 #' @import data.table
 #' @import parallel
+#'
 #' @export
 #'
 #' @examples
 #' # most linear section of the entire data
-#' auto_rate(sardine.rd, parallel = FALSE)
-#' 
+#' auto_rate(flowthrough.rd, parallel = FALSE)
+#'
 #' # LONG EXAMPLES
 #' \dontrun{
 #' # what is the lowest rate over a 10 minute (600s) period?
@@ -188,7 +189,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
   } else if (method %in% c("max", "min", "linear")) {
     cat("\n=== Rank", pos, "of", nrow(x$summary), "===\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
-    cat("R.sq:", x$summary$rsq[pos], "\n")
+    cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
     cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
     cat("Time:", x$summary$time[pos], "to", x$summary$endtime[pos], "\n")
   } else if (method == "interval") {
@@ -212,6 +213,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
   rate <- x$summary$rate_b1[pos]
+  rsq <- x$summary$rsq[pos]
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
   interval <- x$summary$endtime
   startint <- min(interval) - x$width
@@ -226,7 +228,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       layout(mat)
       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt)
-      sub.p(sdt)
+      sub.p(sdt, rsq = rsq)
       rollreg.p(rolldt, rate)
       residual.p(fit)
       qq.p(fit)
@@ -240,7 +242,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       multi.p(dt, sdt)
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
-      sub.p(sdt)
+      sub.p(sdt, rsq = rsq)
       residual.p(fit)
       qq.p(fit)
       par(pardefault) # revert par settings to original
@@ -251,7 +253,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
       # par(mfrow = c(2, 3))  # replace par settings
       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt) # full timeseries with lmfit
-      sub.p(sdt) # closed-up (subset timeseries)
+      sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
       rollreg.p(rolldt, rate) # rolling regression series with markline
       density.p(dens, peaks, pos) # density plot
       residual.p(fit) # residual plot
@@ -261,13 +263,13 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   }
 
   if (choose == 1) {
-    multi.p(dt, sdt)  # full timeseries with lmfit
+    multi.p(dt, sdt) # full timeseries with lmfit
     if (x$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
     }
   }
-  if (choose == 2) sub.p(sdt)  # subset plot
+  if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
   if (choose == 4) density.p(dens, peaks, pos)  # density
   if (choose == 5) residual.p(fit)  # residual plot
@@ -276,7 +278,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
 }
 
 #' @export
-summary.auto_rate <- function(object, pos = NULL,...) {
+summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
   cat("Regressions :", nrow(object$roll))
   cat(" | Results :", nrow(object$summary))
   cat(" | Method :", object$method)
@@ -288,14 +290,20 @@ summary.auto_rate <- function(object, pos = NULL,...) {
     print(object$density)
   }
   if (is.null(pos)) {
+    # if no row is specified, return all results
     cat("\n=== Summary of Results ===\n\n")
-    print(data.table::data.table(object$summary))
+    print(data.table(object$summary))
+    if (export) {
+      return(invisible(data.table(object$summary)))
+    } else return(invisible(object))
   } else {
+    # otherwise, return row specified by `pos`
     cat("\n=== Summary of Ranked ",pos, "Result ===\n\n")
     print(data.table::data.table(object$summary)[pos])
+    if (export) {
+      return(invisible(data.table(object$summary)[pos]))
+    } else return(invisible(object))
   }
-
-  return(invisible(object))
 }
 
 #' Normal rolling regression

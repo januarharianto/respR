@@ -40,14 +40,10 @@ and true (known) rate, which can demonstrate how much the function is able to
 predict true rate.
 }
 \examples{
-# run 5 iterations (please run at least 1000 times for more reliable visuals)
+# run 3 iterations (please run at least 1000 times for more reliable visuals)
 x <- test_lin(reps = 3)
 # plot(x)
 # plot(x, "a")  # view only plot "A"
 # plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
-
-# run using randomly-generated "corrupted" datasets
-x <- test_lin(reps = 3, type = "corrupted")
-# plot(x)
 }
 \keyword{internal}
