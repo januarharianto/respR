@@ -5,7 +5,7 @@
 
 **This package is under active development, but is currently stable.**
 
-[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR) [![Github all releases](https://img.shields.io/github/downloads/januarharianto/respR/total.svg)](https://GitHub.com/januarharianto/respR/releases/)
+[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
 
 # Welcome
 
@@ -53,7 +53,7 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
 library(dplyr) # load to activate pipe operators
 
 urchins.rd %>%        # using the urchins dataset,
-  select(1, 15) %>%   # select rows 1 and 15
+  select(1, 15) %>%   # select columns 1 and 15
   inspect()     %>%   # inspect the data, then
   auto_rate()   %>%   # automatically determine most linear segment
   print()       %>%   # just a quick preview
