@@ -30,7 +30,7 @@ complex correction methods (e.g. non-linear) in the future.
 \examples{
 # Note that respiration is negative by default (since it represents a
 # decrease in dissolved oxygen), so both values are negative!
-# Background respiration correction 
+# Background respiration correction
 adjust_rate(-7.44, -0.04) # this is (-7.44) - (-0.04) = -7.40
 # Oxygen flux correction
 adjust_rate(-7.44, 0.1) # this is (-7.44) - (0.1) = -7.54

@@ -1,9 +1,11 @@
 
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
 
+ [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR) 
 
 **This package is under active development, but is currently stable.**
+
+[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
 
 # Welcome
 
@@ -29,7 +31,7 @@ library(respR) # load the library
 # This example will use the `sardine.rd` example data.
 
 # 1. Check data for errors
-x <- inspect_data(sardine.rd)
+x <- inspect(sardine.rd)
 
 # 2. Manual rate calculations
 calc_rate(x, from = 2000, to = 4000)
@@ -50,11 +52,11 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
 ## Alternatively, use pipes:
 library(dplyr) # load to activate pipe operators
 
-urchins.rd %>%         # using the urchins dataset,
-  select(1, 15) %>%    # select rows 1 and 15
-  inspect_data() %>%   # inspect the data, then
-  auto_rate() %>%      # automatically determine most linear segment
-  print() %>%          # just a quick preview
+urchins.rd %>%        # using the urchins dataset,
+  select(1, 15) %>%   # select columns 1 and 15
+  inspect()     %>%   # inspect the data, then
+  auto_rate()   %>%   # automatically determine most linear segment
+  print()       %>%   # just a quick preview
   convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert data
   
 ```
@@ -63,9 +65,9 @@ urchins.rd %>%         # using the urchins dataset,
 
 - [X] Integration into tidyverse, via `dplyr` pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as `adjust_rate()` and `calc_rate.bg()`.
 - [ ] Better output for `calc_rate.ft()`
-- [ ] Parallisation optimisations. Currently broken.... oops
-- [ ] Better `inspect_data()` output. Feedback says it is sometimes too verbose
-
+- [ ] Parallisation optimisations. Some are currently broken due to OS updates.... oops
+- [ ] Support for additional Pcrit methods.
+- [ ] Refresh vignettes to reflect 1.0.0 updates. Currently half-done, but I have a thesis to complete..
 
 ## Feedback and contributions
 

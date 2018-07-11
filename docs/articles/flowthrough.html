@@ -8,8 +8,8 @@
 <title>Flowthrough respirometry • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Flowthrough respirometry">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Flowthrough respirometry">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -38,7 +42,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -71,7 +75,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -91,15 +95,18 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Flowthrough respirometry</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/januarharianto/respr/blob/master/vignettes/flowthrough.Rmd"><code>vignettes/flowthrough.Rmd</code></a></small>
+      <div class="hidden name"><code>flowthrough.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <div id="introduction" class="section level3">
 <h3 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h3>
@@ -112,13 +119,15 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(respR)
 <span class="kw">data</span>(<span class="st">"flowthrough.rd"</span>)
 <span class="kw">head</span>(flowthrough.rd)
-<span class="co">#&gt;   time   o2.out    o2.in  o2.delta</span>
-<span class="co">#&gt; 1    0 8.169730 8.879693 0.7099636</span>
-<span class="co">#&gt; 2    1 8.170744 8.884703 0.7139588</span>
-<span class="co">#&gt; 3    2 8.168974 8.900421 0.7314472</span>
-<span class="co">#&gt; 4    3 8.170722 8.880303 0.7095818</span>
-<span class="co">#&gt; 5    4 8.173901 8.885802 0.7119012</span>
-<span class="co">#&gt; 6    5 8.167307 8.891156 0.7238484</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 4</span>
+<span class="co">#&gt;    time o2.out o2.in o2.delta</span>
+<span class="co">#&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     0   8.17  8.88    0.710</span>
+<span class="co">#&gt; 2     1   8.17  8.88    0.714</span>
+<span class="co">#&gt; 3     2   8.17  8.90    0.731</span>
+<span class="co">#&gt; 4     3   8.17  8.88    0.710</span>
+<span class="co">#&gt; 5     4   8.17  8.89    0.712</span>
+<span class="co">#&gt; 6     5   8.17  8.89    0.724</span></code></pre></div>
 <p>We can see this dataset contains time values, both outflow and inflow <span class="math inline">\(O_2\)</span> concentrations, and an <span class="math inline">\(O_2\)</span> delta, which is simply the difference between inflow and outflow. The <span class="math inline">\(O_2\)</span> delta column is not required; we include it here to show an exploratory step in the next section. While any flowthrough data can be analysed in the <code>calc_rate.ft</code> function, exploring flowthrough data in <code>inspect_data</code> requires a 3 column data frame of time, outflow <span class="math inline">\(O_2\)</span>, and inflow <span class="math inline">\(O_2\)</span>. Therefore the user should include all three, even if inflow <span class="math inline">\(O_2\)</span> is a column of a single fixed value. In this example it varies, but not significantly from a mean value of 8.88.</p>
 </div>
 <div id="inspecting-data" class="section level3">
@@ -257,7 +266,6 @@
 <span class="co">#&gt; [1] -1.415406</span>
 <span class="co">#&gt; [1] "mg/hour/g"</span></code></pre></div>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -276,6 +284,8 @@
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

@@ -110,14 +110,17 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 print.calc_rate <- function(x, ...) {
   cat("Rate(s):\n")
   print(x$rate)
+  return(invisible(x))
 }
 
 
 #' @export
-summary.calc_rate <- function(object, ...) {
+summary.calc_rate <- function(object, export = FALSE, ...) {
   cat("Summary:\n")
   print(object$summary)
-  return(invisible(object$summary))
+  if (export) {
+    return(invisible(object$summary))
+  } else return(invisible(object))
 }
 
 #' @export
@@ -126,11 +129,12 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   df  <- x$data
   sdf <- x$subsets[[rep]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
+  rsq <- summary(fit)$r.squared
 
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   multi.p(df, sdf)  # full timeseries with lmfit
-  sub.p(sdf)  # subset timeseries
+  sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   par(pardefault)  # revert par settings to original

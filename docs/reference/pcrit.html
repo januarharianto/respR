@@ -21,20 +21,26 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Calculate critical oxygen tension, \(P_{crit}\) — pcrit" />
 
 <meta property="og:description" content="A function to calculate the critical oxygen tension, or the O2 concentration
 below which uptake rate becomes dependent upon oxygen concentration. It is
-calculated by both the "broken-stick" regression (BSR) approach, adopted from
+calculated by both the &quot;broken-stick&quot; regression (BSR) approach, adopted from
 Yeager and Ultsch (1989), and the segmented regression approach, presented by
 Muggeo (2003)." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -57,8 +63,12 @@ Muggeo (2003)." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -68,7 +78,7 @@ Muggeo (2003)." />
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -101,7 +111,7 @@ Muggeo (2003)." />
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -113,6 +123,7 @@ Muggeo (2003)." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -120,12 +131,15 @@ Muggeo (2003)." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate critical oxygen tension, \(P_{crit}\)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/januarharianto/respr/blob/master/R/pcrit.R'><code>R/pcrit.R</code></a></small>
+    <div class="hidden name"><code>pcrit.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>A function to calculate the critical oxygen tension, or the O2 concentration
 below which uptake rate becomes dependent upon oxygen concentration. It is
@@ -133,11 +147,12 @@ calculated by both the "broken-stick" regression (BSR) approach, adopted from
 Yeager and Ultsch (1989), and the segmented regression approach, presented by
 Muggeo (2003).</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>pcrit</span>(<span class='no'>df</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fu'>floor</span>(<span class='fl'>0.1</span> * <span class='fu'>nrow</span>(<span class='no'>df</span>)), <span class='kw'>has.rate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -230,5 +245,8 @@ broken-line relationships. R News 8:20–25.</p>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

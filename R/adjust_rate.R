@@ -1,7 +1,7 @@
 #' Simple rate adjustment function (background or oxygen flux)
 #'
 #' A simple rate correction function. Please note that the **sign** of the
-#' number must be considered in the correction. Background respiration is 
+#' number must be considered in the correction. Background respiration is
 #' normally a negative number, while oxygen flux may or may not be negative.
 #'
 #' To account for background respiration and/or oxygen flux in open respirometry
@@ -10,7 +10,7 @@
 #' complex correction methods (e.g. non-linear) in the future.
 #'
 #' @md
-#' @param x numeric. A single value, or any object of class `calc_rate` or `auto_rate`. 
+#' @param x numeric. A single value, or any object of class `calc_rate` or `auto_rate`.
 #'   This object contains the rate value that needs to be adjusted.
 #' @param by either a numeric, or an object of class `calc_rate.bg`. This is the
 #'   value that is used to perform the correction/adjustment.
@@ -21,7 +21,7 @@
 #' @examples
 #' # Note that respiration is negative by default (since it represents a
 #' # decrease in dissolved oxygen), so both values are negative!
-#' # Background respiration correction 
+#' # Background respiration correction
 #' adjust_rate(-7.44, -0.04) # this is (-7.44) - (-0.04) = -7.40
 #' # Oxygen flux correction
 #' adjust_rate(-7.44, 0.1) # this is (-7.44) - (0.1) = -7.54
@@ -64,5 +64,5 @@ print.adjust_rate <- function(x, ...) {
     cat("\nInput rate:", x$input)
   } else cat("\nInput rate:", x$input.rate)
   cat("\nAdjustment:", x$adjustment)
-  cat("\n Adj. rate:", x$corrected)
+  cat("\n Adj. rate:", x$corrected, "\n")
 }

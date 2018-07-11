@@ -8,8 +8,8 @@
 <title>Analyse, Convert, and Automate Respirometry-Related Data • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Analyse, Convert, and Automate Respirometry-Related Data">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="Analyse, Convert, and Automate Respirometry-Related Data">
 <meta property="og:description" content="A collection of functions that, when used together, provide a 
     complete and structured workflow for the analysis of respirometry-related
     data. See the respR GitHub webpage for documentation and examples.">
@@ -29,8 +29,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -40,7 +44,7 @@
   </a>
 </li>
 <li>
-  <a href="articles/respR.html">Get Started</a>
+  <a href="articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -73,7 +77,7 @@
   </ul>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -96,6 +100,7 @@
   <div class="contents col-md-9">
     
 
+<p><strong>This package is under active development, but is currently stable.</strong></p>
 <div id="welcome" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#welcome" class="anchor"></a>Welcome</h1></div>
@@ -139,12 +144,23 @@ y &lt;-<span class="st"> </span><span class="kw"><a href="reference/auto_rate.ht
 <span class="kw">library</span>(dplyr) <span class="co"># load to activate pipe operators</span>
 
 urchins.rd <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># using the urchins dataset,</span>
-<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="dv">1</span>, <span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># select rows 1 and 15</span>
+<span class="st">  </span><span class="kw"><a href="reference/select.html">select</a></span>(<span class="dv">1</span>, <span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># select rows 1 and 15</span>
 <span class="st">  </span><span class="kw"><a href="reference/inspect_data.html">inspect_data</a></span>() <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># inspect the data, then</span>
 <span class="st">  </span><span class="kw"><a href="reference/auto_rate.html">auto_rate</a></span>() <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># automatically determine most linear segment</span>
 <span class="st">  </span><span class="kw">print</span>() <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># just a quick preview</span>
 <span class="st">  </span><span class="kw"><a href="reference/convert_rate.html">convert_rate</a></span>(<span class="st">"mg/l"</span>, <span class="st">"s"</span>, <span class="st">"mg/h/kg"</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>) <span class="co"># convert data</span>
   </code></pre></div>
+</div>
+<div id="todo" class="section level2">
+<h2 class="hasAnchor">
+<a href="#todo" class="anchor"></a>Todo</h2>
+<ul>
+<li>[X] Integration into tidyverse, via <code>dplyr</code> pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as <code><a href="reference/adjust_rate.html">adjust_rate()</a></code> and <code><a href="reference/calc_rate.bg.html">calc_rate.bg()</a></code>.</li>
+<li>[ ] Better output for <code><a href="reference/calc_rate.ft.html">calc_rate.ft()</a></code>
+</li>
+<li>[ ] Parallisation optimisations. Currently broken…. oops</li>
+<li>[ ] Better <code><a href="reference/inspect_data.html">inspect_data()</a></code> output. Feedback says it is sometimes too verbose</li>
+</ul>
 </div>
 <div id="feedback-and-contributions" class="section level2">
 <h2 class="hasAnchor">
@@ -195,24 +211,37 @@ urchins.rd <span class="op">%&gt;%</span><span class="st">         </span><span 
   </div>
 
   <div class="col-md-3" id="sidebar">
-    <h2>Links</h2>
+    <div class="links">
+<h2>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/januarharianto/respr">https://​github.com/​januarharianto/​respr</a>
 </li>
+<li>Report a bug at <br><a href="NA">NA</a>
+</li>
 </ul>
+</div>
+<div class="license">
 <h2>License</h2>
-<p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></p>
+<ul class="list-unstyled">
+<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+</ul>
+</div>
+<div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Januar Harianto <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Nicholas Carey <br><small class="roles"> Author </small>  </li>
 </ul>
+</div>
+
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=respR"><img src="http://www.r-pkg.org/badges/version/respR" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://travis-ci.org/januarharianto/respR"><img src="https://travis-ci.org/januarharianto/respR.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://codecov.io/gh/januarharianto/respR"><img src="https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg" alt="codecov"></a></li>
 </ul>
+</div>
 </div>
 </div>
 
@@ -227,6 +256,8 @@ urchins.rd <span class="op">%&gt;%</span><span class="st">         </span><span 
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

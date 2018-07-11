@@ -21,12 +21,15 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
 <meta property="og:title" content="Check for common errors in respirometry data — inspect" />
 
 <meta property="og:description" content="inspect() scans and subsets a data.frame object for errors that may affect
@@ -36,6 +39,9 @@ time data. A plot of the data is also produced, including a rolling
 regression plot using a width of floor(0.2 * nrow([data frame]) for a quick
 visual inspection of the rate pattern (or stability) of the data." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -58,8 +64,12 @@ visual inspection of the rate pattern (or stability) of the data." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -69,7 +79,7 @@ visual inspection of the rate pattern (or stability) of the data." />
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -102,7 +112,7 @@ visual inspection of the rate pattern (or stability) of the data." />
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -114,6 +124,7 @@ visual inspection of the rate pattern (or stability) of the data." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -121,12 +132,15 @@ visual inspection of the rate pattern (or stability) of the data." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for common errors in respirometry data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/januarharianto/respr/blob/master/R/inspect.R'><code>R/inspect.R</code></a></small>
+    <div class="hidden name"><code>inspect.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p><code>inspect()</code> scans and subsets a data.frame object for errors that may affect
 the use of various functions in <code>respR</code>. By default, the function scans only
@@ -135,10 +149,11 @@ time data. A plot of the data is also produced, including a rolling
 regression plot using a width of <code>floor(0.2 * nrow([data frame])</code> for a quick
 visual inspection of the rate pattern (or stability) of the data.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>inspect</span>(<span class='no'>df</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>oxygen</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -182,7 +197,7 @@ inflow and outflow, by specifying a vector of column numbers, e.g. <code>oxygen 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># automatically inspect first 2 columns:</span>
-<span class='fu'>inspect</span>(<span class='no'>sardine.rd</span>)</div><div class='output co'>#&gt; <span class='message'>No issues detected while inspecting data frame.</span></div><div class='img'><img src='inspect-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt;               Time Oxygen
+<span class='fu'>inspect</span>(<span class='no'>sardine.rd</span>)</div><div class='output co'>#&gt; <span class='message'>No issues detected while inspecting data frame.</span></div><div class='img'><img src='inspect-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;               Time Oxygen
 #&gt; NA/NAN        pass   pass
 #&gt; sequential    pass      -
 #&gt; duplicated    pass      -
@@ -199,7 +214,7 @@ inflow and outflow, by specifying a vector of column numbers, e.g. <code>oxygen 
 #&gt; evenly-spaced    -    -    -    -    -    -    -
 #&gt; </div><div class='input'>
 <span class='co'># inspect specific columns:</span>
-<span class='fu'>inspect</span>(<span class='no'>urchins.rd</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>oxygen</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time values are not evenly-spaced.</span></div><div class='img'><img src='inspect-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt;               time.min    c
+<span class='fu'>inspect</span>(<span class='no'>urchins.rd</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>oxygen</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Time values are not evenly-spaced.</span></div><div class='img'><img src='inspect-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;               time.min    c
 #&gt; NA/NAN            pass pass
 #&gt; sequential        pass    -
 #&gt; duplicated        pass    -
@@ -269,5 +284,8 @@ inflow and outflow, by specifying a vector of column numbers, e.g. <code>oxygen 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

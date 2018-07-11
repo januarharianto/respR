@@ -8,8 +8,8 @@
 <title>Introduction to respR • respR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to respR">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to respR">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">respR</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">respR</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.3</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -38,7 +42,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get Started</a>
+  <a href="../articles/respR.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -71,7 +75,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -91,15 +95,30 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Introduction to respR</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/januarharianto/respr/blob/master/vignettes/respR.Rmd"><code>vignettes/respR.Rmd</code></a></small>
+      <div class="hidden name"><code>respR.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
+<div id="respirometry" class="section level3">
+<h3 class="hasAnchor">
+<a href="#respirometry" class="anchor"></a>Respirometry</h3>
+<p>There are four broad methodological approaches in respirometry: closed, intermittent flow, flow-through and open. In closed respirometry, <span class="math inline">\(O_2\)</span> decrease is measured within a hermetically sealed chamber of known volume, sometimes set within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the <span class="math inline">\(O_2\)</span> timeseries by assuming a linear relationship between variables, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: <span class="math display">\[VO_2 = \dot O_2V\]</span> where <span class="math inline">\(\dot O_2\)</span> is the slope of the regression that describes the rate of change in <span class="math inline">\(O_2\)</span> concentration over time, or in the case of a two-point measurement, the difference in <span class="math inline">\(O_2\)</span> concentration divided by time elapsed, and <span class="math inline">\(V\)</span> is the volume of the container <span class="citation">[@lighton_measuring_2008]</span>.</p>
+<p>In intermittent flow respirometry, <span class="math inline">\(O_2\)</span> concentration is measured as described above, but periodically the chamber is flushed with new water or air, returning it to initial conditions, resealed, and the experiment repeated <span class="citation">[@svendsen_design_2016]</span>. This technique is essentially closed respirometry, but with the incorporation of repeated measures. Depending on the metabolic rate metric being investigated, final respiration rate can be calculated as the mean of the measures <span class="citation">[e.g. @carey_sea_2016]</span>, or the lowest or highest rates recorded in any trial <span class="citation">[e.g. @stoffels_physiological_2015]</span>.</p>
+<p>Flow-through respirometry involves a closed chamber, but with a regulated flow of air or water through it at a precisely determined rate. After equilibrium has been achieved, the oxygen concentration differential between the incurrent and excurrent channels, along with the flow rate, allows calculation of the oxygen extracted from the flow volume per unit time: <span class="math display">\[VO_2 = (C_iO_2 - C_eO_2)FR\]</span> where <span class="math inline">\(\dot{V}O_2\)</span> is the rate of <span class="math inline">\(O_2\)</span> consumption over time, <span class="math inline">\(C_iO_2\)</span> and <span class="math inline">\(C_eO_2\)</span> are the incurrent and excurrent <span class="math inline">\(O_2\)</span> concentrations, and <span class="math inline">\(FR\)</span> is the flow rate of water through the system <span class="citation">[@lighton_measuring_2008]</span>.</p>
+<p>A final method is open respirometry, in which an open tank or semi-enclosed area is used, but the input or mixing rate of oxygen from the surroundings is known or found to be negligible relative to oxygen consumption of the specimens <span class="citation">[@leclercq_measurement_1999]</span>. It is seldom used, but for some applications it is a sufficient and practical methodology <span class="citation">[@gamble_open-top_2014]</span>. The common equation used for open respirometry is: <span class="math display">\[VO_2 = \dot O_2V + \phi_d\]</span> where <span class="math inline">\(\dot O_2V\)</span> is the slope of the regression that relates <span class="math inline">\(O_2\)</span> concentration to time, <span class="math inline">\(V\)</span> is the volume of the container and <span class="math inline">\(\phi_d\)</span> is the oxygen flux as determined by Fick’s Law <span class="citation">[@leclercq_measurement_1999]</span>.</p>
+</div>
+<div id="respr" class="section level3">
+<h3 class="hasAnchor">
+<a href="#respr" class="anchor"></a><code>respR</code>
+</h3>
 <p><code>respR</code> is a package designed to process the data from closed, intermittent flow, flowthrough, and open tank respirometry. It is designed primarily for aquatic respirometry, although as many of the main functions are unitless it is adaptable for use with gaseous respirometry, and indeed analysis of other data where a parameter may change over time.</p>
 <p>When working with respirometry data, you will often need to:</p>
 <ol style="list-style-type: decimal">
@@ -116,6 +135,7 @@
 <li>The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions</li>
 <li>These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data</li>
 </ul>
+</div>
 <div id="example-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example Data</h3>
@@ -133,20 +153,17 @@
 <p><code>respR</code> was designed to work best with data frame objects, including objects of class <code>data.frame</code>, <code>data.table</code> and <code>tibble</code>, containing numeric time and oxygen data. The function <code>format_time</code> (see <strong>Reference</strong> section above) will help you prepare your time data if it is not in numeric form. It can automatically convert many date-time formats data to numeric time.</p>
 <p>Here we describe a typical workflow for a <strong>closed respirometry</strong> experiment. The example data used here is <code>urchins.rd</code>, where the first column of the data frame is time data, while the remaining 18 columns are dissolved <span class="math inline">\(O_2\)</span> data. Columns <code>b1</code> and <code>b2</code> contain background respiration. The units are minutes and mg/L of <span class="math inline">\(O_2\)</span>, however all analyses in <code>respR</code> are unitless, and we only consider units when we later come to convert rates.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(urchins.rd)
-<span class="co">#&gt;   time.min    a    b    c    d    e    f    g    h    i    j    k    l</span>
-<span class="co">#&gt; 1      0.0 7.86 7.86 7.64 7.65 7.87 7.74 7.62 7.65 7.96 7.75 7.72 7.71</span>
-<span class="co">#&gt; 2      0.2 7.87 7.79 7.60 7.71 7.87 7.72 7.61 7.66 7.97 7.72 7.71 7.71</span>
-<span class="co">#&gt; 3      0.3 7.89 7.70 7.60 7.70 7.90 7.72 7.61 7.63 7.98 7.72 7.69 7.77</span>
-<span class="co">#&gt; 4      0.5 7.90 7.68 7.60 7.72 7.92 7.74 7.62 7.66 7.97 7.72 7.70 7.77</span>
-<span class="co">#&gt; 5      0.7 7.87 7.64 7.60 7.67 7.90 7.73 7.59 7.65 7.95 7.71 7.66 7.76</span>
-<span class="co">#&gt; 6      0.8 7.82 7.69 7.61 7.61 7.88 7.70 7.60 7.65 7.94 7.70 7.63 7.72</span>
-<span class="co">#&gt;      m    n    o    p   b1   b2</span>
-<span class="co">#&gt; 1 7.87 7.61 6.96 7.04 7.90 7.70</span>
-<span class="co">#&gt; 2 7.89 7.61 6.96 7.01 7.89 7.70</span>
-<span class="co">#&gt; 3 7.89 7.65 6.97 7.05 7.90 7.69</span>
-<span class="co">#&gt; 4 7.89 7.67 6.96 7.09 7.89 7.69</span>
-<span class="co">#&gt; 5 7.86 7.62 6.95 7.00 7.90 7.68</span>
-<span class="co">#&gt; 6 7.86 7.61 6.94 6.99 7.90 7.67</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 19</span>
+<span class="co">#&gt;   time.min     a     b     c     d     e     f     g     h     i     j</span>
+<span class="co">#&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      0    7.86  7.86  7.64  7.65  7.87  7.74  7.62  7.65  7.96  7.75</span>
+<span class="co">#&gt; 2      0.2  7.87  7.79  7.6   7.71  7.87  7.72  7.61  7.66  7.97  7.72</span>
+<span class="co">#&gt; 3      0.3  7.89  7.7   7.6   7.7   7.9   7.72  7.61  7.63  7.98  7.72</span>
+<span class="co">#&gt; 4      0.5  7.9   7.68  7.6   7.72  7.92  7.74  7.62  7.66  7.97  7.72</span>
+<span class="co">#&gt; 5      0.7  7.87  7.64  7.6   7.67  7.9   7.73  7.59  7.65  7.95  7.71</span>
+<span class="co">#&gt; 6      0.8  7.82  7.69  7.61  7.61  7.88  7.7   7.6   7.65  7.94  7.7 </span>
+<span class="co">#&gt; # ... with 8 more variables: k &lt;dbl&gt;, l &lt;dbl&gt;, m &lt;dbl&gt;, n &lt;dbl&gt;, o &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   p &lt;dbl&gt;, b1 &lt;dbl&gt;, b2 &lt;dbl&gt;</span></code></pre></div>
 <div id="step-1-check-for-common-errors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-1-check-for-common-errors" class="anchor"></a>Step 1: Check for common errors</h2>
@@ -200,7 +217,13 @@
 <a href="#step-2-process-background-respiration" class="anchor"></a>Step 2: Process background respiration</h2>
 <p>The presence of microorganisms may be a potential source of experimental bias, and we may want to account for background respiration rates during experiments. Since background rates typically account for a small percentage of experimental rates, these often-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and the rates are averaged across several datasets to obtain a more accurate estimate of the correction.</p>
 <p>The function <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> can be used to simultaneously process multiple background rate measurements as long as they share the <strong>same units</strong> of time and oxygen data as the experiments they will be used to correct. In <code>urchins.rd</code>, background respiration was recorded and saved in columns 18 and 19. We analyse the data using the specialised function <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> and save the output as an object. Note the function allows us to subset the data, here by <code>time</code> from 5 to 40 minutes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span>(urchins.rd, <span class="dt">xcol =</span> <span class="dv">1</span>, <span class="dt">ycol =</span> <span class="dv">18</span><span class="op">:</span><span class="dv">19</span>, <span class="dt">from =</span> <span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">40</span>, <span class="dt">by =</span> <span class="st">"time"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bg &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span>(urchins.rd, <span class="dt">xcol =</span> <span class="dv">1</span>, <span class="dt">ycol =</span> <span class="dv">18</span><span class="op">:</span><span class="dv">19</span>, <span class="dt">from =</span> <span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">40</span>, <span class="dt">by =</span> <span class="st">"time"</span>)
+<span class="co">#&gt; Warning in `[.data.table`(x, , ..xcol): Both 'xcol' and '..xcol' exist in</span>
+<span class="co">#&gt; calling scope. Please remove the '..xcol' variable in calling scope for</span>
+<span class="co">#&gt; clarity.</span>
+<span class="co">#&gt; Warning in `[.data.table`(x, , ..ycol): Both 'ycol' and '..ycol' exist in</span>
+<span class="co">#&gt; calling scope. Please remove the '..ycol' variable in calling scope for</span>
+<span class="co">#&gt; clarity.</span></code></pre></div>
 <p><img src="respR_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bg)
 <span class="co">#&gt; Rate(s):</span>
@@ -335,7 +358,6 @@ a.rate
 <span class="co">#&gt; [1] "ug" "mg" "g"  "kg"</span></code></pre></div>
 </div>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -369,6 +391,8 @@ a.rate
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

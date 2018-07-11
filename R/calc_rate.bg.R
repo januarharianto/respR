@@ -39,11 +39,11 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   # Import x from inspect function
   if(any(class(x) %in% "inspect")) x <- as.data.table(x$dataframe)
   if(any(class(x) %in% "inspect_data")) x <- as.data.table(x$df)
-  x <- as.data.table(x)
+  # x <- as.data.table(x)
 
   # Extract data:
-  xval <- x[, ..xcol]
-  yval <- x[, ..ycol]
+  xval <- x[xcol]
+  yval <- x[ycol]
   dt <- data.table(xval, yval)
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
@@ -78,7 +78,7 @@ plot.calc_rate.bg <- function(x, ...) {
   par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
   lapply(1:length(x$bgrate), function(z) sub.p(data.frame(x$data[[1]],
-    x$data[[z + 1]]), title = F))
+    x$data[[z + 1]]), rsq = NULL, title = F))
   par(pardefault)  # revert par settings to original
 
 }
