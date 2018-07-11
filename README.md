@@ -66,9 +66,9 @@ urchins.rd %>%        # using the urchins dataset,
 
 - [X] Integration into tidyverse, via `dplyr` pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as `adjust_rate()` and `calc_rate.bg()`.
 - [ ] Better output for `calc_rate.ft()`
-- [ ] Parallisation optimisations. Currently broken.... oops
-- [ ] Better `inspect_data()` output. Feedback says it is sometimes too verbose
-
+- [ ] Parallisation optimisations. Some are currently broken due to OS updates.... oops
+- [ ] Support for additional Pcrit methods.
+- [ ] Refresh vignettes to reflect 1.0.0 updates. Currently half-done, but I have a thesis to complete..
 
 ## Feedback and contributions
 
