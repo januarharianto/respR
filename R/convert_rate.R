@@ -155,12 +155,29 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 }
 
 #' @export
-print.convert_rate <- function(x, ...) {
-  cat("Input:\n")
-  print(x$input)
+print.convert_rate <- function(x, pos = NULL, ...) {
+  cat("\n#################\n# Conversion(s) #\n#################\n")
+  if (is.null(pos)) {
+    cat("First (top) result\n")
+    cat("Input:\n")
+    print(x$input[1])
+  } else if (is.numeric(pos)) {
+    cat("Position", pos, "result\n")
+    cat("Input:\n")
+    print(x$input[pos])
+  } else {
+    cat("Input:\n")
+    print(x$input)
+  }
   print(c(x$input.o2.unit, x$input.time.unit))
-  cat("Output:\n")
-  print(x$output)
+  cat("Converted:\n")
+  if (is.null(pos)) { 
+    print(x$output[1])
+  } else if (is.numeric(pos)) {
+    print(x$output[pos])
+  } else {
+    print(x$output)
+  }
   print(x$output.unit)
 }
 
