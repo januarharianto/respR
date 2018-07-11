@@ -5,8 +5,7 @@
 
 **This package is under active development, but is currently stable.**
 
-[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
-
+[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR) [![Github all releases](https://img.shields.io/github/downloads/januarharianto/respR/total.svg)](https://GitHub.com/januarharianto/respR/releases/)
 
 # Welcome
 
