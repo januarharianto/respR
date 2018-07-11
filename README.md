@@ -32,7 +32,7 @@ library(respR) # load the library
 # This example will use the `sardine.rd` example data.
 
 # 1. Check data for errors
-x <- inspect_data(sardine.rd)
+x <- inspect(sardine.rd)
 
 # 2. Manual rate calculations
 calc_rate(x, from = 2000, to = 4000)
@@ -53,11 +53,11 @@ convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
 ## Alternatively, use pipes:
 library(dplyr) # load to activate pipe operators
 
-urchins.rd %>%         # using the urchins dataset,
-  select(1, 15) %>%    # select rows 1 and 15
-  inspect_data() %>%   # inspect the data, then
-  auto_rate() %>%      # automatically determine most linear segment
-  print() %>%          # just a quick preview
+urchins.rd %>%        # using the urchins dataset,
+  select(1, 15) %>%   # select rows 1 and 15
+  inspect()     %>%   # inspect the data, then
+  auto_rate()   %>%   # automatically determine most linear segment
+  print()       %>%   # just a quick preview
   convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert data
   
 ```
