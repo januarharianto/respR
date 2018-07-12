@@ -213,7 +213,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
   rate <- x$summary$rate_b1[pos]
-  rsq <- x$summary$rsq[pos]
+  rsq <- signif(x$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
   interval <- x$summary$endtime
   startint <- min(interval) - x$width
