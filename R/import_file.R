@@ -83,3 +83,70 @@ import_file <- function(path) {
 
   return(df)
 }
+
+
+
+
+# MiniDOT
+parse_minidot <- function(path) {
+  txt <- readLines(path)
+  raw <- fread(path, fill = TRUE)
+  colstart <- suppressWarnings(raw[raw$V1 %like% "Unix", which = TRUE])
+  colnames <- as.matrix(raw[colstart])[1,]
+  rdt <- fread(path, skip = colstart-1)[-1]
+  elapsed <- format_time(rdt[[2]])
+  out <- data.table(elapsed, rdt)
+  return(out)
+}
+
+
+# PRESENS OXY10
+parse_oxy10 <- function(path) {
+  txt <- readLines(path)
+  raw <- fread(path, fill = TRUE)
+  colstart <- suppressWarnings(raw[raw$V1 %like% "Date/", which = TRUE])
+  rdt <- fread(path, fill = TRUE, skip = colstart-1, header = TRUE)[,1:4]
+  out <- setnames(rdt, 1:4, c("date", "time", "elapsed", "o2"))
+  return(out)
+}
+
+# Firesting
+parse_firesting <- function(path) {
+  txt <- readLines(path)
+  # Convert text to data.table object so that it's fast to deal with
+  raw <- fread(path, fill = TRUE)
+  startdate <- raw[16]$V2                                                       # Extract start date
+  colstart <- which(raw$V1 == "Time")[1]                                        # Identify main column names
+  rdt <- fread(path, fill = TRUE, skip = colstart+1, header = TRUE)             # Import and clean data
+  rdt <- Filter(function(x)!all(is.na(x)||is.null(x)||x == ""||x == 0), rdt)    # Remove empty columns
+  # Remove unnecessary rows containing extra headers and metadata
+  # We use "Time" as our landmark since it is a header, and delete around it
+  landmark <- which(rdt$Time == "Time")
+  cull <- unlist(lapply(landmark, function(i) seq((i-18), i)))                  # Mark rows to cull
+  rdt <- rdt[-cull]                                                             # Delete those rows
+  # Now we need to deal with the time.
+  rdt <- data.table(startdate, rdt)                                             # First, we add a start date
+  rdt <- data.table(timestamp = with(rdt, as.POSIXct(paste(as.Date(startdate,   # We convert time column to datetime
+                                                                   "%d/%m/%Y"), Time))), rdt[,-c(1,2)])
+  # Now we adjust the dates properly since they're all one date
+  diffday <- c(0, which(diff(rdt$timestamp) < 0), nrow(rdt))                    # create index
+  newdates <- do.call("c", sapply(1:(length(diffday) - 1), function(x) {        # create new dates
+    rdt[(diffday[x] + 1):diffday[x + 1]][[1]] + days(x - 1)
+  }))
+  # rdt[, timestamp := newdates]                                                  # replace timestamp column with new dates
+  elapsed <- format_time(as.character(newdates))
+  out <- data.table(timestamp = newdates, elapsed, rdt[,-1])
+  return(out)
+}
+
+parse_pyro <- function(path) {
+  txt <- readLines(path)
+  # Convert text to data.table object so that it's fast to deal with
+  raw <- fread(path, fill = TRUE)
+  startdate <- raw[16]$V2                                                       # Extract start date
+  colstart <- which(raw$V1 == "Date")[1]                                        # Identify main column names
+  rdt <- fread(path, fill = TRUE, skip = colstart+1, header = TRUE)             # Import and clean data
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x) !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
+  out <- data.table(rdt)                                                        # need to figure out why I did this
+  rdt
+}
