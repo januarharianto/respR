@@ -158,7 +158,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 print.convert_rate <- function(x, pos = NULL, ...) {
   cat("\n# convert_rate # ------------------------\n")
   if (is.null(pos)) {
-    cat("First (top) result\n")
+    cat("Rank/position 1 result shown. To see all results use summary().\n")
     cat("Input:\n")
     print(x$input[1])
   } else if (is.numeric(pos)) {
@@ -186,12 +186,13 @@ print.convert_rate <- function(x, pos = NULL, ...) {
 
 #' @export
 summary.convert_rate <- function(object, ...) {
-  out <- (data.frame(t(c(object$summary,
+  cat("\n# summary.convert_rate # ----------------\n")
+  out <- (data.table(t(c(object$summary,
     input.o2.unit = object$input.o2.unit,
     input.time.unit = object$input.time.unit,
     output.unit = object$output.unit)))
     )
-  return(out)
+  print(out)
   return(invisible(x))
 }
 
