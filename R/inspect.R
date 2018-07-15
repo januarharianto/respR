@@ -209,4 +209,5 @@ plot.inspect <- function(x, ...) {
   par(pardefault) # revert par settings to original
   } else
     message("inspect: Plot is only avalilable for a 2-column dataframe output.")
+  return(invisible(x))
 }

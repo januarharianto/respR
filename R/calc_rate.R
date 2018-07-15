@@ -138,6 +138,7 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   par(pardefault)  # revert par settings to original
+  return(invisible(x))
 }
 
 

@@ -179,6 +179,7 @@ print.convert_rate <- function(x, pos = NULL, ...) {
     print(x$output)
   }
   print(x$output.unit)
+  return(invisible(x))
 }
 
 

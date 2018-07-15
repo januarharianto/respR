@@ -274,6 +274,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   if (choose == 4) density.p(dens, peaks, pos)  # density
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
+  return(invisible(x))
 
 }
 
