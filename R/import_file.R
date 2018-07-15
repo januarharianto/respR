@@ -7,7 +7,20 @@
 #' strings. It's a simple procedure for now, but once we have a large database
 #' of files we will optimise the code.
 #'
+#' Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
+#' PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
+#' AutoResp (software output)
+#'
+#' While the devices listed above are supported, the import functionality may
+#' not be complete due to limited access to output files. This will improve over
+#' time as users provide feedback. We are releasing this as it is, without any
+#' warranty, so that some people can still benefit from the functionality as it
+#' gets better. Users should still be expected to be able to import data by
+#' themselves since it is a fundamental skill in R.
+#'
 #' @param path string. Path to file.
+#' @param export logical. If TRUE, saves the file in the same directory,
+#'   determined by the path parameter above.
 #'
 #' @return a data frame object of time (absolute)
 #'
@@ -18,68 +31,160 @@
 #'
 #' @examples
 #' NULL
-import_file <- function(path) {
+import_file <- function(path, export = FALSE) {
+  raw <- readLines(path)
 
-  # Extract metadata to identify file type
-  # Once file is identified, extract the first line for ID
-  if (tools::file_ext(path) %in% c("txt", "TXT")) {
-    ## support for text files - maybe .log files fit in here too?
-    # TODO
-    con <- file(path, "r")
-    id <- readLines(con, n = 1)
-    close(con)
-  } else if (tools::file_ext(path) %in% c("xls", "xlsx")) {
-    ## support for microsoft excel files
-    id <- names(read_excel(path)[1])
+  # Identify source of file
+  if (suppressWarnings(any(grepl("Firesting", raw[1:5])))) {
+    cat("Firesting Logger Detected\n\n")
+    out <- parse_firesting(path)
+  } else if (suppressWarnings(any(grepl("Pyro", raw[1:5])))) {
+    cat("Pyro Oxygen Logger Detected\n\n")
+    out <- parse_pyro(path)
+  } else if (suppressWarnings(any(grepl("OXY10", raw[1:5])))) {
+    cat("PRESENS OXY10 Detected\n\n")
+    out <- parse_oxy10(path)
+  } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:5])))) {
+    cat("MiniDOT Logger Detected\n\n")
+    out <- parse_minidot(path)
+  } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:5])))) {
+    cat("Loligo Witrox Logger Detected\n\n")
+    out <- parse_witrox(path)
+  } else if (suppressWarnings(any(grepl("Fractional error", raw[1:10])))) {
+    cat("Loligo AutoResp Output Detected\n\n")
+    out <- parse_autoresp(path)
+  } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
+            suppressWarnings(any(grepl("PARAMETERS", raw[10:30]))) &&
+            suppressWarnings(any(grepl("FIRMWARE", raw[30:50])))) {
+    cat("PRESENS Generic file detected\n\n")
+    out <- parse_presens(path)
+  } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
+  
+  if(export) {
+    newpath <- paste(normalizePath(dirname(path)),"/", "parsed-", 
+                     basename(path), sep = "")
+    write.csv(out, newpath)
   }
 
-  # Create data.table object based on text in first line
-  if (grepl("MiniDOT", id, fixed = TRUE)) {
-    ###########################################
-    # PME MiniDOT sensor (TXT file)
-    ###########################################
-    cat("MiniDOT sensor detected.\n")
-    # first read the file, and remove first row after column headers
-    raw_df <- fread(path)[-1]
-    # create timestamp
-    timestamp <- data.table(time = format_time(raw_df[[2]]))
-    # append timestamp
-    df <- cbind(timestamp, raw_df)
-    # if summarise is TRUE, select only time (absolute) and DO columns
-    # if (summarise) df <- df[, c(1, 7)]
-  } else if (grepl("OXY10v3", id, fixed = TRUE)) {
-    ###########################################
-    # PRESENS OXY10v3 sensor (TXT file)
-    ###########################################
-    cat("PRESENS OXY10 detected.\n")
-    raw_df <- fread(path, skip = 18)
-    # create timestamp
-    datetime <- paste(raw_df[[1]], raw_df[[2]])
-    timestamp <- data.table(time = format_time(datetime, " mdyHMSp!"))
-    df <- cbind(timestamp, raw_df)
-    # if summarise is TRUE, select only time (absolute) and DO columns
-    # if (summarise) df <- df[, c(1, 5)]
-  } else if (grepl("Measurement Name", id, fixed = TRUE)) {
-    ###########################################
-    # Loligo microplate sensor (EXCEL OUTPUT)
-    ###########################################
-    cat("Loligo Microplate Systwm detected.\n")
-    df <- as.data.table(read_excel(path, skip = 12))
-    # timestamp is already available in min
-    # if (summarise) df <- df[, c()]
-  } else {
-    stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
-  }
+  return(out)
+}
 
-  #####
-  # Other sensors will follow!
-  # TODO
-  #
-  # Firesting
-  # Vernier
-  # More Loligo
-  #
-  #####
 
-  return(df)
+
+# Invividual device functions ----------
+
+# Loligo AutoResp
+parse_autoresp <- function(path) {
+  raw <- fread(path, fill = TRUE, header = FALSE)
+  colstart <- tail(suppressWarnings(raw[raw$V1 %like% "Date", which = TRUE]), 1)
+  rdt <- fread(path, fill = TRUE, skip = colstart)
+  timestamp <- rdt[[1]]
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]
+  rdt <- setnames(rdt, c("time", "loop", "phase", "slope", "r.squared", "max.o2", "min.o2", "avg.o2", "temp"))
+  rdt[, time := rdt$time - min((rdt$time))]
+  out <- data.table(timestamp, rdt)
+  return(out)
+}
+
+# Witrox
+parse_witrox <- function(path) {
+  # txt <- readLines(path)
+  raw <- fread(path, fill = TRUE, header = FALSE)
+  colstart <- tail(suppressWarnings(raw[raw$V1 %like% "Date", which = TRUE]), 1)
+  rdt <- fread(path, fill = TRUE, skip = colstart, colClasses = c(V2 = "character"))
+  rdt <- setnames(rdt, c("datetime", "time", "pressure", "phase", "temp", "oxygen"))
+  rdt[, time := as.numeric((rdt$time)) - min(as.numeric((rdt$time)))]
+  out <- data.table(rdt)
+  return(out)
+}
+
+
+# MiniDOT
+parse_minidot <- function(path) {
+  # txt <- readLines(path)
+  raw <- fread(path, fill = TRUE)
+  colstart <- suppressWarnings(raw[raw$V1 %like% "Unix", which = TRUE])
+  # colnames <- as.matrix(raw[colstart])[1,]
+  rdt <- fread(path, skip = colstart-1)[-1]
+  elapsed <- format_time(rdt[[2]])
+  out <- data.table(elapsed, rdt)
+  return(out)
+}
+
+
+# PRESENS OXY10
+parse_oxy10 <- function(path) {
+  # txt <- readLines(path)
+  raw <- fread(path, fill = TRUE)
+  # colstart <- suppressWarnings(raw[raw[,1] %like% "Date/", which = TRUE])
+  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE)[,1:4]
+  out <- setnames(rdt, 1:4, c("date", "time", "elapsed", "o2"))
+  return(out)
+}
+
+# Firesting
+parse_firesting <- function(path) {
+  # txt <- readLines(path)
+  # Convert text to data.table object so that it's fast to deal with
+  raw <- fread(path, fill = TRUE)
+  startdate <- raw[16]$V2 # Extract start date
+  colstart <- which(raw$V1 == "Time")[1] # Identify main column names
+  rdt <- fread(path, fill = TRUE, skip = colstart+1, header = TRUE)
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
+  # Remove unnecessary rows containing extra headers and metadata
+  # We use "Time" as our landmark since it is a header, and delete around it
+  landmark <- which(rdt$Time == "Time")
+  # Mark rows to cull
+  cull <- unlist(lapply(landmark, function(i) seq((i-18), i)))
+  rdt <- rdt[-cull] # Delete those rows
+  # Now we need to deal with the time.
+  rdt <- data.table(startdate, rdt) # First, we add a start date
+  # We convert time column to datetime
+  rdt <- data.table(timestamp = with(rdt, as.POSIXct(paste(as.Date(startdate,
+                      "%d/%m/%Y"), Time))), rdt[,-c(1,2)])
+  # Now we adjust the dates properly since they're all one date
+  diffday <- c(0, which(diff(rdt$timestamp) < 0), nrow(rdt)) # create index
+  # create new dates
+  newdates <- do.call("c", sapply(1:(length(diffday) - 1), function(x) {
+    rdt[(diffday[x] + 1):diffday[x + 1]][[1]] + lubridate::days(x - 1)
+  }))
+  elapsed <- format_time(as.character(newdates))
+  out <- data.table(timestamp = newdates, elapsed, rdt[,-1])
+  return(out)
+}
+
+# Firesting Pyro
+parse_pyro <- function(path) {
+  # txt <- readLines(path)
+  # Convert text to data.table object so that it's fast to deal with
+  raw <- fread(path, fill = TRUE)
+  startdate <- raw[16]$V2
+  colstart <- which(raw$V1 == "Date")[1]
+  rdt <- fread(path, fill = TRUE, skip = colstart+1, header = TRUE)
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
+  out <- data.table(rdt)
+  rdt
+}
+
+# Generic PRESENS file
+parse_presens <- function(path) {
+  raw <- fread(path, fill = TRUE, header = FALSE)
+  colstart <- suppressWarnings(raw[raw$V1 %like% "Date/", which = TRUE])
+  rdt <- fread(path, skip = colstart)
+  # Identify columns with numbers
+  valids <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---"||is.character(x)))))]  
+  
+  # Identify column names
+  colid <- unlist(raw[colstart])
+  colid <- colid[valids]
+  colid <- gsub(";", "", colid)
+  # Remove empty channels
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]  
+  out <- setnames(rdt, colid) # rename column headers
+  return(out)
 }
