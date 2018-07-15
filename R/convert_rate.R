@@ -192,6 +192,7 @@ summary.convert_rate <- function(object, ...) {
     output.unit = object$output.unit)))
     )
   return(out)
+  return(invisible(x))
 }
 
 

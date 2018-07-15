@@ -65,6 +65,7 @@ print.adjust_rate <- function(x, ...) {
   } else cat("\nInput rate:", x$input.rate)
   cat("\nAdjustment:", x$adjustment)
   cat("\n Adj. rate:", x$corrected, "\n")
+  return(invisible(x))
 }
 
 
