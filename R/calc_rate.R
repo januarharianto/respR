@@ -108,8 +108,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
 #' @export
 print.calc_rate <- function(x, ...) {
+  cat("\n# calc_rate # -------------------\n")
   cat("Rate(s):\n")
   print(x$rate)
+  # cat("-------------------------------\n")
   return(invisible(x))
 }
 
@@ -125,7 +127,8 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 
 #' @export
 plot.calc_rate <- function(x, rep = 1, ...) {
-  message('Plotting...this may take a while for large datasets.')
+  cat("\n# plot # ------------------------\n")
+  cat('Plotting...this may take a while for large datasets.\n')
   df  <- x$data
   sdf <- x$subsets[[rep]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
@@ -138,6 +141,8 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   par(pardefault)  # revert par settings to original
+  cat("Done.\n")
+  # cat("-------------------------------\n")
   return(invisible(x))
 }
 

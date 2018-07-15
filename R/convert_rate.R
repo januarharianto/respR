@@ -156,7 +156,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 
 #' @export
 print.convert_rate <- function(x, pos = NULL, ...) {
-  cat("\n#################\n# Conversion(s) #\n#################\n")
+  cat("\n# convert_rate # ------------------------\n")
   if (is.null(pos)) {
     cat("First (top) result\n")
     cat("Input:\n")
@@ -179,6 +179,7 @@ print.convert_rate <- function(x, pos = NULL, ...) {
     print(x$output)
   }
   print(x$output.unit)
+  # cat("------------------------\n")
   return(invisible(x))
 }
 

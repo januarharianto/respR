@@ -163,15 +163,16 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     out <- c(out, appendthis)
   }
   if (method == "linear") {
-    message(nrow(rankroll), " kernel density peaks detected and ranked.")
+    message("\n", nrow(rankroll), " kernel density peaks detected and ranked.")
   }
   class(out) <- "auto_rate"
-  if (plot) plot(out)
+  if (plot) plot(out, label = FALSE)
   return(out)
 }
 
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
+  cat("\n# auto_rate # ---------------------------\n")
   method <- x$method
   cat("Data is subset by", x$by, "using width of", x$width, "\n")
   cat(sprintf("Rates were computed using '%s' method\n", x$ method))
@@ -183,11 +184,11 @@ print.auto_rate <- function(x, pos = 1, ...) {
   }
 
   if (method == "default") {
-    cat("\n=== Result", pos, "of", nrow(x$summary), "===\n")
+    cat("\nResult", pos, "of", nrow(x$summary), ":\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", x$summary$rsq[pos])
   } else if (method %in% c("max", "min", "linear")) {
-    cat("\n=== Rank", pos, "of", nrow(x$summary), "===\n")
+    cat("\nRank", pos, "of", nrow(x$summary), ":\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
     cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
@@ -205,7 +206,8 @@ print.auto_rate <- function(x, pos = 1, ...) {
 }
 
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
+  if (label) cat("\n# plot.auto_rate # ----------------------\n")
   # DEFINE OBJECTS
   dt <- x$df
   start <- x$summary$row[pos]
@@ -274,6 +276,8 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, ...) {
   if (choose == 4) density.p(dens, peaks, pos)  # density
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
+  
+  if (label) cat("Done.\n")
   return(invisible(x))
 
 }
