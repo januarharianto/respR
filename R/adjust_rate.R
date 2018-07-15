@@ -66,3 +66,14 @@ print.adjust_rate <- function(x, ...) {
   cat("\nAdjustment:", x$adjustment)
   cat("\n Adj. rate:", x$corrected, "\n")
 }
+
+
+summary.adjust_rate <- function(x) {
+  cat("\n# summary.adjust_rate # -----------------\n")
+  if (length(x) == 3) {
+    rate <- x$input
+  } else rate <- x$input.rate
+  out <- data.table(rate, adjustment = x$adjustment, "adjusted rate" = x$corrected)
+  print(out)
+  return(invisible(x))
+}
