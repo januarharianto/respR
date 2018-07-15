@@ -117,13 +117,14 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
     list(dataframe = dataframe, checks = checks, list_raw = locs, list = list)
   class(out) <- "inspect"
 
-  if (plot) plot(out)
+  if (plot) plot(out, label = FALSE)
 
   return(out)
 }
 
 #' @export
 print.inspect <- function(x, ...) {
+  cat("\n# inspect # -----------------------------\n")
   checks <- x$checks
   locs <- x$list_raw
 
@@ -135,7 +136,7 @@ print.inspect <- function(x, ...) {
 
   # print table
   print(as.data.frame(tab), quote = FALSE)
-  cat("\n")
+  # cat("\n")
 
   # highlight locations that did not pass the tests (but only for 2-col dfs):
   if ((length(x$dataframe)) == 2) {
@@ -182,7 +183,8 @@ print.inspect <- function(x, ...) {
 
 
 #' @export
-plot.inspect <- function(x, ...) {
+plot.inspect <- function(x, label = TRUE, ...) {
+  if (label) cat("\n# plot.inspect # ------------------------\n")
   # extract data frame
   dt <- x$dataframe
   # perform rolling regression (quick one)
@@ -209,4 +211,6 @@ plot.inspect <- function(x, ...) {
   par(pardefault) # revert par settings to original
   } else
     message("inspect: Plot is only avalilable for a 2-column dataframe output.")
+  if (label) cat("Done.\n")
+  return(invisible(x))
 }
