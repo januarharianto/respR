@@ -59,9 +59,9 @@ import_file <- function(path, export = FALSE) {
     cat("PRESENS Generic file detected\n\n")
     out <- parse_presens(path)
   } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
-  
+
   if(export) {
-    newpath <- paste(normalizePath(dirname(path)),"/", "parsed-", 
+    newpath <- paste(normalizePath(dirname(path)),"/", "parsed-",
                      basename(path), sep = "")
     write.csv(out, newpath)
   }
@@ -83,7 +83,7 @@ parse_autoresp <- function(path) {
     !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]
   rdt <- setnames(rdt, c("time", "loop", "phase", "slope", "r.squared", "max.o2", "min.o2", "avg.o2", "temp"))
   rdt[, time := rdt$time - min((rdt$time))]
-  out <- data.table(timestamp, rdt)
+  out <- data.table(rdt, timestamp)
   return(out)
 }
 
@@ -91,10 +91,12 @@ parse_autoresp <- function(path) {
 parse_witrox <- function(path) {
   # txt <- readLines(path)
   raw <- fread(path, fill = TRUE, header = FALSE)
+  # detect start column:
   colstart <- tail(suppressWarnings(raw[raw$V1 %like% "Date", which = TRUE]), 1)
   rdt <- fread(path, fill = TRUE, skip = colstart, colClasses = c(V2 = "character"))
   rdt <- setnames(rdt, c("datetime", "time", "pressure", "phase", "temp", "oxygen"))
   rdt[, time := as.numeric((rdt$time)) - min(as.numeric((rdt$time)))]
+  data.table::setcolorder(rdt, 2) # set time as first column
   out <- data.table(rdt)
   return(out)
 }
@@ -120,6 +122,7 @@ parse_oxy10 <- function(path) {
   # colstart <- suppressWarnings(raw[raw[,1] %like% "Date/", which = TRUE])
   rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE)[,1:4]
   out <- setnames(rdt, 1:4, c("date", "time", "elapsed", "o2"))
+  data.table::setcolorder(out, 3)
   return(out)
 }
 
@@ -166,7 +169,8 @@ parse_pyro <- function(path) {
   rdt <- rdt[, which(unlist(lapply(rdt, function(x)
     !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
   out <- data.table(rdt)
-  rdt
+  data.table::setcolorder(out, 3)
+  return(out)
 }
 
 # Generic PRESENS file
@@ -176,15 +180,15 @@ parse_presens <- function(path) {
   rdt <- fread(path, skip = colstart)
   # Identify columns with numbers
   valids <- rdt[, which(unlist(lapply(rdt, function(x)
-    !all(is.na(x)||x == ""||x == "---"||is.character(x)))))]  
-  
+    !all(is.na(x)||x == ""||x == "---"||is.character(x)))))]
+
   # Identify column names
   colid <- unlist(raw[colstart])
   colid <- colid[valids]
   colid <- gsub(";", "", colid)
   # Remove empty channels
   rdt <- rdt[, which(unlist(lapply(rdt, function(x)
-    !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]  
+    !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]
   out <- setnames(rdt, colid) # rename column headers
   return(out)
 }
