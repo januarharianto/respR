@@ -8,6 +8,8 @@
 #' of files we will optimise the code.
 #'
 #' @param path string. Path to file.
+#' @param export logical. If TRUE, saves the file in the same directory,
+#'   determined by the path parameter above.
 #'
 #' @return a data frame object of time (absolute)
 #'
@@ -18,7 +20,7 @@
 #'
 #' @examples
 #' NULL
-import_file <- function(path) {
+import_file <- function(path, export = FALSE) {
   raw <- readLines(path)
 
   # Identify source of file
@@ -41,6 +43,12 @@ import_file <- function(path) {
     cat("Loligo AutoResp Output Detected\n\n")
     out <- parse_autoresp(path)
   } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
+  
+  if(export) {
+    newpath <- paste(normalizePath(dirname(path)),"/", "parsed-", 
+                     basename(path), sep = "")
+    write.csv(out, newpath)
+  }
 
   return(out)
 }
@@ -93,8 +101,8 @@ parse_minidot <- function(path) {
 parse_oxy10 <- function(path) {
   # txt <- readLines(path)
   raw <- fread(path, fill = TRUE)
-  colstart <- suppressWarnings(raw[raw$V1 %like% "Date/", which = TRUE])
-  rdt <- fread(path, fill = TRUE, skip = colstart-1, header = TRUE)[,1:4]
+  # colstart <- suppressWarnings(raw[raw[,1] %like% "Date/", which = TRUE])
+  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE)[,1:4]
   out <- setnames(rdt, 1:4, c("date", "time", "elapsed", "o2"))
   return(out)
 }
