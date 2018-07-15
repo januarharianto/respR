@@ -8,8 +8,8 @@
 #' of files we will optimise the code.
 #'
 #' Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
-#' PRESENS OXY10 | MiniDOT | Loligo Witrox Logger | Loligo AutoResp (software
-#' output)
+#' PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
+#' AutoResp (software output)
 #'
 #' While the devices listed above are supported, the import functionality may
 #' not be complete due to limited access to output files. This will improve over
@@ -53,6 +53,11 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("Fractional error", raw[1:10])))) {
     cat("Loligo AutoResp Output Detected\n\n")
     out <- parse_autoresp(path)
+  } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
+            suppressWarnings(any(grepl("PARAMETERS", raw[10:30]))) &&
+            suppressWarnings(any(grepl("FIRMWARE", raw[30:50])))) {
+    cat("PRESENS Generic file detected\n\n")
+    out <- parse_presens(path)
   } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
   
   if(export) {
@@ -162,4 +167,24 @@ parse_pyro <- function(path) {
     !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
   out <- data.table(rdt)
   rdt
+}
+
+# Generic PRESENS file
+parse_presens <- function(path) {
+  raw <- fread(path, fill = TRUE, header = FALSE)
+  colstart <- suppressWarnings(raw[raw$V1 %like% "Date/", which = TRUE])
+  rdt <- fread(path, skip = colstart)
+  # Identify columns with numbers
+  valids <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---"||is.character(x)))))]  
+  
+  # Identify column names
+  colid <- unlist(raw[colstart])
+  colid <- colid[valids]
+  colid <- gsub(";", "", colid)
+  # Remove empty channels
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]  
+  out <- setnames(rdt, colid) # rename column headers
+  return(out)
 }
