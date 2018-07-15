@@ -7,6 +7,17 @@
 #' strings. It's a simple procedure for now, but once we have a large database
 #' of files we will optimise the code.
 #'
+#' Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
+#' PRESENS OXY10 | MiniDOT | Loligo Witrox Logger | Loligo AutoResp (software
+#' output)
+#'
+#' While the devices listed above are supported, the import functionality may
+#' not be complete due to limited access to output files. This will improve over
+#' time as users provide feedback. We are releasing this as it is, without any
+#' warranty, so that some people can still benefit from the functionality as it
+#' gets better. Users should still be expected to be able to import data by
+#' themselves since it is a fundamental skill in R.
+#'
 #' @param path string. Path to file.
 #' @param export logical. If TRUE, saves the file in the same directory,
 #'   determined by the path parameter above.
