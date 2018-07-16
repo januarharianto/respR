@@ -4,7 +4,7 @@
 \alias{subset_data}
 \title{Truncate a data frame to create a subset of the data}
 \usage{
-subset_data(x, from, to, by)
+subset_data(x, from, to, by = "time")
 }
 \arguments{
 \item{x}{data frame. The data to subset.}
