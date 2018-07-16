@@ -276,7 +276,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (choose == 4) density.p(dens, peaks, pos)  # density
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
-  
+
   if (label) cat("Done.\n")
   return(invisible(x))
 
@@ -432,7 +432,7 @@ kde_fit <- function(dt, width, by, method, use = "all") {
 
   # If entire width of data frame is selected, there's nothing to detect!
   if (nrow(roll) == 1) {
-    subsets <- list(subset_data(dt, roll$row, roll$endrow, "row"))
+    subsets <- list(truncate_data(dt, roll$row, roll$endrow, "row"))
     d <- NULL
     peaks <- roll$rate_b1
     bw <- NULL
@@ -469,7 +469,7 @@ kde_fit <- function(dt, width, by, method, use = "all") {
     frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
     # Convert fragments to subsets
     subsets <- lapply(1:length(frags), function(x)
-      subset_data(
+      truncate_data(
         dt, min(frags[[x]]$row),
         max(frags[[x]]$endrow), "row"
       ))

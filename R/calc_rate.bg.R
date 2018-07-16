@@ -47,7 +47,7 @@ calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   dt <- data.table(xval, yval)
   # Subset data if needed:
   if (!is.null(from) && !is.null(to))
-    dt <- subset_data(dt, from, to, by)
+    dt <- truncate_data(dt, from, to, by)
   # Perform lm fit on each column:
   fit <- lapply(1:length(ycol), function(x) lm(dt[[x + 1]] ~ dt[[1]]))
   # Extract coefficients:
