@@ -35,8 +35,12 @@
 #' subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 subset_data <- function(x, from, to, by = "time") {
   # Check if object is from respR function(s)
-  if (any(class(x) %in% "inspect_data")) dt <- data.table(x$df)
-  if (any(class(x) %in% "inspect")) dt <- data.table(x$dataframe)
+  if (any(class(x) %in% "inspect_data")) {
+    dt <- data.table(x$df)
+  } else if (any(class(x) %in% "inspect")) {
+    dt <- data.table(x$dataframe)
+  } else dt <- data.table(x)
+
 
   # Subset based on rule "by"
   if (by == "time") {
@@ -70,5 +74,5 @@ subset_data <- function(x, from, to, by = "time") {
     return(x)
   } else if (class(x) == "inspect_data") {
     x$df <- out
-  } else return(out)
+  } else return(invisible(out))
 }
