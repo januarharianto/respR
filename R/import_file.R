@@ -35,22 +35,22 @@ import_file <- function(path, export = FALSE) {
   raw <- readLines(path)
 
   # Identify source of file
-  if (suppressWarnings(any(grepl("Firesting", raw[1:5])))) {
+  if (suppressWarnings(any(grepl("Firesting", raw[1:20])))) {
     cat("Firesting Logger Detected\n\n")
     out <- parse_firesting(path)
-  } else if (suppressWarnings(any(grepl("Pyro", raw[1:5])))) {
+  } else if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
     cat("Pyro Oxygen Logger Detected\n\n")
     out <- parse_pyro(path)
-  } else if (suppressWarnings(any(grepl("OXY10", raw[1:5])))) {
+  } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
     cat("PRESENS OXY10 Detected\n\n")
     out <- parse_oxy10(path)
-  } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:5])))) {
+  } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:20])))) {
     cat("MiniDOT Logger Detected\n\n")
     out <- parse_minidot(path)
-  } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:5])))) {
+  } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:20])))) {
     cat("Loligo Witrox Logger Detected\n\n")
     out <- parse_witrox(path)
-  } else if (suppressWarnings(any(grepl("Fractional error", raw[1:10])))) {
+  } else if (suppressWarnings(any(grepl("Fractional error", raw[1:20])))) {
     cat("Loligo AutoResp Output Detected\n\n")
     out <- parse_autoresp(path)
   } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
