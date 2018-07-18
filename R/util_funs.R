@@ -127,3 +127,32 @@ check_evn <- function(x) {
   out <- list(check = check, which = highlight)
   return(out)
 }
+
+# Internal truncate (similar to subset_data)
+truncate_data <- function(x, from, to, by) {
+
+  # import from other respR functions
+  if (any(class(x) %in% "inspect_data")) x <- x$df
+  if (any(class(x) %in% "inspect")) x <- x$dataframe
+
+  dt <- data.table::as.data.table(x)
+  if (by == "time") {
+    out <- dt[dt[[1]] >= from & dt[[1]] <= to]
+  }
+  if (by == "row") {
+    out <- dt[from:to]
+  }
+  if (by == "o2" & length(x) == 2) {
+    top <- Position(function(z) z <= from, dt[[2]])
+    bot <- Position(function(z) z <= to, dt[[2]])
+    out <- dt[top:bot]
+  }
+  if (by == "proportion") {
+    mx <- max(dt[[2]])
+    mn <- min(dt[[2]])
+    top <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])
+    bot <- Position(function(z) z <= (to * (mx - mn) + mn), dt[[2]])
+    out <- dt[top:bot]
+  }
+  return(out)
+}

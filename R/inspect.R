@@ -73,7 +73,7 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   if (!is.numeric(time)) stop("`time` must be numeric integer.")
   if (!is.numeric(oxygen)) stop("`oxygen` must be numeric integer.")
   # more validations in a bit
-  
+
   df <- as.data.frame(df)
 
   # extract data
@@ -188,7 +188,9 @@ plot.inspect <- function(x, label = TRUE, ...) {
   # extract data frame
   dt <- x$dataframe
   # perform rolling regression (quick one)
-  roll <- static_roll(dt, floor(0.2 * nrow(dt)))$rate_b1
+  if(ncol(dt) == 2) {
+    roll <- static_roll(dt, floor(0.2 * nrow(dt)))$rate_b1
+  }
 
   if (length(x$dataframe) == 2) {
 

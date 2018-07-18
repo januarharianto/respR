@@ -65,7 +65,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   }
 
   # Subset the data:
-  dt <- lapply(1:length(from), function(z) subset_data(x, from[z], to[z], by))
+  dt <- lapply(1:length(from), function(z) truncate_data(x, from[z], to[z], by))
 
   # Perform lm on data and extract coefficients
   coefs <- lapply(1:length(to), function(z) linear_fit(dt[[z]]))
