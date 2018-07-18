@@ -146,6 +146,8 @@ print.pcrit <- function(x, ...) {
   cat("\n--Segmented (Muggeo 2003)--\n")
   cat(sprintf("Std. Err.   %g\n", x$bpoint.summary$psi[3]))
   cat(sprintf("Breakpoint  %g\n", x$result.segmented))
+  return(invisible(x))
+
 }
 
 #' @export
@@ -225,6 +227,7 @@ plot.pcrit <- function(x, ...) {
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
   par(pardefault)  # revert par settings to original
+  return(invisible(x))
 }
 
 
