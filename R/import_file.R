@@ -154,7 +154,10 @@ parse_firesting <- function(path) {
     rdt[(diffday[x] + 1):diffday[x + 1]][[1]] + lubridate::days(x - 1)
   }))
   elapsed <- format_time(as.character(newdates))
-  out <- data.table(timestamp = newdates, elapsed, rdt[,-1])
+  # convert to numeric if read as characters:
+  rdt <- rdt[, -1][, lapply(.SD, as.numeric)]
+  # avengers, assemble!:
+  out <- data.table(elapsed,timestamp = newdates, rdt)
   return(out)
 }
 
