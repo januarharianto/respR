@@ -78,7 +78,7 @@ There are several areas of functionality where `rMR` and `respR` overlap:
 
 `rMR` allows importing of raw Witrox data files. `respR` also has this functionality in the `import_data` function, which as well as Witrox, supports several other systems. Here is typical code from each to do this. The example file and import code (slightly adapted) are taken from the `rMR` [Github](https://github.com/tyler-l-moulton/rMR) repo and README file found there. 
 
-```{r eval = F}
+```{r eval = T}
 ## rMR Import
 columns_to_import <- c("Date.time", "times", "Bar.Pressure.hpa", "Phase", "temp.C", "DO.mgL")
 
@@ -91,9 +91,12 @@ fish_rmr <- get.witrox.data("fishMR.txt",
 
 ## respR Import
 fish_respr <- import_file("fishMR.txt")
-
 ```
 
+```{r}
+head(fish_rmr)
+head(fish_respr)
+```
 These both appear to perform well, on this file at least. The resulting data frames are similar, containing all the relevant data, although `respR` adds a numeric `time` column, which we find is easier to use in further analyses. 
 
 However, in our testing we found that while the `rMR` import function worked with this example, and a few other files we tried, many files we were unable to import using `rMR` for reasons we were unable to diagnose. Likely, some of the inputs were not correctly set, but error messages and documentation were of little help in solving these problems. This would likely be a significant barrier to entry for novice R users, and even those more advanced. Clearly the `respR` import function requires fewer inputs. It relies on pattern matching to recognise the system the file comes from, and other data such as the time-date format. The `get.witrox.data` function has however an advantage, in that you can specify the columns to be imported. 
