@@ -142,7 +142,6 @@ tail(temp2)
 tail(SMR.raw)
 
 
-
 ## last 600
 respr_r <-  calc_rate(temp2,
                       from = seq(601, 28201, 1200),

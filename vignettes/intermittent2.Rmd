@@ -103,7 +103,15 @@ zeb_rep_1 <- subset_data(zeb, from = 5000+180, to = 5750, by = "time")
 zeb_mmr <- auto_rate(zeb_rep_1)
 ```
 
-That's it: the MMR has been calculated and saved, and we can see from the output plots everything looks good. We will convert it to units at the end of the vignette. 
+We also need to adjust the rate for background. Since it is the first replicate, we can simply use the starting background rate we calculated.
+
+```{r}
+## adjust for background
+zeb_mmr_adj <- adjust_rate(zeb_mmr, by = bg_start)
+print(zeb_mmr_adj)
+```
+
+That's it: the MMR has been calculated, adjusted and saved, and we can see from the output plots everything looks good. We will convert it to units at the end of the vignette. 
 
 ### Calculating RMR
 
@@ -197,15 +205,7 @@ convert_rate(zeb_rmr,
 
 ```
 
-The MMR value we calculated earlier can also be passed to `convert_rate` to for conversion to actual units, but we also need to adjust the rate for background first. Since it is the first rep, we will use the starting background rate we calculated.
-
-```{r}
-## adjust for background
-zeb_mmr_adj <- adjust_rate(zeb_mmr, by = bg_start)
-print(zeb_mmr_adj)
-```
-
-Then we convert to get the final mass-specific value for this specimen by entering the correct mass (of the fish) and volume. 
+The MMR value we calculated earlier can also be passed to `convert_rate` to for conversion to actual units, to get the final mass-specific value for this specimen by entering the correct mass (of the fish) and volume. 
 
 Note, the `volume` is volume of water in the respirometer, **not the volume of the respirometer**. That is, it represents the effective volume; the specimen displaces some of the water, so the volume of water entered here should equal the volume of the respirometer **minus the volume of the specimen**. There are several approaches to  calculate the volume of the specimen; geometrically, through displacement in a separate vessel, or calculated from the mass assuming a density value (e.g. for fish it is often assumed they have an equal density as water, that is ~1000 kg/m^3). You could also remove the specimen and directly measure the volume of water remaining.
 
@@ -219,7 +219,6 @@ convert_rate(zeb_mmr_adj,
              volume = 0.1)
 ```
 This final value (as a positive) is what we report, or use in further analyses.
-
 
 
 
