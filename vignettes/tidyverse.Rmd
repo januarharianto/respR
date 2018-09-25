@@ -1,0 +1,31 @@
+---
+title: "respR and the Tidyverse"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{respR and the Tidyverse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
+```
+
+### Working in the Tidyverse
+
+`respR` integrates nicely in the [Tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book.
+
+We load the data, `sardine.rd`, which contains approximately 2.1 hours (7,513 data points) of a single respirometry experiment.
+
+```{r}
+library(respR)
+data("sardine.rd")
+?sardine.rd # run this to see notes about the dataset
+```
+

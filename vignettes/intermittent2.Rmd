@@ -1,0 +1,225 @@
+---
+title: "Intermittent-flow respirometry 2: Complex example"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Intermittent-flow respirometry 2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
+```
+
+## Intermittent-flow respirometry - A more complex example
+
+This vignette shows a more complex intermittent-flow analysis from a long experiment, with many regularly-spaced replicates and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. `respR` will in the future support these kinds of experiment in a much better way, but for now they are easily analysed with a little data manipulation. 
+
+The example data (`zeb_intermittent.rd`) has kindly been provided by Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. Note, the data has been injected with random noise, and volumes and masses used are not the actual values from the experiment. 
+
+
+
+## Experiment overview
+
+From this experiment dataset we want to extract several metrics:
+
+1. *Pre- and post-experiment background rates*. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a long experiment, in high temperatures, the microbial background rate actually increases over the course of the experiment. We will assume this increase is constant (i.e. linear) over the course of the experiment, and each replicate will be corrected with a background rate calculated according to where it occurs along the experiment (i.e. later replicates will be corrected by a greater amount). 
+
+2. *Maximum metabolic rate (MMR)*. Before this experiment, the fish has been exercised to exhaustion, then placed in the respirometer, so the first replicate during which it is recovering from this exercise will represent MMR. 
+
+3. *Routine metabolic rate (RMR)*. This will be calculated from the later replicates once the animal has recovered and is using oxygen only to fuel basal metabolism and minor, spontaneous movement. 
+
+
+
+### Loading and inspecting data
+
+We use `inspect_data()` to preview the data and save it to an object. This is a **very** large dataset (nearly 80,000 records), so if running the code in this vignette be warned that operations may take some time. 
+
+```{r results="hide", message=FALSE, warning=FALSE} 
+zeb <- inspect_data(zeb_intermittent.rd)
+```
+
+Because this is a lengthy experiment, the data is too dense to inspect easily from the plots. Here we'll inspect a portion at the start to illustrate the structure. 
+
+```{r results="hide", message=FALSE, warning=FALSE} 
+inspect_data(zeb_intermittent.rd[1:18000,])
+```
+
+The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 20% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data. 
+
+
+### Calculating background rate
+
+The intial and end sections will be used to calculate background rates, and how they change over the course of the experiment. Timepoints of these will have been recorded as part of the experiment, so can be used to extract the relevant sections. 
+
+```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"} 
+## subset background recordings
+  backg_start <- subset_data(zeb, from = 0, to = 4800, by = "time")
+  backg_end <- subset_data(zeb, from = 76000, to = 79251, by = "time")
+  
+  ## Calc initial and end bg rates
+  bg_start <- calc_rate.bg(backg_start)
+  bg_end <- calc_rate.bg(backg_end)
+
+```
+
+The two different background rates have been saved to these two objects. Support for a dynamic background rate within `calc_rate.bg()` is in our future development plans, but for now we can use the two rates to derive a linear relationship for the rate to apply based on time along the experiment. We will use these later to correct rates for background. 
+
+```{r}
+## extract bg rates and median timepoints 
+r1 <- bg_start$bgrate
+r2 <- bg_end$bgrate
+
+t1 <- median(bg_start$data$time)
+t2 <- median(bg_end$data$time)
+
+## fit lm
+bg_lm <- lm(c(r1,r2)~c(t1,t2))
+
+## extract slope and intercept
+bg_lm_int <- coef(bg_lm)[1]
+bg_lm_slp <- coef(bg_lm)[2]
+
+```
+We will use these later to derive correction values based on time elapsed during the experiment. 
+
+### Calculating MMR
+
+Here we calculate MMR using the first replicate (this can also be extracted from the results of the following section where we calculate rates from every replicate; this is just to show in more detail). For this (and the later analyses) we are going to apply a buffer value after the start of each rep. In this experiment each replicate is 11 minutes long: recording for 10 minutes, with 1 minute of flushing. It is good practice to allow a period of settling after flushing, in case the animal was disturbed, or the O2 probe has some lag in detecting the O2 concentration or slight temperature difference. We are going to use a 3 minutes buffer (180s), that is we won't use the first 3 mins of data in any rep. Here, we subset the replicate out to a separate object, and use `auto_rate()` to find the most linear section (we could also use the `method = "max"` option to find the maximum linear rate *within* this replicate). 
+
+```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
+## subset rep 1
+zeb_rep_1 <- subset_data(zeb, from = 5000+180, to = 5750, by = "time")
+```
+
+``` {r}
+## Find most linear section
+zeb_mmr <- auto_rate(zeb_rep_1)
+```
+
+That's it: the MMR has been calculated and saved, and we can see from the output plots everything looks good. We will convert it to units at the end of the vignette. 
+
+### Calculating RMR
+
+Calculating RMR is more complex. Typically, SMR and RMR are defined as the lowest rates observed. What you choose to use will depend on many factors unique to your experiment, whether that be the absolute lowest rate found, or a representative mean of several low rates. The following is merely to show how you can use `respR` to explore and extract rates from multiple replicates. 
+
+Manually specifying the subsetting criteria for each rep would be onerous, but since we know they cycle at 11 minutes (660s) and there are 105 replicates we can use straightforward R syntax. This is information that should have been recorded as part of the experiment. 
+
+There are a number of approaches we could use, but here we will show a simple `for` loop to run `auto_rate()` for each replicate from the start of the second replicate (at row 5000+660), with a starting buffer of 3 minutes (180s), until 7 minutes (420s) later. These data have O2 recorded once per second, so row numbers can be used like this, but it will depend on the time data units used. For this example, we need to specify the original dataframe saved within the `zeb` object we created using `inspect_data` (i.e. `zeb$df`) for the R subsetting syntax to work. 
+
+Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how `respR` can be used over multiple replicates. Note, for simplicity, we will extract and save only the *rate value* found. Best practice would be to save the `auto_rate()` object for each iteration of the loop (i.e. each replicate) in a `list` object. We also save the start time of each rep for later use to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is **highly** recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with `plot = FALSE`. 
+
+```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
+
+## for results
+rmr_rates <- data.frame()
+
+## loop
+for(i in 1:105){
+  
+  s <- 5000 + (i*660) # start row
+  e <- s + 420 # end row
+  
+  ## find most linear rate in each rep
+  rmr <- auto_rate(zeb$df[s:e,], plot = FALSE)
+  
+  ## save time and rate
+  rmr_rates[i,1] <- s
+  rmr_rates[i,2] <- rmr$rate[1]
+}
+
+names(rmr_rates) <- c("time", "rmr")
+```
+
+```{r}
+## examine
+head(rmr_rates)
+
+```
+
+This `rmr_rates` dataframe contains the start times and most linear rate found in each rep. 
+
+### Correcting for background respiration
+
+While there is a function in `respR` for correcting rates for background (`adjust_rate`), it doesn't yet support a dynamic background rate. It will in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier. 
+
+Using the time we saved for each rep we will calculate the appropriate correction factor, and add it to the dataframe. 
+
+```{r}
+## use time value with lm slope and intercept to get correction factor
+rmr_rates$adj <- rmr_rates$time * bg_lm_slp + bg_lm_int
+head(rmr_rates)
+tail(rmr_rates)
+```
+
+We can see the ultimate correction value is extremely small in comparison to the rate of the specimen, as it should be. We also see it increasing in value in later reps, as it should. 
+
+Note, that in `respR` we have kept rate values as negatives because mathematically they represent depletion of oxygen (although when you come to report these you should change these to positives). So care must be taken when manually using these values to understand the sign and what is being done. Here, to get a final, adjusted RMR rate we *subtract* the `adj` value from the RMR rate we calculated. 
+
+```{r}
+rmr_rates$rmr_adj <- rmr_rates$rmr - rmr_rates$adj
+head(rmr_rates)
+```
+
+If we plot these values (we add the `* -1` to convert to usual rate-reporting positive values), we can see after the initial period where the fish was recovering from excercise, the rates stablise. Depending on your experiment, you may choose to average a selection of these to define RMR. 
+
+```{r}
+plot((rmr_rates$rmr_adj*-1)~rmr_rates$time)
+```
+
+## Conversion and next steps
+
+It depends on your experiment how you might want to define your final RMR. The following is just an example where we define it as the mean of the lowest 10th percentile of adjusted rates (again, because rates are negative be careful with the sign - lowest rates are the highest numerically). We can use the `quantile` function to get the 10% cutoff value, and take the mean of all values lower than this (again careful - it is highest numerically because they are negative). 
+```{r}
+## 10% quantile cutoff value
+co <- quantile(rmr_rates$rmr_adj, 0.9)
+
+## all rates above cutoff value
+rt <- rmr_rates$rmr_adj[rmr_rates$rmr_adj > co]
+rt
+
+## Calculate RMR
+zeb_rmr <- mean(rt)
+
+## Convert
+convert_rate(zeb_rmr,
+             o2.unit = "mg/l",
+             time.unit = "s",
+             output.unit = "mg/h/g",
+             mass = 1,
+             volume = 0.1)
+
+```
+
+The MMR value we calculated earlier can also be passed to `convert_rate` to for conversion to actual units, but we also need to adjust the rate for background first. Since it is the first rep, we will use the starting background rate we calculated.
+
+```{r}
+## adjust for background
+zeb_mmr_adj <- adjust_rate(zeb_mmr, by = bg_start)
+print(zeb_mmr_adj)
+```
+
+Then we convert to get the final mass-specific value for this specimen by entering the correct mass (of the fish) and volume. 
+
+Note, the `volume` is volume of water in the respirometer, **not the volume of the respirometer**. That is, it represents the effective volume; the specimen displaces some of the water, so the volume of water entered here should equal the volume of the respirometer **minus the volume of the specimen**. There are several approaches to  calculate the volume of the specimen; geometrically, through displacement in a separate vessel, or calculated from the mass assuming a density value (e.g. for fish it is often assumed they have an equal density as water, that is ~1000 kg/m^3). You could also remove the specimen and directly measure the volume of water remaining.
+
+```{r}
+## convert
+convert_rate(zeb_mmr_adj,
+             o2.unit = "mg/l",
+             time.unit = "s",
+             output.unit = "mg/h/g",
+             mass = 1,
+             volume = 0.1)
+```
+This final value (as a positive) is what we report, or use in further analyses.
+
+
+
+
