@@ -46,7 +46,7 @@ Therefore, it is clear `rankLocReg` is not a practical solution for analysis of 
 Because of the length of time it takes `rankLocReg` to process data, our comparisons are necessarily based on small datasets. 
 
 
-
+Compare results in corrupted data etc. - doesn `LoLinR` correctly discard wrong sections?
 
 
 

@@ -4,7 +4,8 @@
 \alias{convert_DO}
 \title{Convert units of dissolved oxygen.}
 \usage{
-convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
+convert_DO(x, from = NULL, to = NULL, S = 35, t = 25,
+  P = 1.013253)
 }
 \arguments{
 \item{x}{numeric vector or object of class \code{calc_rate}, \code{auto_rate} or
