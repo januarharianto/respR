@@ -43,14 +43,11 @@ Therefore, it is clear `rankLocReg` is not a practical solution for analysis of 
 
 #### Comparison
 
+Having `auto_rate()` work more quickly is of no use, unless it gives equally good results as `LoLinR`. Here we compare the results of both functions on both simulated and real data, so see if they give comparable results. 
+
 Because of the length of time it takes `rankLocReg` to process data, our comparisons are necessarily based on small datasets. 
 
-
 Compare results in corrupted data etc. - doesn `LoLinR` correctly discard wrong sections?
-
-
-
-Having `auto_rate()` work more quickly is of no use, unless it gives equally good results as `LoLinR`. Here we compare the results of both functions on both simulated and real data, so see if they give comparable results. 
 
 Compare the 3 different methods in LoLinR?
 
@@ -58,7 +55,8 @@ Compare the 3 different methods in LoLinR?
 
 Side by side of `auto_rate()` v `LoLinR` on simulated data 
 just use one example - default
-do it for 100 - show `LoLinR` works better, but `respR` not far behind
+
+do it for 100 datapoints long - make a big deal of `LoLinR` *working better*, but `respR` not far behind
 then 500 - show `respR` is better
 
 
@@ -67,6 +65,8 @@ then 500 - show `respR` is better
 Run some real data 
 Compare results - both regions, adn chekc slopes are same
 then we can say slopes taken from lolinr can be processed in respR to get units.
+
+How do we compare actual results from real data? Which is 'best' if they identify different regions?
 
 
 ## References
