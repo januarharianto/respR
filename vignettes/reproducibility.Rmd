@@ -50,7 +50,7 @@ library(respR)
 exp_param <- data.frame(volume = 12.3, mass = 21.41, DO.unit = "mg/l", time.unit = "s")
 
 ## Inspect the data, and save it as an object
-exp_1 <- inspect_data(sardine.rd)
+exp_1 <- inspect(sardine.rd)
 
 ## Determine rates
 exp_1_linear_rate <- auto_rate(exp_1)
@@ -87,7 +87,7 @@ For more documented analyses, for documenting parts of a workflow, or for saving
 ## Running this code will show how saveRDS and readRDS preserves values correctly, and gives the exact same results when used in further stages of the workflow
 
 ## Inspect
-urch_data <- inspect_data(urchins.rd, time = 1, oxygen = 15)
+urch_data <- inspect(urchins.rd, time = 1, oxygen = 15)
 
 ## Export resulting object to working directory
 saveRDS(urch_data, file = "urch_data.rds")

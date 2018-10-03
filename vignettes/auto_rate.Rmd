@@ -145,7 +145,7 @@ This represents the most consistently linear region, that is most consistent rat
 
 ##### Maximum rates:
 
-Here we want to know the maximum rates sustained over 10 minutes, or 600s, in the `sardine.rd` data. Since in these data, O2 data is recorded every second  and `inspect_data()` tells us the time data is gapless and evenly spaced, we can simply specify width in the correct number of rows:
+Here we want to know the maximum rates sustained over 10 minutes, or 600s, in the `sardine.rd` data. Since in these data, O2 data is recorded every second  and `inspect()` tells us the time data is gapless and evenly spaced, we can simply specify width in the correct number of rows:
 
 ```{r fig.keep='none'}
 inspect(sardine.rd)

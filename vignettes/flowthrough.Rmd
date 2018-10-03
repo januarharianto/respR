@@ -34,7 +34,9 @@ head(flowthrough.rd)
 We can see this dataset contains time values, both outflow and inflow $O_2$ concentrations, and an $O_2$ delta, which is simply the difference between inflow and outflow. The $O_2$ delta column is not required; we include it here to show an exploratory step in the next section. While any flowthrough data can be analysed in the `calc_rate.ft` function, exploring flowthrough data in `inspect_data` requires a 3 column data frame of time, outflow $O_2$, and inflow $O_2$. Therefore the user should include all three, even if inflow $O_2$ is a column of a single fixed value. In this example it varies, but not significantly from a mean value of 8.88. 
 
 ### Inspecting data
-Continuous flowthrough data can be inspected for common errors using the `inspect_data` function, but because these data will be slightly different we need to use different input operators. By default, `inspect_data` assumes Time data in column 1 and $O_2$ data in column 2. For flowthrough data we typically want to look at the outflow O₂ data, which is in column 2 here, so we do not have to change these defaults:
+Continuous flowthrough data can be inspected for common errors using the `inspect_data()` function. Note, a newer version of this function is available (`inspect()`), but for now does not accept flowthrough data. For now, use `inspect_data()` and we will update this vignette when this update is pushed out. 
+
+Because flowthrough data will be slightly different we need to use different input operators in `inspect_data()`. By default, `inspect_data()` assumes Time data in column 1 and $O_2$ data in column 2. For flowthrough data we typically want to look at the outflow O₂ data, which is in column 2 here, so we do not have to change these defaults:
 
 ```{r}
 inspect_data(flowthrough.rd)

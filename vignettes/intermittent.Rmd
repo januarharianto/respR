@@ -25,10 +25,18 @@ Intermittent-flow respirometry involves obtaining multiple replicates in an expe
 
 The example data, `intermittent.rd`, contains intermittent-flow measurements of oxygen consumption in the sea urchin *Heliocidaris erythrogramma*. Detailed information about the data, including its source and methods, can be obtained with the command `?intermittent.rd`. 
 
-We use `inspect_data()` to scan for errors in the data frame, preview the data and save it to an object to pass to the next stage.
+We use `inspect()` to scan for errors in the data frame, preview the data and save it to an object to pass to the next stage.
 
-```{r} 
-urchin_int <- inspect_data(intermittent.rd)
+```{r eval = F}
+urchin_int <- inspect(intermittent.rd)
+```
+
+```{r echo = F, warning=FALSE}
+inspect(intermittent.rd)
+```
+
+```{r echo = F, fig.keep = "none", message = FALSE, results = "hide"}
+urchin_int <- inspect(intermittent.rd)
 ```
 
 We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom plot which shows rate of change in O2 concentration, however uptake rates (flat regions) appear to be consistent within each experimental replicate. 
@@ -79,14 +87,14 @@ If we are interested in looking at rates over particular oxygen ranges within ea
 calc_rate(urchin_int, from = 7, to = 6.6, by = "o2")
 ```
 
-To examine the same range in each replicate, we can follow a number of approaches. We can call the data range containing another replicate directly from the original dataset, or `inspect_data` object element:
+To examine the same range in each replicate, we can follow a number of approaches. We can call the data range containing another replicate directly from the original dataset, or data frame saved within the `inspect()` object:
 
 ```{r fig.keep="none"}
 calc_rate(intermittent.rd[2100:3500,], from = 7, to = 6.6, by = "o2")
-calc_rate(urchin_int$df[2100:3500,], from = 7, to = 6.6, by = "o2")
+calc_rate(urchin_int$dataframe[2100:3500,], from = 7, to = 6.6, by = "o2")
 ```
 ```{r echo=F, message=FALSE, warning=FALSE, results = "hide", fig.width=7, fig.height=3.5}
-calc_rate(urchin_int$df[2100:3500,], from = 7, to = 6.6, by = "o2")
+calc_rate(urchin_int$dataframe[2100:3500,], from = 7, to = 6.6, by = "o2")
 ```
 
 Or we can subset them manually into new dataframes, and process them separately through the entire workflow. Here we use the dedicated `subset_data` function in `respR`, which allows easy subsetting by time, oxygen or row number. For best results, these should exclude the flush periods. 
@@ -96,8 +104,8 @@ u_rep1 <- subset_data(intermittent.rd, from = 1, to = 1900, by = "time")
 u_rep2 <- subset_data(intermittent.rd, from = 2100, to = 3500, by = "time")
 u_rep3 <- subset_data(intermittent.rd, from = 3700, to = 4831, by = "time")
 
-# Process one in `inspect_data` (output not shown)
-u_rep3_c <- inspect_data(u_rep3)
+# Process one in `inspect()` (output not shown)
+u_rep3_c <- inspect(u_rep3)
 ```
 ```{r fig.width=7, fig.height=3.5}
 calc_rate(u_rep3_c, from = 7, to = 6.6, by = "o2")
@@ -134,8 +142,13 @@ We can see each individual rate has been adjusted, and the new rates can be extr
 
 Once the rates have been determined, they can be converted to volume-corrected or mass-specific rates using `convert_rate`. 
 
-```{r}
-u_rates_final <- convert_rate(urchin_int_rates_adj, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+```{r tidy = F}
+u_rates_final <- convert_rate(urchin_int_rates_adj, 
+                              o2.unit = "mg/L", 
+                              time.unit = "s", 
+                              output.unit = "mg/h/g", 
+                              volume = 2.379, 
+                              mass = 0.006955)
 ```
 
 Only the first rate converted rate is shown in the output, but all rates determined are converted and can be extracted.

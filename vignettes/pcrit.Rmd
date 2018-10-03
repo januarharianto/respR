@@ -36,7 +36,7 @@ head(squid.rd)
 We can examine the dataset using the `inspect_data` function. 
 
 ```{r}
-market.squid <- inspect_data(squid.rd)
+market.squid <- inspect(squid.rd)
 ```
 
 We can see from the bottom plot, a rolling rate across 20% of the total data, that the uptake rate is relatively consistent to around the 10,000th row, after which it declines steadily. We cannot tell from this plot what $O_2$ concentration this represents. For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated $P_{crit}$ function. 
@@ -58,7 +58,7 @@ market.squid.pcrit <- pcrit(market.squid$df)
 ```{r, echo = FALSE}
 # This is run in the background with parallel processing switched off.
 # We're doing this to pass the R CMD check...
-market.squid.pcrit <- pcrit(market.squid$df, parallel = FALSE)
+market.squid.pcrit <- pcrit(market.squid$dataframe, parallel = FALSE)
 ```
 
 ```{r, eval = FALSE}

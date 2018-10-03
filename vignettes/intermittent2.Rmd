@@ -39,16 +39,16 @@ From this experiment dataset we want to extract several metrics:
 
 ### Loading and inspecting data
 
-We use `inspect_data()` to preview the data and save it to an object. This is a **very** large dataset (nearly 80,000 records), so if running the code in this vignette be warned that operations may take some time. 
+We use `inspect()` to preview the data and save it to an object. This is a **very** large dataset (nearly 80,000 records), so if running the code in this vignette be warned that operations may take some time. 
 
 ```{r results="hide", message=FALSE, warning=FALSE} 
-zeb <- inspect_data(zeb_intermittent.rd)
+zeb <- inspect(zeb_intermittent.rd)
 ```
 
 Because this is a lengthy experiment, the data is too dense to inspect easily from the plots. Here we'll inspect a portion at the start to illustrate the structure. 
 
 ```{r results="hide", message=FALSE, warning=FALSE} 
-inspect_data(zeb_intermittent.rd[1:18000,])
+inspect(zeb_intermittent.rd[1:18000,])
 ```
 
 The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 20% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data. 
@@ -76,8 +76,8 @@ The two different background rates (only the end one shown above) have been save
 r1 <- bg_start$bgrate
 r2 <- bg_end$bgrate
 
-t1 <- median(bg_start$data$time)
-t2 <- median(bg_end$data$time)
+t1 <- median(bg_start$data$Time)
+t2 <- median(bg_end$data$Time)
 
 ## fit lm
 bg_lm <- lm(c(r1,r2)~c(t1,t2))
@@ -119,7 +119,7 @@ Calculating RMR is a little more complex. Typically, SMR and RMR are defined as 
 
 Manually specifying the subsetting criteria for each subequent rep would be onerous, but since we know they cycle at 11 minutes (660s) and there are 105 further replicates after the first ends at row 5839, we can use straightforward R syntax. This is information that will have been recorded as part of the experiment. 
 
-There are a number of approaches we could use, but here we will show a simple `for` loop to run `auto_rate()` for each replicate from the start of the second replicate (at row 5840), with a starting buffer of 3 minutes (180s), until 7 minutes (420s) later. These data have O2 recorded once per second, so row numbers can be used like this, but it will depend on the time data units used. For this example, we need to specify the original dataframe saved within the `zeb` object we created using `inspect_data` (i.e. `zeb$df`) for the R subsetting syntax to work. 
+There are a number of approaches we could use, but here we will show a simple `for` loop to run `auto_rate()` for each replicate from the start of the second replicate (at row 5840), with a starting buffer of 3 minutes (180s), until 7 minutes (420s) later. These data have O2 recorded once per second, so row numbers can be used like this, but it will depend on the time data units used. For this example, we need to specify the original dataframe saved within the `zeb` object we created using `inspect()` (i.e. `zeb$dataframe`) for the R subsetting syntax to work. 
 
 Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how `respR` can be used over multiple replicates (a more succinct example is at the end of this vignette). Note, for simplicity, we will extract and save only the *rate value* found. Best practice would be to save the `auto_rate()` object for each iteration of the loop (i.e. each replicate) in a `list` object (see eg. at end). We also save the start time of each rep to use later to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is **highly** recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with `plot = FALSE`. 
 
@@ -142,7 +142,7 @@ for(i in 1:105){
   er <- e_r[i] # end row
   
   ## find most linear rate in each rep
-  rmr <- auto_rate(zeb$df[sr:er,], plot = FALSE)
+  rmr <- auto_rate(zeb$dataframe[sr:er,], plot = FALSE)
   
   ## save time and rate
   rmr_rates[i,1] <- sr
@@ -231,11 +231,11 @@ This final value (as a positive) is what we report, or use in further analyses.
 ## A complete analysis
 The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using `apply` functions and `list` objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed even more if you use `Tidyverse` syntax (LINK)).
 
-```{r fig.keep="none", results="hide", message=FALSE, warning=FALSE}
+```{r fig.keep="none", results="hide", message=FALSE, warning=FALSE, tidy = F}
 # Import and inspect raw data ---------------------------------------------
 
 ## importing would normally be the first step, e.g. import_file("path/to/file")
-z_data <- inspect_data(zeb_intermittent.rd)
+z_data <- inspect(zeb_intermittent.rd)
 
 # Background calculations -------------------------------------------------
 
@@ -244,7 +244,7 @@ bg_s <- calc_rate.bg(subset_data(z_data, from = 0, to = 4999, by = "time"))
 bg_e <- calc_rate.bg(subset_data(z_data, from = 75140, to = 79251, by = "time"))
 
 ## fit lm
-bg_mod <- lm(c(bg_s$bgrate, bg_e$bgrate) ~ c(median(bg_s$data$time), median(bg_e$data$time)))
+bg_mod <- lm(c(bg_s$bgrate, bg_e$bgrate) ~ c(median(bg_s$data$Time), median(bg_e$data$Time)))
 
 ## extract slope and intercept
 bg_mod_int <- coef(bg_mod)[1]
@@ -255,19 +255,21 @@ bg_mod_slp <- coef(bg_mod)[2]
 sr <- c(5000, seq(5840, 74300, 660))
 
 ## apply auto_rate to each rep, from start row (+ 3 mins buffer) to 10 mins (600s) later
-z_ar <- lapply(sr, function(g) auto_rate(zeb$df[(g+180):(g+600),], plot = F))
+z_ar <- lapply(sr, 
+               function(g) auto_rate(zeb$dataframe[(g+180):(g+600),], plot = F))
 
 # Adjust rates for background ---------------------------------------------
 ## background adjust each rep based on start time of that rep
-z_ar_adj <- lapply(z_ar, function(g) adjust_rate(g, g$df$x[1] * bg_mod_slp + bg_mod_int))
+z_ar_adj <- lapply(z_ar, 
+                   function(g) adjust_rate(g, g$df$x[1] * bg_mod_slp + bg_mod_int))
 
 # Convert rates -----------------------------------------------------------
 z_rates_final <- lapply(z_ar_adj, function(g) convert_rate(g, 
-                                                               o2.unit = "mg/l",
-                                                               time.unit = "s",
-                                                               output.unit = "mg/h/g",
-                                                               mass = 0.001,
-                                                               volume = 0.1))
+                                                           o2.unit = "mg/l",
+                                                           time.unit = "s",
+                                                           output.unit = "mg/h/g",
+                                                           mass = 0.001,
+                                                           volume = 0.1))
 
 # Extract and define MMR and RMR ------------------------------------------
 

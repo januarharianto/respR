@@ -28,7 +28,7 @@ head(urchins.rd)
 
 ## Step 1: Check for common errors
 
-We first use `inspect_data()` to prepare the data and to scan for:
+We first use `inspect()` to prepare the data and to scan for:
 
 - Missing or non-numeric (`NA`/`NaN`) data
 - Sequential time data
@@ -37,15 +37,25 @@ We first use `inspect_data()` to prepare the data and to scan for:
 
 By default, the function assumes the first column of the data frame is time data, while the second column is $O_2$ data. In the case of `urchins.rd` where a multi-column dataset is provided, the function defaults to using the first two columns. However, the `time = ` and `oxygen = ` arguments can modify that behaviour to select particular columns.
 
-```{r}
-urchin <- inspect_data(urchins.rd, time =  1, oxygen = 15)
+```{r eval = F}
+urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
+```
+
+```{r echo = F, warning=FALSE}
+inspect(urchins.rd, time =  1, oxygen = 15)
+```
+
+```{r echo = F, fig.keep = "none", message = FALSE, results = "hide"}
+urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
 ```
 
 From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.
 
-The function also warns us that time data is not numerically evenly-spaced. However, *this does not mean the data cannot be processed*. Rather than make assumptions that rows represent evenly spaced datapoints, the functions in `respR` use actual time values for analyses and calculations, and so even irregularly spaced data are analysed correctly. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
+The function also warns us that time data is not *numerically* evenly-spaced. However, *this does not mean the data cannot be processed*. Rather than make assumptions that rows represent evenly spaced datapoints, the functions in `respR` use actual time values for analyses and calculations, and so even irregularly spaced data are analysed correctly. This warning is for information purposes only: it is to make the user aware that if they use row numbers for manual operations such as subsetting, the same width may not represent the same time period. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
 
-**It should be noted that using `inspect_data` is optional** - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running `inspect_data` is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. `respR` has been designed to make this easy. 
+**It should be noted that using `inspect()` is optional** - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running `inspect()` is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. `respR` has been designed to make this easy. 
+
+**Note there is an older version of this function called `inspect_data()`** - this function has been deprecated, but kept to maintain compatibility with older code. It will not be updated in the future, so users should use `inspect()`. 
 
 ## Step 2: Process background respiration
 
@@ -63,13 +73,13 @@ This object contains both individual background rates for each data column enter
 
 ## Step 3: Calculate oxygen uptake rate
 
-Calling the function `calc_rate()` on the `inspect_data` object, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. 
+Calling the function `calc_rate()` on the `inspect()` object, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. 
 
 ```{r}
 calc_rate(urchin) # same as: calc_rate(urchin$df)
 ```
 
-Note how the function recognises the `inspect_data()` object. Alternatively, you can specify a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.. 
+Note how the function recognises the `inspect()` object. Alternatively, you can specify a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.. 
 
 In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around such errors by subsetting the regions that are not erroneous and still obtain valid results.
 
@@ -142,16 +152,23 @@ The function `convert_rate()` can be used to convert rate values to chamber volu
 
 For an example of $VO_2$, or absolute oxygen uptake rate, we may convert the output of `calc_rate()` to O~2~ consumed per hour:
 
-```{r}
-convert_rate(a.rate, o2.unit = "mg/L", time.unit = "min", output.unit = "mg/h", 
-  volume = 1.09)
+```{r tidy = FALSE}
+convert_rate(a.rate, 
+             o2.unit = "mg/L", 
+             time.unit = "min", 
+             output.unit = "mg/h", 
+             volume = 1.09)
 ```
 
 We can also convert the rate to a volume-corrected, mass-specific rate:
 
-```{r}
-convert_rate(a.rate, o2.unit = "mgl-1", time.unit = "m", output.unit = "mg/s/kg",
-  volume = 1.09, mass = 0.19)
+```{r tidy = FALSE}
+convert_rate(a.rate, 
+             o2.unit = "mgl-1", 
+             time.unit = "m", 
+             output.unit = "mg/s/kg",
+             volume = 1.09, 
+             mass = 0.19)
 ```
 
 A "fuzzy" string matching algorithm is used to automatically recognise variations in base units, allowing natural, intuitive input of units. For example, `"ml/s"`, `"mL/sec"`, `"milliliter/s"`, and `"millilitre/second"` are all equally identified as `mL/s`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`. For a reminder on what units are available to use, call `unit_args()`:
@@ -165,18 +182,26 @@ unit_args()
 
 This is an example of a straightforward analysis of a *closed-chamber* respirometry experiment. This entire analysis can be documented and shared in only a few lines of code, making it entirely reproducible if the original data file is included:
 
-```{r results="hide", fig.keep="none", eval = FALSE}
+```{r results="hide", fig.keep="none", eval = FALSE, tidy = FALSE}
 ## import and inspect
-urchin <- inspect_data(urchins.rd, time = 1, oxygen = 15)
+urchin <- inspect(urchins.rd, time = 1, oxygen = 15)
+
 ## background
 bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 40, by = "time")
+
 ## specimen rate
 rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
+
 ## adjust rate
 a.rate <- adjust_rate(rate, bg)
+
 ## convert to final rate units
-urchin_MO2 <- convert_rate(a.rate, o2.unit = "mgl-1", time.unit = "m", output.unit = "mg/s/kg", 
-    volume = 1.09, mass = 0.19)
+urchin_MO2 <- convert_rate(a.rate,
+                           o2.unit = "mgl-1", 
+                           time.unit = "m", 
+                           output.unit = "mg/s/kg", 
+                           volume = 1.09, 
+                           mass = 0.19)
 ```
 
 Other vignettes go into more detail about different experiment types and other analyses. 
