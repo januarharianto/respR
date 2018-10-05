@@ -75,13 +75,13 @@ Rates can be detemined from flowthrough data using the `calc_rate.ft` function. 
 2. Combinations of single or vector values. Vector inputs must be of equal length:
 
     ```{r, eval = FALSE}
-    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = c(8,17, 8.16, 8.15), 
+    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = c(8.17, 8.16, 8.15), 
       flowrate = 0.00234)
     
     calc_rate.ft(inflow.o2 = c(8.88, 8.87, 8.89), 
       outflow.o2 = c(8,17, 8.16, 8.15), flowrate = 0.00234)  
     
-    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in, 
+    calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.out, 
       flowrate = 0.00234)
     
     calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in, outflow.o2 = 
@@ -94,7 +94,7 @@ Rates can be detemined from flowthrough data using the `calc_rate.ft` function. 
     calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00234)
     ```
 
-5. An object of class `inspect_data`:
+5. An object of class `inspect_data` containing flowthrough data:
 
     ```{r, eval = FALSE}
     calc_rate.ft(chiton.ft, flowrate = 0.00234)
@@ -116,7 +116,7 @@ The output object includes all calculated rates over the dataset and a mean rate
 
 ### Subsetting data
 
-The `calc_rate.ft` function currently does not support subsetting. The dedicated `subset_data` function can be used to prepare data (see Reference menu above or `?subset_data`), or we can use straightforward R subsetting syntax as follows. We saw earlier how rates between rows 200 and 300 appeared to be most consistent, so we will calculate rates from this data region using the object we saved earlier. 
+The `calc_rate.ft` function currently does not support subsetting. The dedicated `subset_data` function can be used to prepare data (see Reference menu above or `?subset_data`), or we can use straightforward R subsetting syntax as follows. We saw earlier how rates between rows 200 and 300 appeared to be most consistent, so we will calculate rates from this data region using the dataframe within the object we saved earlier. 
 
 ```{r}
 chiton.ft.rate.sub <- calc_rate.ft(chiton.ft$df[200:300,], time = 1, outflow.o2 = 3, inflow.o2 = 2, flowrate = 0.00234)
@@ -128,13 +128,13 @@ Because the function interprets this as a regular data frame, not `inspect_data`
 
 Similar to the other respirometry methods, a background rate value (typically negative) can be used to adjust flowthrough rates. 
 ``` {r}
-adjust_rate(chiton.ft.rate.sub$mean, by = -0.0005)
+new_adjusted_rate <- adjust_rate(chiton.ft.rate.sub$mean, by = -0.0005)
 ```
 `respR` does not currently have a specialised function for determining background respiration in flowthrough data. However the main `calc_rate.ft` function can be used to examine data from 'blank' experiments for background rates, and these (or an average of several) can be entered as above. The user should however be aware that only background rates determined at the *same flow rate* should be used.
 
 ### Converting rates
 
-The `convert_rate` function is used to convert rates to particular units. As with converting rates from closed and intermittent-flow respirometry (i.e. outputs of `calc_rate`), conversion of flowthrough rates (i.e. from `calc_rate.ft`) requires the `o2.unit` of the original data, as well as a `time.unit` and `volume` value. With flowthrough data, these relate to the `flowrate` units. As we said earlier, the flow rate should be in L per unit time, therefore the `volume` should be entered as 1, and `time.unit` as the time unit of the flow rate. For example, if the flow rate was in L/m, these should be `time.unit = "m", volume = 1`. 
+The `convert_rate` function is used to convert rates to particular units. As with converting rates from closed and intermittent-flow respirometry (i.e. outputs of `calc_rate`), conversion of flowthrough rates (i.e. from `calc_rate.ft`) requires the `o2.unit` of the original data, as well as a `time.unit` and `volume` value. With flowthrough data, these relate to the `flowrate` units. As we said earlier, the flow rate should be in L per unit time, therefore the `volume` should be entered as 1, and `time.unit` as the time unit of the flow rate. For example, if the flow rate was in L/m, these should be `time.unit = "m", volume = 1`. Note, in flowthrough respirometry as long as equilibrium has been reached the volume of the respirometer is *not important*, it is the flow rate through it that is important in determining uptake rate.
 
 The function returns a rate for the specimen, and if a `mass` is entered (in kg) it returns a mass-specific rate. We specify our desired units of the final rates using `output.unit`:
 
