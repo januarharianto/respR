@@ -1,8 +1,8 @@
 #' Automatically determine rate of change in oxygen concentration over time
 #'
 #' `auto_rate` automatically performs a rolling regression on a data frame to
-#' determine maximum, minimum, interval or "best fit" linear rate of change in
-#' oxygen concentration over time. First, a rolling regression of specified
+#' determine the *most linear, maximum, minimum*, or *interval* rate of change
+#' in oxygen concentration over time. First, a rolling regression of specified
 #' `width` is performed on the entire dataset to obtain all possible values. The
 #' computations are then ranked (or, arranged), based on the "`logic`" argument,
 #' and the output is summarised.
@@ -19,25 +19,25 @@
 #' At present, `auto_rate()` contains four ranking algorithms that can be called
 #' with the argument `method`:
 #'
-#' - `"linear"`: Uses kernel density estimation (KDE) to detect the most
-#' "linear" sections of the timeseries. This is achieved by using the smoothing
+#' - `linear`: Uses kernel density estimation (KDE) to detect the "most
+#' linear" sections of the timeseries. This is achieved by using the smoothing
 #' bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
 #' regions in the data.
 #'
-#' - `"max"`: regressions are arranged from highest values, to the lowest.
+#' - `max`: regressions are arranged from highest values, to the lowest.
 #'
-#' - `"min"`: regressions are arranged from lowest values, to the highest.
+#' - `min`: regressions are arranged from lowest values, to the highest.
 #'
-#' - `"interval"`: non-overlapping regressions are extracted from the rolled
+#' - `interval`: non-overlapping regressions are extracted from the rolled
 #' regrssions. They are not ranked.
 #'
 #' @param df data frame, or object of class `adjust_rate`. This is the data to
 #'   process.
-#' @param width numeric. Width of the rolling regression. Defaults to `floor(0.2
-#'   * length of data` if NULL. The length of data can either be time or row, as
-#'   defined by the `by` argument. If a number is supplied and it is less than
-#'   1, the function automatically applies the equation `floor(width * length of
-#'   data`. Otherwise it will simply use the number as the width.
+#' @param width numeric. Width of the rolling regression. Defaults to
+#'   `floor(0.2*length of data)` if NULL. The length of data can either be time
+#'   or row, as defined by the `by` argument. If a number is supplied and it is
+#'   less than 1, the function automatically applies the equation `floor(width *
+#'   length of data`. Otherwise it will simply use the number as the width.
 #' @param by string. `"row"` or `"time"`. Defaults to `"row"`. However, if the
 #'   function detects an irregular time series, a warning will be issued to
 #'   recommend changing this argument to `"time"`. In most cases `"row"` is used

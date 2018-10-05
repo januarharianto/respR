@@ -4,18 +4,17 @@
 \alias{auto_rate}
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
-auto_rate(df, width = NULL, by = "row", method = "linear", plot = TRUE,
-  parallel = FALSE)
+auto_rate(df, width = NULL, by = "row", method = "linear",
+  plot = TRUE, parallel = FALSE)
 }
 \arguments{
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
 process.}
 
-\item{width}{numeric. Width of the rolling regression. Defaults to `floor(0.2
-\itemize{
-\item length of data\code{if NULL. The length of data can either be time or row, as defined by the}by\code{argument. If a number is supplied and it is less than 1, the function automatically applies the equation}floor(width * length of
-data`. Otherwise it will simply use the number as the width.
-}}
+\item{width}{numeric. Width of the rolling regression. Defaults to
+\code{floor(0.2*length of data)} if NULL. The length of data can either be time
+or row, as defined by the \code{by} argument. If a number is supplied and it is
+less than 1, the function automatically applies the equation \code{floor(width * length of data}. Otherwise it will simply use the number as the width.}
 
 \item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. However, if the
 function detects an irregular time series, a warning will be issued to
@@ -38,8 +37,8 @@ A list object of class \code{auto_rate}.
 }
 \description{
 \code{auto_rate} automatically performs a rolling regression on a data frame to
-determine maximum, minimum, interval or "best fit" linear rate of change in
-oxygen concentration over time. First, a rolling regression of specified
+determine the \emph{most linear, maximum, minimum}, or \emph{interval} rate of change
+in oxygen concentration over time. First, a rolling regression of specified
 \code{width} is performed on the entire dataset to obtain all possible values. The
 computations are then ranked (or, arranged), based on the "\code{logic}" argument,
 and the output is summarised.
@@ -57,13 +56,13 @@ and/or mass-specific rates of oxygen use are computed in \code{\link[=convert_ra
 At present, \code{auto_rate()} contains four ranking algorithms that can be called
 with the argument \code{method}:
 \itemize{
-\item \code{"linear"}: Uses kernel density estimation (KDE) to detect the most
-"linear" sections of the timeseries. This is achieved by using the smoothing
+\item \code{linear}: Uses kernel density estimation (KDE) to detect the "most
+linear" sections of the timeseries. This is achieved by using the smoothing
 bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
 regions in the data.
-\item \code{"max"}: regressions are arranged from highest values, to the lowest.
-\item \code{"min"}: regressions are arranged from lowest values, to the highest.
-\item \code{"interval"}: non-overlapping regressions are extracted from the rolled
+\item \code{max}: regressions are arranged from highest values, to the lowest.
+\item \code{min}: regressions are arranged from lowest values, to the highest.
+\item \code{interval}: non-overlapping regressions are extracted from the rolled
 regrssions. They are not ranked.
 }
 }
