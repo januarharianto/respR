@@ -18,20 +18,20 @@ that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \c
 Available units for \code{\link[=convert_DO]{convert_DO()}}:
 
 "mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
+"umol/kg", "mL/kg", "\% Air Saturation", "Torr", "hPa", "kPa", "mmHg", "inHg"
 
 Available units for \code{\link[=convert_rate]{convert_rate()}}:
 
 \strong{O2}
 
 "mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "Torr", "hPa", "kPa", "mmHg", "inHg"
+"umol/kg", "mL/kg", "\% Air Saturation", "Torr", "hPa", "kPa", "mmHg", "inHg"
 
-\strong{time}
+\strong{Time}
 
 "s", "m", "h"
 
-\strong{mass}
+\strong{Output mass}
 
 "ug", "mg", "g", "kg"
 }
