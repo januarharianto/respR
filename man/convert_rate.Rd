@@ -5,7 +5,7 @@
 \title{Convert rate value to volumetric and/or mass-specific}
 \usage{
 convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
-  volume = NULL, mass = NULL, S = NULL, t = NULL, P = 1.013253)
+  volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
 }
 \arguments{
 \item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
@@ -32,8 +32,9 @@ of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 \item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
 of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in
-conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{P}{numeric. Pressure (bar). Defaults to NULL. Used only in conversion
+of some units. If left NULL, default value of 1.013253 is applied in
+conversions. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
 A list object.

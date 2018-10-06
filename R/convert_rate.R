@@ -35,8 +35,9 @@
 #'   of some units. See [unit_args()] for details.
 #' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion
 #'   of some units. See [unit_args()] for details.
-#' @param P numeric. Pressure (bar). Defaults to 1.013253. Used only in
-#'   conversion of some units. See [unit_args()] for details.
+#' @param P numeric. Pressure (bar). Defaults to NULL. Used only in conversion
+#'   of some units. If left NULL, default value of 1.013253 is applied in
+#'   conversions. See [unit_args()] for details.
 #'
 #' @return A list object.
 #'
@@ -55,7 +56,7 @@
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
 #'   S =35, t = 15, P = 1.013)
 convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
-  output.unit = NULL, volume = NULL, mass = NULL, S = NULL, t = NULL, P = 1.013253)
+  output.unit = NULL, volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
   {
 
   # Validate inputs If units are set to NULL, use default values.
