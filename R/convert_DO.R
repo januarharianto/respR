@@ -1,15 +1,21 @@
 #' Convert units of dissolved oxygen.
 #'
 #' This is a conversion function that performs basic conversions between units
-#' of dissolved oxygen in aquatic respirometry.
+#' of dissolved oxygen in aquatic respirometry. Some units require temperature
+#' (`t`), salinity (`S`), and atmospheric pressure (`P`) to be specified. See
+#' [unit_args()] for details. For freshwater experiments, salinity should be set
+#' to zero (i.e. S = 0).
 #'
 #' @param x numeric vector or object of class `calc_rate`, `auto_rate` or
 #'   `adjust_rate`. This is the value(s) that you want to convert from.
 #' @param from string. The unit to convert from. See [unit_args()] for details.
 #' @param to string. The unit to convert to. See [unit_args()] for details.
-#' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion of some units. See [unit_args()] for details.
-#' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion of some units. See [unit_args()] for details.
-#' @param P numeric. Pressure (bar). Defaults to 1.013253. Used only in conversion of some units. See [unit_args()] for details.
+#' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+#'   of some units. See [unit_args()] for details.
+#' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+#'   of some units. See [unit_args()] for details.
+#' @param P numeric. Pressure (bar). Defaults to 1.013253. Used only in
+#'   conversion of some units. See [unit_args()] for details.
 #'
 #' @return A list.
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp

@@ -15,18 +15,24 @@ convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
 \item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in
+conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
 A list.
 }
 \description{
 This is a conversion function that performs basic conversions between units
-of dissolved oxygen in aquatic respirometry.
+of dissolved oxygen in aquatic respirometry. Some units require temperature
+(\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be specified. See
+\code{\link[=unit_args]{unit_args()}} for details. For freshwater experiments, salinity should be set
+to zero (i.e. S = 0).
 }
 \examples{
 # Perform conversion on an object of class `calc_rate`:
