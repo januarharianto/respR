@@ -4,7 +4,8 @@
 \alias{convert_DO}
 \title{Convert units of dissolved oxygen.}
 \usage{
-convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
+convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL,
+  P = 1.013253)
 }
 \arguments{
 \item{x}{numeric vector or object of class \code{calc_rate}, \code{auto_rate} or
@@ -14,11 +15,11 @@ convert_DO(x, from = NULL, to = NULL, S = 35, t = 25, P = 1.013253)
 
 \item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{S}{numeric. Salinity. Defaults to 35. Used only in conversion of \% data.}
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.}
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (bar). Used only in conversion of \% data.}
+\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
 A list.
