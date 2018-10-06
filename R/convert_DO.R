@@ -32,37 +32,34 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   fru <- verify_units(from, 'o2')
   tou <- verify_units(to,'o2')
 
-  ## UNITS REQUIRING T and S
-  ts_req <- c("%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p", "inHg.o2p", "mmHg.o2p",
+  ## UNITS REQUIRING T, S and/or P (all same for now)
+  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p", "inHg.o2p", "mmHg.o2p",
               "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2", "mL/kg.o2")
 
-  ## UNITS REQUIRING P
-  p_req <- c("mL/L.o2", "mL/kg.o2", "%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p", "inHg.o2p",
-             "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2", "mL/kg.o2")
-
   ## CHECK t, S and P needed for units
-  ## t and S - Could combine these to one since they have same unit requirements
-  if(is.null(S) && (fru %in% ts_req || tou %in% ts_req))
-    stop("Input or output units require Salinity input (S = )")
+  ## t and S - Could combine these to one check
+  if(is.null(S) && (fru %in% tsp_req || tou %in% tsp_req))
+    stop("Input or output units require Salinity input (i.e. S = ??)")
 
-  if(is.null(t) && (fru %in% ts_req || tou %in% ts_req))
-    stop("Input or output units require Temperature input (t = )")
+  if(is.null(t) && (fru %in% tsp_req || tou %in% tsp_req))
+    stop("Input or output units require Temperature input (i.e. t = ??)")
 
   ## P
   if(is.null(P)) P <- 1.013253
-  if(fru %in% p_req || tou %in% p_req)
-    message("Note: Input or output units require Atmospheric Pressure input (P = ). \n Default value of P = 1.013253 bar has been used.")
+  if(fru %in% tsp_req || tou %in% tsp_req)
+    message("Note: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
 
 
+  ## HAD TO ADD IFS TO THESE FOR NULL CASES OF T AND S
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
   # C library: https://www.unidata.ucar.edu/software/udunits/
-  omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L vol
+  if(!is.null(t)) omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L vol
   omWt <- unname(marelac::molweight('O2'))  # molecular weight of O2 in g/mol
-  oGas <- unname(marelac::gas_satconc(S, t, P, species = "O2")) # gas sat conc.
-  swDn <- marelac::sw_dens(S = S, t = t, P = P) # seawater density in kg/m^3
+  if(!is.null(t) && !is.null(S)) oGas <- unname(marelac::gas_satconc(S, t, P, species = "O2")) # gas sat conc.
+  if(!is.null(t) && !is.null(S)) swDn <- marelac::sw_dens(S = S, t = t, P = P) # seawater density in kg/m^3
   #swDn <- gsw::gsw_rho_t_exact(S, t, (P * 10))  # seawater density in kg/m^3
-  vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
+  if(!is.null(t) && !is.null(S)) vpor <- marelac::vapor(S = S, t = t)  # sat. pressure of water vapour (au)
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
 
   # Import from other functions
