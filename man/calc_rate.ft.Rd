@@ -45,7 +45,7 @@ rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} 
 # Single numeric values
 calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
 # Numeric values and vector
-calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in,
+calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.out,
   flowrate = 0.000039)
 # Vectors
 calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
