@@ -24,12 +24,12 @@
 #' @examples
 #' # Perform conversion on an object of class `calc_rate`:
 #' x <- calc_rate(sardine.rd)
-#' convert_DO(x, from = "percent", to = "mg L-1")
+#' convert_DO(x, from = "percent", to = "mg L-1", t = 15, S = 35)
 #'
 #' # Or, perform on a numeric
 #' convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 #'
-#' convert_DO(sardine.rd[[2]], from = "percent", to = "torr")
+#' convert_DO(sardine.rd[[2]], from = "percent", to = "torr", t = 15, S = 35)
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                          P = 1.013253) {
 
