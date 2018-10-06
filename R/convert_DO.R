@@ -45,9 +45,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
     stop("Input or output units require Temperature input (i.e. t = ??)")
 
   ## P
-  if(is.null(P)) P <- 1.013253
-  if(fru %in% tsp_req || tou %in% tsp_req)
+  if(is.null(P) && fru %in% tsp_req || tou %in% tsp_req)
     message("Note: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
+  if(is.null(P)) P <- 1.013253
 
 
   ## HAD TO ADD IFS TO THESE FOR NULL CASES OF T AND S
