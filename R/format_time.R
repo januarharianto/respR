@@ -106,12 +106,17 @@
 #'   z = c(56, 67, 78))
 #' format_time(x, format = "dmyHMSp")
 format_time <- function(x, format = "ymdHMS", start = 0) {
+
   ## take out date/times
   if(is.data.frame(x)){
     times <- x[[1]]
   } else {
     times <- x
   }
+
+  ## change if factor
+  if(is.factor(times)) times <- as.character(times)
+
   dates <- lubridate::parse_date_time(times, format) # format to datetime
   # convert to numeric:
   times_numeric <- as.numeric(difftime(dates, dates[1], units="secs"))
@@ -121,7 +126,7 @@ format_time <- function(x, format = "ymdHMS", start = 0) {
   if(is.vector(x)) {
     return(out)
   } else {
-    out <- data.frame(times_numeric, x[,-1]) # replace original date-time column
+    out <- data.frame(out, x[,-1]) # replace original date-time column
     names(out) <- names(x)  # rename
     return(out)
   }
