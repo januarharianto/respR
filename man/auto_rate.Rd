@@ -13,7 +13,7 @@ process.}
 
 \item{width}{numeric. Width of the rolling regression. Defaults to `floor(0.2
 \itemize{
-\item length of data\code{if NULL. The length of data can either be time or row, as defined by the}by\code{argument. If a number is supplied and it is less than 1, the function automatically applies the equation}floor(width * length of
+\item length of data\code{if NULL. The length of data can either be time or row, as   defined by the}by\code{argument. If a number is supplied and it is less than   1, the function automatically applies the equation}floor(width * length of
 data`. Otherwise it will simply use the number as the width.
 }}
 

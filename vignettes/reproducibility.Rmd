@@ -39,7 +39,7 @@ The easiest way of providing a reproducible workflow using `respR` is to include
 
 To demonstrate how brief an entire end-to-end `respR` workflow can be, here's an example of a typical script which uses the `sardine.rd` dataset included in the package. We inspect the data, determine the most linear rate, and the maximum rate over a 10 minute period, and finally convert rates to mass-specific units. 
 
-```{r eval = T, results = "hide", fig.keep="none", message=FALSE, warning=FALSE}
+```{r eval = T, results = "hide", fig.keep="none", message=FALSE, warning=FALSE, tidy=FALSE}
 ## Load the package
 library(respR)
 
@@ -58,18 +58,18 @@ exp_1_max_rate <- auto_rate(exp_1, method = "max", width = 600)
 
 ## Convert rates to mass-specific units using the experimental parameters
 exp_1_linear_rate_conv <- convert_rate(exp_1_linear_rate, 
-                                output.unit = "mg/h/kg",
-                                o2.unit = exp_param$DO.unit,
-                                time.unit = exp_param$time.unit,
-                                volume = exp_param$volume,
-                                mass = exp_param$mass)
+                                       output.unit = "mg/h/kg",
+                                       o2.unit = exp_param$DO.unit,
+                                       time.unit = exp_param$time.unit,
+                                       volume = exp_param$volume,
+                                       mass = exp_param$mass)
 
 exp_1_max_rate_conv <- convert_rate(exp_1_max_rate, 
-                                output.unit = "mg/h/kg",
-                                o2.unit = exp_param$DO.unit,
-                                time.unit = exp_param$time.unit,
-                                volume = exp_param$volume,
-                                mass = exp_param$mass)
+                                    output.unit = "mg/h/kg",
+                                    o2.unit = exp_param$DO.unit,
+                                    time.unit = exp_param$time.unit,
+                                    volume = exp_param$volume,
+                                    mass = exp_param$mass)
 ```
 
 ```{r}
