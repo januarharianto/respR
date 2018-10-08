@@ -1,16 +1,17 @@
 
 
 
- [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR) 
+ [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
+[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
 
 **This package is under active development, but is currently stable.**
 
-[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
 
 # Welcome
 
-`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in `respR` will process linear relationships in any related data, such as oxygen flux or photosynthesis.
+`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry data. While the focus of our package is on aquatic respirometry, `respR` is largely unitless and so can process linear relationships in any time-series data, such as oxygen flux or photosynthesis.
 
+A good place to start are the [**online vignettes**](https://januarharianto.github.io/respR/articles/respR.html), which detail the functions and provide example workflows for all types of respirometry experiments. 
 
 ## Installation
 `respR` is not yet published in CRAN. For now, use the `devtools` package to grab the **stable** version:
@@ -22,7 +23,7 @@ devtools::install_github("januarharianto/respR")
 
 ## Usage
 
-A good place to start is our [online vignette](https://januarharianto.github.io/respR/articles/respR.html). For a quick evaluation of the package, try out the following code:
+For a quick evaluation of the package, try out the following code:
 
 ```r
 library(respR) # load the library
@@ -44,12 +45,13 @@ y <- auto_rate(x) # defaults to most-linear rate
 auto_rate(x, width = 900, by = "time", method = "max")
 auto_rate(x, width = 1000, method = "interval")
 
-# 4. Conversions
+# 4. Conversions - some units require temperature, salinity and atm. pressure.
 convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
-             volume = 1.2, mass = 0.8)
+             volume = 12.3, mass = 0.0477,
+             t = 15, S = 35, P = 1.01325) 
 
 
-## Alternatively, use pipes:
+## Alternatively, use Tidyverse pipes:
 library(dplyr) # load to activate pipe operators
 
 urchins.rd %>%        # using the urchins dataset,
@@ -73,11 +75,13 @@ urchins.rd %>%        # using the urchins dataset,
 
 `respR` is under continuous development. If you have any bugs or feedback, you can contact us easily by [opening an issue](https://github.com/januarharianto/respr/issues). Alternatively, you can fork this project and create a pull request.
 
+Please also feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
+
 ## Collaborators
 
-- Januar **Harianto**, University of Sydney
-- Nicholas **Carey**, Stanford University
-- Maria **Byrne**, University of Sydney
+- **Januar Harianto**, University of Sydney
+- **Nicholas Carey**, Scottish Association of Marine Science
+- **Maria Byrne**, University of Sydney
 
 
 # Acknowledgements
@@ -86,6 +90,7 @@ The design of this package would not have been possible without inspiration from
 
 - [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
 - [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
+- [FishResp](https://fishresp.org) - Sergey Morozov
 - [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 - [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
