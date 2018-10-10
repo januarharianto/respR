@@ -4,28 +4,27 @@
 \alias{calc_rate.ft}
 \title{Calculate rate of change in oxygen in flowthrough respirometry}
 \usage{
-calc_rate.ft(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
-  flowrate = NULL, plot = TRUE)
+calc_rate.ft(x = NULL, time = NULL, inflow.o2 = NULL,
+  outflow.o2 = NULL, flowrate = NULL, plot = TRUE)
 }
 \arguments{
-\item{x}{data frame or object of class \code{inspect_data}. Defaults to NULL. Will
-process a data frame if it is provided here.}
+\item{x}{data frame or object of class \code{inspect}.}
 
-\item{time}{numeric. Defaults to NULL. This selects the time column if
-a data frame ('df') is provided. Otherwise, this is a numeric vector for
-time data.}
+\item{time}{numeric. Defaults to NULL. This specifies the time column if a
+data frame is provided. Otherwise, this is a numeric vector for time data.}
 
-\item{inflow.o2}{numeric. Defaults to NULL. This selects the inflow O2 column
-if a data frame ('df') is provided. Otherwise, this is a numeric vector for
+\item{inflow.o2}{numeric. Defaults to NULL. This specifies the inflow O2
+column if a data frame is provided. Otherwise, this is a numeric vector for
 inflow oxygen concentration.}
 
-\item{outflow.o2}{numeric. Defaults to NULL. This selects the outflow O2 column
-if a data frame ('df') is provided.  Otherwise, this is a numeric vector
+\item{outflow.o2}{numeric. Defaults to NULL. This specifies the outflow O2
+column if a data frame is provided.  Otherwise, this is a numeric vector
 for outflow oxygen concentration.}
 
 \item{flowrate}{numeric vector. The flow rate. No unit of measurement is
-expected; you will specify it when you perform conversions later on. However,
-it must be in L per unit time (s,m,h), for example L/s.}
+expected; you will specify it when you perform conversions later in
+\code{convert_rate}. \strong{However}: it must be in \emph{Litres} per unit time (s,m,h), for example
+L/s.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
@@ -33,13 +32,11 @@ it must be in L per unit time (s,m,h), for example L/s.}
 An object of class "calc_rate.ft".
 }
 \description{
-Calculates rate of $O_2$ uptake in flowthrough respirometry given a flow-rate
-and both inflow.o2 and outflow.o2 oxygen concentrations.
+Calculates rate of oxygen uptake in flowthrough respirometry given a
+flow-rate and both inflow and outflow oxygen concentrations. Can return a
+single value, or multiple and mean values based on continuous data.
 }
 \details{
-Can return a single value, or multiple and mean values based on continuous
-data.
-
 There are no units involved in \code{calc_rate.ft}. This is a deliberate decision.
 Units are called in a later function when volumetric and/or mass-specific
 rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
@@ -48,7 +45,7 @@ rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} 
 # Single numeric values
 calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
 # Numeric values and vector
-calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.in,
+calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.out,
   flowrate = 0.000039)
 # Vectors
 calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
