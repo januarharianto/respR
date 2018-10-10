@@ -15,26 +15,32 @@ convert_DO(x, from = NULL, to = NULL, S = 35, t = 25,
 
 \item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{S}{numeric. Salinity. Defaults to 35. Used only in conversion of \% data.}
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion of \% data.}
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (bar). Used only in conversion of \% data.}
+\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in
+conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
 A list.
 }
 \description{
 This is a conversion function that performs basic conversions between units
-of dissolved oxygen in aquatic respirometry.
+of dissolved oxygen in aquatic respirometry. Some units require temperature
+(\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be specified. See
+\code{\link[=unit_args]{unit_args()}} for details. For freshwater experiments, salinity should be set
+to zero (i.e. S = 0).
 }
 \examples{
 # Perform conversion on an object of class `calc_rate`:
 x <- calc_rate(sardine.rd)
-convert_DO(x, from = "percent", to = "mg L-1")
+convert_DO(x, from = "percent", to = "mg L-1", t = 15, S = 35)
 
 # Or, perform on a numeric
 convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 
-convert_DO(sardine.rd[[2]], from = "percent", to = "torr")
+convert_DO(sardine.rd[[2]], from = "percent", to = "torr", t = 15, S = 35)
 }
