@@ -3,18 +3,18 @@ library(testit)
 assert(
   "convert_rate works with default values",
   !has_error(suppressWarnings(
-    convert_rate(10, volume = 1, mass = 1)))
+    convert_rate(10, volume = 1, mass = 1, S = 35, t = 25)))
 )
 
 # use known warnings to do these checks
 # maybe make this more specific later
 assert(
   "convert_rate falls back to default arguments properly",
-  has_warning(convert_rate(10, volume = 1, mass = 1)),
-  has_warning(convert_rate(10, o2.unit = "mg/l", volume = 1, mass = 1)),
-  has_warning(convert_rate(10, time.unit = "s", volume = 1, mass = 1)),
-  has_warning(convert_rate(10, output.unit = "mg/h/g", volume = 1, mass = 1)),
-  has_warning(convert_rate(10, time.unit = "s", volume = 1, mass = 1))
+  has_warning(convert_rate(10, volume = 1, mass = 1, S = 35, t = 25)),
+  has_warning(convert_rate(10, o2.unit = "mg/l", volume = 1, mass = 1, S = 35, t = 25)),
+  has_warning(convert_rate(10, time.unit = "s", volume = 1, mass = 1, S = 35, t = 25)),
+  has_warning(convert_rate(10, output.unit = "mg/h/g", volume = 1, mass = 1, S = 35, t = 25)),
+  has_warning(convert_rate(10, time.unit = "s", volume = 1, mass = 1, S = 35, t = 25))
 )
 
 assert(
