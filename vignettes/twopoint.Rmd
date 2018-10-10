@@ -17,9 +17,11 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
   highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-In some analyses we may want to use only two datapoints of oxygen concentration separated by a known time period to calculate a rate. This could result from **closed-bottle respirometry**, where only the initial and final oxygen concentrations are recorded, in situations of periodic and irregular oxygen monitoring or sampling, or because experimental problems caused erroneous or suspect data to be recorded during an experiment. This approach of course comes with the assumption that rates are relatively constant over the relevant time period, or alternatively the investigator is not particularly interested in how rate may have fluctuated in the intervening time, but rather the total flux and therefore total rate.
+Best practice in respirometry is almost always to use linear regression on multiple time-series recordings of oxygen concentrations, to derive a slope and thus rate of oxygen use. Technically, an overall rate between any two timepoints can be calculated using only two O2 datapoints if they are accurate recordings, and in the past "*closed-bottle*" respirometry was common, where only the initial and final oxygen concentrations were recorded. However, in the modern day, there is little excuse for not using continuous data. Using only two values gives no information about how rates of use may have fluctutated, and are also obviously highly sensitive to error and inaccurate recordings. Therefore rates determined using this method are unsafe. 
 
-While the linear regression approach of `respR` may still provide valid rate estimates, this may not work in the case of irregular data recordings, and the two-point output of `calc_rate` allows useable rates to be determined from sparse or partially erroneous data via this approach.
+For some applications however, there may be valid reasons for using only two datapoints of oxygen concentration separated by a known time period to calculate a rate. This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake rates *per se*, but rather in total oxygen flux over a time period. An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. Smith Jr. 1987). In such cases, even if continuous data exist, fitting a linear regression to these data may not give the correct information the investigator wants. This is particularly the case where oxygen or oxygen use fluctuates significantly over the time period of the experiment, such as with a diurnal rhythm. In such cases linear regressions may be significantly skewed.  
+
+`respR` has the ability to calculate two-point rates. While we strongly recommend it not be used for analysis of data from any laboratory based studies looking at organismal metabolic rates, we have kept the functionality intact for the above use-cases, and for analysis of historical *closed-bottle* respirometry data. 
 
 ### Two-point data
 Simple two-point data can be entered into `calc.rate` in a 2x2 data frame (here created via typical R syntax):
@@ -39,29 +41,6 @@ The two-point rate can be seen at the end of the summary object. With only two d
 two_pt_result$rate_2pt
 ```
 
-### Working around erroneous data
-More useful is using two-point calculations to work around cases of partially erroneous data. Often we can still extract perfectly valid rates as long as the investigator knows *some* of the data contains the true oxygen values.  In the following example we will use the `urchin.rd` data to simulate a dataset where interference has caused regions of erroneous data, but where the intitial and end conditions are known to be reliable recordings. 
-```{r}
-## extract some rows of time and one O2 column
-urchin_mod <- urchins.rd[1:150,c(1,15)]
-
-## simulate sensor dropout
-urchin_mod[30:49,2] <- urchin_mod[30:49,2]-c(seq(0.02,0.46,0.046), rev(seq(0.02,0.46,0.046)))
-urchin_mod[70:89,2] <- urchin_mod[70:89,2]-c(seq(0.02,0.36,0.036), rev(seq(0.02,0.36,0.036)))
-```
-
-```{r message=FALSE, warning=FALSE, results="hide"}
-inspect_data(urchin_mod)
-```
-
-Here we can see our two erroneous regions. We could remove these sections, or only use the lower section of the data, but we can also use the subsetting operators of `calc_rate` to select data that starts and ends where we know valid O₂ recordings were made:
-```{r message=FALSE, warning=FALSE}
-two_pt_result <- calc_rate(urchin_mod, from = 2, to = 23, by = "time")
-summary(two_pt_result)
-```
-
-We can clearly see the linear regression method substantially underestimates the rate because it is skewed downwards. In this case, the two-point output will clearly be a better estimate of the rate of this specimen. 
-
 ### Processing two-point rates
 Two-point rates can be passed to `adjust_rate` for background corrections, and `convert_rate` for conversion to the desired output units. However, if using an object of class `calc_rate` they must be specifically called using `$rate_2pt` or, by default, the adjustment or conversion will operate on the linear regression derived rate. 
 ```{r}
@@ -70,9 +49,11 @@ adjust_rate(two_pt_result$rate_2pt, by = -0.001)
 convert_rate(two_pt_result$rate_2pt, o2.unit = "mg/L", time.unit = "h", output.unit = "mg/h/g", volume = 25, mass = 0.2)
 ```
 
-They can alternatively be entered manually:
+The rate can alternatively be entered manually:
 ```{r}
 convert_rate(-0.0224, o2.unit = "mg/L", time.unit = "h", output.unit = "mg/h/g", volume = 25, mass = 0.2)
 ```
 
 
+##### References
+Smith Jr, K L. 1987. Food energy supply and demand: A discrepancy between particulate organic carbon flux and sediment community oxygen consumption in the deep ocean. Limnology and Oceanography 32(1). 

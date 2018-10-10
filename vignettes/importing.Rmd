@@ -1,0 +1,120 @@
+---
+title: "Importing your data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Importing your data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
+```
+
+`respR` was designed to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. Therefore, it is system agnostic; the data need only be put into a simple structure for a full analysis to be conducted. Indeed, the entire package (with the exception of the final conversion step in `convert_rate`) considers data to be unitless, so non-aquatic respirometry data, or indeed any time-series data can be explored and analysed using `respR`. 
+
+`respR` was designed to work with generic R data frame type objects, including `vectors` and objects of class `data.frame`, `data.table` and `tibble`. The only structural data requirement is that time~O2 data be in a specific (though simple) form; paired values of numeric time-elapsed (in s, m or h) and oxygen amount (in any common unit). Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
+
+`respR` includes two functions to assist with bringing in and formatting your data correctly. 
+
+## `import_file`
+Most systems allow data to be exported in easily readable formats (e.g. .csv, .txt) which contain the numeric time and O2 data `respR` requires. These files are usually easily imported into R using generic functions such as `read.csv` and the relevant columns specified when used in `respR` functions, or extracted into separate data frames. 
+
+Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data, which causes importing problems in `read.csv`. These files can be altered in Excel or other spreadsheet software to fix these issues, however `respR` allows importing of many raw data files from various systems without modification. 
+
+The `import_file` function uses pattern recognititon to identify the originating system of the file. It also automatically recognises the format of any date-time data and uses it to create a new time-elapsed column, if one does not already exist. 
+
+Here's an example of importing a Witrox raw data file (from the current working directory, otherwise any external file can be specified with a filepath):
+```{r}
+import_file("Witrox_eg.txt")
+```
+
+As we can see, the function automatically recognises that this is a Witrox file, removes redundant information, and renames the relevant columns. It also uses the date-time columns to calculate a numeric time elapsed column (called `time` or `elapsed` depending on the original file). 
+
+This function requires only a single input, the path to the file (one other option, `export = TRUE` allows exporting of the imported data to a .csv file). Everything else is handled automatically. This contrasts with other packages where numerous options such as the delimiter character, originating hardware, and specific date format must be specifed, which we have found leads to substantial usability issues (see LINK). 
+
+After importing and saving to an object, this can be passed to the rest of the `respR` functions for processing, all while leaving the raw data file unmodified. 
+
+This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to *send us sample files for testing* (CONTACT LINK), especially any they have problems with, or from systems we do not yet support. 
+
+## `format_time`
+
+For files types that are not yet supported, or if you have already imported your data by other means, the `format_time` function will parse date-time to numeric time-elapsed, in the event the imported file does not contain this. 
+
+Here's an example of a 2 column data frame with date-time data and oxygen. 
+
+```{r  echo = F, message = F, results="hide"}
+data <- import_file("Witrox_eg.txt")
+data <- data[,c(2,6)]
+```
+
+```{r}
+head(data, n = 5)
+```
+
+We can use `format_time` to parse these data to numeric (internally, `format_time` uses functionality in the package `lubridate`). The date-times can be passed as a vector (so it can be appended to the original data) or a data frame where they are in the first column. The resulting data frame will be identical (including column names), except the date-time data will be replaced. We only need to specify the `format` of the date-times (see `?format_time` for further info):
+```{r}
+## as data frame
+data_2 <- format_time(data, format = "dmyHMS")
+head(data_2)
+
+## as vector
+data_3 <- format_time(data$datetime, format = "dmyHMS")
+head(data_3)
+```
+
+By default, the new time-elapsed data will start at zero, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another. 
+
+```{r}
+## as data frame
+data_4 <- format_time(data$datetime, format = "dmyHMS", start = 1000)
+head(data_4)
+```
+
+Note, it will always output elapsed time data in *seconds* regardless of the input format.
+
+## Dealing with timed events or notes
+
+What if there are important notes or events associated with specific times in your experiment? For example, flushing of chambers, imposing a new swimming speed, changing the temperature, noting a response, etc. Resetting the times via formatting the time data may make these difficult to associate to certain stages of the analysis. This is easily dealt with by formatting the times of the events in the same way you formatted the data. You only need to make sure at least one event is associated with the same start time you used for experimental data. 
+
+Here's an example of some experimental notes (in some systems such notes can be entered in the software, and so may be included in output files, or they could be copied from a lab book into a .csv file and imported). 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example data frame of Times and 'Events' or experimental notes
+times <- c("8/17/2016 9:42:02", "8/17/2016 9:52:02", "8/17/2016 9:54:34", "8/17/2016 10:19:02", "8/17/2016 12:04:54", "8/17/2016 14:31:22")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+exp_notes
+
+format_time(exp_notes, format = "mdyHMS")
+```
+
+Such notes do not even have to be in the same date-time format, or even at the same precision, depending on how accurately you need to know when events occurred. The important factors are associating at least one event with the *same start time* used to format the experimental time data, and using the correct `format` setting. 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example notes
+times <- c("9:42", "9:52", "9:54", "10:19", "12:04", "14:31")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+exp_notes
+
+format_time(exp_notes, format = "HM")
+
+```
+
+## Next steps
+After your data is in this paired, numeric *time-elapsed~O2* form, it can be passed to `inspect_data` or other functions for analysis. 

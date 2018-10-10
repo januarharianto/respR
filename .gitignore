@@ -28,3 +28,5 @@ README.html
 # macOS temporary files
 .DS_Store
 respR.Rproj
+rMR scratch.R
+notes.rtf
