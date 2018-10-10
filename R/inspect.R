@@ -211,7 +211,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
       panel.first = grid())
     title(
       ## UPDATED TITLE
-      main = "Rolling Regression of Rate Across Moving Window of 0.2 of Data",
+      main = "Rolling Regression of Rate (0.2 Rolling Window)",
       line = 0.3
     )
     par(pardefault) # revert par settings to original
