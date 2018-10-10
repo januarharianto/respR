@@ -204,8 +204,8 @@ plot.inspect <- function(x, label = TRUE, ...) {
       panel.first = grid())
     title(main = "Full Timeseries", line = 0.3)
     plot(
-      ## NEXT TWO LINES ARE NEW
-      abs(roll)~dt[[1]][floor(0.1*length(dt[[1]])):(floor(0.1*length(dt[[1]]))+(length(roll)-1))],
+      abs(roll) ~ dt[[1]][floor(0.1 * length(dt[[1]])):(floor(0.1 * 
+          length(dt[[1]])) + (length(roll) - 1))],
       xlim = range(dt[[1]]),
       xlab = "", ylab = "", pch = 16, cex = .5,
       panel.first = grid())
