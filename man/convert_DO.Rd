@@ -4,7 +4,7 @@
 \alias{convert_DO}
 \title{Convert units of dissolved oxygen.}
 \usage{
-convert_DO(x, from = NULL, to = NULL, S = 35, t = 25,
+convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL,
   P = 1.013253)
 }
 \arguments{
