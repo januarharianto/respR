@@ -118,13 +118,31 @@
     <loc>http://januarharianto.github.io/respR/reference/verify_units.html</loc>
   </url>
   <url>
+    <loc>http://januarharianto.github.io/respR/reference/zeb_intermittent.rd.html</loc>
+  </url>
+  <url>
     <loc>http://januarharianto.github.io/respR/articles/auto_rate.html</loc>
+  </url>
+  <url>
+    <loc>http://januarharianto.github.io/respR/articles/auto_rate_comp.html</loc>
+  </url>
+  <url>
+    <loc>http://januarharianto.github.io/respR/articles/closed.html</loc>
   </url>
   <url>
     <loc>http://januarharianto.github.io/respR/articles/flowthrough.html</loc>
   </url>
   <url>
+    <loc>http://januarharianto.github.io/respR/articles/importing.html</loc>
+  </url>
+  <url>
     <loc>http://januarharianto.github.io/respR/articles/intermittent.html</loc>
+  </url>
+  <url>
+    <loc>http://januarharianto.github.io/respR/articles/intermittent2.html</loc>
+  </url>
+  <url>
+    <loc>http://januarharianto.github.io/respR/articles/packages_comp.html</loc>
   </url>
   <url>
     <loc>http://januarharianto.github.io/respR/articles/pcrit.html</loc>
@@ -133,9 +151,18 @@
     <loc>http://januarharianto.github.io/respR/articles/performance.html</loc>
   </url>
   <url>
+    <loc>http://januarharianto.github.io/respR/articles/reproducibility.html</loc>
+  </url>
+  <url>
     <loc>http://januarharianto.github.io/respR/articles/respR.html</loc>
   </url>
   <url>
+    <loc>http://januarharianto.github.io/respR/articles/tidyverse.html</loc>
+  </url>
+  <url>
     <loc>http://januarharianto.github.io/respR/articles/twopoint.html</loc>
+  </url>
+  <url>
+    <loc>http://januarharianto.github.io/respR/articles/when_to_use.html</loc>
   </url>
 </urlset>

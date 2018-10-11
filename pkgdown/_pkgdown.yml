@@ -8,6 +8,8 @@ reference:
   - title: "Pre-processing"
     contents:
       - format_time
+      - import_file
+      - inspect
       - inspect_data
       - subset_data
       - subsample
