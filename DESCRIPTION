@@ -33,6 +33,10 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testit
+    testit,
+    rMR,
+    DiagrammeR,
+    FishResp,
+    respirometry
 VignetteBuilder: 
     knitr
