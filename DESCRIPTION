@@ -1,7 +1,7 @@
 Package: respR
 Type: Package
 Title: Analyse, Convert, and Automate Respirometry-Related Data
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
     "Nicholas Carey <nicholascarey@gmail.com> [aut]"))
