@@ -1,3 +1,23 @@
+
+# Version 1.0.5
+This version is aimed at improving the functionality and usability of our conversion functions. We have decided to remove the default values for temperature and salinity inputs in `convert_DO()` and `convert_rate()` (i.e. switched `t` and `S` numerics to `NULL`). This was no easy decision, but we noticed that some users were running the functions by default without considering (or even knowing the existence of) these two *important* input variables. **Unfortunately, existing workflows using `calc_DO()` and `calc_rate()`are likely to break**. Do note that this is a very rare modification -- we know that changing core functionality that breaks prior code is not something to be taken lightly. Please update these two functions respectively. 
+
+- UPDATE: `convert_DO()` and `convert_rate()` now require the user to explicitly provide `t` (temperature) and `S` (salinity) values.
+- UPDATE: `convert_DO()` and `convert_rate()` will warn the user when the default `P` value is used for O2 units that are strongly influenced by atmospheric pressure.
+- UPDATE: `unit_args()` has been updated to indicate which O2 units need inputs of `t`, `S` and `P`.
+- FIX: `inspect()` has a better-looking plot for rolling regressions.
+
+# Version 1.0.4 and 1.0.4a
+This version updates the new functions from 1.0.0 and tries to improve piping workflows.
+
+- HOTFIX: `import_data()` was not importing firesting files properly.
+- FIXED: `subset_data()` - objects produced by this function can now be immediately passed on to other functions. `subset_data()` is a lesser known function but it's very useful, e.g. for truncating intermittent data before analyses. It's been updated work well with other functions, and can also be piped.
+- FIXED: We lowered the R version requirement even further, now people with R versions >3.3.0 should be able to run respR.
+- UPDATE: `import_data()` - works with a lot more files. Now supports: Firesting Logger | Pyro Oxygen Logger (also Firesting) | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo AutoResp (software output). Get more files to us, people!
+- NEW: better feedback from console outputs during piping.
+- NEW: better piping! You can now chain print() and plot() commands, which is useful in some cases e.g. checking the top 3 results and plots of `auto_rate()`.
+
+
 # Version 1.0.0
 The big update! Maybe it's time to submit to CRAN?
 
