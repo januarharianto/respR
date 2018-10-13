@@ -28,7 +28,7 @@ In *intermittent-flow* respirometry, $O_2$ concentration is measured as describe
 A final method is *open-tank* respirometry, in which an open tank or semi-enclosed area is used, but the input or mixing rate of oxygen from the surroundings has been quantified or found to be negligible relative to oxygen consumption of the specimens (Leclercq et al., 1999). It is seldom used, but for some applications it is a sufficient and practical methodology (Gamble et al. 2014). The common equation used for open respirometry is: $$\dot{V}O_2 = \dot O_2V + \phi_d$$ where $\dot O_2V$ is the slope of the regression that relates $O_2$ concentration to time, $V$ is the volume of the container and $\phi_d$ is the oxygen flux as determined by Fick's Law (Leclercq et al., 1999).
 
 
-## `respR`
+## The `respR` R package
 
 `respR` is a package designed to process the data from all of these types of respirometry experiments. It is designed primarily for aquatic respirometry, although as many of the main functions are unitless it is adaptable for use with gaseous respirometry, and indeed analysis of other data where a parameter may change over time. 
 
@@ -47,11 +47,11 @@ The `respR` package allows determination of common metrics such as $VO_2$, $MO_2
 - The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions
 - These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data
 
-### Example Data
+## Example Data
 
 We have provided example data that can be used immediately once `respR` is loaded (`urchins.rd`, `intermittent.rd`, `zeb_intermittent.rd`, `sardine.rd`, `squid.rd`,  `flowthrough.rd`). These data were obtained from past experiments and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
 
-### Vignettes and documentation 
+## Vignettes and documentation 
 
 As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page. In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links:
 
