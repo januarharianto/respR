@@ -34,18 +34,18 @@ A final method is *open-tank* respirometry, in which an open tank or semi-enclos
 
 When working with respirometry data, you will often need to:
 
-1. Ensure that the data, or at least a subset of the data, is representative of the research question of interest.
-2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.
-3. Depending on the experimental setup, correct for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.
-4. Convert the resulting usage rate to the volumetric and mass-specific rates in the appropriate units.
+1. Ensure that the data, or at least a **subset** of the data, is representative of the research question of interest.
+2. Perform an initial analysis of the data to **estimate** the rate of change in oxygen concentration or amount.
+3. Depending on the experimental setup, **correct** for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.
+4. **Convert** the resulting usage rate to the volumetric and mass-specific rates in the appropriate units.
 
-The `respR` package allows determination of common metrics such as $VO_2$, $MO_2$, $MO_{2max}$, $MO_{2min}$, and $P_{crit}$, and contains several functions to make this process straightforward:
+The `respR` package allows determination of common respirometry metrics and contains several functions to make this process straightforward.
 
 - It provides visual feedbacks and diagnostic plots to help you explore, subset and analyse your data.
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked **maximum**, **minimum** or **most linear** sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
-- The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions
-- These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data
+- The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions.
+- These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data.
 
 ## Example Data
 
@@ -53,7 +53,9 @@ We have provided example data that can be used immediately once `respR` is loade
 
 ## Vignettes and documentation 
 
-As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page. In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links:
+<!-- As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page.  -->
+<!-- In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links: -->
+We have prepared several vignettes describing typical analysis workflows:
 
 **[Importing your data](LINK)**  
 `respR` has functions to make it easy to bring in and prepare your data, even from the raw data files output by various respirometry systems
