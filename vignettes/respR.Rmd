@@ -15,9 +15,9 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
   highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-### Respirometry
+## Aquatic Respirometry
 
-There are four broad methodological approaches in respirometry: *closed-chamber*, *intermittent-flow*, *flow-through* and *open-tank*. 
+There are four broad methodological approaches in aquatic respirometry: *closed-chamber*, *intermittent-flow*, *flow-through* and *open-tank*. 
 
 In *closed-chamber* respirometry, $O_2$ decrease is measured within a hermetically sealed chamber of known volume, sometimes set within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the $O_2$ timeseries by assuming a linear relationship between variables, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in $O_2$ concentration over time, or in the case of a two-point measurement, the difference in $O_2$ concentration divided by time elapsed, and $V$ is the volume of the container (Lighton 2008).
 
