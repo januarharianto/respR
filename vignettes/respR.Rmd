@@ -1,8 +1,8 @@
 ---
-title: "Introduction to respR"
+title: "Getting Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to respR}
+  %\VignetteIndexEntry{GettingStarted}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
