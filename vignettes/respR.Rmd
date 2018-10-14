@@ -2,7 +2,7 @@
 title: "Getting Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GettingStarted}
+  %\VignetteIndexEntry{Getting Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -41,7 +41,7 @@ When working with respirometry data, you will often need to:
 
 The `respR` package allows determination of common respirometry metrics and contains several functions to make this process straightforward.
 
-- It provides visual feedbacks and diagnostic plots to help you explore, subset and analyse your data.
+- It provides visual feedback and diagnostic plots to help you explore, subset and analyse your data.
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked **maximum**, **minimum** or **most linear** sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
 - The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions.
@@ -49,7 +49,7 @@ The `respR` package allows determination of common respirometry metrics and cont
 
 ## Example Data
 
-We have provided example data that can be used immediately once `respR` is loaded (`urchins.rd`, `intermittent.rd`, `zeb_intermittent.rd`, `sardine.rd`, `squid.rd`,  `flowthrough.rd`). These data were obtained from past experiments and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
+We have provided example data that can be used immediately once `respR` is loaded (`urchins.rd()`, `intermittent.rd()`, `zeb_intermittent.rd()`, `sardine.rd()`, `squid.rd()`,  `flowthrough.rd()`). These data were obtained from past experiments and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
 
 ## Vignettes and documentation 
 
@@ -57,39 +57,34 @@ We have provided example data that can be used immediately once `respR` is loade
 <!-- In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links: -->
 We have prepared several vignettes describing typical analysis workflows:
 
-**[Importing your data](LINK)**  
-`respR` has functions to make it easy to bring in and prepare your data, even from the raw data files output by various respirometry systems
+**[Importing your data](https://januarharianto.github.io/respR/articles/importing.html)** `respR` has functions to make it easy to bring in and prepare your data, even from the raw data files output by various respirometry systems.
 
-**[Closed-chamber respirometry](LINK)**  
-This is the best place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
-  
-**[auto_rate 1: Automatic detection of metabolic rates](LINK)**  
-**[auto_rate 2: Performance of auto_rate in detecting linear regions](LINK)**  
-**[auto_rate 3: Comparative performance of auto_rate and LoLinR](LINK)**  
-These detail how the main analytical function in `respR` works and its performance
+**[Quick-start using closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)** This is a good place to start exploring the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
 
-**[Intermittent-flow respirometry 1: Simple example](LINK)**  
-**[Intermittent-flow respirometry 2: Complex example](LINK)**  
-How to analyse simple and more complex intermittent-flow respirometry data
+**[Automatic detection of metabolic rates](https://januarharianto.github.io/respR/articles/auto_rate.html)** Here we introduce the function `auto_rate()` for the automatic detection and estimation of common metrics.
 
-**[Flowthrough respirometry](LINK)**  
-How to analyse flowthrough respirometry data 
+**[Performance of auto_rate in detecting linear regions](https://januarharianto.github.io/respR/articles/performance.html)** We use simulated data to test the accuracy of `auto_rate()`, and discuss the function's performance with focus on linear data detection.
 
-**[PCrit](LINK)**  
-Determine PCrit in long-term, closed chamber respirometry experiments
+**[Comparative performance of auto_rate and LoLinR](https://januarharianto.github.io/respR/articles/auto_rate_comp.html)** We make comparisons to another R package, LoLinR, using data from their package and simulated data. 
 
-**[Two-point analyses](LINK)**  
-Determine oxygen use rate using only two datapoints
+**[Intermittent-flow respirometry: Simple example](https://januarharianto.github.io/respR/articles/intermittent.html)**  
+**[Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html)**  
+How to analyse simple and more complex intermittent-flow respirometry data.
 
-**[Reproducibility](LINK)**  
-How `respR` has been designed to allow reporting of reproducible analyses
+**[Flowthrough respirometry](https://januarharianto.github.io/respR/articles/flowthrough.html)** Analysis of flowthrough respirometry data.
 
-**[respR and the Tidyverse](LINK)**  
-Info about how `respR` integrates with `Tidyverse` practices to streamline analyses
+**[PCrit](https://januarharianto.github.io/respR/articles/pcrit.html)** Determine P~crit~ in long-term, closed chamber respirometry experiments.
 
-**[A comparison of '`respR` with other R packages](LINK)**  
-**[When to use `respR`](LINK)**  
-The functionality and workflow of `respR` in comparison to other options, and when you should use it
+**[Two-point analyses](https://januarharianto.github.io/respR/articles/twopoint.html)**  
+Determine oxygen use rate using only two datapoints.
+
+**[Reproducibility](https://januarharianto.github.io/respR/articles/reproducibility.html)** How `respR` has been designed to allow reporting of reproducible analyses.
+
+**[respR and the Tidyverse](https://januarharianto.github.io/respR/articles/tidyverse.html)** Information about how `respR` integrates with `tidyverse` practices to streamline analytic workflows.
+
+**[A comparison of respR with other R packages](https://januarharianto.github.io/respR/articles/packages_comp.html)**  
+**[When to use respR](https://januarharianto.github.io/respR/articles/usage.html)**  
+The functionality and workflow of `respR` in comparison to other options, and when you should use it.
 
 
 ## References
