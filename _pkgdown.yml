@@ -72,7 +72,7 @@ navbar:
       
     - text: Documentation 
       menu:
-      - text: "Quick-start"
+      - text: "Quick-start using closed-chamber respirometry"
         href: articles/closed.html
       - text: "Importing your data"
         href: articles/importing.html
@@ -92,7 +92,7 @@ navbar:
     - text: Discussion 
       menu:
       - text: "When to use respR"
-        href: articles/when_to_use.html
+        href: articles/usage.html
       - text: "Performance of auto_rate"
         href: articles/performance.html
       - text: "Comparing auto_rate and LoLinR"
