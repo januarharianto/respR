@@ -1,5 +1,5 @@
 ---
-title: "auto_rate 3: Comparative performance of auto_rate and LoLinR"
+title: "Comparative performance of auto_rate and LoLinR"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -29,7 +29,7 @@ The two methods use fundamentally different techniques to detect linear regions 
 
 3. `auto_rate()` is several orders of magnitude faster, even as it performs hundreds to thousands of rolling regressions at a time. It is a better option for large data, while LoLinR might be the function of choice for smaller datasets since its speed decreases *exponentially* as data gets bigger. 
 
-### Processing times
+## Processing times
 
 The main function in `LoLinR` is called `rankLocReg`. The time it takes this function to process data follows an exponential relationship with its length. This is illustrated in the following plot. `rankLocReg` was run on different sized datasets (blue dots) and the time to completion recorded. These analyses were run in RStudio on the same dataset subset to the appropriate length, on a 2017 Macbook Pro with 3.1 GHz Intel Core i5 processor, 16GB RAM, and no other applications running. The orange dots are estimated completion times for larger datasets extrapolated from the results. Note the log scale. 
 
@@ -41,7 +41,7 @@ As we can see, any dataset larger than around 400 to 500 in length takes a prohi
 
 Therefore, it is clear `rankLocReg` is not a practical solution for analysis of data more than a few hundred datapoints long. The developers of `LoLinR` are aware of this, and in the documentaton for the package recommend thinning (i.e. subsampling) datasets longer than 500 in length (it includes a function for this, `thinData`). However, thinning datasets of thousands to tens of thousands of datapoints to only a few hundred would inevitably cause loss of information and is not an acceptable solution. 
 
-#### Comparison
+## Comparison
 
 Having `auto_rate()` work more quickly is of no use, unless it gives equally good results as `LoLinR`. Here we compare the results of both functions on both simulated and real data, so see if they give comparable results. 
 
@@ -60,7 +60,7 @@ do it for 100 datapoints long - make a big deal of `LoLinR` *working better*, bu
 then 500 - show `respR` is better
 
 
-##### Real data
+## Real data
 
 Run some real data 
 Compare results - both regions, adn chekc slopes are same
@@ -69,6 +69,6 @@ then we can say slopes taken from lolinr can be processed in respR to get units.
 How do we compare actual results from real data? Which is 'best' if they identify different regions?
 
 
-## References
+### References
 
 Olito, C., White, C. R., Marshall, D. J., & Barneche, D. R. (2017). Estimating monotonic rates from biological data using local linear regression. The Journal of Experimental Biology, jeb.148775-jeb.148775. doi:10.1242/jeb.148775

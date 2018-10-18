@@ -1,10 +1,10 @@
 ---
-title: "Intermittent-flow respirometry 2: Complex example"
+title: "Intermittent-flow respirometry: Complex example"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Intermittent-flow respirometry 2}
+  %\VignetteIndexEntry{Intermittent-flow respirometry: Complex example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,16 +14,12 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
-
-## Intermittent-flow respirometry - A more complex example
 
 This vignette shows a more complex intermittent-flow analysis from a long experiment, with many regularly-spaced replicates (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. `respR` will in the future support these kinds of experiment in a much better way, but for now they are easily analysed with a little data manipulation. 
 
 The example data (`zeb_intermittent.rd`) has kindly been provided by Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. Note, the data has been injected with random noise, and volumes and masses used are not the actual values from the experiment. 
-
-
 
 ## Experiment overview
 
@@ -37,7 +33,7 @@ From this experiment dataset we want to extract several metrics:
 
 
 
-### Loading and inspecting data
+## Loading and inspecting data
 
 We use `inspect()` to preview the data and save it to an object. This is a **very** large dataset (nearly 80,000 records), so if running the code in this vignette be warned that operations may take some time. 
 
@@ -54,7 +50,7 @@ inspect(zeb_intermittent.rd[1:18000,])
 The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 20% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data. 
 
 
-### Calculating background rate
+## Calculating background rate
 
 The intial and end sections will be used to calculate background rates, and how they change over the course of the experiment. Timepoints of these will typically have been recorded as part of the experiment, so can be used to extract the relevant sections (see `?zeb_intermittent.rd` for row locations of all stages).
 
@@ -89,7 +85,7 @@ bg_lm_slp <- coef(bg_lm)[2]
 ```
 We will use these later to derive correction values based on time elapsed during the experiment. 
 
-### Calculating MMR
+## Calculating MMR
 
 Here we calculate MMR using the first replicate. This replicate is longer than the others (14 mins/840 rows vs. 11 mins/660 rows for all others). For this (and the later analyses) we are going to apply a buffer value at the start of each rep. In this experiment, each replicate is comprises a recording period (13 mins for first rep, 10 mins for all others), followed by 1 minute of flushing. It is good practice to allow a period of settling after flushing, in case the animal was disturbed, or the O2 probe has some lag in detecting the O2 concentration or slight temperature difference. For all analyses we are going to use a 3 minute buffer (180s), that is we won't use the first 3 mins of data in any rep. We will also only use 7 minutes (420 rows) of data after this so the flush period is not used. Here, we subset the first replicate out to a separate object using these parameters, and use `auto_rate()` to find the most linear section (we could also use the `method = "max"` option to find the maximum linear rate *within* this replicate). 
 
@@ -113,7 +109,7 @@ print(zeb_mmr_adj)
 
 That's it: the MMR has been calculated, adjusted and saved, and we can see from the output plots everything looks good. We will convert it to units at the end of the vignette. 
 
-### Calculating RMR
+## Calculating RMR
 
 Calculating RMR is a little more complex. Typically, SMR and RMR are defined as the lowest rates observed. What you choose to use will depend on many factors unique to your experiment, whether that be the absolute lowest rate found, or a representative mean of several low rates. The following is merely to show how you can use `respR` to explore and extract rates from multiple replicates. 
 
@@ -160,7 +156,7 @@ head(rmr_rates)
 
 This `rmr_rates` dataframe contains the start times and most linear rate found in each rep. 
 
-### Correcting for background
+## Correcting for background
 
 While there is a function in `respR` for correcting rates for background (`adjust_rate`), it doesn't yet support a dynamic background rate (though see example at the end where a formula can be entered in the function if using `apply` functions). It will support this in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier. 
 
