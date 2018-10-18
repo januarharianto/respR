@@ -13,3 +13,8 @@
 ^_pkgdown\.yml$
 ^index\.Rmd$
 ^data-raw$
+
+# Insurance
+vignettes
+.travis.yml
+.Rproj
