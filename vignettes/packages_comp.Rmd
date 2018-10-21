@@ -24,7 +24,7 @@ We have designed `respR` to be able to explore, process and analyse any and all 
 
 There are only a couple of other `R` packages that are focused towards respirometry analysis;  [rMR](https://cran.r-project.org/web/packages/rMR/index.html), and  [FishResp](https://fishresp.org) (there is one other, [respirometry](https://cran.r-project.org/web/packages/respirometry/index.html), but it is not focussed on processing data). These packages have quite specific focuses; both `rMR` and `FishResp` are centered around processing intermittent-flow, swim tunnel respirometry data, in particular from Loligo Systems equipment. Neither has the universal focus of `respR`, and while it is possible to process other respirometry data using these packages it is far from straightforward. However, they are excellent packages within their own focuses and we would encourage users to explore them and how they work; they may contain functionality that suits your particular analyses or workflows better than `respR`. 
 
-Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the `auto_rate()` function in `respR`, which allows statistically robust, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality, [LoLinR](https://github.com/colin-olito/LoLinR) which also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of `auto_rate()` and `LoLinR` in the **LINK** vignette. 
+Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the `auto_rate()` function in `respR`, which allows statistically robust, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality, [LoLinR](https://github.com/colin-olito/LoLinR) which also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of `auto_rate()` and `LoLinR` [here](https://januarharianto.github.io/respR/articles/auto_rate_comp.html). 
 
 These packages instead rely on manual selection of data regions in respirometry data from which to extract oxygen uptake rates. `respR` also has this functionality as an option, and in this vignette we briefly compare the outputs of these packages with `respR`, and other overlapping functionality. 
 
@@ -33,7 +33,7 @@ These packages instead rely on manual selection of data regions in respirometry 
 
 The [respirometry](https://cran.r-project.org/web/packages/respirometry/index.html) package by Matthew Birk has several useful utility functions for planning and conducting respirometry experiments. However, as the documentation states "Tools focus on helping the researcher setup and conduct experiments. Analysis of the resulting data is not a focus". Therefore, this package has little in common with `respR`. 
 
-The only real functionality overlap with `respR` is the conversion function `conv_o2`, similar to the `convert_DO` function in `respR`. Both support the same units, and because both functions rely on the unit standards package `marelac` they give identical or very similar results. Minor differences are probably dues to the precision with which variables are handled internally:
+The only real functionality overlap with `respR` is the conversion function `conv_o2()`, similar to the `convert_DO()` function in `respR`. Both support the same units, and because both functions rely on the unit standards package `marelac` they give identical or very similar results. Minor differences are probably dues to the precision with which variables are handled internally:
 
 ```{r}
 ## respR
@@ -68,7 +68,7 @@ conv_o2(o2 = 85,
 Overall however, in this small overlap in functionality the packages essentially perform identically. 
 
 
-## `respR` and `rMR`
+## respR and rMR
 
 The [rMR](https://cran.r-project.org/web/packages/rMR/index.html) package by Tyler L. Moulton focuses specifically on analysis of data from Loligo Systems hardware (i.e. Witrox probes), and generally on intermittent-flow, fish respirometry. We should note that as of writing (Sep 2018)  this package has not been updated in nearly 2 years. 
 
@@ -101,7 +101,7 @@ These both appear to perform well, on this file at least. The resulting data fra
 
 However, in our testing we found that while the `rMR` import function worked with this example, and a few other files we tried, many files we were unable to import using `rMR` for reasons we were unable to diagnose. Likely, some of the inputs were not correctly set, but error messages and documentation were of little help in solving these problems. This would likely be a significant barrier to entry for novice R users, and even those more advanced. Clearly the `respR` import function requires fewer inputs. It relies on pattern matching to recognise the system the file comes from, and other data such as the time-date format. The `get.witrox.data` function has however an advantage, in that you can specify the columns to be imported. 
 
-While it is likely the `respR` `import_data` function may fail on occasion, and more testing is needed, it appears to perform better for Witrox files, as well as supporting other systems. As always, we encourage users to send us raw data files (from all systems) to test, particularly ones they have problems with. 
+While it is likely the `respR` `import_data()` function may fail on occasion, and more testing is needed, it appears to perform better for Witrox files, as well as supporting other systems. As always, we encourage users to send us raw data files (from all systems) to test, particularly ones they have problems with. 
 
  
 #### Conversion
@@ -111,7 +111,7 @@ As with `respR` and `respirometry`, `rMR` also has an O2 unit conversion functio
 `rMR` implements a PCrit calculation based on the 'broken-stick' methods of Yeager and Ultsch (1989). See the PCrit vignette (LINK) for comparison and further discussion of this. 
 
 #### Calculating rates
-`MR.loops` is the workhorse function of `rMR` that fits linear regressions to respirometry data and uses the resulting slopes to calculate oxygen uptake rates. This function relies on manually specifying one or more regions over which to fit regressions. `respR` also allows this in the `calc_rate` function, so here we will compare the results of each on the same data. Again, we use data included in `rMR` and code adapted from the documentation. 
+`MR.loops` is the workhorse function of `rMR` that fits linear regressions to respirometry data and uses the resulting slopes to calculate oxygen uptake rates. This function relies on manually specifying one or more regions over which to fit regressions. `respR` also allows this in the `calc_rate()` function, so here we will compare the results of each on the same data. Again, we use data included in `rMR` and code adapted from the documentation. 
 
 ```{r}
 ## rMR
@@ -175,14 +175,14 @@ While use of other data types in `rMR` is possible, it is not intuitive, and tim
 
 - **Specify data regions in several ways (by O2 range, time, or row)**
 
-- **Use of numeric time, rather than POSIX formatted time-data (e.g. "2015-07-03 06:15:00 GMT") is a clear usability advantage and reduces error**. `respr` has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed `respR` to avoid these when at all possible.  
+- **Use of numeric time, rather than POSIX formatted time-data (e.g. "2015-07-03 06:15:00 GMT") is a clear usability advantage and reduces error**. `respR` has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed `respR` to avoid these when at all possible.  
 
 - **Functions have minimal and intuitive inputs while maintaining full functionality, again reducing potential for error**
 
 - **Better visualisations of the data regions in full context of the dataset**
 
 
-## `respR` and `FishResp`
+## respR and FishResp
 
 `FishResp` is still under development and there is little documentation and no guide yet available to detail how the functions in the package interrelate, or provide an example workflow (although we understand from contact with the developers these are under preparation). Therefore, our comparisons are somewhat limited to the functionality we could get to work.  
 
@@ -304,7 +304,7 @@ round(-1*spec1_rates$output, 1)
 
 As we can see the rates calculated by both packages are identical. As with `rMR`, this is exactly what we would expect as we are manually selecting the same data regions and user underlying R code to fit the linear regressions. 
 
-#### Options in `FishResp`
+#### Options in FishResp
 
 `FishResp` (as far as we can tell from the current documentation) only allows fitting regressions across the entire width of what is defined an experimental measurement period, or replicate. There is little flexibility in modifying this. This may or may not be appropriate depending on the data and experiment. There is a `length` operator in `extract.slope`, but this only curtails the latter end of the regression; there appears to be no way of modifying the start location. This is a curious decision and less than ideal practice; if a user wanted to only use data from part of an experimental replicate, typically it is the initial stages they want to remove, as these are just after the flush when the animal might have been disturbed, or probe lag means the probe has not caught up, and overall the system has not reached a steady state. Moreover, this `length` operator applies to all replicates; there is no easy way of fitting regressions of different length over different replicates. `respR` has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; `FishResp`'s ability to do this is very limited. 
 
@@ -312,7 +312,7 @@ The `extract.slope` function is able to sort and select the rates from each repl
  
 It is also not entirely clear how `FishResp` would work on continuous data where the O2 is also recorded through flushes, or when each replicate is separated from another by a waiting period (this sample data has one directly after the next). And as we said, processing of data that does not adhere to a rigid structure or cycle of measurement periods is difficult, if not impossible. 
 
-#### Benefits of `respR` over `FishResp` 
+#### Benefits of respR over FishResp 
 
 Overall `FishResp` is a fine package if you are conducting very a specific type of experiment. Its focus is on processing large amounts of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources. 
 
