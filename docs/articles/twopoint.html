@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -39,69 +39,75 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get started</a>
+  <a href="../articles/respR.html">Getting Started</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">List of Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Documentation
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/auto_rate.html">auto_rate 1: Automatic detection of metabolic rates</a>
-    </li>
-    <li>
-      <a href="../articles/auto_rate_comp.html">auto_rate 3: Comparative performance of auto_rate and LoLinR</a>
-    </li>
-    <li>
       <a href="../articles/closed.html">Closed-chamber respirometry</a>
-    </li>
-    <li>
-      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
       <a href="../articles/importing.html">Importing your data</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Intermittent-flow respirometry 1: Simple example</a>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry rates</a>
     </li>
     <li>
-      <a href="../articles/intermittent2.html">Intermittent-flow respirometry 2: Complex example</a>
+      <a href="../articles/intermittent.html">Intermittent-flow respirometry: Simple example</a>
     </li>
     <li>
-      <a href="../articles/packages_comp.html">respR vs. other R packages</a>
+      <a href="../articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Pcrit</a>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
-      <a href="../articles/performance.html">auto_rate 2: Performance in detecting linear regions</a>
+      <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/reproducibility.html">Open science and reproducibility using respR</a>
-    </li>
-    <li>
-      <a href="../articles/tidyverse.html">respR and the Tidyverse</a>
-    </li>
-    <li>
-      <a href="../articles/twopoint.html">Two-point analyses</a>
-    </li>
-    <li>
-      <a href="../articles/when_to_use.html">When to use `respR`</a>
+      <a href="../articles/intermittent.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Discussion
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../news/index.html">Changelog</a>
+      <a href="../articles/usage.html">When to use respR</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Performance of auto_rate</a>
+    </li>
+    <li>
+      <a href="../articles/auto_rate_comp.html">Comparing auto_rate and LoLinR</a>
+    </li>
+    <li>
+      <a href="../articles/packages_comp.html">A comparison of respR with other R packages</a>
+    </li>
+    <li>
+      <a href="../articles/tidyverse.html">respR and the tidyverse</a>
+    </li>
+    <li>
+      <a href="../articles/reproducibility.html">Reproducibility</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -133,12 +139,12 @@
 
     
     
-<p>Best practice in respirometry is almost always to use linear regression on multiple time-series recordings of oxygen concentrations, to derive a slope and thus rate of oxygen use. Technically, an overall rate between any two timepoints can be calculated using only two O2 datapoints if they are accurate recordings, and in the past “<em>closed-bottle</em>” respirometry was common, where only the initial and final oxygen concentrations were recorded. However, in the modern day, there is little excuse for not using continuous data. Using only two values gives no information about how rates of use may have fluctutated, and are also obviously highly sensitive to error and inaccurate recordings. Therefore rates determined using this method are unsafe.</p>
+<p>Best practice in respirometry is almost always to use linear regression on multiple time-series recordings of oxygen concentrations, to derive a slope and thus rate of oxygen use. Technically, an overall rate between any two timepoints can be calculated using only two O<sub>2</sub> datapoints if they are accurate recordings, and in the past “<em>closed-bottle</em>” respirometry was common, where only the initial and final oxygen concentrations were recorded. However, in the modern day, there is little excuse for not using continuous data. Using only two values gives no information about how rates of use may have fluctutated, and are also obviously highly sensitive to error and inaccurate recordings. Therefore rates determined using this method are unsafe.</p>
 <p>For some applications however, there may be valid reasons for using only two datapoints of oxygen concentration separated by a known time period to calculate a rate. This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake rates <em>per se</em>, but rather in total oxygen flux over a time period. An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. Smith Jr. 1987). In such cases, even if continuous data exist, fitting a linear regression to these data may not give the correct information the investigator wants. This is particularly the case where oxygen or oxygen use fluctuates significantly over the time period of the experiment, such as with a diurnal rhythm. In such cases linear regressions may be significantly skewed.</p>
 <p><code>respR</code> has the ability to calculate two-point rates. While we strongly recommend it not be used for analysis of data from any laboratory based studies looking at organismal metabolic rates, we have kept the functionality intact for the above use-cases, and for analysis of historical <em>closed-bottle</em> respirometry data.</p>
-<div id="two-point-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#two-point-data" class="anchor"></a>Two-point data</h3>
+<div id="two-point-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#two-point-data" class="anchor"></a>Two-point data</h2>
 <p>Simple two-point data can be entered into <code>calc.rate</code> in a 2x2 data frame (here created via typical R syntax):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_pt_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">time =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="dt">o2 =</span> <span class="kw">c</span>(<span class="fl">8.5</span>, <span class="fl">6.3</span>))
 two_pt_data
@@ -156,10 +162,10 @@ two_pt_data
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">two_pt_result<span class="op">$</span>rate_2pt
 <span class="co">#&gt; [1] -0.22</span></code></pre></div>
 </div>
-<div id="processing-two-point-rates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#processing-two-point-rates" class="anchor"></a>Processing two-point rates</h3>
-<p>Two-point rates can be passed to <code>adjust_rate</code> for background corrections, and <code>convert_rate</code> for conversion to the desired output units. However, if using an object of class <code>calc_rate</code> they must be specifically called using <code>$rate_2pt</code> or, by default, the adjustment or conversion will operate on the linear regression derived rate.</p>
+<div id="processing-two-point-rates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#processing-two-point-rates" class="anchor"></a>Processing two-point rates</h2>
+<p>Two-point rates can be passed to <code><a href="../reference/adjust_rate.html">adjust_rate()</a></code> for background corrections, and <code>convert_rate</code> for conversion to the desired output units. However, if using an object of class <code>calc_rate</code> they must be specifically called using <code>$rate_2pt</code> or, by default, the adjustment or conversion will operate on the linear regression derived rate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(two_pt_result<span class="op">$</span>rate_2pt, <span class="dt">by =</span> <span class="op">-</span><span class="fl">0.001</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Rate adjustments applied. Use print() command for more info.</span>
@@ -195,15 +201,23 @@ two_pt_data
 <span class="co">#&gt; Converted:</span>
 <span class="co">#&gt; [1] -0.0028</span>
 <span class="co">#&gt; [1] "mg/hour/g"</span></code></pre></div>
-<div id="references" class="section level5">
-<h5 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h5>
+<div id="references" class="section level3">
+<h3 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h3>
 <p>Smith Jr, K L. 1987. Food energy supply and demand: A discrepancy between particulate organic carbon flux and sediment community oxygen consumption in the deep ocean. Limnology and Oceanography 32(1).</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#two-point-data">Two-point data</a></li>
+      <li><a href="#processing-two-point-rates">Processing two-point rates</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

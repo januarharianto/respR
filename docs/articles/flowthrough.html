@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -39,69 +39,75 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get started</a>
+  <a href="../articles/respR.html">Getting Started</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">List of Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Documentation
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/auto_rate.html">auto_rate 1: Automatic detection of metabolic rates</a>
-    </li>
-    <li>
-      <a href="../articles/auto_rate_comp.html">auto_rate 3: Comparative performance of auto_rate and LoLinR</a>
-    </li>
-    <li>
       <a href="../articles/closed.html">Closed-chamber respirometry</a>
-    </li>
-    <li>
-      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
       <a href="../articles/importing.html">Importing your data</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Intermittent-flow respirometry 1: Simple example</a>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry rates</a>
     </li>
     <li>
-      <a href="../articles/intermittent2.html">Intermittent-flow respirometry 2: Complex example</a>
+      <a href="../articles/intermittent.html">Intermittent-flow respirometry: Simple example</a>
     </li>
     <li>
-      <a href="../articles/packages_comp.html">respR vs. other R packages</a>
+      <a href="../articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Pcrit</a>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
-      <a href="../articles/performance.html">auto_rate 2: Performance in detecting linear regions</a>
+      <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/reproducibility.html">Open science and reproducibility using respR</a>
-    </li>
-    <li>
-      <a href="../articles/tidyverse.html">respR and the Tidyverse</a>
-    </li>
-    <li>
-      <a href="../articles/twopoint.html">Two-point analyses</a>
-    </li>
-    <li>
-      <a href="../articles/when_to_use.html">When to use `respR`</a>
+      <a href="../articles/intermittent.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Discussion
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../news/index.html">Changelog</a>
+      <a href="../articles/usage.html">When to use respR</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Performance of auto_rate</a>
+    </li>
+    <li>
+      <a href="../articles/auto_rate_comp.html">Comparing auto_rate and LoLinR</a>
+    </li>
+    <li>
+      <a href="../articles/packages_comp.html">A comparison of respR with other R packages</a>
+    </li>
+    <li>
+      <a href="../articles/tidyverse.html">respR and the tidyverse</a>
+    </li>
+    <li>
+      <a href="../articles/reproducibility.html">Reproducibility</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -133,11 +139,7 @@
 
     
     
-<div id="introduction" class="section level3">
-<h3 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h3>
-<p>Flowthrough respirometry differs from other methods in that oxygen depletion is measured from a known continuous flow of water through a respirometer, rather than a known volume, typically after the system has achieved equilibrium. In this method, two oxygen concentrations are needed; ‘upstream’ and ‘downstream’ of the experimental chamber, or inflow and outflow concentrations. The inflow concentration is typically a known fixed value and often not continuously monitored, such as fully air-saturated water, or water from a header tank of controlled oxygen concentration. The difference between inflow and outflow concentrations, the <span class="math inline">\(O_2\)</span> delta, and the flow rate allow calculation of the uptake by the specimen.</p>
-</div>
+<p>Flowthrough respirometry differs from other methods in that oxygen depletion is measured from a known continuous flow of water through a respirometer, rather than a known volume, typically after the system has achieved equilibrium. In this method, two oxygen concentrations are needed; ‘upstream’ and ‘downstream’ of the experimental chamber, or inflow and outflow concentrations. The inflow concentration is typically a known fixed value and often not continuously monitored, such as fully air-saturated water, or water from a header tank of controlled oxygen concentration. The difference between inflow and outflow concentrations, the O<sub>2</sub> delta, and the flow rate allow calculation of the uptake by the specimen.</p>
 <div id="example-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example data</h3>
@@ -154,13 +156,13 @@
 <span class="co">#&gt; 4     3   8.17  8.88    0.710</span>
 <span class="co">#&gt; 5     4   8.17  8.89    0.712</span>
 <span class="co">#&gt; 6     5   8.17  8.89    0.724</span></code></pre></div>
-<p>We can see this dataset contains time values, both outflow and inflow <span class="math inline">\(O_2\)</span> concentrations, and an <span class="math inline">\(O_2\)</span> delta, which is simply the difference between inflow and outflow. The <span class="math inline">\(O_2\)</span> delta column is not required; we include it here to show an exploratory step in the next section. While any flowthrough data can be analysed in the <code>calc_rate.ft</code> function, exploring flowthrough data in <code>inspect_data</code> requires a 3 column data frame of time, outflow <span class="math inline">\(O_2\)</span>, and inflow <span class="math inline">\(O_2\)</span>. Therefore the user should include all three, even if inflow <span class="math inline">\(O_2\)</span> is a column of a single fixed value. In this example it varies, but not significantly from a mean value of 8.88.</p>
+<p>We can see this dataset contains time values, both outflow and inflow O<sub>2</sub> concentrations, and an O<sub>2</sub> delta, which is simply the difference between inflow and outflow. The O<sub>2</sub> delta column is not required; we include it here to show an exploratory step in the next section. While any flowthrough data can be analysed in the <code>calc_rate.ft</code> function, exploring flowthrough data in <code><a href="../reference/inspect_data.html">inspect_data()</a></code> requires a 3 column data frame of time, outflow O<sub>2</sub>, and inflow O<sub>2</sub>. Therefore the user should include all three, even if inflow O<sub>2</sub> is a column of a single fixed value. In this example it varies, but not significantly from a mean value of 8.88.</p>
 </div>
-<div id="inspecting-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#inspecting-data" class="anchor"></a>Inspecting data</h3>
+<div id="inspecting-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#inspecting-data" class="anchor"></a>Inspecting data</h2>
 <p>Continuous flowthrough data can be inspected for common errors using the <code><a href="../reference/inspect_data.html">inspect_data()</a></code> function. Note, a newer version of this function is available (<code><a href="../reference/inspect.html">inspect()</a></code>), but for now does not accept flowthrough data. For now, use <code><a href="../reference/inspect_data.html">inspect_data()</a></code> and we will update this vignette when this update is pushed out.</p>
-<p>Because flowthrough data will be slightly different we need to use different input operators in <code><a href="../reference/inspect_data.html">inspect_data()</a></code>. By default, <code><a href="../reference/inspect_data.html">inspect_data()</a></code> assumes Time data in column 1 and <span class="math inline">\(O_2\)</span> data in column 2. For flowthrough data we typically want to look at the outflow O₂ data, which is in column 2 here, so we do not have to change these defaults:</p>
+<p>Because flowthrough data will be slightly different we need to use different input operators in <code><a href="../reference/inspect_data.html">inspect_data()</a></code>. By default, <code><a href="../reference/inspect_data.html">inspect_data()</a></code> assumes Time data in column 1 and O<sub>2</sub> data in column 2. For flowthrough data we typically want to look at the outflow O₂ data, which is in column 2 here, so we do not have to change these defaults:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(flowthrough.rd)
 <span class="co">#&gt; o2.delta :  num [1:935] 0.71 0.714 0.731 0.71 0.712 ...</span>
 <span class="co">#&gt; o2.in :  num [1:935] 8.88 8.88 8.9 8.88 8.89 ...</span>
@@ -174,12 +176,12 @@
 <span class="co">#&gt; Non-duplicated Time PASS </span>
 <span class="co">#&gt; Evenly-spaced Time  PASS</span>
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<p>Unlike in closed respirometry, in a flowthrough experiment oxygen should generally not decline over time, as long as equilibrium has been achieved, and so regions where rates are consistent are more easily identified. Here, using the top plot, we can see the outflow <span class="math inline">\(O_2\)</span> concentration is most consistent in the early stages of the experiment. Since we know in this experiment inflow <span class="math inline">\(O_2\)</span> is more-or-less unvarying, this means the specimen’s rate is also most consistent here. In closed respirometry data, the bottom plot shows how the rate of the specimen varies over the dataset, but here it shows the rate of change in outflow <span class="math inline">\(O_2\)</span> concentration. Therefore, values close to zero indicate regions of highly consistent rates by the <em>specimen</em>. Here, we can see this illustrated well between rows 200 and 400.</p>
-<p>If, for experimental reasons, the inflow <span class="math inline">\(O_2\)</span> concentration is variable, examining consistency in outflow <span class="math inline">\(O_2\)</span> would not necessarily equate to consistent rates by the specimen. Instead, we can examine <span class="math inline">\(O_2\)</span> delta data, by using other <code>inspect_data</code> operators to specify the column we are interested in. Here delta <span class="math inline">\(O_2\)</span> is in column 4:</p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>Unlike in closed respirometry, in a flowthrough experiment oxygen should generally not decline over time, as long as equilibrium has been achieved, and so regions where rates are consistent are more easily identified. Here, using the top plot, we can see the outflow O<sub>2</sub> concentration is most consistent in the early stages of the experiment. Since we know in this experiment inflow O<sub>2</sub> is more-or-less unvarying, this means the specimen’s rate is also most consistent here. In closed respirometry data, the bottom plot shows how the rate of the specimen varies over the dataset, but here it shows the rate of change in outflow O<sub>2</sub> concentration. Therefore, values close to zero indicate regions of highly consistent rates by the <em>specimen</em>. Here, we can see this illustrated well between rows 200 and 400.</p>
+<p>If, for experimental reasons, the inflow O<sub>2</sub> concentration is variable, examining consistency in outflow O<sub>2</sub> would not necessarily equate to consistent rates by the specimen. Instead, we can examine O<sub>2</sub> delta data, by using other <code><a href="../reference/inspect_data.html">inspect_data()</a></code> operators to specify the column we are interested in. Here delta O<sub>2</sub> is in column 4:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(flowthrough.rd, <span class="dt">time =</span> <span class="dv">1</span>, <span class="dt">oxygen =</span> <span class="dv">4</span>)</code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
-<p>Here, we can see that after taking into account variable inflow <span class="math inline">\(O_2\)</span>, the uptake rates of the specimen are most consistent between rows 200 and 300. Note however, this is an exploratory step: these <span class="math inline">\(O_2\)</span> delta data should not be saved via <code>adjust_rate</code>. Instead the original inflow and outflow <span class="math inline">\(O_2\)</span> data should be saved for passing to the next stage, through specifying the columns:</p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p>Here, we can see that after taking into account variable inflow O<sub>2</sub>, the uptake rates of the specimen are most consistent between rows 200 and 300. Note however, this is an exploratory step: these O<sub>2</sub> delta data should not be saved via <code><a href="../reference/adjust_rate.html">adjust_rate()</a></code>. Instead the original inflow and outflow O<sub>2</sub> data should be saved for passing to the next stage, through specifying the columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chiton.ft &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect_data.html">inspect_data</a></span>(flowthrough.rd, <span class="dt">time =</span> <span class="dv">1</span>, <span class="dt">outflow.o2 =</span> <span class="dv">2</span>, <span class="dt">inflow.o2 =</span> <span class="dv">3</span>)
 <span class="co">#&gt; New dataframe generated.</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chiton.ft<span class="op">$</span>df
@@ -195,13 +197,12 @@
 <span class="co">#&gt; 933:  932 8.874755 8.167868</span>
 <span class="co">#&gt; 934:  933 8.887132 8.167505</span>
 <span class="co">#&gt; 935:  934 8.864456 8.165069</span></code></pre></div>
-<p>We can see only the specifed columns have been included, and the <span class="math inline">\(O_2\)</span> delta column removed.</p>
-</div>
+<p>We can see only the specifed columns have been included, and the O<sub>2</sub> delta column removed.</p>
 <div id="flowthrough-rate-function---calc_rate-ft" class="section level3">
 <h3 class="hasAnchor">
-<a href="#flowthrough-rate-function---calc_rate-ft" class="anchor"></a>Flowthrough rate function - <code>calc_rate.ft</code>
+<a href="#flowthrough-rate-function---calc_rate-ft" class="anchor"></a>Flowthrough rate function - <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code>
 </h3>
-<p>Rates can be detemined from flowthrough data using the <code>calc_rate.ft</code> function. This function accepts several forms of data input;</p>
+<p>Rates can be detemined from flowthrough data using the <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code> function. This function accepts several forms of data input;</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Single values of inflow and outflow concentrations:</p>
@@ -220,7 +221,7 @@
     <span class="dt">flowrate =</span> <span class="fl">0.00234</span>)</code></pre></div>
 </li>
 <li>
-<p>A data frame containing columns of paired outflow and inflow <span class="math inline">\(O_2\)</span> values, with column identifiers:</p>
+<p>A data frame containing columns of paired outflow and inflow O<sub>2</sub> values, with column identifiers:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span>(flowthrough.rd, <span class="dt">time =</span> <span class="dv">1</span>, <span class="dt">outflow.o2 =</span> <span class="dv">2</span>, <span class="dt">inflow.o2 =</span> <span class="dv">3</span>, <span class="dt">flowrate =</span> <span class="fl">0.00234</span>)</code></pre></div>
 </li>
 <li>
@@ -228,11 +229,11 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span>(chiton.ft, <span class="dt">flowrate =</span> <span class="fl">0.00234</span>)</code></pre></div>
 </li>
 </ol>
-<p>The <code>flowrate</code> operator is required by the function, and it is assumed it will be an unvarying parameter within each separate experiment. Recordings at different flow rates should be analysed separately. Units for flow rate will be specified when rates are converted later (see below), but they should be in units of volume (in L) per unit time (s,m,h). For example, in this dataset the flow rate is 0.00234 in <code>L/m</code>.</p>
-<p>We will calculate rates from the entire dataset using the object we saved earlier from <code>inspect_data</code>:</p>
+<p>The <code>flowrate</code> operator is required by the function, and it is assumed it will be an unvarying parameter within each separate experiment. Recordings at different flow rates should be analysed separately. Units for flow rate will be specified when rates are converted later (see below), but they should be in units of volume (in L) per unit time (s,m,h). For example, in this dataset the flow rate is 0.00234 in L m<sup>-1</sup>.</p>
+<p>We will calculate rates from the entire dataset using the object we saved earlier from <code><a href="../reference/inspect_data.html">inspect_data()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chiton.ft.rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span>(chiton.ft, <span class="dt">flowrate =</span> <span class="fl">0.00234</span>)
 <span class="co">#&gt; object of class `inspect_data` detected.</span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(chiton.ft.rate)
 <span class="co">#&gt; Rate (first 6):</span>
 <span class="co">#&gt; [1] 0.001661315 0.001670664 0.001711586 0.001660421 0.001665849 0.001693805</span>
@@ -241,14 +242,15 @@
 <span class="co">#&gt; [1] 0.001651558</span></code></pre></div>
 <p>The output object includes all calculated rates over the dataset and a mean rate.</p>
 </div>
-<div id="subsetting-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#subsetting-data" class="anchor"></a>Subsetting data</h3>
-<p>The <code>calc_rate.ft</code> function currently does not support subsetting. The dedicated <code>subset_data</code> function can be used to prepare data (see Reference menu above or <code><a href="../reference/subset_data.html">?subset_data</a></code>), or we can use straightforward R subsetting syntax as follows. We saw earlier how rates between rows 200 and 300 appeared to be most consistent, so we will calculate rates from this data region using the dataframe within the object we saved earlier.</p>
+</div>
+<div id="subsetting-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#subsetting-data" class="anchor"></a>Subsetting data</h2>
+<p>The <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code> function currently does not support subsetting. The dedicated <code><a href="../reference/subset_data.html">subset_data()</a></code> function can be used to prepare data or we can use straightforward R subsetting syntax as follows. We saw earlier how rates between rows 200 and 300 appeared to be most consistent, so we will calculate rates from this data region using the dataframe within the object we saved earlier.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chiton.ft.rate.sub &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span>(chiton.ft<span class="op">$</span>df[<span class="dv">200</span><span class="op">:</span><span class="dv">300</span>, ], <span class="dt">time =</span> <span class="dv">1</span>, <span class="dt">outflow.o2 =</span> <span class="dv">3</span>, 
     <span class="dt">inflow.o2 =</span> <span class="dv">2</span>, <span class="dt">flowrate =</span> <span class="fl">0.00234</span>)
 <span class="co">#&gt; 'data.frame' object detected. Values in 'time', inflow.o2' and 'outflow.o2' are used as column indices to extract data from the data frame.</span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(chiton.ft.rate.sub)
 <span class="co">#&gt; Rate (first 6):</span>
 <span class="co">#&gt; [1] -0.001665366 -0.001660479 -0.001705134 -0.001692309 -0.001663122</span>
@@ -256,21 +258,21 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Mean:</span>
 <span class="co">#&gt; [1] -0.001651307</span></code></pre></div>
-<p>Because the function interprets this as a regular data frame, not <code>inspect_data</code> object, we needed to specify the columns. Again, the output objects includes all calculated rates within the subset and a mean rate. Note the plot row index on the X-axis shows a row index of the subset, not the original row numbers.</p>
+<p>Because the function interprets this as a regular data frame, not <code><a href="../reference/inspect_data.html">inspect_data()</a></code> object, we needed to specify the columns. Again, the output objects includes all calculated rates within the subset and a mean rate. Note the plot row index on the X-axis shows a row index of the subset, not the original row numbers.</p>
 </div>
-<div id="adjusting-rates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#adjusting-rates" class="anchor"></a>Adjusting rates</h3>
+<div id="adjusting-rates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adjusting-rates" class="anchor"></a>Adjusting rates</h2>
 <p>Similar to the other respirometry methods, a background rate value (typically negative) can be used to adjust flowthrough rates.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_adjusted_rate &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(chiton.ft.rate.sub<span class="op">$</span>mean, <span class="dt">by =</span> <span class="op">-</span><span class="fl">5e-04</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Rate adjustments applied. Use print() command for more info.</span></code></pre></div>
 <p><code>respR</code> does not currently have a specialised function for determining background respiration in flowthrough data. However the main <code>calc_rate.ft</code> function can be used to examine data from ‘blank’ experiments for background rates, and these (or an average of several) can be entered as above. The user should however be aware that only background rates determined at the <em>same flow rate</em> should be used.</p>
 </div>
-<div id="converting-rates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#converting-rates" class="anchor"></a>Converting rates</h3>
-<p>The <code>convert_rate</code> function is used to convert rates to particular units. As with converting rates from closed and intermittent-flow respirometry (i.e. outputs of <code>calc_rate</code>), conversion of flowthrough rates (i.e. from <code>calc_rate.ft</code>) requires the <code>o2.unit</code> of the original data, as well as a <code>time.unit</code> and <code>volume</code> value. With flowthrough data, these relate to the <code>flowrate</code> units. As we said earlier, the flow rate should be in L per unit time, therefore the <code>volume</code> should be entered as 1, and <code>time.unit</code> as the time unit of the flow rate. For example, if the flow rate was in L/m, these should be <code>time.unit = "m", volume = 1</code>. Note, in flowthrough respirometry as long as equilibrium has been reached the volume of the respirometer is <em>not important</em>, it is the flow rate through it that is important in determining uptake rate.</p>
+<div id="converting-rates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#converting-rates" class="anchor"></a>Converting rates</h2>
+<p>The <code><a href="../reference/convert_rate.html">convert_rate()</a></code> function is used to convert rates to particular units. As with converting rates from closed and intermittent-flow respirometry (i.e. outputs of <code><a href="../reference/calc_rate.html">calc_rate()</a></code>), conversion of flowthrough rates (i.e. from <code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code>) requires the <code>o2.unit</code> of the original data, as well as a <code>time.unit</code> and <code>volume</code> value. With flowthrough data, these relate to the <code>flowrate</code> units. As we said earlier, the flow rate should be in L per unit time, therefore the <code>volume</code> should be entered as 1, and <code>time.unit</code> as the time unit of the flow rate. For example, if the flow rate was in L min<sup>-1</sup>, these should be <code>time.unit = "m", volume = 1</code>. Note, in flowthrough respirometry as long as equilibrium has been reached the volume of the respirometer is <em>not important</em>, it is the flow rate through it that is important in determining uptake rate.</p>
 <p>The function returns a rate for the specimen, and if a <code>mass</code> is entered (in kg) it returns a mass-specific rate. We specify our desired units of the final rates using <code>output.unit</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># conversion of mean rate</span>
 <span class="kw"><a href="../reference/convert_rate.html">convert_rate</a></span>(chiton.ft.rate.sub<span class="op">$</span>mean, <span class="dt">o2.unit =</span> <span class="st">"mg/l"</span>, <span class="dt">time.unit =</span> <span class="st">"m"</span>, <span class="dt">output.unit =</span> <span class="st">"mg/h"</span>, 
@@ -300,6 +302,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#inspecting-data">Inspecting data</a></li>
+      <li><a href="#subsetting-data">Subsetting data</a></li>
+      <li><a href="#adjusting-rates">Adjusting rates</a></li>
+      <li><a href="#converting-rates">Converting rates</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -39,69 +39,75 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get started</a>
+  <a href="../articles/respR.html">Getting Started</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">List of Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Documentation
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/auto_rate.html">auto_rate 1: Automatic detection of metabolic rates</a>
-    </li>
-    <li>
-      <a href="../articles/auto_rate_comp.html">auto_rate 3: Comparative performance of auto_rate and LoLinR</a>
-    </li>
-    <li>
       <a href="../articles/closed.html">Closed-chamber respirometry</a>
-    </li>
-    <li>
-      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
       <a href="../articles/importing.html">Importing your data</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Intermittent-flow respirometry 1: Simple example</a>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry rates</a>
     </li>
     <li>
-      <a href="../articles/intermittent2.html">Intermittent-flow respirometry 2: Complex example</a>
+      <a href="../articles/intermittent.html">Intermittent-flow respirometry: Simple example</a>
     </li>
     <li>
-      <a href="../articles/packages_comp.html">respR vs. other R packages</a>
+      <a href="../articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Pcrit</a>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
-      <a href="../articles/performance.html">auto_rate 2: Performance in detecting linear regions</a>
+      <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/reproducibility.html">Open science and reproducibility using respR</a>
-    </li>
-    <li>
-      <a href="../articles/tidyverse.html">respR and the Tidyverse</a>
-    </li>
-    <li>
-      <a href="../articles/twopoint.html">Two-point analyses</a>
-    </li>
-    <li>
-      <a href="../articles/when_to_use.html">When to use `respR`</a>
+      <a href="../articles/intermittent.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Discussion
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../news/index.html">Changelog</a>
+      <a href="../articles/usage.html">When to use respR</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Performance of auto_rate</a>
+    </li>
+    <li>
+      <a href="../articles/auto_rate_comp.html">Comparing auto_rate and LoLinR</a>
+    </li>
+    <li>
+      <a href="../articles/packages_comp.html">A comparison of respR with other R packages</a>
+    </li>
+    <li>
+      <a href="../articles/tidyverse.html">respR and the tidyverse</a>
+    </li>
+    <li>
+      <a href="../articles/reproducibility.html">Reproducibility</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -135,14 +141,14 @@
     
 <p>We have designed <code>respR</code> to be able to explore, process and analyse any and all aquatic respirometry data, independent of the system used to collect it. In fact because of the unitless nature of the majority of functions in the package, other respirometry data, or indeed other time series data examining other variables can be analysed in <code>respR</code>.</p>
 <p>There are only a couple of other <code>R</code> packages that are focused towards respirometry analysis; <a href="https://cran.r-project.org/web/packages/rMR/index.html">rMR</a>, and <a href="https://fishresp.org">FishResp</a> (there is one other, <a href="https://cran.r-project.org/web/packages/respirometry/index.html">respirometry</a>, but it is not focussed on processing data). These packages have quite specific focuses; both <code>rMR</code> and <code>FishResp</code> are centered around processing intermittent-flow, swim tunnel respirometry data, in particular from Loligo Systems equipment. Neither has the universal focus of <code>respR</code>, and while it is possible to process other respirometry data using these packages it is far from straightforward. However, they are excellent packages within their own focuses and we would encourage users to explore them and how they work; they may contain functionality that suits your particular analyses or workflows better than <code>respR</code>.</p>
-<p>Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> function in <code>respR</code>, which allows statistically robust, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality, <a href="https://github.com/colin-olito/LoLinR">LoLinR</a> which also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code> in the <strong>LINK</strong> vignette.</p>
+<p>Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> function in <code>respR</code>, which allows statistically robust, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality, <a href="https://github.com/colin-olito/LoLinR">LoLinR</a> which also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code> <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">here</a>.</p>
 <p>These packages instead rely on manual selection of data regions in respirometry data from which to extract oxygen uptake rates. <code>respR</code> also has this functionality as an option, and in this vignette we briefly compare the outputs of these packages with <code>respR</code>, and other overlapping functionality.</p>
 <div id="respr-and-respirometry" class="section level2">
 <h2 class="hasAnchor">
 <a href="#respr-and-respirometry" class="anchor"></a><code>respR</code> and <code>respirometry</code>
 </h2>
 <p>The <a href="https://cran.r-project.org/web/packages/respirometry/index.html">respirometry</a> package by Matthew Birk has several useful utility functions for planning and conducting respirometry experiments. However, as the documentation states “Tools focus on helping the researcher setup and conduct experiments. Analysis of the resulting data is not a focus”. Therefore, this package has little in common with <code>respR</code>.</p>
-<p>The only real functionality overlap with <code>respR</code> is the conversion function <code>conv_o2</code>, similar to the <code>convert_DO</code> function in <code>respR</code>. Both support the same units, and because both functions rely on the unit standards package <code>marelac</code> they give identical or very similar results. Minor differences are probably dues to the precision with which variables are handled internally:</p>
+<p>The only real functionality overlap with <code>respR</code> is the conversion function <code>conv_o2()</code>, similar to the <code><a href="../reference/convert_DO.html">convert_DO()</a></code> function in <code>respR</code>. Both support the same units, and because both functions rely on the unit standards package <code>marelac</code> they give identical or very similar results. Minor differences are probably dues to the precision with which variables are handled internally:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## respR
 <span class="kw"><a href="../reference/convert_DO.html">convert_DO</a></span>(<span class="fl">7.9</span>, <span class="dt">from =</span> <span class="st">"mg/L"</span>, <span class="dt">to =</span> <span class="st">"umol/L"</span>, <span class="dt">t =</span> <span class="dv">25</span>, <span class="dt">S =</span> <span class="dv">35</span>, <span class="dt">P =</span> <span class="fl">1.01325</span>)
 <span class="co">#&gt; [1] 246.8843</span>
@@ -171,8 +177,7 @@
 </div>
 <div id="respr-and-rmr" class="section level2">
 <h2 class="hasAnchor">
-<a href="#respr-and-rmr" class="anchor"></a><code>respR</code> and <code>rMR</code>
-</h2>
+<a href="#respr-and-rmr" class="anchor"></a>respR and rMR</h2>
 <p>The <a href="https://cran.r-project.org/web/packages/rMR/index.html">rMR</a> package by Tyler L. Moulton focuses specifically on analysis of data from Loligo Systems hardware (i.e. Witrox probes), and generally on intermittent-flow, fish respirometry. We should note that as of writing (Sep 2018) this package has not been updated in nearly 2 years.</p>
 <p>There are several areas of functionality where <code>rMR</code> and <code>respR</code> overlap:</p>
 <div id="importing-raw-data" class="section level4">
@@ -214,7 +219,7 @@ fish_respr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <span class="co">#&gt; 6:    5 02/07/2015 3:58:04 PM     1013 29.87 23.48  7.856</span></code></pre></div>
 <p>These both appear to perform well, on this file at least. The resulting data frames are similar, containing all the relevant data, although <code>respR</code> adds a numeric <code>time</code> column, which we find is easier to use in further analyses.</p>
 <p>However, in our testing we found that while the <code>rMR</code> import function worked with this example, and a few other files we tried, many files we were unable to import using <code>rMR</code> for reasons we were unable to diagnose. Likely, some of the inputs were not correctly set, but error messages and documentation were of little help in solving these problems. This would likely be a significant barrier to entry for novice R users, and even those more advanced. Clearly the <code>respR</code> import function requires fewer inputs. It relies on pattern matching to recognise the system the file comes from, and other data such as the time-date format. The <code>get.witrox.data</code> function has however an advantage, in that you can specify the columns to be imported.</p>
-<p>While it is likely the <code>respR</code> <code>import_data</code> function may fail on occasion, and more testing is needed, it appears to perform better for Witrox files, as well as supporting other systems. As always, we encourage users to send us raw data files (from all systems) to test, particularly ones they have problems with.</p>
+<p>While it is likely the <code>respR</code> <code>import_data()</code> function may fail on occasion, and more testing is needed, it appears to perform better for Witrox files, as well as supporting other systems. As always, we encourage users to send us raw data files (from all systems) to test, particularly ones they have problems with.</p>
 </div>
 <div id="conversion" class="section level4">
 <h4 class="hasAnchor">
@@ -229,7 +234,7 @@ fish_respr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div id="calculating-rates" class="section level4">
 <h4 class="hasAnchor">
 <a href="#calculating-rates" class="anchor"></a>Calculating rates</h4>
-<p><code>MR.loops</code> is the workhorse function of <code>rMR</code> that fits linear regressions to respirometry data and uses the resulting slopes to calculate oxygen uptake rates. This function relies on manually specifying one or more regions over which to fit regressions. <code>respR</code> also allows this in the <code>calc_rate</code> function, so here we will compare the results of each on the same data. Again, we use data included in <code>rMR</code> and code adapted from the documentation.</p>
+<p><code>MR.loops</code> is the workhorse function of <code>rMR</code> that fits linear regressions to respirometry data and uses the resulting slopes to calculate oxygen uptake rates. This function relies on manually specifying one or more regions over which to fit regressions. <code>respR</code> also allows this in the <code><a href="../reference/calc_rate.html">calc_rate()</a></code> function, so here we will compare the results of each on the same data. Again, we use data included in <code>rMR</code> and code adapted from the documentation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## rMR load data
 <span class="kw">data</span>(fishMR)
 <span class="co"># create time variable in POSIXct format ##</span>
@@ -278,7 +283,7 @@ metR<span class="op">$</span>MR.summary<span class="op">$</span>MR
 <li><p><strong>Imports multiple data types, as well as general R data structures (data frames, tibbles, data tables, etc.)</strong> While use of other data types in <code>rMR</code> is possible, it is not intuitive, and time data must be in a specific (complex) format. It does not allow use of simple numeric time-elapsed values. Moreover, we entirely used the <code>rMR</code> data and examples in the above comparisons, because in our testing we had many problems importing our own data to <code>rMR</code>. We could not resolve many of these errors. We suspect the reliance on the complex date-time format and having to specify the precise structure of these was the cause of many of these problems.</p></li>
 <li><p><strong>Statistical identification of linear regions (<code>auto_rate</code>), rather than solely manual selection</strong></p></li>
 <li><p><strong>Specify data regions in several ways (by O2 range, time, or row)</strong></p></li>
-<li><p><strong>Use of numeric time, rather than POSIX formatted time-data (e.g. “2015-07-03 06:15:00 GMT”) is a clear usability advantage and reduces error</strong>. <code>respr</code> has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed <code>respR</code> to avoid these when at all possible.</p></li>
+<li><p><strong>Use of numeric time, rather than POSIX formatted time-data (e.g. “2015-07-03 06:15:00 GMT”) is a clear usability advantage and reduces error</strong>. <code>respR</code> has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed <code>respR</code> to avoid these when at all possible.</p></li>
 <li><p><strong>Functions have minimal and intuitive inputs while maintaining full functionality, again reducing potential for error</strong></p></li>
 <li><p><strong>Better visualisations of the data regions in full context of the dataset</strong></p></li>
 </ul>
@@ -286,8 +291,7 @@ metR<span class="op">$</span>MR.summary<span class="op">$</span>MR
 </div>
 <div id="respr-and-fishresp" class="section level2">
 <h2 class="hasAnchor">
-<a href="#respr-and-fishresp" class="anchor"></a><code>respR</code> and <code>FishResp</code>
-</h2>
+<a href="#respr-and-fishresp" class="anchor"></a>respR and FishResp</h2>
 <p><code>FishResp</code> is still under development and there is little documentation and no guide yet available to detail how the functions in the package interrelate, or provide an example workflow (although we understand from contact with the developers these are under preparation). Therefore, our comparisons are somewhat limited to the functionality we could get to work.</p>
 <p>Like <code>rMR</code>, <code>FishResp</code> is focussed on processing data from intermittent-flow, swim tunnel experiments with many equally-spaced replicates, particularly from Loligo Systems equipment (although others are supported). As well as an R package, it has GUI version available <a href="https://fishresp.org">link</a>. It is fully-featured, though highly specific towards this branch of respirometry.</p>
 <p>It has some functions for exploring and pre-processing data, though as we said, we are unsure how these functions are intended to inter-relate, and they only accept input from some data sources. We provide here some comparison with overlaps with <code>respR</code> functionality where we have been able to.</p>
@@ -374,16 +378,14 @@ spec1_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 </div>
 <div id="options-in-fishresp" class="section level4">
 <h4 class="hasAnchor">
-<a href="#options-in-fishresp" class="anchor"></a>Options in <code>FishResp</code>
-</h4>
+<a href="#options-in-fishresp" class="anchor"></a>Options in FishResp</h4>
 <p><code>FishResp</code> (as far as we can tell from the current documentation) only allows fitting regressions across the entire width of what is defined an experimental measurement period, or replicate. There is little flexibility in modifying this. This may or may not be appropriate depending on the data and experiment. There is a <code>length</code> operator in <code>extract.slope</code>, but this only curtails the latter end of the regression; there appears to be no way of modifying the start location. This is a curious decision and less than ideal practice; if a user wanted to only use data from part of an experimental replicate, typically it is the initial stages they want to remove, as these are just after the flush when the animal might have been disturbed, or probe lag means the probe has not caught up, and overall the system has not reached a steady state. Moreover, this <code>length</code> operator applies to all replicates; there is no easy way of fitting regressions of different length over different replicates. <code>respR</code> has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; <code>FishResp</code>’s ability to do this is very limited.</p>
 <p>The <code>extract.slope</code> function is able to sort and select the rates from each replicate according to some simple criteria, for example outputting a selection of rates ordered by minimum or maximum, or based on R2 values or a percentile. <code>respR</code> does not have this option specifically, but it is straightforward from the results via typical R selection syntax.</p>
 <p>It is also not entirely clear how <code>FishResp</code> would work on continuous data where the O2 is also recorded through flushes, or when each replicate is separated from another by a waiting period (this sample data has one directly after the next). And as we said, processing of data that does not adhere to a rigid structure or cycle of measurement periods is difficult, if not impossible.</p>
 </div>
 <div id="benefits-of-respr-over-fishresp" class="section level4">
 <h4 class="hasAnchor">
-<a href="#benefits-of-respr-over-fishresp" class="anchor"></a>Benefits of <code>respR</code> over <code>FishResp</code>
-</h4>
+<a href="#benefits-of-respr-over-fishresp" class="anchor"></a>Benefits of respR over FishResp</h4>
 <p>Overall <code>FishResp</code> is a fine package if you are conducting very a specific type of experiment. Its focus is on processing large amounts of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources.</p>
 <p><code>FishResp</code> can process many experiments at once, both from different individuals and many replicates from individuals. Whether this is an advantage or disadvantage is debatable. Although it can be automated by anyone with basic R skills, <code>respR</code> was specifically designed to process single experiments at a time because we feel (and this is general good practice in data analysis) that respirometry data should be thoroughly explored and visualised prior to any analyses. This may increase the time taken to conduct analyses (though we would argue other time-saving advantages of <code>respR</code> outweigh this), but we feel is safer and less likely to result in mistakes. <code>FishResp</code> has some data visualisation and exploration functions, but its focus seems to be the ability to process great numbers of experiments and replicates at once.</p>
 <p>It does however have a couple of advantages over <code>respR</code> which may influence user choice on which to use:</p>
@@ -422,8 +424,8 @@ spec1_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#respr-and-respirometry"><code>respR</code> and <code>respirometry</code></a></li>
-      <li><a href="#respr-and-rmr"><code>respR</code> and <code>rMR</code></a></li>
-      <li><a href="#respr-and-fishresp"><code>respR</code> and <code>FishResp</code></a></li>
+      <li><a href="#respr-and-rmr">respR and rMR</a></li>
+      <li><a href="#respr-and-fishresp">respR and FishResp</a></li>
       <li><a href="#summary">Summary</a></li>
       </ul>
 </div>

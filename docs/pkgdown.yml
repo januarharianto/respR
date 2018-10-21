@@ -16,7 +16,7 @@ articles:
   respR: respR.html
   tidyverse: tidyverse.html
   twopoint: twopoint.html
-  when_to_use: when_to_use.html
+  usage: usage.html
 urls:
   reference: http://januarharianto.github.io/respR/reference
   article: http://januarharianto.github.io/respR/articles

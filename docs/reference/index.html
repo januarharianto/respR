@@ -50,7 +50,7 @@
   <body>
     <div class="container template-reference-index">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -69,69 +69,75 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/respR.html">Get started</a>
+  <a href="../articles/respR.html">Getting Started</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">List of Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Documentation
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/auto_rate.html">auto_rate 1: Automatic detection of metabolic rates</a>
-    </li>
-    <li>
-      <a href="../articles/auto_rate_comp.html">auto_rate 3: Comparative performance of auto_rate and LoLinR</a>
-    </li>
-    <li>
       <a href="../articles/closed.html">Closed-chamber respirometry</a>
-    </li>
-    <li>
-      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
       <a href="../articles/importing.html">Importing your data</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Intermittent-flow respirometry 1: Simple example</a>
+      <a href="../articles/auto_rate.html">Automatic detection of respirometry rates</a>
     </li>
     <li>
-      <a href="../articles/intermittent2.html">Intermittent-flow respirometry 2: Complex example</a>
+      <a href="../articles/intermittent.html">Intermittent-flow respirometry: Simple example</a>
     </li>
     <li>
-      <a href="../articles/packages_comp.html">respR vs. other R packages</a>
+      <a href="../articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a>
     </li>
     <li>
-      <a href="../articles/pcrit.html">Pcrit</a>
+      <a href="../articles/flowthrough.html">Flowthrough respirometry</a>
     </li>
     <li>
-      <a href="../articles/performance.html">auto_rate 2: Performance in detecting linear regions</a>
+      <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/reproducibility.html">Open science and reproducibility using respR</a>
-    </li>
-    <li>
-      <a href="../articles/tidyverse.html">respR and the Tidyverse</a>
-    </li>
-    <li>
-      <a href="../articles/twopoint.html">Two-point analyses</a>
-    </li>
-    <li>
-      <a href="../articles/when_to_use.html">When to use `respR`</a>
+      <a href="../articles/intermittent.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Discussion
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/usage.html">When to use respR</a>
+    </li>
+    <li>
+      <a href="../articles/performance.html">Performance of auto_rate</a>
+    </li>
+    <li>
+      <a href="../articles/auto_rate_comp.html">Comparing auto_rate and LoLinR</a>
+    </li>
+    <li>
+      <a href="../articles/packages_comp.html">A comparison of respR with other R packages</a>
+    </li>
+    <li>
+      <a href="../articles/tidyverse.html">respR and the tidyverse</a>
+    </li>
+    <li>
+      <a href="../articles/reproducibility.html">Reproducibility</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -169,7 +175,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-pre-processing" class="hasAnchor"><a href="#section-pre-processing" class="anchor"></a>Pre-processing</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>Functions for manipulating and processing data files.</p></p>
         </th>
       </tr>
       <tr>
@@ -181,27 +187,33 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="inspect_data.html">inspect_data()</a></code> </p>
+          <p><code><a href="import_file.html">import_file()</a></code> </p>
         </td>
-        <td><p>Check for common errors in respirometry data</p></td>
+        <td><p>Import from sensor output file</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="subset_data.html">subset_data()</a></code> </p>
+          <p><code><a href="inspect.html">inspect()</a></code> </p>
         </td>
-        <td><p>Truncate a data frame to create a subset of the data</p></td>
+        <td><p>Check for common errors in respirometry data</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="subsample.html">subsample()</a></code> </p>
         </td>
         <td><p>Subsample a data frame object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subset_data.html">subset_data()</a></code> </p>
+        </td>
+        <td><p>Truncate a data frame to create a subset of the data</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-analytical" class="hasAnchor"><a href="#section-analytical" class="anchor"></a>Analytical</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>Functions for data analysis.</p></p>
         </th>
       </tr>
       <tr>
@@ -239,7 +251,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-adjust-convert" class="hasAnchor"><a href="#section-adjust-convert" class="anchor"></a>Adjust/Convert</h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"><p>Functions for data correction and unit conversions.</p></p>
         </th>
       </tr>
       <tr>
@@ -271,11 +283,31 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-example-data" class="hasAnchor"><a href="#section-example-data" class="anchor"></a>Example Data</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-performance" class="hasAnchor"><a href="#section-performance" class="anchor"></a>Performance</h2>
+          <p class="section-desc"><p>Function(s) to test the performance of <code><a href="../reference/auto_rate.html">auto_rate()</a></code>.</p></p>
         </th>
       </tr>
       <tr>
+        
+        <td>
+          <p><code><a href="test_lin_data.html">test_lin_data</a></code> </p>
+        </td>
+        <td><p>Output objects for the function <code>test_lin()</code></p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-files" class="hasAnchor"><a href="#section-data-files" class="anchor"></a>Data files</h2>
+          <p class="section-desc"><p>Sample data files.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
+        </td>
+        <td><p>Flowthrough respirometry data on the chiton, <em>Mopalia lignosa</em></p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="intermittent.rd.html">intermittent.rd</a></code> </p>
@@ -284,15 +316,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="squid.rd.html">squid.rd</a></code> </p>
-        </td>
-        <td><p>Respirometry data of the squid, <em>Doryteuthis opalescens</em>, with P_crit</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="sardine.rd.html">sardine.rd</a></code> </p>
         </td>
         <td><p>Respirometry data of the sardine, <em>Sardinops sagax</em></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="squid.rd.html">squid.rd</a></code> </p>
+        </td>
+        <td><p>Respirometry data of the squid, <em>Doryteuthis opalescens</em>, with P_crit</p></td>
       </tr><tr>
         
         <td>
@@ -303,15 +335,23 @@ Erythrogramma</em>, including background respiration</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="flowthrough.rd.html">flowthrough.rd</a></code> </p>
+          <p><code><a href="zeb_intermittent.rd.html">zeb_intermittent.rd</a></code> </p>
         </td>
-        <td><p>Flowthrough respirometry data on the chiton, <em>Mopalia lignosa</em></p></td>
-      </tr><tr>
+        <td><p>Respirometry data of a zebrafish, <em>Danio rerio</em></p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-deprecated" class="hasAnchor"><a href="#section-deprecated" class="anchor"></a>Deprecated</h2>
+          <p class="section-desc"><p>Functions that are no longer supported/updated.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
-          <p><code><a href="test_lin_data.html">test_lin_data</a></code> </p>
+          <p><code><a href="inspect_data.html">inspect_data()</a></code> </p>
         </td>
-        <td><p>Output objects for the function <code>test_lin()</code></p></td>
+        <td><p>Check for common errors in respirometry data</p></td>
       </tr>
     </tbody>
     </table>
@@ -323,7 +363,9 @@ Erythrogramma</em>, including background respiration</p></td>
       <li><a href="#section-pre-processing">Pre-processing</a></li>
       <li><a href="#section-analytical">Analytical</a></li>
       <li><a href="#section-adjust-convert">Adjust/Convert</a></li>
-      <li><a href="#section-example-data">Example Data</a></li>
+      <li><a href="#section-performance">Performance</a></li>
+      <li><a href="#section-data-files">Data files</a></li>
+      <li><a href="#section-deprecated">Deprecated</a></li>
     </ul>
   </div>
 </div>
