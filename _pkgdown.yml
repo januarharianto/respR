@@ -1,0 +1,106 @@
+url: http://januarharianto.github.io/respR
+
+template:
+  params:
+  bootswatch: cosmo
+
+reference:
+  - title: "Pre-processing"
+    desc: >
+      Functions for manipulating and processing data files.
+    contents:
+    - '`format_time`'
+    - '`import_file`'
+    - '`inspect`'
+    - '`subsample`'
+    - '`subset_data`'
+    
+  - title: "Analytical"
+    desc: >
+      Functions for data analysis.
+    contents:
+    - '`auto_rate`'
+    - '`calc_rate`'
+    - '`calc_rate.bg`'
+    - '`calc_rate.ft`'
+    - '`pcrit`'
+    
+  - title: "Adjust/Convert"
+    desc: >
+      Functions for data correction and unit conversions.
+    contents:
+    - '`adjust_rate`'
+    - '`convert_DO`'
+    - '`convert_rate`'
+    - '`unit_args`'
+    
+  - title: "Performance"
+    desc: >
+      Function(s) to test the performance of `auto_rate()`.
+    contents:
+    - '`test_lin_data`'
+    
+  - title: "Data files"
+    desc: >
+      Sample data files.
+    contents:
+    - '`flowthrough.rd`'
+    - '`intermittent.rd`'
+    - '`sardine.rd`'
+    - '`squid.rd`'
+    - '`urchins.rd`'
+    - '`zeb_intermittent.rd`'
+    
+  - title: "Deprecated"
+    desc: >
+      Functions that are no longer supported/updated.
+    contents:
+    - '`inspect_data`'
+    
+navbar:
+  type: inverse
+  
+  left:
+    - icon: fa-home
+      href: index.html
+      
+    - text: "Getting Started"
+      href: articles/respR.html
+      
+    - text: "List of Functions"
+      href: reference/index.html
+      
+    - text: Documentation 
+      menu:
+      - text: "Closed-chamber respirometry"
+        href: articles/closed.html
+      - text: "Importing your data"
+        href: articles/importing.html
+      - text: "Automatic detection of respirometry rates"
+        href: articles/auto_rate.html
+      - text: "Intermittent-flow respirometry: Simple example"
+        href: articles/intermittent.html
+      - text: "Intermittent-flow respirometry: Complex example"
+        href: articles/intermittent2.html      
+      - text: "Flowthrough respirometry"
+        href: articles/flowthrough.html
+      - text: "Pcrit analysis"
+        href: articles/pcrit.html 
+      - text: "Two-point analysis"
+        href: articles/twopoint.html
+
+    - text: Discussion 
+      menu:
+      - text: "When to use respR"
+        href: articles/usage.html
+      - text: "Performance of auto_rate"
+        href: articles/performance.html
+      - text: "Comparing auto_rate and LoLinR"
+        href: articles/auto_rate_comp.html
+      - text: "A comparison of respR with other R packages"
+        href: articles/packages_comp.html
+      - text: "respR and the tidyverse"
+        href: articles/tidyverse.html
+      - text: "Reproducibility"
+        href: articles/reproducibility.html
+      

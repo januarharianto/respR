@@ -17,18 +17,21 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
   highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-`respR` was designed to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. Therefore, it is system agnostic; the data need only be put into a simple structure for a full analysis to be conducted. Indeed, the entire package (with the exception of the final conversion step in `convert_rate`) considers data to be unitless, so non-aquatic respirometry data, or indeed any time-series data can be explored and analysed using `respR`. 
+We designed `respR` to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. 
+Therefore, it is system-agnostic; the data need only be put into a simple structure for a full analysis to be conducted. 
+Indeed, the entire package (with the exception of the final conversion step in `convert_rate`) considers data to be unitless, so non-aquatic respirometry data, or any time-series data can be explored and analysed using `respR`. 
 
-`respR` was designed to work with generic R data frame type objects, including `vectors` and objects of class `data.frame`, `data.table` and `tibble`. The only structural data requirement is that time~O2 data be in a specific (though simple) form; paired values of numeric time-elapsed (in s, m or h) and oxygen amount (in any common unit). Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
+Generic R data frame type objects, including `vectors` and objects of class `data.frame`, `data.table` and `tibble`, are recognised.
+The only structural data requirement is that time\~O~2~ data be in a specific form; paired values of numeric time-elapsed (in s, m or h) and oxygen amount (in any common unit). 
+Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
+Two functions are provided to assist with bringing in and formatting your data correctly. 
 
-`respR` includes two functions to assist with bringing in and formatting your data correctly. 
+## import_file()
+Most systems allow data to be exported in easily readable formats (e.g. .csv, .txt) which contain the numeric time and O2 data `respR` requires. These files are usually easily imported into R using generic functions such as `read.csv()` and the relevant columns specified when used in `respR` functions, or extracted into separate data frames. 
 
-## `import_file`
-Most systems allow data to be exported in easily readable formats (e.g. .csv, .txt) which contain the numeric time and O2 data `respR` requires. These files are usually easily imported into R using generic functions such as `read.csv` and the relevant columns specified when used in `respR` functions, or extracted into separate data frames. 
+Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data, which causes importing problems in `read.csv()`. These files can be altered in Excel or other spreadsheet software to fix these issues, however `respR` allows importing of many raw data files from various systems without modification. 
 
-Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data, which causes importing problems in `read.csv`. These files can be altered in Excel or other spreadsheet software to fix these issues, however `respR` allows importing of many raw data files from various systems without modification. 
-
-The `import_file` function uses pattern recognititon to identify the originating system of the file. It also automatically recognises the format of any date-time data and uses it to create a new time-elapsed column, if one does not already exist. 
+The `import_file()` function uses pattern recognititon to identify the originating system of the file. It also automatically recognises the format of any date-time data and uses it to create a new time-elapsed column, if one does not already exist. 
 
 Here's an example of importing a Witrox raw data file (from the current working directory, otherwise any external file can be specified with a filepath):
 ```{r}
@@ -43,9 +46,9 @@ After importing and saving to an object, this can be passed to the rest of the `
 
 This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to *send us sample files for testing* (CONTACT LINK), especially any they have problems with, or from systems we do not yet support. 
 
-## `format_time`
+## format_time()
 
-For files types that are not yet supported, or if you have already imported your data by other means, the `format_time` function will parse date-time to numeric time-elapsed, in the event the imported file does not contain this. 
+For files types that are not yet supported, or if you have already imported your data by other means, the `format_time()` function will parse date-time to numeric time-elapsed, in the event the imported file does not contain this. 
 
 Here's an example of a 2 column data frame with date-time data and oxygen. 
 
@@ -117,4 +120,4 @@ format_time(exp_notes, format = "HM")
 ```
 
 ## Next steps
-After your data is in this paired, numeric *time-elapsed~O2* form, it can be passed to `inspect_data` or other functions for analysis. 
+After your data is in this paired, numeric *time-elapsed~O2* form, it can be passed to `inspect()` or other functions for analysis. 

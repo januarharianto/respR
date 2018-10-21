@@ -1,8 +1,8 @@
 ---
-title: "Introduction to respR"
+title: "Getting Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to respR}
+  %\VignetteIndexEntry{Getting Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,79 +15,82 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
   highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-### Respirometry
+## Aquatic Respirometry
 
-There are four broad methodological approaches in respirometry: *closed-chamber*, *intermittent-flow*, *flow-through* and *open-tank*. 
+There are four broad methodological approaches in aquatic respirometry: *closed-chamber*, *intermittent-flow*, *flow-through* and *open-tank*. 
 
 In *closed-chamber* respirometry, $O_2$ decrease is measured within a hermetically sealed chamber of known volume, sometimes set within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the $O_2$ timeseries by assuming a linear relationship between variables, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in $O_2$ concentration over time, or in the case of a two-point measurement, the difference in $O_2$ concentration divided by time elapsed, and $V$ is the volume of the container (Lighton 2008).
 
 In *intermittent-flow* respirometry, $O_2$ concentration is measured as described above, but periodically the chamber is flushed with new water or air, returning it to initial conditions, resealed, and the experiment repeated (Svendsen et al. 2016). This technique is essentially the same as closed respirometry, but with the ability to conduct replicates easily. Depending on the metabolic rate metric being investigated, final respiration rate can be calculated as the mean of the measures (e.g. Carey et al.2016), or the lowest or highest rates recorded in any trial (e.g. Stoffels 2015).
 
-*Flow-through* respirometry involves a closed chamber, but with a regulated flow of air or water through it at a precisely determined rate. After equilibrium has been achieved, the oxygen concentration differential between the incurrent and excurrent channels, along with the flow rate, allows calculation of the oxygen extracted from the flow volume per unit time: $$VO_2 = (C_iO_2 - C_eO_2)FR$$ where $\dot{V}O_2$ is the rate of $O_2$ consumption over time, $C_iO_2$ and $C_eO_2$ are the incurrent and excurrent $O_2$ concentrations, and $FR$ is the flow rate of water through the system (Lighton 2008).
+*Flow-through* respirometry involves a closed chamber, but with a regulated flow of air or water through it at a precisely determined rate. After equilibrium has been achieved, the oxygen concentration differential between the incurrent and excurrent channels, along with the flow rate, allows calculation of the oxygen extracted from the flow volume per unit time: $$\dot{V}O_2 = (C_iO_2 - C_eO_2)FR$$ where $\dot{V}O_2$ is the rate of $O_2$ consumption over time, $C_iO_2$ and $C_eO_2$ are the incurrent and excurrent $O_2$ concentrations, and $FR$ is the flow rate of water through the system (Lighton 2008).
 
-A final method is *open-tank* respirometry, in which an open tank or semi-enclosed area is used, but the input or mixing rate of oxygen from the surroundings has been quantified or found to be negligible relative to oxygen consumption of the specimens (Leclercq et al., 1999). It is seldom used, but for some applications it is a sufficient and practical methodology (Gamble et al. 2014). The common equation used for open respirometry is: $$VO_2 = \dot O_2V + \phi_d$$ where $\dot O_2V$ is the slope of the regression that relates $O_2$ concentration to time, $V$ is the volume of the container and $\phi_d$ is the oxygen flux as determined by Fick's Law (Leclercq et al., 1999).
+A final method is *open-tank* respirometry, in which an open tank or semi-enclosed area is used, but the input or mixing rate of oxygen from the surroundings has been quantified or found to be negligible relative to oxygen consumption of the specimens (Leclercq et al., 1999). It is seldom used, but for some applications it is a sufficient and practical methodology (Gamble et al. 2014). The common equation used for open respirometry is: $$\dot{V}O_2 = \dot O_2V + \phi_d$$ where $\dot O_2V$ is the slope of the regression that relates $O_2$ concentration to time, $V$ is the volume of the container and $\phi_d$ is the oxygen flux as determined by Fick's Law (Leclercq et al., 1999).
 
 
-## `respR`
+## The `respR` R package
 
 `respR` is a package designed to process the data from all of these types of respirometry experiments. It is designed primarily for aquatic respirometry, although as many of the main functions are unitless it is adaptable for use with gaseous respirometry, and indeed analysis of other data where a parameter may change over time. 
 
 When working with respirometry data, you will often need to:
 
-1. Ensure that the data, or at least a subset of the data, is representative of the research question of interest.
-2. Perform an initial analysis of the data to estimate the rate of change in oxygen concentration or amount.
-3. Depending on the experimental setup, correct for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.
-4. Convert the resulting usage rate to the volumetric and mass-specific rates in the appropriate units.
+1. Ensure that the data, or at least a **subset** of the data, is representative of the research question of interest.
+2. Perform an initial analysis of the data to **estimate** the rate of change in oxygen concentration or amount.
+3. Depending on the experimental setup, **correct** for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.
+4. **Convert** the resulting usage rate to the volumetric and mass-specific rates in the appropriate units.
 
-The `respR` package allows determination of common metrics such as $VO_2$, $MO_2$, $MO_{2max}$, $MO_{2min}$, and $P_{crit}$, and contains several functions to make this process straightforward:
+The `respR` package allows determination of common respirometry metrics and contains several functions to make this process straightforward.
 
-- It provides visual feedbacks and diagnostic plots to help you explore, subset and analyse your data.
+- It provides visual feedback and diagnostic plots to help you explore, subset and analyse your data.
 - It uses computational techniques such as rolling regressions and kernel density estimates to estimate ranked **maximum**, **minimum** or **most linear** sections of the data.
 - By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
-- The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions
-- These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data
+- The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions.
+- These objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data.
 
-### Example Data
+## Example Data
 
-We have provided example data that can be used immediately once `respR` is loaded (`urchins.rd`, `intermittent.rd`, `zeb_intermittent.rd`, `sardine.rd`, `squid.rd`,  `flowthrough.rd`). These data were obtained from past experiments and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
+We have provided example data that can be used immediately once `respR` is loaded (`urchins.rd()`, `intermittent.rd()`, `zeb_intermittent.rd()`, `sardine.rd()`, `squid.rd()`,  `flowthrough.rd()`). 
 
-### Vignettes and documentation 
+```{r, echo=TRUE}
+data(package = "respR")
+```
 
-As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page. In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links:
+These data were obtained from past experiments and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
 
-**[Importing your data](LINK)**  
-`respR` has functions to make it easy to bring in and prepare your data, even from the raw data files output by various respirometry systems
+## Vignettes and documentation 
 
-**[Closed-chamber respirometry](LINK)**  
-This is the best place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
-  
-**[auto_rate 1: Automatic detection of metabolic rates](LINK)**  
-**[auto_rate 2: Performance of auto_rate in detecting linear regions](LINK)**  
-**[auto_rate 3: Comparative performance of auto_rate and LoLinR](LINK)**  
-These detail how the main analytical function in `respR` works and its performance
+<!-- As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page.  -->
+<!-- In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links: -->
+We have prepared several vignettes describing typical analysis workflows:
 
-**[Intermittent-flow respirometry 1: Simple example](LINK)**  
-**[Intermittent-flow respirometry 2: Complex example](LINK)**  
-How to analyse simple and more complex intermittent-flow respirometry data
+1. **[Importing your data](https://januarharianto.github.io/respR/articles/importing.html)** `respR` has functions to make it easy to bring in and prepare your data, even from the raw data files output by various respirometry systems.
 
-**[Flowthrough respirometry](LINK)**  
-How to analyse flowthrough respirometry data 
+2. **[Closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)** This is a good place to start exploring the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
 
-**[PCrit](LINK)**  
-Determine PCrit in long-term, closed chamber respirometry experiments
+3. **[Automatic detection of metabolic rates](https://januarharianto.github.io/respR/articles/auto_rate.html)** Here we introduce the function `auto_rate()` for the automatic detection and estimation of common respirometry and metrics.
 
-**[Two-point analyses](LINK)**  
-Determine oxygen use rate using only two datapoints
+4. **[Performance of auto_rate in detecting linear regions](https://januarharianto.github.io/respR/articles/performance.html)** We use simulated data to test the accuracy of `auto_rate()`, and discuss the function's performance with focus on linear data detection.
 
-**[Reproducibility](LINK)**  
-How `respR` has been designed to allow reporting of reproducible analyses
+5. **[Comparative performance of auto_rate and LoLinR](https://januarharianto.github.io/respR/articles/auto_rate_comp.html)** We make comparisons to another R package, LoLinR, using data from their package and simulated data. 
 
-**[respR and the Tidyverse](LINK)**  
-Info about how `respR` integrates with `Tidyverse` practices to streamline analyses
+6. **[Intermittent-flow respirometry: Simple example](https://januarharianto.github.io/respR/articles/intermittent.html)**  
+    **[Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html)**  
+How to analyse simple and more complex intermittent-flow respirometry data.
 
-**[A comparison of '`respR` with other R packages](LINK)**  
-**[When to use `respR`](LINK)**  
-The functionality and workflow of `respR` in comparison to other options, and when you should use it
+7. **[Flowthrough respirometry](https://januarharianto.github.io/respR/articles/flowthrough.html)** Analysis of flowthrough respirometry data.
+
+8. **[PCrit](https://januarharianto.github.io/respR/articles/pcrit.html)** Determine P~crit~ in long-term, closed chamber respirometry experiments.
+
+9. **[Two-point analyses](https://januarharianto.github.io/respR/articles/twopoint.html)**  
+Determine oxygen use rate using only two datapoints.
+
+10. **[Reproducibility](https://januarharianto.github.io/respR/articles/reproducibility.html)** How `respR` has been designed to allow reporting of reproducible analyses.
+
+11. **[respR and the Tidyverse](https://januarharianto.github.io/respR/articles/tidyverse.html)** Information about how `respR` integrates with `tidyverse` practices to streamline analytic workflows.
+
+12. **[A comparison of respR with other R packages](https://januarharianto.github.io/respR/articles/packages_comp.html)**  
+    **[When to use respR](https://januarharianto.github.io/respR/articles/usage.html)**  
+The functionality and workflow of `respR` in comparison to other options, and when you should use it.
 
 
 ## References

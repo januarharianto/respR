@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ## A typical respR workflow: Closed-chamber respirometry
 
-Here we describe a typical workflow for a **closed-chamber** respirometry experiment. The example data used here is `urchins.rd`, where the first column of the data frame is *time* data, while the remaining 18 columns are dissolved *$O_2$* data. Columns `b1` and `b2` contain background respiration recordings. The units are minutes and mg/L of $O_2$, however all analyses in `respR` are unitless, and we only consider units when we later come to convert rates.
+Here we describe a typical workflow for a **closed-chamber** respirometry experiment. The example data used here is `urchins.rd`, where the first column of the data frame is *time* data, while the remaining 18 columns are dissolved *$O_2$* data. Columns 18 and 19 contain background respiration recordings. The units are minutes and mg/L of $O_2$, however all analyses in `respR` are unitless, and we only consider units when we later come to convert rates.
 
 ```{r}
 head(urchins.rd)
@@ -79,7 +79,7 @@ Calling the function `calc_rate()` on the `inspect()` object, with no additional
 calc_rate(urchin) # same as: calc_rate(urchin$df)
 ```
 
-Note how the function recognises the `inspect()` object. Alternatively, you can specify a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.. 
+Note how the function recognises the `inspect()` object. Alternatively, you can specify a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as dissolved $O_2$ data.
 
 In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around such errors by subsetting the regions that are not erroneous and still obtain valid results.
 
@@ -106,16 +106,17 @@ print(rate)
 summary(rate)
 ```
 
-The rate can be seen as the second entry `rate_b1`, and other summary data are saved in the object. The output also includes a `rate_2pt`. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time. For almost all analyses, the `rate_b1` should be used. See the **"Two-point analyses"** vignette (LINK) for an explanation of this output and when it should be used. 
+The rate can be seen as the second entry `rate_b1`, and other summary data are saved in the object. The output also includes a `rate_2pt`. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time. For almost all analyses, the `rate_b1` should be used. See [two-point analysis](https://januarharianto.github.io/respR/articles/twopoint.html) for an explanation of this output and when it should be used. 
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
+
 ```{r}
 plot(rate)
 ```
 
 ## Step 4: Adjust for background respiration
 
-Since background rate has been calculated in `calc_rate.bg()`, adjustment is straightforward using the function `adjust_rate`. The `rate` input can be an object of class `calc_rate` or `auto_rate`, or any numeric value. 
+Since background rate has been calculated in `calc_rate.bg()`, adjustment is straightforward using the function `adjust_rate()`. The `rate` input can be an object of class `calc_rate` or `auto_rate`, or any numeric value. 
 
 ```{r}
 a.rate <- adjust_rate(rate, bg)
@@ -129,7 +130,7 @@ a.rate <- adjust_rate(rate, -0.00083)
 a.rate
 ```
 
-For experiments where there is a quantified background **input** of oxygen, such as in *open-tank* respirometry, `adjust_rate` can be used to correct rates using a *positive* background value.
+For experiments where there is a quantified background **input** of oxygen, such as in *open-tank* respirometry, `adjust_rate()` can be used to correct rates using a *positive* background value.
 
 ```{r}
 a.rate <- adjust_rate(rate, 0.002)
@@ -143,8 +144,8 @@ Note, that until this point `respR` has **not required units of time or oxygen t
 
 For example, we may want to calculate:
 
-1. $VO_2$ - Total change in O~2~ per unit time within the chamber; or
-2. $MO_2$ - Mass-specific rate of change in O~2~ per unit time of the specimen.
+1. $\dot{V}O_2$ - Total change in O~2~ per unit time within the chamber; or
+2. $\dot{M}O_2$ - Mass-specific rate of change in O~2~ per unit time of the specimen.
 
 The function `convert_rate()` can be used to convert rate values to chamber volume and/or specimen mass specific values. This requires the units of the original data (`o2.unit`, `time.unit`), and in SI units (L, kg) the `volume` of fluid in the chamber, and `mass` of the specimen. 
 
@@ -183,25 +184,39 @@ unit_args()
 This is an example of a straightforward analysis of a *closed-chamber* respirometry experiment. This entire analysis can be documented and shared in only a few lines of code, making it entirely reproducible if the original data file is included:
 
 ```{r results="hide", fig.keep="none", eval = FALSE, tidy = FALSE}
-## import and inspect
+# import and inspect
 urchin <- inspect(urchins.rd, time = 1, oxygen = 15)
 
-## background
+# Background
 bg <- calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 40, by = "time")
 
-## specimen rate
+# Specimen rate
 rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
 
-## adjust rate
+# Adjust rate
 a.rate <- adjust_rate(rate, bg)
 
-## convert to final rate units
+# Convert to final rate units
 urchin_MO2 <- convert_rate(a.rate,
                            o2.unit = "mgl-1", 
                            time.unit = "m", 
                            output.unit = "mg/s/kg", 
                            volume = 1.09, 
                            mass = 0.19)
+
+# Alternatively, use dplyr pipes, adding a print() between functions:
+
+urchins.rd %>%                                           # With the data object,
+  inspect(1, 15) %>%                                     # inspect, then
+  calc_rate(from = 4, to = 29, by = "time") %>%          # calculate rate, then
+  print() %>%
+  adjust_rate(
+    calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19,     # adjust bg rate, then
+      from = 5, to = 40, by = "time")) %>%
+  print() %>%
+  convert_rate(o2.unit = "mgl-1", time.unit = "m",     
+    output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) # convert units.
+
 ```
 
-Other vignettes go into more detail about different experiment types and other analyses. 
+<!-- Other vignettes go into more detail about different experiment types and other analyses.  -->
