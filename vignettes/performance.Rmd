@@ -1,10 +1,10 @@
 ---
-title: "auto_rate 2: Performance in detecting linear regions"
+title: "Performance in detecting linear regions"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{autorate_performance}
+  %\VignetteIndexEntry{Performance in detecting linear regions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,7 +22,7 @@ The function `auto_rate()` uses rolling regression and kernel density estimation
 The dimensionless nature of the function, however, also allows it to be applied to any serial data. 
 To our knowledge, the methods we use here are novel, and not reported in past publications involving linear data detection and analysis of biological data.
 Olito et al. (2016) describes a different, though robust, method to detect and rank linear segments in data using their R package, `LoLinR`. 
-A comparison of `auto_rate()` and `LoLinR`'s methods are shown in the **LINK** vignette.
+A comparison of `auto_rate()` and `LoLinR`'s methods are shown [here](https://januarharianto.github.io/respR/articles/auto_rate_comp.html).
 
 The performance tests that we provide are limited but comprehensive, however provide a starting point in generating the data necessary for users to make informed decisions on using and further testing `auto_rate()` for their own purposes. **Users should be aware** that noisy, strongly fluctuating data could cause unpredictable, unwanted results to be returned. For example, while we have had generally good results with our own data, intermittent flow respirometry data where O2 is fluctuating up and down between periods of use by the specimens and flushing the respirometry chamber are likely to confuse the algorithms. Users should always examine the outputs of `auto_rate()` (and indeed other functions in `respR`) to understand where returned results occur within the data and that they are representative of the question of interest. We have made this as easy as possible, and designed the package specifically to not be a 'black box' and at every stage make the user aware of what is going on through plotting results and their locations in the context of the entire datasets, and in the console outputs. 
 
