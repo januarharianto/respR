@@ -87,7 +87,7 @@ navbar:
       - text: "Pcrit analysis"
         href: articles/pcrit.html 
       - text: "Two-point analysis"
-        href: articles/intermittent.html
+        href: articles/twopoint.html
 
     - text: Discussion 
       menu:
