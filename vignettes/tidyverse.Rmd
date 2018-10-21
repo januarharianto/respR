@@ -17,15 +17,30 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
   highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-### Working in the Tidyverse
+## Working in the Tidyverse
 
-`respR` integrates nicely in the [Tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book.
+`respR` integrates nicely in the [tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book.
 
-We load the data, `sardine.rd`, which contains approximately 2.1 hours (7,513 data points) of a single respirometry experiment.
+## Examples
 
-```{r}
-library(respR)
-data("sardine.rd")
-?sardine.rd # run this to see notes about the dataset
+Here we show how using `%?%` pipes can make data analysis worklows simpler for the user:
+
+```{r, eval=FALSE}
+
+library(respR) # load the library
+
+# 1. check data for errors, select cols 1 and 15:
+urch <- inspect(urchins.rd, 1, 15) 
+# 2. automatically determine linear segment:
+rate <- auto_rate(urch)
+# 3. convert units
+out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
+
+## Alternatively, use tidyverse pipes:
+urchins.rd %>%        # using the urchins dataset,
+  select(1, 15) %>%   # select columns 1 and 15
+  inspect()     %>%   # inspect the data, then
+  auto_rate()   %>%   # automatically determine most linear segment
+  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
+
 ```
-
