@@ -49,13 +49,13 @@ inspect(urchins.rd, time =  1, oxygen = 15)
 urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
 ```
 
-From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.
+From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the initial stages of the experiment, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.
 
 The function also warns us that time data is not *numerically* evenly-spaced. However, *this does not mean the data cannot be processed*. Rather than make assumptions that rows represent evenly spaced datapoints, the functions in `respR` use actual time values for analyses and calculations, and so even irregularly spaced data are analysed correctly. This warning is for information purposes only: it is to make the user aware that if they use row numbers for manual operations such as subsetting, the same width may not represent the same time period. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
 
-**It should be noted that using `inspect()` is optional** - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running `inspect()` is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. `respR` has been designed to make this easy. 
+**It should be noted that using `inspect()` is optional** - the main functions in `respR` will readily accept regular `R` data structures (e.g. data frames, tibbles, vectors) as long as data are numeric and error-free. Running `inspect()` is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. `respR` has been designed to make this easy. 
 
-**Note there is an older version of this function called `inspect_data()`** - this function has been deprecated, but kept to maintain compatibility with older code. It will not be updated in the future, so users should use `inspect()`. 
+**Note there is an older version of this function called `inspect_data()`** - this function has been deprecated, but kept in the package to maintain compatibility with older code. It will not be updated in the future, so users should use `inspect()`. 
 
 ## Step 2: Process background respiration
 
