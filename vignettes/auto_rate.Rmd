@@ -31,7 +31,8 @@ The problem is that for large datasets, identifying these regions is difficult, 
 Other methods, such as fitting multiple, fixed-width linear regressions over the entire dataset to identify regions of minimum or maximum slopes is computationally intensive, and slopes found via this method highly sensitive to the width chosen, especially if the specimen's metabolic rate may change rapidly. 
 
 Here we present `auto_rate()`, a function in the `respR` package that uses rolling regression techniques to automatically detect **most linear**, **maximum** and **minimum** rates within a dataset. 
-This function can be used to select linear, max and min rates in an statistically robust, objective way. 
+This function can be used to select most linear, maximum and minimum rates in a statistically robust, objective way. 
+
 In this vignette we detail how `auto_rate()` works, and how it can be used to extract rates from respirometry data. 
 We show how we have [tested this method against simulated data](https://januarharianto.github.io/respR/articles/performance.html), and also [compare its performance against another linear detection method](https://januarharianto.github.io/respR/articles/auto_rate_comp.html). 
 We show it perfoms extremely well on large datasets in determining linear rates. 
@@ -109,7 +110,7 @@ The rolling estimates are then discarded while the detected data segments are an
 ## Adjusting the width of rolling regressions
 
 By default, `auto_rate()`'s rolling regression uses a rolling window value in rows of `0.2` multiplied by the total length of the number of samples. 
-This can be changed by changing the `width` argument, to a proportion relative to the total size of the data (`width = 0.1, by = "row"`) or a fixed value in the time metric (`width = 3000, by = "time"`). 
+This can be changed using the `width` argument, to a proportion relative to the total size of the data (`width = 0.1, by = "row"`) or a fixed value in the time metric (`width = 3000, by = "time"`). 
 
 It is important to note that the width determines the exact width of the data segments produced for `max`, `min` and `interval` rates. This allows the user to consistently report results across experiments, such as reporting the maximum or minimum rates sustained over a specified time period. 
 
@@ -211,23 +212,23 @@ print(x, nrow(x$summary))
 <!-- x <- auto_rate(sardine.rd) -->
 <!-- ``` -->
 
-## Summary of when to use different auto_rate() options
+## Summary of when to use different `auto_rate` options
 
-### `method = linear`  
+### `method = "linear"`  
 In 'steady state' experiments. That is, when you are looking for the most *consistent* or *representative rates* for what the specimen is experiencing. This could represent routine metabolic rate, or in the case of an animal under constant excercise a consistent active metabolic rate. No `width` needs to be specified under this option. 
 
-### `method = max`  
+### `method = "max"`  
 When your specimen is active at some point during the experiment, or has been exercised and placed in a respirometer, and you want to know its *maximum* rate over a specific time period or row width. The default is `width = 0.2, by = "row"` (0.2 of total row number) or it can be specified in the time unit, e.g. `width = 600, by = "time"`). This should be carefully selected, and consistent if you are comparing specimens. 
 
-### `method = min`  
+### `method = "min"`  
 Similarly, when your specimen is inactive, quiescent, dormant, etc., and you want to know the lowest rates over a specified time period. This is often representative of resting, basal or standard metabolic rates. Again, this necessarily requires a time window (`width`) to be specified, which should be carefully selected, and consistent if you are comparing specimens. 
 
-### `method = interval`
+### `method = "interval"`
 This is chiefly for comparison with historical data, or if you have a specific reason to specify non-overlapping regressions. 
 For example, in P~crit~ measurements, it is common for users to generate rate\~O~2~ data by interval-based regressions.
 
 
-## When *not* to use auto_rate() 
+## When *not* to use `auto_rate`  
 
 - **Flowthrough respirometry data**  
 See `calc_rate.ft()`. This respirometry method is currently unsupported in `auto_rate`, but it is in our plans to add this. 
