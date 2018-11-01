@@ -20,13 +20,14 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ### Introduction
 
-In some species (*oxyconformers*) routine uptake is directly proportional to oxygen concentration. 
+In some species (*oxyconformers*) routine oxygen uptake rate is directly proportional to oxygen concentration. 
 So, for example, at 50\%O~2~, the uptake rate will be half that at 100\% O~2~. Many species however (*oxyregulators*) are able to regulate uptake and maintain routine rates as oxygen decreases. 
 Note however, there is a continuum of responses between these extremes, and intermediate cases (Mueller and Seymour, 2011). 
 
-The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure ofO~2~, or $P_{crit}$. 
-Historically, this was expressed in units of partical pressure of oxygen, but more recently it is often expressed in units of concentration.
-It is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and using the resulting oxygen trace to identify the breakpoint in the relationship of uptake rate toO~2~ concentration. 
+The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of O~2~, or $P_{crit}$. 
+Historically, this was expressed in units of partical pressure of oxygen, but more recently it is also commonly expressed in units of concentration.
+
+$P_{crit}$ is typically determined in long term, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber to hypoxia, and the resulting oxygen trace is used to identify the breakpoint in the relationship of uptake rate to O~2~ concentration. 
 
 ### Example data
 
@@ -47,20 +48,19 @@ market.squid <- inspect(squid.rd)
 ```
 
 We can see from the bottom plot, a rolling rate across 20\% of the total data, that the uptake rate is relatively consistent to around the 10,000th row, after which it declines steadily.
-We cannot tell from this plot whatO~2~ concentration this represents. 
+We cannot tell from this plot which O~2~ concentration this represents. 
 For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated `pcrit()` function. 
 
 ### $P_{crit}$ function
 
-The `pcrit()` function provides three methods to report the breakpoint in the rate~O~2~ relationship. 
+The `pcrit()` function provides three methods to report the breakpoint in the rate ~ O~2~ relationship. 
 
 The first two are from the “broken-stick” regression (BSR) approach, adapted from Yeager & Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point.
-Two slightly different ways of reporting this breakpoint are detailed by Yeager & Ultsch (1989); the *intercept* and *midpoint*. 
-These are usually close in value.
+Two slightly different ways of reporting this breakpoint are detailed by Yeager & Ultsch (1989); the *intercept* and *midpoint*. These are usually close in value.
 
-The third method in the `pcrit` function is a wrapper for the segmented regression approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines. 
+The third method in the `pcrit()` function is a wrapper for the "segmented regression"" approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines. 
 
-At present, `pcrit` does not accept `inpect_data` objects, but we can call the data frame within it directly:
+Note that at present, `pcrit` does not accept `inpect` or `inspect_data` objects, but we can easily call the data frame within these directly:
 
 ```{r, eval = FALSE}
 market.squid.pcrit <- pcrit(market.squid$df)
@@ -80,13 +80,13 @@ print(market.squid.pcrit)
 print(market.squid.pcrit)
 ```
 
-The output figure shows all three metrics plotted against the original data and on rate~O~2~ plots. 
+The output figure shows all three metrics plotted against the original data and on rate ~ O~2~ plots. 
 The `print()` summary shows that, in this case, all three methods give very similar values for the $P_{crit}$: 2.61, 2.61 and 2.62 mg L^-1^. 
 We should note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the different methods may provide different results.
-See later section for some general discussion of the different methods. 
+See the later section for some general discussion of the different methods. 
 
-Note that the function has a `width` input, which controls the width of the rolling regressions used to calculate the rolling rate values.
-This affect estimations of the $P_{crit}$. 
+**Note**, that the `pcrit` function has a `width` input, which controls the width of the rolling regressions used to calculate the rolling rate values.
+This necessarily affects estimations of the $P_{crit}$. 
 The default value of 0.1 of the total length of data in our testing seems to provide good results, but in some data changing this may give better results.
 
 Also important to note is that the segmented (Muggeo) method sometimes gives a different result when the exact same code is run. 
@@ -99,15 +99,15 @@ In the case of errors or problems using the function, changing this to `FALSE` i
 
 ### Use of existing *rate* data
 
-This example used raw Time~O~2~ data, and so the function calculated a rolling rate internally. 
-However, the user can input already calculated rate~O~2~ data using the argument `has.rate = TRUE`, and the function will determine $P_{crit}$ using these data directly. 
-These data can be either whole specimen rates ("$\dot{V}O_2$"), or mass-specific rates ("$\dot{M}O_2$"); both give identical results. 
+The example above used raw Time ~ O~2~ data, and so the function calculated a rolling rate internally.
+However, the function can accept already calculated rate ~ O~2~ data using the argument `has.rate = TRUE`, and the function will determine $P_{crit}$ using these data directly. 
+These data can be either whole specimen rates ($\dot{V}O_2$), or mass-specific rates ($\dot{M}O_2$); both give identical results. 
 
 ### Adjustments
 
-The `pcrit()` function does not support adjusting rates for background effects.
-Background O~2~ uptake should not affect $P_{crit}$ as it is typically assumed to be uniform over the course of an experiment. 
-Users should be aware that rates extracted from objects of class `pcrit` will not have been background-corrected.
+Note, the `pcrit()` function does not support adjusting rates for background effects.
+Background O~2~ uptake should not affect $P_{crit}$ as it is typically minimal and assumed to be uniform over the course of an experiment. We are considering how to support background corrections in this function.
+For now, users should be aware that rates extracted from objects of class `pcrit` will not have been background-corrected.
 
 
 ### Extracting results
@@ -137,7 +137,7 @@ summary(market.squid.pcrit)
 ## Comparisons to other implementations
 
 The `segmented` method included in the `pcrit()` function in `respR` is simply a wrapper for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package by Muggeo (2008). 
-Thus, comparing `respR` results to it would be moot. 
+Thus, comparing `respR` results to those from this package would be moot. 
 See the documentation of that package, plus publications by Muggeo for discussion of this method. 
 
 The other methods we implement at present are the two 'broken-stick regression' (BSR) metrics of Yeager and Ultsch (1989). 
@@ -177,32 +177,30 @@ fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
 pcrit(fishMR_respR)
 ```
 
-Note that the `rMR` results (0.80 and 0.87) are slightly different to those from `respR` (0.84 and 0.84).
+Note that the `rMR` results (0.80 and 0.87) are different to those from `respR` (0.84 and 0.84).
 This is likely due to an improved implementation of the BMR method in `respR`. 
 The `respR` analysis uses rolling (i.e. overlapping) regressions, while the `rMR` implementation uses interval (i.e. non-overlapping) regressions to calculate rates. 
-This means in `rMR` the width of regressions has a large effect on the ultimate result, which the user has to balance; a wide width means better estimates of rate, but fewer in total; a narrow width means less accurate estimates of rate, but a greater number of estimates upon which to perform the breakpoint analysis. 
-This is much less of an issue in `respR`; because regressions overlap, the width has less of effect upon the total number of estimates of rate. 
-The user still needs to carefully consider the width (the default is 0.1 of the total data length); too narrow and it will increase noise amongst the rate estimates, too wide and it will cause breakpoints to be less pronounced.
+This means that in the `rMR` implementation the width of regressions has a large effect on the ultimate result, which the user has to balance. A wide width means better estimates of rate, but fewer in total. A narrow width means less accurate estimates of rate, but a greater number of estimates upon which to perform the breakpoint analysis. 
+This is much less of an issue in `respR`; because the regressions overlap, the width has much less of an effect upon the total number of estimates of rate. 
 
+However, note that the user still needs to carefully consider the width (the default is 0.1 of the total data length); too narrow and it will increase noise amongst the rate estimates, too wide and it will cause breakpoints to be less pronounced.See [adjusting the width of rolling regressions](https://januarharianto.github.io/respR/articles/auto_rate.html#adjusting-the-width-of-rolling-regressions) for an example of how width affects the shape of rolling rate plots. 
 
-See [adjusting the width of rolling regressions](https://januarharianto.github.io/respR/articles/auto_rate.html#adjusting-the-width-of-rolling-regressions) for an example of how width affects the shape of rolling rate plots. 
-
-The rolling vs. interval regression methods in the `rMR` and `respR` implementations of BSR also makes it difficult to directly compare their outputs using the same inputs. 
-However, the fact that the two BSR `respR` results (0.84 and 0.84) are identical to each other, and also extremely close to the result from the `segmented` method (0.85), which uses a completely different technique to identify breakpoints, suggests that this method is a much more reliable implementation. 
+The rolling vs. interval regression methods in the `rMR` and `respR` implementations of BSR also make it difficult to directly compare their outputs using the same inputs. 
+However, the fact that the two BSR `respR` results (0.84 and 0.84) are identical to each other, and also extremely close to the result from the `segmented` method (0.85) (which uses a completely different technique to identify breakpoints), suggests that the `respR` implementation is reliable. 
 
 ## Discussion of $P_{crit}$ estimation methods
 
 Currently `respR` has implemented three methods of calculating a breakpoint in the relationship of O~2~ uptake rate to O~2~ concentration. 
 It is in our plans to support several more (e.g. Duggleby, 1984; Lighton and Turner, 2004, Marshall et al., 2013), and additionally, metrics which describe the degree of oxyregulation of a specimen in intermediate cases (e.g. Tang, 1933; Mueller & Seymour, 2011). 
 
-Discussion of 'breakpoint' identification in time-series data is a whole branch of mathematics, which we do not have the space or expertise to discuss here.
+Discussion of 'breakpoint' identification in time-series data is a whole branch of mathematics, which we do not have the expertise to discuss.
 The user should however be aware of the controversy around using the BSR method to estimate $P_{crit}$. 
 
-Marshall et al. (2013) discussed the limitations of the BSR method, and found BSR methods to be inaccurate and prone to error. This publication is a very convincing critique of the BSR methods, and while use of them was understandable in the past when computing power and analytical processing was limited, this should no longer be a limitation, and better methods are available.
+Marshall et al. (2013) discussed the limitations of the BSR methods, and found them to be inaccurate and prone to error. This publication is a convincing critique of the BSR methods, and posits that use of them was understandable in the past when computing power and analytical processing was limited, but that this should no longer be a limitation, and better methods are available.
 A very valid point from this analysis is that BSR approaches provide no estimates of error, making it difficult to judge just how reliable they are. 
 
 Whether or not this is the definitive critique of this method is still an open question; scientific methods persist through consensus, and BSR is still in use by many prominent physiologists in the years since this publication (Chu & Gale, 2017; Regan & Richards,2017; Stoffels et al. 2017).
-It remains to be seen if the non-linear regression methods proposed by Marshall et al. will supplant other methods of estimating $P_{crit}$. 
+It remains to be seen if the non-linear regression (NLR) methods proposed by Marshall et al. will supplant other methods of estimating $P_{crit}$. 
 It is a rigorous method, which indeed appears to be more reliable, and we plan to support this method in a future update to `respR`. 
 
 As far as we are aware, there is no controversy around using the `segmented` method of Muggeo (2008), and in our testing it usually gives similar results to the BSR approach with data that is high-resolution and not particularly noisy.
@@ -211,9 +209,11 @@ As we saw in the examples above, all three methods often give similar results, i
 However, there may be cases where the results from these different methods differ. 
 
 Different methods are discussed amongst the literature cited below.
-It is also important to note that $P_{crit}$ is often used as a *comparative* metric. Since analytical options chosen by the investigator (such as regression width) can affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than the ultimate values of $P_{crit}$ *per se*. 
-It is important that investigators fully report the parameters under which these analyses have been conducted. 
+It is important to note that $P_{crit}$ is most frequently used as a *comparative* metric. Since analytical options chosen by the investigator (such as regression width) inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than considerarion of the ultimate values of $P_{crit}$ *per se*. 
+So, it is important that investigators fully report the parameters under which these analyses have been conducted. 
 This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to know if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward (see [open science and reproducibility using respR](https://januarharianto.github.io/respR/articles/reproducibility.html)).
+
+
 ## References
 
 Chu, J. W. F., & Gale, K. S. P. (2017). Ecophysiological limits to aerobic metabolism in hypoxia determine epibenthic distributions and energy sequestration in the northeast Pacific ocean. Limnology and Oceanog- raphy, 62(1), 59-74. https://doi.org/10.1002/lno.10370
