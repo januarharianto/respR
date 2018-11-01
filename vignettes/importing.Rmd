@@ -26,7 +26,7 @@ The only structural data requirement is that time\~O~2~ data be in a specific fo
 Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
 Two functions are provided to assist with bringing in and formatting your data correctly. 
 
-## import_file()
+## `import_file()`
 Most systems allow data to be exported in easily readable formats (e.g. .csv, .txt) which contain the numeric time and O2 data `respR` requires. These files are usually easily imported into R using generic functions such as `read.csv()` and the relevant columns specified when used in `respR` functions, or extracted into separate data frames. 
 
 Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data, which causes importing problems in `read.csv()`. These files can be altered in Excel or other spreadsheet software to fix these issues, however `respR` allows importing of many raw data files from various systems without modification. 
@@ -46,7 +46,7 @@ After importing and saving to an object, this can be passed to the rest of the `
 
 This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to *send us sample files for testing* (CONTACT LINK), especially any they have problems with, or from systems we do not yet support. 
 
-## format_time()
+## `format_time()`
 
 For files types that are not yet supported, or if you have already imported your data by other means, the `format_time()` function will parse date-time to numeric time-elapsed, in the event the imported file does not contain this. 
 
@@ -61,18 +61,18 @@ data <- data[,c(2,6)]
 head(data, n = 5)
 ```
 
-We can use `format_time` to parse these data to numeric (internally, `format_time` uses functionality in the package `lubridate`). The date-times can be passed as a vector (so it can be appended to the original data) or a data frame where they are in the first column. The resulting data frame will be identical (including column names), except the date-time data will be replaced. We only need to specify the `format` of the date-times (see `?format_time` for further info):
+We can use `format_time` to parse these data to numeric (internally, `format_time` uses functionality in the package `lubridate`). The date-times can either be passed as a vector (for example, so it can be appended to the original data), or as a data frame (by default the function assumes the date-time data are in the first column (i.e. `time = 1`), but this can be overridden by changing the `time` operator to specify the column index where the date-time data occurs). The resulting data frame will be identical (including column names), except a new column with the converted numeric time called `time.num` is added as the first column. We also need to specify the `format` of the date-times (see `?format_time` for further info):
 ```{r}
-## as data frame
-data_2 <- format_time(data, format = "dmyHMS")
+## as vector
+data_2 <- format_time(data$datetime, format = "dmyHMS")
 head(data_2)
 
-## as vector
-data_3 <- format_time(data$datetime, format = "dmyHMS")
+## as data frame
+data_3 <- format_time(data, format = "dmyHMS")
 head(data_3)
 ```
 
-By default, the new time-elapsed data will start at zero, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another. 
+By default, the new time-elapsed data will start at zero, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another, or you simply want to link a specific time elapsed value to the start of the experiment. 
 
 ```{r}
 ## as data frame
@@ -80,7 +80,7 @@ data_4 <- format_time(data$datetime, format = "dmyHMS", start = 1000)
 head(data_4)
 ```
 
-Note, it will always output elapsed time data in *seconds* regardless of the input format.
+Note, elapsed time data will always output in *seconds* regardless of the input format.
 
 ## Dealing with timed events or notes
 
