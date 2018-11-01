@@ -14,7 +14,7 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE)
+  highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
 ## Intermittent-flow respirometry
@@ -43,10 +43,10 @@ inspect(intermittent.rd)
 urchin_int <- inspect(intermittent.rd)
 ```
 
-We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom plot which shows rate of change in O~2~ concentration, however uptake rates (flat regions) appear to be consistent within each experimental replicate. 
+We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom plot which shows rate of change in O~2~ concentration over a rolling window of 20% of the data, however uptake rates (flat regions) appear to be consistent within each experimental replicate. 
 
 ## Analysis with calc_rate()
-In the future `respR` will support intermittent-flow data directly with a dedicated function to easily identify and subset replicates, but at present intermittent data can be analysed quite easily via the main `calc_rate()` function with a little data organisation.
+In the near future `respR` will support intermittent-flow data directly with a dedicated function to easily identify and subset replicates, but at present intermittent data can be analysed quite easily via the main `calc_rate()` function with a little organisation.
 
 ### Subsetting by row and time
 The `calc_rate` function supports input of multiple subset regions by `row` or `time`. The `from` and `to` operators can be vectors with paired values:
