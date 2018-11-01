@@ -14,10 +14,10 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE)
+  highlight = TRUE, fig.width = 6, fig.height = 6)
 ```
 
-This vignette shows a more complex intermittent-flow analysis from a long experiment, with many regularly-spaced replicates (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. `respR` will in the future support these kinds of experiment in a much better way, but for now they are easily analysed with a little data manipulation. 
+This vignette shows a more complex intermittent-flow analysis from a lengthy experiment, with numerous replicates of equal duration (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. `respR` will in the future support these experiments in a much better way, but for now they are easily analysed with a little data manipulation. 
 
 The example data (`zeb_intermittent.rd`) has kindly been provided by Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. Note, the data has been injected with random noise, and volumes and masses used are not the actual values from the experiment. 
 
@@ -25,7 +25,7 @@ The example data (`zeb_intermittent.rd`) has kindly been provided by Davide Tham
 
 From this experiment dataset we want to extract several metrics:
 
-1. *Pre- and post-experiment background rates*. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a long experiment, in high temperatures, the microbial background rate actually increases over the course of the experiment. We will assume this increase is constant (i.e. linear) over the course of the experiment, and each replicate will be corrected with a background rate calculated according to where it occurs along the experiment (i.e. later replicates will be corrected by a greater amount). 
+1. *Pre- and post-experiment background rates*. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a lengthy experiment, in high temperatures, the microbial background rate actually increases over the course of the experiment. We will assume this increase is constant (i.e. linear) over the course of the experiment, and each replicate will be corrected with a background rate calculated according to where it occurs along the experiment (i.e. later replicates will be corrected by a greater amount). 
 
 2. *Maximum metabolic rate (MMR)*. Before this experiment, the fish has been exercised to exhaustion, then placed in the respirometer, so the first replicate during which it is recovering from this exercise will represent MMR. This replicate is 14 minutes duration (13 minutes recording, 1 minute flushing), all the other replicates are 11 minutes in duration (10 minutes recording, 1 minute flushing). See `?zeb_intermittent.rd` for row locations of all stages. 
 
@@ -99,7 +99,7 @@ zeb_rep_1 <- subset_data(zeb, from = 5000+180, to = 5000+180+420, by = "time")
 zeb_mmr <- auto_rate(zeb_rep_1)
 ```
 
-We also need to adjust the rate for background. We will use the background linear model coefficients from above, with the start time of the data we used to calculate the appropriate background rate to apply.
+We also need to adjust the rate for background. We will use the background linear model coefficients from above, with the start time of this replicate to calculate the appropriate background rate to apply (because this is the first replicate we could also just use the background rate we calculated from the initial background recording, i.e. `bg_start`).
 
 ```{r}
 ## adjust for background
@@ -117,18 +117,17 @@ Manually specifying the subsetting criteria for each subequent rep would be oner
 
 There are a number of approaches we could use, but here we will show a simple `for` loop to run `auto_rate()` for each replicate from the start of the second replicate (at row 5840), with a starting buffer of 3 minutes (180s), until 7 minutes (420s) later. These data have O2 recorded once per second, so row numbers can be used like this, but it will depend on the time data units used. For this example, we need to specify the original dataframe saved within the `zeb` object we created using `inspect()` (i.e. `zeb$dataframe`) for the R subsetting syntax to work. 
 
-Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how `respR` can be used over multiple replicates (a more succinct example is at the end of this vignette). Note, for simplicity, we will extract and save only the *rate value* found. Best practice would be to save the `auto_rate()` object for each iteration of the loop (i.e. each replicate) in a `list` object (see eg. at end). We also save the start time of each rep to use later to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is **highly** recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with `plot = FALSE`. 
+Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how `respR` can be easily iterated over multiple replicates (a more succinct example is at the end of this vignette). Note, for simplicity, we will extract and save only the *rate value* found. Best practice would be to save the `auto_rate()` object for each iteration of the loop (i.e. each replicate) in a `list` object (see eg. at end). We also save the start time of each rep to use later to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is **highly** recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with `plot = FALSE`. 
 
 ```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
-
-## set start rows for each rep
+## set start rows for each rep using sequence function (from, to, by)
 s_r <- seq(5840, 74480, 660)
-## apply buffer
+## apply buffer of 3 mins/180s
 s_r <- s_r + 180
-## set end rows for each rep
+## set end rows for each rep - 7 mins/420s later
 e_r <- s_r + 420
 
-## for results
+## for saving results
 rmr_rates <- data.frame()
 
 ## loop
@@ -158,7 +157,7 @@ This `rmr_rates` dataframe contains the start times and most linear rate found i
 
 ## Correcting for background
 
-While there is a function in `respR` for correcting rates for background (`adjust_rate`), it doesn't yet support a dynamic background rate (though see example at the end where a formula can be entered in the function if using `apply` functions). It will support this in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier. 
+While there is a function in `respR` for correcting rates for background (`adjust_rate`), it doesn't yet support a dynamic background rate (though see example at the end where a formula can be entered in the function if using `apply` functions). It is in our plans to support this in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier. 
 
 Using the time we saved for each rep we will calculate the appropriate correction factor, and add it to the dataframe. 
 
@@ -178,7 +177,7 @@ rmr_rates$rmr_adj <- rmr_rates$rmr - rmr_rates$adj
 head(rmr_rates)
 ```
 
-If we plot these values (we add the `* -1` to convert to usual rate-reporting positive values), we can see after the initial period where the fish was recovering from excercise, the rates stablise. Depending on your experiment, you may choose to average a selection of these to define RMR. 
+If we plot these values (we add the `* -1` to convert to the usual positive values rates are reported as), we can see after the initial period where the fish was recovering from excercise, the rates stablise. Depending on your experiment, you may choose to average a selection of these to define RMR. 
 
 ```{r}
 plot((rmr_rates$rmr_adj*-1)~rmr_rates$time)
@@ -221,11 +220,11 @@ convert_rate(zeb_mmr_adj,
              mass = 0.001,
              volume = 0.1)
 ```
-This final value (as a positive) is what we report, or use in further analyses.
+This final value (typically as a positive) is what we report, or use in further analyses.
 
 
 ## A complete analysis
-The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using `apply` functions and `list` objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed even more if you use `Tidyverse` syntax (LINK)).
+The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using `apply` functions rather than a `loop`, and `list` objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed still more if you use `Tidyverse` syntax (LINK)).
 
 ```{r fig.keep="none", results="hide", message=FALSE, warning=FALSE, tidy = F}
 # Import and inspect raw data ---------------------------------------------
@@ -281,7 +280,7 @@ z_rmr <- mean(z_all_rates[z_all_rates > quantile(z_all_rates, 0.9)])
 
 We can see we get same values we calculated above. 
 ```{r}
-z_mmr
 z_rmr
+z_mmr
 ```
 
