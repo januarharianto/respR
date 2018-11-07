@@ -44,9 +44,11 @@ To demonstrate how brief an entire end-to-end `respR` workflow can be, here's an
 library(respR)
 
 ## Import data
-## Here we would typically use import_file() to import an data file, but sardine.rd is already loaded
+## Here we would typically use import_file() to import a data file, 
+## but sardine.rd is already loaded
 
-## Experiment parameters (typically this would be an existing database-style object containing data for many experiments)
+## Experiment parameters (typically this would be an existing 
+## database-style object containing data for many experiments)
 exp_param <- data.frame(volume = 12.3, mass = 21.41, DO.unit = "mg/l", time.unit = "s")
 
 ## Inspect the data, and save it as an object
@@ -84,7 +86,9 @@ This shows an entire analysis workflow can be conducted in only a few lines of c
 For more documented analyses, for documenting parts of a workflow, or for saving the outputs of specific functions, we can use the base R `saveRDS` function. The main functions in `respR` output R objects which include raw data, results and also metadata in the form of subsetting criteria, models and input parameters. Thus, each of these objects contains all the information saved from the previous function that created it, and so all the information required to continue through the `respR` workflow from any intermediate stage. These objects can be saved using `saveRDS` and distributed like any other file. This can allow each stage of the analysis to be saved, and shared or archived. An advantage of using one of these objects is that an analysis can be continued from a certain point without having to re-run the entire workflow. For example, data can be imported, inspected, a rate determined through the `auto_rate` function, and the resulting output object exported via `saveRDS`. This could be shared with a colleague who can then import it into their own R project using `readRDS`, and feed it into `convert_rate` to convert it to whatever units they wish without having to run any other parts of the workflow.  
 
 ```{r eval = FALSE}
-## Running this code will show how saveRDS and readRDS preserves values correctly, and gives the exact same results when used in further stages of the workflow
+## Running this code will show how saveRDS and readRDS preserves values 
+## correctly, and gives the exact same results when used in further 
+## stages of the workflow
 
 ## Inspect
 urch_data <- inspect(urchins.rd, time = 1, oxygen = 15)
@@ -120,7 +124,9 @@ save.image(file = "experiment_1.rda")
 The environment can be reimported by double clicking on the file (usually RStudio will ask if you want to import it to the current project), or `load()` command. 
 
 ```{r eval = FALSE}
-## Will load entire environment to current working project. Path to the file must be specified, or it must be in current working directory.
+## Will load entire environment to current working project. 
+## Path to the file must be specified, or it must be in
+## current working directory.
 load(file = "experiment_1.rda")
 ```
 
