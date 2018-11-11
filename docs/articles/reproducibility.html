@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -140,7 +140,7 @@
     
     
 <p>One of the main motivations in creating <code>respR</code> was to promote open, reproducible respirometry analyses.</p>
-<p>Respirometry is ubiquitous in experimental biology, however there is a lack of standard approaches in analysing respirometry data. Reporting of respirometry analyses is often vague and lacking in detail. This can be understandable given journal word limits, however it hinders attempts to reproduce or scrutinise the data and analyses. In particular, many analysis criteria and parameters are underreported, for example the criteria used to select regions over which rates were determined, or in the case of maximum or minimum rates, the width used when fitting multiple regressions.</p>
+<p>Respirometry is ubiquitous in experimental biology, however there is a lack of standard approaches in analysing respirometry data. Reporting of respirometry analyses is often vague and lacking in detail. This can be understandable given journal word limits, however it hinders attempts to reproduce or scrutinise the data and analyses. In particular, many analysis criteria and parameters are underreported. For example, the criteria used to select regions over which rates were determined, or in the case of maximum or minimum rates, the width used when fitting multiple regressions.</p>
 <p>In the era of cheap data storage, and easy sharing of files online, there is little reason why all stages of analyses and raw data cannot be made available to reviewers, readers and other investigators as supplementary material or in specialised online repositories. We have designed <code>respR</code> to help make this process straightforward.</p>
 <div id="readable-concise-code" class="section level2">
 <h2 class="hasAnchor">
@@ -165,9 +165,11 @@
 <span class="kw">library</span>(respR)
 
 ## Import data
-## Here we would typically use import_file() to import an data file, but sardine.rd is already loaded
+## Here we would typically use import_file() to import a data file, 
+## but sardine.rd is already loaded
 
-## Experiment parameters (typically this would be an existing database-style object containing data for many experiments)
+## Experiment parameters (typically this would be an existing 
+## database-style object containing data for many experiments)
 exp_param &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">volume =</span> <span class="fl">12.3</span>, <span class="dt">mass =</span> <span class="fl">21.41</span>, <span class="dt">DO.unit =</span> <span class="st">"mg/l"</span>, <span class="dt">time.unit =</span> <span class="st">"s"</span>)
 
 ## Inspect the data, and save it as an object
@@ -250,7 +252,7 @@ urch_rate_in &lt;-<span class="st"> </span><span class="kw"><a href="../referenc
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Will save entire environment to current working directory
 <span class="kw">save.image</span>(<span class="dt">file =</span> <span class="st">"experiment_1.rda"</span>)</code></pre></div>
 <p>The environment can be reimported by double clicking on the file (usually RStudio will ask if you want to import it to the current project), or <code>load()</code> command.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Will load entire environment to current working project. Path to the file
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Will load entire environment to current working project.  Path to the file
 ## must be specified, or it must be in current working directory.
 <span class="kw">load</span>(<span class="dt">file =</span> <span class="st">"experiment_1.rda"</span>)</code></pre></div>
 <p>This avoids having to save every object individually.</p>

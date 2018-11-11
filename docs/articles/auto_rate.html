@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -126,7 +126,7 @@
 <!--/.navbar -->
 
       
-      </header><script src="auto_rate_files/htmlwidgets-1.2/htmlwidgets.js"></script><script src="auto_rate_files/viz-0.3/viz.js"></script><link href="auto_rate_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+      </header><script src="auto_rate_files/htmlwidgets-1.3/htmlwidgets.js"></script><script src="auto_rate_files/viz-0.3/viz.js"></script><link href="auto_rate_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
 <script src="auto_rate_files/grViz-binding-1.0.0/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -150,14 +150,15 @@
 <li>maximum rates observed, representative of <em>active</em> or <em>maximal</em> metabolic rates.</li>
 </ul>
 <p>The problem is that for large datasets, identifying these regions is difficult, and if selected visually, are subject to bias and lack of observer objectivity. Other methods, such as fitting multiple, fixed-width linear regressions over the entire dataset to identify regions of minimum or maximum slopes is computationally intensive, and slopes found via this method highly sensitive to the width chosen, especially if the specimen’s metabolic rate may change rapidly.</p>
-<p>Here we present <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, a function in the <code>respR</code> package that uses rolling regression techniques to automatically detect <strong>most linear</strong>, <strong>maximum</strong> and <strong>minimum</strong> rates within a dataset. This function can be used to select linear, max and min rates in an statistically robust, objective way. In this vignette we detail how <code><a href="../reference/auto_rate.html">auto_rate()</a></code> works, and how it can be used to extract rates from respirometry data. We show how we have <a href="https://januarharianto.github.io/respR/articles/performance.html">tested this method against simulated data</a>, and also <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">compare its performance against another linear detection method</a>. We show it perfoms extremely well on large datasets in determining linear rates. Importantly, <code><a href="../reference/auto_rate.html">auto_rate()</a></code> has been optimised to be extremely fast. Other methods on large datasets can take minutes or hours to run. We show how <code><a href="../reference/auto_rate.html">auto_rate()</a></code> can reduce this wait by orders of magnitude, literally fitting tens of thousands of regressions and detecting linear regions in seconds.</p>
+<p>Here we present <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, a function in the <code>respR</code> package that uses rolling regression techniques to automatically detect <strong>most linear</strong>, <strong>maximum</strong> and <strong>minimum</strong> rates within a dataset. This function can be used to select most linear, maximum and minimum rates in a statistically robust, objective way.</p>
+<p>In this vignette we detail how <code><a href="../reference/auto_rate.html">auto_rate()</a></code> works, and how it can be used to extract rates from respirometry data. We show how we have <a href="https://januarharianto.github.io/respR/articles/performance.html">tested this method against simulated data</a>, and also <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">compare its performance against another linear detection method</a>. We show it perfoms extremely well on large datasets in determining linear rates. Importantly, <code><a href="../reference/auto_rate.html">auto_rate()</a></code> has been optimised to be extremely fast. Other methods on large datasets can take minutes or hours to run. We show how <code><a href="../reference/auto_rate.html">auto_rate()</a></code> can reduce this wait by orders of magnitude, literally fitting tens of thousands of regressions and detecting linear regions in seconds.</p>
 </div>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
 <p>This illustrates the main processes involved in <code><a href="../reference/auto_rate.html">auto_rate()</a></code>:</p>
-<div id="htmlwidget-a39e79859a42196a2f23" style="width:681.6px;height:576px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a39e79859a42196a2f23">{"x":{"diagram":"\ndigraph a_nice_graph {\n\n# node definitions with substituted label text\n\nnode [fontname = Helvetica, shape = circle]\nrd [label = \"Raw Data\"]\n\nnode [fontname = Helvetica, shape = rectangle]\nrr [label = \"1. Rolling linear regression\"]\nkd [label = \"2. Kernel density\nestimates\"]\nre [label = \"3. Bandwidth resampling\"]\nlr [label = \"4. Linear regression\"]\nar [label = \"5. Rank\"]\nfi [label = \"6. Filter\"]\n\nnode [fontname = Menlo, shape = none]\nau [label = \"auto_rate()\"]\nli [label = \"linear,\"]\nmm [label = \"max, min\"]\nin [label = \"interval\"]\n\n# edge definitions with the node IDs\n\nrd -> au -> rr -> ar -> mm\nrr -> kd -> re -> lr -> ar -> li\nrr -> fi -> in\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><code><a href="../reference/auto_rate.html">auto_rate()</a></code> works by performing an optimised rolling regression on the dataset. A kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.</p>
+<div id="htmlwidget-733fc92646182aa35365" style="width:681.6px;height:576px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-733fc92646182aa35365">{"x":{"diagram":"\ndigraph a_nice_graph {\n\n# node definitions with substituted label text\n\nnode [fontname = Helvetica, shape = circle]\nrd [label = \"Raw Data\"]\n\nnode [fontname = Helvetica, shape = rectangle]\nrr [label = \"1. Rolling linear regression\"]\nkd [label = \"2. Kernel density\nestimates\"]\nre [label = \"3. Bandwidth resampling\"]\nlr [label = \"4. Linear regression\"]\nar [label = \"5. Rank\"]\nfi [label = \"6. Filter\"]\n\nnode [fontname = Menlo, shape = none]\nau [label = \"auto_rate()\"]\nli [label = \"linear,\"]\nmm [label = \"max, min\"]\nin [label = \"interval\"]\n\n# edge definitions with the node IDs\n\nrd -> au -> rr -> ar -> mm\nrr -> kd -> re -> lr -> ar -> li\nrr -> fi -> in\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><code><a href="../reference/auto_rate.html">auto_rate()</a></code> works by performing an optimised rolling regression on the dataset. A kernel density estimate is performed on the rolling regression output and the kernel bandwidth used to re-sample linear regions of the data for re-analysis.</p>
 </div>
 <div id="rolling-linear-regression" class="section level2">
 <h2 class="hasAnchor">
@@ -179,7 +180,7 @@
 <div id="adjusting-the-width-of-rolling-regressions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adjusting-the-width-of-rolling-regressions" class="anchor"></a>Adjusting the width of rolling regressions</h2>
-<p>By default, <code><a href="../reference/auto_rate.html">auto_rate()</a></code>’s rolling regression uses a rolling window value in rows of <code>0.2</code> multiplied by the total length of the number of samples. This can be changed by changing the <code>width</code> argument, to a proportion relative to the total size of the data (<code>width = 0.1, by = "row"</code>) or a fixed value in the time metric (<code>width = 3000, by = "time"</code>).</p>
+<p>By default, <code><a href="../reference/auto_rate.html">auto_rate()</a></code>’s rolling regression uses a rolling window value in rows of <code>0.2</code> multiplied by the total length of the number of samples. This can be changed using the <code>width</code> argument, to a proportion relative to the total size of the data (<code>width = 0.1, by = "row"</code>) or a fixed value in the time metric (<code>width = 3000, by = "time"</code>).</p>
 <p>It is important to note that the width determines the exact width of the data segments produced for <code>max</code>, <code>min</code> and <code>interval</code> rates. This allows the user to consistently report results across experiments, such as reporting the maximum or minimum rates sustained over a specified time period.</p>
 <p>Importantly, the <code>width</code> does <em>not</em> restrict the maximum width of the segments produced for linear detection. <strong>We advise users to use caution when changing the <code>width</code> argument if using <code>method = "linear"</code>.</strong> Choosing an inappropriate width value tends to over-fit the data for rolling regression.</p>
 <p>Below, we show the differences in the shape of the rolling regressions when using a <code>width</code> of <code>0.6</code> to analyse <code>sardine.rd</code>:</p>
@@ -352,35 +353,36 @@ summary(x, pos = 2)
 </div>
 <div id="summary-of-when-to-use-different-auto_rate-options" class="section level2">
 <h2 class="hasAnchor">
-<a href="#summary-of-when-to-use-different-auto_rate-options" class="anchor"></a>Summary of when to use different auto_rate() options</h2>
+<a href="#summary-of-when-to-use-different-auto_rate-options" class="anchor"></a>Summary of when to use different <code>auto_rate</code> options</h2>
 <div id="method-linear" class="section level3">
 <h3 class="hasAnchor">
-<a href="#method-linear" class="anchor"></a><code>method = linear</code>
+<a href="#method-linear" class="anchor"></a><code>method = "linear"</code>
 </h3>
 <p>In ‘steady state’ experiments. That is, when you are looking for the most <em>consistent</em> or <em>representative rates</em> for what the specimen is experiencing. This could represent routine metabolic rate, or in the case of an animal under constant excercise a consistent active metabolic rate. No <code>width</code> needs to be specified under this option.</p>
 </div>
 <div id="method-max" class="section level3">
 <h3 class="hasAnchor">
-<a href="#method-max" class="anchor"></a><code>method = max</code>
+<a href="#method-max" class="anchor"></a><code>method = "max"</code>
 </h3>
 <p>When your specimen is active at some point during the experiment, or has been exercised and placed in a respirometer, and you want to know its <em>maximum</em> rate over a specific time period or row width. The default is <code>width = 0.2, by = "row"</code> (0.2 of total row number) or it can be specified in the time unit, e.g. <code>width = 600, by = "time"</code>). This should be carefully selected, and consistent if you are comparing specimens.</p>
 </div>
 <div id="method-min" class="section level3">
 <h3 class="hasAnchor">
-<a href="#method-min" class="anchor"></a><code>method = min</code>
+<a href="#method-min" class="anchor"></a><code>method = "min"</code>
 </h3>
 <p>Similarly, when your specimen is inactive, quiescent, dormant, etc., and you want to know the lowest rates over a specified time period. This is often representative of resting, basal or standard metabolic rates. Again, this necessarily requires a time window (<code>width</code>) to be specified, which should be carefully selected, and consistent if you are comparing specimens.</p>
 </div>
 <div id="method-interval" class="section level3">
 <h3 class="hasAnchor">
-<a href="#method-interval" class="anchor"></a><code>method = interval</code>
+<a href="#method-interval" class="anchor"></a><code>method = "interval"</code>
 </h3>
 <p>This is chiefly for comparison with historical data, or if you have a specific reason to specify non-overlapping regressions. For example, in P<sub>crit</sub> measurements, it is common for users to generate rate~O<sub>2</sub> data by interval-based regressions.</p>
 </div>
 </div>
 <div id="when-not-to-use-auto_rate" class="section level2">
 <h2 class="hasAnchor">
-<a href="#when-not-to-use-auto_rate" class="anchor"></a>When <em>not</em> to use auto_rate()</h2>
+<a href="#when-not-to-use-auto_rate" class="anchor"></a>When <em>not</em> to use <code>auto_rate</code>
+</h2>
 <ul>
 <li>
 <strong>Flowthrough respirometry data</strong><br>
@@ -423,8 +425,8 @@ While we have had generally good results using <code><a href="../reference/auto_
       <li><a href="#adjusting-the-width-of-rolling-regressions">Adjusting the width of rolling regressions</a></li>
       <li><a href="#most-linear-rates">Most linear rates</a></li>
       <li><a href="#minimum-and-maximum-rates">Minimum and maximum rates</a></li>
-      <li><a href="#summary-of-when-to-use-different-auto_rate-options">Summary of when to use different auto_rate() options</a></li>
-      <li><a href="#when-not-to-use-auto_rate">When <em>not</em> to use auto_rate()</a></li>
+      <li><a href="#summary-of-when-to-use-different-auto_rate-options">Summary of when to use different <code>auto_rate</code> options</a></li>
+      <li><a href="#when-not-to-use-auto_rate">When <em>not</em> to use <code>auto_rate</code></a></li>
       <li><a href="#further-processing">Further processing</a></li>
       <li><a href="#examples">Examples</a></li>
       </ul>

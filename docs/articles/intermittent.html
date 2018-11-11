@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -151,7 +151,7 @@
 <p>We use <code><a href="../reference/inspect.html">inspect()</a></code> to scan for errors in the data frame, preview the data and save it to an object to pass to the next stage.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">urchin_int &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect.html">inspect</a></span>(intermittent.rd)</code></pre></div>
 <pre><code>#&gt; No issues detected while inspecting data frame.</code></pre>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <pre><code>#&gt; 
 #&gt; # inspect # -----------------------------
 #&gt;               Time   O2
@@ -159,12 +159,12 @@
 #&gt; sequential    pass    -
 #&gt; duplicated    pass    -
 #&gt; evenly-spaced pass    -</code></pre>
-<p>We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom plot which shows rate of change in O<sub>2</sub> concentration, however uptake rates (flat regions) appear to be consistent within each experimental replicate.</p>
+<p>We can see from the top plot that this dataset has three replicates. The flush periods obviously skew the bottom plot which shows rate of change in O<sub>2</sub> concentration over a rolling window of 20% of the data, however uptake rates (flat regions) appear to be consistent within each experimental replicate.</p>
 </div>
 <div id="analysis-with-calc_rate" class="section level2">
 <h2 class="hasAnchor">
 <a href="#analysis-with-calc_rate" class="anchor"></a>Analysis with calc_rate()</h2>
-<p>In the future <code>respR</code> will support intermittent-flow data directly with a dedicated function to easily identify and subset replicates, but at present intermittent data can be analysed quite easily via the main <code><a href="../reference/calc_rate.html">calc_rate()</a></code> function with a little data organisation.</p>
+<p>In the near future <code>respR</code> will support intermittent-flow data directly with a dedicated function to easily identify and subset replicates, but at present intermittent data can be analysed quite easily via the main <code><a href="../reference/calc_rate.html">calc_rate()</a></code> function with a little organisation.</p>
 <div id="subsetting-by-row-and-time" class="section level3">
 <h3 class="hasAnchor">
 <a href="#subsetting-by-row-and-time" class="anchor"></a>Subsetting by row and time</h3>
@@ -193,7 +193,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; # plot # ------------------------</span>
 <span class="co">#&gt; Plotting...this may take a while for large datasets.</span></code></pre></div>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 <pre><code>#&gt; Done.</code></pre>
 <p>We can even query multiple regions of each replicate (which can overlap, although this would obscure the output plot somewhat):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/calc_rate.html">calc_rate</a></span>(urchin_int, <span class="dt">from =</span> <span class="kw">c</span>(<span class="dv">200</span>, <span class="dv">900</span>, <span class="dv">2300</span>, <span class="dv">2900</span>, <span class="dv">4000</span>, <span class="dv">4400</span>), <span class="dt">to =</span> <span class="kw">c</span>(<span class="dv">700</span>, 
@@ -265,9 +265,9 @@ u_rep1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/subs
 <span class="kw"><a href="../reference/auto_rate.html">auto_rate</a></span>(u_rep1)  <span class="co">#default = most linear rate</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 8 kernel density peaks detected and ranked.</span></code></pre></div>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-17-1.png" width="576"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/auto_rate.html">auto_rate</a></span>(u_rep1, <span class="dt">method =</span> <span class="st">"min"</span>)  <span class="co"># minimum rate</span></code></pre></div>
-<p><img src="intermittent_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
+<p><img src="intermittent_files/figure-html/unnamed-chunk-17-2.png" width="576"></p>
 </div>
 <div id="background-adjustments" class="section level2">
 <h2 class="hasAnchor">

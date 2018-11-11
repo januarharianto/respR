@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -143,7 +143,8 @@
 <p>Generic R data frame type objects, including <code>vectors</code> and objects of class <code>data.frame</code>, <code>data.table</code> and <code>tibble</code>, are recognised. The only structural data requirement is that time~O<sub>2</sub> data be in a specific form; paired values of numeric time-elapsed (in s, m or h) and oxygen amount (in any common unit). Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. Two functions are provided to assist with bringing in and formatting your data correctly.</p>
 <div id="import_file" class="section level2">
 <h2 class="hasAnchor">
-<a href="#import_file" class="anchor"></a>import_file()</h2>
+<a href="#import_file" class="anchor"></a><code><a href="../reference/import_file.html">import_file()</a></code>
+</h2>
 <p>Most systems allow data to be exported in easily readable formats (e.g. .csv, .txt) which contain the numeric time and O2 data <code>respR</code> requires. These files are usually easily imported into R using generic functions such as <code>read.csv()</code> and the relevant columns specified when used in <code>respR</code> functions, or extracted into separate data frames.</p>
 <p>Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data, which causes importing problems in <code>read.csv()</code>. These files can be altered in Excel or other spreadsheet software to fix these issues, however <code>respR</code> allows importing of many raw data files from various systems without modification.</p>
 <p>The <code><a href="../reference/import_file.html">import_file()</a></code> function uses pattern recognititon to identify the originating system of the file. It also automatically recognises the format of any date-time data and uses it to create a new time-elapsed column, if one does not already exist.</p>
@@ -163,13 +164,14 @@
 <span class="co">#&gt; 6815: 6814 5/11/2017 11:17:38 AM     1013 30.49 13.50  9.469</span>
 <span class="co">#&gt; 6816: 6815 5/11/2017 11:17:39 AM     1013 30.47 13.53  9.474</span></code></pre></div>
 <p>As we can see, the function automatically recognises that this is a Witrox file, removes redundant information, and renames the relevant columns. It also uses the date-time columns to calculate a numeric time elapsed column (called <code>time</code> or <code>elapsed</code> depending on the original file).</p>
-<p>This function requires only a single input, the path to the file (one other option, <code>export = TRUE</code> allows exporting of the imported data to a .csv file). Everything else is handled automatically. This contrasts with other packages where numerous options such as the delimiter character, originating hardware, and specific date format must be specifed, which we have found leads to substantial usability issues (see LINK).</p>
+<p>This function requires only a single input, the path to the file (one other option, <code>export = TRUE</code> allows exporting of the imported data to a .csv file). Everything else is handled automatically. This contrasts with other packages where numerous options such as the delimiter character, originating hardware, and specific date format must be specifed, which we have found leads to substantial usability issues (see <a href="https://januarharianto.github.io/respR/news/packages_comp.html">A comparison of respR with other R packages</a>).</p>
 <p>After importing and saving to an object, this can be passed to the rest of the <code>respR</code> functions for processing, all while leaving the raw data file unmodified.</p>
-<p>This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to <em>send us sample files for testing</em> (CONTACT LINK), especially any they have problems with, or from systems we do not yet support.</p>
+<p>This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to <em>send us sample files for testing</em>, especially any they have problems with, or from systems we do not yet support.</p>
 </div>
 <div id="format_time" class="section level2">
 <h2 class="hasAnchor">
-<a href="#format_time" class="anchor"></a>format_time()</h2>
+<a href="#format_time" class="anchor"></a><code><a href="../reference/format_time.html">format_time()</a></code>
+</h2>
 <p>For files types that are not yet supported, or if you have already imported your data by other means, the <code><a href="../reference/format_time.html">format_time()</a></code> function will parse date-time to numeric time-elapsed, in the event the imported file does not contain this.</p>
 <p>Here’s an example of a 2 column data frame with date-time data and oxygen.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(data, <span class="dt">n =</span> <span class="dv">5</span>)
@@ -179,28 +181,28 @@
 <span class="co">#&gt; 3: 5/11/2017 9:24:06 AM 10.012</span>
 <span class="co">#&gt; 4: 5/11/2017 9:24:07 AM 10.027</span>
 <span class="co">#&gt; 5: 5/11/2017 9:24:08 AM 10.032</span></code></pre></div>
-<p>We can use <code>format_time</code> to parse these data to numeric (internally, <code>format_time</code> uses functionality in the package <code>lubridate</code>). The date-times can be passed as a vector (so it can be appended to the original data) or a data frame where they are in the first column. The resulting data frame will be identical (including column names), except the date-time data will be replaced. We only need to specify the <code>format</code> of the date-times (see <code><a href="../reference/format_time.html">?format_time</a></code> for further info):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## as data frame
-data_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_time.html">format_time</a></span>(data, <span class="dt">format =</span> <span class="st">"dmyHMS"</span>)
+<p>We can use <code>format_time</code> to parse these data to numeric (internally, <code>format_time</code> uses functionality in the package <code>lubridate</code>). The date-times can either be passed as a vector (for example, so it can be appended to the original data), or as a data frame (by default the function assumes the date-time data are in the first column (i.e. <code>time = 1</code>), but this can be overridden by changing the <code>time</code> operator to specify the column index where the date-time data occurs). The resulting data frame will be identical (including column names), except a new column with the converted numeric time called <code>time.num</code> is added as the first column. We also need to specify the <code>format</code> of the date-times (see <code><a href="../reference/format_time.html">?format_time</a></code> for further info):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## as vector
+data_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_time.html">format_time</a></span>(data<span class="op">$</span>datetime, <span class="dt">format =</span> <span class="st">"dmyHMS"</span>)
 <span class="kw">head</span>(data_<span class="dv">2</span>)
+<span class="co">#&gt; [1] 0 1 2 3 4 5</span>
+
+## as data frame
+data_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_time.html">format_time</a></span>(data, <span class="dt">format =</span> <span class="st">"dmyHMS"</span>)
+<span class="kw">head</span>(data_<span class="dv">3</span>)
 <span class="co">#&gt;   time.num             datetime oxygen</span>
 <span class="co">#&gt; 1        0 5/11/2017 9:24:04 AM 10.056</span>
 <span class="co">#&gt; 2        1 5/11/2017 9:24:05 AM 10.015</span>
 <span class="co">#&gt; 3        2 5/11/2017 9:24:06 AM 10.012</span>
 <span class="co">#&gt; 4        3 5/11/2017 9:24:07 AM 10.027</span>
 <span class="co">#&gt; 5        4 5/11/2017 9:24:08 AM 10.032</span>
-<span class="co">#&gt; 6        5 5/11/2017 9:24:09 AM 10.073</span>
-
-## as vector
-data_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_time.html">format_time</a></span>(data<span class="op">$</span>datetime, <span class="dt">format =</span> <span class="st">"dmyHMS"</span>)
-<span class="kw">head</span>(data_<span class="dv">3</span>)
-<span class="co">#&gt; [1] 0 1 2 3 4 5</span></code></pre></div>
-<p>By default, the new time-elapsed data will start at zero, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another.</p>
+<span class="co">#&gt; 6        5 5/11/2017 9:24:09 AM 10.073</span></code></pre></div>
+<p>By default, the new time-elapsed data will start at zero, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another, or you simply want to link a specific time elapsed value to the start of the experiment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## as data frame
 data_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/format_time.html">format_time</a></span>(data<span class="op">$</span>datetime, <span class="dt">format =</span> <span class="st">"dmyHMS"</span>, <span class="dt">start =</span> <span class="dv">1000</span>)
 <span class="kw">head</span>(data_<span class="dv">4</span>)
 <span class="co">#&gt; [1] 1000 1001 1002 1003 1004 1005</span></code></pre></div>
-<p>Note, it will always output elapsed time data in <em>seconds</em> regardless of the input format.</p>
+<p>Note, elapsed time data will always output in <em>seconds</em> regardless of the input format.</p>
 </div>
 <div id="dealing-with-timed-events-or-notes" class="section level2">
 <h2 class="hasAnchor">
@@ -255,8 +257,8 @@ data_<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw"><a
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#import_file">import_file()</a></li>
-      <li><a href="#format_time">format_time()</a></li>
+<li><a href="#import_file"><code><a href="--/reference/import_file-html">import_file()</a></code></a></li>
+      <li><a href="#format_time"><code><a href="--/reference/format_time-html">format_time()</a></code></a></li>
       <li><a href="#dealing-with-timed-events-or-notes">Dealing with timed events or notes</a></li>
       <li><a href="#next-steps">Next steps</a></li>
       </ul>

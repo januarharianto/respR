@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -139,14 +139,14 @@
 
     
     
-<p>This vignette shows a more complex intermittent-flow analysis from a long experiment, with many regularly-spaced replicates (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. <code>respR</code> will in the future support these kinds of experiment in a much better way, but for now they are easily analysed with a little data manipulation.</p>
+<p>This vignette shows a more complex intermittent-flow analysis from a lengthy experiment, with numerous replicates of equal duration (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. <code>respR</code> will in the future support these experiments in a much better way, but for now they are easily analysed with a little data manipulation.</p>
 <p>The example data (<code>zeb_intermittent.rd</code>) has kindly been provided by Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. Note, the data has been injected with random noise, and volumes and masses used are not the actual values from the experiment.</p>
 <div id="experiment-overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#experiment-overview" class="anchor"></a>Experiment overview</h2>
 <p>From this experiment dataset we want to extract several metrics:</p>
 <ol style="list-style-type: decimal">
-<li><p><em>Pre- and post-experiment background rates</em>. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a long experiment, in high temperatures, the microbial background rate actually increases over the course of the experiment. We will assume this increase is constant (i.e. linear) over the course of the experiment, and each replicate will be corrected with a background rate calculated according to where it occurs along the experiment (i.e. later replicates will be corrected by a greater amount).</p></li>
+<li><p><em>Pre- and post-experiment background rates</em>. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a lengthy experiment, in high temperatures, the microbial background rate actually increases over the course of the experiment. We will assume this increase is constant (i.e. linear) over the course of the experiment, and each replicate will be corrected with a background rate calculated according to where it occurs along the experiment (i.e. later replicates will be corrected by a greater amount).</p></li>
 <li><p><em>Maximum metabolic rate (MMR)</em>. Before this experiment, the fish has been exercised to exhaustion, then placed in the respirometer, so the first replicate during which it is recovering from this exercise will represent MMR. This replicate is 14 minutes duration (13 minutes recording, 1 minute flushing), all the other replicates are 11 minutes in duration (10 minutes recording, 1 minute flushing). See <code><a href="../reference/zeb_intermittent.rd.html">?zeb_intermittent.rd</a></code> for row locations of all stages.</p></li>
 <li><p><em>Routine metabolic rate (RMR)</em>. This will be calculated from the later replicates once the animal has recovered and is using oxygen only to fuel basal metabolism and minor, spontaneous movement.</p></li>
 </ol>
@@ -156,10 +156,10 @@
 <a href="#loading-and-inspecting-data" class="anchor"></a>Loading and inspecting data</h2>
 <p>We use <code><a href="../reference/inspect.html">inspect()</a></code> to preview the data and save it to an object. This is a <strong>very</strong> large dataset (nearly 80,000 records), so if running the code in this vignette be warned that operations may take some time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zeb &lt;-<span class="st"> </span><span class="kw"><a href="../reference/inspect.html">inspect</a></span>(zeb_intermittent.rd)</code></pre></div>
-<p><img src="intermittent2_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="intermittent2_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
 <p>Because this is a lengthy experiment, the data is too dense to inspect easily from the plots. Here we’ll inspect a portion at the start to illustrate the structure.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/inspect.html">inspect</a></span>(zeb_intermittent.rd[<span class="dv">1</span><span class="op">:</span><span class="dv">18000</span>, ])</code></pre></div>
-<p><img src="intermittent2_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p><img src="intermittent2_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 <p>The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 20% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data.</p>
 </div>
 <div id="calculating-background-rate" class="section level2">
@@ -173,7 +173,7 @@ backg_end &lt;-<span class="st"> </span><span class="kw"><a href="../reference/s
 ## Calc initial and end bg rates
 bg_start &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span>(backg_start)
 bg_end &lt;-<span class="st"> </span><span class="kw"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span>(backg_end)</code></pre></div>
-<p><img src="intermittent2_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="intermittent2_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <p>The two different background rates (only the end one shown above) have been saved to these two objects. Support for a dynamic background rate within <code><a href="../reference/calc_rate.bg.html">calc_rate.bg()</a></code> is in our future development plans, but for now we can use the two rates to derive a linear relationship for the rate to apply based on time along the experiment. We will use these later to correct rates for background.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## extract bg rates and median timepoints
 r1 &lt;-<span class="st"> </span>bg_start<span class="op">$</span>bgrate
@@ -200,8 +200,8 @@ zeb_rep_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw"
 zeb_mmr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/auto_rate.html">auto_rate</a></span>(zeb_rep_<span class="dv">1</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 3 kernel density peaks detected and ranked.</span></code></pre></div>
-<p><img src="intermittent2_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>We also need to adjust the rate for background. We will use the background linear model coefficients from above, with the start time of the data we used to calculate the appropriate background rate to apply.</p>
+<p><img src="intermittent2_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
+<p>We also need to adjust the rate for background. We will use the background linear model coefficients from above, with the start time of this replicate to calculate the appropriate background rate to apply (because this is the first replicate we could also just use the background rate we calculated from the initial background recording, i.e. <code>bg_start</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## adjust for background
 zeb_mmr_adj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/adjust_rate.html">adjust_rate</a></span>(zeb_mmr, <span class="dt">by =</span> <span class="dv">5180</span> <span class="op">*</span><span class="st"> </span>bg_lm_slp <span class="op">+</span><span class="st"> </span>bg_lm_int)
 <span class="co">#&gt; </span>
@@ -223,16 +223,15 @@ zeb_mmr_adj &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <p>Calculating RMR is a little more complex. Typically, SMR and RMR are defined as the lowest rates observed. What you choose to use will depend on many factors unique to your experiment, whether that be the absolute lowest rate found, or a representative mean of several low rates. The following is merely to show how you can use <code>respR</code> to explore and extract rates from multiple replicates.</p>
 <p>Manually specifying the subsetting criteria for each subequent rep would be onerous, but since we know they cycle at 11 minutes (660s) and there are 105 further replicates after the first ends at row 5839, we can use straightforward R syntax. This is information that will have been recorded as part of the experiment.</p>
 <p>There are a number of approaches we could use, but here we will show a simple <code>for</code> loop to run <code><a href="../reference/auto_rate.html">auto_rate()</a></code> for each replicate from the start of the second replicate (at row 5840), with a starting buffer of 3 minutes (180s), until 7 minutes (420s) later. These data have O2 recorded once per second, so row numbers can be used like this, but it will depend on the time data units used. For this example, we need to specify the original dataframe saved within the <code>zeb</code> object we created using <code><a href="../reference/inspect.html">inspect()</a></code> (i.e. <code>zeb$dataframe</code>) for the R subsetting syntax to work.</p>
-<p>Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how <code>respR</code> can be used over multiple replicates (a more succinct example is at the end of this vignette). Note, for simplicity, we will extract and save only the <em>rate value</em> found. Best practice would be to save the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> object for each iteration of the loop (i.e. each replicate) in a <code>list</code> object (see eg. at end). We also save the start time of each rep to use later to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is <strong>highly</strong> recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with <code>plot = FALSE</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-## set start rows for each rep
+<p>Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely a simple example to illustrate how <code>respR</code> can be easily iterated over multiple replicates (a more succinct example is at the end of this vignette). Note, for simplicity, we will extract and save only the <em>rate value</em> found. Best practice would be to save the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> object for each iteration of the loop (i.e. each replicate) in a <code>list</code> object (see eg. at end). We also save the start time of each rep to use later to calculate the correct background rate. Also, while it will greatly increase the time taken, for actual analyses it is <strong>highly</strong> recommended you examine the plot of each iteration, or at very least those that you use. Here in the interests of speed we suppress it with <code>plot = FALSE</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## set start rows for each rep using sequence function (from, to, by)
 s_r &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">5840</span>, <span class="dv">74480</span>, <span class="dv">660</span>)
-## apply buffer
+## apply buffer of 3 mins/180s
 s_r &lt;-<span class="st"> </span>s_r <span class="op">+</span><span class="st"> </span><span class="dv">180</span>
-## set end rows for each rep
+## set end rows for each rep - 7 mins/420s later
 e_r &lt;-<span class="st"> </span>s_r <span class="op">+</span><span class="st"> </span><span class="dv">420</span>
 
-## for results
+## for saving results
 rmr_rates &lt;-<span class="st"> </span><span class="kw">data.frame</span>()
 
 ## loop
@@ -264,7 +263,7 @@ rmr_rates &lt;-<span class="st"> </span><span class="kw">data.frame</span>()
 <div id="correcting-for-background" class="section level2">
 <h2 class="hasAnchor">
 <a href="#correcting-for-background" class="anchor"></a>Correcting for background</h2>
-<p>While there is a function in <code>respR</code> for correcting rates for background (<code>adjust_rate</code>), it doesn’t yet support a dynamic background rate (though see example at the end where a formula can be entered in the function if using <code>apply</code> functions). It will support this in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier.</p>
+<p>While there is a function in <code>respR</code> for correcting rates for background (<code>adjust_rate</code>), it doesn’t yet support a dynamic background rate (though see example at the end where a formula can be entered in the function if using <code>apply</code> functions). It is in our plans to support this in the future, but for now the rates can be easily corrected using the background correction linear relationship we calculated earlier.</p>
 <p>Using the time we saved for each rep we will calculate the appropriate correction factor, and add it to the dataframe.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## use time value with lm slope and intercept to get correction factor
 rmr_rates<span class="op">$</span>adj &lt;-<span class="st"> </span>rmr_rates<span class="op">$</span>time <span class="op">*</span><span class="st"> </span>bg_lm_slp <span class="op">+</span><span class="st"> </span>bg_lm_int
@@ -295,9 +294,9 @@ rmr_rates<span class="op">$</span>adj &lt;-<span class="st"> </span>rmr_rates<sp
 <span class="co">#&gt; 4 8000 -0.004246525 -7.765433e-05 -0.004168870</span>
 <span class="co">#&gt; 5 8660 -0.003727447 -7.807232e-05 -0.003649375</span>
 <span class="co">#&gt; 6 9320 -0.002378394 -7.849031e-05 -0.002299904</span></code></pre></div>
-<p>If we plot these values (we add the <code>* -1</code> to convert to usual rate-reporting positive values), we can see after the initial period where the fish was recovering from excercise, the rates stablise. Depending on your experiment, you may choose to average a selection of these to define RMR.</p>
+<p>If we plot these values (we add the <code>* -1</code> to convert to the usual positive values rates are reported as), we can see after the initial period where the fish was recovering from excercise, the rates stablise. Depending on your experiment, you may choose to average a selection of these to define RMR.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>((rmr_rates<span class="op">$</span>rmr_adj <span class="op">*</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span>) <span class="op">~</span><span class="st"> </span>rmr_rates<span class="op">$</span>time)</code></pre></div>
-<p><img src="intermittent2_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="intermittent2_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
 </div>
 <div id="conversion-and-next-steps" class="section level2">
 <h2 class="hasAnchor">
@@ -342,12 +341,12 @@ zeb_rmr &lt;-<span class="st"> </span><span class="kw">mean</span>(rt)
 <span class="co">#&gt; Converted:</span>
 <span class="co">#&gt; [1] -2.084955</span>
 <span class="co">#&gt; [1] "mg/hour/g"</span></code></pre></div>
-<p>This final value (as a positive) is what we report, or use in further analyses.</p>
+<p>This final value (typically as a positive) is what we report, or use in further analyses.</p>
 </div>
 <div id="a-complete-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-complete-analysis" class="anchor"></a>A complete analysis</h2>
-<p>The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a <code>respR</code> analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using <code>apply</code> functions and <code>list</code> objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed even more if you use <code>Tidyverse</code> syntax (LINK)).</p>
+<p>The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a <code>respR</code> analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using <code>apply</code> functions rather than a <code>loop</code>, and <code>list</code> objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed still more if you use <code>Tidyverse</code> syntax, see <a href="https://januarharianto.github.io/respR/news/tidyverse.html">respR and the tidyverse</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Import and inspect raw data ---------------------------------------------</span>
 
 ## importing would normally be the first step, e.g. import_file("path/to/file")
@@ -397,10 +396,10 @@ z_mmr &lt;-<span class="st"> </span>z_rates_final[[<span class="dv">1</span>]]<s
 z_all_rates &lt;-<span class="st"> </span><span class="kw">sapply</span>(z_rates_final, <span class="cf">function</span>(g) g<span class="op">$</span>output[<span class="dv">1</span>])
 z_rmr &lt;-<span class="st"> </span><span class="kw">mean</span>(z_all_rates[z_all_rates <span class="op">&gt;</span><span class="st"> </span><span class="kw">quantile</span>(z_all_rates, <span class="fl">0.9</span>)])</code></pre></div>
 <p>We can see we get same values we calculated above.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z_mmr
-<span class="co">#&gt; [1] -2.084955</span>
-z_rmr
-<span class="co">#&gt; [1] -0.6185866</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z_rmr
+<span class="co">#&gt; [1] -0.6185866</span>
+z_mmr
+<span class="co">#&gt; [1] -2.084955</span></code></pre></div>
 </div>
   </div>
 

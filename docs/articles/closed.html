@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -179,10 +179,10 @@
 #&gt; Uneven time data locations (first 20 shown) in column: time.min n 
 #&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20</code></pre>
 <pre><code>#&gt; Warning: Time values are not evenly-spaced.</code></pre>
-<p>From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the first 150 rows, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.</p>
+<p>From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the initial stages of the experiment, oxygen uptake shows a consistent rate, and so in this experiment this section would be suitable for analysis.</p>
 <p>The function also warns us that time data is not <em>numerically</em> evenly-spaced. However, <em>this does not mean the data cannot be processed</em>. Rather than make assumptions that rows represent evenly spaced datapoints, the functions in <code>respR</code> use actual time values for analyses and calculations, and so even irregularly spaced data are analysed correctly. This warning is for information purposes only: it is to make the user aware that if they use row numbers for manual operations such as subsetting, the same width may not represent the same time period. For now, the data frame is saved as an object, <code>urchin</code> which contains the original data columns we selected coerced into a data frame, and various other metadata.</p>
-<p><strong>It should be noted that using <code><a href="../reference/inspect.html">inspect()</a></code> is optional</strong> - the main functions in our package will readily accept any data frame as long as data are numeric and error-free. Running <code><a href="../reference/inspect.html">inspect()</a></code> is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. <code>respR</code> has been designed to make this easy.</p>
-<p><strong>Note there is an older version of this function called <code><a href="../reference/inspect_data.html">inspect_data()</a></code></strong> - this function has been deprecated, but kept to maintain compatibility with older code. It will not be updated in the future, so users should use <code><a href="../reference/inspect.html">inspect()</a></code>.</p>
+<p><strong>It should be noted that using <code><a href="../reference/inspect.html">inspect()</a></code> is optional</strong> - the main functions in <code>respR</code> will readily accept regular <code>R</code> data structures (e.g. data frames, tibbles, vectors) as long as data are numeric and error-free. Running <code><a href="../reference/inspect.html">inspect()</a></code> is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. <code>respR</code> has been designed to make this easy.</p>
+<p><strong>Note there is an older version of this function called <code><a href="../reference/inspect_data.html">inspect_data()</a></code></strong> - this function has been deprecated, but kept in the package to maintain compatibility with older code. It will not be updated in the future, so users should use <code><a href="../reference/inspect.html">inspect()</a></code>.</p>
 </div>
 <div id="step-2-process-background-respiration" class="section level2">
 <h2 class="hasAnchor">

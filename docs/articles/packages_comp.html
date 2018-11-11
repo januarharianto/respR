@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>respR vs. other R packages • respR</title>
+<title>A comparison of respR with other R packages • respR</title>
 <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="respR vs. other R packages">
+<script src="../pkgdown.js"></script><meta property="og:title" content="A comparison of respR with other R packages">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -78,7 +78,7 @@
       <a href="../articles/pcrit.html">Pcrit analysis</a>
     </li>
     <li>
-      <a href="../articles/intermittent.html">Two-point analysis</a>
+      <a href="../articles/twopoint.html">Two-point analysis</a>
     </li>
   </ul>
 </li>
@@ -129,7 +129,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>respR vs. other R packages</h1>
+      <h1>A comparison of respR with other R packages</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/januarharianto/respr/blob/master/vignettes/packages_comp.Rmd"><code>vignettes/packages_comp.Rmd</code></a></small>
@@ -139,10 +139,10 @@
 
     
     
-<p>We have designed <code>respR</code> to be able to explore, process and analyse any and all aquatic respirometry data, independent of the system used to collect it. In fact because of the unitless nature of the majority of functions in the package, other respirometry data, or indeed other time series data examining other variables can be analysed in <code>respR</code>.</p>
-<p>There are only a couple of other <code>R</code> packages that are focused towards respirometry analysis; <a href="https://cran.r-project.org/web/packages/rMR/index.html">rMR</a>, and <a href="https://fishresp.org">FishResp</a> (there is one other, <a href="https://cran.r-project.org/web/packages/respirometry/index.html">respirometry</a>, but it is not focussed on processing data). These packages have quite specific focuses; both <code>rMR</code> and <code>FishResp</code> are centered around processing intermittent-flow, swim tunnel respirometry data, in particular from Loligo Systems equipment. Neither has the universal focus of <code>respR</code>, and while it is possible to process other respirometry data using these packages it is far from straightforward. However, they are excellent packages within their own focuses and we would encourage users to explore them and how they work; they may contain functionality that suits your particular analyses or workflows better than <code>respR</code>.</p>
-<p>Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> function in <code>respR</code>, which allows statistically robust, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality, <a href="https://github.com/colin-olito/LoLinR">LoLinR</a> which also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code> <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">here</a>.</p>
-<p>These packages instead rely on manual selection of data regions in respirometry data from which to extract oxygen uptake rates. <code>respR</code> also has this functionality as an option, and in this vignette we briefly compare the outputs of these packages with <code>respR</code>, and other overlapping functionality.</p>
+<p>We have designed <code>respR</code> to be able to explore, process and analyse any and all aquatic respirometry data, independent of the system or hardware used to collect it. In fact because of the unitless nature of the majority of functions in the package, other respirometry data, or indeed other time series data examining other variables can be analysed in <code>respR</code>.</p>
+<p>There are only a couple of other <code>R</code> packages that are focused towards respirometry data analysis; <a href="https://cran.r-project.org/web/packages/rMR/index.html">rMR</a>, and <a href="https://fishresp.org">FishResp</a> (there is one other, <a href="https://cran.r-project.org/web/packages/respirometry/index.html">respirometry</a>, but it is not focussed on processing data). These packages have quite specific focuses; both <code>rMR</code> and <code>FishResp</code> are centered around processing intermittent-flow, swim tunnel respirometry data, in particular from Loligo Systems equipment. Neither has the universal focus of <code>respR</code>, and while it is sometimes possible to process other respirometry data using these packages it is far from straightforward. However, they are excellent packages within their own focuses and we would encourage users to explore them and how they work; they may contain functionality that suits your particular analyses or workflows better than <code>respR</code>.</p>
+<p>Neither of these packages however are particularly analytical in nature; they lack any functionality similar to the <code><a href="../reference/auto_rate.html">auto_rate()</a></code> function in <code>respR</code>, which allows statistically robust, rapid, objective identification of linear segments in respirometry data. Only one package to our knowledge has a similar functionality; <a href="https://github.com/colin-olito/LoLinR">LoLinR</a> also seeks to identify linear regions in time-series data, although with no particular focus on respirometry. We compare the performance of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> and <code>LoLinR</code> <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">here</a>.</p>
+<p>The <code>rMR</code> and <code>FishResp</code> packages instead rely solely on manual selection of data regions in respirometry data from which to extract oxygen uptake rates. <code>respR</code> also has this functionality as an option, and in this vignette we briefly compare the outputs of these packages with <code>respR</code>, and other overlapping functionality.</p>
 <div id="respr-and-respirometry" class="section level2">
 <h2 class="hasAnchor">
 <a href="#respr-and-respirometry" class="anchor"></a><code>respR</code> and <code>respirometry</code>
@@ -177,7 +177,8 @@
 </div>
 <div id="respr-and-rmr" class="section level2">
 <h2 class="hasAnchor">
-<a href="#respr-and-rmr" class="anchor"></a>respR and rMR</h2>
+<a href="#respr-and-rmr" class="anchor"></a><code>respR</code> and <code>rMR</code>
+</h2>
 <p>The <a href="https://cran.r-project.org/web/packages/rMR/index.html">rMR</a> package by Tyler L. Moulton focuses specifically on analysis of data from Loligo Systems hardware (i.e. Witrox probes), and generally on intermittent-flow, fish respirometry. We should note that as of writing (Sep 2018) this package has not been updated in nearly 2 years.</p>
 <p>There are several areas of functionality where <code>rMR</code> and <code>respR</code> overlap:</p>
 <div id="importing-raw-data" class="section level4">
@@ -218,7 +219,7 @@ fish_respr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <span class="co">#&gt; 5:    4 02/07/2015 3:58:03 PM     1013 29.87 23.46  7.862</span>
 <span class="co">#&gt; 6:    5 02/07/2015 3:58:04 PM     1013 29.87 23.48  7.856</span></code></pre></div>
 <p>These both appear to perform well, on this file at least. The resulting data frames are similar, containing all the relevant data, although <code>respR</code> adds a numeric <code>time</code> column, which we find is easier to use in further analyses.</p>
-<p>However, in our testing we found that while the <code>rMR</code> import function worked with this example, and a few other files we tried, many files we were unable to import using <code>rMR</code> for reasons we were unable to diagnose. Likely, some of the inputs were not correctly set, but error messages and documentation were of little help in solving these problems. This would likely be a significant barrier to entry for novice R users, and even those more advanced. Clearly the <code>respR</code> import function requires fewer inputs. It relies on pattern matching to recognise the system the file comes from, and other data such as the time-date format. The <code>get.witrox.data</code> function has however an advantage, in that you can specify the columns to be imported.</p>
+<p>However, in our testing we found that while the <code>rMR</code> import function worked with this example, and a few other files we tried, many files we were unable to import using <code>rMR</code> for reasons we were unable to diagnose. Likely, some of the inputs were not correctly set, but error messages and documentation were of little help in solving these problems. This would likely be a significant barrier to entry for novice R users, and even those more advanced. Clearly the <code>respR</code> import function is easier to use; it requires only a single input. It relies on pattern matching to recognise the system the file comes from, and other data such as the time-date format. The <code>get.witrox.data</code> function has however an advantage, in that you can specify the columns to be imported.</p>
 <p>While it is likely the <code>respR</code> <code>import_data()</code> function may fail on occasion, and more testing is needed, it appears to perform better for Witrox files, as well as supporting other systems. As always, we encourage users to send us raw data files (from all systems) to test, particularly ones they have problems with.</p>
 </div>
 <div id="conversion" class="section level4">
@@ -228,8 +229,9 @@ fish_respr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 </div>
 <div id="pcrit" class="section level4">
 <h4 class="hasAnchor">
-<a href="#pcrit" class="anchor"></a>PCrit</h4>
-<p><code>rMR</code> implements a PCrit calculation based on the ‘broken-stick’ methods of Yeager and Ultsch (1989). See the PCrit vignette (LINK) for comparison and further discussion of this.</p>
+<a href="#pcrit" class="anchor"></a>P<sub>Crit</sub>
+</h4>
+<p><code>rMR</code> implements a PCrit calculation based on the ‘broken-stick’ methods of Yeager and Ultsch (1989). See the P<sub>Crit</sub> vignette (<a href="https://januarharianto.github.io/respR/articles/pcrit.html">Pcrit analysis</a>) for comparison and further discussion of this.</p>
 </div>
 <div id="calculating-rates" class="section level4">
 <h4 class="hasAnchor">
@@ -280,10 +282,11 @@ metR<span class="op">$</span>MR.summary<span class="op">$</span>MR
 </h4>
 <p>While we are obviously somewhat biased, we see clear benefits of using <code>respR</code> over <code>rMR</code>. These include, but are not limited to -</p>
 <ul>
-<li><p><strong>Imports multiple data types, as well as general R data structures (data frames, tibbles, data tables, etc.)</strong> While use of other data types in <code>rMR</code> is possible, it is not intuitive, and time data must be in a specific (complex) format. It does not allow use of simple numeric time-elapsed values. Moreover, we entirely used the <code>rMR</code> data and examples in the above comparisons, because in our testing we had many problems importing our own data to <code>rMR</code>. We could not resolve many of these errors. We suspect the reliance on the complex date-time format and having to specify the precise structure of these was the cause of many of these problems.</p></li>
-<li><p><strong>Statistical identification of linear regions (<code>auto_rate</code>), rather than solely manual selection</strong></p></li>
-<li><p><strong>Specify data regions in several ways (by O2 range, time, or row)</strong></p></li>
-<li><p><strong>Use of numeric time, rather than POSIX formatted time-data (e.g. “2015-07-03 06:15:00 GMT”) is a clear usability advantage and reduces error</strong>. <code>respR</code> has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed <code>respR</code> to avoid these when at all possible.</p></li>
+<li><p><strong>Imports multiple data types, as well as general R data structures (data frames, tibbles, data tables, etc.)</strong><br>
+While use of other data types in <code>rMR</code> is possible, it is not intuitive, and time data must be in a specific, complex format. It does not allow the use of simple numeric time-elapsed values. Moreover, we entirely used the <code>rMR</code> data and examples in the above comparisons, because in our testing we had many problems importing our own data to <code>rMR</code>. We could not resolve many of these errors. We suspect the reliance on complex date-time formats and requiring the user to specify the precise structure of these was the cause of many of these problems.</p></li>
+<li><p><strong>Allows statistically robust identification of linear regions (<code>auto_rate</code>), rather than solely manual selection</strong></p></li>
+<li><p><strong>Allows specifying data regions in several ways (by O2 range, time, or row)</strong></p></li>
+<li><p><strong>Insisting on use of numeric time elapsed, rather than POSIX formatted time-data (e.g. “2015-07-03 06:15:00 GMT”) is a clear usability advantage and reduces error</strong>.<br><code>respR</code> has a function for formatting POSIX data to numeric time-elapsed, after which the user need not concern themselves with date-time formats. Date-time and POSIX data are notoriously difficult to work with and error prone, and we have designed <code>respR</code> to avoid these when at all possible.</p></li>
 <li><p><strong>Functions have minimal and intuitive inputs while maintaining full functionality, again reducing potential for error</strong></p></li>
 <li><p><strong>Better visualisations of the data regions in full context of the dataset</strong></p></li>
 </ul>
@@ -291,9 +294,10 @@ metR<span class="op">$</span>MR.summary<span class="op">$</span>MR
 </div>
 <div id="respr-and-fishresp" class="section level2">
 <h2 class="hasAnchor">
-<a href="#respr-and-fishresp" class="anchor"></a>respR and FishResp</h2>
-<p><code>FishResp</code> is still under development and there is little documentation and no guide yet available to detail how the functions in the package interrelate, or provide an example workflow (although we understand from contact with the developers these are under preparation). Therefore, our comparisons are somewhat limited to the functionality we could get to work.</p>
-<p>Like <code>rMR</code>, <code>FishResp</code> is focussed on processing data from intermittent-flow, swim tunnel experiments with many equally-spaced replicates, particularly from Loligo Systems equipment (although others are supported). As well as an R package, it has GUI version available <a href="https://fishresp.org">link</a>. It is fully-featured, though highly specific towards this branch of respirometry.</p>
+<a href="#respr-and-fishresp" class="anchor"></a><code>respR</code> and <code>FishResp</code>
+</h2>
+<p><code>FishResp</code> is still under development and there is sparse documentation and no detailed guide yet available to detail how the functions in the package interrelate, or example workflows provided (although we understand from contact with the developers these are under preparation). Therefore, our comparisons are somewhat limited to the functionality we could get to work.</p>
+<p>As with <code>rMR</code>, <code>FishResp</code> is focussed on processing data from intermittent-flow, swim tunnel experiments with many equally-spaced replicates, particularly from Loligo Systems equipment (although others are supported). As well as an <code>R</code> package, it has a <a href="https://fishresp.org">GUI version</a> for Mac, Windows and Linux. It is fully-featured, though highly specific towards this branch of respirometry.</p>
 <p>It has some functions for exploring and pre-processing data, though as we said, we are unsure how these functions are intended to inter-relate, and they only accept input from some data sources. We provide here some comparison with overlaps with <code>respR</code> functionality where we have been able to.</p>
 <div id="importing-raw-data-1" class="section level4">
 <h4 class="hasAnchor">
@@ -379,42 +383,47 @@ spec1_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <div id="options-in-fishresp" class="section level4">
 <h4 class="hasAnchor">
 <a href="#options-in-fishresp" class="anchor"></a>Options in FishResp</h4>
-<p><code>FishResp</code> (as far as we can tell from the current documentation) only allows fitting regressions across the entire width of what is defined an experimental measurement period, or replicate. There is little flexibility in modifying this. This may or may not be appropriate depending on the data and experiment. There is a <code>length</code> operator in <code>extract.slope</code>, but this only curtails the latter end of the regression; there appears to be no way of modifying the start location. This is a curious decision and less than ideal practice; if a user wanted to only use data from part of an experimental replicate, typically it is the initial stages they want to remove, as these are just after the flush when the animal might have been disturbed, or probe lag means the probe has not caught up, and overall the system has not reached a steady state. Moreover, this <code>length</code> operator applies to all replicates; there is no easy way of fitting regressions of different length over different replicates. <code>respR</code> has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; <code>FishResp</code>’s ability to do this is very limited.</p>
-<p>The <code>extract.slope</code> function is able to sort and select the rates from each replicate according to some simple criteria, for example outputting a selection of rates ordered by minimum or maximum, or based on R2 values or a percentile. <code>respR</code> does not have this option specifically, but it is straightforward from the results via typical R selection syntax.</p>
+<p><code>FishResp</code> (as far as we can tell from the current documentation) only allows fitting regressions across the entire width of what is defined an experimental measurement period, or replicate. There is little flexibility in modifying this. This may or may not be appropriate depending on the data and experiment. There is a <code>length</code> operator in <code>extract.slope</code>, but this only curtails the latter end of the regression; there appears to be no way of modifying the start location. This is a curious decision and less than ideal practice; if a user wanted to only use data from part of an experimental replicate, typically it is the initial stages they want to remove, as these are just after the flush when the animal might have been disturbed, or probe lag means the system has not reached a steady state. Moreover, this <code>length</code> operator applies to all replicates; there is no easy way of fitting regressions of different length over different replicates. <code>respR</code> has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; <code>FishResp</code>’s ability to do this is very limited.</p>
+<p>The <code>extract.slope</code> function is able to sort and select the rates from each replicate according to some basic criteria, for example outputting a selection of rates ordered by minimum or maximum, or based on R2 values or a percentile. <code>respR</code> does not have this option specifically, but it is straightforward from the results via typical R selection syntax.</p>
 <p>It is also not entirely clear how <code>FishResp</code> would work on continuous data where the O2 is also recorded through flushes, or when each replicate is separated from another by a waiting period (this sample data has one directly after the next). And as we said, processing of data that does not adhere to a rigid structure or cycle of measurement periods is difficult, if not impossible.</p>
 </div>
 <div id="benefits-of-respr-over-fishresp" class="section level4">
 <h4 class="hasAnchor">
 <a href="#benefits-of-respr-over-fishresp" class="anchor"></a>Benefits of respR over FishResp</h4>
-<p>Overall <code>FishResp</code> is a fine package if you are conducting very a specific type of experiment. Its focus is on processing large amounts of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources.</p>
-<p><code>FishResp</code> can process many experiments at once, both from different individuals and many replicates from individuals. Whether this is an advantage or disadvantage is debatable. Although it can be automated by anyone with basic R skills, <code>respR</code> was specifically designed to process single experiments at a time because we feel (and this is general good practice in data analysis) that respirometry data should be thoroughly explored and visualised prior to any analyses. This may increase the time taken to conduct analyses (though we would argue other time-saving advantages of <code>respR</code> outweigh this), but we feel is safer and less likely to result in mistakes. <code>FishResp</code> has some data visualisation and exploration functions, but its focus seems to be the ability to process great numbers of experiments and replicates at once.</p>
+<p>Overall <code>FishResp</code> is a fine package (and GUI application) if you are conducting very a specific type of respirometry experiment. Its focus is on processing large numbers of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources.</p>
+<p><code>FishResp</code> can process many experiments at once, both from different individuals and many replicates on individuals. Whether this is an advantage or disadvantage is debatable. Although it can be automated by anyone with basic R skills, <code>respR</code> was specifically designed to process single experiments at a time because we feel (and that this is general good practice in data analysis) that respirometry data should be thoroughly explored and visualised prior to any analyses. This may increase the time taken to conduct analyses (though we would argue other time-saving advantages of <code>respR</code> outweigh this), but we feel is safer and less likely to result in mistakes. <code>FishResp</code> has some data visualisation and exploration functions, but its focus seems to be the ability to process great numbers of experiments and replicates at once.</p>
 <p>It does however have a couple of advantages over <code>respR</code> which may influence user choice on which to use:</p>
 <ul>
-<li><p><strong>Support for dynamic background correction.</strong> Pre- and post-experiment background rates can be applied as average, linear or exponential interpolations. Support for dynamic background correction is planned in <code>respR</code> (though see LINK vignette for how it can be achieved presently).</p></li>
-<li><p><strong>Support for raw data files from multiple systems at once.</strong> Again, we plan to support importing files from as many systems as we can get sample files for in <code>respR</code> in the near future. We are unsure of the benefits of supporting other data inputs that <code>FishResp</code> supports (e.g. hardware interfaces such as AquaResp), but are looking into it. Again though, <code>respR</code> is system agnostic; we know of no respirometry system that does not output data in a form that is easily imported into R using generic functions.</p></li>
+<li><p><strong>A GUI (Graphical User Interface) Verison.</strong><br>
+If you are not comfortable with code or prefer a user interface, <code>FishResp</code> has an application available that runs on Mac, Windows and Linux computers. We have no specific plans to create a GUI version of <code>respR</code>.</p></li>
+<li><p><strong>Support for dynamic background correction.</strong><br>
+Pre- and post-experiment background rates can be applied as average, linear or exponential interpolations. Dynamic background correction is not specifically supported in <code>respR</code> as yet, but this is planned. However, see <a href="https://januarharianto.github.io/respR/articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a> for how it can be achieved at present.</p></li>
+<li><p><strong>Support for raw data files from multiple systems at once.</strong> Again, we plan to support importing files from as many systems as we can get sample files for in <code>respR</code> in the near future. We are unsure of the benefits of supporting other data inputs that <code>FishResp</code> supports (e.g. hardware interfaces such as AquaResp), but are looking into it. Again though, <code>respR</code> is system agnostic; we know of no respirometry system that does not output data in a form that is easily imported into <code>R</code>, and thus able to be analysed in <code>respR</code>, using generic functions.</p></li>
 </ul>
 <p>However, we feel <code>FishResp</code> has substantial drawbacks in comparison to <code>respR</code>:</p>
 <ul>
 <li>It is designed for intermittent-flow respirometry with set width of cycled replicates. There is no easy way to analyse closed, flowthrough or non-regular intermittent-flow respirometry data.<br>
 </li>
-<li>It supports importing data from some specific systems, but little support for regular R data structures.</li>
+<li>It supports importing data from some specific systems, but limited or no support for regular R data structures.</li>
 <li>Complex inputs: as with <code>rMR</code>, complex date-time inputs are a particular source of frustration and potential error.<br>
 </li>
-<li>Length and location of data regions over which to fit regression cannot be easily adjusted.<br>
+<li>Length and location of data regions over which to fit regressions cannot be easily adjusted.<br>
 </li>
-<li>Manual selection of data regions only, no equivalent to <code><a href="../reference/auto_rate.html">auto_rate()</a></code> in <code>respR</code><br>
+<li>Manual selection of data regions only; there is no equivalent to <code>auto_rate</code> in <code>respR</code><br>
 </li>
-<li>Complicated, not well documented. We expect this to change, but at present the package has a substantial barrier to entry, even for advanced R users, in that it is very difficult to use and has little documentation.</li>
+<li>Complicated, not well documented. We expect this to change, but at present the package has a substantial barrier to entry, even for advanced R users, in that it is difficult to use and has limited documentation.</li>
 </ul>
-<p>We will update this vignette with more detail and comparisons of the functionality once the developers release the guides that we know are in preparation.</p>
+<p>We will update this vignette with more detail and comparisons of the functionality of <code>FishResp</code> and <code>respR</code> once the developers release the guides that we understand are in preparation.</p>
 </div>
 </div>
 <div id="summary" class="section level2">
 <h2 class="hasAnchor">
 <a href="#summary" class="anchor"></a>Summary</h2>
-<p>The packages we examined here are the only other packages we know of to process respirometry data in R (but see LINK vignette on <code>LoLinR</code>). However, they have only a small subset of the functionality contained in <code>respR</code>. Where they overlap in functionality, we feel <code>respR</code> is clearly easier to use and less prone to input errors or difficult to diagnose problems. <code>respR</code> has been designed to be as flexible as possible, accepting any and all respirometry data and experiment types.</p>
-<p>These packages are focused on intermittent-flow respirometry, with multiple, regularly-spaced experimental replicates. Both analyse these data fine if you want to manually specify data regions over which to determine rates, but we would argue <code>respR</code> is equally capable of doing so (see the LINK vignette). In addition, the <code>respR</code> workflow would allow for use of <code><a href="../reference/auto_rate.html">auto_rate()</a></code> which determines linear regions of data in a statistically robust way, rather than relying on user selected regions. The packages here generally insist on using complex date-time formats for the time metric, which we found led to lots of useability issues. There is no real reason why this should be the case; <code>respR</code> avoids this by only allowing numeric time-elapsed data, and providing two functions to easily prepare data to this form. Overall, a major barrier to use of both packages is getting data into them in a recognisable format. We had trouble importing data into both. <code>respR</code> is clearly superior here in that as well as allowing import of raw data files (though this is still in development and there are still systems not yet supported), it accepts almost any form of typical R data structure.</p>
-<p>Users are very much encouraged to explore these packages and their functionality. They may, with their specific focuses, contain functionality that suits your particular analyses or workflows better than <code>respR</code>. However, <code>respR</code> has been designed to be highly flexible, adaptable, and universal and with some organisation can be used for analysis of any aquatic respirometry data or experiment type we are aware of. It also has statistical linear-detection functionality which is not present in these packages. We compare the performance of this to the only other R package which has similar functionality in the LINK vignette.</p>
+<p>The packages we examine here are the only other ones we know of that focus on processing respirometry data in R (but see <a href="https://januarharianto.github.io/respR/articles/auto_rate_comp.html">Comparative performance of auto_rate and LoLinR</a>). However, they have only a small subset of the functionality contained in <code>respR</code>. Where they overlap in functionality, we feel <code>respR</code> is clearly easier to use and less prone to input errors or difficult to diagnose problems. <code>respR</code> has been designed to be as flexible as possible, accepting any and all respirometry data and experiment types.</p>
+<p>The <code>rMR</code> and <code>FishResp</code> packages are, by contrast, focused entirely on intermittent-flow respirometry, with multiple, regularly-spaced experimental replicates. Both analyse these data adequately via manual specification of data regions over which to determine rates, but we would argue <code>respR</code> is equally capable of doing so (see <a href="https://januarharianto.github.io/respR/articles/intermittent2.html">Intermittent-flow respirometry: Complex example</a>).</p>
+<p>However, the <code>respR</code> workflow for these experiments allows for use of <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, which identifies linear regions of data in a statistically robust manner, as opposed to relying on user selected regions.</p>
+<p>In addition, the packages we compare here generally rely on complex date-time formats for the time metric, which we have found leads to substantial useability issues. There is no real reason why this should be the case; <code>respR</code> avoids this through use of numeric, time-elapsed data, and providing two functions to easily prepare data to this form (<a href="https://januarharianto.github.io/respR/articles/importing.html">Importing your data</a>). Overall, a major barrier to use of both these packages is getting data into them in a recognisable format. We had trouble importing data into both. <code>respR</code> is clearly ahead here, in that as well as allowing import of raw data files (though this is still in development and there are still systems not yet supported), it accepts almost any form of typical R data structure.</p>
+<p>Investigators working with respirometry are very much encouraged to explore <code>rMR</code> and <code>FishResp</code>. They may, because of their specific focuses, contain functionality that suits your particular analyses or workflows better than <code>respR</code>. However, <code>respR</code> has been designed to be highly flexible, adaptable, and universal and with some basic <code>R</code> knowledge can be used for analysis of any aquatic respirometry data or experiment type we are aware of. It also has statistically robust, linear-detection functionality which is not present in these packages. We compare the performance of this to the only other <code>R</code> package which has similar functionality as seen <a href="https://januarharianto.github.io/respR/news/auto_rate_comp.html">here</a>.</p>
 </div>
   </div>
 
@@ -424,8 +433,8 @@ spec1_rates &lt;-<span class="st"> </span><span class="kw"><a href="../reference
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#respr-and-respirometry"><code>respR</code> and <code>respirometry</code></a></li>
-      <li><a href="#respr-and-rmr">respR and rMR</a></li>
-      <li><a href="#respr-and-fishresp">respR and FishResp</a></li>
+      <li><a href="#respr-and-rmr"><code>respR</code> and <code>rMR</code></a></li>
+      <li><a href="#respr-and-fishresp"><code>respR</code> and <code>FishResp</code></a></li>
       <li><a href="#summary">Summary</a></li>
       </ul>
 </div>
