@@ -40,11 +40,12 @@ import_file("Witrox_eg.txt")
 
 As we can see, the function automatically recognises that this is a Witrox file, removes redundant information, and renames the relevant columns. It also uses the date-time columns to calculate a numeric time elapsed column (called `time` or `elapsed` depending on the original file). 
 
-This function requires only a single input, the path to the file (one other option, `export = TRUE` allows exporting of the imported data to a .csv file). Everything else is handled automatically. This contrasts with other packages where numerous options such as the delimiter character, originating hardware, and specific date format must be specifed, which we have found leads to substantial usability issues (see LINK). 
+This function requires only a single input, the path to the file (one other option, `export = TRUE` allows exporting of the imported data to a .csv file). Everything else is handled automatically. 
+This contrasts with other packages where numerous options such as the delimiter character, originating hardware, and specific date format must be specifed, which we have found leads to substantial usability issues (see [A comparison of respR with other R packages](https://januarharianto.github.io/respR/news/packages_comp.html)). 
 
 After importing and saving to an object, this can be passed to the rest of the `respR` functions for processing, all while leaving the raw data file unmodified. 
 
-This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to *send us sample files for testing* (CONTACT LINK), especially any they have problems with, or from systems we do not yet support. 
+This function supports several systems at present (Firesting | Pyro | PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox). However, it is still in development; some files may fail to import because of structural or version differences we have not encountered. We would encourage users to *send us sample files for testing*, especially any they have problems with, or from systems we do not yet support. 
 
 ## `format_time()`
 

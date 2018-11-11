@@ -224,7 +224,7 @@ This final value (typically as a positive) is what we report, or use in further 
 
 
 ## A complete analysis
-The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using `apply` functions rather than a `loop`, and `list` objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed still more if you use `Tidyverse` syntax (LINK)).
+The above is a long description with the code expanded to show the analysis in detail, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment like this may be. Here is a code block showing the exact same analysis condensed and using a couple of different R approaches (e.g. using `apply` functions rather than a `loop`, and `list` objects to save results). This could be condensed further still depending on how you determine and apply background rates, and if replicates were completely regular or locations already saved to an R object (and condensed still more if you use `Tidyverse` syntax, see [respR and the tidyverse](https://januarharianto.github.io/respR/news/tidyverse.html)).
 
 ```{r fig.keep="none", results="hide", message=FALSE, warning=FALSE, tidy = F}
 # Import and inspect raw data ---------------------------------------------
