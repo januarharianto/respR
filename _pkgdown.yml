@@ -34,12 +34,6 @@ reference:
     - '`convert_rate`'
     - '`unit_args`'
     
-  - title: "Performance"
-    desc: >
-      Function(s) to test the performance of `auto_rate()`.
-    contents:
-    - '`test_lin_data`'
-    
   - title: "Data files"
     desc: >
       Sample data files.
@@ -50,6 +44,7 @@ reference:
     - '`squid.rd`'
     - '`urchins.rd`'
     - '`zeb_intermittent.rd`'
+    - '`test_lin_data`'
     
   - title: "Deprecated"
     desc: >
