@@ -1,3 +1,4 @@
+^docs$
 ^.*\.Rproj$         # Automatically added by RStudio,
 ^\.Rproj\.user$     # used for temporary files.
 ^README\.Rmd$       # An Rmarkdown file used to generate README.md
@@ -12,3 +13,8 @@
 ^_pkgdown\.yml$
 ^index\.Rmd$
 ^data-raw$
+
+# Insurance
+vignettes
+.travis.yml
+.Rproj

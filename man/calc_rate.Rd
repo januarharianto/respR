@@ -37,7 +37,7 @@ rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} 
 \examples{
 calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
 calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
-calc_rate(sardine.rd, 200, 1800, by = 'row')     # subset by row
+calc_rate(sardine.rd, 1, 1000, by = 'row')     # subset by row
 x <- calc_rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
 x
 summary(x)

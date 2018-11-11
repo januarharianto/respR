@@ -5,7 +5,7 @@
 \title{Convert rate value to volumetric and/or mass-specific}
 \usage{
 convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
-  volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
+  volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
 }
 \arguments{
 \item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
@@ -26,14 +26,15 @@ respirometry chamber, not the specimen volume.}
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
 
-\item{S}{numeric. Salinity. Defaults to 35. Used only in conversion of \%
-data.}
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{t}{numeric. Temperature. Defaults to 25 (°C). Used only in conversion
-of \% data.}
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure. Defaults to 1.013253 (bar). Used only in
-conversion of \% data.}
+\item{P}{numeric. Pressure (bar). Defaults to NULL. Used only in conversion
+of some units. If left NULL, default value of 1.013253 is applied in
+conversions. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
 A list object.
@@ -54,6 +55,10 @@ Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
 Output units (\code{output.unit}) must be in the sequence O2-Time (e.g. mg/h,
 mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
 mg/h/kg).
+
+Some units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
+pressure (\code{P}) to be specified. See \code{\link[=unit_args]{unit_args()}} for details. For freshwater
+experiments, salinity should be set to zero (i.e. S = 0).
 }
 \examples{
 # Manually enter values

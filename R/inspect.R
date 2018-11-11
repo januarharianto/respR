@@ -194,23 +194,27 @@ plot.inspect <- function(x, label = TRUE, ...) {
 
   if (length(x$dataframe) == 2) {
 
-  pardefault <- par(no.readonly = T) # save original par settings
-  par(
-    mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
-    cex = 1, cex.main = 1
-  )
-  plot(
-    dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
-    panel.first = grid())
-  title(main = "Full Timeseries", line = 0.3)
-  plot(
-    abs(roll), xlab = "", ylab = "", pch = 16, cex = .5,
-    panel.first = grid())
-  title(
-    main = "Rolling Regression of Rate vs Index (Row No.)",
-    line = 0.3
-  )
-  par(pardefault) # revert par settings to original
+    pardefault <- par(no.readonly = T) # save original par settings
+    par(
+      mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
+      cex = 1, cex.main = 1
+    )
+    plot(
+      dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
+      panel.first = grid())
+    title(main = "Full Timeseries", line = 0.3)
+    plot(
+      abs(roll) ~ dt[[1]][floor(0.1 * length(dt[[1]])):(floor(0.1 * 
+          length(dt[[1]])) + (length(roll) - 1))],
+      xlim = range(dt[[1]]),
+      xlab = "", ylab = "", pch = 16, cex = .5,
+      panel.first = grid())
+    title(
+      ## UPDATED TITLE
+      main = "Rolling Regression of Rate (0.2 Rolling Window)",
+      line = 0.3
+    )
+    par(pardefault) # revert par settings to original
   } else
     message("inspect: Plot is only avalilable for a 2-column dataframe output.")
   if (label) cat("Done.\n")

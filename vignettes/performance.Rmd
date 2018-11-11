@@ -1,11 +1,10 @@
 ---
-title: "Assessing the performance of respR's auto_rate function in detecting 
-  linear data"
+title: "Performance in detecting linear regions"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{autorate_performance}
+  %\VignetteIndexEntry{Performance in detecting linear regions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,11 +18,13 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
 ```
 
 
-The function `auto_rate()` uses rolling regression and kernel density estimation techniques to automatically detect the most linear sections of respirometry data. 
+The function `auto_rate()` uses rolling regression and kernel density estimation techniques to automatically detect the *most linear* regions in respirometry data. 
 The dimensionless nature of the function, however, also allows it to be applied to any serial data. 
 To our knowledge, the methods we use here are novel, and not reported in past publications involving linear data detection and analysis of biological data.
-Olito et al. (2016) describes a different, though very robust, method to detect and rank linear segments in data using their R package, `LoLinR`. 
-A brief comparison of `auto_rate()` and `LoLinR`'s methods are discussed at the end of this document.
+Olito et al. (2016) describes a different, though robust, method to detect and rank linear segments in data using their R package, `LoLinR`. 
+A comparison of `auto_rate()` and `LoLinR`'s methods are shown [here](https://januarharianto.github.io/respR/articles/auto_rate_comp.html).
+
+The performance tests that we provide are limited but comprehensive, however provide a starting point in generating the data necessary for users to make informed decisions on using and further testing `auto_rate()` for their own purposes. **Users should be aware** that noisy, strongly fluctuating data could cause unpredictable, unwanted results to be returned. For example, while we have had generally good results with our own data, intermittent flow respirometry data where O2 is fluctuating up and down between periods of use by the specimens and flushing the respirometry chamber are likely to confuse the algorithms. Users should always examine the outputs of `auto_rate()` (and indeed other functions in `respR`) to understand where returned results occur within the data and that they are representative of the question of interest. We have made this as easy as possible, and designed the package specifically to not be a 'black box' and at every stage make the user aware of what is going on through plotting results and their locations in the context of the entire datasets, and in the console outputs. 
 
 
 ## Testing the linear detection method of auto_rate
@@ -33,7 +34,6 @@ The first function, `sim_data()`, generates a random dataset which contains both
 The second function, `test_lin()`, specifically performs `auto_rate()` repeatedly on randomly generated data and aggregates the performance metrics obtained to assess and visualise the accuracy of the KDE technique.
 Both functions are published with the `respR` package, thus anyone can use them -- as we show below -- or run them with their own input paramters.
 
-The performance tests that we provide are by no means comprehensive, but provide a starting point in generating the data necessary for users to make informed decisions on using and further testing `auto_rate()` for their own purposes.
 
 
 ## Generating simulated data for tests
@@ -238,20 +238,11 @@ plot(test_lin_data$segmented500)
 
 We did not report any of the results for 200-sample size datasets, but users are free to call the data object `test_lin_data` and plot the results, or run their own analyses using the functions we provide.
 
-## Linear detection in other packages and software
+## Summary
 
+In this limited testing on relatively small datasets, we have shown that on datasets of around 100 records in length `auto_rate()` performs quite well, although with some occurences of data mischaracterisation. However, when datasets are around 500 in length its performance is radically improved. This pattern holds across our three test data types characteristic of respirometry data: "default"" (non-linear to linear data segments),  "corrupted" (data with an obvious erroneous drop-out), and "segmented" (non-linear to multiple linear segments). The use of `auto_rate()` on datasets larger than this is likely to be even more accurate in identifying valid linear regions of data. 
 
-
-To our current knowledge, one other software, [`LoLinR`](https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html) (Olito et al. 2017), an R package, performs linear detection techniques on serial data. 
-<!-- This is not a coincidence - many of the data reporting and visualisations of `auto_rate()` are, in fact, inspired by our own experiences with LoLinR.  -->
-<!-- However, we created the function with a completely different aim in mind (i.e. to be a part of a larger ecosystem of respirometry analysis), of which linear data detection is but one of many features availabe.  -->
-<!-- LoLinR is focused on one task: obtaining the best-fit linear segments from any serial data.  -->
-<!-- The design of our package however also allows the auto_rate function to be applied to any serial data, not just respirometry data.  -->
-Here, we list some very important differences between `auto_rate()`'s linear detection method and `LoLinR`'s:
-
-1. `auto_rate()` detects linear segments first before running linear regressions on the data. `LoLinR`, in contrast, performs all possible linear regressions on the data first, before implementing a ranking algorithm to rank all linear segment(s). We have discussed `auto_rate()`'s advantages and pitfalls in this document; users are encouraged to also view `LoLinR`'s online vignette [here](https://github.com/colin-olito/LoLinR), and their paper linked in their document, which includes benchmark results.
-2. `LoLinR`'s algorithms uses three different metrics to select linear data, in which at least one performs very well to detect linear segments -- even if a small amount data is provided (<100 samples). In comparison, `auto_rate()` performs less accurately at such small sample sizes, but that accuracy increases greatly with more data available.
-3. `auto_rate()` is blazingly *fast*, even as it performs hundreds to thousands of rolling regressions at a time. It is perhaps ideal for large data, while LoLinR might be the function of choice for smaller datasets since its speed decreases exponentially as data gets bigger. If processing time is not an issue, users may still use `LoLinR` to analyse bigger data. Users may also find use in utilising `LoLinR`'s `thinData()` function to deal with big datasets.
+Despite the overall good perfomance, this does serve to illustrate that users should always inspect and explore their data, and the results of analyses for obvious errors and that the results are characteristic and valid answers to the question they are asking of the data. We have this made this as straightforward as possible in `respR` through always outputting by default plots with results highlighted in the context of the entire datasets, and useful summary output in the console. There is also extensive support for exploring data and results via the base R `plot()`, `print()` and `summary()` functions. 
 
 ## References
 

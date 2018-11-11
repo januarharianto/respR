@@ -1,0 +1,182 @@
+---
+title: "Comparative performance of auto_rate and LoLinR"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{autorate_performance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F, warning = F, message = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
+  highlight = TRUE, fig.width = 7.1, fig.height = 6)
+```
+
+<!-- In this vignette we compare `auto_rate()` to a different method for detecting linear regions in time series data. -->
+
+To our current knowledge, one other R package, [`LoLinR`](https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html) (Olito et al. 2017), performs ranking techniques on time series data.
+<!-- This is similar to `respR`'s `auto_rate()` function which contains a method (`method = "linear"`) to detect linear regions. -->
+The two packages use fundamentally different techniques to estimate linear regions of data.
+We detail `auto_rate()`'s methods [here](https://januarharianto.github.io/respR/articles/auto_rate.html). 
+`LoLinR`'s methods can be found in their online vignette [here](https://colin-olito.github.io/LoLinR/vignettes/LoLinR.html), and Olito et al. (JEB, 2017). 
+
+To summarise the main differences between the two functions:
+
+<!-- LoLinR is designed to be able to do this on any time series datasets, not just respirometry data.  -->
+<!-- However, the same is true of `auto_rate()`; while `respR` has a focus as an end-to-end solution for processing and analysing respirometry experiments, `auto_rate()` can similarly be used on any data.  -->
+
+<!-- The two methods use fundamentally different techniques to detect linear regions of data; we detail `auto_rate()` methods [here](https://januarharianto.github.io/respR/articles/auto_rate.html). `LoLinR` methods can be found in `LoLinR`'s online vignette [here](https://github.com/colin-olito/LoLinR), and Olito et al. (JEB, 2017). To summarise the main differences: -->
+
+1. `auto_rate()` uses machine learning techniques to detect linear segments first before running linear regressions on these data regions. `LoLinR`, by contrast, performs all possible linear regressions on the data first, and then implements a ranking algorithm such that the most linear regions are top-ranked. 
+
+2. `LoLinR`'s algorithms use three different metrics to select linear data, in which at least one performs very well to detect linear segments -- even if a small amount data is provided (<100 samples). In comparison, `auto_rate()` uses only one method  (kernel density estimation), which performs less accurately at smaller sample sizes, but that accuracy increases greatly with more data available.
+
+<!-- 3. `auto_rate()` is several orders of magnitude faster, even as it performs hundreds to thousands of rolling regressions at a time. It is a better option for large data, while LoLinR might be the function of choice for smaller datasets since its speed decreases *exponentially* as data gets bigger.  -->
+
+3. Because `auto_rate()` detects linear data first before it performs linear regressions, it is several orders of magnitude faster than `LoLinR`. Thus `auto_rate()` is ideal for large data. On the other hand, `LoLinR` is restricted to small datasets (see below). 
+
+Thus, even though both packages can perform linear metric analysis and determine the "most linear" section of a plot, the user will observe varying differences between the two methods used (see Comparisons section below).
+
+## Processing times
+
+The main function in `LoLinR` is called `rankLocReg()`. 
+The time it takes this function to process data follows an exponential relationship with its length, illustrated below:
+
+```{r, echo = F, out.width = "700px"}
+knitr::include_graphics("lolinr_times.png")
+```
+
+`rankLocReg()` was run on different sized datasets (blue dots) and the time to completion recorded. 
+These analyses were run in RStudio on the same dataset subset to the appropriate length, on a 2017 Macbook Pro with 3.1 GHz Intel Core i5 processor, 16GB RAM, and no other applications running. 
+The orange dots are estimated completion times for larger datasets extrapolated from the results. 
+**Note the log scale.**
+
+
+
+As we can see, any dataset larger than around 400 to 500 in length takes a prohibitively long time to be processed by `rankLocReg()`. 
+In a test under the same conditions, `auto_rate()` processed a dataset of 5000 datapoints in size in 1.25 seconds; `rankLocReg()` would take 47 days. 
+One dataset included in `respR` (`squid.rd`) is over 34,000 datapoints in length. `auto_rate()` completed analysis of this dataset in 18.5 seconds; under the exponential relationship of `rankLocReg()` this would take approximately *163 years* to be processed.  
+In reality, it is likely (as we have experienced) RAM limits will cause the `rankLocReg()` process to crash well before these durations are reached. 
+
+<!-- Therefore, it is clear `rankLocReg()` is not a practical solution for analysis of data more than a few hundred datapoints long.  -->
+The developers of `LoLinR` are aware of the processing limitations of `rankLocReg()`, and in the documentaton for the package recommend thinning (i.e. subsampling) datasets longer than 500 in length using another function that they provided, `thinData()`.
+<!-- However, thinning datasets of thousands to tens of thousands of datapoints to only a few hundred would inevitably cause loss of information and is not an acceptable solution.  -->
+However, thinning datasets of thousands to tens of thousands of datapoints to only a few hundred would inevitably cause loss of information, which may not be desirable in certain use cases.
+
+## Comparisons
+
+We provide, below, comparison plot outputs for both `auto_rate()` and `rankLocReg()` on simulated data generated by the `sim_data()` function and on experimental data provided by both packages.
+Because of `rankLocReg()`'s limitations for large data, the analysis of simulated data are restricted to 150 data points. 
+For experimental data, `auto_rate()` was used without modifications to the data, however for `LoLinR` they are processed using `thinData()` function. 
+Because `rankLocReg()` uses three methods ("z", "eq", and "pc") to rank the data, we manually selected most accurate method that best ranked data.
+
+We will let the plots speak for themselves.
+
+
+### Simulated data: default
+
+```{r, echo=FALSE}
+library(respR)
+library(LoLinR)
+```
+
+```{r, results=FALSE}
+set.seed(769)
+sim1 <- sim_data(150)
+## respR:
+auto_rate(sim1$df)
+```
+
+```{r, fig.height=8}
+## LoLinR:
+lir1 <- rankLocReg(xall = sim1$df$x, yall = sim1$df$y, 0.2, method = 'pc')
+plot(lir1)
+```
+
+### Simulated data: corrupted
+
+```{r, results=FALSE}
+set.seed(112)
+sim2 <- sim_data(150, type = "corrupted")
+## respR:
+auto_rate(sim2$df)
+```
+
+```{r, fig.height=8}
+## LoLinR:
+lir2 <- rankLocReg(xall = sim2$df$x, yall = sim2$df$y, 0.2, "pc")
+plot(lir2)
+```
+
+### Simulated data: segmented
+
+```{r, results=FALSE}
+set.seed(546)
+sim3 <- sim_data(150, type = "segmented")
+## respR:
+auto_rate(sim3$df)
+```
+
+```{r, fig.height=8}
+## LoLinR:
+lir3 <- rankLocReg(xall = sim3$df$x, yall = sim3$df$y, 0.2, "pc")
+plot(lir3)
+```
+
+### Experimental data: UrchinData from LoLinR
+
+
+```{r, results=FALSE}
+## respR:
+UrchinData %>%
+  select(1, 4) %>%
+  auto_rate()
+```
+
+
+```{r, fig.height=8}
+## LoLinR:
+lolinr_urchindata  <-  rankLocReg(xall=UrchinData$time, yall=UrchinData$D, alpha=0.2, method="z")
+plot(lolinr_urchindata)
+```
+
+
+### Experimental data: CormorantData from LoLinR
+
+```{r, results=FALSE}
+## respR:
+auto_rate(CormorantData)
+```
+
+```{r, fig.height=8}
+## LoLinR:
+lcor  <-  thinData(CormorantData, by = 3)$newData1 # thin data
+lcoregs <- rankLocReg(xall=lcor$Time, yall=lcor$VO2.ml.min, alpha=0.2, 
+  method="eq", verbose=FALSE)
+lcoregs  <-  reRank(lcoregs, newMethod='pc')
+plot(lcoregs)
+```
+
+### Experimental data: squid.rd from respR
+
+```{r, results=FALSE}
+## respR:
+auto_rate(squid.rd)
+```
+
+```{r, fig.height=8}
+## LoLinR:
+lsquid <- thinData(squid.rd, by = 200)$newData1
+lsquidregs <- rankLocReg(xall=lsquid$Time, yall=lsquid$o2, alpha=0.2, 
+  method="eq")
+plot(lsquidregs)
+```
+
+### References
+
+Olito, C., White, C. R., Marshall, D. J., & Barneche, D. R. (2017). Estimating monotonic rates from biological data using local linear regression. The Journal of Experimental Biology, jeb.148775-jeb.148775. doi:10.1242/jeb.148775

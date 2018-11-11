@@ -123,3 +123,27 @@
 #' @format List of multiple output objects of class `test_lin`.
 "test_lin_data"
 
+
+#' Respirometry data of a zebrafish, *Danio rerio*
+#'
+#' Multiple measurements (106 replicates, plus initial and end background
+#' measurements) of oxygen consumption in a zebrafish, *Danio rerio*, obtained
+#' using intermittent flow respirometry. Data kindly provided by Davide
+#' Thambithurai (University of Glasgow). Note, the data has been injected with
+#' random noise, and volume and mass below are not the actual values from the
+#' experiment, but for example only.
+#'
+#' Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
+#' 0.1 - Specimen wet mass (kg): 0.001
+#'
+#' Replicate structure (Rows - Experiment section)
+#' - 1:4999 - Start background recording
+#' - 5000:5839 - First replicate for MMR (14 mins duration)
+#' - 5840:75139 - 105 further replicates of 11 minutes duration each (660 rows)
+#' - 75140:79251 - End background recording
+#'
+#' @md
+#' @author Davide Thambithurai
+#' @format A data frame object consisting of 2 columns (time and dissolved
+#'   oxygen) and 79,251 rows (approx 22h of data).
+"zeb_intermittent.rd"

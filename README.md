@@ -1,16 +1,18 @@
 
 
 
- [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR) 
-
-**This package is under active development, but is currently stable.**
-
+ [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
 [![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
 
 # Welcome
 
-`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry-related data. While the focus of our package is on aquatic respirometry, it is highly likely that the main analytical functions in `respR` will process linear relationships in any related data, such as oxygen flux or photosynthesis.
+**This package is under active development, but is currently stable.**
 
+
+`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry data. 
+While the focus of our package is on aquatic respirometry, `respR` is largely unitless and so can process linear relationships in any time-series data, such as oxygen flux or photosynthesis.
+
+Here is how to [get started](https://januarharianto.github.io/respR/articles/respR.html).
 
 ## Installation
 `respR` is not yet published in CRAN. For now, use the `devtools` package to grab the **stable** version:
@@ -22,76 +24,58 @@ devtools::install_github("januarharianto/respR")
 
 ## Usage
 
-A good place to start is our [online vignette](https://januarharianto.github.io/respR/articles/respR.html). For a quick evaluation of the package, try out the following code:
+For a quick evaluation of the package, try out the following code:
 
 ```r
 library(respR) # load the library
 
 # As lazy loading is in place, we do not need to call example data explicitly.
-# This example will use the `sardine.rd` example data.
+# This example will use the `urchins.rd` example data.
 
-# 1. Check data for errors
-x <- inspect(sardine.rd)
+# 1. check data for errors, select cols 1 and 15:
+urch <- inspect(urchins.rd, 1, 15) 
+# 2. automatically determine linear segment:
+rate <- auto_rate(urch)
+# 3. convert units
+out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
 
-# 2. Manual rate calculations
-calc_rate(x, from = 2000, to = 4000)
-y <- calc_rate(x, from = c(200, 3000), to = c(800, 5500), by = "time")
-print(y)   # show results
-plot(y, 2) # plot second subset
-
-# 3. Automatic rate calculations
-y <- auto_rate(x) # defaults to most-linear rate
-auto_rate(x, width = 900, by = "time", method = "max")
-auto_rate(x, width = 1000, method = "interval")
-
-# 4. Conversions
-convert_rate(y, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg",
-             volume = 1.2, mass = 0.8)
-
-
-## Alternatively, use pipes:
-library(dplyr) # load to activate pipe operators
+## Alternatively, use tidyverse pipes:
 
 urchins.rd %>%        # using the urchins dataset,
   select(1, 15) %>%   # select columns 1 and 15
   inspect()     %>%   # inspect the data, then
   auto_rate()   %>%   # automatically determine most linear segment
   print()       %>%   # just a quick preview
-  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert data
+  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
   
 ```
-
-## Todo
-
-- [X] Integration into tidyverse, via `dplyr` pipes. Done. Not all functions work as I have to re-think the approach for independent functions such as `adjust_rate()` and `calc_rate.bg()`.
-- [ ] Better output for `calc_rate.ft()`
-- [ ] Parallisation optimisations. Some are currently broken due to OS updates.... oops
-- [ ] Support for additional Pcrit methods.
-- [ ] Refresh vignettes to reflect 1.0.0 updates. Currently half-done, but I have a thesis to complete..
 
 ## Feedback and contributions
 
 `respR` is under continuous development. If you have any bugs or feedback, you can contact us easily by [opening an issue](https://github.com/januarharianto/respr/issues). Alternatively, you can fork this project and create a pull request.
 
+Please also feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
+
 ## Collaborators
 
-- Januar **Harianto**, University of Sydney
-- Nicholas **Carey**, Stanford University
-- Maria **Byrne**, University of Sydney
+- **Januar Harianto**, University of Sydney
+- **Nicholas Carey**, Scottish Association of Marine Science
+- **Maria Byrne**, University of Sydney
 
 
-# Acknowledgements
+## Acknowledgements
 
 The design of this package would not have been possible without inspiration from the following authors and their packages:
 
 - [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
 - [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
+- [FishResp](https://fishresp.org) - Sergey Morozov
 - [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 - [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
 
 
-# References
+## References
 
 Clark, T. D., Sandblom, E., & Jutfelt, F. (2013). Aerobic scope measurements of fishes in an era of climate change: respirometry, relevance and recommendations. Journal of Experimental Biology, 216(15), 2771–2782. [doi: 10.1242/Jeb.084251](https://doi.org/10.1242/Jeb.084251)
 

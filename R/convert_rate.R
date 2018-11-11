@@ -15,6 +15,10 @@
 #' mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
 #' mg/h/kg).
 #'
+#' Some units also require temperature (`t`), salinity (`S`), and atmospheric
+#' pressure (`P`) to be specified. See [unit_args()] for details. For freshwater
+#' experiments, salinity should be set to zero (i.e. S = 0).
+#'
 #' @param x numeric, or objects of class [calc_rate()], [calc_rate.ft()],
 #'   [auto_rate()] or [adjust_rate()].
 #' @param o2.unit string. The dissolved oxygen unit of the data used to
@@ -27,12 +31,13 @@
 #'   respirometry chamber, not the specimen volume.
 #' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
 #'   you wish to calculate mass-specific rates.
-#' @param S numeric. Salinity. Defaults to 35. Used only in conversion of \%
-#'   data.
-#' @param t numeric. Temperature. Defaults to 25 (°C). Used only in conversion
-#'   of \% data.
-#' @param P numeric. Pressure. Defaults to 1.013253 (bar). Used only in
-#'   conversion of \% data.
+#' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+#'   of some units. See [unit_args()] for details.
+#' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+#'   of some units. See [unit_args()] for details.
+#' @param P numeric. Pressure (bar). Defaults to NULL. Used only in conversion
+#'   of some units. If left NULL, default value of 1.013253 is applied in
+#'   conversions. See [unit_args()] for details.
 #'
 #' @return A list object.
 #'
@@ -51,7 +56,7 @@
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
 #'   S =35, t = 15, P = 1.013)
 convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
-  output.unit = NULL, volume = NULL, mass = NULL, S = 35, t = 25, P = 1.013253)
+  output.unit = NULL, volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
   {
 
   # Validate inputs If units are set to NULL, use default values.
@@ -171,7 +176,7 @@ print.convert_rate <- function(x, pos = NULL, ...) {
   }
   print(c(x$input.o2.unit, x$input.time.unit))
   cat("Converted:\n")
-  if (is.null(pos)) { 
+  if (is.null(pos)) {
     print(x$output[1])
   } else if (is.numeric(pos)) {
     print(x$output[pos])

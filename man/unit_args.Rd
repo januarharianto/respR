@@ -12,26 +12,42 @@ A list.
 }
 \description{
 This is a simple function, requiring no argument. It shows available units
-that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}.
+that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}. Some
+units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
+pressure (\code{P}) to be specified.
 }
 \details{
-Available units for \code{\link[=convert_DO]{convert_DO()}}:
+\strong{Available units for \code{\link[=convert_DO]{convert_DO()}}:}
 
-"mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "%", "Torr", "hPa", "kPa", "mmHg", "inHg"
+Do \emph{NOT} require t, S and P:
 
-Available units for \code{\link[=convert_rate]{convert_rate()}}:
+"mg/L", "ug/L", "mmol/L", "umol/L"
+
+Require t, S and P:
+
+"mL/L", "mg/kg", "ug/kg", "mmol/kg",
+"umol/kg", "mL/kg", "\%" (N.B. = \% Air Saturation), "Torr", "hPa", "kPa",
+"mmHg", "inHg"
+
+\strong{Available units for \code{\link[=convert_rate]{convert_rate()}}:}
 
 \strong{O2}
 
-"mg/L", "ug/L", "mmol/L", "umol/L", "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "Torr", "hPa", "kPa", "mmHg", "inHg"
+Do \emph{NOT} require t, S and P:
 
-\strong{time}
+"mg/L", "ug/L", "mmol/L", "umol/L"
+
+Require t, S and P:
+
+"mL/L", "mg/kg", "ug/kg", "mmol/kg",
+"umol/kg", "mL/kg", "\%" (N.B. = \% Air Saturation), "Torr", "hPa", "kPa",
+"mmHg", "inHg"
+
+\strong{Time}
 
 "s", "m", "h"
 
-\strong{mass}
+\strong{Output mass}
 
 "ug", "mg", "g", "kg"
 }

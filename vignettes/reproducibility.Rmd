@@ -1,0 +1,140 @@
+---
+title: "Open science and reproducibility using respR"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Open science and reproducibility using respR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
+```
+
+One of the main motivations in creating `respR` was to promote open, reproducible respirometry analyses. 
+
+Respirometry is ubiquitous in experimental biology, however there is a lack of standard approaches in analysing respirometry data. Reporting of respirometry analyses is often vague and lacking in detail. This can be understandable given journal word limits, however it hinders attempts to reproduce or scrutinise the data and analyses. In particular, many analysis criteria and parameters are underreported. For example, the criteria used to select regions over which rates were determined, or in the case of maximum or minimum rates, the width used when fitting multiple regressions. 
+
+In the era of cheap data storage, and easy sharing of files online, there is little reason why all stages of analyses and raw data cannot be made available to reviewers, readers and other investigators as supplementary material or in specialised online repositories. We have designed `respR` to help make this process straightforward. 
+
+## Readable, concise code
+The functions in `respR` have clear, unambiguous arguments describing the operators and the parameters used in analysis. Therefore, given some familiarity with the package functions, the code is very human-readable, and it is usually clear under what parameters an analysis was conducted. We have minimised the number of function operators where possible, mainly to streamline and simplify analyses, but this also has the side benefit of making input code less verbose and more readable. This, along with the fact that an end-to-end workflow could potentially consist of processing raw data through as few as three functions, means the entire script for a `respR` workflow for a single experiment could consist of only a few lines of code. 
+
+## Transparent and portable analyses
+While there is commercial software which can analyse respirometry data (e.g. AutoResp by Loligo), these are often poorly designed, complex, inefficient, and often prohibitively expensive and locked to single platforms, if not single computers. The main drawback of these is that they are not open-source or allow for transparent analyses. Alternatively, many investigators have their own analysis workflows in Excel and R. These are perfectly fine and work well on an individual basis or within a lab, but even if the spreadsheet or code is shared, their custom nature means that reproducibility is difficult for an independent user or require a significant time commitment. `respR` seeks to solve these problems. 
+
+We have designed respR to avoid it being a "black box", into which data is fed and a result spit out with the user having little understanding or oversight into what is happening. We feel it important a user understands their data, which is why we include exploratory functions to visualise the data, look for common errors, and prepare it for analysis. We designed the functions to allow straightforward natural-language querying of different parts of the data in terms the user can understand, so they should always be aware of what they are doing. All the analytical functions also provide visualisations of the analysis and results. All output objects support the base R `plot()`, `print()` and `summary()` commands, which allow quick assessment of the most important outputs. As with all R packages and functions, the code underlying the analysis is easily viewable, so advanced users can investigate how it works for themselves. 
+
+
+## Documenting reproducible workflows
+
+### Simple sharing of scripts
+The easiest way of providing a reproducible workflow using `respR` is to include the raw data as a `.csv` or `.rda` file , and include a `.R` script containing all the code used to import and process that data file. Because `respR` has been designed as an end-to-end workflow covering every step in the analysis of respirometry data, code for all stages from raw data input, data preparation and exploration, determining rates, and converting the rates to specific units can be included in a single file, and usually this will comprise only a few lines of code. There may be additional data inputs (experiment specific parameters such as volumes, masses, temperatures, etc.). These can be entered as values in code, but typically would be included as an additional data file, and most R users should be familiar with how to format these in good database-style formatting, and how to reference relevant values in code. 
+
+To demonstrate how brief an entire end-to-end `respR` workflow can be, here's an example of a typical script which uses the `sardine.rd` dataset included in the package. We inspect the data, determine the most linear rate, and the maximum rate over a 10 minute period, and finally convert rates to mass-specific units. 
+
+```{r eval = T, results = "hide", fig.keep="none", message=FALSE, warning=FALSE, tidy=FALSE}
+## Load the package
+library(respR)
+
+## Import data
+## Here we would typically use import_file() to import a data file, 
+## but sardine.rd is already loaded
+
+## Experiment parameters (typically this would be an existing 
+## database-style object containing data for many experiments)
+exp_param <- data.frame(volume = 12.3, mass = 21.41, DO.unit = "mg/l", time.unit = "s")
+
+## Inspect the data, and save it as an object
+exp_1 <- inspect(sardine.rd)
+
+## Determine rates
+exp_1_linear_rate <- auto_rate(exp_1)
+exp_1_max_rate <- auto_rate(exp_1, method = "max", width = 600)
+
+## Convert rates to mass-specific units using the experimental parameters
+exp_1_linear_rate_conv <- convert_rate(exp_1_linear_rate, 
+                                       output.unit = "mg/h/kg",
+                                       o2.unit = exp_param$DO.unit,
+                                       time.unit = exp_param$time.unit,
+                                       volume = exp_param$volume,
+                                       mass = exp_param$mass)
+
+exp_1_max_rate_conv <- convert_rate(exp_1_max_rate, 
+                                    output.unit = "mg/h/kg",
+                                    o2.unit = exp_param$DO.unit,
+                                    time.unit = exp_param$time.unit,
+                                    volume = exp_param$volume,
+                                    mass = exp_param$mass)
+```
+
+```{r}
+## Results
+exp_1_linear_rate_conv
+
+exp_1_max_rate_conv
+```
+This shows an entire analysis workflow can be conducted in only a few lines of code. 
+
+### Saving single respR objects
+For more documented analyses, for documenting parts of a workflow, or for saving the outputs of specific functions, we can use the base R `saveRDS` function. The main functions in `respR` output R objects which include raw data, results and also metadata in the form of subsetting criteria, models and input parameters. Thus, each of these objects contains all the information saved from the previous function that created it, and so all the information required to continue through the `respR` workflow from any intermediate stage. These objects can be saved using `saveRDS` and distributed like any other file. This can allow each stage of the analysis to be saved, and shared or archived. An advantage of using one of these objects is that an analysis can be continued from a certain point without having to re-run the entire workflow. For example, data can be imported, inspected, a rate determined through the `auto_rate` function, and the resulting output object exported via `saveRDS`. This could be shared with a colleague who can then import it into their own R project using `readRDS`, and feed it into `convert_rate` to convert it to whatever units they wish without having to run any other parts of the workflow.  
+
+```{r eval = FALSE}
+## Running this code will show how saveRDS and readRDS preserves values 
+## correctly, and gives the exact same results when used in further 
+## stages of the workflow
+
+## Inspect
+urch_data <- inspect(urchins.rd, time = 1, oxygen = 15)
+
+## Export resulting object to working directory
+saveRDS(urch_data, file = "urch_data.rds")
+
+## Re-import it to new object
+urch_data_in <- readRDS(file = "urch_data.rds")
+
+## Check values are preserved - should be TRUE
+all.equal(urch_data, urch_data_in)
+
+## Determine rate using original and imported objects
+urch_rate <- auto_rate(urch_data)
+urch_rate_in <- auto_rate(urch_data_in)
+
+## Check results are the same - should be TRUE
+all.equal(urch_rate, urch_rate_in)
+
+```
+
+One example of using this method to document a reproducible workflow, would be to save the object created by `inpect_data` and include that along with the script for the rest of the analysis rather than including original data files. This object includes the raw data, but using it tells the next user the data has already been checked for common errors such as missing data, and if so these errors fixed, and so that step is unnecessary. 
+
+### Saving all respR objects
+To document or archive an entire working environment we can use the `save.image()` command. This function saves to the working directory every object and value in the current R environment (though not scripts, i.e. `.R` files.). This way, all objects from the analysis of a single experiment, or multiple experiments, can be saved to a single file.
+
+```{r eval = FALSE}
+## Will save entire environment to current working directory
+save.image(file = "experiment_1.rda")
+```
+
+The environment can be reimported by double clicking on the file (usually RStudio will ask if you want to import it to the current project), or `load()` command. 
+
+```{r eval = FALSE}
+## Will load entire environment to current working project. 
+## Path to the file must be specified, or it must be in
+## current working directory.
+load(file = "experiment_1.rda")
+```
+
+This avoids having to save every object individually. 
+
+## Conclusion
+
+We hope this brief vignette has helped you understand how `respR` may be used to produce open and reproducible science from your respirometry data. As scientists, we have probably all wished we could get the raw data from a publication, or struggled to extract data from old plots and tables. So we encourage you to use our package, and when you come to submit your paper consider including supplementary material as described above to allow others to scrutinise and reproduce your results, and in the future utilise your data for new analyses. This benefits the science community as a whole. 
+
+If you do use `respR` in your analyses, please do let us know. We would love to keep a running list of projects where it has proven useful.  
+

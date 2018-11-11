@@ -1,14 +1,22 @@
 pandoc: 1.19.2.1
-pkgdown: 1.1.0
-pkgdown_sha: ~
+pkgdown: 1.1.0.9000
+pkgdown_sha: 16c6506a153dacf99c185f0ef62488458297d301
 articles:
   auto_rate: auto_rate.html
+  auto_rate_comp: auto_rate_comp.html
+  closed: closed.html
   flowthrough: flowthrough.html
+  importing: importing.html
   intermittent: intermittent.html
+  intermittent2: intermittent2.html
+  packages_comp: packages_comp.html
   pcrit: pcrit.html
   performance: performance.html
+  reproducibility: reproducibility.html
   respR: respR.html
+  tidyverse: tidyverse.html
   twopoint: twopoint.html
+  usage: usage.html
 urls:
   reference: http://januarharianto.github.io/respR/reference
   article: http://januarharianto.github.io/respR/articles
