@@ -210,7 +210,7 @@ Thus, the function may incorrectly sample none of the linear segment **(B)**, bu
 plot(test_lin_data$corrupted100)
 ```
 
-Again, `auto_rate()` performed better when provided with bigger data. At 500 samples the same issue where the the shorter linear segment was incorrectly selected still persisted **(A)**, but **(B)** the function sampled incorrect segments less often, **(C)** linear regression of $\beta_{detected}$ against $\beta_{true}$ had a better goodness of fit and **(D)** deviation values from $\beta_{true}$ were substantially smaller with seemingly fewer poor estimates when slope values approach zero. 
+Again, `auto_rate()` performed better when provided with bigger data. At 500 samples the same issue where the shorter linear segment was incorrectly selected still persisted **(A)**, but **(B)** the function sampled incorrect segments less often, **(C)** linear regression of $\beta_{detected}$ against $\beta_{true}$ had a better goodness of fit and **(D)** deviation values from $\beta_{true}$ were substantially smaller with seemingly fewer poor estimates when slope values approach zero. 
 
 ```{r plotcorrupted500, fig.cap=""}
 plot(test_lin_data$corrupted500)
