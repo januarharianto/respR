@@ -39,8 +39,7 @@ rate <- auto_rate(urch)
 # 3. convert units
 out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
 
-## Alternatively, use tidyverse pipes:
-
+## Alternatively, use dplyr pipes:
 urchins.rd %>%        # using the urchins dataset,
   select(1, 15) %>%   # select columns 1 and 15
   inspect()     %>%   # inspect the data, then
