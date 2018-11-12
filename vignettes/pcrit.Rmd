@@ -21,7 +21,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 ### Introduction
 
 In some species (*oxyconformers*) routine oxygen uptake rate is directly proportional to oxygen concentration. 
-So, for example, at 50\%O~2~, the uptake rate will be half that at 100\% O~2~. Many species however (*oxyregulators*) are able to regulate uptake and maintain routine rates as oxygen decreases. 
+So, for example, at 50\% O~2~, the uptake rate will be half that at 100\% O~2~. Many species however (*oxyregulators*) are able to regulate uptake and maintain routine rates as oxygen decreases. 
 Note however, there is a continuum of responses between these extremes, and intermediate cases (Mueller and Seymour, 2011). 
 
 The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of O~2~, or $P_{crit}$. 
