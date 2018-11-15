@@ -48,8 +48,9 @@ The main function in `LoLinR` is called `rankLocReg()`.
 The time it takes this function to process data follows an exponential relationship with its length, illustrated below:
 
 ```{r, echo = F, out.width = "700px"}
-knitr::include_graphics("lolinr_times.png")
+knitr::include_graphics("https://raw.githubusercontent.com/januarharianto/respR/develop/vignettes/img/lolinr_times.png")
 ```
+
 
 `rankLocReg()` was run on different sized datasets (blue dots) and the time to completion recorded. 
 These analyses were run in RStudio on the same dataset subset to the appropriate length, on a 2017 Macbook Pro with 3.1 GHz Intel Core i5 processor, 16GB RAM, and no other applications running. 

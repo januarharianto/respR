@@ -214,7 +214,7 @@ SMR.raw <- import.meas(file = "anch01_raw.txt",
 ```
 
 ```{r, echo = F, out.width = "700px"}
-knitr::include_graphics("anch_fishresp.png")
+knitr::include_graphics("https://raw.githubusercontent.com/januarharianto/respR/develop/vignettes/img/anch_fishresp.png")
 ```
 
 We can't compare the importing functionality of `FishResp` with `respR`, as we do not yet support direct importing of AutoResp files (this is planned, and currently they can easily be imported using other methods such as `read.csv()` and analysed in `respR`). 
