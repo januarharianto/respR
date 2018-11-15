@@ -1,3 +1,8 @@
+# Version 1.0.5.1
+This is a quick fix for images not showing in the online vignettes.
+
+- FIX: images not showing in two vignettes. If you didn't notice it, it never happened...
+
 
 # Version 1.0.5
 This version is aimed at improving the functionality and usability of our conversion functions. We have decided to remove the default values for temperature and salinity inputs in `convert_DO()` and `convert_rate()` (i.e. switched `t` and `S` numerics to `NULL`). This was no easy decision, but we noticed that some users were running the functions by default without considering (or even knowing the existence of) these two *important* input variables. **With this change, existing workflows using `calc_DO()` and `calc_rate()`are likely to break**. Do note that this is a very rare modification -- we know that changing core functionality that breaks prior code is not something to be taken lightly. Please update these two functions respectively. 

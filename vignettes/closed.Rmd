@@ -106,7 +106,7 @@ print(rate)
 summary(rate)
 ```
 
-The rate can be seen as the second entry `rate_b1`, and other summary data are saved in the object. The output also includes a `rate_2pt`. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time. For almost all analyses, the `rate_b1` should be used. See [two-point analysis](https://januarharianto.github.io/respR/articles/twopoint.html) for an explanation of this output and when it should be used. 
+The rate can be seen as the second entry `rate_b1`, and other summary data are saved in the object. The output also includes a `rate_2pt`. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time. For almost all analyses, the `rate_b1` should be used. See [Two-point analyses](https://januarharianto.github.io/respR/articles/twopoint.html) for an explanation of this output and when it should be used. 
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
 

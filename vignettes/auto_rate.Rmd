@@ -1,10 +1,10 @@
 ---
-title: "Automatic detection of metabolic rates"
+title: "auto_rate: Automatic detection of metabolic rates"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Automatic detection of metabolic rates}
+  %\VignetteIndexEntry{auto_rate: Automatic detection of metabolic rates}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -34,8 +34,8 @@ Here we present `auto_rate()`, a function in the `respR` package that uses rolli
 This function can be used to select most linear, maximum and minimum rates in a statistically robust, objective way. 
 
 In this vignette we detail how `auto_rate()` works, and how it can be used to extract rates from respirometry data. 
-We show how we have [tested this method against simulated data](https://januarharianto.github.io/respR/articles/performance.html), and also [compare its performance against another linear detection method](https://januarharianto.github.io/respR/articles/auto_rate_comp.html). 
-We show it perfoms extremely well on large datasets in determining linear rates. 
+In additional vignettes we show how we have [tested this method against simulated data](https://januarharianto.github.io/respR/articles/performance.html), and also [compare its performance against another linear detection method](https://januarharianto.github.io/respR/articles/auto_rate_comp.html). 
+We show it performs extremely well on large datasets in determining linear rates. 
 Importantly, `auto_rate()` has been optimised to be extremely fast. Other methods on large datasets can take minutes or hours to run.
 We show how `auto_rate()` can reduce this wait by orders of magnitude, literally fitting tens of thousands of regressions and detecting linear regions in seconds. 
 
@@ -112,12 +112,12 @@ The rolling estimates are then discarded while the detected data segments are an
 By default, `auto_rate()`'s rolling regression uses a rolling window value in rows of `0.2` multiplied by the total length of the number of samples. 
 This can be changed using the `width` argument, to a proportion relative to the total size of the data (`width = 0.1, by = "row"`) or a fixed value in the time metric (`width = 3000, by = "time"`). 
 
-It is important to note that the width determines the exact width of the data segments produced for `max`, `min` and `interval` rates. This allows the user to consistently report results across experiments, such as reporting the maximum or minimum rates sustained over a specified time period. 
+It is important to note that the `width` determines the exact width of the data segments produced for `max`, `min` and `interval` rates. This allows the user to consistently report results across experiments, such as reporting the maximum or minimum rates sustained over a specific time period. 
 
-Importantly, the `width` does *not* restrict the maximum width of the segments produced for linear detection. 
+Importantly however, the `width` does *not* restrict the maximum width of the segments produced for linear detection. 
 **We advise users to use caution when changing the `width` argument if using `method = "linear"`.** Choosing an inappropriate width value tends to over-fit the data for rolling regression. 
 
-Below, we show the differences in the shape of the rolling regressions when using a `width` of `0.6` to analyse `sardine.rd`:
+Below, we show the differences in the shape of the rolling regressions when using the default `width = 0.2` versus a value of `0.6` with the dataset `sardine.rd`:
 
 ```{r rollreg_demo}
 # Perform linear detection; default width (when not specified) is 0.2:
@@ -135,7 +135,7 @@ plot(overx, choose = 3)
 
 Under perfectly linear conditions, we would expect the rolling regression output to produce a straight, horizontal line with a slope of 0, i.e. a very stable plot.
 Since KDE automatically aggregates stable values, a poor selection of the `width` value may result in a badly-characterised rolling estimate output.
-In the example presented above, while the default width showed a pattern of relative stability after 3,000 seconds, that information was lost when a `width` of `0.6` was used.
+In the example presented above, while the default width showed a pattern of relative stability in rate after 3,000 seconds, that information was lost when a `width` of `0.6` was used.
 Thus, the KDE technique would not have had the appropriate information necessary to correctly detect any linear patterns in the same data.
 
 ## Most linear rates
@@ -177,7 +177,7 @@ print(x)
 
 ### Additional ranked results
 
-`auto_rate()` objects contain all the results for the specified width (or in the case of `method = linear` all results for *all* widths). By default, the first ranked (i.e. most maximum or minimum) result is returned, but others and their locations can be examined using the `summary` command: 
+`auto_rate()` objects contain all the results for the specified width. By default, the first ranked (i.e. most maximum or minimum) result is returned, but others and their locations can be examined using the `summary` command: 
 
 ```{r}
 summary(x)
@@ -215,7 +215,7 @@ print(x, nrow(x$summary))
 ## Summary of when to use different `auto_rate` options
 
 ### `method = "linear"`  
-In 'steady state' experiments. That is, when you are looking for the most *consistent* or *representative rates* for what the specimen is experiencing. This could represent routine metabolic rate, or in the case of an animal under constant excercise a consistent active metabolic rate. No `width` needs to be specified under this option. 
+In 'steady state' experiments. That is, when you are looking for the most *consistent* or *representative rates* for what the specimen is experiencing. This could represent routine metabolic rate, or in the case of an animal under constant excercise a consistent active metabolic rate. The default `width = 0.2` is used and in testing gives good results; users should be careful about changing this value to avoid overfitting (see section above). 
 
 ### `method = "max"`  
 When your specimen is active at some point during the experiment, or has been exercised and placed in a respirometer, and you want to know its *maximum* rate over a specific time period or row width. The default is `width = 0.2, by = "row"` (0.2 of total row number) or it can be specified in the time unit, e.g. `width = 600, by = "time"`). This should be carefully selected, and consistent if you are comparing specimens. 
@@ -233,8 +233,7 @@ For example, in P~crit~ measurements, it is common for users to generate rate\~O
 - **Flowthrough respirometry data**  
 See `calc_rate.ft()`. This respirometry method is currently unsupported in `auto_rate`, but it is in our plans to add this. 
 - **Intermittent flow respirometry, without some subsetting or specification of measurement periods**  
-While we have had generally good results using `auto_rate()` on intermittent-flow data, there is a strong possibility flush periods could confuse the algorithms on occasion. See [intermittent-flow respirometry: complex example](https://januarharianto.github.io/respR/articles/intermittent2.html) for how to get around this. 
-And as always, inspect outputs plots to ensure data locations are relevant. 
+While we have had generally good results using `auto_rate()` on intermittent-flow data, there is a strong possibility flush periods could confuse the algorithms on occasion. See [Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html) for how to use `auto_rate` with these data. And as always, inspect output plots to ensure data locations are relevant. 
 
 ## Further processing
 Saved `auto_rate()` objects can be passed to subsequent `respR` functions for further processing, such as `adjust_rate()` to correct for background respiration, or `convert_rate()` to convert to final O~2~ uptake rates. 

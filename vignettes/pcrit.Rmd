@@ -21,7 +21,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 ### Introduction
 
 In some species (*oxyconformers*) routine oxygen uptake rate is directly proportional to oxygen concentration. 
-So, for example, at 50\%O~2~, the uptake rate will be half that at 100\% O~2~. Many species however (*oxyregulators*) are able to regulate uptake and maintain routine rates as oxygen decreases. 
+So, for example, at 50\% O~2~, the uptake rate will be half that at 100\% O~2~. Many species however (*oxyregulators*) are able to regulate uptake and maintain routine rates as oxygen decreases. 
 Note however, there is a continuum of responses between these extremes, and intermediate cases (Mueller and Seymour, 2011). 
 
 The concentration below which routine uptake becomes unsustainable is termed the critical partial pressure of O~2~, or $P_{crit}$. 
@@ -209,7 +209,7 @@ As we saw in the examples above, all three methods often give similar results, i
 However, there may be cases where the results from these different methods differ. 
 
 Different methods are discussed amongst the literature cited below.
-It is important to note that $P_{crit}$ is most frequently used as a *comparative* metric. Since analytical options chosen by the investigator (such as regression width) inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than considerarion of the ultimate values of $P_{crit}$ *per se*. 
+It is important to note that $P_{crit}$ is most frequently used as a *comparative* metric. Since analytical options chosen by the investigator (such as regression width) inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than consideration of the ultimate values of $P_{crit}$ *per se*. 
 So, it is important that investigators fully report the parameters under which these analyses have been conducted. 
 This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to know if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward (see [open science and reproducibility using respR](https://januarharianto.github.io/respR/articles/reproducibility.html)).
 
