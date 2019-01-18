@@ -24,9 +24,9 @@ A list object of class \code{inspect}.
 \description{
 \code{inspect()} scans and subsets a data.frame object for errors that may affect
 the use of various functions in \code{respR}. By default, the function scans only
-the first 2 columns of a data frame and assumes that the first columne is
+the first 2 columns of a data frame and assumes that the first column is
 time data. A plot of the data is also produced, including a rolling
-regression plot using a width of \code{floor(0.2 * nrow([data frame])} for a quick
+regression plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick
 visual inspection of the rate pattern (or stability) of the data.
 }
 \details{

@@ -2,9 +2,9 @@
 #'
 #' `inspect()` scans and subsets a data.frame object for errors that may affect
 #' the use of various functions in `respR`. By default, the function scans only
-#' the first 2 columns of a data frame and assumes that the first columne is
+#' the first 2 columns of a data frame and assumes that the first column is
 #' time data. A plot of the data is also produced, including a rolling
-#' regression plot using a width of `floor(0.2 * nrow([data frame])` for a quick
+#' regression plot using a width of `floor(0.1 * nrow([data frame])` for a quick
 #' visual inspection of the rate pattern (or stability) of the data.
 #'
 #' Time columns are checked for NA/NaN values, sequential time, duplicate time
@@ -218,6 +218,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
       main = "Rolling Regression of Rate (0.1 Rolling Window)",
       line = 0.3
     )
+    ## Added dashed line at rate = 0
     abline(h = 0, lty = 2)
     par(pardefault) # revert par settings to original
   } else
