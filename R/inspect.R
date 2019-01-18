@@ -189,7 +189,8 @@ plot.inspect <- function(x, label = TRUE, ...) {
   dt <- x$dataframe
   # perform rolling regression (quick one)
   if(ncol(dt) == 2) {
-    roll <- static_roll(dt, floor(0.2 * nrow(dt)))$rate_b1
+    ## changed here 0.2 to 0.1
+    roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
   }
 
   if (length(x$dataframe) == 2) {
@@ -204,16 +205,20 @@ plot.inspect <- function(x, label = TRUE, ...) {
       panel.first = grid())
     title(main = "Full Timeseries", line = 0.3)
     plot(
-      abs(roll) ~ dt[[1]][floor(0.1 * length(dt[[1]])):(floor(0.1 * 
+      ## changed this to 10% width for now (0.05 each side here)
+      ## Also changed abs to -1* so intermittent data don't look so weird on this plot
+      -1*(roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
           length(dt[[1]])) + (length(roll) - 1))],
       xlim = range(dt[[1]]),
       xlab = "", ylab = "", pch = 16, cex = .5,
       panel.first = grid())
     title(
       ## UPDATED TITLE
-      main = "Rolling Regression of Rate (0.2 Rolling Window)",
+      ## Updated again!!!!
+      main = "Rolling Regression of Rate (0.1 Rolling Window)",
       line = 0.3
     )
+    abline(h = 0, lty = 2)
     par(pardefault) # revert par settings to original
   } else
     message("inspect: Plot is only avalilable for a 2-column dataframe output.")
