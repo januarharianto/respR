@@ -1,8 +1,9 @@
 
 
-
- [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
+[![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
 [![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
+
 
 # Welcome
 
