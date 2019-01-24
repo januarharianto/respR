@@ -181,7 +181,7 @@ plot.pcrit <- function(x, ...) {
   if (x$has.rate) {
     # No plot here :D
   } else {
-    plot(x$df, col = c1, pch = 21, xlab = "", ylab = "", cex = .8,
+    plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
       panel.first = grid(lwd = .7))
     abline(h = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
     abline(h = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
@@ -195,7 +195,7 @@ plot.pcrit <- function(x, ...) {
   }
 
   # Plot for broken-stick
-  plot(x$mr.df, col = c1, pch = 21, xlab = "", ylab = "", cex = .8,
+  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
     panel.first = grid(lwd = .7))
   abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
   abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
@@ -208,7 +208,7 @@ plot.pcrit <- function(x, ...) {
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
 
   # Plot for segmented (breakpoint)
-  plot(x$mr.df, col = c1, pch = 21, xlab = "", ylab = "", lwd = 2, cex = .8,
+  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
     panel.first = grid(lwd = .7))
   lines(x$bpoint.fit.df, lwd = 1, lty = 4)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
@@ -219,7 +219,7 @@ plot.pcrit <- function(x, ...) {
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
   subdf <- x$mr.df[x > min(aps) * 0.99][x < max(aps) *1.01]
-  plot(subdf, col = c1, pch = 21, xlab = "", ylab = "", cex = 2,
+  plot(subdf, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = 2,
     panel.first = grid(lwd = .7))
   abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
   abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)

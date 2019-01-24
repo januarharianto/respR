@@ -19,11 +19,11 @@ d2 <- adjustcolor("darkslateblue", alpha.f = .75)
 pch <- 21
 cex <- .5
 
-multi.p <- function(df, sdf, rsq, title = TRUE) {
+multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
-  plot(df, xlab = "", ylab = "", bg = r1, col = r1, pch = pch, cex = .3,
+  plot(df, xlab = xl, ylab = yl, bg = r1, col = r1, pch = pch, cex = .3,
     panel.first = grid(lwd = .7))
   invisible(lapply(sdf, function(x) points(x, pch = pch, bg = r2, col = r2,
     cex = cex)))
