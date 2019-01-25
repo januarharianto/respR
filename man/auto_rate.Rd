@@ -5,7 +5,7 @@
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
 auto_rate(df, width = NULL, by = "row", method = "linear",
-  plot = TRUE, parallel = FALSE)
+  plot = TRUE, full = FALSE, parallel = FALSE)
 }
 \arguments{
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
@@ -28,6 +28,9 @@ to \code{linear}. Note that if \code{"linear"} is selected, the argument \code{w
 be set to default.}
 
 \item{plot}{logical. Defaults to TRUE. Plot the results.}
+
+\item{full}{logical. Defaults to FALSE. Change to TRUE to plot every single
+data point. May increase computation time substantially.}
 
 \item{parallel}{logical. Defaults to TRUE. Should parallel processing be
 used?}
