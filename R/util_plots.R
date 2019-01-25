@@ -120,3 +120,168 @@ rollreg.p <- function(rolldf, ranked.b1) {
 #   legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
 #     bty = "n")
 # }
+
+# Plot 1
+fullplot <- function(dta, dtb, full = FALSE, interval = NULL) {
+  require(ggplot2)
+  names(dta) <- c('x', 'y')
+  names(dtb) <- c('x', 'y')
+  p <-ggplot(dta) +
+    theme_bw(base_size = 13) +
+    xlab("Time") +
+    ylab("Oxygen") +
+    ggtitle("Full Timeseries") +
+    theme(plot.title = element_text(size = 15)) +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none")
+  if (full) {
+    out <- p +
+      geom_point(aes(x, y)) +
+      geom_point(data = dtb, aes(dtb[[1]], dtb[[2]]), 
+        colour = "goldenrod")
+  } else {
+    out <- p +
+      geom_bin2d(aes(x, y)) +
+      geom_bin2d(data = dtb, aes(dtb[[1]], dtb[[2]]), 
+        colour = "white", fill = "goldenrod")
+  }
+  if (!is.null(interval)) {
+    out <- out +
+      geom_vline(data = data.frame(interval), aes(xintercept = interval))
+  }
+  return(out)
+}
+
+
+# Plot 2
+focusplot <- function(dt, full = FALSE) {
+  require(ggplot2)
+  p <- ggplot(dt, aes(dt[[1]], dt[[2]])) +
+    theme_bw(base_size = 13) +
+    xlab("Fitted") +
+    ylab("Residuals") +
+    ggtitle("Close-up Region") +
+    theme(plot.title = element_text(size = 15)) +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none")
+  if (full) {
+    p +
+      geom_point(colour = "goldenrod", size = .2) +
+      geom_smooth(method='lm', colour = "black", 
+        linetype = "dashed", size = .5) -> out
+  } else {
+    p +
+      geom_hex(fill = "goldenrod", colour = "white", size = .2) +
+      geom_smooth(method='lm', colour = "black", 
+        linetype = "dashed", size = .5) -> out
+  }
+  
+  return(out)
+}
+
+
+# Plot 3
+rollplot <- function(obj, pos = 1, full = FALSE) {
+  require(ggplot2)
+  p <- ggplot(obj$roll, aes(obj$roll[[6]], obj$roll[[2]])) +
+    theme_bw(base_size = 13) +
+    # geom_label(data = dt$summary, aes(, signif(rate_b1[rank],3), label = rate_b1[rank])) +
+    xlab("Time") +
+    ylab(expression("Regression ß"[1])) +
+    ggtitle(expression("Rolling Regression ß"[1])) +
+    # theme(text = element_text(family = "Times")) +
+    theme(plot.title = element_text(size = 15)) +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none")
+  if (full) {
+    p +
+      geom_point() +
+      geom_hline(aes(yintercept = obj$summary[[2]][pos]), linetype = 2) -> out
+  } else {
+    p +
+      geom_bin2d() +
+      geom_hline(aes(yintercept = obj$summary[[2]][pos]), linetype = 2) -> out
+  }
+  return(out)
+}
+
+
+# Plot 4
+drollplot <- function(obj, pos = 1) {
+  require(ggplot2)
+  ggplot(obj$roll, aes(rate_b1)) +
+    theme_bw(base_size = 13) +
+    stat_density(bw = "SJ-ste", fill = "lightskyblue", colour = "black") +
+    geom_vline(data = obj$peaks, aes(xintercept = peak_b1[pos]), linetype = 2) +
+    xlab(expression("Regression ß"[1])) +
+    ylab("Density") +
+    ggtitle(expression("Density of Rolling Regression ß"[1])) +
+    theme(plot.title = element_text(size = 15)) +
+    # scale_fill_brewer(palette="Dark2") +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none") -> out
+  return(out)
+}
+
+
+# Plot 5
+residualplot <- function(model, full = FALSE) {
+  require(ggplot2)
+  # model
+  amodel <- broom::augment(model)
+  # residual plot
+  p <- ggplot(amodel, aes(.fitted, .resid)) +
+    theme_bw(base_size = 13) +
+    geom_hline(yintercept = 0, linetype = 2) +
+    xlab("Fitted") +
+    ylab("Residuals") +
+    ggtitle("Residuals vs. Fitted") +
+    theme(plot.title = element_text(size = 15)) +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none")
+  if (full) {
+    p +
+      geom_point() +
+      geom_smooth(colour = "lightyellow", method = "lm", formula = y~poly(x, 2), 
+        fill = "black", linetype = 2) -> out
+  } else {
+    p +
+      geom_hex() +
+      geom_smooth(colour = "lightyellow", method = "lm", formula = y~poly(x, 2), 
+        fill = "black", linetype = 2) -> out
+  }
+  
+  return(out)
+}
+
+# Plot 6
+qqplot <- function(model, full = FALSE) {
+  require(ggplot2)
+  amodel <- broom::augment(model)
+  probs <- c(0.25, 0.75)
+  y <- quantile(amodel$.std.resid, probs, names = FALSE, na.rm = TRUE)
+  x <- qnorm(probs)
+  slope <- diff(y)/diff(x)
+  intercept <- y[1L] - slope * x[1L]
+  
+  p <- ggplot(amodel) +
+    theme_bw(base_size = 13) +
+    geom_abline(slope = slope, intercept = intercept) +
+    xlab("Theoretical") +
+    ylab("Sample") +
+    ggtitle("Theoretical Q. vs Std. Residuals") +
+    theme(plot.title = element_text(size = 15)) +
+    theme(axis.text.y = element_text(angle=90, hjust = 0.5)) +
+    theme(legend.position="none")
+  if (full) {
+    p +
+      geom_point(aes(x=qnorm((1:nrow(amodel))/nrow(amodel)-0.5/nrow(amodel)), 
+        y = sort(.std.resid))) -> out
+  } else {
+    p +
+      geom_hex(aes(x=qnorm((1:nrow(amodel))/nrow(amodel)-0.5/nrow(amodel)), 
+        y = sort(.std.resid))) -> out
+  }
+  return(out)
+}
+
