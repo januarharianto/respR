@@ -121,9 +121,17 @@ rollreg.p <- function(rolldf, ranked.b1) {
 #     bty = "n")
 # }
 
-# Plot 1
+#' Generate full plot
+#'
+#' @param dta object of class `data.frame`. Full.
+#' @param dtb object of class `data.frame`. Subset.
+#' @param full logical. Default is FALSE. When set to TRUE, peform a full plot.
+#' @param interval defaults to NULL. If set to TRUE, will plot interval lines.
+#' @keywords internal
+#' @import ggplot2 
+#' @export
+#'
 fullplot <- function(dta, dtb, full = FALSE, interval = NULL) {
-  require(ggplot2)
   names(dta) <- c('x', 'y')
   names(dtb) <- c('x', 'y')
   p <-ggplot(dta) +
@@ -153,9 +161,15 @@ fullplot <- function(dta, dtb, full = FALSE, interval = NULL) {
 }
 
 
-# Plot 2
+#' Generate timeseries plot, focused
+#'
+#' @param dt object of class `data.frame`.
+#' @param full logical. Default is FALSE. When set to TRUE, peform a full plot.
+#' @keywords internal
+#' @import ggplot2
+#' @export
+#'
 focusplot <- function(dt, full = FALSE) {
-  require(ggplot2)
   p <- ggplot(dt, aes(dt[[1]], dt[[2]])) +
     theme_bw(base_size = 13) +
     xlab("Fitted") +
@@ -181,8 +195,16 @@ focusplot <- function(dt, full = FALSE) {
 
 
 # Plot 3
+#' Title
+#'
+#' @param obj object of class `auto_rate`.
+#' @param pos numeric. Ranked result.
+#' @param full logical. Default is FALSE. When set to TRUE, peform a full plot.
+#' @keywords internal
+#' @import ggplot2
+#' @export
+#'
 rollplot <- function(obj, pos = 1, full = FALSE) {
-  require(ggplot2)
   p <- ggplot(obj$roll, aes(obj$roll[[6]], obj$roll[[2]])) +
     theme_bw(base_size = 13) +
     # geom_label(data = dt$summary, aes(, signif(rate_b1[rank],3), label = rate_b1[rank])) +
@@ -206,9 +228,15 @@ rollplot <- function(obj, pos = 1, full = FALSE) {
 }
 
 
-# Plot 4
+#' Generate density of rolling regression plot
+#'
+#' @param obj object of class `auto_rate`.
+#' @param pos numeric. Ranked result.
+#' @keywords internal
+#' @import ggplot2
+#' @export
+#'
 drollplot <- function(obj, pos = 1) {
-  require(ggplot2)
   ggplot(obj$roll, aes(rate_b1)) +
     theme_bw(base_size = 13) +
     stat_density(bw = "SJ-ste", fill = "lightskyblue", colour = "black") +
@@ -224,9 +252,16 @@ drollplot <- function(obj, pos = 1) {
 }
 
 
-# Plot 5
+#' Generate residual plot
+#'
+#' @param model an `lm()` object.
+#' @param full logical. Default is FALSE. When set to TRUE, peform a full plot.
+#' @keywords internal
+#' @import ggplot2
+#' @importFrom broom augment
+#' @export
+#'
 residualplot <- function(model, full = FALSE) {
-  require(ggplot2)
   # model
   amodel <- broom::augment(model)
   # residual plot
@@ -254,9 +289,17 @@ residualplot <- function(model, full = FALSE) {
   return(out)
 }
 
-# Plot 6
+
+#' Generate QQ plot
+#'
+#' @param model an `lm()` object.
+#' @param full logical. Default is FALSE. When set to TRUE, peform a full plot.
+#' @keywords internal
+#' @import ggplot2
+#' @importFrom broom augment
+#' @export
+#'
 qqplot <- function(model, full = FALSE) {
-  require(ggplot2)
   amodel <- broom::augment(model)
   probs <- c(0.25, 0.75)
   y <- quantile(amodel$.std.resid, probs, names = FALSE, na.rm = TRUE)
