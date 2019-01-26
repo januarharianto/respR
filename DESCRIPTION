@@ -16,6 +16,9 @@ LazyData: true
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Imports:
+    broom,
+    gridExtra,
+    ggplot2,
     dplyr,
     magrittr,
     grDevices,
@@ -27,6 +30,7 @@ Imports:
     stringr,
     readxl,
     marelac,
+    methods,
     data.table,
     lubridate,
     segmented
