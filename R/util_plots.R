@@ -180,16 +180,16 @@ focusplot <- function(dt, full = FALSE) {
     theme(legend.position="none")
   if (full) {
     p +
-      geom_point(colour = "goldenrod", size = .2) +
+      geom_point(colour = "lightgoldenrod", size = .2) +
       geom_smooth(method='lm', colour = "black", 
         linetype = "dashed", size = .5) +
-      stat_smooth_func(geom = "text", method = "lm", hjust = 0, parse = TRUE) -> out
+      stat_smooth_func(geom = "text", method = "lm", hjust = 0, parse = TRUE, size = 3) -> out
   } else {
     p +
-      geom_hex(fill = "goldenrod", colour = "white", size = .2) +
+      geom_hex(fill = "lightgoldenrod", colour = "white", size = .2) +
       geom_smooth(method='lm', colour = "black", 
         linetype = "dashed", size = .5) +
-      stat_smooth_func(geom = "text", method = "lm", hjust = 0, parse = TRUE) -> out
+      stat_smooth_func(geom = "text", method = "lm", hjust = 0, parse = TRUE, size = 3) -> out
   }
   
   return(out)

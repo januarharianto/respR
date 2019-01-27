@@ -136,8 +136,8 @@ StatSmoothFunc <- ggproto("StatSmooth", Stat,
         
                             func_string = as.character(as.expression(eq))
                             
-                            if(is.null(xpos)) xpos = min(data$x)*0.9
-                            if(is.null(ypos)) ypos = max(data$y)*0.9
+                            if(is.null(xpos)) xpos = min(data$x)
+                            if(is.null(ypos)) ypos = max(data$y)
                             data.frame(x=xpos, y=ypos, label=func_string)
                             
                           },
