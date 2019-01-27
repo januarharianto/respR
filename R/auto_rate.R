@@ -207,6 +207,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
   return(invisible(x)) # this lets us continue with dplyr pipes
 }
 
+#' @importFrom methods is
 #' @export
 plot.auto_rate <- function(x, pos = 1, full = FALSE, choose = FALSE, label = TRUE, ...) {
   if (label) cat("\n# plot.auto_rate # ----------------------\n")
@@ -234,6 +235,7 @@ plot.auto_rate <- function(x, pos = 1, full = FALSE, choose = FALSE, label = TRU
   
   if (!choose & method == "interval") {
     pp <- gridExtra::arrangeGrob(p1, p2, p5, p6, nrow = 2)
+    # use tryCatch and re-draw if errors occur
     for(attempt in 1:10) {
       output <- tryCatch(
         expr={ plot(pp) },
@@ -245,6 +247,7 @@ plot.auto_rate <- function(x, pos = 1, full = FALSE, choose = FALSE, label = TRU
     }
   } else if (!choose) {
     pp <- gridExtra::arrangeGrob(p1, p2, p3, p4, p5, p6, nrow = 2)
+    # use tryCatch and re-draw if errors occur
     for(attempt in 1:10) {
       output <- tryCatch(
         expr={ plot(pp) },
