@@ -1,8 +1,9 @@
 # Deal with pesky "no visible binding for global variable.." checks
 x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL
 rowlength = NULL; endrow = NULL; timelength = NULL; rate_twopoint = NULL
-endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL;
-..xcol = NULL; ..ycol = NULL
+endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
+..xcol = NULL; ..ycol = NULL; peak_b1 = NULL; .std.resid = NULL
+.fitted = NULL; .resid = NULL
 
 #' Pipe graphics
 #' @importFrom magrittr %>%
