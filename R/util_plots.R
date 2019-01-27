@@ -144,7 +144,7 @@ fullplot <- function(dta, dtb, full = FALSE, interval = NULL) {
     theme(legend.position="none")
   if (full) {
     out <- p +
-      geom_point(aes(x, y)) +
+      geom_point(aes(x, y), colour = "dodgerblue4") +
       geom_point(data = dtb, aes(dtb[[1]], dtb[[2]]), 
         colour = "goldenrod")
   } else {
@@ -219,7 +219,7 @@ rollplot <- function(obj, pos = 1, full = FALSE) {
     theme(legend.position="none")
   if (full) {
     p +
-      geom_point() +
+      geom_point(colour = "dodgerblue4") +
       geom_hline(aes(yintercept = obj$summary[[2]][pos]), linetype = 2) -> out
   } else {
     p +
@@ -242,8 +242,9 @@ drollplot <- function(obj, pos = 1) {
   peak_b1 <- NULL
   ggplot(obj$roll, aes(rate_b1)) +
     theme_bw(base_size = 11) +
-    stat_density(bw = "SJ-ste", fill = "lightskyblue", colour = "black") +
-    geom_vline(data = obj$peaks, aes(xintercept = peak_b1[pos]), linetype = 2) +
+    stat_density(bw = "SJ-ste", fill = "dodgerblue4", colour = "black") +
+    geom_vline(data = obj$peaks, aes(xintercept = peak_b1[pos]), 
+               linetype = 2, colour = "white", size = .3) +
     xlab("Rate") +
     ylab("Density") +
     ggtitle("Density of Rate (Roll. Reg.)") +
@@ -279,14 +280,14 @@ residualplot <- function(model, full = FALSE) {
     theme(legend.position="none")
   if (full) {
     p +
-      geom_point() +
-      geom_smooth(colour = "lightyellow", method = "lm", formula = y~poly(x, 2), 
-        fill = "black", linetype = 2) -> out
+      geom_point(colour = "dodgerblue4", alpha = .1) +
+      geom_smooth(colour = "white", method = "lm", formula = y~poly(x, 2), 
+        fill = "black", linetype = 1, size = .5) -> out
   } else {
     p +
       geom_hex() +
-      geom_smooth(colour = "lightyellow", method = "lm", formula = y~poly(x, 2), 
-        fill = "black", linetype = 2) -> out
+      geom_smooth(colour = "white", method = "lm", formula = y~poly(x, 2), 
+        fill = "black", linetype = 1, size = .5) -> out
   }
   
   return(out)
@@ -322,7 +323,7 @@ gqqplot <- function(model, full = FALSE) {
   if (full) {
     p +
       geom_point(aes(x=qnorm((1:nrow(amodel))/nrow(amodel)-0.5/nrow(amodel)), 
-        y = sort(.std.resid))) -> out
+        y = sort(.std.resid)), alpha = .1, colour = "dodgerblue4") -> out
   } else {
     p +
       geom_hex(aes(x=qnorm((1:nrow(amodel))/nrow(amodel)-0.5/nrow(amodel)), 
