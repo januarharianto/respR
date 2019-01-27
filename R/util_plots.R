@@ -299,7 +299,7 @@ residualplot <- function(model, full = FALSE) {
 #' @importFrom broom augment
 #' @export
 #'
-qqplot <- function(model, full = FALSE) {
+gqqplot <- function(model, full = FALSE) {
   amodel <- broom::augment(model)
   probs <- c(0.25, 0.75)
   y <- quantile(amodel$.std.resid, probs, names = FALSE, na.rm = TRUE)

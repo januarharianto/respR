@@ -230,7 +230,7 @@ plot.auto_rate <- function(x, pos = 1, full = FALSE, choose = FALSE, label = TRU
     p4 <- drollplot(x, pos)
   }
   p5 <- residualplot(model, full)
-  p6 <- qqplot(model, full)
+  p6 <- gqqplot(model, full)
   
   if (!choose & method == "interval") {
     pp <- gridExtra::arrangeGrob(p1, p2, p5, p6, nrow = 2)
