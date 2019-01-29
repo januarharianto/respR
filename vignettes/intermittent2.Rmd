@@ -47,7 +47,7 @@ Because this is a lengthy experiment, the data is too dense to inspect easily fr
 inspect(zeb_intermittent.rd[1:18000,])
 ```
 
-The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 20% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data. 
+The top plot shows the initial background recording, then experimental replicates where O2 decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot (a rate over a rolling window of 10% of the entire data), is not really useful as this window will cover several different replicates, but we can clearly see rates are higher at the start of the data. 
 
 
 ## Calculating background rate
