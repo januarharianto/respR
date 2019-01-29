@@ -13,7 +13,7 @@
 `respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry data. 
 While the focus of our package is on aquatic respirometry, `respR` is largely unitless and so can process linear relationships in any time-series data, such as oxygen flux or photosynthesis.
 
-Here is how to [get started](https://januarharianto.github.io/respR/articles/respR.html).
+[**This site**](https://januarharianto.github.io/respR/articles/respR.html) can show you how to get started, and has a range of vignettes covering the fuctionality of the package and example analyses for different respirometry experiment types. 
 
 ## Installation
 `respR` is not yet published in CRAN. For now, use the `devtools` package to grab the **stable** version:
