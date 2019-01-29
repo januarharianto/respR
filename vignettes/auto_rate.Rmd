@@ -36,7 +36,7 @@ This function can be used to select most linear, maximum and minimum rates in a 
 In this vignette we detail how `auto_rate()` works, and how it can be used to extract rates from respirometry data. 
 In additional vignettes we show how we have [tested this method against simulated data](https://januarharianto.github.io/respR/articles/performance.html), and also [compare its performance against another linear detection method](https://januarharianto.github.io/respR/articles/auto_rate_comp.html). 
 We show it performs extremely well on large datasets in determining linear rates. 
-Importantly, `auto_rate()` has been optimised to be extremely fast. Other methods on large datasets can take minutes or hours to run.
+Importantly, `auto_rate()` has been optimised to be *extremely fast*. Other methods on large datasets can take minutes or hours to run.
 We show how `auto_rate()` can reduce this wait by orders of magnitude, literally fitting tens of thousands of regressions and detecting linear regions in seconds. 
 
 ## Overview
