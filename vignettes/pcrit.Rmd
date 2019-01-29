@@ -15,7 +15,7 @@ library(respR) # load respR
 library(rMR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
 
 ### Introduction

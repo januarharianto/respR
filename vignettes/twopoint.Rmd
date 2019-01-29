@@ -14,7 +14,7 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
 
 Best practice in respirometry is almost always to use linear regression on multiple time-series recordings of oxygen concentrations, to derive a slope and thus rate of oxygen use. 

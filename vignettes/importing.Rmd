@@ -14,7 +14,7 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
 
 We designed `respR` to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. 

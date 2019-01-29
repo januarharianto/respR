@@ -17,7 +17,7 @@ library(rMR) # load respR
 library(FishResp) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
 
 We have designed `respR` to be able to explore, process and analyse any and all aquatic respirometry data, independent of the system or hardware used to collect it. In fact because of the unitless nature of the majority of functions in the package, other respirometry data, or indeed other time series data examining other variables can be analysed in `respR`. 

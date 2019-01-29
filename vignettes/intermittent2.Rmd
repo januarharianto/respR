@@ -14,7 +14,7 @@ library(knitr) # load knitr to enable options
 library(respR) # load respR
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+  highlight = TRUE)
 ```
 
 This vignette shows a more complex intermittent-flow analysis from a lengthy experiment, with numerous replicates of equal duration (except the first one) and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. `respR` will in the future support these experiments in a much better way, but for now they are easily analysed with a little data manipulation. 

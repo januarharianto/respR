@@ -16,7 +16,7 @@ library(respR) # load respR
 library(DiagrammeR) # flowcharts... and more
 
 opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
-  highlight = TRUE, fig.width = 7.1, fig.height = 6)
+  highlight = TRUE)
 ```
 
 ## Introduction
