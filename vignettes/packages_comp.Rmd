@@ -185,14 +185,14 @@ While use of other data types in `rMR` is possible, it is not intuitive, and tim
 
 ## `respR` and `FishResp`
 
-`FishResp` is still under development and there is sparse documentation and no detailed guide yet available to detail how the functions in the package interrelate, or example workflows provided (although we understand from contact with the developers these are under preparation). Therefore, our comparisons are somewhat limited to the functionality we could get to work.  
+The [FishResp](https://fishresp.org) package has recently come out of beta with the release of version 1.0. A guide to usage of the package is also now available on [bioRxiv](https://www.biorxiv.org/content/10.1101/467845v1) and soon to be published in *Conservation Physiology*. 
 
 As with `rMR`, `FishResp` is focussed on processing data from intermittent-flow, swim tunnel experiments with many equally-spaced replicates, particularly from Loligo Systems equipment (although others are supported). As well as an `R` package, it has a [GUI version](https://fishresp.org) for Mac, Windows and Linux. It is fully-featured, though highly specific towards this branch of respirometry.
 
-It has some functions for exploring and pre-processing data, though as we said, we are unsure how these functions are intended to inter-relate, and they only accept input from some data sources. We provide here some comparison with overlaps with `respR` functionality where we have been able to. 
+It has functions for exploring and pre-processing data, but it is important to note the package only accepts input from some data sources. We provide here some comparison with overlaps with `respR` functionality where we have been able to use the same data. 
 
 #### Importing raw data
-`FishResp` allows importing of raw data files from ’AutoResp’ (LoligoSystems), ’OxyView’ (PreSens), ’Pyro Oxygen Logger’ (PyroScience) and ’Qbox-Aqua’ (QubitSystems). However, as with `rMR` (see above) we struggled to import our own data files. We did import an AutoResp file, but this involved quite a lot of trial and error in setting the inputs (code below). However, we were not able to import a PreSens file. These additional formats apparently require additional files to be imported alongside them, and processing through multiple functions, and these requirements and workflow are not well documented at present. The AutoResp file (from a 1-channel, intermittent-flow, swim tunnel experiment on an anchovy) did however import successfully and plot the data:
+`FishResp` allows importing of raw data files from ’AutoResp’ (LoligoSystems), ’OxyView’ (PreSens), ’Pyro Oxygen Logger’ (PyroScience) and ’Qbox-Aqua’ (QubitSystems). However, as with `rMR` (see above) we struggled to import our own data files. We did import an AutoResp file, but this involved quite a lot of trial and error in setting the inputs (code below). However, we were not able to import a PreSens file. These additional formats apparently require additional files originating from the swim tunnel hardware to be imported alongside them, and processed through several functions. The AutoResp file (from a 1-channel, intermittent-flow, swim tunnel experiment on an anchovy) did however import successfully and plot the data:
 
 ```{r message=FALSE, results="hide"}
 ## create experimental metadata
@@ -219,10 +219,10 @@ knitr::include_graphics("https://raw.githubusercontent.com/januarharianto/respR/
 
 We can't compare the importing functionality of `FishResp` with `respR`, as we do not yet support direct importing of AutoResp files (this is planned, and currently they can easily be imported using other methods such as `read.csv()` and analysed in `respR`). 
 
-It should be noted the importing of raw data files in `FishResp` is apparently **obligatory**: there is no easy way to use other data structures or files in the package. Importing is an compulsory step to format the data to a structure that the functions will understand. `respR` does not have this restriction and allows a range of data structures to be used in *all* functions, allowing all variations in experimental type or data to be analysed. 
+It should be noted the importing of raw data files in `FishResp` is **obligatory**: it is not possible to use regular `R` data structures such as data frames or vectors in the package. Importing the raw data files from the supported hardware and software platforms centred around intermittent-flow, swim tunnel respirometry is a compulsory step to format the data to a structure that the functions will understand. `respR` does not have this restriction and allows a range of data structures to be used in *all* functions, allowing all variations in experimental type or data to be analysed. 
 
 #### Calculating rates
-We cannot analyse the above experimental data in `FishResp` because a major limitation of `FishResp` is that it apparently assumes replicates occur at regular intervals. This is true in some intermittent-flow respirometry experiments, but certainly not all. Experimental measurement periods and flushes are often triggered manually or done at irregular intervals. There is no clear way that we can see to accommodate these data in `FishResp`. 
+We cannot analyse the above experimental data in `FishResp` because a limitation of `FishResp` is that it apparently assumes replicates occur at regular intervals. This is true in some intermittent-flow respirometry experiments, but certainly not all. Experimental measurement periods and flushes are often triggered manually or done at irregular intervals. There is no clear way that we can see to accommodate these data in `FishResp`. 
 
 Therefore, we use here data included in `FishResp` that has already been imported and prepared in various ways, and the code is mostly taken from the documentation. We will use these data to compare the outputs of `FishResp` to `respR`. 
 
@@ -309,15 +309,13 @@ As we can see the rates calculated by both packages are identical. As with `rMR`
 
 #### Options in FishResp
 
-`FishResp` (as far as we can tell from the current documentation) generally only allows fitting regressions across the entire width of what is defined an experimental measurement period, or replicate. There is little flexibility in modifying this. This may or may not be appropriate depending on the data and experiment. The `extract.slope` function does have a `length` operator, but this only curtails the latter end of the regression; there appears to be no way of modifying the start location. This is a curious decision and less than ideal practice; if a user wanted to only use data from part of an experimental replicate, typically it is the initial stages they want to remove, as these are just after the flush when the animal might have been disturbed, or probe lag means the system has not reached a steady state. Moreover, this `length` operator applies to all replicates; there is no easy way of fitting regressions of different length over different replicates. `respR` has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; `FishResp`'s ability to do this is very limited. 
+`FishResp` has options to modify the start and end of the data regions over which regressions are fit to determine oxygen uptake rate, by modifying the 'wait' and 'measure' phases, and using the `length` operator. However these phases are apparently applied equally to all replicates. As mentioned above, not all intermittent-flow respirometry experiments adhere to a rigid structure; there is no easy way of fitting regressions of different length over different replicates. `respR` has functionality to easily modify the starts and ends of data locations by time, O2 amount or row number; `FishResp`'s ability to do this is limited. 
 
 The `extract.slope` function is able to sort and select the rates from each replicate according to some basic criteria, for example outputting a selection of rates ordered by minimum or maximum, or based on R2 values or a percentile. `respR` does not have this option specifically, but it is straightforward from the results object via typical R selection syntax. 
- 
-It is also not entirely clear how `FishResp` would work on continuous data where the O2 is also recorded through flushes, or when each replicate is separated from another by a waiting period (these sample data has each directly after the next). And as we said, processing of data that does not adhere to a rigid structure or cycle of measurement periods is difficult, if not impossible. 
 
 #### Benefits of respR over FishResp 
 
-Overall `FishResp` is a fine package (and GUI application) if you are conducting very a specific type of respirometry experiment. Its focus is on processing large numbers of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources. 
+Overall `FishResp` is an excellent and useful package (and GUI application) if you are conducting a very specific type of respirometry experiment. Its focus is on processing large numbers of experimental replicates from a specific respirometry experiment type, using specific equipment. We have no doubt it works very well if you are conducting these types of experiment, but there is little to no flexibility to process other types of experiment or data sources. 
 
 `FishResp` can process many experiments at once, both from different individuals and many replicates on individuals. Whether this is an advantage or disadvantage is debatable. Although it can be automated by anyone with basic R skills, `respR` was specifically designed to process single experiments at a time because we feel (and that this is general good practice in data analysis) that respirometry data should be thoroughly explored and visualised prior to any analyses. This may increase the time taken to conduct analyses, but we feel is safer and less likely to result in mistakes (and we would argue other time-saving advantages of `respR` ultimately outweigh this). `FishResp` has some data visualisation and exploration functions, but its focus seems to be the ability to process large numbers of experiments and replicates at once. 
 
@@ -329,34 +327,30 @@ If you are not comfortable with code or prefer a user interface, `FishResp` has 
 - **Support for dynamic background correction.**  
 Pre- and post-experiment background rates can be applied as average, linear or exponential interpolations. Dynamic background correction is not specifically supported in `respR` as yet, but this is planned. However, see [Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html) for how it can be achieved at present. 
 
-- **Support for raw data files from multiple systems at once.** Again, we plan to support importing files from as many systems as we can get sample files for in `respR` in the near future. We are unsure of the benefits of supporting other data inputs that `FishResp` supports (e.g. hardware interfaces such as AquaResp), but are looking into it. Again though, `respR` is system agnostic; we know of no respirometry system that does not output data in a form that is easily imported into `R`, and thus able to be analysed in `respR`, using generic functions. 
+- **Support for raw data files from multiple systems at once.** Again, we plan to support importing files from as many systems as we can get sample files for in `respR` in the near future. We are unsure of the benefits of supporting other data inputs that `FishResp` supports (e.g. hardware interfaces such as AquaResp), but are looking into it. Again though, `respR` is system agnostic; we know of no respirometry system that does not output data in a form that is easily imported into `R` using generic functions, and thus able to be analysed in `respR`. 
 
 However, we feel `FishResp` has substantial drawbacks in comparison to `respR`: 
 
 - It is designed for intermittent-flow respirometry with set width of cycled replicates. There is no easy way to analyse closed, flowthrough or irregularly timed intermittent-flow respirometry data.  
 - It supports importing data from some specific systems, but limited or no support for regular R data structures. 
 - Complex inputs: as with `rMR`, complex date-time inputs are a particular source of frustration and potential error.  
-- Length and location of data regions over which to fit regressions cannot be easily adjusted.   
 - Manual selection of data regions only; there is no equivalent to the `respR::auto_rate` function in `FishResp`  
-- Complicated, not well documented. We expect this to change soon, but at present the package has a substantial barrier to entry, even for advanced R users, in that it is difficult to use and has limited documentation. 
 
-We will update this vignette with more detail and comparisons of the functionality of `FishResp` and `respR` once the developers release the guides that we understand are in preparation. 
-  
 ## Summary
 
 The packages we examine here are the only other ones we know of that focus on processing respirometry data in R (but see [Comparative performance of auto_rate and LoLinR](https://januarharianto.github.io/respR/articles/auto_rate_comp.html)). 
-However, they have only a small subset of the functionality contained in `respR`. 
+However, they have only a subset of the functionality contained in `respR`. 
 Where they overlap in functionality, we feel `respR` is clearly easier to use and less prone to input errors or difficult to diagnose problems. 
 `respR` has been designed to be as flexible as possible, accepting any and all respirometry data and experiment types. 
 
 The `rMR` and `FishResp` packages are, by contrast, focused entirely on intermittent-flow respirometry, with multiple, regularly-spaced experimental replicates. 
-Both analyse these data adequately via manual specification of data regions over which to determine rates, but we would argue `respR` is equally capable of doing so (see [Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html)). 
+Both analyse these data adequately via manual specification of data regions over which to determine rates, but we would argue `respR` is equally capable of doing so (see [Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html)). We are also working to make analysing the data from these experiments even easier.
 
-However, the `respR` workflow for these experiments allows for use of `auto_rate()`, which identifies linear regions of data in a statistically robust manner, as opposed to relying on user selected regions. 
+In addition, the `respR` workflow for these experiments allows for use of `auto_rate()`, which identifies linear regions of data in an objective, statistically robust manner, as opposed to relying on user selected regions. 
 
 To highlight a particular usability aspect, the packages we compare here rely on complex date-time formats for the time metric, which in our experiences often leads to substantial problems. 
 There is no real reason why this should be the case; `respR` avoids this through use of numeric, time-elapsed data, and providing two functions to easily prepare data to this form ([Importing your data](https://januarharianto.github.io/respR/articles/importing.html)). Overall, a major barrier to use of both these packages is getting data into them in a recognisable format.
-We had trouble importing data into both. `respR` is clearly ahead here, in that as well as allowing import of raw data files (though this is still in development and there are still systems not yet supported), it accepts almost any form of typical R data structure.
+We had trouble importing data into both. `respR` is clearly ahead here, in that as well as allowing import of raw data files (though this is still in development and there are still systems not yet supported), it accepts almost any form of typical `R` data structure.
 
 Investigators working with respirometry data are very much encouraged to explore `rMR` and `FishResp`. 
 They may, because of their specific focuses, contain functionality that suits your particular analyses or workflows better than `respR`. 
