@@ -47,7 +47,7 @@ We can examine the dataset using the `inspect_data` function.
 market.squid <- inspect(squid.rd)
 ```
 
-We can see from the bottom plot, a rolling rate across 20\% of the total data, that the uptake rate is relatively consistent to around the 10,000th row, after which it declines steadily.
+We can see from the bottom plot, a rolling rate across 10\% of the total data, that the uptake rate is relatively consistent to around row 12,000, after which it declines steadily.
 We cannot tell from this plot which O~2~ concentration this represents. 
 For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated `pcrit()` function. 
 
