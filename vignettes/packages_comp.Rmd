@@ -185,7 +185,7 @@ While use of other data types in `rMR` is possible, it is not intuitive, and tim
 
 ## `respR` and `FishResp`
 
-The [FishResp](https://fishresp.org) package has recently come out of beta with the release of version 1.0. A guide to usage of the package is also now available on [bioRxiv](https://www.biorxiv.org/content/10.1101/467845v1) and soon to be published in *Conservation Physiology*. 
+The [FishResp](https://fishresp.org) package has recently come out of beta with the release of version 1.0. A guide to usage of the package has also now been published in [*Conservation Physiology*](https://academic.oup.com/conphys/article/7/1/coz003/5307661). 
 
 As with `rMR`, `FishResp` is focussed on processing data from intermittent-flow, swim tunnel experiments with many equally-spaced replicates, particularly from Loligo Systems equipment (although others are supported). As well as an `R` package, it has a [GUI version](https://fishresp.org) for Mac, Windows and Linux. It is fully-featured, though highly specific towards this branch of respirometry.
 
