@@ -168,11 +168,19 @@ parse_pyro <- function(path) {
   raw <- fread(path, fill = TRUE)
   startdate <- raw[16]$V2
   colstart <- which(raw$V1 == "Date")[1]
-  rdt <- fread(path, fill = TRUE, skip = colstart+1, header = TRUE)
+  # Extract column header names:
+  headers <- raw[colstart]
+  rdt <- tail(fread(path, fill = TRUE),-colstart)
+  # Insert column header names:
+  setnames(rdt, make.unique(as.character(unlist(headers))))
   rdt <- rdt[, which(unlist(lapply(rdt, function(x)
     !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
   out <- data.table(rdt)
   data.table::setcolorder(out, 3)
+  # convert character to numeric
+  index <- c(1, 4:length(names(out)))
+  out[, names(out)[index] := lapply(.SD, as.numeric) , .SDcols = index]
+  
   return(out)
 }
 
