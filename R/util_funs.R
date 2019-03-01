@@ -1,9 +1,8 @@
 # Deal with pesky "no visible binding for global variable.." checks
 x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL
 rowlength = NULL; endrow = NULL; timelength = NULL; rate_twopoint = NULL
-endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
-..xcol = NULL; ..ycol = NULL; peak_b1 = NULL; .std.resid = NULL
-.fitted = NULL; .resid = NULL
+endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL;
+..xcol = NULL; ..ycol = NULL
 
 #' Pipe graphics
 #' @importFrom magrittr %>%
@@ -71,12 +70,12 @@ check_timeseries <- function(x, type = "time") {
     checks <- rbind(nan[1, , drop = F], seq[1], dup[1], evn[1])
     locs <- rbind(nan[2, , drop = F], seq[1], dup[1], evn[1])
   }
-
+  
   # rename rows - I'm sure I can make this more efficient... later..
   rnames <- c("NA/NAN", "sequential", "duplicated", "evenly-spaced")
   rownames(checks) <- rnames
   rownames(locs) <- rnames
-
+  
   return(list(checks, locs))
 }
 
@@ -118,11 +117,11 @@ calc_mode <- function(x) {
 check_evn <- function(x) {
   spacing <- diff(as.numeric(x))
   mod <- calc_mode(spacing)
-
+  
   test <- spacing != mod
   # If spacing is even, there should only be 1 interval detected:
   check <- length(unique(spacing)) > 1
-
+  
   test <- ifelse(is.na(test), TRUE, test)  # convert NA values to FALSE
   highlight <- which(test)
   out <- list(check = check, which = highlight)
@@ -131,21 +130,32 @@ check_evn <- function(x) {
 
 # Internal truncate (similar to subset_data)
 truncate_data <- function(x, from, to, by) {
-
+  
   # import from other respR functions
   if (any(class(x) %in% "inspect_data")) x <- x$df
   if (any(class(x) %in% "inspect")) x <- x$dataframe
-
+  
   dt <- data.table::as.data.table(x)
   if (by == "time") {
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]
   }
   if (by == "row") {
+    ## Also new - check to row not too large
+    if(to > nrow(dt)) stop("`to` row is greater than total number of rows.")
     out <- dt[from:to]
   }
   if (by == "o2" & length(x) == 2) {
     top <- Position(function(z) z <= from, dt[[2]])
-    bot <- Position(function(z) z <= to, dt[[2]])
+    
+    ## this is new
+    ## if less than min o2 value, match pos of min o2 value
+    ## else pos of the actual to value
+    if(to < min(dt[[2]])){ 
+      bot <- Position(function(z) z <= min(dt[[2]]), dt[[2]]) 
+    } else {
+      bot <- Position(function(z) z <= to, dt[[2]])
+    }
+    
     out <- dt[top:bot]
   }
   if (by == "proportion") {
