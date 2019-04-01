@@ -26,7 +26,7 @@ of files we will optimise the code.
 \details{
 Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
 PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
-AutoResp (software output)
+AutoResp (software output) | Vernier (raw gmbl/qmbl, csv, txt)
 
 While the devices listed above are supported, the import functionality may
 not be complete due to limited access to output files. This will improve over

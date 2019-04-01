@@ -9,7 +9,7 @@
 #'
 #' Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
 #' PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
-#' AutoResp (software output)
+#' AutoResp (software output) | Vernier (raw gmbl/qmbl, csv, txt)
 #'
 #' While the devices listed above are supported, the import functionality may
 #' not be complete due to limited access to output files. This will improve over
@@ -26,6 +26,8 @@
 #'
 #' @importFrom data.table data.table fread
 #' @importFrom readxl read_excel
+#' @importFrom xml2 xml_text
+#' @importFrom xml2 read_html
 #'
 #' @export
 #'
@@ -53,6 +55,21 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("Fractional error", raw[1:20])))) {
     cat("Loligo AutoResp Output Detected\n\n")
     out <- parse_autoresp(path)
+  } else if (suppressWarnings(any(grepl("gmbl", raw[1:20])))) {
+    cat("Vernier Logger Raw File Detected\n\n")
+    out <- parse_vernier_raw(path)
+  } else if (suppressWarnings(any(grepl("qmbl", raw[1:20])))) {
+    cat("Vernier Logger Raw File Detected\n\n")
+    out <- parse_vernier_raw(path)
+  } else if (suppressWarnings(any(grepl(": Time \\(", raw[1])))) {
+    cat("Vernier Logger .csv File Detected\n\n")
+    out <- parse_vernier_csv(path)
+  } else if (suppressWarnings(any(grepl("Vernier Format", raw[1:20])))) {
+    cat("Vernier Logger .txt File Detected\n\n")
+    warning("NOTE: Vernier files exported as .txt may have data columns in a different order to 
+            original data, and have no clear indication of which data came from which probes!
+            We strongly recommend exporting as .csv or importing raw qmbl/gmbl files.")
+    out <- parse_vernier_txt(path)
   } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
             suppressWarnings(any(grepl("PARAMETERS", raw[10:30]))) &&
             suppressWarnings(any(grepl("FIRMWARE", raw[30:50])))) {
@@ -72,6 +89,218 @@ import_file <- function(path, export = FALSE) {
 
 
 # Invividual device functions ----------
+
+# Vernier csv files
+parse_vernier_csv <- function(path) {
+  raw <- fread(path, fill = TRUE, header = TRUE)
+  out <- data.table(raw)
+  return(out)
+}
+
+# Vernier txt files
+parse_vernier_txt <- function(path) {
+  
+  ## read in raw data
+  raw <- fread(path, fill = TRUE, header = FALSE, skip = 7)
+  if(all(is.na(raw[[ncol(raw)]])))
+    raw <- raw[,1:(ncol(raw)-1)] # remove extra column of NAs
+  
+  ## get metadata
+  all <- readLines(path) # read in everything
+  meta_index <- which(grepl("Vernier", all)) # where do each Run start?
+  meta <- lapply(meta_index, function(x) all[x:(x+7)]) # read in 7 rows of metadata for each run
+  runs <- sapply(meta, function(x) x[3]) # extract Run or exp name
+  
+  ## column names
+  cols <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 7)) # read in first chunk of metadata
+  if(all(is.na(cols[[ncol(cols)]])))
+    cols <- cols[,1:(ncol(cols)-1)] # remove extra column of NAs
+  
+  col_nms <- c() # loop to construct col names
+  for(i in 1:ncol(cols)){
+    col_nms[i] <- paste0(cols[1,i], " (", cols[3,i], ")")
+  }
+  
+  ## if more than one Run in file, split
+  if(any(grepl("Vernier", raw))){
+    ## sequence of Run row locations
+    seq <- which(grepl("Vernier", raw[[1]])) # metadata starts
+    seq <- c(seq-1, seq+7) # Add run data starts
+    seq <- sort(seq) # reorder
+    seq <- c(1, seq, length(raw[[1]])) ## sequence of Run data row locations
+    seq <- matrix(seq, nrow = length(seq)/2, ncol = 2, byrow = T) # matrix for loop
+    
+    nrows <- max(seq[,2]-seq[,1])+1 # nrows of data
+    ncols <- length(col_nms) # ncols of data in each run
+    
+    ## df with max no. of rows
+    assembled <- data.frame(a = rep(NA, nrows))
+    
+    ## loop
+    lp <- nrow(seq)
+    
+    for (i in 1:lp) {
+      
+      out <- raw[seq[i,1]:seq[i,2],]
+      ## fill if too short
+      if(nrow(out) < nrows){
+        r_add <- nrows - nrow(out)
+        empty <- matrix(NA, nrow = r_add, ncol = ncols)
+        out <- rbind(out, empty)
+      }
+      
+      assembled <- cbind(assembled, out)
+    }
+    raw <- assembled[,-1] # remove initialising column
+  }
+  
+  all_col_nms <- rep(col_nms, ncol(raw)/length(col_nms)) ## rep col nms to size of df
+  all_col_nms <- paste0(sapply(runs, function(x) rep(x, times = length(col_nms))), ": ", all_col_nms) # append run name to each
+  
+  raw <- apply(raw, 2, function(x) x <- as.numeric(x)) # make numeric
+  
+  out <- data.table(raw)
+  names(out) <- all_col_nms
+  
+  return(out)
+}
+
+# Vernier gmbl/qmbl files
+parse_vernier_raw <- function(path){
+  
+  raw <- data.table::fread(path, fill = TRUE)
+  
+  ## collapse all columns into one column and remove added commas
+  if(ncol(raw) > 1){
+    raw <- data.table::data.table(apply(raw, 1, toString))
+    raw[[1]] <- gsub(",", "", raw[[1]])
+  }
+  
+  ## Remove "NA NA" from end of strings 
+  ## Only seen this once so far, not sure why)
+  raw[[1]] <- gsub("NA NA", "", raw[[1]])
+  
+  ## Extract any notes, then copy over them to keep metadata pattern intact
+  ## Should probably do a "notes detected" message and return these somehow
+  if(any(grep("<TextText>", raw[[1]]))){
+    str <- grep("<TextText>", raw[[1]])
+    enr <- grep("</TextText>", raw[[1]])
+    nr <- enr-str+1
+    notes <- raw[str:enr]
+    raw[[1]][(str:enr)] <- rep("<tmp>", nr)
+  }
+  
+  # Metadata ----------------------------------------------------------------
+  
+  meta_index <- grep("<", raw[[1]]) ## metadata rows
+  
+  meta_starts <- c(1, meta_index[(which(diff(meta_index) !=1))+1])
+  meta_ends <- c(meta_index[which(diff(meta_index) !=1)], nrow(raw))
+  meta_locs <- data.frame(starts = meta_starts,
+                          ends = meta_ends)
+  ## metadata in list as separate elements
+  meta <- apply(meta_locs, 1, function(x) raw[x[1]:x[2]])
+  
+  
+  # Data --------------------------------------------------------------------
+  
+  data_index <- seq(1:length(raw[[1]])) 
+  data_index <- data_index[data_index %in% meta_index == F] # data rows
+  
+  data_starts <- c(data_index[1], data_index[(which(diff(data_index) !=1))+1])
+  data_ends <- c(data_index[which(diff(data_index) !=1)], tail(data_index, 1))
+  data_locs <- data.frame(starts = data_starts,
+                          ends = data_ends)
+  
+  data <- apply(data_locs, 1, function(x) raw[x[1]:x[2]])
+  data <- lapply(data, function(x) x[[1]]) ## make vector (cos problems later)
+  data <- suppressWarnings(lapply(data, function(x) as.numeric(x)))  # make numeric
+  
+  # Run names ---------------------------------------------------------------
+  
+  runs <- raw[grep("<DataSetName>", raw[[1]])]
+  runs <- sapply(runs, function (x) gsub("<DataSetName>", "", x, fixed = TRUE))
+  runs <- sapply(runs, function (x) gsub("</DataSetName>", "", x, fixed = TRUE))
+  runs <- trimws(runs, "right")
+  
+  n_runs <- length(runs)
+  
+  
+  # Channels ----------------------------------------------------------------
+  
+  channels <- meta[[length(meta)]][[1]][grep("<MBLChannelIndex>", meta[[length(meta)]][[1]])]
+  channels <- sapply(channels, function (x) gsub("<MBLChannelIndex>", "", x, fixed = TRUE))
+  channels <- sapply(channels, function (x) gsub("</MBLChannelIndex>", "", x, fixed = TRUE))
+  channels <- trimws(channels, "right")
+  channels <- c(NA, channels) ## add NA channel for Time
+  
+  if(anyDuplicated(channels))
+    warning("Duplicate Channel ID numbers found. This can result from wireless probes.")
+  
+  if(!identical(as.vector(na.omit(channels)), as.vector(na.omit(channels[order(channels)]))))
+    warning("NOTE: Data Channels may not be in numerical order. Columns returned in the order 
+            reported by the Vernier software.")
+  
+  n_channels <- length(channels)
+  
+  if(n_channels != length(data)/n_runs){
+    warning("Channel information unable to be extracted. Column names will be units
+            and data type only.")
+    channels <- rep(NA, length(data))
+  }
+  
+  # Column names ------------------------------------------------------------
+  
+  ## column names and units fn
+  col_nm <- function(x){
+    ## column name
+    col <- as.character(x[grep("<DataObjectName>", x[[1]])])
+    col <- gsub("<DataObjectName>", "", col, fixed = TRUE)
+    col <- gsub("</DataObjectName>", "", col, fixed = TRUE)
+    col <- gsub(" ", "", col, fixed = TRUE)
+    ## column units
+    un <- as.character(x[grep("<ColumnUnits>", x[[1]])])
+    un <- gsub("<ColumnUnits>", "", un, fixed = TRUE)
+    un <- gsub("</ColumnUnits>", "", un, fixed = TRUE)
+    un <- gsub(" ", "", un, fixed = TRUE)
+    ## replace html degrees character and space
+    un <- gsub("&#176;", xml2::xml_text(xml2::read_html("<x>&#176;</x>")), un)
+    ## final col name
+    nm <- paste0(col, " (", un, ")")
+    return(nm)}
+  
+  col_nms <- sapply(meta[-length(meta)], function (x) col_nm(x))
+  
+  ## matrix of additions to column names
+  mat <- expand.grid(runs, channels)
+  mat <- mat[order(factor(mat[,1], levels = runs)),]
+  mat[,3] <- col_nms
+  mat <- as.matrix(mat)
+  
+  col_nms <- apply(mat, 1, function(x) paste0(x[1], ": Ch.", x[2], ": ", x[3]))
+  
+  
+  # Data --------------------------------------------------------------------
+  
+  ## nrow of final df 
+  nrf <- max(sapply(data, length))
+  
+  ## pad shorter data to max length
+  data <- lapply(data, function(x) {
+    r_add <- nrf - length(x)
+    empty <- rep(NA, r_add)
+    x <- c(x, empty)
+    return(x)
+  })
+  
+  ## convert to df
+  data <- as.data.frame(data)
+  ## rename
+  names(data) <- col_nms
+  ## return
+  return(data)
+}
+
 
 # Loligo AutoResp
 parse_autoresp <- function(path) {
