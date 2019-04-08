@@ -298,6 +298,7 @@ parse_vernier_raw <- function(path){
   ## rename
   names(data) <- col_nms
   ## return
+  data <- data.table(data)
   return(data)
 }
 
