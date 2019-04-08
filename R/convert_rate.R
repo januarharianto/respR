@@ -27,8 +27,8 @@
 #'   Check [unit_args()].
 #' @param output.unit string. The output unit to convert rate to. Check
 #'   [unit_args()].
-#' @param volume numeric. Volume in litres. This is the volume of fluid in the
-#'   respirometry chamber, not the specimen volume.
+#' @param volume numeric. Volume in litres. This is the effective volume of the
+#'   respirometer, that is the volume of fluid, not the specimen volume.
 #' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
 #'   you wish to calculate mass-specific rates.
 #' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
