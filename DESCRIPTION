@@ -38,10 +38,10 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testit,
     rMR,
     DiagrammeR,
     FishResp,
-    respirometry
+    respirometry,
+    testthat
 VignetteBuilder: 
     knitr
