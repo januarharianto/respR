@@ -56,9 +56,10 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
 
   # Data validation.
-  if (any(class(df) %in% "inspect.data")) df <- df$df
+  if (any(class(df) %in% "inspect_data")) df <- df$df
+  if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
-  if (width > nrow(df)) stop("`width` input is bigger than  length of data.")
+  if (width > nrow(df)) stop("`width` input is bigger than length of data.")
 
   # Format data.
   dt <- data.table::data.table(df)
