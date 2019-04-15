@@ -36,6 +36,9 @@
 calc_rate.bg <- function(x, xcol = 1, ycol = 2, from = NULL,
   to = NULL, by = "time", plot = TRUE) {
 
+  ## verify by input
+  by <- verify_by(by)
+  
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {

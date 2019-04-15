@@ -57,3 +57,13 @@ tlm <- time_lm(sardine.rd, 10, 50)
 expect_is(tlm,
           "data.frame")
 
+
+## Works with variations of `by` input
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "Time"), regexp = NA)
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "T"), regexp = NA)
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "Row"), regexp = NA)
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "r"), regexp = NA)
+## Error with wrong by
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "o2"), 
+             "Invalid `by`` input value, must be 'time' or 'row'.")
+

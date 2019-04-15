@@ -87,6 +87,9 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     df <- df[,1:2]
   }
 
+  ## verify by input
+  by <- verify_by(by)
+  
   if (!by %in% c("time", "row"))
     stop("Invalid `by`` input value, must be 'time' or 'row'.")
   if (!method %in% c("default", "linear", "max", "min", "interval"))

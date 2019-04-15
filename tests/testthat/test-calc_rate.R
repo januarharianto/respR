@@ -29,3 +29,19 @@ expect_output(plot(cr))
 
 expect_equal(c("intercept_b0", "rate_b1", "rsq"),
              names(linear_fit(sardine.rd)))
+
+
+
+## Works with variations of `by` input
+expect_error(calc_rate(sardine.rd, plot = F, by = "Time"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "T"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "Oxygen"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "O2"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "Row"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "r"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "Proportion"), regexp = NA)
+expect_error(calc_rate(sardine.rd, plot = F, by = "prop"), regexp = NA)
+## Error with wrong by
+expect_error(calc_rate(sardine.rd, plot = F, by = "tttimmmeee"), 
+             "`by` input not recognised")
+
