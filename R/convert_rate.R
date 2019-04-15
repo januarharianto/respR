@@ -109,8 +109,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   if (is.MO2 && is.null(mass))
     stop("'output.unit' needs a value for 'mass'.")
   if (!is.MO2 && is.numeric(mass))
-    warning("mass' is ignored as `output.unit` does not require it.",
-      call. = F)
+    stop("`mass` has been entered, but units not specified in `output.unit`.")
 
   # Format unit strings to look nicer
   o2.unit <- stringr::str_replace(oxy, "\\..*", "")
