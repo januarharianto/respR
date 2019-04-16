@@ -2,10 +2,12 @@
 #'
 #' `inspect()` scans and subsets a data.frame object for errors that may affect
 #' the use of various functions in `respR`. By default, the function scans only
-#' the first 2 columns of a data frame and assumes that the first column is
-#' time data. A plot of the data is also produced, including a rolling
-#' regression plot using a width of `floor(0.1 * nrow([data frame])` for a quick
-#' visual inspection of the rate pattern (or stability) of the data.
+#' the first 2 columns of a data frame and assumes that the first column is time
+#' data. A plot of the data is also produced, including a rolling regression
+#' plot using a width of `floor(0.1 * nrow([data frame])` for a quick visual
+#' inspection of the rate pattern (or stability) of the data. Note that rates
+#' for oxygen uptake are returned as negative and plotted on a reverse axis;
+#' higher uptake rates are higher on the plot.
 #'
 #' Time columns are checked for NA/NaN values, sequential time, duplicate time
 #' and evenly-spaced time data. Oxygen columns are simply checked for NA/NaN
@@ -206,10 +208,11 @@ plot.inspect <- function(x, label = TRUE, ...) {
     title(main = "Full Timeseries", line = 0.3)
     plot(
       ## changed this to 10% width for now (0.05 each side here)
-      ## Also changed abs to -1* so intermittent data don't look so weird on this plot
-      -1*(roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
+      ## Removed -1* before roll - now actual negative rates
+      (roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
           length(dt[[1]])) + (length(roll) - 1))],
       xlim = range(dt[[1]]),
+      ylim = rev(range(roll)), # reversed axis
       xlab = "", ylab = "", pch = 16, cex = .5,
       panel.first = grid())
     title(

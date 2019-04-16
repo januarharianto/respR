@@ -24,10 +24,12 @@ A list object of class \code{inspect}.
 \description{
 \code{inspect()} scans and subsets a data.frame object for errors that may affect
 the use of various functions in \code{respR}. By default, the function scans only
-the first 2 columns of a data frame and assumes that the first column is
-time data. A plot of the data is also produced, including a rolling
-regression plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick
-visual inspection of the rate pattern (or stability) of the data.
+the first 2 columns of a data frame and assumes that the first column is time
+data. A plot of the data is also produced, including a rolling regression
+plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick visual
+inspection of the rate pattern (or stability) of the data. Note that rates
+for oxygen uptake are returned as negative and plotted on a reverse axis;
+higher uptake rates are higher on the plot.
 }
 \details{
 Time columns are checked for NA/NaN values, sequential time, duplicate time
