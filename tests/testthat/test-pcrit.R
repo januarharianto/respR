@@ -7,10 +7,20 @@ expect_error(
     suppressMessages(
       pcrit(squid, plot = F, parallel = F)), regexp = NA)
 
-## pcrit parses input with has.rate properly
+## pcrit parses input rate properly
+
+## correctly defaults to cols 1 and 2 for time and o2 nd test exact value output
+expect_equal(round(pcrit(squid)$result.midpoint, 4),
+             2.5944)
+
 # This analysis does not make sense, but we are just testing that the function
-# works with has.rate = TRUE.
-expect_error(pcrit(squid, has.rate = T, parallel = F), regexp = NA)
+expect_error(pcrit(squid, time = 1, oxygen = 2, parallel = F, plot = F), regexp = NA)
+expect_error(pcrit(squid, time = 1, rate = 2, parallel = F, plot = F), regexp = NA)
+
+# works with multi column data frames - again analysis makes no sense
+expect_error(pcrit(urchins.rd, time = 1, oxygen = 12, parallel = F, plot = F), regexp = NA)
+expect_error(pcrit(urchins.rd, time = 11, oxygen = 16, parallel = F, plot = F), regexp = NA)
+expect_error(pcrit(urchins.rd, time = 11, rate = 16, parallel = F, plot = F), regexp = NA)
 
 ## pcrit S3 generics work
 pcr <- pcrit(squid, parallel = F)
