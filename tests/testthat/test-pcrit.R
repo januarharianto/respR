@@ -10,7 +10,7 @@ expect_error(
 ## pcrit parses input rate properly
 
 ## correctly defaults to cols 1 and 2 for time and o2 nd test exact value output
-expect_equal(round(pcrit(squid)$result.midpoint, 4),
+expect_equal(round(pcrit(squid, parallel = F, plot=F)$result.midpoint, 4),
              2.5944)
 
 # This analysis does not make sense, but we are just testing that the function
