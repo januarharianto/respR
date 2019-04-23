@@ -5,25 +5,25 @@
   if(interactive()){
     vers <- packageDescription("respR", fields = "Version")
     start_msg <- paste("
-    ======================================================================
-    respR", vers, "                                            
-    ======================================================================
-    
-    Please cite respR using the following:
+======================================================================
+respR", vers, "
+======================================================================
 
-    Harianto, J., Carey, N., Byrne, M., 2019. respR — An R package for the 
-    manipulation and analysis of respirometry data. Methods in Ecology and 
-    Evolution. https://doi.org/10.1111/2041-210X.13162 
+Please cite respR using the following:
 
-    Visit this site for help documentation and vignettes:
+Harianto, J., Carey, N., Byrne, M., 2019. respR - An R package for the 
+manipulation and analysis of respirometry data. Methods in Ecology and 
+Evolution. https://doi.org/10.1111/2041-210X.13162
 
-              http://bit.ly/respr_pkg
+Visit this site for help documentation and vignettes:
 
-    And follow respR on Twitter for latest news:
+    http://bit.ly/respr_pkg
 
-              http://twitter.com/respr_pkg
-  
-    ======================================================================\n")
+And follow respR on Twitter for latest news:
+
+    http://twitter.com/respr_pkg
+
+======================================================================")
     
     packageStartupMessage(start_msg)
   }
