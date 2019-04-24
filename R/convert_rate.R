@@ -88,6 +88,11 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   } else if (class(x) %in% "calc_rate.ft") {
     rate <- x$mean
     message("object of class `calc_rate.ft` detected. Automatically using mean value.")
+    ## possibly here we automatically fill volume = 1
+    message("NOTE: In flowthrough experiments `volume` and `time` inputs should be set 
+      with reference to the flow rate in L per unit time. 
+      E.g. for 0.1 L/s `volume = 1, time = \"s\"`.
+      `time` does NOT refer to the resolution of the original data.")
   } else stop("`x` input is not valid.")
 
   # Validate o2.unit & time.unit
