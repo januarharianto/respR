@@ -32,6 +32,7 @@ expect_is(ar,
 
 ## auto_rate can be plotted
       ## NB - This saves a Rplots.pdf to testthat directory
+      ## Don't know why - something to do with new plots
       ## Can't see another way of doing this
 expect_output(plot(ar))
 file.remove("Rplots.pdf")
