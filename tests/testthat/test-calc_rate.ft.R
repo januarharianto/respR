@@ -37,9 +37,12 @@ expect_error(calc_rate.ft(ftdat, outflow.o2 = 2,
              regexp = NA)
 
 ## works with `inspect_data` object (OLD INSPECT FUNCTION)
-ftdat_oldinsp <- inspect_data(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3)
+sink("/dev/null") ## stops printing outputs on assigning 
+ftdat_oldinsp <- suppressWarnings(inspect_data(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3))
 expect_error(calc_rate.ft(ftdat_oldinsp, outflow.o2 = 2, inflow.o2 = 3, flowrate =  0.00234),
              regexp = NA)
+sink() ## turns printing back on
+
 
 ## stops if flowrate missing
 expect_error(calc_rate.ft(flowthrough.rd, outflow.o2 = 2, 

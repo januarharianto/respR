@@ -33,7 +33,7 @@ expect_error(plot(pcr), regexp = NA)
 sq_i <- inspect(squid.rd, plot = F)
 expect_error(pcrit(sq_i, plot = F, parallel = F), regexp = NA)
   
-sq_id <- inspect_data(squid.rd, plot = F)
+sq_id <- suppressWarnings(inspect_data(squid.rd, plot = F))
 expect_error(pcrit(sq_id, plot = F, parallel = F), regexp = NA)
 
 
