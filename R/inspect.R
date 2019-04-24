@@ -7,7 +7,7 @@
 #' plot using a width of `floor(0.1 * nrow([data frame])` for a quick visual
 #' inspection of the rate pattern (or stability) of the data. Note that rates
 #' for oxygen uptake are returned as negative and plotted on a reverse axis;
-#' higher uptake rates are higher on the plot.
+#' higher oxygen uptake rates are higher on the rate plot (more negative).
 #'
 #' Time columns are checked for NA/NaN values, sequential time, duplicate time
 #' and evenly-spaced time data. Oxygen columns are simply checked for NA/NaN
@@ -22,6 +22,21 @@
 #' inflow and outflow, by specifying a vector of column numbers, e.g. `oxygen =
 #' c(2,3)`.
 #'
+#' @section Failed Checks: It should be noted most of these checks are for
+#'   exploratory purposes only; they help diagnose potential issues with the
+#'   data. For instance, very long experiments could have had sensor dropouts
+#'   the user is completely unaware of. Other issues are not issues at all - for
+#'   instance, an uneven time warning can result from using decimalised minutes,
+#'   which is a completely valid time metric.
+#'
+#'   If some of these checks fail, it should generally not hinder analysis of
+#'   the data. respR has been coded to rely on linear regression on exact data
+#'   values, and not make assumptions about data spacing. Therefore issues such
+#'   as missing or NA/NaN values, duplicate values, or uneven time spacing
+#'   should not cause any erroneous results, as long as they do not occur over
+#'   large regions of the data. The only major potential issue is if time data
+#'   are not sequential. This could cause unknown results and incorrect rates to
+#'   be returned.
 #'
 #' @param df data.frame object. Accepts any object of class `data.frame`.
 #' @param time numeric vector. Defaults to NULL. This specifies the column
@@ -199,13 +214,32 @@ plot.inspect <- function(x, label = TRUE, ...) {
 
     pardefault <- par(no.readonly = T) # save original par settings
     par(
-      mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
-      cex = 1, cex.main = 1
+      mfrow = c(2, 1), mai = c(0.4, 0.4, 0.6, 0.3), ps = 10,
+      cex = 1, cex.main = 1,
+      mgp=c(0, 0.5, 0) # middle = to put tick labels closer to ticks
     )
+    
     plot(
       dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
+      col.lab = "blue", col.axis = "blue",
       panel.first = grid())
-    title(main = "Full Timeseries", line = 0.3)
+    axis(side = 2) # simply to put yaxis label colour back to black
+    
+    #title(xlab = "Time", line = 1)
+    ## add row index axis
+    par(new=TRUE)
+    plot(
+      seq(1, nrow(dt)), dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
+      axes = FALSE)
+    axis(side=3, col.axis = "red")
+    
+    legend("bottomleft", "Time", text.col = "blue", bg = "gray90", 
+           cex = 0.7) 
+    legend("topright", "Row Index", text.col = "red", bg = "gray90", 
+           cex = 0.7)
+    
+    title(main = "Full Timeseries", line = 2)
+    
     plot(
       ## changed this to 10% width for now (0.05 each side here)
       ## Removed -1* before roll - now actual negative rates
@@ -214,18 +248,48 @@ plot.inspect <- function(x, label = TRUE, ...) {
       xlim = range(dt[[1]]),
       ylim = rev(range(roll)), # reversed axis
       xlab = "", ylab = "", pch = 16, cex = .5,
-      panel.first = grid())
+      col.lab = "blue", col.axis = "blue")
+    axis(side = 2) # simply to put yaxis label colour back to black
+
+    ## Added dashed line at rate = 0
+    abline(h = 0, lty = 2)
+    
+    par(new=TRUE)
+    plot(
+      seq(1, nrow(dt)), dt[[2]], xlab = "", ylab = "", pch = "", cex =.5,
+      axes = FALSE, col = "white") # plot invisibly
+    axis(side=3, col.axis = "red")
+    
+    legend("bottomleft", "Time", text.col = "blue", bg = "gray90", 
+           cex = 0.7)
+    legend("topright", "Row Index", text.col = "red", bg = "gray90", 
+           cex = 0.7)
+    
     title(
       ## UPDATED TITLE
       ## Updated again!!!!
       main = "Rolling Regression of Rate (0.1 Rolling Window)",
-      line = 0.3
+      line = 2
     )
-    ## Added dashed line at rate = 0
-    abline(h = 0, lty = 2)
+    
     par(pardefault) # revert par settings to original
-  } else
-    message("inspect: Plot is only avalilable for a 2-column dataframe output.")
+  } else {
+    
+    ## plot every column anyway - without rate plot
+    message("inspect: Full plot is only avalilable for a 2-column dataframe output.")
+
+    pardefault <- par(no.readonly = T)  # save original par settings
+    par(mfrow = n2mfrow(length(x$dataframe)-1), mai = c(0.4, 0.4, 0.1, 0.1),
+        ps = 10, cex = 1, cex.main = 1, pch =".")  # replace par settings
+    
+    lapply(1:(length(x$dataframe)-1), function(z) plot(data.frame(x$dataframe[[1]],
+                                                                  x$dataframe[[z+1]]),
+                                                       xlab = "", ylab = ""))
+    
+    par(pardefault)  # revert par settings to original 
+    }   
+  
+  
   if (label) cat("Done.\n")
   return(invisible(x))
 }

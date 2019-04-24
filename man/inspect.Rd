@@ -29,7 +29,7 @@ data. A plot of the data is also produced, including a rolling regression
 plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick visual
 inspection of the rate pattern (or stability) of the data. Note that rates
 for oxygen uptake are returned as negative and plotted on a reverse axis;
-higher uptake rates are higher on the plot.
+higher oxygen uptake rates are higher on the rate plot (more negative).
 }
 \details{
 Time columns are checked for NA/NaN values, sequential time, duplicate time
@@ -44,6 +44,24 @@ frame. However, the function will not produce a plot. Thus, you may inspect
 flowthrough respirometry data, which usually contains oxygen values for
 inflow and outflow, by specifying a vector of column numbers, e.g. \code{oxygen = c(2,3)}.
 }
+\section{Failed Checks}{
+ It should be noted most of these checks are for
+exploratory purposes only; they help diagnose potential issues with the
+data. For instance, very long experiments could have had sensor dropouts
+the user is completely unaware of. Other issues are not issues at all - for
+instance, an uneven time warning can result from using decimalised minutes,
+which is a completely valid time metric.
+
+If some of these checks fail, it should generally not hinder analysis of
+the data. respR has been coded to rely on linear regression on exact data
+values, and not make assumptions about data spacing. Therefore issues such
+as missing or NA/NaN values, duplicate values, or uneven time spacing
+should not cause any erroneous results, as long as they do not occur over
+large regions of the data. The only major potential issue is if time data
+are not sequential. This could cause unknown results and incorrect rates to
+be returned.
+}
+
 \examples{
 # automatically inspect first 2 columns:
 inspect(sardine.rd)
