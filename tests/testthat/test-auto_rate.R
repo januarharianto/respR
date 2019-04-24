@@ -35,7 +35,7 @@ expect_is(ar,
       ## Don't know why - something to do with new plots
       ## Can't see another way of doing this
 expect_output(plot(ar))
-file.remove("Rplots.pdf")
+suppressWarnings(file.remove("Rplots.pdf"))
 
 ## auto_rate can be printed
 expect_output(print(ar))

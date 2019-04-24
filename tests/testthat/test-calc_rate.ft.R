@@ -64,13 +64,13 @@ expect_error(calc_rate.ft(ftdat, outflow.o2 = NULL,
 ftrt <- calc_rate.ft(ftdat, outflow.o2 = 2, 
                      inflow.o2 = 3, flowrate =  0.00234, plot = F)
 
-ftrt_conv <- convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h", 
-                          volume = 1)
+ftrt_conv <- suppressWarnings(convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h", 
+                                           volume = 1))
 expect_equal(round(ftrt_conv$output, 8),
              -0.09909348)
 
-ftrt_conv_ms <- convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h/g", 
-                          volume = 1, mass = 0.000070)
+ftrt_conv_ms <- suppressWarnings(convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h/g", 
+                                              volume = 1, mass = 0.000070))
 expect_equal(round(ftrt_conv_ms$output, 6),
              -1.415621)
 
