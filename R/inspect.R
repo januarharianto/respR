@@ -159,35 +159,35 @@ print.inspect <- function(x, ...) {
   if ((length(x$dataframe)) == 2) {
     if (checks[, 1][[1]]) {
       xnan <- locs[, 1][[1]]
-      cat("NA/NaN data locations")
+      cat("NA/NaN data locations ")
       if (length(xnan) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xnan, 20))
     }
     if (checks[, 1][[2]]) {
       xseq <- locs[, 1][[2]]
-      cat("Non-sequential time data locations")
+      cat("Non-sequential time data locations ")
       if (length(xseq) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xseq, 20))
     }
     if (checks[, 1][[3]]) {
       xdup <- locs[, 1][[3]]
-      cat("Duplicate time data locations")
+      cat("Duplicate time data locations ")
       if (length(xdup) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xdup, 20))
     }
     if (checks[, 1][[4]]) {
       xevn <- locs[, 1][[4]]
-      cat("Uneven time data locations")
+      cat("Uneven time data locations ")
       if (length(xevn) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xevn, 20))
     }
     if (checks[, 2][[1]]) {
       ynan <- locs[, 2][[1]]
-      cat("NA/NaN locations")
+      cat("NA/NaN locations ")
       if (length(ynan) > 20) cat(" (only first 20 shown) ")
       cat("in column:", names(x$dataframe[2]), "\n")
       print(head(ynan, 20))
