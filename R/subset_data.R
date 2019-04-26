@@ -69,10 +69,10 @@ subset_data <- function(x, from, to, by = "time") {
   cat("\nNew data:\n")
   print(data.table(out), topn = 2)
 
-  if (class(x) == "inspect") {
+  if (any(class(x) %in% "inspect")) {
     x$dataframe <- out
-    return(x)
-  } else if (class(x) == "inspect_data") {
+    return(invisible(x))
+  } else if (any(class(x) %in% "inspect_data")) {
     x$df <- out
   } else return(invisible(out))
 }
