@@ -24,9 +24,18 @@ strings. It's a simple procedure for now, but once we have a large database
 of files we will optimise the code.
 }
 \details{
-Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
-PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
-AutoResp (software output) | Vernier (raw gmbl/qmbl, csv, txt)
+Currently works for:
+\itemize{
+\item Firesting Logger
+\item Pyro Oxygen Logger (another name for Firesting)
+\item PRESENS OXY10
+\item PRESENS (generic)
+\item MiniDOT
+\item Loligo Witrox Logger
+\item Loligo AutoResp (software output)
+\item Loligo & Presens 24-Well Multiplate System (txt and Excel files)
+\item Vernier (raw gmbl/qmbl, csv, txt)
+}
 
 While the devices listed above are supported, the import functionality may
 not be complete due to limited access to output files. This will improve over

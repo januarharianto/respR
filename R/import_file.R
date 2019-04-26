@@ -7,9 +7,16 @@
 #' strings. It's a simple procedure for now, but once we have a large database
 #' of files we will optimise the code.
 #'
-#' Currently works for: Firesting Logger | Pyro Oxygen Logger (also Firesting) |
-#' PRESENS OXY10 | PRESENS (generic) | MiniDOT | Loligo Witrox Logger | Loligo
-#' AutoResp (software output) | Vernier (raw gmbl/qmbl, csv, txt)
+#' Currently works for: 
+#'  - Firesting Logger 
+#'  - Pyro Oxygen Logger (another name for Firesting)
+#'  - PRESENS OXY10
+#'  - PRESENS (generic)
+#'  - MiniDOT
+#'  - Loligo Witrox Logger
+#'  - Loligo AutoResp (software output)
+#'  - Loligo & Presens 24-Well Multiplate System (txt and Excel files)
+#'  - Vernier (raw gmbl/qmbl, csv, txt)
 #'
 #' While the devices listed above are supported, the import functionality may
 #' not be complete due to limited access to output files. This will improve over
@@ -34,8 +41,16 @@
 #' @examples
 #' NULL
 import_file <- function(path, export = FALSE) {
-  raw <- readLines(path)
-
+  
+  ## readLines doesn't work on xlsx files Have to do Excel import here - may not
+  ## be just for multiplate system - probably we will support other systems that
+  ## output xl files
+  
+  if(grepl(".xls", path)) {
+    raw <- suppressMessages(read_excel(path, n_max = 20))
+    raw <- as.character(raw)
+  } else {raw <- readLines(path)}
+  
   # Identify source of file
   if (suppressWarnings(any(grepl("Firesting", raw[1:20])))) {
     cat("Firesting Logger Detected\n\n")
@@ -70,34 +85,60 @@ import_file <- function(path, export = FALSE) {
             original data, and have no clear indication of which data came from which probes!
             We strongly recommend exporting as .csv or importing raw qmbl/gmbl files.")
     out <- parse_vernier_txt(path)
+  ## This next one is also a multiplate file, but exported as text rather than
+  ## Excel. Should probably revise to keep empty Well columns, so there's always
+  ## 24 total.
   } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
             suppressWarnings(any(grepl("PARAMETERS", raw[10:30]))) &&
             suppressWarnings(any(grepl("FIRMWARE", raw[30:50])))) {
     cat("PRESENS Generic file detected\n\n")
     out <- parse_presens(path)
+  } else if(suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
+    cat("Loligo/Presens 24-well Multiplate Excel file detected\n\n")
+    out <- parse_multiplate_excel(path)
   } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
-
+  
   if(export) {
     newpath <- paste(normalizePath(dirname(path)),"/", "parsed-",
                      basename(path), sep = "")
     write.csv(out, newpath)
   }
-
+  
   return(out)
 }
 
 
 
-# Invividual device functions ----------
+# Invividual device functions ---------------------------------------------
 
-# Vernier csv files
+# Loligo/Presens multiplate system ----------------------------------------
+
+parse_multiplate_excel <- function(path){
+  raw <- suppressMessages(read_excel(path, col_names = TRUE))
+  ## which row has "Date/Time" 
+  start_row <- which(grepl("^Date/Time$", raw[[1]]))
+  ## inport from that row on
+  raw <- suppressMessages(read_excel(path, skip = start_row-1))
+  ## remove columns which are empty (all NA)
+  ## EXCEPT the 24 Wells columns (and keep date-time, and num.time)
+  cols1 <- raw[,1:26]
+  cols2 <- raw[,-(1:26)]
+  cols2 <- cols2[ , ! apply( cols2 , 2 , function(x) all(is.na(x)) ) ]
+  raw <- cbind(cols1, cols2) 
+  out <- data.table(raw)
+}
+
+# Vernier csv files -------------------------------------------------------
+
 parse_vernier_csv <- function(path) {
   raw <- fread(path, fill = TRUE, header = TRUE)
   out <- data.table(raw)
   return(out)
 }
 
-# Vernier txt files
+
+# Vernier txt files -------------------------------------------------------
+
 parse_vernier_txt <- function(path) {
   
   ## read in raw data
@@ -165,7 +206,9 @@ parse_vernier_txt <- function(path) {
   return(out)
 }
 
-# Vernier gmbl/qmbl files
+
+# Vernier gmbl/qmbl files -------------------------------------------------
+
 parse_vernier_raw <- function(path){
   
   raw <- data.table::fread(path, fill = TRUE)
@@ -303,7 +346,8 @@ parse_vernier_raw <- function(path){
 }
 
 
-# Loligo AutoResp
+# Loligo AutoResp ---------------------------------------------------------
+
 parse_autoresp <- function(path) {
   raw <- fread(path, fill = TRUE, header = FALSE)
   colstart <- tail(suppressWarnings(raw[raw$V1 %like% "Date", which = TRUE]), 1)
@@ -317,7 +361,9 @@ parse_autoresp <- function(path) {
   return(out)
 }
 
-# Witrox
+
+# Witrox ------------------------------------------------------------------
+
 parse_witrox <- function(path) {
   # txt <- readLines(path)
   raw <- fread(path, fill = TRUE, header = FALSE)
@@ -332,7 +378,8 @@ parse_witrox <- function(path) {
 }
 
 
-# MiniDOT
+# MiniDOT -----------------------------------------------------------------
+
 parse_minidot <- function(path) {
   # txt <- readLines(path)
   raw <- fread(path, fill = TRUE)
@@ -345,7 +392,8 @@ parse_minidot <- function(path) {
 }
 
 
-# PRESENS OXY10
+# PRESENS OXY10 -----------------------------------------------------------
+
 parse_oxy10 <- function(path) {
   # txt <- readLines(path)
   raw <- fread(path, fill = TRUE)
@@ -356,7 +404,8 @@ parse_oxy10 <- function(path) {
   return(out)
 }
 
-# Firesting
+# Firesting ---------------------------------------------------------------
+
 parse_firesting <- function(path) {
   # txt <- readLines(path)
   # Convert text to data.table object so that it's fast to deal with
@@ -376,7 +425,7 @@ parse_firesting <- function(path) {
   rdt <- data.table(startdate, rdt) # First, we add a start date
   # We convert time column to datetime
   rdt <- data.table(timestamp = with(rdt, as.POSIXct(paste(as.Date(startdate,
-                      "%d/%m/%Y"), Time))), rdt[,-c(1,2)])
+                                                                   "%d/%m/%Y"), Time))), rdt[,-c(1,2)])
   # Now we adjust the dates properly since they're all one date
   diffday <- c(0, which(diff(rdt$timestamp) < 0), nrow(rdt)) # create index
   # create new dates
@@ -391,7 +440,8 @@ parse_firesting <- function(path) {
   return(out)
 }
 
-# Firesting Pyro
+# Firesting Pyro ----------------------------------------------------------
+
 parse_pyro <- function(path) {
   # txt <- readLines(path)
   # Convert text to data.table object so that it's fast to deal with
@@ -414,7 +464,8 @@ parse_pyro <- function(path) {
   return(out)
 }
 
-# Generic PRESENS file
+# Generic PRESENS file ----------------------------------------------------
+
 parse_presens <- function(path) {
   raw <- fread(path, fill = TRUE, header = FALSE)
   colstart <- suppressWarnings(raw[raw$V1 %like% "Date/", which = TRUE])
@@ -422,7 +473,7 @@ parse_presens <- function(path) {
   # Identify columns with numbers
   valids <- rdt[, which(unlist(lapply(rdt, function(x)
     !all(is.na(x)||x == ""||x == "---"||is.character(x)))))]
-
+  
   # Identify column names
   colid <- unlist(raw[colstart])
   colid <- colid[valids]
