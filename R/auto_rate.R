@@ -72,7 +72,7 @@
 #' auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
 #' }
 auto_rate <- function(df, width = NULL, by = "row", method = "linear",
-                      plot = TRUE, full = FALSE, parallel = FALSE) {
+                      plot = TRUE, parallel = FALSE) {
   # Import and format data
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
@@ -168,7 +168,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     message("\n", nrow(rankroll), " kernel density peaks detected and ranked.")
   }
   class(out) <- "auto_rate"
-  if (plot) plot(out, label = FALSE, full = full)
+  if (plot) plot(out, label = FALSE)
   return(out)
 }
 
@@ -207,158 +207,85 @@ print.auto_rate <- function(x, pos = 1, ...) {
   return(invisible(x)) # this lets us continue with dplyr pipes
 }
 
-#' @importFrom methods is
-#' @export
-plot.auto_rate <- function(x, pos = 1, full = FALSE, choose = FALSE, label = TRUE, ...) {
-  if (label) cat("\n# plot.auto_rate # ----------------------\n")
-  if (!full) cat("You can select higher-resolution plots using argument `full = TRUE`. \n")
-  # what method did auto_rate use?
-  method <- x$method
-  # extract data
-  dta <- x$df
-  dtbrange <- x$summary[pos]$row:x$summary[pos]$endrow
-  dtb <- x$df[dtbrange]
-  model <- lm(dtb[[2]]~dtb[[1]])
-  if (method == "interval") {
-    interval <- append(0, x$summary$endrow)
-  } else interval <- NULL
-  
-  # generate plots
-  p1 <- fullplot(dta, dtb, full, interval)
-  p2 <- focusplot(dtb, full)
-  if (!(method == "interval")) {
-    p3 <- rollplot(x, pos, full)
-    p4 <- drollplot(x, pos)
-  }
-  p5 <- residualplot(model, full)
-  p6 <- gqqplot(model, full)
-  
-  if (!choose & method == "interval") {
-    pp <- gridExtra::arrangeGrob(p1, p2, p5, p6, nrow = 2)
-    # use tryCatch and re-draw if errors occur
-    for(attempt in 1:10) {
-      output <- tryCatch(
-        expr={ plot(pp) },
-        error=function(e) { return(e) }
-      )
-      if(!is(output, "error")) {
-        break
-      }
-    }
-  } else if (!choose) {
-    pp <- gridExtra::arrangeGrob(p1, p2, p3, p4, p5, p6, nrow = 2)
-    # use tryCatch and re-draw if errors occur
-    for(attempt in 1:10) {
-      output <- tryCatch(
-        expr={ plot(pp) },
-        error=function(e) { return(e) }
-      )
-      if(!is(output, "error")) {
-        break
-      }
-    }
-  }
-  
-  # if user wants specific plots 
-  if (choose == 1) {
-    print(p1)
-  } else if (choose == 2) {
-    print(p2)
-  } else if (choose == 3) {
-    if (method == "interval") {
-      stop("There is no rolling regression plot for interval analyis.")
-    } else print(p3)
-  } else if (choose == 4) {
-    if (method == "interval") {
-      stop("There is no kernel density plot for interval analyis.")
-    } else print(p4)
-  } else if (choose == 5) {
-    print(p5)
-  } else if (choose == 6) {
-    print(p6)
-  }
-  if (label) cat("Done. \n")
-  return(invisible(x))
-}
 
 # OLD PLOTTING FUNCTION USING BASE PLOT.
 # Don't delete -- take as a reminder that this has been attempted before.
-#
-# plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
-#   if (label) cat("\n# plot.auto_rate # ----------------------\n")
-#   # DEFINE OBJECTS
-#   dt <- x$df
-#   start <- x$summary$row[pos]
-#   end <- x$summary$endrow[pos]
-#   sdt <- dt[start:end]
-#   rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
-#   rate <- x$summary$rate_b1[pos]
-#   rsq <- signif(x$summary$rsq[pos],3)
-#   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
-#   interval <- x$summary$endtime
-#   startint <- min(interval) - x$width
-#   dens <- x$density
-#   peaks <- x$peaks[, 2:3]
-# 
-#   # PLOT BASED ON METHOD
-#   if (x$method %in% c("default", "max", "min")) {
-#     if (choose == FALSE) {
-#       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
-#       pardefault <- par(no.readonly = T) # save original par settings
-#       layout(mat)
-#       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
-#       multi.p(dt, sdt)
-#       sub.p(sdt, rsq = rsq)
-#       rollreg.p(rolldt, rate)
-#       residual.p(fit)
-#       qq.p(fit)
-#       layout(1)
-#       par(pardefault) # revert par settings to original
-#     }
-#   } else if (x$method == "interval") {
-#     if (choose == FALSE) {
-#       pardefault <- par(no.readonly = T) # save original par settings
-#       par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-#       multi.p(dt, sdt)
-#       abline(v = startint, lty = 3)
-#       abline(v = interval, lty = 3)
-#       sub.p(sdt, rsq = rsq)
-#       residual.p(fit)
-#       qq.p(fit)
-#       par(pardefault) # revert par settings to original
-#     }
-#   } else if (x$method == "linear") {
-#     if (choose == FALSE) {
-#       pardefault <- par(no.readonly = T) # save original par settings
-#       # par(mfrow = c(2, 3))  # replace par settings
-#       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
-#       multi.p(dt, sdt) # full timeseries with lmfit
-#       sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
-#       rollreg.p(rolldt, rate) # rolling regression series with markline
-#       density.p(dens, peaks, pos) # density plot
-#       residual.p(fit) # residual plot
-#       qq.p(fit) # qq plot
-#       par(pardefault) # revert par settings to original
-#     }
-#   }
-# 
-#   if (choose == 1) {
-#     multi.p(dt, sdt) # full timeseries with lmfit
-#     if (x$method == "interval") {
-#       abline(v = startint, lty = 3)
-#       abline(v = interval, lty = 3)
-#     }
-#   }
-#   if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
-#   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
-#   if (choose == 4) density.p(dens, peaks, pos)  # density
-#   if (choose == 5) residual.p(fit)  # residual plot
-#   if (choose == 6) qq.p(fit)  #qq plot
-# 
-#   if (label) cat("Done.\n")
-#   return(invisible(x))
-# 
-# }
+
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
+  if (label) cat("\n# plot.auto_rate # ----------------------\n")
+  # DEFINE OBJECTS
+  dt <- x$df
+  start <- x$summary$row[pos]
+  end <- x$summary$endrow[pos]
+  sdt <- dt[start:end]
+  rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
+  rate <- x$summary$rate_b1[pos]
+  rsq <- signif(x$summary$rsq[pos],3)
+  fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
+  interval <- x$summary$endtime
+  startint <- min(interval) - x$width
+  dens <- x$density
+  peaks <- x$peaks[, 2:3]
+
+  # PLOT BASED ON METHOD
+  if (x$method %in% c("default", "max", "min")) {
+    if (choose == FALSE) {
+      mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
+      pardefault <- par(no.readonly = T) # save original par settings
+      layout(mat)
+      par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt)
+      sub.p(sdt, rsq = rsq)
+      rollreg.p(rolldt, rate)
+      residual.p(fit)
+      qq.p(fit)
+      layout(1)
+      par(pardefault) # revert par settings to original
+    }
+  } else if (x$method == "interval") {
+    if (choose == FALSE) {
+      pardefault <- par(no.readonly = T) # save original par settings
+      par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt)
+      abline(v = startint, lty = 3)
+      abline(v = interval, lty = 3)
+      sub.p(sdt, rsq = rsq)
+      residual.p(fit)
+      qq.p(fit)
+      par(pardefault) # revert par settings to original
+    }
+  } else if (x$method == "linear") {
+    if (choose == FALSE) {
+      pardefault <- par(no.readonly = T) # save original par settings
+      # par(mfrow = c(2, 3))  # replace par settings
+      par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
+      multi.p(dt, sdt) # full timeseries with lmfit
+      sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
+      rollreg.p(rolldt, rate) # rolling regression series with markline
+      density.p(dens, peaks, pos) # density plot
+      residual.p(fit) # residual plot
+      qq.p(fit) # qq plot
+      par(pardefault) # revert par settings to original
+    }
+  }
+
+  if (choose == 1) {
+    multi.p(dt, sdt) # full timeseries with lmfit
+    if (x$method == "interval") {
+      abline(v = startint, lty = 3)
+      abline(v = interval, lty = 3)
+    }
+  }
+  if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
+  if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
+  if (choose == 4) density.p(dens, peaks, pos)  # density
+  if (choose == 5) residual.p(fit)  # residual plot
+  if (choose == 6) qq.p(fit)  #qq plot
+
+  if (label) cat("Done.\n")
+  return(invisible(x))
+
+}
 
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
