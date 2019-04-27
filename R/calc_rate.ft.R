@@ -1,26 +1,33 @@
 #' Calculate rate of change in oxygen in flowthrough respirometry
 #'
 #' Calculates rate of oxygen uptake in flowthrough respirometry given a
-#' flow-rate and both inflow and outflow oxygen concentrations. Can return a
-#' single value, or multiple and mean values based on continuous data.
+#' flow-rate and both inflow (upstream of the chamber) and outflow (downstream
+#' of the chamber) oxygen concentrations. Can return a single rate value, or
+#' multiple and mean values based on continuous data.
+#'
+#' Input can be numeric values or vectors - see examples. In addition, a
+#' `data.frame` or `inspect` object can be entered. In this case `outflow.o2`
+#' and `inflow.o2` are indices indicting the columns containing these data.
+#' Note, an `inflow.o2` column *must* be present in the data.frame, even if this
+#' is a single fixed value repeated to the correct length. Note, a numeric time
+#' elapsed column can be present, but is not required. In flowthrough data,
+#' uptake rate calculations use O2 delta and the flow rate.
 #'
 #' There are no units involved in `calc_rate.ft`. This is a deliberate decision.
 #' Units are called in a later function when volumetric and/or mass-specific
 #' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
 #'
 #' @param x data frame or object of class `inspect`.
-#' @param time numeric. Defaults to NULL. This specifies the time column if a
-#'   data frame is provided. Otherwise, this is a numeric vector for time data.
 #' @param inflow.o2 numeric. Defaults to NULL. This specifies the inflow O2
-#'   column if a data frame is provided. Otherwise, this is a numeric vector for
-#'   inflow oxygen concentration.
+#'   column if a data frame or `inspect` object is provided. Otherwise, this is
+#'   a numeric vector for inflow oxygen concentration.
 #' @param outflow.o2 numeric. Defaults to NULL. This specifies the outflow O2
-#'   column if a data frame is provided.  Otherwise, this is a numeric vector
-#'   for outflow oxygen concentration.
-#' @param flowrate numeric vector. The flow rate. No unit of measurement is
-#'   expected; you will specify it when you perform conversions later in
-#'   `convert_rate`. **However**: it must be in *Litres* per unit time (s,m,h), for example
-#'   L/s.
+#'   column if a data frame or `inspect` object is provided. Otherwise, this is
+#'   a numeric vector for outflow oxygen concentration.
+#' @param flowrate numeric vector. The flow rate. Must be in *Litres* per unit
+#'   time (s,m,h), for example L/s. The units are not required to be entered in
+#'   this function; you will specify them when you perform conversions later in
+#'   `convert_rate`.
 #' @param plot logical. Defaults to TRUE. Plots the data.
 #'
 #' @return An object of class "calc_rate.ft".
@@ -36,62 +43,70 @@
 #' calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
 #'   outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
 #' # A data frame
-#' calc_rate.ft(flowthrough.rd, time = 1, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
-calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = NULL,
+#' calc_rate.ft(flowthrough.rd, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
+calc_rate.ft <- function(x = NULL, outflow.o2 = NULL, inflow.o2 = NULL, 
   flowrate = NULL, plot = TRUE) {
 
   # Validate inputs
+  # flowrate required
   if (!is.numeric(flowrate)) stop("numeric 'flowrate' value must be provided.")
-  if (is.data.frame(x) && is.null(inflow.o2) && is.null(outflow.o2))
-    stop("You must provide subset locations (row number) for 'inflow.o2' and 'outflow.o2'.")
+  # if df or inspect - both inflow.o2 and outflow.o2 required
+  if ((is.data.frame(x) || (any(class(x) %in% "inspect"))) 
+      && (is.null(inflow.o2) || is.null(outflow.o2)))
+    stop("Column indices must be provided for 'outflow.o2' and 'inflow.o2'.")
 
-  # Extract individual data
+
+# inspect_data ------------------------------------------------------------
+
   if (any(class(x) %in% "inspect_data")) {
 
     # Object is of class `inspect_data`. Validate.
     if (length(x$df) < 3)
       stop("Looks like you used the wrong `inspect_data` object here.")
 
-    # Extract data from object.
+    # Extract data from object. 
     df      <- x$df
-    time    <- df$time
     inflow.o2  <- df$inflow
     outflow.o2 <- df$outflow
-    message("object of class `inspect_data` detected.")
-    delta <- inflow.o2 - outflow.o2
-
-  } else if (is.data.frame(x) && is.null(time)) {
-
-    # Object is data frame. Time is not provided. Extract data from data frame.
-    df <- x
-    inflow.o2 <- df[[inflow.o2]]
-    outflow.o2 <- df[[outflow.o2]]
-    message("'data.frame' object detected. Values in 'inflow.o2' and 'outflow.o2' are used as column indices to to extract data from the data frame.")
-    delta <- inflow.o2 - outflow.o2
-
-  } else if (is.data.frame(x) && !is.null(time)) {
-
-    # Object is data frame. Time is provided. Extract data from data frame.
-    df <- x
-    time <- df[[time]]
-    inflow.o2 <- df[[inflow.o2]]
-    outflow.o2 <- df[[outflow.o2]]
-    message("'data.frame' object detected. Values in 'time', inflow.o2' and 'outflow.o2' are used as column indices to extract data from the data frame.")
+    message("NOTE: `inspect_data` has been deprecated. Please use `inspect` instead.")
+    message("object of class `inspect_data` detected. 
+            Any `inflow.o2` or `outflow.o2` inputs entered here ignored.")
     delta <- outflow.o2 - inflow.o2
 
-  } else if (is.null(x) && is.null(time) && is.numeric(inflow.o2) &&
+
+# inspect -----------------------------------------------------------------
+
+  } else if (any(class(x) %in% "inspect")) {
+    
+    # Extract data from object.
+    df      <- x$dataframe
+    inflow.o2  <- df[[inflow.o2]]
+    outflow.o2 <- df[[outflow.o2]]
+    message("object of class `inspect` detected. Values in `inflow.o2' and 'outflow.o2' are used as 
+            column indices to extract data from the data frame.")
+    delta <- outflow.o2 - inflow.o2
+
+
+# data.frame --------------------------------------------------------------
+
+  } else if (is.data.frame(x)) {
+    
+    # Object is data frame. Extract data from data frame.
+    df <- x
+    inflow.o2 <- df[[inflow.o2]]
+    outflow.o2 <- df[[outflow.o2]]
+    message("'data.frame' object detected. Values in 'inflow.o2' and 'outflow.o2' are used as column 
+            indices to to extract data from the data frame.")
+    delta <- outflow.o2 - inflow.o2
+
+
+# numeric inputs ----------------------------------------------------------
+
+  } else if (is.null(x) && is.numeric(inflow.o2) &&
       is.numeric(outflow.o2)) {
 
-    # No data frame is provided. Time is not provided.
+    # No data frame is provided. 
     df <- data.table::data.table(inflow.o2 = inflow.o2, outflow.o2 = outflow.o2)
-    message("calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.")
-    delta <- outflow.o2 - inflow.o2
-
-  } else if (is.null(x) && !is.null(time) && is.numeric(inflow.o2) &&
-      is.numeric(outflow.o2)) {
-
-    # No data frame is provided. Time is provided. Essentiall same as above.
-    df <- data.table::data.table(time = time, inflow.o2 = inflow.o2, outflow.o2 = outflow.o2)
     message("calculating from numeric rate values provided in 'inflow.o2' and 'outflow.o2'.")
     delta <- outflow.o2 - inflow.o2
 
@@ -103,9 +118,15 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = N
 
   } else stop("Unable to process data. Please double check input arguments.")
 
+
+# Calculate rate ----------------------------------------------------------
+
   # Calculate rate
   rate <- delta * flowrate
   mean <- mean(rate)
+
+
+# Summary and output ------------------------------------------------------
 
   # Generate summary
   input <- df
@@ -121,14 +142,21 @@ calc_rate.ft <- function(x = NULL, time = NULL, inflow.o2 = NULL, outflow.o2 = N
       mean = mean)
   class(out) <- "calc_rate.ft"
 
+
+# Plot --------------------------------------------------------------------
+
   # Plot
   if (plot) {
     if (length(rate) == 1) NULL else plot(out)
   }
 
+# Return ------------------------------------------------------------------
+
   return(out)
 }
 
+
+# Print fn ----------------------------------------------------------------
 
 #' @export
 print.calc_rate.ft <- function(x, ...) {
@@ -148,6 +176,8 @@ print.calc_rate.ft <- function(x, ...) {
 }
 
 
+# Summary fn --------------------------------------------------------------
+
 #' @export
 summary.calc_rate.ft <- function(object, ...) {
   out <- object$summary
@@ -155,6 +185,8 @@ summary.calc_rate.ft <- function(object, ...) {
   return(invisible(out))
 }
 
+
+# Plot fn -----------------------------------------------------------------
 
 #' @export
 plot.calc_rate.ft <- function(x, ...) {

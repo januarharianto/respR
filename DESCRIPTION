@@ -1,6 +1,7 @@
 Package: respR
 Type: Package
 Title: Analyse, Convert, and Automate Respirometry-Related Data
+Date: 2019-04-08
 Version: 1.0.5.1
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
@@ -8,7 +9,7 @@ Authors@R: as.person(c(
 Description: A collection of functions that, when used together, provide a 
     complete and structured workflow for the analysis of respirometry-related
     data. See the respR GitHub webpage for documentation and examples.
-URL: https://github.com/januarharianto/respr
+URL: https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
 Depends: R (>= 3.3)
 License: GPL-3
 Encoding: UTF-8
@@ -38,10 +39,10 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testit,
     rMR,
     DiagrammeR,
     FishResp,
-    respirometry
+    respirometry,
+    testthat
 VignetteBuilder: 
     knitr

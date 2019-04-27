@@ -144,7 +144,7 @@ truncate_data <- function(x, from, to, by) {
     if(to > nrow(dt)) stop("`to` row is greater than total number of rows.")
     out <- dt[from:to]
   }
-  if (by == "o2" & length(x) == 2) {
+  if (by == "o2" & length(dt) == 2) {
     top <- Position(function(z) z <= from, dt[[2]])
     
     ## this is new
@@ -166,4 +166,36 @@ truncate_data <- function(x, from, to, by) {
     out <- dt[top:bot]
   }
   return(out)
+}
+
+
+# Verify by input for calc_rate etc.
+verify_by <- function(by){
+  ## no doubt this is easier with regex
+  time_variations <- c("time", "Time", "TIME", 
+                       "tim", "Tim", "TIM", 
+                       "tm", "Tm", "TM",
+                       "t", "T")
+  ox_variations <- c("o2", "O2",
+                     "oxygen", "Oxygen", "OXYGEN",
+                     "oxy", "Oxy", "OXY",
+                     "ox", "Ox", "OX",
+                     "o", "O")
+  row_variations <- c("row", "Row", "ROW",
+                      "rw", "Rw", "RW",
+                      "r", "R")
+  prop_variations <- c("proportion", "Proportion", "PROPORTION",
+                       "proport", "Proport", "PROPORT",
+                       "prop", "Prop", "PROP",
+                       "prp", "Prp", "PRP",
+                       "pr", "Pr", "PR", 
+                       "p", "P")
+  
+  if(by %in% time_variations) by <- "time"
+  else if(by %in% ox_variations) by <- "o2"
+  else if(by %in% row_variations) by <- "row"
+  else if(by %in% prop_variations) by <- "proportion"
+  else stop("`by` input not recognised")
+  
+  return(by)  
 }

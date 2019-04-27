@@ -52,7 +52,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
     stop("Input or output units require Temperature input (i.e. t = ??)")
 
   ## Set default P if not provided
-  if(is.null(P) && fru %in% tsp_req || tou %in% tsp_req)
+  if(is.null(P) && (fru %in% tsp_req || tou %in% tsp_req))
     message("Note: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
   if(is.null(P)) P <- 1.013253
 
@@ -238,7 +238,7 @@ verify_units <- function(unit, is) {
   chk <- sapply(chk, function(x) length(x) > 0)
   result <- any(chk == T)  # did a match occur?
   if (result == FALSE)
-    stop("unit '", unit, "' cannot be recognised. Please check unit strings.", call. = F)
+    stop("unit '", unit, "' cannot be recognised. Check unit strings are in correct order O2/Time or O2/Time/Mass.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }

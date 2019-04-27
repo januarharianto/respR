@@ -14,8 +14,8 @@ inspect_data(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
 
 \item{oxygen}{numeric. Defaults to NULL. This is the dissolved oxygen data.}
 
-\item{inflow.o2}{numeric. Defaults to NULL. This is inflow oxygen data.
-Used only for flowthrough respirometry data.}
+\item{inflow.o2}{numeric. Defaults to NULL. This is inflow oxygen data. Used
+only for flowthrough respirometry data.}
 
 \item{outflow.o2}{numeric. Defaults to NULL. This is outflow oxygen data.
 Used only for flowthrough respirometry data.}
@@ -31,15 +31,18 @@ A list object of class \code{adjust_rate}.
 }
 \description{
 \code{inspect_data()} scans a data frame for specific errors that may affect the
-use of functions in \code{respR}. Data checks include:
+use of functions in \code{respR}.
 }
 \details{
+PLEASE NOTE: the \code{inspect_data} function is deprecated. It will not be
+updated, and will be removed in a future update to \code{respR}. Please use the
+new \code{inspect} function instead.
+
+Data checks include:
 \itemize{
-\item A test for NA/NaN inputs.
-\item A test for numeric data.
-\item A test for sequential time data.
-\item A test for duplicate time data.
-\item A test for evenly-spaced time data.
+\item A test for NA/NaN inputs. * A test for numeric data. * A test for
+sequential time data. * A test for duplicate time data. * A test for
+evenly-spaced time data.
 }
 
 Once data checks are complete, the function produces a list object which may

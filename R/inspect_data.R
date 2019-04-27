@@ -1,13 +1,17 @@
 #' Check for common errors in respirometry data
 #'
 #' `inspect_data()` scans a data frame for specific errors that may affect the
-#' use of functions in `respR`. Data checks include:
+#' use of functions in `respR`.
 #'
-#' * A test for NA/NaN inputs.
-#' * A test for numeric data.
-#' * A test for sequential time data.
-#' * A test for duplicate time data.
-#' * A test for evenly-spaced time data.
+#' PLEASE NOTE: the `inspect_data` function is deprecated. It will not be
+#' updated, and will be removed in a future update to `respR`. Please use the
+#' new `inspect` function instead.
+#'
+#' Data checks include:
+#'
+#' * A test for NA/NaN inputs. * A test for numeric data. * A test for
+#' sequential time data. * A test for duplicate time data. * A test for
+#' evenly-spaced time data.
 #'
 #' Once data checks are complete, the function produces a list object which may
 #' be directly loaded into [calc_rate()], [calc_rate.bg()], [calc_rate.ft()],
@@ -18,8 +22,8 @@
 #' @param df data frame. Accepts data frame object of any size.
 #' @param time numeric. Defaults to NULL. This is the time data.
 #' @param oxygen numeric. Defaults to NULL. This is the dissolved oxygen data.
-#' @param inflow.o2 numeric. Defaults to NULL. This is inflow oxygen data.
-#'   Used only for flowthrough respirometry data.
+#' @param inflow.o2 numeric. Defaults to NULL. This is inflow oxygen data. Used
+#'   only for flowthrough respirometry data.
 #' @param outflow.o2 numeric. Defaults to NULL. This is outflow oxygen data.
 #'   Used only for flowthrough respirometry data.
 #' @param highlight logical. Defaults to TRUE. Prints location (row #) of errors
@@ -41,6 +45,10 @@
 inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
   outflow.o2 = NULL, highlight = TRUE, plot = TRUE) {
 
+  warning("inspect_data has been deprecated. 
+It will not be updated and will be removed in a future version of respR. 
+Please use the `inspect` function instead.")
+  
   inflow <- inflow.o2
   outflow <-outflow.o2
 

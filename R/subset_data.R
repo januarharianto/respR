@@ -34,6 +34,10 @@
 #' # Subset by row:
 #' subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 subset_data <- function(x, from, to, by = "time") {
+  
+  ## verify by input
+  by <- verify_by(by)
+  
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect_data")) {
     dt <- data.table(x$df)

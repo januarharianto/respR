@@ -44,6 +44,8 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
+  ## verify by input
+  by <- verify_by(by)
   # Ensure "from" and "to" are same length:
   if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
 
