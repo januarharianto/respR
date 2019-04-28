@@ -4,25 +4,19 @@
 \alias{calc_rate.bg}
 \title{Calculate background respiration rates}
 \usage{
-calc_rate.bg(x, xcol = 1, ycol = 2, from = NULL, to = NULL,
-  by = "time", plot = TRUE)
+calc_rate.bg(x, time = NULL, oxygen = NULL, plot = TRUE)
 }
 \arguments{
-\item{x}{data frame. This is the data to process.}
+\item{x}{data frame, \code{inspect} or \code{inspect_data} object. This is the data to
+process.}
 
-\item{xcol}{numeric. Defaults to \code{1}. This is the time column.}
+\item{time}{integer. Defaults to NULL. This specifies the column number of
+the time data. If NULL, function assumes time data are in Column 1.}
 
-\item{ycol}{numeric vector. Defaults to \code{2}. Can have length > 1. This is the
-O2 data.}
-
-\item{from}{numeric. Defaults to NULL. Defines the lower bound(s) of the data
-frame to subset. Subsetting is based on the argument: \code{by}.}
-
-\item{to}{numeric. Defaults to NULL. Defines the upper bound(s) of the data
-frame to subset. Subsetting is based on the argument: \code{by}.}
-
-\item{by}{string. \code{"time"} or \code{"row"} Defaults to \code{"time"}. This is the
-method used to subset the data.}
+\item{oxygen}{integer vector. Defaults to NULL. This specifies the column
+number(s) of the oxygen data. Multiple columns of oxygen can be specified.
+If NULL, function assumes oxygen data are in all columns of the data frame
+except Column 1.}
 
 \item{plot}{logical. Defaults to TRUE. Will plot the results for visual
 inspection.}
@@ -31,20 +25,22 @@ inspection.}
 A list object of class \code{calc_bg.rate}.
 }
 \description{
-This function uses simple linear regression to automatically calculate the
-rate of change of oxygen over time for background corrections of the main
-data. Can be used on multiple datasets of background measures, as long as the
-time data are identical between measurements. In addition, the data must be
-in the same time and oxygen units as the data to be corrected. Data can be
-subset using the \code{from}, \code{to}, and \code{by} arguments. If multiple datasets are
-included, all are subset by the same criteria.
+This function uses simple linear regression to calculate the rate of change
+of oxygen over time for background corrections of the main data. The
+background data must be in the same time and oxygen units as the data to be
+corrected. Multiple columns of background oxygen measures, as long as the
+time data are identical between measurements.The function returns rates for
+all columns, and also calculates an average rate.
 }
 \details{
+If you need to subset the data to remove regions you don't want to use, see
+\code{\link{subset_data}}.
+
 There are no units involved in \code{calc_rate.bg()}. This is a deliberate
 decision. Units are called in a later function when volumetric and/or
-mass-specific rates of oxygen use are computed in
-\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
+mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
+\code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
-calc_rate.bg(urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time")
+calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
 }

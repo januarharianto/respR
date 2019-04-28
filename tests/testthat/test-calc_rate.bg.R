@@ -1,30 +1,46 @@
 
-## calc_rate.bg works using default arguments",
+sink("/dev/null") ## stops printing outputs on assigning in log
 
-crbg <- calc_rate.bg(
-  urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "time",
-  plot = F)
+## Accepts data.frame
+## Works using default arguments
+## Analyses all columns by default
+urbg <- calc_rate.bg(urchins.rd,  plot = F)
+expect_is(urbg,
+          "calc_rate.bg")
+expect_equal(ncol(urbg$data), 19)
+expect_equal(length(urbg$bgrate), 18)
 
-expect_is(crbg,
+## Accepts 2 columns
+urbg <- calc_rate.bg(urchins.rd,  time = 1, oxygen = 18, plot = F)
+expect_equal(ncol(urbg$data), 2)
+
+## Accepts multiple columns
+urbg <- calc_rate.bg(urchins.rd,  time = 1, oxygen = c(18,19), plot = F)
+expect_equal(ncol(urbg$data), 3)
+
+## Accepts `inspect_data` objects
+ur <- inspect_data(urchins.rd, plot = F)
+urbg <- calc_rate.bg(ur,  plot = F)
+expect_is(urbg,
           "calc_rate.bg")
 
+## Accepts `inspect` objects
+ur <- inspect(urchins.rd, plot = F)
+urbg <- calc_rate.bg(ur,  plot = F)
+expect_is(urbg,
+          "calc_rate.bg")
 
-## Works with variations of `by` input
-expect_error(calc_rate.bg(
-  urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "Time",
-  plot = F), regexp = NA)
-expect_error(calc_rate.bg(
-  urchins.rd, xcol = 1, ycol = 18:19, from = 5, to = 45, by = "TIME",
-  plot = F), regexp = NA)
+## Correctly uses specified columns in `inspect` objects
+ur <- inspect(urchins.rd, plot = F)
+urbg <- calc_rate.bg(ur,  time = 1, oxygen = c(18,19), plot = F)
+expect_equal(ncol(urbg$data), 3)
+expect_equal(ur$dataframe$b1, urbg$data$b1)
+expect_equal(ur$dataframe$b2, urbg$data$b2)
 
-expect_error(calc_rate.bg(
-  urchins.rd, xcol = 1, ycol = 18, from = 20, to = 100, by = "Row", 
-  plot = F), regexp = NA)
-expect_error(calc_rate.bg(
-  urchins.rd, xcol = 1, ycol = 19, from = 20, to = 100, by = "r",
-  plot = F), regexp = NA)
+## calc_rate S3 generics work
+expect_output(print(urbg))
+# expect_output(plot(urbg)) ## this fails - don't know why - it plots
+expect_error(plot(urbg), regexp = NA) ## alternative to above?
 
-## Error with wrong by
-expect_error(calc_rate(sardine.rd, plot = F, by = "tttimmmeee"), 
-             "`by` input not recognised")
 
+sink() ## turns printing back on
