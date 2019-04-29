@@ -7,17 +7,11 @@
 #' Muggeo (2003).
 #'
 #' The default data input is an `inspect` or `inspect_data` object, or
-#' `data.frame` containing time~dissolved oxygen data (e.g. `squid.rd`). Columns
-#' of each can be specified, the default being they are the first two columns
-#' (i.e. `time = 1`, `oxygen = 2`). If an `inspect` or `inspect_data` object is
-#' used the data frame is extracted automatically and column identifiers are not
-#' required since these were already identified and extracted in those
-#' functions.
-#'
-#' To calculate Pcrit, the function requires data in the form of oxygen uptake
-#' rate against dissolved oxygen (DO) concentration. The function performs a
-#' rolling regression on time~O2 data to determine rates, and matches these
-#' against a rolling mean of the DO data. The function then performs the two
+#' `data.frame` containing time~dissolved oxygen data (e.g. `squid.rd`). To
+#' calculate Pcrit, the function requires data in the form of oxygen uptake rate
+#' against dissolved oxygen (DO) concentration. The function performs a rolling
+#' regression on time~O2 data to determine rates, and matches these against a
+#' rolling mean of the DO data. The function then performs the two
 #' \eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
 #' default width (10\% of the data length) works well, but this may vary with
@@ -38,6 +32,7 @@
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
 #'   regression. Defaults to `floor(0.1*nrow(df))`, or 10\% of total rows.
+#' @param has.rate logical. Is the second column not oxygen, but rate?
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
 #'   used?
@@ -63,35 +58,8 @@
 #' pcrit(squid.rd)
 #' }
 
-pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, width = floor(0.1*nrow(df)), 
+pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
-
-  ## one of `rate` or `oxygen` must be NULL
-  if(!is.null(oxygen) && !is.null(rate)) stop("Choose either an `oxygen` or `rate` column, cannot enter both.")
-  
-  # validate inputs
-  ## set default values if NULL, which selects first column as time, and
-  ## second as oxygen
-  if (is.null(time) & is.null(oxygen) & is.null(rate)) {
-    col1 <- 1
-    col2 <- 2
-    has.rate <- FALSE
-    message("Selecting columns 1 and 2 as 'time' and 'oxygen'...")
-  }
-  ## if rate is provided
-  if (is.numeric(time) & is.null(oxygen) & is.numeric(rate)) {
-    col1 <- time
-    col2 <- rate
-    has.rate <- TRUE
-    message("Performing analysis using existing rate data...")
-  }
-  ## if oxygen provided
-  if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
-    col1 <- time
-    col2 <- oxygen
-    has.rate <- FALSE
-    message("Performing analysis using raw oxygen data...")
-  }
   
   # Data validation.
   if (any(class(df) %in% "inspect_data")) df <- df$df
@@ -100,8 +68,7 @@ pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, width = floor(0.1
   if (width > nrow(df)) stop("`width` input is bigger than length of data.")
 
   # Format data.
-  ## select columns
-  dt <- data.table::data.table(df[[col1]], df[[col2]])
+  dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
   
   # Check if rate is provided in "has.rate".
