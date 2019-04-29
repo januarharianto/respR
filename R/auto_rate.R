@@ -48,8 +48,6 @@
 #'   to `linear`. Note that if `"linear"` is selected, the argument `width` will
 #'   be set to default.
 #' @param plot logical. Defaults to TRUE. Plot the results.
-#' @param full logical. Defaults to FALSE. Change to TRUE to plot every single 
-#'   data point. May increase computation time substantially.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
 #'   used?
 #'
