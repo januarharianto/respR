@@ -34,7 +34,7 @@ expect_is(ar,
       ## NB - This saves a Rplots.pdf to testthat directory
       ## Don't know why - something to do with new plots
       ## Can't see another way of doing this
-expect_output(plot(ar))
+expect_error(plot(ar), regex = NA)
 suppressWarnings(file.remove("Rplots.pdf"))
 
 ## auto_rate can be printed
@@ -65,6 +65,6 @@ expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "T"), regexp = N
 expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "Row"), regexp = NA)
 expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "r"), regexp = NA)
 ## Error with wrong by
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "o2"), 
+expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "o2"),
              "Invalid `by`` input value, must be 'time' or 'row'.")
 
