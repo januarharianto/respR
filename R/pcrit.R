@@ -24,10 +24,6 @@
 #'
 #' @param df data frame or object of class `inspect_data`. This is the data to
 #'   analyse.
-#' @param time numeric vector. Defaults to NULL. This specifies the column
-#'   number of the time data.
-#' @param oxygen numeric vector. Defaults to NULL. This specifies the column
-#'   number(s) of the oxygen data.
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
