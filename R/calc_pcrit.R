@@ -66,7 +66,12 @@
 calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, 
   width = floor(0.1*nrow(df)), plot = TRUE, parallel = TRUE) {
   
-  ## one of `rate` or `oxygen` must be NULL
+  # Data validation
+  if (any(class(df) %in% "inspect_data")) df <- df$df
+  if (any(class(df) %in% "inspect")) df <- df$dataframe
+  if (!is.data.frame(df)) stop("Input must be data.frame object.")
+  if (width > nrow(df)) stop("'width' input is bigger than length of data.")
+  # one of `rate` or `oxygen` must be NULL
   if(!is.null(oxygen) && !is.null(rate)) stop("Choose either an `oxygen` or `rate` column, cannot enter both.")
   
   # validate inputs
@@ -93,11 +98,6 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     message("Performing analysis using raw oxygen data...")
   }
   
-  # Data validation.
-  if (any(class(df) %in% "inspect_data")) df <- df$df
-  if (any(class(df) %in% "inspect")) df <- df$dataframe
-  if (!is.data.frame(df)) stop("Input must be data.frame object.")
-  if (width > nrow(df)) stop("`width` input is bigger than length of data.")
   
   # Format data.
   ## select columns
