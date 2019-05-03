@@ -8,12 +8,13 @@
 #' Input can be a vector, or data frame. If a vector, output is a vector of
 #' equal length containing numeric time data. If a data frame, the column index
 #' of the date-time data can be specified using the `time =` input. If date-time
-#' data is split over two columns (e.g. date in one column, time in another),
-#' two columns can be specified. The function uses these to combine date and
-#' time strings together for conversion. If multiple columns are specified, the
-#' `format` setting should reflect the same order entered in `time =`. The
-#' output data frame will be identical, except a new column called `time.num` is
-#' added as the first column.
+#' data is split over multiple columns (e.g. date in one column, time in
+#' another), multiple columns can be specified. The function uses these to
+#' combine date and time strings together for conversion. If multiple columns
+#' are specified, the `format` setting should reflect the same order entered in
+#' `time =`. On conversion, a data frame is returned which is identical to the
+#' input data frame except a new column called `time.num` is added as the last
+#' column.
 #'
 #' Date-time data can be unspaced or separated by any combination of spaces,
 #' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -34,9 +35,9 @@
 #' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
 #' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry, unless a `start` number is specified, in which
-#' case the series starts at that number (in seconds) and all subsequent times
-#' are shifted forward by the same amount.
+#' duration from the first entry starting at 1. However, a `start` value can be
+#' specified, in which case the series starts at that number (in seconds) and
+#' all subsequent times are shifted forward by the same amount.
 #'
 #' **Syntax**
 #'
@@ -54,23 +55,23 @@
 #'
 #' Print the order in the `format` string argument, using separators if you
 #' choose to (optional): `"dmyHMS"`; `"dmy_HMS"` and `"d m y H M S"` are all the
-#' same. Obviously, single experiments will not be conducted across different
-#' time zones, so if a time zone is present, it is ignored for the purposes of
-#' calculating numeric times. If multiple columns have been specified in the
-#' `time` argument, the `format` should reflect the same order.
+#' same. Single datasets should not span different time zones, so if a time zone
+#' is present it is ignored for the purposes of calculating numeric times. If
+#' multiple columns have been specified in the `time` argument, the `format`
+#' should reflect the same order.
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.
-#' @param time numeric value or vector of length 2. Identifies column(s)
-#'   containing date-time data
+#' @param time numeric value or vector. Specifies column(s) containing
+#'   date-time data
 #' @param format string. Code describing structure of date-time data. See
-#'   details. Directly relates to functions in the package `lubridate`
-#' @param start numeric. Default = 0. At what time (in seconds) should the
+#'   details. Directly relates to functionality in the package `lubridate`
+#' @param start numeric. Default = 1. At what time (in seconds) should the
 #'   formatted time data start?
 #' @return A vector or data frame, depending on input. If input is a vector, a
 #'   vector of same length containing numeric time is returned. If input is a
 #'   data frame, the output data frame is identical, except a new column,
-#'   `time.num`,of numeric time data in seconds is added as the first column.
+#'   `time.num`,of numeric time data in seconds is added as the last column.
 #'
 #' @importFrom lubridate parse_date_time
 #' @export
@@ -114,14 +115,24 @@
 #' format_time(x, time = 2, format = "HMS") # WRONG! Crosses midnight
 #' format_time(x, time = c(1,2), format = "dmyHMS") # Correct
 #' format_time(x, time = c(2,1), format = "HMSdmy") # Different column order & format
-format_time <- function(x, time = 1, format = "ymdHMS", start = 0) {
+#'
+#' # convert dataframe with multiple date and time columns
+#' x <- data.frame(
+#'   v = c("09-02", "09-02","10-02"),
+#'   w = c("2018", "2018","2018"),
+#'   x = c("22:11:11", "23:11:11","00:25:11"),
+#'   y = c(23, 34, 45),
+#'   z = c(56, 67, 78))
+#' format_time(x, time = c(1:3), format = "dmyHMS")
 
-  ## if two columns specified
-  if(length(time) == 2){
+format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
+
+  ## if multiple columns specified
+  if(length(time) > 1){
   ## extract columns
-  times <- data.frame(x[[time[1]]], x[[time[2]]])
+  times <- data.frame(x[,time])
   ## concatenate
-  times <- paste(times[,1], times[,2], sep = " ")
+  times <- apply(times, 1, function(x) paste(x, collapse = " "))
   }
 
   ## take out date/times
@@ -134,7 +145,9 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 0) {
   ## change if factor
   if(is.factor(times)) times <- as.character(times)
 
-  dates <- lubridate::parse_date_time(times, format) # format to datetime
+  # format to datetime
+  dates <- lubridate::parse_date_time(times, format)
+
   # convert to numeric:
   times_numeric <- as.numeric(difftime(dates, dates[1], units="secs"))
   out <- times_numeric + start # adjust start time, if needed
@@ -143,8 +156,9 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 0) {
   if(is.vector(x)) {
     return(out)
   } else {
-    out <- data.frame(out, x) # add new column as first col
-    names(out) <- c("time.num", names(x))  # rename
+    col_nms <- names(x)  # rename
+    out <- cbind(x, out) # add new column as LAST col
+    names(out) <- c(col_nms, "time.num")  # rename
     return(out)
   }
 
