@@ -38,6 +38,16 @@ x <- data.table(
   y = c(23, 34, 45))
 expect_error(format_time(x), regexp = NA)
 
+# Outputs are same class as input
+x <- data.table(
+  x = c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11"),
+  y = c(23, 34, 45))
+expect_is(format_time(x), 'data.table')
+x <- data.frame(
+  x = c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11"),
+  y = c(23, 34, 45))
+expect_is(format_time(x), 'data.frame')
+
 # Uses correct column if not default
 x <- data.table(
   w = c("some", "random", "text"),
@@ -54,6 +64,15 @@ x <- data.frame(
   z = c(56, 67, 78))
 result <- format_time(x, time = c(1,2), format = "dmyHMS")
 expect_equal(result[3,5], 8041)
+
+# Converts data table with 2 separate date and time columns
+x <- data.table(
+  w = c("09-02-18", "09-02-18","10-02-18"),
+  x = c("22:11:11", "23:11:11","00:25:11"),
+  y = c(23, 34, 45),
+  z = c(56, 67, 78))
+result <- format_time(x, time = c(1,2), format = "dmyHMS")
+expect_equal(as.numeric(result[3,5]), 8041)
 
 # Converts dataframe with 3 separate date and time columns
 x <- data.frame(

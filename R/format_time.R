@@ -129,10 +129,12 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
 
   ## if multiple columns specified
   if(length(time) > 1){
-  ## extract columns
-  times <- data.frame(x[,time])
-  ## concatenate
-  times <- apply(times, 1, function(x) paste(x, collapse = " "))
+    ## extract columns
+    ## ifs here cos of WTF STUPID STUPID data table subsetting syntax
+    if(is.data.table(x)) times <- x[,time, with = F]
+    if(!is.data.table(x)) times <- x[,time]
+    ## concatenate
+    times <- apply(times, 1, function(x) paste(x, collapse = " "))
   }
 
   ## take out date/times
