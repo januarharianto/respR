@@ -66,36 +66,52 @@
 calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, 
   width = floor(0.1*nrow(df)), plot = TRUE, parallel = TRUE) {
   
-  # Data validation
+  # data validation
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
   if (width > nrow(df)) stop("'width' input is bigger than length of data.")
-  # one of `rate` or `oxygen` must be NULL
-  if(!is.null(oxygen) && !is.null(rate)) stop("Choose either an `oxygen` or `rate` column, cannot enter both.")
   
-  # validate inputs
-  ## set default values if NULL, which selects first column as time, and
-  ## second as oxygen
-  if (is.null(time) & is.null(oxygen) & is.null(rate)) {
-    col1 <- 1
-    col2 <- 2
-    has.rate <- FALSE
-    message("Selecting column 1 as 'time' and column 2 as 'oxygen'...")
+  # conditions must be met before we continue
+  if (!is.null(oxygen) & !is.null(rate)) {
+    # one of "rate" or "oxygen" must be NULL
+    stop("Choose either an 'oxygen' or 'rate' column, cannot enter both.")
   }
-  ## if rate is provided
-  if (is.numeric(time) & is.null(oxygen) & is.numeric(rate)) {
-    col1 <- time
-    col2 <- rate
-    has.rate <- TRUE
-    message("Performing analysis using existing rate data...")
+  # if "time" is not provided, check if we can still automate on the assumption
+  # that the first column is "time":
+  if (is.null(time) & !is.null(oxygen) & is.null(rate)) {
+    if (oxygen == 1) stop("Please specify a 'time' argument.")
+  } else if (is.null(time) & is.null(oxygen) & !is.null(rate)) {
+    if (rate == 1) stop("Please specify a 'time' argument.")
   }
-  ## if oxygen provided
+  
+  # identify data -----
   if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
+    # "time" and "oxygen" are used
     col1 <- time
     col2 <- oxygen
-    has.rate <- FALSE
-    message("Performing analysis using raw oxygen data...")
+    message("Performing analysis using raw oxygen data.")
+  } else if (is.numeric(time) &
+      is.null(oxygen) & is.numeric(rate)) {
+    # "time" and "rate" are used
+    col1 <- time
+    col2 <- rate
+    message("Performing analysis using existing rate data.")
+  } else if (is.null(time) & is.numeric(oxygen) & is.null(rate)) {
+    # only "oxygen" is used
+    col1 <- 1 # automatically assume column 1 is time column
+    col2 <- oxygen
+    message("Performing analysis using raw oxygen data.")
+    message('Using column 1 as "time".')
+  } else if (is.null(time) & is.null(oxygen) & is.numeric(rate)) {
+    # only "rate" ise used
+    col1 <- 1 # automatically assume column 1 is time column
+    col2 <- rate
+    message("Performing analysis using existing rate data.")
+    message("Using column 1 as 'time'.")
+  } else {
+    # otherwise, stop
+    stop("Inputs for 'time'', 'oxygen' or 'rate' do not meet requirements.")
   }
   
   
