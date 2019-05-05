@@ -233,12 +233,21 @@ broken_stick <- function(dt, n) {
   # Calculate midpoint
   midpoint <-  (dta[,x][nrow(dta)] + dtb[,x][1]) / 2
   
+  # List coefficients
+  line1 <- data.table(rbind(coefa))
+  names(line1) <- c("intercept_b0", "rate_b1")
+  line2 <- data.table(rbind(coefb))
+  names(line2) <- c("intercept_b0", "rate_b1")
+  
   # Generate output
   out <- data.table::data.table(
     splitpoint = dta[,x][nrow(dta)],
     sumRSS = trss,
     pcrit.intercept = intersect,
-    pcrit.mpoint = midpoint
+    pcrit.mpoint = midpoint,
+    l1_coefs = line1,
+    l2_coefs = line2
+    
   )
   return(out)
 }
