@@ -21,12 +21,6 @@ regression. Defaults to \code{floor(0.1*nrow(df))}, or 10\% of total rows.}
 \item{parallel}{logical. Defaults to TRUE. Should parallel processing be
 used?}
 
-\item{time}{numeric vector. Defaults to NULL. This specifies the column
-number of the time data.}
-
-\item{oxygen}{numeric vector. Defaults to NULL. This specifies the column
-number(s) of the oxygen data.}
-
 \item{rate}{numeric vector. Defaults to NULL. This specifies the column
 number(s) of rate data.}
 }
