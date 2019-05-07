@@ -123,77 +123,68 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     message("Using column 1 as 'time'.")
   }
   
+  # begin analysis -----
+  # extract data first:
+  dt <- data.table::data.table(df[, c(col1, col2)])
+  data.table::setnames(dt, 1:2, c("x", "y"))  # rename columns:
+  # if raw oxygen data, automatically generate rate data
+  if (convert) {
+    dt <- generate_mrdf(dt, width)
+    message("Using rolling regression to convert raw oxygen data to rate...")
+  }
+  # Save progress for output:
+  dt_mr <- dt
+  # Arrange the dataset in ascending order by x to prep for broken-stick model:
+  data.table::setorder(dt, "x")
   
-  # Format data.
-  ## select columns
-  dt <- data.table::data.table(df[[col1]], df[[col2]])
-  data.table::setnames(dt, 1:2, c("x", "y"))
-  
-  # Check if rate is provided in "has.rate".
-  if (!has.rate) {
-    rdt <- generate_mrdf(dt, width)
-  } else rdt <- dt
-  
-  # Arrange the dataset in ascending order by x to prep for broken-stick model.
-  data.table::setorder(rdt, "x")
-  
-  # BROKEN-STICK
-  message("Performing broken-stick analysis...")
-  
-  # We can speed up really large datasets by subsampling them first.
+  # broken-stick ----- 
+  message("Performing broken-stick analysis (Yeager and Ultsch 1989)...")
+  # speed up large data by subsampling:
   limit <- 1000
-  if (nrow(rdt) > limit) {
-    srdt <- subsample(rdt, n = round(nrow(rdt)/limit), plot = F)
-  } else srdt <- rdt
-  
-  # Generate index for iterative sampling.
-  lseq <- seq.int(3, nrow(srdt) - 2) # generate sequence for lm
-  
-  # Then, perform broken-stick estimates.
+  if (nrow(dt) > limit) {
+    sdt <- subsample(dt, n = round(nrow(dt)/limit), plot = F)
+  } else sdt <- dt
+  # generate index for iterative sampling.
+  lseq <- seq.int(3, nrow(sdt) - 2) # generate sequence for lm
+  # perform analysis:
   if (parallel) {
     no_cores <- parallel::detectCores() - 1  # use n-1 cores
     cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
     parallel::clusterExport(cl, "broken_stick") # import function to use
-    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(srdt, z))
+    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(sdt, z))
     parallel::stopCluster(cl)  # release cores
-  } else {
-    brstick <- lapply(lseq, function(z) broken_stick(srdt,z))
-  }
-  
-  brstick <- data.table::rbindlist(brstick)
-  
-  # Arrange by increasing total sum of squares of residuals
+  } else brstick <- lapply(lseq, function(z) broken_stick(sdt,z))
+  # convert output to data.table:
+  brstick <- data.table::rbindlist(brstick) 
+  # arrange by increasing total sum of squares of residuals
   data.table::setorder(brstick, sumRSS)
   best <- brstick[1]
   
-  # SEGMENTED (BREAKPOINT)
-  message("Performing segmented (breakpoint) analysis...")
-  lmfit <- lm(y ~ x, srdt)
+  # segmented -----
+  message("Performing nonlinear breakpoint analysis (Muggeo 2003)...")
+  lmfit <- lm(y ~ x, sdt)
   seg <- segmented::segmented(lmfit, seg.Z = ~ x)
   message("Convergence attained in ", seg$it, " iterations.")
   fit <- fitted(seg)
-  bpfit <- data.table::data.table(x = srdt$x, y = fit)
+  bpfit <- data.table::data.table(x = sdt$x, y = fit)
   
-  # Generate output
-  
+  # output -----
   out <- list(
-    df = df,
-    mr.df = rdt,
-    has.rate = has.rate,
+    df = data.table(df),
+    df_rate_oxygen = dt_mr,
     width = width,
     bstick.summary = brstick,
     bpoint.summary = seg,
     bpoint.fit.df = bpfit,
     result.intercept = best$pcrit.intercept,
     result.midpoint = best$pcrit.mpoint,
-    result.segmented = seg$psi[2]
+    result.segmented = seg$psi[2],
+    convert = convert
   )
-  
   class(out) <- "calc_pcrit"
   
   # Plot, if true
   if (plot) plot(out)
-  
   return(out)
 }
 
@@ -233,8 +224,8 @@ summary.calc_pcrit <- function(object, ...) {
 plot.calc_pcrit <- function(x, ...) {
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
-  segment1 <- x$mr.df[x <= cutoff]
-  segment2 <- x$mr.df[x > cutoff]
+  segment1 <- x$df_rate_oxygen[x <= cutoff]
+  segment2 <- x$df_rate_oxygen[x > cutoff]
   intercept <- x$result.intercept
   
   # Plot settings
@@ -243,8 +234,8 @@ plot.calc_pcrit <- function(x, ...) {
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   
   # Plot original data if available
-  if (x$has.rate) {
-    # No plot here :D
+  if (!x$convert) {
+    message("Plotting...") # dummy text (make this better next time)
   } else {
     plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
       panel.first = grid(lwd = .7))
@@ -260,7 +251,7 @@ plot.calc_pcrit <- function(x, ...) {
   }
   
   # Plot for broken-stick
-  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
+  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
     panel.first = grid(lwd = .7))
   abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
   abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
@@ -273,7 +264,7 @@ plot.calc_pcrit <- function(x, ...) {
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
   
   # Plot for segmented (breakpoint)
-  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
+  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
     panel.first = grid(lwd = .7))
   lines(x$bpoint.fit.df, lwd = 1, lty = 4)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
@@ -283,7 +274,7 @@ plot.calc_pcrit <- function(x, ...) {
   
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
-  subdf <- x$mr.df[x > min(aps) * 0.99][x < max(aps) *1.01]
+  subdf <- x$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
   plot(subdf, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = 2,
     panel.first = grid(lwd = .7))
   abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
