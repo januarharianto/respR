@@ -235,9 +235,9 @@ broken_stick <- function(dt, n) {
   
   # List coefficients
   line1 <- data.table(rbind(coefa))
-  names(line1) <- c("intercept_b0", "rate_b1")
+  names(line1) <- c("b0", "b1")
   line2 <- data.table(rbind(coefb))
-  names(line2) <- c("intercept_b0", "rate_b1")
+  names(line2) <- c("b0", "b1")
   
   # Generate output
   out <- data.table::data.table(
@@ -245,8 +245,8 @@ broken_stick <- function(dt, n) {
     sumRSS = trss,
     pcrit.intercept = intersect,
     pcrit.mpoint = midpoint,
-    l1_coefs = line1,
-    l2_coefs = line2
+    l1_coef = line1,
+    l2_coef = line2
     
   )
   return(out)
