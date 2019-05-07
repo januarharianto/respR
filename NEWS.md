@@ -1,13 +1,19 @@
 # Version 1.1.0
 
-Lots of updates! First, `pcrit()` has been deprecated and replaced with the function, `calc_pcrit()`. We needed to introduce an easier way to input arguments for oxygen or rate data, and the `"has.rate"` argument in `pcrit()` was sometimes too cryptic for users (and difficult to explain). We have now removed the argument `"has.rate"` and replaced it with two arguments, `"oxygen"` and `"rate"`, and `calc_pcrit()` is smart enough to figure out what to do with your data depending on the argument used! So if you attach your data to the `"oxygen"` argument, `calc_pcrit()` will automatically generate your rate data before determining P~crit~ metrics. If, on the other hand, you attach your data to the `"rate"` argument, the function jumps straight to analysing P~crit~ metrics with the data you provided. This **MAJOR** update has been pushed into the new function `calc_pcrit()` to prevent breaking of old code using `pcrit()`. Please note that from now on, we will be pushing updates only to `calc_pcrit()` and **`pcrit()` is deprecated**, but bug fixes *will* be pushed to both functions until the next major version (2.0.0).
+Lots of updates! First, `pcrit()` has been deprecated and replaced with the function, `calc_pcrit()`. We needed to introduce an easier way to input arguments for oxygen or rate data, and the `"has.rate"` argument in `pcrit()` was sometimes too cryptic for users (and difficult to explain). We have now removed the argument `"has.rate"` and replaced it with two arguments, `"oxygen"` and `"rate"`, and like before, `calc_pcrit()` is smart enough to figure out what to do with your data depending on the argument used. 
+
+We plan to add new methods of calculation P~crit~ soon, and these methods will be pushed to `calc_pcrit()`. Please check the documentation for more information on using `calc_pcrit()`. Meanwhile, `pcrit()` is still functional for at least 12 months to support users who have already used the function in their code.
+
+We've also made lots of improvements to `import_file()` but Januar made the crappy mistake of locking the release branch and forgetting to include the changes. Ha! Well, it will come out in version 1.1.1 in the next few days, so stay tuned.
+
+This major release is being prepared for submission into CRAN. The next few minor versions will advance towards that goal.
 
 ### New Features
 
 - NEW: You can now grab the reference for `respR` by running `citation("respR")`.
-- NEW: Loading `respR` will print a startup message containing links to our published manuscript and vignettes.
-- NEW: `inspect()` can now plot data with multiple columns when more than 2 columns are detected. For some people, this may provide a great overview of the data. For others, it may give *some* idea if the data is not properly formatted.
-- NEW: **`calc_pcrit()` is a new function** that replaces the current `pcrit()` function, which is now deprecated (but still supported). 
+- NEW: Loading `respR` will print a startup message containing links to our published manuscript and vignettes. Is it flashy? You bet it is... and we'll tame it in the next version. Maybe.
+- NEW: `inspect()` can now plot data with multiple columns when more than 2 columns are detected. For some people, this may provide a great overview of the data.
+- NEW: `calc_pcrit()` is a **new function** that replaces the current `pcrit()` function, which is now deprecated (but still supported). 
 
 ### Updates
 
