@@ -5,7 +5,7 @@
 \title{Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}}
 \usage{
 calc_pcrit(df, time = NULL, oxygen = NULL, rate = NULL,
-  width = floor(0.1 * nrow(df)), plot = TRUE, parallel = TRUE)
+  width = 0.1, plot = TRUE, parallel = TRUE)
 }
 \arguments{
 \item{df}{data frame or object of class \code{inspect_data}. This is the data to
@@ -21,7 +21,7 @@ number(s) of the oxygen data.}
 number(s) of rate data.}
 
 \item{width}{numeric. Number of rows over which to perform the rolling
-regression. Defaults to \code{floor(0.1*nrow(df))}, or 10\% of total rows.}
+regression. Defaults to 0.1, or 10\% of total rows.}
 
 \item{plot}{logical. Defaults to TRUE.}
 

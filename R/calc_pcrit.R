@@ -37,7 +37,7 @@
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10\% of total rows.
+#'   regression. Defaults to 0.1, or 10\% of total rows.
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
 #'   used?
@@ -64,7 +64,7 @@
 #' }
 
 calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, 
-  width = floor(0.1*nrow(df)), plot = TRUE, parallel = TRUE) {
+  width = 0.1, plot = TRUE, parallel = TRUE) {
   
   # data validation
   if (any(class(df) %in% "inspect_data")) df <- df$df
@@ -125,11 +125,15 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   
   # begin analysis -----
   # extract data first:
-  dt <- data.table::data.table(df[, c(col1, col2)])
+  if (any(class(df) %in% "data.table")) {
+    dt <- data.table::data.table(df[, c(..col1, ..col2)])
+  } else dt <- data.table::data.table(df[, c(col1, col2)])
+  
   data.table::setnames(dt, 1:2, c("x", "y"))  # rename columns:
   # if raw oxygen data, automatically generate rate data
   if (convert) {
-    dt <- generate_mrdf(dt, width)
+    win <- floor(width*nrow(dt))
+    dt <- generate_mrdf(dt, win)
     message("Using rolling regression to convert raw oxygen data to rate...")
   }
   # Save progress for output:
