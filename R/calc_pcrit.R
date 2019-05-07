@@ -126,10 +126,10 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   # begin analysis -----
   # extract data first:
   if (any(class(df) %in% "data.table")) {
-    dt <- data.table::data.table(df[, c(..col1, ..col2)])
-  } else dt <- data.table::data.table(df[, c(col1, col2)])
+    dt <- subset(df, select = c(col1, col2))
+  } else dt <- data.table(df[, c(col1, col2)])
   
-  data.table::setnames(dt, 1:2, c("x", "y"))  # rename columns:
+  setnames(dt, 1:2, c("x", "y"))  # rename columns
   # if raw oxygen data, automatically generate rate data
   if (convert) {
     win <- floor(width*nrow(dt))
