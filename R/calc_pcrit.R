@@ -86,32 +86,41 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   }
   
   # identify data -----
-  if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
+  # if nothing is provided other than data frame, use assumption that first
+  # column is "time" and second column is "oxygen"
+  if (is.null(time) & is.null(oxygen) & is.null(rate)) {
+    col1 <- 1
+    col2 <- 2
+    convert <- TRUE
+    message('No inputs for data types. Using column 1 as "time" and column 2 as "oxygen".')
+    message('If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
+  } else if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
     # "time" and "oxygen" are used
     col1 <- time
     col2 <- oxygen
+    convert <- TRUE
     message("Performing analysis using raw oxygen data.")
   } else if (is.numeric(time) &
       is.null(oxygen) & is.numeric(rate)) {
     # "time" and "rate" are used
     col1 <- time
     col2 <- rate
+    convert <- FALSE
     message("Performing analysis using existing rate data.")
   } else if (is.null(time) & is.numeric(oxygen) & is.null(rate)) {
     # only "oxygen" is used
     col1 <- 1 # automatically assume column 1 is time column
     col2 <- oxygen
+    convert <- TRUE
     message("Performing analysis using raw oxygen data.")
     message('Using column 1 as "time".')
   } else if (is.null(time) & is.null(oxygen) & is.numeric(rate)) {
     # only "rate" ise used
     col1 <- 1 # automatically assume column 1 is time column
     col2 <- rate
+    convert <- FALSE
     message("Performing analysis using existing rate data.")
     message("Using column 1 as 'time'.")
-  } else {
-    # otherwise, stop
-    stop("Inputs for 'time'', 'oxygen' or 'rate' do not meet requirements.")
   }
   
   
