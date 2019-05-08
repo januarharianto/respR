@@ -31,9 +31,6 @@ be set to default.}
 
 \item{parallel}{logical. Defaults to TRUE. Should parallel processing be
 used?}
-
-\item{full}{logical. Defaults to FALSE. Change to TRUE to plot every single
-data point. May increase computation time substantially.}
 }
 \value{
 A list object of class \code{auto_rate}.

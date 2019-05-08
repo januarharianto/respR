@@ -1,3 +1,45 @@
+# Version 1.1.0
+
+Lots of updates! First, `pcrit()` has been deprecated and replaced with the function, `calc_pcrit()`. We needed to introduce an easier way to input arguments for oxygen or rate data, and the `"has.rate"` argument in `pcrit()` was sometimes too cryptic for users (and difficult to explain). We have now removed the argument `"has.rate"` and replaced it with two arguments, `"oxygen"` and `"rate"`, and like before, `calc_pcrit()` is smart enough to figure out what to do with your data depending on the argument used. 
+
+We plan to add new methods of calculation P~crit~ soon, and these methods will be pushed to `calc_pcrit()`. Please check the documentation for more information on using `calc_pcrit()`. Meanwhile, `pcrit()` is still functional for at least 12 months to support users who have already used the function in their code.
+
+We've also made lots of improvements to `import_file()` but Januar made the crappy mistake of locking the release branch and forgetting to include the changes. Ha! Well, it will come out in version 1.1.1 in the next few days, so stay tuned.
+
+This major release is being prepared for submission into CRAN. The next few minor versions will advance towards that goal.
+
+### New Features
+
+- NEW: You can now grab the reference for `respR` by running `citation("respR")`.
+- NEW: Loading `respR` will print a startup message containing links to our published manuscript and vignettes. Is it flashy? You bet it is... and we'll tame it in the next version. Maybe.
+- NEW: `inspect()` can now plot data with multiple columns when more than 2 columns are detected. For some people, this may provide a great overview of the data.
+- NEW: `calc_pcrit()` is a **new function** that replaces the current `pcrit()` function, which is now deprecated (but still supported). 
+
+### Updates
+
+- UPDATE: The `by` argument in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"o2"`, `"O2"`, `"oxygen"` and `"Oxygen"` are recognised). To achieve this we created a string matching function, `verify_by()` which uses brute force matching to recognise different ways of writing the same text.
+- UPDATE: Switched to `testthat` package for unit testing (was previously `testit`).
+
+### Fixes
+
+- **`convert_DO()`**:
+    - FIX: Argument for `"P"` (pressure) was ignored even when a value was already specified, resulting in the default used. The function will now respect the `"P"` value provided. 
+    - FIX: The error message for an unrecognised unit was... cryptic. It has been changed and will now instruct the user on the proper syntax required to recognise units properly.
+- **`inspect()`**:
+    - FIX: Positive rates were not reflected accurately in plots.
+    - FIX: Plot of rolling regression was not sensitive for smaller changes in datasets. The rolling window has been reduced to 10% of the length of the dataset to address this.
+- **`convert_rate()`**:
+    - FIX: Now stops if a `"mass"` argument is provided but `"output.unit"` is not a mass-specific unit. 
+    - FIX: Properly accepts objects of class `calc_rate.bg`.
+    - FIX: Optimised the syntax for the recognition of `output.unit` in the code.
+- **`calc_rate.ft()`**:
+    - FIX: Critical error in returned rates sometimes outputting values with the wrong sign.
+    - FIX: Optimised code - the `"time"` argument has been removed as it was not used.
+    - FIX: Properly accepts objects of class `inspect`.
+- **`pcrit()`**:
+    - FIX: Properly accepts objects of class `inspect` and `inspect_data`. Please note that the `inspect_data()` function is deprecated and will be removed in the near future.
+
+
 # Version 1.0.5.1
 This is a quick fix for images not showing in the online vignettes.
 

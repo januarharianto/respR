@@ -199,3 +199,83 @@ verify_by <- function(by){
   
   return(by)  
 }
+
+
+# FUNCTIONS for P_crit----------------------------
+
+
+#' Perform broken-stick regressions
+#'
+#' @keywords internal
+#'
+#' @export
+broken_stick <- function(dt, n) {
+  # Cut data into 2
+  dta <- dt[1:n]
+  dtb <- dt[(n + 1):nrow(dt)]
+  
+  # Perform lm
+  lma <- .lm.fit(cbind(1, dta[[1]]), dta[[2]])
+  lmb <- .lm.fit(cbind(1, dtb[[1]]), dtb[[2]])
+  
+  # Extract coefficients
+  coefa <- coef(lma)
+  coefb <- coef(lmb)
+  
+  # Calculate residual sum of squares
+  trss <- sum(lma$residuals*lma$residuals) + sum(lmb$residuals*lmb$residuals)
+  
+  # Also, calculate intersect
+  cm <- rbind(coefa, coefb)
+  # https://stackoverflow.com/a/7114961
+  intersect <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1])[1]
+  
+  # Calculate midpoint
+  midpoint <-  (dta[,x][nrow(dta)] + dtb[,x][1]) / 2
+  
+  # List coefficients
+  line1 <- data.table(rbind(coefa))
+  names(line1) <- c("b0", "b1")
+  line2 <- data.table(rbind(coefb))
+  names(line2) <- c("b0", "b1")
+  
+  # Generate output
+  out <- data.table::data.table(
+    splitpoint = dta[,x][nrow(dta)],
+    sumRSS = trss,
+    pcrit.intercept = intersect,
+    pcrit.mpoint = midpoint,
+    l1_coef = line1,
+    l2_coef = line2
+    
+  )
+  return(out)
+}
+
+
+
+
+#' Generate a DO ~ PO2 data table from a DO timeseries
+#'
+#' @keywords internal
+#'
+#' @export
+generate_mrdf <- function(dt, width) {
+  # Ensure that dt is a data.table
+  dt <- data.table::data.table(dt)
+  data.table::setnames(dt, 1:2, c("x", "y"))
+  
+  # Extract columns
+  x <- as.matrix(dt[,1])
+  y <- as.matrix(dt[,2])
+  
+  # Then, perform rolling mean and lm
+  rollx <- na.omit(roll::roll_mean(y, width))
+  rolly <- static_roll(dt, width)
+  
+  # Then, combine into new data.table
+  rdt <- data.table::data.table(rollx, abs(rolly$rate_b1))
+  data.table::setnames(rdt, 1:2, c("x", "y"))
+  return(rdt)
+}
+
