@@ -49,7 +49,8 @@ import_file <- function(path, export = FALSE) {
   if(grepl(".xls", path)) {
     raw <- suppressMessages(read_excel(path, n_max = 20))
     raw <- as.character(raw)
-  } else {raw <- readLines(path)}
+  } else {
+    raw <- suppressWarnings(readLines(path))} #wrapped cos of 'incomplete final line' warning
 
   # Identify source of file
   if (suppressWarnings(any(grepl("Firesting", raw[1:20])))) {
@@ -85,9 +86,9 @@ import_file <- function(path, export = FALSE) {
             original data, and have no clear indication of which data came from which probes!
             We strongly recommend exporting as .csv or importing raw qmbl/gmbl files.")
     out <- parse_vernier_txt(path)
-  ## This next one is also a multiplate file, but exported as text rather than
-  ## Excel. Should probably revise to keep empty Well columns, so there's always
-  ## 24 total.
+    ## This next one is also a multiplate file, but exported as text rather than
+    ## Excel. Should probably revise to keep empty Well columns, so there's always
+    ## 24 total.
   } else if(suppressWarnings(any(grepl("MUX channel", raw[10:30]))) &&
             suppressWarnings(any(grepl("PARAMETERS", raw[10:30]))) &&
             suppressWarnings(any(grepl("FIRMWARE", raw[30:50])))) {
@@ -96,6 +97,12 @@ import_file <- function(path, export = FALSE) {
   } else if(suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
     cat("Loligo/Presens 24-well Multiplate Excel file detected\n\n")
     out <- parse_multiplate_excel(path)
+  } else if(suppressWarnings(any(grepl("Tau - Phase Method", raw[1])))) {
+    cat("NeoFox file detected\n\n")
+    out <- parse_neofox(path)
+  } else if(suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
+    cat("PreSens OxyView file detected\n\n")
+    out <- parse_oxyview(path)
   } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Process stopped.")
 
   if(export) {
@@ -196,7 +203,8 @@ parse_vernier_txt <- function(path) {
   }
 
   all_col_nms <- rep(col_nms, ncol(raw)/length(col_nms)) ## rep col nms to size of df
-  all_col_nms <- paste0(sapply(runs, function(x) rep(x, times = length(col_nms))), ": ", all_col_nms) # append run name to each
+  all_col_nms <- paste0(sapply(runs, function(x)
+    rep(x, times = length(col_nms))), ": ", all_col_nms) # append run name to each
 
   raw <- apply(raw, 2, function(x) x <- as.numeric(x)) # make numeric
 
@@ -355,7 +363,9 @@ parse_autoresp <- function(path) {
   timestamp <- rdt[[1]]
   rdt <- rdt[, which(unlist(lapply(rdt, function(x)
     !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]
-  rdt <- setnames(rdt, c("time", "loop", "phase", "slope", "r.squared", "max.o2", "min.o2", "avg.o2", "temp"))
+  rdt <- setnames(rdt, c("time", "loop", "phase",
+                         "slope", "r.squared", "max.o2",
+                         "min.o2", "avg.o2", "temp"))
   rdt[, time := rdt$time - min((rdt$time))]
   out <- data.table(rdt, timestamp)
   return(out)
@@ -436,8 +446,11 @@ parse_firesting <- function(path) {
   # Now we need to deal with the time.
   rdt <- data.table(startdate, rdt) # First, we add a start date
   # We convert time column to datetime
-  rdt <- data.table(timestamp = with(rdt, as.POSIXct(paste(as.Date(startdate,
-                                                                   "%d/%m/%Y"), Time))), rdt[,-c(1,2)])
+  rdt <- data.table(timestamp = with(rdt,
+                                     as.POSIXct(
+                                       paste(as.Date(startdate,
+                                                     "%d/%m/%Y"),
+                                             Time))), rdt[,-c(1,2)])
   # Now we adjust the dates properly since they're all one date
   diffday <- c(0, which(diff(rdt$timestamp) < 0), nrow(rdt)) # create index
   # create new dates
@@ -495,5 +508,49 @@ parse_presens <- function(path) {
   rdt <- rdt[, which(unlist(lapply(rdt, function(x)
     !all(is.na(x)||x == ""||x == "---"||is.character(x))))), with = FALSE]
   out <- setnames(rdt, colid) # rename column headers
+  return(out)
+}
+
+
+
+# NeoFox ------------------------------------------------------------------
+
+## super simple for now - decide later if we do anything more complicated
+parse_neofox <- function(path) {
+  rdt <- fread(path, fill = TRUE, sep = ",")
+  out <- rdt
+  return(out)
+}
+
+
+# PreSens OxyView ---------------------------------------------------------
+
+## Not sure this is working yet. Not sure where i got to.
+
+parse_oxyview <- function(path) {
+  # Convert text to data.table object so that it's fast to deal with
+  raw <- fread(path, fill = TRUE)
+  raw <- gsub("[^[:alnum:]///' ]", "", raw) ## removes weird characters
+
+  colstart <- which(raw$V1 == "^date$")[1]
+
+  start_row <- which(grepl("^date$", raw[[1]]))
+
+  which(grepl("^date$", raw[[1]][29]))
+
+  # Extract column header names:
+  headers <- raw[colstart]
+  rdt <- tail(fread(path, fill = TRUE),-colstart)
+  # Insert column header names:
+  setnames(rdt, make.unique(as.character(unlist(headers))))
+  rdt <- rdt[, which(unlist(lapply(rdt, function(x)
+    !all(is.na(x)||x == ""||x == "---")))), with = FALSE]
+  out <- data.table(rdt)
+  data.table::setcolorder(out, 3)
+  # convert character to numeric
+  index <- c(1, 4:length(names(out)))
+  # wrapped this because of "NAs introduced by coercion" warning
+  suppressWarnings(out[, names(out)[index] := lapply(.SD, as.numeric) , .SDcols = index])
+
   return(out)
 }
