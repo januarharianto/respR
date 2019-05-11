@@ -55,7 +55,8 @@ import_file <- function(path, export = FALSE) {
     raw <- suppressMessages(read_excel(path, n_max = 20))
     raw <- as.character(raw)
   } else {
-    raw <- suppressWarnings(readLines(path))} #wrapped cos of 'incomplete final line' warning
+    raw <- suppressWarnings(readLines(path))
+    } 
 
   # Identify source of file
   if (suppressWarnings(any(grepl("Firesting", raw[1:20])))) {
