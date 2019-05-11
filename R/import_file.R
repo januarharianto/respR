@@ -41,6 +41,11 @@
 #' @examples
 #' NULL
 import_file <- function(path, export = FALSE) {
+  
+  # Don't even start if file doesn't exist:
+  if (!file.exists(path)) {
+    stop("File does not exist - please check file path.")
+  }
 
   ## readLines doesn't work on xlsx files Have to do Excel import here - may not
   ## be just for multiplate system - probably we will support other systems that
