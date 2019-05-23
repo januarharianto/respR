@@ -20,8 +20,8 @@ Check \code{\link[=unit_args]{unit_args()}}.}
 \item{output.unit}{string. The output unit to convert rate to. Check
 \code{\link[=unit_args]{unit_args()}}.}
 
-\item{volume}{numeric. Volume in litres. This is the volume of fluid in the
-respirometry chamber, not the specimen volume.}
+\item{volume}{numeric. Volume in litres. This is the effective volume of the
+respirometer, that is the volume of fluid, not the specimen volume.}
 
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
