@@ -14,6 +14,7 @@ This major release is being prepared for submission into CRAN. The next few mino
 - NEW: Loading `respR` will print a startup message containing links to our published manuscript and vignettes. Is it flashy? You bet it is... and we'll tame it in the next version. Maybe.
 - NEW: `inspect()` can now plot data with multiple columns when more than 2 columns are detected. For some people, this may provide a great overview of the data.
 - NEW: `calc_pcrit()` is a **new function** that replaces the current `pcrit()` function, which is now deprecated (but still supported). 
+- NEW: `import_file()` supports even more files! Added more parsers for Vernier, PRESENS and Loligo systems.
 
 ### Updates
 
