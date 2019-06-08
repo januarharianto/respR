@@ -40,7 +40,10 @@
 #' @export
 #'
 #' @examples
+#' data("sardine.rd")
 #' inspect_data(sardine.rd)
+#' 
+#' data("urchins.rd")
 #' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
   outflow.o2 = NULL, highlight = TRUE, plot = TRUE) {

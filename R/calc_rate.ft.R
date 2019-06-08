@@ -37,12 +37,15 @@
 #' # Single numeric values
 #' calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
 #' # Numeric values and vector
+#' data("flowthrough.rd")
 #' calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.out,
 #'   flowrate = 0.000039)
 #' # Vectors
+#' data("flowthrough.rd")
 #' calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
 #'   outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
 #' # A data frame
+#' data("flowthrough.rd")
 #' calc_rate.ft(flowthrough.rd, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
 calc_rate.ft <- function(x = NULL, outflow.o2 = NULL, inflow.o2 = NULL, 
   flowrate = NULL, plot = TRUE) {

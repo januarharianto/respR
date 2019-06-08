@@ -30,16 +30,22 @@ can subset any data frame by 'row'.}
 }
 \examples{
 # Subset by time:
+data("squid.rd")
 x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
 plot(x)
+
+data("flowthrough.rd")
 subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 
 # Subset by O_2:
+data("sardine.rd")
 subset_data(sardine.rd, from = 94, to = 91, by = "o2")
 
 # Subset by proportion:
+data("sardine.rd")
 subset_data(sardine.rd, from = 0.8, to = 0.4, by = "proportion")
 
 # Subset by row:
+data("flowthrough.rd")
 subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 }

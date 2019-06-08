@@ -78,7 +78,7 @@ convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 
 # Use example data
-data(sardine.rd)
+data("sardine.rd")
 x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
 convert_rate(x, o2.unit = '\%', time.unit = 's',
   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,

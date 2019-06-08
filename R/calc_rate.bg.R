@@ -32,6 +32,7 @@
 #' @export
 #'
 #' @examples
+#' data("urchins.rd")
 #' calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
 calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 

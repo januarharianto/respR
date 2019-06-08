@@ -14,9 +14,11 @@
 #'
 #' @examples
 #' # Subsample every 10 rows:
+#' data("squid.rd")
 #' subsample(squid.rd, n = 10)
 #'
 #' # Subsample with random first value:
+#' data("sardine.rd")
 #' subsample(sardine.rd, 3, TRUE)
 subsample <- function(df, n = 5, random_start = FALSE, plot = TRUE) {
   # First check if [random_start] is true. If true, the

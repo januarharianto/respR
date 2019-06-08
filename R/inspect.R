@@ -53,18 +53,24 @@
 #'
 #' @examples
 #' # automatically inspect first 2 columns:
+#' data("sardine.rd")
 #' inspect(sardine.rd)
+#' 
+#' data("urchins.rd")
 #' inspect(urchins.rd)
 #'
 #' # inspect specific columns:
+#' data("urchins.rd")
 #' inspect(urchins.rd, time = 1, oxygen = 4)
 #'
 #' # inspect multiple columns
+#' data("urchins.rd")
 #' x <- inspect(urchins.rd, time = 1, oxygen = c(2:12))
 #' print(x)
 #' x$list$time.min  # check position of errors in data frame
 #'
 #' # inspect flowthrough data
+#' data("flowthrough.rd")
 #' x <- inspect(flowthrough.rd, 1, c(2,3))
 #' x
 inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {

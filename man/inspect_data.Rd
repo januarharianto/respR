@@ -50,6 +50,9 @@ be directly loaded into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc
 and \code{\link[=auto_rate]{auto_rate()}} for further analyses.
 }
 \examples{
+data("sardine.rd")
 inspect_data(sardine.rd)
+
+data("urchins.rd")
 inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 }
