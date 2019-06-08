@@ -60,6 +60,7 @@
 #' @examples
 #' # Intensive, and a large dataset, so may take some time.
 #' \dontrun{
+#' data("squid.rd")
 #' pcrit(squid.rd)
 #' }
 

@@ -42,5 +42,6 @@ mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{con
 \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
+data("urchins.rd")
 calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
 }
