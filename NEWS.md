@@ -1,6 +1,8 @@
 # Version 1.1.0
 
-Lots of updates! First, we have a new function, `calc_pcrit()`, which is functionally identical to `pcrit()` but with code reorganised to prepare for the addition of new methods in the near future. The function `pcrit()` will eventually become deprecated. We've also made some improvements to `import_file()` with increased support to more files from Vernier, PRESENS and Loligo systems.
+Lots of updates! First, we have a new function, `calc_pcrit()`, which we will use to include new methods in the future. We've also made some improvements to `import_file()` with increased support to more files from Vernier, PRESENS and Loligo systems.
+
+**Vignettes have been migrated into a new repository** on GitHub, and are now updated separately. This gives us several advantages -- the documentation can be updated without needing to compile a new package, and the size of the package is significantly reduced. Users can also contribute to the documentation more easily now that it is not tied to the package. 
 
 ### New Features
 
