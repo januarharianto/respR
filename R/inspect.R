@@ -207,95 +207,135 @@ print.inspect <- function(x, ...) {
 
 #' @export
 plot.inspect <- function(x, label = TRUE, ...) {
-  if (label) cat("\n# plot.inspect # ------------------------\n")
-
+  if (label)
+    cat("\n# plot.inspect # ------------------------\n")
+  
   pardefault <- par(no.readonly = T) # save original par settings
-
+  
   # extract data frame
   dt <- x$dataframe
   # perform rolling regression (quick one)
-  if(ncol(dt) == 2) {
+  if (ncol(dt) == 2) {
     ## changed here 0.2 to 0.1
     roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
   }
-
+  
   if (length(x$dataframe) == 2) {
-
     par(
-      mfrow = c(2, 1), mai = c(0.4, 0.4, 0.6, 0.3), ps = 10,
-      cex = 1, cex.main = 1,
-      mgp=c(0, 0.5, 0) # middle = to put tick labels closer to ticks
-    )
-
+      mfrow = c(2, 1),
+      mai = c(0.4, 0.4, 0.6, 0.3),
+      ps = 10,
+      cex = 1,
+      cex.main = 1,
+      mgp = c(0, 0.5, 0)
+    ) # mid = to put tick labels closer to ticks
     plot(
-      dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
-      col.lab = "blue", col.axis = "blue",
-      panel.first = grid())
+      dt[[1]],
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      col.lab = "blue",
+      col.axis = "blue",
+      panel.first = grid()
+    )
     axis(side = 2) # simply to put yaxis label colour back to black
-
     #title(xlab = "Time", line = 1)
     ## add row index axis
-    par(new=TRUE)
+    par(new = TRUE)
     plot(
-      seq(1, nrow(dt)), dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
-      axes = FALSE)
-    axis(side=3, col.axis = "red")
-
-    legend("bottomleft", "Time", text.col = "blue", bg = "gray90",
-           cex = 0.7)
-    legend("topright", "Row Index", text.col = "red", bg = "gray90",
-           cex = 0.7)
-
+      seq(1, nrow(dt)),
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      axes = FALSE
+    )
+    axis(side = 3, col.axis = "red")
+    legend(
+      "bottomleft",
+      "Time",
+      text.col = "blue",
+      bg = "gray90",
+      cex = 0.7
+    )
+    legend(
+      "topright",
+      "Row Index",
+      text.col = "red",
+      bg = "gray90",
+      cex = 0.7
+    )
     title(main = "Full Timeseries", line = 2)
-
-    plot(
-      ## changed this to 10% width for now (0.05 each side here)
-      ## Removed -1* before roll - now actual negative rates
-      (roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
-          length(dt[[1]])) + (length(roll) - 1))],
+    
+    ## changed to 10% width for now (0.05 each side here)
+    ## Removed -1* before roll - now actual negative rates
+    plot((roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
+        length(dt[[1]])) + (length(roll) - 1))],
       xlim = range(dt[[1]]),
-      ylim = rev(range(roll)), # reversed axis
-      xlab = "", ylab = "", pch = 16, cex = .5,
-      col.lab = "blue", col.axis = "blue")
+      ylim = rev(range(roll)),
+      # reversed axis
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      col.lab = "blue",
+      col.axis = "blue"
+    )
     axis(side = 2) # simply to put yaxis label colour back to black
-
     ## Added dashed line at rate = 0
     abline(h = 0, lty = 2)
-
-    par(new=TRUE)
+    par(new = TRUE)
     plot(
-      seq(1, nrow(dt)), dt[[2]], xlab = "", ylab = "", pch = "", cex =.5,
-      axes = FALSE, col = "white") # plot invisibly
-    axis(side=3, col.axis = "red")
-
-    legend("bottomleft", "Time", text.col = "blue", bg = "gray90",
-           cex = 0.7)
-    legend("topright", "Row Index", text.col = "red", bg = "gray90",
-           cex = 0.7)
-
-    title(
-      ## UPDATED TITLE
-      ## Updated again!!!!
-      main = "Rolling Regression of Rate (0.1 Rolling Window)",
-      line = 2
+      seq(1, nrow(dt)),
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = "",
+      cex = .5,
+      axes = FALSE,
+      col = "white"
+    ) # plot invisibly
+    axis(side = 3, col.axis = "red")
+    legend(
+      "bottomleft",
+      "Time",
+      text.col = "blue",
+      bg = "gray90",
+      cex = 0.7
     )
-
+    legend(
+      "topright",
+      "Row Index",
+      text.col = "red",
+      bg = "gray90",
+      cex = 0.7
+    )
+    title(main = "Rolling Regression of Rate (0.1 Rolling Window)", line = 2)
+    
   } else {
-
     ## plot every column anyway - without rate plot
     message("inspect: Full plot is only avalilable for a 2-column dataframe output.")
-
-    par(mfrow = n2mfrow(length(x$dataframe)-1), mai = c(0.4, 0.4, 0.1, 0.1),
-        ps = 10, cex = 1, cex.main = 1, pch =".")  # replace par settings
-
-    lapply(1:(length(x$dataframe)-1), function(z) plot(data.frame(x$dataframe[[1]],
-                                                                  x$dataframe[[z+1]]),
-                                                       xlab = "", ylab = ""))
-
-    }
-
+    par(
+      mfrow = n2mfrow(length(x$dataframe) - 1),
+      mai = c(0.4, 0.4, 0.1, 0.1),
+      ps = 10,
+      cex = 1,
+      cex.main = 1,
+      pch = "."
+    )  # replace par settings
+    lapply(1:(length(x$dataframe) - 1), function(z)
+      plot(
+        data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
+        xlab = "",
+        ylab = ""
+      ))
+  }
   par(pardefault)  # revert par settings to original
-
-  if (label) cat("Done.\n")
+  
+  if (label)
+    cat("Done.\n")
   return(invisible(x))
 }
