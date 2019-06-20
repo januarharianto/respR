@@ -13,7 +13,7 @@ expect_error(import_file("~random/path/to/file"), "File does not exist - please 
 
 ## error fot file not recognised
 expect_error(import_file("~/Dropbox/respR_import_test_files/z_unsupported_for_now/pyroscience-aquaresp.txt"),
-             "Source file cannot be identified. Please contact the developers with a sample of your file. Import stopped.")
+             "Source file cannot be identified.")
 
 
 # Firesting Pyro ----------------------------------------------------------
@@ -50,7 +50,7 @@ expect_error(import_file(path02), NA)
 expect_error(import_file(path03), NA)
 expect_error(import_file(path04), NA)
 expect_error(import_file(path05), NA)
-expect_error(import_file(path06), "It will have to imported manually or edited to contain only one dataset.")
+expect_error(import_file(path06), "Import halted.")
 expect_error(import_file(path07), NA)
 expect_error(import_file(path08), NA)
 expect_error(import_file(path09), NA)
@@ -636,39 +636,49 @@ expect_equal(ncol(imp), 7)
 
 
 
-# Minidot -----------------------------------------------------------------
+# Presens OXY4 ------------------------------------------------------------
 
-path01 <- "~/Dropbox/respR_import_test_files/minidot/minidot01.txt" # miniDOT.TXT
-## next, the above file just copied and extension changed to csv.
-path02 <- "~/Dropbox/respR_import_test_files/minidot/minidot01.csv" # miniDOT.TXT
+path01 <- "~/Dropbox/respR_import_test_files/presens_oxy4/presens_oxy4_01.txt" # presens-ch1.txt - from FishResp
+path02 <- "~/Dropbox/respR_import_test_files/presens_oxy4/presens_oxy4_02.txt" # presens-ch2.txt - from FishResp
+path03 <- "~/Dropbox/respR_import_test_files/presens_oxy4/presens_oxy4_03.txt" # presens-ch3.txt - from FishResp
+path04 <- "~/Dropbox/respR_import_test_files/presens_oxy4/presens_oxy4_04.txt" # presens-ch4.txt - from FishResp
 
 # imports
 expect_error(import_file(path01), NA)
 expect_error(import_file(path02), NA)
+expect_error(import_file(path03), NA)
+expect_error(import_file(path04), NA)
 
 # values
 imp <- import_file(path01)
-expect_equal(as.numeric(imp[1,1]), 1523906520)
-expect_equal(as.numeric(imp[19369,8]), 0.973000)
+expect_equal(as.numeric(imp[1,4]), 96.97)
+expect_equal(as.numeric(imp[1464,4]), 79.28)
 expect_equal(ncol(imp), 8)
 # col names
-expect_match(colnames(imp)[5], "Temperature \\(deg C\\)")
-expect_match(colnames(imp)[6], "Dissolved Oxygen \\(mg/l\\)")
-expect_match(colnames(imp)[7], "Dissolved Oxygen Saturation \\(%\\)")
+expect_match(colnames(imp)[5], "Phase")
+expect_match(colnames(imp)[6], "Amp")
+expect_match(colnames(imp)[7], "Temp C")
 
-# values
 imp <- import_file(path02)
-expect_equal(as.numeric(imp[1,1]), 1523906520)
-expect_equal(as.numeric(imp[19369,8]), 0.973000)
+expect_equal(as.numeric(imp[1,4]), 99.7)
+expect_equal(as.numeric(imp[1464,5]), 33.5)
 expect_equal(ncol(imp), 8)
-# col names
-expect_match(colnames(imp)[5], "Temperature \\(deg C\\)")
-expect_match(colnames(imp)[6], "Dissolved Oxygen \\(mg/l\\)")
-expect_match(colnames(imp)[7], "Dissolved Oxygen Saturation \\(%\\)")
 
-## import both versions the same
-expect_identical(import_file(path01),
-                 import_file(path02))
+imp <- import_file(path03)
+expect_equal(ncol(imp), 8)
+expect_match(colnames(imp)[5], "Phase")
+expect_match(colnames(imp)[6], "Amp")
+expect_match(colnames(imp)[7], "Temp C")
+
+imp <- import_file(path04)
+expect_equal(ncol(imp), 8)
+expect_match(colnames(imp)[5], "Phase")
+expect_match(colnames(imp)[6], "Amp")
+expect_match(colnames(imp)[7], "Temp C")
+
+
+
+
 
 
 
@@ -824,9 +834,6 @@ path02 <- "~/Dropbox/respR_import_test_files/presens_generic/presens_generic_01.
 expect_error(import_file(path01), NA)
 expect_error(import_file(path02), NA)
 
-
-## Just check a few
-
 # values
 imp <- import_file(path01)
 expect_equal(as.numeric(imp[1,4]), 100.01)
@@ -846,6 +853,43 @@ expect_equal(ncol(imp), 31)
 expect_match(colnames(imp)[5], "A3")
 expect_match(colnames(imp)[16], "C2")
 expect_match(colnames(imp)[30], "T_internal_C")
+
+
+
+
+# Minidot -----------------------------------------------------------------
+
+path01 <- "~/Dropbox/respR_import_test_files/minidot/minidot01.txt" # miniDOT.TXT
+## next, the above file just copied and extension changed to csv.
+path02 <- "~/Dropbox/respR_import_test_files/minidot/minidot01.csv" # miniDOT.TXT
+
+# imports
+expect_error(import_file(path01), NA)
+expect_error(import_file(path02), NA)
+
+# values
+imp <- import_file(path01)
+expect_equal(as.numeric(imp[1,1]), 1523906520)
+expect_equal(as.numeric(imp[19369,8]), 0.973000)
+expect_equal(ncol(imp), 8)
+# col names
+expect_match(colnames(imp)[5], "Temperature \\(deg C\\)")
+expect_match(colnames(imp)[6], "Dissolved Oxygen \\(mg/l\\)")
+expect_match(colnames(imp)[7], "Dissolved Oxygen Saturation \\(%\\)")
+
+# values
+imp <- import_file(path02)
+expect_equal(as.numeric(imp[1,1]), 1523906520)
+expect_equal(as.numeric(imp[19369,8]), 0.973000)
+expect_equal(ncol(imp), 8)
+# col names
+expect_match(colnames(imp)[5], "Temperature \\(deg C\\)")
+expect_match(colnames(imp)[6], "Dissolved Oxygen \\(mg/l\\)")
+expect_match(colnames(imp)[7], "Dissolved Oxygen Saturation \\(%\\)")
+
+## import both versions the same
+expect_identical(import_file(path01),
+                 import_file(path02))
 
 
 
@@ -931,6 +975,9 @@ path19 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autor
 path20 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_20.txt" # Blue_V13AP_swim challenge_8-17-2016_raw.txt - mine
 path21 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_21.txt" # Metabolic Scope 8-23-2016_raw.txt - mine
 path22 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_22.txt" # squid4_022017_raw.txt - mine
+path23 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_23.txt" # post_raw.txt - from FishResp (guppy)
+path24 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_24.txt" # pre_raw.txt - from FishResp (guppy)
+path25 <- "~/Dropbox/respR_import_test_files/loligo_autoresp_witrox/loligo_autoresp_witrox_25.txt" # SMR_raw.txt - from FishResp (guppy)
 
 # imports
 expect_error(import_file(path01), NA)
@@ -955,6 +1002,9 @@ expect_error(import_file(path19), NA)
 expect_error(import_file(path20), NA)
 expect_error(import_file(path21), NA)
 expect_error(import_file(path22), NA)
+expect_error(import_file(path23), NA)
+expect_error(import_file(path24), NA)
+expect_error(import_file(path25), NA)
 
 # values
 imp <- import_file(path01)
@@ -1075,7 +1125,23 @@ expect_equal(as.numeric(imp[3,5]), 29.61)
 expect_equal(as.numeric(imp[3235,5]), 33.4986)
 expect_equal(ncol(imp), 47)
 expect_match(colnames(imp)[5], "CH1_O2_input_phase")
+
+imp <- import_file(path23)
+expect_equal(ncol(imp), 47)
+expect_match(colnames(imp)[5], "CH1_O2_input_phase")
 expect_match(colnames(imp)[47], "User_event")
+
+imp <- import_file(path24)
+expect_equal(ncol(imp), 47)
+expect_match(colnames(imp)[5], "CH1_O2_input_phase")
+expect_match(colnames(imp)[47], "User_event")
+
+imp <- import_file(path25)
+expect_equal(ncol(imp), 47)
+expect_match(colnames(imp)[5], "CH1_O2_input_phase")
+expect_match(colnames(imp)[47], "User_event")
+expect_match(colnames(imp)[47], "User_event")
+
 
 # Loligo Metadata Files ---------------------------------------------------
 
@@ -1097,4 +1163,22 @@ expect_error(import_file(path06), "Currently these files are unsupported in resp
 expect_error(import_file(path07), "Currently these files are unsupported in respR.")
 expect_error(import_file(path08), "Currently these files are unsupported in respR.")
 
+# QBox Aqua ---------------------------------------------------------------
+
+## Is identified as Vernier csv file and imports ok.
+## System must be some sort of version of Vernier/use their tech
+path01 <- "~/Dropbox/respR_import_test_files/qbox_aqua/qbox_aqua_01.csv" # from FishResp
+
+# imports
+expect_error(import_file(path01), NA)
+
+# values
+imp <- import_file(path01)
+expect_equal(as.numeric(imp[1,2]), 7.501285244)
+expect_equal(as.numeric(imp[3312,19]), 7.084495385)
+expect_equal(ncol(imp), 19)
+# col names
+expect_match(colnames(imp)[5], "Latest: Pressure \\(atm\\)")
+expect_match(colnames(imp)[6], "Latest: Sin")
+expect_match(colnames(imp)[19], "Latest: DOcor \\(mg/L\\)")
 

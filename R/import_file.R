@@ -9,15 +9,14 @@
 #' Currently works for:
 #'  - Firesting Logger
 #'  - Pyro Oxygen Logger (another name for Firesting)
-#'  - PRESENS OXY10
-#'  - PRESENS (generic, including multiplate systems)
+#'  - PreSens OXY10
+#'  - PreSens OXY4
+#'  - PreSens (generic, including multiplate systems)
+#'  - PreSens/Loligo 24-Well Multiplate System (Excel files)
 #'  - MiniDOT
-#'  - Loligo Witrox Logger
 #'  - Loligo AutoResp ('_raw' files output, not metadata files)
-#'  - Loligo/Presens 24-Well Multiplate System (Excel files)
+#'  - Loligo Witrox (same as AutoResp, without metadata)
 #'  - Vernier (raw qmbl, csv, txt, (not yet gmbl))
-#'  - PRESENS OXY4 (working on it)
-#'  - Guppy (working on it)
 #'  - Qbox Aqua (working on it)
 #'
 #' We are always looking for sample files to improve the function. Please send
@@ -66,22 +65,19 @@ import_file <- function(path, export = FALSE) {
 
   # Identify source of file
   if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
-    cat("Firesting-Pyro Oxygen Logger Detected\n\n")
+    cat("Firesting-Pyro file detected\n\n")
     out <- parse_pyro(path)
-  } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
-    cat("PRESENS OXY10 Detected\n\n")
-    out <- parse_oxy10(path)
   } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:20])))) {
-    cat("MiniDOT Logger Detected\n\n")
+    cat("MiniDOT file detected\n\n")
     out <- parse_minidot(path)
   } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:20])))) {
-    cat("Loligo AutoResp/Witrox Logger Detected\n\n")
+    cat("Loligo AutoResp/Witrox file detected\n\n")
     out <- parse_autoresp_witrox(path)
   } else if (suppressWarnings(any(grepl(": Time \\(", raw[1])))) {
-    cat("Vernier Logger .csv File Detected\n\n")
+    cat("Vernier or QBox Aqua csv file detected\n\n")
     out <- parse_vernier_csv(path)
   } else if (suppressWarnings(any(grepl("Vernier Format", raw[1:20])))) {
-    cat("Vernier Logger .txt File Detected\n\n")
+    cat("Vernier txt file detected\n\n")
     warning("NOTE: Vernier files exported as .txt may have data columns in a different order to
     original data, and have no clear indication of which data came from which probes!
     We strongly recommend exporting as .csv or importing raw qmbl files.")
@@ -91,35 +87,42 @@ import_file <- function(path, export = FALSE) {
     ## gmbl used to work with parse_vernier_raw but not any longer
     ## Some problem wih fread
   } else if (suppressWarnings(any(grepl("qmbl", raw[1:20])))) {
-    cat("Vernier Logger Raw File Detected\n\n")
+    cat("Vernier raw qmbl file detected\n\n")
     out <- parse_vernier_raw(path)
-    ## This one needs to go here, because the next (Presens Generic) will also match to
-    ## Oxyview files
+    ## These need to go here, because the next (Presens Generic) will also match
+  } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
+    cat("PreSens OXY10 file detected\n\n")
+    out <- parse_oxy10(path)
   } else if(suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
     cat("PreSens OxyView file detected\n\n")
     out <- parse_oxyview(path)
+  } else if(suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
+    cat("PreSens OXY4 file detected\n\n")
+    out <- parse_oxy4(path)
     ## This next one is also a multiplate file, but exported as text rather than
     ## Excel.
   } else if(suppressWarnings(any(grepl("MUX channel", raw[1:80]))) &&
             suppressWarnings(any(grepl("PARAMETERS", raw[1:80]))) &&
             suppressWarnings(any(grepl("FIRMWARE", raw[1:80])))) {
-    cat("PRESENS Generic file detected\n\n")
+    cat("PreSens Generic file detected\n\n")
     out <- parse_presens(path)
   } else if(suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
-    cat("Loligo/Presens 24-well Multiplate Excel file detected\n\n")
+    cat("Loligo/PreSens 24-well multiplate Excel file detected\n\n")
     out <- parse_multiplate_excel(path)
   } else if(suppressWarnings(any(grepl("Tau - Phase Method", raw[1])))) {
     cat("NeoFox file detected\n\n")
     out <- parse_neofox(path)
     ## Loligo Metadata files
   } else if (suppressWarnings(any(grepl("Fractional error", raw[1:20])))) {
-    cat("Loligo AutoResp Metadata File Detected\n\n")
+    cat("Loligo AutoResp metadata file detected\n\n")
     stop("Currently these files are unsupported in respR.
   This is an AutoResp metadata file, and contains no raw time~O2 data.
   It may contain other experimentally useful values (e.g. mass and volume).
   Please import the associated file appended with \"_raw\" which contains time~O2 data." )
 
-  } else stop("Source file cannot be identified. Please contact the developers with a sample of your file. Import stopped.")
+  } else stop("Source file cannot be identified.
+              Please contact the developers with a sample of your file.
+              Import halted.")
 
   if(export) {
     newpath <- paste(normalizePath(dirname(path)),"/", "parsed-",
@@ -420,7 +423,22 @@ parse_minidot <- function(path) {
 
 # PRESENS OXY10 -----------------------------------------------------------
 
+## identical to parse_oxy10 - could merge
 parse_oxy10 <- function(path) {
+  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE)
+  nms <- colnames(rdt)
+  nms <- gsub("%", "perc", nms) ## because it gets removed in next line
+  nms <- gsub("[^[:alnum:]///' ]", "", nms) ## removes weird characters
+  nms <- gsub("/", " ", nms)
+  colnames(rdt) <- nms
+  out <- rdt
+  return(out)
+}
+
+# PRESENS OXY4 ------------------------------------------------------------
+
+## identical to parse_oxy10 - could merge
+parse_oxy4 <- function(path) {
   rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE)
   nms <- colnames(rdt)
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
@@ -446,7 +464,8 @@ parse_pyro <- function(path) {
     message("Data file appears to have multiple datasets starting at these rows: ")
     cat(rowstart)
     message("\n")
-    stop("It will have to imported manually or edited to contain only one dataset.")
+    message("It will have to imported manually or edited to contain only one dataset.")
+    stop("Import halted.")
   }
   # Extract column header names:
   headers <- raw[rowstart]
@@ -483,15 +502,8 @@ parse_presens <- function(path) {
   raw <- fread(path, fill = TRUE, header = FALSE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "^Date/", which = TRUE])
 
-  ## if generic version with ; delimit
-  if(grepl("^Measurement$", raw[1,1])){
-    rdt <- fread(path, skip = rowstart)
-    nms <- fread(path, skip = rowstart-1, nrow = 1)
-  } else if (grepl("^Measurement Name :$", raw_x[1,1])){
-    rdt <- raw[-(1:(rowstart)),]
-    nms <- fread(path, nrow = rowstart, fill = TRUE, header = FALSE)
-    nms <- nms[rowstart,]
-  } else {stop("Parsing Error. Please import manually.")}
+  rdt <- fread(path, skip = rowstart)
+  nms <- fread(path, skip = rowstart-1, nrow = 1)
 
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters

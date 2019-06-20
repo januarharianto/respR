@@ -27,15 +27,14 @@ Currently works for:
 \itemize{
 \item Firesting Logger
 \item Pyro Oxygen Logger (another name for Firesting)
-\item PRESENS OXY10
-\item PRESENS (generic, including multiplate systems)
+\item PreSens OXY10
+\item PreSens OXY4
+\item PreSens (generic, including multiplate systems)
+\item PreSens/Loligo 24-Well Multiplate System (Excel files)
 \item MiniDOT
-\item Loligo Witrox Logger
 \item Loligo AutoResp ('_raw' files output, not metadata files)
-\item Loligo/Presens 24-Well Multiplate System (Excel files)
+\item Loligo Witrox (same as AutoResp, without metadata)
 \item Vernier (raw qmbl, csv, txt, (not yet gmbl))
-\item PRESENS OXY4 (working on it)
-\item Guppy (working on it)
 \item Qbox Aqua (working on it)
 }
 
