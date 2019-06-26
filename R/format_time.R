@@ -7,14 +7,23 @@
 #'
 #' Input can be a vector, or data frame. If a vector, output is a vector of
 #' equal length containing numeric time data. If a data frame, the column index
-#' of the date-time data can be specified using the `time =` input. If date-time
+#' of the date-time data is specified using the `time =` input. By default the
+#' first column is assumed to contain the date-time data (i.e. `time = 1`).
+#'
+#' Multiple columns can be specified (e.g. `time = c(1, 2)`) if the date-time
 #' data is split over multiple columns (e.g. date in one column, time in
-#' another), multiple columns can be specified. The function uses these to
-#' combine date and time strings together for conversion. If multiple columns
-#' are specified, the `format` setting should reflect the same order entered in
-#' `time =`. On conversion, a data frame is returned which is identical to the
-#' input data frame except a new column called `time.num` is added as the last
-#' column.
+#' another). The function will combine these date and time strings together for
+#' conversion. If multiple columns are specified, the `format` setting should
+#' reflect the same order entered in `time`.
+#'
+#' For data frame inputs, a data frame is returned which is identical to the
+#' input except a new column called `time.num` is added as the last column.
+#'
+#' Time-only data, that is times which lack an associated date, can also be
+#' parsed. Normally, parsing time-only data will cause problems when the times
+#' cross midnight (i.e. 00:00:00). However, the function attempts to identify
+#' these occurences and parse the data correctly. It also prints a message with
+#' the locations of these data regions for the user to check they look ok.
 #'
 #' Date-time data can be unspaced or separated by any combination of spaces,
 #' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -35,9 +44,10 @@
 #' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
 #' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry starting at 1. However, a `start` value can be
-#' specified, in which case the series starts at that number (in seconds) and
-#' all subsequent times are shifted forward by the same amount.
+#' duration from the first entry starting at 1. However, if you want the times
+#' to satrt at a different time, a `start` value can be specified, in which
+#' case the series starts at that number (in seconds) and all subsequent times
+#' are shifted forward by the same amount.
 #'
 #' **Syntax**
 #'
@@ -62,8 +72,8 @@
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.
-#' @param time numeric value or vector. Specifies column(s) containing
-#'   date-time data
+#' @param time numeric value or vector. Specifies column(s) containing date-time
+#'   data
 #' @param format string. Code describing structure of date-time data. See
 #'   details. Directly relates to functionality in the package `lubridate`
 #' @param start numeric. Default = 1. At what time (in seconds) should the
@@ -152,7 +162,79 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
 
   # convert to numeric:
   times_numeric <- as.numeric(difftime(dates, dates[1], units="secs"))
-  out <- times_numeric + start # adjust start time, if needed
+
+  # Check if time crosses midnight
+  # Should result in sudden time difference of -86400 ish
+  # Though depends on the recording frequency
+  # This *should* catch them
+  if(any(diff(times_numeric) < -30000)){
+    message("Times cross midnight, attempting to parse correctly... ")
+
+    ## This is index of last date/time before midnight
+    ## May be more than once for very long experiments
+    locs <- which(abs(diff(times_numeric)) > 30000)
+
+    ## We change the dummy dates lubridates adds before and after these
+    ## rows
+
+    ## loop to create correct number of new dates
+    add_dates <- c()
+    for(i in 1:(length(locs)+1)){
+      add_dates[i] <- paste0("0000-01-0", i)
+    }
+    ## start/end row locations for new dates
+    locs <- c(1, locs, locs+1, length(times_numeric))
+    locs <- locs[order(locs)]
+
+    # df to use in loop of start row, end row, new date
+    row_dates <- data.frame(a = c(locs[seq(1, length(locs), 2)]),
+                            b = c(locs[seq(2, length(locs), 2)]),
+                            c = add_dates)
+
+    # length(dates)
+    new_dates <- c()
+    for(i in 1:nrow(row_dates)){
+      yyy <- gsub("0000-01-01", row_dates[i,3], dates[row_dates[i,1]:row_dates[i,2]])
+      new_dates <- c(new_dates, yyy)
+    }
+
+    ## reparse new date/times
+    new_format <- paste0("ymd", format)
+    new_dates_posix <- lubridate::parse_date_time(new_dates, new_format)
+    times_numeric <- as.numeric(difftime(new_dates_posix, new_dates_posix[1], units="secs"))
+
+    print_midnight <- function() {
+      cat("\n")
+
+      rr <- locs[(locs %% 2 == 0)]
+      ifelse(length(rr) > 1, rr1 <- rr[-length(rr)], rr1 <- rr)
+      rr2 <- rr1 + 1
+      rx1 <- x[rr1]
+      rx2 <- x[rr2]
+
+      for(i in 1:length(rr1)){
+
+        if(i==1){cat("row", "       time", "         time.num", "\n")}
+        cat("---\n")
+        cat(rr1[i], "    ", times[rr1[i]], "    ", times_numeric[rr1[i]] + start, "\n")
+        cat(rr2[i], "    ", times[rr2[i]], "    ", times_numeric[rr2[i]] + start, "\n")
+        cat("---\n")
+        cat("\n")
+
+      }}
+
+    if(any(diff(times_numeric) < 0)){
+      message("Parsing of time-only data unsuccessful: \nNon-sequential numeric time values found.")
+    } else {
+      message("Parsing of time-only data successful.")
+      message("Check these data locations carefully:")
+      print_midnight()
+    }
+
+  }
+
+  # adjust start time, if needed
+  out <- times_numeric + start
 
   # output - return vector or df
   if(is.vector(x)) {

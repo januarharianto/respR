@@ -10,8 +10,8 @@ format_time(x, time = 1, format = "ymdHMS", start = 1)
 \item{x}{vector or data frame containing strings or class POSIX.ct date-time
 data to be converted to numeric.}
 
-\item{time}{numeric value or vector. Specifies column(s) containing
-date-time data}
+\item{time}{numeric value or vector. Specifies column(s) containing date-time
+data}
 
 \item{format}{string. Code describing structure of date-time data. See
 details. Directly relates to functionality in the package \code{lubridate}}
@@ -34,14 +34,23 @@ numeric time for use in \code{respR} functions.
 
 Input can be a vector, or data frame. If a vector, output is a vector of
 equal length containing numeric time data. If a data frame, the column index
-of the date-time data can be specified using the \code{time =} input. If date-time
+of the date-time data is specified using the \code{time =} input. By default the
+first column is assumed to contain the date-time data (i.e. \code{time = 1}).
+
+Multiple columns can be specified (e.g. \code{time = c(1, 2)}) if the date-time
 data is split over multiple columns (e.g. date in one column, time in
-another), multiple columns can be specified. The function uses these to
-combine date and time strings together for conversion. If multiple columns
-are specified, the \code{format} setting should reflect the same order entered in
-\code{time =}. On conversion, a data frame is returned which is identical to the
-input data frame except a new column called \code{time.num} is added as the last
-column.
+another). The function will combine these date and time strings together for
+conversion. If multiple columns are specified, the \code{format} setting should
+reflect the same order entered in \code{time}.
+
+For data frame inputs, a data frame is returned which is identical to the
+input except a new column called \code{time.num} is added as the last column.
+
+Time-only data, that is times which lack an associated date, can also be
+parsed. Normally, parsing time-only data will cause problems when the times
+cross midnight (i.e. 00:00:00). However, the function attempts to identify
+these occurences and parse the data correctly. It also prints a message with
+the locations of these data regions for the user to check they look ok.
 
 Date-time data can be unspaced or separated by any combination of spaces,
 forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -59,9 +68,10 @@ and "01:10:23 PM" are both same as "13:10:23"
 }
 
 Regardless of input, all data are parsed to numeric time data in seconds
-duration from the first entry starting at 1. However, a \code{start} value can be
-specified, in which case the series starts at that number (in seconds) and
-all subsequent times are shifted forward by the same amount.
+duration from the first entry starting at 1. However, if you want the times
+to satrt at a different time, a \code{start} value can be specified, in which
+case the series starts at that number (in seconds) and all subsequent times
+are shifted forward by the same amount.
 
 \strong{Syntax}
 
