@@ -48,3 +48,6 @@ warranty, so that some people can still benefit from the functionality as it
 gets better. Users should be careful using this function, and be prepared to
 to import data by themselves since it is a fundamental skill in R.
 }
+\examples{
+NULL
+}
