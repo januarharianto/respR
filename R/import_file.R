@@ -43,8 +43,7 @@
 #'
 #' @export
 #'
-#' @examples
-
+#' @examples NULL
 import_file <- function(path, export = FALSE) {
 
   # Don't even start if file doesn't exist:
@@ -56,7 +55,7 @@ import_file <- function(path, export = FALSE) {
   ## be just for multiplate system - probably we will support other systems that
   ## output xl files
 
-  if(grepl(".xls", path)) {
+  if (grepl(".xls", path)) {
     raw <- suppressMessages(read_excel(path, n_max = 20))
     raw <- as.character(raw)
   } else {
@@ -93,23 +92,23 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
     cat("PreSens OXY10 file detected\n\n")
     out <- parse_oxy10(path)
-  } else if(suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
+  } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
     cat("PreSens OxyView file detected\n\n")
     out <- parse_oxyview(path)
-  } else if(suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
+  } else if (suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
     cat("PreSens OXY4 file detected\n\n")
     out <- parse_oxy4(path)
     ## This next one is also a multiplate file, but exported as text rather than
     ## Excel.
-  } else if(suppressWarnings(any(grepl("MUX channel", raw[1:80]))) &&
+  } else if (suppressWarnings(any(grepl("MUX channel", raw[1:80]))) &&
             suppressWarnings(any(grepl("PARAMETERS", raw[1:80]))) &&
             suppressWarnings(any(grepl("FIRMWARE", raw[1:80])))) {
     cat("PreSens Generic file detected\n\n")
     out <- parse_presens(path)
-  } else if(suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
+  } else if (suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
     cat("Loligo/PreSens 24-well multiplate Excel file detected\n\n")
     out <- parse_multiplate_excel(path)
-  } else if(suppressWarnings(any(grepl("Tau - Phase Method", raw[1])))) {
+  } else if (suppressWarnings(any(grepl("Tau - Phase Method", raw[1])))) {
     cat("NeoFox file detected\n\n")
     out <- parse_neofox(path)
     ## Loligo Metadata files
@@ -124,7 +123,7 @@ import_file <- function(path, export = FALSE) {
               Please contact the developers with a sample of your file.
               Import halted.")
 
-  if(export) {
+  if (export) {
     newpath <- paste(normalizePath(dirname(path)),"/", "parsed-",
                      basename(path), sep = "")
     write.csv(out, newpath)
@@ -144,7 +143,7 @@ parse_multiplate_excel <- function(path){
   ## which row has "Date/Time"
   start_row <- which(grepl("^Date/Time$", raw[[1]]))
   ## inport from that row on
-  raw <- suppressMessages(read_excel(path, skip = start_row-1))
+  raw <- suppressMessages(read_excel(path, skip = start_row - 1))
   ## remove column 27 - empty
   raw <- raw[,-27]
   out <- data.table(raw)
@@ -166,24 +165,24 @@ parse_vernier_txt <- function(path) {
 
   ## read in raw data
   raw <- fread(path, fill = TRUE, header = FALSE, skip = 7)
-  if(all(is.na(raw[[ncol(raw)]])))
-    raw <- raw[,1:(ncol(raw)-1)] # remove extra column of NAs
+  if (all(is.na(raw[[ncol(raw)]])))
+    raw <- raw[,1:(ncol(raw) - 1)] # remove extra column of NAs
 
   ## get metadata
   all <- readLines(path) # read in everything
   meta_index <- which(grepl("Vernier", all)) # where do each Run start?
-  meta <- lapply(meta_index, function(x) all[x:(x+7)]) # read in 7 rows of metadata for each run
+  meta <- lapply(meta_index, function(x) all[x:(x + 7)]) # read in 7 rows of metadata for each run
   runs <- sapply(meta, function(x) x[3]) # extract Run or exp name
 
   ## column names
   cols <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 7)) # read in first chunk of metadata
-  if(all(is.na(cols[[ncol(cols)]])))
-    cols <- cols[,1:(ncol(cols)-1)] # remove extra column of NAs
+  if (all(is.na(cols[[ncol(cols)]])))
+    cols <- cols[,1:(ncol(cols) - 1)] # remove extra column of NAs
   ## make df
   setDF(cols)
 
   col_nms <- c() # loop to construct col names
-  for(i in 1:ncol(cols)){
+  for (i in 1:ncol(cols)){
     col_nms[i] <- paste0(cols[1,i], " (", cols[3,i], ")")
   }
 
@@ -191,12 +190,12 @@ parse_vernier_txt <- function(path) {
   if(any(grepl("Vernier", raw))){
     ## sequence of Run row locations
     seq <- which(grepl("Vernier", raw[[1]])) # metadata starts
-    seq <- c(seq-1, seq+7) # Add run data starts
+    seq <- c(seq - 1, seq + 7) # Add run data starts
     seq <- sort(seq) # reorder
     seq <- c(1, seq, length(raw[[1]])) ## sequence of Run data row locations
     seq <- matrix(seq, nrow = length(seq)/2, ncol = 2, byrow = T) # matrix for loop
 
-    nrows <- max(seq[,2]-seq[,1])+1 # nrows of data
+    nrows <- max(seq[,2] - seq[,1])+1 # nrows of data
     ncols <- length(col_nms) # ncols of data in each run
 
     ## df with max no. of rows
