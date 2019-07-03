@@ -136,114 +136,68 @@
 #' format_time(x, time = c(1:3), format = "dmyHMS")
 
 format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
-
-  ## if multiple columns specified
-  if(length(time) > 1){
-    ## extract columns
-    ## ifs here cos of WTF STUPID STUPID data table subsetting syntax
-    if(is.data.table(x)) times <- x[,time, with = F]
-    if(!is.data.table(x)) times <- x[,time]
-    ## concatenate
-    times <- apply(times, 1, function(x) paste(x, collapse = " "))
-  }
-
-  ## take out date/times
-  if(is.data.frame(x) && length(time) == 1){
-    times <- x[[time]]
-  } else if(!is.data.frame(x)){
-    times <- x
-  }
-
-  ## change if factor
-  if(is.factor(times)) times <- as.character(times)
-
-  # format to datetime
-  dates <- lubridate::parse_date_time(times, format)
-
-  # convert to numeric:
-  times_numeric <- as.numeric(difftime(dates, dates[1], units="secs"))
-
-  # Check if time crosses midnight
-  # Should result in sudden time difference of -86400 ish
-  # Though depends on the recording frequency
-  # This *should* catch them
-  if(any(diff(times_numeric) < -30000)){
-    message("Times cross midnight, attempting to parse correctly... ")
-
-    ## This is index of last date/time before midnight
-    ## May be more than once for very long experiments
-    locs <- which(abs(diff(times_numeric)) > 30000)
-
-    ## We change the dummy dates lubridates adds before and after these
-    ## rows
-
-    ## loop to create correct number of new dates
-    add_dates <- c()
-    for(i in 1:(length(locs)+1)){
-      add_dates[i] <- paste0("0000-01-0", i)
-    }
-    ## start/end row locations for new dates
-    locs <- c(1, locs, locs+1, length(times_numeric))
-    locs <- locs[order(locs)]
-
-    # df to use in loop of start row, end row, new date
-    row_dates <- data.frame(a = c(locs[seq(1, length(locs), 2)]),
-                            b = c(locs[seq(2, length(locs), 2)]),
-                            c = add_dates)
-
-    # length(dates)
-    new_dates <- c()
-    for(i in 1:nrow(row_dates)){
-      yyy <- gsub("0000-01-01", row_dates[i,3], dates[row_dates[i,1]:row_dates[i,2]])
-      new_dates <- c(new_dates, yyy)
-    }
-
-    ## reparse new date/times
-    new_format <- paste0("ymd", format)
-    new_dates_posix <- lubridate::parse_date_time(new_dates, new_format)
-    times_numeric <- as.numeric(difftime(new_dates_posix, new_dates_posix[1], units="secs"))
-
-    print_midnight <- function() {
-      cat("\n")
-
-      rr <- locs[(locs %% 2 == 0)]
-      ifelse(length(rr) > 1, rr1 <- rr[-length(rr)], rr1 <- rr)
-      rr2 <- rr1 + 1
-      rx1 <- x[rr1]
-      rx2 <- x[rr2]
-
-      for(i in 1:length(rr1)){
-
-        if(i==1){cat("row", "       time", "         time.num", "\n")}
-        cat("---\n")
-        cat(rr1[i], "    ", times[rr1[i]], "    ", times_numeric[rr1[i]] + start, "\n")
-        cat(rr2[i], "    ", times[rr2[i]], "    ", times_numeric[rr2[i]] + start, "\n")
-        cat("---\n")
-        cat("\n")
-
-      }}
-
-    if(any(diff(times_numeric) < 0)){
-      message("Parsing of time-only data unsuccessful: \nNon-sequential numeric time values found.")
-    } else {
-      message("Parsing of time-only data successful.")
-      message("Check these data locations carefully:")
-      print_midnight()
-    }
-
-  }
-
-  # adjust start time, if needed
-  out <- times_numeric + start
-
-  # output - return vector or df
-  if(is.vector(x)) {
-    return(out)
+  dt <- data.table(x)  # convert to data.table object, regardless of type
+  
+  # check if object is data frame and multiple time columns are specified
+  # the time columns will be concatenated and then saved for further analysis
+  if (length(time) > 1) {
+    dt <- dt[, time, with = FALSE]  # extract columns
+    # join date time columns and subset the result:
+    ts <- dt[, ts := do.call(paste, c(.SD, sep = " "))]
+    ts <- ts[, -time, with = FALSE]
+  } else if (length(time) == 1) {
+    ts <- dt[, time, with = FALSE]  # extract columns
+  } else ts <- x # otherwise assume that object is a vector list of date(s)
+  # end if
+  
+  # ERROR CHECK(S)
+  # TODO: gotta add tryCatch() here if parse_date_time() fails.
+  
+  # formate to datetime, then convert to interval in seconds:
+  dtm <- lubridate::parse_date_time(unlist(ts), format) # format to datetime
+  # calculate the difference in all times, from starting time (dtm[1])
+  intervals <- as.numeric(difftime(dtm, dtm[1], units = "secs"))
+  
+  # quality check - does time cross midnight?
+  # usually happens when no date is provided
+  if (any(diff(intervals) < 0)) {
+    message("Time(s) cross midnight, attempting to parse correctly... ")
+    # if format is "HMS", assume that neg interval time indicates midnight cross
+    # i.e. switch from 23:59:59 to 00:00:00
+    # create index to determine locations that signal different days
+    # indx <- which(diff(intervals) < 0)
+    indx <- c(0, which(diff(intervals) < 0), length(intervals))
+    # generate new data based on index values and adjust dummy dates
+    new_dtm <- lapply(1:(length(indx) - 1), function(i) {
+      dtm[(indx[i] + 1):indx[i + 1]] + lubridate::days(i - 1)
+    })
+    new_dtm <- do.call("c", new_dtm)  # combine the output into a list
+    # recalculate intervals with the corrected data:
+    intervals <- as.numeric(difftime(new_dtm, new_dtm[1], units = "secs"))
+  }  # end if
+  
+  # ERROR CHECK(S)
+  # sometimes even if there is an output it may be wrong because data structure
+  #   is wrong - so we check for issues before we continue.
+  
+  # check for non-sequential time
+  if (check_seq(intervals)$check) stop("Parsing of time-only data unsuccessful: 
+    Non-sequential numeric time values found.")
+  
+  # adjust start time, if specified
+  intervals <- intervals + start  
+  
+  # output results
+  # if original object was a data frame object, we append data on the right
+  if (is.data.table(x)) {
+    out <- data.table(dt, elapsed = intervals)
+  } else if (is.data.frame(x)) {
+    out <- data.frame(x, elapsed = intervals)
   } else {
-    col_nms <- names(x)  # rename
-    out <- cbind(x, out) # add new column as LAST col
-    names(out) <- c(col_nms, "time.num")  # rename
-    return(out)
-  }
-
-}
+    # otherwise just output the data as vector:
+    out <- intervals
+  }  # end if
+  
+  return(out)
+  
+}  # end format_time()
