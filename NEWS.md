@@ -11,6 +11,7 @@ Lots of updates! First, we have a new function, `calc_pcrit()`, which we will us
 - NEW: `inspect()` can now plot data with multiple columns when more than 2 columns are detected. For some people, this may provide a great overview of the data.
 - NEW: `calc_pcrit()` is a **new function** that will be developed in parallel to the current `pcrit()` function. In the future we intend to use `calc_pcrit()` to incorporate new methods. 
 - NEW: `import_file()` supports even more files! Added more parsers for Vernier, PRESENS and Loligo systems.
+- NEW: `format_time()` can now calculate time elapsed even if date information is not provided (e.g. "HMS"-only data). 
 - NEW: The `by` argument in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"o2"`, `"O2"`, `"oxygen"` and `"Oxygen"` are recognised). To achieve this we created a string matching function, `verify_by()` which uses brute force matching to recognise different ways of writing the same text.
 
 ### Fixes
