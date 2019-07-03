@@ -502,7 +502,7 @@ parse_presens <- function(path) {
   rowstart <- suppressWarnings(raw[raw$V1 %like% "^Date/", which = TRUE])
 
   rdt <- fread(path, skip = rowstart)
-  nms <- fread(path, skip = rowstart-1, nrow = 1)
+  nms <- fread(path, skip = rowstart-1, nrows = 1)
 
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
