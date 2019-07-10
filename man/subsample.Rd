@@ -25,8 +25,10 @@ new data frame object. Effectively "thins" large datasets.
 }
 \examples{
 # Subsample every 10 rows:
+data("squid.rd")
 subsample(squid.rd, n = 10)
 
 # Subsample with random first value:
+data("sardine.rd")
 subsample(sardine.rd, 3, TRUE)
 }

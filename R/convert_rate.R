@@ -1,9 +1,21 @@
 #' Convert rate value to volumetric and/or mass-specific
 #'
 #' This is a conversion function. It can convert a dimensionless unit of rate,
-#' derived from `calc_rate`, `calc_rate.ft`, `auto_rate`, or `adjust_rate` into
-#' volume-adjusted (i.e. to the container), VO2 or mass-specific (i.e. to the
-#' specimen mass), MO2 rate.
+#' derived from `calc_rate`, `calc_rate.ft`, `calc_rate.bg`, `auto_rate`, or
+#' `adjust_rate` into volume-adjusted (i.e. to the container), VO2 or
+#' mass-specific (i.e. to the specimen mass), MO2 rate.
+#'
+#' Unless other values are specifically called as `x`, the function converts the
+#' primary `$rate` from `calc_rate` and `auto_rate` objects, the `$corrected`
+#' rate from `adjust_rate` objects, and the `$mean` rate from `calc_rate.ft` and
+#' `calc_rate.bg` objects. Values or vectors of other rates within these obects
+#' can be converted by calling them as `x` using `$`.
+#'
+#' Note, for rates from flowthrough experiments, the `volume` and `time` inputs
+#' should be set with reference to the *flow rate* in L per unit time. E.g. for
+#' a flow rate in L/s `volume = 1, time = "s"`. With these rates `volume` does
+#' *NOT* represent the volume of the respirometer, and `time` does *NOT*
+#' represent the resolution of the original data."
 #'
 #' The function uses an internal database and a fuzzy string matching algorithm
 #' to accept various unit formatting styles.
@@ -50,7 +62,7 @@
 #'   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 #'
 #' # Use example data
-#' data(sardine.rd)
+#' data("sardine.rd")
 #' x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
 #' convert_rate(x, o2.unit = '%', time.unit = 's',
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
@@ -69,9 +81,9 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
     time.unit <- "s"
   }
   if (is.null(output.unit)) {
-    warning("'output.unit' is not provided, using 'mg/h/kg`.",
+    warning("'output.unit' is not provided, using 'mg/h`.",
       call. = F)
-    output.unit <- "mg/h/kg"
+    output.unit <- "mg/h"
   }
 
   # Volume must not be NULL
@@ -88,6 +100,17 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   } else if (class(x) %in% "calc_rate.ft") {
     rate <- x$mean
     message("object of class `calc_rate.ft` detected. Automatically using mean value.")
+    ## possibly here we automatically fill volume = 1
+    ## Or at least warn if volume != 1
+    warning("NOTE: In flowthrough experiments `volume` and `time` inputs should be set 
+      with reference to the flow rate in L per unit time. 
+      E.g. for a flow rate in L/s `volume = 1, time = \"s\"`.
+      `volume` does NOT represent the volume of the respirometer.
+      `time` does NOT represent the resolution of the original data.")
+  } else if (class(x) %in% "calc_rate.bg") {
+    ## possible warning if mass entered - no reason to have mass with bg data
+    rate <- x$mean
+    message("object of class `calc_rate.bg` detected. Automatically using mean value.")
   } else stop("`x` input is not valid.")
 
   # Validate o2.unit & time.unit
@@ -109,8 +132,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   if (is.MO2 && is.null(mass))
     stop("'output.unit' needs a value for 'mass'.")
   if (!is.MO2 && is.numeric(mass))
-    warning("mass' is ignored as `output.unit` does not require it.",
-      call. = F)
+    stop("`mass` has been entered, but units not specified in `output.unit`.")
 
   # Format unit strings to look nicer
   o2.unit <- stringr::str_replace(oxy, "\\..*", "")

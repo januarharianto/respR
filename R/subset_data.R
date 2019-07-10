@@ -21,19 +21,29 @@
 #'
 #' @examples
 #' # Subset by time:
+#' data("squid.rd")
 #' x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
 #' plot(x)
+#' 
+#' data("flowthrough.rd")
 #' subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 #'
 #' # Subset by O_2:
+#' data("sardine.rd")
 #' subset_data(sardine.rd, from = 94, to = 91, by = "o2")
 #'
 #' # Subset by proportion:
+#' data("sardine.rd")
 #' subset_data(sardine.rd, from = 0.8, to = 0.4, by = "proportion")
 #'
 #' # Subset by row:
+#' data("flowthrough.rd")
 #' subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 subset_data <- function(x, from, to, by = "time") {
+  
+  ## verify by input
+  by <- verify_by(by)
+  
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect_data")) {
     dt <- data.table(x$df)
@@ -69,10 +79,10 @@ subset_data <- function(x, from, to, by = "time") {
   cat("\nNew data:\n")
   print(data.table(out), topn = 2)
 
-  if (class(x) == "inspect") {
+  if (any(class(x) %in% "inspect")) {
     x$dataframe <- out
-    return(x)
-  } else if (class(x) == "inspect_data") {
+    return(invisible(x))
+  } else if (any(class(x) %in% "inspect_data")) {
     x$df <- out
   } else return(invisible(out))
 }

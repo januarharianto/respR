@@ -1,42 +1,48 @@
 Package: respR
 Type: Package
 Title: Analyse, Convert, and Automate Respirometry-Related Data
-Version: 1.0.5.1
+Date: 2019-04-08
+Version: 1.1.0.0
 Authors@R: as.person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
     "Nicholas Carey <nicholascarey@gmail.com> [aut]"))
 Description: A collection of functions that, when used together, provide a 
     complete and structured workflow for the analysis of respirometry-related
     data. See the respR GitHub webpage for documentation and examples.
-URL: https://github.com/januarharianto/respr
+URL: https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
 Depends: R (>= 3.3)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Imports:
-    dplyr,
-    magrittr,
-    grDevices,
-    graphics,
-    parallel,
-    stats,
-    utils,
-    roll,
-    stringr,
-    readxl,
-    marelac,
+    broom,
     data.table,
+    dplyr,
+    ggplot2,
+    graphics,
+    grDevices,
+    gridExtra,
     lubridate,
-    segmented
+    magrittr,
+    marelac,
+    methods,
+    parallel,
+    readxl,
+    roll,
+    segmented,
+    stats,
+    stringr,
+    utils,
+    xml2
 Suggests:
     knitr,
     rmarkdown,
-    testit,
     rMR,
     DiagrammeR,
     FishResp,
-    respirometry
+    respirometry,
+    testthat
 VignetteBuilder: 
     knitr

@@ -24,10 +24,12 @@ A list object of class \code{inspect}.
 \description{
 \code{inspect()} scans and subsets a data.frame object for errors that may affect
 the use of various functions in \code{respR}. By default, the function scans only
-the first 2 columns of a data frame and assumes that the first columne is
-time data. A plot of the data is also produced, including a rolling
-regression plot using a width of \code{floor(0.2 * nrow([data frame])} for a quick
-visual inspection of the rate pattern (or stability) of the data.
+the first 2 columns of a data frame and assumes that the first column is time
+data. A plot of the data is also produced, including a rolling regression
+plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick visual
+inspection of the rate pattern (or stability) of the data. Note that rates
+for oxygen uptake are returned as negative and plotted on a reverse axis;
+higher oxygen uptake rates are higher on the rate plot (more negative).
 }
 \details{
 Time columns are checked for NA/NaN values, sequential time, duplicate time
@@ -42,20 +44,44 @@ frame. However, the function will not produce a plot. Thus, you may inspect
 flowthrough respirometry data, which usually contains oxygen values for
 inflow and outflow, by specifying a vector of column numbers, e.g. \code{oxygen = c(2,3)}.
 }
+\section{Failed Checks}{
+ It should be noted most of these checks are for
+exploratory purposes only; they help diagnose potential issues with the
+data. For instance, very long experiments could have had sensor dropouts
+the user is completely unaware of. Other issues are not issues at all - for
+instance, an uneven time warning can result from using decimalised minutes,
+which is a completely valid time metric.
+
+If some of these checks fail, it should generally not hinder analysis of
+the data. respR has been coded to rely on linear regression on exact data
+values, and not make assumptions about data spacing. Therefore issues such
+as missing or NA/NaN values, duplicate values, or uneven time spacing
+should not cause any erroneous results, as long as they do not occur over
+large regions of the data. The only major potential issue is if time data
+are not sequential. This could cause unknown results and incorrect rates to
+be returned.
+}
+
 \examples{
 # automatically inspect first 2 columns:
+data("sardine.rd")
 inspect(sardine.rd)
+
+data("urchins.rd")
 inspect(urchins.rd)
 
 # inspect specific columns:
+data("urchins.rd")
 inspect(urchins.rd, time = 1, oxygen = 4)
 
 # inspect multiple columns
+data("urchins.rd")
 x <- inspect(urchins.rd, time = 1, oxygen = c(2:12))
 print(x)
 x$list$time.min  # check position of errors in data frame
 
 # inspect flowthrough data
+data("flowthrough.rd")
 x <- inspect(flowthrough.rd, 1, c(2,3))
 x
 }

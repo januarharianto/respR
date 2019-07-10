@@ -2,10 +2,12 @@
 #'
 #' `inspect()` scans and subsets a data.frame object for errors that may affect
 #' the use of various functions in `respR`. By default, the function scans only
-#' the first 2 columns of a data frame and assumes that the first columne is
-#' time data. A plot of the data is also produced, including a rolling
-#' regression plot using a width of `floor(0.2 * nrow([data frame])` for a quick
-#' visual inspection of the rate pattern (or stability) of the data.
+#' the first 2 columns of a data frame and assumes that the first column is time
+#' data. A plot of the data is also produced, including a rolling regression
+#' plot using a width of `floor(0.1 * nrow([data frame])` for a quick visual
+#' inspection of the rate pattern (or stability) of the data. Note that rates
+#' for oxygen uptake are returned as negative and plotted on a reverse axis;
+#' higher oxygen uptake rates are higher on the rate plot (more negative).
 #'
 #' Time columns are checked for NA/NaN values, sequential time, duplicate time
 #' and evenly-spaced time data. Oxygen columns are simply checked for NA/NaN
@@ -20,6 +22,21 @@
 #' inflow and outflow, by specifying a vector of column numbers, e.g. `oxygen =
 #' c(2,3)`.
 #'
+#' @section Failed Checks: It should be noted most of these checks are for
+#'   exploratory purposes only; they help diagnose potential issues with the
+#'   data. For instance, very long experiments could have had sensor dropouts
+#'   the user is completely unaware of. Other issues are not issues at all - for
+#'   instance, an uneven time warning can result from using decimalised minutes,
+#'   which is a completely valid time metric.
+#'
+#'   If some of these checks fail, it should generally not hinder analysis of
+#'   the data. respR has been coded to rely on linear regression on exact data
+#'   values, and not make assumptions about data spacing. Therefore issues such
+#'   as missing or NA/NaN values, duplicate values, or uneven time spacing
+#'   should not cause any erroneous results, as long as they do not occur over
+#'   large regions of the data. The only major potential issue is if time data
+#'   are not sequential. This could cause unknown results and incorrect rates to
+#'   be returned.
 #'
 #' @param df data.frame object. Accepts any object of class `data.frame`.
 #' @param time numeric vector. Defaults to NULL. This specifies the column
@@ -36,18 +53,24 @@
 #'
 #' @examples
 #' # automatically inspect first 2 columns:
+#' data("sardine.rd")
 #' inspect(sardine.rd)
+#' 
+#' data("urchins.rd")
 #' inspect(urchins.rd)
 #'
 #' # inspect specific columns:
+#' data("urchins.rd")
 #' inspect(urchins.rd, time = 1, oxygen = 4)
 #'
 #' # inspect multiple columns
+#' data("urchins.rd")
 #' x <- inspect(urchins.rd, time = 1, oxygen = c(2:12))
 #' print(x)
 #' x$list$time.min  # check position of errors in data frame
 #'
 #' # inspect flowthrough data
+#' data("flowthrough.rd")
 #' x <- inspect(flowthrough.rd, 1, c(2,3))
 #' x
 inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
@@ -142,35 +165,35 @@ print.inspect <- function(x, ...) {
   if ((length(x$dataframe)) == 2) {
     if (checks[, 1][[1]]) {
       xnan <- locs[, 1][[1]]
-      cat("NA/NaN data locations")
+      cat("NA/NaN data locations ")
       if (length(xnan) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xnan, 20))
     }
     if (checks[, 1][[2]]) {
       xseq <- locs[, 1][[2]]
-      cat("Non-sequential time data locations")
+      cat("Non-sequential time data locations ")
       if (length(xseq) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xseq, 20))
     }
     if (checks[, 1][[3]]) {
       xdup <- locs[, 1][[3]]
-      cat("Duplicate time data locations")
+      cat("Duplicate time data locations ")
       if (length(xdup) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xdup, 20))
     }
     if (checks[, 1][[4]]) {
       xevn <- locs[, 1][[4]]
-      cat("Uneven time data locations")
+      cat("Uneven time data locations ")
       if (length(xevn) > 20) cat(" (first 20 shown) ")
       cat("in column:", names(x$dataframe[1]), "\n")
       print(head(xevn, 20))
     }
     if (checks[, 2][[1]]) {
       ynan <- locs[, 2][[1]]
-      cat("NA/NaN locations")
+      cat("NA/NaN locations ")
       if (length(ynan) > 20) cat(" (only first 20 shown) ")
       cat("in column:", names(x$dataframe[2]), "\n")
       print(head(ynan, 20))
@@ -184,39 +207,135 @@ print.inspect <- function(x, ...) {
 
 #' @export
 plot.inspect <- function(x, label = TRUE, ...) {
-  if (label) cat("\n# plot.inspect # ------------------------\n")
+  if (label)
+    cat("\n# plot.inspect # ------------------------\n")
+  
+  pardefault <- par(no.readonly = T) # save original par settings
+  
   # extract data frame
   dt <- x$dataframe
   # perform rolling regression (quick one)
-  if(ncol(dt) == 2) {
-    roll <- static_roll(dt, floor(0.2 * nrow(dt)))$rate_b1
+  if (ncol(dt) == 2) {
+    ## changed here 0.2 to 0.1
+    roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
   }
-
+  
   if (length(x$dataframe) == 2) {
-
-    pardefault <- par(no.readonly = T) # save original par settings
     par(
-      mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
-      cex = 1, cex.main = 1
+      mfrow = c(2, 1),
+      mai = c(0.4, 0.4, 0.6, 0.3),
+      ps = 10,
+      cex = 1,
+      cex.main = 1,
+      mgp = c(0, 0.5, 0)
+    ) # mid = to put tick labels closer to ticks
+    plot(
+      dt[[1]],
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      col.lab = "blue",
+      col.axis = "blue",
+      panel.first = grid()
     )
+    axis(side = 2) # simply to put yaxis label colour back to black
+    #title(xlab = "Time", line = 1)
+    ## add row index axis
+    par(new = TRUE)
     plot(
-      dt[[1]], dt[[2]], xlab = "", ylab = "", pch = 16, cex =.5,
-      panel.first = grid())
-    title(main = "Full Timeseries", line = 0.3)
-    plot(
-      abs(roll) ~ dt[[1]][floor(0.1 * length(dt[[1]])):(floor(0.1 * 
-          length(dt[[1]])) + (length(roll) - 1))],
+      seq(1, nrow(dt)),
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      axes = FALSE
+    )
+    axis(side = 3, col.axis = "red")
+    legend(
+      "bottomleft",
+      "Time",
+      text.col = "blue",
+      bg = "gray90",
+      cex = 0.7
+    )
+    legend(
+      "topright",
+      "Row Index",
+      text.col = "red",
+      bg = "gray90",
+      cex = 0.7
+    )
+    title(main = "Full Timeseries", line = 2)
+    
+    ## changed to 10% width for now (0.05 each side here)
+    ## Removed -1* before roll - now actual negative rates
+    plot((roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
+        length(dt[[1]])) + (length(roll) - 1))],
       xlim = range(dt[[1]]),
-      xlab = "", ylab = "", pch = 16, cex = .5,
-      panel.first = grid())
-    title(
-      ## UPDATED TITLE
-      main = "Rolling Regression of Rate (0.2 Rolling Window)",
-      line = 0.3
+      ylim = rev(range(roll)),
+      # reversed axis
+      xlab = "",
+      ylab = "",
+      pch = 16,
+      cex = .5,
+      col.lab = "blue",
+      col.axis = "blue"
     )
-    par(pardefault) # revert par settings to original
-  } else
-    message("inspect: Plot is only avalilable for a 2-column dataframe output.")
-  if (label) cat("Done.\n")
+    axis(side = 2) # simply to put yaxis label colour back to black
+    ## Added dashed line at rate = 0
+    abline(h = 0, lty = 2)
+    par(new = TRUE)
+    plot(
+      seq(1, nrow(dt)),
+      dt[[2]],
+      xlab = "",
+      ylab = "",
+      pch = "",
+      cex = .5,
+      axes = FALSE,
+      col = "white"
+    ) # plot invisibly
+    axis(side = 3, col.axis = "red")
+    legend(
+      "bottomleft",
+      "Time",
+      text.col = "blue",
+      bg = "gray90",
+      cex = 0.7
+    )
+    legend(
+      "topright",
+      "Row Index",
+      text.col = "red",
+      bg = "gray90",
+      cex = 0.7
+    )
+    title(main = "Rolling Regression of Rate (0.1 Rolling Window)", line = 2)
+    
+  } else {
+    ## plot every column anyway - without rate plot
+    message("inspect: Full plot is only avalilable for a 2-column dataframe output.")
+    par(
+      mfrow = n2mfrow(length(x$dataframe) - 1),
+      mai = c(0.4, 0.4, 0.1, 0.1),
+      ps = 10,
+      cex = 1,
+      cex.main = 1,
+      pch = "."
+    )  # replace par settings
+    lapply(1:(length(x$dataframe) - 1), function(z)
+      plot(
+        data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
+        xlab = "",
+        ylab = ""
+      ))
+  }
+  par(pardefault)  # revert par settings to original
+  
+  if (label)
+    cat("Done.\n")
   return(invisible(x))
 }

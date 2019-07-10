@@ -36,14 +36,6 @@
 test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
                      preview = FALSE, plot = FALSE) {
 
-  # snipR::refresh()
-  # reps = 5
-  # len = 100
-  # sd = .05
-  # type = "default"
-  # preview = FALSE
-  # plot = FALSE
-
   # define the procedure to repeat
   run_once <- function(preview = FALSE, plot = TRUE, ...) {
     # generate data

@@ -41,11 +41,23 @@ A list object.
 }
 \description{
 This is a conversion function. It can convert a dimensionless unit of rate,
-derived from \code{calc_rate}, \code{calc_rate.ft}, \code{auto_rate}, or \code{adjust_rate} into
-volume-adjusted (i.e. to the container), VO2 or mass-specific (i.e. to the
-specimen mass), MO2 rate.
+derived from \code{calc_rate}, \code{calc_rate.ft}, \code{calc_rate.bg}, \code{auto_rate}, or
+\code{adjust_rate} into volume-adjusted (i.e. to the container), VO2 or
+mass-specific (i.e. to the specimen mass), MO2 rate.
 }
 \details{
+Unless other values are specifically called as \code{x}, the function converts the
+primary \code{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \code{$corrected}
+rate from \code{adjust_rate} objects, and the \code{$mean} rate from \code{calc_rate.ft} and
+\code{calc_rate.bg} objects. Values or vectors of other rates within these obects
+can be converted by calling them as \code{x} using \code{$}.
+
+Note, for rates from flowthrough experiments, the \code{volume} and \code{time} inputs
+should be set with reference to the \emph{flow rate} in L per unit time. E.g. for
+a flow rate in L/s \code{volume = 1, time = "s"}. With these rates \code{volume} does
+\emph{NOT} represent the volume of the respirometer, and \code{time} does \emph{NOT}
+represent the resolution of the original data."
+
 The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles.
 
@@ -66,7 +78,7 @@ convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 
 # Use example data
-data(sardine.rd)
+data("sardine.rd")
 x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
 convert_rate(x, o2.unit = '\%', time.unit = 's',
   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,

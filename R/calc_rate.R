@@ -29,6 +29,7 @@
 #' @export
 #'
 #' @examples
+#' data("sardine.rd")
 #' calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
 #' calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
 #' calc_rate(sardine.rd, 1, 1000, by = 'row')     # subset by row
@@ -38,12 +39,14 @@
 #' plot(x)
 #'
 #' # Using a vector in 'from' and 'to' perform multiple measurements:
-#' data(intermittent.rd)
+#' data("intermittent.rd")
 #' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
 calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
+  ## verify by input
+  by <- verify_by(by)
   # Ensure "from" and "to" are same length:
   if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
 

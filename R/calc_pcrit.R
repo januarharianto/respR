@@ -7,11 +7,17 @@
 #' Muggeo (2003).
 #'
 #' The default data input is an `inspect` or `inspect_data` object, or
-#' `data.frame` containing time~dissolved oxygen data (e.g. `squid.rd`). To
-#' calculate Pcrit, the function requires data in the form of oxygen uptake rate
-#' against dissolved oxygen (DO) concentration. The function performs a rolling
-#' regression on time~O2 data to determine rates, and matches these against a
-#' rolling mean of the DO data. The function then performs the two
+#' `data.frame` containing time~dissolved oxygen data (e.g. `squid.rd`). Columns
+#' of each can be specified, the default being they are the first two columns
+#' (i.e. `time = 1`, `oxygen = 2`). If an `inspect` or `inspect_data` object is
+#' used the data frame is extracted automatically and column identifiers are not
+#' required since these were already identified and extracted in those
+#' functions.
+#'
+#' To calculate Pcrit, the function requires data in the form of oxygen uptake
+#' rate against dissolved oxygen (DO) concentration. The function performs a
+#' rolling regression on time~O2 data to determine rates, and matches these
+#' against a rolling mean of the DO data. The function then performs the two
 #' \eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
 #' default width (10\% of the data length) works well, but this may vary with
@@ -24,11 +30,14 @@
 #'
 #' @param df data frame or object of class `inspect_data`. This is the data to
 #'   analyse.
+#' @param time numeric vector. Defaults to NULL. This specifies the column
+#'   number of the time data.
+#' @param oxygen numeric vector. Defaults to NULL. This specifies the column
+#'   number(s) of the oxygen data.
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10\% of total rows.
-#' @param has.rate logical. Is the second column not oxygen, but rate?
+#'   regression. Defaults to 0.1, or 10\% of total rows.
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
 #'   used?
@@ -55,84 +64,132 @@
 #' pcrit(squid.rd)
 #' }
 
-pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
-  plot = TRUE, parallel = TRUE) {
+calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, 
+  width = 0.1, plot = TRUE, parallel = TRUE) {
   
-  # Data validation.
+  # data validation
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
-  if (width > nrow(df)) stop("`width` input is bigger than length of data.")
-
-  # Format data.
-  dt <- data.table::data.table(df)
-  data.table::setnames(dt, 1:2, c("x", "y"))
+  if (width > nrow(df)) stop("'width' input is bigger than length of data.")
   
-  # Check if rate is provided in "has.rate".
-  if (!has.rate) {
-    rdt <- generate_mrdf(dt, width)
-  } else rdt <- dt
-
-  # Arrange the dataset in ascending order by x to prep for broken-stick model.
-  data.table::setorder(rdt, "x")
-
-  # BROKEN-STICK
-  message("Performing broken-stick analysis...")
-
-  # We can speed up really large datasets by subsampling them first.
+  # conditions must be met before we continue
+  if (!is.null(oxygen) & !is.null(rate)) {
+    # one of "rate" or "oxygen" must be NULL
+    stop("Choose either an 'oxygen' or 'rate' column, cannot enter both.")
+  }
+  # if "time" is not provided, check if we can still automate on the assumption
+  # that the first column is "time":
+  if (is.null(time) & !is.null(oxygen) & is.null(rate)) {
+    if (oxygen == 1) stop("Please specify a 'time' argument.")
+  } else if (is.null(time) & is.null(oxygen) & !is.null(rate)) {
+    if (rate == 1) stop("Please specify a 'time' argument.")
+  }
+  
+  # identify data -----
+  # if nothing is provided other than data frame, use assumption that first
+  # column is "time" and second column is "oxygen"
+  if (is.null(time) & is.null(oxygen) & is.null(rate)) {
+    col1 <- 1
+    col2 <- 2
+    convert <- TRUE
+    message('No inputs for data types. Using column 1 as "time" and column 2 as "oxygen".')
+    message('If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
+  } else if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
+    # "time" and "oxygen" are used
+    col1 <- time
+    col2 <- oxygen
+    convert <- TRUE
+    message("Performing analysis using raw oxygen data.")
+  } else if (is.numeric(time) &
+      is.null(oxygen) & is.numeric(rate)) {
+    # "time" and "rate" are used
+    col1 <- time
+    col2 <- rate
+    convert <- FALSE
+    message("Performing analysis using existing rate data.")
+  } else if (is.null(time) & is.numeric(oxygen) & is.null(rate)) {
+    # only "oxygen" is used
+    col1 <- 1 # automatically assume column 1 is time column
+    col2 <- oxygen
+    convert <- TRUE
+    message("Performing analysis using raw oxygen data.")
+    message('Using column 1 as "time".')
+  } else if (is.null(time) & is.null(oxygen) & is.numeric(rate)) {
+    # only "rate" ise used
+    col1 <- 1 # automatically assume column 1 is time column
+    col2 <- rate
+    convert <- FALSE
+    message("Performing analysis using existing rate data.")
+    message("Using column 1 as 'time'.")
+  }
+  
+  # begin analysis -----
+  # extract data first:
+  if (any(class(df) %in% "data.table")) {
+    dt <- subset(df, select = c(col1, col2))
+  } else dt <- data.table(df[, c(col1, col2)])
+  
+  setnames(dt, 1:2, c("x", "y"))  # rename columns
+  # if raw oxygen data, automatically generate rate data
+  if (convert) {
+    win <- floor(width*nrow(dt))
+    dt <- generate_mrdf(dt, win)
+    message("Using rolling regression to convert raw oxygen data to rate...")
+  }
+  # Save progress for output:
+  dt_mr <- dt
+  # Arrange the dataset in ascending order by x to prep for broken-stick model:
+  data.table::setorder(dt, "x")
+  
+  # broken-stick ----- 
+  message("Performing broken-stick analysis (Yeager and Ultsch 1989)...")
+  # speed up large data by subsampling:
   limit <- 1000
-  if (nrow(rdt) > limit) {
-    srdt <- subsample(rdt, n = round(nrow(rdt)/limit), plot = F)
-  } else srdt <- rdt
-
-  # Generate index for iterative sampling.
-  lseq <- seq.int(3, nrow(srdt) - 2) # generate sequence for lm
-
-  # Then, perform broken-stick estimates.
+  if (nrow(dt) > limit) {
+    sdt <- subsample(dt, n = round(nrow(dt)/limit), plot = F)
+  } else sdt <- dt
+  # generate index for iterative sampling.
+  lseq <- seq.int(3, nrow(sdt) - 2) # generate sequence for lm
+  # perform analysis:
   if (parallel) {
     no_cores <- parallel::detectCores() - 1  # use n-1 cores
     cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
     parallel::clusterExport(cl, "broken_stick") # import function to use
-    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(srdt, z))
+    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(sdt, z))
     parallel::stopCluster(cl)  # release cores
-  } else {
-    brstick <- lapply(lseq, function(z) broken_stick(srdt,z))
-  }
-
-  brstick <- data.table::rbindlist(brstick)
-
-  # Arrange by increasing total sum of squares of residuals
+  } else brstick <- lapply(lseq, function(z) broken_stick(sdt,z))
+  # convert output to data.table:
+  brstick <- data.table::rbindlist(brstick) 
+  # arrange by increasing total sum of squares of residuals
   data.table::setorder(brstick, sumRSS)
   best <- brstick[1]
-
-  # SEGMENTED (BREAKPOINT)
-  message("Performing segmented (breakpoint) analysis...")
-  lmfit <- lm(y ~ x, srdt)
+  
+  # segmented -----
+  message("Performing nonlinear breakpoint analysis (Muggeo 2003)...")
+  lmfit <- lm(y ~ x, sdt)
   seg <- segmented::segmented(lmfit, seg.Z = ~ x)
   message("Convergence attained in ", seg$it, " iterations.")
   fit <- fitted(seg)
-  bpfit <- data.table::data.table(x = srdt$x, y = fit)
-
-  # Generate output
-
+  bpfit <- data.table::data.table(x = sdt$x, y = fit)
+  
+  # output -----
   out <- list(
-    df = df,
-    mr.df = rdt,
-    has.rate = has.rate,
+    df = data.table(df),
+    df_rate_oxygen = dt_mr,
     width = width,
     bstick.summary = brstick,
     bpoint.summary = seg,
     bpoint.fit.df = bpfit,
     result.intercept = best$pcrit.intercept,
     result.midpoint = best$pcrit.mpoint,
-    result.segmented = seg$psi[2]
+    result.segmented = seg$psi[2],
+    convert = convert
   )
-
-  class(out) <- "pcrit"
-
+  class(out) <- "calc_pcrit"
+  
   # Plot, if true
   if (plot) plot(out)
-
   return(out)
 }
 
@@ -141,26 +198,26 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
 
 
 #' @export
-print.pcrit <- function(x, ...) {
+print.calc_pcrit <- function(x, ...) {
   cat("--Broken stick (Yeager & Ultsch 1989)--\n")
   cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
   cat(sprintf("Intercept   %g\n", x$result.intercept))
   cat(sprintf("Midpoint    %g\n", x$result.midpoint))
-
+  
   cat("\n--Segmented (Muggeo 2003)--\n")
   cat(sprintf("Std. Err.   %g\n", x$bpoint.summary$psi[3]))
   cat(sprintf("Breakpoint  %g\n", x$result.segmented))
   return(invisible(x))
-
+  
 }
 
 #' @export
-summary.pcrit <- function(object, ...) {
+summary.calc_pcrit <- function(object, ...) {
   cat("Top Result for all Methods:\n")
   summ <- cbind(
     object$bstick.summary[1],
     pcrit.segmented = object$result.segmented)
-
+  
   print(summ)
   return(invisible(summ))
 }
@@ -169,21 +226,21 @@ summary.pcrit <- function(object, ...) {
 
 
 #' @export
-plot.pcrit <- function(x, ...) {
+plot.calc_pcrit <- function(x, ...) {
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
-  segment1 <- x$mr.df[x <= cutoff]
-  segment2 <- x$mr.df[x > cutoff]
+  segment1 <- x$df_rate_oxygen[x <= cutoff]
+  segment2 <- x$df_rate_oxygen[x > cutoff]
   intercept <- x$result.intercept
-
+  
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
-
+  
   # Plot original data if available
-  if (x$has.rate) {
-    # No plot here :D
+  if (!x$convert) {
+    message("Plotting...") # dummy text (make this better next time)
   } else {
     plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
       panel.first = grid(lwd = .7))
@@ -197,9 +254,9 @@ plot.pcrit <- function(x, ...) {
       bty = "n", cex = 0.8, horiz = F)
     title(main = expression("Original Series"), line = 0.5)
   }
-
+  
   # Plot for broken-stick
-  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
+  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
     panel.first = grid(lwd = .7))
   abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
   abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
@@ -210,27 +267,26 @@ plot.pcrit <- function(x, ...) {
     col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
     cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
-
+  
   # Plot for segmented (breakpoint)
-  plot(x$mr.df, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
+  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
     panel.first = grid(lwd = .7))
   lines(x$bpoint.fit.df, lwd = 1, lty = 4)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   legend("bottom", sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
     col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Segmented'), line = 0.5)
-
+  
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
-  subdf <- x$mr.df[x > min(aps) * 0.99][x < max(aps) *1.01]
+  subdf <- x$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
   plot(subdf, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = 2,
     panel.first = grid(lwd = .7))
   abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
   abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
-
+  
   par(pardefault)  # revert par settings to original
   return(invisible(x))
 }
-

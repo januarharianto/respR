@@ -60,10 +60,12 @@
 #'
 #' @examples
 #' # most linear section of the entire data
+#' data("flowthrough.rd")
 #' auto_rate(flowthrough.rd, parallel = FALSE)
 #'
 #' # LONG EXAMPLES
 #' \dontrun{
+#' data("sardine.rd")
 #' # what is the lowest rate over a 10 minute (600s) period?
 #' auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
 #' # what is the highest rate over a 10 minute (600s) period?
@@ -85,6 +87,9 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
     df <- df[,1:2]
   }
 
+  ## verify by input
+  by <- verify_by(by)
+  
   if (!by %in% c("time", "row"))
     stop("Invalid `by`` input value, must be 'time' or 'row'.")
   if (!method %in% c("default", "linear", "max", "min", "interval"))
@@ -205,7 +210,10 @@ print.auto_rate <- function(x, pos = 1, ...) {
   return(invisible(x)) # this lets us continue with dplyr pipes
 }
 
-#' @export
+
+# OLD PLOTTING FUNCTION USING BASE PLOT.
+# Don't delete -- take as a reminder that this has been attempted before.
+
 plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (label) cat("\n# plot.auto_rate # ----------------------\n")
   # DEFINE OBJECTS

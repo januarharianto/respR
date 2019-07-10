@@ -4,26 +4,26 @@
 \alias{format_time}
 \title{Parse date-time data to numeric}
 \usage{
-format_time(x, time = 1, format = "ymdHMS", start = 0)
+format_time(x, time = 1, format = "ymdHMS", start = 1)
 }
 \arguments{
 \item{x}{vector or data frame containing strings or class POSIX.ct date-time
 data to be converted to numeric.}
 
-\item{time}{numeric value or vector of length 2. Identifies column(s)
-containing date-time data}
+\item{time}{numeric value or vector. Specifies column(s) containing date-time
+data}
 
 \item{format}{string. Code describing structure of date-time data. See
-details. Directly relates to functions in the package \code{lubridate}}
+details. Directly relates to functionality in the package \code{lubridate}}
 
-\item{start}{numeric. Default = 0. At what time (in seconds) should the
+\item{start}{numeric. Default = 1. At what time (in seconds) should the
 formatted time data start?}
 }
 \value{
 A vector or data frame, depending on input. If input is a vector, a
 vector of same length containing numeric time is returned. If input is a
 data frame, the output data frame is identical, except a new column,
-\code{time.num},of numeric time data in seconds is added as the first column.
+\code{time.num},of numeric time data in seconds is added as the last column.
 }
 \description{
 A function to parse class POSIX.ct or text strings of date-time data to
@@ -34,13 +34,23 @@ numeric time for use in \code{respR} functions.
 
 Input can be a vector, or data frame. If a vector, output is a vector of
 equal length containing numeric time data. If a data frame, the column index
-of the date-time data can be specified using the \code{time =} input. If date-time
-data is split over two columns (e.g. date in one column, time in another),
-two columns can be specified. The function uses these to combine date and
-time strings together for conversion. If multiple columns are specified, the
-\code{format} setting should reflect the same order entered in \code{time =}. The
-output data frame will be identical, except a new column called \code{time.num} is
-added as the first column.
+of the date-time data is specified using the \code{time =} input. By default the
+first column is assumed to contain the date-time data (i.e. \code{time = 1}).
+
+Multiple columns can be specified (e.g. \code{time = c(1, 2)}) if the date-time
+data is split over multiple columns (e.g. date in one column, time in
+another). The function will combine these date and time strings together for
+conversion. If multiple columns are specified, the \code{format} setting should
+reflect the same order entered in \code{time}.
+
+For data frame inputs, a data frame is returned which is identical to the
+input except a new column called \code{time.num} is added as the last column.
+
+Time-only data, that is times which lack an associated date, can also be
+parsed. Normally, parsing time-only data will cause problems when the times
+cross midnight (i.e. 00:00:00). However, the function attempts to identify
+these occurences and parse the data correctly. It also prints a message with
+the locations of these data regions for the user to check they look ok.
 
 Date-time data can be unspaced or separated by any combination of spaces,
 forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -58,7 +68,8 @@ and "01:10:23 PM" are both same as "13:10:23"
 }
 
 Regardless of input, all data are parsed to numeric time data in seconds
-duration from the first entry, unless a \code{start} number is specified, in which
+duration from the first entry starting at 1. However, if you want the times
+to satrt at a different time, a \code{start} value can be specified, in which
 case the series starts at that number (in seconds) and all subsequent times
 are shifted forward by the same amount.
 
@@ -78,10 +89,10 @@ or 0--59).} \item{\code{p}}{AM/PM indicator. Adding this will format the data as
 
 Print the order in the \code{format} string argument, using separators if you
 choose to (optional): \code{"dmyHMS"}; \code{"dmy_HMS"} and \code{"d m y H M S"} are all the
-same. Obviously, single experiments will not be conducted across different
-time zones, so if a time zone is present, it is ignored for the purposes of
-calculating numeric times. If multiple columns have been specified in the
-\code{time} argument, the \code{format} should reflect the same order.
+same. Single datasets should not span different time zones, so if a time zone
+is present it is ignored for the purposes of calculating numeric times. If
+multiple columns have been specified in the \code{time} argument, the \code{format}
+should reflect the same order.
 }
 \examples{
 # convert year-month-day hour-min-sec
@@ -122,6 +133,15 @@ x <- data.frame(
 format_time(x, time = 2, format = "HMS") # WRONG! Crosses midnight
 format_time(x, time = c(1,2), format = "dmyHMS") # Correct
 format_time(x, time = c(2,1), format = "HMSdmy") # Different column order & format
+
+# convert dataframe with multiple date and time columns
+x <- data.frame(
+  v = c("09-02", "09-02","10-02"),
+  w = c("2018", "2018","2018"),
+  x = c("22:11:11", "23:11:11","00:25:11"),
+  y = c(23, 34, 45),
+  z = c(56, 67, 78))
+format_time(x, time = c(1:3), format = "dmyHMS")
 }
 \seealso{
 \code{\link{lubridate}}
