@@ -16,7 +16,7 @@
 #'
 #' This function is ideal for passing only some regions of your data to other
 #' functions such as `auto_rate`, either by resaving them as a new object or
-#' throguht the use of pipes (`%>%`). It is also ideal for use with
+#' through the use of pipes (`%>%`). It is also ideal for use with
 #' intermittent-flow data in loops, where each replicate can be extracted and
 #' passed to an analytical function such as `calc_rate` or `auto_rate`. See
 #' examples and vignettes.
