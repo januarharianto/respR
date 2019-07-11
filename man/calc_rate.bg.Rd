@@ -37,7 +37,7 @@ If you need to subset the data to remove regions you don't want to use, see
 \code{\link{subset_data}}.
 
 There are no units involved in \code{calc_rate.bg()}. This is a deliberate
-decision. Units are called in a later function when volumetric and/or
+decision. Units are called in a later function when absolute and/or
 mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
 \code{\link[=convert_DO]{convert_DO()}}.
 }

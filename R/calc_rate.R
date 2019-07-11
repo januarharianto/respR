@@ -6,7 +6,7 @@
 #' the data frame by calling the `from` and `to` arguments.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
-#' Units are called in a later function when volumetric and/or mass-specific
+#' Units are called in a later function when absolute and/or mass-specific
 #' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
 #'
 #' @param x data frame or object of class `adjust_rate`. This is the data to

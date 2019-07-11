@@ -38,7 +38,7 @@ the same rows regardless of oxygen values.
 
 This function is ideal for passing only some regions of your data to other
 functions such as \code{auto_rate}, either by resaving them as a new object or
-throguht the use of pipes (\code{\%>\%}). It is also ideal for use with
+through the use of pipes (\code{\%>\%}). It is also ideal for use with
 intermittent-flow data in loops, where each replicate can be extracted and
 passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
 examples and vignettes.

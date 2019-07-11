@@ -47,7 +47,7 @@ and the output is summarised.
 \strong{Units}
 
 There are no units of measurement involved in \code{auto_rate}. This is a
-deliberate decision. Units are called in a later function when volumetric
+deliberate decision. Units are called in a later function when absolute
 and/or mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
 \code{\link[=convert_DO]{convert_DO()}}.
 

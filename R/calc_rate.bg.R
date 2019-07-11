@@ -11,7 +11,7 @@
 #' \code{\link{subset_data}}.
 #'
 #' There are no units involved in `calc_rate.bg()`. This is a deliberate
-#' decision. Units are called in a later function when volumetric and/or
+#' decision. Units are called in a later function when absolute and/or
 #' mass-specific rates of oxygen use are computed in [convert_rate()] and
 #' [convert_DO()].
 #'

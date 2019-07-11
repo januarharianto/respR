@@ -44,7 +44,7 @@ elapsed column can be present, but is not required. In flowthrough data,
 uptake rate calculations use O2 delta and the flow rate.
 
 There are no units involved in \code{calc_rate.ft}. This is a deliberate decision.
-Units are called in a later function when volumetric and/or mass-specific
+Units are called in a later function when absolute and/or mass-specific
 rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{

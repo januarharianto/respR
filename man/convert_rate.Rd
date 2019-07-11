@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_rate.R
 \name{convert_rate}
 \alias{convert_rate}
-\title{Convert rate value to volumetric and/or mass-specific}
+\title{Convert rate value to absolute and/or mass-specific}
 \usage{
 convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
   volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
@@ -65,7 +65,7 @@ For example, \code{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same
 Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
 
 Output units (\code{output.unit}) must be in the sequence O2-Time (e.g. mg/h,
-mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
+mg-h) for absolute rates, and for mass-specific rates O2-Time-Mass (e.g.
 mg/h/kg).
 
 Some units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
