@@ -7,16 +7,15 @@
 
 # Welcome
 
-**This package is under active development, but is currently stable.**
-
-
 `respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry data. 
 While the focus of our package is on aquatic respirometry, `respR` is largely unitless and so can process linear relationships in any time-series data, such as oxygen flux or photosynthesis.
 
-Here is how to [get started](https://januarharianto.github.io/respR/articles/respR.html).
+[**This site**](https://januarharianto.github.io/respR/articles/respR.html) can show you how to get started, and has a range of vignettes covering the fuctionality of the package and example analyses for different respirometry experiment types. 
+
+The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify citing it, not a problem at all, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found it useful, and we will help publicise your research. 
 
 ## Installation
-`respR` is not yet published in CRAN. For now, use the `devtools` package to grab the **stable** version:
+`respR` will be submitted soon to CRAN. For now, use the `devtools` package to install the latest stable version:
 
 ```r
 install.packages("devtools")
@@ -84,6 +83,8 @@ Gamble, S., Carton, A. G., & Pirozzi, I. (2014). Open-top static respirometry is
 Leclercq, N., Gattuso, J.-P. & Jaubert, J. (1999). Measurement of oxygen metabolism in open-top aquatic mesocosms: Application to a coral reef community. Marine Ecology Progress Series, 177, 299–304. [doi: 10.3354/meps177299](https://doi.org/10.3354/meps177299)
 
 Lighton, J.R.B. (2008). Measuring Metabolic Rates: A Manual for Scientists. Oxford University Press, USA.
+
+Morozov S., McCairns R.J.S., Merilä J. (2019) FishResp: R package and GUI application for analysis of aquatic respirometry data. Conservation Physiology 7(1). [doi:10.1093/conphys/coz003](https://doi.org/10.1093/conphys/coz003)
 
 Muggeo, V.M.R. (2003). Estimating regression models with unknown break-points. Statistics in Medicine, 22, 3055–3071. [doi: 10.1002/sim.1545](https://doi.org/10.1002/sim.1545)
 
