@@ -23,10 +23,11 @@ A \code{data.table} or \code{inspect} object.
 \description{
 This function subsets a data frame or \code{inspect()} object based on a given set
 of rules. It can subset data based on ranges of: time, oxygen, row number, or
-proportion. For data frames, to subset by 'time', 'o2', or 'proportion', the
-time data is assumed to be in the first column, and oxygen in the second
-column. For \code{inspect()} objects, the data will have been coerced to this
-structure already. The function can subset \strong{any} data frame by 'row'.
+proportion of total oxygen used. For data frames, to subset by 'time', 'o2',
+or 'proportion', the time data is assumed to be in the first column, and
+oxygen in the second column. For \code{inspect()} objects, the data will have been
+coerced to this structure already. The function can subset \strong{any} data frame
+by 'row'.
 }
 \details{
 For multiple column data frames, such as with time in column 1, and multiple
@@ -55,7 +56,7 @@ subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 data("sardine.rd")
 subset_data(sardine.rd, from = 94, to = 91, by = "o2")
 
-# Subset by proportion:
+# Subset by proportion of total oxygen used:
 data("sardine.rd")
 subset_data(sardine.rd, from = 0.8, to = 0.4, by = "proportion")
 
