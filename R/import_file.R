@@ -11,13 +11,14 @@
 #'  - Pyro Oxygen Logger (another name for Firesting)
 #'  - PreSens OXY10
 #'  - PreSens OXY4
-#'  - PreSens (generic, including multiplate systems)
+#'  - PreSens (OxyView generic, including multiplate systems)
 #'  - PreSens/Loligo 24-Well Multiplate System (Excel files)
 #'  - MiniDOT
 #'  - Loligo AutoResp ('_raw' files output, not metadata files)
 #'  - Loligo Witrox (same as AutoResp, without metadata)
 #'  - Vernier (raw qmbl, csv, txt, (not yet gmbl))
-#'  - Qbox Aqua (working on it)
+#'  - NeoFox
+#'  - Qbox Aqua
 #'
 #' We are always looking for sample files to improve the function. Please send
 #' them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
