@@ -17,7 +17,7 @@
 #' reflect the same order entered in `time`.
 #'
 #' For data frame inputs, a data frame is returned which is identical to the
-#' input except a new column called `time.num` is added as the last column.
+#' input except a new column called `time_num` is added as the last column.
 #'
 #' Time-only data, that is times which lack an associated date, can also be
 #' parsed. Normally, parsing time-only data will cause problems when the times
@@ -81,7 +81,7 @@
 #' @return A vector or data frame, depending on input. If input is a vector, a
 #'   vector of same length containing numeric time is returned. If input is a
 #'   data frame, the output data frame is identical, except a new column,
-#'   `time.num`,of numeric time data in seconds is added as the last column.
+#'   `time_num`,of numeric time data in seconds is added as the last column.
 #'
 #' @importFrom lubridate parse_date_time
 #' @export
@@ -190,9 +190,9 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   # output results
   # if original object was a data frame object, we append data on the right
   if (is.data.table(x)) {
-    out <- data.table(dt, elapsed = intervals)
+    out <- data.table(dt, time_num = intervals)
   } else if (is.data.frame(x)) {
-    out <- data.frame(x, elapsed = intervals)
+    out <- data.frame(x, time_num = intervals)
   } else {
     # otherwise just output the data as vector:
     out <- intervals
