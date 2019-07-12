@@ -1,4 +1,4 @@
-#' Convert rate value to volumetric and/or mass-specific
+#' Convert rate value to absolute and/or mass-specific
 #'
 #' This is a conversion function. It can convert a dimensionless unit of rate,
 #' derived from `calc_rate`, `calc_rate.ft`, `calc_rate.bg`, `auto_rate`, or
@@ -24,7 +24,7 @@
 #' Use [unit_args()] to view a list of usable unit strings.
 #'
 #' Output units (`output.unit`) must be in the sequence O2-Time (e.g. mg/h,
-#' mg-h) for volumetric rates, and for mass-specific rates O2-Time-Mass (e.g.
+#' mg-h) for absolute rates, and for mass-specific rates O2-Time-Mass (e.g.
 #' mg/h/kg).
 #'
 #' Some units also require temperature (`t`), salinity (`S`), and atmospheric
@@ -102,8 +102,8 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
     message("object of class `calc_rate.ft` detected. Automatically using mean value.")
     ## possibly here we automatically fill volume = 1
     ## Or at least warn if volume != 1
-    warning("NOTE: In flowthrough experiments `volume` and `time` inputs should be set 
-      with reference to the flow rate in L per unit time. 
+    warning("NOTE: In flowthrough experiments `volume` and `time` inputs should be set
+      with reference to the flow rate in L per unit time.
       E.g. for a flow rate in L/s `volume = 1, time = \"s\"`.
       `volume` does NOT represent the volume of the respirometer.
       `time` does NOT represent the resolution of the original data.")
@@ -167,7 +167,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 
   # Generate output
   summary <- data.frame(input.rate = rate, converted.rate = RO2,
-    volumetric = VO2)
+    absolute = VO2)
   if (is.MO2) {
     summary <- data.frame(summary, mass.specific = MO2)
     converted <- MO2

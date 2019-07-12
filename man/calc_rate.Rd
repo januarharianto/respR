@@ -31,7 +31,7 @@ the data frame by calling the \code{from} and \code{to} arguments.
 }
 \details{
 There are no units involved in \code{calc_rate}. This is a deliberate decision.
-Units are called in a later function when volumetric and/or mass-specific
+Units are called in a later function when absolute and/or mass-specific
 rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{

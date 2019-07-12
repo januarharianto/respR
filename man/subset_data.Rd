@@ -2,31 +2,46 @@
 % Please edit documentation in R/subset_data.R
 \name{subset_data}
 \alias{subset_data}
-\title{Truncate a data frame to create a subset of the data}
+\title{Truncate a data frame or `inspect()`` object to create a subset of the data}
 \usage{
 subset_data(x, from, to, by = "time")
 }
 \arguments{
-\item{x}{data frame. The data to subset.}
+\item{x}{data frame or \code{inspect} object. The data to subset.}
 
-\item{from}{numeric. Defines the lower bound(s) of the data frame to subset.
+\item{from}{numeric. Defines the lower bound(s) of the data to subset.
 Subsetting is based on the argument: \code{by}.}
 
-\item{to}{numeric. Defines the upper bound(s) of the data frame to subset.
+\item{to}{numeric. Defines the upper bound(s) of the data to subset.
 Subsetting is based on the argument: \code{by}.}
 
 \item{by}{string. "time", "row", "o2" or "proportion".}
 }
 \value{
-A \code{data.table} object.
+A \code{data.table} or \code{inspect} object.
 }
 \description{
-This function extracts a subset data frame based on a given set of rules. Can
-subset data based on ranges of: time, oxygen, row number, or proportion. To
-subset by 'time' and by 'o2', the function assumes time is in the first
-column, and oxygen in the second column. To subset by 'proportion', the
-function calculates proportion data from the oxygen column. \strong{This function
-can subset any data frame by 'row'.}
+This function subsets a data frame or \code{inspect()} object based on a given set
+of rules. It can subset data based on ranges of: time, oxygen, row number, or
+proportion of total oxygen used. For data frames, to subset by 'time', 'o2',
+or 'proportion', the time data is assumed to be in the first column, and
+oxygen in the second column. For \code{inspect()} objects, the data will have been
+coerced to this structure already. The function can subset \strong{any} data frame
+by 'row'.
+}
+\details{
+For multiple column data frames, such as with time in column 1, and multiple
+columns of oxygen data, the subset object will include \emph{all} columns. In the
+case of subsetting \code{by = "o2"}, subsetting is based on the first column of
+oxygen data (i.e. column 2), and all subsequent columns are subset between
+the same rows regardless of oxygen values.
+
+This function is ideal for passing only some regions of your data to other
+functions such as \code{auto_rate}, either by resaving them as a new object or
+through the use of pipes (\code{\%>\%}). It is also ideal for use with
+intermittent-flow data in loops, where each replicate can be extracted and
+passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
+examples and vignettes.
 }
 \examples{
 # Subset by time:
@@ -41,11 +56,16 @@ subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 data("sardine.rd")
 subset_data(sardine.rd, from = 94, to = 91, by = "o2")
 
-# Subset by proportion:
+# Subset by proportion of total oxygen used:
 data("sardine.rd")
 subset_data(sardine.rd, from = 0.8, to = 0.4, by = "proportion")
 
 # Subset by row:
 data("flowthrough.rd")
 subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
+
+# Pass (via piping) only part of a dataset to auto_rate
+data("sardine.rd")
+subset_data(sardine.rd, from = 94, to = 91, by = "o2") \%>\%
+auto_rate()
 }

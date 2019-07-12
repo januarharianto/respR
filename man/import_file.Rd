@@ -29,13 +29,14 @@ Currently works for:
 \item Pyro Oxygen Logger (another name for Firesting)
 \item PreSens OXY10
 \item PreSens OXY4
-\item PreSens (generic, including multiplate systems)
+\item PreSens (OxyView generic, including multiplate systems)
 \item PreSens/Loligo 24-Well Multiplate System (Excel files)
 \item MiniDOT
 \item Loligo AutoResp ('_raw' files output, not metadata files)
 \item Loligo Witrox (same as AutoResp, without metadata)
 \item Vernier (raw qmbl, csv, txt, (not yet gmbl))
-\item Qbox Aqua (working on it)
+\item NeoFox
+\item Qbox Aqua
 }
 
 We are always looking for sample files to improve the function. Please send

@@ -10,7 +10,7 @@
 #' **Units**
 #'
 #' There are no units of measurement involved in `auto_rate`. This is a
-#' deliberate decision. Units are called in a later function when volumetric
+#' deliberate decision. Units are called in a later function when absolute
 #' and/or mass-specific rates of oxygen use are computed in [convert_rate()] and
 #' [convert_DO()].
 #'
@@ -89,7 +89,7 @@ auto_rate <- function(df, width = NULL, by = "row", method = "linear",
 
   ## verify by input
   by <- verify_by(by)
-  
+
   if (!by %in% c("time", "row"))
     stop("Invalid `by`` input value, must be 'time' or 'row'.")
   if (!method %in% c("default", "linear", "max", "min", "interval"))
