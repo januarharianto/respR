@@ -342,6 +342,7 @@ static_roll <- function(df, win) {
 #' @import future.apply
 #' @export
 time_roll <- function(dt, width, parallel = FALSE) {
+  future_lapply <- plan <- NULL # global variables hack (unfortunate)
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
   
