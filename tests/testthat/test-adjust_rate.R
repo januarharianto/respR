@@ -1,5 +1,10 @@
 
-## adjust_rate works with numeric inputs
+## accepts calc_rate.bg inputs
+bg <- calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+expect_error(adjust_rate(100, bg), regexp = NA)
+
+
+## accepts numeric inputs
 adj <- adjust_rate(100, 20)
 expect_is(adj$input,
           "numeric")
@@ -15,5 +20,4 @@ expect_is(ar,
 
 ## adjust_rate can be printed
 expect_output(print(ar))
-
 
