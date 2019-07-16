@@ -1,6 +1,9 @@
 
 ## accepts calc_rate.bg inputs
 bg <- calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+expect_error(adjust_rate(100, bg),
+             regexp = NA)
+
 
 ## accepts numeric inputs
 adj <- adjust_rate(100, 20)
