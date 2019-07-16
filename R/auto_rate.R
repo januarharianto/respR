@@ -339,19 +339,30 @@ static_roll <- function(df, win) {
 #' This is an internal function. Used by [auto_rate()].
 #'
 #' @keywords internal
+#' @import future.apply
 #' @export
 time_roll <- function(dt, width, parallel = FALSE) {
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
-
+  
   # The cutoff specifies where to stop the rolling regression, based on width
   time_cutoff <- max(dt[,1]) - width
   row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
-
-  # Parallel is unstable on some machines tested. Not sure why (was good before)
-  # Let's disable it while I debug the issues...
-  # TODO: implement new parallelisation code that works
-
+  
+  if(parallel) {
+    oplan <- plan()
+    on.exit(plan(oplan), add = TRUE)
+    if (os() == 'win') {
+      plan(multicore)
+    } else plan(multisession)
+    out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
+      dt[[1]][x], dt[[1]][x] + width))
+  } else {
+    out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+      dt[[1]][x], dt[[1]][x] + width))
+  }
+  
+  # old parallel code - keep for reference
   # if (parallel) {
   #   no_cores <- parallel::detectCores()  # calc the no. of cores available
   #   if (os() == "win") {
@@ -363,11 +374,7 @@ time_roll <- function(dt, width, parallel = FALSE) {
   #   parallel::stopCluster(cl)  # stop cluster (release cores)
   # } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
   #   dt[[1]][x], dt[[1]][x] + width))
-  if (parallel) NULL
-  if (!parallel) NULL
-
-  out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-    dt[[1]][x], dt[[1]][x] + width))
+  
   out <- data.table::rbindlist(out)
   return(out)
 }
@@ -472,7 +479,8 @@ kde_fit <- function(dt, width, by, method, use = "all") {
       ))
     }
     # select longest fragments
-    i <- sapply(1:length(frags), function(x) which.max(sapply(frags[[x]], nrow)))
+    i <- sapply(1:length(frags), 
+      function(x) which.max(sapply(frags[[x]], nrow)))
     frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
     frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
     # Convert fragments to subsets
