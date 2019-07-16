@@ -30,4 +30,8 @@ nr <- adjust_rate(0.1, 0.001)
 expect_output(print(nr))
 
 
-## summary
+## summary works
+expect_output(summary(cr))
+expect_output(summary(ar))
+expect_output(summary(nr))
+
