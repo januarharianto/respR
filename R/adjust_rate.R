@@ -71,7 +71,7 @@ print.adjust_rate <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
-
+#' @export
 summary.adjust_rate <- function(x) {
   cat("\n# summary.adjust_rate # -----------------\n")
   if (length(x) == 3) {
