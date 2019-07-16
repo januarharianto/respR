@@ -213,7 +213,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
 
 # OLD PLOTTING FUNCTION USING BASE PLOT.
 # Don't delete -- take as a reminder that this has been attempted before.
-
+#' @export
 plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (label) cat("\n# plot.auto_rate # ----------------------\n")
   # DEFINE OBJECTS
