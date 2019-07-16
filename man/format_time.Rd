@@ -23,7 +23,7 @@ formatted time data start?}
 A vector or data frame, depending on input. If input is a vector, a
 vector of same length containing numeric time is returned. If input is a
 data frame, the output data frame is identical, except a new column,
-\code{time.num},of numeric time data in seconds is added as the last column.
+\code{time_num},of numeric time data in seconds is added as the last column.
 }
 \description{
 A function to parse class POSIX.ct or text strings of date-time data to
@@ -44,7 +44,7 @@ conversion. If multiple columns are specified, the \code{format} setting should
 reflect the same order entered in \code{time}.
 
 For data frame inputs, a data frame is returned which is identical to the
-input except a new column called \code{time.num} is added as the last column.
+input except a new column called \code{time_num} is added as the last column.
 
 Time-only data, that is times which lack an associated date, can also be
 parsed. Normally, parsing time-only data will cause problems when the times
