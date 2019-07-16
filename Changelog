@@ -1,0 +1,14 @@
+Changelog
+
+Fixes
+- FIX: summary() works correctly on `adjust_rate` objects
+- FIX: subset_data() - fix for failure with inspect() objects
+
+
+Changes
+(we don't have to include all these, but we should keep a full list however minor)
+- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
+- CHANGE: Updated startup message for full MEE citation
+- CHANGE: import_file docs - updated supported systems list
+- CHANGE: Updated README
+
