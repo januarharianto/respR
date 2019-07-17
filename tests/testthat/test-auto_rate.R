@@ -72,6 +72,9 @@ expect_output(plot(ar, choose =3))
 expect_output(plot(ar, choose =4))
 expect_output(plot(ar, choose =5))
 expect_output(plot(ar, choose =6))
+## plots first panel with method = "interval"
+ar <- auto_rate(urchins.rd, method = "interval", parallel = F, plot = F)
+expect_output(plot(ar, choose =1))
 
 
 ## print() and summary() work for different methods
@@ -89,6 +92,14 @@ expect_output(print(ar))
 expect_output(summary(ar))
 ## summary works with different pos
 expect_output(summary(ar, pos = 2))
+## print and summary works when there are more than 5 results
+ar <- auto_rate(urchins.rd, method = "interval", plot = F, parallel = F, width = 0.1)
+expect_output(print(ar))
+expect_output(summary(ar))
+## summary export = TRUE works
+expect_output(summary(ar, export = TRUE))
+
+
 
 ## static_roll (auto_rate) outputs a data frame object
 sroll <- static_roll(urchins.rd, 1500)
@@ -134,6 +145,8 @@ expect_error(auto_rate(urchins.rd, width = 271, by = "row", method = "min", para
 
 ## works if width is set to less than 1
 expect_error(auto_rate(urchins.rd, width = 0.5, by = "row", method = "min", parallel = F, plot = T),
+             regexp = NA)
+expect_error(auto_rate(urchins.rd, width = 0.5, by = "time", method = "min", parallel = F, plot = T),
              regexp = NA)
 
 ## stops if width is non-numeric
