@@ -339,7 +339,7 @@ static_roll <- function(df, win) {
 #' This is an internal function. Used by [auto_rate()].
 #'
 #' @keywords internal
-#' @import future.apply
+#' @import parallel
 #' @export
 time_roll <- function(dt, width, parallel = FALSE) {
   future_lapply <- plan <- NULL # global variables hack (unfortunate)
@@ -350,31 +350,31 @@ time_roll <- function(dt, width, parallel = FALSE) {
   time_cutoff <- max(dt[,1]) - width
   row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
   
-  if(parallel) {
-    oplan <- plan()
-    on.exit(plan(oplan), add = TRUE)
-    if (os() == 'win') {
-      plan(multicore)
-    } else plan(multisession)
-    out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
-      dt[[1]][x], dt[[1]][x] + width))
-  } else {
-    out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-      dt[[1]][x], dt[[1]][x] + width))
-  }
-  
-  # old parallel code - keep for reference
-  # if (parallel) {
-  #   no_cores <- parallel::detectCores()  # calc the no. of cores available
-  #   if (os() == "win") {
-  #     cl <- parallel::makeCluster(no_cores)
-  #   } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-  #   parallel::clusterExport(cl, "time_lm")
-  #   out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+  # if(parallel) {
+  #   oplan <- plan()
+  #   on.exit(plan(oplan), add = TRUE)
+  #   if (os() == 'win') {
+  #     plan(multicore)
+  #   } else plan(multisession)
+  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
   #     dt[[1]][x], dt[[1]][x] + width))
-  #   parallel::stopCluster(cl)  # stop cluster (release cores)
-  # } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-  #   dt[[1]][x], dt[[1]][x] + width))
+  # } else {
+  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+  #     dt[[1]][x], dt[[1]][x] + width))
+  # }
+  
+  # parallelisation
+  if (parallel) {
+    no_cores <- parallel::detectCores()  # calc the no. of cores available
+    if (os() == "win") {
+      cl <- parallel::makeCluster(no_cores)
+    } else cl <- parallel::makeCluster(no_cores, type = "FORK")
+    parallel::clusterExport(cl, "time_lm")
+    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+      dt[[1]][x], dt[[1]][x] + width))
+    parallel::stopCluster(cl)  # stop cluster (release cores)
+  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+    dt[[1]][x], dt[[1]][x] + width))
   
   out <- data.table::rbindlist(out)
   return(out)
