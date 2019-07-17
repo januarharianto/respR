@@ -19,7 +19,7 @@ ar <- auto_rate(df3col)
 expect_equal(ncol(ar$df), 2)
 
 ## stops with malformed method
-## For some reason can't get the actual message to match here
+## For some reason can't get the actual message to match here, use NULL instead to not be specific
 expect_error(auto_rate(urchins.rd, method = "wrong"),
              regexp = NULL)
 
@@ -60,23 +60,35 @@ expect_is(ar,
       ## Can't see another way of doing this
 expect_error(plot(ar), regex = NA)
 suppressWarnings(file.remove("Rplots.pdf"))
-## and for differnet methods too
+## and for different methods too
 ar <- auto_rate(urchins.rd, method = "max", plot = F, parallel = F)
 expect_error(plot(ar), regex = NA)
 suppressWarnings(file.remove("Rplots.pdf"))
+## plots individual panels
+ar <- auto_rate(urchins.rd, parallel = F, plot = F)
+expect_output(plot(ar, choose =1))
+expect_output(plot(ar, choose =2))
+expect_output(plot(ar, choose =3))
+expect_output(plot(ar, choose =4))
+expect_output(plot(ar, choose =5))
+expect_output(plot(ar, choose =6))
 
-## can be printed for different methods
+
+## print() and summary() work for different methods
 ar <- auto_rate(urchins.rd, method = "linear", plot = F, parallel = F)
 expect_output(print(ar))
+expect_output(summary(ar))
 ar <- auto_rate(urchins.rd, method = "max", plot = F, parallel = F)
 expect_output(print(ar))
+expect_output(summary(ar))
 ar <- auto_rate(urchins.rd, method = "max", plot = F, parallel = F)
 expect_output(print(ar))
+expect_output(summary(ar))
 ar <- auto_rate(urchins.rd, method = "interval", plot = F, parallel = F)
 expect_output(print(ar))
-
-## can print summary
 expect_output(summary(ar))
+## summary works with different pos
+expect_output(summary(ar, pos = 2))
 
 ## static_roll (auto_rate) outputs a data frame object
 sroll <- static_roll(urchins.rd, 1500)
@@ -110,5 +122,22 @@ int_tm <- auto_rate(urchins.rd, parallel = F, plot = F, method = "interval", by 
 expect_equal(int_tm$rate[1],
              -0.0335646)
 
+
+## parallel code works
+expect_error(auto_rate(urchins.rd, parallel = T, plot = F),
+             regexp = NA)
+
+
+## works even if width is set to width of entire data
+expect_error(auto_rate(urchins.rd, width = 271, by = "row", method = "min", parallel = F, plot = F),
+             regexp = NA)
+
+## works if width is set to less than 1
+expect_error(auto_rate(urchins.rd, width = 0.5, by = "row", method = "min", parallel = F, plot = T),
+             regexp = NA)
+
+## stops if width is non-numeric
+expect_error(auto_rate(urchins.rd, width = "text", by = "time", parallel = F, plot = F),
+             regexp = "'width' must be numeric.")
 
 
