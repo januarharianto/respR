@@ -281,7 +281,11 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
   if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
-  if (choose == 4) density.p(dens, peaks, pos)  # density
+  if (choose == 4) {
+    if (x$method != 'linear') {
+      stop('density plot not available for "max", "min" and "interval" methods')
+      } else density.p(dens, peaks, pos)  # density
+  }
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
 
