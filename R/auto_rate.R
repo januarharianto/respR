@@ -414,7 +414,8 @@ time_lm <- function(df, start, end) {
 #' @keywords internal
 #' @export
 rolling_reg <- function(dt, width, by, method) {
-  win <- calc_window(dt, width, by)
+  # win <- calc_window(dt, width, by) # this was wrong hmm
+  win <- width
   # Rolling regression
   if (by == "time") {
     roll <- time_roll(dt, win, parallel = FALSE) # TODO: fix parallel here
