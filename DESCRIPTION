@@ -21,7 +21,6 @@ Imports:
     broom,
     data.table,
     dplyr,
-    future.apply,
     ggplot2,
     graphics,
     grDevices,
