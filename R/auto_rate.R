@@ -156,11 +156,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
     )
   }
 
-  if (method == "default") {
-    cat("\nResult", pos, "of", nrow(x$summary), ":\n")
-    cat("Rate:", x$summary$rate_b1[pos], "\n")
-    cat("R.sq:", x$summary$rsq[pos])
-  } else if (method %in% c("max", "min", "linear")) {
+  if (method %in% c("max", "min", "linear")) {
     cat("\nRank", pos, "of", nrow(x$summary), ":\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
@@ -199,7 +195,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   peaks <- x$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
-  if (x$method %in% c("default", "max", "min")) {
+  if (x$method %in% c("max", "min")) {
     if (choose == FALSE) {
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
       pardefault <- par(no.readonly = T) # save original par settings
