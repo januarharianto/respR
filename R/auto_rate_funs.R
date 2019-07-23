@@ -72,7 +72,7 @@ validate_auto_rate <- function(df, by, method) {
     msg = 'The method argument cannot be recognised. It must be "linear",
     "max", "min" or "interval"'
   )
-  return(data.table(df))
+  return(list(by = by, df = data.table(df)))
 }
 
 
@@ -355,6 +355,7 @@ rolling_reg_time <- function(df, width) {
     r2 <- suppressWarnings(cor(x, y)^2)
     return(list(b0,b1,r2))
   }
+  . <- x.x <- NULL
   results <- setDT(df)[.(start = x - width, end = x), 
     on = .(x >= start, x <= end), 
     as.list(calc_coefs(x.x, y)), by = .EACHI]

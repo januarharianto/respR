@@ -72,7 +72,8 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
   plot = TRUE) {
   # perform checks
   checks <- validate_auto_rate(df, by, method)
-  dt <- checks  # extract df from validation check
+  dt <- checks$df  # extract df from validation check
+  by <- checks$by
   
   # prepare data
   setnames(dt, 1:2, c("x", "y")) # rename data columns
