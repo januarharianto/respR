@@ -5,7 +5,7 @@
 \title{Automatically determine rate of change in oxygen concentration over time}
 \usage{
 auto_rate(df, width = NULL, by = "row", method = "linear",
-  plot = TRUE, parallel = FALSE)
+  plot = TRUE)
 }
 \arguments{
 \item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
@@ -28,9 +28,6 @@ to \code{linear}. Note that if \code{"linear"} is selected, the argument \code{w
 be set to default.}
 
 \item{plot}{logical. Defaults to TRUE. Plot the results.}
-
-\item{parallel}{logical. Defaults to TRUE. Should parallel processing be
-used?}
 }
 \value{
 A list object of class \code{auto_rate}.
@@ -40,13 +37,13 @@ A list object of class \code{auto_rate}.
 determine the \emph{most linear, maximum, minimum}, or \emph{interval} rate of change
 in oxygen concentration over time. First, a rolling regression of specified
 \code{width} is performed on the entire dataset to obtain all possible values. The
-computations are then ranked (or, arranged), based on the "\code{logic}" argument,
-and the output is summarised.
+computations are then ranked (or, arranged), based on the "\code{method}"
+argument, and the output is summarised.
 }
 \details{
 \strong{Units}
 
-There are no units of measurement involved in \code{auto_rate}. This is a
+There are no units of measurement involved in \code{auto_rate()}. This is a
 deliberate decision. Units are called in a later function when absolute
 and/or mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
 \code{\link[=convert_DO]{convert_DO()}}.
@@ -56,10 +53,10 @@ and/or mass-specific rates of oxygen use are computed in \code{\link[=convert_ra
 At present, \code{auto_rate()} contains four ranking algorithms that can be called
 with the argument \code{method}:
 \itemize{
-\item \code{linear}: Uses kernel density estimation (KDE) to detect the "most
-linear" sections of the timeseries. This is achieved by using the smoothing
-bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
-regions in the data.
+\item \code{linear}: Uses kernel density estimation (KDE) to detect the "most linear"
+sections of the timeseries. This is achieved by using the smoothing bandwidth
+of the KDE to re-sample the "peaks" in the KDE to determine linear regions in
+the data.
 \item \code{max}: regressions are arranged from highest values, to the lowest.
 \item \code{min}: regressions are arranged from lowest values, to the highest.
 \item \code{interval}: non-overlapping regressions are extracted from the rolled
@@ -69,14 +66,14 @@ regrssions. They are not ranked.
 \examples{
 # most linear section of the entire data
 data("flowthrough.rd")
-auto_rate(flowthrough.rd, parallel = FALSE)
+auto_rate(flowthrough.rd)
 
 # LONG EXAMPLES
 \dontrun{
 data("sardine.rd")
 # what is the lowest rate over a 10 minute (600s) period?
-auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
+auto_rate(sardine.rd, method = "min", width = 600, by = "time")
 # what is the highest rate over a 10 minute (600s) period?
-auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
+auto_rate(sardine.rd, method = "max", width = 600, by = "time")
 }
 }
