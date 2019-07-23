@@ -1,6 +1,6 @@
 
 ## aauto_rate works using default arguments
-ar <- auto_rate(sardine.rd, parallel = F, plot = F)
+ar <- auto_rate(sardine.rd, plot = F)
 expect_is(ar,
           "auto_rate")
 expect_is(ar$rate,
@@ -9,24 +9,24 @@ expect_is(ar$df,
           "data.frame")
 
 ## auto_rate works by default with `max` argument
-ar <- auto_rate(sardine.rd, parallel = F, plot = F, method = "max")
+ar <- auto_rate(sardine.rd, plot = F, method = "max")
 expect_is(ar,
           "auto_rate")
-ar <- auto_rate(sardine.rd, parallel = F, plot = F, method = "max", width = 7500, by = "time")
+ar <- auto_rate(sardine.rd, plot = F, method = "max", width = 7500, by = "time")
 expect_is(ar,
           "auto_rate")
 
 ## auto_rate works by default with `min` argument
-ar <- auto_rate(sardine.rd, parallel = F, plot = F, method = "min")
+ar <- auto_rate(sardine.rd, plot = F, method = "min")
 expect_is(ar,
           "auto_rate")
-ar <- auto_rate(sardine.rd, parallel = F, plot = F, method = "min", width = 7500, by = "time")
+ar <- auto_rate(sardine.rd, plot = F, method = "min", width = 7500, by = "time")
 expect_is(ar,
           "auto_rate")
 
 
 ## auto_rate will perform interval method using default values
-ar <- auto_rate(sardine.rd, method = "interval", plot = F, parallel = F)
+ar <- auto_rate(sardine.rd, method = "interval", plot = F)
 expect_is(ar,
           "auto_rate")
 
@@ -48,10 +48,10 @@ sroll <- static_roll(sardine.rd, 1500)
 expect_is(sroll,
           "data.frame")
 
-## time_roll (auto_rate) produces data.frame object",
-troll <- time_roll(sardine.rd, width = 7500, parallel = FALSE)
-expect_is(troll,
-          "data.frame")
+# ## time_roll (auto_rate) produces data.frame object",
+# troll <- time_roll(sardine.rd, width = 7500)
+# expect_is(troll,
+#           "data.frame")
 
 ## time_lm (auto_rate) produces data.frame object",
 tlm <- time_lm(sardine.rd, 10, 50)
@@ -60,11 +60,11 @@ expect_is(tlm,
 
 
 ## Works with variations of `by` input
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "Time"), regexp = NA)
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "T"), regexp = NA)
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "Row"), regexp = NA)
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "r"), regexp = NA)
+expect_error(auto_rate(sardine.rd, plot = F, by = "Time"), regexp = NA)
+expect_error(auto_rate(sardine.rd, plot = F, by = "T"), regexp = NA)
+expect_error(auto_rate(sardine.rd, plot = F, by = "Row"), regexp = NA)
+expect_error(auto_rate(sardine.rd, plot = F, by = "r"), regexp = NA)
 ## Error with wrong by
-expect_error(auto_rate(sardine.rd, parallel = F, plot = F, by = "o2"),
-             "Invalid `by`` input value, must be 'time' or 'row'.")
+expect_error(auto_rate(sardine.rd, plot = F, by = "o2"),
+             "The by argument must be 'time' or 'row'")
 
