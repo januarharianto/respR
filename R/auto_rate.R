@@ -4,12 +4,12 @@
 #' determine the *most linear, maximum, minimum*, or *interval* rate of change
 #' in oxygen concentration over time. First, a rolling regression of specified
 #' `width` is performed on the entire dataset to obtain all possible values. The
-#' computations are then ranked (or, arranged), based on the "`logic`" argument,
-#' and the output is summarised.
+#' computations are then ranked (or, arranged), based on the "`method`"
+#' argument, and the output is summarised.
 #'
 #' **Units**
 #'
-#' There are no units of measurement involved in `auto_rate`. This is a
+#' There are no units of measurement involved in `auto_rate()`. This is a
 #' deliberate decision. Units are called in a later function when absolute
 #' and/or mass-specific rates of oxygen use are computed in [convert_rate()] and
 #' [convert_DO()].
@@ -19,10 +19,10 @@
 #' At present, `auto_rate()` contains four ranking algorithms that can be called
 #' with the argument `method`:
 #'
-#' - `linear`: Uses kernel density estimation (KDE) to detect the "most
-#' linear" sections of the timeseries. This is achieved by using the smoothing
-#' bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
-#' regions in the data.
+#' - `linear`: Uses kernel density estimation (KDE) to detect the "most linear"
+#' sections of the timeseries. This is achieved by using the smoothing bandwidth
+#' of the KDE to re-sample the "peaks" in the KDE to determine linear regions in
+#' the data.
 #'
 #' - `max`: regressions are arranged from highest values, to the lowest.
 #'
@@ -48,132 +48,100 @@
 #'   to `linear`. Note that if `"linear"` is selected, the argument `width` will
 #'   be set to default.
 #' @param plot logical. Defaults to TRUE. Plot the results.
-#' @param parallel logical. Defaults to TRUE. Should parallel processing be
-#'   used?
 #'
 #' @return A list object of class `auto_rate`.
 #'
 #' @import data.table
-#' @import parallel
 #'
 #' @export
 #'
 #' @examples
 #' # most linear section of the entire data
 #' data("flowthrough.rd")
-#' auto_rate(flowthrough.rd, parallel = FALSE)
+#' auto_rate(flowthrough.rd)
 #'
 #' # LONG EXAMPLES
 #' \dontrun{
 #' data("sardine.rd")
 #' # what is the lowest rate over a 10 minute (600s) period?
-#' auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
+#' auto_rate(sardine.rd, method = "min", width = 600, by = "time")
 #' # what is the highest rate over a 10 minute (600s) period?
-#' auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
+#' auto_rate(sardine.rd, method = "max", width = 600, by = "time")
 #' }
-auto_rate <- function(df, width = NULL, by = "row", method = "linear",
-                      plot = TRUE, parallel = FALSE) {
-  # Import and format data
-  if (any(class(df) %in% "inspect_data")) df <- df$df
-  if (any(class(df) %in% "inspect")) df <- df$dataframe
-
-  # Input checks
-  if(!is.data.frame(df))
-    stop("`df` must be a data frame object.")
-
-  # check that data frame length is 2, if not, select only the first 2 columns
-  if (length(df) > 2) {
-    message("auto_rate: Large dataframe detected. Selecting first 2 columns by default.")
-    df <- df[,1:2]
-  }
-
-  ## verify by input
-  by <- verify_by(by)
-
-  if (!by %in% c("time", "row"))
-    stop("Invalid `by`` input value, must be 'time' or 'row'.")
-  if (!method %in% c("default", "linear", "max", "min", "interval"))
-    stop("Invalid `method` input value, please run ?auto_rate for options.")
-
-  dt <- data.table(df) # convert to data.table object
-  setnames(dt, 1:2, c("x", "y"))
-
-  # linear detection is always by "row" since linear detection is not dependent
-  # on time but more on the stability of the data
-  if (method == "linear") by <- "row"
-
-  # determine absolute width value if fraction
-  width <- calc_window(dt, width, by)
-
-  if (method != "linear") {
-    reg <- rolling_reg(dt, width, by, method)
-    win <- reg$win
-    roll <- reg$roll
-  }
-  if (method == "max") {
-    rankroll <- reg$roll[order(rank(rate_b1))]  # order by size (from biggest)
-  } else if (method == "min") {
-    rankroll <- reg$roll[order(-rank(rate_b1))] # order by size (from smallest)
-  } else if (method == "interval") {
-    if (by == "row") {
-      sequence <- seq(win, nrow(dt), win)  # generate the sequence interval
-      # then subset the data based on the interval
-      rankroll <- reg$roll[(seq(win, nrow(dt), win) - win + 1), ]
-    } else if (by == "time") {
-      sequence <- seq.int(min(dt[, x]), max(dt[, x]), by = win) # generate
-      rankroll <- reg$roll[time %in% sequence] # subset
-    }
-  } else if (method == "linear") {
-    kde <- kde_fit(dt, width, by, method, use = "all")  # use KDE technique
-    # verify KDE technique:
-    win <- floor(kde$win * .9)
-    roll <- kde$roll # extract roll
-    # double-check KDE:
-    rankroll <- sapply(1:length(kde$subsets), function(x)
-      kde_fit(kde$subsets[[x]], win, by, method, use = "top")$subsets)
-
-    # perform calc_rate on each subset generated
-    rankroll <- rbindlist(lapply(1:length(rankroll), function(xi)
-      calc_rate(
-        dt,
-        from = head(rankroll[[xi]][[1]], 1),
-        to = tail(rankroll[[xi]][[1]], 1),
-        by = "time",
-        plot = FALSE
-      )$summary))
-  }
-  # add extra information for other methods that are not "linear"
-  if (method != "linear") {
-    # add row length and time length
-    rankroll[, rowlength := endrow - row + 1][, timelength := endtime - time]
-  }
-  rankroll <- data.table(rankroll)
-  # output
-  out <- list(
-    df = dt,
-    width = win,
-    by = by,
-    method = method,
-    roll = roll,
-    summary = rankroll,
-    rate = rankroll$rate_b1
-  )
-  if (method == "linear") {
-    # append extra items to output if using linear method
-    appendthis <- list(
-      density = kde$density,
-      peaks = kde$peaks,
-      bandwidth = kde$bandwidth
-    )
-    out <- c(out, appendthis)
-  }
-  if (method == "linear") {
-    message("\n", nrow(rankroll), " kernel density peaks detected and ranked.")
-  }
-  class(out) <- "auto_rate"
+auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
+  plot = TRUE) {
+  # perform checks
+  checks <- validate_auto_rate(df, by, method)
+  dt <- checks$df  # extract df from validation check
+  by <- checks$by
+  
+  # prepare data
+  setnames(dt, 1:2, c("x", "y")) # rename data columns
+  win <- calc_rolling_win(dt, width, by)  # determine width automatically
+  
+  # verify & apply methods
+  if (method == 'max') {
+    output <- auto_rate_max(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method)
+    out <- list(df = dt,
+      width   = win,
+      by      = by,
+      method  = method,
+      roll    = output$roll,
+      summary = output$results,
+      rate    = output$results$rate_b1,
+      metadata = metadata)
+    
+  } else if (method == 'min') {
+    output <- auto_rate_min(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method, 
+      total_regs = nrow(output$roll))
+    out <- list(df = dt,
+      width   = win,
+      by      = by,
+      method  = method,
+      roll    = output$roll,
+      summary = output$results,
+      rate    = output$results$rate_b1,
+      metadata = metadata)
+    
+  } else if (method == 'interval') {
+    output <- auto_rate_interval(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method, 
+      total_regs = nrow(output$roll))
+    out <- list(df = dt,
+      width   = win,
+      by      = by,
+      method  = method,
+      roll    = output$roll,
+      summary = output$results,
+      rate    = output$results$rate_b1,
+      metadata = metadata)
+    
+  } else if (method == 'linear') {
+    output <- auto_rate_linear(dt, win)
+    metadata <- data.table(width = win, by = by, method = method, 
+      no_regs = nrow(output$roll), no_peaks = nrow(output$peaks),
+      kde_bw = output$density$bw)
+    out <- list(df = dt, 
+      width   = win, 
+      by      = by, 
+      method  = method, 
+      roll    = output$roll, 
+      summary = output$results, 
+      rate    = output$results$rate_b1, 
+      density = output$density,
+      peaks   = output$peaks, 
+      bandwidth = output$density$bw,
+      metadata  = metadata)
+    
+  } else stop("method argument cannot be recognised")
+  class(out) <- 'auto_rate'
   if (plot) plot(out, label = FALSE)
   return(out)
 }
+
+
 
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
@@ -188,11 +156,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
     )
   }
 
-  if (method == "default") {
-    cat("\nResult", pos, "of", nrow(x$summary), ":\n")
-    cat("Rate:", x$summary$rate_b1[pos], "\n")
-    cat("R.sq:", x$summary$rsq[pos])
-  } else if (method %in% c("max", "min", "linear")) {
+  if (method %in% c("max", "min", "linear")) {
     cat("\nRank", pos, "of", nrow(x$summary), ":\n")
     cat("Rate:", x$summary$rate_b1[pos], "\n")
     cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
@@ -231,7 +195,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   peaks <- x$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
-  if (x$method %in% c("default", "max", "min")) {
+  if (x$method %in% c("max", "min")) {
     if (choose == FALSE) {
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
       pardefault <- par(no.readonly = T) # save original par settings
@@ -281,7 +245,11 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
   if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
-  if (choose == 4) density.p(dens, peaks, pos)  # density
+  if (choose == 4) {
+    if (x$method != 'linear') {
+      stop('density plot not available for "max", "min" and "interval" methods')
+      } else density.p(dens, peaks, pos)  # density
+  }
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
 
@@ -339,35 +307,43 @@ static_roll <- function(df, win) {
 #' This is an internal function. Used by [auto_rate()].
 #'
 #' @keywords internal
+#' @import parallel
 #' @export
 time_roll <- function(dt, width, parallel = FALSE) {
+  future_lapply <- plan <- NULL # global variables hack (unfortunate)
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
-
+  
   # The cutoff specifies where to stop the rolling regression, based on width
   time_cutoff <- max(dt[,1]) - width
   row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
-
-  # Parallel is unstable on some machines tested. Not sure why (was good before)
-  # Let's disable it while I debug the issues...
-  # TODO: implement new parallelisation code that works
-
-  # if (parallel) {
-  #   no_cores <- parallel::detectCores()  # calc the no. of cores available
-  #   if (os() == "win") {
-  #     cl <- parallel::makeCluster(no_cores)
-  #   } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-  #   parallel::clusterExport(cl, "time_lm")
-  #   out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+  
+  # if(parallel) {
+  #   oplan <- plan()
+  #   on.exit(plan(oplan), add = TRUE)
+  #   if (os() == 'win') {
+  #     plan(multicore)
+  #   } else plan(multisession)
+  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
   #     dt[[1]][x], dt[[1]][x] + width))
-  #   parallel::stopCluster(cl)  # stop cluster (release cores)
-  # } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-  #   dt[[1]][x], dt[[1]][x] + width))
-  if (parallel) NULL
-  if (!parallel) NULL
-
-  out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+  # } else {
+  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+  #     dt[[1]][x], dt[[1]][x] + width))
+  # }
+  
+  # parallelisation
+  if (parallel) {
+    no_cores <- parallel::detectCores()  # calc the no. of cores available
+    if (os() == "win") {
+      cl <- parallel::makeCluster(no_cores)
+    } else cl <- parallel::makeCluster(no_cores, type = "FORK")
+    parallel::clusterExport(cl, "time_lm")
+    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+      dt[[1]][x], dt[[1]][x] + width))
+    parallel::stopCluster(cl)  # stop cluster (release cores)
+  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
     dt[[1]][x], dt[[1]][x] + width))
+  
   out <- data.table::rbindlist(out)
   return(out)
 }
@@ -402,7 +378,8 @@ time_lm <- function(df, start, end) {
 #' @keywords internal
 #' @export
 rolling_reg <- function(dt, width, by, method) {
-  win <- calc_window(dt, width, by)
+  # win <- calc_window(dt, width, by) # this was wrong hmm
+  win <- width
   # Rolling regression
   if (by == "time") {
     roll <- time_roll(dt, win, parallel = FALSE) # TODO: fix parallel here
@@ -472,7 +449,8 @@ kde_fit <- function(dt, width, by, method, use = "all") {
       ))
     }
     # select longest fragments
-    i <- sapply(1:length(frags), function(x) which.max(sapply(frags[[x]], nrow)))
+    i <- sapply(1:length(frags), 
+      function(x) which.max(sapply(frags[[x]], nrow)))
     frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
     frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
     # Convert fragments to subsets

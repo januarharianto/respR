@@ -17,6 +17,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Imports:
+    assertthat,
     broom,
     data.table,
     dplyr,
@@ -28,7 +29,6 @@ Imports:
     magrittr,
     marelac,
     methods,
-    parallel,
     readxl,
     roll,
     segmented,
