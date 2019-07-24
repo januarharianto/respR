@@ -152,10 +152,10 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   if (parallel) {
     no_cores <- parallel::detectCores() - 1  # use n-1 cores
     cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
-    parallel::clusterExport(cl, "broken_stick") # import function to use
-    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(sdt, z))
+    # parallel::clusterExport(cl, "broken_stick") # import function to use
+    brstick <- parallel::parLapply(cl, lseq, function(z) respR::broken_stick(sdt, z))
     parallel::stopCluster(cl)  # release cores
-  } else brstick <- lapply(lseq, function(z) broken_stick(sdt,z))
+  } else brstick <- lapply(lseq, function(z) respR::broken_stick(sdt,z))
   # convert output to data.table:
   brstick <- data.table::rbindlist(brstick) 
   # arrange by increasing total sum of squares of residuals
