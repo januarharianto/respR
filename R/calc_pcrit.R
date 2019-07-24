@@ -93,8 +93,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     col1 <- 1
     col2 <- 2
     convert <- TRUE
-    message('No inputs for data types. Using column 1 as "time" and column 2 as "oxygen".')
-    message('If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
+    message('No inputs for data types. Using column 1 as "time" and column 2 as "oxygen". If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
   } else if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
     # "time" and "oxygen" are used
     col1 <- time
@@ -134,31 +133,29 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   # if raw oxygen data, automatically generate rate data
   if (convert) {
     win <- floor(width*nrow(dt))
-    dt <- generate_mrdf(dt, win)
+    dt_mr <- generate_mrdf(dt, win)
     message("Using rolling regression to convert raw oxygen data to rate...")
-  }
-  # Save progress for output:
-  dt_mr <- dt
+  } else dt_mr <- dt
   # Arrange the dataset in ascending order by x to prep for broken-stick model:
-  data.table::setorder(dt, "x")
+  data.table::setorder(dt_mr, "x")
   
   # broken-stick ----- 
   message("Performing broken-stick analysis (Yeager and Ultsch 1989)...")
   # speed up large data by subsampling:
   limit <- 1000
-  if (nrow(dt) > limit) {
-    sdt <- subsample(dt, n = round(nrow(dt)/limit), plot = F)
-  } else sdt <- dt
+  if (nrow(dt_mr) > limit) {
+    sdt <- subsample(dt_mr, n = round(nrow(dt_mr)/limit), plot = F)
+  } else sdt <- dt_mr
   # generate index for iterative sampling.
   lseq <- seq.int(3, nrow(sdt) - 2) # generate sequence for lm
   # perform analysis:
   if (parallel) {
     no_cores <- parallel::detectCores() - 1  # use n-1 cores
     cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
-    parallel::clusterExport(cl, "broken_stick") # import function to use
-    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(sdt, z))
+    # parallel::clusterExport(cl, "broken_stick") # import function to use
+    brstick <- parallel::parLapply(cl, lseq, function(z) respR::broken_stick(sdt, z))
     parallel::stopCluster(cl)  # release cores
-  } else brstick <- lapply(lseq, function(z) broken_stick(sdt,z))
+  } else brstick <- lapply(lseq, function(z) respR::broken_stick(sdt,z))
   # convert output to data.table:
   brstick <- data.table::rbindlist(brstick) 
   # arrange by increasing total sum of squares of residuals
@@ -175,7 +172,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   
   # output -----
   out <- list(
-    df = data.table(df),
+    df = dt,
     df_rate_oxygen = dt_mr,
     width = width,
     bstick.summary = brstick,
