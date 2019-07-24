@@ -65,7 +65,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   if (width > nrow(df)) stop("`width` input is bigger than length of data.")
 
   # Format data.
-  dt <- data.table::data.table(df)
+  dt <- data.table::data.table(df[,1:2])
   data.table::setnames(dt, 1:2, c("x", "y"))
   
   # Check if rate is provided in "has.rate".
@@ -116,7 +116,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   # Generate output
 
   out <- list(
-    df = df,
+    df = dt,
     mr.df = rdt,
     has.rate = has.rate,
     width = width,
