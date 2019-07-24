@@ -72,12 +72,12 @@ print.adjust_rate <- function(x, pos = 1, ...) {
 }
 
 #' @export
-summary.adjust_rate <- function(x) {
+summary.adjust_rate <- function(object, ...) {
   cat("\n# summary.adjust_rate # -----------------\n")
-  if (length(x) == 3) {
-    rate <- x$input
-  } else rate <- x$input.rate
-  out <- data.table(rate, adjustment = x$adjustment, "adjusted rate" = x$corrected)
+  if (length(object) == 3) {
+    rate <- object$input
+  } else rate <- object$input.rate
+  out <- data.table(rate, adjustment = x$adjustment, "adjusted rate" = object$corrected)
   print(out)
-  return(invisible(x))
+  return(invisible(object))
 }
