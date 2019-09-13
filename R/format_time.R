@@ -137,7 +137,7 @@
 
 format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   dt <- data.table(x)  # convert to data.table object, regardless of type
-  
+
   # check if object is data frame and multiple time columns are specified
   # the time columns will be concatenated and then saved for further analysis
   if (length(time) > 1) {
@@ -149,15 +149,15 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
     ts <- dt[, time, with = FALSE]  # extract columns
   } else ts <- x # otherwise assume that object is a vector list of date(s)
   # end if
-  
+
   # ERROR CHECK(S)
   # TODO: gotta add tryCatch() here if parse_date_time() fails.
-  
+
   # formate to datetime, then convert to interval in seconds:
   dtm <- lubridate::parse_date_time(unlist(ts), format) # format to datetime
   # calculate the difference in all times, from starting time (dtm[1])
   intervals <- as.numeric(difftime(dtm, dtm[1], units = "secs"))
-  
+
   # quality check - does time cross midnight?
   # usually happens when no date is provided
   if (any(diff(intervals) < 0)) {
@@ -175,29 +175,29 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
     # recalculate intervals with the corrected data:
     intervals <- as.numeric(difftime(new_dtm, new_dtm[1], units = "secs"))
   }  # end if
-  
+
   # ERROR CHECK(S)
   # sometimes even if there is an output it may be wrong because data structure
   #   is wrong - so we check for issues before we continue.
-  
+
   # check for non-sequential time
-  if (check_seq(intervals)$check) stop("Parsing of time-only data unsuccessful: 
+  if (check_seq(intervals)$check) stop("Parsing of time-only data unsuccessful:
     Non-sequential numeric time values found.")
-  
+
   # adjust start time, if specified
-  intervals <- intervals + start  
-  
+  intervals <- intervals + start
+
   # output results
   # if original object was a data frame object, we append data on the right
   if (is.data.table(x)) {
-    out <- data.table(dt, time_num = intervals)
+    out <- data.table(x, time_num = intervals)
   } else if (is.data.frame(x)) {
     out <- data.frame(x, time_num = intervals)
   } else {
     # otherwise just output the data as vector:
     out <- intervals
   }  # end if
-  
+
   return(out)
-  
+
 }  # end format_time()
