@@ -5,6 +5,7 @@ Fixes
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
 - FIX: subset_data() - fix for failure with inspect() objects
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
+- FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
 
 Changes
 (we don't have to include all these, but we should keep a full list however minor)

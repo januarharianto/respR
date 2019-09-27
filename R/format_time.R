@@ -192,7 +192,7 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   if (is.data.table(x)) {
     out <- data.table(x, time_num = intervals)
   } else if (is.data.frame(x)) {
-    out <- data.frame(x, time_num = intervals)
+    out <- cbind(x, time_num = intervals)
   } else {
     # otherwise just output the data as vector:
     out <- intervals
