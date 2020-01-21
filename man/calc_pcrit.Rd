@@ -4,8 +4,15 @@
 \alias{calc_pcrit}
 \title{Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}}
 \usage{
-calc_pcrit(df, time = NULL, oxygen = NULL, rate = NULL,
-  width = 0.1, plot = TRUE, parallel = TRUE)
+calc_pcrit(
+  df,
+  time = NULL,
+  oxygen = NULL,
+  rate = NULL,
+  width = 0.1,
+  plot = TRUE,
+  parallel = TRUE
+)
 }
 \arguments{
 \item{df}{data frame or object of class \code{inspect_data}. This is the data to

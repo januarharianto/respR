@@ -20,7 +20,7 @@
 #' against a rolling mean of the DO data. The function then performs the two
 #' \eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
-#' default width (10\% of the data length) works well, but this may vary with
+#' default width (10% of the data length) works well, but this may vary with
 #' data that has abrupt changes in rate, or is particularly noisy.
 #'
 #' Alternatively, existing rate~DO data may be used, with the `rate` input
@@ -37,7 +37,7 @@
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to 0.1, or 10\% of total rows.
+#'   regression. Defaults to 0.1, or 10% of total rows.
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
 #'   used?
@@ -64,15 +64,15 @@
 #' pcrit(squid.rd)
 #' }
 
-calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL, 
+calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   width = 0.1, plot = TRUE, parallel = TRUE) {
-  
+
   # data validation
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
   if (width > nrow(df)) stop("'width' input is bigger than length of data.")
-  
+
   # conditions must be met before we continue
   if (!is.null(oxygen) & !is.null(rate)) {
     # one of "rate" or "oxygen" must be NULL
@@ -85,7 +85,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   } else if (is.null(time) & is.null(oxygen) & !is.null(rate)) {
     if (rate == 1) stop("Please specify a 'time' argument.")
   }
-  
+
   # identify data -----
   # if nothing is provided other than data frame, use assumption that first
   # column is "time" and second column is "oxygen"
@@ -122,13 +122,13 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     message("Performing analysis using existing rate data.")
     message("Using column 1 as 'time'.")
   }
-  
+
   # begin analysis -----
   # extract data first:
   if (any(class(df) %in% "data.table")) {
     dt <- subset(df, select = c(col1, col2))
   } else dt <- data.table(df[, c(col1, col2)])
-  
+
   setnames(dt, 1:2, c("x", "y"))  # rename columns
   # if raw oxygen data, automatically generate rate data
   if (convert) {
@@ -138,8 +138,8 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   } else dt_mr <- dt
   # Arrange the dataset in ascending order by x to prep for broken-stick model:
   data.table::setorder(dt_mr, "x")
-  
-  # broken-stick ----- 
+
+  # broken-stick -----
   message("Performing broken-stick analysis (Yeager and Ultsch 1989)...")
   # speed up large data by subsampling:
   limit <- 1000
@@ -157,11 +157,11 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     parallel::stopCluster(cl)  # release cores
   } else brstick <- lapply(lseq, function(z) respR::broken_stick(sdt,z))
   # convert output to data.table:
-  brstick <- data.table::rbindlist(brstick) 
+  brstick <- data.table::rbindlist(brstick)
   # arrange by increasing total sum of squares of residuals
   data.table::setorder(brstick, sumRSS)
   best <- brstick[1]
-  
+
   # segmented -----
   message("Performing nonlinear breakpoint analysis (Muggeo 2003)...")
   lmfit <- lm(y ~ x, sdt)
@@ -169,7 +169,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   message("Convergence attained in ", seg$it, " iterations.")
   fit <- fitted(seg)
   bpfit <- data.table::data.table(x = sdt$x, y = fit)
-  
+
   # output -----
   out <- list(
     df = dt,
@@ -184,7 +184,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     convert = convert
   )
   class(out) <- "calc_pcrit"
-  
+
   # Plot, if true
   if (plot) plot(out)
   return(out)
@@ -200,12 +200,12 @@ print.calc_pcrit <- function(x, ...) {
   cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
   cat(sprintf("Intercept   %g\n", x$result.intercept))
   cat(sprintf("Midpoint    %g\n", x$result.midpoint))
-  
+
   cat("\n--Segmented (Muggeo 2003)--\n")
   cat(sprintf("Std. Err.   %g\n", x$bpoint.summary$psi[3]))
   cat(sprintf("Breakpoint  %g\n", x$result.segmented))
   return(invisible(x))
-  
+
 }
 
 #' @export
@@ -214,7 +214,7 @@ summary.calc_pcrit <- function(object, ...) {
   summ <- cbind(
     object$bstick.summary[1],
     pcrit.segmented = object$result.segmented)
-  
+
   print(summ)
   return(invisible(summ))
 }
@@ -229,12 +229,12 @@ plot.calc_pcrit <- function(x, ...) {
   segment1 <- x$df_rate_oxygen[x <= cutoff]
   segment2 <- x$df_rate_oxygen[x > cutoff]
   intercept <- x$result.intercept
-  
+
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
   pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
-  
+
   # Plot original data if available
   if (!x$convert) {
     message("Plotting...") # dummy text (make this better next time)
@@ -251,7 +251,7 @@ plot.calc_pcrit <- function(x, ...) {
       bty = "n", cex = 0.8, horiz = F)
     title(main = expression("Original Series"), line = 0.5)
   }
-  
+
   # Plot for broken-stick
   plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
     panel.first = grid(lwd = .7))
@@ -264,7 +264,7 @@ plot.calc_pcrit <- function(x, ...) {
     col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
     cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
-  
+
   # Plot for segmented (breakpoint)
   plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
     panel.first = grid(lwd = .7))
@@ -273,7 +273,7 @@ plot.calc_pcrit <- function(x, ...) {
   legend("bottom", sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
     col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Segmented'), line = 0.5)
-  
+
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
   subdf <- x$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
@@ -283,7 +283,7 @@ plot.calc_pcrit <- function(x, ...) {
   abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
-  
+
   par(pardefault)  # revert par settings to original
   return(invisible(x))
 }
