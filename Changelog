@@ -13,3 +13,20 @@ Changes
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
+
+NEW
+- NEW: filter_rate function
+
+
+
+Can we keep *everything* in here, rather than moving some to NEWS.md? Hard to keep track what's waiting in dev, what's not.....
+Then we can decide what to include
+Let's make that below and copy over when we are ready to release
+
+# [version 1.1.1] -- 2019-07-24
+Quick fixes and changes.
+
+- **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
+- **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
+- **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
