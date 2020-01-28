@@ -26,7 +26,7 @@ Do \emph{NOT} require t, S and P:
 Require t, S and P:
 
 "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "\%" (N.B. = \% Air Saturation), "Torr", "hPa", "kPa",
+"umol/kg", "mL/kg", "\\%" (N.B. = \\% Air Saturation), "Torr", "hPa", "kPa",
 "mmHg", "inHg"
 
 \strong{Available units for \code{\link[=convert_rate]{convert_rate()}}:}
@@ -40,7 +40,7 @@ Do \emph{NOT} require t, S and P:
 Require t, S and P:
 
 "mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "\%" (N.B. = \% Air Saturation), "Torr", "hPa", "kPa",
+"umol/kg", "mL/kg", "\\%" (N.B. = \\% Air Saturation), "Torr", "hPa", "kPa",
 "mmHg", "inHg"
 
 \strong{Time}

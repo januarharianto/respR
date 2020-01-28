@@ -72,7 +72,7 @@ x <- data.table(
   y = c(23, 34, 45),
   z = c(56, 67, 78))
 result <- format_time(x, time = c(1,2), format = "dmyHMS")
-expect_equal(as.numeric(result[3,4]), 8041)
+expect_equal(as.numeric(result[3,5]), 8041)
 
 # Converts dataframe with 3 separate date and time columns
 x <- data.frame(

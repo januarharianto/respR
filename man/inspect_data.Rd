@@ -4,8 +4,15 @@
 \alias{inspect_data}
 \title{Check for common errors in respirometry data}
 \usage{
-inspect_data(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
-  outflow.o2 = NULL, highlight = TRUE, plot = TRUE)
+inspect_data(
+  df,
+  time = NULL,
+  oxygen = NULL,
+  inflow.o2 = NULL,
+  outflow.o2 = NULL,
+  highlight = TRUE,
+  plot = TRUE
+)
 }
 \arguments{
 \item{df}{data frame. Accepts data frame object of any size.}
