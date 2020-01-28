@@ -77,7 +77,17 @@
 #'  between 0.05 and 0.08: `method = 'rate', n = c(0.05, 0.08)`. To retain all
 #'  rates with a R-Squared above 0.90: `method = 'rsq', n = c(0.9, 1)`. The
 #'  `row` and `time` ranges refer to the original data source and can be used to
-#'  constrain results to regions of the data.
+#'  constrain results to rates from particular regions of the data. Note, `time`
+#'  is not the same as `duration` - see next section.
+#'
+#'  \subsection{ }{`duration`} This method allows filtering of rates which occur
+#'  over a minimum or maximum duration. Here, `n` should be a numeric vector of
+#'  two values indicating the duration range you are interested in retaining.
+#'  Use this to set minimum and maximum durations in the time units of the
+#'  original data. For example, `n = c(0,500)`, will retain only rates
+#'  determined over a maximum of 500 time units. To retain rates over a minimum
+#'  duration, set this using the minimum value plus an arbitrary large
+#'  value that exceeds all durations, e.g. `n = c(500,10000)`.
 #'
 #'  \subsection{ }{`manual`} This method simply allows particular rows of the
 #'  `$summary` data frame to be manually selected to be retained. For example,
@@ -108,35 +118,23 @@
 
 filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
 
-  ## method = how to filter $rate
-  ## e.g. if it has been used on int.flow exps to remove results from flushes
-  ## also below/above certain value
-
-  ## methods
-  ## negative and positive and nonzero
-  ## highest, lowest
-  ## min, max,
-  ## low/high nth percentile
-  ## rate value range
-  ## x/time/row range - NO - use subset_data and run auto_rate on subset
-  ## non-overlapping?
-
-  ## n
-  ## ignored for neg, pos, zero, nonzero
-  ## integer for highest, lowest, min, max
-  ## +ve or -ve percentage for percentile (or 0-100 where 0 is min, 100 max?)
-  ## vector length 2 for range
-
-
   # Checks ------------------------------------------------------------------
   ## Also for `auto_rate_filt` if we decide to use that as class
   if(!("auto_rate" %in% class(x))) stop("Input is not an 'auto_rate' object")
 
+  ## Check for empty auto_rate object?
+  ## can occur if previously filtered by silly criteria
+  ## what to do/say if so?
+
   ## pos and neg rates found
-  if(any(x$rate > 0) && any(x$rate < 0)) warning("Object contains both negative and positive rates. \nTake extra care that you understand what inputs are doing.")
+  if(any(x$rate > 0) && any(x$rate < 0)) warning("Object contains both negative and positive rates. \nEnsure the chosen `method` is appropriate.")
+
+  ## Specify a method (non-null check)
+  if(is.null(method)) stop("Please specify a 'method'")
 
   ## validate method
-  if(!(method %in% c("manual",
+  if(!(method %in% c("duration",
+                     "manual",
                      "time",
                      "row",
                      "rsq",
@@ -154,7 +152,6 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
                      "negative",
                      "positive"))) stop("'method' input not recognised")
 
-  ## Specify a method (non-null check)
 
   # Positive rates only -----------------------------------------------------
 
@@ -341,6 +338,20 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
   }
 
 
+  # duration ----------------------------------------------------------------
+  if(method == "duration"){
+    if(length(n) != 2) stop("For 'duration' method 'n' must be a vector of two values.")
+    n_order <- sort(n) # in case entered wrong way round
+    message(glue::glue("Filtering rates with duration between {n_order[1]} and {n_order[2]}..."))
+
+    durations <- x$summary$endtime-x$summary$time
+
+    keep1 <- which(durations >= n_order[1])
+    keep2 <- which(durations <= n_order[2])
+    keep <- keep1[keep1 %in% keep2]
+  }
+
+
 
   # Filter ar object --------------------------------------------------------
 
@@ -415,12 +426,3 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
 #   print(out)
 #   return(invisible(object))
 # }
-
-
-
-
-
-
-# if(all(x$rate < 0)) sign <- "neg" else
-#   if (all(x$rate > 0)) sign <- "pos" else
-#     if(any(x$rate) == 0) stop("some rates equal zero")

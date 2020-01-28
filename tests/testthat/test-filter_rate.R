@@ -34,6 +34,10 @@ expect_error(filter_rate(calc_rate(intermittent.rd, from = 0, to = 1000,
 expect_error(filter_rate(545),
              regexp = "Input is not an 'auto_rate' object")
 
+## stops if no method
+expect_error(filter_rate(ar_obj, method = NULL, plot = FALSE),
+             regexp = "Please specify a 'method'")
+
 ## stops if wrong method
 expect_error(filter_rate(ar_filt_pos, method = "blah", plot = FALSE),
              regexp = "'method' input not recognised")
@@ -359,3 +363,23 @@ expect_error(filter_rate(ar_obj, method = "manual", n = 17, plot = FALSE),
              regexp = "For 'manual' method: 'n' values are out of range of ")
 
 
+
+# Check "duration" method -------------------------------------------------
+
+## max duration (zero to something)
+ar_filt_dur1 <- filter_rate(ar_obj, method = "duration",
+                           n = c(0,1000), plot = FALSE)
+## should be 11 matches
+expect_equal(length(ar_filt_dur1$rate),
+             11)
+
+## min duration (something to something large )
+ar_filt_dur2 <- filter_rate(ar_obj, method = "duration",
+                           n = c(1000, 5000), plot = FALSE)
+## should be 5 matches
+expect_equal(length(ar_filt_dur2$rate),
+             5)
+
+## Test both
+expect_equal(length(ar_filt_dur1$rate) + length(ar_filt_dur2$rate),
+             length(ar_obj$rate))

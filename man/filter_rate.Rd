@@ -98,7 +98,17 @@ numeric vecctor of two values. Matching rows which fall within that range
 between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all
 rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The
 \code{row} and \code{time} ranges refer to the original data source and can be used to
-constrain results to regions of the data.
+constrain results to rates from particular regions of the data. Note, \code{time}
+is not the same as \code{duration} - see next section.
+
+\subsection{ }{\code{duration}} This method allows filtering of rates which occur
+over a minimum or maximum duration. Here, \code{n} should be a numeric vector of
+two values indicating the duration range you are interested in retaining.
+Use this to set minimum and maximum durations in the time units of the
+original data. For example, \code{n = c(0,500)}, will retain only rates
+determined over a maximum of 500 time units. To retain rates over a minimum
+duration, set this using the minimum value plus an arbitrary large
+value that exceeds all durations, e.g. \code{n = c(500,10000)}.
 
 \subsection{ }{\code{manual}} This method simply allows particular rows of the
 \verb{$summary} data frame to be manually selected to be retained. For example,
