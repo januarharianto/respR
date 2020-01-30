@@ -4,8 +4,14 @@
 \alias{test_lin}
 \title{Perform \code{auto_rate()} iteratively and extract performance metrics}
 \usage{
-test_lin(reps = 1, len = 300, sd = 0.05, type = "default",
-  preview = FALSE, plot = FALSE)
+test_lin(
+  reps = 1,
+  len = 300,
+  sd = 0.05,
+  type = "default",
+  preview = FALSE,
+  plot = FALSE
+)
 }
 \arguments{
 \item{reps}{numeric. Number of times to iterate \code{auto_rate()} on a randomly

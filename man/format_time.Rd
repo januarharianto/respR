@@ -34,7 +34,7 @@ numeric time for use in \code{respR} functions.
 
 Input can be a vector, or data frame. If a vector, output is a vector of
 equal length containing numeric time data. If a data frame, the column index
-of the date-time data is specified using the \code{time =} input. By default the
+of the date-time data is specified using the \verb{time =} input. By default the
 first column is assumed to contain the date-time data (i.e. \code{time = 1}).
 
 Multiple columns can be specified (e.g. \code{time = c(1, 2)}) if the date-time
@@ -55,7 +55,7 @@ the locations of these data regions for the user to check they look ok.
 Date-time data can be unspaced or separated by any combination of spaces,
 forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
 
-E.g. all these are parsed as the same date-time: \code{"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23"}.
+E.g. all these are parsed as the same date-time: \verb{"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23"}.
 \itemize{
 \item Times can be in 24H or 12H with AM/PM \cr E.g. "2010-02-28 13:10:23" or
 "2010-02-28 1:10:23 PM"
