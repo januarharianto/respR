@@ -102,13 +102,13 @@ constrain results to rates from particular regions of the data. Note, \code{time
 is not the same as \code{duration} - see next section.
 
 \subsection{ }{\code{duration}} This method allows filtering of rates which occur
-over a minimum or maximum duration. Here, \code{n} should be a numeric vector of
-two values indicating the duration range you are interested in retaining.
-Use this to set minimum and maximum durations in the time units of the
-original data. For example, \code{n = c(0,500)}, will retain only rates
-determined over a maximum of 500 time units. To retain rates over a minimum
-duration, set this using the minimum value plus an arbitrary large
-value that exceeds all durations, e.g. \code{n = c(500,10000)}.
+over a duration range. Here, \code{n} should be a numeric vector of two values
+indicating the duration range you are interested in retaining. Use this to
+set minimum and maximum durations in the time units of the original data.
+For example, \code{n = c(0,500)}, will retain only rates determined over a
+maximum of 500 time units. To retain rates over a minimum duration, set this
+using the minimum value plus the maximum duration (or an arbitrary large
+value, e.g. \code{n = c(500,10000)}).
 
 \subsection{ }{\code{manual}} This method simply allows particular rows of the
 \verb{$summary} data frame to be manually selected to be retained. For example,

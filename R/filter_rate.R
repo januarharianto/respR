@@ -81,13 +81,13 @@
 #'  is not the same as `duration` - see next section.
 #'
 #'  \subsection{ }{`duration`} This method allows filtering of rates which occur
-#'  over a minimum or maximum duration. Here, `n` should be a numeric vector of
-#'  two values indicating the duration range you are interested in retaining.
-#'  Use this to set minimum and maximum durations in the time units of the
-#'  original data. For example, `n = c(0,500)`, will retain only rates
-#'  determined over a maximum of 500 time units. To retain rates over a minimum
-#'  duration, set this using the minimum value plus an arbitrary large
-#'  value that exceeds all durations, e.g. `n = c(500,10000)`.
+#'  over a duration range. Here, `n` should be a numeric vector of two values
+#'  indicating the duration range you are interested in retaining. Use this to
+#'  set minimum and maximum durations in the time units of the original data.
+#'  For example, `n = c(0,500)`, will retain only rates determined over a
+#'  maximum of 500 time units. To retain rates over a minimum duration, set this
+#'  using the minimum value plus the maximum duration (or an arbitrary large
+#'  value, e.g. `n = c(500,10000)`).
 #'
 #'  \subsection{ }{`manual`} This method simply allows particular rows of the
 #'  `$summary` data frame to be manually selected to be retained. For example,
@@ -355,9 +355,11 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
 
   # Filter ar object --------------------------------------------------------
 
-  ## save call or filtering criteria?
-  ## save original auto_rate object, i.e. x? - will get big v quickly, especially if chaining together
-  ## multiple times.
+  ## Options
+  ## Save call or filtering criteria?
+  ## Save excluded rows in separate element?
+  ## Save original auto_rate object, i.e. x?
+  ##    - will get big v quickly, especially if chaining together multiple times.
 
   output <- x
   output$summary <- output$summary[keep,]
@@ -367,11 +369,15 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
 
   ## Add custom ADDITIONAL class
   ## Maybe different way of doing this, but:
-  ## 1. for analysis documentation purposes new object needs to have indiciation it was an ar object
-  ## that was manipulated, i.e. not original
+  ## 1. for analysis documentation purposes new object should have indiciation it was an
+  ## auto_rate object that was manipulated, i.e. not original
   ## 2. can't replace 'auto_rate' class because generic S3 functions will stop working
   ## (unless we just duplicate these for new class)
   if(!("auto_rate_filt" %in% class(output))) class(output) <- c(class(output), "auto_rate_filt")
+
+
+
+  # Plot --------------------------------------------------------------------
 
   ## This plotting is a horrible hack. Margins much too wide. Also very slow. Maybe reduce to max of 12.
   ## Must be a better way of determining grid too
