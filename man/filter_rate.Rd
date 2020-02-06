@@ -107,8 +107,8 @@ indicating the duration range you are interested in retaining. Use this to
 set minimum and maximum durations in the time units of the original data.
 For example, \code{n = c(0,500)}, will retain only rates determined over a
 maximum of 500 time units. To retain rates over a minimum duration, set this
-using the minimum value plus the maximum duration (or an arbitrary large
-value, e.g. \code{n = c(500,10000)}).
+using the minimum value plus the maximum duration (or simply infinity, e.g.
+\code{n = c(500,Inf)}).
 
 \subsection{ }{\code{manual}} This method simply allows particular rows of the
 \verb{$summary} data frame to be manually selected to be retained. For example,

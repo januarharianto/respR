@@ -86,8 +86,8 @@
 #'  set minimum and maximum durations in the time units of the original data.
 #'  For example, `n = c(0,500)`, will retain only rates determined over a
 #'  maximum of 500 time units. To retain rates over a minimum duration, set this
-#'  using the minimum value plus the maximum duration (or an arbitrary large
-#'  value, e.g. `n = c(500,10000)`).
+#'  using the minimum value plus the maximum duration (or simply infinity, e.g.
+#'  `n = c(500,Inf)`).
 #'
 #'  \subsection{ }{`manual`} This method simply allows particular rows of the
 #'  `$summary` data frame to be manually selected to be retained. For example,
@@ -133,6 +133,12 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
   if(is.null(method)) stop("Please specify a 'method'")
 
   ## validate method
+
+  ## OTHER METHODS??
+    ## - some way of excluding rates which overlap. Statistically should not use these in stats
+    ## if they largely overlap. Falsely inflating stat strength of that result. But how to pick
+    ## which one to exclude?
+
   if(!(method %in% c("duration",
                      "manual",
                      "time",
@@ -154,15 +160,12 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
 
 
   # Positive rates only -----------------------------------------------------
-
-  ## Both these include 0 results. Maybe message? Or NOT include zero?
   if(method == "positive"){
     message("Filtering all positive rate values. `n` input ignored.")
     keep <- which(x$rate > 0)
   }
 
   # Negative rates only -----------------------------------------------------
-
   if(method == "negative"){
     message("Filtering all negative rate values. `n` input ignored.")
     keep <- which(x$rate < 0)
@@ -181,7 +184,7 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
   }
 
   # lowest rates ------------------------------------------------------------
-  ## Note these are not lowest *numerical*, but lowest *absolute* values
+  ## Note these are NOT lowest *numerical*, but lowest *absolute* values
   ## E.g. if all negative will return the highest/least negative n values
 
   if(method == "lowest"){
@@ -193,12 +196,10 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
     if(all(x$rate <= 0)) keep <- sort(tail(order(x$rate), n))
     ## if all positive return LOWEST numerical n
     if(all(x$rate >= 0)) keep <- sort(head(order(x$rate), n))
-    ## if a mix of neg and pos stop
   }
 
   # highest rates -----------------------------------------------------------
-  ## Note these are not highest *numerical*, but highest *absolute* values
-  ## E.g. if all negative will return the lowest/most negative n values
+  ## Note these are NOT highest *numerical*, but highest *absolute* values
 
   if(method == "highest"){
     if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'highest' method is intended to find highest rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to filter out only positive or negative rates first, or 'max' option to find *numerical* highest rates.")
@@ -218,7 +219,7 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
     if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'lowest_percentile' method is intended to find lowest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to filter out only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
     if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
 
-    message(glue::glue("Filtering lowest {n*100}th percentile *absolute* rate values..."))
+    message(glue::glue("Filtering lowest {n*100}th percentile of *absolute* rate values..."))
 
     ## if all negative return HIGHEST numerical nth percentile
     if(all(x$rate <= 0)) {
@@ -237,7 +238,7 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
     if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'highest_percentile' method is intended to find highest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to filter out only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
     if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
 
-    message(glue::glue("Filtering highest {n*100}th percentile *absolute* rate values..."))
+    message(glue::glue("Filtering highest {n*100}th percentile of *absolute* rate values..."))
 
     ## if all negative return LOWEST numerical nth percentile
     if(all(x$rate <= 0)) {
@@ -382,6 +383,11 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
   ## This plotting is a horrible hack. Margins much too wide. Also very slow. Maybe reduce to max of 12.
   ## Must be a better way of determining grid too
   ## (cowplot has plot_grid but don't know how to make it work with these)
+
+  ## ToDO
+  ## narrow margins
+  ## add box with value of rate in each plot - replace title so it doesn't overlap data
+
   if(plot == TRUE){
 
     parorig <- par(no.readonly = TRUE) # save original par settings
@@ -403,11 +409,14 @@ filter_rate <- function(x, method = NULL, n = 1, plot = TRUE){
     on.exit(par(parorig)) # revert par settings to original
   }
 
+  ## Message here like "Filtering complete: 'n' matching rates/rows returned" ???
   return(output)
 
 }
 
 ##  shouldn't need these as long as auto_rate class is retained
+
+##  HOWEVER - maybe should be different print out if filtered object
 
 #' @export
 # print.adjust_rate <- function(x, pos = 1, ...) {
