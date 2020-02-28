@@ -29,13 +29,13 @@ operation that has been applied to the \verb{$original} object, from the first t
 the most recent. Note, if using \verb{\%>\%} piping the \code{x} input in these appears
 as \code{x = .} where it has been piped from the previous call. These additional
 elements ensure the output contains the complete, reproducible history of
-the \code{uato_rate} object having been subset.
+the \code{auto_rate} object having been subset.
 }
 \description{
-The \code{auto_rate} function is a very powerful function, but the
-output can be large and difficult to explore. \code{subset_rate} subsets
-\code{auto_rate} results according to various criteria. For example, extracting
-only positive or negative rates, or only the highest or lowest rates.
+The \code{auto_rate} function is a very powerful, but the output can
+be large and difficult to explore. \code{subset_rate} subsets \code{auto_rate} results
+according to various criteria. For example, extracting only positive or
+negative rates, or only the highest or lowest rates.
 
 Note: when choosing a \code{method}, keep in mind that to keep mathematically
 consistent, \code{respR} outputs oxygen consumption (i.e. respiration) rates as
@@ -104,13 +104,13 @@ percentile methods would be a better option in this case however).
 
 \subsection{ }{\code{rate}, \code{rsq}, \code{row}, \code{time}} These methods work on the
 respective columns of the \code{auto_rate} \verb{$summary} data frame. For these, \code{n}
-should be a numeric vector of two values. Matching rows which fall within
-that range (inclusive) are returned. For example, to retain only rows where
-rate is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To
-retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the original data source and can
-be used to constrain results to rates from particular regions of the data
-(though the better option is to \code{\link{subset_data}} prior to
-analysis). Note, \code{time} is not the same as \code{duration} - see next section.
+should be a numeric vector of two values. Matching rates which fall within
+that range (inclusive) are returned. For example, to retain only rates where
+the \code{rate} value is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the original data source
+(\verb{$df} element of the input) and can be used to constrain results to rates
+from particular regions of the data (though a better option is to
+\code{\link{subset_data}} prior to analysis). Note, \code{time} is not the same
+as \code{duration} - see next section.
 
 \subsection{ }{\code{duration}} This method allows subsetting of rates which
 occur within a duration range. Here, \code{n} should be a numeric vector of two
@@ -123,9 +123,10 @@ using the minimum value plus the maximum duration (or simply infinity, e.g.
 
 \subsection{ }{\code{manual}} This method simply allows particular rows of the
 \verb{$summary} data frame to be manually selected to be retained. For example,
-to keep only the first result: \verb{method = 'manual', n = 1}. To keep multiple
-columns use regular \code{R} selection syntax: \code{n = 1:3}, \code{n = c(1,2,3)}, \code{n = c(5,8,10)}, etc. No value of \code{n} should exceed the number of rows in the
-\verb{$summary} data frame.
+to keep only the top ranked result: \verb{method = 'manual', n = 1}. To keep
+multiple rows use regular \code{R} selection syntax: \code{n = 1:3}, \code{n = c(1,2,3)},
+\code{n = c(5,8,10)}, etc. No value of \code{n} should exceed the number of rows in
+the \verb{$summary} data frame.
 
 \subsection{ }{\code{overlap}} This method removes rates which overlap, that is,
 linear regions identified by \code{auto_rate} which partly or completely share

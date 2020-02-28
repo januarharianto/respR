@@ -1,9 +1,9 @@
 #'@title Subset auto_rate results based on a range of criteria
 #'
-#'@description The `auto_rate` function is a very powerful function, but the
-#'  output can be large and difficult to explore. `subset_rate` subsets
-#'  `auto_rate` results according to various criteria. For example, extracting
-#'  only positive or negative rates, or only the highest or lowest rates.
+#'@description The `auto_rate` function is a very powerful, but the output can
+#'  be large and difficult to explore. `subset_rate` subsets `auto_rate` results
+#'  according to various criteria. For example, extracting only positive or
+#'  negative rates, or only the highest or lowest rates.
 #'
 #'  Note: when choosing a `method`, keep in mind that to keep mathematically
 #'  consistent, `respR` outputs oxygen consumption (i.e. respiration) rates as
@@ -73,14 +73,15 @@
 #'
 #'  \subsection{ }{`rate`, `rsq`, `row`, `time`} These methods work on the
 #'  respective columns of the `auto_rate` `$summary` data frame. For these, `n`
-#'  should be a numeric vector of two values. Matching rows which fall within
-#'  that range (inclusive) are returned. For example, to retain only rows where
-#'  rate is between 0.05 and 0.08: `method = 'rate', n = c(0.05, 0.08)`. To
-#'  retain all rates with a R-Squared above 0.90: `method = 'rsq', n = c(0.9,
-#'  1)`. The `row` and `time` ranges refer to the original data source and can
-#'  be used to constrain results to rates from particular regions of the data
-#'  (though the better option is to \code{\link{subset_data}} prior to
-#'  analysis). Note, `time` is not the same as `duration` - see next section.
+#'  should be a numeric vector of two values. Matching rates which fall within
+#'  that range (inclusive) are returned. For example, to retain only rates where
+#'  the `rate` value is between 0.05 and 0.08: `method = 'rate', n = c(0.05,
+#'  0.08)`. To retain all rates with a R-Squared above 0.90: `method = 'rsq', n
+#'  = c(0.9, 1)`. The `row` and `time` ranges refer to the original data source
+#'  (`$df` element of the input) and can be used to constrain results to rates
+#'  from particular regions of the data (though a better option is to
+#'  \code{\link{subset_data}} prior to analysis). Note, `time` is not the same
+#'  as `duration` - see next section.
 #'
 #'  \subsection{ }{`duration`} This method allows subsetting of rates which
 #'  occur within a duration range. Here, `n` should be a numeric vector of two
@@ -93,10 +94,10 @@
 #'
 #'  \subsection{ }{`manual`} This method simply allows particular rows of the
 #'  `$summary` data frame to be manually selected to be retained. For example,
-#'  to keep only the first result: `method = 'manual', n = 1`. To keep multiple
-#'  columns use regular `R` selection syntax: `n = 1:3`, `n = c(1,2,3)`, `n =
-#'  c(5,8,10)`, etc. No value of `n` should exceed the number of rows in the
-#'  `$summary` data frame.
+#'  to keep only the top ranked result: `method = 'manual', n = 1`. To keep
+#'  multiple rows use regular `R` selection syntax: `n = 1:3`, `n = c(1,2,3)`,
+#'  `n = c(5,8,10)`, etc. No value of `n` should exceed the number of rows in
+#'  the `$summary` data frame.
 #'
 #'  \subsection{ }{`overlap`} This method removes rates which overlap, that is,
 #'  linear regions identified by `auto_rate` which partly or completely share
@@ -141,7 +142,7 @@
 #'  the most recent. Note, if using `%>%` piping the `x` input in these appears
 #'  as `x = .` where it has been piped from the previous call. These additional
 #'  elements ensure the output contains the complete, reproducible history of
-#'  the `uato_rate` object having been subset.
+#'  the `auto_rate` object having been subset.
 #'
 #'@md
 #'@param x list. An object of class `auto_rate` or `auto_rate_subset`.
@@ -169,7 +170,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   call <- match.call()
 
   # Checks ------------------------------------------------------------------
-  ## Also for `auto_rate_subset` if we decide to use that as class
+
   if(!("auto_rate" %in% class(x))) stop("Input is not an 'auto_rate' object")
 
   ## Check for empty auto_rate object
@@ -179,7 +180,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   ## pos and neg rates found
   if(any(x$rate > 0) && any(x$rate < 0)) message("Object contains both negative and positive rates. Ensure the chosen `method` is appropriate.")
 
-  ## Specify a method (non-null check)
+  ## Specify a method
   if(is.null(method)) stop("Please specify a 'method'")
 
   ## Validate method
