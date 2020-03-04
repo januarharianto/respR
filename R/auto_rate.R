@@ -76,7 +76,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
   by <- checks$by
 
   # prepare data
-  setnames(dt, 1:2, c("x", "y")) # rename data columns
+  data.table::setnames(dt, 1:2, c("x", "y")) # rename data columns
   win <- calc_rolling_win(dt, width, by)  # determine width automatically
 
   # verify & apply methods
@@ -202,9 +202,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (x$method %in% c("max", "min")) {
     if (choose == FALSE) {
 
-      parorig <- par(no.readonly = TRUE) # save original par settings
-      on.exit(par(parorig)) # revert par settings to original
-
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
       layout(mat)
       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
@@ -218,9 +215,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   } else if (x$method == "interval") {
     if (choose == FALSE) {
 
-      parorig <- par(no.readonly = TRUE) # save original par settings
-      on.exit(par(parorig)) # revert par settings to original
-
       par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt)
       abline(v = startint, lty = 3)
@@ -231,9 +225,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
     }
   } else if (x$method == "linear") {
     if (choose == FALSE) {
-
-      parorig <- par(no.readonly = TRUE) # save original par settings
-      on.exit(par(parorig)) # revert par settings to original
 
       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt) # full timeseries with lmfit
