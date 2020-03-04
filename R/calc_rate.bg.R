@@ -88,12 +88,14 @@ print.calc_rate.bg <- function(x, ...) {
 
 #' @export
 plot.calc_rate.bg <- function(x, ...) {
-  pardefault <- par(no.readonly = T)  # save original par settings
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
   lapply(1:length(x$bgrate), function(z) sub.p(data.frame(x$data[[1]],
     x$data[[z + 1]]), rsq = NULL, title = F))
-  par(pardefault)  # revert par settings to original
 
 }
 

@@ -40,7 +40,9 @@ subsample <- function(df, n = 5, random_start = FALSE, plot = TRUE) {
 
   if (plot) {
 
-    pardefault <- par(no.readonly = T)  # save original par settings
+    parorig <- par(no.readonly = TRUE) # save original par settings
+    on.exit(par(parorig)) # revert par settings to original
+
     par(mfrow=c(1,2))  # replace par settings
     plot(df, xlab = "Time", ylab = "Oxygen", col = r1, pch = 16,
       panel.first = c(rect(par("usr")[1],
@@ -56,7 +58,6 @@ subsample <- function(df, n = 5, random_start = FALSE, plot = TRUE) {
         par("usr")[4], col = r3), grid(col = "white",
           lty = 1, lwd = 1.5)))
     title(main = "Subsample Timeseries", line = 0.5)
-    par(pardefault)  # revert par settings to original
   }
   return(invisible(subset))
 }

@@ -127,13 +127,13 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   ls <- x$results
 
   options(scipen = 5) # adjust threshold for scientific notation
-  pardefault <- par(no.readonly = T) # save original par settings
+  parorig <- par(no.readonly = TRUE) # save original par settings
   if (any(show %in% "all")) {
     # mat <- matrix(c(1,2,5,3,4,5), nrow = 2, byrow = TRUE)
     # pardefault <- par(no.readonly = T)  # save original par settings
     # layout(mat)
     # par(mai=c(0.6,0.6,0.3,0.2), ps = 10, cex = 1, cex.main = 1)
-    pardefault <- par(no.readonly = T) # save original par settings
+    parorig <- par(no.readonly = TRUE) # save original par settings
     par(mfrow = c(2,2), mai = c(.5,.5,.3,.3), ps = 10, cex = 1, cex.main = 1)
   }
 
@@ -224,6 +224,6 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     title(main = "Deviation from true rate", cex.main = .8)
   }
 
-  if (any(show %in% "all")) par(pardefault) # revert par settings to original
+  if (any(show %in% "all"))   on.exit(par(parorig)) # revert par settings to original
   return(invisible(x))
 }

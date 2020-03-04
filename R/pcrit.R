@@ -171,6 +171,10 @@ summary.pcrit <- function(object, ...) {
 
 #' @export
 plot.pcrit <- function(x, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
   segment1 <- x$mr.df[x <= cutoff]
@@ -179,7 +183,6 @@ plot.pcrit <- function(x, ...) {
 
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
-  pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
 
   # Plot original data if available
@@ -231,7 +234,6 @@ plot.pcrit <- function(x, ...) {
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
-  par(pardefault)  # revert par settings to original
   return(invisible(x))
 }
 

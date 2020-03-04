@@ -247,13 +247,16 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     cat("\n# plot.inspect # ------------------------\n")
 
   parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
 
   # extract data frame
   dt <- x$dataframe
+  # perform rolling regression (quick one)
+  if (ncol(dt) == 2) {
+    ## changed here 0.2 to 0.1
+    roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
+  }
 
-  # 2 column plot -----------------------------------------------------------
-
-  ## For 2 columns
   if (length(x$dataframe) == 2) {
     par(
       mfrow = c(2, 1),
@@ -304,7 +307,6 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     )
     title(main = "Full Timeseries", line = 2)
 
-
     ## Adding this fn here to avoid using static_roll
     roll_reg_plot <- function(df, width) {
       roll_width <- floor(width * nrow(df))
@@ -334,6 +336,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
          col.lab = "blue",
          col.axis = "blue"
     )
+    
     axis(side = 2) # simply to put yaxis label colour back to black
     ## Added dashed line at rate = 0
     abline(h = 0, lty = 2)
@@ -364,7 +367,6 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
       cex = 0.7
     )
     title(main = glue::glue("Rolling Regression of Rate ({width} Rolling Window)"), line = 2)
-
 
     # Multi column plot -------------------------------------------------------
 
@@ -400,7 +402,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
       title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 0.3)}
     )
   }
-  on.exit(par(parorig)) # revert par settings to original
+
 
   if (label)
     cat("Done.\n")

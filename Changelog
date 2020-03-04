@@ -23,6 +23,8 @@ Fixes
 - FIX: subset_data() - fix for failure with inspect() objects
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
 - FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
+- FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
+
 
 
 Changes
@@ -32,4 +34,5 @@ Changes
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
+- CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
 
