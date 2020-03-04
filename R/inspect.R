@@ -55,7 +55,7 @@
 #' # automatically inspect first 2 columns:
 #' data("sardine.rd")
 #' inspect(sardine.rd)
-#' 
+#'
 #' data("urchins.rd")
 #' inspect(urchins.rd)
 #'
@@ -209,9 +209,10 @@ print.inspect <- function(x, ...) {
 plot.inspect <- function(x, label = TRUE, ...) {
   if (label)
     cat("\n# plot.inspect # ------------------------\n")
-  
-  pardefault <- par(no.readonly = T) # save original par settings
-  
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   # extract data frame
   dt <- x$dataframe
   # perform rolling regression (quick one)
@@ -219,7 +220,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
     ## changed here 0.2 to 0.1
     roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
   }
-  
+
   if (length(x$dataframe) == 2) {
     par(
       mfrow = c(2, 1),
@@ -269,7 +270,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
       cex = 0.7
     )
     title(main = "Full Timeseries", line = 2)
-    
+
     ## changed to 10% width for now (0.05 each side here)
     ## Removed -1* before roll - now actual negative rates
     plot((roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
@@ -314,7 +315,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
       cex = 0.7
     )
     title(main = "Rolling Regression of Rate (0.1 Rolling Window)", line = 2)
-    
+
   } else {
     ## plot every column anyway - without rate plot
     message("inspect: Full plot is only avalilable for a 2-column dataframe output.")
@@ -333,8 +334,7 @@ plot.inspect <- function(x, label = TRUE, ...) {
         ylab = ""
       ))
   }
-  par(pardefault)  # revert par settings to original
-  
+
   if (label)
     cat("Done.\n")
   return(invisible(x))

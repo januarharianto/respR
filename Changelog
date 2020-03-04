@@ -32,4 +32,4 @@ Changes
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
-
+- CHANGE: Better original par() restoration behaviour (TIL: put them next to each other and use on.exit to restore and it stills works if there is some sort of plotting error that causes it to exit early)

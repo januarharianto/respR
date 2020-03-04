@@ -130,6 +130,10 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 
 #' @export
 plot.calc_rate <- function(x, rep = 1, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   cat("\n# plot # ------------------------\n")
   cat('Plotting...this may take a while for large datasets.\n')
   df  <- x$data
@@ -137,13 +141,11 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
-  pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   multi.p(df, sdf)  # full timeseries with lmfit
   sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
-  par(pardefault)  # revert par settings to original
   cat("Done.\n")
   # cat("-------------------------------\n")
   return(invisible(x))
