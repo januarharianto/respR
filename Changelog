@@ -26,6 +26,7 @@ Fixes
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
 
 
+
 Changes
 - CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
 - CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
@@ -34,3 +35,4 @@ Changes
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
+

@@ -1,50 +1,91 @@
-#' Check for common errors in respirometry data
+#' Explore and visualise respirometry data and check for common errors
 #'
-#' `inspect()` scans and subsets a data.frame object for errors that may affect
-#' the use of various functions in `respR`. By default, the function scans only
-#' the first 2 columns of a data frame and assumes that the first column is time
-#' data. A plot of the data is also produced, including a rolling regression
-#' plot using a width of `floor(0.1 * nrow([data frame])` for a quick visual
-#' inspection of the rate pattern (or stability) of the data. Note that rates
-#' for oxygen uptake are returned as negative and plotted on a reverse axis;
-#' higher oxygen uptake rates are higher on the rate plot (more negative).
+#' `inspect` is a data exploration and preparation function that visualises
+#' respirometry data and scans it for errors that may affect the use of various
+#' functions in `respR`. It also subsets specified columns into a new `list`
+#' object that can be used in subsequent functions, reducing the need for
+#' additional inputs. Note, use of `inspect` to prepare data for the subsequent
+#' functions is *completely optional*. All functions in `respR` can accept
+#' regular `R`` data objects including data frames, data tables, tibbles,
+#' vectors, etc. It is a quality control and exploratory step to help users
+#' explore and prepare their data prior to analysis.
+#'
+#' For the input data frame, the function scans the specified `time` and
+#' `oxygen` columns. By default, it is assumed the first column is time data,
+#' and second is oxygen data, but different columns can be specified using the
+#' `time` and `oxygen` column identification inputs. A plot of the data is also
+#' produced (unless `plot = FALSE`), including a rolling regression plot, which
+#' calculates the rate of change in oxygen across a rolling window set using the
+#' `width` operator (default is `width = 0.1`, or 10% of the entire dataset).
+#' This plot provides a quick visual inspection of the how the rate changes (or
+#' is stable) over the course of the experiment. The `width` can be changed to
+#' examine how this affects rate calculations. Rates are plotted against the
+#' middle timepoint of the respective regression. Note that rates are plotted on
+#' a reverse axis because oxygen uptake rates are returned as negative by
+#' `respR`. Therefore, higher oxygen uptake rates are higher on the rate plot
+#' (more negative). Note, if examining oxygen *production*, higher rates will be
+#' *lower* on this plot.
 #'
 #' Time columns are checked for NA/NaN values, sequential time, duplicate time
 #' and evenly-spaced time data. Oxygen columns are simply checked for NA/NaN
-#' data. Once data checks are complete, the function produces a list object
-#' which may be directly loaded into [calc_rate()], [calc_rate.bg()],
-#' [calc_rate.ft()], and [auto_rate()] for further analyses.
+#' data. See **Failed Checks** section for what it means for analyses if these
+#' checks are failed. Once data checks are complete, the function produces a
+#' list object which may be directly loaded into [calc_rate()],
+#' [calc_rate.bg()], [calc_rate.ft()], and [auto_rate()] for further analyses.
 #'
-#' If you wish to scan more than two columns, you can do so by specifying the
-#' `time` and `oxygen` arguments to select specific columns of a large data
-#' frame. However, the function will not produce a plot. Thus, you may inspect
-#' flowthrough respirometry data, which usually contains oxygen values for
-#' inflow and outflow, by specifying a vector of column numbers, e.g. `oxygen =
-#' c(2,3)`.
+#' @section Multiple Columns of Oxygen Data: For quick overview of larger
+#'   experiments, multiple oxygen columns can be scanned for errors and plotted
+#'   using the `oxygen` argument to select multiple columns of a data frame (or
+#'   `NULL` for all columns). These must *share the same `time` column*. In this
+#'   case a plot of each oxygen time series is produced, but no rolling rate
+#'   plot is produced. All data are plotted on the same axis range of both time
+#'   and oxygen (total range of data). This is chiefly exploratory functionality
+#'   to give a quick overview of a dataset, and it should be noted that while
+#'   the output `list` object will contain all columns in its `$dataframe`
+#'   element, subsequent functions in `respR` (`calc_rate`, `auto_rate`, etc.)
+#'   will by default only use the first two columns (`time`, and the first
+#'   specified `oxygen` column). Other columns of oxygen data contained in
+#'   `inspect` output objects can only be used in these functions by calling the
+#'   data frame columns directly as the input (e.g. `data$dataframe[,c(1,3)])`).
+#'   Best practice is to inspect and assign each oxygen column individually as
+#'   separate `inspect` objects. See examples.
 #'
-#' @section Failed Checks: It should be noted most of these checks are for
-#'   exploratory purposes only; they help diagnose potential issues with the
-#'   data. For instance, very long experiments could have had sensor dropouts
-#'   the user is completely unaware of. Other issues are not issues at all - for
-#'   instance, an uneven time warning can result from using decimalised minutes,
-#'   which is a completely valid time metric.
+#' @section Flowthrough Data: Flowthrough respirometry data, which usually
+#'   contains oxygen values for inflow and outflow channels, can also be
+#'   inspected by specifying column IDs, e.g. `oxygen = c(2,3)`. See examples.
 #'
-#'   If some of these checks fail, it should generally not hinder analysis of
-#'   the data. respR has been coded to rely on linear regression on exact data
-#'   values, and not make assumptions about data spacing. Therefore issues such
-#'   as missing or NA/NaN values, duplicate values, or uneven time spacing
-#'   should not cause any erroneous results, as long as they do not occur over
-#'   large regions of the data. The only major potential issue is if time data
-#'   are not sequential. This could cause unknown results and incorrect rates to
-#'   be returned.
+#' @section Failed Checks: It should be noted the data checks in `inspect` are
+#'   mainly for exploratory purposes; they help diagnose and flag potential
+#'   issues with the data. For instance, very long experiments could have had
+#'   sensor dropouts the user is completely unaware of. Others are not really
+#'   issues at all. For instance, an uneven time warning can result from using
+#'   decimalised minutes, which is a completely valid time metric, but happens
+#'   to be numerically unevenly spaced. As an additional check, if uneven time
+#'   is found, the minimum and maximum intervals in the time data are in the
+#'   console output, so a user can see immediately if there are large gaps in
+#'   the data.
+#'
+#'   If some of these checks fail, it should *generally* not hinder analysis of
+#'   the data. `respR` has been coded to rely on linear regressions on exact
+#'   data values, and not make assumptions about data spacing or order.
+#'   Therefore issues such as missing or NA/NaN values, duplicate or
+#'   non-sequential time values, or uneven time spacing should not cause any
+#'   erroneous results, as long as they do not occur over large regions of the
+#'   data. `inspect` however outputs locations (row numbers) of where these
+#'   issues occur, allowing users to amend them before analysis. We would
+#'   recommend that to be completely confident in any results from analysis of
+#'   such data, these issues be addressed before proceeding.
 #'
 #' @param df data.frame object. Accepts any object of class `data.frame`.
-#' @param time numeric vector. Defaults to NULL. This specifies the column
-#'   number(s) of the time data to subset.
-#' @param oxygen numeric vector. Defaults to NULL. This specifies the column
-#'   number(s) of the oxygen data to subset.
-#' @param plot logical. Defaults to TRUE. Plots the data for quick visual
-#'   diagnosis. Works only when the subset dataframe contains exactly 2 columns.
+#' @param time numeric integer. Defaults to 1. Specifies the column number of
+#'   the Time data.
+#' @param oxygen numeric vector of integers. Defaults to 2. Specifies the column
+#'   number(s) of the Oxygen data. If NULL all columns will be inspected.
+#' @param width numeric. Defaults to 0.1. Width used in the rolling regression
+#'   plot as proportion of total length of data (0 to 1).
+#' @param plot logical. Defaults to TRUE. Plots the data. If 2 columns selected,
+#'   plots timeseries data plus a plot of rolling rate. If multiple columns,
+#'   plots all timeseries data only.
 #'
 #' @return A list object of class `inspect`.
 #'
@@ -52,49 +93,43 @@
 #' @export
 #'
 #' @examples
-#' # automatically inspect first 2 columns:
-#' data("sardine.rd")
+#' # By default, inspects first 2 columns:
 #' inspect(sardine.rd)
 #'
-#' data("urchins.rd")
-#' inspect(urchins.rd)
+#' # Adjust the width of the rolling rate plot:
+#' inspect(sardine.rd, width = 0.2)
 #'
-#' # inspect specific columns:
-#' data("urchins.rd")
+#' # Inspect specific columns in multicolumn datasets:
 #' inspect(urchins.rd, time = 1, oxygen = 4)
 #'
-#' # inspect multiple columns
-#' data("urchins.rd")
-#' x <- inspect(urchins.rd, time = 1, oxygen = c(2:12))
+#' # Inspect and assign multiple columns in multicolumn datasets:
+#' x <- inspect(urchins.rd, time = 1, oxygen = c(2:9))
 #' print(x)
-#' x$list$time.min  # check position of errors in data frame
 #'
-#' # inspect flowthrough data
-#' data("flowthrough.rd")
+#' # Check position of errors in data frame
+#' x$list$time.min
+#'
+#' # Inspect flowthrough data
 #' x <- inspect(flowthrough.rd, 1, c(2,3))
 #' x
-inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
+inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
-  "%!in%" <- function(x, y) !("%in%"(x, y))
-
-  # validate inputs
+  ## Validate inputs
   ## set default values if NULL, which selects first column as time, and
   ## everything else as oxygen
-  if (is.null(time) & is.null(oxygen)) {
-    time <- 1
+  if (is.null(time)) time <- 1
+
+  ## if only time is provided, assume check is for all data
+  if (is.null(oxygen)) {
     listcols <- seq.int(1, ncol(df))
     oxygen <- listcols[!listcols %in% 1]
   }
-  ## if only time is provided, assume check is for all data
-  if (is.numeric(time) & is.null(oxygen)) {
-    time <- time
-    listcols <- seq.int(1, ncol(df))
-    oxygen <- listcols[!listcols %in% time]
-  }
 
+  if (length(oxygen) > 2) message("Multiple `oxygen` columns selected. Note subsequent functions will by default use only first oxygen column.")
   if (!is.data.frame(df)) stop("`df` must be data.frame object.")
-  if (!is.numeric(time)) stop("`time` must be numeric integer.")
-  if (!is.numeric(oxygen)) stop("`oxygen` must be numeric integer.")
+  if (!(time %% 1 == 0)) stop("`time` column: must be numeric integer.")
+  if (any(!(oxygen %% 1 == 0))) stop("`oxygen` column(s): must be numeric integers.")
+  if (width <= 0 || width >= 1) stop("`width` must be between 0 and 1.")
   # more validations in a bit
 
   df <- as.data.frame(df)
@@ -104,20 +139,20 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   y <- lapply(1:length(df[oxygen]), function(y) df[oxygen][[y]])
 
   # validate data by type
-  x_results <- check_timeseries(x, "time")
-  y_results <- check_timeseries(y, "oxygen")
+  x_results <- respR:::check_timeseries(x, "time")
+  y_results <- respR:::check_timeseries(y, "oxygen")
 
   # issue warnings
   if (any(unlist(x_results[[1]][1,])))
-    warning("NA/NaN values detected in time columns.", call. = F)
+    warning("NA/NaN values detected in Time column.", call. = F)
   if (any(unlist(x_results[[1]][2,])))
-    warning("Non-sequential time found.", call. = F)
+    warning("Non-sequential Time values found.", call. = F)
   if (any(unlist(x_results[[1]][3,])))
-    warning("Duplicate time values found.", call. = F)
+    warning("Duplicate Time values found.", call. = F)
   if (any(unlist(x_results[[1]][4,])))
-    warning("Time values are not evenly-spaced.", call. = F)
+    warning("Time values are not evenly-spaced (numerically).", call. = F)
   if (any(unlist(y_results[[1]][1,])))
-    warning("NA/NaN values detected in oxygen columns.", call. = F)
+    warning("NA/NaN values detected in Oxygen column(s).", call. = F)
 
   # combine results
   checks <- cbind(x_results[[1]], y_results[[1]])
@@ -135,12 +170,12 @@ inspect <- function(df, time = NULL, oxygen = NULL, plot = TRUE) {
   }
 
   # save new data frame and create output object
-  dataframe <- data.table(cbind(df[time], df[oxygen]))
+  dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
   out <-
     list(dataframe = dataframe, checks = checks, list_raw = locs, list = list)
   class(out) <- "inspect"
 
-  if (plot) plot(out, label = FALSE)
+  if (plot) plot(out, label = FALSE, width = width)
 
   return(out)
 }
@@ -159,43 +194,45 @@ print.inspect <- function(x, ...) {
 
   # print table
   print(as.data.frame(tab), quote = FALSE)
-  # cat("\n")
+  cat("\n")
 
   # highlight locations that did not pass the tests (but only for 2-col dfs):
+  if (checks[, 1][[1]]) {
+    xnan <- locs[, 1][[1]]
+    cat("NA/NaN Time data locations: ")
+    if (length(xnan) > 20) cat(" (first 20 shown) ")
+    cat("in column:", names(x$dataframe)[1], "\n")
+    print(head(xnan, 20))
+  }
+  if (checks[, 1][[2]]) {
+    xseq <- locs[, 1][[2]]
+    cat("Non-sequential Time data locations ")
+    if (length(xseq) > 20) cat(" (first 20 shown) ")
+    cat("in column:", names(x$dataframe)[1], "\n")
+    print(head(xseq, 20))
+  }
+  if (checks[, 1][[3]]) {
+    xdup <- locs[, 1][[3]]
+    cat("Duplicate Time data locations ")
+    if (length(xdup) > 20) cat(" (first 20 shown) ")
+    cat("in column:", names(x$dataframe)[1], "\n")
+    print(head(xdup, 20))
+  }
+  if (checks[, 1][[4]]) {
+    xevn <- locs[, 1][[4]]
+    cat("Uneven Time data locations")
+    if (length(xevn) > 20) cat(" (first 20 shown) ")
+    cat("in column:", names(x$dataframe)[1], "\n")
+    print(head(xevn, 20))
+    cat("Minimum and Maximum intervals in uneven Time data: \n")
+    print(range(diff(na.omit(x$dataframe[[1]]))))
+  }
   if ((length(x$dataframe)) == 2) {
-    if (checks[, 1][[1]]) {
-      xnan <- locs[, 1][[1]]
-      cat("NA/NaN data locations ")
-      if (length(xnan) > 20) cat(" (first 20 shown) ")
-      cat("in column:", names(x$dataframe[1]), "\n")
-      print(head(xnan, 20))
-    }
-    if (checks[, 1][[2]]) {
-      xseq <- locs[, 1][[2]]
-      cat("Non-sequential time data locations ")
-      if (length(xseq) > 20) cat(" (first 20 shown) ")
-      cat("in column:", names(x$dataframe[1]), "\n")
-      print(head(xseq, 20))
-    }
-    if (checks[, 1][[3]]) {
-      xdup <- locs[, 1][[3]]
-      cat("Duplicate time data locations ")
-      if (length(xdup) > 20) cat(" (first 20 shown) ")
-      cat("in column:", names(x$dataframe[1]), "\n")
-      print(head(xdup, 20))
-    }
-    if (checks[, 1][[4]]) {
-      xevn <- locs[, 1][[4]]
-      cat("Uneven time data locations ")
-      if (length(xevn) > 20) cat(" (first 20 shown) ")
-      cat("in column:", names(x$dataframe[1]), "\n")
-      print(head(xevn, 20))
-    }
     if (checks[, 2][[1]]) {
       ynan <- locs[, 2][[1]]
       cat("NA/NaN locations ")
       if (length(ynan) > 20) cat(" (only first 20 shown) ")
-      cat("in column:", names(x$dataframe[2]), "\n")
+      cat("in Oxygen column:", names(x$dataframe)[2], "\n")
       print(head(ynan, 20))
     }
   }
@@ -204,9 +241,8 @@ print.inspect <- function(x, ...) {
 
 
 
-
 #' @export
-plot.inspect <- function(x, label = TRUE, ...) {
+plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
   if (label)
     cat("\n# plot.inspect # ------------------------\n")
 
@@ -271,20 +307,36 @@ plot.inspect <- function(x, label = TRUE, ...) {
     )
     title(main = "Full Timeseries", line = 2)
 
-    ## changed to 10% width for now (0.05 each side here)
-    ## Removed -1* before roll - now actual negative rates
-    plot((roll) ~ dt[[1]][floor(0.05 * length(dt[[1]])):(floor(0.05 *
-        length(dt[[1]])) + (length(roll) - 1))],
-      xlim = range(dt[[1]]),
-      ylim = rev(range(roll)),
-      # reversed axis
-      xlab = "",
-      ylab = "",
-      pch = 16,
-      cex = .5,
-      col.lab = "blue",
-      col.axis = "blue"
+    ## Adding this fn here to avoid using static_roll
+    roll_reg_plot <- function(df, width) {
+      roll_width <- floor(width * nrow(df))
+      ## Calc all rates, even there is a min_obs of only 1 datapoint
+      ## This means rate is returned even if there are NA in data
+      rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
+                            roll_width, min_obs = 1)$coefficients[,2]
+      ## However this means rates are ALSO calculated at the start of the data
+      ## before the width is even reached, so we remove these.
+      rates <- rates[-(1:(roll_width-1))]
+      return(rates)
+    }
+
+    ## Rolling reg plot
+    ## Width needs to be half on each side
+    rates <- roll_reg_plot(x$dataframe, width)
+    half_width <- width/2
+    xdt <- dt[[1]]
+    plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
+         xlim = range(na.omit(xdt)),
+         ylim = rev(range(rates)),
+         # reversed axis
+         xlab = "",
+         ylab = "",
+         pch = 16,
+         cex = .5,
+         col.lab = "blue",
+         col.axis = "blue"
     )
+    
     axis(side = 2) # simply to put yaxis label colour back to black
     ## Added dashed line at rate = 0
     abline(h = 0, lty = 2)
@@ -314,26 +366,43 @@ plot.inspect <- function(x, label = TRUE, ...) {
       bg = "gray90",
       cex = 0.7
     )
-    title(main = "Rolling Regression of Rate (0.1 Rolling Window)", line = 2)
+    title(main = glue::glue("Rolling Regression of Rate ({width} Rolling Window)"), line = 2)
+
+    # Multi column plot -------------------------------------------------------
 
   } else {
     ## plot every column anyway - without rate plot
-    message("inspect: Full plot is only avalilable for a 2-column dataframe output.")
+    message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
     par(
       mfrow = n2mfrow(length(x$dataframe) - 1),
-      mai = c(0.4, 0.4, 0.1, 0.1),
+      mai = c(0.3, 0.3, 0.2, 0.1),
       ps = 10,
+      pch = 20,
       cex = 1,
       cex.main = 1,
-      pch = "."
-    )  # replace par settings
-    lapply(1:(length(x$dataframe) - 1), function(z)
+      tck = -.05
+    )
+
+    ylim <- range(x$dataframe[,-1]) ## so all on same axes
+    buffer <- diff(ylim)*0.05
+    ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
+
+    lapply(1:(length(x$dataframe) - 1), function(z) {
       plot(
         data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
+        mgp = c(0, 0.5, 0),
+        ylim = ylim,
         xlab = "",
-        ylab = ""
-      ))
+        ylab = "",
+        cex = 0.5,
+        col.lab = "blue",
+        col.axis = "blue",
+        panel.first = grid()
+      )
+      title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 0.3)}
+    )
   }
+
 
   if (label)
     cat("Done.\n")

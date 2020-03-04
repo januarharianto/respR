@@ -1,0 +1,15 @@
+Changes
+
+- `time = 1` and `oxygen = 2` the defaults rather than NULL
+- if `oxygen = NULL` now inspects ALL columns
+- added `width` input for rolling reg plot (default 0.1)
+- updated roxygen docs. There was quite a lot out of date...
+- Added message if multiple columns inspected that subsequent functions will only use first 2 by default
+- Muliple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
+- FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
+
+print.inspect
+- minor edits to console print out (e.g. messages print relevant columns names rather than both x/y col names, better spacing)
+- if uneven time, now prints min/max intervals found
+- time error locations now printed out when multiple o2 columns inspected
+
