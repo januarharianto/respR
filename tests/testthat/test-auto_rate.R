@@ -25,6 +25,7 @@ expect_error(auto_rate(urchins.rd, method = "wrong"),
 
 ## auto_rate works using default arguments
 ar <- auto_rate(urchins.rd, parallel = F, plot = F)
+
 expect_is(ar,
           "auto_rate")
 expect_is(ar$rate,
@@ -37,6 +38,7 @@ ar <- auto_rate(urchins.rd, parallel = F, plot = F, method = "max")
 expect_is(ar,
           "auto_rate")
 ar <- auto_rate(urchins.rd, parallel = F, plot = F, method = "max", width = 10, by = "time")
+
 expect_is(ar,
           "auto_rate")
 
@@ -45,12 +47,14 @@ ar <- auto_rate(urchins.rd, parallel = F, plot = F, method = "min")
 expect_is(ar,
           "auto_rate")
 ar <- auto_rate(urchins.rd, parallel = F, plot = F, method = "min", width = 10, by = "time")
+
 expect_is(ar,
           "auto_rate")
 
 
 ## auto_rate will perform interval method using default values
 ar <- auto_rate(urchins.rd, method = "interval", plot = F, parallel = F)
+
 expect_is(ar,
           "auto_rate")
 
@@ -125,7 +129,6 @@ expect_error(auto_rate(urchins.rd, parallel = F, plot = F, by = "r"), regexp = N
 ## Error with wrong by
 expect_error(auto_rate(urchins.rd, parallel = F, plot = F, by = "o2"),
              "Invalid `by`` input value, must be 'time' or 'row'.")
-
 
 
 ## works with method == "interval" and by == "time"

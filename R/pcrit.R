@@ -14,7 +14,7 @@
 #' rolling mean of the DO data. The function then performs the two
 #' \eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
-#' default width (10\% of the data length) works well, but this may vary with
+#' default width (10% of the data length) works well, but this may vary with
 #' data that has abrupt changes in rate, or is particularly noisy.
 #'
 #' Alternatively, existing rate~DO data may be used, with the `rate` input
@@ -27,7 +27,7 @@
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10\% of total rows.
+#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10% of total rows.
 #' @param has.rate logical. Is the second column not oxygen, but rate?
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
@@ -57,7 +57,7 @@
 
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
-  
+
   # Data validation.
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
@@ -65,9 +65,9 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   if (width > nrow(df)) stop("`width` input is bigger than length of data.")
 
   # Format data.
-  dt <- data.table::data.table(df)
+  dt <- data.table::data.table(df[,1:2])
   data.table::setnames(dt, 1:2, c("x", "y"))
-  
+
   # Check if rate is provided in "has.rate".
   if (!has.rate) {
     rdt <- generate_mrdf(dt, width)
@@ -92,11 +92,12 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   if (parallel) {
     no_cores <- parallel::detectCores() - 1  # use n-1 cores
     cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
-    parallel::clusterExport(cl, "broken_stick") # import function to use
-    brstick <- parallel::parLapply(cl, lseq, function(z) broken_stick(srdt, z))
+    # parallel::clusterExport(cl, "broken_stick") # import function to use
+    brstick <- parallel::parLapply(cl, lseq, function(z)
+      respR::broken_stick(srdt, z))
     parallel::stopCluster(cl)  # release cores
   } else {
-    brstick <- lapply(lseq, function(z) broken_stick(srdt,z))
+    brstick <- lapply(lseq, function(z) respR::broken_stick(srdt,z))
   }
 
   brstick <- data.table::rbindlist(brstick)
@@ -116,7 +117,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   # Generate output
 
   out <- list(
-    df = df,
+    df = dt,
     mr.df = rdt,
     has.rate = has.rate,
     width = width,
@@ -170,6 +171,10 @@ summary.pcrit <- function(object, ...) {
 
 #' @export
 plot.pcrit <- function(x, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
   segment1 <- x$mr.df[x <= cutoff]
@@ -178,7 +183,6 @@ plot.pcrit <- function(x, ...) {
 
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
-  pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
 
   # Plot original data if available
@@ -230,7 +234,6 @@ plot.pcrit <- function(x, ...) {
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
-  par(pardefault)  # revert par settings to original
   return(invisible(x))
 }
 

@@ -193,6 +193,10 @@ summary.calc_rate.ft <- function(object, ...) {
 
 #' @export
 plot.calc_rate.ft <- function(x, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16, cex = .7,
     panel.first = grid(lwd = .7))
   abline(h = x$mean, lwd = 1.5, lty = 2)

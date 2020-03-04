@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_funs.R
 \name{\%>\%}
 \alias{\%>\%}
-\title{Pipe graphics}
+\title{Pipe graphics direct from tidyverse-related package}
 \description{
-Pipe graphics
+Pipe graphics direct from tidyverse-related package
 }

@@ -1,3 +1,25 @@
+<!---
+Each version should:
+List its release date in the above format.
+Group changes to describe their impact on the project, as follows:
+Added:        for new features.
+Changed:      for changes in existing functionality.
+Deprecated:   for once-stable features removed in upcoming releases.
+Removed:      for deprecated features removed in this release.
+Fixed:        for any bug fixes.
+Security:     to invite users to upgrade in case of vulnerabilities. 
+--->
+
+
+# [version 1.1.1] -- 2019-07-24
+Quick fixes and changes.
+
+- **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
+- **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
+- **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
+
+
 # Version 1.1.0
 
 Lots of updates! First, we have a new function, `calc_pcrit()`, which we will use to include new methods in the future. We've also made some improvements to `import_file()` with increased support to more files from Vernier, PRESENS and Loligo systems.

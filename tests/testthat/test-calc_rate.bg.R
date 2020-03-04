@@ -31,7 +31,7 @@ expect_is(urbg,
           "calc_rate.bg")
 
 ## Correctly uses specified columns in `inspect` objects
-ur <- inspect(urchins.rd, plot = F)
+ur <- inspect(urchins.rd, time = 1, oxygen = NULL, plot = F)
 urbg <- calc_rate.bg(ur,  time = 1, oxygen = c(18,19), plot = F)
 expect_equal(ncol(urbg$data), 3)
 expect_equal(ur$dataframe$b1, urbg$data$b1)
