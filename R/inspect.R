@@ -114,9 +114,7 @@
 #' x
 inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
-  #"%!in%" <- function(x, y) !("%in%"(x, y))
-
-  # validate inputs
+  ## Validate inputs
   ## set default values if NULL, which selects first column as time, and
   ## everything else as oxygen
   if (is.null(time)) time <- 1
@@ -172,7 +170,7 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   }
 
   # save new data frame and create output object
-  dataframe <- data.table(cbind(df[time], df[oxygen]))
+  dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
   out <-
     list(dataframe = dataframe, checks = checks, list_raw = locs, list = list)
   class(out) <- "inspect"
@@ -248,16 +246,14 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
   if (label)
     cat("\n# plot.inspect # ------------------------\n")
 
-  pardefault <- par(no.readonly = T) # save original par settings
+  parorig <- par(no.readonly = TRUE) # save original par settings
 
   # extract data frame
   dt <- x$dataframe
-  # perform rolling regression (quick one)
-  if (ncol(dt) == 2) {
-    ## changed here 0.2 to 0.1
-    roll <- static_roll(dt, floor(width * nrow(dt)))$rate_b1
-  }
 
+  # 2 column plot -----------------------------------------------------------
+
+  ## For 2 columns
   if (length(x$dataframe) == 2) {
     par(
       mfrow = c(2, 1),
@@ -370,6 +366,9 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     )
     title(main = glue::glue("Rolling Regression of Rate ({width} Rolling Window)"), line = 2)
 
+
+    # Multi column plot -------------------------------------------------------
+
   } else {
     ## plot every column anyway - without rate plot
     message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
@@ -387,24 +386,22 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     buffer <- diff(ylim)*0.05
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
-    lapply(1:(length(x$dataframe) - 1), function(z)
-    {plot(
-      data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
-      mgp = c(0, 0.5, 0),
-      ylim = ylim,
-      xlab = "",
-      ylab = "",
-      cex = 0.5,
-      col.lab = "blue",
-      col.axis = "blue",
-      panel.first = grid()
-    )
-      axis(side = 2, col = "black") # simply to put yaxis label colour back to black
+    lapply(1:(length(x$dataframe) - 1), function(z) {
+      plot(
+        data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
+        mgp = c(0, 0.5, 0),
+        ylim = ylim,
+        xlab = "",
+        ylab = "",
+        cex = 0.5,
+        col.lab = "blue",
+        col.axis = "blue",
+        panel.first = grid()
+      )
       title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 0.3)}
-
     )
   }
-  on.exit(par(pardefault))  # revert par settings to original
+  on.exit(par(parorig)) # revert par settings to original
 
   if (label)
     cat("Done.\n")

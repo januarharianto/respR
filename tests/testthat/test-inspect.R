@@ -38,9 +38,9 @@ test_that("inspect objects can be printed", {
 })
 
 test_that("inspect works with NULL inputs", {
-  expect_error(inspect(urchins.rd, time = NULL, plot = F),
+  expect_error(inspect(intermittent.rd, time = NULL, plot = F),
                regexp = NA)
-  expect_error(inspect(urchins.rd, oxygen = NULL, plot = F),
+  expect_error(inspect(intermittent.rd, oxygen = NULL, plot = F),
                regexp = NA)
 })
 
