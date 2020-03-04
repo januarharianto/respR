@@ -2,6 +2,8 @@
 ## test_file("tests/testthat/test-inspect.R")
 ## covr::file_coverage("R/inspect.R", "tests/testthat/test-inspect.R")
 
+sink("/dev/null") ## stops printing console outputs on assigning
+
 test_that("inspect works on 2-column data",
           expect_error(inspect(sardine.rd, plot = F),
                        regexp = NA))
@@ -118,3 +120,4 @@ test_that("inspect: all good message if no errors",
                         "No issues detected while inspecting data frame."))
 
 
+sink() ## turns console printing back on
