@@ -304,29 +304,28 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     )
     title(main = "Full Timeseries", line = 2)
 
-    ## Rolling reg plot
-    ## Width needs to be half on each side
 
-    ## putting this here to stop using static_roll
+    ## Adding this fn here to avoid using static_roll
     roll_reg_plot <- function(df, width) {
-
       roll_width <- floor(width * nrow(df))
-      roll <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), roll_width, min_obs = 1)$coefficients[,2]
-
-      roll <- roll[-(1:roll_width)]
-      #length((rev(roll[-(1:roll_width)])))
-
-      #plot(rev(roll[-(1:roll_width)]))
-
-      return(roll)
+      ## Calc all rates, even there is a min_obs of only 1 datapoint
+      ## This means rate is returned even if there are NA in data
+      rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
+                            roll_width, min_obs = 1)$coefficients[,2]
+      ## However this means rates are ALSO calculated at the start of the data
+      ## before the width is even reached, so we remove these.
+      rates <- rates[-(1:(roll_width-1))]
+      return(rates)
     }
 
-    roll <- roll_reg_plot(x$dataframe, width)
+    ## Rolling reg plot
+    ## Width needs to be half on each side
+    rates <- roll_reg_plot(x$dataframe, width)
     half_width <- width/2
     xdt <- dt[[1]]
-    plot((roll) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(roll) - 1))],
+    plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
          xlim = range(na.omit(xdt)),
-         ylim = rev(range(roll)),
+         ylim = rev(range(rates)),
          # reversed axis
          xlab = "",
          ylab = "",
