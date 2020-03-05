@@ -6,7 +6,7 @@
 #' mass-specific (i.e. to the specimen mass), MO2 rate.
 #'
 #' Unless other values are specifically called as `x`, the function converts the
-#' primary `$rate` from `calc_rate` and `auto_rate` objects, the `$corrected`
+#' primary `$rate` from `calc_rate` and `auto_rate` objects, the `$adjusted.rate`
 #' rate from `adjust_rate` objects, and the `$mean` rate from `calc_rate.ft` and
 #' `calc_rate.bg` objects. Values or vectors of other rates within these obects
 #' can be converted by calling them as `x` using `$`.
@@ -96,7 +96,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   } else if (class(x) %in% c("calc_rate", "auto_rate")) {
     rate <- x$rate
   } else if (class(x) %in% "adjust_rate") {
-    rate <- x$corrected
+    rate <- x$adjusted.rate
   } else if (class(x) %in% "calc_rate.ft") {
     rate <- x$mean
     message("object of class `calc_rate.ft` detected. Automatically using mean value.")

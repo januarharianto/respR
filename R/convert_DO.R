@@ -40,12 +40,12 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   tou <- verify_units(to, 'o2')
 
   # Units requiring t, S and/or P (all same for now)
-  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p", 
+  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
     "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
     "mL/kg.o2")
 
   # Check t, S and P needed for units
-  
+
   ## t and S - could combine these to one check
   if(is.null(S) && (fru %in% tsp_req || tou %in% tsp_req))
     stop("Input or output units require Salinity input (i.e. S = ??)")
@@ -61,7 +61,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
   # C library: https://www.unidata.ucar.edu/software/udunits/
-  
+
   if(!is.null(t)) omVl <- unname(marelac::molvol(t, P, species = "O2"))  # moles O2 in 1L vol
   omWt <- unname(marelac::molweight('O2'))  # molecular weight of O2 in g/mol
   if(!is.null(t) && !is.null(S)) oGas <- unname(marelac::gas_satconc(S, t, P, species = "O2")) # gas sat conc.
@@ -72,7 +72,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
   # Import from other functions
   if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
-  if (class(x) %in% "adjust_rate") z <- x$corrected
+  if (class(x) %in% "adjust_rate") z <- x$adjusted.rate
 
   if (is.numeric(x)) z <- x
 

@@ -28,7 +28,7 @@ A list object of class \code{calc_bg.rate}.
 This function uses simple linear regression to calculate the rate of change
 of oxygen over time for background corrections of the main data. The
 background data must be in the same time and oxygen units as the data to be
-corrected. Multiple columns of background oxygen measures, as long as the
+adjusted. Multiple columns of background oxygen measures, as long as the
 time data are identical between measurements.The function returns rates for
 all columns, and also calculates an average rate.
 }
