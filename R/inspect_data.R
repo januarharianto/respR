@@ -1,11 +1,11 @@
 #' Check for common errors in respirometry data
 #'
+#' PLEASE NOTE: the `inspect_data` function is **deprecated**. It will not be
+#' updated, and will be removed in a future update to `respR`. Please use the
+#' \code{\link{inspect}} function instead.
+#'
 #' `inspect_data()` scans a data frame for specific errors that may affect the
 #' use of functions in `respR`.
-#'
-#' PLEASE NOTE: the `inspect_data` function is deprecated. It will not be
-#' updated, and will be removed in a future update to `respR`. Please use the
-#' new `inspect` function instead.
 #'
 #' Data checks include:
 #'

@@ -1,4 +1,8 @@
-#' Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}
+#' Calculate critical oxygen tension, *Pcrit*
+#'
+#' PLEASE NOTE: the `pcrit` function is **deprecated**. It will not be updated,
+#' and will be removed in a future update to `respR`. Please use the
+#' \code{\link{calc_pcrit}} function instead.
 #'
 #' A function to calculate the critical oxygen tension, or the O2 concentration
 #' below which uptake rate becomes dependent upon oxygen concentration. It is
@@ -57,6 +61,10 @@
 
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
+
+  warning("pcrit() has been deprecated.
+It will not be updated and will be removed in a future version of respR.
+Please use the `calc_pcrit` function instead.")
 
   # Data validation.
   if (any(class(df) %in% "inspect_data")) df <- df$df
