@@ -69,12 +69,12 @@ ftrt <- calc_rate.ft(ftdat, outflow.o2 = 2,
 
 ftrt_conv <- suppressWarnings(convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h",
                                            volume = 1))
-expect_equal(round(ftrt_conv$output, 8),
+expect_equal(round(ftrt_conv$output.rate, 8),
              -0.09909348)
 
 ftrt_conv_ms <- suppressWarnings(convert_rate(ftrt, o2.unit = "mg/l", time.unit = "m", output.unit = "mg/h/g",
                                               volume = 1, mass = 0.000070))
-expect_equal(round(ftrt_conv_ms$output, 6),
+expect_equal(round(ftrt_conv_ms$output.rate, 6),
              -1.415621)
 
 

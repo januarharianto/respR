@@ -167,13 +167,13 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 
   # Generate output
   summary <- data.frame(input.rate = rate, converted.rate = RO2,
-    absolute = VO2)
+    absolute.rate = VO2)
   if (is.MO2) {
-    summary <- data.frame(summary, mass.specific = MO2)
-    converted <- MO2
-  } else converted <- VO2
+    summary <- data.frame(summary, mass.specific.rate = MO2)
+    converted.rate <- MO2
+  } else converted.rate <- VO2
 
-  out <- list(input = rate, output = converted, summary = summary,
+  out <- list(input.rate = rate, output.rate = converted.rate, summary = summary,
     input.o2.unit = o2.unit, input.time.unit = time.unit,
     output.unit = output.unit)
 
@@ -187,23 +187,23 @@ print.convert_rate <- function(x, pos = NULL, ...) {
   if (is.null(pos)) {
     cat("Rank/position 1 result shown. To see all results use summary().\n")
     cat("Input:\n")
-    print(x$input[1])
+    print(x$input.rate[1])
   } else if (is.numeric(pos)) {
     cat("Position", pos, "result\n")
     cat("Input:\n")
-    print(x$input[pos])
+    print(x$input.rate[pos])
   } else {
     cat("Input:\n")
-    print(x$input)
+    print(x$input.rate)
   }
   print(c(x$input.o2.unit, x$input.time.unit))
   cat("Converted:\n")
   if (is.null(pos)) {
-    print(x$output[1])
+    print(x$output.rate[1])
   } else if (is.numeric(pos)) {
-    print(x$output[pos])
+    print(x$output.rate[pos])
   } else {
-    print(x$output)
+    print(x$output.rate)
   }
   print(x$output.unit)
   # cat("------------------------\n")
