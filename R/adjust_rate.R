@@ -59,16 +59,17 @@ adjust_rate <- function(x, by) {
 
 
 #' @export
-print.adjust_rate <- function(x, pos = 1, ...) {
+print.adjust_rate <- function(object, pos = 1, ...) {
   cat("\n# adjust_rate # -------------------------\n")
-  cat("Note: please consider the sign of the value while correcting the rate.\n")
+  cat("Note: please consider the sign of the correction value when adjusting the rate.\n")
+  if(pos > length(object$corrected)) stop("Invalid 'pos' rank: only ", length(object$corrected), " adjusted rates found.")
   cat("\nRank/position", pos, "result shown. To see all results use summary().")
-  if (length(x) == 3) {
-    cat("\nInput rate:", x$input[pos])
-  } else cat("\nInput rate:", x$input.rate[pos])
-  cat("\nAdjustment:", x$adjustment[pos])
-  cat("\nAdj. rate:", x$corrected[pos], "\n")
-  return(invisible(x))
+  if (length(object) == 3) {
+    cat("\nInput rate:", object$input[pos])
+  } else cat("\nInput rate:", object$input.rate[pos])
+  cat("\nAdjustment:", object$adjustment)
+  cat("\nAdj. rate:", object$corrected[pos], "\n")
+  return(invisible(object))
 }
 
 #' @export
@@ -77,7 +78,7 @@ summary.adjust_rate <- function(object, ...) {
   if (length(object) == 3) {
     rate <- object$input
   } else rate <- object$input.rate
-  out <- data.table(rate, adjustment = x$adjustment, "adjusted rate" = object$corrected)
+  out <- data.table(rate, adjustment = object$adjustment, "adjusted rate" = object$corrected)
   print(out)
   return(invisible(object))
 }
