@@ -110,34 +110,39 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
 
 #' @export
-print.calc_rate <- function(x, ...) {
+print.calc_rate <- function(object, ...) {
   cat("\n# calc_rate # -------------------\n")
   cat("Rate(s):\n")
-  print(x$rate)
-  # cat("-------------------------------\n")
-  return(invisible(x))
+  print(object$rate)
+  return(invisible(object))
 }
 
 
 #' @export
 summary.calc_rate <- function(object, export = FALSE, ...) {
+
   cat("Summary:\n")
   print(object$summary)
-  if (export) {
-    return(invisible(object$summary))
-  } else return(invisible(object))
+
+  if(export)
+    return(invisible(object$summary)) else
+      return(invisible(object))
 }
 
 #' @export
-plot.calc_rate <- function(x, rep = 1, ...) {
+plot.calc_rate <- function(object, pos = 1, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
+  if(is.null(pos)) pos <- 1
+  if(pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
   cat("\n# plot # ------------------------\n")
-  cat('Plotting...this may take a while for large datasets.\n')
-  df  <- x$data
-  sdf <- x$subsets[[rep]]
+  cat('Plotting calc_rate result from position', pos, 'of', length(object$rate), '... \n')
+  df  <- object$data
+  sdf <- object$subsets[[pos]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
@@ -147,8 +152,8 @@ plot.calc_rate <- function(x, rep = 1, ...) {
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   cat("Done.\n")
-  # cat("-------------------------------\n")
-  return(invisible(x))
+
+  return(invisible(object))
 }
 
 

@@ -28,6 +28,9 @@
 
 adjust_rate <- function(x, by) {
 
+  if(!(is.numeric(x) | (class(x) %in% c("calc_rate", "auto_rate"))))
+    stop('x must be numeric or an object of class calc_rate or auto_rate')
+
   if (class(by) %in% "calc_rate.bg") by <-  by$bgrate
   if (!is.numeric(by))
     stop("'by' must be numeric or object of class 'calc_rate.bg'.")
@@ -73,12 +76,15 @@ print.adjust_rate <- function(object, pos = 1, ...) {
 }
 
 #' @export
-summary.adjust_rate <- function(object, ...) {
+summary.adjust_rate <- function(object, export = FALSE, ...) {
   cat("\n# summary.adjust_rate # -----------------\n")
   if (length(object) == 3) {
     rate <- object$input
   } else rate <- object$input.rate
   out <- data.table(rate, adjustment = object$adjustment, "adjusted rate" = object$adjusted.rate)
   print(out)
-  return(invisible(object))
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
 }

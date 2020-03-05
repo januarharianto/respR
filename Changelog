@@ -49,24 +49,41 @@ Changes
 - added `width` input for rolling reg plot (default 0.1)
 - updated roxygen docs. There was quite a lot out of date...
 - Added message if multiple columns inspected that subsequent functions will only use first 2 by default
-- Muliple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
+- Multiple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
 - FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
 
-print.inspect
-- minor edits to console print out (e.g. messages print relevant columns names rather than both x/y col names, better spacing)
-- if uneven time, now prints min/max intervals found
-- time error locations now printed out when multiple o2 columns inspected
 
 
 
 ========================== S3 Methods ============================
+
+All
+- Changed primary input `x` to `object` for consistency across all (was in some, not in others)
+- All summary S3 have `export = TRUE` for export of summary table
+- Added `return(invisible(object))` where missing
+- All stop if 'pos' too high
+
 print.adjust_rate
-- stops if 'pos' too high
 - FIX: prints adjustment correctly if pos > 1
 
 summary.adjust_rate
 - FIX: 'adjustment' column was missing
 
-print.convert_rate
-- stops if 'pos' too high
+summary.convert_rate
 - FIX: prints summary table as columns correctly
+
+print.inspect
+- CHANGE: if uneven time, now prints min/max intervals found
+- FIX: time error locations now printed out when multiple o2 columns inspected
+
+print.auto_rate
+- CHANGE: prints all results of interval method regardless of pos or width
+
+print.calc_rate.ft
+- CHANGE: now has `pos` argument
+
+plot.calc_rate
+- CHANGE: changed `rep` to `pos` for consistency
+
+
+

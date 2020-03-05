@@ -195,97 +195,97 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
 
 
 #' @export
-print.calc_pcrit <- function(x, ...) {
+print.calc_pcrit <- function(object, ...) {
   cat("--Broken stick (Yeager & Ultsch 1989)--\n")
-  cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
-  cat(sprintf("Intercept   %g\n", x$result.intercept))
-  cat(sprintf("Midpoint    %g\n", x$result.midpoint))
+  cat(sprintf("Sum RSS     %g\n", object$bstick.summary$sumRSS[1]))
+  cat(sprintf("Intercept   %g\n", object$result.intercept))
+  cat(sprintf("Midpoint    %g\n", object$result.midpoint))
 
   cat("\n--Segmented (Muggeo 2003)--\n")
-  cat(sprintf("Std. Err.   %g\n", x$bpoint.summary$psi[3]))
-  cat(sprintf("Breakpoint  %g\n", x$result.segmented))
-  return(invisible(x))
-
+  cat(sprintf("Std. Err.   %g\n", object$bpoint.summary$psi[3]))
+  cat(sprintf("Breakpoint  %g\n", object$result.segmented))
+  return(invisible(object))
 }
 
 #' @export
-summary.calc_pcrit <- function(object, ...) {
+summary.calc_pcrit <- function(object, export = FALSE, ...) {
   cat("Top Result for all Methods:\n")
-  summ <- cbind(
+
+  out <- cbind(
     object$bstick.summary[1],
     pcrit.segmented = object$result.segmented)
 
-  print(summ)
-  return(invisible(summ))
+  print(out)
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
 }
 
-
-
-
 #' @export
-plot.calc_pcrit <- function(x, ...) {
+plot.calc_pcrit <- function(object, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
   # Prepare data
-  cutoff <- x$bstick.summary$splitpoint[1]
-  segment1 <- x$df_rate_oxygen[x <= cutoff]
-  segment2 <- x$df_rate_oxygen[x > cutoff]
-  intercept <- x$result.intercept
+  cutoff <- object$bstick.summary$splitpoint[1]
+  segment1 <- object$df_rate_oxygen[x <= cutoff]
+  segment2 <- object$df_rate_oxygen[x > cutoff]
+  intercept <- object$result.intercept
 
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
 
   # Plot original data if available
-  if (!x$convert) {
+  if (!object$convert) {
     message("Plotting...") # dummy text (make this better next time)
   } else {
-    plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
+    plot(object$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
       panel.first = grid(lwd = .7))
-    abline(h = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
-    abline(h = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
-    abline(h = x$result.segmented, col = "red", lwd = 2, lty = 4)
-    legend("top", c(sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
-      sprintf("Intercept, %g", signif(x$result.intercept, 3)),
-      sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
+    abline(h = object$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+    abline(h = object$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
+    abline(h = object$result.segmented, col = "red", lwd = 2, lty = 4)
+    legend("top", c(sprintf("Breakpoint, %g", signif(object$result.segmented, 3)),
+      sprintf("Intercept, %g", signif(object$result.intercept, 3)),
+      sprintf("Midpoint, %g", signif(object$result.midpoint, 3))),
       col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2,
       bty = "n", cex = 0.8, horiz = F)
     title(main = expression("Original Series"), line = 0.5)
   }
 
   # Plot for broken-stick
-  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
+  plot(object$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
     panel.first = grid(lwd = .7))
   abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
   abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
-  abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
-  abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
-  legend("bottom", c(sprintf("Intercept, %g", signif(x$result.intercept, 3)),
-    sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
+  abline(v = object$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+  abline(v = object$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
+  legend("bottom", c(sprintf("Intercept, %g", signif(object$result.intercept, 3)),
+    sprintf("Midpoint, %g", signif(object$result.midpoint, 3))),
     col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
     cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
 
   # Plot for segmented (breakpoint)
-  plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
+  plot(object$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
     panel.first = grid(lwd = .7))
-  lines(x$bpoint.fit.df, lwd = 1, lty = 4)
-  abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
-  legend("bottom", sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
+  lines(object$bpoint.fit.df, lwd = 1, lty = 4)
+  abline(v = object$result.segmented, col = "red", lwd = 2, lty = 2)
+  legend("bottom", sprintf("Breakpoint, %g", signif(object$result.segmented, 3)),
     col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Segmented'), line = 0.5)
 
   # plot within
-  aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
-  subdf <- x$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
+  aps <- c(object$result.intercept, object$result.midpoint, object$result.segmented)
+  subdf <- object$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
   plot(subdf, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = 2,
     panel.first = grid(lwd = .7))
-  abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
-  abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
-  abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
+  abline(v = object$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
+  abline(v = object$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
+  abline(v = object$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
-  return(invisible(x))
+  return(invisible(object))
 }

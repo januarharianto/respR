@@ -216,15 +216,19 @@ print.convert_rate <- function(x, pos = NULL, ...) {
 
 
 #' @export
-summary.convert_rate <- function(object, ...) {
+summary.convert_rate <- function(object, export = FALSE, ...) {
   cat("\n# summary.convert_rate # ----------------\n")
+
   out <- data.table(object$summary,
                     input.o2.unit = object$input.o2.unit,
                     input.time.unit = object$input.time.unit,
                     output.unit = object$output.unit)
 
   print(out)
-  return(invisible(object))
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
 }
 
 #' Convert between multipliers of the same unit, e.g. mg to kg
