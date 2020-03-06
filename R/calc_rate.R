@@ -118,7 +118,6 @@ print.calc_rate <- function(object, ...) {
   return(invisible(object))
 }
 
-
 #' @export
 summary.calc_rate <- function(object, export = FALSE, ...) {
 
@@ -158,6 +157,21 @@ plot.calc_rate <- function(object, pos = 1, ...) {
   return(invisible(object))
 }
 
+#' @export
+mean.calc_rate <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.calc_rate # ----------------------\n")
+  if(length(object$rate) == 1) warning("Only 1 rate found in calc_rate object. Returning mean rate regardless...")
+  n <- length(object$rate)
+  out <- mean(object$rate)
+  cat("Mean of", n, "output rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}
 
 # linear_fit --------------------------------------------------------------
 

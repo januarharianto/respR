@@ -39,13 +39,13 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {
-    message("`inspect` input detected")
+    message("calc_rate.bg: `inspect` input detected")
     x <- data.frame(x$dataframe)
   } else if(any(class(x) %in% "inspect_data")) {
-    message("`inspect_data` input detected")
+    message("calc_rate.bg: `inspect_data` input detected")
     x <- data.frame(x$df)
   } else {
-    message("`data.frame` input detected")
+    message("calc_rate.bg: `data.frame` input detected")
     x <- data.frame(x)}
 
   ## if NULL use col1 for time, all other cols for oxygen
@@ -80,10 +80,13 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 
 #' @export
 print.calc_rate.bg <- function(object, ...) {
-  cat("Rate(s):\n")
+
+  cat("\n# print.calc_rate.bg # ------------------\n")
+  cat("Background rate(s):\n")
   print(object$bgrate)
-  cat("Average bg rate:\n")
-  print(mean(object$bgrate))
+  cat("Average background rate:\n")
+  print(object$mean)
+  cat("-----------------------------------------\n")
   return(invisible(object))
 
 }
@@ -94,11 +97,29 @@ plot.calc_rate.bg <- function(object, ...) {
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
+  cat("\n# plot.calc_rate.bg # -------------------\n")
   par(mfrow = n2mfrow(length(object$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
   lapply(1:length(object$bgrate), function(z) sub.p(data.frame(object$data[[1]],
     object$data[[z + 1]]), rsq = NULL, title = F))
+  cat("Done.\n")
+  cat("-----------------------------------------\n")
 
   return(invisible(object))
 }
 
+#' @export
+mean.calc_rate.bg <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.calc_rate.bg # -------------------\n")
+  if(length(object$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg object. Returning mean rate regardless...")
+  n <- length(object$bgrate)
+  out <- mean(object$bgrate)
+  cat("Mean of", n, "background rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}

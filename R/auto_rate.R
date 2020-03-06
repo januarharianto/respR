@@ -172,7 +172,6 @@ print.auto_rate <- function(object, pos = 1, ...) {
   return(invisible(object)) # this lets us continue with dplyr pipes
 }
 
-
 # OLD PLOTTING FUNCTION USING BASE PLOT.
 # Don't delete -- take as a reminder that this has been attempted before.
 #' @export
@@ -305,6 +304,23 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
     return(invisible(out)) else
       return(invisible(object))
 }
+
+#' @export
+mean.auto_rate <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.auto_rate # ----------------------\n")
+  if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate regardless...")
+  n <- length(object$rate)
+  out <- mean(object$rate)
+  cat("Mean of", n, "output rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}
+
 
 #' Normal rolling regression
 #'

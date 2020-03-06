@@ -182,38 +182,37 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 }
 
 #' @export
-print.convert_rate <- function(x, pos = NULL, ...) {
+print.convert_rate <- function(object, pos = NULL, ...) {
   cat("\n# print.convert_rate # ------------------\n")
 
   if (is.null(pos)) {
     cat("Rank/position 1 of", length(object$output.rate), "result(s) shown. To see all results use summary().\n")
     cat("Input:\n")
-    print(x$input.rate[1])
+    print(object$input.rate[1])
   } else if(pos > length(object$output.rate)) {
     stop("Invalid 'pos' rank: only ",
          length(object$output.rate), " rates found.")
   } else if (is.numeric(pos)) {
     cat("Position", pos, "result\n")
     cat("Input:\n")
-    print(x$input.rate[pos])
+    print(object$input.rate[pos])
   } else {
     cat("Input:\n")
-    print(x$input.rate)
+    print(object$input.rate)
   }
-  print(c(x$input.o2.unit, x$input.time.unit))
+  print(c(object$input.o2.unit, object$input.time.unit))
   cat("Converted:\n")
   if (is.null(pos)) {
-    print(x$output.rate[1])
+    print(object$output.rate[1])
   } else if (is.numeric(pos)) {
-    print(x$output.rate[pos])
+    print(object$output.rate[pos])
   } else {
-    print(x$output.rate)
+    print(object$output.rate)
   }
-  print(x$output.unit)
+  print(object$output.unit)
   cat("-----------------------------------------\n")
-  return(invisible(x))
+  return(invisible(object))
 }
-
 
 #' @export
 summary.convert_rate <- function(object, export = FALSE, ...) {
@@ -225,6 +224,23 @@ summary.convert_rate <- function(object, export = FALSE, ...) {
                     output.unit = object$output.unit)
 
   print(out)
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}
+
+#' @export
+mean.convert_rate <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.convert_rate # -------------------\n")
+  if(length(object$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate regardless...")
+  n <- length(object$output.rate)
+  out <- mean(object$output.rate)
+  cat("Mean of", n, "output rates:\n")
+  print(out)
+  print(object$output.unit)
+  cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else
