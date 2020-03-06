@@ -47,20 +47,23 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Will migrate to assertive package when I get used to it..
   ## verify by input
   by <- verify_by(by)
+
   # Ensure "from" and "to" are same length:
-  if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
+  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect_data")) x <- x$df # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
-
 
   # By now, x input must be a data frame object
   if(!is.data.frame(x)) stop("Input must be a data.frame object.")
 
   # Format as data.table
   x <- data.table::data.table(x)
-  x <- x[,1:2] # if data is > 2 columns, pick the first 2
+  if (length(x) > 2) {
+    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
+    x <- x[, 1:2]
+  }
 
   # If 'from' and 'to' are NULL, we assume that the user is analysing all data
   if (all(sapply(list(from, to), is.null))) {

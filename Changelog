@@ -38,6 +38,7 @@ Changes
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
+- CHANGE: calc_rate - Detects and warns if multi-colum input (matches auto_rate behaviour)
 
 
 
