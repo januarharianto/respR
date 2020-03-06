@@ -117,7 +117,7 @@ plot.calc_rate.bg <- function(object, ...) {
 mean.calc_rate.bg <- function(object, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.bg # -------------------\n")
-  if(length(object$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg object. Returning mean rate regardless...")
+  if(length(object$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg object. Returning mean rate anyway...")
   n <- length(object$bgrate)
   out <- mean(object$bgrate)
   cat("Mean of", n, "background rates:\n")

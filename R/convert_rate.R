@@ -234,7 +234,7 @@ summary.convert_rate <- function(object, export = FALSE, ...) {
 mean.convert_rate <- function(object, export = FALSE, ...){
 
   cat("\n# mean.convert_rate # -------------------\n")
-  if(length(object$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate regardless...")
+  if(length(object$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate anyway...")
   n <- length(object$output.rate)
   out <- mean(object$output.rate)
   cat("Mean of", n, "output rates:\n")

@@ -309,7 +309,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 mean.auto_rate <- function(object, export = FALSE, ...){
 
   cat("\n# mean.auto_rate # ----------------------\n")
-  if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate regardless...")
+  if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate anyway...")
   n <- length(object$rate)
   out <- mean(object$rate)
   cat("Mean of", n, "output rates:\n")

@@ -95,7 +95,7 @@ summary.adjust_rate <- function(object, export = FALSE, ...) {
 mean.adjust_rate <- function(object, export = FALSE, ...){
 
   cat("\n# mean.adjust_rate # --------------------\n")
-  if(length(object$adjusted.rate) == 1) warning("Only 1 rate found in adjust_rate object. Returning mean rate regardless...")
+  if(length(object$adjusted.rate) == 1) warning("Only 1 rate found in adjust_rate object. Returning mean rate anyway...")
   n <- length(object$adjusted.rate)
   out <- mean(object$adjusted.rate)
   cat("Mean of", n, "adjusted rates:\n")
