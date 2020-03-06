@@ -164,16 +164,16 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   list <- lapply(1:ncol(locs), function(z) locs[, z])
   names(list) <- c(names(df[time]), names(df[oxygen]))
 
-  # if no errors occur, send out a good message :D
-  if (!any(na.omit(unlist(checks)))) {
-    message("No issues detected while inspecting data frame.")
-  }
-
   # save new data frame and create output object
   dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
   out <-
     list(dataframe = dataframe, checks = checks, list_raw = locs, list = list)
   class(out) <- "inspect"
+
+  # if no errors occur, send out a good message :D
+  if (!any(na.omit(unlist(checks))))
+    message("No issues detected while inspecting data frame.") else
+    message("Issues detected. For more information use print().")
 
   if (plot) plot(out, label = FALSE, width = width)
 
@@ -182,7 +182,7 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
 #' @export
 print.inspect <- function(x, ...) {
-  cat("\n# inspect # -----------------------------\n")
+  cat("\n# print.inspect # -----------------------\n")
   checks <- x$checks
   locs <- x$list_raw
 
@@ -236,6 +236,7 @@ print.inspect <- function(x, ...) {
       print(head(ynan, 20))
     }
   }
+  cat("-----------------------------------------\n")
   return(invisible(x))
 }
 
@@ -251,13 +252,8 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
 
   # extract data frame
   dt <- x$dataframe
-  # perform rolling regression (quick one)
-  if (ncol(dt) == 2) {
-    ## changed here 0.2 to 0.1
-    roll <- static_roll(dt, floor(0.1 * nrow(dt)))$rate_b1
-  }
 
-  if (length(x$dataframe) == 2) {
+  if (length(dt) == 2) {
     par(
       mfrow = c(2, 1),
       mai = c(0.4, 0.4, 0.6, 0.3),
@@ -322,7 +318,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
 
     ## Rolling reg plot
     ## Width needs to be half on each side
-    rates <- roll_reg_plot(x$dataframe, width)
+    rates <- roll_reg_plot(dt, width)
     half_width <- width/2
     xdt <- dt[[1]]
     plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
@@ -336,7 +332,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
          col.lab = "blue",
          col.axis = "blue"
     )
-    
+
     axis(side = 2) # simply to put yaxis label colour back to black
     ## Added dashed line at rate = 0
     abline(h = 0, lty = 2)
@@ -374,7 +370,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     ## plot every column anyway - without rate plot
     message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
     par(
-      mfrow = n2mfrow(length(x$dataframe) - 1),
+      mfrow = n2mfrow(length(dt) - 1),
       mai = c(0.3, 0.3, 0.2, 0.1),
       ps = 10,
       pch = 20,
@@ -383,13 +379,13 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
       tck = -.05
     )
 
-    ylim <- range(x$dataframe[,-1]) ## so all on same axes
+    ylim <- range(na.omit(x$dataframe[,-1])) ## so all on same axes
     buffer <- diff(ylim)*0.05
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
-    lapply(1:(length(x$dataframe) - 1), function(z) {
+    lapply(1:(length(dt) - 1), function(z) {
       plot(
-        data.frame(x$dataframe[[1]], x$dataframe[[z + 1]]),
+        data.frame(dt[[1]], dt[[z + 1]]),
         mgp = c(0, 0.5, 0),
         ylim = ylim,
         xlab = "",
@@ -399,7 +395,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
         col.axis = "blue",
         panel.first = grid()
       )
-      title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 0.3)}
+      title(main = glue::glue("Column: {names(dt)[z+1]}"), line = 0.3)}
     )
   }
 
