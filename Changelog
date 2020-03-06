@@ -39,20 +39,22 @@ Changes
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
 - CHANGE: calc_rate - Detects and warns if multi-colum input (matches auto_rate behaviour)
-- CHANGE: inspect - Prints NA locations for all oxygen columns they are found in (previously only printed if a 2-col df)
+
 
 
 
 ========================== inspect() ============================
 Changes
 
-- `time = 1` and `oxygen = 2` the defaults rather than NULL
-- if `oxygen = NULL` now inspects ALL columns
-- added `width` input for rolling reg plot (default 0.1)
-- updated roxygen docs. There was quite a lot out of date...
-- Added message if multiple columns inspected that subsequent functions will only use first 2 by default
-- Multiple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
+- CHANGE: `time = 1` and `oxygen = 2` the defaults rather than NULL
+- CHANGE: if `oxygen = NULL` now inspects ALL columns
+- NEW: added `width` input for rolling reg plot (default 0.1)
+- CHANGE: updated roxygen docs. There was quite a lot out of date...
+- CHANGE: Added message if multiple columns inspected that subsequent functions will only use first 2 by default
+- CHANGE: Multiple rate inspection plot improved. Now all plot on same axis ranges, titles, better colours and spacing.
 - FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
+- CHANGE: Prints NA locations for all oxygen columns they are found in (previously only printed if a 2-col df)
+- CHANGE: If multiple columns in df input, warning that 1:2 used by default.
 
 
 

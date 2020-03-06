@@ -114,6 +114,9 @@
 #' x
 inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
+  if(length(df) > 2 && time == 1 && length(oxygen) == 1 && oxygen == 2)
+    warning("inspect: Multi-column dataset detected in input. Inspecting first two columns by default.\n  If these are not the intended data, select columns with 'time' and 'oxygen' arguments. 'oxygen = NULL' will inspect ALL columns.")
+
   ## Validate inputs
   ## set default values if NULL, which selects first column as time, and
   ## everything else as oxygen
@@ -125,7 +128,7 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
     oxygen <- listcols[!listcols %in% 1]
   }
 
-  if (length(oxygen) > 2) message("Multiple `oxygen` columns selected. Note subsequent functions will by default use only first oxygen column.")
+  if (length(oxygen) > 1) message("Multiple `oxygen` columns selected. Note subsequent functions will by default use only first oxygen column.")
   if (!is.data.frame(df)) stop("`df` must be data.frame object.")
   if (!(time %% 1 == 0)) stop("`time` column: must be numeric integer.")
   if (any(!(oxygen %% 1 == 0))) stop("`oxygen` column(s): must be numeric integers.")
