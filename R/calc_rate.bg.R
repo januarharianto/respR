@@ -36,6 +36,8 @@
 #' calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
 calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 
+  if (any(time %in% oxygen)) stop("calc_rate.bg: 'time' and 'oxygen' columns conflict.")
+
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {
@@ -57,8 +59,11 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
     message("Using Column 2 onwards as `oxygen`...")}
 
   # Extract data:
-  xval <- x[time]
-  yval <- x[oxygen]
+  if(any(time > length(x))) stop("calc_rate.bg: Selected 'time' column not present in the input.") else
+    xval <- x[time]
+  if(any(oxygen > length(x))) stop("calc_rate.bg: Selected 'oxygen' column(s) not present in the input.") else
+    yval <- x[oxygen]
+
   # Ok, convert back to data.table object
   dt <- data.table(xval, yval)
 

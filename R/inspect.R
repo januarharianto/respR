@@ -128,22 +128,24 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
     oxygen <- listcols[!listcols %in% 1]
   }
 
-  if (length(oxygen) > 1) message("Multiple `oxygen` columns selected. Note subsequent functions will by default use only first oxygen column.")
-  if (!is.data.frame(df)) stop("`df` must be data.frame object.")
-  if (!(time %% 1 == 0)) stop("`time` column: must be numeric integer.")
-  if (any(!(oxygen %% 1 == 0))) stop("`oxygen` column(s): must be numeric integers.")
-  if (width <= 0 || width >= 1) stop("`width` must be between 0 and 1.")
+  if (any(time %in% oxygen)) stop("inspect: 'time' and 'oxygen' columns conflict.")
+  if (length(oxygen) > 1) message("inspect: Multiple 'oxygen' columns selected. Note that subsequent functions will by default use first oxygen column only.")
+  if (!is.data.frame(df)) stop("inspect: 'df' must be data.frame object.")
+  if (!(time %% 1 == 0)) stop("inspect: 'time' column: must be numeric integer.")
+  if (any(!(oxygen %% 1 == 0))) stop("inspect: 'oxygen' column(s): must be numeric integers.")
+  if (width <= 0 || width >= 1) stop("inspect: 'width' must be between 0 and 1.")
   # more validations in a bit
 
   df <- as.data.frame(df)
 
   # extract data
-  x <- lapply(1:length(df[time]), function(y) df[time][[y]])
-  y <- lapply(1:length(df[oxygen]), function(y) df[oxygen][[y]])
+  if(any(time > length(df))) stop("inspect: Selected 'time' column not present in the input.") else
+    xval <- lapply(1:length(df[time]), function(z) df[time][[z]])
+  if(any(oxygen > length(df))) stop("inspect: Selected 'oxygen' column(s) not present in the input.") else
+    yval <- lapply(1:length(df[oxygen]), function(z) df[oxygen][[z]])
 
-  # validate data by type
-  x_results <- respR:::check_timeseries(x, "time")
-  y_results <- respR:::check_timeseries(y, "oxygen")
+  x_results <- respR:::check_timeseries(xval, "time")
+  y_results <- respR:::check_timeseries(yval, "oxygen")
 
   # issue warnings
   if (any(unlist(x_results[[1]][1,])))
