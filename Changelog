@@ -39,6 +39,7 @@ Changes
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
 - CHANGE: calc_rate - Detects and warns if multi-colum input (matches auto_rate behaviour)
+- CHANGE: inspect - Prints NA locations for all oxygen columns they are found in (previously only printed if a 2-col df)
 
 
 
@@ -75,7 +76,7 @@ summary.convert_rate
 - FIX: prints summary table as columns correctly
 
 print.inspect
-- CHANGE: if uneven time, now prints min/max intervals found
+- NEW: if uneven time, now prints min/max intervals found
 - FIX: time error locations now printed out when multiple o2 columns inspected
 
 print.auto_rate

@@ -227,15 +227,17 @@ print.inspect <- function(x, ...) {
     cat("Minimum and Maximum intervals in uneven Time data: \n")
     print(range(diff(na.omit(x$dataframe[[1]]))))
   }
-  if ((length(x$dataframe)) == 2) {
-    if (checks[, 2][[1]]) {
-      ynan <- locs[, 2][[1]]
+
+  for(i in 2:length(x$dataframe)) { ## for multiple columns
+    if (checks[, i][[1]]) {
+      ynan <- locs[, i][[1]]
       cat("NA/NaN locations ")
       if (length(ynan) > 20) cat(" (only first 20 shown) ")
-      cat("in Oxygen column:", names(x$dataframe)[2], "\n")
+      cat("in Oxygen column:", names(x$dataframe)[i], "\n")
       print(head(ynan, 20))
     }
   }
+
   cat("-----------------------------------------\n")
   return(invisible(x))
 }
