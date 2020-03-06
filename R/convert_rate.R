@@ -183,10 +183,10 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
 
 #' @export
 print.convert_rate <- function(x, pos = NULL, ...) {
-  cat("\n# convert_rate # ------------------------\n")
+  cat("\n# print.convert_rate # ------------------\n")
 
   if (is.null(pos)) {
-    cat("Rank/position 1 result shown. To see all results use summary().\n")
+    cat("Rank/position 1 of", length(object$output.rate), "result(s) shown. To see all results use summary().\n")
     cat("Input:\n")
     print(x$input.rate[1])
   } else if(pos > length(object$output.rate)) {
@@ -210,7 +210,7 @@ print.convert_rate <- function(x, pos = NULL, ...) {
     print(x$output.rate)
   }
   print(x$output.unit)
-  # cat("------------------------\n")
+  cat("-----------------------------------------\n")
   return(invisible(x))
 }
 
@@ -230,6 +230,7 @@ summary.convert_rate <- function(object, export = FALSE, ...) {
     return(invisible(out)) else
       return(invisible(object))
 }
+
 
 #' Convert between multipliers of the same unit, e.g. mg to kg
 #'

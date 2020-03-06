@@ -172,8 +172,8 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
   # if no errors occur, send out a good message :D
   if (!any(na.omit(unlist(checks))))
-    message("No issues detected while inspecting data frame.") else
-    message("Issues detected. For more information use print().")
+    message("inspect: No issues detected while inspecting data frame.") else
+    message("inspect: Data issues detected. For more information use print().")
 
   if (plot) plot(out, label = FALSE, width = width)
 
@@ -399,8 +399,10 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     )
   }
 
-
-  if (label)
+  if (label){
     cat("Done.\n")
+    cat("-----------------------------------------\n")
+  }
+
   return(invisible(x))
 }

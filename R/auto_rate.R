@@ -145,7 +145,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
 
 #' @export
 print.auto_rate <- function(object, pos = 1, ...) {
-  cat("\n# auto_rate # ---------------------------\n")
+  cat("\n# print.auto_rate # ---------------------\n")
 
   if(is.null(pos)) pos <- 1
   if(pos > length(object$rate))
@@ -154,12 +154,9 @@ print.auto_rate <- function(object, pos = 1, ...) {
   method <- object$method
   cat("Data is subset by", object$by, "using width of", object$width, "\n")
   cat(sprintf("Rates were computed using '%s' method\n", object$ method))
-  if (method == "linear") {
-    cat(
-      nrow(object$summary),
-      "linear regions detected in the kernel density estimate\n"
-    )
-  }
+  if (method == "linear")
+    cat(nrow(object$summary), "linear regions detected in the kernel density estimate\n")
+  cat("To see all results use summary()\n")
 
   if (method %in% c("max", "min", "linear")) {
     cat("\nRank", pos, "of", nrow(object$summary), ":\n")
@@ -171,6 +168,7 @@ print.auto_rate <- function(object, pos = 1, ...) {
       cat("\n=== All", nrow(object$summary), "results of", nrow(object$summary), "===\n")
       print(object$summary)
   }
+  cat("-----------------------------------------\n")
   return(invisible(object)) # this lets us continue with dplyr pipes
 }
 
@@ -187,7 +185,11 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  if (label) cat("\n# plot.auto_rate # ----------------------\n")
+  if (label) {
+    cat("\n# plot.auto_rate # ----------------------\n")
+    cat('Plotting auto_rate result from position', pos, 'of', length(object$rate), '... \n')
+  }
+
   # DEFINE OBJECTS
   dt <- object$df
   start <- object$summary$row[pos]
@@ -257,13 +259,18 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
 
-  if (label) cat("Done.\n")
+  if (label){
+    cat("Done.\n")
+    cat("-----------------------------------------\n")
+  }
+
   return(invisible(object))
 
 }
 
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
+  cat("\n# summary.auto_rate # -------------------\n")
 
   if(!is.null(pos) && pos > length(object$rate))
     stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
@@ -281,12 +288,15 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   if (is.null(pos)) {
     # if no row is specified, return all results
-    cat("\n=== Summary of Results ===\n\n")
+    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n\n")
+    if (object$method == "min") cat("\n=== Summary of Results by Minimum Rate ===\n\n")
+    if (object$method == "max") cat("\n=== Summary of Results by Maximum Rate ===\n\n")
+    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n\n")
     out <- data.table(object$summary)
     print(out)
   } else {
     # otherwise, return row specified by `pos`
-    cat("\n=== Summary of Ranked ",pos, "Result ===\n\n")
+    cat("\n=== Summary of Result: Rank ", pos, "of", length(object$rate), "===\n\n")
     out <- data.table::data.table(object$summary)[pos]
     print(out)
   }

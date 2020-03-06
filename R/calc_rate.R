@@ -111,9 +111,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
 #' @export
 print.calc_rate <- function(object, ...) {
-  cat("\n# calc_rate # -------------------\n")
+  cat("\n# print.calc_rate # ---------------------\n")
   cat("Rate(s):\n")
   print(object$rate)
+  cat("-----------------------------------------\n")
   return(invisible(object))
 }
 
@@ -121,7 +122,7 @@ print.calc_rate <- function(object, ...) {
 #' @export
 summary.calc_rate <- function(object, export = FALSE, ...) {
 
-  cat("Summary:\n")
+  cat("\n# summary.calc_rate # -------------------\n")
   print(object$summary)
 
   if(export)
@@ -139,7 +140,7 @@ plot.calc_rate <- function(object, pos = 1, ...) {
   if(pos > length(object$rate))
     stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
-  cat("\n# plot # ------------------------\n")
+  cat("\n# plot.calc_rate # ----------------------\n")
   cat('Plotting calc_rate result from position', pos, 'of', length(object$rate), '... \n')
   df  <- object$data
   sdf <- object$subsets[[pos]]
@@ -152,6 +153,7 @@ plot.calc_rate <- function(object, pos = 1, ...) {
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
   cat("Done.\n")
+  cat("-----------------------------------------\n")
 
   return(invisible(object))
 }
