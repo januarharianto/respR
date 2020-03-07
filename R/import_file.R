@@ -63,6 +63,9 @@ import_file <- function(path, export = FALSE) {
     raw <- suppressWarnings(readLines(path))
   }
 
+  ## file extensions helps with some
+  ext <- substr(path, nchar(path)-3, nchar(path))
+
   # Identify source of file
   if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
     cat("Firesting-Pyro file detected\n\n")
@@ -93,6 +96,12 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
     cat("PreSens OXY10 file detected\n\n")
     out <- parse_oxy10(path)
+  } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".txt") {
+    cat("PreSens OxyView .txt file detected\n\n")
+    out <- parse_oxyview_txt(path)
+  } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".csv") {
+    cat("PreSens OxyView .csv file detected\n\n")
+    out <- parse_oxyview_csv(path)
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
     cat("PreSens OxyView file detected\n\n")
     out <- parse_oxyview(path)
@@ -535,13 +544,30 @@ parse_neofox <- function(path) {
 
 ## Very similar to parse oxy10
 
-parse_oxyview <- function(path) {
+parse_oxyview_csv <- function(path) {
 
   raw <- fread(path, fill = TRUE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "date\\(", which = TRUE])
-  rdt <- raw[-(1:rowstart),]
-  #rdt <- fread(path, fill = TRUE, skip = rowstart-1, header = TRUE)
-  #nms <- colnames(rdt)
+  rdt <- fread(path, fill = TRUE, skip = rowstart)
+  str(rdt)
+  nms <- raw[rowstart,]
+  nms <- gsub("%", "perc", nms) ## because it gets removed in next line
+  nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
+  nms <- gsub("/", " ", nms)
+  nms <- trimws(nms) # remove trailing spaces
+  nms <- gsub("  ", "", nms) # to remove multiple spaces
+  nms <- gsub(" ", "_", nms) # now make all spaces underscores
+  colnames(rdt) <- nms
+  if("NA" %in% colnames(rdt)){rdt$'NA' <- NULL} # remove added empty column if present
+  out <- rdt
+  return(out)
+}
+
+parse_oxyview_txt <- function(path) {
+
+  raw <- fread(path, fill = TRUE)
+  rowstart <- suppressWarnings(raw[raw$V1 %like% "date\\(", which = TRUE])
+  rdt <- fread(path, fill = TRUE, skip = "date") ## only difference to above, otherwise columns are characters
   nms <- raw[rowstart,]
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters

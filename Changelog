@@ -24,13 +24,14 @@ Fixes
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
 - FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
+- FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
 
 
 
 Changes
 - CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
 - CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
-  - (ugh, might have to revist the above - we use absolute in subset_rate for absolute value between +/-... )
+  - (ugh, might have to revist the above - we use absolute in subset_rate for absolute value between +/- )
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
