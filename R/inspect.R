@@ -289,7 +289,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
       dt[[2]],
       xlab = "",
       ylab = "",
-      pch = 16,
+      pch = "",
       cex = .5,
       axes = FALSE
     )

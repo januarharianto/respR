@@ -59,6 +59,7 @@ Changes
 - CHANGE: If multiple columns in df input, warning that 1:2 used by default.
 - CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: Stops if 'oxygen' and 'time' columns conflict
+- FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
 
 
 
