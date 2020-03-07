@@ -420,8 +420,9 @@ parse_minidot <- function(path) {
   raw <- fread(path, fill = TRUE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "Unix", which = TRUE])
   # colnames <- as.matrix(raw[rowstart])[1,]
-  rdt <- fread(path, skip = rowstart-1)[-1]
-  col_nms1 <- colnames(rdt)
+  rdt <- fread(path, skip = rowstart+1)
+  col_nms1 <- fread(path, skip = rowstart-1, nrows = 3)[-1]
+  col_nms1 <- colnames(col_nms1)
   col_nms2 <- fread(path, skip = rowstart-1, nrows = 1)
   col_nms <- paste(col_nms1, col_nms2)
   colnames(rdt) <- col_nms
@@ -549,7 +550,6 @@ parse_oxyview_csv <- function(path) {
   raw <- fread(path, fill = TRUE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "date\\(", which = TRUE])
   rdt <- fread(path, fill = TRUE, skip = rowstart)
-  str(rdt)
   nms <- raw[rowstart,]
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
