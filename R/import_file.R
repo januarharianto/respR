@@ -57,6 +57,7 @@ import_file <- function(path, export = FALSE) {
   ## output xl files
 
   if (grepl(".xls", path)) {
+    message("Excel file detected. Only Loligo/Presens Multiplate Excel files currently supported. \nImport will fail for others saved as Excel format. Use raw output files only.")
     raw <- suppressMessages(read_excel(path, n_max = 20))
     raw <- as.character(raw)
   } else {
