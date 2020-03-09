@@ -145,6 +145,10 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
 
 #' @export
 print.auto_rate <- function(object, pos = 1, ...) {
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
   cat("\n# print.auto_rate # ---------------------\n")
 
   if(is.null(pos)) pos <- 1
@@ -177,7 +181,12 @@ print.auto_rate <- function(object, pos = 1, ...) {
 #' @export
 plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
 
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
+  ## pos 1 by default
   if(is.null(pos)) pos <-1
+  ## warning if pos too low
   if(pos > length(object$rate))
     stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
@@ -269,6 +278,10 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
 
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
   cat("\n# summary.auto_rate # -------------------\n")
 
   if(!is.null(pos) && pos > length(object$rate))
@@ -307,6 +320,9 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
 #' @export
 mean.auto_rate <- function(object, export = FALSE, ...){
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
 
   cat("\n# mean.auto_rate # ----------------------\n")
   if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate anyway...")

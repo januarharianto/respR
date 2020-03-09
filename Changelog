@@ -76,6 +76,7 @@ All
 - Added `return(invisible(object))` where missing to allow piping
 - All stop if 'pos' too high
 - All print much better with nicer spacing, especially in pipes
+- auto_rate - all S3 methods stop if no rates found (can happen with over-enthusiastic subsetting in new subset_rate fn)
 
 print.adjust_rate
 - FIX: prints adjustment correctly if pos > 1
