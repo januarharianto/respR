@@ -72,8 +72,8 @@ Changes
 
 All
 - Changed primary input `x` to `object` for consistency across all (was in some, not in others)
-- All summary S3 have `export = TRUE` for export of summary table
-- Added `return(invisible(object))` where missing
+- All summary S3 have `export = TRUE` for export of summary table/value
+- Added `return(invisible(object))` where missing to allow piping
 - All stop if 'pos' too high
 - All print much better with nicer spacing, especially in pipes
 
@@ -88,7 +88,7 @@ summary.convert_rate
 
 print.inspect
 - NEW: if uneven time, now prints min/max intervals found
-- FIX: time error locations now printed out when multiple o2 columns inspected
+- NEW: time error locations now printed out when multiple o2 columns inspected
 
 print.auto_rate
 - CHANGE: prints all results of interval method regardless of pos or width
@@ -104,4 +104,5 @@ mean.calc_rate
 mean.calc_rate.bg
 mean.adjust_rate
 mean.convert_rate
-- NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate after `subset_rate` of auto_rate, or they just have multiple `calc_rate` results they want to average.
+- NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
+
