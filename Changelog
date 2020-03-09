@@ -26,6 +26,7 @@ Fixes
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
 - FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
 - FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
+- FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
 
 
 
@@ -43,6 +44,7 @@ Changes
 - CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
+- CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs).
 
 
 
