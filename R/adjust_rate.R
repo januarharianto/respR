@@ -29,11 +29,11 @@
 adjust_rate <- function(x, by) {
 
   if(!(is.numeric(x) | (class(x) %in% c("calc_rate", "auto_rate"))))
-    stop('x must be numeric or an object of class calc_rate or auto_rate')
+    stop("adjust_rate: 'x' must be numeric or an object of class 'calc_rate' or 'auto_rate'")
 
   if (class(by) %in% "calc_rate.bg") by <-  by$bgrate
   if (!is.numeric(by))
-    stop("'by' must be numeric or object of class 'calc_rate.bg'.")
+    stop("adjust_rate: 'by' must be numeric or object of class 'calc_rate.bg'.")
 
   # TODO check that x is ok, too
   # for piping

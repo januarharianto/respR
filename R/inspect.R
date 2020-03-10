@@ -114,27 +114,36 @@
 #' x
 inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
 
-  if(length(df) > 2 && time == 1 && length(oxygen) == 1 && oxygen == 2)
-    warning("inspect: Multi-column dataset detected in input. Inspecting first two columns by default.\n  If these are not the intended data, select columns with 'time' and 'oxygen' arguments. 'oxygen = NULL' will inspect ALL columns.")
+  ## stop if not df
+  if (!is.data.frame(df)) stop("inspect: 'df' must be data.frame object.")
 
-  ## Validate inputs
-  ## set default values if NULL, which selects first column as time, and
-  ## everything else as oxygen
+  ## width: apply default and validate
+  if(is.null(width)) {
+    width <- 0.1
+    message("inspect: 'width' set to 0.1")
+  }
+  if (width <= 0 || width >= 1) stop("inspect: 'width' must be between 0 and 1.")
+
+  ## time: apply default and validate
   if (is.null(time)) time <- 1
+  if (!(time %% 1 == 0)) stop("inspect: 'time' column: must be numeric integer.")
 
-  ## if only time is provided, assume check is for all data
+  ## oxygen: if NULL assume check is for all *other* data columns than 'time'
   if (is.null(oxygen)) {
     listcols <- seq.int(1, ncol(df))
-    oxygen <- listcols[!listcols %in% 1]
+    oxygen <- listcols[!listcols %in% time]
   }
-
-  if (any(time %in% oxygen)) stop("inspect: 'time' and 'oxygen' columns conflict.")
-  if (length(oxygen) > 1) message("inspect: Multiple 'oxygen' columns selected. Note that subsequent functions will by default use first oxygen column only.")
-  if (!is.data.frame(df)) stop("inspect: 'df' must be data.frame object.")
-  if (!(time %% 1 == 0)) stop("inspect: 'time' column: must be numeric integer.")
   if (any(!(oxygen %% 1 == 0))) stop("inspect: 'oxygen' column(s): must be numeric integers.")
-  if (width <= 0 || width >= 1) stop("inspect: 'width' must be between 0 and 1.")
-  # more validations in a bit
+
+  ## time and oxygen columns should not conflict
+  if (any(time %in% oxygen)) stop("inspect: 'time' and 'oxygen' columns conflict.")
+
+  ## Applying defaults message
+  if(length(df) > 2 && time == 1 && oxygen == 2)
+    warning("inspect: Multi-column dataset detected in input. Inspecting first two columns by default.\n  If these are not the intended data, select columns with 'time' and 'oxygen' arguments. 'oxygen = NULL' will inspect ALL columns.")
+
+  ## Multiple column message/warning
+  if (length(oxygen) > 1) message("inspect: Multiple 'oxygen' columns selected. Note that subsequent functions will by default use first oxygen column only.")
 
   df <- as.data.frame(df)
 

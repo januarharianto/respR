@@ -136,7 +136,8 @@
 #' format_time(x, time = c(1:3), format = "dmyHMS")
 
 format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
-  dt <- data.table(x)  # convert to data.table object, regardless of type
+
+    dt <- data.table(x)  # convert to data.table object, regardless of type
 
   # check if object is data frame and multiple time columns are specified
   # the time columns will be concatenated and then saved for further analysis
@@ -152,6 +153,7 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
 
   # ERROR CHECK(S)
   # TODO: gotta add tryCatch() here if parse_date_time() fails.
+
 
   # formate to datetime, then convert to interval in seconds:
   dtm <- lubridate::parse_date_time(unlist(ts), format) # format to datetime
