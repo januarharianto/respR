@@ -40,6 +40,8 @@ test_that("inspect objects can be printed", {
 })
 
 test_that("inspect works with NULL inputs", {
+  expect_error(inspect(intermittent.rd, time = NULL, oxygen = NULL, plot = F),
+               regexp = NA)
   expect_error(inspect(intermittent.rd, time = NULL, plot = F),
                regexp = NA)
   expect_error(inspect(intermittent.rd, oxygen = NULL, plot = F),
@@ -49,26 +51,26 @@ test_that("inspect works with NULL inputs", {
 
 test_that("inspect stops if input not df", {
   expect_error(inspect(as.matrix(urchins.rd), plot = F),
-               "`df` must be data.frame object.")
+               "inspect: 'df' must be data.frame object.")
   expect_error(inspect(urchins.rd[[1]], plot = F),
-               "`df` must be data.frame object.")
+               "inspect: 'df' must be data.frame object.")
   expect_error(inspect(3435, plot = F),
-               "`df` must be data.frame object.")
+               "inspect: 'df' must be data.frame object.")
 })
 
 test_that("inspect stops if time/oxygen/width inputs out of range", {
   expect_error(inspect(urchins.rd, time = 0.2, plot = F),
-               "`time` column: must be numeric integer.")
+               "inspect: 'time' column: must be numeric integer.")
   expect_error(inspect(urchins.rd, time = 1, oxygen = 0.5, plot = F),
-               "`oxygen` column\\(s): must be numeric integers.")
+               "inspect: 'oxygen' column\\(s): must be numeric integers.")
   expect_error(inspect(urchins.rd, width = 1.5, plot = F),
-               "`width` must be between 0 and 1.")
+               "inspect: 'width' must be between 0 and 1.")
 })
 
 
 # -------------------------------------------------------------------------
 
-test_that("inspect: unevenly spaced time detected",
+test_that("inspect: unevenly spaced time detected message",
           expect_warning(inspect(urchins.rd, plot = F),
                         "Time values are not evenly-spaced \\(numerically)."))
 
@@ -116,7 +118,7 @@ test_that("inspect: non-sequential time detected",
 
 input <- base
 test_that("inspect: all good message if no errors",
-          expect_message(inspect(input, plot = F),
+          expect_message(suppressWarnings(inspect(input, plot = F)),
                         "No issues detected while inspecting data frame."))
 
 

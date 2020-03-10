@@ -1,3 +1,5 @@
+## test_file("tests/testthat/test-auto_rate.R")
+
 sink("/dev/null") ## stops printing outputs on assigning
 
 ## 2 col data from urchins.rd so it's fast, but does not output constant
@@ -108,19 +110,23 @@ test_that("auto_rate: different results can be plot with pos", {
 })
 
 
-test_that("auto_rate: print() and summary() work for different methods", {
+test_that("auto_rate: S3 generics work for different methods", {
   ar <- auto_rate(urch_data, method = "linear", plot = F)
   expect_output(print(ar))
   expect_output(summary(ar))
+  expect_output(mean(ar))
   ar <- auto_rate(urch_data, method = "max", plot = F)
   expect_output(print(ar))
   expect_output(summary(ar))
+  expect_output(mean(ar))
   ar <- auto_rate(urch_data, method = "max", plot = F)
   expect_output(print(ar))
   expect_output(summary(ar))
+  expect_output(mean(ar))
   ar <- auto_rate(urch_data, method = "interval", plot = F)
   expect_output(print(ar))
   expect_output(summary(ar))
+  expect_output(mean(ar))
 })
 
 test_that("auto_rate summary works with different pos", {
