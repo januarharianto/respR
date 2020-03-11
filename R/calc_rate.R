@@ -5,7 +5,7 @@
 #' in a data frame. You can perform a single regression on a subset of the data
 #' frame by calling the `from` and `to` arguments to specify the data region in
 #' terms of `oxygen` or `time` units, `row` region of the input data, or a
-#' `proportion` of the total change in oxygen. Multiple regressions can be
+#' `proportion` of the total oxygen used. Multiple regressions can be
 #' performed by using these arguments to enter equal length vectors of paired
 #' values in the appropriate metric.
 #'
@@ -18,7 +18,7 @@
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
 #' Units are called in a later function when absolute and/or mass-specific rates
-#' of oxygen use are computed in [convert_rate()] and [convert_DO()].
+#' of oxygen use are computed in [convert_rate] and [convert_DO].
 #'
 #' @param x data frame or object of class `inspect`. This is the data to
 #'   process.
@@ -51,7 +51,7 @@
 #' # subset by row
 #' calc_rate(sardine.rd, 1, 1000, by = 'row')
 #'
-#' # subset by proportion O2 used
+#' # subset by proportion of total O2 used
 #' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
 #'
 #' ## summary and print

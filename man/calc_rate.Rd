@@ -31,7 +31,7 @@ A list object of class \code{calc_rate}.
 in a data frame. You can perform a single regression on a subset of the data
 frame by calling the \code{from} and \code{to} arguments to specify the data region in
 terms of \code{oxygen} or \code{time} units, \code{row} region of the input data, or a
-\code{proportion} of the total change in oxygen. Multiple regressions can be
+\code{proportion} of the total oxygen used. Multiple regressions can be
 performed by using these arguments to enter equal length vectors of paired
 values in the appropriate metric.
 }
@@ -45,10 +45,10 @@ last option outputs the mean value of all rates determined.
 
 There are no units involved in \code{calc_rate}. This is a deliberate decision.
 Units are called in a later function when absolute and/or mass-specific rates
-of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
+of oxygen use are computed in \link{convert_rate} and \link{convert_DO}.
 }
 \examples{
-# default subset by 'time'
+# default - subset by 'time'
 calc_rate(sardine.rd, from = 200, to = 1800)
 
 # subset by O2
@@ -57,7 +57,7 @@ calc_rate(sardine.rd, 94, 91, by = 'o2')
 # subset by row
 calc_rate(sardine.rd, 1, 1000, by = 'row')
 
-# subset by proportion O2 used
+# subset by proportion of total O2 used
 x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
 
 ## summary and print
@@ -68,7 +68,8 @@ plot(x)
 x <- calc_rate(intermittent.rd,
                c(200,2300,4100),
                c(1800,3200,4600),
-               by = 'time')
+               by = 'time',
+               plot = FALSE)
 # Plot the third of these results
 plot(x, pos = 3)
 }
