@@ -120,15 +120,21 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   ## width: apply default and validate
   if(is.null(width)) {
     width <- 0.1
-    message("inspect: 'width' set to 0.1")
+    message("inspect: 'width' set to default of 0.1")
   }
   if (width <= 0 || width >= 1) stop("inspect: 'width' must be between 0 and 1.")
 
   ## time: apply default and validate
-  if (is.null(time)) time <- 1
+  if(is.null(time)) {
+    message("inspect: Applying column default of 'time = 1'")
+    time <- 1
+  }
   if (!(time %% 1 == 0)) stop("inspect: 'time' column: must be numeric integer.")
 
-  ## oxygen: if NULL assume check is for all *other* data columns than 'time'
+  ## oxygen: Applying defaults message
+  ## if NULL assume check is for all *other* data columns than 'time'
+  if(length(df) > 2 && is.null(oxygen))
+    warning("inspect: Multi-column dataset detected. Inspecting all columns from 2 onwards as 'oxygen' by default.\n  If these are not the intended data, select columns with 'time' and 'oxygen' arguments. \n 'oxygen = NULL' will inspect ALL columns.")
   if (is.null(oxygen)) {
     listcols <- seq.int(1, ncol(df))
     oxygen <- listcols[!listcols %in% time]
@@ -138,9 +144,6 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   ## time and oxygen columns should not conflict
   if (any(time %in% oxygen)) stop("inspect: 'time' and 'oxygen' columns conflict.")
 
-  ## Applying defaults message
-  if(length(df) > 2 && time == 1 && oxygen == 2)
-    warning("inspect: Multi-column dataset detected in input. Inspecting first two columns by default.\n  If these are not the intended data, select columns with 'time' and 'oxygen' arguments. 'oxygen = NULL' will inspect ALL columns.")
 
   ## Multiple column message/warning
   if (length(oxygen) > 1) message("inspect: Multiple 'oxygen' columns selected. Note that subsequent functions will by default use first oxygen column only.")
@@ -187,7 +190,7 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   # if no errors occur, send out a good message :D
   if (!any(na.omit(unlist(checks))))
     message("inspect: No issues detected while inspecting data frame.") else
-    message("inspect: Data issues detected. For more information use print().")
+      message("inspect: Data issues detected. For more information use print().")
 
   if (plot) plot(out, label = FALSE, width = width)
 
@@ -325,7 +328,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
       ## Calc all rates, even there is a min_obs of only 1 datapoint
       ## This means rate is returned even if there are NA in data
       rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
-                            roll_width, min_obs = 1)$coefficients[,2]
+                             roll_width, min_obs = 1)$coefficients[,2]
       ## However this means rates are ALSO calculated at the start of the data
       ## before the width is even reached, so we remove these.
       rates <- rates[-(1:(roll_width-1))]
