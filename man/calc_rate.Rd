@@ -7,44 +7,68 @@
 calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE)
 }
 \arguments{
-\item{x}{data frame or object of class \code{adjust_rate}. This is the data to
+\item{x}{data frame or object of class \code{inspect}. This is the data to
 process.}
 
-\item{from}{numeric vector. Defaults to NULL. Defines the lower bound(s) of
-the data frame to subset. Subsetting is based on the argument: \code{by}.}
+\item{from}{numeric value or vector. Defaults to \code{NULL}. Defines the lower
+bound(s) of the data frame to subset. Subsetting is based on the argument:
+\code{by}.}
 
-\item{to}{numeric vector. Defaults to NULL. Defines the upper bound(s) of the
-data frame to subset. Subsetting is based on the argument: \code{by}.}
+\item{to}{numeric value or vector. Defaults to \code{NULL}. Defines the upper
+bound(s) of the data frame to subset. Subsetting is based on the argument:
+\code{by}.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"} Defaults to
-\code{"time"}.This is the method used to subset the data.}
+\item{by}{string. \code{time}, \code{row}, \code{o2} or \code{proportion} Defaults to \code{time}.This
+is the method used to subset the data.}
 
-\item{plot}{logical. Defaults to TRUE. Plot the results.}
+\item{plot}{logical. Defaults to \code{TRUE}. Plot the results.}
 }
 \value{
 A list object of class \code{calc_rate}.
 }
 \description{
 \code{calc_rate} calculates the rate of change in oxygen concentration over time
-in a data frame. You can perform single or multiple regressions on subsets of
-the data frame by calling the \code{from} and \code{to} arguments.
+in a data frame. You can perform a single regression on a subset of the data
+frame by calling the \code{from} and \code{to} arguments to specify the data region in
+terms of \code{oxygen} or \code{time} units, \code{row} region of the input data, or a
+\code{proportion} of the total change in oxygen. Multiple regressions can be
+performed by using these arguments to enter equal length vectors of paired
+values in the appropriate metric.
 }
 \details{
+The results are plotted by default with various summary statistics for the
+regression. If multiple rates are determined, only the first is plotted.
+Others can be plotted by assigning the output and using the \code{pos} argument,
+for example \code{plot(x, pos = 2)}. The output object of class \code{calc_rate} also
+supports the other generic S3 functions \code{print}, \code{summary}, and \code{mean}. This
+last option outputs the mean value of all rates determined.
+
 There are no units involved in \code{calc_rate}. This is a deliberate decision.
-Units are called in a later function when absolute and/or mass-specific
-rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
+Units are called in a later function when absolute and/or mass-specific rates
+of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
 }
 \examples{
-data("sardine.rd")
-calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
-calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
-calc_rate(sardine.rd, 1, 1000, by = 'row')     # subset by row
-x <- calc_rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
-x
+# default subset by 'time'
+calc_rate(sardine.rd, from = 200, to = 1800)
+
+# subset by O2
+calc_rate(sardine.rd, 94, 91, by = 'o2')
+
+# subset by row
+calc_rate(sardine.rd, 1, 1000, by = 'row')
+
+# subset by proportion O2 used
+x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
+
+## summary and print
 summary(x)
 plot(x)
 
 # Using a vector in 'from' and 'to' perform multiple measurements:
-data("intermittent.rd")
-calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+x <- calc_rate(intermittent.rd,
+               c(200,2300,4100),
+               c(1800,3200,4600),
+               by = 'time')
+# Plot the third of these results
+plot(x, pos = 3)
 }

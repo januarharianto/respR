@@ -46,6 +46,7 @@ Changes
 - CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
 - CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
 - CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear in pipes)
+- CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
 
 
 

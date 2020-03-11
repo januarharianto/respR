@@ -2,22 +2,35 @@
 #' Calculate rate of change in oxygen over time
 #'
 #' `calc_rate` calculates the rate of change in oxygen concentration over time
-#' in a data frame. You can perform single or multiple regressions on subsets of
-#' the data frame by calling the `from` and `to` arguments.
+#' in a data frame. You can perform a single regression on a subset of the data
+#' frame by calling the `from` and `to` arguments to specify the data region in
+#' terms of `oxygen` or `time` units, `row` region of the input data, or a
+#' `proportion` of the total change in oxygen. Multiple regressions can be
+#' performed by using these arguments to enter equal length vectors of paired
+#' values in the appropriate metric.
+#'
+#' The results are plotted by default with various summary statistics for the
+#' regression. If multiple rates are determined, only the first is plotted.
+#' Others can be plotted by assigning the output and using the `pos` argument,
+#' for example `plot(x, pos = 2)`. The output object of class `calc_rate` also
+#' supports the other generic S3 functions `print`, `summary`, and `mean`. This
+#' last option outputs the mean value of all rates determined.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
-#' Units are called in a later function when absolute and/or mass-specific
-#' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
+#' Units are called in a later function when absolute and/or mass-specific rates
+#' of oxygen use are computed in [convert_rate()] and [convert_DO()].
 #'
-#' @param x data frame or object of class `adjust_rate`. This is the data to
+#' @param x data frame or object of class `inspect`. This is the data to
 #'   process.
-#' @param from numeric vector. Defaults to NULL. Defines the lower bound(s) of
-#'   the data frame to subset. Subsetting is based on the argument: `by`.
-#' @param to numeric vector. Defaults to NULL. Defines the upper bound(s) of the
-#'   data frame to subset. Subsetting is based on the argument: `by`.
-#' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"` Defaults to
-#'   `"time"`.This is the method used to subset the data.
-#' @param plot logical. Defaults to TRUE. Plot the results.
+#' @param from numeric value or vector. Defaults to `NULL`. Defines the lower
+#'   bound(s) of the data frame to subset. Subsetting is based on the argument:
+#'   `by`.
+#' @param to numeric value or vector. Defaults to `NULL`. Defines the upper
+#'   bound(s) of the data frame to subset. Subsetting is based on the argument:
+#'   `by`.
+#' @param by string. `time`, `row`, `o2` or `proportion` Defaults to `time`.This
+#'   is the method used to subset the data.
+#' @param plot logical. Defaults to `TRUE`. Plot the results.
 #'
 #' @importFrom data.table data.table rbindlist
 #' @import utils
@@ -29,18 +42,31 @@
 #' @export
 #'
 #' @examples
-#' data("sardine.rd")
-#' calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
-#' calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
-#' calc_rate(sardine.rd, 1, 1000, by = 'row')     # subset by row
-#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
-#' x
+#' # default - subset by 'time'
+#' calc_rate(sardine.rd, from = 200, to = 1800)
+#'
+#' # subset by O2
+#' calc_rate(sardine.rd, 94, 91, by = 'o2')
+#'
+#' # subset by row
+#' calc_rate(sardine.rd, 1, 1000, by = 'row')
+#'
+#' # subset by proportion O2 used
+#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
+#'
+#' ## summary and print
 #' summary(x)
 #' plot(x)
 #'
 #' # Using a vector in 'from' and 'to' perform multiple measurements:
-#' data("intermittent.rd")
-#' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+#' x <- calc_rate(intermittent.rd,
+#'                c(200,2300,4100),
+#'                c(1800,3200,4600),
+#'                by = 'time',
+#'                plot = FALSE)
+#' # Plot the third of these results
+#' plot(x, pos = 3)
+
 calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
@@ -92,11 +118,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Extract rate_b1
   rate <- rdt[,rate_b1]
 
-  # Plot if TRUE
-  if (plot) {
-    multi.p(x, dt, title = FALSE)
-  }
-
   # Generate output
   out <- list(
     data = x,
@@ -108,6 +129,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
     )
 
   class(out) <- "calc_rate"
+
+  # Plot if TRUE
+  if (plot) plot(out)
+
   return(out)
 }
 
