@@ -4,31 +4,37 @@
 \alias{subsample}
 \title{Subsample a data frame object}
 \usage{
-subsample(df, n = 5, random_start = FALSE, plot = TRUE)
+subsample(df, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame. The data to process.}
+\item{df}{data frame or vector. The data to process.}
 
-\item{n}{numeric. This will prompt the function to extract every "\code{n}" rows.}
+\item{n}{numeric. Subsample every \code{n} rows.}
+
+\item{length.out}{numeric. Subsample to a specific length or number of rows.}
 
 \item{random_start}{logical. Defaults to FALSE. If TRUE, randomises the start
-row of the data.}
+row of the data (applies to \code{n} input only).}
 
-\item{plot}{logical. Defaults to TRUE. Plots the data automatically.}
+\item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
 \value{
-A data frame object.
+A data frame or vector object (depending on input).
 }
 \description{
-A simple function that selects every "\code{n}" rows in a data frame to create a
-new data frame object. Effectively "thins" large datasets.
+A simple function that subsamples a data frame of time~oxygen data in order
+to "thin" large datasets. It also works on vectors of any data type. Two
+subsampling methods are provided. Using the \code{n} argument selects every n
+elements or rows. The \code{length.out} argument uniformly subsamples the input to
+the desired length.
 }
 \examples{
 # Subsample every 10 rows:
-data("squid.rd")
 subsample(squid.rd, n = 10)
 
-# Subsample with random first value:
-data("sardine.rd")
-subsample(sardine.rd, 3, TRUE)
+# Subsample to 1000 rows
+subsample(squid.rd, n = 10)
+
+# Subsample with random starting position
+subsample(sardine.rd, n = 3, random_start = TRUE)
 }
