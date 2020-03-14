@@ -5,7 +5,7 @@
 \alias{zeb_intermittent.rd}
 \title{Respirometry data of a zebrafish, \emph{Danio rerio}}
 \format{A data frame object consisting of 2 columns (time and dissolved
-oxygen) and 79,251 rows (approx 22h of data).}
+oxygen) and 79251 rows (approx 22h of data).}
 \usage{
 zeb_intermittent.rd
 }
@@ -18,8 +18,12 @@ random noise, and volume and mass below are not the actual values from the
 experiment, but for example only.
 }
 \details{
-Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
-0.1 - Specimen wet mass (kg): 0.001
+Dissolved oxygen units: mg/L
+\itemize{
+\item Time units: seconds
+\item Chamber volume (L): 0.1
+\item Specimen wet mass (kg): 0.001
+}
 
 Replicate structure (Rows - Experiment section)
 \itemize{

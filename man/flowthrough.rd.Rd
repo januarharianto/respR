@@ -4,7 +4,7 @@
 \name{flowthrough.rd}
 \alias{flowthrough.rd}
 \title{Flowthrough respirometry data on the chiton, \emph{Mopalia lignosa}}
-\format{A data frame object consisting of and 935 rows (approx 16 mins of
+\format{A data frame object consisting of 935 rows (approx 16 mins of
 data),and 4 columns: time, oxygen inflow and outflow concentrations, and
 oxygen delta (the difference between inflow and outflow concentrations).}
 \usage{

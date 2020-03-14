@@ -4,7 +4,15 @@
 \alias{adjust_rate}
 \title{Simple rate adjustment function (background or oxygen flux)}
 \usage{
-adjust_rate(x, by)
+adjust_rate(
+  x,
+  by,
+  by2 = NULL,
+  method = "mean",
+  t_x = NULL,
+  t_by = NULL,
+  t_by2 = NULL
+)
 }
 \arguments{
 \item{x}{numeric. A single value, or any object of class \code{calc_rate} or \code{auto_rate}.
