@@ -151,20 +151,44 @@
 "zeb_intermittent.rd"
 
 
-#' Background respirometry data
+#' Background respirometry data (linear)
 #'
-#' Background respirometry recording. Data is from a Loligo swim tunnel, oxygen
-#' recorded via a Witrox sensor in % air saturation over nearly 6 hours at 1
-#' second intervals.
+#' Linear background oxygen consumption data. After initial 30 minutes, data
+#' shows a generally linear background rate. Taken from a Loligo swim tunnel
+#' background recording. Oxygen recorded via a Witrox sensor in % air saturation
+#' over nearly 6 hours at 1 second intervals. Data is from a real experiment,
+#' but decrease in oxygen has been slightly exaggerated for testing purposes.
 #'
 #' - Dissolved oxygen units: % Air Saturation
 #' - Time units: seconds
 #' - Swim tunnel volume: 12.3 L
 #' - Temperature: 14.5 C
-#' - Salinity - 34 ppt
+#' - Salinity: 34 ppt
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of 20664 rows (approx 6 h of
-#'   data),and 2 columns: time in seconds, oxygen in % air saturation.
-"background.rd"
+#' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
+#'   2 columns: time in seconds, oxygen in % air saturation.
+"background_lin.rd"
+
+
+#' Background respirometry data (exponential)
+#'
+#' Exponential background oxygen consumption data. Data shows a generally
+#' increasing background rate. Taken from a Loligo swim tunnel background
+#' recording. Oxygen recorded via a Witrox sensor in % air saturation over
+#' nearly 6 hours at 1 second intervals. Data is from a real experiment, but
+#' oxygen decrease curve has been exaggerated to impose an exponential increase
+#' in background consumption for testing purposes.
+#'
+#' - Dissolved oxygen units: % Air Saturation
+#' - Time units: seconds
+#' - Swim tunnel volume: 12.3 L
+#' - Temperature: 14.5 C
+#' - Salinity: 34 ppt
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
+#'   2 columns: time in seconds, oxygen in % air saturation.
+"background_exp.rd"

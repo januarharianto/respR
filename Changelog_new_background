@@ -1,9 +1,9 @@
 Changelog - new_background branch
 
+- NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
+
 subsample()
 - NEW: Now works on vectors as well as data frames
 - NEW: Added 'length.out' argument which uniformly subsamples to exact number of rows (data frame) or length (vectors)
 - FIX: works and plots correctly (first data column only) with multicolumn data frames
-
-- NEW: Added `background.rd` data for testing new background correction functionality
 
