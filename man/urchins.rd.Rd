@@ -5,9 +5,11 @@
 \alias{urchins.rd}
 \title{Multi-column respirometry data of the sea urchin, \emph{Heliocidaris
 Erythrogramma}, including background respiration}
-\format{A data frame object consisting of one column of time, 16 columns of
+\format{
+A data frame object consisting of one column of time, 16 columns of
 urchin oxygen consumption (a-p) and 2 columns of background oxygen
-consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.}
+consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.
+}
 \usage{
 urchins.rd
 }

@@ -4,8 +4,10 @@
 \name{intermittent.rd}
 \alias{intermittent.rd}
 \title{Respirometry data of the sea urchin, \emph{Heliocidaris Erythrogramma}}
-\format{A data frame object consisting of 2 columns (time and dissolved
-oxygen) and 4831 rows (approx 80 min of data).}
+\format{
+A data frame object consisting of 2 columns (time and dissolved
+oxygen) and 4831 rows (approx 80 min of data).
+}
 \usage{
 intermittent.rd
 }
