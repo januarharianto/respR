@@ -68,7 +68,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
   width = 0.1, plot = TRUE, parallel = TRUE) {
 
   # data validation
-  if (any(class(df) %in% "inspect_data")) df <- df$df
+  if (any(class(df) %in% "inspect_data")) df <- df$dataframe
   if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("calc_pcrit: Input must be data.frame object.")
   if (width > nrow(df)) stop("calc_pcrit: 'width' input is bigger than length of data.")
@@ -172,7 +172,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
 
   # output -----
   out <- list(
-    df = dt,
+    dataframe = dt,
     df_rate_oxygen = dt_mr,
     width = width,
     bstick.summary = brstick,

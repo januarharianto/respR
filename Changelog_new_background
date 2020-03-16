@@ -1,6 +1,7 @@
 Changelog - new_background branch
 
 - NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
+- CHANGE: ALL FUNCTIONS: changed dataframe in output to `$dataframe` for consistency and simpler code (was df, data, dataframe, etc....)
 
 subsample()
 - NEW: Now works on vectors as well as data frames

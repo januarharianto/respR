@@ -83,7 +83,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
   if (method == 'max') {
     output <- auto_rate_max(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method)
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
       width   = win,
       by      = by,
       method  = method,
@@ -96,7 +96,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
       total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
       width   = win,
       by      = by,
       method  = method,
@@ -109,7 +109,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
       total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
       width   = win,
       by      = by,
       method  = method,
@@ -123,7 +123,7 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
     metadata <- data.table(width = win, by = by, method = method,
       no_regs = nrow(output$roll), no_peaks = nrow(output$peaks),
       kde_bw = output$density$bw)
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
       width   = win,
       by      = by,
       method  = method,
@@ -199,7 +199,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   # DEFINE OBJECTS
-  dt <- object$df
+  dt <- object$dataframe
   start <- object$summary$row[pos]
   end <- object$summary$endrow[pos]
   sdt <- dt[start:end]

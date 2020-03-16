@@ -173,9 +173,12 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
     converted.rate <- MO2
   } else converted.rate <- VO2
 
-  out <- list(input.rate = rate, output.rate = converted.rate, summary = summary,
-    input.o2.unit = o2.unit, input.time.unit = time.unit,
-    output.unit = output.unit)
+  out <- list(input.rate = rate,
+              output.rate = converted.rate,
+              summary = summary,
+              input.o2.unit = o2.unit,
+              input.time.unit = time.unit,
+              output.unit = output.unit)
 
   class(out) <- "convert_rate"
   return(out)

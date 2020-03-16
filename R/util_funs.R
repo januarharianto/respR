@@ -64,12 +64,12 @@ check_timeseries <- function(x, type = "time") {
     checks <- rbind(nan[1, , drop = F], seq[1], dup[1], evn[1])
     locs <- rbind(nan[2, , drop = F], seq[1], dup[1], evn[1])
   }
-  
+
   # rename rows - I'm sure I can make this more efficient... later..
   rnames <- c("NA/NAN", "sequential", "duplicated", "evenly-spaced")
   rownames(checks) <- rnames
   rownames(locs) <- rnames
-  
+
   return(list(checks, locs))
 }
 
@@ -111,11 +111,11 @@ calc_mode <- function(x) {
 check_evn <- function(x) {
   spacing <- diff(as.numeric(x))
   mod <- calc_mode(spacing)
-  
+
   test <- spacing != mod
   # If spacing is even, there should only be 1 interval detected:
   check <- length(unique(spacing)) > 1
-  
+
   test <- ifelse(is.na(test), TRUE, test)  # convert NA values to FALSE
   highlight <- which(test)
   out <- list(check = check, which = highlight)
@@ -124,11 +124,11 @@ check_evn <- function(x) {
 
 # Internal truncate (similar to subset_data)
 truncate_data <- function(x, from, to, by) {
-  
+
   # import from other respR functions
-  if (any(class(x) %in% "inspect_data")) x <- x$df
+  if (any(class(x) %in% "inspect_data")) x <- x$dataframe
   if (any(class(x) %in% "inspect")) x <- x$dataframe
-  
+
   dt <- data.table::as.data.table(x)
   if (by == "time") {
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]
@@ -140,16 +140,16 @@ truncate_data <- function(x, from, to, by) {
   }
   if (by == "o2" & length(dt) == 2) {
     top <- Position(function(z) z <= from, dt[[2]])
-    
+
     ## this is new
     ## if less than min o2 value, match pos of min o2 value
     ## else pos of the actual to value
-    if(to < min(dt[[2]])){ 
-      bot <- Position(function(z) z <= min(dt[[2]]), dt[[2]]) 
+    if(to < min(dt[[2]])){
+      bot <- Position(function(z) z <= min(dt[[2]]), dt[[2]])
     } else {
       bot <- Position(function(z) z <= to, dt[[2]])
     }
-    
+
     out <- dt[top:bot]
   }
   if (by == "proportion") {
@@ -166,8 +166,8 @@ truncate_data <- function(x, from, to, by) {
 # Verify by input for calc_rate etc.
 verify_by <- function(by){
   ## no doubt this is easier with regex
-  time_variations <- c("time", "Time", "TIME", 
-                       "tim", "Tim", "TIM", 
+  time_variations <- c("time", "Time", "TIME",
+                       "tim", "Tim", "TIM",
                        "tm", "Tm", "TM",
                        "t", "T")
   ox_variations <- c("o2", "O2",
@@ -182,16 +182,16 @@ verify_by <- function(by){
                        "proport", "Proport", "PROPORT",
                        "prop", "Prop", "PROP",
                        "prp", "Prp", "PRP",
-                       "pr", "Pr", "PR", 
+                       "pr", "Pr", "PR",
                        "p", "P")
-  
+
   if(by %in% time_variations) by <- "time"
   else if(by %in% ox_variations) by <- "o2"
   else if(by %in% row_variations) by <- "row"
   else if(by %in% prop_variations) by <- "proportion"
   else stop("`by` input not recognised")
-  
-  return(by)  
+
+  return(by)
 }
 
 
@@ -207,32 +207,32 @@ broken_stick <- function(dt, n) {
   # Cut data into 2
   dta <- dt[1:n]
   dtb <- dt[(n + 1):nrow(dt)]
-  
+
   # Perform lm
   lma <- .lm.fit(cbind(1, dta[[1]]), dta[[2]])
   lmb <- .lm.fit(cbind(1, dtb[[1]]), dtb[[2]])
-  
+
   # Extract coefficients
   coefa <- coef(lma)
   coefb <- coef(lmb)
-  
+
   # Calculate residual sum of squares
   trss <- sum(lma$residuals*lma$residuals) + sum(lmb$residuals*lmb$residuals)
-  
+
   # Also, calculate intersect
   cm <- rbind(coefa, coefb)
   # https://stackoverflow.com/a/7114961
   intersect <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1])[1]
-  
+
   # Calculate midpoint
   midpoint <-  (dta[,x][nrow(dta)] + dtb[,x][1]) / 2
-  
+
   # List coefficients
   line1 <- data.table(rbind(coefa))
   names(line1) <- c("b0", "b1")
   line2 <- data.table(rbind(coefb))
   names(line2) <- c("b0", "b1")
-  
+
   # Generate output
   out <- data.table::data.table(
     splitpoint = dta[,x][nrow(dta)],
@@ -241,7 +241,7 @@ broken_stick <- function(dt, n) {
     pcrit.mpoint = midpoint,
     l1_coef = line1,
     l2_coef = line2
-    
+
   )
   return(out)
 }
@@ -258,15 +258,15 @@ generate_mrdf <- function(dt, width) {
   # Ensure that dt is a data.table
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("x", "y"))
-  
+
   # Extract columns
   x <- as.matrix(dt[,1])
   y <- as.matrix(dt[,2])
-  
+
   # Then, perform rolling mean and lm
   rollx <- na.omit(roll::roll_mean(y, width))
   rolly <- static_roll(dt, width)
-  
+
   # Then, combine into new data.table
   rdt <- data.table::data.table(rollx, abs(rolly$rate_b1))
   data.table::setnames(rdt, 1:2, c("x", "y"))

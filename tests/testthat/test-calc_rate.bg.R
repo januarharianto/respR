@@ -9,18 +9,18 @@ test_that("calc_rate.bg works using default arguments", {
   urbg <- calc_rate.bg(urchins.rd,  plot = F)
   expect_is(urbg,
             "calc_rate.bg")
-  expect_equal(ncol(urbg$data), 19)
+  expect_equal(ncol(urbg$dataframe), 19)
   expect_equal(length(urbg$bgrate), 18)
 })
 
 test_that("calc_rate.bg accepts 2 columns", {
   urbg <- calc_rate.bg(urchins.rd,  time = 1, oxygen = 18, plot = F)
-  expect_equal(ncol(urbg$data), 2)
+  expect_equal(ncol(urbg$dataframe), 2)
 })
 
 test_that("calc_rate.bg accepts multiple columns", {
   urbg <- calc_rate.bg(urchins.rd,  time = 1, oxygen = c(18,19), plot = F)
-  expect_equal(ncol(urbg$data), 3)
+  expect_equal(ncol(urbg$dataframe), 3)
 })
 
 test_that("calc_rate.bg accepts `inspect_data` objects", {

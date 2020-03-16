@@ -49,7 +49,7 @@ validate_auto_rate <- function(df, by, method) {
   # if (!is_defined(df)) stop('df object does not exist, please check')
 
   # convert data if necessary:
-  if (any(class(df) %in% "inspect_data")) df <- df$df
+  if (any(class(df) %in% "inspect_data")) df <- df$dataframe
   if (any(class(df) %in% "inspect")) df <- df$dataframe
 
   # select only first two columns by default if dataset is multi-column
