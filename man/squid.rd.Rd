@@ -4,8 +4,10 @@
 \name{squid.rd}
 \alias{squid.rd}
 \title{Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit}
-\format{A data frame object consisting of 2 columns (time and dissolved
-oxygen) and 34120 rows (approx 9.5h of data).}
+\format{
+A data frame object consisting of 2 columns (time and dissolved
+oxygen) and 34120 rows (approx 9.5h of data).
+}
 \usage{
 squid.rd
 }

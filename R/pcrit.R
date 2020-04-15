@@ -14,7 +14,7 @@
 #' rolling mean of the DO data. The function then performs the two
 #' \eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
 #' rolling regression is determined by the `width` argument. In most cases, the
-#' default width (10\% of the data length) works well, but this may vary with
+#' default width (10% of the data length) works well, but this may vary with
 #' data that has abrupt changes in rate, or is particularly noisy.
 #'
 #' Alternatively, existing rate~DO data may be used, with the `rate` input
@@ -27,7 +27,7 @@
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
 #' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10\% of total rows.
+#'   regression. Defaults to `floor(0.1*nrow(df))`, or 10% of total rows.
 #' @param has.rate logical. Is the second column not oxygen, but rate?
 #' @param plot logical. Defaults to TRUE.
 #' @param parallel logical. Defaults to TRUE. Should parallel processing be
@@ -57,7 +57,7 @@
 
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
-  
+
   # Data validation.
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
@@ -67,7 +67,7 @@ pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   # Format data.
   dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
-  
+
   # Check if rate is provided in "has.rate".
   if (!has.rate) {
     rdt <- generate_mrdf(dt, width)

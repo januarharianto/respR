@@ -26,7 +26,7 @@ A list object of class \code{inspect}.
 the use of various functions in \code{respR}. By default, the function scans only
 the first 2 columns of a data frame and assumes that the first column is time
 data. A plot of the data is also produced, including a rolling regression
-plot using a width of \code{floor(0.1 * nrow([data frame])} for a quick visual
+plot using a width of \verb{floor(0.1 * nrow([data frame])} for a quick visual
 inspection of the rate pattern (or stability) of the data. Note that rates
 for oxygen uptake are returned as negative and plotted on a reverse axis;
 higher oxygen uptake rates are higher on the rate plot (more negative).

@@ -4,8 +4,13 @@
 \alias{calc_rate.ft}
 \title{Calculate rate of change in oxygen in flowthrough respirometry}
 \usage{
-calc_rate.ft(x = NULL, outflow.o2 = NULL, inflow.o2 = NULL,
-  flowrate = NULL, plot = TRUE)
+calc_rate.ft(
+  x = NULL,
+  outflow.o2 = NULL,
+  inflow.o2 = NULL,
+  flowrate = NULL,
+  plot = TRUE
+)
 }
 \arguments{
 \item{x}{data frame or object of class \code{inspect}.}

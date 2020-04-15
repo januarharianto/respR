@@ -4,8 +4,17 @@
 \alias{convert_rate}
 \title{Convert rate value to volumetric and/or mass-specific}
 \usage{
-convert_rate(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
-  volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
+convert_rate(
+  x,
+  o2.unit = NULL,
+  time.unit = NULL,
+  output.unit = NULL,
+  volume = NULL,
+  mass = NULL,
+  S = NULL,
+  t = NULL,
+  P = NULL
+)
 }
 \arguments{
 \item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
@@ -47,21 +56,21 @@ mass-specific (i.e. to the specimen mass), MO2 rate.
 }
 \details{
 Unless other values are specifically called as \code{x}, the function converts the
-primary \code{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \code{$corrected}
-rate from \code{adjust_rate} objects, and the \code{$mean} rate from \code{calc_rate.ft} and
+primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \verb{$corrected}
+rate from \code{adjust_rate} objects, and the \verb{$mean} rate from \code{calc_rate.ft} and
 \code{calc_rate.bg} objects. Values or vectors of other rates within these obects
 can be converted by calling them as \code{x} using \code{$}.
 
 Note, for rates from flowthrough experiments, the \code{volume} and \code{time} inputs
 should be set with reference to the \emph{flow rate} in L per unit time. E.g. for
-a flow rate in L/s \code{volume = 1, time = "s"}. With these rates \code{volume} does
+a flow rate in L/s \verb{volume = 1, time = "s"}. With these rates \code{volume} does
 \emph{NOT} represent the volume of the respirometer, and \code{time} does \emph{NOT}
 represent the resolution of the original data."
 
 The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles.
 
-For example, \code{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same.
+For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same.
 Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
 
 Output units (\code{output.unit}) must be in the sequence O2-Time (e.g. mg/h,
