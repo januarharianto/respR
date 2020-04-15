@@ -4,7 +4,9 @@
 \name{test_lin_data}
 \alias{test_lin_data}
 \title{Output objects for the function \code{test_lin()}}
-\format{List of multiple output objects of class \code{test_lin}.}
+\format{
+List of multiple output objects of class \code{test_lin}.
+}
 \usage{
 test_lin_data
 }
