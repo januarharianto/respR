@@ -38,6 +38,10 @@ Changes
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
+
+***************Need to revise above. on.exit cmd needs to be at end after all... Done for plot.auto_rate
+
+
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function

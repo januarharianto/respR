@@ -191,7 +191,6 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
     stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
   parorig <- par(no.readonly = TRUE) # save original par settings
-  on.exit(par(parorig)) # revert par settings to original
 
   if (label) {
     cat("\n# plot.auto_rate # ----------------------\n")
@@ -273,6 +272,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   return(invisible(object))
+  on.exit(par(parorig)) # revert par settings to original
 
 }
 
