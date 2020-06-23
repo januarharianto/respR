@@ -591,6 +591,33 @@ parse_presens <- function(path, dec = dec) {
 }
 
 
+# Presens datamanager ----------------------------------------------------------
+
+parse_datamanager <- function(path, dec = dec) {
+  # import raw data:
+  raw <- data.table::fread(myPath, fill = TRUE, skip = 1)
+  
+  # below is code to clean the data file
+  # TODO perhaps a clean function could be used hmm
+  # # clean if necessary:
+  # if (clean) {
+  #   out <- raw[, c(
+  #     "Date",
+  #     "Time",
+  #     "delta_t",
+  #     "Value",
+  #     "Phase",
+  #     "Amplitude",
+  #     "Temp",
+  #     "patm",
+  #     "Salinity"
+  #   )]
+  # } else
+  #   out <- raw
+  out <- raw
+  return(out)
+}
+
 
 # NeoFox ------------------------------------------------------------------
 
