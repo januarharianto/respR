@@ -115,9 +115,9 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".csv") {
     cat("PreSens OxyView .csv file detected\n\n")
     out <- parse_oxyview_csv(path, dec = dec)
-  } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
-    cat("PreSens OxyView file detected\n\n")
-    out <- parse_oxyview(path, dec = dec)
+  # } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
+  #   cat("PreSens OxyView file detected\n\n")
+  #   out <- parse_oxyview(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
     cat("PreSens OXY4 file detected\n\n")
     out <- parse_oxy4(path, dec = dec)
