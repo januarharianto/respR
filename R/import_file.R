@@ -143,6 +143,7 @@ import_file <- function(path, export = FALSE) {
   Please import the associated file appended with \"_raw\" which contains time~O2 data." )
     ## PreSens Datamanager
   } else if (suppressWarnings(any(grepl("PreSens Datamanager", raw[1:20])))) {
+    cat("PreSens Datamanager output file detected\n\n")
     out <- parse_datamanager(path, dec = dec)
   } else stop("Source file cannot be identified.
               Please contact the developers with a sample of your file.
