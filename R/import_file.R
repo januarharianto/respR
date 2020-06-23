@@ -597,7 +597,7 @@ parse_presens <- function(path, dec = dec) {
 
 parse_datamanager <- function(path, dec = dec) {
   # import raw data:
-  raw <- data.table::fread(myPath, fill = TRUE, skip = 1)
+  raw <- data.table::fread(myPath, fill = TRUE, skip = 1, dec = dec)
   
   # below is code to clean the data file
   # TODO perhaps a clean function could be used hmm
