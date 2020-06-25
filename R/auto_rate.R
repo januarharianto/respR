@@ -74,11 +74,11 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
   checks <- validate_auto_rate(df, by, method)
   dt <- checks$df  # extract df from validation check
   by <- checks$by
-  
+
   # prepare data
-  setnames(dt, 1:2, c("x", "y")) # rename data columns
+  data.table::setnames(dt, 1:2, c("x", "y")) # rename data columns
   win <- calc_rolling_win(dt, width, by)  # determine width automatically
-  
+
   # verify & apply methods
   if (method == 'max') {
     output <- auto_rate_max(dt, win, by)
@@ -91,10 +91,10 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
       summary = output$results,
       rate    = output$results$rate_b1,
       metadata = metadata)
-    
+
   } else if (method == 'min') {
     output <- auto_rate_min(dt, win, by)
-    metadata <- data.table(width = win, by = by, method = method, 
+    metadata <- data.table(width = win, by = by, method = method,
       total_regs = nrow(output$roll))
     out <- list(df = dt,
       width   = win,
@@ -104,10 +104,10 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
       summary = output$results,
       rate    = output$results$rate_b1,
       metadata = metadata)
-    
+
   } else if (method == 'interval') {
     output <- auto_rate_interval(dt, win, by)
-    metadata <- data.table(width = win, by = by, method = method, 
+    metadata <- data.table(width = win, by = by, method = method,
       total_regs = nrow(output$roll))
     out <- list(df = dt,
       width   = win,
@@ -117,24 +117,24 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
       summary = output$results,
       rate    = output$results$rate_b1,
       metadata = metadata)
-    
+
   } else if (method == 'linear') {
     output <- auto_rate_linear(dt, win)
-    metadata <- data.table(width = win, by = by, method = method, 
+    metadata <- data.table(width = win, by = by, method = method,
       no_regs = nrow(output$roll), no_peaks = nrow(output$peaks),
       kde_bw = output$density$bw)
-    out <- list(df = dt, 
-      width   = win, 
-      by      = by, 
-      method  = method, 
-      roll    = output$roll, 
-      summary = output$results, 
-      rate    = output$results$rate_b1, 
+    out <- list(df = dt,
+      width   = win,
+      by      = by,
+      method  = method,
+      roll    = output$roll,
+      summary = output$results,
+      rate    = output$results$rate_b1,
       density = output$density,
-      peaks   = output$peaks, 
+      peaks   = output$peaks,
       bandwidth = output$density$bw,
       metadata  = metadata)
-    
+
   } else stop("method argument cannot be recognised")
   class(out) <- 'auto_rate'
   if (plot) plot(out, label = FALSE)
@@ -144,61 +144,78 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
 
 
 #' @export
-print.auto_rate <- function(x, pos = 1, ...) {
-  cat("\n# auto_rate # ---------------------------\n")
-  method <- x$method
-  cat("Data is subset by", x$by, "using width of", x$width, "\n")
-  cat(sprintf("Rates were computed using '%s' method\n", x$ method))
-  if (method == "linear") {
-    cat(
-      nrow(x$summary),
-      "linear regions detected in the kernel density estimate\n"
-    )
-  }
+print.auto_rate <- function(object, pos = 1, ...) {
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
+  cat("\n# print.auto_rate # ---------------------\n")
+
+  if(is.null(pos)) pos <- 1
+  if(pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
+  method <- object$method
+  cat("Data is subset by", object$by, "using width of", object$width, "\n")
+  cat(sprintf("Rates were computed using '%s' method\n", object$ method))
+  if (method == "linear")
+    cat(nrow(object$summary), "linear regions detected in the kernel density estimate\n")
+  cat("To see all results use summary()\n")
 
   if (method %in% c("max", "min", "linear")) {
-    cat("\nRank", pos, "of", nrow(x$summary), ":\n")
-    cat("Rate:", x$summary$rate_b1[pos], "\n")
-    cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
-    cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
-    cat("Time:", x$summary$time[pos], "to", x$summary$endtime[pos], "\n")
+    cat("\nRank", pos, "of", nrow(object$summary), ":\n")
+    cat("Rate:", object$summary$rate_b1[pos], "\n")
+    cat("R.sq:", signif(object$summary$rsq[pos], 5), "\n")
+    cat("Rows:", object$summary$row[pos], "to", object$summary$endrow[pos], "\n")
+    cat("Time:", object$summary$time[pos], "to", object$summary$endtime[pos], "\n")
   } else if (method == "interval") {
-    if (nrow(x$summary) > 5) {
-      cat("\n=== Showing first 5 results of", nrow(x$summary), "===\n")
-      print(x$summary[1:5])
-    } else {
-      cat("\n=== All", nrow(x$summary), "results of", nrow(x$summary), "===\n")
-      print(x$summary)
-    }
+      cat("\n=== All", nrow(object$summary), "results of", nrow(object$summary), "===\n")
+      print(object$summary)
   }
-  return(invisible(x)) # this lets us continue with dplyr pipes
+  cat("-----------------------------------------\n")
+  return(invisible(object)) # this lets us continue with dplyr pipes
 }
-
 
 # OLD PLOTTING FUNCTION USING BASE PLOT.
 # Don't delete -- take as a reminder that this has been attempted before.
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
-  if (label) cat("\n# plot.auto_rate # ----------------------\n")
+plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
+  ## pos 1 by default
+  if(is.null(pos)) pos <-1
+  ## warning if pos too low
+  if(pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+
+  if (label) {
+    cat("\n# plot.auto_rate # ----------------------\n")
+    cat('Plotting auto_rate result from position', pos, 'of', length(object$rate), '... \n')
+  }
+
   # DEFINE OBJECTS
-  dt <- x$df
-  start <- x$summary$row[pos]
-  end <- x$summary$endrow[pos]
+  dt <- object$df
+  start <- object$summary$row[pos]
+  end <- object$summary$endrow[pos]
   sdt <- dt[start:end]
-  rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
-  rate <- x$summary$rate_b1[pos]
-  rsq <- signif(x$summary$rsq[pos],3)
+  rolldt <- data.table::data.table(object = object$roll$endtime, y = object$roll$rate)
+  rate <- object$summary$rate_b1[pos]
+  rsq <- signif(object$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
-  interval <- x$summary$endtime
-  startint <- min(interval) - x$width
-  dens <- x$density
-  peaks <- x$peaks[, 2:3]
+  interval <- object$summary$endtime
+  startint <- min(interval) - object$width
+  dens <- object$density
+  peaks <- object$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
-  if (x$method %in% c("max", "min")) {
+  if (object$method %in% c("max", "min")) {
     if (choose == FALSE) {
+
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
-      pardefault <- par(no.readonly = T) # save original par settings
       layout(mat)
       par(mai = c(0.4, 0.4, 0.3, 0.3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt)
@@ -207,11 +224,10 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
       residual.p(fit)
       qq.p(fit)
       layout(1)
-      par(pardefault) # revert par settings to original
     }
-  } else if (x$method == "interval") {
+  } else if (object$method == "interval") {
     if (choose == FALSE) {
-      pardefault <- par(no.readonly = T) # save original par settings
+
       par(mfrow = c(2, 2), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt)
       abline(v = startint, lty = 3)
@@ -219,12 +235,10 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
       sub.p(sdt, rsq = rsq)
       residual.p(fit)
       qq.p(fit)
-      par(pardefault) # revert par settings to original
     }
-  } else if (x$method == "linear") {
+  } else if (object$method == "linear") {
     if (choose == FALSE) {
-      pardefault <- par(no.readonly = T) # save original par settings
-      # par(mfrow = c(2, 3))  # replace par settings
+
       par(mfrow = c(2, 3), mai = c(.4, .4, .3, .3), ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt) # full timeseries with lmfit
       sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
@@ -232,13 +246,12 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
       density.p(dens, peaks, pos) # density plot
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
-      par(pardefault) # revert par settings to original
     }
   }
 
   if (choose == 1) {
     multi.p(dt, sdt) # full timeseries with lmfit
-    if (x$method == "interval") {
+    if (object$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
     }
@@ -246,20 +259,34 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
   if (choose == 4) {
-    if (x$method != 'linear') {
+    if (object$method != 'linear') {
       stop('density plot not available for "max", "min" and "interval" methods')
       } else density.p(dens, peaks, pos)  # density
   }
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
 
-  if (label) cat("Done.\n")
-  return(invisible(x))
+  if (label){
+    cat("Done.\n")
+    cat("-----------------------------------------\n")
+  }
+
+  return(invisible(object))
+  on.exit(par(parorig)) # revert par settings to original
 
 }
 
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
+  cat("\n# summary.auto_rate # -------------------\n")
+
+  if(!is.null(pos) && pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
   cat("Regressions :", nrow(object$roll))
   cat(" | Results :", nrow(object$summary))
   cat(" | Method :", object$method)
@@ -270,22 +297,46 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n=== Kernel Density ===")
     print(object$density)
   }
+
   if (is.null(pos)) {
     # if no row is specified, return all results
-    cat("\n=== Summary of Results ===\n\n")
-    print(data.table(object$summary))
-    if (export) {
-      return(invisible(data.table(object$summary)))
-    } else return(invisible(object))
+    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n\n")
+    if (object$method == "min") cat("\n=== Summary of Results by Minimum Rate ===\n\n")
+    if (object$method == "max") cat("\n=== Summary of Results by Maximum Rate ===\n\n")
+    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n\n")
+    out <- data.table(object$summary)
+    print(out)
   } else {
     # otherwise, return row specified by `pos`
-    cat("\n=== Summary of Ranked ",pos, "Result ===\n\n")
-    print(data.table::data.table(object$summary)[pos])
-    if (export) {
-      return(invisible(data.table(object$summary)[pos]))
-    } else return(invisible(object))
+    cat("\n=== Summary of Result: Rank ", pos, "of", length(object$rate), "===\n\n")
+    out <- data.table::data.table(object$summary)[pos]
+    print(out)
   }
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
 }
+
+#' @export
+mean.auto_rate <- function(object, export = FALSE, ...){
+
+  ## warning if empty
+  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+
+  cat("\n# mean.auto_rate # ----------------------\n")
+  if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate anyway...")
+  n <- length(object$rate)
+  out <- mean(object$rate)
+  cat("Mean of", n, "output rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}
+
 
 #' Normal rolling regression
 #'
@@ -313,11 +364,11 @@ time_roll <- function(dt, width, parallel = FALSE) {
   future_lapply <- plan <- NULL # global variables hack (unfortunate)
   dt <- data.table::data.table(dt)
   data.table::setnames(dt, 1:2, c("V1", "V2"))
-  
+
   # The cutoff specifies where to stop the rolling regression, based on width
   time_cutoff <- max(dt[,1]) - width
   row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
-  
+
   # if(parallel) {
   #   oplan <- plan()
   #   on.exit(plan(oplan), add = TRUE)
@@ -330,7 +381,7 @@ time_roll <- function(dt, width, parallel = FALSE) {
   #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
   #     dt[[1]][x], dt[[1]][x] + width))
   # }
-  
+
   # parallelisation
   if (parallel) {
     no_cores <- parallel::detectCores()  # calc the no. of cores available
@@ -343,7 +394,7 @@ time_roll <- function(dt, width, parallel = FALSE) {
     parallel::stopCluster(cl)  # stop cluster (release cores)
   } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
     dt[[1]][x], dt[[1]][x] + width))
-  
+
   out <- data.table::rbindlist(out)
   return(out)
 }
@@ -449,7 +500,7 @@ kde_fit <- function(dt, width, by, method, use = "all") {
       ))
     }
     # select longest fragments
-    i <- sapply(1:length(frags), 
+    i <- sapply(1:length(frags),
       function(x) which.max(sapply(frags[[x]], nrow)))
     frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
     frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data

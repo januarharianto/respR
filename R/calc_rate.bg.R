@@ -3,7 +3,7 @@
 #' This function uses simple linear regression to calculate the rate of change
 #' of oxygen over time for background corrections of the main data. The
 #' background data must be in the same time and oxygen units as the data to be
-#' corrected. Multiple columns of background oxygen measures, as long as the
+#' adjusted. Multiple columns of background oxygen measures, as long as the
 #' time data are identical between measurements.The function returns rates for
 #' all columns, and also calculates an average rate.
 #'
@@ -36,16 +36,18 @@
 #' calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
 calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 
+  if (any(time %in% oxygen)) stop("calc_rate.bg: 'time' and 'oxygen' columns conflict.")
+
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {
-    message("`inspect` input detected")
+    message("calc_rate.bg: `inspect` input detected")
     x <- data.frame(x$dataframe)
   } else if(any(class(x) %in% "inspect_data")) {
-    message("`inspect_data` input detected")
+    message("calc_rate.bg: `inspect_data` input detected")
     x <- data.frame(x$df)
   } else {
-    message("`data.frame` input detected")
+    message("calc_rate.bg: `data.frame` input detected")
     x <- data.frame(x)}
 
   ## if NULL use col1 for time, all other cols for oxygen
@@ -57,8 +59,11 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
     message("Using Column 2 onwards as `oxygen`...")}
 
   # Extract data:
-  xval <- x[time]
-  yval <- x[oxygen]
+  if(any(time > length(x))) stop("calc_rate.bg: Selected 'time' column not present in the input.") else
+    xval <- x[time]
+  if(any(oxygen > length(x))) stop("calc_rate.bg: Selected 'oxygen' column(s) not present in the input.") else
+    yval <- x[oxygen]
+
   # Ok, convert back to data.table object
   dt <- data.table(xval, yval)
 
@@ -79,21 +84,47 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 
 
 #' @export
-print.calc_rate.bg <- function(x, ...) {
-  cat("Rate(s):\n")
-  print(x$bgrate)
-  cat("Average bg rate:\n")
-  print(mean(x$bgrate))
+print.calc_rate.bg <- function(object, ...) {
+
+  cat("\n# print.calc_rate.bg # ------------------\n")
+  cat("Background rate(s):\n")
+  print(object$bgrate)
+  cat("Average background rate:\n")
+  print(object$mean)
+  cat("-----------------------------------------\n")
+  return(invisible(object))
+
 }
 
 #' @export
-plot.calc_rate.bg <- function(x, ...) {
-  pardefault <- par(no.readonly = T)  # save original par settings
-  par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
-    ps = 10, cex = 1, cex.main = 1)  # replace par settings
-  lapply(1:length(x$bgrate), function(z) sub.p(data.frame(x$data[[1]],
-    x$data[[z + 1]]), rsq = NULL, title = F))
-  par(pardefault)  # revert par settings to original
+plot.calc_rate.bg <- function(object, ...) {
 
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  cat("\n# plot.calc_rate.bg # -------------------\n")
+  par(mfrow = n2mfrow(length(object$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
+    ps = 10, cex = 1, cex.main = 1)  # replace par settings
+  lapply(1:length(object$bgrate), function(z) sub.p(data.frame(object$data[[1]],
+    object$data[[z + 1]]), rsq = NULL, title = F))
+  cat("Done.\n")
+  cat("-----------------------------------------\n")
+
+  return(invisible(object))
 }
 
+#' @export
+mean.calc_rate.bg <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.calc_rate.bg # -------------------\n")
+  if(length(object$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg object. Returning mean rate anyway...")
+  n <- length(object$bgrate)
+  out <- mean(object$bgrate)
+  cat("Mean of", n, "background rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}

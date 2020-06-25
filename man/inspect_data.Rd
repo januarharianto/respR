@@ -37,13 +37,13 @@ diagnostics.}
 A list object of class \code{adjust_rate}.
 }
 \description{
-\code{inspect_data()} scans a data frame for specific errors that may affect the
-use of functions in \code{respR}.
+PLEASE NOTE: the \code{inspect_data} function is \strong{deprecated}. It will not be
+updated, and will be removed in a future update to \code{respR}. Please use the
+\code{\link{inspect}} function instead.
 }
 \details{
-PLEASE NOTE: the \code{inspect_data} function is deprecated. It will not be
-updated, and will be removed in a future update to \code{respR}. Please use the
-new \code{inspect} function instead.
+\code{inspect_data()} scans a data frame for specific errors that may affect the
+use of functions in \code{respR}.
 
 Data checks include:
 \itemize{

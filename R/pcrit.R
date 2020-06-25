@@ -1,4 +1,8 @@
-#' Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}
+#' Calculate critical oxygen tension, *Pcrit*
+#'
+#' PLEASE NOTE: the `pcrit` function is **deprecated**. It will not be updated,
+#' and will be removed in a future update to `respR`. Please use the
+#' \code{\link{calc_pcrit}} function instead.
 #'
 #' A function to calculate the critical oxygen tension, or the O2 concentration
 #' below which uptake rate becomes dependent upon oxygen concentration. It is
@@ -57,6 +61,10 @@
 
 pcrit <- function(df, width = floor(0.1*nrow(df)), has.rate = FALSE,
   plot = TRUE, parallel = TRUE) {
+
+  warning("pcrit() has been deprecated.
+It will not be updated and will be removed in a future version of respR.
+Please use the `calc_pcrit` function instead.")
 
   # Data validation.
   if (any(class(df) %in% "inspect_data")) df <- df$df
@@ -171,6 +179,10 @@ summary.pcrit <- function(object, ...) {
 
 #' @export
 plot.pcrit <- function(x, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   # Prepare data
   cutoff <- x$bstick.summary$splitpoint[1]
   segment1 <- x$mr.df[x <= cutoff]
@@ -179,7 +191,6 @@ plot.pcrit <- function(x, ...) {
 
   # Plot settings
   c1 <- adjustcolor("orange", alpha.f = 1)
-  pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
 
   # Plot original data if available
@@ -231,7 +242,6 @@ plot.pcrit <- function(x, ...) {
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   title(main = expression('Rate vs PO'[2]*', Close-Up (All)'), line = 0.5)
 
-  par(pardefault)  # revert par settings to original
   return(invisible(x))
 }
 

@@ -39,26 +39,26 @@
 #' # df <- c(1:40)
 #' # validate_auto_rate(df, by = "row", method = "moo")
 validate_auto_rate <- function(df, by, method) {
-  
-  # # does df exist? 
+
+  # # does df exist?
   # is_defined <- function(sym) {
   #   sym <- deparse(substitute(sym))
   #   env <- parent.frame()
   #   exists(sym, env)
   # }
   # if (!is_defined(df)) stop('df object does not exist, please check')
-  
+
   # convert data if necessary:
   if (any(class(df) %in% "inspect_data")) df <- df$df
   if (any(class(df) %in% "inspect")) df <- df$dataframe
-  
+
   # select only first two columns by default if dataset is multi-column
   if (length(df) > 2) {
-    warning("Multi-column dataset detected. Selecting first two columns by default. If this is not your intended dataset, subset the data frame appropriately before running `auto_rate()`")
+    warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
     df <- df[, 1:2]
   }
   by <- verify_by(by) # validate `by` argument
-  
+
   assertthat::assert_that(
     is.data.frame(df),
     msg = "Input data must be of class data.frame"
@@ -85,7 +85,7 @@ validate_auto_rate <- function(df, by, method) {
 
 
 #' Perform rolling regression and rank from maximum to minimum
-#' 
+#'
 #' This is an internal function for `auto_rate()`
 #'
 #' @param dt data.frame object.
@@ -105,9 +105,9 @@ auto_rate_max <- function(dt, width, by = 'row') {
   } else if (by == 'time') {
     rollreg <- rolling_reg_time(dt, width)
   }
-  
+
   # order data by size, from biggest
-  results <- rollreg[order(rank(rate_b1))] 
+  results <- rollreg[order(rank(rate_b1))]
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_max")
   return(out)
@@ -122,7 +122,7 @@ auto_rate_max <- function(dt, width, by = 'row') {
 
 
 #' Perform rolling regression and rank from maximum to minimum
-#' 
+#'
 #' This is an internal function for `auto_rate()`
 #'
 #' @param dt data.frame object.
@@ -142,9 +142,9 @@ auto_rate_min <- function(dt, width, by = 'row') {
   } else if (by == 'time') {
     rollreg <- rolling_reg_time(dt, width)
   }
-  
+
   # order data by size, from biggest
-  results <- rollreg[order(-rank(rate_b1))] 
+  results <- rollreg[order(-rank(rate_b1))]
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_min")
   return(out)
@@ -160,7 +160,7 @@ auto_rate_min <- function(dt, width, by = 'row') {
 
 
 #' Obtain rate values at non-overlapping intervals of a dataset
-#' 
+#'
 #' This is an internal function for `auto_rate()`
 #'
 #' @param dt data.frame object.
@@ -174,13 +174,13 @@ auto_rate_min <- function(dt, width, by = 'row') {
 #' @examples
 #' NULL
 auto_rate_interval <- function(dt, width, by) {
-  
+
   if (by == 'row') {
     rollreg <- rolling_reg_row(dt, width)
     sequence <- seq(width, nrow(dt), width)
     results <- rollreg[sequence - width + 1]
   }
-  
+
   if (by == 'time') {
     rollreg <- rolling_reg_time(dt, width)
     sequence <- seq.int(min(dt[, 1]), max(dt[, 1]), width)
@@ -200,7 +200,7 @@ auto_rate_interval <- function(dt, width, by) {
 
 
 #' Linear detection method
-#' 
+#'
 #' This is an internal function for `auto_rate()`
 #'
 #' @param dt data.frame object.
@@ -208,25 +208,25 @@ auto_rate_interval <- function(dt, width, by) {
 #' @param verify logical. Should KDE be performed again to verify the detection?
 #'
 #' @return a list object
-#' @export 
+#' @export
 #' @keywords internal
 #'
 #' @examples
 #' NULL
 auto_rate_linear <- function(dt, width, verify = TRUE) {
-  
+
   # define kde function
   kernel_method <- function(dt, width, top_only = FALSE) {
     # linear detection is always by row since linear detection is not dependent
     # on time but more on the stability of the data
     rollreg <- rolling_reg_row(dt, width)
-    
+
     # perform kernel density estimate
     d <- density(rollreg$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
     # extract bandwidth
     bw <- d$bw
     # identify peaks in kernel density:
-    peaks <- which(diff(sign(diff(d$y))) == -2) + 1 
+    peaks <- which(diff(sign(diff(d$y))) == -2) + 1
     # match peaks to rate values:
     index <- rbindlist(lapply(peaks, function(x)
       data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]))
@@ -234,17 +234,17 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
     if (top_only) {
       ranked_index <- index[order(-rank(density))][1]
     } else ranked_index <- index[order(-rank(density))]
-    
+
     # identify data that match each peak rate:
-    frags <- lapply(ranked_index$peak_b1, function(x) 
+    frags <- lapply(ranked_index$peak_b1, function(x)
       rollreg[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)])
     # ensure that data segments that do not overlap are identified:
-    frags <- lapply(1:length(frags), function(x) 
+    frags <- lapply(1:length(frags), function(x)
       split(frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > width))))
     # select longest fragments only:
-    i <- sapply(1:length(frags), 
+    i <- sapply(1:length(frags),
       function(x) which.max(sapply(frags[[x]], nrow)))
-    frags <- unname(mapply(function(x, y) 
+    frags <- unname(mapply(function(x, y)
       frags[[x]][y], 1:length(frags), i))
     # remove zero-length data:
     frags <- frags[sapply(frags, nrow) > 0]
@@ -254,22 +254,22 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
         dt, min(frags[[x]]$row),
         max(frags[[x]]$endrow), "row"
       ))
-    out <- list(rollreg = rollreg, subsets = subsets, 
+    out <- list(rollreg = rollreg, subsets = subsets,
       peaks = ranked_index, density = d)
     return(out)
   }
-  
+
   # run kde
   kde <- kernel_method(dt, width)
   subsets <- kde$subsets
-  
+
   # run verification step if necessary
   if (verify) {
     testwin <- floor(width * .85)
     subsets <- sapply(1:length(subsets), function(z)
       kernel_method(subsets[[z]], testwin, top_only = TRUE)$subsets)
   }
-  
+
   # perform calc_rate on each subset generated
   output <- rbindlist(lapply(1:length(subsets), function(xi)
     calc_rate(
@@ -280,10 +280,10 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
       plot = FALSE
     )$summary))
   results <- output[,-(8:12)][, c(4:7, 1:3)]
-  
-  out <- list(results = results, roll = kde$rollreg, 
+
+  out <- list(results = results, roll = kde$rollreg,
     density = kde$density, peaks = kde$peaks)
-  
+
   class(out) <- append(class(out), "auto_rate_linear")
   return(out)
 }
@@ -312,12 +312,12 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
 rolling_reg_row <- function(df, width) {
   df <- data.table(df)
   setnames(df, 1:2, c("x", "y"))
-  
+
   # perform rolling regression based on row numbers
   roll <- roll_lm(matrix(df[[1]]), matrix(df[[2]]), width)
   roll <- na.omit(data.table(cbind(roll$coefficients, roll$r.squared)))
   setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
-  
+
   # add row indices
   roll[, row := seq_len(.N)]
   roll[, endrow := row + width - 1]
@@ -356,8 +356,8 @@ rolling_reg_time <- function(df, width) {
     return(list(b0,b1,r2))
   }
   . <- x.x <- NULL
-  results <- setDT(df)[.(start = x - width, end = x), 
-    on = .(x >= start, x <= end), 
+  results <- setDT(df)[.(start = x - width, end = x),
+    on = .(x >= start, x <= end),
     as.list(calc_coefs(x.x, y)), by = .EACHI]
   setnames(results, 1:5, c('time', 'endtime', 'intercept_b0', 'rate_b1', 'rsq'))
   results <- results[time >= df[[1]][1]] # remove extra rows
@@ -393,14 +393,14 @@ rolling_reg_time <- function(df, width) {
 #' NULL
 calc_rolling_win <- function(dt, width, by) {
   # this is an internal function so we don't have to validate data too much
-  # however we make sure that input arguments are validated since they are 
+  # however we make sure that input arguments are validated since they are
   # obtained from user input
-  
+
   # validation
   if (is.null(width)) width <- .2  # if no width is specified, set to 20 %
   # if width > 1, check that value does not exceed length of data:
   if (width > 1 && width > nrow(dt)) stop('`width` exceeds length of dataset')
-  
+
   # perform calculations
   if (width <= 1 & by == 'time') {
     win <- floor(width * max(dt[[1]]))

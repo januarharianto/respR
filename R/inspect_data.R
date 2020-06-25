@@ -1,11 +1,11 @@
 #' Check for common errors in respirometry data
 #'
+#' PLEASE NOTE: the `inspect_data` function is **deprecated**. It will not be
+#' updated, and will be removed in a future update to `respR`. Please use the
+#' \code{\link{inspect}} function instead.
+#'
 #' `inspect_data()` scans a data frame for specific errors that may affect the
 #' use of functions in `respR`.
-#'
-#' PLEASE NOTE: the `inspect_data` function is deprecated. It will not be
-#' updated, and will be removed in a future update to `respR`. Please use the
-#' new `inspect` function instead.
 #'
 #' Data checks include:
 #'
@@ -42,16 +42,16 @@
 #' @examples
 #' data("sardine.rd")
 #' inspect_data(sardine.rd)
-#' 
+#'
 #' data("urchins.rd")
 #' inspect_data(urchins.rd, 1, 5, highlight = FALSE)
 inspect_data <- function(df, time = NULL, oxygen = NULL, inflow.o2 = NULL,
   outflow.o2 = NULL, highlight = TRUE, plot = TRUE) {
 
-  warning("inspect_data has been deprecated. 
-It will not be updated and will be removed in a future version of respR. 
+  warning("inspect_data has been deprecated.
+It will not be updated and will be removed in a future version of respR.
 Please use the `inspect` function instead.")
-  
+
   inflow <- inflow.o2
   outflow <-outflow.o2
 
@@ -210,6 +210,10 @@ Please use the `inspect` function instead.")
 
   ## PLOT
   if (plot) {
+
+    parorig <- par(no.readonly = TRUE) # save original par settings
+    on.exit(par(parorig)) # revert par settings to original
+
     # Calculate rolling regression
     if (type == "default") {
 
@@ -217,7 +221,7 @@ Please use the `inspect` function instead.")
     } else {
       roll <- static_roll(dt[, 1:2], floor(0.1 * nrow(dt)))$rate_b1
     }
-    pardefault <- par(no.readonly = T)  # save original par settings
+
     par(mfrow = c(2, 1), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
       cex = 1, cex.main = 1)
     plot(dt[[1]], dt[[2]], xlab = "", ylab = "", col = r1, pch = 16, cex = .5,
@@ -227,7 +231,6 @@ Please use the `inspect` function instead.")
       panel.first = grid(lwd = .7))
     title(main = "Rolling Regression of Rate vs Index (Row No.) at .2 width",
       line = 0.3)
-    par(pardefault)  # revert par settings to original
   }
   out <- list(df = dt, highlights = highlights)
 

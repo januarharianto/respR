@@ -162,40 +162,61 @@ calc_rate.ft <- function(x = NULL, outflow.o2 = NULL, inflow.o2 = NULL,
 # Print fn ----------------------------------------------------------------
 
 #' @export
-print.calc_rate.ft <- function(x, ...) {
+print.calc_rate.ft <- function(object, pos = NULL, ...) {
 
-  if (length(x$rate) < 6) {
-    cat("Rate:\n")
-    print(x$rate)
+  if(!is.null(pos) && pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
+  if(is.null(pos)) {
+    if (length(object$rate) <= 20) {
+      cat("Rate:\n")
+      print(object$rate)
+    } else {
+      cat("Rate (first 20 shown):\n")
+      print(head(object$rate, 20))
+    }
   } else {
-    cat("Rate (first 6):\n")
-    print(head(x$rate, 6))
+    cat("Rate:\n")
+    print(object$rate[pos])
   }
 
-  if (length(x$rate) > 1) {
-    cat("\nMean:\n")
-    print(x$mean)
+  if (length(object$rate) > 1) {
+    cat("\nMean (of all rates in object):\n")
+    print(object$mean)
   }
+
+  return(invisible(object))
 }
 
 
 # Summary fn --------------------------------------------------------------
 
 #' @export
-summary.calc_rate.ft <- function(object, ...) {
+summary.calc_rate.ft <- function(object, export = FALSE, ...) {
+
   out <- object$summary
   print(out)
-  return(invisible(out))
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
 }
 
 
 # Plot fn -----------------------------------------------------------------
 
 #' @export
-plot.calc_rate.ft <- function(x, ...) {
-  plot(x$rate, xlab = "", ylab = "", col = r1, pch = 16, cex = .7,
+plot.calc_rate.ft <- function(object, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  plot(object$rate, xlab = "", ylab = "", col = r1, pch = 16, cex = .7,
     panel.first = grid(lwd = .7))
-  abline(h = x$mean, lwd = 1.5, lty = 2)
+  abline(h = object$mean, lwd = 1.5, lty = 2)
+  legend("Mean (of all rates)", x = "topright", lwd = 1.5,
+         lty = 2, bg = "white", adj = 0.2, cex = 0.8, x.intersp = 2)
   title(main = "Row Index ~ Rate", line = 0.3)
+  return(invisible(object))
 }
 

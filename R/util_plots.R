@@ -29,7 +29,12 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {
                                            cex = cex)))
   invisible(lapply(sdf, function(z) {
     names(z) <- c("x", "y")  # rename columns, in case they're not x and y
-    clip(min(z$x), max(z$x), min(z$y), max(z$y))
+    ## This fails and breaks return if the z data happens to contain an NA
+    ## Rare, but i have seen it happen...
+    clip(min(na.omit(z$x)),
+         max(na.omit(z$x)),
+         min(na.omit(z$y)),
+         max(na.omit(z$y)))
     abline(lm(y ~ x, z), lwd = 1.2, lty = 3)
   }))
   if (title == T)

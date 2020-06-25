@@ -9,24 +9,26 @@ import_file(path, export = FALSE)
 \arguments{
 \item{path}{string. Path to file.}
 
-\item{export}{logical. If TRUE, exports the data to the same directory,
-determined by the path parameter above.}
+\item{export}{logical. If TRUE, exports the data as a \code{csv} to the same
+directory, as determined by the \code{path} parameter.}
 }
 \value{
 a data frame object of all columned data
 }
 \description{
-Automatically read data from different respirometry hardware and software
+Automatically import data from different respirometry hardware and software
 systems. The aim is to work with most commercial DO sensors available in the
 market with little input from the user. The function extracts data columns
-from the file and generally cleans up column names to make the data easier to
-work with.
+from the file and generally cleans up column names (e.g. removes whitespace
+and characters which cause text encoding issues) to make the data easier to
+work with. Files should be raw output files where possible; files opened and
+re-saved in a different format or filetype will likely fail to import.
 }
 \details{
 Currently works for:
 \itemize{
-\item Firesting Logger
-\item Pyro Oxygen Logger (another name for Firesting)
+\item Firesting
+\item Pyro (another name for Firesting)
 \item PreSens OXY10
 \item PreSens OXY4
 \item PreSens (OxyView generic, including multiplate systems)
@@ -42,12 +44,18 @@ Currently works for:
 We are always looking for sample files to improve the function. Please send
 them to us via \href{mailto:nicholascarey@gmail.com}{email}, or via a \href{https://github.com/januarharianto/respR/issues}{Github issue}.
 
-While the devices listed above are supported, the import functionality may
-not be complete due to limited access to output files. This will improve over
-time as users provide feedback. We are releasing this as it is, without any
-warranty, so that some people can still benefit from the functionality as it
-gets better. Users should be careful using this function, and be prepared to
-to import data by themselves since it is a fundamental skill in R.
+Files with European formatting (i.e. commas instead of points to denote
+decimals) are supported, and will be converted to point-decimals on import.
+This is experimental functionality, so please provide feedback for any files
+for which this might fail.
+
+While the devices listed above are supported, the import functionality is
+experimental due to limited access to output files. This will improve over
+time as users provide feedback and smaple files. We are releasing this as it
+is, without any warranty, so that some people can still benefit from the
+functionality as it gets better. Users should be careful using this function,
+check the imported data, and be prepared to import data by themselves since
+it is a fundamental skill in R.
 }
 \examples{
 NULL

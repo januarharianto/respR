@@ -56,7 +56,7 @@ mass-specific (i.e. to the specimen mass), MO2 rate.
 }
 \details{
 Unless other values are specifically called as \code{x}, the function converts the
-primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \verb{$corrected}
+primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \verb{$adjusted.rate}
 rate from \code{adjust_rate} objects, and the \verb{$mean} rate from \code{calc_rate.ft} and
 \code{calc_rate.bg} objects. Values or vectors of other rates within these obects
 can be converted by calling them as \code{x} using \code{$}.

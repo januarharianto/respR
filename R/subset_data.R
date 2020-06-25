@@ -96,6 +96,7 @@ subset_data <- function(x, from, to, by = "time") {
   print(dt, topn = 2)
   cat("\nNew data:\n")
   print(data.table(out), topn = 2)
+  cat("-----------------------------------------\n")
 
   if (any(class(x) %in% "inspect")) {
     x$dataframe <- out

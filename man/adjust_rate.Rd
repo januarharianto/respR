@@ -22,7 +22,7 @@ number must be considered in the correction. Background respiration is
 normally a negative number, while oxygen flux may or may not be negative.
 }
 \details{
-To account for background respiration and/or oxygen flux in open respirometry
+To account for background respiration and/or net oxygen flux in open respirometry
 experiments, we have provided a simple function to perform either, or both,
 corrections. As a separate function we may develop this to support more
 complex correction methods (e.g. non-linear) in the future.

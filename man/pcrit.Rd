@@ -2,7 +2,7 @@
 % Please edit documentation in R/pcrit.R
 \name{pcrit}
 \alias{pcrit}
-\title{Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}}
+\title{Calculate critical oxygen tension, \emph{Pcrit}}
 \usage{
 pcrit(
   df,
@@ -33,13 +33,17 @@ number(s) of rate data.}
 A list object of class \code{pcrit}.
 }
 \description{
+PLEASE NOTE: the \code{pcrit} function is \strong{deprecated}. It will not be updated,
+and will be removed in a future update to \code{respR}. Please use the
+\code{\link{calc_pcrit}} function instead.
+}
+\details{
 A function to calculate the critical oxygen tension, or the O2 concentration
 below which uptake rate becomes dependent upon oxygen concentration. It is
 calculated by both the "broken-stick" regression (BSR) approach, adopted from
 Yeager and Ultsch (1989), and the segmented regression approach, presented by
 Muggeo (2003).
-}
-\details{
+
 The default data input is an \code{inspect} or \code{inspect_data} object, or
 \code{data.frame} containing time~dissolved oxygen data (e.g. \code{squid.rd}). To
 calculate Pcrit, the function requires data in the form of oxygen uptake rate

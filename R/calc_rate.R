@@ -2,22 +2,35 @@
 #' Calculate rate of change in oxygen over time
 #'
 #' `calc_rate` calculates the rate of change in oxygen concentration over time
-#' in a data frame. You can perform single or multiple regressions on subsets of
-#' the data frame by calling the `from` and `to` arguments.
+#' in a data frame. You can perform a single regression on a subset of the data
+#' frame by calling the `from` and `to` arguments to specify the data region in
+#' terms of `oxygen` or `time` units, `row` region of the input data, or a
+#' `proportion` of the total oxygen used. Multiple regressions can be
+#' performed by using these arguments to enter equal length vectors of paired
+#' values in the appropriate metric.
+#'
+#' The results are plotted by default with various summary statistics for the
+#' regression. If multiple rates are determined, only the first is plotted.
+#' Others can be plotted by assigning the output and using the `pos` argument,
+#' for example `plot(x, pos = 2)`. The output object of class `calc_rate` also
+#' supports the other generic S3 functions `print`, `summary`, and `mean`. This
+#' last option outputs the mean value of all rates determined.
 #'
 #' There are no units involved in `calc_rate`. This is a deliberate decision.
-#' Units are called in a later function when absolute and/or mass-specific
-#' rates of oxygen use are computed in [convert_rate()] and [convert_DO()].
+#' Units are called in a later function when absolute and/or mass-specific rates
+#' of oxygen use are computed in [convert_rate] and [convert_DO].
 #'
-#' @param x data frame or object of class `adjust_rate`. This is the data to
+#' @param x data frame or object of class `inspect`. This is the data to
 #'   process.
-#' @param from numeric vector. Defaults to NULL. Defines the lower bound(s) of
-#'   the data frame to subset. Subsetting is based on the argument: `by`.
-#' @param to numeric vector. Defaults to NULL. Defines the upper bound(s) of the
-#'   data frame to subset. Subsetting is based on the argument: `by`.
-#' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"` Defaults to
-#'   `"time"`.This is the method used to subset the data.
-#' @param plot logical. Defaults to TRUE. Plot the results.
+#' @param from numeric value or vector. Defaults to `NULL`. Defines the lower
+#'   bound(s) of the data frame to subset. Subsetting is based on the argument:
+#'   `by`.
+#' @param to numeric value or vector. Defaults to `NULL`. Defines the upper
+#'   bound(s) of the data frame to subset. Subsetting is based on the argument:
+#'   `by`.
+#' @param by string. `time`, `row`, `o2` or `proportion` Defaults to `time`.This
+#'   is the method used to subset the data.
+#' @param plot logical. Defaults to `TRUE`. Plot the results.
 #'
 #' @importFrom data.table data.table rbindlist
 #' @import utils
@@ -29,38 +42,54 @@
 #' @export
 #'
 #' @examples
-#' data("sardine.rd")
-#' calc_rate(sardine.rd, from = 200, to = 1800)     # default subset by 'time'
-#' calc_rate(sardine.rd, 93, 92, by = 'o2')         # subset by O2
-#' calc_rate(sardine.rd, 1, 1000, by = 'row')     # subset by row
-#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion') # subset by proportion
-#' x
+#' # default - subset by 'time'
+#' calc_rate(sardine.rd, from = 200, to = 1800)
+#'
+#' # subset by O2
+#' calc_rate(sardine.rd, 94, 91, by = 'o2')
+#'
+#' # subset by row
+#' calc_rate(sardine.rd, 1, 1000, by = 'row')
+#'
+#' # subset by proportion of total O2 used
+#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
+#'
+#' ## summary and print
 #' summary(x)
 #' plot(x)
 #'
 #' # Using a vector in 'from' and 'to' perform multiple measurements:
-#' data("intermittent.rd")
-#' calc_rate(intermittent.rd, c(200,2300,4100), c(1800,3200,4600), by = 'time')
+#' x <- calc_rate(intermittent.rd,
+#'                c(200,2300,4100),
+#'                c(1800,3200,4600),
+#'                by = 'time',
+#'                plot = FALSE)
+#' # Plot the third of these results
+#' plot(x, pos = 3)
+
 calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
   ## verify by input
   by <- verify_by(by)
+
   # Ensure "from" and "to" are same length:
-  if (length(from) != length(to)) stop("'from' and 'to' have unequal lengths.")
+  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect_data")) x <- x$df # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
-
 
   # By now, x input must be a data frame object
   if(!is.data.frame(x)) stop("Input must be a data.frame object.")
 
   # Format as data.table
   x <- data.table::data.table(x)
-  x <- x[,1:2] # if data is > 2 columns, pick the first 2
+  if (length(x) > 2) {
+    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
+    x <- x[, 1:2]
+  }
 
   # If 'from' and 'to' are NULL, we assume that the user is analysing all data
   if (all(sapply(list(from, to), is.null))) {
@@ -89,11 +118,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Extract rate_b1
   rate <- rdt[,rate_b1]
 
-  # Plot if TRUE
-  if (plot) {
-    multi.p(x, dt, title = FALSE)
-  }
-
   # Generate output
   out <- list(
     data = x,
@@ -105,50 +129,77 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
     )
 
   class(out) <- "calc_rate"
+
+  # Plot if TRUE
+  if (plot) plot(out)
+
   return(out)
 }
 
 
 #' @export
-print.calc_rate <- function(x, ...) {
-  cat("\n# calc_rate # -------------------\n")
+print.calc_rate <- function(object, ...) {
+  cat("\n# print.calc_rate # ---------------------\n")
   cat("Rate(s):\n")
-  print(x$rate)
-  # cat("-------------------------------\n")
-  return(invisible(x))
+  print(object$rate)
+  cat("-----------------------------------------\n")
+  return(invisible(object))
 }
-
 
 #' @export
 summary.calc_rate <- function(object, export = FALSE, ...) {
-  cat("Summary:\n")
+
+  cat("\n# summary.calc_rate # -------------------\n")
   print(object$summary)
-  if (export) {
-    return(invisible(object$summary))
-  } else return(invisible(object))
+
+  if(export)
+    return(invisible(object$summary)) else
+      return(invisible(object))
 }
 
 #' @export
-plot.calc_rate <- function(x, rep = 1, ...) {
-  cat("\n# plot # ------------------------\n")
-  cat('Plotting...this may take a while for large datasets.\n')
-  df  <- x$data
-  sdf <- x$subsets[[rep]]
+plot.calc_rate <- function(object, pos = 1, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  if(is.null(pos)) pos <- 1
+  if(pos > length(object$rate))
+    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+
+  cat("\n# plot.calc_rate # ----------------------\n")
+  cat('Plotting calc_rate result from position', pos, 'of', length(object$rate), '... \n')
+  df  <- object$data
+  sdf <- object$subsets[[pos]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
-  pardefault <- par(no.readonly = T)  # save original par settings
   par(mfrow = c(2, 2), mai=c(0.4,0.4,0.3,0.3), ps = 10, cex = 1, cex.main = 1)
   multi.p(df, sdf)  # full timeseries with lmfit
   sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
-  par(pardefault)  # revert par settings to original
   cat("Done.\n")
-  # cat("-------------------------------\n")
-  return(invisible(x))
+  cat("-----------------------------------------\n")
+
+  return(invisible(object))
 }
 
+#' @export
+mean.calc_rate <- function(object, export = FALSE, ...){
+
+  cat("\n# mean.calc_rate # ----------------------\n")
+  if(length(object$rate) == 1) warning("Only 1 rate found in calc_rate object. Returning mean rate anyway...")
+  n <- length(object$rate)
+  out <- mean(object$rate)
+  cat("Mean of", n, "output rates:\n")
+  print(out)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(object))
+}
 
 # linear_fit --------------------------------------------------------------
 

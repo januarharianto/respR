@@ -1,28 +1,9 @@
-Changelog
 
-Fixes
-- FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
-- FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
-- FIX: subset_data() - fix for failure with inspect() objects
-- FIX: format_time() - fix for not appending new numeric time column onto a data.table
-- FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
+Can we keep *everything* regarding changes in here, rather than moving some to NEWS.md. It's hard to keep track what's where. We can decide what to include in NEWS just before we release.
 
-Changes
-(we don't have to include all these, but we should keep a full list however minor)
-- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
-- CHANGE: Updated startup message for full MEE citation
-- CHANGE: import_file docs - updated supported systems list
-- CHANGE: Updated README
+For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then we can copy it in here when it is merged.
 
-NEW
-- NEW: filter_rate function
-
-
-
-Can we keep *everything* in here, rather than moving some to NEWS.md? Hard to keep track what's waiting in dev, what's not.....
-Then we can decide what to include
-Let's make that below and copy over when we are ready to release
-
+NEWS
 # [version 1.1.1] -- 2019-07-24
 Quick fixes and changes.
 
@@ -30,3 +11,111 @@ Quick fixes and changes.
 - **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
 - **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
+
+
+
+
+(we don't have to include all these, but we should keep a full list however minor)
+
+Fixes
+- FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
+- FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
+- FIX: subset_data() - fix for failure with inspect() objects
+- FIX: format_time() - fix for not appending new numeric time column onto a data.table
+- FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
+- FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
+- FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
+- FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
+- FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
+
+
+
+Changes
+- CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
+- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
+  - (ugh, might have to revist the above - we use absolute in subset_rate for absolute value between +/- )
+- CHANGE: Updated startup message for full MEE citation
+- CHANGE: import_file docs - updated supported systems list
+- CHANGE: Updated README
+
+NEW
+- NEW: subset_rate function
+
+
+- CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
+
+***************Need to revise above. on.exit cmd needs to be at end after all... Done for plot.auto_rate
+
+
+- CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
+- CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
+- CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
+- CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
+- CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
+- CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
+- CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
+- CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear in pipes)
+- CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
+
+
+
+
+========================== inspect() ============================
+Changes
+
+- CHANGE: `time = 1` and `oxygen = 2` the defaults rather than NULL
+- CHANGE: if `oxygen = NULL` now inspects ALL columns
+- NEW: added `width` input for rolling reg plot (default 0.1)
+- CHANGE: updated roxygen docs. There was quite a lot out of date...
+- CHANGE: Added message if multiple columns inspected that subsequent functions will only use first 2 by default
+- CHANGE: Multiple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
+- FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
+- CHANGE: Prints NA locations for all oxygen columns they are found in (previously only printed if a 2-col df)
+- CHANGE: If multiple columns in df input, warning that 1:2 used by default.
+- CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
+- CHANGE: Stops if 'oxygen' and 'time' columns conflict
+- FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
+
+
+
+
+========================== S3 Methods ============================
+
+All
+- Changed primary input `x` to `object` for consistency across all (was in some, not in others)
+- All summary S3 have `export = TRUE` for export of summary table/value
+- Added `return(invisible(object))` where missing to allow piping
+- All stop if 'pos' too high
+- All print much better with nicer spacing, especially in pipes
+- auto_rate - all S3 methods stop if no rates found (can happen with over-enthusiastic subsetting in new subset_rate fn)
+
+print.adjust_rate
+- FIX: prints adjustment correctly if pos > 1
+
+summary.adjust_rate
+- FIX: 'adjustment' column was missing
+
+summary.convert_rate
+- FIX: prints summary table as columns correctly
+
+print.inspect
+- NEW: if uneven time, now prints min/max intervals found
+- NEW: time error locations now printed out when multiple o2 columns inspected
+
+print.auto_rate
+- CHANGE: prints all results of interval method regardless of pos or width
+
+print.calc_rate.ft
+- NEW: now has `pos` argument
+
+plot.calc_rate
+- CHANGE: changed `rep` to `pos` for consistency
+
+mean.auto_rate
+mean.calc_rate
+mean.calc_rate.bg
+mean.adjust_rate
+mean.convert_rate
+- NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
+
+
