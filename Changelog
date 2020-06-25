@@ -37,6 +37,11 @@ Changes
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
+
+NEW
+- NEW: subset_rate function
+
+
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
 
 ***************Need to revise above. on.exit cmd needs to be at end after all... Done for plot.auto_rate
@@ -112,4 +117,5 @@ mean.calc_rate.bg
 mean.adjust_rate
 mean.convert_rate
 - NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
+
 

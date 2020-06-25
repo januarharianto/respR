@@ -24,9 +24,9 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
   plot(df, xlab = xl, ylab = yl, bg = r1, col = r1, pch = pch, cex = .3,
-    panel.first = grid(lwd = .7))
+       panel.first = grid(lwd = .7))
   invisible(lapply(sdf, function(x) points(x, pch = pch, bg = r2, col = r2,
-    cex = cex)))
+                                           cex = cex)))
   invisible(lapply(sdf, function(z) {
     names(z) <- c("x", "y")  # rename columns, in case they're not x and y
     ## This fails and breaks return if the z data happens to contain an NA
@@ -51,10 +51,10 @@ sub.p <- function(sdf, rep = 1, rsq, title = T) {
   # generate equation to paste into plot
   cf <- signif(coef(fit), 3)
   eq <- paste0("y = ", cf[1], ifelse(sign(cf[2]) == 1, " + ", " - "),
-    abs(cf[2]), " x ")
+               abs(cf[2]), " x ")
   # plot the graph
   plot(sdf, xlab = "", ylab = "", pch = pch, bg = r2, col = r2, cex = cex,
-    panel.first = grid(lwd = .7))
+       panel.first = grid(lwd = .7))
   abline(fit, lwd = 1.5, lty = 2)
   if (title == T) title(main = expression("Close-up Region"), line = 0.5)
   title(main = eq, line = -1.5, font.main = 1)
@@ -64,10 +64,10 @@ sub.p <- function(sdf, rep = 1, rsq, title = T) {
 # a plot of residuals
 residual.p <- function(fit) {
   plot(fit$fitted.values, fit$residuals, xlab = "", ylab = "", bg = r2,
-    col = r2, ylim = c(max(fit$residuals), -max(fit$residuals)),
-    pch = pch, cex = cex, panel.first = grid(lwd = .7))
+       col = r2, ylim = c(max(fit$residuals), -max(fit$residuals)),
+       pch = pch, cex = cex, panel.first = grid(lwd = .7))
   lines(suppressWarnings(loess.smooth(fit$fitted.values, fit$residuals)),
-    col = "black", lwd = 2)
+        col = "black", lwd = 2)
   title(main = expression("Std. Residuals vs Fitted Values"), line = 0.5)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
@@ -75,7 +75,7 @@ residual.p <- function(fit) {
 # a q-q plot
 qq.p <- function(fit) {
   qqnorm(rstandard(fit), main = "", xlab = "", ylab = "", bg = r2, col = r2,
-    pch = pch, cex = cex, panel.first = grid(lwd = .7))
+         pch = pch, cex = cex, panel.first = grid(lwd = .7))
   title(main = expression("Theoretical Q. vs Std. Residuals"), line = 0.5)
   qqline(rstandard(fit), lty = 3, lwd = 1.5)
 }
@@ -91,8 +91,8 @@ density.p <- function(dens, peaks, rank = 1) {
 # rolling regression
 rollreg.p <- function(rolldf, ranked.b1) {
   plot(rolldf, xlab = "Time", ylab = "Rate", bg = r2, col = r2,
-    pch = pch,
-    lwd = 1, cex = cex, panel.first = grid(lwd = .7))
+       pch = pch,
+       lwd = 1, cex = cex, panel.first = grid(lwd = .7))
   # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
   abline(h = ranked.b1, lty = 2)
   title(main = expression("Rolling Regression"~beta[1]), line = 0.5)
@@ -125,4 +125,123 @@ rollreg.p <- function(rolldf, ranked.b1) {
 #   legend("topright", c("Intercept", "Mid-point"), col = c(d1, d2), lty = 1, lwd = 3,
 #     bty = "n")
 # }
+
+
+
+#' Plots multiple auto_rate results in a nice way
+#' x = auto_rate or auto_rate_filt object
+#' n = max no. of plots
+#' THIS IS SLOOOOOOOW
+#' Will probably have to revert to base plotting
+#'
+#' @importFrom cowplot plot_grid
+#' @importFrom methods show
+#' @import ggplot2
+#'
+#' @keywords internal
+
+plot_multi_ar <- function(x, n = 9){
+  parorig <- par(no.readonly = TRUE) # save original par settings
+
+  nres <- length(x$rate) ## no. of results
+  df <- x$df
+
+  if(nres == 0) {
+    message("No rates to plot...")
+    return()}
+  if(nres > n) message(glue::glue("Plotting first {n} filtered rate results only..."))
+  if(nres < n) n <- length(x$rate)
+
+  ## save all ggplot2 plots to list
+  all_plots <- apply(x$summary[1:n,], 1, function(q) {
+
+    start <- q[1]
+    end <- q[2]
+    rate <- q[6]
+
+    rdf <- df[start:end]
+    slope <- lm(rdf$y ~ rdf$x)$coefficients[2]
+    intercept <- lm(rdf$y ~ rdf$x)$coefficients[1]
+
+    plt <-
+      ggplot() +
+      theme(plot.title = element_text(hjust = 1, family = "mono")) +
+      theme(plot.margin = margin(0.1, 0.1, 0, 0, "cm")) +
+      geom_point(aes(x = df$x,
+                     y = df$y),
+                 color="darkgrey",) +
+      labs(x="", y="") +
+
+      geom_point(aes(x = rdf$x, y = rdf$y),
+                 color = "yellow1") +
+      stat_smooth(method = "lm") +
+      ggtitle(glue::glue("Rate = {signif(rate, digits = 3)}"))
+
+    ## turns out clipping an lm in ggplot is a PITA...
+    plt <- plt + geom_segment(
+      aes(x = rdf$x[1], y = rdf$x[1]*slope+intercept,
+          xend = tail(rdf$x, 1), yend = tail(rdf$x, 1)*slope+intercept, ),
+      linetype = "dashed",
+      color = "black",
+      lwd = 0.8)
+
+    return(plt)
+  })
+
+  grd <- cowplot::plot_grid(plotlist = all_plots)
+  show(grd)
+  on.exit(par(parorig)) # revert par settings to original
+}
+
+
+#' Plots auto_rate regressions in a way you can see how they
+#' overlap. If it's an auto_rate_subset object, it will plot
+#' the subset on the axes of the original results, so you can compare
+#' the subset and original easily.
+#' You can also specify an auto_rate $summary df directly, but then the axes
+#' limits will be drawn from the summary df not the original data, so may be
+#' somewhat arbitrary.
+#' Possibly we incorporate this into a user exploration function
+#' @keywords internal
+plot_overlaps <- function(x){
+
+  if(is.data.frame(x)) df <- x else
+    df <- x$summary
+
+  if(is.data.frame(x))maxy <- nrow(x) else
+    if(("original" %in% names(x))) maxy <- nrow(x$original$summary) else
+      maxy <- nrow(x$summary)
+
+    miny <- 0
+    minx <- 0
+    if(is.data.frame(x))maxx <- max(x$endrow) else
+      maxx <- nrow(x$df)
+
+    if(("original" %in% names(x))) {
+      o_df <- x$original$summary
+
+      colsToUse <- intersect(colnames(df), colnames(o_df))
+      o_rows <- match(do.call("paste", as.data.frame(df)[, colsToUse]),
+                      do.call("paste", as.data.frame(o_df)[, colsToUse]))
+
+      o_df$row_no <- 1:nrow(o_df)
+    }
+
+    df$row_no <- 1:nrow(df)
+
+    plot(minx:maxx, seq(miny, maxy, length.out=length(minx:maxx)),
+         ylim = c(maxy,miny),
+         col = "white",
+         ylab="$summary table ranking",
+         xlab="orginal data rows")
+
+    if(("original" %in% names(x))) {for(i in 1:nrow(df)) {
+      segments(df$row[i], o_rows[i], x1 = df$endrow[i], y1 = o_rows[i],
+               lwd=3, col = "blue")}
+    } else {for(i in 1:nrow(df)) {
+      segments(df$row[i], df$row_no[i], x1 = df$endrow[i], y1 = df$row_no[i],
+               lwd=3, col = "blue")}}
+
+    invisible(return(x)) ## to allow it to be used within pipes - still prints though...
+}
 
