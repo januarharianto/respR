@@ -1,35 +1,60 @@
 #'@title Subset auto_rate results based on a range of criteria
 #'
-#'@description The `auto_rate` function is a very powerful, but the output can
-#'  be large and difficult to explore. `subset_rate` subsets `auto_rate` results
-#'  according to various criteria. For example, extracting only positive or
-#'  negative rates, or only the highest or lowest rates.
+#'@description The `auto_rate` function is very powerful, but the output can be
+#'  large and difficult to explore. In addition, it may identify valid linear
+#'  data regions, but from areas of the data that are not of experimental
+#'  interest.  As an advanced, machine learning based process, it is also
+#'  somewhat fallible and on occasion may return questionable results.
+#'
+#'  The `subset_rate` function subsets `auto_rate` results according to various
+#'  criteria. For example, extracting only positive or negative rates, only the
+#'  highest or lowest rates, only those from certain data regions, and numerous
+#'  other methods that allow advanced filtering of results so the rates
+#'  extracted are well-defined towards the research question of interest. This
+#'  also allows for highly consistent reporting of results and rate selection
+#'  criteria.
+#'
+#'  Multiple subsetting criteria can be applied by assigning the output and
+#'  processing it through the function multiple times with different criteria,
+#'  or alternatively via `%>%` piping. See examples.
 #'
 #'  Note: when choosing a `method`, keep in mind that to keep mathematically
 #'  consistent, `respR` outputs oxygen consumption (i.e. respiration) rates as
 #'  negative values. This is particularly important in the difference between
-#'  `highest/lowest` and `min/max` methods.
+#'  `highest/lowest` and `min/max` methods. See Details.
 #'
-#'  When a `$rate` is omitted by the subsetting criteria, all associated data in
-#'  `$summary` (i.e. the associated row) is removed. Summary results are not
-#'  reordered in any way, only the non-matching rates removed. The `$peaks` and
-#'  `$metadata$no_peaks` components of the `auto_rate` object are similarly
+#'  When a `$rate` result is omitted by the subsetting criteria, all associated
+#'  data in `$summary` (i.e. the associated row) is removed. Summary results are
+#'  not reordered in any way, only the non-matching rates removed. The `$peaks`
+#'  and `$metadata$no_peaks` components of the `auto_rate` object are similarly
 #'  adjusted. The resulting object retains the `auto_rate` class, however an
 #'  additional `auto_rate_subset` class is applied. The original `auto_rate`
 #'  object is saved in the output as `$original`.
 #'
-#'  Multiple subsetting criteria can be applied by assigning outputs and
-#'  processing them through the function multiple times with different criteria,
-#'  or via `%>%` piping. See examples.
+#'  Regardless of which `method` is chosen, the first operation conducted is
+#'  removal of duplicate results. Due to the way it works, the `auto_rate`
+#'  kernel-density analysis occasionally identifies linear regions that are
+#'  identical in all regards, including start/end datapoints, and these appear
+#'  as identical rows in the output `$summary`. For all methods only unique
+#'  regressions are retained. To apply only this duplicate removal method, use
+#'  the default `method = NULL` or `method = "unique"`.
+#'
+#'  Generally speaking, for most large datasets we advise using
+#'  \code{\link{subset_data}} and then running `auto_rate` on the subset(s) of
+#'  the data you are interested in, rather than run it on the whole dataset and
+#'  relying on `subset_rate` to filter it afterwards.
 #'
 #'@details These are the current methods by which rates in `auto_rate` objects
-#'  can be subset:
+#'  can be subset. Matching results are *retained* in the output:
+#'
+#'  \subsection{ }{`NULL`, `unique`} Subsets only unique results, that is
+#'  removes any duplicate regressions from the input `$summary`. `n` is ignored.
 #'
 #'  \subsection{ }{`positive`, `negative`} Subsets all `positive` (>0) or
 #'  `negative` (<0) rates. `n` is ignored. Useful in intermittent respirometry
 #'  where `auto_rate` may identify linear regions of oxygen increase during
 #'  flushes. Note, to keep mathematically consistent, `respR` outputs oxygen
-#'  consumption (i.e. respiration) rates as negative values.
+#'  consumption (i.e. respiration) rates as *negative* values.
 #'
 #'  \subsection{ }{`nonzero`, `zero`} Retains all `nonzero` rates (i.e. removes
 #'  any zero rates), or retains *only* `zero` rates (i.e. removes all rates with
@@ -39,10 +64,10 @@
 #'  methods. They can only be used when rates all have the same sign (i.e. are
 #'  all negative or all positive). Here, they subset the highest and lowest
 #'  ***absolute*** rate values. That is, if rates are all negative, `method =
-#'  'highest'` will retain the highest magnitude rates regardless of sign, that
-#'  is the *most negative*. Essentially, these options ignore the sign of the
-#'  rate. `n` indicates how many of the lowest/highest rates to retain See `min`
-#'  and `max` options for extracting numerical low/high rates.
+#'  'highest'` will retain the highest magnitude rates regardless of the sign,
+#'  that is the *most negative*. Essentially, these options ignore the sign of
+#'  the rate. `n` indicates how many of the lowest/highest rates to retain See
+#'  `min` and `max` options for extracting numerical low/high rates.
 #'
 #'  \subsection{ }{`lowest_percentile`, `highest_percentile`} Again, special
 #'  note should be taken of these methods, which can only be used when rates all
@@ -74,14 +99,26 @@
 #'  \subsection{ }{`rate`, `rsq`, `row`, `time`} These methods work on the
 #'  respective columns of the `auto_rate` `$summary` data frame. For these, `n`
 #'  should be a numeric vector of two values. Matching rates which fall within
-#'  that range (inclusive) are returned. For example, to retain only rates where
+#'  that range (inclusive) are retained For example, to retain only rates where
 #'  the `rate` value is between 0.05 and 0.08: `method = 'rate', n = c(0.05,
 #'  0.08)`. To retain all rates with a R-Squared above 0.90: `method = 'rsq', n
 #'  = c(0.9, 1)`. The `row` and `time` ranges refer to the original data source
 #'  (`$df` element of the input) and can be used to constrain results to rates
-#'  from particular regions of the data (though a better option is to
+#'  from particular regions of the data (although a better option is to
 #'  \code{\link{subset_data}} prior to analysis). Note, `time` is not the same
-#'  as `duration` - see next section.
+#'  as `duration` - see later section.
+#'
+#'  \subsection{ }{`time_omit`, `row_omit`} These methods refer to the original
+#'  data, and are intended to exclude rates determined over particular data
+#'  regions. This is useful in the case of, for example, a data anomaly such as
+#'  a spike or sensor dropout. For these, `n` can be a single value indicating a
+#'  single data row or timepoint, or a numeric vector of two values indicating a
+#'  row or time range. Only rates (i.e. regressions) which *do not* utilise that
+#'  particular value or range are retained in the putput. For example, if an
+#'  anomaly occurs precisely at timepoint 3000,  `time_omit = 3000` will mean
+#'  only rates determined solely over regions before and after this will be
+#'  retained. Similarly, if it occurs over a time range this can be entered as,
+#'  `time_omit = c(3000, 3200)`.
 #'
 #'  \subsection{ }{`duration`} This method allows subsetting of rates which
 #'  occur within a duration range. Here, `n` should be a numeric vector of two
@@ -101,48 +138,47 @@
 #'
 #'  \subsection{ }{`overlap`} This method removes rates which overlap, that is,
 #'  linear regions identified by `auto_rate` which partly or completely share
-#'  the same rows of the data. Due to the way `auto_rate` works, it may identify
-#'  multiple linear regions some of which may substantially overlap, or even be
-#'  completely contained within others. In such cases taking an average of the
-#'  rate values may be questionable, as certain regions will be weighted higher
-#'  due to these multiple, overlapping results. This method removes overlapping
-#'  rates, using `n` as a threshold to determine degree of permitted overlap. It
-#'  is recommended this method be used after all other selection criteria have
-#'  been applied, as it is quite aggressive about removing rates, including
-#'  high-ranked ones, and can be computationally intensive when there are many
-#'  results. It can also only be used on `auto_rate` objects where the `linear`
-#'  method has been used (the others specifically output all overlapping
-#'  (`min/max`) or non-overlapping (`interval`) rates). Permitted overlap is
-#'  determined by `n`, which indicates the minimum proportion of each particular
-#'  regression which must overlap with another for it to be regarded as
-#'  overlapping.  For example, `n = 0.2` means a regression would have to
-#'  overlap with another by 20% or more of its total length to be regarded as
-#'  overlapping. The `overlap` method does several operations. First, any
-#'  duplicate rows in `$summary` are removed. Second, any rate regressions which
-#'  are completely contained within any others are removed. Neither of these
-#'  operations uses `n`.
+#'  the same rows of the original data. Due to the way `auto_rate` works, it may
+#'  identify multiple linear regions some of which may substantially overlap, or
+#'  even be completely contained within others. In such cases summary operations
+#'  such as taking an average of the rate values may be questionable, as certain
+#'  regions will be weighted higher due to these multiple, overlapping results.
+#'  This method removes overlapping rates, using `n` as a threshold to determine
+#'  degree of permitted overlap. It is recommended this method be used after all
+#'  other selection criteria have been applied, as it is quite aggressive about
+#'  removing rates, including high-ranked ones, and can be computationally
+#'  intensive when there are many results. It can also only be used on
+#'  `auto_rate` objects where the `linear` method has been used (the others
+#'  specifically output all overlapping (`min/max`) or non-overlapping
+#'  (`interval`) rates). Permitted overlap is determined by `n`, which indicates
+#'  the minimum proportion of each particular regression which must overlap with
+#'  another for it to be regarded as overlapping.  For example, `n = 0.2` means
+#'  a regression would have to overlap with another by 20% or more of its total
+#'  length to be regarded as overlapping. The `overlap` method does two separate
+#'  operations. First, regardless of the `n` value, any rate regressions which
+#'  are completely contained within another are removed.
 #'
-#'  Lastly, for each `rate_b1` result in `$summary` how many *other* rate
+#'  Secondly, for each `rate_b1` result in `$summary` how many *other* rate
 #'  results it overlaps with (accounting for `n`) is determined. The one which
-#'  overlaps with the most others is then removed. In the event of multiple
-#'  rates having the same number of overlaps, it removes the least ranked one
-#'  (i.e. lowest in the summary table). It repeats this analysis iteratively
-#'  until only non-overlapping rates (accounting for `n`) are retained. If `n =
-#'  0`, only rates which do not overlap at all are retained. If `n = 1`, only
-#'  duplicate rows and rates which are entirely contained within another are
+#'  overlaps with the most others is then removed. In the event of more than one
+#'  rate overlapping with equal numbers of other rates, it removes the least
+#'  ranked one (i.e. lowest in the summary table). It repeats this analysis
+#'  iteratively until only non-overlapping rates (accounting for `n`) are
+#'  retained. If `n = 0`, only rates which do not overlap at all are retained.
+#'  If `n = 1`, only rates which are entirely contained within another are
 #'  removed.
 #'
 #'@return The output of `subset_rate` is a `list` object which retains the
 #'  `auto_rate` class, but has an additional `auto_rate_subset` class. It
 #'  contains two additional elements: `$original` contains the original,
-#'  unaltered `auto_rate` object, which will be retained through multiple
-#'  subsetting operations, that is even after processing through the function
-#'  multiple times. `$subset_calls` contains the calls for every subsetting
-#'  operation that has been applied to the `$original` object, from the first to
-#'  the most recent. Note, if using `%>%` piping the `x` input in these appears
-#'  as `x = .` where it has been piped from the previous call. These additional
-#'  elements ensure the output contains the complete, reproducible history of
-#'  the `auto_rate` object having been subset.
+#'  unaltered `auto_rate` object, which will be retained unaltered through
+#'  multiple subsetting operations, that is even after processing through the
+#'  function multiple times. `$subset_calls` contains the calls for every
+#'  subsetting operation that has been applied to the `$original` object, from
+#'  the first to the most recent. Note, if using `%>%` piping the `x` input in
+#'  these appears as `x = .` where it has been piped from the previous call.
+#'  These additional elements ensure the output contains the complete,
+#'  reproducible history of the `auto_rate` object having been subset.
 #'
 #'@md
 #'@param x list. An object of class `auto_rate` or `auto_rate_subset`.
@@ -168,64 +204,87 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   ## Save function call for output
   call <- match.call()
+  ## Save unaltered auto_rate input for output
+  input_x <- x
 
   # Checks ------------------------------------------------------------------
 
-  if(!("auto_rate" %in% class(x))) stop("Input is not an 'auto_rate' object")
+  if(!("auto_rate" %in% class(x))) stop("subset_rate: Input is not an 'auto_rate' object")
 
   ## Check for empty auto_rate object
   ## Can occur if previously subset by silly criteria
-  if(nrow(x$summary) == 0) stop("No rates found in $summary")
+  if(nrow(x$summary) == 0) stop("subset_rate: No rates found in $summary")
 
   ## pos and neg rates found
-  if(any(x$rate > 0) && any(x$rate < 0)) message("Object contains both negative and positive rates. Ensure the chosen `method` is appropriate.")
+  if(any(x$rate > 0) && any(x$rate < 0)) message("subset_rate: Object contains both negative and positive rates. Ensure the chosen `method` is appropriate.")
 
   ## Specify a method
-  if(is.null(method)) stop("Please specify a 'method'")
+  #if(is.null(method)) stop("subset_rate: Please specify a 'method'")
 
   ## Validate method
-  if(!(method %in% c("overlap",
-                     "duration",
-                     "manual",
-                     "time",
-                     "row",
-                     "rsq",
-                     "rate",
-                     "max_percentile",
-                     "min_percentile",
-                     "max",
-                     "min",
-                     "lowest_percentile",
-                     "highest_percentile",
-                     "lowest",
-                     "highest",
-                     "zero",
-                     "nonzero",
-                     "negative",
-                     "positive"))) stop("'method' input not recognised")
+  if(!is.null(method) && !(method %in% c("unique",
+                                         "overlap",
+                                         "duration",
+                                         "manual",
+                                         "time",
+                                         "time_omit",
+                                         "row",
+                                         "row_omit",
+                                         "rsq",
+                                         "rate",
+                                         "max_percentile",
+                                         "min_percentile",
+                                         "max",
+                                         "min",
+                                         "lowest_percentile",
+                                         "highest_percentile",
+                                         "lowest",
+                                         "highest",
+                                         "zero",
+                                         "nonzero",
+                                         "negative",
+                                         "positive"))) stop("subset_rate: 'method' input not recognised")
 
+
+  # Remove duplicates -------------------------------------------------------
+  # This happens regardless of any other subsetting operation.
+  # Should be moved to auto_rate function, so can be removed from here when it is.
+
+  # index of rows which are unique
+  index_unique <- which(!duplicated(x$summary))
+
+  x$summary <- x$summary[index_unique,]
+  x$rate <- x$rate[index_unique]
+  x$peaks <- x$peaks[index_unique,]
+  x$metadata$no_peaks <- length(index_unique)
+
+  if(method == "unique" || is.null(method)){
+    message("subset_rate: Subsetting only unique regressions. `n` input ignored...")
+    method <- "unique"
+    keep <- 1:nrow(x$summary)
+  }
 
   # Positive rates only -----------------------------------------------------
   if(method == "positive"){
-    message("Subsetting all positive rate values. `n` input ignored...")
+    message("subset_rate: Subsetting all positive rate values. `n` input ignored...")
     keep <- which(x$rate > 0)
   }
 
   # Negative rates only -----------------------------------------------------
   if(method == "negative"){
-    message("Subsetting all negative rate values. `n` input ignored...")
+    message("subset_rate: Subsetting all negative rate values. `n` input ignored...")
     keep <- which(x$rate < 0)
   }
 
   # Nonzero rates only -----------------------------------------------------
   if(method == "nonzero"){
-    message("Subsetting all non-zero rate values. `n` input ignored...")
+    message("subset_rate: Subsetting all non-zero rate values. `n` input ignored...")
     keep <- which(x$rate != 0)
   }
 
   # Zero rates only ---------------------------------------------------------
   if(method == "zero"){
-    message("Subsetting all zero rate values. `n` input ignored...")
+    message("subset_rate: Subsetting all zero rate values. `n` input ignored...")
     keep <- which(x$rate == 0)
   }
 
@@ -234,11 +293,11 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   ## E.g. if all negative will return the highest/least negative n values
 
   if(method == "lowest"){
-    if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'lowest' method is intended to find lowest rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or 'min' option to find *numerical* lowest rates.")
-    if(is.null(n) || n %% 1 != 0 || n < 0) stop("For 'lowest' method 'n' must be a positive integer value.")
-    if(n > length(x$rate)) message("'n' input is greater than number of rates in $summary. Nothing to remove.")
+    if(any(x$rate > 0) && any(x$rate < 0)) stop("subset_rate: Object contains both negative and positive rates. \n'lowest' method is intended to find lowest rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or 'min' option to find *numerical* lowest rates.")
+    if(is.null(n) || n %% 1 != 0 || n < 0) stop("subset_rate: For 'lowest' method 'n' must be a positive integer value.")
+    if(n > length(x$rate)) message("subset_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
-    message(glue::glue("Subsetting lowest {n} *absolute* rate values..."))
+    message(glue::glue("subset_rate: Subsetting lowest {n} *absolute* rate values..."))
 
     ## if all negative return HIGHEST numerical n
     if(all(x$rate <= 0)) keep <- sort(tail(order(x$rate), n))
@@ -250,11 +309,11 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   ## Note these are NOT highest *numerical*, but highest *absolute* values
 
   if(method == "highest"){
-    if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'highest' method is intended to find highest rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or 'max' option to find *numerical* highest rates.")
-    if(is.null(n) || n %% 1 != 0 || n < 0) stop("For 'highest' method 'n' must be a positive integer value.")
-    if(n > length(x$rate)) message("'n' input is greater than number of rates in $summary. Nothing to remove.")
+    if(any(x$rate > 0) && any(x$rate < 0)) stop("subset_rate: Object contains both negative and positive rates. \n'highest' method is intended to find highest rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or 'max' option to find *numerical* highest rates.")
+    if(is.null(n) || n %% 1 != 0 || n < 0) stop("subset_rate: For 'highest' method 'n' must be a positive integer value.")
+    if(n > length(x$rate)) message("subset_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
-    message(glue::glue("Subsetting highest {n} *absolute* rate values..."))
+    message(glue::glue("subset_rate: Subsetting highest {n} *absolute* rate values..."))
 
     ## if all negative return LOWEST numerical n
     if(all(x$rate <= 0)) keep <- sort(head(order(x$rate), n))
@@ -265,10 +324,10 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # lowest percentile rates -------------------------------------------------
   if(method == "lowest_percentile") {
-    if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'lowest_percentile' method is intended to find lowest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
-    if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
+    if(any(x$rate > 0) && any(x$rate < 0)) stop("subset_rate: Object contains both negative and positive rates. \n'lowest_percentile' method is intended to find lowest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
+    if(n <= 0 || n >= 1) stop("subset_rate: For 'percentile' methods 'n' must be between 0 and 1.")
 
-    message(glue::glue("Subsetting lowest {n*100}th percentile of *absolute* rate values..."))
+    message(glue::glue("subset_rate: Subsetting lowest {n*100}th percentile of *absolute* rate values..."))
 
     ## if all negative return HIGHEST numerical nth percentile
     if(all(x$rate <= 0)) {
@@ -284,10 +343,10 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # highest percentile rates ------------------------------------------------
   if(method == "highest_percentile") {
-    if(any(x$rate > 0) && any(x$rate < 0)) stop("Object contains both negative and positive rates. \n'highest_percentile' method is intended to find highest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
-    if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
+    if(any(x$rate > 0) && any(x$rate < 0)) stop("subset_rate: Object contains both negative and positive rates. \n'highest_percentile' method is intended to find highest percentile rate in absolute terms amongst rates all having the same sign. \nUse 'positive' or 'negative' method to subset only positive or negative rates first, or see 'min_percentile' and 'max_percentile' options to perform *strictly numerical* operations.")
+    if(n <= 0 || n >= 1) stop("subset_rate: For 'percentile' methods 'n' must be between 0 and 1.")
 
-    message(glue::glue("Subsetting highest {n*100}th percentile of *absolute* rate values..."))
+    message(glue::glue("subset_rate: Subsetting highest {n*100}th percentile of *absolute* rate values..."))
 
     ## if all negative return LOWEST numerical nth percentile
     if(all(x$rate <= 0)) {
@@ -306,34 +365,34 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   ## i.e can mix -ve and +ve
   ## min = lowest/most negative
   if(method == "min") {
-    if(is.null(n) || n %% 1 != 0 || n < 0) stop("For 'min' method 'n' must be a positive integer value.")
-    if(n > length(x$rate)) message("'n' input is greater than number of rates in $summary. Nothing to remove.")
+    if(is.null(n) || n %% 1 != 0 || n < 0) stop("subset_rate: For 'min' method 'n' must be a positive integer value.")
+    if(n > length(x$rate)) message("subset_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
-    message(glue::glue("Subsetting minimum {n} *numerical* rate values..."))
+    message(glue::glue("subset_rate: Subsetting minimum {n} *numerical* rate values..."))
     keep <- sort(head(order(x$rate), n))
   }
 
   # max n rates -------------------------------------------------------------
   if(method == "max") {
-    if(is.null(n) || n %% 1 != 0 || n < 0) stop("For 'max' method 'n' must be a positive integer value.")
-    if(n > length(x$rate)) message("'n' input is greater than number of rates in $summary. Nothing to remove.")
+    if(is.null(n) || n %% 1 != 0 || n < 0) stop("subset_rate: For 'max' method 'n' must be a positive integer value.")
+    if(n > length(x$rate)) message("subset_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
-    message(glue::glue("Subsetting maximum {n} *numerical* rate values..."))
+    message(glue::glue("subset_rate: Subsetting maximum {n} *numerical* rate values..."))
     keep <- sort(tail(order(x$rate), n))
   }
 
   # min percentile rates ----------------------------------------------------
   if(method == "min_percentile") {
-    if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
-    message(glue::glue("Subsetting minimum {n*100}th percentile *numerical* rate values..."))
+    if(n <= 0 || n >= 1) stop("subset_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+    message(glue::glue("subset_rate: Subsetting minimum {n*100}th percentile *numerical* rate values..."))
     cutoff <- stats::quantile(x$rate, n)
     keep <- sort(which(x$rate %in% x$rate[x$rate <= cutoff]))
   }
 
   # max percentile rates ----------------------------------------------------
   if(method == "max_percentile") {
-    if(n <= 0 || n >= 1) stop("For 'percentile' methods 'n' must be between 0 and 1.")
-    message(glue::glue("Subsetting maximum {n*100}th percentile *numerical* rate values..."))
+    if(n <= 0 || n >= 1) stop("subset_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+    message(glue::glue("subset_rate: Subsetting maximum {n*100}th percentile *numerical* rate values..."))
     cutoff <- stats::quantile(x$rate, 1-n) ## NOTE DIFFERENCE TO ABOVE
     keep <- sort(which(x$rate %in% x$rate[x$rate >= cutoff]))
   }
@@ -341,25 +400,25 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # rate range --------------------------------------------------------------
   if(method == "rate"){
-    if(length(n) != 2) stop("For 'rate' method 'n' must be a vector of two values.")
-    message(glue::glue("Subsetting rates with values between {n[1]} and {n[2]}..."))
+    if(length(n) != 2) stop("subset_rate: For 'rate' method 'n' must be a vector of two values.")
+    message(glue::glue("subset_rate: Subsetting rates with values between {n[1]} and {n[2]}..."))
     keep <- sort(which(data.table::between(x$rate, n[1], n[2])))
   }
 
 
   # rsq range ---------------------------------------------------------------
   if(method == "rsq"){
-    if(length(n) != 2) stop("For 'rsq' method 'n' must be a vector of two values.")
-    message(glue::glue("Subsetting rates with rsq values between {n[1]} and {n[2]}..."))
+    if(length(n) != 2) stop("subset_rate: For 'rsq' method 'n' must be a vector of two values.")
+    message(glue::glue("subset_rate: Subsetting rates with rsq values between {n[1]} and {n[2]}..."))
     keep <- sort(which(data.table::between(x$summary$rsq, n[1], n[2])))
   }
 
   # row range ---------------------------------------------------------------
   if(method == "row"){
-    if(length(n) != 2) stop("For 'row' method 'n' must be a vector of two values.")
-    if(any(n > dim(x$df)[1])) stop("Input for 'n': row inputs out of data frame range.")
+    if(length(n) != 2) stop("subset_rate: For 'row' method 'n' must be a vector of two values.")
+    if(any(n > dim(x$df)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
 
-    message(glue::glue("Subsetting rates which occur only between rows {n[1]} and {n[2]}..."))
+    message(glue::glue("subset_rate: Subsetting rates which occur only between original data rows {n[1]} and {n[2]}..."))
 
     n_order <- sort(n) # in case entered wrong way round
     keep1 <- which(x$summary$row >= n_order[1])
@@ -367,13 +426,27 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep <- keep1[keep1 %in% keep2]
   }
 
+  # row_omit ----------------------------------------------------------------
+  if(method == "row_omit"){
+    if(length(n) > 2) stop("subset_rate: For 'row_omit' method 'n' must be a single value or vector of two values.")
+    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use original data row(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
+
+    if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
+    if(any(n > dim(x$df)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
+
+    # which regs span n?
+    n_order <- sort(n) # in case entered wrong way round
+    keep1 <- which(x$summary$row >= n_order[2]) ## start is AFTER n
+    keep2 <- which(x$summary$endrow <= n_order[1]) ## end is BEFORE n
+    keep <- c(keep1, keep2)
+  }
 
   # time range --------------------------------------------------------------
   if(method == "time"){
-    if(length(n) != 2) stop("For 'time' method 'n' must be a vector of two values.")
-    if(any(n < range(x$df[[1]])[1]) || any(n > range(x$df[[1]])[2])) stop("Input for 'n': time inputs out of time data range.")
+    if(length(n) != 2) stop("subset_rate: For 'time' method 'n' must be a vector of two values.")
+    if(any(n < range(x$df[[1]])[1]) || any(n > range(x$df[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
 
-    message(glue::glue("Subsetting rates which occur only between times {n[1]} and {n[2]}..."))
+    message(glue::glue("subset_rate: Subsetting rates which occur only between times {n[1]} and {n[2]}..."))
 
     n_order <- sort(n) # in case entered wrong way round
     keep1 <- which(x$summary$time >= n_order[1])
@@ -382,11 +455,26 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   }
 
 
+  # time_omit ---------------------------------------------------------------
+  if(method == "time_omit"){
+    if(length(n) > 2) stop("subset_rate: For 'time_omit' method 'n' must be a single value or vector of two values.")
+    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use time value(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
+    if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
+    if(any(n < range(x$df[[1]])[1]) || any(n > range(x$df[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
+
+    # which regs span n?
+    n_order <- sort(n) # in case entered wrong way round
+    keep1 <- which(x$summary$time >= n_order[2]) ## start is AFTER n
+    keep2 <- which(x$summary$endtime <= n_order[1]) ## end is BEFORE n
+    keep <- c(keep1, keep2)
+  }
+
+
   # manual range ------------------------------------------------------------
   if(method == "manual"){
     # check within range of summary length
-    if(!all(n %in% 1:nrow(x$summary))) stop("For 'manual' method: 'n' values are out of range of $summary data.frame rows...")
-    message(glue::glue("Subsetting selected rows of the $summary data.frame..."))
+    if(!all(n %in% 1:nrow(x$summary))) stop("subset_rate: For 'manual' method: 'n' values are out of range of $summary data.frame rows...")
+    message(glue::glue("subset_rate: Subsetting selected rows of the $summary data.frame..."))
     n_order <- sort(n) # in case entered wrong way round
     keep <- n_order
   }
@@ -394,9 +482,9 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # duration ----------------------------------------------------------------
   if(method == "duration"){
-    if(length(n) != 2) stop("For 'duration' method 'n' must be a vector of two values.")
+    if(length(n) != 2) stop("subset_rate: For 'duration' method 'n' must be a vector of two values.")
     n_order <- sort(n) # in case entered wrong way round
-    message(glue::glue("Subsetting rates with duration between {n_order[1]} and {n_order[2]}..."))
+    message(glue::glue("subset_rate: Subsetting rates with duration between {n_order[1]} and {n_order[2]}..."))
 
     durations <- x$summary$endtime-x$summary$time
 
@@ -408,28 +496,21 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # overlap -----------------------------------------------------------------
   if(method == "overlap") {
-    if(n < 0 || n > 1) stop("For 'overlap' method 'n' must be between 0 and 1 inclusive.")
-    if(x$method != "linear") stop("The 'overlap' method should only be used with results determined via the auto_rate 'linear' method.")
-    message(glue::glue("Subsetting rates which overlap by {n*100}% or less..."))
+    if(n < 0 || n > 1) stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
+    if(x$method != "linear") stop("subset_rate: The 'overlap' method should only be used with results determined via the auto_rate 'linear' method.")
+    message(glue::glue("subset_rate: Subsetting rates which overlap by {n*100}% or less..."))
 
     ## extract summary df
     df <- x$summary
     ## reverse it, since we will process from lowest ranked to top ranked in loops
     df <- df[nrow(df):1]
 
-    ################# FIRST - remove duplicates #####################
-
-    ## index of rows which are duplicates
-    index_dupes <- which(duplicated(df))
-
-    ## add these to use later
+    ## Add these to use later
     df$row_width <- df$endrow - df$row
     df$orig_row_no <- nrow(df):1
 
-    ## Remove duplicates
-    output_df <- df[-index_dupes]
 
-    ################# SECOND - remove contained #####################
+    ################# FIRST - remove contained #####################
     ## i.e. remove all regressions completely contained within another longer one
 
     ## Need two dfs here, one to do loop with, another to modify
@@ -459,7 +540,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
       }
     }
 
-    ################# THIRD - remove partial overlaps #####################
+    ################# SECOND - remove partial overlaps #####################
     ## Now we remove any regressions that overlap each other
 
     ## Here we loop through the df multiple times (while loop), because the multiple
@@ -540,7 +621,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   output$metadata$no_peaks <- length(keep)
 
   ## save original ar object if it isn't already there
-  if(!("original" %in% names(output))) output$original <- x
+  if(!("original" %in% names(output))) output$original <- input_x
 
   ## save subsetting criteria
   if(!("subset_calls" %in% names(output))){
@@ -566,7 +647,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(plot) plot_multi_ar(output, n = 9)
 
   ## Message
-  message(glue::glue("\n----- Subsetting complete. {length(x$rate) - length(keep)} rates removed, {length(keep)} rates remaining -----\n\n"))
+  message(glue::glue(
+    "\n----- Subsetting complete. {length(input_x$rate) - length(keep)} rate(s) removed, {length(keep)} rate(s) remaining -----\n\n"))
 
   ## Return
   return(output)
