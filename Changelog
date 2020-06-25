@@ -1,7 +1,10 @@
 
-Can we keep *everything* regarding changes in here, rather than moving some to NEWS.md. It's hard to keep track what's where. We can decide what to include in NEWS just before we release.
+Keep *everything* regarding changes in here, rather than moving some to NEWS.md.
+It's hard to keep track what's where.
+We can decide what to include in NEWS just before we release.
 
-For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then we can copy it in here when it is merged.
+For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then copy it in here when it is merged.
+
 
 NEWS
 # [version 1.1.1] -- 2019-07-24
@@ -11,7 +14,6 @@ Quick fixes and changes.
 - **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
 - **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
-
 
 
 
@@ -29,7 +31,6 @@ Fixes
 - FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
 
 
-
 Changes
 - CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
 - CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
@@ -39,8 +40,7 @@ Changes
 - CHANGE: Updated README
 
 NEW
-- NEW: subset_rate function
-
+- NEW: subset_rate function - HIGHLIGHT
 
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
 
@@ -54,9 +54,9 @@ NEW
 - CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
 - CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
-- CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear in pipes)
+- CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
 - CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
-
+- NEW: import_file now supports Presens Datamanager files
 
 
 
