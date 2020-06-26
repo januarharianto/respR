@@ -135,6 +135,9 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
       bandwidth = output$density$bw,
       metadata  = metadata)
 
+    ### Add density to summary table
+    out$summary$density <- out$peaks$density
+
   } else stop("method argument cannot be recognised")
   class(out) <- 'auto_rate'
   if (plot) plot(out, label = FALSE)
@@ -287,31 +290,36 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
   if(!is.null(pos) && pos > length(object$rate))
     stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
-  cat("Regressions :", nrow(object$roll))
-  cat(" | Results :", nrow(object$summary))
-  cat(" | Method :", object$method)
-  cat(" | Roll width :", object$width)
-  cat(" | Roll type :", object$by, "\n")
-
-  if (object$method == "linear") {
-    cat("\n=== Kernel Density ===")
-    print(object$density)
-  }
-
+  ########### Summary Table ###################
   if (is.null(pos)) {
     # if no row is specified, return all results
-    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n\n")
-    if (object$method == "min") cat("\n=== Summary of Results by Minimum Rate ===\n\n")
-    if (object$method == "max") cat("\n=== Summary of Results by Maximum Rate ===\n\n")
-    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n\n")
+    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n")
+    if (object$method == "min") cat("\n=== Summary of Results by Minimum Rate ===\n")
+    if (object$method == "max") cat("\n=== Summary of Results by Maximum Rate ===\n")
+    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n")
     out <- data.table(object$summary)
-    print(out)
+    print(out, nrows = 20)
   } else {
     # otherwise, return row specified by `pos`
     cat("\n=== Summary of Result: Rank ", pos, "of", length(object$rate), "===\n\n")
     out <- data.table::data.table(object$summary)[pos]
     print(out)
   }
+
+  ########### Regressions summary line ########
+  cat("\nRegressions :", nrow(object$roll))
+  cat(" | Results :", nrow(object$summary))
+  cat(" | Method :", object$method)
+  cat(" | Roll width :", object$width)
+  cat(" | Roll type :", object$by, "\n")
+
+
+  ########### Kernel Density summary ##########
+  if (object$method == "linear") {
+    cat("\n=== Kernel Density Summary ===")
+    print_dens(object$density)
+  }
+
 
   if(export)
     return(invisible(out)) else
@@ -537,5 +545,22 @@ calc_window <- function(dt, width, by) {
     stop("'width' must be numeric.")
   }
   return(win)
+}
+
+
+
+#' Prints the density object for summary.auto_rate S3
+#' Basically copied from stats:::print.density and edited to make
+#' it look better
+#'
+#' @keywords internal
+#' @export
+print_dens <- function (x, digits = NULL, ...){
+  cat("\nCall: ", gsub("  ", "", deparse(x$call)), "\nData: ", x$data.name,
+      " (", x$n, " obs.)", ", Bandwidth 'bw' = ", formatC(x$bw,
+                                                          digits = digits), "\n", sep = "")
+  print(summary(as.data.frame(x[c("x", "y")])), digits = digits,
+        ...)
+  invisible(x)
 }
 

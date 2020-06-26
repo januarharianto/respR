@@ -1,0 +1,5 @@
+auto_rate changelog
+
+- added density to summary table for linear method
+- tidied and reordered summary S3 printout
+- only prints out 20 rows max of results (data.table)
