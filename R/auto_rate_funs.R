@@ -1,4 +1,4 @@
-#' Validation function for auto_rate()
+#' Validation function for auto_rate
 #'
 #' This is an internal function for `auto_rate()`. Used to validate input
 #' arguments.
@@ -61,67 +61,25 @@ validate_auto_rate <- function(df, by, method) {
 
   assertthat::assert_that(
     is.data.frame(df),
-    msg = "Input data must be of class data.frame"
+    msg = "auto_rate: Input data must be of class 'data.frame' or 'inspect'"
   )
   assertthat::assert_that(
     by %in% c("time", "row"),
-    msg = "The by argument must be 'time' or 'row'"
+    msg = "auto_rate: The 'by' argument must be 'time' or 'row'"
   )
   assertthat::assert_that(
-    method %in% c("default", "linear", "max", "min", "interval"),
-    msg = 'The method argument cannot be recognised. It must be "linear",
-    "max", "min" or "interval"'
+    method %in% c("default", "linear", "max", "min", "interval",
+                  "highest", "lowest", "maximum", "minimum"),
+    msg = "auto_rate: The 'method' argument is not recognised: it should be 'linear',
+    'highest', 'lowest', 'maximum', 'minimum', or 'interval'"
+    # leave out max/min from message - old operators, we don't want them to be used
   )
   return(list(by = by, df = data.table(df)))
 }
 
 
-
-
-
-
-
-
-
-
-#' Perform rolling regression and rank from maximum to minimum
-#'
-#' This is an internal function for `auto_rate()`
-#'
-#' @param dt data.frame object.
-#' @param width numeric.
-#' @param by string.
-#'
-#' @return a list object with appended class `auto_rate_max`
-#' @export
-#' @keywords internal
-#'
-#' @examples
-#' NULL
-auto_rate_max <- function(dt, width, by = 'row') {
-  # perform rolling regression
-  if (by == 'row') {
-    rollreg <- rolling_reg_row(dt, width)
-  } else if (by == 'time') {
-    rollreg <- rolling_reg_time(dt, width)
-  }
-
-  # order data by size, from biggest
-  results <- rollreg[order(rank(rate_b1))]
-  out <- list(roll = rollreg, results = results)
-  class(out) <- append(class(out), "auto_rate_max")
-  return(out)
-}
-
-
-
-
-
-
-
-
-
-#' Perform rolling regression and rank from maximum to minimum
+#' Perform rolling regression and rank from NUMERICAL minimum to maximum
+#' i.e. includes sign - most negative rates are highest
 #'
 #' This is an internal function for `auto_rate()`
 #'
@@ -143,20 +101,121 @@ auto_rate_min <- function(dt, width, by = 'row') {
     rollreg <- rolling_reg_time(dt, width)
   }
 
+  # message if mix of -ve and +ve
+  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+    message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
+
   # order data by size, from biggest
-  results <- rollreg[order(-rank(rate_b1))]
+  results <- rollreg[order(rank(rate_b1))]
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_min")
   return(out)
 }
 
+#' Perform rolling regression and rank from NUMERICAL maximum to minimum
+#' i.e. includes sign - most positive rates are highest
+#'
+#' This is an internal function for `auto_rate()`
+#'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param by string.
+#'
+#' @return a list object with appended class `auto_rate_max`
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' NULL
+auto_rate_max <- function(dt, width, by = 'row') {
+  # perform rolling regression
+  if (by == 'row') {
+    rollreg <- rolling_reg_row(dt, width)
+  } else if (by == 'time') {
+    rollreg <- rolling_reg_time(dt, width)
+  }
 
+  # message if mix of -ve and +ve
+  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+    message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
 
+  # order data by size, from biggest
+  results <- rollreg[order(-rank(rate_b1))]
+  out <- list(roll = rollreg, results = results)
+  class(out) <- append(class(out), "auto_rate_max")
+  return(out)
+}
 
+#' Perform rolling regression and rank from ABSOLUTE highest to lowest
+#'
+#' i.e. ignores sign. should only be used when rates are all negative or all
+#' positive
+#'
+#' This is an internal function for `auto_rate()`
+#'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param by string.
+#'
+#' @return a list object with appended class `auto_rate_highest`
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' NULL
+auto_rate_highest <- function(dt, width, by = 'row') {
+  # perform rolling regression
+  if (by == 'row') {
+    rollreg <- rolling_reg_row(dt, width)
+  } else if (by == 'time') {
+    rollreg <- rolling_reg_time(dt, width)
+  }
 
+  # stop if mix of -ve and +ve
+  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
+  # order data by absolute value, from highest
+  results <- rollreg[order(-rank(abs(rollreg$rate_b1)))] ## note abs() operation
+  out <- list(roll = rollreg, results = results)
+  class(out) <- append(class(out), "auto_rate_highest")
+  return(out)
+}
 
+#' Perform rolling regression and rank from ABSOLUTE lowest to highest
+#'
+#' i.e. ignores sign. should only be used when rates are all negative or all
+#' positive
+#'
+#' This is an internal function for `auto_rate()`
+#'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param by string.
+#'
+#' @return a list object with appended class `auto_rate_lowest`
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' NULL
+auto_rate_lowest <- function(dt, width, by = 'row') {
+  # perform rolling regression
+  if (by == 'row') {
+    rollreg <- rolling_reg_row(dt, width)
+  } else if (by == 'time') {
+    rollreg <- rolling_reg_time(dt, width)
+  }
 
+  # stop if mix of -ve and +ve
+  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
 
+  # order data by absolute value, from lowest
+  results <- rollreg[order(rank(abs(rollreg$rate_b1)))] ## note abs() operation
+  out <- list(roll = rollreg, results = results)
+  class(out) <- append(class(out), "auto_rate_lowest")
+  return(out)
+}
 
 
 #' Obtain rate values at non-overlapping intervals of a dataset
@@ -190,13 +249,6 @@ auto_rate_interval <- function(dt, width, by) {
   class(out) <- append(class(out), "auto_rate_interval")
   return(out)
 }
-
-
-
-
-
-
-
 
 
 #' Linear detection method
@@ -289,14 +341,6 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
 }
 
 
-
-
-
-
-
-
-
-
 #' Perform regular rolling regression
 #'
 #' @param df data.frame object.
@@ -326,14 +370,6 @@ rolling_reg_row <- function(df, width) {
   out <- roll[, c(4:7, 1:3)]
   return(out)
 }
-
-
-
-
-
-
-
-
 
 
 #' Perform rolling regression based on time units.
@@ -369,14 +405,6 @@ rolling_reg_time <- function(df, width) {
 }
 
 
-
-
-
-
-
-
-
-
 #' Automatically calculate rolling window
 #'
 #' The calculated value is used to determine the rolling window for rolling
@@ -399,7 +427,7 @@ calc_rolling_win <- function(dt, width, by) {
   # validation
   if (is.null(width)) width <- .2  # if no width is specified, set to 20 %
   # if width > 1, check that value does not exceed length of data:
-  if (width > 1 && width > nrow(dt)) stop('`width` exceeds length of dataset')
+  if (width > 1 && width > nrow(dt)) stop("auto_rate: 'width' exceeds length of dataset")
 
   # perform calculations
   if (width <= 1 & by == 'time') {
