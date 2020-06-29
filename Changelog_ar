@@ -1,0 +1,20 @@
+auto_rate changelog
+
+MAJOR CHANGE
+- Mew 'highest' and 'lowest' methods for absolute min/max of rates
+- Can only use these when rates all have the same sign
+- New internal functions for this ordering - auto_rate_lowest, auto_rate_highest
+- New 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates
+- Therefore internal functions auto_rate_min and auto_rate_max have been swapped around in terms of functionality.
+- Old methods ('min', 'max') still produce same results as old code but have a prominent warning
+
+Other changes
+- reordered operators to put "method" second
+- added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE.
+- Help docs updated
+- tidied and reordered summary S3 printout
+  - summary table comes first, only prints out 20 rows max of results (via data.table)
+  - new function (print_dens) for printing the density result more compactly
+- method = "max" was missing '$total_regs' element from metadata
+- updated error messages (including internal fns) to be clear they come from auto_rate
+

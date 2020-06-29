@@ -1,53 +1,108 @@
-#' Automatically determine rate of change in oxygen concentration over time
+#' Automatically determine most linear, maximum and minimum rates of change in
+#' oxygen concentration in a dataset
 #'
-#' `auto_rate` automatically performs a rolling regression on a data frame to
-#' determine the *most linear, maximum, minimum*, or *interval* rate of change
-#' in oxygen concentration over time. First, a rolling regression of specified
-#' `width` is performed on the entire dataset to obtain all possible values. The
-#' computations are then ranked (or, arranged), based on the "`method`"
-#' argument, and the output is summarised.
+#' `auto_rate` performs a rolling regression on a dataset to determine the *most
+#' linear, highest, lowest, maximum, minimum*, and *interval* rates of change in
+#' oxygen concentration over time. Initially, a rolling regression of the
+#' specified `width` is performed on the entire dataset to obtain all possible
+#' rate values. Then, based on the "`method`" argument, the resulting
+#' regressions are ranked or ordered, and the output is summarised.
 #'
-#' **Units**
+#' @details ***Ranking and ordering algorithms***
 #'
-#' There are no units of measurement involved in `auto_rate()`. This is a
-#' deliberate decision. Units are called in a later function when absolute
-#' and/or mass-specific rates of oxygen use are computed in [convert_rate()] and
-#' [convert_DO()].
+#'   Currently, `auto_rate` contains six ranking and ordering algorithms that
+#'   can be applied using the `method` argument:
 #'
-#' ***Ranking algorithms***
+#'   - `linear`: Uses kernel density estimation (KDE) to learn the shape of the
+#'   entire dataset and *automatically identify* the most linear regions of the
+#'   timeseries. This is achieved by using the smoothing bandwidth of the KDE to
+#'   re-sample the "peaks" in the KDE to determine linear regions of the data.
+#'   See \code{\link{here(to follow)}} for full details. The summary output will
+#'   contain only the regressions identified as coming from linear regions of
+#'   the data, ranked by order of the KDE density analysis. This is present in
+#'   the `$summary` component of the output as `$density`.
 #'
-#' At present, `auto_rate()` contains four ranking algorithms that can be called
-#' with the argument `method`:
+#'   - `highest`: Every regression of the specified `width` across the entire
+#'   timeseries is calculated, then ordered using ***absolute*** rate values
+#'   from highest to lowest. Essentially, this option ignores the sign of the
+#'   rate, and can only be used when rates all have the same sign. Regardless of
+#'   if they are oxygen uptake or oxygen production rates, rates will be ordered
+#'   from highest to lowest in the `$summary` table.
 #'
-#' - `linear`: Uses kernel density estimation (KDE) to detect the "most linear"
-#' sections of the timeseries. This is achieved by using the smoothing bandwidth
-#' of the KDE to re-sample the "peaks" in the KDE to determine linear regions in
-#' the data.
+#'   - `lowest`: Every regression of the specified `width` across the entire
+#'   timeseries is calculated, then ordered using ***absolute*** rate values
+#'   from lowest to highest. Essentially, this option ignores the sign of the
+#'   rate, and can only be used when rates all have the same sign. Regardless of
+#'   if they are oxygen uptake or oxygen production rates, rates will be ordered
+#'   from lowest to highest in the `$summary` table.
 #'
-#' - `max`: regressions are arranged from highest values, to the lowest.
+#'   - `maximum`: Every regression of the specified `width` across the entire
+#'   timeseries is calculated, then ordered using ***numerical*** rate values
+#'   from maximum to minimum. Takes ***full account of the sign of the rate***.
+#'   Therefore, oxygen uptake rates, which in `respR` are negative, would be
+#'   ordered from lowest (least negative), to highest (most negative) in the
+#'   summary table in numerical order. Therefore, generally this method should
+#'   only be used when rates are a mix of oxygen consumption and production
+#'   rates, or when positive rates result from flushes such as in
+#'   intermittent-flow respirometry. For most analyses where highest or lowest
+#'   rates are of interest use the 'highest' or 'lowest' methods should be used.
 #'
-#' - `min`: regressions are arranged from lowest values, to the highest.
+#'   - `minimum`: Every regression of the specified `width` across the entire
+#'   timeseries is calculated, then ordered using ***numerical*** rate values
+#'   from minimum to maximum. Takes ***full account of the sign of the rate***.
+#'   Therefore, oxygen uptake rates, which in `respR` are negative, would be
+#'   ordered from highest (most negative) to lowest (least negative) in the
+#'   summary table in numerical order. Therefore, generally this method should
+#'   only be used when rates are a mix of oxygen consumption and production
+#'   rates, or when positive rates result from flushes such as in
+#'   intermittent-flow respirometry. For most analyses where highest or lowest
+#'   rates are of interest use the 'highest' or 'lowest' methods should be used.
 #'
-#' - `interval`: non-overlapping regressions are extracted from the rolled
-#' regrssions. They are not ranked.
+#'   - `interval`: multiple, successive, non-overlapping regressions of the
+#'   specified 'width' are extracted from the rolled regressions, ordered by
+#'   time.
 #'
-#' @param df data frame, or object of class `adjust_rate`. This is the data to
-#'   process.
+#'   - NOTE: `max`, `min`: These methods used in previous versions have been
+#'   deprecated. They were intended to order oxygen uptake (negative) rates by
+#'   magnitude, but this resulted in incorrect ordering of oxygen production
+#'   (positive) rates. They have been retained for code compatibility, but may
+#'   be removed in a future version of `respR`, and so *should not be used*.
+#'
+#'   ***Further selection of rates***
+#'
+#'   For further selection or subsetting of `auto_rate` results, see the
+#'   dedicated \code{\link{subset_rate}} function, which allows subsetting of
+#'   rates by various criteria, including r-squared, data region, percentiles,
+#'   and more.
+#'
+#'   ***Units***
+#'
+#'   There are no units of measurement involved in `auto_rate()`. This is a
+#'   deliberate decision. Units are called in a later function when absolute
+#'   and/or mass-specific rates of oxygen use are computed in [convert_rate()]
+#'   and [convert_DO()].
+#'
+#' @param df data frame, or object of class `inspect` containing oxygen~time
+#'   data.
+#' @param method string. `"linear"`, `"highest"`, `"lowest"`, `"maximum"`,
+#'   `"minimum"` or `"interval"`. Defaults to `linear`. See Details.
 #' @param width numeric. Width of the rolling regression. Defaults to
-#'   `floor(0.2*length of data)` if NULL. The length of data can either be time
-#'   or row, as defined by the `by` argument. If a number is supplied and it is
-#'   less than 1, the function automatically applies the equation `floor(width *
-#'   length of data`. Otherwise it will simply use the number as the width.
-#' @param by string. `"row"` or `"time"`. Defaults to `"row"`. However, if the
+#'   `floor(0.2*length of data)` or 20% of the width of the data, i.e. `width =
+#'   0.2`. In testing, this value performs well with the `linear` method. A
+#'   value between 0 and 1 represents a proportion of the total data length, as
+#'   applied in the equation `floor(width * length of data)`. Otherwise if 1 or
+#'   greater, the width can be an exact value in either the time unit or in
+#'   rows, as specified via the `by = ` argument.
+#' @param by string. Metric to which to apply the `width` input applies if 1 or
+#'   greater, either `"row"` or `"time"`. Defaults to `"row"`. However, if the
 #'   function detects an irregular time series, a warning will be issued to
-#'   recommend changing this argument to `"time"`. In most cases `"row"` is used
-#'   by default as it is efficient. Switching to `"time"` causes the function to
-#'   perform checks for irregular time at every iteration of the rolling
-#'   regression, even if time is evenly spaced, which adds to computation time.
-#' @param method string. `"linear"`, `"max"`, `"min"` or `"interval"`. Defaults
-#'   to `linear`. Note that if `"linear"` is selected, the argument `width` will
-#'   be set to default.
-#' @param plot logical. Defaults to TRUE. Plot the results.
+#'   consider changing this argument to `"time"`. In most cases `"row"` should
+#'   be used by default as it is more computationally efficient. Switching to
+#'   `"time"` causes the function to perform checks for irregular time intervals
+#'   at every iteration of the rolling regression, even if time is evenly
+#'   spaced, which adds to computation time. This is to ensure the specified
+#'   `"width"` input is honoured.
+#' @param plot logical. Plot the results. Defaults to TRUE.
 #'
 #' @return A list object of class `auto_rate`.
 #'
@@ -57,19 +112,27 @@
 #'
 #' @examples
 #' # most linear section of the entire data
-#' data("flowthrough.rd")
 #' auto_rate(flowthrough.rd)
 #'
-#' # LONG EXAMPLES
 #' \dontrun{
-#' data("sardine.rd")
-#' # what is the lowest rate over a 10 minute (600s) period?
-#' auto_rate(sardine.rd, method = "min", width = 600, by = "time")
-#' # what is the highest rate over a 10 minute (600s) period?
-#' auto_rate(sardine.rd, method = "max", width = 600, by = "time")
+#' # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
+#' low_rates <- auto_rate(sardine.rd, method = "lowest", width = 600, by = "time")
+#' # View summary of lowest rate results
+#' summary(low_rates)
+#'
+#' # What is the highest oxygen consumption rate over a 10 minute (600s) period?
+#' high_rates <- auto_rate(sardine.rd, method = "highest", width = 600, by = "time")
+#' # View summary of lowest rate results
+#' summary(high_rates)
+#'
+#' # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
+#' # period in intermittent-flow respirometry data?
+#' # NOTE: because uptake rates are negative, this would be the HIGHEST uptake rate.
+#' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
 #' }
-auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
-  plot = TRUE) {
+#'
+auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
+                      plot = TRUE) {
   # perform checks
   checks <- validate_auto_rate(df, by, method)
   dt <- checks$df  # extract df from validation check
@@ -80,80 +143,145 @@ auto_rate <- function(df, width = NULL, by = 'row', method = 'linear',
   win <- calc_rolling_win(dt, width, by)  # determine width automatically
 
   # verify & apply methods
+  ## OLD METHOD
   if (method == 'max') {
-    output <- auto_rate_max(dt, win, by)
-    metadata <- data.table(width = win, by = by, method = method)
+    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but may be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
     out <- list(df = dt,
-      width   = win,
-      by      = by,
-      method  = method,
-      roll    = output$roll,
-      summary = output$results,
-      rate    = output$results$rate_b1,
-      metadata = metadata)
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
 
+    ## OLD METHOD
   } else if (method == 'min') {
+    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but may be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
+    out <- list(df = dt,
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
+
+    ### NOW ORDERS BY NUMERICAL VALUE I.E. CONSIDERS SIGN
+  } else if (method == 'maximum') {
+    output <- auto_rate_max(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
+    out <- list(df = dt,
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
+
+    ### NOW ORDERS BY NUMERICAL VALUE I.E. CONSIDERS SIGN
+  } else if (method == 'minimum') {
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
-      total_regs = nrow(output$roll))
+                           total_regs = nrow(output$roll))
     out <- list(df = dt,
-      width   = win,
-      by      = by,
-      method  = method,
-      roll    = output$roll,
-      summary = output$results,
-      rate    = output$results$rate_b1,
-      metadata = metadata)
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
 
   } else if (method == 'interval') {
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
-      total_regs = nrow(output$roll))
+                           total_regs = nrow(output$roll))
     out <- list(df = dt,
-      width   = win,
-      by      = by,
-      method  = method,
-      roll    = output$roll,
-      summary = output$results,
-      rate    = output$results$rate_b1,
-      metadata = metadata)
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
+
+  } else if (method == 'highest') {
+    output <- auto_rate_highest(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
+    out <- list(df = dt,
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
+
+  } else if (method == 'lowest') {
+    output <- auto_rate_lowest(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
+    out <- list(df = dt,
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
 
   } else if (method == 'linear') {
     output <- auto_rate_linear(dt, win)
     metadata <- data.table(width = win, by = by, method = method,
-      no_regs = nrow(output$roll), no_peaks = nrow(output$peaks),
-      kde_bw = output$density$bw)
+                           total_regs = nrow(output$roll),
+                           total_peaks = nrow(output$peaks),
+                           kde_bw = output$density$bw)
     out <- list(df = dt,
-      width   = win,
-      by      = by,
-      method  = method,
-      roll    = output$roll,
-      summary = output$results,
-      rate    = output$results$rate_b1,
-      density = output$density,
-      peaks   = output$peaks,
-      bandwidth = output$density$bw,
-      metadata  = metadata)
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                density = output$density,
+                peaks   = output$peaks,
+                bandwidth = output$density$bw,
+                metadata  = metadata)
 
-  } else stop("method argument cannot be recognised")
+    ### Add density to summary table
+    out$summary$density <- out$peaks$density
+
+  } else stop("auto_rate: 'method' argument not recognised")
+
   class(out) <- 'auto_rate'
+
   if (plot) plot(out, label = FALSE)
+
   return(out)
 }
-
 
 
 #' @export
 print.auto_rate <- function(object, pos = 1, ...) {
 
   ## warning if empty
-  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+  if(length(object$rate) == 0) stop("auto_rate: No rates found in auto_rate object.")
 
   cat("\n# print.auto_rate # ---------------------\n")
 
   if(is.null(pos)) pos <- 1
   if(pos > length(object$rate))
-    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
   method <- object$method
   cat("Data is subset by", object$by, "using width of", object$width, "\n")
@@ -162,15 +290,15 @@ print.auto_rate <- function(object, pos = 1, ...) {
     cat(nrow(object$summary), "linear regions detected in the kernel density estimate\n")
   cat("To see all results use summary()\n")
 
-  if (method %in% c("max", "min", "linear")) {
+  if (method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "linear")) {
     cat("\nRank", pos, "of", nrow(object$summary), ":\n")
     cat("Rate:", object$summary$rate_b1[pos], "\n")
     cat("R.sq:", signif(object$summary$rsq[pos], 5), "\n")
     cat("Rows:", object$summary$row[pos], "to", object$summary$endrow[pos], "\n")
     cat("Time:", object$summary$time[pos], "to", object$summary$endtime[pos], "\n")
   } else if (method == "interval") {
-      cat("\n=== All", nrow(object$summary), "results of", nrow(object$summary), "===\n")
-      print(object$summary)
+    cat("\n=== All", nrow(object$summary), "results of", nrow(object$summary), "===\n")
+    print(object$summary)
   }
   cat("-----------------------------------------\n")
   return(invisible(object)) # this lets us continue with dplyr pipes
@@ -182,13 +310,13 @@ print.auto_rate <- function(object, pos = 1, ...) {
 plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
 
   ## warning if empty
-  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+  if(length(object$rate) == 0) stop("auto_rate: No rates found in auto_rate object.")
 
   ## pos 1 by default
   if(is.null(pos)) pos <-1
   ## warning if pos too low
   if(pos > length(object$rate))
-    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
   parorig <- par(no.readonly = TRUE) # save original par settings
 
@@ -212,7 +340,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   peaks <- object$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
-  if (object$method %in% c("max", "min")) {
+  if (object$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest")) {
     if (choose == FALSE) {
 
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
@@ -260,8 +388,8 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
   if (choose == 4) {
     if (object$method != 'linear') {
-      stop('density plot not available for "max", "min" and "interval" methods')
-      } else density.p(dens, peaks, pos)  # density
+      stop('auto_rate: density plot not available for "highest", "lowest", "maximum", "minimum" and "interval" methods')
+    } else density.p(dens, peaks, pos)  # density
   }
   if (choose == 5) residual.p(fit)  # residual plot
   if (choose == 6) qq.p(fit)  #qq plot
@@ -280,38 +408,47 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   ## warning if empty
-  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+  if(length(object$rate) == 0) stop("auto_rate: No rates found in auto_rate object.")
 
   cat("\n# summary.auto_rate # -------------------\n")
 
   if(!is.null(pos) && pos > length(object$rate))
-    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
-  cat("Regressions :", nrow(object$roll))
-  cat(" | Results :", nrow(object$summary))
-  cat(" | Method :", object$method)
-  cat(" | Roll width :", object$width)
-  cat(" | Roll type :", object$by, "\n")
-
-  if (object$method == "linear") {
-    cat("\n=== Kernel Density ===")
-    print(object$density)
-  }
-
+  ########### Summary Table ###################
   if (is.null(pos)) {
     # if no row is specified, return all results
-    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n\n")
-    if (object$method == "min") cat("\n=== Summary of Results by Minimum Rate ===\n\n")
-    if (object$method == "max") cat("\n=== Summary of Results by Maximum Rate ===\n\n")
-    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n\n")
+    if (object$method == "linear") cat("\n=== Summary of Results by Kernel Density Rank ===\n")
+    if (object$method == "highest") cat("\n=== Summary of Results by Highest Rate ===\n")
+    if (object$method == "lowest") cat("\n=== Summary of Results by Lowest Rate ===\n")
+    if (object$method == "maximum") cat("\n=== Summary of Results by Maximum Rate ===\n")
+    if (object$method == "minimum") cat("\n=== Summary of Results by Minimum Rate ===\n")
+    if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n")
+    if (object$method == "max") cat("\n=== Summary of Results by Maximum NEGATIVE Rate ===\n")
+    if (object$method == "min") cat("\n=== Summary of Results by Minimum NEGATIVE Rate ===\n")
     out <- data.table(object$summary)
-    print(out)
+    print(out, nrows = 20)
   } else {
     # otherwise, return row specified by `pos`
     cat("\n=== Summary of Result: Rank ", pos, "of", length(object$rate), "===\n\n")
     out <- data.table::data.table(object$summary)[pos]
     print(out)
   }
+
+  ########### Regressions summary line ########
+  cat("\nRegressions :", nrow(object$roll))
+  cat(" | Results :", nrow(object$summary))
+  cat(" | Method :", object$method)
+  cat(" | Roll width :", object$width)
+  cat(" | Roll type :", object$by, "\n")
+
+
+  ########### Kernel Density summary ##########
+  if (object$method == "linear") {
+    cat("\n=== Kernel Density Summary ===")
+    print_dens(object$density)
+  }
+
 
   if(export)
     return(invisible(out)) else
@@ -322,10 +459,10 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 mean.auto_rate <- function(object, export = FALSE, ...){
 
   ## warning if empty
-  if(length(object$rate) == 0) stop("No rates found in auto_rate object.")
+  if(length(object$rate) == 0) stop("auto_rate: No rates found in auto_rate object.")
 
   cat("\n# mean.auto_rate # ----------------------\n")
-  if(length(object$rate) == 1) warning("Only 1 rate found in auto_rate object. Returning mean rate anyway...")
+  if(length(object$rate) == 1) warning("auto_rate: Only 1 rate found in auto_rate object. Returning mean rate regardless...")
   n <- length(object$rate)
   out <- mean(object$rate)
   cat("Mean of", n, "output rates:\n")
@@ -390,10 +527,10 @@ time_roll <- function(dt, width, parallel = FALSE) {
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
     parallel::clusterExport(cl, "time_lm")
     out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
-      dt[[1]][x], dt[[1]][x] + width))
+                                                                     dt[[1]][x], dt[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
   } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-    dt[[1]][x], dt[[1]][x] + width))
+                                                         dt[[1]][x], dt[[1]][x] + width))
 
   out <- data.table::rbindlist(out)
   return(out)
@@ -501,7 +638,7 @@ kde_fit <- function(dt, width, by, method, use = "all") {
     }
     # select longest fragments
     i <- sapply(1:length(frags),
-      function(x) which.max(sapply(frags[[x]], nrow)))
+                function(x) which.max(sapply(frags[[x]], nrow)))
     frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
     frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
     # Convert fragments to subsets
@@ -534,8 +671,25 @@ calc_window <- function(dt, width, by) {
       if (by == "row") win <- floor(width * nrow(dt))
     } else if (width > 1) win <- width
   } else {
-    stop("'width' must be numeric.")
+    stop("auto_rate: 'width' must be numeric.")
   }
   return(win)
+}
+
+
+
+#' Prints the density object for summary.auto_rate S3
+#' Basically copied from stats:::print.density and edited to make
+#' it more compact
+#'
+#' @keywords internal
+#' @export
+print_dens <- function (x, digits = NULL, ...){
+  cat("\nCall: ", gsub("  ", "", deparse(x$call)), "\nData: ", x$data.name,
+      " (", x$n, " obs.)", ", Bandwidth 'bw' = ", formatC(x$bw,
+                                                          digits = digits), "\n", sep = "")
+  print(summary(as.data.frame(x[c("x", "y")])), digits = digits,
+        ...)
+  invisible(x)
 }
 
