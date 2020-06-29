@@ -173,7 +173,7 @@ auto_rate_highest <- function(dt, width, by = 'row') {
 
   # stop if mix of -ve and +ve
   if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
-    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
+    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'highest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
   # order data by absolute value, from highest
   results <- rollreg[order(-rank(abs(rollreg$rate_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
