@@ -58,6 +58,7 @@ unit_args <- function() {
 
   timeunit <- c("s", "m", "h")
   massunit <- c("ug", "mg", "g", "kg")
+  areaunit <- c("mm^2", "cm^2", "m^2", "km^2")
 
   cat("O2 Units - Do not require t, S and P\n")
   print(o2unit)
@@ -65,6 +66,8 @@ unit_args <- function() {
   print(o2unit_tsp)
   cat("\nTime units\n")
   print(timeunit)
-  cat("\nOutput mass units\n")
+  cat("\nOutput mass-specific units\n")
   print(massunit)
+  cat("\nOutput surface area-specific units\n")
+  print(areaunit)
 }

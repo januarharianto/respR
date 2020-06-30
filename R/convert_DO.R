@@ -226,6 +226,13 @@ verify_units <- function(unit, is) {
       g.mass   = c('g.mass','g','G','gram'),
       kg.mass  = c('kg.mass','kg','KG','kilogram','kgram'))
   }
+  if (is == 'area') {
+    all.units <- list(
+      mm.sq  = c('mm.sq','mmsq','mm^2','mm2','mm.2','sqmm','sq.mm'),
+      cm.sq  = c('cm.sq','cmsq','cm^2','cm2','cm.2','sqcm','sq.cm'),
+      m.sq   = c('m.sq','msq','m^2','m2','m.2','sqm','sq.m'),
+      km.sq  = c('km.sq','kmsq','km^2','km.2','km2','sqkm','sq.km'))
+  }
   if (is == 'o1') {
     all.units <-  list(
       'mg.o2'   = c('mg.o2','mg','milligram'),
@@ -240,7 +247,7 @@ verify_units <- function(unit, is) {
   chk <- sapply(chk, function(x) length(x) > 0)
   result <- any(chk == T)  # did a match occur?
   if (result == FALSE)
-    stop("unit '", unit, "' cannot be recognised. Check unit strings are in correct order O2/Time or O2/Time/Mass.", call. = F)
+    stop("unit '", unit, "' cannot be recognised. Check unit strings are in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }

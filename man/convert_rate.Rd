@@ -2,7 +2,8 @@
 % Please edit documentation in R/convert_rate.R
 \name{convert_rate}
 \alias{convert_rate}
-\title{Convert rate value to absolute and/or mass-specific}
+\title{Convert a unitless rate value to absolute, mass-specific or area-specific
+rate}
 \usage{
 convert_rate(
   x,
@@ -11,6 +12,7 @@ convert_rate(
   output.unit = NULL,
   volume = NULL,
   mass = NULL,
+  area = NULL,
   S = NULL,
   t = NULL,
   P = NULL
@@ -35,6 +37,9 @@ respirometry chamber, not the specimen volume.}
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
 
+\item{area}{numeric. Surface area in m^2. This is the surface area of the
+specimen if you wish to calculate surface area-specific rates.}
+
 \item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
 of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
@@ -49,17 +54,18 @@ conversions. See \code{\link[=unit_args]{unit_args()}} for details.}
 A list object.
 }
 \description{
-This is a conversion function. It can convert a dimensionless unit of rate,
-derived from \code{calc_rate}, \code{calc_rate.ft}, \code{calc_rate.bg}, \code{auto_rate}, or
-\code{adjust_rate} into volume-adjusted (i.e. to the container), VO2 or
-mass-specific (i.e. to the specimen mass), MO2 rate.
+This is a conversion function. It can convert a unitless rate derived from
+\code{calc_rate}, \code{calc_rate.ft}, \code{calc_rate.bg}, \code{auto_rate}, or \code{adjust_rate}
+into an absolute volume-adjusted (i.e. to the container) rate, mass-specific
+rate (i.e. normalised by specimen mass), or area-specific rate (i.e.
+normailsed by specimen surface area).
 }
 \details{
 Unless other values are specifically called as \code{x}, the function converts the
-primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \verb{$adjusted.rate}
-rate from \code{adjust_rate} objects, and the \verb{$mean} rate from \code{calc_rate.ft} and
-\code{calc_rate.bg} objects. Values or vectors of other rates within these obects
-can be converted by calling them as \code{x} using \code{$}.
+primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the
+\verb{$adjusted.rate} rate from \code{adjust_rate} objects, and the \verb{$mean} rate from
+\code{calc_rate.ft} and \code{calc_rate.bg} objects. Values or vectors of other rates
+within these obects can be converted by calling them as \code{x} using \code{$}.
 
 Note, for rates from flowthrough experiments, the \code{volume} and \code{time} inputs
 should be set with reference to the \emph{flow rate} in L per unit time. E.g. for
@@ -79,7 +85,7 @@ mg/h/kg).
 
 Some units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
 pressure (\code{P}) to be specified. See \code{\link[=unit_args]{unit_args()}} for details. For freshwater
-experiments, salinity should be set to zero (i.e. S = 0).
+experiments, salinity should be set to zero (i.e. \code{S = 0}).
 }
 \examples{
 # Manually enter values
@@ -87,7 +93,6 @@ convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 
 # Use example data
-data("sardine.rd")
 x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
 convert_rate(x, o2.unit = '\%', time.unit = 's',
   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,

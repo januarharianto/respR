@@ -1,15 +1,17 @@
-#' Convert rate value to absolute and/or mass-specific
+#' Convert a unitless rate value to absolute, mass-specific or area-specific
+#' rate
 #'
-#' This is a conversion function. It can convert a dimensionless unit of rate,
-#' derived from `calc_rate`, `calc_rate.ft`, `calc_rate.bg`, `auto_rate`, or
-#' `adjust_rate` into volume-adjusted (i.e. to the container), VO2 or
-#' mass-specific (i.e. to the specimen mass), MO2 rate.
+#' This is a conversion function. It can convert a unitless rate derived from
+#' `calc_rate`, `calc_rate.ft`, `calc_rate.bg`, `auto_rate`, or `adjust_rate`
+#' into an absolute volume-adjusted (i.e. to the container) rate, mass-specific
+#' rate (i.e. normalised by specimen mass), or area-specific rate (i.e.
+#' normailsed by specimen surface area).
 #'
 #' Unless other values are specifically called as `x`, the function converts the
-#' primary `$rate` from `calc_rate` and `auto_rate` objects, the `$adjusted.rate`
-#' rate from `adjust_rate` objects, and the `$mean` rate from `calc_rate.ft` and
-#' `calc_rate.bg` objects. Values or vectors of other rates within these obects
-#' can be converted by calling them as `x` using `$`.
+#' primary `$rate` from `calc_rate` and `auto_rate` objects, the
+#' `$adjusted.rate` rate from `adjust_rate` objects, and the `$mean` rate from
+#' `calc_rate.ft` and `calc_rate.bg` objects. Values or vectors of other rates
+#' within these obects can be converted by calling them as `x` using `$`.
 #'
 #' Note, for rates from flowthrough experiments, the `volume` and `time` inputs
 #' should be set with reference to the *flow rate* in L per unit time. E.g. for
@@ -29,7 +31,7 @@
 #'
 #' Some units also require temperature (`t`), salinity (`S`), and atmospheric
 #' pressure (`P`) to be specified. See [unit_args()] for details. For freshwater
-#' experiments, salinity should be set to zero (i.e. S = 0).
+#' experiments, salinity should be set to zero (i.e. `S = 0`).
 #'
 #' @param x numeric, or objects of class [calc_rate()], [calc_rate.ft()],
 #'   [auto_rate()] or [adjust_rate()].
@@ -43,6 +45,8 @@
 #'   respirometry chamber, not the specimen volume.
 #' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
 #'   you wish to calculate mass-specific rates.
+#' @param area numeric. Surface area in m^2. This is the surface area of the
+#'   specimen if you wish to calculate surface area-specific rates.
 #' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
 #'   of some units. See [unit_args()] for details.
 #' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion
@@ -62,33 +66,44 @@
 #'   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 #'
 #' # Use example data
-#' data("sardine.rd")
 #' x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
 #' convert_rate(x, o2.unit = '%', time.unit = 's',
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
 #'   S =35, t = 15, P = 1.013)
-convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
-  output.unit = NULL, volume = NULL, mass = NULL, S = NULL, t = NULL, P = NULL)
+convert_rate <- function(x,
+                         o2.unit = NULL,
+                         time.unit = NULL,
+                         output.unit = NULL,
+                         volume = NULL,
+                         mass = NULL,
+                         area = NULL,
+                         S = NULL,
+                         t = NULL,
+                         P = NULL)
   {
 
   # Validate inputs If units are set to NULL, use default values.
   if (is.null(o2.unit)) {
-    warning("`o2.unit` is not provided, using `mg/L`.", call. = F)
+    warning("convert_rate: the 'o2.unit' is not provided, using 'mg/L'.", call. = F)
     o2.unit <- "mg/L"
   }
   if (is.null(time.unit)) {
-    warning("'time.unit' is not provided, using 's'.", call. = F)
+    warning("convert_rate: the 'time.unit' is not provided, using 's'.", call. = F)
     time.unit <- "s"
   }
   if (is.null(output.unit)) {
-    warning("'output.unit' is not provided, using 'mg/h`.",
+    warning("convert_rate: the 'output.unit' is not provided, using 'mg/h'.",
       call. = F)
     output.unit <- "mg/h"
   }
 
   # Volume must not be NULL
   if (is.null(volume))
-    stop("Input argument for 'volume' must not be empty.")
+    stop("convert_rate: Input argument for 'volume' is required.")
+
+  # Can't have both 'mass' and 'area' inputs
+  if (!is.null(mass) && !is.null(area))
+    stop("convert_rate: Cannot have inputs for both 'mass' and 'area'.")
 
   # Validate rate value based on object class
   if (is.numeric(x)) {
@@ -120,19 +135,47 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   # Validate output.unit
   ou <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+",
     " ", output.unit), header = FALSE))
-  is.MO2 <- length(ou) == 3
+
+  ## is it a specific rate (mass or area)?
+  is.spec <- length(ou) == 3
+
+  ## Is output unit mass or area specific rate?
+  if(is.spec){
+    if(verify_units(ou[3], "mass") %in% c("ug.mass", "mg.mass", "g.mass", "kg.mass")){
+      is.mass.spec <- TRUE
+      is.area.spec <- FALSE
+    } else if(verify_units(ou[3], "area") %in% c("mm.sq", "cm.sq", "m.sq", "km.sq")){
+      is.mass.spec <- FALSE
+      is.area.spec <- TRUE
+    }
+  } else {
+    is.area.spec <- FALSE
+    is.mass.spec <- FALSE
+  }
+
   A <- verify_units(ou[1], "o1")
   B <- verify_units(ou[2], "time")
-  if (is.MO2) {
-    C <- verify_units(ou[3], "mass")
-    ou <- as.matrix(data.frame(A, B, C))
+  if(is.spec){
+    if (is.mass.spec) {
+      C <- verify_units(ou[3], "mass")
+      ou <- as.matrix(data.frame(A, B, C))
+    } else if (is.area.spec) {
+      C <- verify_units(ou[3], "area")
+      ou <- as.matrix(data.frame(A, B, C))
+    }
   } else ou <- as.matrix(data.frame(A, B))
 
-  # Verify if mass is needed
-  if (is.MO2 && is.null(mass))
-    stop("'output.unit' needs a value for 'mass'.")
-  if (!is.MO2 && is.numeric(mass))
-    stop("`mass` has been entered, but units not specified in `output.unit`.")
+  # Verify 'mass' input
+  if (is.mass.spec && is.null(mass))
+    stop("convert_rate: 'output.unit' requires a value for 'mass'.")
+  if (!is.mass.spec && is.numeric(mass))
+    stop("convert_rate: a 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
+
+  # Verify 'area' input
+  if (is.area.spec && is.null(area))
+    stop("convert_rate: 'output.unit' requires a value for 'area'.")
+  if (!is.area.spec && is.numeric(area))
+    stop("convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 
   # Format unit strings to look nicer
   o2.unit <- stringr::str_replace(oxy, "\\..*", "")
@@ -158,24 +201,35 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL,
   # Then, scale to volume
   VO2 <- RO2 * volume
 
-  # Then, scale to mass
-  if (is.MO2) {
+  # Then, scale to mass or area
+  if (is.mass.spec) {
     # adjust mass multiplier
     multm <- adjust_scale(mass, "kg.mass", C)
-    MO2 <- VO2/multm # ok
+    VO2.mass.spec <- VO2/multm # ok
+  }
+  if (is.area.spec) {
+    # adjust area multiplier
+    multm <- adjust_scale_area(area, "m.2", C)
+    VO2.area.spec <- VO2/multm # ok
   }
 
   # Generate output
   summary <- data.frame(input.rate = rate, converted.rate = RO2,
     absolute.rate = VO2)
-  if (is.MO2) {
-    summary <- data.frame(summary, mass.specific.rate = MO2)
-    converted.rate <- MO2
+  if (is.mass.spec) {
+    summary <- data.frame(summary, mass.specific.rate = VO2.mass.spec)
+    converted.rate <- VO2.mass.spec
+  } else if (is.area.spec) {
+    summary <- data.frame(summary, area.specific.rate = VO2.area.spec)
+    converted.rate <- VO2.area.spec
   } else converted.rate <- VO2
 
-  out <- list(input.rate = rate, output.rate = converted.rate, summary = summary,
-    input.o2.unit = o2.unit, input.time.unit = time.unit,
-    output.unit = output.unit)
+  out <- list(input.rate = rate,
+              output.rate = converted.rate,
+              summary = summary,
+              input.o2.unit = o2.unit,
+              input.time.unit = time.unit,
+              output.unit = output.unit)
 
   class(out) <- "convert_rate"
   return(out)
@@ -234,7 +288,7 @@ summary.convert_rate <- function(object, export = FALSE, ...) {
 mean.convert_rate <- function(object, export = FALSE, ...){
 
   cat("\n# mean.convert_rate # -------------------\n")
-  if(length(object$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate anyway...")
+  if(length(object$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate regardless...")
   n <- length(object$output.rate)
   out <- mean(object$output.rate)
   cat("Mean of", n, "output rates:\n")
@@ -284,3 +338,44 @@ adjust_scale <- function(x, input, output) {
   out <- x * (a/b)  # convert
   return(out)
 }
+
+#' Convert between multipliers of the same AREA unit, e.g. mm2 to km2
+#'
+#' This is an internal function. Converts units of area. Could be combined with
+#' adjust_scale, but didn't know how....
+#'
+#' @param x numeric.
+#' @param input string.
+#' @param output string.
+#'
+#' @keywords internal
+#'
+#' @return A numeric.
+#'
+#' @importFrom stringr str_replace
+#' @export
+adjust_scale_area <- function(x, input, output) {
+  # Create database of terms for matching
+  prefix <- c("m", "c", "", "k")
+  suffix <- c("m.2")
+  multip <- c(1e+6, 10000, 1, 1e-6)
+  string <- "^(m|c||k)?(m.2)$"
+  # Clean and extract input strings
+  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
+  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
+  # Clean and extract output strings
+  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
+  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
+  # Check that conversion is possible
+  if (bef[3] != aft[3])
+    stop("Units do not match and cannot be converted.", call. = F)
+  # Convert!
+  a <- multip[match(bef[2], prefix)]  # get multiplier from input
+  b <- multip[match(aft[2], prefix)]  # get multiplier from output
+  out <- x * (a/b)  # convert
+  return(out)
+}
+
+x = 1
+input = "m^2"
+output = "mm^2"
