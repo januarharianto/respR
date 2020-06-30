@@ -58,18 +58,21 @@ negative values. This is particularly important in the difference between
 When a \verb{$rate} result is omitted by the subsetting criteria, all associated
 data in \verb{$summary} (i.e. the associated row) is removed. Summary results are
 not reordered in any way, only the non-matching rates removed. The \verb{$peaks}
-and \verb{$metadata$no_peaks} components of the \code{auto_rate} object are similarly
-adjusted. The resulting object retains the \code{auto_rate} class, however an
-additional \code{auto_rate_subset} class is applied. The original \code{auto_rate}
-object is saved in the output as \verb{$original}.
+component (if present) of the \code{auto_rate} object is adjusted, and a
+\verb{$subset_regs} value is added to \verb{$metadata} indicating the number of
+regressions remaining after subsetting. The resulting object retains the
+\code{auto_rate} class, however an additional \code{auto_rate_subset} class is
+applied. The original \code{auto_rate} object is saved in the output as
+\verb{$original}. The history of subsetting operations to the object is saved in
+\verb{$subset_calls}
 
 Regardless of which \code{method} is chosen, the first operation conducted is
 removal of duplicate results. Due to the way it works, the \code{auto_rate}
 kernel-density analysis occasionally identifies linear regions that are
 identical in all regards, including start/end datapoints, and these appear
-as identical rows in the output \verb{$summary}. For all methods only unique
-regressions are retained. To apply only this duplicate removal method, use
-the default \code{method = NULL} or \code{method = "unique"}.
+as identical rows in the output \verb{$summary}, except for different \verb{$density}
+values. For all methods, only unique regressions are retained. To apply only
+this duplicate removal method, use the default \code{method = NULL} or \code{method = "unique"}.
 
 Generally speaking, for most large datasets we advise using
 \code{\link{subset_data}} and then running \code{auto_rate} on the subset(s) of
@@ -111,39 +114,40 @@ negative}. Essentially, these options ignore the sign of the rate. Here \code{n}
 should be a percentile value between 0 and 1. For example, to extract the
 lowest 10th percentile of rates regardless of sign, you would enter \verb{method = 'lowest_percentile', n = 0.1}.
 
-\subsection{ }{\code{min}, \code{max}} In contrast to \code{lowest} and \code{highest}, these
-are \emph{strictly numerical} options which take full account of the sign of the
-rate, and can be used where rates are a mix of positive and negative. That
-is, \code{method = 'min'} will retain the minimum value numerical rates,
+\subsection{ }{\code{minimum}, \code{maximum}} In contrast to \code{lowest} and \code{highest},
+these are \emph{strictly numerical} options which take full account of the sign
+of the rate, and can be used where rates are a mix of positive and negative.
+That is, \code{method = 'minimum'} will retain the minimum value numerical rates,
 including the most negative. \code{n} indicates how many of the min/max rates to
 retain.
 
-\subsection{ }{\code{min_percentile}, \code{max_percentile}} Like \code{min} and \code{max}
-these are \emph{strictly numerical} inputs which retain the \code{n}'th minimum or
-maximum percentile of the rates and take full account of the sign. Here \code{n}
-should be a percentile value between 0 and 1. For example, if rates are all
-negative (i.e. typical uptake rates), to extract the lowest 10th percentile
-of rates, you would enter \verb{method = 'max_percentile', n = 0.1}. This is
-because the \emph{lowest} rates are the \emph{highest numerically} (\code{highest/lowest}
-percentile methods would be a better option in this case however).
+\subsection{ }{\code{minimum_percentile}, \code{maximum_percentile}} Like \code{min} and
+\code{max} these are \emph{strictly numerical} inputs which retain the \code{n}'th minimum
+or maximum percentile of the rates and take full account of the sign. Here
+\code{n} should be a percentile value between 0 and 1. For example, if rates are
+all negative (i.e. typical uptake rates), to extract the lowest 10th
+percentile of rates, you would enter \verb{method = 'maximum_percentile', n = 0.1}. This is because the \emph{lowest} rates are the \emph{highest numerically}
+(\code{highest/lowest} percentile methods would be a better option in this case
+however).
 
-\subsection{ }{\code{rate}, \code{rsq}, \code{row}, \code{time}} These methods work on the
-respective columns of the \code{auto_rate} \verb{$summary} data frame. For these, \code{n}
+\subsection{ }{\code{rate}, \code{rsq}, \code{row}, \code{time}, \code{density}} These methods refer
+to the respective columns of the \verb{$summary} data frame. For these, \code{n}
 should be a numeric vector of two values. Matching rates which fall within
-that range (inclusive) are retained For example, to retain only rates where
-the \code{rate} value is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the original data source
-(\verb{$df} element of the input) and can be used to constrain results to rates
-from particular regions of the data (although a better option is to
+the \code{n} range (inclusive) are retained. For example, to retain only rates
+where the \code{rate} value is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the
+\verb{$row}-\verb{$endrow} or \verb{$time}-\verb{$endtime} columns and original data source
+(\verb{$df} element of the input), and can be used to constrain results to rates
+from particular regions of the data (although usually a better option is to
 \code{\link{subset_data}} prior to analysis). Note, \code{time} is not the same
 as \code{duration} - see later section.
 
 \subsection{ }{\code{time_omit}, \code{row_omit}} These methods refer to the original
-data, and are intended to exclude rates determined over particular data
+data, and are intended to \emph{exclude} rates determined over particular data
 regions. This is useful in the case of, for example, a data anomaly such as
 a spike or sensor dropout. For these, \code{n} can be a single value indicating a
 single data row or timepoint, or a numeric vector of two values indicating a
 row or time range. Only rates (i.e. regressions) which \emph{do not} utilise that
-particular value or range are retained in the putput. For example, if an
+particular value or range are retained in the output. For example, if an
 anomaly occurs precisely at timepoint 3000,  \code{time_omit = 3000} will mean
 only rates determined solely over regions before and after this will be
 retained. Similarly, if it occurs over a time range this can be entered as,
@@ -178,24 +182,24 @@ other selection criteria have been applied, as it is quite aggressive about
 removing rates, including high-ranked ones, and can be computationally
 intensive when there are many results. It can also only be used on
 \code{auto_rate} objects where the \code{linear} method has been used (the others
-specifically output all overlapping (\code{min/max}) or non-overlapping
+specifically output all overlapping (\code{lowest/highest}) or non-overlapping
 (\code{interval}) rates). Permitted overlap is determined by \code{n}, which indicates
 the minimum proportion of each particular regression which must overlap with
 another for it to be regarded as overlapping.  For example, \code{n = 0.2} means
 a regression would have to overlap with another by 20\% or more of its total
-length to be regarded as overlapping. The \code{overlap} method does two separate
-operations. First, regardless of the \code{n} value, any rate regressions which
-are completely contained within another are removed.
+length to be regarded as overlapping.
 
-Secondly, for each \code{rate_b1} result in \verb{$summary} how many \emph{other} rate
-results it overlaps with (accounting for \code{n}) is determined. The one which
-overlaps with the most others is then removed. In the event of more than one
-rate overlapping with equal numbers of other rates, it removes the least
-ranked one (i.e. lowest in the summary table). It repeats this analysis
-iteratively until only non-overlapping rates (accounting for \code{n}) are
-retained. If \code{n = 0}, only rates which do not overlap at all are retained.
-If \code{n = 1}, only rates which are entirely contained within another are
-removed.
+The \code{overlap} method does two separate operations. First, regardless of the
+\code{n} value, any rate regressions which are completely contained within
+another are removed. Secondly, for each \code{rate_b1} result in \verb{$summary} how
+many \emph{other} rate results it overlaps with (accounting for \code{n}) is
+determined. The one which overlaps with the most others is then removed. In
+the event of more than one rate overlapping with equal numbers of other
+rates, it removes the least ranked one (i.e. lowest in the summary table).
+It repeats this analysis iteratively until only non-overlapping rates
+(accounting for \code{n}) are retained. If \code{n = 0}, only rates which do not
+overlap at all are retained. If \code{n = 1}, only rates which are entirely
+contained within another are removed.
 }
 \examples{
  ar_obj <- inspect(intermittent.rd, plot = FALSE) \%>\%

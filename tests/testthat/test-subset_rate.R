@@ -16,6 +16,16 @@ suppressWarnings(ar_subset_nonzero <- subset_rate(ar_obj_w_0, method = "nonzero"
 suppressWarnings(ar_subset_zero <- subset_rate(ar_obj_w_0, method = "zero", plot = FALSE))
 
 
+## objects to test subsetting of different auto_rate methods
+ar_obj_high <- auto_rate(urchins.rd[,1:2], method = "highest", plot = FALSE)
+ar_obj_low <- auto_rate(urchins.rd[,1:2], method = "lowest", plot = FALSE)
+ar_obj_maximum <- auto_rate(urchins.rd[,1:2], method = "maximum", plot = FALSE)
+ar_obj_minimum <- auto_rate(urchins.rd[,1:2], method = "minimum", plot = FALSE)
+ar_obj_max <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "max", plot = FALSE))
+ar_obj_min <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "min", plot = FALSE))
+ar_obj_int <- auto_rate(urchins.rd[,1:2], method = "interval", plot = FALSE)
+
+ar_obj_high_sub <- subset_rate(ar_obj_high, method = "rsq", n = c(0.96,1), plot = FALSE)
 
 
 # General checks ----------------------------------------------------------
@@ -91,6 +101,77 @@ test_that("subset_rate output has saved subset calls", {
                c("subset_rate", "ar_obj", "negative", "FALSE"))
 })
 
+test_that("subset_rate works with auto_rate method = highest object", {
+  expect_error(subset_rate(ar_obj_high, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_high, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_high, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = lowest object", {
+  expect_error(subset_rate(ar_obj_low, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_low, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_low, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = maximum object", {
+  expect_error(subset_rate(ar_obj_maximum, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_maximum, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_maximum, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = minimum object", {
+  expect_error(subset_rate(ar_obj_minimum, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_minimum, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_minimum, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = max object (OLD METHOD", {
+  expect_error(subset_rate(ar_obj_max, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_max, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_max, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = min object (OLD METHOD", {
+  expect_error(subset_rate(ar_obj_min, method = "rsq", n = c(0.96,1), plot = FALSE),
+               regexp = NA)
+  ## should be 38 remaining
+  expect_equal(subset_rate(ar_obj_min, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_min, method = "rsq", n = c(0.96,1), plot = FALSE)$metadata$subset_regs,
+               38)
+})
+
+test_that("subset_rate works with auto_rate method = interval object (OLD METHOD", {
+  expect_error(subset_rate(ar_obj_int, method = "rsq", n = c(0.90,0.95), plot = FALSE),
+               regexp = NA)
+  ## should be 3 remaining - IN INTERVAL CASE ONLY
+  expect_equal(subset_rate(ar_obj_int, method = "rsq", n = c(0.90,0.95), plot = FALSE)$metadata$total_regs,
+               218)
+  expect_equal(subset_rate(ar_obj_int, method = "rsq", n = c(0.90,0.95), plot = FALSE)$metadata$subset_regs,
+               3)
+})
+
+
 
 # Check duplicates are removed --------------------------------------------
 
@@ -108,10 +189,11 @@ test_that("subset_rate: method = NULL   - works with NULL input", {
 })
 
 test_that("subset_rate: method = NULL   - correctly removes duplicates", {
-  ar_obj_uniq <- subset_rate(ar_obj_sard, plot = FALSE)
+  ar_obj_uniq <- subset_rate(ar_obj_sard, method = NULL,
+                             plot = FALSE)
   expect_equal(nrow(ar_obj_uniq$summary),
                39)
-  expect_equal(ar_obj_uniq$summary, unique(ar_obj_sard$summary))
+  expect_equal(ar_obj_uniq$summary[,1:7], unique(ar_obj_sard$summary[,1:7]))
 })
 
 test_that("subset_rate: method = unique   - correct message", {
@@ -130,7 +212,7 @@ test_that("subset_rate: method = unique   - correctly removes duplicates", {
                              plot = FALSE)
   expect_equal(nrow(ar_obj_uniq$summary),
                39)
-  expect_equal(ar_obj_uniq$summary, unique(ar_obj_sard$summary))
+  expect_equal(ar_obj_uniq$summary[,1:7], unique(ar_obj_sard$summary[,1:7]))
 })
 
 
@@ -291,75 +373,76 @@ test_that("subset_rate: method = highest_percentile   - these should match", {
 })
 
 
-# Check "min" method ------------------------------------------------------
-ar_subset_min_n <- subset_rate(ar_obj, method = "min", n = 4, plot = FALSE)
+# Check "minimum" method --------------------------------------------------
 
-test_that("subset_rate: method = min   - check n rates extracted", {
+ar_subset_min_n <- subset_rate(ar_obj, method = "minimum", n = 4, plot = FALSE)
+
+test_that("subset_rate: method = minimum   - check n rates extracted", {
   expect_length(ar_subset_min_n$rate,
                 4)
 })
 
-test_that("subset_rate: method = min   - check they are LOWEST n rates", {
+test_that("subset_rate: method = minimum   - check they are LOWEST n rates", {
   expect_equal(head(sort(ar_obj$rate), 4), ## head to get lowest
                sort(ar_subset_min_n$rate))
 })
 
-test_that("subset_rate: method = min   - check some exact values", {
+test_that("subset_rate: method = minimum   - check some exact values", {
   expect_equal(ar_subset_min_n$rate[2], -0.0005968452)
 })
 
-test_that("subset_rate: method = min   - check message", {
-  expect_message(subset_rate(ar_obj, method = "min", n = 4, plot = FALSE),
+test_that("subset_rate: method = minimum   - check message", {
+  expect_message(subset_rate(ar_obj, method = "minimum", n = 4, plot = FALSE),
                  "Subsetting minimum")
 })
 
-# Check "max" method ------------------------------------------------------
-ar_subset_max_n <- subset_rate(ar_obj, method = "max", n = 4, plot = FALSE)
+# Check "maximim" method --------------------------------------------------
+ar_subset_max_n <- subset_rate(ar_obj, method = "maximum", n = 4, plot = FALSE)
 
-test_that("subset_rate: method = max   - check n rates extracted", {
+test_that("subset_rate: method = maximum   - check n rates extracted", {
   expect_length(ar_subset_max_n$rate,
                 4)
 })
 
-test_that("subset_rate: method = max   - check they are HIGHEST n rates", {
+test_that("subset_rate: method = maximum   - check they are HIGHEST n rates", {
   expect_equal(tail(sort(ar_obj$rate), 4),
                sort(ar_subset_max_n$rate))
 })
 
-test_that("subset_rate: method = max   - check some exact values", {
+test_that("subset_rate: method = maximum   - check some exact values", {
   expect_equal(ar_subset_max_n$rate[2], 0.001605693)
 })
 
-test_that("subset_rate: method = max   - check message", {
-  expect_message(subset_rate(ar_obj, method = "max", n = 4, plot = FALSE),
+test_that("subset_rate: method = maximum   - check message", {
+  expect_message(subset_rate(ar_obj, method = "maximum", n = 4, plot = FALSE),
                  "Subsetting maximum")
 })
 
-# Check "min_percentile" method -------------------------------------------
+# Check "minimum_percentile" method -------------------------------------------
 
-ar_subset_min_perc <- subset_rate(ar_obj, method = "min_percentile", n = 0.1, plot = FALSE)
+ar_subset_min_perc <- subset_rate(ar_obj, method = "minimum_percentile", n = 0.1, plot = FALSE)
 
-test_that("subset_rate: method = min_percentile   - these should match (in this case)", {
+test_that("subset_rate: method = minimum_percentile   - these should match (in this case)", {
   expect_equal(ar_subset_min_perc$rate,
-               subset_rate(ar_obj, method = "min", n = 2, plot = FALSE)$rate)
+               subset_rate(ar_obj, method = "minimum", n = 2, plot = FALSE)$rate)
 })
 
-test_that("subset_rate: method = min_percentile   - check stops with n not between 0-1", {
-  expect_error(subset_rate(ar_obj, method = "min_percentile", n = 4, plot = FALSE),
+test_that("subset_rate: method = minimum_percentile   - check stops with n not between 0-1", {
+  expect_error(subset_rate(ar_obj, method = "minimum_percentile", n = 4, plot = FALSE),
                regexp = "For 'percentile' methods 'n' must be between 0 and 1.")
 })
 
-# Check "max_percentile" method -------------------------------------------
+# Check "maximum_percentile" method -------------------------------------------
 
-ar_subset_max_perc <- subset_rate(ar_obj, method = "max_percentile", n = 0.1, plot = FALSE)
+ar_subset_max_perc <- subset_rate(ar_obj, method = "maximum_percentile", n = 0.1, plot = FALSE)
 
-test_that("subset_rate: method = max_percentile   - these should match (in this case)", {
+test_that("subset_rate: method = maximum_percentile   - these should match (in this case)", {
   expect_equal(ar_subset_max_perc$rate,
-               subset_rate(ar_obj, method = "max", n = 2, plot = FALSE)$rate)
+               subset_rate(ar_obj, method = "maximum", n = 2, plot = FALSE)$rate)
 })
 
-test_that("subset_rate: method = max_percentile   - check stops with n not between 0-1", {
-  expect_error(subset_rate(ar_obj, method = "max_percentile", n = 4, plot = FALSE),
+test_that("subset_rate: method = maximum_percentile   - check stops with n not between 0-1", {
+  expect_error(subset_rate(ar_obj, method = "maximum_percentile", n = 4, plot = FALSE),
                regexp = "For 'percentile' methods 'n' must be between 0 and 1.")
 })
 
@@ -544,6 +627,37 @@ test_that("subset_rate: method = manual   - check stops with n out of range", {
 })
 
 
+# Check "density" method --------------------------------------------------
+
+ar_subset_density <- subset_rate(ar_obj, method = "density",
+                             n = c(300, 7500), plot = FALSE)
+
+test_that("subset_rate: method = density   - check all within density n range", {
+  sapply(ar_subset_density$summary$density, function(x) expect_gte(x, 300))
+  sapply(ar_subset_density$summary$density, function(x) expect_lte(x, 7500))
+})
+
+test_that("subset_rate: method = density   - check stops with n not length 2 vector", {
+  expect_error(subset_rate(ar_obj, method = "density", n = 4, plot = FALSE),
+               regexp = "For 'density' method 'n' must be a vector of two values.")
+  expect_error(subset_rate(ar_obj, method = "density", n = c(1,2,3), plot = FALSE),
+               regexp = "For 'density' method 'n' must be a vector of two values.")
+})
+
+test_that("subset_rate: method = density   - check stops with auto_rate objects not of 'linear' KDE method", {
+  obj <- inspect(intermittent.rd, plot = FALSE) %>%
+    auto_rate(method = "maximum", plot = FALSE)
+  expect_error(subset_rate(obj, method = "density", n = c(300,7500), plot = FALSE),
+               regexp = "subset_rate: The 'density' method can only be used with results determined via the auto_rate 'linear' method.")
+
+  obj <- inspect(intermittent.rd, plot = FALSE) %>%
+    auto_rate(method = "interval", plot = FALSE)
+  expect_error(subset_rate(obj, method = "density", n = c(300,7500), plot = FALSE),
+               regexp = "subset_rate: The 'density' method can only be used with results determined via the auto_rate 'linear' method.")
+})
+
+
+
 # Check "duration" method -------------------------------------------------
 
 test_that("subset_rate: method = duration   - subsets max duration (zero to something) correctly", {
@@ -580,7 +694,7 @@ test_that("subset_rate: method = overlap   - stops when n is outside 0 to 1", {
 })
 
 test_that("subset_rate: method = overlap   - stops when auto_rate method is not 'linear'", {
-  expect_error(subset_rate(auto_rate(intermittent.rd, method = "max", plot = FALSE),
+  expect_error(subset_rate(auto_rate(intermittent.rd, method = "maximum", plot = FALSE),
                            method = "overlap", n = 0.5, plot = FALSE),
                "The 'overlap' method should only be used with results")
 })
