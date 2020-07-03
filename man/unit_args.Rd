@@ -7,49 +7,74 @@
 \usage{
 unit_args()
 }
-\value{
-A list.
-}
 \description{
-This is a simple function, requiring no argument. It shows available units
-that can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}. Some
-units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
-pressure (\code{P}) to be specified.
+This is a simple function, with no arguments. It shows available units that
+can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}. Some oxygen
+unit conversions also require temperature (\code{t}), salinity (\code{S}), and
+atmospheric pressure (\code{P}) to be specified.
 }
 \details{
-\strong{Available units for \code{\link[=convert_DO]{convert_DO()}}:}
+\strong{\code{\link[=convert_DO]{convert_DO()}}}
 
-Do \emph{NOT} require t, S and P:
+\strong{Oxygen concentration or pressure units for \code{from} and \code{to} arguments:}
 
-"mg/L", "ug/L", "mmol/L", "umol/L"
+Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
+denominator.
 
-Require t, S and P:
+Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 
-"mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "\\%" (N.B. = \\% Air Saturation), "Torr", "hPa", "kPa",
-"mmHg", "inHg"
+\verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
 
-\strong{Available units for \code{\link[=convert_rate]{convert_rate()}}:}
+Require \code{t}, \code{S} and \code{P} for conversions:
 
-\strong{O2}
+\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%" (Note this is \% Air Saturation), "Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
 
-Do \emph{NOT} require t, S and P:
+\strong{\code{\link[=convert_rate]{convert_rate()}}}
 
-"mg/L", "ug/L", "mmol/L", "umol/L"
+\strong{Oxygen concentration or pressure units for \code{o2.unit} argument:}
 
-Require t, S and P:
+Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
+denominator.
 
-"mL/L", "mg/kg", "ug/kg", "mmol/kg",
-"umol/kg", "mL/kg", "\\%" (N.B. = \\% Air Saturation), "Torr", "hPa", "kPa",
-"mmHg", "inHg"
+Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 
-\strong{Time}
+\verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
 
-"s", "m", "h"
+Require \code{t}, \code{S} and \code{P} for conversions:
 
-\strong{Output mass}
+\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%" (Note this is \% Air Saturation), "Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
 
-"ug", "mg", "g", "kg"
+\strong{Time units for \code{time.unit} argument:}
+
+\verb{"sec", "min", "hour", "day"}
+
+\strong{Combining units for \code{output.unit} argument:}
+
+Must be in correct order, with no special characters other than the
+separator:
+\itemize{
+\item Absolute rates: \code{O2/Time} e.g. \code{"mg/s"}, \code{"umol/min"}, \code{"mL/h"}
+\item Mass-specific rates: \code{O2/Time/Mass} e.g. \code{"mg/s/ug"}, \code{"umol/min/g"},
+\code{"mL/h/kg"}
+\item Area-specific rates: \code{O2/Time/Area} e.g. \code{"mg/s/mm2"}, \code{"umol/min/cm2"},
+\code{"mL/h/m2"}
+}
+
+\strong{Oxygen amount units for use in \code{output.unit} argument:}
+
+\verb{"ug", "mg", "umol", "mmol", "mol", "mL"}
+
+\strong{Time units for use in \code{output.unit} argument:}
+
+\verb{"sec", "min", "hour", "day"}
+
+\strong{Mass units for use in \code{output.unit} argument in mass-specific rates:}
+
+\verb{"ug", "mg", "g", "kg"}
+
+\strong{Area units for use in \code{output.unit} argument in area-specific rates:}
+
+\verb{"mm2", "cm2", "m2", "km2"}
 }
 \examples{
 unit_args()
