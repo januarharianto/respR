@@ -46,7 +46,7 @@ Require \code{t}, \code{S} and \code{P} for conversions:
 
 \strong{Time units for \code{time.unit} argument:}
 
-\verb{"sec", "min", "hour"}
+\verb{"sec", "min", "hour", "day"}
 
 \strong{Combining units for \code{output.unit} argument:}
 
@@ -66,7 +66,7 @@ separator:
 
 \strong{Time units for use in \code{output.unit} argument:}
 
-\verb{"sec", "min", "hour"}
+\verb{"sec", "min", "hour", "day"}
 
 \strong{Mass units for use in \code{output.unit} argument in mass-specific rates:}
 

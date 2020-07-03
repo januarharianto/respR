@@ -114,17 +114,17 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
 
   ## Apply output unit defaults
   if (is.null(output.unit) && is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mg/h'.",
+    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h'.",
       call. = F)
     output.unit <- "mg/h"
   }
   if (is.null(output.unit) && !is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mg/h/kg'.",
+    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h/kg'.",
       call. = F)
     output.unit <- "mg/h/kg"
   }
   if (is.null(output.unit) && is.null(mass) && !is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mg/h/m2'.",
+    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h/m2'.",
       call. = F)
     output.unit <- "mg/h/m2"
   }
@@ -210,7 +210,10 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   # Format unit strings to look nicer
   o2.unit <- stringr::str_replace(oxy, "\\..*", "")
   time.unit <- stringr::str_replace(time, "\\..*", "")
+
+  ## Add "O2" to output O2 unit string for clarity
   output.unit <- stringr::str_replace(ou, "\\..*", "")
+  output.unit[1] <- paste0(output.unit[1], "O2")
   output.unit <- paste(output.unit, collapse = "/")
 
   # Convert DO unit first
@@ -356,10 +359,10 @@ mean.convert_rate <- function(object, export = FALSE, ...){
 #' @export
 adjust_scale <- function(x, input, output) {
   # Create database of terms for matching
-  prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour")
+  prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour", "day")
   suffix <- c("mol", "g", "L", "l", "")
-  multip <- c(1e-19, 1e-06, 0.001, 1, 1000, 3600, 60, 1)
-  string <- "^(n|u|m||k|sec|min|hour)?(mol|g|L|l|)$"
+  multip <- c(1e-19, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
+  string <- "^(n|u|m||k|sec|min|hour|day)?(mol|g|L|l|)$"
   # Clean and extract input strings
   bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
   bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
@@ -376,9 +379,6 @@ adjust_scale <- function(x, input, output) {
   return(out)
 }
 
-# x=0.5
-# input <- "kg.mass"
-# output <- "g.mass"
 
 #' Convert between multipliers of the same AREA unit, e.g. mm2 to km2
 #'

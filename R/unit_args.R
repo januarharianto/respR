@@ -40,7 +40,7 @@
 #'
 #' **Time units for `time.unit` argument:**
 #'
-#' `"sec", "min", "hour"`
+#' `"sec", "min", "hour", "day"`
 #'
 #' **Combining units for `output.unit` argument:**
 #'
@@ -61,7 +61,7 @@
 #'
 #' **Time units for use in `output.unit` argument:**
 #'
-#' `"sec", "min", "hour"`
+#' `"sec", "min", "hour", "day"`
 #'
 #' **Mass units for use in `output.unit` argument in mass-specific rates:**
 #'
@@ -83,7 +83,7 @@ unit_args <- function() {
                   "ug/kg", "mmol/kg", "umol/kg", "mL/kg", "%", "Torr",
                   "hPa", "kPa", "mmHg", "inHg")
   o2unit_out <- c("ug", "mg", "umol", "mmol", "ml")
-  timeunit <- c("sec", "min", "hour")
+  timeunit <- c("sec", "min", "hour", "day")
   massunit <- c("ug", "mg", "g", "kg")
   areaunit <- c("mm2", "cm2", "m2", "km2")
 

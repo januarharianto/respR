@@ -164,9 +164,10 @@ verify_units <- function(unit, is) {
   # time units
   if (is == 'time') {
     all.units <- list(
-      hour.time = c('hour', 'hr', 'h'),
-      min.time  = c('minute', 'min', 'm'),
-      sec.time  = c('second', 'sec', 's'))
+      day.time = c('days', 'day', 'dy', 'dys', 'd'),
+      hour.time = c('hours', 'hour', 'hr', 'hrs', 'h'),
+      min.time  = c('minutes', 'minute', 'min', 'mins', 'm'),
+      sec.time  = c('seconds', 'second', 'sec', 'secs', 's'))
   }
   # 2-dimensional o2 units, and pressure
   if (is == 'o2') {
@@ -247,11 +248,11 @@ verify_units <- function(unit, is) {
   }
   if (is == 'o1') {
     all.units <-  list(
-      'mg.o2'   = c('mg.o2','mg','milligram'),
-      'ug.o2'   = c('ug.o2','ug','microgram'),
-      'mmol.o2' = c('mmol.o2','mmol','millimol'),
-      'umol.o2' = c('umol.o2','umol','micromol'),
-      'ml.o2'   = c('ml.o2','ml','mL','millil'))
+      'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram'),
+      'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram'),
+      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
+      'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol'),
+      'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
   }
   # Look for match
   string <- paste0('^', unit, '$')  # for exact matching
