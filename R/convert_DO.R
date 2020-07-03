@@ -1,39 +1,51 @@
-#' Convert units of dissolved oxygen.
+#' Convert between units of dissolved oxygen.
 #'
-#' This is a conversion function that performs basic conversions between units
-#' of dissolved oxygen in aquatic respirometry. Some units require temperature
-#' (`t`), salinity (`S`), and atmospheric pressure (`P`) to be specified. See
-#' [unit_args()] for details. For freshwater experiments, salinity should be set
-#' to zero (i.e. S = 0).
+#' This is a conversion function that performs basic conversions between
+#' concentration or pressure units of dissolved oxygen (DO). Concentration units
+#' should use SI units (`L` or `kg`) for the denominator. Some DO units require
+#' temperature (`t`), salinity (`S`), and atmospheric pressure (`P`) to be
+#' specified. For freshwater experiments, salinity should be set to zero (i.e.
+#' `S = 0`). See [unit_args()] for details of accepted units.
 #'
-#' @param x numeric vector or object of class `calc_rate`, `auto_rate` or
-#'   `adjust_rate`. This is the value(s) that you want to convert from.
-#' @param from string. The unit to convert from. See [unit_args()] for details.
-#' @param to string. The unit to convert to. See [unit_args()] for details.
-#' @param S numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
+#' @param x numeric value or vector. This is the dissolved oxygen (DO) value(s)
+#'   that you want to convert.
+#' @param from string. The DO unit to convert *from*. See [unit_args()] for
+#'   details.
+#' @param to string. The unit to convert *to*. See [unit_args()] for details.
+#' @param S numeric. Salinity (ppt). Defaults to NULL. Required for conversion
 #'   of some units. See [unit_args()] for details.
-#' @param t numeric. Temperature(°C). Defaults to NULL. Used only in conversion
+#' @param t numeric. Temperature(°C). Defaults to NULL. Required for conversion
 #'   of some units. See [unit_args()] for details.
-#' @param P numeric. Pressure (bar). Defaults to 1.013253. Used only in
+#' @param P numeric. Pressure (bar). Defaults to 1.013253. Required for
 #'   conversion of some units. See [unit_args()] for details.
 #'
-#' @return A list.
+#' @return Returns a `list` object containing four elements: `$input` values,
+#'   `$output` (converted) values, `$input.unit` and `$output.unit`
+#'
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
 #' @export
 #'
 #' @examples
-#' # Perform conversion on an object of class `calc_rate`:
-#' data("sardine.rd")
-#' x <- calc_rate(sardine.rd)
-#' convert_DO(x, from = "percent", to = "mg L-1", t = 15, S = 35)
+#' # Convert a numeric value from/to units which do not require t, S and P
+#' convert_DO(8.21, from = "mg/L", to = "umol/L")
 #'
-#' # Or, perform on a numeric
+#' # Convert a numeric value from/to units which require t, S and P
 #' convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
+#' convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 #'
-#' data("sardine.rd")
-#' convert_DO(sardine.rd[[2]], from = "percent", to = "torr", t = 15, S = 35)
+#' # Convert a vector of values
+#' convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
+#' convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "%",
+#'   t = 15, S = 35)
+#' convert_DO(sardine.rd[[2]], from = "percent", to = "torr",
+#'   t = 15, S = 35)
+
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                          P = 1.013253) {
+
+  # Validate input:
+  if (!is.character(from)) stop("convert_DO: 'from' unit should be a character string.")
+  if (!is.character(to)) stop("convert_DO: 'to' unit should be a character string.")
 
   # Verify the units:
   fru <- verify_units(from, 'o2')
@@ -48,14 +60,14 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
   ## t and S - could combine these to one check
   if(is.null(S) && (fru %in% tsp_req || tou %in% tsp_req))
-    stop("Input or output units require Salinity input (i.e. S = ??)")
+    stop("convert_DO: Input or output units require Salinity input (i.e. S = ??)")
 
   if(is.null(t) && (fru %in% tsp_req || tou %in% tsp_req))
-    stop("Input or output units require Temperature input (i.e. t = ??)")
+    stop("convert_DO: Input or output units require Temperature input (i.e. t = ??)")
 
   ## Set default P if not provided
   if(is.null(P) && (fru %in% tsp_req || tou %in% tsp_req))
-    message("Note: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
+    message("convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
   if(is.null(P)) P <- 1.013253
 
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
@@ -71,15 +83,15 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   oAtm <- unname(marelac::atmComp('O2'))  # atmospheric composition of O2 (%)
 
   # Import from other functions
-  if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
-  if (class(x) %in% "adjust_rate") z <- x$adjusted.rate
+  # This made no sense! These are not DO units but DO/time rates
+  # However this would be useful functionality to have - conversion of rates between units
+  # if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
+  # if (class(x) %in% "adjust_rate") z <- x$adjusted.rate
 
   if (is.numeric(x)) z <- x
 
-  # Validate input:
-  if (!is.character(from)) stop("`from` unit should be character string.")
-  if (!is.character(to)) stop("`to` unit should be character string.")
-  if (!is.numeric(z)) stop("input units must be numeric.")
+  # Validate x input:
+  if (!is.numeric(z)) stop("convert_DO: input 'x' must be a numeric value or vector.")
 
   # Perform conversions
   # First we convert all values to a standard unit, mg/L:
@@ -228,10 +240,10 @@ verify_units <- function(unit, is) {
   }
   if (is == 'area') {
     all.units <- list(
-      mm.sq  = c('mm.sq','mmsq','mm^2','mm2','mm.2','sqmm','sq.mm'),
-      cm.sq  = c('cm.sq','cmsq','cm^2','cm2','cm.2','sqcm','sq.cm'),
-      m.sq   = c('m.sq','msq','m^2','m2','m.2','sqm','sq.m'),
-      km.sq  = c('km.sq','kmsq','km^2','km.2','km2','sqkm','sq.km'))
+      mm2.area  = c('mm2.area','mmsq','mm2','sqmm'),
+      cm2.area  = c('cm2.area','cmsq','cm2','sqcm'),
+      m2.area   = c('m2.area','msq','m2','sqm'),
+      km2.area  = c('km2.area','kmsq','km2','sqkm'))
   }
   if (is == 'o1') {
     all.units <-  list(
@@ -247,7 +259,7 @@ verify_units <- function(unit, is) {
   chk <- sapply(chk, function(x) length(x) > 0)
   result <- any(chk == T)  # did a match occur?
   if (result == FALSE)
-    stop("unit '", unit, "' cannot be recognised. Check unit strings are in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.", call. = F)
+    stop("verify_units: unit '", unit, "' not recognised. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }

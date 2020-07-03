@@ -1,18 +1,28 @@
 ## testthat::test_file("tests/testthat/test-convert_rate.R")
 
+sink("/dev/null") ## stops printing outputs on assigning
+
 test_that("convert_rate works with default values",
-          expect_equal(suppressWarnings(convert_rate(10, volume = 1)$output.rate), 36000))
+          expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", o2.unit = "mg/l")$output.rate),
+                       36000))
 
 # use known warnings to do these checks
 # maybe make this more specific later
 test_that("convert_rate falls back to default arguments properly", {
-  # specific warnings
-  expect_warning(convert_rate(10, volume = 1, S = 35, t = 25),
-                 "convert_rate: the 'o2.unit' is not provided, using 'mg/L'.")
-  expect_warning(convert_rate(10, volume = 1, S = 35, t = 25),
-                 "convert_rate: the 'time.unit' is not provided, using 's'.")
-  expect_warning(convert_rate(10, volume = 1, S = 35, t = 25),
+  expect_warning(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l"),
                  "convert_rate: the 'output.unit' is not provided, using 'mg/h'.")
+  expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l")$output.unit),
+               "mg/hour")
+
+  expect_warning(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l", mass = 1),
+                 "convert_rate: the 'output.unit' is not provided, using 'mg/h/kg'.")
+  expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l", mass = 1)$output.unit),
+               "mg/hour/kg")
+
+  expect_warning(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l", area = 1),
+                 "convert_rate: the 'output.unit' is not provided, using 'mg/h/m2'.")
+  expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", o2.unit = "mg/l", area = 1)$output.unit),
+               "mg/hour/m2")
 })
 
 #
@@ -21,27 +31,412 @@ test_that("convert_rate (adjust_scale) produces valid output", {
   expect_is(adjust_scale(10, "ml", "l"), "numeric")
 })
 
+##
+test_that("convert_rate stops if 'o2.unit' or 'time.unit' are NULL or numeric", {
+  expect_error(convert_rate(10, volume = 1, o2.unit = "umol/l", time.unit = NULL),
+               "convert_rate: the 'time.unit' of the original data is required.")
+  expect_error(convert_rate(10, volume = 1, o2.unit = "umol/l", time.unit = 1.1),
+               "convert_rate: the 'time.unit' of the original data is required.")
 
-test_that("convert_rate outputs correct conversion values", {
+  expect_error(convert_rate(10, volume = 1, o2.unit = NULL, time.unit = "s"),
+               "convert_rate: the 'o2.unit' of the original data is required.")
+  expect_error(convert_rate(10, volume = 1, o2.unit = 1.1, time.unit = "s"),
+               "convert_rate: the 'o2.unit' of the original data is required.")
+})
 
-  convert_rate(10, volume = 1, S = 35, t = 25)
+test_that("convert_rate stops if 'volume' is NULL or NOT numeric", {
+  expect_error(convert_rate(10, volume = NULL, o2.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g"),
+               "convert_rate: the 'volume' input is required.")
+  expect_error(convert_rate(10, volume = "text", o2.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g"),
+               "convert_rate: the 'volume' input is required.")
+})
 
-  expect_equal(round(
-    convert_rate(10, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 1, S = 35, t = 25, P = 1.013253)$output, 3), 0.675)
-  expect_equal(round(convert_rate(10, "%", "ug/l", S = 35, t = 25, P = 1.013253)$output, 3), 675.11)
-  expect_equal(round(convert_rate(10, "%", "mmol/l", S = 35, t = 25, P = 1.013253)$output, 3), 0.021)
-  expect_equal(round(convert_rate(10, "%", "umol/l", S = 35, t = 25, P = 1.013253)$output, 3), 21.098)
-  expect_equal(round(convert_rate(10, "%", "ml/l", S = 35, t = 25, P = 1.013253)$output, 3), 0.516)
-  expect_equal(round(convert_rate(10, "%", "mg/kg", S = 35, t = 25, P = 1.013253)$output, 3), 0.66)
-  expect_equal(round(convert_rate(10, "%", "ug/kg", S = 35, t = 25, P = 1.013253)$output, 3), 659.79)
-  expect_equal(round(convert_rate(10, "%", "mmol/kg", S = 35, t = 25, P = 1.013253)$output, 3), 0.021)
-  expect_equal(round(convert_rate(10, "%", "umol/kg", S = 35, t = 25, P = 1.013253)$output, 3), 20.619)
-  expect_equal(round(convert_rate(10, "%", "ml/kg", S = 35, t = 25, P = 1.013253)$output, 3), 0.504)
-  expect_equal(round(convert_rate(10, "%", "%", S = 35, t = 25, P = 1.013253)$output, 3), 10)
-  expect_equal(round(convert_rate(10, "%", "hPa", S = 35, t = 25, P = 1.013253)$output, 3), 20.854)
-  expect_equal(round(convert_rate(10, "%", "kPa", S = 35, t = 25, P = 1.013253)$output, 3), 2.085)
-  expect_equal(round(convert_rate(10, "%", "mmHg", S = 35, t = 25, P = 1.013253)$output, 3), 15.642)
-  expect_equal(round(convert_rate(10, "%", "inHg", S = 35, t = 25, P = 1.013253)$output, 3), 0.616)
-  expect_equal(round(convert_rate(10, "%", "Torr", S = 35, t = 25, P = 1.013253)$output, 3), 15.642)
+test_that("convert_rate stops if both 'mass' and 'area' inputs are entered", {
+  expect_error(convert_rate(10, volume = 1, o2.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g",
+                            mass = 1,
+                            area = 1),
+               "convert_rate: Cannot have inputs for both 'mass' and 'area'.")
+})
 
-  })
+test_that("convert_rate stops if 'output.unit' requires a 'mass' or 'area' input and neither is provided", {
+  expect_error(convert_rate(10, volume = 1, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/h/g",
+                            mass = NULL, area = NULL),
+               "convert_rate: 'output.unit' requires a value for 'mass' or 'area'")
+  expect_error(convert_rate(10, volume = 1, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/h/cm2",
+                            mass = NULL, area = NULL),
+               "convert_rate: 'output.unit' requires a value for 'mass' or 'area'")
+})
+
+test_that("convert_rate stops if a 'mass' or 'area' input entered but output.unit is not mass- or area-specific", {
+  expect_error(convert_rate(10, volume = 1, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/h",
+                            mass = 1, area = NULL),
+               "convert_rate: a 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
+  expect_error(convert_rate(10, volume = 1, o2.unit = "mg/l", time.unit = "s", output.unit = "mg/h",
+                            mass = NULL, area = 1),
+               "convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
+})
+
+
+
+test_that("convert_rate S3 generics work as expected", {
+  res_abs <- convert_rate(-0.0001534657, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h",
+                          volume = 0.0032245)
+  res_ms <- convert_rate(-0.0001534657, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/g",
+                         volume = 0.0032245, mass = 0.00534)
+  res_as <- convert_rate(-0.0001534657, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                         volume = 0.0032245, area = 0.000001429)
+
+  ## summary
+  expect_output(summary(res_abs))
+  expect_output(summary(res_ms))
+  expect_output(summary(res_as))
+
+  ## print
+  expect_output(print(res_abs))
+  expect_output(print(res_ms))
+  expect_output(print(res_as))
+
+  ## mean
+  ## absolute
+  expect_output(suppressWarnings(mean(res_abs)))
+  expect_warning(mean(res_abs),
+                 "Only 1 rate found in convert_rate object. Returning mean rate regardless...")
+  expect_equal(suppressWarnings(mean(res_abs, export = TRUE)),
+               mean(res_abs$output.rate))
+  ## mass-spec
+  expect_output(suppressWarnings(mean(res_ms)))
+  expect_warning(mean(res_ms),
+                 "Only 1 rate found in convert_rate object. Returning mean rate regardless...")
+  expect_equal(suppressWarnings(mean(res_ms, export = TRUE)),
+               mean(res_ms$output.rate))
+  ## area-spec
+  expect_output(suppressWarnings(mean(res_as)))
+  expect_warning(mean(res_as),
+                 "Only 1 rate found in convert_rate object. Returning mean rate regardless...")
+  expect_equal(suppressWarnings(mean(res_as, export = TRUE)),
+               mean(res_as$output.rate))
+
+  ## check multiple rates have correct mean
+  rate <- suppressWarnings(inspect(urchins.rd, plot = F)) %>%
+    auto_rate(plot = F) %>%
+    convert_rate(o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                 volume = 0.0032245, area = 0.000001429)
+  expect_output(suppressWarnings(mean(rate)))
+  expect_equal(mean(rate, export = TRUE),
+               mean(rate$output.rate))
+
+})
+
+
+test_that("convert_rate stops if units require t, S and P", {
+
+  expect_error(convert_rate(-0.0001534657, o2.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                            volume = 0.0032245,
+                            area = 0.000001429),
+               "Input or output units require Salinity input")
+
+  expect_error(convert_rate(-0.0001534657, o2.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                            volume = 0.0032245,
+                            S = 35,
+                            area = 0.000001429),
+               "Input or output units require Temperature input")
+
+  expect_message(convert_rate(-0.0001534657, o2.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              S = 35, t = 31, P = NULL,
+                              area = 0.000001429),
+                 "Input or output units require Atmospheric Pressure input")
+
+})
+
+
+## Possibly update these in future with exact values we know are correct.
+## For now, these just flag up if code changes cause output changes
+test_that("convert_rate outputs correct conversion values - absolute rates", {
+
+  res <- convert_rate(93.1, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 1, S = 35, t = 25, P = 1.013253)
+  expect_equal(res$output.rate, 22626.99, tolerance = 0.01) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 93.1)
+  expect_equal(res$input.o2.unit, "%")
+  expect_equal(res$input.time.unit, "sec")
+  expect_equal(res$output.unit, "mg/hour")
+  expect_equal(res$summary$input.rate, 93.1)
+  expect_equal(res$summary$output.rate, 22626.99, tolerance = 0.01)
+  expect_equal(res$summary$absolute.rate, 22626.99, tolerance = 0.01)
+
+  res <- convert_rate(4303, o2.unit = "ug/l", time.unit = "hr", output.unit = "ml/minute", volume = 1, S = 35, t = 25, P = 1.013253)
+  expect_equal(res$output.rate, 0.05477929, tolerance = 0.00001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 4303)
+  expect_equal(res$input.o2.unit, "ug/L")
+  expect_equal(res$input.time.unit, "hour")
+  expect_equal(res$output.unit, "ml/min")
+  expect_equal(res$summary$input.rate, 4303)
+  expect_equal(res$summary$output.rate, 0.05477929, tolerance = 0.00001)
+  expect_equal(res$summary$absolute.rate, 0.05477929, tolerance = 0.00001)
+
+  res <- convert_rate(234, o2.unit = "hPa", time.unit = "min", output.unit = "umol/min", volume = 1, S = 35, t = 25, P = 1.013253)
+  expect_equal(res$output.rate, 236.739, tolerance = 0.001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 234)
+  expect_equal(res$input.o2.unit, "hPa")
+  expect_equal(res$input.time.unit, "min")
+  expect_equal(res$output.unit, "umol/min")
+  expect_equal(res$summary$input.rate, 234)
+  expect_equal(res$summary$output.rate, 236.739, tolerance = 0.001)
+  expect_equal(res$summary$absolute.rate, 236.739, tolerance = 0.001)
+
+  # changing magnitude of inputs and outputs changes rate by right amount
+  rate <- auto_rate(sardine.rd, plot = F)
+
+  # sign of the rate
+  expect_equal(
+    convert_rate(-1*rate$rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate * -1
+  )
+  # time metric in output
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/m", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/s", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate*60*60
+  )
+  # time metric in input
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "m", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "h", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate*60*60
+  )
+  # volume
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 10, S = 35, t = 14, P = 1.013253)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h", volume = 1, S = 35, t = 14, P = 1.013253)$output.rate*10
+  )
+
+})
+
+
+test_that("convert_rate outputs correct conversion values - mass-specific rates", {
+
+  res <- convert_rate(93.1, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 1, S = 35, t = 25, P = 1.013253,
+                      mass = 0.012)
+  expect_equal(res$output.rate, 1885.583, tolerance = 0.001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 93.1)
+  expect_equal(res$input.o2.unit, "%")
+  expect_equal(res$input.time.unit, "sec")
+  expect_equal(res$output.unit, "mg/hour/g")
+  expect_equal(res$summary$input.rate, 93.1)
+  expect_equal(res$summary$output.rate, 1885.583, tolerance = 0.01)
+  expect_equal(res$summary$absolute.rate, 22626.99, tolerance = 0.01)
+  expect_equal(res$summary$mass.specific.rate, 1885.583, tolerance = 0.001)
+
+  res <- convert_rate(4303, o2.unit = "ug/l", time.unit = "hr", output.unit = "ml/minute/kg", volume = 1, S = 35, t = 25, P = 1.013253,
+                      mass = 0.012)
+  expect_equal(res$output.rate, 4.564941, tolerance = 0.00001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 4303)
+  expect_equal(res$input.o2.unit, "ug/L")
+  expect_equal(res$input.time.unit, "hour")
+  expect_equal(res$output.unit, "ml/min/kg")
+  expect_equal(res$summary$input.rate, 4303)
+  expect_equal(res$summary$output.rate, 4.564941, tolerance = 0.00001)
+  expect_equal(res$summary$absolute.rate, 0.05477929, tolerance = 0.00001)
+  expect_equal(res$summary$mass.specific.rate, 4.564941, tolerance = 0.00001)
+
+  res <- convert_rate(234, o2.unit = "hPa", time.unit = "min", output.unit = "umol/min/ug", volume = 1, S = 35, t = 25, P = 1.013253,
+                      mass = 0.012)
+  expect_equal(res$output.rate, 0.00001972825, tolerance = 0.000001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 234)
+  expect_equal(res$input.o2.unit, "hPa")
+  expect_equal(res$input.time.unit, "min")
+  expect_equal(res$output.unit, "umol/min/ug")
+  expect_equal(res$summary$input.rate, 234)
+  expect_equal(res$summary$output.rate, 0.00001972825, tolerance = 0.000001)
+  expect_equal(res$summary$absolute.rate, 236.739, tolerance = 0.001)
+  expect_equal(res$summary$mass.specific.rate, 0.00001972825, tolerance = 0.000001)
+
+  # changing magnitude of inputs and outputs changes rate by right amount
+  rate <- auto_rate(sardine.rd, plot = F)
+
+  # sign of the rate
+  expect_equal(
+    convert_rate(-1*rate$rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate * -1
+  )
+  # time metric in output
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/m/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/s/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*60*60
+  )
+  # time metric in input
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "m", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "h", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*60*60
+  )
+  # volume
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 1, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*10
+  )
+  # mass
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/kg", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate/1000
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/mg", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*1000
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/g", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/ug", volume = 10, S = 35, t = 14, P = 1.013253,
+                 mass = 0.012)$output.rate*1000000
+  )
+
+})
+
+
+## Kate Quigley data
+## These values checked in Excel - first one is right
+
+test_that("convert_rate outputs correct conversion values - area-specific rates", {
+
+  res <- convert_rate(-0.0001534657, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                      volume = 0.0032245,
+                      S = 35, t = 31, P = 1.013253,
+                      area = 0.000001429)
+
+  expect_equal(res$output.rate, -0.001246648) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, -0.0001534657)
+  expect_equal(res$input.o2.unit, "mg/L")
+  expect_equal(res$input.time.unit, "sec")
+  expect_equal(res$output.unit, "mg/hour/mm2")
+  expect_equal(res$summary$input.rate, -0.0001534657)
+  expect_equal(res$summary$output.rate, -0.001246648)
+  expect_equal(res$summary$absolute.rate, -0.001781461)
+  expect_equal(res$summary$area.specific.rate, -0.001246648)
+
+  ## these made up
+  res <- convert_rate(4303, o2.unit = "ug/l", time.unit = "hr", output.unit = "ml/minute/m2",
+                      volume = 1, S = 35, t = 25, P = 1.013253,
+                      area = 0.012)
+  expect_equal(res$output.rate, 4.564941, tolerance = 0.00001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 4303)
+  expect_equal(res$input.o2.unit, "ug/L")
+  expect_equal(res$input.time.unit, "hour")
+  expect_equal(res$output.unit, "ml/min/m2")
+  expect_equal(res$summary$input.rate, 4303)
+  expect_equal(res$summary$output.rate, 4.564941, tolerance = 0.00001)
+  expect_equal(res$summary$absolute.rate, 0.05477929, tolerance = 0.00001)
+  expect_equal(res$summary$area.specific.rate, 4.564941, tolerance = 0.00001)
+
+  res <- convert_rate(234, o2.unit = "hPa", time.unit = "min", output.unit = "umol/min/cm2",
+                      volume = 1, S = 35, t = 25, P = 1.013253,
+                      area = 0.012)
+  expect_equal(res$output.rate, 1.972825, tolerance = 0.000001) # exact value
+  ## inputs and outputs are saved in object correctly
+  expect_equal(res$input.rate, 234)
+  expect_equal(res$input.o2.unit, "hPa")
+  expect_equal(res$input.time.unit, "min")
+  expect_equal(res$output.unit, "umol/min/cm2")
+  expect_equal(res$summary$input.rate, 234)
+  expect_equal(res$summary$output.rate, 1.972825, tolerance = 0.000001)
+  expect_equal(res$summary$absolute.rate, 236.739, tolerance = 0.001)
+  expect_equal(res$summary$area.specific.rate, 1.972825, tolerance = 0.000001)
+
+  # changing magnitude of inputs and outputs changes rate by right amount
+  rate <- auto_rate(sardine.rd, plot = F)
+  # time metric in output
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/m/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/s/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate*60*60
+  )
+  # time metric in input
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "m", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate*60
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "h", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate*60*60
+  )
+  # volume
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 1, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate*10
+  )
+  # area
+  # mm2 > cm2 > m2 > km2
+  # 1 x 100 x 10000 x 1000000
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/mm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate/100
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/mm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/m2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate/100/10000
+  )
+  expect_equal(
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/mm2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate,
+    convert_rate(rate, o2.unit = "%", time.unit = "s", output.unit = "mg/h/km2", volume = 10, S = 35, t = 14, P = 1.013253,
+                 area = 0.012)$output.rate/100/10000/1000000
+  )
+
+})
+
+
+sink() ## turns printing back on

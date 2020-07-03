@@ -1,0 +1,16 @@
+Changelog
+
+unit_args
+- updated with more detail of which functions accept which units
+
+convert_rate
+- NEW: now converts to surface area-specific rates via the 'area' argument.
+- This acccepts 4 inputs: mm2, cm2, m2, km2
+
+- Changed o2.unit = NULL and time.unit = NULL behaviour - now stops instead of applying a default.
+- Now applies a default output unit for mass- and area specific rates as well as absolute.
+
+convert_DO
+- Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure! However - a rate conversion would be very useful
+
+
