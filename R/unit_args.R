@@ -57,7 +57,7 @@
 #'
 #' **Oxygen amount units for use in `output.unit` argument:**
 #'
-#' `"ug", "mg", "umol", "mmol", "ml"`
+#' `"ug", "mg", "umol", "mmol", "mol", "mL"`
 #'
 #' **Time units for use in `output.unit` argument:**
 #'
@@ -82,7 +82,7 @@ unit_args <- function() {
   o2unit_tsp <- c("mL/L", "mg/kg",
                   "ug/kg", "mmol/kg", "umol/kg", "mL/kg", "%", "Torr",
                   "hPa", "kPa", "mmHg", "inHg")
-  o2unit_out <- c("ug", "mg", "umol", "mmol", "ml")
+  o2unit_out <- c("ug", "mg", "umol", "mmol", "mol", "mL")
   timeunit <- c("sec", "min", "hour", "day")
   massunit <- c("ug", "mg", "g", "kg")
   areaunit <- c("mm2", "cm2", "m2", "km2")

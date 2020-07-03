@@ -478,6 +478,22 @@ test_that("convert_rate: changing 'time' inputs changes rates by correct magnitu
                  volume = 1.2, mass = 0.5)$output.rate * 24,
     convert_rate(0.9, o2.unit = 'mg/l', time.unit = 'day', output.unit = 'mg/d/kg',
                  volume = 1.2, mass = 0.5)$output.rate)
-  })
+})
+
+test_that("convert_rate: different magnitudes of umol/mmol/mol changes rates by correct magnitude multiplier", {
+
+  expect_equal(convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate,
+               convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mmol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate/1000)
+  expect_equal(convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate,
+               convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'umol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate/1000/1000)
+  expect_equal(convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'umol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate,
+               convert_rate(0.9, o2.unit = 'mg/l', time.unit = 's', output.unit = 'mmol/s/kg',
+                            volume = 1.2, mass = 0.5)$output.rate*1000)
+})
 
 sink() ## turns printing back on

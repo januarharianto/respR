@@ -62,7 +62,7 @@ separator:
 
 \strong{Oxygen amount units for use in \code{output.unit} argument:}
 
-\verb{"ug", "mg", "umol", "mmol", "ml"}
+\verb{"ug", "mg", "umol", "mmol", "mol", "mL"}
 
 \strong{Time units for use in \code{output.unit} argument:}
 

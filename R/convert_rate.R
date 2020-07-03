@@ -217,7 +217,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   output.unit <- paste(output.unit, collapse = "/")
 
   # Convert DO unit first
-  if (A %in% c("mmol.o2", "umol.o2")) {
+  if (A %in% c("mmol.o2", "umol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
     RO2 <- adjust_scale(RO2$output, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {

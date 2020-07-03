@@ -248,10 +248,11 @@ verify_units <- function(unit, is) {
   }
   if (is == 'o1') {
     all.units <-  list(
-      'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram'),
       'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram'),
-      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
+      'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram'),
       'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol'),
+      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
+      'mol.o2' = c('mol.o2','molo2','molO2','mol','mole'),
       'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
   }
   # Look for match
