@@ -30,14 +30,14 @@
 #' convert_DO(8.21, from = "mg/L", to = "umol/L")
 #'
 #' # Convert a numeric value from/to units which require t, S and P
-#' convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
+#' convert_DO(100, from = "%Air", to = "mg L-1", S = 33, t = 18)
 #' convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 #'
 #' # Convert a vector of values
 #' convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
-#' convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "%",
+#' convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "%Air",
 #'   t = 15, S = 35)
-#' convert_DO(sardine.rd[[2]], from = "percent", to = "torr",
+#' convert_DO(sardine.rd[[2]], from = "%Air", to = "torr",
 #'   t = 15, S = 35)
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
@@ -52,7 +52,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   tou <- verify_units(to, 'o2')
 
   # Units requiring t, S and/or P (all same for now)
-  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
+  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%Air.o2", "%O2.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
     "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
     "mL/kg.o2")
 
@@ -104,7 +104,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if (fru == verify_units('ug/kg',  'o2')) {c <-  z * swDn / 1e6}
   if (fru == verify_units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
   if (fru == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
-  if (fru == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
+  #if (fru == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
+  if (fru == verify_units('%Air',   'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
+  if (fru == verify_units('%O2',    'o2')) {c <-  z * oGas * omWt / oAtm / 1e3 / 100}
   if (fru == verify_units('mL/kg',  'o2')) {c <-  z * omWt / omVl * swDn / 1e3}
   if (fru == verify_units('Torr',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
   if (fru == verify_units('hPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
@@ -122,7 +124,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if(tou == verify_units('ug/kg',  'o2')) {out <- c / swDn * 1e6}
   if(tou == verify_units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
   if(tou == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
-  if(tou == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
+  #if(tou == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
+  if(tou == verify_units('%Air',   'o2')) {out <- c / omWt / oGas * 1e3 * 100}
+  if(tou == verify_units('%O2',    'o2')) {out <- c / omWt / oGas * oAtm * 1e3 * 100}
   if(tou == verify_units('mL/kg',  'o2')) {out <- c / swDn * omVl / omWt * 1e3}
   if(tou == verify_units('Torr',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
   if(tou == verify_units('hPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
@@ -171,8 +175,19 @@ verify_units <- function(unit, is) {
   }
   # 2-dimensional o2 units, and pressure
   if (is == 'o2') {
+
+    if(unit %in% c("%", "perc", "percent","percentage"))
+      stop("verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%O2\" instead. See unit_args().")
+
     all.units <- list(
-      '%.o2' = c('%.o2','%','percent','percentage','%o2','%O2'),
+      '%Air.o2' = c('%Air.o2', '%air','%Air','%A','%a',
+                    "percair","percentair","percentageair"),
+
+      '%O2.o2' = c('%O2.o2','%oxy','%Oxy','%OX','%OXY','%o2','%O2','%o','%O',
+                    "percoxygen","percentoxygen","percentageoxygen",
+                    "percoxy","percentoxy","percentageoxy",
+                    "perco2","percento2","percentageo2",
+                    "percoO2","percentO2","percentageO2"),
 
       'ug/L.o2' = c('ug/L.o2','ug/L','ug/l','ug / L','ug / l','ugL-1',
                     'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre'),

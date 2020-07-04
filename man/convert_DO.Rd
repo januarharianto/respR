@@ -41,13 +41,13 @@ specified. For freshwater experiments, salinity should be set to zero (i.e.
 convert_DO(8.21, from = "mg/L", to = "umol/L")
 
 # Convert a numeric value from/to units which require t, S and P
-convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
+convert_DO(100, from = "\%Air", to = "mg L-1", S = 33, t = 18)
 convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 
 # Convert a vector of values
 convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
-convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "\%",
+convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "\%Air",
   t = 15, S = 35)
-convert_DO(sardine.rd[[2]], from = "percent", to = "torr",
+convert_DO(sardine.rd[[2]], from = "\%Air", to = "torr",
   t = 15, S = 35)
 }

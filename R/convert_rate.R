@@ -88,13 +88,13 @@
 #'
 #' # Convert a single rate derived via calc_rate to mass-specific
 #' x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
-#' convert_rate(x, o2.unit = '%', time.unit = 's',
+#' convert_rate(x, o2.unit = '%Air', time.unit = 's',
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
 #'   S =35, t = 15, P = 1.013)
 #'
 #' # Convert multiple rates derived via auto_rate to area-specific
 #' x <- auto_rate(sardine.rd)
-#' rates <- convert_rate(x, o2.unit = '%', time.unit = 's',
+#' rates <- convert_rate(x, o2.unit = '%Air', time.unit = 's',
 #'   output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
 #'   S =35, t = 15, P = 1.013)
 #' summary(rates)

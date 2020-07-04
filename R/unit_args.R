@@ -6,6 +6,11 @@
 #' unit conversions also require temperature (`t`), salinity (`S`), and
 #' atmospheric pressure (`P`) to be specified.
 #'
+#' Note the difference between percent air saturation (`'%Air`), where air
+#' saturated water is ~100%, and percent oxygen saturation (`'%O2`), where air
+#' saturated water is ~20.946% *oxygen* saturated. In other words, `%O2 =
+#' %Air * 0.20946`.
+#'
 #' **[convert_DO()]**
 #'
 #' **Oxygen concentration or pressure units for `from` and `to` arguments:**
@@ -19,8 +24,9 @@
 #'
 #' Require `t`, `S` and `P` for conversions:
 #'
-#' `"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",` `"%" (Note this is
-#' % Air Saturation), "Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' `"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",` `"%Air" (i.e. %
+#' Air Saturation), `"%O2" (i.e. % Oxygen Saturation) "Torr", "hPa", "kPa",`
+#' `"mmHg", "inHg"`
 #'
 #' **[convert_rate()]**
 #'
@@ -35,8 +41,9 @@
 #'
 #' Require `t`, `S` and `P` for conversions:
 #'
-#' `"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",` `"%" (Note this is
-#' % Air Saturation), "Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' `"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",` `"%Air" (i.e. %
+#' Air Saturation), `"%O2" (i.e. % Oxygen Saturation) "Torr", "hPa", "kPa",`
+#' `"mmHg", "inHg"`
 #'
 #' **Time units for `time.unit` argument:**
 #'
@@ -80,7 +87,8 @@ unit_args <- function() {
 
   o2unit <- c("mg/L", "ug/L", "mmol/L", "umol/L")
   o2unit_tsp <- c("mL/L", "mg/kg",
-                  "ug/kg", "mmol/kg", "umol/kg", "mL/kg", "%", "Torr",
+                  "ug/kg", "mmol/kg", "umol/kg", "mL/kg",
+                  "%Air", "%O2", "Torr",
                   "hPa", "kPa", "mmHg", "inHg")
   o2unit_out <- c("ug", "mg", "umol", "mmol", "mol", "mL")
   timeunit <- c("sec", "min", "hour", "day")

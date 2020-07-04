@@ -14,6 +14,10 @@ unit conversions also require temperature (\code{t}), salinity (\code{S}), and
 atmospheric pressure (\code{P}) to be specified.
 }
 \details{
+Note the difference between percent air saturation (\verb{'\%Air}), where air
+saturated water is ~100\%, and percent oxygen saturation (\verb{'\%O2}), where air
+saturated water is ~20.946\% \emph{oxygen} saturated. In other words, \verb{\%O2 = \%Air * 0.20946}.
+
 \strong{\code{\link[=convert_DO]{convert_DO()}}}
 
 \strong{Oxygen concentration or pressure units for \code{from} and \code{to} arguments:}
@@ -27,7 +31,7 @@ Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 
 Require \code{t}, \code{S} and \code{P} for conversions:
 
-\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%" (Note this is \% Air Saturation), "Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
+\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%Air" (i.e. \% Air Saturation), }"\%O2" (i.e. \% Oxygen Saturation) "Torr", "hPa", "kPa",\verb{}"mmHg", "inHg"`
 
 \strong{\code{\link[=convert_rate]{convert_rate()}}}
 
@@ -42,7 +46,7 @@ Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 
 Require \code{t}, \code{S} and \code{P} for conversions:
 
-\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%" (Note this is \% Air Saturation), "Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
+\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%Air" (i.e. \% Air Saturation), }"\%O2" (i.e. \% Oxygen Saturation) "Torr", "hPa", "kPa",\verb{}"mmHg", "inHg"`
 
 \strong{Time units for \code{time.unit} argument:}
 
