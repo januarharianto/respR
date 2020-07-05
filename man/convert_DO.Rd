@@ -2,52 +2,46 @@
 % Please edit documentation in R/convert_DO.R
 \name{convert_DO}
 \alias{convert_DO}
-\title{Convert between units of dissolved oxygen.}
+\title{Convert units of dissolved oxygen.}
 \usage{
 convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL, P = 1.013253)
 }
 \arguments{
-\item{x}{numeric value or vector. This is the dissolved oxygen (DO) value(s)
-that you want to convert.}
+\item{x}{numeric vector or object of class \code{calc_rate}, \code{auto_rate} or
+\code{adjust_rate}. This is the value(s) that you want to convert from.}
 
-\item{from}{string. The DO unit to convert \emph{from}. See \code{\link[=unit_args]{unit_args()}} for
-details.}
+\item{from}{string. The unit to convert from. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{to}{string. The unit to convert \emph{to}. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{to}{string. The unit to convert to. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{S}{numeric. Salinity (ppt). Defaults to NULL. Required for conversion
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
 of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{t}{numeric. Temperature(°C). Defaults to NULL. Required for conversion
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
 of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Required for
+\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used only in
 conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
-Returns a \code{list} object containing four elements: \verb{$input} values,
-\verb{$output} (converted) values, \verb{$input.unit} and \verb{$output.unit}
+A list.
 }
 \description{
-This is a conversion function that performs basic conversions between
-concentration or pressure units of dissolved oxygen (DO). Concentration units
-should use SI units (\code{L} or \code{kg}) for the denominator. Some DO units require
-temperature (\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be
-specified. For freshwater experiments, salinity should be set to zero (i.e.
-\code{S = 0}). See \code{\link[=unit_args]{unit_args()}} for details of accepted units.
+This is a conversion function that performs basic conversions between units
+of dissolved oxygen in aquatic respirometry. Some units require temperature
+(\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be specified. See
+\code{\link[=unit_args]{unit_args()}} for details. For freshwater experiments, salinity should be set
+to zero (i.e. S = 0).
 }
 \examples{
-# Convert a numeric value from/to units which do not require t, S and P
-convert_DO(8.21, from = "mg/L", to = "umol/L")
+# Perform conversion on an object of class `calc_rate`:
+data("sardine.rd")
+x <- calc_rate(sardine.rd)
+convert_DO(x, from = "percent", to = "mg L-1", t = 15, S = 35)
 
-# Convert a numeric value from/to units which require t, S and P
-convert_DO(100, from = "\%Air", to = "mg L-1", S = 33, t = 18)
-convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
+# Or, perform on a numeric
+convert_DO(100, from = "percent", to = "mg L-1", S = 33, t = 18)
 
-# Convert a vector of values
-convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
-convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "\%Air",
-  t = 15, S = 35)
-convert_DO(sardine.rd[[2]], from = "\%Air", to = "torr",
-  t = 15, S = 35)
+data("sardine.rd")
+convert_DO(sardine.rd[[2]], from = "percent", to = "torr", t = 15, S = 35)
 }

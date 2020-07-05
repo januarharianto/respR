@@ -2,7 +2,7 @@
 % Please edit documentation in R/auto_rate_funs.R
 \name{validate_auto_rate}
 \alias{validate_auto_rate}
-\title{Validation function for auto_rate}
+\title{Validation function for auto_rate()}
 \usage{
 validate_auto_rate(df, by, method)
 }

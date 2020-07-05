@@ -2,8 +2,7 @@
 % Please edit documentation in R/auto_rate_funs.R
 \name{auto_rate_min}
 \alias{auto_rate_min}
-\title{Perform rolling regression and rank from NUMERICAL minimum to maximum
-i.e. includes sign - most negative rates are highest}
+\title{Perform rolling regression and rank from maximum to minimum}
 \usage{
 auto_rate_min(dt, width, by = "row")
 }
