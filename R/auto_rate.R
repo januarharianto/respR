@@ -329,7 +329,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   # DEFINE OBJECTS
-  dt <- object$dataframe
+  dt <- object$df
   start <- object$summary$row[pos]
   end <- object$summary$endrow[pos]
   sdt <- dt[start:end]
