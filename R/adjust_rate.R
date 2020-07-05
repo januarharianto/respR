@@ -61,7 +61,7 @@ Adjustments have been applied anyway, using shared time values found in the 'x' 
   }
 
   if(dynamic){
-  ## if dynamic - t_x (if numeric/not null) can have multiple values, but must be same lengths as x or x$rate
+    ## if dynamic - t_x (if numeric/not null) can have multiple values, but must be same lengths as x or x$rate
     if(is.numeric(x) && is.numeric(t_x) && length(t_x) != length(x))
       stop("adjust_rate: 't_x' input should be the same length as the 'x' input.")
     if(!is.crbg.2col(by) && !is.sn(by))
@@ -319,49 +319,48 @@ midpt <- function(p) {
 is.sn <- function(x){
   if(is.numeric(x) && length(x) == 1) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is a single numeric value OR calc_rate/auto_rate object
 is.sn.cr.ar <- function(x){
   if(((is.numeric(x) && length(x) == 1)) ||  class(x) %in% c("calc_rate", "auto_rate")) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is numeric vector OR calc_rate/auto_rate object
 is.nv.cr.ar <- function(x){
   if((is.numeric(x)) ||  class(x) %in% c("calc_rate", "auto_rate")) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is numeric vector OR calc_rate.bg object
 is.nv.crbg <- function(x){
   if((is.numeric(x)) ||  class(x) %in% c("calc_rate.bg")) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is a single numeric value OR calc_rate.bg object
 is.sn.crbg <- function(x){
   if(((is.numeric(x) && length(x) == 1)) ||  class(x) %in% c("calc_rate.bg")) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is a calc_rate/auto_rate object
 is.cr.ar <- function(x){
   if(class(x) %in% c("calc_rate", "auto_rate")) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate that an input is a calc_rate.bg object with 2 column dataframe
 is.crbg.2col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) == 2) return(TRUE) else
     return(FALSE)
-  }
-
+}
 ## validate that an input is a calc_rate.bg object with multiple column dataframe
 is.crbg.multi.col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) > 2) return(TRUE) else
     return(FALSE)
-  }
+}
 
 ## validate method
 val_meth <- function(method){
