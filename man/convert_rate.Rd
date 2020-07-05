@@ -2,7 +2,8 @@
 % Please edit documentation in R/convert_rate.R
 \name{convert_rate}
 \alias{convert_rate}
-\title{Convert rate value to absolute and/or mass-specific}
+\title{Convert a unitless oxygen rate value to absolute, mass-specific or
+area-specific rate}
 \usage{
 convert_rate(
   x,
@@ -11,85 +12,116 @@ convert_rate(
   output.unit = NULL,
   volume = NULL,
   mass = NULL,
+  area = NULL,
   S = NULL,
   t = NULL,
-  P = NULL
+  P = 1.013253
 )
 }
 \arguments{
-\item{x}{numeric, or objects of class \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}},
-\code{\link[=auto_rate]{auto_rate()}} or \code{\link[=adjust_rate]{adjust_rate()}}.}
+\item{x}{numeric value or vector, or object of class \code{\link[=auto_rate]{auto_rate()}},
+\code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.ft]{calc_rate.ft()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}} or \code{\link[=adjust_rate]{adjust_rate()}}. The
+rate of change in oxygen.}
 
-\item{o2.unit}{string. The dissolved oxygen unit of the data used to
-determine rate. Check \code{\link[=unit_args]{unit_args()}}.}
+\item{o2.unit}{string. The dissolved oxygen unit of the original data used to
+determine the rate in 'x'. See \code{\link[=unit_args]{unit_args()}}.}
 
-\item{time.unit}{string. The time unit of the data used to determine rate.
-Check \code{\link[=unit_args]{unit_args()}}.}
+\item{time.unit}{string. The time unit of the original data used to determine
+the rate in 'x'. See \code{\link[=unit_args]{unit_args()}}. When converting rates from \emph{flowthrough
+experiments} this should be the time unit of the \emph{flow rate}. See Details.}
 
-\item{output.unit}{string. The output unit to convert rate to. Check
-\code{\link[=unit_args]{unit_args()}}.}
+\item{output.unit}{string. The output unit to which to convert the input rate
+in 'x'. Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
+"O2/Time/Area". See \code{\link[=unit_args]{unit_args()}}.}
 
-\item{volume}{numeric. Volume in litres. This is the volume of fluid in the
-respirometry chamber, not the specimen volume.}
+\item{volume}{numeric. Volume of water in litres. This is the \emph{effective
+volume} of the respirometer, that is volume of fluid in the respirometry
+chamber, not the total respirometer volume or specimen volume.
+\href{https://github.com/nicholascarey/respfun#eff_vol}{See here} for
+calculating effective volumes. Converting rates from \emph{flowthrough
+experiments} is a special case: see Details.}
 
 \item{mass}{numeric. Mass/weight in kg. This is the mass of the specimen if
 you wish to calculate mass-specific rates.}
 
-\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used only in conversion
-of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{area}{numeric. Surface area in m^2. This is the surface area of the
+specimen if you wish to calculate surface area-specific rates.}
 
-\item{t}{numeric. Temperature(°C). Defaults to NULL. Used only in conversion
-of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{S}{numeric. Salinity (ppt). Defaults to NULL. Used in conversion of
+some oxygen units. See \code{\link[=unit_args]{unit_args()}} for details. Fresh water should be
+entered as \code{S = 0}.}
 
-\item{P}{numeric. Pressure (bar). Defaults to NULL. Used only in conversion
-of some units. If left NULL, default value of 1.013253 is applied in
+\item{t}{numeric. Temperature(°C). Defaults to NULL. Used in conversion of
+some oxygen units. See \code{\link[=unit_args]{unit_args()}} for details.}
+
+\item{P}{numeric. Pressure (bar). Defaults to 1.013253. Used in conversion of
+some oxygen units. If NULL, a standard value of 1.013253 is applied in
 conversions. See \code{\link[=unit_args]{unit_args()}} for details.}
 }
 \value{
-A list object.
+Returns a \code{list} object containing the \verb{$input.rate}, and
+\verb{$output.rate} (converted) rate in the \verb{$output.unit}, as well as inputs
+and summary elements.
 }
 \description{
-This is a conversion function. It can convert a dimensionless unit of rate,
-derived from \code{calc_rate}, \code{calc_rate.ft}, \code{calc_rate.bg}, \code{auto_rate}, or
-\code{adjust_rate} into volume-adjusted (i.e. to the container), VO2 or
-mass-specific (i.e. to the specimen mass), MO2 rate.
+\code{convert_rate} converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}},
+\code{\link[=calc_rate.ft]{calc_rate.ft()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, \code{\link[=auto_rate]{auto_rate()}}, or \code{\link[=adjust_rate]{adjust_rate()}}
+into an absolute volume-adjusted (i.e. to the container) rate, or
+mass-specific rate (i.e. normalised by specimen mass), or area-specific rate
+(i.e. normalised by specimen surface area) in any common unit.
 }
 \details{
-Unless other values are specifically called as \code{x}, the function converts the
-primary \verb{$rate} from \code{calc_rate} and \code{auto_rate} objects, the \verb{$adjusted.rate}
-rate from \code{adjust_rate} objects, and the \verb{$mean} rate from \code{calc_rate.ft} and
-\code{calc_rate.bg} objects. Values or vectors of other rates within these obects
-can be converted by calling them as \code{x} using \code{$}.
+By default, \code{convert_rate} converts the primary \verb{$rate} element from
+\code{calc_rate} and \code{auto_rate} objects, the \verb{$adjusted.rate} from \code{adjust_rate}
+objects, and the \verb{$mean} rate from \code{calc_rate.ft} and \code{calc_rate.bg} objects.
+Different rates within these objects can be converted by calling them
+specifically as the \code{x} input using \code{$}. Additionally, any numeric value or
+vector can be input as \code{x}.
 
-Note, for rates from flowthrough experiments, the \code{volume} and \code{time} inputs
-should be set with reference to the \emph{flow rate} in L per unit time. E.g. for
-a flow rate in L/s \verb{volume = 1, time = "s"}. With these rates \code{volume} does
-\emph{NOT} represent the volume of the respirometer, and \code{time} does \emph{NOT}
-represent the resolution of the original data."
+NOTE: for converting rates from flowthrough experiments, the \code{volume} and
+\code{time.unit} inputs should be set with reference to the \code{flowrate} units \strong{in
+L per unit time} used in \code{calc_rate.ft} to determine the rates. For example.
+if the flow rate was entered via the \code{flowrate} operator in \code{L/s} enter
+\verb{volume = 1, time.unit = "s"}. With flowthrough rates \code{volume} does \emph{NOT}
+represent the volume of the respirometer, and \code{time.unit} does \emph{NOT}
+represent the resolution of the original data.
 
 The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles.
+to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. Use \code{\link[=unit_args]{unit_args()}} to
+view a list of usable unit strings.
 
-For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all the same.
-Use \code{\link[=unit_args]{unit_args()}} to view a list of usable unit strings.
+Output units (\code{output.unit}) must be in the sequence \emph{O2-Time} (e.g.
+\code{"mg/h"}) for absolute rates, \emph{O2-Time-Mass} (e.g. \code{"mg/h/kg"}) for
+mass-specific rates, and \emph{O2-Time-Area} (e.g. \code{"mg/h/cm2"}) for surface
+area-specific rates.
 
-Output units (\code{output.unit}) must be in the sequence O2-Time (e.g. mg/h,
-mg-h) for absolute rates, and for mass-specific rates O2-Time-Mass (e.g.
-mg/h/kg).
-
-Some units also require temperature (\code{t}), salinity (\code{S}), and atmospheric
+Some oxygen units require temperature (\code{t}), salinity (\code{S}), and atmospheric
 pressure (\code{P}) to be specified. See \code{\link[=unit_args]{unit_args()}} for details. For freshwater
-experiments, salinity should be set to zero (i.e. S = 0).
+experiments, salinity should be entered as zero (i.e. \code{S = 0}).
 }
 \examples{
-# Manually enter values
-convert_rate(7.5, o2.unit = 'mg/l', time.unit = 's',
+# Convert a single numeric rate to an absolute rate
+convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+  output.unit = 'mg/min', volume = 1.2)
+
+# Convert a single numeric rate to a mass-specific rate
+convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 
-# Use example data
-data("sardine.rd")
+# Convert a single numeric rate to an area-specific rate
+convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+  output.unit = 'mg/min/cm2', volume = 1.2, area = 0.0002)
+
+# Convert a single rate derived via calc_rate to mass-specific
 x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
-convert_rate(x, o2.unit = '\%', time.unit = 's',
+convert_rate(x, o2.unit = '\%Air', time.unit = 's',
   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
   S =35, t = 15, P = 1.013)
+
+# Convert multiple rates derived via auto_rate to area-specific
+x <- auto_rate(sardine.rd)
+rates <- convert_rate(x, o2.unit = '\%Air', time.unit = 's',
+  output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
+  S =35, t = 15, P = 1.013)
+summary(rates)
 }

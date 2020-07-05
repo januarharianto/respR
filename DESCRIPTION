@@ -19,9 +19,11 @@ Roxygen: list(markdown = TRUE)
 Imports:
     assertthat,
     broom,
+    cowplot,
     data.table,
     dplyr,
     ggplot2,
+    glue,
     graphics,
     grDevices,
     gridExtra,

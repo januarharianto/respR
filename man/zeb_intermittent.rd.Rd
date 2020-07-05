@@ -6,7 +6,7 @@
 \title{Respirometry data of a zebrafish, \emph{Danio rerio}}
 \format{
 A data frame object consisting of 2 columns (time and dissolved
-oxygen) and 79251 rows (approx 22h of data).
+oxygen) and 79,251 rows (approx 22h of data).
 }
 \usage{
 zeb_intermittent.rd

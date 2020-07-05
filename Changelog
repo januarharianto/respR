@@ -1,7 +1,10 @@
 
-Can we keep *everything* regarding changes in here, rather than moving some to NEWS.md. It's hard to keep track what's where. We can decide what to include in NEWS just before we release.
+Keep *everything* regarding changes in here, rather than moving some to NEWS.md.
+It's hard to keep track what's where.
+We can decide what to include in NEWS just before we release.
 
-For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then we can copy it in here when it is merged.
+For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then copy it in here when it is merged.
+
 
 NEWS
 # [version 1.1.1] -- 2019-07-24
@@ -11,7 +14,6 @@ Quick fixes and changes.
 - **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
 - **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
-
 
 
 
@@ -29,7 +31,6 @@ Fixes
 - FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
 
 
-
 Changes
 - CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
 - CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
@@ -37,7 +38,15 @@ Changes
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
+
+NEW
+- NEW: subset_rate function - HIGHLIGHT
+
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
+
+***************Need to revise above. on.exit cmd needs to be at end after all... Done for plot.auto_rate
+
+
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
@@ -45,9 +54,9 @@ Changes
 - CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
 - CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
-- CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear in pipes)
+- CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
 - CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
-
+- NEW: import_file now supports Presens Datamanager files
 
 
 
@@ -109,3 +118,42 @@ mean.adjust_rate
 mean.convert_rate
 - NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
 
+
+========================== auto_rate() ============================
+MAJOR CHANGE
+- Mew 'highest' and 'lowest' methods for absolute min/max of rates
+- Can only use these when rates all have the same sign
+- New internal functions for this ordering - auto_rate_lowest, auto_rate_highest
+- New 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates
+- Therefore internal functions auto_rate_min and auto_rate_max have been swapped around in terms of functionality.
+- Old methods ('min', 'max') still produce same results as old code but have a prominent warning
+
+Other changes
+- reordered operators to put "method" second
+- added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE.
+- Help docs updated
+- tidied and reordered summary S3 printout
+  - summary table comes first, only prints out 20 rows max of results (via data.table)
+  - new function (print_dens) for printing the density result more compactly
+- method = "max" was missing '$total_regs' element from metadata
+- updated error messages (including internal fns) to be clear they come from auto_rate
+
+
+
+========================== convert_rate() ============================
+
+- NEW: now converts to surface area-specific rates via the 'area' argument (acccepts 4 inputs: mm2, cm2, m2, km2)
+- o2.unit = NULL and time.unit = NULL now stop instead of applying a default unit
+- However, it now applies a default output unit for mass- and area specific rates as well as absolute.
+- $output.unit oxygen amount component now has "O2" appended. e.g. mgO2/h/g, umolO2/day/m2 (done at end, does not affect any conversions).
+- time - can now import data and output rates using 'day' as time unit e.g. "mgO2/day/m2"
+- oxygen - can now output oxygen used in moles e.g. "molO2/day/kg"
+
+
+========================== convert_DO() ============================
+- Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure! However - a rate conversion function would be very useful
+- Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
+
+
+========================== unit_args() ============================
+- updated for new units (time in days, oxygen in mol, %O2) and more detail of which functions accept which units

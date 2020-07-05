@@ -356,6 +356,7 @@ is.crbg.2col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) == 2) return(TRUE) else
     return(FALSE)
   }
+
 ## validate that an input is a calc_rate.bg object with multiple column dataframe
 is.crbg.multi.col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) > 2) return(TRUE) else

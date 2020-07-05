@@ -5,7 +5,7 @@
 \alias{sardine.rd}
 \title{Respirometry data of the sardine, \emph{Sardinops sagax}}
 \format{
-A data frame object consisting of 2 columns (time and \% oxygen
+A data frame object consisting of 2 columns (time and \\% oxygen
 saturation) and 7513 rows (approx 2.1h of data).
 }
 \usage{

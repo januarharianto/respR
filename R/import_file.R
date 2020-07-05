@@ -115,9 +115,9 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".csv") {
     cat("PreSens OxyView .csv file detected\n\n")
     out <- parse_oxyview_csv(path, dec = dec)
-  } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
-    cat("PreSens OxyView file detected\n\n")
-    out <- parse_oxyview(path, dec = dec)
+  # } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
+  #   cat("PreSens OxyView file detected\n\n")
+  #   out <- parse_oxyview(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
     cat("PreSens OXY4 file detected\n\n")
     out <- parse_oxy4(path, dec = dec)
@@ -141,7 +141,10 @@ import_file <- function(path, export = FALSE) {
   This is an AutoResp metadata file, and contains no raw time~O2 data.
   It may contain other experimentally useful values (e.g. mass and volume).
   Please import the associated file appended with \"_raw\" which contains time~O2 data." )
-
+    ## PreSens Datamanager
+  } else if (suppressWarnings(any(grepl("PreSens Datamanager", raw[1:20])))) {
+    cat("PreSens Datamanager output file detected\n\n")
+    out <- parse_datamanager(path, dec = dec)
   } else stop("Source file cannot be identified.
               Please contact the developers with a sample of your file.
               Import halted.")
@@ -590,6 +593,33 @@ parse_presens <- function(path, dec = dec) {
 
 }
 
+
+# Presens datamanager ----------------------------------------------------------
+
+parse_datamanager <- function(path, dec = dec) {
+  # import raw data:
+  raw <- data.table::fread(myPath, fill = TRUE, skip = 1, dec = dec)
+  
+  # below is code to clean the data file
+  # TODO perhaps a clean function could be used hmm
+  # # clean if necessary:
+  # if (clean) {
+  #   out <- raw[, c(
+  #     "Date",
+  #     "Time",
+  #     "delta_t",
+  #     "Value",
+  #     "Phase",
+  #     "Amplitude",
+  #     "Temp",
+  #     "patm",
+  #     "Salinity"
+  #   )]
+  # } else
+  #   out <- raw
+  out <- raw
+  return(out)
+}
 
 
 # NeoFox ------------------------------------------------------------------
