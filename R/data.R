@@ -71,13 +71,13 @@
 #'
 #' A single experiment on the sardine species *Sardinops sagax* in a Loligo
 #' Systems swim tunnel and Witrox oxygen probe system. Oxygen content recorded
-#' in \% oxygen saturation. Temperature, salinity and atmospheric pressure are
-#' supplied below to allow for conversion to concentration units.
+#' in % air saturation. Temperature, salinity and atmospheric pressure are
+#' supplied below to allow for conversion to oxygen concentration units.
 #'
 #' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
 #' Grove, California.
 #'
-#' - Dissolved oxygen units: \% $O_2$ saturation
+#' - Dissolved oxygen units: % air saturation
 #' - Temperature (°C): 15
 #' - Salinity: 35
 #' - Atm. Pressure (kPa): 1.013253
@@ -87,7 +87,7 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of 2 columns (time and \% oxygen
+#' @format A data frame object consisting of 2 columns (time and % oxygen
 #'   saturation) and 7513 rows (approx 2.1h of data).
 "sardine.rd"
 
@@ -106,18 +106,18 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of and 935 rows (approx 16 mins of
+#' @format A data frame object consisting of 935 rows (approx 16 mins of
 #'   data),and 4 columns: time, oxygen inflow and outflow concentrations, and
 #'   oxygen delta (the difference between inflow and outflow concentrations).
 "flowthrough.rd"
 
 
-#' Output objects for the function `test_lin()`
+#' Output objects for the function `test_lin`
 #'
 #' This data contains the results of 9 separate performance checks
-#' on `auto_rate()`'s linear detection algorithm (i.e. `method = "linear"`).
+#' on the `auto_rate` linear detection algorithm (i.e. `method = "linear"`).
 #' These test results are used to assess and discuss the performance of
-#' `auto_rate()` in our online vignette.
+#' `auto_rate` in our online vignette.
 #'
 #' @author Januar Harianto
 #' @format List of multiple output objects of class `test_lin`.
@@ -133,8 +133,10 @@
 #' random noise, and volume and mass below are not the actual values from the
 #' experiment, but for example only.
 #'
-#' Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
-#' 0.1 - Specimen wet mass (kg): 0.001
+#' Dissolved oxygen units: mg/L
+#' - Time units: seconds
+#' - Chamber volume (L): 0.1
+#' - Specimen wet mass (kg): 0.001
 #'
 #' Replicate structure (Rows - Experiment section)
 #' - 1:4999 - Start background recording
@@ -145,5 +147,48 @@
 #' @md
 #' @author Davide Thambithurai
 #' @format A data frame object consisting of 2 columns (time and dissolved
-#'   oxygen) and 79,251 rows (approx 22h of data).
+#'   oxygen) and 79251 rows (approx 22h of data).
 "zeb_intermittent.rd"
+
+
+#' Background respirometry data (linear)
+#'
+#' Linear background oxygen consumption data. After initial 30 minutes, data
+#' shows a generally linear background rate. Taken from a Loligo swim tunnel
+#' background recording. Oxygen recorded via a Witrox sensor in % air saturation
+#' over nearly 6 hours at 1 second intervals. Data is from a real experiment,
+#' but decrease in oxygen has been slightly exaggerated for testing purposes.
+#'
+#' - Dissolved oxygen units: % Air Saturation
+#' - Time units: seconds
+#' - Swim tunnel volume: 12.3 L
+#' - Temperature: 14.5 C
+#' - Salinity: 34 ppt
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
+#'   2 columns: time in seconds, oxygen in % air saturation.
+"background_lin.rd"
+
+
+#' Background respirometry data (exponential)
+#'
+#' Exponential background oxygen consumption data. Data shows a generally
+#' increasing background rate. Taken from a Loligo swim tunnel background
+#' recording. Oxygen recorded via a Witrox sensor in % air saturation over
+#' nearly 6 hours at 1 second intervals. Data is from a real experiment, but
+#' oxygen decrease curve has been exaggerated to impose an exponential increase
+#' in background consumption for testing purposes.
+#'
+#' - Dissolved oxygen units: % Air Saturation
+#' - Time units: seconds
+#' - Swim tunnel volume: 12.3 L
+#' - Temperature: 14.5 C
+#' - Salinity: 34 ppt
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
+#'   2 columns: time in seconds, oxygen in % air saturation.
+"background_exp.rd"

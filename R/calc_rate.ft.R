@@ -64,11 +64,11 @@ calc_rate.ft <- function(x = NULL, outflow.o2 = NULL, inflow.o2 = NULL,
   if (any(class(x) %in% "inspect_data")) {
 
     # Object is of class `inspect_data`. Validate.
-    if (length(x$df) < 3)
+    if (length(x$dataframe) < 3)
       stop("Looks like you used the wrong `inspect_data` object here.")
 
     # Extract data from object.
-    df      <- x$df
+    df      <- x$dataframe
     inflow.o2  <- df$inflow
     outflow.o2 <- df$outflow
     message("NOTE: `inspect_data` has been deprecated. Please use `inspect` instead.")

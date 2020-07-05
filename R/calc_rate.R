@@ -78,7 +78,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
 
   # Extract data.frame from inspect functions
-  if(any(class(x) %in% "inspect_data")) x <- x$df # this will be removed later
+  if(any(class(x) %in% "inspect_data")) x <- x$dataframe # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
 
   # By now, x input must be a data frame object
@@ -120,8 +120,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
   # Generate output
   out <- list(
-    data = x,
-    from = from, to = to, by = by,
+    dataframe = x,
+    from = from,
+    to = to,
+    by = by,
     subsets = dt,
     summary = rdt,
     rate = rate,

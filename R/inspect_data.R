@@ -232,7 +232,7 @@ Please use the `inspect` function instead.")
     title(main = "Rolling Regression of Rate vs Index (Row No.) at .2 width",
       line = 0.3)
   }
-  out <- list(df = dt, highlights = highlights)
+  out <- list(dataframe = dt, highlights = highlights)
 
   class(out) <- "inspect_data"
   return(invisible(out))

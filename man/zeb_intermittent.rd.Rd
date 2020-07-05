@@ -20,8 +20,12 @@ random noise, and volume and mass below are not the actual values from the
 experiment, but for example only.
 }
 \details{
-Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
-0.1 - Specimen wet mass (kg): 0.001
+Dissolved oxygen units: mg/L
+\itemize{
+\item Time units: seconds
+\item Chamber volume (L): 0.1
+\item Specimen wet mass (kg): 0.001
+}
 
 Replicate structure (Rows - Experiment section)
 \itemize{

@@ -64,7 +64,7 @@ subset_data <- function(x, from, to, by = "time") {
 
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect_data")) {
-    dt <- data.table(x$df)
+    dt <- data.table(x$dataframe)
   } else if (any(class(x) %in% "inspect")) {
     dt <- data.table(x$dataframe)
   } else dt <- data.table(x)
@@ -102,6 +102,6 @@ subset_data <- function(x, from, to, by = "time") {
     x$dataframe <- out
     return(invisible(x))
   } else if (any(class(x) %in% "inspect_data")) {
-    x$df <- out
+    x$dataframe <- out
   } else return(invisible(out))
 }

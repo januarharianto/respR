@@ -322,7 +322,7 @@ is.sn <- function(x){
   }
 
 ## validate that an input is a single numeric value OR calc_rate/auto_rate object
-is.sn.or.crar <- function(x){
+is.sn.cr.ar <- function(x){
   if(((is.numeric(x) && length(x) == 1)) ||  class(x) %in% c("calc_rate", "auto_rate")) return(TRUE) else
     return(FALSE)
   }
@@ -333,7 +333,7 @@ is.nv.cr.ar <- function(x){
     return(FALSE)
   }
 
-## validate that an input is numeric vector OR calc_rate/auto_rate object
+## validate that an input is numeric vector OR calc_rate.bg object
 is.nv.crbg <- function(x){
   if((is.numeric(x)) ||  class(x) %in% c("calc_rate.bg")) return(TRUE) else
     return(FALSE)
@@ -351,11 +351,13 @@ is.cr.ar <- function(x){
     return(FALSE)
   }
 
-## validate that an input is a calc_rate/auto_rate object
+## validate that an input is a calc_rate.bg object with 2 column dataframe
 is.crbg.2col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) == 2) return(TRUE) else
     return(FALSE)
   }
+
+## validate that an input is a calc_rate.bg object with multiple column dataframe
 is.crbg.multi.col <- function(x){
   if(class(x) %in% c("calc_rate.bg") && length(x$dataframe) > 2) return(TRUE) else
     return(FALSE)

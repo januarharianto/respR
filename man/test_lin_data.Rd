@@ -12,9 +12,9 @@ test_lin_data
 }
 \description{
 This data contains the results of 9 separate performance checks
-on \code{auto_rate()}'s linear detection algorithm (i.e. \code{method = "linear"}).
+on the \code{auto_rate} linear detection algorithm (i.e. \code{method = "linear"}).
 These test results are used to assess and discuss the performance of
-\code{auto_rate()} in our online vignette.
+\code{auto_rate} in our online vignette.
 }
 \author{
 Januar Harianto

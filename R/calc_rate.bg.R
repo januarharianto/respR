@@ -45,7 +45,7 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
     x <- data.frame(x$dataframe)
   } else if(any(class(x) %in% "inspect_data")) {
     message("calc_rate.bg: `inspect_data` input detected")
-    x <- data.frame(x$df)
+    x <- data.frame(x$dataframe)
   } else {
     message("calc_rate.bg: `data.frame` input detected")
     x <- data.frame(x)}
@@ -74,9 +74,13 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
   rownames(coefs) <- c("Intercept", "Rate")
   # Generate output:
   bg <- unname(coefs[2, ])
-  out <- list(data = dt, lm = fit, results = coefs, bgrate = bg,
-    mean = mean(bg))
+  out <- list(dataframe = dt,
+              lm = fit,
+              results = coefs,
+              bgrate = bg,
+              mean = mean(bg))
   class(out) <- "calc_rate.bg"
+
   # Plot data:
   if (plot) plot(out)
   return(out)
@@ -105,8 +109,8 @@ plot.calc_rate.bg <- function(object, ...) {
   cat("\n# plot.calc_rate.bg # -------------------\n")
   par(mfrow = n2mfrow(length(object$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
-  lapply(1:length(object$bgrate), function(z) sub.p(data.frame(object$data[[1]],
-    object$data[[z + 1]]), rsq = NULL, title = F))
+  lapply(1:length(object$bgrate), function(z) sub.p(data.frame(object$dataframe[[1]],
+    object$dataframe[[z + 1]]), rsq = NULL, title = F))
   cat("Done.\n")
   cat("-----------------------------------------\n")
 

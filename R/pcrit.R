@@ -67,7 +67,7 @@ It will not be updated and will be removed in a future version of respR.
 Please use the `calc_pcrit` function instead.")
 
   # Data validation.
-  if (any(class(df) %in% "inspect_data")) df <- df$df
+  if (any(class(df) %in% "inspect_data")) df <- df$dataframe
   if (any(class(df) %in% "inspect")) df <- df$dataframe
   if (!is.data.frame(df)) stop("Input must be data.frame object.")
   if (width > nrow(df)) stop("`width` input is bigger than length of data.")
@@ -125,7 +125,7 @@ Please use the `calc_pcrit` function instead.")
   # Generate output
 
   out <- list(
-    df = dt,
+    dataframe = dt,
     mr.df = rdt,
     has.rate = has.rate,
     width = width,
@@ -197,7 +197,7 @@ plot.pcrit <- function(x, ...) {
   if (x$has.rate) {
     # No plot here :D
   } else {
-    plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
+    plot(x$dataframe, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
       panel.first = grid(lwd = .7))
     abline(h = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
     abline(h = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)

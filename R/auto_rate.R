@@ -201,6 +201,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
                 rate    = output$results$rate_b1,
                 metadata = metadata)
 
+
   } else if (method == 'interval') {
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
@@ -240,6 +241,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
                 rate    = output$results$rate_b1,
                 metadata = metadata)
 
+
   } else if (method == 'linear') {
     output <- auto_rate_linear(dt, win)
     metadata <- data.table(width = win, by = by, method = method,
@@ -262,6 +264,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     out$summary$density <- out$peaks$density
 
   } else stop("auto_rate: 'method' argument not recognised")
+
 
   class(out) <- 'auto_rate'
 
@@ -326,7 +329,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   # DEFINE OBJECTS
-  dt <- object$df
+  dt <- object$dataframe
   start <- object$summary$row[pos]
   end <- object$summary$endrow[pos]
   sdt <- dt[start:end]
