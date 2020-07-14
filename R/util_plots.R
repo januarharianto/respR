@@ -145,25 +145,29 @@ plot_multi_ar <- function(x, n = 9){
 
   nres <- length(x$rate) ## no. of results
   df <- x$dataframe
+  summ <- as.data.frame(x$summary)
+  # summary table rank column for creating title
+  # this replaces $density if linear auto_rate method
+  # but we don't use it here anyway.
+  summ[[8]] <- 1:nrow(summ)
 
   if(nres == 0) {
-    message("No rates to plot...")
+    message("subset_rate: No rates to plot...")
     return()}
-  if(nres > n) message(glue::glue("Plotting first {n} filtered rate results only..."))
-  if(nres < n) n <- length(x$rate)
-  x$summary$rank <- 1:n # summary table rank column for creating title
+  if(nres > n) message(glue::glue("subset_rate: Plotting first {n} of {nres} subset rate results only..."))
+  if(nres < n) n <- nres
 
   ## save all ggplot2 plots to list
-  all_plots <- apply(x$summary[1:n,], 1, function(q) {
+  all_plots <- apply(summ[1:n,], 1, function(q) {
 
     start <- q[1]
     end <- q[2]
     rate <- q[6]
-    rank <- q[9]
+    rank <- q[8]
 
     rdf <- df[start:end]
-    slope <- lm(rdf$y ~ rdf$x)$coefficients[2]
-    intercept <- lm(rdf$y ~ rdf$x)$coefficients[1]
+    slope <- q[6]
+    intercept <- q[5]
 
     plt <-
       ggplot() +
@@ -177,7 +181,7 @@ plot_multi_ar <- function(x, n = 9){
       geom_point(aes(x = rdf$x, y = rdf$y),
                  color = "yellow1") +
       stat_smooth(method = "lm") +
-      ggtitle(glue::glue("Row {rank}, Rate = {signif(rate, digits = 3)}"))
+      ggtitle(glue::glue("Rank {rank} of {nres}\nRate = {signif(rate, digits = 3)}"))
 
     ## turns out clipping an lm in ggplot is a PITA...
     plt <- plt + geom_segment(
@@ -192,7 +196,7 @@ plot_multi_ar <- function(x, n = 9){
 
   grd <- cowplot::plot_grid(plotlist = all_plots)
   show(grd)
-  on.exit(par(parorig)) # revert par settings to original
+  on.exit(suppressWarnings(par(parorig))) # revert par settings to original
 }
 
 

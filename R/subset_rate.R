@@ -485,7 +485,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(method == "manual"){
     # check within range of summary length
     if(!all(n %in% 1:nrow(x$summary))) stop("subset_rate: For 'manual' method: 'n' values are out of range of $summary data.frame rows...")
-    message(glue::glue("subset_rate: Subsetting selected rows of the $summary data.frame..."))
+    message(glue::glue("subset_rate: Subsetting selected rows of the '$summary' table..."))
     n_order <- sort(n) # in case entered wrong way round
     keep <- n_order
   }
