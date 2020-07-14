@@ -26,7 +26,7 @@ test_that("auto_rate accepts multi column dataset", {
 
 test_that("auto_rate subsets out 2 columns from larger dataset", {
   ar <- suppressWarnings(auto_rate(urchins.rd))
-  expect_equal(ncol(ar$df), 2)
+  expect_equal(ncol(ar$dataframe), 2)
 })
 
 test_that("auto_rate stops with malformed method", {
@@ -40,7 +40,7 @@ test_that("auto_rate works using default arguments", {
             "auto_rate")
   expect_is(ar$rate,
             "numeric")
-  expect_is(ar$df,
+  expect_is(ar$dataframe,
             "data.frame")
 })
 

@@ -109,7 +109,7 @@
 #'  c(0.05, 0.08)`. To retain all rates with a R-Squared above 0.90: `method =
 #'  'rsq', n = c(0.9, 1)`. The `row` and `time` ranges refer to the
 #'  `$row`-`$endrow` or `$time`-`$endtime` columns and original data source
-#'  (`$df` element of the input), and can be used to constrain results to rates
+#'  (`$dataframe` element of the input), and can be used to constrain results to rates
 #'  from particular regions of the data (although usually a better option is to
 #'  \code{\link{subset_data}} prior to analysis). Note, `time` is not the same
 #'  as `duration` - see later section.
@@ -427,7 +427,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   # row range ---------------------------------------------------------------
   if(method == "row"){
     if(length(n) != 2) stop("subset_rate: For 'row' method 'n' must be a vector of two values.")
-    if(any(n > dim(x$df)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
+    if(any(n > dim(x$dataframe)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
 
     message(glue::glue("subset_rate: Subsetting rates which occur only between original data rows {n[1]} and {n[2]}..."))
 
@@ -443,7 +443,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use original data row(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
 
     if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
-    if(any(n > dim(x$df)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
+    if(any(n > dim(x$dataframe)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
 
     # which regs span n?
     n_order <- sort(n) # in case entered wrong way round
@@ -455,7 +455,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   # time range --------------------------------------------------------------
   if(method == "time"){
     if(length(n) != 2) stop("subset_rate: For 'time' method 'n' must be a vector of two values.")
-    if(any(n < range(x$df[[1]])[1]) || any(n > range(x$df[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
+    if(any(n < range(x$dataframe[[1]])[1]) || any(n > range(x$dataframe[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
 
     message(glue::glue("subset_rate: Subsetting rates which occur only between times {n[1]} and {n[2]}..."))
 
@@ -471,7 +471,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     if(length(n) > 2) stop("subset_rate: For 'time_omit' method 'n' must be a single value or vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use time value(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
     if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
-    if(any(n < range(x$df[[1]])[1]) || any(n > range(x$df[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
+    if(any(n < range(x$dataframe[[1]])[1]) || any(n > range(x$dataframe[[1]])[2])) stop("subset_rate: Input for 'n': time inputs out of time data range.")
 
     # which regs span n?
     n_order <- sort(n) # in case entered wrong way round
