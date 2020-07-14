@@ -41,13 +41,10 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {
-    message("calc_rate.bg: `inspect` input detected")
     x <- data.frame(x$dataframe)
   } else if(any(class(x) %in% "inspect_data")) {
-    message("calc_rate.bg: `inspect_data` input detected")
     x <- data.frame(x$dataframe)
   } else {
-    message("calc_rate.bg: `data.frame` input detected")
     x <- data.frame(x)}
 
   ## if NULL use col1 for time, all other cols for oxygen

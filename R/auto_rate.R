@@ -149,7 +149,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -164,7 +164,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -178,7 +178,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_max(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -192,7 +192,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -206,7 +206,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -219,7 +219,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_highest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -232,7 +232,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
     output <- auto_rate_lowest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -248,7 +248,7 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
                            total_regs = nrow(output$roll),
                            total_peaks = nrow(output$peaks),
                            kde_bw = output$density$bw)
-    out <- list(df = dt,
+    out <- list(dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
@@ -329,7 +329,7 @@ plot.auto_rate <- function(object, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   # DEFINE OBJECTS
-  dt <- object$df
+  dt <- object$dataframe
   start <- object$summary$row[pos]
   end <- object$summary$endrow[pos]
   sdt <- dt[start:end]
