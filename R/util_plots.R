@@ -144,13 +144,14 @@ plot_multi_ar <- function(x, n = 9){
   parorig <- par(no.readonly = TRUE) # save original par settings
 
   nres <- length(x$rate) ## no. of results
-  df <- x$df
+  df <- x$dataframe
 
   if(nres == 0) {
     message("No rates to plot...")
     return()}
   if(nres > n) message(glue::glue("Plotting first {n} filtered rate results only..."))
   if(nres < n) n <- length(x$rate)
+  x$summary$rank <- 1:n # summary table rank column for creating title
 
   ## save all ggplot2 plots to list
   all_plots <- apply(x$summary[1:n,], 1, function(q) {
@@ -158,6 +159,7 @@ plot_multi_ar <- function(x, n = 9){
     start <- q[1]
     end <- q[2]
     rate <- q[6]
+    rank <- q[9]
 
     rdf <- df[start:end]
     slope <- lm(rdf$y ~ rdf$x)$coefficients[2]
@@ -165,7 +167,7 @@ plot_multi_ar <- function(x, n = 9){
 
     plt <-
       ggplot() +
-      theme(plot.title = element_text(hjust = 1, family = "mono")) +
+      theme(plot.title = element_text(hjust = 1, family = "mono", size = 10)) +
       theme(plot.margin = margin(0.1, 0.1, 0, 0, "cm")) +
       geom_point(aes(x = df$x,
                      y = df$y),
@@ -175,7 +177,7 @@ plot_multi_ar <- function(x, n = 9){
       geom_point(aes(x = rdf$x, y = rdf$y),
                  color = "yellow1") +
       stat_smooth(method = "lm") +
-      ggtitle(glue::glue("Rate = {signif(rate, digits = 3)}"))
+      ggtitle(glue::glue("Row {rank}, Rate = {signif(rate, digits = 3)}"))
 
     ## turns out clipping an lm in ggplot is a PITA...
     plt <- plt + geom_segment(
@@ -215,7 +217,7 @@ plot_overlaps <- function(x){
     miny <- 0
     minx <- 0
     if(is.data.frame(x))maxx <- max(x$endrow) else
-      maxx <- nrow(x$df)
+      maxx <- nrow(x$dataframe)
 
     if(("original" %in% names(x))) {
       o_df <- x$original$summary
