@@ -30,10 +30,11 @@ A list object of class \code{calc_rate}.
 \code{calc_rate} calculates the rate of change in oxygen concentration over time
 in a data frame. You can perform a single regression on a subset of the data
 frame by calling the \code{from} and \code{to} arguments to specify the data region in
-terms of \code{oxygen} or \code{time} units, \code{row} region of the input data, or a
-\code{proportion} of the total oxygen used. Multiple regressions can be
-performed by using these arguments to enter equal length vectors of paired
-values in the appropriate metric.
+terms of \code{oxygen} or \code{time} units, \code{row} region of the input data, or over a
+\code{proportion} of the total oxygen used or produced (note, this last option works
+poorly with noisy or fluctuating data). Multiple rates can
+be calculated by using these arguments to enter vectors of paired values in
+the appropriate metric. See Examples.
 }
 \details{
 The results are plotted by default with various summary statistics for the
@@ -64,12 +65,14 @@ x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
 summary(x)
 plot(x)
 
-# Using a vector in 'from' and 'to' perform multiple measurements:
+# Using a vector in 'from' and 'to' perform multiple rate calculations:
 x <- calc_rate(intermittent.rd,
-               c(200,2300,4100),
-               c(1800,3200,4600),
+               from = c(200,2300,4100),
+               to = c(1800,3200,4600),
                by = 'time',
                plot = FALSE)
+# View all rates
+summary(x)
 # Plot the third of these results
 plot(x, pos = 3)
 }

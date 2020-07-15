@@ -4,10 +4,11 @@
 #' `calc_rate` calculates the rate of change in oxygen concentration over time
 #' in a data frame. You can perform a single regression on a subset of the data
 #' frame by calling the `from` and `to` arguments to specify the data region in
-#' terms of `oxygen` or `time` units, `row` region of the input data, or a
-#' `proportion` of the total oxygen used. Multiple regressions can be
-#' performed by using these arguments to enter equal length vectors of paired
-#' values in the appropriate metric.
+#' terms of `oxygen` or `time` units, `row` region of the input data, or over a
+#' `proportion` of the total oxygen used or produced (note, this last option works
+#' poorly with noisy or fluctuating data). Multiple rates can
+#' be calculated by using these arguments to enter vectors of paired values in
+#' the appropriate metric. See Examples.
 #'
 #' The results are plotted by default with various summary statistics for the
 #' regression. If multiple rates are determined, only the first is plotted.
@@ -58,12 +59,14 @@
 #' summary(x)
 #' plot(x)
 #'
-#' # Using a vector in 'from' and 'to' perform multiple measurements:
+#' # Using a vector in 'from' and 'to' perform multiple rate calculations:
 #' x <- calc_rate(intermittent.rd,
-#'                c(200,2300,4100),
-#'                c(1800,3200,4600),
+#'                from = c(200,2300,4100),
+#'                to = c(1800,3200,4600),
 #'                by = 'time',
 #'                plot = FALSE)
+#' # View all rates
+#' summary(x)
 #' # Plot the third of these results
 #' plot(x, pos = 3)
 
@@ -82,12 +85,12 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   if(any(class(x) %in% "inspect")) x <- x$dataframe
 
   # By now, x input must be a data frame object
-  if(!is.data.frame(x)) stop("Input must be a data.frame object.")
+  if(!is.data.frame(x)) stop("calc_rate: Input must be a data.frame object.")
 
   # Format as data.table
   x <- data.table::data.table(x)
   if (length(x) > 2) {
-    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
+    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate()")
     x <- x[, 1:2]
   }
 
@@ -163,7 +166,6 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 plot.calc_rate <- function(object, pos = 1, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
-  on.exit(par(parorig)) # revert par settings to original
 
   if(is.null(pos)) pos <- 1
   if(pos > length(object$rate))
@@ -171,7 +173,7 @@ plot.calc_rate <- function(object, pos = 1, ...) {
 
   cat("\n# plot.calc_rate # ----------------------\n")
   cat('Plotting calc_rate result from position', pos, 'of', length(object$rate), '... \n')
-  df  <- object$data
+  df  <- object$dataframe
   sdf <- object$subsets[[pos]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
@@ -185,6 +187,7 @@ plot.calc_rate <- function(object, pos = 1, ...) {
   cat("-----------------------------------------\n")
 
   return(invisible(object))
+  on.exit(par(parorig)) # revert par settings to original
 }
 
 #' @export

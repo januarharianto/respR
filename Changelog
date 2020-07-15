@@ -22,7 +22,6 @@ Quick fixes and changes.
 Fixes
 - FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
-- FIX: subset_data() - fix for failure with inspect() objects
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
 - FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
@@ -53,13 +52,11 @@ NEW
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
 - CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
-- CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
 - CHANGE: calc_rate.bg - Removed "input detected" message at start - other functions don't have this
 - CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
 - CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
-- CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
 - NEW: import_file now supports Presens Datamanager files
 
 
@@ -172,3 +169,15 @@ Other changes
 - NEW: Now works on vectors as well as data frames
 - NEW: Added 'length.out' argument which uniformly subsamples to exact number of rows (data frame) or length (vectors)
 - FIX: Now works and plots correctly (first data column only) with multicolumn data frames
+
+
+
+========================== calc_rate() ============================
+- CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
+- CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
+- FIX - by = "proportion" now works correctly with oxygen production data
+
+
+========================== subset_data() ============================
+- FIX: subset_data() - fix for failure with inspect() objects
+- FIX: by = "proportion" now works correctly with oxygen production data

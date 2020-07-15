@@ -139,25 +139,36 @@ truncate_data <- function(x, from, to, by) {
     out <- dt[from:to]
   }
   if (by == "o2" & length(dt) == 2) {
-    top <- Position(function(z) z <= from, dt[[2]])
+    start <- Position(function(z) z <= from, dt[[2]])
 
     ## this is new
     ## if less than min o2 value, match pos of min o2 value
     ## else pos of the actual to value
     if(to < min(dt[[2]])){
-      bot <- Position(function(z) z <= min(dt[[2]]), dt[[2]])
+      end <- Position(function(z) z <= min(dt[[2]]), dt[[2]])
     } else {
-      bot <- Position(function(z) z <= to, dt[[2]])
+      end <- Position(function(z) z <= to, dt[[2]])
     }
 
-    out <- dt[top:bot]
+    out <- dt[start:end]
   }
   if (by == "proportion") {
     mx <- max(dt[[2]])
     mn <- min(dt[[2]])
-    top <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])
-    bot <- Position(function(z) z <= (to * (mx - mn) + mn), dt[[2]])
-    out <- dt[top:bot]
+    ## all this to deal with oxy production too
+    lower <- sort(c(from, to))[1]
+    upper <- sort(c(from, to))[2]
+    # all data between these
+    ## - this is actually not ideal. In strongly fluctuating data/intermittent data this will not work
+    ## very well at all.
+    start <- min(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
+    end <- max(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
+
+    # Old method - only works with oxy decrease
+    #start <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])
+    #end <- Position(function(z) z <= (to * (mx - mn) + mn), dt[[2]])
+
+    out <- dt[start:end]
   }
   return(out)
 }
