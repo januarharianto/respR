@@ -156,8 +156,8 @@ inspect <- function(df, time = 1, oxygen = 2, width = 0.1, plot = TRUE) {
   if(any(oxygen > length(df))) stop("inspect: Selected 'oxygen' column(s) not present in the input.") else
     yval <- lapply(1:length(df[oxygen]), function(z) df[oxygen][[z]])
 
-  x_results <- respR:::check_timeseries(xval, "time")
-  y_results <- respR:::check_timeseries(yval, "oxygen")
+  x_results <- check_timeseries(xval, "time")
+  y_results <- check_timeseries(yval, "oxygen")
 
   # issue warnings
   if (any(unlist(x_results[[1]][1,])))

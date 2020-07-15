@@ -1718,11 +1718,13 @@ apply(num_mat, 1, function(z) {
   ## build assertion so we know which test fails
   assertion <- glue::glue("adjust_rate: method = 'linear' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
 
-  test_that(assertion,
-            expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                      by = by, time_by = time_by,
-                                                      by2 = by2, time_by2 = time_by2))$adjusted.rate,
-                         o_x - o_adj))
+  test_that(assertion,{
+    skip_on_cran()
+    expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
+                                              by = by, time_by = time_by,
+                                              by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                 o_x - o_adj)
+  })
 
 })
 
@@ -2297,11 +2299,13 @@ apply(num_mat, 1, function(z) {
   ## build assertion so we know which test fails
   assertion <- glue::glue("adjust_rate: method = 'exponential' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
 
-  test_that(assertion,
-            expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                      by = by, time_by = time_by,
-                                                      by2 = by2, time_by2 = time_by2))$adjusted.rate,
-                         o_x - o_adj))
+  test_that(assertion, {
+    skip_on_cran()
+    expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
+                                              by = by, time_by = time_by,
+                                              by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                 o_x - o_adj)
+  })
 
 })
 
@@ -2432,11 +2436,13 @@ apply(num_mat, 1, function(z) {
   ## build assertion so we know which test fails
   assertion <- glue::glue("adjust_rate: method = 'exponential' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
 
-  test_that(assertion,
-            expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                      by = by, time_by = time_by,
-                                                      by2 = by2, time_by2 = time_by2))$adjusted.rate,
-                         o_x - o_adj))
+  test_that(assertion, {
+    skip_on_cran()
+    expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
+                                              by = by, time_by = time_by,
+                                              by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                 o_x - o_adj)
+  })
 
 })
 

@@ -598,8 +598,8 @@ parse_presens <- function(path, dec = dec) {
 
 parse_datamanager <- function(path, dec = dec) {
   # import raw data:
-  raw <- data.table::fread(myPath, fill = TRUE, skip = 1, dec = dec)
-  
+  raw <- data.table::fread(path, fill = TRUE, skip = 1, dec = dec)
+
   # below is code to clean the data file
   # TODO perhaps a clean function could be used hmm
   # # clean if necessary:
@@ -676,8 +676,9 @@ parse_oxyview_txt <- function(path, dec = dec) {
 
 # Internal Functions ------------------------------------------------------
 
-## Identify decimal character
-## For European formatted files with commas as decimal separator
+#' Identify decimal character
+#' For European formatted files with commas as decimal separator
+#'
 #' @keywords internal
 #' @export
 get_dec <- function(path){

@@ -17,10 +17,12 @@
 #'   entire dataset and *automatically identify* the most linear regions of the
 #'   timeseries. This is achieved by using the smoothing bandwidth of the KDE to
 #'   re-sample the "peaks" in the KDE to determine linear regions of the data.
-#'   See \code{\link{here(to follow)}} for full details. The summary output will
-#'   contain only the regressions identified as coming from linear regions of
-#'   the data, ranked by order of the KDE density analysis. This is present in
-#'   the `$summary` component of the output as `$density`.
+#'   See
+#'   \href{https://januarharianto.github.io/respR/articles/auto_rate.html}{here}
+#'   for full details. The summary output will contain only the regressions
+#'   identified as coming from linear regions of the data, ranked by order of
+#'   the KDE density analysis. This is present in the `$summary` component of
+#'   the output as `$density`.
 #'
 #'   - `highest`: Every regression of the specified `width` across the entire
 #'   timeseries is calculated, then ordered using ***absolute*** rate values
