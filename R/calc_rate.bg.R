@@ -85,47 +85,47 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE) {
 
 
 #' @export
-print.calc_rate.bg <- function(object, ...) {
+print.calc_rate.bg <- function(x, ...) {
 
   cat("\n# print.calc_rate.bg # ------------------\n")
   cat("Background rate(s):\n")
-  print(object$bgrate)
+  print(x$bgrate)
   cat("Average background rate:\n")
-  print(object$mean)
+  print(x$mean)
   cat("-----------------------------------------\n")
-  return(invisible(object))
+  return(invisible(x))
 
 }
 
 #' @export
-plot.calc_rate.bg <- function(object, ...) {
+plot.calc_rate.bg <- function(x, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
   cat("\n# plot.calc_rate.bg # -------------------\n")
-  par(mfrow = n2mfrow(length(object$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
+  par(mfrow = n2mfrow(length(x$bgrate)), mai = c(0.4, 0.4, 0.1, 0.1),
     ps = 10, cex = 1, cex.main = 1)  # replace par settings
-  lapply(1:length(object$bgrate), function(z) sub.p(data.frame(object$dataframe[[1]],
-    object$dataframe[[z + 1]]), rsq = NULL, title = F))
+  lapply(1:length(x$bgrate), function(z) sub.p(data.frame(x$dataframe[[1]],
+    x$dataframe[[z + 1]]), rsq = NULL, title = F))
   cat("Done.\n")
   cat("-----------------------------------------\n")
 
-  return(invisible(object))
+  return(invisible(x))
 }
 
 #' @export
-mean.calc_rate.bg <- function(object, export = FALSE, ...){
+mean.calc_rate.bg <- function(x, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.bg # -------------------\n")
-  if(length(object$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg object. Returning mean rate anyway...")
-  n <- length(object$bgrate)
-  out <- mean(object$bgrate)
+  if(length(x$bgrate) == 1) warning("Only 1 rate found in calc_rate.bg x. Returning mean rate anyway...")
+  n <- length(x$bgrate)
+  out <- mean(x$bgrate)
   cat("Mean of", n, "background rates:\n")
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else
-      return(invisible(object))
+      return(invisible(x))
 }

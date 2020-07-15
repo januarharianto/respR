@@ -83,7 +83,7 @@ Changes
 ========================== S3 Methods ============================
 
 All
-- Changed primary input `x` to `object` for consistency across all (was in some, not in others)
+- Made inputs consistent (for .summary first input should be 'object', all others 'x' or causes CMD check error)
 - All summary S3 have `export = TRUE` for export of summary table/value
 - Added `return(invisible(object))` where missing to allow piping
 - All stop if 'pos' too high
@@ -175,9 +175,9 @@ Other changes
 ========================== calc_rate() ============================
 - CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
-- FIX - by = "proportion" now works correctly with oxygen production data
+- FIX - by = "proportion" now works correctly with oxygen production data (change to truncate_data)
 
 
 ========================== subset_data() ============================
 - FIX: subset_data() - fix for failure with inspect() objects
-- FIX: by = "proportion" now works correctly with oxygen production data
+- FIX: by = "proportion" now works correctly with oxygen production data (change to truncate_data)

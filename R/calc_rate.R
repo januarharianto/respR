@@ -143,12 +143,12 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
 
 
 #' @export
-print.calc_rate <- function(object, ...) {
+print.calc_rate <- function(x, ...) {
   cat("\n# print.calc_rate # ---------------------\n")
   cat("Rate(s):\n")
-  print(object$rate)
+  print(x$rate)
   cat("-----------------------------------------\n")
-  return(invisible(object))
+  return(invisible(x))
 }
 
 #' @export
@@ -163,18 +163,18 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate <- function(object, pos = 1, ...) {
+plot.calc_rate <- function(x, pos = 1, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
 
   if(is.null(pos)) pos <- 1
-  if(pos > length(object$rate))
-    stop("Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+  if(pos > length(x$rate))
+    stop("Invalid 'pos' rank: only ", length(x$rate), " rates found.")
 
   cat("\n# plot.calc_rate # ----------------------\n")
-  cat('Plotting calc_rate result from position', pos, 'of', length(object$rate), '... \n')
-  df  <- object$dataframe
-  sdf <- object$subsets[[pos]]
+  cat('Plotting calc_rate result from position', pos, 'of', length(x$rate), '... \n')
+  df  <- x$dataframe
+  sdf <- x$subsets[[pos]]
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
@@ -186,24 +186,24 @@ plot.calc_rate <- function(object, pos = 1, ...) {
   cat("Done.\n")
   cat("-----------------------------------------\n")
 
-  return(invisible(object))
+  return(invisible(x))
   on.exit(par(parorig)) # revert par settings to original
 }
 
 #' @export
-mean.calc_rate <- function(object, export = FALSE, ...){
+mean.calc_rate <- function(x, export = FALSE, ...){
 
   cat("\n# mean.calc_rate # ----------------------\n")
-  if(length(object$rate) == 1) warning("Only 1 rate found in calc_rate object. Returning mean rate anyway...")
-  n <- length(object$rate)
-  out <- mean(object$rate)
+  if(length(x$rate) == 1) warning("Only 1 rate found in calc_rate x. Returning mean rate anyway...")
+  n <- length(x$rate)
+  out <- mean(x$rate)
   cat("Mean of", n, "output rates:\n")
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else
-      return(invisible(object))
+      return(invisible(x))
 }
 
 # linear_fit --------------------------------------------------------------

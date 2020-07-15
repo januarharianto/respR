@@ -650,21 +650,21 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 
 
 #' @export
-print.adjust_rate <- function(object, pos = 1, ...) {
+print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\n# print.adjust_rate # -------------------\n")
   cat("Note: please consider the sign of the correction value when adjusting the rate.\n")
-  if(pos > length(object$adjusted.rate)) stop("Invalid 'pos' rank: only ", length(object$adjusted.rate), " adjusted rates found.")
-  cat("\nAdjustment was applied using '", object$adjustment.method, "' method.", sep = "")
+  if(pos > length(x$adjusted.rate)) stop("Invalid 'pos' rank: only ", length(x$adjusted.rate), " adjusted rates found.")
+  cat("\nAdjustment was applied using '", x$adjustment.method, "' method.", sep = "")
   cat("\n")
-  cat("\nRank", pos, "of", length(object$adjusted.rate), "adjusted rate(s):")
-  cat("\nInput rate    :", object$input.rate[pos])
-  cat("\nAdjustment    :", object$adjustment[pos])
-  cat("\nAdjusted rate :", object$adjusted.rate[pos])
+  cat("\nRank", pos, "of", length(x$adjusted.rate), "adjusted rate(s):")
+  cat("\nInput rate    :", x$input.rate[pos])
+  cat("\nAdjustment    :", x$adjustment[pos])
+  cat("\nAdjusted rate :", x$adjusted.rate[pos])
   cat("\n")
   cat("\nTo see all results use summary().\n")
   cat("-----------------------------------------\n")
 
-  return(invisible(object))
+  return(invisible(x))
 }
 
 #' @export
@@ -684,19 +684,19 @@ summary.adjust_rate <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-mean.adjust_rate <- function(object, export = FALSE, ...){
+mean.adjust_rate <- function(x, export = FALSE, ...){
 
   cat("\n# mean.adjust_rate # --------------------\n")
-  if(length(object$adjusted.rate) == 1) warning("Only 1 rate found in adjust_rate object. Returning mean rate anyway...")
-  n <- length(object$adjusted.rate)
-  out <- mean(object$adjusted.rate)
+  if(length(x$adjusted.rate) == 1) warning("Only 1 rate found in adjust_rate x. Returning mean rate anyway...")
+  n <- length(x$adjusted.rate)
+  out <- mean(x$adjusted.rate)
   cat("Mean of", n, "adjusted rates:\n")
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else
-      return(invisible(object))
+      return(invisible(x))
 }
 
 
