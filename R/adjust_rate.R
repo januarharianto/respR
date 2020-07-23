@@ -381,7 +381,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
       rate <- x$rate
     } else rate <- x
 
-    # Use mean value of bgrate for correction
+    # Use value for correction
     adjustment <- unname(unlist(bg1))
     out_model <- NULL
 
