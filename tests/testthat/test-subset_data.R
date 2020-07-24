@@ -44,7 +44,7 @@ test_that("subset_data works with variations of `by` input", {
 
 test_that("subset_data error with wrong by", {
   expect_error(subset_data(sardine.rd, by = "tttimmmeee"),
-               "`by` input not recognised")
+               "'by' input not recognised")
 })
 
 test_that("subset_data output can be printed", {
