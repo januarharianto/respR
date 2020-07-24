@@ -130,37 +130,49 @@ truncate_data <- function(x, from, to, by) {
   if (any(class(x) %in% "inspect")) x <- x$dataframe
 
   dt <- data.table::as.data.table(x)
+
+  ## time is ok, since it is always increasing
   if (by == "time") {
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]
   }
+  ## row is ok, since it is always increasing
   if (by == "row") {
-    ## Also new - check to row not too large
-    if(to > nrow(dt)) stop("`to` row is greater than total number of rows.")
+    ## Check rows within range
+    if(from > nrow(dt)) stop("'from' row is greater than total number of rows.")
+    ## Use last row if to row too large
+    if(to > nrow(dt)) to <- nrow(dt)
+
     out <- dt[from:to]
   }
+  ## o2 could be increasing or decreasing
   if (by == "o2" & length(dt) == 2) {
-    start <- Position(function(z) z <= from, dt[[2]])
 
-    ## this is new
-    ## if less than min o2 value, match pos of min o2 value
-    ## else pos of the actual to value
-    if(to < min(dt[[2]])){
-      end <- Position(function(z) z <= min(dt[[2]]), dt[[2]])
-    } else {
-      end <- Position(function(z) z <= to, dt[[2]])
-    }
+    # data range
+    o_range <- range(dt[[2]])
+
+    # use highest/lowest values if out of range
+    if(from > o_range[2]) from <- o_range[2] else
+      if(from < o_range[1]) from <- o_range[1]
+    if(to > o_range[2]) to <- o_range[2] else
+      if(to < o_range[1]) to <- o_range[1]
+
+    ## dplyr::between needs them in low-high order
+    lower <- sort(c(from, to))[1]
+    upper <- sort(c(from, to))[2]
+    # indices of data between these
+    start <- min(which(dplyr::between(dt[[2]], lower, upper)))
+    end <- max(which(dplyr::between(dt[[2]], lower, upper)))
 
     out <- dt[start:end]
   }
   if (by == "proportion") {
+    ## has to handle by proportion produced as well as consumed!
     mx <- max(dt[[2]])
     mn <- min(dt[[2]])
-    ## all this to deal with oxy production too
+    ## dplyr::between needs them in low-high order
     lower <- sort(c(from, to))[1]
     upper <- sort(c(from, to))[2]
-    # all data between these
-    ## - this is actually not ideal. In strongly fluctuating data/intermittent data this will not work
-    ## very well at all.
+    # indices of data between these
     start <- min(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     end <- max(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
 
@@ -196,11 +208,12 @@ verify_by <- function(by){
                        "pr", "Pr", "PR",
                        "p", "P")
 
-  if(by %in% time_variations) by <- "time"
+  if (is.null(by)) stop("'by' input is NULL")
+  else if(by %in% time_variations) by <- "time"
   else if(by %in% ox_variations) by <- "o2"
   else if(by %in% row_variations) by <- "row"
   else if(by %in% prop_variations) by <- "proportion"
-  else stop("`by` input not recognised")
+  else stop("'by' input not recognised")
 
   return(by)
 }

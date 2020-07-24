@@ -77,9 +77,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   ## verify by input
   by <- verify_by(by)
 
-  # Ensure "from" and "to" are same length:
-  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
-
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect_data")) x <- x$dataframe # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
@@ -97,6 +94,77 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # If 'from' and 'to' are NULL, we assume that the user is analysing all data
   if (all(sapply(list(from, to), is.null))) {
     from <- 1; to <- nrow(x); by <- "row"
+  }
+
+
+  # from/to checks  ---------------------------------------------------------
+
+  # Ensure "from" and "to" are same length:
+  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
+  # values of "from" and "to" can't be equal (for any metric):
+  if(any(mapply(function(p,q) p == q,
+                p = from,
+                q = to))) stop("calc_rate: some 'from' values are equal to the paired values in 'to'.")
+
+  if(by == "time"){
+    ## all 'from' should be less than its paired 'to'
+    if(any(mapply(function(p,q) p > q,
+                  p = from,
+                  q = to))) stop("calc_rate: some 'from' time values are later than the paired values in 'to'.")
+
+    t_range <- range(x[[1]])
+    if(any(sapply(from, function(z) z > t_range[2])))
+      stop("calc_rate: some 'from' time values are higher than the values present in 'x'.")
+    if(any(sapply(to, function(z) z < t_range[1])))
+      stop("calc_rate: some 'to' time values are lower than the values present in 'x'.")
+    if(any(sapply(from, function(z) z < t_range[1])))
+      message("calc_rate: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
+    if(any(sapply(to, function(z) z > t_range[2])))
+      message("calc_rate: some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
+  }
+
+  if(by == "row"){
+    if(any(mapply(function(p,q) p > q,
+                  p = from,
+                  q = to))) stop("calc_rate: some 'from' row numbers are higher than the paired values in 'to'.")
+
+    r_range <- range(1:nrow(x))
+    if(any(sapply(from, function(z) z > r_range[2])))
+      stop("calc_rate: some 'from' row numbers are beyond the number of rows present in 'x'.")
+    if(any(sapply(to, function(z) z > r_range[2])))
+      message("calc_rate: some 'to' row numbers are higher than the number of rows present in 'x'. The final row number will be used instead.")
+  }
+
+  if(by == "o2"){
+    o_range <- range(x[[2]])
+
+    ## can't have 'from' and 'to' both below or both above o2 range
+    if(any(mapply(function(p,q) p < o_range[1] && q < o_range[1],
+                  p = from,
+                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both below the range of oxygen data in 'x'.")
+    if(any(mapply(function(p,q) p > o_range[2] && q > o_range[2],
+                  p = from,
+                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both above the range of oxygen data in 'x'.")
+
+    ## if any 'from' or 'to' are above or below o2 range
+    if(any(sapply(from, function(z) z > o_range[2]))) {
+      message("calc_rate: some 'from' oxygen values are higher than the values in 'x'. The highest available value will be used instead.")
+    } else if(any(sapply(from, function(z) z < o_range[1]))) {
+      message("calc_rate: some 'from' oxygen values are lower than the values in 'x'. The lowest available value will be used instead.")
+    }
+
+    if(any(sapply(to, function(z) z > o_range[2]))) {
+      message("calc_rate: some 'to' oxygen values are higher than the values in 'x'. The highest available value will be used instead.")
+    } else if(any(sapply(to, function(z) z < o_range[1]))) {
+      message("calc_rate: some 'to' oxygen values are lower than the values in 'x'. The lowest available value will be used instead.")
+    }
+  }
+
+  if(by == "proportion"){
+    if(any(!(sapply(from, function(z) data.table::between(z, 0, 1)))))
+      stop("calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
+    if(any(!(sapply(to, function(z) data.table::between(z, 0, 1)))))
+      stop("calc_rate: for by = 'proportion' method, all 'to' values should be between 0 and 1.")
   }
 
   # Subset the data:
@@ -131,7 +199,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
     summary = rdt,
     rate = rate,
     rate_2pt = rdt$rate_twopoint
-    )
+  )
 
   class(out) <- "calc_rate"
 
@@ -183,7 +251,6 @@ plot.calc_rate <- function(x, pos = 1, ...) {
   sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
   residual.p(fit)  # residual plot
   qq.p(fit)  # qqplot
-  cat("Done.\n")
   cat("-----------------------------------------\n")
 
   return(invisible(x))
@@ -194,7 +261,7 @@ plot.calc_rate <- function(x, pos = 1, ...) {
 mean.calc_rate <- function(x, export = FALSE, ...){
 
   cat("\n# mean.calc_rate # ----------------------\n")
-  if(length(x$rate) == 1) warning("Only 1 rate found in calc_rate x. Returning mean rate anyway...")
+  if(length(x$rate) == 1) message("Only 1 rate found in calc_rate x. Returning mean rate anyway...")
   n <- length(x$rate)
   out <- mean(x$rate)
   cat("Mean of", n, "output rates:\n")

@@ -175,7 +175,10 @@ Other changes
 ========================== calc_rate() ============================
 - CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
-- FIX - by = "proportion" now works correctly with oxygen production data (change to truncate_data)
+- CHANGE: added a bunch of new input checks
+- FIX - by = "proportion" and by = "o2" now work correctly with oxygen production data.
+About the above. All changes made to truncate_data. Previously these methods didn't work with rising O2 as the code for finding the from/to values assumed it was decreasing. Now it identifes all data within the range of from/to. Essentially this makes from/to interchangeable. This however breaks the previous behaviour where it found first occurence of 'from', then the first occurence of 'to' after that, so you could use it with intermittent-flow data and it would get the from-to rate from the first replicate. This is such a niche use case, it's not worth trying to fix it (although i almost figured it out actually). Users with these data need to know how to subset them anyway, so they can just subset this replicate too.
+Although, there's a chance with some data it will give different results than the old way, because of the way the from-to region is identified internally. Old way - first occurence of the 'from' value, then first occurence of the 'to' value after that. New way - first occurence of the 'from' value, then LAST occurence of the 'to' value after that. With most data any difference in rates should be very minor. I can only see this making a difference in really noisy or really shallow data.
 
 
 ========================== subset_data() ============================
