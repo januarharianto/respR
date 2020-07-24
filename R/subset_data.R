@@ -77,18 +77,14 @@ subset_data <- function(x, from, to, by = "time") {
   } else if (by == "row") {
     out <- dt[from:to]
   } else if (by == "o2") {
-    top <- Position(function(z)
-      z <= from, dt[[2]])
-    bot <- Position(function(z)
-      z <= to, dt[[2]])
-    out <- dt[top:bot]
+    out <- truncate_data(x, from, to, by)
   } else if (by == "proportion") {
     out <- truncate_data(x, from, to, by)
   }
   cat("\n# subset_data # -------------------------\n")
   cat("Original data:\n")
   print(dt, topn = 2)
-  cat("\nNew data:\n")
+  cat("\nSubset data:\n")
   print(data.table(out), topn = 2)
   cat("-----------------------------------------\n")
 

@@ -145,7 +145,7 @@ truncate_data <- function(x, from, to, by) {
     out <- dt[from:to]
   }
   ## o2 could be increasing or decreasing
-  if (by == "o2" & length(dt) == 2) {
+  if (by == "o2") {
 
     # data range
     o_range <- range(dt[[2]])
