@@ -237,7 +237,7 @@ print.inspect <- function(x, ...) {
   }
   if (checks[, 1][[4]]) {
     xevn <- locs[, 1][[4]]
-    cat("Uneven Time data locations")
+    cat("Uneven Time data locations ")
     if (length(xevn) > 20) cat(" (first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xevn, 20))
