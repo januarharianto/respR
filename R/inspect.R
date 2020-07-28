@@ -217,28 +217,28 @@ print.inspect <- function(x, ...) {
   if (checks[, 1][[1]]) {
     xnan <- locs[, 1][[1]]
     cat("NA/NaN Time data locations: ")
-    if (length(xnan) > 20) cat(" (first 20 shown) ")
+    if (length(xnan) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xnan, 20))
   }
   if (checks[, 1][[2]]) {
     xseq <- locs[, 1][[2]]
     cat("Non-sequential Time data locations ")
-    if (length(xseq) > 20) cat(" (first 20 shown) ")
+    if (length(xseq) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xseq, 20))
   }
   if (checks[, 1][[3]]) {
     xdup <- locs[, 1][[3]]
     cat("Duplicate Time data locations ")
-    if (length(xdup) > 20) cat(" (first 20 shown) ")
+    if (length(xdup) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xdup, 20))
   }
   if (checks[, 1][[4]]) {
     xevn <- locs[, 1][[4]]
     cat("Uneven Time data locations ")
-    if (length(xevn) > 20) cat(" (first 20 shown) ")
+    if (length(xevn) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xevn, 20))
     cat("Minimum and Maximum intervals in uneven Time data: \n")
@@ -249,7 +249,7 @@ print.inspect <- function(x, ...) {
     if (checks[, i][[1]]) {
       ynan <- locs[, i][[1]]
       cat("NA/NaN locations ")
-      if (length(ynan) > 20) cat(" (only first 20 shown) ")
+      if (length(ynan) > 20) cat("(first 20 shown) ")
       cat("in Oxygen column:", names(x$dataframe)[i], "\n")
       print(head(ynan, 20))
     }
