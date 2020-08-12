@@ -79,8 +79,32 @@ test_that("format_time converts dataframe with separate date and time columns", 
     x = c("22:11:11", "23:11:11","00:25:11"),
     y = c(23, 34, 45),
     z = c(56, 67, 78))
-  result <- format_time(x, time = c(1,2), format = "dmyHMS")
-  expect_equal(result[3,5], 8041)
+  result <- format_time(x, time = 1:2, format = "dmyHMS")
+  expect_equal(result[[5]], c(1,3601,8041))
+
+  ## This failed with previous versions when date-times did not include column 1
+  ## Don't know why. Probably data.table, but the code was needlessly complex anyway
+  x <- data.frame(text = c("text","text","text",
+                           "text","text","text"),
+                  date = c("2020-4-6", "2020-4-6", "2020-4-6",
+                           "2020-4-6", "2020-4-6", "2020-4-6"),
+                  time = c("3:25:01 PM", "3:25:11 PM", "3:25:21 PM",
+                           "3:25:31 PM", "3:25:41 PM", "3:25:51 PM"))
+  result <- format_time(x, time = 2:3, format = "ymdHMSp")
+  expect_equal(result[[4]],
+               c(1,11,21,31,41,51))
+  # non contiguous columns
+  x <- data.frame(text = c("text","text","text",
+                           "text","text","text"),
+                  date = c("2020-4-6", "2020-4-6", "2020-4-6",
+                           "2020-4-6", "2020-4-6", "2020-4-6"),
+                  text2 = c("text2","text2","text2",
+                           "text2","text2","text2"),
+                  time = c("3:25:01 PM", "3:25:11 PM", "3:25:21 PM",
+                           "3:25:31 PM", "3:25:41 PM", "3:25:51 PM"))
+  result <- format_time(x, time = c(2,4), format = "ymdHMSp")
+  expect_equal(result[[5]],
+               c(1,11,21,31,41,51))
 })
 
 test_that("format_time converts data table with separate date and time columns", {
@@ -131,6 +155,7 @@ test_that("format_time works with NO punctuation characters", {
 
 test_that("format_time works with date-times over a stupid number of columns", {
   x <- data.frame(
+    pre = c("text","text","text"),
     a = c("09", "09","10"),
     b = c("02", "02","02"),
     c = c("2018", "2018","2018"),
@@ -139,8 +164,8 @@ test_that("format_time works with date-times over a stupid number of columns", {
     f = c("11", "11", "11"),
     g = c(56, 67, 78))
   # select 3 columns
-  result <- format_time(x, time = c(1:6), format = "dmyHMS")
-  expect_equal(result[3,8], 8041)
+  result <- format_time(x, time = c(2:7), format = "dmyHMS")
+  expect_equal(result[[9]], c(1,3601,8041))
 })
 
 
