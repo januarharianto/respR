@@ -88,10 +88,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   # if (class(x) %in% c("calc_rate","auto_rate")) z <- x$rate
   # if (class(x) %in% "adjust_rate") z <- x$adjusted.rate
 
-  if (is.numeric(x)) z <- x
-
   # Validate x input:
-  if (!is.numeric(z)) stop("convert_DO: input 'x' must be a numeric value or vector.")
+  if (!is.numeric(x)) stop("convert_DO: input 'x' must be a numeric value or vector.")
+  if (is.numeric(x)) z <- x
 
   # Perform conversions
   # First we convert all values to a standard unit, mg/L:
