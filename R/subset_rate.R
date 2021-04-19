@@ -1,10 +1,10 @@
 #'@title Subset auto_rate results based on a range of criteria
 #'
-#'@description The `auto_rate` function is very powerful, but the output can be
-#'  large and difficult to explore. In addition, it may identify valid linear
-#'  data regions, but from areas of the data that are not of experimental
-#'  interest.  As an advanced, machine learning based process, it is also
-#'  somewhat fallible and on occasion may return questionable results.
+#'@description The `auto_rate` function is powerful, but the output can be large
+#'  and difficult to explore. In addition, it may identify linear data regions,
+#'  but from areas of the data that are not of experimental interest.  As an
+#'  advanced, machine learning based process, it is also somewhat fallible and
+#'  on occasion may return questionable results.
 #'
 #'  The `subset_rate` function subsets `auto_rate` results according to various
 #'  criteria. For example, extracting only positive or negative rates, only the
@@ -18,7 +18,7 @@
 #'  processing it through the function multiple times with different criteria,
 #'  or alternatively via `%>%` piping. See examples.
 #'
-#'  Note: when choosing a `method`, keep in mind that to keep mathematically
+#'  Note: when choosing a `method`, keep in mind that to remain mathematically
 #'  consistent, `respR` outputs oxygen consumption (i.e. respiration) rates as
 #'  negative values. This is particularly important in the difference between
 #'  `highest/lowest` and `min/max` methods. See Details.
@@ -109,10 +109,10 @@
 #'  c(0.05, 0.08)`. To retain all rates with a R-Squared above 0.90: `method =
 #'  'rsq', n = c(0.9, 1)`. The `row` and `time` ranges refer to the
 #'  `$row`-`$endrow` or `$time`-`$endtime` columns and original data source
-#'  (`$dataframe` element of the input), and can be used to constrain results to rates
-#'  from particular regions of the data (although usually a better option is to
-#'  \code{\link{subset_data}} prior to analysis). Note, `time` is not the same
-#'  as `duration` - see later section.
+#'  (`$dataframe` element of the input), and can be used to constrain results to
+#'  rates from particular regions of the data (although usually a better option
+#'  is to \code{\link{subset_data}} prior to analysis). Note, `time` is not the
+#'  same as `duration` - see later section.
 #'
 #'  \subsection{ }{`time_omit`, `row_omit`} These methods refer to the original
 #'  data, and are intended to *exclude* rates determined over particular data
@@ -143,33 +143,42 @@
 #'  the `$summary` data frame.
 #'
 #'  \subsection{ }{`overlap`} This method removes rates which overlap, that is,
-#'  linear regions identified by `auto_rate` which partly or completely share
-#'  the same rows of the original data. Due to the way `auto_rate` works, it may
-#'  identify multiple linear regions some of which may substantially overlap, or
-#'  even be completely contained within others. In such cases summary operations
-#'  such as taking an average of the rate values may be questionable, as certain
-#'  regions will be weighted higher due to these multiple, overlapping results.
-#'  This method removes overlapping rates, using `n` as a threshold to determine
-#'  degree of permitted overlap. It is recommended this method be used after all
-#'  other selection criteria have been applied, as it is quite aggressive about
-#'  removing rates, including high-ranked ones, and can be computationally
-#'  intensive when there are many results. It can also only be used on
-#'  `auto_rate` objects where the `linear` method has been used (the others
-#'  specifically output all overlapping (`lowest/highest`) or non-overlapping
-#'  (`interval`) rates). Permitted overlap is determined by `n`, which indicates
-#'  the minimum proportion of each particular regression which must overlap with
-#'  another for it to be regarded as overlapping.  For example, `n = 0.2` means
-#'  a regression would have to overlap with another by 20% or more of its total
-#'  length to be regarded as overlapping.
+#'  linear regions or regressions calculated by `auto_rate` which partly or
+#'  completely share the same rows of the original data. The `auto_rate`
+#'  `linear` method may identify multiple linear regions, some of which may
+#'  substantially overlap, or even be completely contained within others. In
+#'  such cases summary operations such as taking an average of the rate values
+#'  may be questionable, as certain values will be weighted higher due to these
+#'  multiple, overlapping results. This method removes overlapping rates, using
+#'  `n` as a threshold to determine degree of permitted overlap. It is
+#'  recommended this method be used after all other selection criteria have been
+#'  applied, as it is quite aggressive about removing rates, including
+#'  high-ranked ones, and can be computationally intensive when there are many
+#'  results. While it can be used with `auto_rate` results determined via the
+#'  `rolling`, `lowest`, or `highest` methods, by their nature these methods
+#'  produce all possible overlapping regressions, ordered in the appropriate
+#'  way, so other subsetting methods are probably more appropriate.
+#'
+#'  Permitted overlap is determined by `n`, which indicates the minimum
+#'  proportion of each particular regression which must overlap with another for
+#'  it to be regarded as overlapping.  For example, `n = 0.2` means a regression
+#'  would have to overlap with another by 20% or more of its total length to be
+#'  regarded as overlapping.
 #'
 #'  The `overlap` method does two separate operations. First, regardless of the
 #'  `n` value, any rate regressions which are completely contained within
-#'  another are removed. Secondly, for each `rate_b1` result in `$summary` how
-#'  many *other* rate results it overlaps with (accounting for `n`) is
-#'  determined. The one which overlaps with the most others is then removed. In
-#'  the event of more than one rate overlapping with equal numbers of other
-#'  rates, it removes the least ranked one (i.e. lowest in the summary table).
-#'  It repeats this analysis iteratively until only non-overlapping rates
+#'  another are removed. Secondly, for each regression in `$summary` how many
+#'  other regressions it overlaps with (accounting for `n`) is determined. The
+#'  one which overlaps with the most others is then removed. In the event of
+#'  several regressions overlapping with equal numbers of others, the one lowest
+#'  down in the `$summary` table is removed. This will be the least ranked one
+#'  (i.e. lowest density value) in the case of the `auto_rate` `linear` method.
+#'  In the case of `auto_rate` `rolling`, `lowest`, or `highest` methods, this
+#'  order is determined by the method. In general, the `overlap` subsetting
+#'  should only be used in combination with the `auto_rate` `linear` method,
+#'  unless you have a specific reason for doing so.
+#'
+#'  This analysis is repeated iteratively until only non-overlapping rates
 #'  (accounting for `n`) are retained. If `n = 0`, only rates which do not
 #'  overlap at all are retained. If `n = 1`, only rates which are entirely
 #'  contained within another are removed.
@@ -273,30 +282,35 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message("subset_rate: Subsetting only unique regressions. `n` input ignored...")
     method <- "unique"
     keep <- 1:nrow(x$summary)
+    keep <- sort(keep)
   }
 
   # Positive rates only -----------------------------------------------------
   if(method == "positive"){
     message("subset_rate: Subsetting all positive rate values. `n` input ignored...")
     keep <- which(x$rate > 0)
+    keep <- sort(keep)
   }
 
   # Negative rates only -----------------------------------------------------
   if(method == "negative"){
     message("subset_rate: Subsetting all negative rate values. `n` input ignored...")
     keep <- which(x$rate < 0)
+    keep <- sort(keep)
   }
 
   # Nonzero rates only -----------------------------------------------------
   if(method == "nonzero"){
     message("subset_rate: Subsetting all non-zero rate values. `n` input ignored...")
     keep <- which(x$rate != 0)
+    keep <- sort(keep)
   }
 
   # Zero rates only ---------------------------------------------------------
   if(method == "zero"){
     message("subset_rate: Subsetting all zero rate values. `n` input ignored...")
     keep <- which(x$rate == 0)
+    keep <- sort(keep)
   }
 
   # lowest rates ------------------------------------------------------------
@@ -314,6 +328,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     if(all(x$rate <= 0)) keep <- sort(tail(order(x$rate), n))
     ## if all positive return LOWEST numerical n
     if(all(x$rate >= 0)) keep <- sort(head(order(x$rate), n))
+
+    keep <- sort(keep)
   }
 
   # highest rates -----------------------------------------------------------
@@ -330,6 +346,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     if(all(x$rate <= 0)) keep <- sort(head(order(x$rate), n))
     ## if all positive return HIGHEST numerical n
     if(all(x$rate >= 0)) keep <- sort(tail(order(x$rate), n))
+
+    keep <- sort(keep)
   }
 
 
@@ -350,6 +368,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
       cutoff <- stats::quantile(x$rate, n)
       keep <- sort(which(x$rate %in% x$rate[x$rate <= cutoff]))
     }
+
+    keep <- sort(keep)
   }
 
   # highest percentile rates ------------------------------------------------
@@ -369,6 +389,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
       cutoff <- stats::quantile(x$rate, 1-n)
       keep <- sort(which(x$rate %in% x$rate[x$rate >= cutoff]))
     }
+
+    keep <- sort(keep)
   }
 
   # min n rates -------------------------------------------------------------
@@ -381,6 +403,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
     message(glue::glue("subset_rate: Subsetting minimum {n} *numerical* rate values..."))
     keep <- sort(head(order(x$rate), n))
+    keep <- sort(keep)
   }
 
   # max n rates -------------------------------------------------------------
@@ -390,6 +413,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
     message(glue::glue("subset_rate: Subsetting maximum {n} *numerical* rate values..."))
     keep <- sort(tail(order(x$rate), n))
+    keep <- sort(keep)
   }
 
   # min percentile rates ----------------------------------------------------
@@ -398,6 +422,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message(glue::glue("subset_rate: Subsetting minimum {n*100}th percentile *numerical* rate values..."))
     cutoff <- stats::quantile(x$rate, n)
     keep <- sort(which(x$rate %in% x$rate[x$rate <= cutoff]))
+    keep <- sort(keep)
   }
 
   # max percentile rates ----------------------------------------------------
@@ -406,6 +431,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message(glue::glue("subset_rate: Subsetting maximum {n*100}th percentile *numerical* rate values..."))
     cutoff <- stats::quantile(x$rate, 1-n) ## NOTE DIFFERENCE TO ABOVE
     keep <- sort(which(x$rate %in% x$rate[x$rate >= cutoff]))
+    keep <- sort(keep)
   }
 
 
@@ -414,6 +440,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     if(length(n) != 2) stop("subset_rate: For 'rate' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with values between {n[1]} and {n[2]}..."))
     keep <- sort(which(data.table::between(x$rate, n[1], n[2])))
+    keep <- sort(keep)
   }
 
 
@@ -422,6 +449,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     if(length(n) != 2) stop("subset_rate: For 'rsq' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with rsq values between {n[1]} and {n[2]}..."))
     keep <- sort(which(data.table::between(x$summary$rsq, n[1], n[2])))
+    keep <- sort(keep)
   }
 
   # row range ---------------------------------------------------------------
@@ -435,6 +463,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep1 <- which(x$summary$row >= n_order[1])
     keep2 <- which(x$summary$endrow <= n_order[2])
     keep <- keep1[keep1 %in% keep2]
+    keep <- sort(keep)
   }
 
   # row_omit ----------------------------------------------------------------
@@ -450,6 +479,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep1 <- which(x$summary$row >= n_order[2]) ## start is AFTER n
     keep2 <- which(x$summary$endrow <= n_order[1]) ## end is BEFORE n
     keep <- c(keep1, keep2)
+    keep <- sort(keep)
   }
 
   # time range --------------------------------------------------------------
@@ -463,6 +493,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep1 <- which(x$summary$time >= n_order[1])
     keep2 <- which(x$summary$endtime <= n_order[2])
     keep <- keep1[keep1 %in% keep2]
+    keep <- sort(keep)
   }
 
 
@@ -478,6 +509,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep1 <- which(x$summary$time >= n_order[2]) ## start is AFTER n
     keep2 <- which(x$summary$endtime <= n_order[1]) ## end is BEFORE n
     keep <- c(keep1, keep2)
+    keep <- sort(keep)
   }
 
 
@@ -488,6 +520,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message(glue::glue("subset_rate: Subsetting selected rows of the '$summary' table..."))
     n_order <- sort(n) # in case entered wrong way round
     keep <- n_order
+    keep <- sort(keep)
   }
 
 
@@ -498,6 +531,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     n_order <- sort(n) # in case entered wrong way round
     message(glue::glue("subset_rate: Subsetting rates with density values between {n[1]} and {n[2]}..."))
     keep <- sort(which(data.table::between(x$summary$density, n[1], n[2])))
+    keep <- sort(keep)
   }
 
 
@@ -512,13 +546,19 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep1 <- which(durations >= n_order[1])
     keep2 <- which(durations <= n_order[2])
     keep <- keep1[keep1 %in% keep2]
+    keep <- sort(keep)
   }
 
 
   # overlap -----------------------------------------------------------------
   if(method == "overlap") {
+    if(is.null(n)) {
+      n <- 0
+      message("subset_rate: 'overlap' method applying default 'n = 0', no overlapping permitted.")
+    }
     if(n < 0 || n > 1) stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
-    if(x$method != "linear") stop("subset_rate: The 'overlap' method should only be used with results determined via the auto_rate 'linear' method.")
+    #if(x$method != "linear") stop("subset_rate: The 'overlap' method should only be used with results determined via the auto_rate 'linear' method.")
+    message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
     message(glue::glue("subset_rate: Subsetting rates which overlap by {n*100}% or less..."))
 
     ## extract summary df

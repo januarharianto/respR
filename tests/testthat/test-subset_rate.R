@@ -693,12 +693,6 @@ test_that("subset_rate: method = overlap   - stops when n is outside 0 to 1", {
                "For 'overlap' method 'n' must be between 0 and 1 inclusive.")
 })
 
-test_that("subset_rate: method = overlap   - stops when auto_rate method is not 'linear'", {
-  expect_error(subset_rate(auto_rate(intermittent.rd, method = "maximum", plot = FALSE),
-                           method = "overlap", n = 0.5, plot = FALSE),
-               "The 'overlap' method should only be used with results")
-})
-
 test_that("subset_rate: method = overlap   - outputs 4 rates with these inputs", {
   expect_equal(length(subset_rate(ar_obj,
                                   method = "overlap", n = 0.5, plot = FALSE)$rate),

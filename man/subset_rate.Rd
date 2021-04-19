@@ -32,11 +32,11 @@ These additional elements ensure the output contains the complete,
 reproducible history of the \code{auto_rate} object having been subset.
 }
 \description{
-The \code{auto_rate} function is very powerful, but the output can be
-large and difficult to explore. In addition, it may identify valid linear
-data regions, but from areas of the data that are not of experimental
-interest.  As an advanced, machine learning based process, it is also
-somewhat fallible and on occasion may return questionable results.
+The \code{auto_rate} function is powerful, but the output can be large
+and difficult to explore. In addition, it may identify linear data regions,
+but from areas of the data that are not of experimental interest.  As an
+advanced, machine learning based process, it is also somewhat fallible and
+on occasion may return questionable results.
 
 The \code{subset_rate} function subsets \code{auto_rate} results according to various
 criteria. For example, extracting only positive or negative rates, only the
@@ -50,7 +50,7 @@ Multiple subsetting criteria can be applied by assigning the output and
 processing it through the function multiple times with different criteria,
 or alternatively via \verb{\%>\%} piping. See examples.
 
-Note: when choosing a \code{method}, keep in mind that to keep mathematically
+Note: when choosing a \code{method}, keep in mind that to remain mathematically
 consistent, \code{respR} outputs oxygen consumption (i.e. respiration) rates as
 negative values. This is particularly important in the difference between
 \code{highest/lowest} and \code{min/max} methods. See Details.
@@ -136,10 +136,10 @@ should be a numeric vector of two values. Matching rates which fall within
 the \code{n} range (inclusive) are retained. For example, to retain only rates
 where the \code{rate} value is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the
 \verb{$row}-\verb{$endrow} or \verb{$time}-\verb{$endtime} columns and original data source
-(\verb{$dataframe} element of the input), and can be used to constrain results to rates
-from particular regions of the data (although usually a better option is to
-\code{\link{subset_data}} prior to analysis). Note, \code{time} is not the same
-as \code{duration} - see later section.
+(\verb{$dataframe} element of the input), and can be used to constrain results to
+rates from particular regions of the data (although usually a better option
+is to \code{\link{subset_data}} prior to analysis). Note, \code{time} is not the
+same as \code{duration} - see later section.
 
 \subsection{ }{\code{time_omit}, \code{row_omit}} These methods refer to the original
 data, and are intended to \emph{exclude} rates determined over particular data
@@ -170,33 +170,42 @@ multiple rows use regular \code{R} selection syntax: \code{n = 1:3}, \code{n = c
 the \verb{$summary} data frame.
 
 \subsection{ }{\code{overlap}} This method removes rates which overlap, that is,
-linear regions identified by \code{auto_rate} which partly or completely share
-the same rows of the original data. Due to the way \code{auto_rate} works, it may
-identify multiple linear regions some of which may substantially overlap, or
-even be completely contained within others. In such cases summary operations
-such as taking an average of the rate values may be questionable, as certain
-regions will be weighted higher due to these multiple, overlapping results.
-This method removes overlapping rates, using \code{n} as a threshold to determine
-degree of permitted overlap. It is recommended this method be used after all
-other selection criteria have been applied, as it is quite aggressive about
-removing rates, including high-ranked ones, and can be computationally
-intensive when there are many results. It can also only be used on
-\code{auto_rate} objects where the \code{linear} method has been used (the others
-specifically output all overlapping (\code{lowest/highest}) or non-overlapping
-(\code{interval}) rates). Permitted overlap is determined by \code{n}, which indicates
-the minimum proportion of each particular regression which must overlap with
-another for it to be regarded as overlapping.  For example, \code{n = 0.2} means
-a regression would have to overlap with another by 20\% or more of its total
-length to be regarded as overlapping.
+linear regions or regressions calculated by \code{auto_rate} which partly or
+completely share the same rows of the original data. The \code{auto_rate}
+\code{linear} method may identify multiple linear regions, some of which may
+substantially overlap, or even be completely contained within others. In
+such cases summary operations such as taking an average of the rate values
+may be questionable, as certain values will be weighted higher due to these
+multiple, overlapping results. This method removes overlapping rates, using
+\code{n} as a threshold to determine degree of permitted overlap. It is
+recommended this method be used after all other selection criteria have been
+applied, as it is quite aggressive about removing rates, including
+high-ranked ones, and can be computationally intensive when there are many
+results. While it can be used with \code{auto_rate} results determined via the
+\code{rolling}, \code{lowest}, or \code{highest} methods, by their nature these methods
+produce all possible overlapping regressions, ordered in the appropriate
+way, so other subsetting methods are probably more appropriate.
+
+Permitted overlap is determined by \code{n}, which indicates the minimum
+proportion of each particular regression which must overlap with another for
+it to be regarded as overlapping.  For example, \code{n = 0.2} means a regression
+would have to overlap with another by 20\% or more of its total length to be
+regarded as overlapping.
 
 The \code{overlap} method does two separate operations. First, regardless of the
 \code{n} value, any rate regressions which are completely contained within
-another are removed. Secondly, for each \code{rate_b1} result in \verb{$summary} how
-many \emph{other} rate results it overlaps with (accounting for \code{n}) is
-determined. The one which overlaps with the most others is then removed. In
-the event of more than one rate overlapping with equal numbers of other
-rates, it removes the least ranked one (i.e. lowest in the summary table).
-It repeats this analysis iteratively until only non-overlapping rates
+another are removed. Secondly, for each regression in \verb{$summary} how many
+other regressions it overlaps with (accounting for \code{n}) is determined. The
+one which overlaps with the most others is then removed. In the event of
+several regressions overlapping with equal numbers of others, the one lowest
+down in the \verb{$summary} table is removed. This will be the least ranked one
+(i.e. lowest density value) in the case of the \code{auto_rate} \code{linear} method.
+In the case of \code{auto_rate} \code{rolling}, \code{lowest}, or \code{highest} methods, this
+order is determined by the method. In general, the \code{overlap} subsetting
+should only be used in combination with the \code{auto_rate} \code{linear} method,
+unless you have a specific reason for doing so.
+
+This analysis is repeated iteratively until only non-overlapping rates
 (accounting for \code{n}) are retained. If \code{n = 0}, only rates which do not
 overlap at all are retained. If \code{n = 1}, only rates which are entirely
 contained within another are removed.
