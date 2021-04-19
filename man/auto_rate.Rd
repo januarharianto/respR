@@ -12,7 +12,8 @@ auto_rate(df, method = "linear", width = NULL, by = "row", plot = TRUE)
 data.}
 
 \item{method}{string. \code{"linear"}, \code{"highest"}, \code{"lowest"}, \code{"maximum"},
-\code{"minimum"} or \code{"interval"}. Defaults to \code{linear}. See Details.}
+\code{"minimum"}, \code{"rolling"} or \code{"interval"}. Defaults to \code{linear}. See
+Details.}
 
 \item{width}{numeric. Width of the rolling regression. Defaults to
 \verb{floor(0.2*length of data)} or 20\% of the width of the data, i.e. \code{width = 0.2}. In testing, this value performs well with the \code{linear} method. A
@@ -38,16 +39,16 @@ A list object of class \code{auto_rate}.
 }
 \description{
 \code{auto_rate} performs a rolling regression on a dataset to determine the \emph{most
-linear, highest, lowest, maximum, minimum}, and \emph{interval} rates of change in
-oxygen concentration over time. Initially, a rolling regression of the
-specified \code{width} is performed on the entire dataset to obtain all possible
-rate values. Then, based on the "\code{method}" argument, the resulting
+linear, highest, lowest, maximum, minimum, rolling}, and \emph{interval} rates of
+change in oxygen concentration over time. Initially, a rolling regression of
+the specified \code{width} is performed on the entire dataset to obtain all
+possible rate values. Then, based on the "\code{method}" argument, the resulting
 regressions are ranked or ordered, and the output is summarised.
 }
 \details{
 \emph{\strong{Ranking and ordering algorithms}}
 
-Currently, \code{auto_rate} contains six ranking and ordering algorithms that
+Currently, \code{auto_rate} contains seven ranking and ordering algorithms that
 can be applied using the \code{method} argument:
 \itemize{
 \item \code{linear}: Uses kernel density estimation (KDE) to learn the shape of the
@@ -92,6 +93,8 @@ only be used when rates are a mix of oxygen consumption and production
 rates, or when positive rates result from flushes such as in
 intermittent-flow respirometry. For most analyses where highest or lowest
 rates are of interest use the 'highest' or 'lowest' methods should be used.
+\item \code{rolling}: A rolling regression of the specified \code{width} is performed
+across the entire timeseries. No reordering of results is performed.
 \item \code{interval}: multiple, successive, non-overlapping regressions of the
 specified 'width' are extracted from the rolled regressions, ordered by
 time.

@@ -69,9 +69,10 @@ validate_auto_rate <- function(df, by, method) {
   )
   assertthat::assert_that(
     method %in% c("default", "linear", "max", "min", "interval",
+                  "rolling",
                   "highest", "lowest", "maximum", "minimum"),
     msg = "auto_rate: The 'method' argument is not recognised: it should be 'linear',
-    'highest', 'lowest', 'maximum', 'minimum', or 'interval'"
+    'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'"
     # leave out max/min from message - old operators, we don't want them to be used
   )
   return(list(by = by, df = data.table(df)))
@@ -214,6 +215,40 @@ auto_rate_lowest <- function(dt, width, by = 'row') {
   results <- rollreg[order(rank(abs(rollreg$rate_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_lowest")
+  return(out)
+}
+
+
+#' Perform rolling regression of fixed width and do not reorder results
+#'
+#' This is an internal function for `auto_rate()`
+#'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param by string.
+#'
+#' @return a list object with appended class `auto_rate_rolling`
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' NULL
+auto_rate_rolling <- function(dt, width, by = 'row') {
+  # perform rolling regression
+  if (by == 'row') {
+    rollreg <- rolling_reg_row(dt, width)
+  } else if (by == 'time') {
+    rollreg <- rolling_reg_time(dt, width)
+  }
+
+  # message if mix of -ve and +ve
+  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+    message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
+
+  # DO NOT reorder data
+  results <- rollreg
+  out <- list(roll = rollreg, results = results)
+  class(out) <- append(class(out), "auto_rate_rolling")
   return(out)
 }
 

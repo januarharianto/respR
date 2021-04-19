@@ -128,6 +128,8 @@ MAJOR CHANGE
 - New 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates
 - Therefore internal functions auto_rate_min and auto_rate_max have been swapped around in terms of functionality.
 - Old methods ('min', 'max') still produce same results as old code but have a prominent warning
+- Additional new method - 'rolling'. Performs simple rolling regression of specified width, with NO ordering of results (seemed like an ommission when we have the other options)
+- this goes nicely with subset_rate - allows users full control of selection criteria (albeit with fixed width regressions)
 
 Other changes
 - reordered operators to put "method" second

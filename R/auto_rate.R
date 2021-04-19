@@ -2,15 +2,15 @@
 #' oxygen concentration in a dataset
 #'
 #' `auto_rate` performs a rolling regression on a dataset to determine the *most
-#' linear, highest, lowest, maximum, minimum*, and *interval* rates of change in
-#' oxygen concentration over time. Initially, a rolling regression of the
-#' specified `width` is performed on the entire dataset to obtain all possible
-#' rate values. Then, based on the "`method`" argument, the resulting
+#' linear, highest, lowest, maximum, minimum, rolling*, and *interval* rates of
+#' change in oxygen concentration over time. Initially, a rolling regression of
+#' the specified `width` is performed on the entire dataset to obtain all
+#' possible rate values. Then, based on the "`method`" argument, the resulting
 #' regressions are ranked or ordered, and the output is summarised.
 #'
 #' @details ***Ranking and ordering algorithms***
 #'
-#'   Currently, `auto_rate` contains six ranking and ordering algorithms that
+#'   Currently, `auto_rate` contains seven ranking and ordering algorithms that
 #'   can be applied using the `method` argument:
 #'
 #'   - `linear`: Uses kernel density estimation (KDE) to learn the shape of the
@@ -60,6 +60,9 @@
 #'   intermittent-flow respirometry. For most analyses where highest or lowest
 #'   rates are of interest use the 'highest' or 'lowest' methods should be used.
 #'
+#'   - `rolling`: A rolling regression of the specified `width` is performed
+#'   across the entire timeseries. No reordering of results is performed.
+#'
 #'   - `interval`: multiple, successive, non-overlapping regressions of the
 #'   specified 'width' are extracted from the rolled regressions, ordered by
 #'   time.
@@ -87,7 +90,8 @@
 #' @param df data frame, or object of class `inspect` containing oxygen~time
 #'   data.
 #' @param method string. `"linear"`, `"highest"`, `"lowest"`, `"maximum"`,
-#'   `"minimum"` or `"interval"`. Defaults to `linear`. See Details.
+#'   `"minimum"`, `"rolling"` or `"interval"`. Defaults to `linear`. See
+#'   Details.
 #' @param width numeric. Width of the rolling regression. Defaults to
 #'   `floor(0.2*length of data)` or 20% of the width of the data, i.e. `width =
 #'   0.2`. In testing, this value performs well with the `linear` method. A
@@ -206,6 +210,19 @@ auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
 
   } else if (method == 'interval') {
     output <- auto_rate_interval(dt, win, by)
+    metadata <- data.table(width = win, by = by, method = method,
+                           total_regs = nrow(output$roll))
+    out <- list(dataframe = dt,
+                width   = win,
+                by      = by,
+                method  = method,
+                roll    = output$roll,
+                summary = output$results,
+                rate    = output$results$rate_b1,
+                metadata = metadata)
+
+  } else if (method == 'rolling') {
+    output <- auto_rate_rolling(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(dataframe = dt,
@@ -345,7 +362,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   peaks <- x$peaks[, 2:3]
 
   # PLOT BASED ON METHOD
-  if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest")) {
+  if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "rolling")) {
     if (choose == FALSE) {
 
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
@@ -393,7 +410,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
   if (choose == 4) {
     if (x$method != 'linear') {
-      stop('auto_rate: density plot not available for "highest", "lowest", "maximum", "minimum" and "interval" methods')
+      stop('auto_rate: density plot not available for "highest", "lowest", "maximum", "minimum", "rolling" and "interval" methods')
     } else density.p(dens, peaks, pos)  # density
   }
   if (choose == 5) residual.p(fit)  # residual plot
@@ -428,6 +445,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
     if (object$method == "lowest") cat("\n=== Summary of Results by Lowest Rate ===\n")
     if (object$method == "maximum") cat("\n=== Summary of Results by Maximum Rate ===\n")
     if (object$method == "minimum") cat("\n=== Summary of Results by Minimum Rate ===\n")
+    if (object$method == "rolling") cat("\n=== Summary of Results by Rolling Order ===\n")
     if (object$method == "interval") cat("\n=== Summary of Results by Interval Order ===\n")
     if (object$method == "max") cat("\n=== Summary of Results by Maximum NEGATIVE Rate ===\n")
     if (object$method == "min") cat("\n=== Summary of Results by Minimum NEGATIVE Rate ===\n")
