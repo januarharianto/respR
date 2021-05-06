@@ -20,4 +20,4 @@ convert_DO - fix for error with non-numeric x inputs
 new utility validation fns
 - verify_by updated - can select which 'by' inputs to accept, or if required, plus output message
 - column.val - updated with req and range?
-- numeric.val - for numeric validations
+- numeric.val - for numeric input validations
