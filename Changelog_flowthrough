@@ -1,3 +1,23 @@
+data
+- new flowthrough_mult.rd dataset
+
+inspect.ft
+- new
+- can pass rate.rev = FALSE to plot rates correctly
+
+flowthrough completely separate workflow
+- same functions, but with '.ft'
+- inspect
+- calc_rate
+- calc_rate.bg
+- adjust_rate
+- convert
+
 format_time - fix for not working with multiple data-time columns if one of them wasn't column 1
 
 convert_DO - fix for error with non-numeric x inputs
+
+new utility validation fns
+- verify_by updated - can select which 'by' inputs to accept, or if required, plus output message
+- column.val - updated with req and range?
+- numeric.val - for numeric validations

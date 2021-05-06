@@ -70,7 +70,7 @@ test_that("calc_rate works with variations of `by` input", {
 
 test_that("calc_rate - stops with wrong 'by' inputs", {
   expect_error(calc_rate(sardine.rd, plot = F, by = "tttimmmeee"),
-               "'by' input not recognised")
+               "'by' input not valid or not recognised")
 })
 
 test_that("calc_rate - correctly extracts dataframe from 'inspect' and 'inspect_data' objects", {

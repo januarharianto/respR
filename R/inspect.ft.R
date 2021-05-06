@@ -2,112 +2,118 @@
 #'
 #' `inspect.ft` is a data exploration and preparation function that visualises
 #' flowthrough respirometry data, scans it for common issues, and prepares it
-#' for use in other functions in `respR`, such as [calc_rate.ft()].
+#' for use in later functions in `respR`, such as [calc_rate.ft()].
 #'
-#' `inspect.ft` is specific to *flowthrough* respirometry data. In flowthrough
-#' respirometry (sometimes known as 'open flow' 'open system' or 'continuous
-#' flow' respirometry) rather than calculating a rate from a declining or
-#' increasing oxygen concentration recording in a sealed chamber, instead the
-#' difference (i.e. 'delta') between the inflow and outflow concentrations of a
-#' respirometer receiving water at a constant flow rate is used to calculate an
-#' oxygen consumption or production rate, typically after it has reached a
-#' steady state. Therefore, in general, regions of stable oxygen concentrations
-#' in the outflow recording, indicating stable oxygen delta values, are of
-#' interest. `inspect.ft` inspects, visualises, and prepares the data for use in
-#' [calc_rate.ft()]. By specifying data types in this function and saving the
-#' output, they do not need to be specified in [calc_rate.ft()].
+#' `inspect.ft` is intended to be specific to *flowthrough* respirometry data.
+#' In flowthrough respirometry (also known as 'open flow' 'open system' or
+#' 'continuous flow' respirometry) rather than calculating a rate from a
+#' declining or increasing oxygen concentration recording in a sealed chamber,
+#' instead the difference (i.e. 'delta') between the inflow and outflow
+#' concentrations of a respirometer receiving water at a constant flow rate is
+#' used to calculate an oxygen consumption or production rate, typically after
+#' it has reached a steady state. Therefore, in general, regions of stable
+#' oxygen concentrations in the outflow recording, indicating stable oxygen
+#' delta values, are of interest. `inspect.ft` inspects, visualises, and
+#' prepares the data for use in [calc_rate.ft()]. By specifying data types in
+#' this function and saving the output, they do not need to be specified in
+#' [calc_rate.ft()].
 #'
 #' `inspect.ft` requires at least two data inputs; a single column of numeric
 #' `time` data, with *either* a column of paired `out.o2` concentrations (i.e.
 #' the exhalent or 'downstream' concentrations), *or* a column of already
-#' calculated paired `delta.o2` values, that is the difference between outflow
-#' and inflow concentrations, or the outflow concentration corrected by a
-#' background recording from a 'blank' or empty chamber. If an `out.o2` column
-#' has been specified, in order to calculate the oxygen delta (and therefore a
-#' rate in [calc_rate.ft()]) there must also be an inflow oxygen concentration
-#' input (i.e. the inhalent or 'upstream' concentration). This can either be a
-#' column of paired `in.o2` concentrations, or alternatively a single
-#' `in.o2.value` value. If a column, the paired values of `out.o2` and `in.o2`
-#' are used to calculate the oxygen `delta.o2`, which is saved in the output,
-#' and used to determine a rate in [calc_rate.ft()]. If however the inflow
-#' oxygen concentration is a known, generally unvarying concentration (such as
-#' fully air-saturated water from a header tank) this can be entered as a single
-#' value via `in.o2.value` and this is used to calculate the `delta.o2`.
+#' calculated `delta.o2` values, that is the difference between outflow and
+#' inflow concentrations, or the outflow concentration corrected by a background
+#' recording from a 'blank' or empty chamber. If an `out.o2` column has been
+#' specified, in order to calculate the oxygen delta (and therefore a rate in
+#' [calc_rate.ft()]) there must also be an inflow oxygen concentration input
+#' (i.e. the inhalent or 'upstream' concentration). This will generally be a
+#' column of paired `in.o2` concentrations,  in which case the paired values of
+#' `out.o2` and `in.o2` are used to calculate the oxygen `delta.o2`, which is
+#' saved in the output, and used to determine a rate in [calc_rate.ft()].
+#' Alternatively, if the inflow oxygen concentration is a known, generally
+#' unvarying concentration (such as fully air-saturated water from a header
+#' tank) this can be entered as a single value via `in.o2.value` and this is
+#' used to calculate the `delta.o2`.
 #'
 #' @section Data processing and validation checks: `inspect.ft` subsets and
 #'   classifies the specified columns into a new `list` object that can be used
 #'   in subsequent functions, reducing the need for additional inputs. Note, use
 #'   of `inspect.ft` to prepare data for the subsequent functions is optional.
-#'   All functions in `respR` can accept regular `R`` data objects including
-#'   data frames, data tables, tibbles, vectors, etc. Its purpose is quality
-#'   control, data visualisation and exploration to assist users in exploring
-#'   and preparing their data prior to analysis.
+#'   All functions in `respR` accept regular `R`` data objects including data
+#'   frames, data tables, tibbles, vectors, etc. Its purpose is quality control,
+#'   data visualisation and exploration to assist users in exploring and
+#'   preparing their data prior to analysis.
 #'
 #'   Given an input data frame (`df`), the function scans the columns specified
-#'   via the `time`, `out.o2`, `in.o2` or `delta.o2` columns. If no columns are
+#'   via the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
 #'   specified, by default the functions assumes the first column is `time`, and
-#'   all others are oxygen data. However, while these columns are checked and
-#'   plotted, they are not designated as `out.o2`, `in.o2` or `delta.o2` so if
-#'   the object is saved, these column types will have to be specified in
-#'   `calc_rate.ft`.
+#'   all others are `delta.o2` oxygen data.
 #'
 #'   The `time` column is checked for missing (NA/NaN) values, that values are
 #'   sequential, that there are no duplicate times, and that it is numerically
 #'   evenly-spaced. Oxygen columns are simply checked for NA/NaN data. See
 #'   **Failed Checks** section for what it means for analyses if these checks
-#'   produce warnings. The function produces a `list` object which, if saved,
+#'   result in warnings. The function outputs a `list` object which, if saved,
 #'   can be directly loaded (or `%>%` piped) into [calc_rate.ft()] for further
 #'   analysis.
 #'
 #' @section Plot details: A plot of the data is also produced (unless `plot =
 #'   FALSE`), depending on the inputs:
 #'
-#'   - a single `out.o2` column: a two panel plot. The top plot is both outflow
-#'   (black points) and inflow (grey points) oxygen against both time (bottom,
-#'   blue axis) and row index (top, red axis). The bottom plot is a rolling
-#'   oxygen consumption or production rate, that is the oxygen delta between
-#'   inflow and outflow oxygen.
+#'   - a single `out.o2` column with either a paired `in.o2` column or a
+#'   `in.o2.value`: a two panel plot. The top plot is both outflow (black
+#'   points) and inflow (grey points) oxygen against both time (bottom, blue
+#'   axis) and row index (top, red axis). The bottom plot is a rolling oxygen
+#'   consumption or production rate, that is the oxygen delta between inflow and
+#'   outflow oxygen.
 #'
 #'   - a single `delta.o2` column: a one panel plot of a rolling oxygen
-#'   consumption or production rate, that is the oxygen delta input.
+#'   consumption or production rate, that is the oxygen delta input, against
+#'   time.
 #'
 #'   - multiple `out.o2` or `delta.o2` columns: a grid plot of all `delta.o2`
-#'   columns (either as entered or calculated) only. Specific column sets can be
-#'   examined as a single plot by using the `pos` input. See examples.
+#'   columns (either as entered or calculated from `out.o2` and `in.o2`) only.
+#'   Specific delta plots can be examined as a single plot by using the `pos`
+#'   input. Y-axes are not equal. See examples.
 #'
-#'   - unspecified columns: all columns are plotted assuming `time` in in column
-#'   1, and all others are oxygen data. Y-axes are not equal.
+#'   - unspecified columns: all columns are plotted assuming `time` is in column
+#'   1, and all others are oxygen `delta.o2` data. Y-axes are not equal.
 #'
 #'   In rate plots, that is those plotting `delta.o2` values, either directly
-#'   entered or calculated, regions where rates are stable and consistent will
-#'   be horizontally flat.
+#'   entered or calculated, stable oxygen uptake or production rates will be
+#'   seen as flat regions.
 #'
-#'   ***Important:*** Rates in the `delta.o2` plots are plotted strictly
-#'   numerically on the y-axis. That is, *higher* oxygen consumption rates,
-#'   which in `respR` are negative since they represent a negative slope of
-#'   oxygen against time, will be *lower* on these plots. Higher oxygen
-#'   production rates, which are positive, will be higher on the plot.
+#'   ***Important:*** Since `respR` is primarily used to examine oxygen
+#'   consumption, `delta.o2` plots are plotted on a reverse y-axis by default.
+#'   In `respR` oxygen uptake rates are negative since they represent a negative
+#'   slope of oxygen against time. In rate plots the axis is reversed so that
+#'   higher uptake rates (i.e. more negative rates) will be higher on these
+#'   plots. If you are interested instead in oxygen production rates, which are
+#'   positive, the `rate.rev = FALSE` argument can be passed in either the
+#'   `inspect.ft` call, or when using `plot()` on the output object. In this
+#'   case, the `delta.o2` values will be plotted with highest oxygen production
+#'   rates higher on the `delta.o2` plot.
 #'
-#'   If the legend obscures part of the plots, it can be suppressed via `legend
-#'   = FALSE` in either the `inspect.ft` call, or when using `plot()` on the
-#'   output object.
+#'   If the legend or labels obscure part of the plot, they can be suppressed
+#'   via `legend = FALSE` in either the `inspect.ft` call, or when using
+#'   `plot()` on the output object.
 #'
 #' @section Multiple data columns: For a quick overview of larger experiments,
 #'   multiple columns of `out.o2`, `in.o2` and `delta.o2` can be inspected, but
 #'   must share the same numeric time data column specified by the `time` input.
 #'   Note, multiple column inspection is chiefly intended as a data exploration
-#'   step for larger datasets. Subsequent functions such as [calc_rate.ft()]
-#'   will by default use only the first specified `out.o2`, `in.o2` and
-#'   `delta.o2` columns for calculating rates.
+#'   step, to give a quick overview larger datasets. Subsequent functions such
+#'   as [calc_rate.ft()] will by default use only the first specified `out.o2`,
+#'   `in.o2` and `delta.o2` columns for calculating rates.
 #'
 #'   If multiple `out.o2` columns are specified, `in.o2` can be a single column
 #'   (if for example all chambers are supplied from the same header tank), in
 #'   which case it is used to calculate an oxygen delta for all `out.o2`
-#'   columns. There can also be multiple `in.o2` columns, in which case it is
-#'   assumed each `out.o2` column is paired with each `in.o2` at the same
-#'   position, and used to calculate the oxygen `delta.o2`. Therefore, they must
-#'   have the same number of columns. A single `in.o2.value` value in the same
-#'   units as `out.o2` can also be specified.
+#'   columns. A single `in.o2.value` value in the same units as `out.o2` can
+#'   also be specified. There can also be multiple `in.o2` columns, in which
+#'   case it is assumed each `out.o2` column is paired with each `in.o2` at the
+#'   same position, and used to calculate the oxygen `delta.o2`. Therefore, they
+#'   must have the same number of columns.
 #'
 #'   Regardless of which inputs are used, multiple columns results in a plot of
 #'   each `delta.o2` time series. All data are plotted on the same axis range of
@@ -119,8 +125,8 @@
 #'   (`time`, and the first `delta.o2`) to calculate rates. Other columns of
 #'   oxygen data contained in `inspect.ft` output objects can only be used in
 #'   these functions by calling the specific output object elements directly.
-#'   Best practice is to inspect and assign each individual experiment as
-#'   separate `inspect.ft` objects. See examples.
+#'   Best practice is to inspect and assign each individual experiment or column
+#'   pair as separate `inspect.ft` objects. See examples.
 #'
 #' @section Failed Checks: It should be noted the data checks in `inspect.ft`
 #'   are mainly for exploratory purposes; they help diagnose and flag potential
@@ -158,8 +164,9 @@
 #'   calculate a `delta.o2`.
 #' @param delta.o2 numeric vector of integers. Specifies the column number(s) of
 #'   the delta O2 data, for data where the user has already calculated the
-#'   difference between inflow and outflow oxygen. If entered, `out.o2` and
-#'   `in.o2` should be NULL. Defaults to NULL if no other inputs given.
+#'   difference between inflow and outflow oxygen (should be negative values for
+#'   oxygen uptake). If used, `out.o2` and `in.o2` should be NULL. Defaults to
+#'   all non-time columns if no other inputs given.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE` and `pos`.
@@ -180,22 +187,55 @@
 inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
                        in.o2.value = NULL, delta.o2 = NULL, plot = TRUE, ...) {
 
-  # Apply input defaults ----------------------------------------------------
+
+
+  # Input checks ------------------------------------------------------------
+
+  ## stop if not df
+  if (!is.data.frame(df)) stop("inspect.ft: 'df' must be data.frame object.")
+
+  ## Apply time column default
   if(is.null(time)) {
     message("inspect.ft: Applying column default of 'time = 1'")
     time <- 1
   }
-  ## assume all others are delta.o2
+
+  ## only one of in.o2 or in.o2.value should be entered
+  if(!is.null(in.o2) && !is.null(in.o2.value))
+    stop("inspect.ft: Only one of 'in.o2' or 'in.o2.value' can be entered.")
+
+  ## if in.o2 entered, out.o2 must be entered
+  if(!is.null(in.o2) && (is.null(out.o2)))
+    stop("inspect.ft: An 'in.o2' input requires paired 'out.o2' column(s).")
+
+  ## if out.o2 entered, one of in.o2 or in.o2.value must be entered
+  if(!is.null(out.o2) && (is.null(in.o2) && is.null(in.o2.value)))
+    stop("inspect.ft: With 'out.o2' data, paired 'in.o2' columns or an 'in.o2.value' is required.")
+
+  ## if out.o2 entered, in.o2 must be either same no. of columns or a single column
+  if(!is.null(out.o2) && !(is.null(in.o2))){
+    ncol_o <- length(out.o2)
+    ncol_i <- length(in.o2)
+    if(ncol_o != ncol_i && ncol_i != 1)
+      stop("inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
+  }
+
+  # if delta.o2 entered, out.o2, in.o2 & in.o2.value should be NULL
+  if(!is.null(delta.o2) && (!is.null(out.o2) || !is.null(in.o2) || !is.null(in.o2.value)))
+    stop("inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
+
+  # Apply input defaults ----------------------------------------------------
+
+  ## After all that, if these are still NULL assume all non-time are delta.o2
   if (is.null(out.o2) && is.null(delta.o2)) {
     message("inspect.ft: Applying column default of all non-time column(s) as 'delta.o2'")
     listcols <- seq.int(1, ncol(df))
     delta.o2 <- listcols[!listcols %in% time]
   }
 
-  # Input checks ------------------------------------------------------------
 
-  ## stop if not df
-  if (!is.data.frame(df)) stop("inspect.ft: 'df' must be data.frame object.")
+  # Final input checks ------------------------------------------------------
+
   ## check for duplicate column numbers
   inputs <- list(time, out.o2, in.o2, delta.o2)
   if(respR:::column.conflict(inputs)) {
@@ -211,27 +251,6 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
                      msg = "inspect.ft: 'in.o2' input - ")
   respR:::column.val(delta.o2, int = TRUE, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
                      msg = "inspect.ft: 'delta.o2' input - ")
-
-  ## only one of in.o2 or in.o2.should be entered
-  if(!is.null(in.o2) && !is.null(in.o2.value))
-    stop("inspect.ft: Only one of 'in.o2' or 'in.o2.value' can be entered.")
-
-  ## if out.o2 entered, one of in.o2 or in.o2.value must be entered
-  if(!is.null(out.o2) && (is.null(in.o2) && is.null(in.o2.value)))
-    stop("inspect.ft: With 'out.o2' data, paired 'in.o2' columns or an 'in.o2.value' value is required.")
-
-  ## if out.o2 entered, in.o2 must be either same no. of columns or a single column
-  if(!is.null(out.o2) && !(is.null(in.o2))){
-    ncol_o <- length(out.o2)
-    ncol_i <- length(in.o2)
-    if(ncol_o != ncol_i && ncol_i != 1)
-      stop("inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
-  }
-
-  # if delta.o2 entered, out.o2, in.o2 & in.o2.value should be NULL
-  if(!is.null(delta.o2) && (!is.null(out.o2) || !is.null(in.o2) || !is.null(in.o2.value)))
-    stop("inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
-
 
   # Extract data ------------------------------------------------------------
 
@@ -357,7 +376,7 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
     message("inspect.ft: No issues detected while inspecting data frame.") else
       message("inspect.ft: Data issues detected. For more information use print().")
 
-  if (plot) plot(out, label = FALSE, ...)
+  if (plot) plot(out, message = FALSE, ...)
 
   return(out)
 }
@@ -425,13 +444,13 @@ print.inspect.ft <- function(x, ...) {
   return(invisible(x))
 }
 
-#x<-out
 #' @export
-plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
+plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
+                            legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
 
-  if (label)
+  if (message)
     cat("\n# plot.inspect.ft # ---------------------\n")
 
   # extract data
@@ -447,7 +466,7 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
   ## if multiple columns or only delta.o2 data inspected, just plot grid of all delta.o2
   if (length(del.o2) > 1 || is.null(out.o2)){
 
-    if(label && is.null(pos))
+    if(message && is.null(pos))
       cat("inspect.ft: Plotting all columns. To plot a specific dataset use 'pos'.\n")
 
     if(is.null(pos))
@@ -456,7 +475,7 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
     if(any(pos > length(del.o2)))
       stop("inspect.ft: Invalid 'pos' input: only ", length(del.o2), " data inputs found.")
 
-    if (label && length(pos) == 1)
+    if (message && length(pos) == 1)
       cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
 
     par(
@@ -469,14 +488,21 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
       tck = -.05
     )
 
+    # Plot all on same y axis range?????
     #ylim <- range(na.omit(del.o2[pos])) ## so all on same axes
     #buffer <- diff(ylim)*0.1
     #ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
+
+
     lapply(pos, function(z) {
+
+      ylim <- grDevices::extendrange(r = range(del.o2[[z]]), f = 0.05) ## add a little more space
+      if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
+
       plot(data.frame(time, del.o2[[z]]),
            mgp = c(0, 0.5, 0),
-           ylim = grDevices::extendrange(r = range(del.o2[[z]]), f = 0.05),
+           ylim = ylim,
            xlab = "",
            ylab = "",
            tck = -0.02,
@@ -495,7 +521,7 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
     if(pos > length(x$input_data$delta.o2))
       stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$input_data$out.o2), " data inputs found.")
 
-    if (label)
+    if (message)
       cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$input_data$delta), '... \n')
 
     ## general settings
@@ -577,21 +603,23 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
+    if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
+
     plot(
       unlist(time),
       del.o2[[pos]],
       xlab = "",
       ylab = "",
-      ylim = ylim,
+      ylim = ylim, # reverse y axis
       pch = 16,
       cex = .5,
       axes = FALSE,
       panel.first = grid()
     )
 
-    axis(side = 2, las = 1, tck = 0) # simply to put yaxis label colour back to black
+    axis(side = 2, las = 1, tck = 0) # simply to put yaxis lab colour back to black
     axis(side = 1,col.lab = "blue",
-         col.axis = "blue") # simply to put yaxis label colour back to black
+         col.axis = "blue") # simply to put yaxis lab colour back to black
 
     box()
 
@@ -603,10 +631,10 @@ plot.inspect.ft <- function(x, pos = NULL, label = TRUE, legend = TRUE, ...) {
 
     title(main = glue::glue("Rate (Delta O2)"), line = 0.3)
 
-  on.exit(par(parorig)) # revert par settings to original
+    on.exit(par(parorig)) # revert par settings to original
   }
 
-  if (label){
+  if (message){
     cat("Done.\n")
     cat("-----------------------------------------\n")
   }

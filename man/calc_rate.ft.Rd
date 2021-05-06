@@ -6,27 +6,28 @@
 \usage{
 calc_rate.ft(
   x = NULL,
-  outflow.o2 = NULL,
-  inflow.o2 = NULL,
   flowrate = NULL,
+  from = NULL,
+  to = NULL,
+  by = NULL,
+  width = NULL,
   plot = TRUE
 )
 }
 \arguments{
-\item{x}{data frame or object of class \code{inspect}.}
+\item{x}{numeric value, numeric vector of two values, or object of class
+\code{inspect.ft}.}
 
-\item{outflow.o2}{numeric. Defaults to NULL. This specifies the outflow O2
-column if a data frame or \code{inspect} object is provided. Otherwise, this is
-a numeric vector for outflow oxygen concentration.}
+\item{flowrate}{numeric value. The flow rate. Must be in \emph{Litres} per unit
+time (s,m,h) of the original data, for example L/s. The units are not
+required to be entered in this function; you will specify them when you
+perform conversions later in \code{convert_rate.ft}.}
 
-\item{inflow.o2}{numeric. Defaults to NULL. This specifies the inflow O2
-column if a data frame or \code{inspect} object is provided. Otherwise, this is
-a numeric vector for inflow oxygen concentration.}
+\item{from}{numeric value.}
 
-\item{flowrate}{numeric vector. The flow rate. Must be in \emph{Litres} per unit
-time (s,m,h), for example L/s. The units are not required to be entered in
-this function; you will specify them when you perform conversions later in
-\code{convert_rate}.}
+\item{to}{numeric value.}
+
+\item{by}{string. "time" or "row".}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
@@ -35,35 +36,45 @@ An object of class "calc_rate.ft".
 }
 \description{
 Calculates rate of oxygen uptake in flowthrough respirometry given a
-flow-rate and both inflow (upstream of the chamber) and outflow (downstream
-of the chamber) oxygen concentrations. Can return a single rate value, or
+flowrate and a delta oxygen value. Can return a single rate value, or
 multiple and mean values based on continuous data.
 }
 \details{
-Input can be numeric values or vectors - see examples. In addition, a
-\code{data.frame} or \code{inspect} object can be entered. In this case \code{outflow.o2}
-and \code{inflow.o2} are indices indicting the columns containing these data.
-Note, an \code{inflow.o2} column \emph{must} be present in the data.frame, even if this
-is a single fixed value repeated to the correct length. Note, a numeric time
-elapsed column can be present, but is not required. In flowthrough data,
-uptake rate calculations use O2 delta and the flow rate.
+The \code{x} input can be a single numeric value, a vector of length 2, or an
+object of class \code{inspect.ft()}.
+
+For continuous data recordings, it is recommended a \code{data.frame} containing
+the data be prepared via \code{\link[=inspect.ft]{inspect.ft()}}, and entered as the \code{x} input.
+
+Alternatively, if \code{x} is a single value it is assumed this is a delta oxygen
+value (outflow oxygen concentration minus inflow oxygen concentration in the
+same units). Alternatively, \code{x} can be a vector of two numeric values of
+outflow and inflow oxygen concentrations in that order. In these cases the
+\code{from}, \code{to}, and \code{by} inputs are unnecessary and ignored.
+
+The \code{from}, \code{to}, and \code{by} inputs determine the region of the \code{x} input over
+which a rate is determined. All delta oxygen values within this region are
+averaged to produce a final rate.
+
+Alternatively a \code{width} input can be entered, which along with \code{by} means a
+rolling rate of that width is calculated and returned.
 
 There are no units involved in \code{calc_rate.ft}. This is a deliberate decision.
-Units are called in a later function when absolute and/or mass-specific
-rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_DO]{convert_DO()}}.
+Units are called in a later function when absolute and/or mass-specific rates
+of oxygen use are computed in \code{\link[=convert_rate.ft]{convert_rate.ft()}}.
 }
 \examples{
 # Single numeric values
-calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = 8.17, flowrate = 0.000039)
+calc_rate.ft(in.o2 = 8.88, out.o2 = 8.17, flowrate = 0.000039)
 # Numeric values and vector
 data("flowthrough.rd")
-calc_rate.ft(inflow.o2 = 8.88, outflow.o2 = flowthrough.rd$o2.out,
+calc_rate.ft(in.o2 = 8.88, out.o2 = flowthrough.rd$o2.out,
   flowrate = 0.000039)
 # Vectors
 data("flowthrough.rd")
-calc_rate.ft(inflow.o2 = flowthrough.rd$o2.in,
-  outflow.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
+calc_rate.ft(in.o2 = flowthrough.rd$o2.in,
+  out.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
 # A data frame
 data("flowthrough.rd")
-calc_rate.ft(flowthrough.rd, outflow.o2 = 2, inflow.o2 = 3, flowrate = 0.00039)
+calc_rate.ft(flowthrough.rd, out.o2 = 2, in.o2 = 3, flowrate = 0.00039)
 }

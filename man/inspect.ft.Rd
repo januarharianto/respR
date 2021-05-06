@@ -35,8 +35,9 @@ calculate a \code{delta.o2}.}
 
 \item{delta.o2}{numeric vector of integers. Specifies the column number(s) of
 the delta O2 data, for data where the user has already calculated the
-difference between inflow and outflow oxygen. If entered, \code{out.o2} and
-\code{in.o2} should be NULL. Defaults to NULL if no other inputs given.}
+difference between inflow and outflow oxygen (should be negative values for
+oxygen uptake). If used, \code{out.o2} and \code{in.o2} should be NULL. Defaults to
+all non-time columns if no other inputs given.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data. See Details.}
 
@@ -48,62 +49,60 @@ A list object of class \code{inspect.ft}.
 \description{
 \code{inspect.ft} is a data exploration and preparation function that visualises
 flowthrough respirometry data, scans it for common issues, and prepares it
-for use in other functions in \code{respR}, such as \code{\link[=calc_rate.ft]{calc_rate.ft()}}.
+for use in later functions in \code{respR}, such as \code{\link[=calc_rate.ft]{calc_rate.ft()}}.
 }
 \details{
-\code{inspect.ft} is specific to \emph{flowthrough} respirometry data. In flowthrough
-respirometry (sometimes known as 'open flow' 'open system' or 'continuous
-flow' respirometry) rather than calculating a rate from a declining or
-increasing oxygen concentration recording in a sealed chamber, instead the
-difference (i.e. 'delta') between the inflow and outflow concentrations of a
-respirometer receiving water at a constant flow rate is used to calculate an
-oxygen consumption or production rate, typically after it has reached a
-steady state. Therefore, in general, regions of stable oxygen concentrations
-in the outflow recording, indicating stable oxygen delta values, are of
-interest. \code{inspect.ft} inspects, visualises, and prepares the data for use in
-\code{\link[=calc_rate.ft]{calc_rate.ft()}}. By specifying data types in this function and saving the
-output, they do not need to be specified in \code{\link[=calc_rate.ft]{calc_rate.ft()}}.
+\code{inspect.ft} is intended to be specific to \emph{flowthrough} respirometry data.
+In flowthrough respirometry (also known as 'open flow' 'open system' or
+'continuous flow' respirometry) rather than calculating a rate from a
+declining or increasing oxygen concentration recording in a sealed chamber,
+instead the difference (i.e. 'delta') between the inflow and outflow
+concentrations of a respirometer receiving water at a constant flow rate is
+used to calculate an oxygen consumption or production rate, typically after
+it has reached a steady state. Therefore, in general, regions of stable
+oxygen concentrations in the outflow recording, indicating stable oxygen
+delta values, are of interest. \code{inspect.ft} inspects, visualises, and
+prepares the data for use in \code{\link[=calc_rate.ft]{calc_rate.ft()}}. By specifying data types in
+this function and saving the output, they do not need to be specified in
+\code{\link[=calc_rate.ft]{calc_rate.ft()}}.
 
 \code{inspect.ft} requires at least two data inputs; a single column of numeric
 \code{time} data, with \emph{either} a column of paired \code{out.o2} concentrations (i.e.
 the exhalent or 'downstream' concentrations), \emph{or} a column of already
-calculated paired \code{delta.o2} values, that is the difference between outflow
-and inflow concentrations, or the outflow concentration corrected by a
-background recording from a 'blank' or empty chamber. If an \code{out.o2} column
-has been specified, in order to calculate the oxygen delta (and therefore a
-rate in \code{\link[=calc_rate.ft]{calc_rate.ft()}}) there must also be an inflow oxygen concentration
-input (i.e. the inhalent or 'upstream' concentration). This can either be a
-column of paired \code{in.o2} concentrations, or alternatively a single
-\code{in.o2.value} value. If a column, the paired values of \code{out.o2} and \code{in.o2}
-are used to calculate the oxygen \code{delta.o2}, which is saved in the output,
-and used to determine a rate in \code{\link[=calc_rate.ft]{calc_rate.ft()}}. If however the inflow
-oxygen concentration is a known, generally unvarying concentration (such as
-fully air-saturated water from a header tank) this can be entered as a single
-value via \code{in.o2.value} and this is used to calculate the \code{delta.o2}.
+calculated \code{delta.o2} values, that is the difference between outflow and
+inflow concentrations, or the outflow concentration corrected by a background
+recording from a 'blank' or empty chamber. If an \code{out.o2} column has been
+specified, in order to calculate the oxygen delta (and therefore a rate in
+\code{\link[=calc_rate.ft]{calc_rate.ft()}}) there must also be an inflow oxygen concentration input
+(i.e. the inhalent or 'upstream' concentration). This will generally be a
+column of paired \code{in.o2} concentrations,  in which case the paired values of
+\code{out.o2} and \code{in.o2} are used to calculate the oxygen \code{delta.o2}, which is
+saved in the output, and used to determine a rate in \code{\link[=calc_rate.ft]{calc_rate.ft()}}.
+Alternatively, if the inflow oxygen concentration is a known, generally
+unvarying concentration (such as fully air-saturated water from a header
+tank) this can be entered as a single value via \code{in.o2.value} and this is
+used to calculate the \code{delta.o2}.
 }
 \section{Data processing and validation checks}{
  \code{inspect.ft} subsets and
 classifies the specified columns into a new \code{list} object that can be used
 in subsequent functions, reducing the need for additional inputs. Note, use
 of \code{inspect.ft} to prepare data for the subsequent functions is optional.
-All functions in \code{respR} can accept regular `R`` data objects including
-data frames, data tables, tibbles, vectors, etc. Its purpose is quality
-control, data visualisation and exploration to assist users in exploring
-and preparing their data prior to analysis.
+All functions in \code{respR} accept regular `R`` data objects including data
+frames, data tables, tibbles, vectors, etc. Its purpose is quality control,
+data visualisation and exploration to assist users in exploring and
+preparing their data prior to analysis.
 
 Given an input data frame (\code{df}), the function scans the columns specified
-via the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} columns. If no columns are
+via the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} inputs. If no columns are
 specified, by default the functions assumes the first column is \code{time}, and
-all others are oxygen data. However, while these columns are checked and
-plotted, they are not designated as \code{out.o2}, \code{in.o2} or \code{delta.o2} so if
-the object is saved, these column types will have to be specified in
-\code{calc_rate.ft}.
+all others are \code{delta.o2} oxygen data.
 
 The \code{time} column is checked for missing (NA/NaN) values, that values are
 sequential, that there are no duplicate times, and that it is numerically
 evenly-spaced. Oxygen columns are simply checked for NA/NaN data. See
 \strong{Failed Checks} section for what it means for analyses if these checks
-produce warnings. The function produces a \code{list} object which, if saved,
+result in warnings. The function outputs a \code{list} object which, if saved,
 can be directly loaded (or \verb{\%>\%} piped) into \code{\link[=calc_rate.ft]{calc_rate.ft()}} for further
 analysis.
 }
@@ -111,32 +110,41 @@ analysis.
 \section{Plot details}{
  A plot of the data is also produced (unless \code{plot = FALSE}), depending on the inputs:
 \itemize{
-\item a single \code{out.o2} column: a two panel plot. The top plot is both outflow
-(black points) and inflow (grey points) oxygen against both time (bottom,
-blue axis) and row index (top, red axis). The bottom plot is a rolling
-oxygen consumption or production rate, that is the oxygen delta between
-inflow and outflow oxygen.
+\item a single \code{out.o2} column with either a paired \code{in.o2} column or a
+\code{in.o2.value}: a two panel plot. The top plot is both outflow (black
+points) and inflow (grey points) oxygen against both time (bottom, blue
+axis) and row index (top, red axis). The bottom plot is a rolling oxygen
+consumption or production rate, that is the oxygen delta between inflow and
+outflow oxygen.
 \item a single \code{delta.o2} column: a one panel plot of a rolling oxygen
-consumption or production rate, that is the oxygen delta input.
+consumption or production rate, that is the oxygen delta input, against
+time.
 \item multiple \code{out.o2} or \code{delta.o2} columns: a grid plot of all \code{delta.o2}
-columns (either as entered or calculated) only. Specific column sets can be
-examined as a single plot by using the \code{pos} input. See examples.
-\item unspecified columns: all columns are plotted assuming \code{time} in in column
-1, and all others are oxygen data. Y-axes are not equal.
+columns (either as entered or calculated from \code{out.o2} and \code{in.o2}) only.
+Specific delta plots can be examined as a single plot by using the \code{pos}
+input. Y-axes are not equal. See examples.
+\item unspecified columns: all columns are plotted assuming \code{time} is in column
+1, and all others are oxygen \code{delta.o2} data. Y-axes are not equal.
 }
 
 In rate plots, that is those plotting \code{delta.o2} values, either directly
-entered or calculated, regions where rates are stable and consistent will
-be horizontally flat.
+entered or calculated, stable oxygen uptake or production rates will be
+seen as flat regions.
 
-\emph{\strong{Important:}} Rates in the \code{delta.o2} plots are plotted strictly
-numerically on the y-axis. That is, \emph{higher} oxygen consumption rates,
-which in \code{respR} are negative since they represent a negative slope of
-oxygen against time, will be \emph{lower} on these plots. Higher oxygen
-production rates, which are positive, will be higher on the plot.
+\emph{\strong{Important:}} Since \code{respR} is primarily used to examine oxygen
+consumption, \code{delta.o2} plots are plotted on a reverse y-axis by default.
+In \code{respR} oxygen uptake rates are negative since they represent a negative
+slope of oxygen against time. In rate plots the axis is reversed so that
+higher uptake rates (i.e. more negative rates) will be higher on these
+plots. If you are interested instead in oxygen production rates, which are
+positive, the \code{rate.rev = FALSE} argument can be passed in either the
+\code{inspect.ft} call, or when using \code{plot()} on the output object. In this
+case, the \code{delta.o2} values will be plotted with highest oxygen production
+rates higher on the \code{delta.o2} plot.
 
-If the legend obscures part of the plots, it can be suppressed via \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on the
-output object.
+If the legend or labels obscure part of the plot, they can be suppressed
+via \code{legend = FALSE} in either the \code{inspect.ft} call, or when using
+\code{plot()} on the output object.
 }
 
 \section{Multiple data columns}{
@@ -144,18 +152,18 @@ output object.
 multiple columns of \code{out.o2}, \code{in.o2} and \code{delta.o2} can be inspected, but
 must share the same numeric time data column specified by the \code{time} input.
 Note, multiple column inspection is chiefly intended as a data exploration
-step for larger datasets. Subsequent functions such as \code{\link[=calc_rate.ft]{calc_rate.ft()}}
-will by default use only the first specified \code{out.o2}, \code{in.o2} and
-\code{delta.o2} columns for calculating rates.
+step, to give a quick overview larger datasets. Subsequent functions such
+as \code{\link[=calc_rate.ft]{calc_rate.ft()}} will by default use only the first specified \code{out.o2},
+\code{in.o2} and \code{delta.o2} columns for calculating rates.
 
 If multiple \code{out.o2} columns are specified, \code{in.o2} can be a single column
 (if for example all chambers are supplied from the same header tank), in
 which case it is used to calculate an oxygen delta for all \code{out.o2}
-columns. There can also be multiple \code{in.o2} columns, in which case it is
-assumed each \code{out.o2} column is paired with each \code{in.o2} at the same
-position, and used to calculate the oxygen \code{delta.o2}. Therefore, they must
-have the same number of columns. A single \code{in.o2.value} value in the same
-units as \code{out.o2} can also be specified.
+columns. A single \code{in.o2.value} value in the same units as \code{out.o2} can
+also be specified. There can also be multiple \code{in.o2} columns, in which
+case it is assumed each \code{out.o2} column is paired with each \code{in.o2} at the
+same position, and used to calculate the oxygen \code{delta.o2}. Therefore, they
+must have the same number of columns.
 
 Regardless of which inputs are used, multiple columns results in a plot of
 each \code{delta.o2} time series. All data are plotted on the same axis range of
@@ -167,8 +175,8 @@ that while the output \code{list} object will contain all data columns in its
 (\code{time}, and the first \code{delta.o2}) to calculate rates. Other columns of
 oxygen data contained in \code{inspect.ft} output objects can only be used in
 these functions by calling the specific output object elements directly.
-Best practice is to inspect and assign each individual experiment as
-separate \code{inspect.ft} objects. See examples.
+Best practice is to inspect and assign each individual experiment or column
+pair as separate \code{inspect.ft} objects. See examples.
 }
 
 \section{Failed Checks}{
