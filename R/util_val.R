@@ -76,15 +76,6 @@ column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,I
 
 }
 
-# df = flowthrough.rd
-# input = time
-# time = 1:2
-# outflow.o2 = 3
-# inflow.o2 = 4
-# inflow.o2.conc = NULL
-# delta.o2 = NULL
-# plot = FALSE
-
 
 ## Validation of general inputs
 ## - num = input is numeric?
@@ -92,8 +83,8 @@ column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,I
 ## - int = should only be integers?
 ## - max = for max total number of inputs allowed (e.g. flowrate should only be 1 value)
 ## - min = for min total number of inputs allowed
-## - range = for specific range allowed (e.g. c(0,1))
-## - msg = string to add custom message
+## - range = for specific range of values allowed (e.g. c(0,1))
+## - msg = string to prepend failure message
 
 input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
                         max = Inf, min = 1, range = c(-Inf,Inf), msg = ""){

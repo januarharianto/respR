@@ -1,29 +1,24 @@
 
-Keep *everything* regarding changes in here, rather than moving some to NEWS.md.
-It's hard to keep track what's where.
+Keep *EVERYTHING* regarding changes in here, rather than moving some to NEWS.md.
 We can decide what to include in NEWS just before we release.
+
+The more detail the better.
 
 For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then copy it in here when it is merged.
 
 
-NEWS
-# [version 1.1.1] -- 2019-07-24
 Quick fixes and changes.
+(we don't have to include all these, but we should keep a full list however minor)
 
 - **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
 - **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
 - **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
-
-
-
-(we don't have to include all these, but we should keep a full list however minor)
-
-Fixes
 - FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
 - FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
+- FIX: format_time() - fix for not working with multiple data-time columns if one of them wasn't column 1
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
 - FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
 - FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
@@ -42,12 +37,12 @@ Changes
 
 NEW
 - NEW: subset_rate function - HIGHLIGHT
+- NEW: new flowthrough process - 4 functions - HIGHLIGHT
 - NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
 
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
 
-***************Need to revise above. on.exit cmd needs to be at end after all... Done for plot.auto_rate
-
+***************Need to revise above. on.exit cmd needs to be at end after all, but apparently before return(). Done for plot.auto_rate. TEST THIS
 
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
@@ -58,6 +53,13 @@ NEW
 - CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
 - CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
 - NEW: import_file now supports Presens Datamanager files
+
+
+========================== internals ============================
+New utility validation fns
+- verify_by - updated - can select which 'by' inputs to accept, or if required, plus output a message
+- column.val - for inputs which take column numbers
+- input.val - for other input validations
 
 
 
@@ -76,8 +78,7 @@ Changes
 - CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: Stops if 'oxygen' and 'time' columns conflict
 - FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
-
-
+- CHANGE: Can pass 'rate.rev = FALSE' to plot rates numerically correctly (for oxygen production respirometry)
 
 
 ========================== S3 Methods ============================
@@ -156,10 +157,12 @@ Other changes
 ========================== convert_DO() ============================
 - Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure! However - a rate conversion function would be very useful
 - Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
+- Fix for error with non-numeric x inputs
 
 
 ========================== unit_args() ============================
-- updated for new units (time in days, oxygen in mol, %O2) and more detail of which functions accept which units
+- Updated for new units (time in days, oxygen in mol, %O2) and more detail of which functions accept which units
+- Updated with units for flowrates and better printing
 
 
 ========================== adjust_rate() ============================
@@ -188,3 +191,21 @@ Although, there's a chance with some data it will give different results than th
 - FIX: by = "proportion" and by = "o2" now work correctly with oxygen production data (changes made to truncate_data)
 - Note changes above now generally result in larger/longer subsets. Extra rows are at the end (because of change in identifying where 'to' is - see comment on calc_rate)
 - Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple O2 column dataframes
+
+
+========================== flowthrough ============================
+- inspect.ft
+- calc_rate.ft
+- adjust_rate.ft
+- convert_rate.ft
+
+- Specific to flowthough data.
+- Will add more detail in vignettes. Help file is pretty complete
+
+inspect.ft - can pass rate.rev = FALSE to plot rates numerically correctly (for oxygen production respirometry)
+
+- NEW: flowthrough_mult.rd example dataset - multiple flowthrough data
+- NEW: flowthrough_nlbg.rd example dataset - flowthrough data with non-linear background
+- CHANGE: flowthrough.rd amended to make delta column negative values
+
+
