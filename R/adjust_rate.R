@@ -648,12 +648,13 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 }
 
 
+# S3 Generic functions ----------------------------------------------------
 
 #' @export
 print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\n# print.adjust_rate # -------------------\n")
   cat("Note: please consider the sign of the correction value when adjusting the rate.\n")
-  if(pos > length(x$adjusted.rate)) stop("Invalid 'pos' rank: only ", length(x$adjusted.rate), " adjusted rates found.")
+  if(pos > length(x$adjusted.rate)) stop("print.adjust_rate: Invalid 'pos' rank: only ", length(x$adjusted.rate), " adjusted rates found.")
   cat("\nAdjustment was applied using '", x$adjustment.method, "' method.", sep = "")
   cat("\n")
   cat("\nRank", pos, "of", length(x$adjusted.rate), "adjusted rate(s):")
@@ -677,6 +678,7 @@ summary.adjust_rate <- function(object, export = FALSE, ...) {
   } else rate <- object$input.rate
   out <- data.table::data.table(rate, adjustment = object$adjustment, "adjusted rate" = object$adjusted.rate)
   print(out)
+  cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else

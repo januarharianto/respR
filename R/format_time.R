@@ -6,24 +6,22 @@
 #' **Input**
 #'
 #' Input can be a vector, or data frame. If a vector, output is a vector of
-#' equal length containing numeric time data. If a data frame, the column index
-#' of the date-time data is specified using the `time =` input. By default the
+#' equal length containing numeric time data. If a data frame, the column(s)
+#' of the date-time data are specified using the `time =` input. By default the
 #' first column is assumed to contain the date-time data (i.e. `time = 1`).
 #'
-#' Multiple columns can be specified (e.g. `time = c(1, 2)`) if the date-time
-#' data is split over multiple columns (e.g. date in one column, time in
-#' another). The function will combine these date and time strings together for
-#' conversion. If multiple columns are specified, the `format` setting should
+#' Multiple columns can be specified (e.g. `time = c(1,2)`) if the date-time
+#' data is split over several columns (e.g. date in one column, time in
+#' another). If multiple columns are specified, the `format` setting should
 #' reflect the same order entered in `time`.
 #'
 #' For data frame inputs, a data frame is returned which is identical to the
-#' input except a new column called `time_num` is added as the last column.
+#' input with a new column called `time_num` added as the last column.
 #'
 #' Time-only data, that is times which lack an associated date, can also be
 #' parsed. Normally, parsing time-only data will cause problems when the times
 #' cross midnight (i.e. 00:00:00). However, the function attempts to identify
-#' these occurences and parse the data correctly. It also prints a message with
-#' the locations of these data regions for the user to check they look ok.
+#' when this occurs and parse the data correctly.
 #'
 #' Date-time data can be unspaced or separated by any combination of spaces,
 #' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -44,48 +42,58 @@
 #' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
 #' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry starting at 1. However, if you want the times
-#' to satrt at a different time, a `start` value can be specified, in which
-#' case the series starts at that number (in seconds) and all subsequent times
-#' are shifted forward by the same amount.
+#' duration from the first entry starting at 1. If you want the times
+#' to start at a different time, a `start` value can be specified, in which case
+#' the series starts at that number (in seconds) and all subsequent times are
+#' shifted forward by the same amount.
 #'
 #' **Syntax**
 #'
-#' Simply identify the order which the year, month, day, and time appears in
-#' your date-time input.
+#' Specify the order of year, month, day, and time in your date-time input.
 #'
-#' \describe{ \item{`d`}{Day of the month as decimal number (01--31 or 0--31).}
-#' \item{`m`}{Month of the year as decimal number (01--12 or 1--12).}
-#' \item{`y`}{Year (2010, 2001, 1989).} \item{`H`}{Hour, must be capitalised
-#' (`H`, not `h`). Decimal number (00--24 or 0--24).} \item{`M`}{Minute, must be
-#' capitalised (`M`, not `m`). Decimal number (00--59 or 0--59).}
-#' \item{`S`}{Second, must be capitalised (`S`, not `s`). Decimal number (00--59
-#' or 0--59).} \item{`p`}{AM/PM indicator. Adding this will format the data as
-#' 12-h date-time format.} }
+#' `d` - Day of the month as decimal number (01--31 or 1--31).
+#'
+#' `m` - Month of the year as decimal number (01--12 or 1--12).
+#'
+#' `y` - Year (2010, 2001, 1989).
+#'
+#' `H` - Hour as decimal number (00--24 or 0--24 or 00-12 (see `p`)).
+#'
+#' `M` - Minute as decimal number (00--59 or 0--59).
+#'
+#' `S` - Second as decimal number (00--59 or 0--59).
+#'
+#' `p` - AM/PM indicator for 12-h date-time format.
 #'
 #' Print the order in the `format` string argument, using separators if you
 #' choose to (optional): `"dmyHMS"`; `"dmy_HMS"` and `"d m y H M S"` are all the
-#' same. Single datasets should not span different time zones, so if a time zone
+#' same. For more info see [lubridate()].
+#'
+#' Single datasets should not span different time zones, so if a time zone
 #' is present it is ignored for the purposes of calculating numeric times. If
 #' multiple columns have been specified in the `time` argument, the `format`
-#' should reflect the same order.
+#' should reflect the proper order.
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.
 #' @param time numeric value or vector. Specifies column(s) containing date-time
 #'   data
 #' @param format string. Code describing structure of date-time data. See
-#'   details. Directly relates to functionality in the package `lubridate`
+#'   details.
 #' @param start numeric. Default = 1. At what time (in seconds) should the
 #'   formatted time data start?
-#' @return A vector or data frame, depending on input. If input is a vector, a
-#'   vector of same length containing numeric time is returned. If input is a
-#'   data frame, the output data frame is identical, except a new column,
-#'   `time_num`,of numeric time data in seconds is added as the last column.
+#'
+#' @return Output is a vector or data frame, depending on input. If input is a
+#'   vector, a vector of same length containing numeric time is returned. If
+#'   input is a data frame, the same data frame is returned with a new column,
+#'   `time_num`, of numeric time data in seconds added as the last column.
 #'
 #' @importFrom lubridate parse_date_time
+#'
 #' @export
+#'
 #' @seealso \code{\link{lubridate}}
+#'
 #' @examples
 #' # convert year-month-day hour-min-sec
 #' x <- c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11")
@@ -122,9 +130,9 @@
 #'   x = c("22:11:11", "23:11:11","00:25:11"),
 #'   y = c(23, 34, 45),
 #'   z = c(56, 67, 78))
-#' format_time(x, time = 2, format = "HMS") # WRONG! Crosses midnight
-#' format_time(x, time = c(1,2), format = "dmyHMS") # Correct
-#' format_time(x, time = c(2,1), format = "HMSdmy") # Different column order & format
+#' format_time(x, time = 2, format = "HMS") # Crosses midnight, but parses correctly
+#' format_time(x, time = 1:2, format = "dmyHMS") # Include dates if present to be sure
+#' format_time(x, time = 2:1, format = "HMSdmy") # Different column order & format
 #'
 #' # convert dataframe with multiple date and time columns
 #' x <- data.frame(
@@ -133,7 +141,7 @@
 #'   x = c("22:11:11", "23:11:11","00:25:11"),
 #'   y = c(23, 34, 45),
 #'   z = c(56, 67, 78))
-#' format_time(x, time = c(1:3), format = "dmyHMS")
+#' format_time(x, time = 1:3, format = "dmyHMS")
 
 format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
 
@@ -143,9 +151,8 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   # the time columns will be concatenated and then saved for further analysis
   if (length(time) > 1) {
     dt <- dt[, time, with = FALSE]  # extract columns
-    # join date time columns and subset the result:
-    ts <- dt[, ts := do.call(paste, c(.SD, sep = " "))]
-    ts <- ts[, -time, with = FALSE]
+    # join date time columns to single string
+    ts <- apply(dt, 1, function(x) paste(x, collapse = " "))
   } else if (length(time) == 1) {
     ts <- dt[, time, with = FALSE]  # extract columns
   } else ts <- x # otherwise assume that object is a vector list of date(s)
