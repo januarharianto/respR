@@ -167,7 +167,7 @@ test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
                regexp = NA)
   expect_equal(as.data.frame(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
                                         in.o2 = NULL, delta.o2 = NULL, plot = F)$input_data$delta.o2),
-               as.data.frame(flowthrough_mult.rd[,2:11]))
+               as.data.frame(flowthrough_mult.rd[,2:13]))
 })
 
 test_that("inspect.ft - stops if input column numbers found to conflict",{

@@ -2,16 +2,16 @@
 % Please edit documentation in R/unit_args.R
 \name{unit_args}
 \alias{unit_args}
-\title{Print examples of unit arguments for use in \code{\link[=convert_DO]{convert_DO()}} and
-\code{\link[=convert_rate]{convert_rate()}}}
+\title{Print examples of unit arguments for use in \code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}},
+and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}
 \usage{
 unit_args()
 }
 \description{
-This is a simple function, with no arguments. It shows available units that
-can be used in the functions \code{\link[=convert_DO]{convert_DO()}} and \code{\link[=convert_rate]{convert_rate()}}. Some oxygen
-unit conversions also require temperature (\code{t}), salinity (\code{S}), and
-atmospheric pressure (\code{P}) to be specified.
+This is a simple function, with no arguments. It prints to the console the
+units that can be used in the functions \code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}}, and
+\code{\link[=convert_rate.ft]{convert_rate.ft()}}. Some oxygen unit conversions also require temperature
+(\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be specified.
 }
 \details{
 Note the difference between percent air saturation (\verb{'\%Air}), where air
@@ -26,14 +26,18 @@ Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
 denominator.
 
 Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
-
-\verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
+\itemize{
+\item \verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
+}
 
 Require \code{t}, \code{S} and \code{P} for conversions:
+\itemize{
+\item \verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg", "\%Air"} (i.e. \%
+Air Saturation), \code{"\%O2"} (i.e. \% Oxygen Saturation), \verb{"Torr", "hPa", "kPa",}
+\verb{"mmHg", "inHg"}
+}
 
-\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%Air" (i.e. \% Air Saturation), }"\%O2" (i.e. \% Oxygen Saturation) "Torr", "hPa", "kPa",\verb{}"mmHg", "inHg"`
-
-\strong{\code{\link[=convert_rate]{convert_rate()}}}
+\strong{\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}
 
 \strong{Oxygen concentration or pressure units for \code{o2.unit} argument:}
 
@@ -41,16 +45,28 @@ Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
 denominator.
 
 Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
-
-\verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
+\itemize{
+\item \verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
+}
 
 Require \code{t}, \code{S} and \code{P} for conversions:
+\itemize{
+\item \verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \code{"\%Air"} (i.e. \%
+Air Saturation), \code{"\%O2"} (i.e. \% Oxygen Saturation), \verb{"Torr", "hPa", "kPa",}
+\verb{"mmHg", "inHg"}
+}
 
-\verb{"mL/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",} \verb{"\%Air" (i.e. \% Air Saturation), }"\%O2" (i.e. \% Oxygen Saturation) "Torr", "hPa", "kPa",\verb{}"mmHg", "inHg"`
+\strong{Time units for \code{time.unit} or \code{flowrate.unit} argument:}
+\itemize{
+\item \verb{"sec", "min", "hour", "day"}
+}
 
-\strong{Time units for \code{time.unit} argument:}
+\strong{Volume units for \code{flowrate.unit} argument (\code{convert_rate.ft} only):}
 
-\verb{"sec", "min", "hour", "day"}
+For example, in \code{'ml/min'}, \code{'L/s'}, etc.
+\itemize{
+\item \verb{"uL", "mL", "L"}
+}
 
 \strong{Combining units for \code{output.unit} argument:}
 
@@ -65,20 +81,24 @@ separator:
 }
 
 \strong{Oxygen amount units for use in \code{output.unit} argument:}
-
-\verb{"ug", "mg", "umol", "mmol", "mol", "mL"}
+\itemize{
+\item \verb{"ug", "mg", "umol", "mmol", "mol", "mL"}
+}
 
 \strong{Time units for use in \code{output.unit} argument:}
-
-\verb{"sec", "min", "hour", "day"}
+\itemize{
+\item \verb{"sec", "min", "hour", "day"}
+}
 
 \strong{Mass units for use in \code{output.unit} argument in mass-specific rates:}
-
-\verb{"ug", "mg", "g", "kg"}
+\itemize{
+\item \verb{"ug", "mg", "g", "kg"}
+}
 
 \strong{Area units for use in \code{output.unit} argument in area-specific rates:}
-
-\verb{"mm2", "cm2", "m2", "km2"}
+\itemize{
+\item \verb{"mm2", "cm2", "m2", "km2"}
+}
 }
 \examples{
 unit_args()

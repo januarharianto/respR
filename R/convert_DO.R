@@ -41,7 +41,7 @@
 #'   t = 15, S = 35)
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
-                         P = 1.013253) {
+                       P = 1.013253) {
 
   # Validate input:
   if (!is.character(from)) stop("convert_DO: 'from' unit should be a character string.")
@@ -53,8 +53,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
   # Units requiring t, S and/or P (all same for now)
   tsp_req <- c("mL/L.o2", "mL/kg.o2", "%Air.o2", "%O2.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
-    "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
-    "mL/kg.o2")
+               "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
+               "mL/kg.o2")
 
   # Check t, S and P needed for units
 
@@ -183,10 +183,10 @@ verify_units <- function(unit, is) {
                     "percair","percentair","percentageair"),
 
       '%O2.o2' = c('%O2.o2','%oxy','%Oxy','%OX','%OXY','%o2','%O2','%o','%O',
-                    "percoxygen","percentoxygen","percentageoxygen",
-                    "percoxy","percentoxy","percentageoxy",
-                    "perco2","percento2","percentageo2",
-                    "percoO2","percentO2","percentageO2"),
+                   "percoxygen","percentoxygen","percentageoxygen",
+                   "percoxy","percentoxy","percentageoxy",
+                   "perco2","percento2","percentageo2",
+                   "percoO2","percentO2","percentageO2"),
 
       'ug/L.o2' = c('ug/L.o2','ug/L','ug/l','ug / L','ug / l','ugL-1',
                     'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre'),
@@ -269,6 +269,90 @@ verify_units <- function(unit, is) {
       'mol.o2' = c('mol.o2','molo2','molO2','mol','mole'),
       'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
   }
+  if (is == 'flow') {
+    ul_var <- c("ul", "uL", "UL", "Ul",
+                "microlitre", "microlitres",
+                "micro litre", "micro litres",
+                "microliter", "microliters",
+                "micro liter", "micro liters")
+    ml_var <- c("ml", "mL", "ML", "Ml",
+                "millilitre", "millilitres",
+                "milli litre", "milli litres",
+                "milliliter", "milliliters",
+                "milli liter", "milli liters")
+    l_var <- c("l", "L",
+               "litre", "litres",
+               "Litre", "Litres",
+               "Liter", "Liters")
+    vol_var <- list(ul_var,
+                    ml_var,
+                    l_var)
+    vol_var.true <- list(rep("ul", length(ul_var)),
+                         rep("ml", length(ml_var)),
+                         rep("l", length(l_var)))
+
+    sec_var  = c('seconds', 'second', 'sec', 'secs', 's', "S")
+    min_var  = c('minutes', 'minute', 'min', 'mins', 'm', "M")
+    hour_var = c('hours', 'hour', 'hr', 'hrs', 'h', "H")
+    day_var = c('days', 'day', 'dy', 'dys', 'd', "D")
+
+    time_var <- list(sec_var,
+                     min_var,
+                     hour_var,
+                     day_var)
+    time_var.true <- list(rep("s", length(sec_var)),
+                          rep("m", length(min_var)),
+                          rep("h", length(hour_var)),
+                          rep("d", length(day_var)))
+
+    ## all combinations of vol and time
+    flow_units <- expand.grid(unlist(vol_var), unlist(time_var))
+    ## with / sep
+    flow_units[[3]] <- mapply(function(p,q) paste0(p, "/", q),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## with . sep
+    flow_units[[4]] <- mapply(function(p,q) paste0(p, ".", q),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## with space sep
+    flow_units[[5]] <- mapply(function(p,q) paste0(p, " ", q),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## with space sep plus -1
+    flow_units[[6]] <- mapply(function(p,q) paste0(p, " ", q, "-1"),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## with NO sep plus -1
+    flow_units[[7]] <- mapply(function(p,q) paste0(p, q, "-1"),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## with . sep plus -1
+    flow_units[[8]] <- mapply(function(p,q) paste0(p, ".", q, "-1"),
+                              p = flow_units[[1]],
+                              q = flow_units[[2]])
+    ## add final parsed unit
+    ## this is what matches will be identified as
+    flow_units[,9:10] <- expand.grid(unlist(vol_var.true), unlist(time_var.true))
+    flow_units[[11]] <- mapply(function(p,q) paste0(p, "/", q, ".flow"),
+                               p = flow_units[[9]],
+                               q = flow_units[[10]])
+    all.units <- list(
+      'ul/s.flow' = unlist(flow_units[which(flow_units[[11]] == "ul/s.flow"),3:8]),
+      'ml/s.flow' = unlist(flow_units[which(flow_units[[11]] == "ml/s.flow"),3:8]),
+      'l/s.flow' = unlist(flow_units[which(flow_units[[11]] == "l/s.flow"),3:8]),
+      'ul/m.flow' = unlist(flow_units[which(flow_units[[11]] == "ul/m.flow"),3:8]),
+      'ml/m.flow' = unlist(flow_units[which(flow_units[[11]] == "ml/m.flow"),3:8]),
+      'l/m.flow' = unlist(flow_units[which(flow_units[[11]] == "l/m.flow"),3:8]),
+      'ul/h.flow' = unlist(flow_units[which(flow_units[[11]] == "ul/h.flow"),3:8]),
+      'ml/h.flow' = unlist(flow_units[which(flow_units[[11]] == "ml/h.flow"),3:8]),
+      'l/h.flow' = unlist(flow_units[which(flow_units[[11]] == "l/h.flow"),3:8]),
+      'ul/d.flow' = unlist(flow_units[which(flow_units[[11]] == "ul/d.flow"),3:8]),
+      'ml/d.flow' = unlist(flow_units[which(flow_units[[11]] == "ml/d.flow"),3:8]),
+      'l/d.flow' = unlist(flow_units[which(flow_units[[11]] == "l/d.flow"),3:8])
+    )
+  }
+
   # Look for match
   string <- paste0('^', unit, '$')  # for exact matching
   chk <- lapply(all.units, function(x) grep(string, x))

@@ -86,7 +86,8 @@ column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,I
 # plot = FALSE
 
 
-## Validation of numeric inputs
+## Validation of general inputs
+## - num = input is numeric?
 ## - req = input is required (i.e. can't be NULL)
 ## - int = should only be integers?
 ## - max = for max total number of inputs allowed (e.g. flowrate should only be 1 value)
@@ -94,11 +95,14 @@ column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,I
 ## - range = for specific range allowed (e.g. c(0,1))
 ## - msg = string to add custom message
 
-numeric.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
-                        max = 1, min = 1, range = c(-Inf,Inf), msg = ""){
+input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
+                        max = Inf, min = 1, range = c(-Inf,Inf), msg = ""){
 
-  ## check numeric
+  ## check if numeric
   is_num <- is.numeric(input)
+  ## if is numeric, but should not be - stop
+  if(is_num && !num) stop(glue::glue("{msg} input is numeric and should not be."))
+
   ## check if an input required
   is_null <- is.null(input)
   ## check integer
@@ -114,9 +118,9 @@ numeric.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
 
   if(!is_null){
     if(num && !is_num) stop(glue::glue("{msg} input is not numeric."))
-    if(int && !are_int) stop(glue::glue("{msg} one or more inputs are not integers."))
-    if(!below_max) stop(glue::glue("{msg} only {max} inputs allowed."))
-    if(!above_min) stop(glue::glue("{msg} at least {min} inputs required."))
-    if(!in_range) stop(glue::glue("{msg} one or more inputs are outside the range of allowed values."))
+    if(num && int && !are_int) stop(glue::glue("{msg} one or more inputs are not integers."))
+    if(num && !below_max) stop(glue::glue("{msg} only {max} inputs allowed."))
+    if(num && !above_min) stop(glue::glue("{msg} at least {min} inputs required."))
+    if(num && !in_range) stop(glue::glue("{msg} one or more inputs are outside the range of allowed values."))
   }
 }

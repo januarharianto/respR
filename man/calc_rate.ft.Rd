@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_rate.ft.R
 \name{calc_rate.ft}
 \alias{calc_rate.ft}
-\title{Calculate rate of change in oxygen in flowthrough respirometry}
+\title{Calculate rate of change in oxygen from flowthrough respirometry data}
 \usage{
 calc_rate.ft(
   x = NULL,
@@ -11,70 +11,154 @@ calc_rate.ft(
   to = NULL,
   by = NULL,
   width = NULL,
-  plot = TRUE
+  plot = TRUE,
+  ...
 )
 }
 \arguments{
-\item{x}{numeric value, numeric vector of two values, or object of class
-\code{inspect.ft}.}
+\item{x}{numeric value or vector of delta oxygen values, a 2-column
+\code{data.frame} of outflow (col 1) and inflow (col 2) oxygen values, or an
+object of class \code{inspect.ft}.}
 
-\item{flowrate}{numeric value. The flow rate. Must be in \emph{Litres} per unit
-time (s,m,h) of the original data, for example L/s. The units are not
-required to be entered in this function; you will specify them when you
-perform conversions later in \code{convert_rate.ft}.}
+\item{flowrate}{numeric value. The flow rate through the respirometer in
+volume (ul, ml, L) per unit time (s,m,h,d).}
 
-\item{from}{numeric value.}
+\item{from}{numeric value or vector. The start of the region(s) over which
+you want the average rate in either time or row units. If a vector, each
+value must have a paired value in \code{to}. For use with \code{inspect.ft} inputs
+only.}
 
-\item{to}{numeric value.}
+\item{to}{numeric value or vector. The end of the region(s) over which you
+want the average rate in either time or row units. If a vector, each value
+must have a paired value in \code{from}. For use with \code{inspect.ft} inputs only.}
 
-\item{by}{string. "time" or "row".}
+\item{by}{\code{"time"} or \code{"row"}. Defaults to \code{"time"}. Specifies the units of
+the \code{from} and \code{by}, or \code{width} value. For use with \code{inspect.ft} inputs
+only.}
+
+\item{width}{numeric. Calculates a rolling rate across the whole dataset of
+the specified width in the units specified in \code{by}. For use with
+\code{inspect.ft} inputs only.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
+
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE} and \code{pos}.}
 }
 \value{
-An object of class "calc_rate.ft".
+Output is a \code{list} object of class \code{calc_rate.ft} containing input
+parameters and data, various summary data, metadata, and the primary output
+of interest \verb{$rate}, which can be background adjusted in \code{\link{adjust_rate.ft}}
+or converted to units in \code{\link{convert_rate.ft}}.
 }
 \description{
-Calculates rate of oxygen uptake in flowthrough respirometry given a
-flowrate and a delta oxygen value. Can return a single rate value, or
-multiple and mean values based on continuous data.
+Calculates rate of oxygen uptake or production in flowthrough respirometry
+data given a \code{flowrate} and delta oxygen values, which can either be directly
+entered, or be calculated from inflow and outflow oxygen. The function
+returns a single rate value from the whole dataset or a subset of it.
+Alternatively, multiple rate values can be returned from different regions of
+continuous data, or a rolling rate of a specific window size performed across
+the whole dataset.
 }
 \details{
-The \code{x} input can be a single numeric value, a vector of length 2, or an
-object of class \code{inspect.ft()}.
-
 For continuous data recordings, it is recommended a \code{data.frame} containing
 the data be prepared via \code{\link[=inspect.ft]{inspect.ft()}}, and entered as the \code{x} input.
 
-Alternatively, if \code{x} is a single value it is assumed this is a delta oxygen
-value (outflow oxygen concentration minus inflow oxygen concentration in the
-same units). Alternatively, \code{x} can be a vector of two numeric values of
-outflow and inflow oxygen concentrations in that order. In these cases the
-\code{from}, \code{to}, and \code{by} inputs are unnecessary and ignored.
+For data unprepared like this, \code{x} can be a 2-column \code{data.frame} containing
+numeric values of outflow (col 1) and inflow (col 2) oxygen concentrations.
+Alternatively, \code{x} can be a numeric value or vector representing delta oxygen
+values (outflow oxygen concentration minus inflow oxygen concentration in the
+same units). In these cases, the \code{flowrate} is used to convert all delta
+oxygen values to rates, and the \code{from}, \code{to}, and \code{by} inputs are ignored.
 
-The \code{from}, \code{to}, and \code{by} inputs determine the region of the \code{x} input over
-which a rate is determined. All delta oxygen values within this region are
-averaged to produce a final rate.
+\emph{\strong{Specifying rate region}}
 
-Alternatively a \code{width} input can be entered, which along with \code{by} means a
-rolling rate of that width is calculated and returned.
+For calculating rates over specific regions of the data, the \code{from} and
+\code{to}inputs (in the \code{by} units of \code{time}, the default, or \code{row}) can be used
+for \code{inspect.ft()} inputs. All delta oxygen values within this region are
+converted to rates, and averaged to produce a overall rate for the region
+(\verb{$rate} in the output). Multiple regions can be examined within the same
+dataset by entering \code{from} and \code{to} as vectors of paired values to specify
+different regions. In this case, \verb{$rate} in the output will be a vector of
+multiple rates with each result corresponding to the position of the paired
+\code{from} and \code{to} inputs. If \code{from} and \code{to} are \code{NULL} (the default), the rate
+is determined over the entire dataset.
 
-There are no units involved in \code{calc_rate.ft}. This is a deliberate decision.
-Units are called in a later function when absolute and/or mass-specific rates
-of oxygen use are computed in \code{\link[=convert_rate.ft]{convert_rate.ft()}}.
+Alternatively a \code{width} input can be specified, in which case a rolling rate
+is calculated using this window size (in the relevant \code{by} units) across the
+entire dataset, and returned as a vector of rate values in \verb{$rate}.
+
+In order to convert delta oxygen values to a oxygen uptake or production
+rate, the \code{flowrate} input is required. This must be in a volume (L, ml, or
+ul) per unit time (s,m,h,d), for example in \code{L/s}. The units are not required
+to be entered in here; you will specify them in \code{\link[=convert_rate.ft]{convert_rate.ft()}} to
+convert rates to specific units of oxygen uptake or production.
+
+\emph{\strong{Plot}}
+
+For rates calculated from \code{inspect.ft} inputs, a plot is produced (provided
+\code{plot = TRUE}) showing the original data timeseries of inflow and outflow
+oxygen (if present, top plot), oxygen delta values (middle or top plot) with
+the region specified via the \code{from} and \code{to} inputs highlighted, and a
+close-up of this region with calculated rate value (bottom plot). If multiple
+rates have been calculated, by default the first is plotted. Others can be
+plotted by changing the \code{pos} argument (e.g. \code{plot(object, pos = 2)}).
+
+\emph{\strong{Important:}} Since \code{respR} is primarily used to examine oxygen
+consumption, the delta oxygen and rate plots are by default plotted on a
+reverse y-axis. In \code{respR} oxygen uptake rates are negative since they
+represent a negative slope of oxygen against time. In these plots the axis is
+reversed so that higher uptake rates (i.e. more negative rates) will be
+higher on these plots. If you are interested instead in oxygen production
+rates, which are positive, the \code{rate.rev = FALSE} argument can be passed in
+either the \code{inspect.ft} call, or when using \code{plot()} on the output object. In
+this case, the delta and rate values will be plotted numerically, with higher
+oxygen \emph{production} rates higher on the plot.
+
+If the legend or labels obscure part of the plot, they can be suppressed via
+\code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
+the output object.
+
+\emph{\strong{Background control or "blank" experiments}}
+
+\code{calc_rate.ft} can also be used to determine background rates from empty
+control experiments in the same way as specimen rates are determined. The
+saved objects can be used as the \code{by} input in \code{\link{adjust_rate.ft}}. For
+experiments in which the specimen data is to be corrected by a
+concurrently-run control experiment, best option is to use this as the
+\code{in.o2} input in \code{\link[=inspect.ft]{inspect.ft()}}. See help file for that function, or the
+vignettes on the website for examples.
+
+\emph{\strong{S3 Generic Functions}}
+
+\code{calc_rate.ft} objects work with the S3 generic functions \code{print()},
+\code{summary()}, and \code{mean()}.
+
+\code{print()}: by default, prints the first result in \verb{$rate} to the console. If
+there are multiple rates, others can be printed using the \code{pos} input, e.g.
+\verb{print(object, pos = 2}).
+
+\code{summary()}: prints the \verb{$summary} table from the output. Different rows can
+be output using the \code{pos} input with regular \code{R} numeric vector syntax, e.g.
+\code{pos = 1}, \code{pos = c(2,4,6)}, \code{pos = 1:10}. It can also be used to save the
+\code{summary} table as a \code{data.frame} using the \code{export = TRUE} option, e.g.
+\code{summ <- summary(object, export = TRUE)}.
+
+\code{mean()}: this calculates and prints the mean of all values in \verb{$rate}. The
+mean value can be output and saved using the \code{export = TRUE} option, e.g.
+\code{mean_rate <- mean(object, export = TRUE)}.
 }
 \examples{
-# Single numeric values
-calc_rate.ft(in.o2 = 8.88, out.o2 = 8.17, flowrate = 0.000039)
-# Numeric values and vector
-data("flowthrough.rd")
-calc_rate.ft(in.o2 = 8.88, out.o2 = flowthrough.rd$o2.out,
-  flowrate = 0.000039)
-# Vectors
-data("flowthrough.rd")
-calc_rate.ft(in.o2 = flowthrough.rd$o2.in,
-  out.o2 = flowthrough.rd$o2.out, flowrate = 0.000039)
-# A data frame
-data("flowthrough.rd")
-calc_rate.ft(flowthrough.rd, out.o2 = 2, in.o2 = 3, flowrate = 0.00039)
+# Single numeric value
+
+
+# Numeric vector of two values
+
+
+# inspect.ft object
+#single delta
+
+#multiple from/to
+
+#width
+
 }

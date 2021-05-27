@@ -76,8 +76,6 @@ test_that("convert_rate stops if a 'mass' or 'area' input entered but output.uni
                "convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 })
 
-
-
 test_that("convert_rate S3 generics work as expected", {
   res_abs <- convert_rate(-0.0001534657, o2.unit = "mg/L", time.unit = "s", output.unit = "mg/h",
                           volume = 0.0032245)
@@ -126,7 +124,6 @@ test_that("convert_rate S3 generics work as expected", {
                mean(rate$output.rate))
 
 })
-
 
 test_that("convert_rate stops if units require t, S and P", {
 
