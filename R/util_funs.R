@@ -128,6 +128,7 @@ truncate_data <- function(x, from, to, by) {
   # import from other respR functions
   if (any(class(x) %in% "inspect_data")) x <- x$dataframe
   if (any(class(x) %in% "inspect")) x <- x$dataframe
+  if (any(class(x) %in% "inspect.ft")) x <- x$dataframe
 
   dt <- data.table::as.data.table(x)
 
@@ -173,8 +174,12 @@ truncate_data <- function(x, from, to, by) {
     lower <- sort(c(from, to))[1]
     upper <- sort(c(from, to))[2]
     # indices of data between these
-    start <- min(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-    end <- max(which(dplyr::between(dt[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
+    start <- min(which(dplyr::between(dt[[2]],
+                                      (lower * (mx - mn) + mn),
+                                      (upper * (mx - mn) + mn))))
+    end <- max(which(dplyr::between(dt[[2]],
+                                    (lower * (mx - mn) + mn),
+                                    (upper * (mx - mn) + mn))))
 
     # Old method - only works with oxy decrease
     #start <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])

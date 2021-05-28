@@ -2,12 +2,13 @@
 % Please edit documentation in R/subset_data.R
 \name{subset_data}
 \alias{subset_data}
-\title{Truncate a data frame or `inspect()`` object to create a subset of the data}
+\title{Truncate a data frame, \code{inspect()}, or \code{inspect.ft()} object to create a
+subset of the data}
 \usage{
 subset_data(x, from, to, by = "time")
 }
 \arguments{
-\item{x}{data frame or \code{inspect} object. The data to subset.}
+\item{x}{data frame, \code{inspect}, or \code{inspect.ft()} object. The data to subset.}
 
 \item{from}{numeric. Defines the lower bound(s) of the data to subset.
 Subsetting is based on the argument: \code{by}.}
@@ -18,31 +19,59 @@ Subsetting is based on the argument: \code{by}.}
 \item{by}{string. "time", "row", "o2" or "proportion".}
 }
 \value{
-A \code{data.table} or \code{inspect} object.
+If the input is a \code{data.frame}, the output is a \code{data.table} of the
+subset, otherwise it is an \code{inspect}, or \code{inspect.ft()} object depending on
+input.
 }
 \description{
-This function subsets a data frame or \code{inspect()} object based on a given set
-of criteria. It can subset data based on ranges of: time, oxygen, row number,
-or proportion of total oxygen used or produced (note, this last option works
-poorly with noisy or fluctuating data). For data frames, to subset by \code{time},
-\code{o2}, or \code{proportion}, the time data is assumed to be in the first column,
-and oxygen in the second column. For \code{inspect()} objects, the data will have
-been coerced to this structure already. The function can subset \strong{any} data
-frame by \code{row}.
+\code{subset_data} subsets a data frame, \code{inspect()}, or \code{inspect.ft()} object
+based on a given set of criteria. The function is ideal for passing only some
+regions of your data to other functions such as \verb{[auto_rate()]}, either by
+saving them as a new object or through the use of pipes (\verb{\%>\%}). It is also
+ideal for use with intermittent-flow data in loops, where each replicate can
+be extracted and passed to an analytical function such as \code{calc_rate} or
+\code{auto_rate}. See examples and vignettes.
 }
 \details{
-For multiple column data frames, such as with time in column 1, and multiple
-columns of oxygen data, the subset object will include \emph{all} columns. In the
-case of subsetting \code{by = "o2"} or \code{by = "proportion"}, subsetting is based on
-the first column of oxygen data (i.e. column 2), and all subsequent columns
-are subset between the same rows regardless of oxygen values.
+The function can subset data based on ranges of: time, oxygen, row number, or
+proportion of total oxygen used or produced (note, this last option works
+poorly with noisy or fluctuating data). For data frames, to subset by \code{time},
+\code{o2}, or \code{proportion}, the time data is assumed to be in the first column,
+and oxygen data in the second column. For \code{inspect()} and \code{inspect.ft()}
+objects, the data will have been coerced to this structure already. In these
+cases the \verb{$dataframe} element in the output is replaced by the subset, and
+in \code{inspect.ft()} the \verb{$inputs} element is similarly subset and replaced.
+Note for \code{inspect.ft()} objects, the oxygen data in column 2 will be either
+\code{out.o2} data or \code{delta.o2} data depending on what was inspected. The
+function can subset \strong{any} data frame by \code{row}.
 
-This function is ideal for passing only some regions of your data to other
-functions such as \code{auto_rate}, either by resaving them as a new object or
-through the use of pipes (\verb{\%>\%}). It is also ideal for use with
-intermittent-flow data in loops, where each replicate can be extracted and
-passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
-examples and vignettes.
+When multiple columns are present, for example time in column 1, and
+multiple columns of oxygen data, the subset object will include \emph{all}
+columns. In the case of subsetting \code{by = "o2"} or \code{by = "proportion"},
+subsetting is based on the first column of oxygen data (i.e. column 2), and
+all subsequent columns are subset between the same rows regardless of
+oxygen values.
+
+For \code{"time"} and \code{"row"} subsetting, \code{from} and \code{to} should be in correct
+order. No warning or messages are given if the values are beyond those in
+the dataframe. For instance, if \code{to = 100} and there are only 50 rows in
+the data, the last row (50) will be used instead. The same for \code{from} and
+\code{to} time values outside those in the data frame. For \code{"time"} subsetting,
+the values do not need to be precise; the function will use the closest
+values found.
+
+For \code{"o2"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
+interchangeable, and the function will subset data \emph{between} the first and
+last occurrences (or closest occurrences) of these values. It works best
+with generally increasing or decreasing oxygen data, but results may vary
+with other data such as intermittent flow data or those in \code{inspect.ft}
+objects.
+
+Note: for \code{inspect} and \code{inspect.ft} objects after subsetting, the
+locations of any data issues highlighted when the object is run through
+\code{print()}, will no longer be accurate. If these are inportant, best
+practice is to subset the original dataframe, and process the subset
+through \code{inspect} or \code{inspect.ft}.
 }
 \examples{
 # Subset by time:
