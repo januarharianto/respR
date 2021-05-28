@@ -1,5 +1,7 @@
 ## test_file("tests/testthat/test-convert_DO.R")
 
+sink("/dev/null") ## stops printing outputs on assigning
+
 test_that("convert_DO output conversions, using %Air, have expected results", {
   expect_equal(round(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253)$output, 3), 0.675)
   expect_equal(round(convert_DO(10, "%Air", "ug/l", S = 35, t = 25, P = 1.013253)$output, 3), 675.11)
@@ -71,7 +73,8 @@ test_that("convert_DO conversion works with changing salinity value", {
 })
 
 test_that("convert_DO conversion works with changing pressure value", {
-  expect_equal(round(convert_DO(7.5, "%Air", "mg/l", P = 0.337, S = 35, t = 25)$output, 3), 0.168)
+  expect_equal(round(convert_DO(7.5, "%Air", "mg/l", P = 0.9, S = 35, t = 25)$output, 3),
+               0.45)
 })
 
 test_that("convert_DO conversion works with changing temperature", {
@@ -116,7 +119,7 @@ test_that("convert_DO: %Air and %O2 return same results as respirometry::conv_o2
   # %O2
   # respR results
   res_respR <- apply(grid, 1, function(x) {
-      convert_DO(x = x[1], from = "%O2", to = "mg/L", t = x[2], S = x[3], P = x[4])$output
+      suppressWarnings(convert_DO(x = x[1], from = "%O2", to = "mg/L", t = x[2], S = x[3], P = x[4]))$output
     })
 
   # respirometry results
@@ -136,7 +139,7 @@ test_that("convert_DO: %Air and %O2 return same results as respirometry::conv_o2
   grid[[5]] <- seq(1:nrow(grid))
   # respR results
   res_respR <- apply(grid, 1, function(x) {
-      convert_DO(x = x[1], from = "%Air", to = "mg/L", t = x[2], S = x[3], P = x[4])$output
+    suppressWarnings(convert_DO(x = x[1], from = "%Air", to = "mg/L", t = x[2], S = x[3], P = x[4]))$output
     })
 
   # respirometry results
@@ -150,5 +153,20 @@ test_that("convert_DO: %Air and %O2 return same results as respirometry::conv_o2
   })
 
 
+test_that("convert_DO: warning if P is outside realistic range", {
+  expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
+                           t = 12, S = 30, P = 1.5),
+                 regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+  expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
+                           t = 12, S = 30, P = 1000),
+                 regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+  expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
+                           t = 12, S = 30, P = 0.01),
+                 regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+  expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
+                           t = 12, S = 30, P = 1),
+                 regexp = NA)
+})
 
 
+sink() ## turns printing back on

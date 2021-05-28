@@ -159,7 +159,7 @@ Other changes
 - Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure! However - a rate conversion function would be very useful
 - Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
 - Fix for error with non-numeric x inputs
-
+- Added warning for 'P' values outside realistic range
 
 ========================== unit_args() ============================
 - Updated for new units (time in days, oxygen in mol, %O2) and more detail of which functions accept which units

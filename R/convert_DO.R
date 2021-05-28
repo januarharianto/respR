@@ -70,6 +70,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
     message("convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used.")
   if(is.null(P)) P <- 1.013253
 
+  if(!dplyr::between(P, 0.9, 1.08))
+    warning("convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range. \nIt should not be outside the typical range of 0.9 to 1.1 except for special applications. \nPlease make sure it is entered in 'bar' units. Conversion performed regardless.")
+
   # Constants/formula data using data taken from 'marelac' (gsw removed atm).
   # Conversion factors between pressure units are obtained from the udunits2
   # C library: https://www.unidata.ucar.edu/software/udunits/
