@@ -33,6 +33,7 @@ Changes
 - CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
 - CHANGE: ALL FUNCTIONS: changed dataframe in output to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
+- CHANGE: Example data are now all data.tables
 
 
 NEW
