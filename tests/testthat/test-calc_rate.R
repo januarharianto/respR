@@ -181,18 +181,18 @@ test_that("calc_rate - by = 'time' outputs correct results", {
   from <- 1000
   to <- 1999
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sardine.rd[(from+1):(to+1),2]~sardine.rd[(from+1):(to+1),1])$coefficients[2]))
+               as.numeric(lm(sardine.rd$Oxygen[(from+1):(to+1)]~sardine.rd$Time[(from+1):(to+1)])$coefficients[2]))
 
   ## try a bunch of values
   from <- round(seq(1000, 5000, length.out = 20))
   to <- round(seq(2000, 7000, length.out = 20))
   mapply(function(p,q) expect_equal(calc_rate(sardine.rd, from = p, to = q, plot = F, by = by)$rate,
-                                    as.numeric(lm(sardine.rd[(p+1):(q+1),2]~sardine.rd[(p+1):(q+1),1])$coefficients[2])),
+                                    as.numeric(lm(sardine.rd$Oxygen[(p+1):(q+1)]~sardine.rd$Time[(p+1):(q+1)])$coefficients[2])),
          p = from,
          q = to)
 
   ## as a multiple from/to input
-  rates <- mapply(function(p,q) as.numeric(lm(sardine.rd[(p+1):(q+1),2]~sardine.rd[(p+1):(q+1),1])$coefficients[2]),
+  rates <- mapply(function(p,q) as.numeric(lm(sardine.rd$Oxygen[(p+1):(q+1)]~sardine.rd$Time[(p+1):(q+1)])$coefficients[2]),
                   p = from,
                   q = to)
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
@@ -209,18 +209,18 @@ test_that("calc_rate - by = 'time' outputs correct results with oxygen productio
   from <- 1000
   to <- 1999
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sardine_rev[(from+1):(to+1),2]~sardine_rev[(from+1):(to+1),1])$coefficients[2]))
+               as.numeric(lm(sardine_rev$Oxygen[(from+1):(to+1)]~sardine_rev$Time[(from+1):(to+1)])$coefficients[2]))
 
   ## try a bunch of values
   from <- round(seq(1000, 5000, length.out = 20))
   to <- round(seq(2000, 7000, length.out = 20))
   mapply(function(p,q) expect_equal(calc_rate(sardine_rev, from = p, to = q, plot = F, by = by)$rate,
-                                    as.numeric(lm(sardine_rev[(p+1):(q+1),2]~sardine_rev[(p+1):(q+1),1])$coefficients[2])),
+                                    as.numeric(lm(sardine_rev$Oxygen[(p+1):(q+1)]~sardine_rev$Time[(p+1):(q+1)])$coefficients[2])),
          p = from,
          q = to)
 
   ## as a multiple from/to input
-  rates <- mapply(function(p,q) as.numeric(lm(sardine_rev[(p+1):(q+1),2]~sardine_rev[(p+1):(q+1),1])$coefficients[2]),
+  rates <- mapply(function(p,q) as.numeric(lm(sardine_rev$Oxygen[(p+1):(q+1)]~sardine_rev$Time[(p+1):(q+1)])$coefficients[2]),
                   p = from,
                   q = to)
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
@@ -287,18 +287,18 @@ test_that("calc_rate - by = 'row' outputs correct results", {
   from <- 1000
   to <- 1999
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sardine.rd[(from):(to),2]~sardine.rd[(from):(to),1])$coefficients[2]))
+               as.numeric(lm(sardine.rd$Oxygen[(from):(to)]~sardine.rd$Time[(from):(to)])$coefficients[2]))
 
   ## try a bunch of values
   from <- round(seq(1000, 5000, length.out = 20))
   to <- round(seq(2000, 7000, length.out = 20))
   mapply(function(p,q) expect_equal(calc_rate(sardine.rd, from = p, to = q, plot = F, by = by)$rate,
-                                    as.numeric(lm(sardine.rd[(p):(q),2]~sardine.rd[(p):(q),1])$coefficients[2])),
+                                    as.numeric(lm(sardine.rd$Oxygen[(p):(q)]~sardine.rd$Time[(p):(q)])$coefficients[2])),
          p = from,
          q = to)
 
   ## as a multiple from/to input
-  rates <- mapply(function(p,q) as.numeric(lm(sardine.rd[(p):(q),2]~sardine.rd[(p):(q),1])$coefficients[2]),
+  rates <- mapply(function(p,q) as.numeric(lm(sardine.rd$Oxygen[(p):(q)]~sardine.rd$Time[(p):(q)])$coefficients[2]),
                   p = from,
                   q = to)
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
@@ -315,18 +315,18 @@ test_that("calc_rate - by = 'row' outputs correct results with oxygen production
   from <- 1000
   to <- 1999
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sardine_rev[(from):(to),2]~sardine_rev[(from):(to),1])$coefficients[2]))
+               as.numeric(lm(sardine_rev$Oxygen[(from):(to)]~sardine_rev$Time[(from):(to)])$coefficients[2]))
 
   ## try a bunch of values
   from <- round(seq(1000, 5000, length.out = 20))
   to <- round(seq(2000, 7000, length.out = 20))
   mapply(function(p,q) expect_equal(calc_rate(sardine_rev, from = p, to = q, plot = F, by = by)$rate,
-                                    as.numeric(lm(sardine_rev[(p):(q),2]~sardine_rev[(p):(q),1])$coefficients[2])),
+                                    as.numeric(lm(sardine_rev$Oxygen[(p):(q)]~sardine_rev$Time[(p):(q)])$coefficients[2])),
          p = from,
          q = to)
 
   ## as a multiple from/to input
-  rates <- mapply(function(p,q) as.numeric(lm(sardine_rev[(p):(q),2]~sardine_rev[(p):(q),1])$coefficients[2]),
+  rates <- mapply(function(p,q) as.numeric(lm(sardine_rev$Oxygen[(p):(q)]~sardine_rev$Time[(p):(q)])$coefficients[2]),
                   p = from,
                   q = to)
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
@@ -380,7 +380,7 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
   expect_message(calc_rate(sardine.rd, from = 95, to = 80, plot = F, by = by),
                  "calc_rate: some 'to' oxygen values are lower than the values in 'x'. The lowest available value will be used instead.")
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 95, to = 80, plot = F, by = by)$summary$endtime[1]),
-               sardine.rd[nrow(sardine.rd),1])
+               sardine.rd$Time[nrow(sardine.rd)])
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 95, to = 80, plot = F, by = by)$summary$endrow[1]),
                nrow(sardine.rd))
   # single values, one above, one below
@@ -393,7 +393,7 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 100, to = 80, plot = F, by = by)$summary$row[1]),
                1)
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 100, to = 80, plot = F, by = by)$summary$endtime[1]),
-               sardine.rd[nrow(sardine.rd),1])
+               sardine.rd$Time[nrow(sardine.rd)])
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 100, to = 80, plot = F, by = by)$summary$endrow[1]),
                nrow(sardine.rd))
 
@@ -408,7 +408,7 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
   expect_message(calc_rate(sardine.rd, from = c(95,94), to = c(80,92), plot = F, by = by),
                  "calc_rate: some 'to' oxygen values are lower than the values in 'x'. The lowest available value will be used instead.")
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = c(95,94), to = c(80,92), plot = F, by = by)$summary$endtime[1]),
-               sardine.rd[nrow(sardine.rd),1])
+               sardine.rd$Time[nrow(sardine.rd)])
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = c(95,94), to = c(80,92), plot = F, by = by)$summary$endrow[1]),
                nrow(sardine.rd))
   # multiple values, one above, one below
@@ -421,7 +421,7 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = c(100,94), to = c(80,92), plot = F, by = by)$summary$row[1]),
                1)
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = c(100,94), to = c(80,92), plot = F, by = by)$summary$endtime[1]),
-               sardine.rd[nrow(sardine.rd),1])
+               sardine.rd$Time[nrow(sardine.rd)])
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = c(100,94), to = c(80,92), plot = F, by = by)$summary$endrow[1]),
                nrow(sardine.rd))
 })
@@ -434,7 +434,7 @@ test_that("calc_rate - by = 'o2' outputs correct results", {
 
   sub <- sardine.rd[min(which(dplyr::between(sardine.rd[[2]], to, from))):max(which(dplyr::between(sardine.rd[[2]], to, from))),]
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+               as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
 
   ## try a bunch of values
   #from <- (seq(95, 91, length.out = 20))
@@ -445,14 +445,14 @@ test_that("calc_rate - by = 'o2' outputs correct results", {
   for(i in 1:length(from)){
     sub <- sardine.rd[min(which(dplyr::between(sardine.rd[[2]], to[i], from[i]))):max(which(dplyr::between(sardine.rd[[2]], to[i], from[i]))),]
     expect_equal(calc_rate(sardine.rd, from = from[i], to = to[i], plot = F, by = by)$rate,
-                 as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
   }
 
   ## as a multiple from/to input
   rates <- c()
   for(i in 1:length(from)){
     sub <- sardine.rd[min(which(dplyr::between(sardine.rd[[2]], to[i], from[i]))):max(which(dplyr::between(sardine.rd[[2]], to[i], from[i]))),]
-    rates[i] <- as.numeric(lm(sub[,2]~sub[,1])$coefficients[2])
+    rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
   }
 
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
@@ -493,7 +493,7 @@ test_that("calc_rate - by = 'o2' outputs correct results with oxygen production 
 
   sub <- sardine_rev[min(which(dplyr::between(sardine_rev[[2]], to, from))):max(which(dplyr::between(sardine_rev[[2]], to, from))),]
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+               as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
 
   ## try a bunch of values
   from <- runif(100, max = 96, min = 93)
@@ -502,14 +502,14 @@ test_that("calc_rate - by = 'o2' outputs correct results with oxygen production 
   for(i in 1:length(from)){
     sub <- sardine_rev[min(which(dplyr::between(sardine_rev[[2]], to[i], from[i]))):max(which(dplyr::between(sardine_rev[[2]], to[i], from[i]))),]
     expect_equal(calc_rate(sardine_rev, from = from[i], to = to[i], plot = F, by = by)$rate,
-                 as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
   }
 
   ## as a multiple from/to input
   rates <- c()
   for(i in 1:length(from)){
     sub <- sardine_rev[min(which(dplyr::between(sardine_rev[[2]], to[i], from[i]))):max(which(dplyr::between(sardine_rev[[2]], to[i], from[i]))),]
-    rates[i] <- as.numeric(lm(sub[,2]~sub[,1])$coefficients[2])
+    rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
   }
 
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
@@ -566,7 +566,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
 
   sub <- sardine.rd[min:max,]
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+               as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
 
   ## try a bunch of values
   #from <- (seq(95, 91, length.out = 20))
@@ -581,7 +581,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
     max <- max(which(dplyr::between(sardine.rd[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     sub <- sardine.rd[min:max,]
     expect_equal(calc_rate(sardine.rd, from = from[i], to = to[i], plot = F, by = by)$rate,
-                 as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
   }
 
   ## as a multiple from/to input
@@ -592,7 +592,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
     min <- min(which(dplyr::between(sardine.rd[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     max <- max(which(dplyr::between(sardine.rd[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     sub <- sardine.rd[min:max,]
-    rates[i] <- as.numeric(lm(sub[,2]~sub[,1])$coefficients[2])
+    rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
   }
 
   expect_equal(calc_rate(sardine.rd, from = from, to = to, plot = F, by = by)$rate,
@@ -649,7 +649,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
 
   sub <- sardine_rev[min:max,]
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-               as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+               as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
 
   ## try a bunch of values
   #from <- (seq(95, 91, length.out = 20))
@@ -664,7 +664,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
     max <- max(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     sub <- sardine_rev[min:max,]
     expect_equal(calc_rate(sardine_rev, from = from[i], to = to[i], plot = F, by = by)$rate,
-                 as.numeric(lm(sub[,2]~sub[,1])$coefficients[2]))
+                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
   }
 
   ## as a multiple from/to input
@@ -675,7 +675,7 @@ test_that("calc_rate - by = 'proportion' outputs correct results", {
     min <- min(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     max <- max(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
     sub <- sardine_rev[min:max,]
-    rates[i] <- as.numeric(lm(sub[,2]~sub[,1])$coefficients[2])
+    rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
   }
 
   expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
