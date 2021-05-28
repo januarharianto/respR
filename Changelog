@@ -191,6 +191,7 @@ Although, there's a chance with some data it will give different results than th
 - FIX: by = "proportion" and by = "o2" now work correctly with oxygen production data (changes made to truncate_data)
 - Note changes above now generally result in larger/longer subsets. Extra rows are at the end (because of change in identifying where 'to' is - see comment on calc_rate)
 - Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple O2 column dataframes
+- NEW: support for `inspect.ft` objects
 
 
 ========================== flowthrough ============================
