@@ -653,16 +653,16 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 #' @export
 print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\n# print.adjust_rate # -------------------\n")
-  cat("Note: please consider the sign of the correction value when adjusting the rate.\n")
+  cat("Note: please consider the sign of the adjustment value when adjusting the rate.\n")
   if(pos > length(x$adjusted.rate)) stop("print.adjust_rate: Invalid 'pos' rank: only ", length(x$adjusted.rate), " adjusted rates found.")
   cat("\nAdjustment was applied using '", x$adjustment.method, "' method.", sep = "")
   cat("\n")
   cat("\nRank", pos, "of", length(x$adjusted.rate), "adjusted rate(s):")
-  cat("\nInput rate    :", x$input.rate[pos])
+  cat("\nRate          :", x$input.rate[pos])
   cat("\nAdjustment    :", x$adjustment[pos])
-  cat("\nAdjusted rate :", x$adjusted.rate[pos])
+  cat("\nAdjusted Rate :", x$adjusted.rate[pos])
   cat("\n")
-  cat("\nTo see all results use summary().\n")
+  cat("\nTo see full results use summary().\n")
   cat("-----------------------------------------\n")
 
   return(invisible(x))
