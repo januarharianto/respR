@@ -249,5 +249,15 @@ test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both 
                    sub$dataframe)
 })
 
+test_that("subset_data - warns if output is empty", {
+  urch <- urchins.rd[20:200,]
+  expect_warning(subset_data(urch, from = 0, to = 1, by = "time"),
+               regexp = "subset_data: subsetting criteria result in empty dataset!")
+  expect_warning(subset_data(inspect(urch), from = 0, to = 1, by = "time"),
+               regexp = "subset_data: subsetting criteria result in empty dataset!")
+  expect_warning(subset_data(inspect.ft(urch[,1:2]), from = 0, to = 1, by = "time"),
+               regexp = "subset_data: subsetting criteria result in empty dataset!")
+})
+
 sink() ## turns printing back on
 

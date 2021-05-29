@@ -98,7 +98,7 @@ subset_data <- function(x, from, to, by = "time") {
   } else dt <- data.table(x)
 
   ## verify by input
-  by <- respR:::verify_by(by, msg = "subset_data:")
+  by <- verify_by(by, msg = "subset_data:")
 
   ## if time, 'from' required, single val, not bigger than max value in time
   if(by == "time") {
@@ -157,6 +157,10 @@ subset_data <- function(x, from, to, by = "time") {
     start <- min(which(duplicated(rbind(dt2, out), fromLast = TRUE)))
     end <- max(which(duplicated(rbind(dt2, out), fromLast = TRUE)))
 
+    # if out was empty, start and end are now Inf & -Inf, which produces errors
+    if(start == Inf || start == -Inf) start <- 0
+    if(end == Inf || end == -Inf) end <- 0
+
     # subset x$input_data elements
     input_data_sub <- lapply(x$input_data, function(y) {
       lapply(y, function(z){
@@ -173,6 +177,11 @@ subset_data <- function(x, from, to, by = "time") {
   cat("\nSubset data:\n")
   print(data.table(out), topn = 2)
   cat("-----------------------------------------\n")
+
+  # if out is empty, warn.
+  # Still return in case this would break loops or whatever
+  if(nrow(out) == 0)
+    warning("subset_data: subsetting criteria result in empty dataset!")
 
   if (any(class(x) %in% "inspect")) {
     x$dataframe <- out
