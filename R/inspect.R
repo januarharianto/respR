@@ -72,9 +72,10 @@
 #'   non-sequential time values, or uneven time spacing should not cause any
 #'   erroneous results, as long as they do not occur over large regions of the
 #'   data. `inspect` however outputs locations (row numbers) of where these
-#'   issues occur, allowing users to amend them before analysis. We would
-#'   recommend that to be completely confident in any results from analysis of
-#'   such data, these issues be addressed before proceeding.
+#'   issues occur (located in the `$list` element of the output), allowing users
+#'   to amend them before analysis. We would recommend that to be completely
+#'   confident in any results from analysis of such data, these issues be
+#'   addressed before proceeding.
 #'
 #' @param df data.frame object. Accepts any object of class `data.frame`.
 #' @param time numeric integer. Defaults to 1. Specifies the column number of

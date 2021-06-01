@@ -42,7 +42,6 @@ NEW
 - NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
 
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
-
 ***************Need to revise above. on.exit cmd needs to be at end after all, but apparently before return(). Done for plot.auto_rate. TEST THIS
 
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
@@ -55,6 +54,10 @@ NEW
 - CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
 - NEW: import_file now supports Presens Datamanager files
 
+========================== convert_val() ============================
+- New function
+- For doing simple conversions between volume, time, mass, area and pressure units
+- integrates with convert_rate() etc - see examples
 
 ========================== internals ============================
 New utility validation fns

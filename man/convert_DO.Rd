@@ -36,6 +36,11 @@ temperature (\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P})
 specified. For freshwater experiments, salinity should be set to zero (i.e.
 \code{S = 0}). See \code{\link[=unit_args]{unit_args()}} for details of accepted units.
 }
+\details{
+The function uses an internal database and a fuzzy string matching algorithm
+to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. Use \code{\link[=unit_args]{unit_args()}} to
+view a list of usable unit strings.
+}
 \examples{
 # Convert a numeric value from/to units which do not require t, S and P
 convert_DO(8.21, from = "mg/L", to = "umol/L")

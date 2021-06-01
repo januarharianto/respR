@@ -7,6 +7,11 @@
 #' specified. For freshwater experiments, salinity should be set to zero (i.e.
 #' `S = 0`). See [unit_args()] for details of accepted units.
 #'
+#' The function uses an internal database and a fuzzy string matching algorithm
+#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
+#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. Use [unit_args()] to
+#' view a list of usable unit strings.
+#'
 #' @param x numeric value or vector. This is the dissolved oxygen (DO) value(s)
 #'   that you want to convert.
 #' @param from string. The DO unit to convert *from*. See [unit_args()] for
@@ -168,13 +173,21 @@ verify_units <- function(unit, is) {
   # EDIT: ok it's worth it, but I've come too far.... will fix in future version
   # Doing it the stupid way:
   # time units
+
+  # time --------------------------------------------------------------------
   if (is == 'time') {
     all.units <- list(
-      day.time = c('days', 'day', 'dy', 'dys', 'd'),
-      hour.time = c('hours', 'hour', 'hr', 'hrs', 'h'),
-      min.time  = c('minutes', 'minute', 'min', 'mins', 'm'),
-      sec.time  = c('seconds', 'second', 'sec', 'secs', 's'))
+      day.time = c('days', 'day', 'dy', 'dys', 'd',
+                   'Days', 'Day', 'Dy', 'Dys', 'D'),
+      hour.time = c('hours', 'hour', 'hr', 'hrs', 'h',
+                    'Hours', 'Hour', 'Hr', 'Hrs', 'H'),
+      min.time  = c('minutes', 'minute', 'min', 'mins', 'm',
+                    'Minutes', 'Minute', 'Min', 'Mins', 'M'),
+      sec.time  = c('seconds', 'second', 'sec', 'secs', 's',
+                    'Seconds', 'Second', 'Sec', 'Secs', 'S'))
   }
+
+  # o2 ----------------------------------------------------------------------
   # 2-dimensional o2 units, and pressure
   if (is == 'o2') {
 
@@ -241,6 +254,8 @@ verify_units <- function(unit, is) {
       'inHg.o2p' = c('inHg.o2p','inHg','in Hg','inhg','in hg','INHG','IN HG',
                      'inch of mercury','inch mercury'))
   }
+
+  # vol ---------------------------------------------------------------------
   if (is == 'vol') {
     all.units <- list(
       uL.vol = c('ul.vol','ul','uL','microlitre','microliter',
@@ -249,6 +264,8 @@ verify_units <- function(unit, is) {
                  'milli liter'),
       L.vol  = c('L.vol','l','L','liter','litre','Litre','Liter'))
   }
+
+  # mass --------------------------------------------------------------------
   if (is == 'mass') {
     all.units <- list(
       ug.mass  = c('ug.mass','ug','UG','ugram','microgram'),
@@ -256,13 +273,17 @@ verify_units <- function(unit, is) {
       g.mass   = c('g.mass','g','G','gram'),
       kg.mass  = c('kg.mass','kg','KG','kilogram','kgram'))
   }
+
+  # area --------------------------------------------------------------------
   if (is == 'area') {
     all.units <- list(
-      mm2.area  = c('mm2.area','mmsq','mm2','sqmm'),
-      cm2.area  = c('cm2.area','cmsq','cm2','sqcm'),
-      m2.area   = c('m2.area','msq','m2','sqm'),
-      km2.area  = c('km2.area','kmsq','km2','sqkm'))
+      mm2.area  = c('mm2.area','mmsq','mm2','MM2','sqmm'),
+      cm2.area  = c('cm2.area','cmsq','cm2','CM2','sqcm'),
+      m2.area   = c('m2.area','msq','m2','M2','sqm'),
+      km2.area  = c('km2.area','kmsq','km2','KM2','sqkm'))
   }
+
+  # o1 ----------------------------------------------------------------------
   if (is == 'o1') {
     all.units <-  list(
       'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram'),
@@ -272,6 +293,8 @@ verify_units <- function(unit, is) {
       'mol.o2' = c('mol.o2','molo2','molO2','mol','mole'),
       'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
   }
+
+  # flow --------------------------------------------------------------------
   if (is == 'flow') {
     ul_var <- c("ul", "uL", "UL", "Ul",
                 "microlitre", "microlitres",
@@ -356,7 +379,38 @@ verify_units <- function(unit, is) {
     )
   }
 
-  # Look for match
+  # pressure ----------------------------------------------------------------
+  if (is == 'pressure') {
+    all.units <- list(
+      kpa.p  = c('kPa','kpa', 'KPA'),
+      hpa.p  = c('hPa','hpa', 'HPA'),
+      pa.p  = c('Pa','pa', 'PA'),
+      ubar.p  = c('ub', 'ubar', 'Ubar', 'UBAR', 'uBar', 'ubr', 'UBR'),
+      mbar.p  = c('mb', 'mbar', 'Mbar', 'MBAR', 'mBar', 'mbr', 'MBR'),
+      bar.p  = c('b', 'bar', 'bar', 'BAR', 'Bar', 'br', 'BR'),
+      atm.p  = c('atm', 'Atm', 'ATM', 'Atmos', 'ATMOS'),
+      torr.p  = c('torr','TORR','Torr','Tor','tor'),
+      mmhg.p = c('mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG'),
+      inhg.p = c('inHg','in Hg','inhg','in hg','INHG','IN HG'))
+  }
+
+  # temperature -------------------------------------------------------------
+  if (is == 'temperature') {
+    all.units <- list(
+      c.temp  = c('C','c', 'dgrc', 'DGRC', 'dgr c', 'DGR C',
+                  'degrees c', 'DEGREES C',
+                  'celsius', 'Celsius', 'CELSIUS',
+                  'centigrade', 'Centigrade'),
+      k.temp  = c('K','k', 'dgrk', 'DGRK', 'dgr k', 'DGR K',
+                  'degrees k', 'DEGREES K',
+                  'kelvin', 'Kelvin', 'KELVIN'),
+      f.temp  = c('F','f', 'dgrf', 'DGRF', 'dgr f', 'DGR F',
+                  'degrees f', 'DEGREES F',
+                  'fahrenheit', 'Fahrenheit', 'FAHRENHEIT'))
+  }
+
+
+# Look for match ----------------------------------------------------------
   string <- paste0('^', unit, '$')  # for exact matching
   chk <- lapply(all.units, function(x) grep(string, x))
   chk <- sapply(chk, function(x) length(x) > 0)

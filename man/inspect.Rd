@@ -104,9 +104,10 @@ Therefore issues such as missing or NA/NaN values, duplicate or
 non-sequential time values, or uneven time spacing should not cause any
 erroneous results, as long as they do not occur over large regions of the
 data. \code{inspect} however outputs locations (row numbers) of where these
-issues occur, allowing users to amend them before analysis. We would
-recommend that to be completely confident in any results from analysis of
-such data, these issues be addressed before proceeding.
+issues occur (located in the \verb{$list} element of the output), allowing users
+to amend them before analysis. We would recommend that to be completely
+confident in any results from analysis of such data, these issues be
+addressed before proceeding.
 }
 
 \examples{
