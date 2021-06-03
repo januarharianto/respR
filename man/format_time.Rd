@@ -11,19 +11,19 @@ format_time(x, time = 1, format = "ymdHMS", start = 1)
 data to be converted to numeric.}
 
 \item{time}{numeric value or vector. Specifies column(s) containing date-time
-data}
+data. Default is \code{1}.}
 
 \item{format}{string. Code describing structure of date-time data. See
 details.}
 
-\item{start}{numeric. Default = 1. At what time (in seconds) should the
-formatted time data start?}
+\item{start}{numeric. At what time (in seconds) should the formatted time
+data start? Default is \code{1}.}
 }
 \value{
-Output is a vector or data frame, depending on input. If input is a
-vector, a vector of same length containing numeric time is returned. If
-input is a data frame, the same data frame is returned with a new column,
-\code{time_num}, of numeric time data in seconds added as the last column.
+If input is a vector, a vector of same length containing numeric time
+is returned. If input is a data frame, the same data frame is returned with
+a new column, \code{time_num}, of numeric time data in seconds added as the last
+column.
 }
 \description{
 A function to parse class POSIX.ct or text strings of date-time data to
@@ -33,8 +33,8 @@ numeric time for use in \code{respR} functions.
 \strong{Input}
 
 Input can be a vector, or data frame. If a vector, output is a vector of
-equal length containing numeric time data. If a data frame, the column(s)
-of the date-time data are specified using the \verb{time =} input. By default the
+equal length containing numeric time data. If a data frame, the column(s) of
+the date-time data are specified using the \verb{time =} input. By default the
 first column is assumed to contain the date-time data (i.e. \code{time = 1}).
 
 Multiple columns can be specified (e.g. \code{time = c(1,2)}) if the date-time
@@ -66,9 +66,9 @@ and "01:10:23 PM" are both same as "13:10:23"
 }
 
 Regardless of input, all data are parsed to numeric time data in seconds
-duration from the first entry starting at 1. If you want the times
-to start at a different time, a \code{start} value can be specified, in which case
-the series starts at that number (in seconds) and all subsequent times are
+duration from the first entry starting at 1. If you want the times to start
+at a different time, a \code{start} value can be specified, in which case the
+series starts at that number (in seconds) and all subsequent times are
 shifted forward by the same amount.
 
 \strong{Syntax}
@@ -93,8 +93,8 @@ Print the order in the \code{format} string argument, using separators if you
 choose to (optional): \code{"dmyHMS"}; \code{"dmy_HMS"} and \code{"d m y H M S"} are all the
 same. For more info see \code{\link[=lubridate]{lubridate()}}.
 
-Single datasets should not span different time zones, so if a time zone
-is present it is ignored for the purposes of calculating numeric times. If
+Single datasets should not span different time zones, so if a time zone is
+present it is ignored for the purposes of calculating numeric times. If
 multiple columns have been specified in the \code{time} argument, the \code{format}
 should reflect the proper order.
 }

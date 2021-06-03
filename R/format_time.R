@@ -6,8 +6,8 @@
 #' **Input**
 #'
 #' Input can be a vector, or data frame. If a vector, output is a vector of
-#' equal length containing numeric time data. If a data frame, the column(s)
-#' of the date-time data are specified using the `time =` input. By default the
+#' equal length containing numeric time data. If a data frame, the column(s) of
+#' the date-time data are specified using the `time =` input. By default the
 #' first column is assumed to contain the date-time data (i.e. `time = 1`).
 #'
 #' Multiple columns can be specified (e.g. `time = c(1,2)`) if the date-time
@@ -42,9 +42,9 @@
 #' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
 #' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry starting at 1. If you want the times
-#' to start at a different time, a `start` value can be specified, in which case
-#' the series starts at that number (in seconds) and all subsequent times are
+#' duration from the first entry starting at 1. If you want the times to start
+#' at a different time, a `start` value can be specified, in which case the
+#' series starts at that number (in seconds) and all subsequent times are
 #' shifted forward by the same amount.
 #'
 #' **Syntax**
@@ -69,24 +69,24 @@
 #' choose to (optional): `"dmyHMS"`; `"dmy_HMS"` and `"d m y H M S"` are all the
 #' same. For more info see [lubridate()].
 #'
-#' Single datasets should not span different time zones, so if a time zone
-#' is present it is ignored for the purposes of calculating numeric times. If
+#' Single datasets should not span different time zones, so if a time zone is
+#' present it is ignored for the purposes of calculating numeric times. If
 #' multiple columns have been specified in the `time` argument, the `format`
 #' should reflect the proper order.
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.
 #' @param time numeric value or vector. Specifies column(s) containing date-time
-#'   data
+#'   data. Default is `1`.
 #' @param format string. Code describing structure of date-time data. See
 #'   details.
-#' @param start numeric. Default = 1. At what time (in seconds) should the
-#'   formatted time data start?
+#' @param start numeric. At what time (in seconds) should the formatted time
+#'   data start? Default is `1`.
 #'
-#' @return Output is a vector or data frame, depending on input. If input is a
-#'   vector, a vector of same length containing numeric time is returned. If
-#'   input is a data frame, the same data frame is returned with a new column,
-#'   `time_num`, of numeric time data in seconds added as the last column.
+#' @return If input is a vector, a vector of same length containing numeric time
+#'   is returned. If input is a data frame, the same data frame is returned with
+#'   a new column, `time_num`, of numeric time data in seconds added as the last
+#'   column.
 #'
 #' @importFrom lubridate parse_date_time
 #'
