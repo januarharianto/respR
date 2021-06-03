@@ -57,7 +57,7 @@ validate_auto_rate <- function(df, by, method) {
     warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
     df <- df[, 1:2]
   }
-  by <- verify_by(by) # validate `by` argument
+  by <- verify_by(by, msg = "auto_rate:") # validate `by` argument
 
   assertthat::assert_that(
     is.data.frame(df),

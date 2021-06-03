@@ -548,7 +548,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
 
     lapply(pos, function(z) {
 
-      ylim <- grDevices::extendrange(r = range(del.o2[[z]]), f = 0.05) ## add a little more space
+      ylim <- grDevices::extendrange(r = range(del.o2[[z]], na.rm = TRUE), f = 0.05) ## add a little more space
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
       plot(data.frame(time, del.o2[[z]]),
@@ -591,7 +591,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
         mgp = c(0, 0.5, 0))
 
     ## ylim for outflow and inflow plots - plus 10%
-    ylim <- range(range(out.o2[[pos]]), range(in.o2[[pos]])) ## so all on same axes
+    ylim <- range(range(out.o2[[pos]], na.rm = TRUE), range(in.o2[[pos]], na.rm = TRUE)) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 

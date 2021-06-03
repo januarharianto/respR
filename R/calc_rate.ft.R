@@ -236,7 +236,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     dt <- data.table::data.table(time = time, delta.o2 = delta.o2)
 
     # ranges
-    t_range <- range(time)
+    t_range <- range(time, na.rm = TRUE)
     r_range <- range(1:length(time))
 
 
@@ -498,7 +498,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   # is it delta only rates?
   delta_only <-
     is.null(x$input_data$out.o2) && is.null(x$input_data$in.o2)
-  if(!(delta_only)) y_range <- range(in.o2, out.o2) # for plotting rate region rectangle
+  if(!(delta_only)) y_range <- range(in.o2, out.o2, na.rm = TRUE) # for plotting rate region rectangle
   rate_mean <- signif(x$rate, digits = 5) # rounded mean rate for inclusion in plot
 
   # validate pos input
@@ -547,7 +547,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   if (!delta_only) {
 
     ## ylim for outflow and inflow plots - plus 10%
-    ylim <- range(range(out.o2), range(in.o2)) ## so all on same axes
+    ylim <- range(range(out.o2), range(in.o2), na.rm = TRUE) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 

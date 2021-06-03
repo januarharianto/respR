@@ -1,4 +1,9 @@
-## testthat::test_file("tests/testthat/test-auto_rate.R")
+# library(testthat)
+# rm(list=ls())
+# testthat::test_file("tests/testthat/test-auto_rate.R")
+# covr::file_coverage("R/auto_rate.R", "tests/testthat/test-auto_rate.R")
+# x <- covr::package_coverage()
+# covr::report(x)
 
 sink("/dev/null") ## stops printing outputs on assigning
 
@@ -345,6 +350,34 @@ test_that("auto_rate outputs expected results when method = 'min'", {
   ## this was the original behaviour
   expect_equal(suppressWarnings(auto_rate(intermittent.rd, method = "min", plot = FALSE)$rate),
                auto_rate(intermittent.rd, method = "maximum", plot = FALSE)$rate)
+})
+
+test_that("auto_rate works when there are NA in the 'time' data", {
+
+  skip("skip - until we fix this")
+
+  input_na <- squid.rd
+  input_na[200:205,1] <- NA ##  time NA
+  input_na[8000,1] <- NA ##  time NA
+
+  expect_error(auto_rate(input_na),
+               NA)
+  # this will cause errors in future if auto_rate changes, but for now
+  # test output value
+  expect_equal(auto_rate(input_na)$rate[1],
+               -3.067353e-04)
+})
+
+
+test_that("auto_rate works when there are NA in the 'oxygen' data", {
+
+  input_na <- squid.rd
+  input_na[200:205,2] <- NA ##  time NA
+  input_na[400:405,2] <- NA ##  time NA
+
+  expect_error(auto_rate(input_na),
+               NA)
+
 })
 
 sink() ## turns printing back on

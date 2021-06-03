@@ -472,6 +472,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
     print_dens(object$density)
   }
 
+  cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else

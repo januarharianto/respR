@@ -75,14 +75,14 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
   ## verify by input
-  by <- verify_by(by)
+  by <- verify_by(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect_data")) x <- x$dataframe # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
 
   # By now, x input must be a data frame object
-  if(!is.data.frame(x)) stop("calc_rate: Input must be a data.frame object.")
+  if(!is.data.frame(x)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.")
 
   # Format as data.table
   x <- data.table::data.table(x)
@@ -112,7 +112,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
                   p = from,
                   q = to))) stop("calc_rate: some 'from' time values are later than the paired values in 'to'.")
 
-    t_range <- range(x[[1]])
+    t_range <- range(x[[1]], na.rm = TRUE)
     if(any(sapply(from, function(z) z > t_range[2])))
       stop("calc_rate: some 'from' time values are higher than the values present in 'x'.")
     if(any(sapply(to, function(z) z < t_range[1])))
@@ -136,7 +136,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   }
 
   if(by == "o2"){
-    o_range <- range(x[[2]])
+    o_range <- range(x[[2]], na.rm = TRUE)
 
     ## can't have 'from' and 'to' both below or both above o2 range
     if(any(mapply(function(p,q) p < o_range[1] && q < o_range[1],
@@ -224,6 +224,7 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 
   cat("\n# summary.calc_rate # -------------------\n")
   print(object$summary)
+  cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(object$summary)) else

@@ -87,7 +87,7 @@ test_that("calc_rate - correctly extracts dataframe from 'inspect' and 'inspect_
 
 test_that("calc_rate - stops with non data.frame 'x' input", {
   expect_error(calc_rate(as.matrix(sardine.rd), plot = F),
-               "calc_rate: Input must be a data.frame object.")
+               "calc_rate: Input must be a 'data.frame' or 'inspect' object.")
 })
 
 test_that("calc_rate - warns with multi column input", {

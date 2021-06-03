@@ -1,5 +1,7 @@
 sink("/dev/null") ## stops printing outputs on assigning
 
+skip("skip - until we revise this fn")
+
 ## pcrit works with default values
 # Thin the data so it won't take too long
 squid <- squid.rd[seq.int(1, nrow(squid.rd), 100), ]

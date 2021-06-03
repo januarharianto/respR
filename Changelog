@@ -10,10 +10,9 @@ For now - direct changes/commits to dev go in here. Keep a separate changelog te
 Quick fixes and changes.
 (we don't have to include all these, but we should keep a full list however minor)
 
-- **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
-- **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
-- **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
-- **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
+- FIX:  Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
+- FIX:  Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- FIX:  Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
 - FIX: format_time() - fix for not appending new numeric time column onto a data.table
@@ -23,7 +22,7 @@ Quick fixes and changes.
 - FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
 - FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
 - FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
-
+- FIX: Fix for `calc_rate` and `auto_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
 
 Changes
 - CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
@@ -38,7 +37,7 @@ Changes
 
 NEW
 - NEW: subset_rate function - HIGHLIGHT
-- NEW: new flowthrough process - 4 functions - HIGHLIGHT
+- NEW: flowthrough workflow - 4 new specific functions - HIGHLIGHT
 - NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
 
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
@@ -61,7 +60,7 @@ NEW
 
 ========================== internals ============================
 New utility validation fns
-- verify_by - updated - can select which 'by' inputs to accept, or if required, plus output a message
+- verify_by - updated - can select which 'by' inputs function accepts, or if it is required, plus output a custom message
 - column.val - for inputs which take column numbers
 - input.val - for other input validations
 

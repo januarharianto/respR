@@ -149,7 +149,7 @@ truncate_data <- function(x, from, to, by) {
   if (by == "o2") {
 
     # data range
-    o_range <- range(dt[[2]])
+    o_range <- range(dt[[2]], na.rm = TRUE)
 
     # use highest/lowest values if out of range
     if(from > o_range[2]) from <- o_range[2] else

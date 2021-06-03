@@ -343,7 +343,7 @@ plot.inspect <- function(x, label = TRUE, width = 0.1, ...) {
     xdt <- dt[[1]]
     plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
          xlim = range(na.omit(xdt)),
-         ylim = rev(range(rates)),
+         ylim = rev(range(na.omit(rates))),
          # reversed axis
          xlab = "",
          ylab = "",
