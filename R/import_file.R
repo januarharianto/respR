@@ -55,6 +55,8 @@
 #' @examples NULL
 import_file <- function(path, export = FALSE) {
 
+  cat("\n# import_file # -------------------------\n")
+
   # Don't even start if file doesn't exist:
   if (!file.exists(path)) {
     stop("File does not exist - please check file path.")
@@ -81,69 +83,69 @@ import_file <- function(path, export = FALSE) {
 
   # Identify source of file
   if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
-    cat("Firesting-Pyro file detected\n\n")
+    cat("Firesting-Pyro file detected\n")
     out <- parse_pyro(path, dec = dec)
   } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:20])))) {
-    cat("MiniDOT file detected\n\n")
+    cat("MiniDOT file detected\n")
     out <- parse_minidot(path, dec = dec)
   } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:20])))) {
-    cat("Loligo AutoResp/Witrox file detected\n\n")
-    out <- parse_autoresp_witrox(path, dec = dec)
+    cat("Loligo AutoResp/Witrox file detected\n")
+    out <- respR:::parse_autoresp_witrox(path, dec = dec)
   } else if (suppressWarnings(any(grepl(": Time \\(", raw[1])))) {
-    cat("Vernier or QBox Aqua csv file detected\n\n")
+    cat("Vernier or QBox Aqua csv file detected\n")
     out <- parse_vernier_csv(path, dec = dec)
   } else if (suppressWarnings(any(grepl("Vernier Format", raw[1:20])))) {
-    cat("Vernier txt file detected\n\n")
+    cat("Vernier txt file detected\n")
     warning("NOTE: Vernier files exported as .txt may have data columns in a different order to
     original data, and have no clear indication of which data came from which probes!
     We strongly recommend exporting as .csv or importing raw qmbl files.")
     out <- parse_vernier_txt(path, dec = dec)
   } else if (suppressWarnings(any(grepl("gmbl", raw[1:20])))) {
-    stop("Vernier gmbl files not yet supported.\n\n")
+    stop("Vernier gmbl files not yet supported.\n")
     ## gmbl used to work with parse_vernier_raw but not any longer
     ## Some problem wih fread
   } else if (suppressWarnings(any(grepl("qmbl", raw[1:20])))) {
-    cat("Vernier raw qmbl file detected\n\n")
+    cat("Vernier raw qmbl file detected\n")
     out <- parse_vernier_raw(path, dec = dec)
     ## These need to go here, because the next (Presens Generic) will also match
   } else if (suppressWarnings(any(grepl("OXY10", raw[1:20])))) {
-    cat("PreSens OXY10 file detected\n\n")
+    cat("PreSens OXY10 file detected\n")
     out <- parse_oxy10(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".txt") {
-    cat("PreSens OxyView .txt file detected\n\n")
+    cat("PreSens OxyView .txt file detected\n")
     out <- parse_oxyview_txt(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".csv") {
-    cat("PreSens OxyView .csv file detected\n\n")
+    cat("PreSens OxyView .csv file detected\n")
     out <- parse_oxyview_csv(path, dec = dec)
   # } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
-  #   cat("PreSens OxyView file detected\n\n")
+  #   cat("PreSens OxyView file detected\n")
   #   out <- parse_oxyview(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
-    cat("PreSens OXY4 file detected\n\n")
+    cat("PreSens OXY4 file detected\n")
     out <- parse_oxy4(path, dec = dec)
     ## This next one is also a multiplate file, but exported as text rather than
     ## Excel.
   } else if (suppressWarnings(any(grepl("MUX channel", raw[1:80]))) &&
              suppressWarnings(any(grepl("PARAMETERS", raw[1:80]))) &&
              suppressWarnings(any(grepl("FIRMWARE", raw[1:80])))) {
-    cat("PreSens Generic file detected\n\n")
+    cat("PreSens Generic file detected\n")
     out <- parse_presens(path, dec = dec)
   } else if (suppressWarnings(any(grepl("SDR Serial No.", raw[1:20])))) {
-    cat("Loligo/PreSens 24-well multiplate Excel file detected\n\n")
+    cat("Loligo/PreSens 24-well multiplate Excel file detected\n")
     out <- parse_multiplate_excel(path, dec = dec)
   } else if (suppressWarnings(any(grepl("Tau - Phase Method", raw[1])))) {
-    cat("NeoFox file detected\n\n")
+    cat("NeoFox file detected\n")
     out <- parse_neofox(path, dec = dec)
     ## Loligo Metadata files
   } else if (suppressWarnings(any(grepl("Fractional error", raw[1:20])))) {
-    cat("Loligo AutoResp metadata file detected\n\n")
+    cat("Loligo AutoResp metadata file detected\n")
     stop("Currently these files are unsupported in respR.
   This is an AutoResp metadata file, and contains no raw time~O2 data.
   It may contain other experimentally useful values (e.g. mass and volume).
   Please import the associated file appended with \"_raw\" which contains time~O2 data." )
     ## PreSens Datamanager
   } else if (suppressWarnings(any(grepl("PreSens Datamanager", raw[1:20])))) {
-    cat("PreSens Datamanager output file detected\n\n")
+    cat("PreSens Datamanager output file detected\n")
     out <- parse_datamanager(path, dec = dec)
   } else stop("Source file cannot be identified.
               Please contact the developers with a sample of your file.
@@ -155,6 +157,7 @@ import_file <- function(path, export = FALSE) {
     write.csv(out, newpath)
   }
 
+  cat("-----------------------------------------\n")
   return(out)
 }
 
@@ -179,7 +182,7 @@ parse_multiplate_excel <- function(path, dec = dec){
 # Vernier csv files -------------------------------------------------------
 
 parse_vernier_csv <- function(path, dec = dec) {
-  raw <- fread(path, fill = TRUE, header = TRUE, dec = dec)
+  raw <- fread(path, fill = TRUE, header = TRUE, dec = dec, showProgress = FALSE)
   out <- data.table(raw)
   return(out)
 }
@@ -201,7 +204,8 @@ parse_vernier_txt <- function(path, dec = dec) {
   runs <- sapply(meta, function(x) x[3]) # extract Run or exp name
 
   ## column names
-  cols <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 7, dec = dec)) # read in first chunk of metadata
+  cols <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 7,
+                                 dec = dec, showProgress = FALSE)) # read in first chunk of metadata
   if (all(is.na(cols[[ncol(cols)]])))
     cols <- cols[,1:(ncol(cols) - 1)] # remove extra column of NAs
   ## make df
@@ -265,7 +269,7 @@ parse_vernier_txt <- function(path, dec = dec) {
 
 parse_vernier_raw <- function(path, dec = dec){
 
-  raw <- data.table::fread(path, fill = TRUE, dec = dec)
+  raw <- data.table::fread(path, fill = TRUE, dec = dec, showProgress = FALSE)
 
   ## collapse all columns into one column and remove added commas
   if(ncol(raw) > 1){
@@ -403,14 +407,16 @@ parse_vernier_raw <- function(path, dec = dec){
 
 parse_autoresp_witrox <- function(path, dec = dec) {
   # txt <- readLines(path)
-  raw <- fread(path, fill = TRUE, header = FALSE, dec = dec)
+  raw <- fread(path, fill = TRUE, header = FALSE, dec = dec, showProgress = FALSE)
   # detect start column:
   rowstart <- tail(suppressWarnings(raw[raw$V1 %like% "Date", which = TRUE]), 1)
-  rdt <- fread(path, fill = TRUE, skip = rowstart, colClasses = c(V2 = "character"), dec = dec)
+  rdt <- fread(path, fill = TRUE, skip = rowstart, colClasses = c(V2 = "character"),
+               dec = dec, showProgress = FALSE)
 
   ## column names - this can differ A LOT depending on what is connected and
   ## number of channels. Best to use original names
-  nms <- fread(path, skip = rowstart - 1, nrows = 1, header = F, dec = dec)
+  nms <- fread(path, skip = rowstart - 1, nrows = 1, header = F, dec = dec,
+               showProgress = FALSE)
   nms <- as.character(nms)
 
   ## need to strip all special characters - units etc. Encoding/hex code problems
@@ -433,13 +439,13 @@ parse_autoresp_witrox <- function(path, dec = dec) {
 
 parse_minidot <- function(path, dec = dec) {
   # txt <- readLines(path)
-  raw <- fread(path, fill = TRUE, dec = dec)
+  raw <- fread(path, fill = TRUE, dec = dec, showProgress = FALSE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "Unix", which = TRUE])
   # colnames <- as.matrix(raw[rowstart])[1,]
-  rdt <- fread(path, skip = rowstart+1, dec = dec)
-  col_nms1 <- fread(path, skip = rowstart-1, nrows = 3, dec = dec)[-1]
+  rdt <- fread(path, skip = rowstart+1, dec = dec, showProgress = FALSE)
+  col_nms1 <- fread(path, skip = rowstart-1, nrows = 3, dec = dec, showProgress = FALSE)[-1]
   col_nms1 <- colnames(col_nms1)
-  col_nms2 <- fread(path, skip = rowstart-1, nrows = 1, dec = dec)
+  col_nms2 <- fread(path, skip = rowstart-1, nrows = 1, dec = dec, showProgress = FALSE)
   col_nms <- paste(col_nms1, col_nms2)
   colnames(rdt) <- col_nms
   out <- rdt
@@ -451,7 +457,8 @@ parse_minidot <- function(path, dec = dec) {
 
 ## identical to parse_oxy10 - could merge
 parse_oxy10 <- function(path, dec = dec) {
-  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE, dec = dec)
+  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE,
+               dec = dec, showProgress = FALSE)
   nms <- colnames(rdt)
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", "", nms) ## removes weird characters
@@ -465,7 +472,8 @@ parse_oxy10 <- function(path, dec = dec) {
 
 ## identical to parse_oxy10 - could merge
 parse_oxy4 <- function(path, dec = dec) {
-  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE, dec = dec)
+  rdt <- fread(path, fill = TRUE, skip = 37, header = TRUE,
+               dec = dec, showProgress = FALSE)
   nms <- colnames(rdt)
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", "", nms) ## removes weird characters
@@ -482,7 +490,8 @@ parse_pyro <- function(path, dec = dec) {
 
   # Convert text to data.table object so that it's fast to deal with
   raw <- fread(path, fill = TRUE, dec = dec, header = FALSE,
-               encoding = "UTF-8", na.strings=c("","NA","---"))
+               encoding = "UTF-8", na.strings=c("","NA","---"),
+               showProgress = FALSE)
 
   # deals with files with multiple datasets (e.g. pyro06)
   # dunno how common this is
@@ -553,6 +562,7 @@ parse_pyro <- function(path, dec = dec) {
   ## This works but data comes out non-numeric
   rdt <- tail(fread(path, fill = TRUE, dec = dec,
                     header = FALSE,
+                    showProgress = FALSE,
                     encoding = "UTF-8", na.strings=c("","NA","---")),-(rowstart))
 
   # Insert column header names:
@@ -573,11 +583,11 @@ parse_pyro <- function(path, dec = dec) {
 
 parse_presens <- function(path, dec = dec) {
 
-  raw <- fread(path, fill = TRUE, header = FALSE, dec = dec)
+  raw <- fread(path, fill = TRUE, header = FALSE, dec = dec, showProgress = FALSE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "^Date/", which = TRUE])
 
-  rdt <- fread(path, skip = rowstart, dec = dec)
-  nms <- fread(path, skip = rowstart-1, nrows = 1, dec = dec)
+  rdt <- fread(path, skip = rowstart, dec = dec, showProgress = FALSE)
+  nms <- fread(path, skip = rowstart-1, nrows = 1, dec = dec, showProgress = FALSE)
 
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
@@ -598,7 +608,7 @@ parse_presens <- function(path, dec = dec) {
 
 parse_datamanager <- function(path, dec = dec) {
   # import raw data:
-  raw <- data.table::fread(path, fill = TRUE, skip = 1, dec = dec)
+  raw <- data.table::fread(path, fill = TRUE, skip = 1, dec = dec, showProgress = FALSE)
 
   # below is code to clean the data file
   # TODO perhaps a clean function could be used hmm
@@ -626,7 +636,7 @@ parse_datamanager <- function(path, dec = dec) {
 
 ## super simple for now - decide later if we do anything more complicated
 parse_neofox <- function(path, dec = dec) {
-  rdt <- fread(path, fill = TRUE, sep = ",", dec = dec)
+  rdt <- fread(path, fill = TRUE, sep = ",", dec = dec, showProgress = FALSE)
   out <- rdt
   return(out)
 }
@@ -638,9 +648,9 @@ parse_neofox <- function(path, dec = dec) {
 
 parse_oxyview_csv <- function(path, dec = dec) {
 
-  raw <- fread(path, fill = TRUE, dec = dec)
+  raw <- fread(path, fill = TRUE, dec = dec, showProgress = FALSE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "date\\(", which = TRUE])
-  rdt <- fread(path, fill = TRUE, skip = rowstart, dec = dec)
+  rdt <- fread(path, fill = TRUE, skip = rowstart, dec = dec, showProgress = FALSE)
   nms <- raw[rowstart,]
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
@@ -656,9 +666,10 @@ parse_oxyview_csv <- function(path, dec = dec) {
 
 parse_oxyview_txt <- function(path, dec = dec) {
 
-  raw <- fread(path, fill = TRUE, dec = dec)
+  raw <- fread(path, fill = TRUE, dec = dec, showProgress = FALSE)
   rowstart <- suppressWarnings(raw[raw$V1 %like% "date\\(", which = TRUE])
-  rdt <- fread(path, fill = TRUE, skip = "date", dec = dec) ## only difference to above, otherwise columns are characters
+  rdt <- fread(path, fill = TRUE, skip = "date", dec = dec,
+               showProgress = FALSE) ## only difference to above, otherwise columns are characters
   nms <- raw[rowstart,]
   nms <- gsub("%", "perc", nms) ## because it gets removed in next line
   nms <- gsub("[^[:alnum:]///' ]", " ", nms) ## removes weird characters
@@ -688,13 +699,16 @@ get_dec <- function(path){
   ## a few rows.
   ## readLines faster, but problems with files with alternating blank lines
   #nrw <- length(suppressWarnings(readLines(path)))
-  nrw <- nrow(suppressWarnings(fread(path, fill = TRUE, header = TRUE)))
+  nrw <- nrow(suppressWarnings(fread(path, fill = TRUE, header = TRUE,
+                                     showProgress = FALSE)))
 
   ## read in 5 rows starting 10 back from last row (to avoid any weirdness in last rows)
   ## read in with points as dec
-  pnt <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 5, skip = nrw-10, dec = "."))
+  pnt <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 5,
+                                skip = nrw-10, dec = ".", showProgress = FALSE))
   ## read in with commas as dec
-  com <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 5, skip = nrw-10, dec = ","))
+  com <- suppressWarnings(fread(path, fill = FALSE, header = FALSE, nrows = 5,
+                                skip = nrw-10, dec = ",", showProgress = FALSE))
 
   ## which has more numeric columns?
   pnt_num <- unlist(lapply(pnt, is.numeric))
