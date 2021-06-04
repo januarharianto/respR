@@ -331,6 +331,9 @@ print.auto_rate <- function(x, pos = 1, ...) {
 #' @export
 plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
 
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   ## warning if empty
   if(length(x$rate) == 0) stop("auto_rate: No rates found in auto_rate x.")
 
@@ -339,8 +342,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   ## warning if pos too low
   if(pos > length(x$rate))
     stop("auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
-
-  parorig <- par(no.readonly = TRUE) # save original par settings
 
   if (label) {
     cat("\n# plot.auto_rate # ----------------------\n")
@@ -422,8 +423,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, label = TRUE, ...) {
   }
 
   return(invisible(x))
-  on.exit(par(parorig)) # revert par settings to original
-
 }
 
 #' @export

@@ -199,5 +199,21 @@ test_that("inspect: all good message if no errors",
           expect_message(suppressWarnings(inspect(input, plot = F)),
                          "No issues detected while inspecting data frame."))
 
+test_that("inspect - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  inspect(sardine.rd, 1, 2)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
 
 sink() ## turns console printing back on

@@ -468,4 +468,22 @@ test_that("inspect.ft objects can be printed, including those which shows warnin
 
 })
 
+test_that("inspect.ft - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  inspect.ft(flowthrough.rd, 1, 2, 3)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
+
+
 sink() ## turns console printing back on

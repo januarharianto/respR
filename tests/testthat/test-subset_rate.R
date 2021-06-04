@@ -705,3 +705,20 @@ test_that("subset_rate: method = overlap   - outputs 4 rates with these inputs",
                4)
 })
 
+
+test_that("subset_rate - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  subset_rate(ar_obj_w_0, method = "nonzero", plot = TRUE)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})

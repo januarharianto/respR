@@ -1251,4 +1251,21 @@ test_that("calc_rate.ft objects work with mean()", {
                mean(crft.obj.multrate.delta.only$rate))
 })
 
+
+test_that("calc_rate.ft - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  calc_rate.ft(inspect.ft(flowthrough.rd, 1, delta.o2 = 4), flowrate = 1.5)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
 sink() ## turns console summarying back on

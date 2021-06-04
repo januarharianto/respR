@@ -39,8 +39,7 @@ NEW
 - NEW: subset_rate function - HIGHLIGHT
 - NEW: flowthrough workflow - 4 new specific functions - HIGHLIGHT
 
-- CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
-***************Need to revise above. on.exit cmd needs to be at end after all, but apparently before return(). Done for plot.auto_rate. TEST THIS
+- CHANGE: Better par() restoration behaviour. (Definitely fixed now - put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of error that causes it to exit early). Unit tests for this added to all fns which plot too.
 
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
 - CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)

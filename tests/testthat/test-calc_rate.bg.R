@@ -85,4 +85,22 @@ test_that("calc_rate.bg S3 generics work", {
   expect_output(mean(urbg))
 })
 
+test_that("calc_rate.bg - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  calc_rate.bg(urchins.rd, 1, 19)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
+
+
 sink() ## turns printing back on

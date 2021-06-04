@@ -142,6 +142,7 @@ rollreg.p <- function(rolldf, ranked.b1) {
 
 plot_multi_ar <- function(x, n = 9){
   parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(suppressWarnings(par(parorig))) # revert par settings to original
 
   nres <- length(x$rate) ## no. of results
   df <- x$dataframe
@@ -196,7 +197,6 @@ plot_multi_ar <- function(x, n = 9){
 
   grd <- cowplot::plot_grid(plotlist = all_plots)
   show(grd)
-  on.exit(suppressWarnings(par(parorig))) # revert par settings to original
 }
 
 

@@ -235,6 +235,7 @@ summary.calc_rate <- function(object, export = FALSE, ...) {
 plot.calc_rate <- function(x, pos = 1, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
 
   if(is.null(pos)) pos <- 1
   if(pos > length(x$rate))
@@ -255,7 +256,6 @@ plot.calc_rate <- function(x, pos = 1, ...) {
   cat("-----------------------------------------\n")
 
   return(invisible(x))
-  on.exit(par(parorig)) # revert par settings to original
 }
 
 #' @export

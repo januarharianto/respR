@@ -481,6 +481,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
                               legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
 
   if(x$input_type != "insp")
     stop("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
@@ -735,8 +736,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
     cat("Done.\n")
     cat("-----------------------------------------\n")
   }
-
-  on.exit(par(parorig)) # revert par settings to original
 
   return(invisible(x))
 }

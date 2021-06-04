@@ -288,6 +288,7 @@ plot.inspect <- function(x, message = TRUE, width = NULL,
                          legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
 
   if (message)
     cat("\n# plot.inspect # ------------------------\n")
@@ -452,8 +453,6 @@ plot.inspect <- function(x, message = TRUE, width = NULL,
     cat("Done.\n")
     cat("-----------------------------------------\n")
   }
-
-  on.exit(par(parorig)) # revert par settings to original
 
   return(invisible(x))
 }

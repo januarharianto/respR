@@ -380,4 +380,23 @@ test_that("auto_rate works when there are NA in the 'oxygen' data", {
 
 })
 
+test_that("auto_rate - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  auto_rate(sardine.rd[1:1000,])
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
+
+
+
 sink() ## turns printing back on
