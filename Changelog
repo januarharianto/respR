@@ -38,7 +38,6 @@ Changes
 NEW
 - NEW: subset_rate function - HIGHLIGHT
 - NEW: flowthrough workflow - 4 new specific functions - HIGHLIGHT
-- NEW: Added `background_lin.rd` and `background_exp.rd` data for testing new background correction functionality
 
 - CHANGE: Better original par() restoration behaviour (TIL: put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of plotting error that causes it to exit early)
 ***************Need to revise above. on.exit cmd needs to be at end after all, but apparently before return(). Done for plot.auto_rate. TEST THIS
@@ -68,8 +67,6 @@ New utility validation fns
 ========================== inspect() ============================
 Changes
 
-- CHANGE: `time = 1` and `oxygen = 2` the defaults rather than NULL
-- CHANGE: if `oxygen = NULL` now inspects ALL columns
 - NEW: added `width` input for rolling reg plot (default 0.1)
 - CHANGE: updated roxygen docs. There was quite a lot out of date...
 - CHANGE: Added message if multiple columns inspected that subsequent functions will only use first 2 by default
@@ -80,7 +77,11 @@ Changes
 - CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: Stops if 'oxygen' and 'time' columns conflict
 - FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
-- CHANGE: Can pass 'rate.rev = FALSE' to plot rates numerically correctly (for oxygen production respirometry)
+- CHANGE: Can pass 'rate.rev = FALSE' to plot rates not reversed (for oxygen production respirometry)
+- CHANGE: Can pass 'legend = FALSE' to plot to suppress legend
+- CHANGE: prints on assigning when issues are found
+- CHANGE: output has additional elements `$call` and `$inputs`
+- CHANGE: output `$list` and `$list_raw` renamed `locs` and `$locs_raw`
 
 
 ========================== S3 Methods ============================
@@ -208,8 +209,15 @@ Although, there's a chance with some data it will give different results than th
 
 inspect.ft - can pass rate.rev = FALSE to plot rates numerically correctly (for oxygen production respirometry)
 
-- NEW: flowthrough_mult.rd example dataset - multiple flowthrough data
-- NEW: flowthrough_nlbg.rd example dataset - flowthrough data with non-linear background
+
+========================== data ============================
+
 - CHANGE: flowthrough.rd amended to make delta column negative values
 
+NEW: new example datasets
+- `background_lin.rd` - linear background, for testing new background correction functionality
+- `background_exp.rd` - exponential background, for testing new background correction functionality
+- `flowthrough_mult.rd` - multiple flowthrough data
+- `flowthrough_nlbg.rd` - flowthrough data with non-linear background
+- `algae.rd` - oxygen production data
 

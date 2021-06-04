@@ -246,3 +246,21 @@
 #' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
 #'   2 columns: time in seconds, oxygen in % air saturation.
 "background_exp.rd"
+
+
+#' Oxygen production respirometry data
+#'
+#' Data from a respirometry experiment on algae which shows oxygen production
+#' over time.
+#'
+#' - Dissolved oxygen units: % Air Saturation
+#' - Time units: hours
+#' - Respirometer volume: 0.1 L
+#' - Temperature: 12 C
+#' - Salinity: 30 ppt
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame object consisting of 1200 rows (20 h of data),and
+#'   2 columns: time in hours, oxygen in % air saturation.
+"algae.rd"

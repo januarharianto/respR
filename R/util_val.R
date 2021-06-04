@@ -53,27 +53,44 @@ column.conflict <- function(inputs, id = FALSE){
 
 ## Column input validation
 ## - req = input is required (i.e. can't be NULL)
-## - int = should only be integers
-## - max = for max total number of column inputs allowed (e.g. for time, max = 1, as should never have more than 1 time column)
+## - min = for min total number of column inputs allowed
+## - max = for max total number of column inputs allowed
+##      (e.g. for time, max = 1, as should never have more than 1 time column)
 ## - range = for specific column range allowed (e.g. c(1,ncol(df)))
+## - conflicts = does it conflict with these other column inputs?
+##      (e.g. for time and oxygen should never be same column)
 ## - msg = string to add custom message
 
-column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,Inf), msg = ""){
+column.val <- function(input, req = FALSE, min = 1, max = Inf,
+                       range = c(-Inf,Inf), conflicts = NULL, msg = ""){
 
-  ## check if an input required
+  ## check if NULL
   is_null <- is.null(input)
-  ## check integer
-  are_int <- all(sapply(input, function(z) z %% 1 == 0))
+  if(req && is_null) stop(glue::glue("{msg} column input is required."))
+
+  ## check if numeric
+  is_num <- is.numeric(input)
+  if(req && !is_num) stop(glue::glue("{msg} column input is not numeric."))
+
+  ## check all integers
+  if(is_num) are_int <- all(sapply(input, function(z) z %% 1 == 0))
   ## check not greater than max
   below_max <-  length(input) <= max
+  ## check not less than min
+  above_min <-  length(input) >= min
   ## check within range
-  in_range <- all(sapply(input, function(z) dplyr::between(z, range[1], range[2])))
+  if(is_num) in_range <- all(sapply(input, function(z) dplyr::between(z, range[1], range[2])))
+  ## check if conflicts
+  conflicts <- any(input %in% conflicts)
 
-  if(req && is_null) stop(glue::glue("{msg}input is required."))
-  if(int && !are_int) stop(glue::glue("{msg}some column inputs are not integers."))
-  if(!below_max) stop(glue::glue("{msg}input is greater than the maximum allowed number of columns."))
-  if(!in_range) stop(glue::glue("{msg}some column inputs are out of range of allowed data columns."))
-
+  # Check and messages
+  if(!is_null){
+    if(is_num && !are_int) stop(glue::glue("{msg} some column inputs are not integers."))
+    if(!below_max) stop(glue::glue("{msg} cannot enter more than {max} column(s) with this input or this dataset."))
+    if(!above_min) stop(glue::glue("{msg} at least {min} column inputs required."))
+    if(is_num && !in_range) stop(glue::glue("{msg} one or more column inputs are out of range of allowed data columns."))
+    if(conflicts) stop(glue::glue("{msg} one or more column inputs conflicts with other inputs."))
+  }
 }
 
 
@@ -87,7 +104,7 @@ column.val <- function(input, int = TRUE, req = FALSE, max = 1, range = c(-Inf,I
 ## - msg = string to prepend failure message
 
 input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
-                        max = Inf, min = 1, range = c(-Inf,Inf), msg = ""){
+                      max = Inf, min = 1, range = c(-Inf,Inf), msg = ""){
 
   ## check if numeric
   is_num <- is.numeric(input)

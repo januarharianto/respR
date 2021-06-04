@@ -7,9 +7,16 @@
 
 sink("/dev/null") ## stops printing outputs on assigning
 
-test_that("convert_val - stops if units not recognised", {
+test_that("convert_val - stops if from and to units not same type", {
   expect_error(convert_val(-273.15, "K", "kg"),
                "convert_val: 'from' and 'to' appear to be different unit types.")
+})
+
+test_that("convert_val - stops if units not recognised, or not of accepted type", {
+  expect_error(convert_val(-273.15, "sec", "kg"),
+               "convert_val: 'from' unit is not one of the accepted unit types.")
+  expect_error(convert_val(-273.15, "kg", "hr"),
+               "convert_val: 'to' unit is not one of the accepted unit types.")
   expect_error(convert_val(-273.15, "F", "blah"),
                "convert_val: \"blah\" unit not recognised")
 })

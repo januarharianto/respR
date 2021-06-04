@@ -252,43 +252,43 @@ test_that("inspect.ft - stops if column inputs malformed", {
   ## time
   expect_error(inspect.ft(flowthrough.rd, time = 1.1, out.o2 = 2,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'time' input - some column inputs are not integers.")
+               regexp = "inspect.ft: 'time' - some column inputs are not integers.")
   expect_error(inspect.ft(flowthrough.rd, time = 1:2, out.o2 = 3,
                           in.o2 = 4, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'time' input - input is greater than the maximum allowed number of columns.")
+               regexp = "inspect.ft: 'time' - cannot enter more than 1 column\\(s\\) with this input or this dataset.")
   expect_error(inspect.ft(flowthrough.rd, time = 8, out.o2 = 2,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'time' input - some column inputs are out of range of allowed data columns.")
+               regexp = "inspect.ft: 'time' - one or more column inputs are out of range of allowed data columns.")
   ## out.o2
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2.1,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' input - some column inputs are not integers")
+               regexp = "inspect.ft: 'out.o2' - some column inputs are not integers")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 4:9,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' input - input is greater than the maximum allowed number of columns.")
+               regexp = "inspect.ft: 'out.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 8:9,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' input - some column inputs are out of range of allowed data columns.")
+               regexp = "inspect.ft: 'out.o2' - one or more column inputs are out of range of allowed data columns.")
   ## in.o2
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
                           in.o2 = 3.1, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'in.o2' input - some column inputs are not integers.")
+               regexp = "inspect.ft: 'in.o2' - some column inputs are not integers.")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 4:9,
                           in.o2 = 2, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' input - input is greater than the maximum allowed number of columns.")
+               regexp = "inspect.ft: 'out.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2:3,
                           in.o2 = 8:9, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'in.o2' input - some column inputs are out of range of allowed data columns.")
+               regexp = "inspect.ft: 'in.o2' - one or more column inputs are out of range of allowed data columns.")
   ## delta.o2
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
                           in.o2 = NULL, in.o2.value = NULL, delta.o2 = 4.1, plot = F),
-               regexp = "inspect.ft: 'delta.o2' input - some column inputs are not integers")
+               regexp = "inspect.ft: 'delta.o2' - some column inputs are not integers")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
                           in.o2 = NULL, in.o2.value = NULL, delta.o2 = 2:5, plot = F),
-               regexp = "inspect.ft: 'delta.o2' input - input is greater than the maximum allowed number of columns.")
+               regexp = "inspect.ft: 'delta.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
                           in.o2 = NULL, in.o2.value = NULL, delta.o2 = 5, plot = F),
-               regexp = "inspect.ft: 'delta.o2' input - some column inputs are out of range of allowed data columns.")
+               regexp = "inspect.ft: 'delta.o2' - one or more column inputs are out of range of allowed data columns.")
 })
 
 

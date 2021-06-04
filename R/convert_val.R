@@ -96,7 +96,6 @@
 
 convert_val <- function(x, from = NULL, to = NULL) {
 
-
   # Validate inputs ---------------------------------------------------------
   ## validate from and to input
   input.val(from, num = FALSE, req = TRUE,
@@ -106,6 +105,8 @@ convert_val <- function(x, from = NULL, to = NULL) {
 
   ## check from unit type
   fr_unit <- unit_type(from, msg = "convert_val: ")
+  if(!(fr_unit %in% c("vol", "temperature", "mass", "area", "pressure")))
+    stop("convert_val: 'from' unit is not one of the accepted unit types.")
 
   ## apply defaults
   if(is.null(to)) {
@@ -117,6 +118,8 @@ convert_val <- function(x, from = NULL, to = NULL) {
   }
   ## check to unit type
   to_unit <- unit_type(to, msg = "convert_val: ")
+  if(!(to_unit %in% c("vol", "temperature", "mass", "area", "pressure")))
+    stop("convert_val: 'to' unit is not one of the accepted unit types.")
 
   ## warn if different
   if(fr_unit != to_unit)

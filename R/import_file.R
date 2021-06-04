@@ -90,7 +90,7 @@ import_file <- function(path, export = FALSE) {
     out <- parse_minidot(path, dec = dec)
   } else if (suppressWarnings(any(grepl("CALIBRATION DATA", raw[1:20])))) {
     cat("Loligo AutoResp/Witrox file detected\n")
-    out <- respR:::parse_autoresp_witrox(path, dec = dec)
+    out <- parse_autoresp_witrox(path, dec = dec)
   } else if (suppressWarnings(any(grepl(": Time \\(", raw[1])))) {
     cat("Vernier or QBox Aqua csv file detected\n")
     out <- parse_vernier_csv(path, dec = dec)

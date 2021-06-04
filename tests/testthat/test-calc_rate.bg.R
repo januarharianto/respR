@@ -70,7 +70,7 @@ test_that("calc_rate.bg accepts `data.table` objects", {
 })
 
 test_that("calc_rate.bg correctly uses specified columns in `inspect` objects", {
-  ur <- suppressWarnings(inspect(urchins.rd, time = 1, oxygen = NULL, plot = F))
+  ur <- suppressWarnings(inspect(urchins.rd, time = 1, oxygen = 2:19, plot = F))
   urbg <- calc_rate.bg(ur,  time = 1, oxygen = c(18,19), plot = F)
   expect_equal(ncol(urbg$data), 3)
   expect_equal(ur$dataframe$b1, urbg$data$b1)
@@ -78,7 +78,7 @@ test_that("calc_rate.bg correctly uses specified columns in `inspect` objects", 
 })
 
 test_that("calc_rate.bg S3 generics work", {
-  ur <- suppressWarnings(inspect(urchins.rd, time = 1, oxygen = NULL, plot = F))
+  ur <- suppressWarnings(inspect(urchins.rd, time = 1, oxygen = 2:19, plot = F))
   urbg <- calc_rate.bg(ur,  time = 1, oxygen = c(18,19), plot = F)
   expect_output(print(urbg))
   expect_output(plot(urbg))

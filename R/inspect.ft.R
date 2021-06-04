@@ -291,14 +291,14 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
     stop(glue::glue("inspect.ft: Input columns conflict. Column(s) {glue::glue_collapse(dupe_cols, \", \", last = \" and \")} are entered more than once."))
   }
   ## check column inputs are valid
-  column.val(time, int = TRUE, req = TRUE, max = 1, range = c(1, ncol(df)),
-                     msg = "inspect.ft: 'time' input - ")
-  column.val(out.o2, int = TRUE, req = FALSE, max = ncol(df)-1, range = c(1, ncol(df)),
-                     msg = "inspect.ft: 'out.o2' input - ")
-  column.val(in.o2, int = TRUE, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
-                     msg = "inspect.ft: 'in.o2' input - ")
-  column.val(delta.o2, int = TRUE, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
-                     msg = "inspect.ft: 'delta.o2' input - ")
+  column.val(time, req = TRUE, max = 1, range = c(1, ncol(df)),
+                     msg = "inspect.ft: 'time' -")
+  column.val(out.o2, req = FALSE, max = ncol(df)-1, range = c(1, ncol(df)),
+                     msg = "inspect.ft: 'out.o2' -")
+  column.val(in.o2, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
+                     msg = "inspect.ft: 'in.o2' -")
+  column.val(delta.o2, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
+                     msg = "inspect.ft: 'delta.o2' -")
 
   # Extract data ------------------------------------------------------------
 
