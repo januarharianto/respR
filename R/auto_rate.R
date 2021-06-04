@@ -87,7 +87,7 @@
 #'   and/or mass-specific rates of oxygen use are computed in [convert_rate()]
 #'   and [convert_DO()].
 #'
-#' @param df data frame, or object of class `inspect` containing oxygen~time
+#' @param x data frame, or object of class `inspect` containing oxygen~time
 #'   data.
 #' @param method string. `"linear"`, `"highest"`, `"lowest"`, `"maximum"`,
 #'   `"minimum"`, `"rolling"` or `"interval"`. Defaults to `linear`. See
@@ -137,10 +137,10 @@
 #' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
 #' }
 #'
-auto_rate <- function(df, method = 'linear', width = NULL, by = 'row',
+auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
                       plot = TRUE) {
   # perform checks
-  checks <- validate_auto_rate(df, by, method)
+  checks <- validate_auto_rate(x, by, method)
   dt <- checks$df  # extract df from validation check
   by <- checks$by
 

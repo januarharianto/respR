@@ -4,10 +4,10 @@
 \alias{subsample}
 \title{Subsample a data frame object}
 \usage{
-subsample(df, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE)
+subsample(x, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE)
 }
 \arguments{
-\item{df}{data frame or vector. The data to process.}
+\item{x}{data frame or vector. The data to process.}
 
 \item{n}{numeric. Subsample every \code{n} rows.}
 

@@ -5,10 +5,10 @@
 \title{Automatically determine most linear, maximum and minimum rates of change in
 oxygen concentration in a dataset}
 \usage{
-auto_rate(df, method = "linear", width = NULL, by = "row", plot = TRUE)
+auto_rate(x, method = "linear", width = NULL, by = "row", plot = TRUE)
 }
 \arguments{
-\item{df}{data frame, or object of class \code{inspect} containing oxygen~time
+\item{x}{data frame, or object of class \code{inspect} containing oxygen~time
 data.}
 
 \item{method}{string. \code{"linear"}, \code{"highest"}, \code{"lowest"}, \code{"maximum"},

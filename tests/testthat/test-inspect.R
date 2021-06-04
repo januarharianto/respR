@@ -55,23 +55,23 @@ test_that("inspect objects with lots of results (20+) can be printed", {
   # time NA
   urch <- urchins.rd[,1:2]
   urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- NA
-  urch_insp <- inspect(urch)
+  urch_insp <- suppressWarnings(inspect(urch))
   expect_output(print(urch_insp))
   # time non seq
   urch <- urchins.rd[,1:2]
   urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <-
     rev(urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)])
-  urch_insp <- inspect(urch)
+  urch_insp <- suppressWarnings(inspect(urch))
   expect_output(print(urch_insp))
   # time dup
   urch <- urchins.rd[,1:2]
   urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- 44.3
-  urch_insp <- inspect(urch)
+  urch_insp <- suppressWarnings(inspect(urch))
   expect_output(print(urch_insp))
   # oxy NA
   urch <- urchins.rd[,1:2]
   urch$a[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- NA
-  urch_insp <- inspect(urch)
+  urch_insp <- suppressWarnings(inspect(urch))
   expect_output(print(urch_insp))
 })
 

@@ -44,7 +44,7 @@
 #' Its purpose is quality control, data visualisation and exploration to assist
 #' users in exploring and preparing their data prior to analysis.
 #'
-#' Given an input data frame (`df`), the function scans the columns specified
+#' Given an input data frame (`x`), the function scans the columns specified
 #' via the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
 #' specified, by default the functions assumes the first column is `time`, and
 #' all others are `delta.o2` oxygen data.
@@ -172,7 +172,7 @@
 #' **Note**: All background calculations should be from experiments done at the
 #' **same flow rate** as the specimen experiments to be corrected.
 #'
-#' @param df any object of class `data.frame` containing columns of `time` and
+#' @param x any object of class `data.frame` containing columns of `time` and
 #'   `out.o2` or `delta.o2` concentrations, and optionally `in.o2`.
 #' @param time numeric integer. Defaults to 1. Specifies the column number of
 #'   the time data.
@@ -181,7 +181,7 @@
 #' @param in.o2 numeric value or vector of integers. Defaults to NULL. Specifies
 #'   the column number(s) of inflow O2 data.
 #' @param in.o2.value numeric value. Defaults to NULL. If there is no continuous
-#'   `in.o2` data in `df`, this specifies a fixed value of oxygen for inflowing
+#'   `in.o2` data in `x`, this specifies a fixed value of oxygen for inflowing
 #'   water in same units as `out.o2`, and is used to calculate a `delta.o2`.
 #' @param delta.o2 numeric value or vector of integers. Specifies the column
 #'   number(s) of delta O2 data, for when the user has already calculated the
@@ -234,13 +234,13 @@
 #' inspect.ft(flowthrough_nlbg.rd, time = 1,
 #'            out.o2 = 2, in.o2 = 3)
 
-inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
+inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
                        in.o2.value = NULL, delta.o2 = NULL, plot = TRUE, ...) {
 
   # Input checks ------------------------------------------------------------
 
   ## stop if not df
-  if (!is.data.frame(df)) stop("inspect.ft: 'df' must be data.frame object.")
+  if (!is.data.frame(x)) stop("inspect.ft: 'x' must be data.frame object.")
 
   ## Apply time column default
   if(is.null(time)) {
@@ -277,7 +277,7 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
   ## After all that, if these are still NULL assume all non-time are delta.o2
   if (is.null(out.o2) && is.null(delta.o2)) {
     message("inspect.ft: Applying column default of all non-time column(s) as 'delta.o2'")
-    listcols <- seq.int(1, ncol(df))
+    listcols <- seq.int(1, ncol(x))
     delta.o2 <- listcols[!listcols %in% time]
   }
 
@@ -291,18 +291,18 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
     stop(glue::glue("inspect.ft: Input columns conflict. Column(s) {glue::glue_collapse(dupe_cols, \", \", last = \" and \")} are entered more than once."))
   }
   ## check column inputs are valid
-  column.val(time, req = TRUE, max = 1, range = c(1, ncol(df)),
+  column.val(time, req = TRUE, max = 1, range = c(1, ncol(x)),
                      msg = "inspect.ft: 'time' -")
-  column.val(out.o2, req = FALSE, max = ncol(df)-1, range = c(1, ncol(df)),
+  column.val(out.o2, req = FALSE, max = ncol(x)-1, range = c(1, ncol(x)),
                      msg = "inspect.ft: 'out.o2' -")
-  column.val(in.o2, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
+  column.val(in.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
                      msg = "inspect.ft: 'in.o2' -")
-  column.val(delta.o2, req = FALSE, max = ncol(df)-1, range = c(0, ncol(df)),
+  column.val(delta.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
                      msg = "inspect.ft: 'delta.o2' -")
 
   # Extract data ------------------------------------------------------------
 
-  df <- as.data.frame(df)
+  df <- as.data.frame(x)
 
   ## time
   time.all <- lapply(1:length(df[time]), function(z) df[time][[z]])
@@ -409,7 +409,7 @@ inspect.ft <- function(df, time = NULL, out.o2 = NULL, in.o2 = NULL,
               checks = checks,
               locations_raw = locs,
               locations = locations,
-              call = list(df = df,
+              call = list(df = x,
                           time = time,
                           out.o2 = out.o2,
                           in.o2 = in.o2,

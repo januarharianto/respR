@@ -6,7 +6,7 @@
 #' elements or rows. The `length.out` argument uniformly subsamples the input to
 #' the desired length.
 #'
-#' @param df data frame or vector. The data to process.
+#' @param x data frame or vector. The data to process.
 #' @param n numeric. Subsample every `n` rows.
 #' @param length.out numeric. Subsample to a specific length or number of rows.
 #' @param random_start logical. Defaults to FALSE. If TRUE, randomises the start
@@ -26,7 +26,7 @@
 #' # Subsample with random starting position
 #' subsample(sardine.rd, n = 3, random_start = TRUE)
 
-subsample <- function(df, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE) {
+subsample <- function(x, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE) {
 
   if(is.null(n) && is.null(length.out))
     stop("One of 'n' or 'length.out' is required.")
@@ -34,8 +34,8 @@ subsample <- function(df, n = NULL, length.out = NULL, random_start = FALSE, plo
     stop("Only one of 'n' or 'length.out' should be entered.")
 
   # df or vector
-  if(is.data.frame(df)) index <- 1:nrow(df) else
-    index <- 1:length(df)
+  if(is.data.frame(x)) index <- 1:nrow(x) else
+    index <- 1:length(x)
 
   # If random_start randomise start location for n
   if(!is.null(n) && random_start) start <- sample(1:n, 1) else
@@ -49,23 +49,23 @@ subsample <- function(df, n = NULL, length.out = NULL, random_start = FALSE, plo
     index <- index[seq.int(start, end, length.out = length.out)]
 
   ## apply index
-  if(is.data.frame(df)) subset <- df[index,] else
-    subset <- df[index]
+  if(is.data.frame(x)) subset <- x[index,] else
+    subset <- x[index]
 
   # Create the plots
   if (plot) {
 
-    if(is.data.frame(df) && ncol(df) > 2) message("subsample: plotting first column of data only.")
+    if(is.data.frame(x) && ncol(x) > 2) message("subsample: plotting first column of data only.")
 
-    if(is.data.frame(df)){
+    if(is.data.frame(x)){
       xlab <- "Time"
       ylab <- "Oxygen"
-      data <- df[,1:2]
+      data <- x[,1:2]
       sub_data <- subset[,1:2]
     } else {
       xlab <- "Row"
       ylab <- "Data"
-      data <- df
+      data <- x
       sub_data <- subset
     }
 

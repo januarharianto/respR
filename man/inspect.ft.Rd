@@ -5,7 +5,7 @@
 \title{Explore and visualise flowthrough respirometry data and check for errors}
 \usage{
 inspect.ft(
-  df,
+  x,
   time = NULL,
   out.o2 = NULL,
   in.o2 = NULL,
@@ -16,7 +16,7 @@ inspect.ft(
 )
 }
 \arguments{
-\item{df}{any object of class \code{data.frame} containing columns of \code{time} and
+\item{x}{any object of class \code{data.frame} containing columns of \code{time} and
 \code{out.o2} or \code{delta.o2} concentrations, and optionally \code{in.o2}.}
 
 \item{time}{numeric integer. Defaults to 1. Specifies the column number of
@@ -29,7 +29,7 @@ Specifies the column number(s) of outflow O2 data.}
 the column number(s) of inflow O2 data.}
 
 \item{in.o2.value}{numeric value. Defaults to NULL. If there is no continuous
-\code{in.o2} data in \code{df}, this specifies a fixed value of oxygen for inflowing
+\code{in.o2} data in \code{x}, this specifies a fixed value of oxygen for inflowing
 water in same units as \code{out.o2}, and is used to calculate a \code{delta.o2}.}
 
 \item{delta.o2}{numeric value or vector of integers. Specifies the column
@@ -93,7 +93,7 @@ subsequent functions is optional. Most functions in \code{respR} accept regular
 Its purpose is quality control, data visualisation and exploration to assist
 users in exploring and preparing their data prior to analysis.
 
-Given an input data frame (\code{df}), the function scans the columns specified
+Given an input data frame (\code{x}), the function scans the columns specified
 via the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} inputs. If no columns are
 specified, by default the functions assumes the first column is \code{time}, and
 all others are \code{delta.o2} oxygen data.

@@ -33,7 +33,7 @@ Changes
 - CHANGE: Updated README
 - CHANGE: ALL FUNCTIONS: changed dataframe in output to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
 - CHANGE: Example data are now all data.tables
-
+- CHANGE: For consistency, changed primary input from `df` to `x` where appropriate (auto_rate, inspect, inspect.ft, subsample) (this was inconsistent and often confusing, in that `df` did not have to be a data frame, but could be `inspect` etc.)
 
 NEW
 - NEW: subset_rate function - HIGHLIGHT

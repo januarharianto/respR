@@ -236,16 +236,16 @@ test_that("inspect.ft - stops if delta.o2 entered and out.o2, in.o2 or in.o2.val
                regexp = "inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
 })
 
-test_that("inspect.ft - stops if df not a dataframe", {
+test_that("inspect.ft - stops if x not a dataframe", {
   expect_error(inspect.ft(as.matrix(flowthrough.rd), time = 1, out.o2 = 2,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'df' must be data.frame object.")
+               regexp = "inspect.ft: 'x' must be data.frame object.")
   expect_error(inspect.ft(flowthrough.rd[[1]], time = 1, out.o2 = 2,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'df' must be data.frame object.")
+               regexp = "inspect.ft: 'x' must be data.frame object.")
   expect_error(inspect.ft("blah", time = 1, out.o2 = 2,
                           in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'df' must be data.frame object.")
+               regexp = "inspect.ft: 'x' must be data.frame object.")
 })
 
 test_that("inspect.ft - stops if column inputs malformed", {
