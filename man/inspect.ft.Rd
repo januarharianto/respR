@@ -93,8 +93,8 @@ subsequent functions is optional. Most functions in \code{respR} accept regular
 Its purpose is quality control, data visualisation and exploration to assist
 users in exploring and preparing their data prior to analysis.
 
-Given an input data frame (\code{x}), the function scans the columns specified
-via the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} inputs. If no columns are
+Given an input data frame (\code{x}), the function scans the columns specified via
+the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} inputs. If no columns are
 specified, by default the functions assumes the first column is \code{time}, and
 all others are \code{delta.o2} oxygen data.
 
@@ -169,7 +169,7 @@ have the same number of columns.
 Regardless of which inputs are used, multiple columns results in a plot of
 each \code{delta.o2} time series. This is chiefly exploratory functionality to
 give a quick overview of a dataset. While the output will contain all data
-columns in \verb{$dataframe} and \verb{$input_data}, subsequent functions such as
+columns in \verb{$dataframe} and \verb{$data}, subsequent functions such as
 \code{\link[=calc_rate.ft]{calc_rate.ft()}}, will only use the first inspected data set (\code{time}, and the
 first \code{delta.o2}) to calculate rates. Best practice is to inspect and assign
 each individual experiment or column pair as separate \code{inspect.ft} objects.

@@ -44,8 +44,8 @@
 #' Its purpose is quality control, data visualisation and exploration to assist
 #' users in exploring and preparing their data prior to analysis.
 #'
-#' Given an input data frame (`x`), the function scans the columns specified
-#' via the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
+#' Given an input data frame (`x`), the function scans the columns specified via
+#' the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
 #' specified, by default the functions assumes the first column is `time`, and
 #' all others are `delta.o2` oxygen data.
 #'
@@ -122,7 +122,7 @@
 #' Regardless of which inputs are used, multiple columns results in a plot of
 #' each `delta.o2` time series. This is chiefly exploratory functionality to
 #' give a quick overview of a dataset. While the output will contain all data
-#' columns in `$dataframe` and `$input_data`, subsequent functions such as
+#' columns in `$dataframe` and `$data`, subsequent functions such as
 #' [calc_rate.ft()], will only use the first inspected data set (`time`, and the
 #' first `delta.o2`) to calculate rates. Best practice is to inspect and assign
 #' each individual experiment or column pair as separate `inspect.ft` objects.
@@ -237,6 +237,9 @@
 inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
                        in.o2.value = NULL, delta.o2 = NULL, plot = TRUE, ...) {
 
+  ## Save function call for output
+  call <- match.call()
+
   # Input checks ------------------------------------------------------------
 
   ## stop if not df
@@ -292,13 +295,13 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   }
   ## check column inputs are valid
   column.val(time, req = TRUE, max = 1, range = c(1, ncol(x)),
-                     msg = "inspect.ft: 'time' -")
+             msg = "inspect.ft: 'time' -")
   column.val(out.o2, req = FALSE, max = ncol(x)-1, range = c(1, ncol(x)),
-                     msg = "inspect.ft: 'out.o2' -")
+             msg = "inspect.ft: 'out.o2' -")
   column.val(in.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
-                     msg = "inspect.ft: 'in.o2' -")
+             msg = "inspect.ft: 'in.o2' -")
   column.val(delta.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
-                     msg = "inspect.ft: 'delta.o2' -")
+             msg = "inspect.ft: 'delta.o2' -")
 
   # Extract data ------------------------------------------------------------
 
@@ -378,7 +381,7 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
 
   # combine results
   checks <- cbind(time_results[[1]], out.o2_results[[1]], in.o2_results[[1]], del.o2_results[[1]])
-  locs <- cbind(time_results[[2]], out.o2_results[[2]], in.o2_results[[2]], del.o2_results[[2]])
+  locs_raw <- cbind(time_results[[2]], out.o2_results[[2]], in.o2_results[[2]], del.o2_results[[2]])
 
   # output
   ## rename columns:
@@ -386,8 +389,8 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   #colnames(checks) <- c(names(time.all), names(out.o2.all), names(in.o2.all), names(del.o2.all))
 
   ##
-  locations <- lapply(1:ncol(locs), function(z) locs[, z])
-  names(locations) <- colnames(locs)
+  locs <- lapply(1:ncol(locs_raw), function(z) locs_raw[, z])
+  names(locs) <- colnames(locs_raw)
   ##
 
   # save new data frame and create output object
@@ -402,20 +405,21 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   }
 
   out <- list(dataframe = dataframe,
-              input_data = list(time = time.all,
-                                out.o2 = out.o2.all,
-                                in.o2 = in.o2.all,
-                                delta.o2 = del.o2.all),
+              call = call,
+              inputs = list(df = x,
+                            time = time,
+                            out.o2 = out.o2,
+                            in.o2 = in.o2,
+                            in.o2.value = in.o2.value,
+                            delta.o2 = delta.o2,
+                            plot = plot),
+              data = list(time = time.all,
+                          out.o2 = out.o2.all,
+                          in.o2 = in.o2.all,
+                          delta.o2 = del.o2.all),
               checks = checks,
-              locations_raw = locs,
-              locations = locations,
-              call = list(df = x,
-                          time = time,
-                          out.o2 = out.o2,
-                          in.o2 = in.o2,
-                          in.o2.all = in.o2.all,
-                          delta.o2 = delta.o2,
-                          plot = plot))
+              locs_raw = locs_raw,
+              locs = locs)
 
   class(out) <- "inspect.ft"
 
@@ -436,7 +440,7 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
 print.inspect.ft <- function(x, ...) {
   cat("\n# print.inspect.ft # --------------------\n")
   checks <- x$checks
-  locs <- x$locations_raw
+  locs_raw <- x$locs_raw
 
   # rename content:
   tab <- checks
@@ -450,28 +454,28 @@ print.inspect.ft <- function(x, ...) {
 
   # highlight locations that did not pass the tests (but only for 2-col dfs):
   if (checks[, 1][[1]]) {
-    xnan <- locs[, 1][[1]]
+    xnan <- locs_raw[, 1][[1]]
     cat("NA/NaN Time data locations: ")
     if (length(xnan) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xnan, 20))
   }
   if (checks[, 1][[2]]) {
-    xseq <- locs[, 1][[2]]
+    xseq <- locs_raw[, 1][[2]]
     cat("Non-sequential Time data locations ")
     if (length(xseq) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xseq, 20))
   }
   if (checks[, 1][[3]]) {
-    xdup <- locs[, 1][[3]]
+    xdup <- locs_raw[, 1][[3]]
     cat("Duplicate Time data locations ")
     if (length(xdup) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xdup, 20))
   }
   if (checks[, 1][[4]]) {
-    xevn <- locs[, 1][[4]]
+    xevn <- locs_raw[, 1][[4]]
     cat("Uneven Time data locations ")
     if (length(xevn) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
@@ -483,7 +487,7 @@ print.inspect.ft <- function(x, ...) {
   #### CHANGE from length df to ncol checks
   for(i in 2:ncol(x$checks)) { ## for multiple columns
     if (checks[, i][[1]]) {
-      ynan <- locs[, i][[1]]
+      ynan <- locs_raw[, i][[1]]
       cat("NA/NaN locations ")
       if (length(ynan) > 20) cat("(first 20 shown) ")
       cat("in Oxygen column:", names(x$dataframe)[i], "\n")
@@ -507,11 +511,11 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
 
   # extract data
   dt <- x$dataframe
-  time <- x$input_data$time
-  out.o2 <- x$input_data$out.o2
-  in.o2 <- x$input_data$in.o2
+  time <- x$data$time
+  out.o2 <- x$data$out.o2
+  in.o2 <- x$data$in.o2
   if(length(in.o2) == 1) in.o2 <- rep(in.o2, length(out.o2)) # makes plotting easier
-  del.o2 <- x$input_data$delta.o2
+  del.o2 <- x$data$delta.o2
 
   # Multi column plot -------------------------------------------------------
 
@@ -567,14 +571,14 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     )
 
     # Single dataset ----------------------------------------------------------
-  } else if (length(x$input_data$delta.o2) == 1 || !is.null(pos)) {
+  } else if (length(x$data$delta.o2) == 1 || !is.null(pos)) {
 
     if(is.null(pos)) pos <- 1
-    if(pos > length(x$input_data$delta.o2))
-      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$input_data$out.o2), " data inputs found.")
+    if(pos > length(x$data$delta.o2))
+      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.o2), " data inputs found.")
 
     if (message)
-      cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$input_data$delta), '... \n')
+      cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
 
     ## general settings
     ## margins

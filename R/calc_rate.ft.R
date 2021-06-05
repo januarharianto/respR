@@ -225,7 +225,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   } else if(xtype == "insp") {
     message("calc_rate.ft: calculating rate from 'inspect.ft' object.")
 
-    input_data <- x$input_data
+    input_data <- x$data
 
     if(length(input_data$delta) > 1)
       warning("calc_rate.ft: multiple columns of delta O2 data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")

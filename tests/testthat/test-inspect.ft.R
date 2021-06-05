@@ -155,7 +155,7 @@ test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
                           in.o2 = 5, delta.o2 = NULL, plot = F),
                regexp = NA)
   expect_equal(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = F)$input_data$time[[1]],
+                          in.o2 = 5, delta.o2 = NULL, plot = F)$data$time[[1]],
                flowthrough_mult.rd[[1]])
 
   # in.o2 = NULL & out.o2 = NULL & delta.o2 = NULL
@@ -166,7 +166,7 @@ test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
                           in.o2 = NULL, delta.o2 = NULL, plot = F),
                regexp = NA)
   expect_equal(as.data.frame(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                                        in.o2 = NULL, delta.o2 = NULL, plot = F)$input_data$delta.o2),
+                                        in.o2 = NULL, delta.o2 = NULL, plot = F)$data$delta.o2),
                as.data.frame(flowthrough_mult.rd[,2:13]))
 })
 

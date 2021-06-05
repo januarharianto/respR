@@ -210,21 +210,21 @@ test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both 
   fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
                                       out.o2 = 2, in.o2 = 5))
   sub <- subset_data(fltr, from = 2000, to = 3000, by = "time")
-  dtt <- sapply(sub$input_data, function(z) rbind.data.frame(z))
+  dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
   expect_identical(dtt,
                    sub$dataframe)
 
   sub <- subset_data(fltr, from = 100, to = 867, by = "row")
-  dtt <- sapply(sub$input_data, function(z) rbind.data.frame(z))
+  dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
   expect_identical(dtt,
                    sub$dataframe)
 
   sub <- subset_data(fltr, from = 8.5, to = 8.2, by = "ox")
-  dtt <- sapply(sub$input_data, function(z) rbind.data.frame(z))
+  dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
   expect_identical(dtt,
@@ -233,7 +233,7 @@ test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both 
   fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
                                       delta.o2 = 8:10))
   sub <- subset_data(fltr, from = 1567, to = 3200, by = "time")
-  dtt <- sapply(sub$input_data, function(z) rbind.data.frame(z))
+  dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
   expect_identical(dtt,
@@ -242,7 +242,7 @@ test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both 
   fltr <- suppressWarnings(inspect.ft(flowthrough.rd, time = 1,
                                       out.o2 = 2, in.o2 = 3))
   sub <- subset_data(fltr, from = 123, to = 654, by = "row")
-  dtt <- sapply(sub$input_data, function(z) rbind.data.frame(z))
+  dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
   expect_identical(dtt,

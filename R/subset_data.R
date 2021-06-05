@@ -140,14 +140,14 @@ subset_data <- function(x, from, to, by = "time") {
     out <- truncate_data(dt, from, to, by)
   }
 
-  # inspect.ft has an additional element that needs subset - $input_data
+  # inspect.ft has an additional element that needs subset - $data
   if (any(class(x) %in% "inspect.ft")) {
 
     # get indices of start and end of subset
     # Must be a better way of doing this...
 
     # collapse list of lists to list of dfs
-    dt2 <- sapply(x$input_data, function(z) rbind.data.frame(z))
+    dt2 <- sapply(x$data, function(z) rbind.data.frame(z))
     # collapse list of dfs to dt
     dt2 <- as.data.table(dt2)
     # for some stupid reason the names get changed
@@ -161,14 +161,14 @@ subset_data <- function(x, from, to, by = "time") {
     if(start == Inf || start == -Inf) start <- 0
     if(end == Inf || end == -Inf) end <- 0
 
-    # subset x$input_data elements
-    input_data_sub <- lapply(x$input_data, function(y) {
+    # subset x$data elements
+    data_sub <- lapply(x$data, function(y) {
       lapply(y, function(z){
         z[start:end]
       })
     })
 
-    x$input_data <- input_data_sub
+    x$data <- data_sub
   }
 
   cat("\n# subset_data # -------------------------\n")

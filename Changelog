@@ -38,6 +38,8 @@ Changes
 NEW
 - NEW: subset_rate function - HIGHLIGHT
 - NEW: flowthrough workflow - 4 new specific functions - HIGHLIGHT
+- Tested with R 4.1 and the new native pipes (`|>`)
+- Tested with Apple Silicon builds of R
 
 - CHANGE: Better par() restoration behaviour. (Definitely fixed now - put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of error that causes it to exit early). Unit tests for this added to all fns which plot too.
 

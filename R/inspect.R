@@ -197,15 +197,17 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   # save new data frame and create output object
   dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
-  out <- list(call = call,
+
+  out <- list(dataframe = dataframe,
+              call = call,
               inputs = list(x = x,
                             time = time,
                             oxygen = oxygen,
                             width = width),
-              dataframe = dataframe,
               checks = checks,
               locs_raw = locs,
               locs = list)
+
   class(out) <- "inspect"
 
   # if no errors occur, send out a good message :D
