@@ -286,6 +286,11 @@ print.inspect <- function(x, ...) {
 }
 
 #' @export
+summary.inspect <- function(x, ...) {
+  print(x)
+}
+
+#' @export
 plot.inspect <- function(x, message = TRUE, width = NULL,
                          legend = TRUE, rate.rev = TRUE, ...) {
 

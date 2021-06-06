@@ -500,6 +500,11 @@ print.inspect.ft <- function(x, ...) {
 }
 
 #' @export
+summary.inspect.ft <- function(x, ...) {
+  print(x)
+}
+
+#' @export
 plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
                             legend = TRUE, rate.rev = TRUE, ...) {
 

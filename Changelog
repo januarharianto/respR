@@ -69,6 +69,7 @@ New utility validation fns
 Changes
 
 - NEW: added `width` input for rolling reg plot (default 0.1)
+- NEW: `summary()` works on output (simply a wrapper for `print()`)
 - CHANGE: updated roxygen docs. There was quite a lot out of date...
 - CHANGE: Added message if multiple columns inspected that subsequent functions will only use first 2 by default
 - CHANGE: Multiple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
@@ -83,6 +84,7 @@ Changes
 - CHANGE: prints on assigning when issues are found
 - CHANGE: output has additional elements `$call` and `$inputs`
 - CHANGE: output `$list` and `$list_raw` renamed `locs` and `$locs_raw`
+
 
 
 ========================== S3 Methods ============================
@@ -208,7 +210,9 @@ Although, there's a chance with some data it will give different results than th
 - Specific to flowthough data.
 - Will add more detail in vignettes. Help file is pretty complete
 
-inspect.ft - can pass rate.rev = FALSE to plot rates numerically correctly (for oxygen production respirometry)
+inspect.ft
+- can pass `rate.rev = FALSE` to plot rates not on reverse y-axis (for oxygen production respirometry)
+- `summary()` works on output (simply a wrapper for `print()`)
 
 
 ========================== data ============================
