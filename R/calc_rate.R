@@ -87,7 +87,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE) {
   # Format as data.table
   x <- data.table::data.table(x)
   if (length(x) > 2) {
-    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate()")
+    warning("calc_rate: Multiple columns of O2 data found in input.\n  Rate(s) will be calculated from first column only!\n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
     x <- x[, 1:2]
   }
 

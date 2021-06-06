@@ -228,7 +228,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     input_data <- x$data
 
     if(length(input_data$delta) > 1)
-      warning("calc_rate.ft: multiple columns of delta O2 data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
+      warning("calc_rate.ft: Multiple columns of delta O2 data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
 
     ## put data in dt
     time <- input_data$time[[1]]
