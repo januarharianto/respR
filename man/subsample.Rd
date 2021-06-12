@@ -29,12 +29,12 @@ elements or rows. The \code{length.out} argument uniformly subsamples the input 
 the desired length.
 }
 \examples{
-# Subsample every 10 rows:
+# Subsample by every 10th row:
 subsample(squid.rd, n = 10)
 
-# Subsample to 1000 rows
-subsample(squid.rd, n = 10)
+# Subsample to 1000 rows:
+subsample(squid.rd, length.out = 1000)
 
-# Subsample with random starting position
+# Subsample with random starting position:
 subsample(sardine.rd, n = 3, random_start = TRUE)
 }

@@ -17,13 +17,13 @@
 #' @export
 #'
 #' @examples
-#' # Subsample every 10 rows:
+#' # Subsample by every 10th row:
 #' subsample(squid.rd, n = 10)
 #'
-#' # Subsample to 1000 rows
-#' subsample(squid.rd, n = 10)
+#' # Subsample to 1000 rows:
+#' subsample(squid.rd, length.out = 1000)
 #'
-#' # Subsample with random starting position
+#' # Subsample with random starting position:
 #' subsample(sardine.rd, n = 3, random_start = TRUE)
 
 subsample <- function(x, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE) {
@@ -53,40 +53,64 @@ subsample <- function(x, n = NULL, length.out = NULL, random_start = FALSE, plot
     subset <- x[index]
 
   # Create the plots
-  if (plot) {
+  if (plot) plot.sub(x, subset)
 
-    if(is.data.frame(x) && ncol(x) > 2) message("subsample: plotting first column of data only.")
-
-    if(is.data.frame(x)){
-      xlab <- "Time"
-      ylab <- "Oxygen"
-      data <- x[,1:2]
-      sub_data <- subset[,1:2]
-    } else {
-      xlab <- "Row"
-      ylab <- "Data"
-      data <- x
-      sub_data <- subset
-    }
-
-    parorig <- par(no.readonly = TRUE) # save original par settings
-    on.exit(par(parorig)) # revert par settings to original
-
-    par(mfrow=c(1,2))  # replace par settings
-    plot(data, xlab = xlab, ylab = ylab, col = r1, pch = 16,
-         panel.first = c(rect(par("usr")[1],
-                              par("usr")[3],
-                              par("usr")[2],
-                              par("usr")[4], col = r3), grid(col = "white",
-                                                             lty = 1, lwd = 1.5)))
-    title(main = "Full Dataset", line = 0.5)
-    plot(sub_data, xlab = xlab, ylab = ylab, col = r1, pch = 16,
-         panel.first = c(rect(par("usr")[1],
-                              par("usr")[3],
-                              par("usr")[2],
-                              par("usr")[4], col = r3), grid(col = "white",
-                                                             lty = 1, lwd = 1.5)))
-    title(main = "Subsample Dataset", line = 0.5)
-  }
+  # Return
   return(invisible(subset))
 }
+
+#o_data <- x
+plot.sub <- function(o_data, subset){
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  if(is.data.frame(o_data) && ncol(o_data) > 2)
+    message("subsample: plotting first column of data only.")
+
+  if(is.data.frame(o_data)){
+    o_data <- o_data[,1:2]
+    sub_data <- subset[,1:2]
+    xlab <- names(o_data)[1]
+    ylab <- names(o_data)[2]
+  } else {
+    o_data <- o_data
+    sub_data <- subset
+    xlab <- "Row"
+    ylab <- "Data"
+  }
+
+  par(mfrow=c(1,2),
+      oma = c(1, 1, 1, 0.2),
+      mai = c(0.3, 0.3, 0.2, 0.2),
+      mgp = c(0, 0.3, 0),
+      tck = tck)
+
+  plot(o_data, axes = FALSE, xlab = "", ylab = "",
+       panel.first = c(rect(par("usr")[1],
+                            par("usr")[3],
+                            par("usr")[2],
+                            par("usr")[4], col = r3), grid(col = "white",
+                                                           lty = 1, lwd = 1.5)))
+  box()
+  axis(1, col = r1, pch = 16)
+  mtext(xlab, line = 1.2, side = 1)
+  axis(2, col = r1, pch = 16)
+  mtext(ylab, line = 1.2, side = 2)
+  mtext("Full Data", line = 0.5)
+
+  plot(sub_data, axes = FALSE, xlab = "", ylab = "",
+       panel.first = c(rect(par("usr")[1],
+                            par("usr")[3],
+                            par("usr")[2],
+                            par("usr")[4], col = r3), grid(col = "white",
+                                                           lty = 1, lwd = 1.5)))
+  box()
+  axis(1, col = r1, pch = 16)
+  mtext(xlab, line = 1.2, side = 1)
+  axis(2, col = r1, pch = 16)
+  mtext(ylab, line = 1.2, side = 2)
+  mtext("Subsample Data", line = 0.5)
+}
+
+
