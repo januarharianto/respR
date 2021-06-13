@@ -3,25 +3,32 @@
 #' Calculates rate of oxygen uptake or production in flowthrough respirometry
 #' data given a `flowrate` and delta oxygen values, which can either be directly
 #' entered, or be calculated from inflow and outflow oxygen. The function
-#' returns a single rate value from the whole dataset or a subset of it.
-#' Alternatively, multiple rate values can be returned from different regions of
-#' continuous data, or a rolling rate of a specific window size performed across
-#' the whole dataset.
+#' returns a single rate value from the whole dataset or a subset of it, by
+#' averaging delta oxygen values. Alternatively, multiple rate values can be
+#' returned from different regions of continuous data, or a rolling rate of a
+#' specific window size performed across the whole dataset.
+#'
+#' The function calculates rates by averaging the delta oxygen values across the
+#' dataset, or from specified subsets of the data, and then using the `flowrate`
+#' to convert these to rates. There are no units involved in `calc_rate.ft`.
+#' This is a deliberate decision. The units of oxygen concentration and flowrate
+#' will be specified later in [`convert_rate.ft()`] when rates are converted to
+#' specific output units.
 #'
 #' For continuous data recordings, it is recommended a `data.frame` containing
 #' the data be prepared via [`inspect.ft()`], and entered as the `x` input.
 #'
-#' For data unprepared like this, `x` can be a 2-column `data.frame` containing
-#' numeric values of outflow (col 1) and inflow (col 2) oxygen concentrations.
-#' Alternatively, `x` can be a numeric value or vector representing delta oxygen
-#' values (outflow oxygen concentration minus inflow oxygen concentration in the
-#' same units). In these cases, the `flowrate` is used to convert all delta
-#' oxygen values to rates, and the `from`, `to`, and `by` inputs are ignored.
+#' For data not prepared like this, `x` can be a 2-column `data.frame`
+#' containing numeric values of outflow (col 1) and inflow (col 2) oxygen
+#' concentrations. Alternatively, `x` can be a numeric value or vector
+#' representing delta oxygen values (outflow oxygen concentration minus inflow
+#' oxygen concentration in the same units). In these cases, the `from`, `to`,
+#' and `by` inputs are unnecessary and are ignored.
 #'
-#' ***Specifying rate region***
+#' ## Specifying regions
 #'
-#' For calculating rates over specific regions of the data, the `from` and
-#' `to`inputs (in the `by` units of `time`, the default, or `row`) can be used
+#' For calculating rates over specific regions of the data, the `from` and `to`
+#' inputs in the `by` units of `"time"` (the default) or `"row"`) can be used
 #' for `inspect.ft()` inputs. All delta oxygen values within this region are
 #' converted to rates, and averaged to produce a overall rate for the region
 #' (`$rate` in the output). Multiple regions can be examined within the same
@@ -35,13 +42,15 @@
 #' is calculated using this window size (in the relevant `by` units) across the
 #' entire dataset, and returned as a vector of rate values in `$rate`.
 #'
+#' ## Flowrate
+#'
 #' In order to convert delta oxygen values to a oxygen uptake or production
 #' rate, the `flowrate` input is required. This must be in a volume (L, ml, or
 #' ul) per unit time (s,m,h,d), for example in `L/s`. The units are not required
 #' to be entered in here; you will specify them in [`convert_rate.ft()`] to
 #' convert rates to specific units of oxygen uptake or production.
 #'
-#' ***Plot***
+#' ## Plot
 #'
 #' For rates calculated from `inspect.ft` inputs, a plot is produced (provided
 #' `plot = TRUE`) showing the original data timeseries of inflow and outflow
@@ -49,7 +58,7 @@
 #' the region specified via the `from` and `to` inputs highlighted, and a
 #' close-up of this region with calculated rate value (bottom plot). If multiple
 #' rates have been calculated, by default the first is plotted. Others can be
-#' plotted by changing the `pos` argument (e.g. `plot(object, pos = 2)`).
+#' plotted by changing the `pos` argument, e.g. `plot(object, pos = 2)`.
 #'
 #' ***Important:*** Since `respR` is primarily used to examine oxygen
 #' consumption, the delta oxygen and rate plots are by default plotted on a
@@ -64,9 +73,10 @@
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
-#' the output object.
+#' the output object. Console output messages can be suppressed using `message =
+#' FALSE`.
 #'
-#' ***Background control or "blank" experiments***
+#' ## Background control or "blank" experiments
 #'
 #' `calc_rate.ft` can also be used to determine background rates from empty
 #' control experiments in the same way as specimen rates are determined. The
@@ -76,37 +86,51 @@
 #' `in.o2` input in [`inspect.ft()`]. See help file for that function, or the
 #' vignettes on the website for examples.
 #'
-#' ***S3 Generic Functions***
+#' ## S3 Generic Functions
 #'
-#' `calc_rate.ft` objects work with the S3 generic functions `print()`,
+#' Saved output objects can be used in the generic S3 functions `print()`,
 #' `summary()`, and `mean()`.
 #'
-#' `print()`: by default, prints the first result in `$rate` to the console. If
-#' there are multiple rates, others can be printed using the `pos` input, e.g.
-#' `print(object, pos = 2`).
+#' - `print()`: prints a single result, by default the first rate. Others can be
+#' printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' `summary()`: prints the `$summary` table from the output. Different rows can
-#' be output using the `pos` input with regular `R` numeric vector syntax, e.g.
-#' `pos = 1`, `pos = c(2,4,6)`, `pos = 1:10`. It can also be used to save the
-#' `summary` table as a `data.frame` using the `export = TRUE` option, e.g.
-#' `summ <- summary(object, export = TRUE)`.
+#' - `summary()`: prints summary table of all results and metadata, or those
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output can be
+#' saved as a separate dataframe by passing `export = TRUE`.
 #'
-#' `mean()`: this calculates and prints the mean of all values in `$rate`. The
-#' mean value can be output and saved using the `export = TRUE` option, e.g.
-#' `mean_rate <- mean(object, export = TRUE)`.
+#' - `mean()`: calculates the mean of all rates, or those specified by the `pos`
+#' input. e.g. `mean(x, pos = 1:5)` The output can be saved as a separate value
+#' by passing `export = TRUE`.
+#'
+#' ## Output
+#'
+#' Output is a `list` object of class `calc_rate.ft` containing input parameters
+#' and data, various summary data, metadata, and the primary output of interest
+#' `$rate`, which can be background adjusted in [`adjust_rate.ft`] or converted
+#' to units in [`convert_rate.ft`]. Note the `$summary` table contains linear
+#' regression coefficients alongside other metadata. These *should not be
+#' confused* with those in other functions such as `calc_rate` where slopes
+#' represent rates and coefficients such as a high r-squared are important.
+#' Here, they represent the stability of the data region, in that the closer the
+#' slope is to zero, and lower the r-squared, the less the delta oxygen values
+#' in that region vary. They are included to enable possible future
+#' functionality where stable regions may be automatically identified, and
+#' should generally be ignored.
 #'
 #' @param x numeric value or vector of delta oxygen values, a 2-column
 #'   `data.frame` of outflow (col 1) and inflow (col 2) oxygen values, or an
 #'   object of class `inspect.ft`.
 #' @param flowrate numeric value. The flow rate through the respirometer in
-#'   volume (ul, ml, L) per unit time (s,m,h,d).
-#' @param from numeric value or vector. The start of the region(s) over which
-#'   you want the average rate in either time or row units. If a vector, each
-#'   value must have a paired value in `to`. For use with `inspect.ft` inputs
-#'   only.
-#' @param to numeric value or vector. The end of the region(s) over which you
-#'   want the average rate in either time or row units. If a vector, each value
-#'   must have a paired value in `from`. For use with `inspect.ft` inputs only.
+#'   volume (ul,ml,L) per unit time (s,m,h,d). The units are not necessary here,
+#'   but will be specified in [`convert_rate.ft`].
+#' @param from numeric value or vector. Defaults to `NULL`. The start of the
+#'   region(s) over which you want to calculate the rate in either time or row
+#'   units. If a vector, each value must have a paired value in `to`. For use
+#'   with `inspect.ft` inputs only.
+#' @param to numeric value or vector. Defaults to `NULL`. The end of the
+#'   region(s) over which you want to calculate the rate in either time or row
+#'   units. If a vector, each value must have a paired value in `from`. For use
+#'   with `inspect.ft` inputs only.
 #' @param by `"time"` or `"row"`. Defaults to `"time"`. Specifies the units of
 #'   the `from` and `by`, or `width` value. For use with `inspect.ft` inputs
 #'   only.
@@ -115,12 +139,7 @@
 #'   `inspect.ft` inputs only.
 #' @param plot logical. Defaults to TRUE. Plots the data.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE` and `pos`.
-#'
-#' @return Output is a `list` object of class `calc_rate.ft` containing input
-#'   parameters and data, various summary data, metadata, and the primary output
-#'   of interest `$rate`, which can be background adjusted in [`adjust_rate.ft`]
-#'   or converted to units in [`convert_rate.ft`].
+#'   = FALSE`, `rate.rev = FALSE`, and `pos`.
 #'
 #' @importFrom data.table data.table
 #' @export
@@ -185,7 +204,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     dfs <- NULL
     dt <- data.table::data.table(time = NA,
                                  delta.o2 = delta)
-    input_data <- data.frame(delta.o2 = x)
+    data <- data.frame(delta.o2 = x)
 
     ## summary for output
     summary <- data.frame(out.o2 = NA, in.o2 = NA, delta.o2 = delta)
@@ -209,7 +228,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     dfs <- NULL
     dt <- data.table::data.table(time = NA,
                                  delta.o2 = delta)
-    input_data <- data.frame(out.o2 = x[[1]],
+    data <- data.frame(out.o2 = x[[1]],
                              in.o2 = x[[2]])
 
     ## summary for output
@@ -225,14 +244,14 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   } else if(xtype == "insp") {
     message("calc_rate.ft: calculating rate from 'inspect.ft' object.")
 
-    input_data <- x$data
+    data <- x$data
 
-    if(length(input_data$delta) > 1)
+    if(length(data$delta) > 1)
       warning("calc_rate.ft: Multiple columns of delta O2 data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
 
     ## put data in dt
-    time <- input_data$time[[1]]
-    delta.o2 <- input_data$delta.o2[[1]]
+    time <- data$time[[1]]
+    delta.o2 <- data$delta.o2[[1]]
     dt <- data.table::data.table(time = time, delta.o2 = delta.o2)
 
     # ranges
@@ -387,11 +406,12 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   out <-
     list(
       call = call,
-      input_data = input_data,
-      input_type = xtype,
       dataframe = as.data.frame(dt),
+      data = data,
+      input_type = xtype,
       subsets = dfs,
-      summary = data.table(cbind(summary, flowrate = flowrate, rate = rate)),
+      summary = data.table(cbind(rank = 1:nrow(summary),
+        summary, flowrate = flowrate, rate = rate)),
       from = from,
       to = to,
       by = by,
@@ -403,7 +423,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
 
   # Plot --------------------------------------------------------------------
-  if (plot) plot(out, message = TRUE, ...)
+  if (plot) plot(out, ...)
 
   # Return ------------------------------------------------------------------
 
@@ -450,7 +470,7 @@ summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  out <- cbind(rank = pos, object$summary[pos,])
+  out <- object$summary[pos,]
   print(out)
   cat("-----------------------------------------\n")
 
@@ -460,13 +480,25 @@ summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-mean.calc_rate.ft <- function(x, export = FALSE, ...){
+mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.ft # -------------------\n")
-  if(length(x$rate) == 1)
-    message("Only 1 rate found in input. Returning mean rate anyway...")
-  n <- length(x$rate)
-  out <- mean(x$rate)
+  if(!is.null(pos) && any(pos > length(x$rate)))
+    stop("mean.calc_rate.ft: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+  if(is.null(pos)) {
+    pos <- 1:length(x$rate)
+    cat("Mean of all rate results:")
+    cat("\n")
+  } else{
+    cat("Mean of rate results from entered 'pos' ranks:")
+    cat("\n")
+  }
+  if(length(x$rate[pos]) == 1)
+    message("Only 1 rate found. Returning mean rate anyway...")
+  cat("\n")
+
+  n <- length(x$rate[pos])
+  out <- mean(x$rate[pos])
   cat("Mean of", n, "output rates:\n")
   print(out)
   cat("-----------------------------------------\n")
@@ -491,21 +523,23 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
 
   # extract data
   # only first columns
-  time <- unlist(x$input_data$time)
-  out.o2 <- x$input_data$out.o2[[1]]
-  in.o2 <- x$input_data$in.o2[[1]]
-  del.o2 <- x$input_data$delta.o2[[1]]
+  time <- unlist(x$data$time)
+  out.o2 <- x$data$out.o2[[1]]
+  in.o2 <- x$data$in.o2[[1]]
+  del.o2 <- x$data$delta.o2[[1]]
   nres <- length(x$rate) # number of rates
   # is it delta only rates?
   delta_only <-
-    is.null(x$input_data$out.o2) && is.null(x$input_data$in.o2)
+    is.null(x$data$out.o2) && is.null(x$data$in.o2)
   if(!(delta_only)) y_range <- range(in.o2, out.o2, na.rm = TRUE) # for plotting rate region rectangle
   rate_mean <- signif(x$rate, digits = 5) # rounded mean rate for inclusion in plot
 
   # validate pos input
   if(is.null(pos)) pos <- 1
-  if(pos > length(x$rate) || pos < 1)
-    stop("plot.calc_rate.ft: Invalid 'pos' input: only ", nres, " rates found.")
+  if(length(pos) > 1)
+    stop("calc_rate: 'pos' should be a single value.")
+  if(pos > nres || pos < 1)
+    stop("calc_rate.ft: Invalid 'pos' input: only ", nres, " rates found.")
 
   pos_rate <- signif(x$rate[pos], digits = 5) # rate for this pos
   pos_from_row <- x$summary$row[pos] # for subsetting rate region
@@ -516,9 +550,11 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   pos_x_data <- time[pos_from_row:pos_to_row]
   pos_y_data_delta <- del.o2[pos_from_row:pos_to_row]
 
+  if(message && pos == 1 && nres == 1)
+    cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ..."), sep="\n")
   if(message && pos == 1 && nres > 1)
-    cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres}. To plot others use 'pos'."), sep="\n")
-  if (message && pos > 1)
+    cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
+  if(message && pos > 1)
     cat(glue::glue('calc_rate.ft: Plotting rate from position {pos} of {nres} ...'), sep="\n")
 
   # delta only --------------------------------------------------------------
@@ -607,13 +643,13 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
          col = rgb(15/255,245/255,53/255,  alpha = 0.15),
          lty = 0)
 
-    if(legend) legend(x = "topright",
+    if(legend) legend("topright",
                       "Row Index",
                       text.col = "red",
                       bg = "gray90",
                       cex = 0.5)
 
-    if(legend) legend(x = "right",
+    if(legend) legend("right",
                       legend=c("Inflow O2", "Outflow O2"),
                       col=c("grey", "black"),
                       pch=16,
@@ -652,7 +688,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   if(delta_only){
     axis(side = 3, col.axis = "red", tck = -0.02)
 
-    if(legend) legend(x = "topright",
+    if(legend) legend("topright",
                       "Row Index",
                       text.col = "red",
                       bg = "gray90",
@@ -733,7 +769,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   abline(lm(all_rates ~ pos_x_data), lwd = 1.2, lty = 3)
 
   if (message){
-    cat("Done.\n")
     cat("-----------------------------------------\n")
   }
 
