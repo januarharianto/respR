@@ -6,14 +6,16 @@
 #' elements or rows. The `length.out` argument uniformly subsamples the input to
 #' the desired length.
 #'
-#' @param x data frame or vector. The data to process.
+#' ## Output
+#' Returns a data frame or vector object depending on input.
+#'
+#' @param x data frame or vector. The data to subsample.
 #' @param n numeric. Subsample every `n` rows.
 #' @param length.out numeric. Subsample to a specific length or number of rows.
 #' @param random_start logical. Defaults to FALSE. If TRUE, randomises the start
 #'   row of the data (applies to `n` input only).
 #' @param plot logical. Defaults to TRUE. Plots the data.
 #'
-#' @return A data frame or vector object (depending on input).
 #' @export
 #'
 #' @examples

@@ -21,7 +21,7 @@
 #'   every iteration. **Note: will severely slow the function down.** Useful to
 #'   visualise what's being detected at every step. Defaults to FALSE.
 #'
-#' @return An object of class `test_lin`. Contains linear regressin results, and
+#' @return An object of class `test_lin`. Contains linear regression results, and
 #'   data required to plot diagnostics.
 #'
 #' @export
@@ -32,7 +32,8 @@
 #' x <- test_lin(reps = 3)
 #' # plot(x)
 #' # plot(x, "a")  # view only plot "A"
-#' # plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
+#' # plot(x, "d")  # view only plot "D". You know what to do (for other plots).
+
 test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
                      preview = FALSE, plot = FALSE) {
 
@@ -111,6 +112,10 @@ test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
 #' @export
 #' @keywords internal
 plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   df <- x$df
   # bw <- "nrd0" # "nrd" "SJ-ste"
   c1 <- adjustcolor("peru", alpha.f = .4)

@@ -51,7 +51,7 @@ for which this might fail.
 
 While the devices listed above are supported, the import functionality is
 experimental due to limited access to output files. This will improve over
-time as users provide feedback and smaple files. We are releasing this as it
+time as users provide feedback and sample files. We are releasing this as it
 is, without any warranty, so that some people can still benefit from the
 functionality as it gets better. Users should be careful using this function,
 check the imported data, and be prepared to import data by themselves since

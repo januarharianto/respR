@@ -2,8 +2,8 @@
 % Please edit documentation in R/unit_args.R
 \name{unit_args}
 \alias{unit_args}
-\title{Print examples of unit arguments for use in \code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}},
-and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}
+\title{Print examples of unit arguments for use in \code{convert_DO}, \code{convert_rate}, and
+\code{convert_rate.ft}}
 \usage{
 unit_args()
 }
@@ -14,8 +14,8 @@ units that can be used in the functions \code{\link[=convert_DO]{convert_DO()}},
 (\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be specified.
 }
 \details{
-Note the difference between percent air saturation (\verb{'\%Air}), where air
-saturated water is ~100\%, and percent oxygen saturation (\verb{'\%O2}), where air
+Note the difference between percent air saturation (\verb{\%Air}), where air
+saturated water is ~100\%, and percent oxygen saturation (\verb{\%O2}), where air
 saturated water is ~20.946\% \emph{oxygen} saturated. In other words, \verb{\%O2 = \%Air * 0.20946}.
 
 \strong{\code{\link[=convert_DO]{convert_DO()}}}
@@ -56,12 +56,13 @@ Air Saturation), \code{"\%O2"} (i.e. \% Oxygen Saturation), \verb{"Torr", "hPa",
 \verb{"mmHg", "inHg"}
 }
 
-\strong{Time units for \code{time.unit} or \code{flowrate.unit} argument:}
+\strong{Time units for \code{time.unit} or as part of \code{flowrate.unit} argument:}
 \itemize{
 \item \verb{"sec", "min", "hour", "day"}
 }
 
-\strong{Volume units for \code{flowrate.unit} argument (\code{convert_rate.ft} only):}
+\strong{Volume units for use as part of \code{flowrate.unit} argument (\code{convert_rate.ft}
+only):}
 
 For example, in \code{'ml/min'}, \code{'L/s'}, etc.
 \itemize{

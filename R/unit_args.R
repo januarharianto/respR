@@ -1,13 +1,13 @@
-#' Print examples of unit arguments for use in [convert_DO()], [convert_rate()],
-#' and [convert_rate.ft()]
+#' Print examples of unit arguments for use in `convert_DO`, `convert_rate`, and
+#' `convert_rate.ft`
 #'
 #' This is a simple function, with no arguments. It prints to the console the
 #' units that can be used in the functions [convert_DO()], [convert_rate()], and
 #' [convert_rate.ft()]. Some oxygen unit conversions also require temperature
 #' (`t`), salinity (`S`), and atmospheric pressure (`P`) to be specified.
 #'
-#' Note the difference between percent air saturation (`'%Air`), where air
-#' saturated water is ~100%, and percent oxygen saturation (`'%O2`), where air
+#' Note the difference between percent air saturation (`%Air`), where air
+#' saturated water is ~100%, and percent oxygen saturation (`%O2`), where air
 #' saturated water is ~20.946% *oxygen* saturated. In other words, `%O2 = %Air *
 #' 0.20946`.
 #'
@@ -45,11 +45,12 @@
 #' Air Saturation), `"%O2"` (i.e. % Oxygen Saturation), `"Torr", "hPa", "kPa",`
 #' `"mmHg", "inHg"`
 #'
-#' **Time units for `time.unit` or `flowrate.unit` argument:**
+#' **Time units for `time.unit` or as part of `flowrate.unit` argument:**
 #'
 #' - `"sec", "min", "hour", "day"`
 #'
-#' **Volume units for `flowrate.unit` argument (`convert_rate.ft` only):**
+#' **Volume units for use as part of `flowrate.unit` argument (`convert_rate.ft`
+#' only):**
 #'
 #' For example, in `'ml/min'`, `'L/s'`, etc.
 #'
@@ -112,10 +113,10 @@ unit_args <- function() {
   print(o2unit)
   cat("Oxygen Concentration or Pressure Units - Require t, S and P\n")
   print(o2unit_tsp)
-  cat("\nFlowrate volume units in calc_rate.ft and convert_rate.ft")
-  cat("\n(e.g. in 'ml/min', 'L/s', etc.)\n")
+  cat("\nVolume units for use in flow rates in calc_rate.ft and convert_rate.ft")
+  cat("\n(e.g. as in 'ml/min', 'L/s', etc.)\n")
   print(flowunit)
-  cat("\nTime units\n")
+  cat("\nTime units (for 'time.unit' or as part of 'flowrate.unit')\n")
   print(timeunit)
   cat("\nMass units\n")
   print(massunit)

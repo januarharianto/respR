@@ -7,7 +7,7 @@
 subsample(x, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE)
 }
 \arguments{
-\item{x}{data frame or vector. The data to process.}
+\item{x}{data frame or vector. The data to subsample.}
 
 \item{n}{numeric. Subsample every \code{n} rows.}
 
@@ -18,15 +18,18 @@ row of the data (applies to \code{n} input only).}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
 }
-\value{
-A data frame or vector object (depending on input).
-}
 \description{
 A simple function that subsamples a data frame of time~oxygen data in order
 to "thin" large datasets. It also works on vectors of any data type. Two
 subsampling methods are provided. Using the \code{n} argument selects every n
 elements or rows. The \code{length.out} argument uniformly subsamples the input to
 the desired length.
+}
+\details{
+\subsection{Output}{
+
+Returns a data frame or vector object depending on input.
+}
 }
 \examples{
 # Subsample by every 10th row:
