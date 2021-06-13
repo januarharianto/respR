@@ -1,5 +1,7 @@
 ## testthat::test_file("tests/testthat/test-subset_rate.R")
 
+sink("/dev/null") ## stops printing outputs on assigning
+
 ## auto_rate object for testing
 ## contains both negative and positive rates
 suppressWarnings(ar_obj <- inspect(intermittent.rd, plot = FALSE) %>%
@@ -193,7 +195,7 @@ test_that("subset_rate: method = NULL   - correctly removes duplicates", {
                              plot = FALSE)
   expect_equal(nrow(ar_obj_uniq$summary),
                39)
-  expect_equal(ar_obj_uniq$summary[,1:7], unique(ar_obj_sard$summary[,1:7]))
+  expect_equal(ar_obj_uniq$summary[,c(2:4,6:8)], unique(ar_obj_sard$summary[,c(2:4,6:8)]))
 })
 
 test_that("subset_rate: method = unique   - correct message", {
@@ -212,7 +214,7 @@ test_that("subset_rate: method = unique   - correctly removes duplicates", {
                              plot = FALSE)
   expect_equal(nrow(ar_obj_uniq$summary),
                39)
-  expect_equal(ar_obj_uniq$summary[,1:7], unique(ar_obj_sard$summary[,1:7]))
+  expect_equal(ar_obj_uniq$summary[,c(2:4,6:8)], unique(ar_obj_sard$summary[,c(2:4,6:8)]))
 })
 
 
@@ -722,3 +724,8 @@ test_that("subset_rate - plot defaults are correctly restored", {
                    paraft$mai)
 
 })
+
+## this may cause problems with cmd-check....
+suppressWarnings(file.remove("Rplots.pdf"))
+
+sink() ## turns printing back on
