@@ -2,17 +2,19 @@
 #' respiration or oxygen flux.
 #'
 #' The `adjust_rate.ft` function adjusts an oxygen uptake or production rate
-#' (for example, as determined in [`calc_rate.ft`]) for background oxygen use by
-#' microbial organisms, or other removal (or input) of oxygen during
+#' (for example, as determined in [`calc_rate.ft()`]) for background oxygen use
+#' by microbial organisms, or other removal (or input) of oxygen during
 #' *flowthrough* respirometry experiments. The function accepts numeric values,
-#' as well as regular `calc_rate.ft` objects.
+#' as well as `calc_rate.ft` objects. Numeric `x` inputs should be rates
+#' calculated as an oxygen delta * flowrate. Units will be specified in
+#' [`convert_rate.ft()`] when rates are converted to specific output units.
 #'
-#' ***Note:*** take special care with the **sign** of the rate used for
-#' adjustments. In `respR` oxygen uptake rates are negative values, as they
-#' represent a negative slope of oxygen against time. Background rates will
-#' normally also be a negative value. See examples.
+#' ***Note:*** take special care with the *sign* of the rate used for
+#' adjustments. In `respR` oxygen uptake rates are negative, as they represent a
+#' negative slope of oxygen against time. Background rates will normally also be
+#' a negative value. See Examples.
 #'
-#' `adjust_rate.ft` allows the rate (or multiple rates) in `x` to be adjusted by
+#' `adjust_rate.ft` allows the rate, or multiple rates, in `x` to be adjusted by
 #' the background rate in `by`. There are several ways of determining the
 #' background rate, or performing background corrections depending on the setup
 #' of the experiment.
@@ -21,44 +23,60 @@
 #' background rate generally does not change over the course of the experiment
 #' (that is, the oxygen delta between inflow and outflow concentrations remains
 #' consistent), it is recommended the rate be determined and saved via the
-#' `[inspect.ft]` and `[calc_rate.ft]` functions and then entered as the `by`
-#' input as either a value or the saved `calc_rate.ft` object. In this case, the
-#' `$rate` element of the `calc_rate.ft` object is used to adjust all rates in
-#' `x`. If there are multiple rates in `$rate`, the mean value of all rates
-#' found is used. In this way, a single blank experiment can be applied to
-#' numerous actual experiments, or several blank experiments can be averaged to
-#' provide a single average adjustment rate. Alternatively, once blank
-#' experiments have been analysed to produce a background correction value, can
-#' be and this entered via `by` as a numeric value.
+#' [`inspect.ft()`] and [`calc_rate.ft()`] functions and then entered as the
+#' `by` input as either a value or the saved `calc_rate.ft` object. In this
+#' case, the `$rate` element of the `calc_rate.ft` object is used to adjust all
+#' rates in `x`. If there are multiple rates in `$rate`, the mean value is used.
+#' In this way, a single blank experiment can be applied to several specimen
+#' experiments. Alternatively, the rate from several blank experiments can be
+#' averaged to provide a single adjustment value, and this entered via `by` as a
+#' numeric value.
 #'
 #' For experiments in which an empty "blank" experiment has been run alongside
 #' actual experiments in parallel, and background rate may increase or decrease
 #' over time (or there may be other variations such as in the inflow oxygen
 #' concentrations), it is recommended you *NOT* use this function. Instead, the
-#' paired blank oxygen concentration data should be used in `[inspect.ft]` as
-#' the `in.o2` input. In this way, the calculated delta oxygen values take
-#' account of whatever background or other variation in oxygen is occurring in
-#' the blank chamber with respect to time.
+#' paired blank oxygen concentration data should be used in [`inspect.ft`] as
+#' the `in.o2` input. In this way, the calculated specimen delta oxygen values
+#' take account of whatever background or other variation in oxygen is occurring
+#' in the blank chamber with respect to time.
 #'
-#' For all background operations, it is important the same `flowrate` is used.
+#' For all background experiments, it is important the same `flowrate` is used.
 #'
 #' For adjustments, all rates in `x`, whether entered as values or as a
 #' `calc_rate.ft` object, are adjusted by subtracting the mean of all background
 #' rates in `by`. Again, take special note of the *sign* of these rates. See
-#' examples.
+#' Examples.
 #'
 #' ## Output
 #'
-#' If the `x` input is numeric, the output will be a numeric of the same length
-#' containing adjusted rates.
-#'
 #' If the `x` input is a `calc_rate.ft` object, the output will be identical in
 #' structure, but of class `adjust_rate.ft` and containing the additional
-#' elements `$adjustment` and `$rate.adjusted` and these also added to summary
-#' metadata. If `x` is a value or vector, the output is a list object of class
-#' `adjust_rate.ft` containing three elements: `$rate`, `$adjustment`, and
-#' `$rate.adjusted`. The `$rate.adjusted` element will be the one converted when
+#' elements `$adjustment` and `$rate.adjusted`, with these also added to
+#' `$summary` metadata.
+#'
+#' If `x` is a numeric value or vector, the output is a `list` object of class
+#' `adjust_rate.ft` containing four elements: a `$summary` table, `$rate`,
+#' `$adjustment`, and `$rate.adjusted`.
+#'
+#' For all outputs, the `$rate.adjusted` element will be the one converted when
 #' the object is passed to `convert_rate.ft`.
+#'
+#' ## S3 Generic Functions
+#'
+#' Saved output objects can be used in the generic S3 functions `print()`,
+#' `summary()`, and `mean()`.
+#'
+#' - `print()`: prints a single result, by default the first adjusted rate.
+#' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
+#'
+#' - `summary()`: prints summary table of all results and metadata, or those
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output can be
+#' saved as a separate dataframe by passing `export = TRUE`.
+#'
+#' - `mean()`: calculates the mean of all adjusted rates, or those specified by
+#' the `pos` input. e.g. `mean(x, pos = 1:5)` The output can be saved as a
+#' separate value by passing `export = TRUE`.
 #'
 #' @md
 #'
@@ -145,9 +163,9 @@ adjust_rate.ft <- function(x, by) {
   # Append results to input object
   if(class(x) == "calc_rate.ft") {
     out <- list(call = x$call,
-                input_data = x$input_data,
-                input_type = x$input_type,
                 dataframe = x$dataframe,
+                data = x$data,
+                input_type = x$input_type,
                 subsets = x$subsets,
                 summary = cbind(x$summary, adjustment = adjustment_long,
                                 rate.adjusted = rate.adjusted),
@@ -163,7 +181,9 @@ adjust_rate.ft <- function(x, by) {
     # or make new one
   } else {
     out <- list(
-      summary = data.table::data.table(rate = rate, adjustment = adjustment_long,
+      summary = data.table::data.table(rank = 1:length(rate.adjusted),
+                                       rate = rate,
+                                       adjustment = adjustment_long,
                                        rate.adjusted = rate.adjusted),
       rate = rate,
       adjustment = adjustment,
@@ -187,13 +207,13 @@ print.adjust_rate.ft <- function(x, pos = 1, ...) {
   if(pos > length(x$rate.adjusted))
     stop("print.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
   cat("\n# print.adjust_rate.ft # ----------------\n")
-  cat("Note: please consider the sign of the adjustment value when adjusting the rate.\n")
+  cat("NOTE: Consider the sign of the adjustment value when adjusting the rate.\n")
   cat("\nRank", pos, "of", length(x$rate.adjusted), "adjusted rate(s):")
   cat("\nRate          :", x$summary$rate[pos])
   cat("\nAdjustment    :", x$summary$adjustment[pos])
   cat("\nAdjusted Rate :", x$summary$rate.adjusted[pos], "\n")
   cat("\n")
-  if(length(x$rate) > 1) cat("To see other results use 'pos' input. ")
+  if(length(x$rate) > 1) cat("To see other results use 'pos' input.\n")
   cat("To see full results use summary().\n")
   cat("-----------------------------------------\n")
   return(invisible(x))
@@ -218,7 +238,7 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  out <- cbind(rank = pos, object$summary[pos,])
+  out <- object$summary[pos,]
 
   print(out)
   cat("-----------------------------------------\n")
@@ -230,13 +250,26 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
 
 #' @export
-mean.adjust_rate.ft <- function(x, export = FALSE, ...){
+mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.adjust_rate.ft # -----------------\n")
-  if(length(x$rate.adjusted) == 1)
-    message("Only 1 rate found in input. Returning mean rate anyway...")
-  n <- length(x$rate.adjusted)
-  out <- mean(x$rate.adjusted)
+
+  if(!is.null(pos) && any(pos > length(x$rate.adjusted)))
+    stop("mean.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
+  if(is.null(pos)) {
+    pos <- 1:length(x$rate.adjusted)
+    cat("Mean of all adjusted rate results:")
+    cat("\n")
+  } else{
+    cat("Mean of adjusted rate results from entered 'pos' ranks:")
+    cat("\n")
+  }
+  if(length(x$rate.adjusted[pos]) == 1)
+    message("Only 1 rate found. Returning mean rate anyway...")
+  cat("\n")
+
+  n <- length(x$rate.adjusted[pos])
+  out <- mean(x$rate.adjusted[pos])
   cat("Mean of", n, "adjusted rates:\n")
   print(out)
   cat("-----------------------------------------\n")

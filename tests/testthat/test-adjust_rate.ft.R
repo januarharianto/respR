@@ -409,7 +409,7 @@ test_that("adjust_rate.ft - objects work with mean()", {
   expect_equal(mean(adj.ft_obj.insp.1, export = TRUE),
                mean(adj.ft_obj.insp.1$rate.adjusted))
   expect_message(mean(adj.ft_obj.insp.1),
-               regexp = "Only 1 rate found in input. Returning mean rate anyway")
+               regexp = "Only 1 rate found. Returning mean rate anyway")
 
   expect_error(mean(adj.ft_obj.insp.many),
                regexp = NA)

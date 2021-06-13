@@ -21,18 +21,20 @@ Output is a list object of class \code{adjust_rate.ft}
 }
 \description{
 The \code{adjust_rate.ft} function adjusts an oxygen uptake or production rate
-(for example, as determined in \code{\link{calc_rate.ft}}) for background oxygen use by
-microbial organisms, or other removal (or input) of oxygen during
+(for example, as determined in \code{\link[=calc_rate.ft]{calc_rate.ft()}}) for background oxygen use
+by microbial organisms, or other removal (or input) of oxygen during
 \emph{flowthrough} respirometry experiments. The function accepts numeric values,
-as well as regular \code{calc_rate.ft} objects.
+as well as \code{calc_rate.ft} objects. Numeric \code{x} inputs should be rates
+calculated as an oxygen delta * flowrate. Units will be specified in
+\code{\link[=convert_rate.ft]{convert_rate.ft()}} when rates are converted to specific output units.
 }
 \details{
-\emph{\strong{Note:}} take special care with the \strong{sign} of the rate used for
-adjustments. In \code{respR} oxygen uptake rates are negative values, as they
-represent a negative slope of oxygen against time. Background rates will
-normally also be a negative value. See examples.
+\emph{\strong{Note:}} take special care with the \emph{sign} of the rate used for
+adjustments. In \code{respR} oxygen uptake rates are negative, as they represent a
+negative slope of oxygen against time. Background rates will normally also be
+a negative value. See Examples.
 
-\code{adjust_rate.ft} allows the rate (or multiple rates) in \code{x} to be adjusted by
+\code{adjust_rate.ft} allows the rate, or multiple rates, in \code{x} to be adjusted by
 the background rate in \code{by}. There are several ways of determining the
 background rate, or performing background corrections depending on the setup
 of the experiment.
@@ -41,43 +43,59 @@ For experiments in which an empty "blank" experiment has been run, and the
 background rate generally does not change over the course of the experiment
 (that is, the oxygen delta between inflow and outflow concentrations remains
 consistent), it is recommended the rate be determined and saved via the
-\verb{[inspect.ft]} and \verb{[calc_rate.ft]} functions and then entered as the \code{by}
-input as either a value or the saved \code{calc_rate.ft} object. In this case, the
-\verb{$rate} element of the \code{calc_rate.ft} object is used to adjust all rates in
-\code{x}. If there are multiple rates in \verb{$rate}, the mean value of all rates
-found is used. In this way, a single blank experiment can be applied to
-numerous actual experiments, or several blank experiments can be averaged to
-provide a single average adjustment rate. Alternatively, once blank
-experiments have been analysed to produce a background correction value, can
-be and this entered via \code{by} as a numeric value.
+\code{\link[=inspect.ft]{inspect.ft()}} and \code{\link[=calc_rate.ft]{calc_rate.ft()}} functions and then entered as the
+\code{by} input as either a value or the saved \code{calc_rate.ft} object. In this
+case, the \verb{$rate} element of the \code{calc_rate.ft} object is used to adjust all
+rates in \code{x}. If there are multiple rates in \verb{$rate}, the mean value is used.
+In this way, a single blank experiment can be applied to several specimen
+experiments. Alternatively, the rate from several blank experiments can be
+averaged to provide a single adjustment value, and this entered via \code{by} as a
+numeric value.
 
 For experiments in which an empty "blank" experiment has been run alongside
 actual experiments in parallel, and background rate may increase or decrease
 over time (or there may be other variations such as in the inflow oxygen
 concentrations), it is recommended you \emph{NOT} use this function. Instead, the
-paired blank oxygen concentration data should be used in \verb{[inspect.ft]} as
-the \code{in.o2} input. In this way, the calculated delta oxygen values take
-account of whatever background or other variation in oxygen is occurring in
-the blank chamber with respect to time.
+paired blank oxygen concentration data should be used in \code{\link{inspect.ft}} as
+the \code{in.o2} input. In this way, the calculated specimen delta oxygen values
+take account of whatever background or other variation in oxygen is occurring
+in the blank chamber with respect to time.
 
-For all background operations, it is important the same \code{flowrate} is used.
+For all background experiments, it is important the same \code{flowrate} is used.
 
 For adjustments, all rates in \code{x}, whether entered as values or as a
 \code{calc_rate.ft} object, are adjusted by subtracting the mean of all background
 rates in \code{by}. Again, take special note of the \emph{sign} of these rates. See
-examples.
+Examples.
 \subsection{Output}{
-
-If the \code{x} input is numeric, the output will be a numeric of the same length
-containing adjusted rates.
 
 If the \code{x} input is a \code{calc_rate.ft} object, the output will be identical in
 structure, but of class \code{adjust_rate.ft} and containing the additional
-elements \verb{$adjustment} and \verb{$rate.adjusted} and these also added to summary
-metadata. If \code{x} is a value or vector, the output is a list object of class
-\code{adjust_rate.ft} containing three elements: \verb{$rate}, \verb{$adjustment}, and
-\verb{$rate.adjusted}. The \verb{$rate.adjusted} element will be the one converted when
+elements \verb{$adjustment} and \verb{$rate.adjusted}, with these also added to
+\verb{$summary} metadata.
+
+If \code{x} is a numeric value or vector, the output is a \code{list} object of class
+\code{adjust_rate.ft} containing four elements: a \verb{$summary} table, \verb{$rate},
+\verb{$adjustment}, and \verb{$rate.adjusted}.
+
+For all outputs, the \verb{$rate.adjusted} element will be the one converted when
 the object is passed to \code{convert_rate.ft}.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints a single result, by default the first adjusted rate.
+Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+\item \code{summary()}: prints summary table of all results and metadata, or those
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The output can be
+saved as a separate dataframe by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all adjusted rates, or those specified by
+the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The output can be saved as a
+separate value by passing \code{export = TRUE}.
+}
 }
 }
 \examples{
