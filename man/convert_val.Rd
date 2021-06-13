@@ -2,7 +2,8 @@
 % Please edit documentation in R/convert_val.R
 \name{convert_val}
 \alias{convert_val}
-\title{Convert values to a different unit}
+\title{Convert values of temperature, volume, mass, area, and atmospheric pressure
+to different units}
 \usage{
 convert_val(x, from = NULL, to = NULL)
 }
@@ -21,13 +22,19 @@ Output is a numeric vector of converted values.
 This is a basic function that converts values of temperature, volume, mass,
 area, and atmospheric pressure to different units. This can be useful in
 \code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}}, and \code{\link[=convert_rate.ft]{convert_rate.ft()}} in which some
-inputs must be in specific units (e.g. atmospheric pressure in bar, area in
-m2). See examples.
+inputs must be in specific units (e.g. temperature in °C, atmospheric
+pressure in bar, area in m2). See Examples.
 }
 \details{
-If the \code{'to'} input is left \code{NULL}, these defaults are applied depending on
-the unit type of the \code{from} input: volume "L", temperature "C", mass "kg",
-area "m2", pressure "bar".
+If the \code{'to'} input is left \code{NULL}, the following defaults are applied
+depending on the unit type of the \code{from} input:
+\itemize{
+\item volume:        "L"
+\item temperature:   "C"
+\item mass:          "kg"
+\item area:          "m2"
+\item pressure:      "bar"
+}
 
 A fuzzy string matching algorithm is used to accept different unit formatting
 styles. For example, \verb{'msq', 'm2', 'M2', 'sqm'} are all parsed as metres
