@@ -1,76 +1,104 @@
 #' Convert a unitless oxygen rate value to absolute, mass-specific or
 #' area-specific rate
 #'
-#' `convert_rate` converts a unitless rate derived from [`calc_rate()`],
-#' [`calc_rate.ft()`], [`calc_rate.bg()`], [`auto_rate()`], or [`adjust_rate()`]
-#' into an absolute volume-adjusted (i.e. to the container) rate, or
-#' mass-specific rate (i.e. normalised by specimen mass), or area-specific rate
-#' (i.e. normalised by specimen surface area) in any common unit.
+#' Converts a unitless rate derived from [`calc_rate()`], [`auto_rate()`],
+#' [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute (i.e. whole chamber
+#' or whole speciemn) rate, or mass-specific rate (i.e. normalised by specimen
+#' mass), or area-specific rate (i.e. normalised by specimen surface area) in
+#' any common unit.
 #'
 #' By default, `convert_rate` converts the primary `$rate` element from
-#' `calc_rate` and `auto_rate` objects, the `$adjusted.rate` from `adjust_rate`
-#' objects, and the `$mean` rate from `calc_rate.ft` and `calc_rate.bg` objects.
-#' Different rates within these objects can be converted by calling them
-#' specifically as the `x` input using `$`. Additionally, any numeric value or
-#' vector can be input as `x`.
+#' `calc_rate` and `auto_rate` objects, the `$rate.adjusted` from `adjust_rate`
+#' objects, and the `$rate.bg` from `calc_rate.bg` objects. Additionally, any
+#' numeric value or vector of rates can be input as `x`.
 #'
-#' NOTE: for converting rates from flowthrough experiments, the `volume` and
-#' `time.unit` inputs should be set with reference to the `flowrate` units **in
-#' L per unit time** used in `calc_rate.ft` to determine the rates. For example.
-#' if the flow rate was entered via the `flowrate` operator in `L/s` enter
-#' `volume = 1, time.unit = "s"`. With flowthrough rates `volume` does *NOT*
-#' represent the volume of the respirometer, and `time.unit` does *NOT*
-#' represent the resolution of the original data.
+#' ## Respirometer volume
 #'
-#' The function uses an internal database and a fuzzy string matching algorithm
-#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
-#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. Use [unit_args()] to
-#' view a list of usable unit strings.
+#' Note, the `volume` input represents the *effective volume* of the
+#' respirometer, that is volume of fluid in the respirometry chamber, **not**
+#' the total respirometer volume or the specimen volume. Generally, this should
+#' be the volume of the respirometer minus the volume of the specimen.
+#' \href{https://github.com/nicholascarey/respfun#eff_vol}{See here} for help
+#' with calculating effective volumes.
 #'
-#' Output units (`output.unit`) must be in the sequence *O2-Time* (e.g.
+#' ## Units
+#'
+#' The `o2.unit` of the original data used to calculated the rate is required.
+#' Concentration units should use only SI units (`L` or `kg`) for the
+#' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
+#' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
+#' details.
+#'
+#' The `time.unit` of the original data used to calculated the rate is also
+#' required.
+#'
+#' An `output.unit` is also required. If left NULL, The default of `"mgO2/h"` is
+#' used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
+#' has been entered. The `output.unit` must be in the sequence *O2-Time* (e.g.
 #' `"mg/h"`) for absolute rates, *O2-Time-Mass* (e.g. `"mg/h/kg"`) for
 #' mass-specific rates, and *O2-Time-Area* (e.g. `"mg/h/cm2"`) for surface
 #' area-specific rates.
 #'
-#' Some oxygen units require temperature (`t`), salinity (`S`), and atmospheric
-#' pressure (`P`) to be specified. See [unit_args()] for details. For freshwater
-#' experiments, salinity should be entered as zero (i.e. `S = 0`).
+#' Note, some oxygen input or output units require temperature (`t`) and
+#' salinity (`S`) to perform conversions. For freshwater experiments, salinity
+#' should be entered as zero (i.e. `S = 0`). Strictly speaking these also
+#' require an atmospheric pressure (`P`) input. In reality, it has a relatively
+#' minor effect within normal ranges, however the default value of 1.013253 bar
+#' (standard pressure at sea level) can be changed if desired. See [unit_args()]
+#' for details.
 #'
-#' @param x numeric value or vector, or object of class [auto_rate()],
-#'   [calc_rate()], [calc_rate.ft()], [calc_rate.bg()] or [adjust_rate()]. The
-#'   rate of change in oxygen.
+#' The function uses an internal database and a fuzzy string matching algorithm
+#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
+#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. See [`unit_args()`] for
+#' details of accepted units and their formatting. See also [`convert_val()`]
+#' for simple conversion between units.
+#'
+#' ## Output
+#'
+#' Returns a `list` object containing the `$rate.input`, and converted rate(s)
+#' in `$rate.output` in the `$output.unit`, as well as inputs and summary
+#' elements.
+#'
+#' ## S3 Generic Functions
+#'
+#' Saved output objects can be used in the generic S3 functions `print()`,
+#' `summary()`, and `mean()`.
+#'
+#' - `print()`: prints a single result, by default the first converted rate.
+#' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
+#'
+#' - `summary()`: prints summary table of all converted rates and metadata, or
+#' those specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output
+#' can be saved as a separate dataframe by passing `export = TRUE`.
+#'
+#' - `mean()`: calculates the mean of all converted rates, or those specified by
+#' the `pos` input. e.g. `mean(x, pos = 1:5)` The output can be saved as a
+#' separate value by passing `export = TRUE`.
+#'
+#' @param x numeric value or vector, or object of class `auto_rate`,
+#'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.`
 #' @param o2.unit string. The dissolved oxygen unit of the original data used to
-#'   determine the rate in 'x'. See [unit_args()].
+#'   determine the rate in `x`.
 #' @param time.unit string. The time unit of the original data used to determine
-#'   the rate in 'x'. See [unit_args()]. When converting rates from *flowthrough
-#'   experiments* this should be the time unit of the *flow rate*. See Details.
-#' @param output.unit string. The output unit to which to convert the input rate
-#'   in 'x'. Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
-#'   "O2/Time/Area". See [unit_args()].
-#' @param volume numeric. Volume of water in litres. This is the *effective
-#'   volume* of the respirometer, that is volume of fluid in the respirometry
-#'   chamber, not the total respirometer volume or specimen volume.
-#'   \href{https://github.com/nicholascarey/respfun#eff_vol}{See here} for
-#'   calculating effective volumes. Converting rates from *flowthrough
-#'   experiments* is a special case: see Details.
-#' @param mass numeric. Mass/weight in kg. This is the mass of the specimen if
-#'   you wish to calculate mass-specific rates.
-#' @param area numeric. Surface area in m^2. This is the surface area of the
-#'   specimen if you wish to calculate surface area-specific rates.
+#'   the rate in `x`.
+#' @param output.unit string. The output unit to convert the input rate to.
+#'   Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
+#'   "O2/Time/Area".
+#' @param volume numeric. Volume of water in ***litres*** in the respirometer or
+#'   respirometer loop.
+#' @param mass numeric. Mass/weight in ***kg***. This is the mass of the
+#'   specimen if you wish to calculate mass-specific rates.
+#' @param area numeric. Surface area in ***m^2***. This is the surface area of
+#'   the specimen if you wish to calculate surface area-specific rates.
 #' @param S numeric. Salinity (ppt). Defaults to NULL. Used in conversion of
-#'   some oxygen units. See [unit_args()] for details. Fresh water should be
-#'   entered as `S = 0`.
+#'   some oxygen units. Fresh water should be entered as `S = 0`.
 #' @param t numeric. Temperature(°C). Defaults to NULL. Used in conversion of
-#'   some oxygen units. See [unit_args()] for details.
-#' @param P numeric. Pressure (bar). Defaults to 1.013253. Used in conversion of
-#'   some oxygen units. If NULL, a standard value of 1.013253 is applied in
-#'   conversions. See [unit_args()] for details.
-#'
-#' @return Returns a `list` object containing the `$input.rate`, and
-#'   `$output.rate` (converted) rate in the `$output.unit`, as well as inputs
-#'   and summary elements.
+#'   some oxygen units.
+#' @param P numeric. Pressure (bar). Used in conversion of some oxygen units.
+#'   Defaults to a standard value of 1.013253 bar.
 #'
 #' @importFrom stringr str_replace
+#' @md
 #' @export
 #'
 #' @examples
@@ -101,31 +129,31 @@
 
 convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
                          volume = NULL, mass = NULL, area = NULL,
-                         S = NULL, t = NULL, P = 1.013253)
-  {
+                         S = NULL, t = NULL, P = 1.013253) {
+
+  ## Save function call for output
+  call <- match.call()
 
   # Validate inputs If units are set to NULL, use default values.
-  if (is.null(o2.unit) || is.numeric(o2.unit)) {
+  if (is.null(o2.unit) || is.numeric(o2.unit))
     stop("convert_rate: the 'o2.unit' of the original data is required.")
-  }
-  if (is.null(time.unit) || is.numeric(time.unit)) {
+  if (is.null(time.unit) || is.numeric(time.unit))
     stop("convert_rate: the 'time.unit' of the original data is required.")
-  }
 
   ## Apply output unit defaults
   if (is.null(output.unit) && is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h'.",
-      call. = F)
+    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h'",
+            call. = F)
     output.unit <- "mg/h"
   }
   if (is.null(output.unit) && !is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h/kg'.",
-      call. = F)
+    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/kg'",
+            call. = F)
     output.unit <- "mg/h/kg"
   }
   if (is.null(output.unit) && is.null(mass) && !is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided, using 'mgO2/h/m2'.",
-      call. = F)
+    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/m2'",
+            call. = F)
     output.unit <- "mg/h/m2"
   }
 
@@ -135,29 +163,26 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
 
   # Can't have both 'mass' and 'area' inputs
   if (!is.null(mass) && !is.null(area))
-    stop("convert_rate: Cannot have inputs for both 'mass' and 'area'.")
+    stop("convert_rate: cannot have inputs for both 'mass' and 'area'.")
 
   # Validate rate value based on object class
   if (is.numeric(x)) {
     rate <- x
-  } else if (class(x) %in% c("calc_rate", "auto_rate")) {
+  } else if (class(x) %in% c("calc_rate")) {
     rate <- x$rate
+    message("convert_rate: object of class `calc_rate` detected. Converting all rates in '$rate'.")
+  } else if (class(x) %in% c("auto_rate")) {
+    rate <- x$rate
+    message("convert_rate: object of class `auto_rate` detected. Converting all rates in '$rate'.")
   } else if (class(x) %in% "adjust_rate") {
-    rate <- x$adjusted.rate
+    rate <- x$rate.adjusted
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
   } else if (class(x) %in% "calc_rate.ft") {
-    rate <- x$mean
-    message("convert_rate: object of class `calc_rate.ft` detected. Automatically using mean rate value.")
-    ## possibly here we automatically fill volume = 1
-    ## Or at least warn if volume != 1
-    warning("NOTE: In flowthrough experiments `volume` and `time` inputs should be set
-      with reference to the flow rate in L per unit time.
-      E.g. for a flow rate in L/s `volume = 1, time = \"s\"`.
-      `volume` does NOT represent the volume of the respirometer.
-      `time` does NOT represent the resolution of the original data.")
+    stop("convert_rate: object of class `calc_rate.ft` detected. \nPlease use 'convert_rate.ft' to convert the rate.")
   } else if (class(x) %in% "calc_rate.bg") {
     ## possible warning if mass entered - no reason to have mass with bg data
-    rate <- x$mean
-    message("convert_rate: object of class `calc_rate.bg` detected. Automatically using mean value.")
+    rate <- x$rate.bg
+    message("convert_rate: object of class `calc_rate.bg` detected. Converting all background rates in '$rate.bg'.")
   } else stop("convert_rate: 'x' input is not valid.")
 
   # Validate o2.unit & time.unit
@@ -166,7 +191,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
 
   # Validate output.unit
   ou <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+",
-    " ", output.unit), header = FALSE))
+                                         " ", output.unit), header = FALSE))
 
   ## is it a specific rate (mass or area)?
   is.spec <- length(ou) == 3
@@ -248,76 +273,112 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
 
   # Generate output
   if (is.mass.spec) {
-    summary <- data.frame(input.rate = rate, output.rate = VO2.mass.spec,
-                          absolute.rate = VO2, mass.specific.rate = VO2.mass.spec)
+    summary <- data.table(rank = 1:length(rate),
+                          rate.input = rate,
+                          o2.unit = o2.unit,
+                          time.unit = time.unit,
+                          volume = volume,
+                          mass = mass,
+                          area = NA,
+                          rate.abs = VO2,
+                          rate.m.spec = VO2.mass.spec,
+                          rate.a.spec = NA,
+                          output.unit = output.unit,
+                          rate.output = VO2.mass.spec)
+
   } else if (is.area.spec) {
-    summary <- data.frame(input.rate = rate, output.rate = VO2.area.spec,
-                          absolute.rate = VO2, area.specific.rate = VO2.area.spec)
+    summary <- data.table(rank = 1:length(rate),
+                          rate.input = rate,
+                          o2.unit = o2.unit,
+                          time.unit = time.unit,
+                          volume = volume,
+                          mass = NA,
+                          area = area,
+                          rate.abs = VO2,
+                          rate.m.spec = NA,
+                          rate.a.spec = VO2.area.spec,
+                          output.unit = output.unit,
+                          rate.output = VO2.area.spec)
   } else {
-    summary <- data.frame(input.rate = rate, output.rate = VO2,
-                          absolute.rate = VO2)
+    summary <- data.table(rank = 1:length(rate),
+                          rate.input = rate,
+                          o2.unit = o2.unit,
+                          time.unit = time.unit,
+                          volume = volume,
+                          mass = NA,
+                          area = NA,
+                          rate.abs = VO2,
+                          rate.m.spec = NA,
+                          rate.a.spec = NA,
+                          output.unit = output.unit,
+                          rate.output = VO2)
   }
 
-  out <- list(input.rate = rate,
-              output.rate = summary$output.rate,
+
+  # Assemble output ---------------------------------------------------------
+
+  ## Save inputs
+  inputs <- list(x = x, o2.unit = o2.unit, time.unit = time.unit, output.unit = output.unit,
+                 volume = volume, mass = mass, area = area,
+                 S = S, t = t, P = P)
+
+  out <- list(call = call,
+              inputs = inputs,
               summary = summary,
-              input.o2.unit = o2.unit,
-              input.time.unit = time.unit,
+              rate.input = rate,
               output.unit = output.unit,
-              input.volume = volume,
-              input.mass = mass,
-              input.area = area)
+              rate.output = summary$rate.output)
 
   class(out) <- "convert_rate"
   return(out)
 }
 
 #' @export
-print.convert_rate <- function(x, pos = NULL, ...) {
+print.convert_rate <- function(x, pos = 1, ...) {
   cat("\n# print.convert_rate # ------------------\n")
 
-  if (is.null(pos)) {
-    cat("Rank/position 1 of", length(x$output.rate), "result(s) shown. To see all results use summary().\n")
-    cat("Input:\n")
-    print(x$input.rate[1])
-  } else if(pos > length(x$output.rate)) {
-    stop("Invalid 'pos' rank: only ",
-         length(x$output.rate), " rates found.")
-  } else if (is.numeric(pos)) {
-    cat("Position", pos, "result\n")
-    cat("Input:\n")
-    print(x$input.rate[pos])
-  } else {
-    cat("Input:\n")
-    print(x$input.rate)
-  }
-  print(c(x$input.o2.unit, x$input.time.unit))
+  if(length(pos) > 1)
+    stop("print.convert_rate: 'pos' must be a single value. To examine multiple results use summary().")
+  if(pos > length(x$rate.input))
+    stop("print.convert_rate: Invalid 'pos' rank: only ", length(x$rate.input), " rates found.")
+
+  cat("Rank", pos, "of", length(x$rate.output), "rates:\n")
+  cat("\n")
+  cat("Input:\n")
+  print(x$rate.input[pos])
+  print(c(x$o2.unit, x$time.unit))
   cat("Converted:\n")
-  if (is.null(pos)) {
-    print(x$output.rate[1])
-  } else if (is.numeric(pos)) {
-    print(x$output.rate[pos])
-  } else {
-    print(x$output.rate)
-  }
+  print(x$rate.output[pos])
   print(x$output.unit)
+  cat("\n")
+  if(length(x$rate.input) > 1) cat("To see other results use 'pos' input. \n")
+  cat("To see full results use summary().\n")
   cat("-----------------------------------------\n")
   return(invisible(x))
 }
 
 #' @export
-summary.convert_rate <- function(object, export = FALSE, ...) {
-  cat("\n# summary.convert_rate # ----------------\n")
+summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
-  out <- data.table(object$summary,
-                    input.o2.unit = object$input.o2.unit,
-                    input.time.unit = object$input.time.unit,
-                    output.unit = object$output.unit,
-                    input.volume = object$input.volume,
-                    input.mass = object$input.mass,
-                    input.area = object$input.area)
+  if(!is.null(pos) && any(pos > length(object$rate.input)))
+    stop("summary.calc_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.")
+
+  cat("\n# summary.convert_rate # ----------------\n")
+  if(is.null(pos)) {
+    pos <- 1:nrow(object$summary)
+    cat("Summary of all converted rates:")
+    cat("\n")
+    cat("\n")
+  } else{
+    cat("Summary of converted rates from entered 'pos' rank(s):")
+    cat("\n")
+    cat("\n")
+  }
+
+  out <- data.table(object$summary[pos,])
 
   print(out)
+  cat("-----------------------------------------\n")
 
   if(export)
     return(invisible(out)) else
@@ -325,12 +386,25 @@ summary.convert_rate <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-mean.convert_rate <- function(x, export = FALSE, ...){
+mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.convert_rate # -------------------\n")
-  if(length(x$output.rate) == 1) warning("Only 1 rate found in convert_rate object. Returning mean rate regardless...")
-  n <- length(x$output.rate)
-  out <- mean(x$output.rate)
+  if(!is.null(pos) && any(pos > length(x$rate.output)))
+    stop("mean.convert_rate: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.")
+  if(is.null(pos)) {
+    pos <- 1:length(x$rate.output)
+    cat("Mean of all rate results:")
+    cat("\n")
+  } else{
+    cat("Mean of rate results from entered 'pos' ranks:")
+    cat("\n")
+  }
+  if(length(x$rate.output[pos]) == 1)
+    message("Only 1 rate found. Returning mean rate anyway...")
+  cat("\n")
+
+  n <- length(x$rate.output[pos])
+  out <- mean(x$rate.output[pos])
   cat("Mean of", n, "output rates:\n")
   print(out)
   print(x$output.unit)
@@ -416,7 +490,3 @@ adjust_scale_area <- function(x, input, output) {
   out <- x * (a/b)  # convert
   return(out)
 }
-
-# x = area
-# input = "m.sq"
-# output = "cm.sq"
