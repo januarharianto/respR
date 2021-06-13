@@ -1,5 +1,5 @@
 ## library(testthat)
-## test_file("tests/testthat/test-inspect.R")
+## test_file("tests/testthat/test-calc_rate.bg.R")
 
 sink("/dev/null") ## stops printing outputs on assigning in log
 
@@ -10,7 +10,7 @@ test_that("calc_rate.bg works using default arguments", {
   expect_is(urbg,
             "calc_rate.bg")
   expect_equal(ncol(urbg$dataframe), 19)
-  expect_equal(length(urbg$bgrate), 18)
+  expect_equal(length(urbg$rate.bg), 18)
 })
 
 test_that("calc_rate.bg accepts 2 columns", {
@@ -32,7 +32,7 @@ test_that("calc_rate.bg accepts `inspect_data` objects", {
   urbg <- calc_rate.bg(ur,  plot = F)
   expect_is(urbg,
             "calc_rate.bg")
-  expect_equal(urbg$bgrate,
+  expect_equal(urbg$rate.bg,
                -0.0007650013)
 })
 
@@ -43,7 +43,7 @@ test_that("calc_rate.bg accepts `inspect` objects", {
   urbg <- calc_rate.bg(ur,  plot = F)
   expect_is(urbg,
             "calc_rate.bg")
-  expect_equal(urbg$bgrate,
+  expect_equal(urbg$rate.bg,
                -0.0007650013)
 })
 
@@ -54,7 +54,7 @@ test_that("calc_rate.bg accepts `data.frame` objects", {
   urbg <- calc_rate.bg(ur,  plot = F)
   expect_is(urbg,
             "calc_rate.bg")
-  expect_equal(urbg$bgrate,
+  expect_equal(urbg$rate.bg,
                -0.0007650013)
 })
 
@@ -65,7 +65,7 @@ test_that("calc_rate.bg accepts `data.table` objects", {
   urbg <- calc_rate.bg(ur,  plot = F)
   expect_is(urbg,
             "calc_rate.bg")
-  expect_equal(urbg$bgrate,
+  expect_equal(urbg$rate.bg,
                -0.0007650013)
 })
 

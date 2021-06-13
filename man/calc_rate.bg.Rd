@@ -2,44 +2,111 @@
 % Please edit documentation in R/calc_rate.bg.R
 \name{calc_rate.bg}
 \alias{calc_rate.bg}
-\title{Calculate background respiration rates}
+\title{Calculate background oxygen uptake or input rates}
 \usage{
-calc_rate.bg(x, time = NULL, oxygen = NULL, plot = TRUE)
+calc_rate.bg(x, time = NULL, oxygen = NULL, plot = TRUE, ...)
 }
 \arguments{
-\item{x}{data frame, \code{inspect} or \code{inspect_data} object. This is the data to
-process.}
+\item{x}{\code{data.frame} or \code{inspect} object. This is the data to process.}
 
-\item{time}{integer. Defaults to NULL. This specifies the column number of
-the time data. If NULL, function assumes time data are in Column 1.}
+\item{time}{integer. Defaults to 1. This specifies the column number of the
+time data.}
 
-\item{oxygen}{integer vector. Defaults to NULL. This specifies the column
-number(s) of the oxygen data. Multiple columns of oxygen can be specified.
-If NULL, function assumes oxygen data are in all columns of the data frame
-except Column 1.}
+\item{oxygen}{integer value or vector. This specifies the column number(s) of
+the oxygen data. Multiple columns of oxygen can be specified. If NULL,
+function assumes oxygen data are in all columns of the data frame except
+the \code{time} column.}
 
-\item{plot}{logical. Defaults to TRUE. Will plot the results for visual
-inspection.}
+\item{plot}{logical. Defaults to TRUE. Defaults to TRUE. Plots the data. See
+Details.}
+
+\item{...}{Allows additional plotting controls to be passed, such as \code{pos}
+and \code{message = FALSE}.}
 }
 \value{
 A list object of class \code{calc_bg.rate}.
 }
 \description{
-This function uses simple linear regression to calculate the rate of change
-of oxygen over time for background corrections of the main data. The
-background data must be in the same time and oxygen units as the data to be
-adjusted. Multiple columns of background oxygen measures, as long as the
-time data are identical between measurements.The function returns rates for
-all columns, and also calculates an average rate.
+This function calculates the rate of change of oxygen over time from "blank"
+or control respirometry experiments, to allow for background adjustments of
+experimental data. It accepts background oxygen~time data as data frames and
+\code{inspect} objects. The data must be in the same time and oxygen units as the
+data used from which the rate to be adjusted was extracted. Multiple columns
+of background oxygen measurements can be examined as long as they share the
+same time data. The function returns rates for all columns, and also
+calculates a mean rate.
 }
 \details{
-If you need to subset the data to remove regions you don't want to use, see
-\code{\link{subset_data}}.
+The main difference between \code{calc_rate.bg} and \code{calc_rate}, is that this
+function allows a rate to be determined from the same region of multiple
+oxygen data columns, whereas \code{calc_rate} allows multiple rates to be
+determined from different regions of a single dataset.
+\subsection{Units}{
 
-There are no units involved in \code{calc_rate.bg()}. This is a deliberate
-decision. Units are called in a later function when absolute and/or
-mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
-\code{\link[=convert_DO]{convert_DO()}}.
+There are no units involved in \code{calc_rate.bg}. This is a deliberate decision.
+The units of oxygen concentration and time will be specified later in
+\code{\link[=convert_rate]{convert_rate()}} when rates are converted to specific output units. It is
+important however, the background time~oxygen data is in the same time and
+oxygen units as the data used to determine the rate which will be adjusted.
+}
+
+\subsection{Subsetting data regions}{
+
+\code{calc_rate.bg} does not have internal subsetting of data regions. If you need
+to subset the data to specific regions you don't want to use, see
+\code{\link[=subset_data]{subset_data()}}, which allows for easy passing (or piping) of subsets to
+\code{calc_rate.bg}.
+}
+
+\subsection{Background respiration vs background input of oxygen}{
+
+\code{calc_rate.bg} can easily quantify oxygen \emph{input} rates as well as
+consumption rates. Most users will be interested in this function because
+background rates are typically consumption rates from microbial activity,
+that need to be quantified and their effects removed from experimental
+specimen rates. However, there are some experiments where oxygen input is of
+interest, for example open tank or open arena respirometry where the input of
+oxygen from the open water surface is of interest. There are also cases in
+closed respirometry where there may be an input of oxygen via leaks or
+production from photosynthesis, which need to be quantified. \code{calc_rate.bg}
+is capable of quantifying production rates as well as consumption, and these
+can be used for adjustments in \code{\link[=adjust_rate]{adjust_rate()}}.
+}
+
+\subsection{Output}{
+
+Output is a \code{list} object of class \code{calc_rate.bg} containing original data,
+linear models, summary information, and the primary output of interest
+\verb{$rate.bg}, which contains a rate for each oxygen column present in the input
+data. There is also \verb{$rate.bg.mean} containing the mean of all background
+rates. Note, this is not used in \code{adjust_rate}, where the \code{method} input
+there determines how \verb{$rate.bg} are applied, but can easily be extracted and
+applied as an adjustment value if desired.
+}
+
+\subsection{Plot}{
+
+A plot is produced (provided \code{plot = TRUE}) showing all examined columns of
+oxygen against time, with the rate and linear model coefficients. Single
+rates can be plotted by changing the \code{pos} argument either in the main
+function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
+Console output messages can be suppressed using \code{message = FALSE}.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints all background rates, plus the mean background rate.
+\item \code{summary()}: prints summary table of all results and metadata, or those
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The output can be
+saved as a separate dataframe by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all rates, or those specified by the \code{pos}
+input. e.g. \code{mean(x, pos = 1:5)} The output can be saved as a separate value
+by passing \code{export = TRUE}.
+}
+}
 }
 \examples{
 data("urchins.rd")
