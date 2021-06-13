@@ -366,7 +366,9 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
       by = "time",
       plot = FALSE
     )$summary))
-  results <- output[,-(8:12)][, c(4:7, 1:3)]
+  # reorder
+  # remove rank, oxy, endoxy, rate2pt columns
+  results <- output[,2:8]
 
   out <- list(results = results, roll = kde$rollreg,
     density = kde$density, peaks = kde$peaks)
