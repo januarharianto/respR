@@ -2,11 +2,11 @@
 % Please edit documentation in R/adjust_rate.R
 \name{is.crbg.single}
 \alias{is.crbg.single}
-\title{Validate that an input is a calc_rate.bg object with a single $bgrate or 2 columns of data}
+\title{Validate that an input is a calc_rate.bg object with a single $rate.bg or 2 columns of data}
 \usage{
 is.crbg.single(x)
 }
 \description{
-Validate that an input is a calc_rate.bg object with a single $bgrate or 2 columns of data
+Validate that an input is a calc_rate.bg object with a single $rate.bg or 2 columns of data
 }
 \keyword{internal}

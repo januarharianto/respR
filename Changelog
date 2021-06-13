@@ -10,26 +10,14 @@ For now - direct changes/commits to dev go in here. Keep a separate changelog te
 Quick fixes and changes.
 (we don't have to include all these, but we should keep a full list however minor)
 
-- FIX:  Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
-- FIX:  Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+
 - FIX:  Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
-- FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
-- FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
-- FIX: format_time() - fix for not appending new numeric time column onto a data.table
-- FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
-- FIX: format_time() - fix for not working with multiple data-time columns if one of them wasn't column 1
-- FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
-- FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
-- FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
-- FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
-- FIX: Fix for `calc_rate` and `auto_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
+
 
 Changes
-- CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
+- CHANGE: added `rank` column to all `$summary` tables as first column. Helps a lot wiht consistent S3 summary outputs and generally keeping track or selecting summary rows,
 - CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
-  - (ugh, might have to revist the above - we use absolute in subset_rate for absolute value between +/- )
 - CHANGE: Updated startup message for full MEE citation
-- CHANGE: import_file docs - updated supported systems list
 - CHANGE: Updated README
 - CHANGE: ALL FUNCTIONS: changed dataframe in output to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
 - CHANGE: Example data are now all data.tables
@@ -40,18 +28,26 @@ NEW
 - NEW: flowthrough workflow - 4 new specific functions - HIGHLIGHT
 - Tested with R 4.1 and the new native pipes (`|>`)
 - Tested with Apple Silicon builds of R
+- All (where relevant) outputs have function call saved to `$call` element
 
 - CHANGE: Better par() restoration behaviour. (Definitely fixed now - put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of error that causes it to exit early). Unit tests for this added to all fns which plot too.
 
 - CHANGE: inspect_data and pcrit now have 'function deprecated' warnings in docs and code
-- CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
-- CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
-- CHANGE: calc_rate.bg - Stops if 'oxygen' or 'time' columns not present in the input
-- CHANGE: calc_rate.bg - Stops if 'oxygen' and 'time' columns conflict
-- CHANGE: calc_rate.bg - Removed "input detected" message at start - other functions don't have this
-- CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
 - CHANGE: General clean up of errors, messages etc to make clear what function they come from (not always clear, especially in pipes)
+
+========================== import_file() ============================
+- FIX: import_file() - Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
+- FIX: import_file() - Fix for MiniDot files not being imported as numeric data.
+- FIX: import_file() - Imports European style formatted numeric data which uses commas instead of points for decimals.
+- CHANGE: import_file docs - updated supported systems list
+- CHANGE: import_file - Pyro/Firesting imports now don't remove any columns (e.g. empty or NA columns). Columns names now much improved (unique names, data type linked to channel IDs). Also fixes numeric columns being imported as character when Firesting software replaces missing data with "---".
 - NEW: import_file now supports Presens Datamanager files
+
+========================== format_time() ============================
+- FIX: format_time() - fix for not appending new numeric time column onto a data.table
+- FIX: format_time() - fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
+- FIX: format_time() - fix for not working with multiple data-time columns if one of them wasn't column 1
+- CHANGE: format_time - numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term for non-english speakers)
 
 ========================== convert_val() ============================
 - New function
@@ -65,23 +61,30 @@ New utility validation fns
 - input.val - for other input validations
 
 
+========================== calc_rate.bg() ============================
+
+- CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
+- CHANGE: Stops if 'oxygen' and 'time' columns conflict
+- CHANGE: Removed "input detected" message at start - other functions don't have this
+- CHANGE: output: `$bgrate` changed to `$rate.bg`
+- CHANGE: output: `$mean` changed to `$rate.bg.mean`
+
 ========================== inspect() ============================
 Changes
 
 - NEW: added `width` input for rolling reg plot (default 0.1)
 - NEW: `summary()` works on output (simply a wrapper for `print()`)
 - CHANGE: updated roxygen docs. There was quite a lot out of date...
-- CHANGE: Added message if multiple columns inspected that subsequent functions will only use first 2 by default
 - CHANGE: Multiple rate inspection plot improved. Now all plot on same axes ranges, better colours and spacing.
 - FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
 - CHANGE: Prints NA locations for all oxygen columns they are found in (previously only printed if a 2-col df)
-- CHANGE: If multiple columns in df input, warning that 1:2 used by default.
+- CHANGE: If multiple columns in df input, message that 1:2 used by default by subsequent functions.
 - CHANGE: Stops if 'oxygen' or 'time' columns not present in the input
 - CHANGE: Stops if 'oxygen' and 'time' columns conflict
 - FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
 - CHANGE: Can pass 'rate.rev = FALSE' to plot rates not reversed (for oxygen production respirometry)
 - CHANGE: Can pass 'legend = FALSE' to plot to suppress legend
-- CHANGE: prints on assigning when issues are found
+- CHANGE: prints on assigning
 - CHANGE: output has additional elements `$call` and `$inputs`
 - CHANGE: output `$list` and `$list_raw` renamed `locs` and `$locs_raw`
 
@@ -90,10 +93,11 @@ Changes
 ========================== S3 Methods ============================
 
 All
-- Made inputs consistent (for .summary first input should be 'object', all others 'x' or causes CMD check error)
-- All summary S3 have `export = TRUE` for export of summary table/value
-- Added `return(invisible(object))` where missing to allow piping
+- Made inputs consistent (for .summary first input should be 'object', in all others 'x' or causes CMD check error)
+- All summary S3 (where appropriate) have `export = TRUE` for export of summary table/value
+- All S3 (where appropriate) have `pos` input
 - All stop if 'pos' too high
+- Added `return(invisible(object))` where missing to allow piping
 - All print much better with nicer spacing, especially in pipes
 - auto_rate - all S3 methods stop if no rates found (can happen with over-enthusiastic subsetting in new subset_rate fn)
 
@@ -124,12 +128,18 @@ mean.calc_rate
 mean.calc_rate.bg
 mean.adjust_rate
 mean.convert_rate
-- NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
+- NEW: All work on relevant output rate. None alter the output in any way (i.e. normal invisible return of input object), but have `export` argument, so values can be exported if user wants. Also `pos` input to select range. None really *that* useful except `mean.convert_rate`, which is the one we can point users to, so they can come up with a final mean rate
 
 
 ========================== auto_rate() ============================
 MAJOR CHANGE
-- Mew 'highest' and 'lowest' methods for absolute min/max of rates
+- FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
+- FIX: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
+- FIX: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
+- FIX: Fix for `auto_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
+
+- New 'highest' and 'lowest' methods for absolute min/max of rates
 - Can only use these when rates all have the same sign
 - New internal functions for this ordering - auto_rate_lowest, auto_rate_highest
 - New 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates
@@ -140,15 +150,15 @@ MAJOR CHANGE
 
 Other changes
 - reordered operators to put "method" second
-- added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE.
+- added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE. (also added for other methods, but as an empty column)
+- Summary table reordered to be consistent with other functions
 - Help docs updated
 - tidied and reordered summary S3 printout
   - summary table comes first, only prints out 20 rows max of results (via data.table)
   - new function (print_dens) for printing the density result more compactly
 - method = "max" was missing '$total_regs' element from metadata
 - updated error messages (including internal fns) to be clear they come from auto_rate
-
-
+- plot updated with title showing which Rank current plot is, and better spacing
 
 ========================== convert_rate() ============================
 
@@ -158,6 +168,7 @@ Other changes
 - $output.unit oxygen amount component now has "O2" appended. e.g. mgO2/h/g, umolO2/day/m2 (done at end, does not affect any conversions).
 - time - can now import data and output rates using 'day' as time unit e.g. "mgO2/day/m2"
 - oxygen - can now output oxygen used in moles e.g. "molO2/day/kg"
+- CHANGE: convert_rate - outputs renamed (e.g. output to output.rate, absolute to absolute.rate etc.). should not affect code anywhere else since this is last function
 
 
 ========================== convert_DO() ============================
@@ -165,6 +176,7 @@ Other changes
 - Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
 - Fix for error with non-numeric x inputs
 - Added warning for 'P' values outside realistic range
+- print() S3 revised
 
 ========================== unit_args() ============================
 - Updated for new units (time in days, oxygen in mol, %O2) and more detail of which functions accept which units
@@ -174,6 +186,11 @@ Other changes
 ========================== adjust_rate() ============================
 - NEW: completely rewritten to allow several new methods, including dynamic background correction
 - (same original inputs (x, by) plus five new ones. Method defaults to "mean" so old code should output same results as it did before).
+- output: `adjusted.rate` changed to `rate.adjusted`
+- output: `input.rate` changed to `rate.input`
+- FIX: summary() works correctly on `adjust_rate` objects (missing #' @export)
+- CHANGE: adjust_rate - changed rates from 'corrected' to 'adjusted.rate' in output (updated code in convert_rate, convert_DO to match)
+
 
 
 ========================== subsample() ============================
@@ -187,6 +204,11 @@ Other changes
 - CHANGE: calc_rate - Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: calc_rate: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
 - CHANGE: added a bunch of new input checks
+- CHANGE: output elements renamed
+- CHANGE: most `$summary` columns renamed
+- CHANGE: Summary table columns reordered to be consistent with other functions
+- CHANGE: plot updated with title showing which Rank current plot is, and better spacing
+- FIX: Fix for `calc_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
 - FIX - by = "proportion" and by = "o2" now work correctly with oxygen production data.
 About the above. All changes made to truncate_data. Previously these methods didn't work with rising O2 as the code for finding the from/to values assumed it was decreasing. Now it identifes all data within the range of from/to. Essentially this makes from/to interchangeable. This however breaks the previous behaviour where it found first occurence of 'from', then the first occurence of 'to' after that, so you could use it with intermittent-flow data and it would get the from-to rate from the first replicate. This is such a niche use case, it's not worth trying to fix it (although i almost figured it out actually). Users with these data need to know how to subset them anyway, so they can just subset this replicate too.
 Although, there's a chance with some data it will give different results than the old way, because of the way the from-to region is identified internally. Old way - first occurence of the 'from' value, then first occurence of the 'to' value after that. New way - first occurence of the 'from' value, then LAST occurence of the 'to' value after that. With most data any difference in rates should be very minor. I can only see this making a difference in really noisy or really shallow data.
@@ -217,12 +239,12 @@ inspect.ft
 
 ========================== data ============================
 
-- CHANGE: flowthrough.rd amended to make delta column negative values
+- CHANGE: flowthrough.rd amended to make delta column (i.e. rates) negative values
 
 NEW: new example datasets
 - `background_lin.rd` - linear background, for testing new background correction functionality
 - `background_exp.rd` - exponential background, for testing new background correction functionality
-- `flowthrough_mult.rd` - multiple flowthrough data
-- `flowthrough_nlbg.rd` - flowthrough data with non-linear background
+- `flowthrough_mult.rd` - multiple column flowthrough data
+- `flowthrough_nlbg.rd` - flowthrough data with non-linear/non-constant background recording
 - `algae.rd` - oxygen production data
 
