@@ -5,9 +5,8 @@
 sink("/dev/null") ## stops printing outputs on assigning
 
 test_that("adjust_rate: All tests pass",
-
   {
-  skip("skip until I figure out how to skip on R CMD CHECK")
+  skip("skip - until I figure out how to skip these on R CMD CHECK")
 
     test_that("adjust_rate stops with wrong method", {
       expect_error(adjust_rate(100, 10, method = "text"),
@@ -143,7 +142,7 @@ test_that("adjust_rate: All tests pass",
       ## auto_rate objects of different methods with lots of rates
       ar_obj_highest <- auto_rate(urchins.rd[,1:2], method = "highest", plot = F)
       ar_obj_lowest <- auto_rate(urchins.rd[,1:2], method = "lowest", plot = F)
-      ar_obj_interval <- auto_rate(urchins.rd[,1:2], method = "interval", width = 0.05, , plot = F)
+      ar_obj_interval <- auto_rate(urchins.rd[,1:2], method = "interval", width = 0.05, plot = F)
 
 
     } # end make objects
@@ -156,7 +155,7 @@ test_that("adjust_rate: All tests pass",
     test_that("adjust_rate: method = 'value' - correct message", {
       # if NULL
       expect_message(adjust_rate(x = -0.1, by = -0.005, method = "value"),
-                     "adjust_rate: Rate adjustments applied using \"value\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"value\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -171,13 +170,13 @@ test_that("adjust_rate: All tests pass",
 
     test_that("adjust_rate: method = 'value' - stops if 'by' is not a single numeric or calc_rate.bg", {
       expect_error(adjust_rate(ar_obj, by = c(1,2), method = "value"),
-                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$bgrate'")
+                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
       expect_error(adjust_rate(ar_obj, by = "text", method = "value"),
-                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$bgrate'")
+                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
       expect_error(adjust_rate(ar_obj, by = ar_obj, method = "value"),
-                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$bgrate'")
+                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
       expect_error(adjust_rate(ar_obj, by = bg_df2col, method = "value"),
-                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$bgrate'")
+                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
     })
 
     test_that("adjust_rate: method = 'value' - stops if 'by2', 'time_x', 'time_by', or 'time_by2' have inputs.", {
@@ -195,30 +194,30 @@ test_that("adjust_rate: All tests pass",
       ## single values for both
       rate = -0.01
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate - by)
       ## multiple values for rate
       rate = c(-0.01, -0.02, -0.03)
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate - by)
       ## should always be equal to 'mean' method
       rate = c(-0.01, -0.02, -0.03)
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   adjust_rate(rate, by = by, method = "mean")$adjusted.rate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   adjust_rate(rate, by = by, method = "mean")$rate.adjusted)
     })
 
     test_that("adjust_rate: method = 'value' - outputs correct results with calc_rate 'x', numeric 'by' inputs.", {
       ## calc_rate object with single rate, adjusted by single by
       rate = cr_obj_single
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
       ## calc_rate object with multiple rates, adjusted by single by
       rate = cr_obj_three
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
     })
 
@@ -226,22 +225,22 @@ test_that("adjust_rate: All tests pass",
       ## auto_rate object adjusted by single by
       rate = ar_obj
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
 
       rate = ar_obj_single
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
 
       rate = ar_obj_highest
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
 
       rate = ar_obj_interval
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
                    rate$rate - by)
     })
 
@@ -249,48 +248,48 @@ test_that("adjust_rate: All tests pass",
       ## single x, calc_rate.bg with single bg rate
       rate = -0.01
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate - by$rate.bg)
       ## multiple x, calc_rate.bg with single bg rate
       rate = c(-0.01, -0.02, -0.03)
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate - by$rate.bg)
     })
 
     test_that("adjust_rate: method = 'value' - outputs correct results with calc_rate 'x', calc_rate.bg 'by' inputs.", {
       ## single calc_rate x, calc_rate.bg with single bg rate
       rate = cr_obj_single
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
       ## multiple calc_rate x, calc_rate.bg with single bg rate
       rate = cr_obj_three
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
     })
 
     test_that("adjust_rate: method = 'value' - outputs correct results with auto_rate 'x', calc_rate.bg 'by' inputs.", {
       rate = ar_obj
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
 
       rate = ar_obj_single
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
 
       rate = ar_obj_highest
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
 
       rate = ar_obj_interval
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by, method = "value")$adjusted.rate,
-                   rate$rate - by$bgrate)
+      expect_equal(adjust_rate(rate, by = by, method = "value")$rate.adjusted,
+                   rate$rate - by$rate.bg)
     })
 
 
@@ -300,11 +299,11 @@ test_that("adjust_rate: All tests pass",
     test_that("adjust_rate: method = 'mean' - correct message", {
       # if NULL
       expect_message(adjust_rate(cr_obj_three, by = -0.005),
-                     "adjust_rate: Rate adjustments applied using \"mean\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"mean\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
       # if method = "mean" specified
       expect_message(adjust_rate(cr_obj_single, method = "mean", by = -0.005),
-                     "adjust_rate: Rate adjustments applied using \"mean\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"mean\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -339,31 +338,31 @@ test_that("adjust_rate: All tests pass",
       ## single values for both
       rate = -0.01
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
       ## multiple values for rate
       rate = c(-0.01, -0.02, -0.03)
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
       ## multiple values for by
       rate = -0.01
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
       ## multiple values for both - equal lengths
       rate = c(-0.01, -0.02, -0.03)
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
       ## multiple values for both - different lengths
       rate = c(-0.01, -0.02, -0.03, -0.04, -0.05)
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
       rate = c(-0.01, -0.02, -0.03)
       by = c(-0.001, -0.002, -0.003, -0.004, -0.005)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate - mean(by))
     })
 
@@ -371,31 +370,31 @@ test_that("adjust_rate: All tests pass",
       ## calc_rate object with single rate, adjusted by single by
       rate = cr_obj_single
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## calc_rate object with multiple rates, adjusted by single by
       rate = cr_obj_three
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## calc_rate object with single rate, adjusted by multiple by
       rate = cr_obj_single
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## calc_rate object with multiple rates, adjusted by multiple by - equal lengths
       rate = cr_obj_three
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## calc_rate object with multiple rates, adjusted by multiple by - different lengths
       rate = cr_obj_three
       by = c(-0.001, -0.002)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       rate = cr_obj_three
       by = c(-0.001, -0.002, -0.003, -0.004, -0.005)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
     })
 
@@ -403,34 +402,34 @@ test_that("adjust_rate: All tests pass",
       ## auto_rate object adjusted by single by
       rate = ar_obj
       by = -0.001
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## auto_rate object adjusted by multiple by
       rate = ar_obj
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       rate = ar_obj
       by = c(-0.001, -0.002, -0.003, -0.004, -0.005)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## auto_rate object with multiple rates, adjusted by multiple by - equal lengths
       rate = ar_obj
       by = c(-0.001, -0.002, -0.003, -0.004)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       ## auto_rate object with multiple rates, adjusted by multiple by - equal lengths
       rate = ar_obj_highest
       by = c(-0.001, -0.002, -0.003, -0.004)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       rate = ar_obj_interval
       by = c(-0.001, -0.002, -0.003, -0.004)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
       rate = ar_obj_single
       by = c(-0.001, -0.002, -0.003, -0.004)
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
                    rate$rate - mean(by))
     })
 
@@ -438,72 +437,72 @@ test_that("adjust_rate: All tests pass",
       ## single x, calc_rate.bg with single bg rate
       rate = -0.01
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate - mean(by$rate.bg))
       ## multiple x, calc_rate.bg with single bg rate
       rate = c(-0.01, -0.02, -0.03)
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate - mean(by$rate.bg))
       ## single x, calc_rate.bg with multiple bg rate
       rate = -0.01
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate - mean(by$rate.bg))
       ## multiple x, calc_rate.bg with multiple bg rate
       rate = c(-0.01, -0.02, -0.03)
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate - mean(by$rate.bg))
     })
 
     test_that("adjust_rate: method = 'mean' - outputs correct results with calc_rate 'x', calc_rate.bg 'by' inputs.", {
       ## single calc_rate x, calc_rate.bg with single bg rate
       rate = cr_obj_single
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       ## multiple calc_rate x, calc_rate.bg with single bg rate
       rate = cr_obj_three
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       ## single calc_rate x, calc_rate.bg with multiple bg rate
       rate = cr_obj_single
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       ## multiple calc_rate x, calc_rate.bg with multiple bg rate
       rate = cr_obj_three
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
     })
 
     test_that("adjust_rate: method = 'mean' - outputs correct results with auto_rate 'x', calc_rate.bg 'by' inputs.", {
       ## single auto_rate x, calc_rate.bg with single bg rate
       rate = ar_obj
       by = bg_single
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       ## single auto_rate x, calc_rate.bg with multiple bg rate
       rate = ar_obj
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
 
       rate = ar_obj_highest
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       rate = ar_obj_interval
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
       rate = ar_obj_single
       by = bg_three
-      expect_equal(adjust_rate(rate, by = by)$adjusted.rate,
-                   rate$rate - mean(by$bgrate))
+      expect_equal(adjust_rate(rate, by = by)$rate.adjusted,
+                   rate$rate - mean(by$rate.bg))
     })
 
 
@@ -514,7 +513,7 @@ test_that("adjust_rate: All tests pass",
     test_that("adjust_rate: method = 'paired' - correct message", {
       # if method = "mean" specified
       expect_message(adjust_rate(cr_obj_single, method = "paired", by = -0.005),
-                     "adjust_rate: Rate adjustments applied using \"paired\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"paired\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -562,12 +561,12 @@ test_that("adjust_rate: All tests pass",
       ## single values
       rate = -0.01
       by = -0.001
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
                    rate - (by))
       ## multiple values
       rate = c(-0.01, -0.02, -0.03)
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
                    rate - (by))
     })
 
@@ -575,19 +574,19 @@ test_that("adjust_rate: All tests pass",
       ## single values
       rate = cr_obj_single
       by = -0.001
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
                    rate$rate - (by))
       ## multiple values
       rate = cr_obj_three
       by = c(-0.001, -0.002, -0.003)
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
                    rate$rate - (by))
     })
 
     test_that("adjust_rate: method = 'paired' - outputs correct results with auto_rate 'x', numeric 'by' inputs.", {
       rate = ar_obj
       by = c(-0.001, -0.002, -0.003, -0.004)
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
                    rate$rate - (by))
     })
 
@@ -595,24 +594,24 @@ test_that("adjust_rate: All tests pass",
       ## single values
       rate = cr_obj_single
       by = bg_single
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
-                   rate$rate - (by$bgrate))
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
+                   rate$rate - (by$rate.bg))
       ## multiple values
       rate = cr_obj_three
       by = bg_three
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
-                   rate$rate - (by$bgrate))
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
+                   rate$rate - (by$rate.bg))
       rate = cr_obj_eight
       by = bg_eight
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
-                   rate$rate - (by$bgrate))
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
+                   rate$rate - (by$rate.bg))
     })
 
     test_that("adjust_rate: method = 'paired' - outputs correct results with auto_rate 'x', calc_rate.bg 'by' inputs.", {
       rate = ar_obj
       by = bg_four
-      expect_equal(adjust_rate(rate, method = "paired", by = by)$adjusted.rate,
-                   rate$rate - (by$bgrate))
+      expect_equal(adjust_rate(rate, method = "paired", by = by)$rate.adjusted,
+                   rate$rate - (by$rate.bg))
     })
 
 
@@ -622,7 +621,7 @@ test_that("adjust_rate: All tests pass",
     test_that("adjust_rate: method = 'concurrent' - correct message", {
       # if method = "mean" specified
       expect_message(adjust_rate(cr_obj_single, method = "concurrent", by = bg_df2col),
-                     "adjust_rate: Rate adjustments applied using \"concurrent\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"concurrent\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -686,7 +685,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, single concurrent blank
@@ -695,7 +694,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, single concurrent blank
@@ -704,7 +703,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## single rate value, two concurrent blanks
@@ -717,7 +716,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, two concurrent blanks
@@ -730,7 +729,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, two concurrent blanks
@@ -743,7 +742,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -762,7 +761,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, seven concurrent blanks
@@ -780,7 +779,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, seven concurrent blanks
@@ -798,7 +797,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
     })
 
@@ -811,7 +810,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, single concurrent blank
@@ -820,7 +819,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, single concurrent blank
@@ -829,7 +828,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## single rate value, two concurrent blanks
@@ -842,7 +841,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, two concurrent blanks
@@ -855,7 +854,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, two concurrent blanks
@@ -868,7 +867,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -887,7 +886,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, seven concurrent blanks
@@ -905,7 +904,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, seven concurrent blanks
@@ -923,7 +922,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
     })
 
@@ -936,7 +935,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by$dataframe, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, single concurrent blank
@@ -945,7 +944,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by$dataframe, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, single concurrent blank
@@ -954,7 +953,7 @@ test_that("adjust_rate: All tests pass",
       o_rate <- rate$rate
       adj <- calc_rate(by$dataframe, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## single rate value, two concurrent blanks
@@ -967,7 +966,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, two concurrent blanks
@@ -980,7 +979,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, two concurrent blanks
@@ -993,7 +992,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -1012,7 +1011,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## three rate values, seven concurrent blanks
@@ -1030,7 +1029,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## eight rate values, seven concurrent blanks
@@ -1048,7 +1047,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
     })
 
@@ -1061,7 +1060,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, single concurrent blank
@@ -1072,7 +1071,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with MANY rates, single concurrent blank
@@ -1083,7 +1082,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj, two concurrent blanks
@@ -1096,7 +1095,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, two concurrent blanks
@@ -1109,7 +1108,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -1128,7 +1127,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, seven concurrent blanks
@@ -1146,7 +1145,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
     })
 
@@ -1159,7 +1158,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, single concurrent blank
@@ -1170,7 +1169,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -1184,7 +1183,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## ## auto_rate obj with single rate, two concurrent blanks
@@ -1197,7 +1196,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
 
@@ -1216,7 +1215,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, seven concurrent blanks
@@ -1234,7 +1233,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
     })
@@ -1248,7 +1247,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by$dataframe, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, single concurrent blank
@@ -1259,7 +1258,7 @@ test_that("adjust_rate: All tests pass",
       # adjustment should be this
       adj <- calc_rate(by$dataframe, from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj, two concurrent blanks
@@ -1272,7 +1271,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## ## auto_rate obj with single rate, two concurrent blanks
@@ -1285,7 +1284,7 @@ test_that("adjust_rate: All tests pass",
       adj2 <- calc_rate(by$dataframe[,c(1,3)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2)/2
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj, seven concurrent blanks
@@ -1303,7 +1302,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
 
       ## auto_rate obj with single rate, seven concurrent blanks
@@ -1321,7 +1320,7 @@ test_that("adjust_rate: All tests pass",
       adj7 <- calc_rate(by$dataframe[,c(1,8)], from = rate$summary$time, to = rate$summary$endtime, by = "time", plot = F)$rate
       adj <- (adj1+adj2+adj3+adj4+adj5+adj6+adj7)/7
 
-      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$adjusted.rate,
+      expect_equal(adjust_rate(rate, method = "concurrent", by = by)$rate.adjusted,
                    o_rate - (adj))
     })
 
@@ -1333,7 +1332,7 @@ test_that("adjust_rate: All tests pass",
       # if method = "mean" specified
       expect_message(adjust_rate(x = -0.03, time_x = 20, method = "linear", by = -0.002, time_by = 0,
                                  by2 = -0.003, time_by2 = 40),
-                     "adjust_rate: Rate adjustments applied using \"linear\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"linear\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -1699,20 +1698,20 @@ test_that("adjust_rate: All tests pass",
         o_by <- by
         o_time_by <- time_by
       } else if(is.data.frame(by)) {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
         o_time_by <- sum(range(by[[1]]))/2
       } else {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
         o_time_by <- sum(range(by$dataframe[[1]]))/2
       }
       if(is.numeric(by2)) {
         o_by2 <- by2
         o_time_by2 <- time_by2
       } else if(is.data.frame(by2)) {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2[[1]]))/2
       } else {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
       }
 
@@ -1727,7 +1726,7 @@ test_that("adjust_rate: All tests pass",
         skip_on_cran()
         expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
                                                   by = by, time_by = time_by,
-                                                  by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                                                  by2 = by2, time_by2 = time_by2))$rate.adjusted,
                      o_x - o_adj)
       })
 
@@ -1747,7 +1746,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(adjust_rate(x = x, time_x = time_x, method = method,
                                by = by, time_by = time_by,
-                               by2 = by2, time_by2 = time_by2)$adjusted.rate,
+                               by2 = by2, time_by2 = time_by2)$rate.adjusted,
                    -99.5)
       ## all positive
       method <- "linear"
@@ -1760,7 +1759,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(adjust_rate(x = x, time_x = time_x, method = method,
                                by = by, time_by = time_by,
-                               by2 = by2, time_by2 = time_by2)$adjusted.rate,
+                               by2 = by2, time_by2 = time_by2)$rate.adjusted,
                    99.5)
 
       method <- "linear"
@@ -1773,7 +1772,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(adjust_rate(x = x, time_x = time_x, method = method,
                                by = by, time_by = time_by,
-                               by2 = by2, time_by2 = time_by2)$adjusted.rate,
+                               by2 = by2, time_by2 = time_by2)$rate.adjusted,
                    99.8)
 
       method <- "linear"
@@ -1786,7 +1785,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
                                                 by = by, time_by = time_by,
-                                                by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                                                by2 = by2, time_by2 = time_by2))$rate.adjusted,
                    100)
 
       method <- "linear"
@@ -1799,14 +1798,14 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
                                                 by = by, time_by = time_by,
-                                                by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                                                by2 = by2, time_by2 = time_by2))$rate.adjusted,
                    -100)
       ## numeric single inputs
       expect_error(adjust_rate(x = -100, by = 0, by2 = -50, time_x = 50,
                                time_by = 0, time_by2 = 100, method = "linear"),
                    regexp = NA)
       expect_equal(adjust_rate(x = -100, by = 0, by2 = -50, time_x = 50,
-                               time_by = 0, time_by2 = 100, method = "linear")$adjusted.rate,
+                               time_by = 0, time_by2 = 100, method = "linear")$rate.adjusted,
                    -75)
       ## with calc_rate.bg for by, by2 and both
       bg_obj1 <- suppressMessages(calc_rate.bg(urchins.rd[1:10,], 1, 18, plot = F))
@@ -1839,7 +1838,7 @@ test_that("adjust_rate: All tests pass",
                                time_by = 0, time_by2 = 100, method = "linear"),
                    regexp = NA)
       expect_equal(adjust_rate(x = -c(100,110,120), by = 0, by2 = -50, time_x = c(50,60,70),
-                               time_by = 0, time_by2 = 100, method = "linear")$adjusted.rate,
+                               time_by = 0, time_by2 = 100, method = "linear")$rate.adjusted,
                    c(-75, -80, -85))
 
       ## calc_rate input - one rate
@@ -1853,7 +1852,7 @@ test_that("adjust_rate: All tests pass",
                                time_by = 0, time_by2 = 45, method = "linear")$adjustment,
                    -0.01/2)
       expect_equal(adjust_rate(x = cr_obj, by = 0, by2 = -0.01,
-                               time_by = 0, time_by2 = 45, method = "linear")$adjusted.rate,
+                               time_by = 0, time_by2 = 45, method = "linear")$rate.adjusted,
                    -0.02282768)
 
       ## calc_rate input - multiples rates
@@ -1867,7 +1866,7 @@ test_that("adjust_rate: All tests pass",
                                time_by = 0, time_by2 = 45, method = "linear")$adjustment,
                    c(-0.01*1/9, -0.01*3/9, -0.01*5/9, -0.01*7/9))
       expect_equal(adjust_rate(x = cr_obj, by = 0, by2 = -0.01,
-                               time_by = 0, time_by2 = 45, method = "linear")$adjusted.rate,
+                               time_by = 0, time_by2 = 45, method = "linear")$rate.adjusted,
                    c(-0.03178548, -0.02555831, -0.02166402, -0.01793542))
 
       ## auto_rate input
@@ -1881,7 +1880,7 @@ test_that("adjust_rate: All tests pass",
                                time_by = 0, time_by2 = 45, method = "linear")$adjustment,
                    c(-0.003477778, -0.007422222, -0.001066667, -0.001222222))
       expect_equal(adjust_rate(x = ar_obj, by = 0, by2 = -0.01,
-                               time_by = 0, time_by2 = 45, method = "linear")$adjusted.rate,
+                               time_by = 0, time_by2 = 45, method = "linear")$rate.adjusted,
                    c(-0.02578789, -0.01791415, -0.03132537, -0.03072295))
 
     })
@@ -1893,7 +1892,7 @@ test_that("adjust_rate: All tests pass",
       # if method = "mean" specified
       expect_message(adjust_rate(x = -0.03, time_x = 20, method = "exponential", by = -0.002, time_by = 0,
                                  by2 = -0.003, time_by2 = 40),
-                     "adjust_rate: Rate adjustments applied using \"exponential\" method. Use print() or summary() on output for more info.",
+                     "adjust_rate: Rate adjustments applied using \"exponential\" method. \nUse print() or summary() on output for more info.",
                      fixed = TRUE)
     })
 
@@ -2266,20 +2265,20 @@ test_that("adjust_rate: All tests pass",
         o_by <- by
         o_time_by <- time_by
       } else if(is.data.frame(by)) {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
         o_time_by <- sum(range(by[[1]]))/2
       } else {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
         o_time_by <- sum(range(by$dataframe[[1]]))/2
       }
       if(is.numeric(by2)) {
         o_by2 <- by2
         o_time_by2 <- time_by2
       } else if(is.data.frame(by2)) {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2[[1]]))/2
       } else {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
       }
 
@@ -2308,7 +2307,7 @@ test_that("adjust_rate: All tests pass",
         skip_on_cran()
         expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
                                                   by = by, time_by = time_by,
-                                                  by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                                                  by2 = by2, time_by2 = time_by2))$rate.adjusted,
                      o_x - o_adj)
       })
 
@@ -2409,20 +2408,20 @@ test_that("adjust_rate: All tests pass",
         o_by <- by
         o_time_by <- time_by
       } else if(is.data.frame(by)) {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
         o_time_by <- sum(range(by[[1]]))/2
       } else {
-        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$bgrate)
+        o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
         o_time_by <- sum(range(by$dataframe[[1]]))/2
       }
       if(is.numeric(by2)) {
         o_by2 <- by2
         o_time_by2 <- time_by2
       } else if(is.data.frame(by2)) {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2[[1]]))/2
       } else {
-        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$bgrate)
+        o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
         o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
       }
 
@@ -2445,7 +2444,7 @@ test_that("adjust_rate: All tests pass",
         skip_on_cran()
         expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
                                                   by = by, time_by = time_by,
-                                                  by2 = by2, time_by2 = time_by2))$adjusted.rate,
+                                                  by2 = by2, time_by2 = time_by2))$rate.adjusted,
                      o_x - o_adj)
       })
 
@@ -2464,7 +2463,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(adjust_rate(x = x, time_x = time_x, method = method,
                                by = by, time_by = time_by,
-                               by2 = by2, time_by2 = time_by2)$adjusted.rate,
+                               by2 = by2, time_by2 = time_by2)$rate.adjusted,
                    -98.58579,
                    tolerance = 0.00001)
 
@@ -2479,7 +2478,7 @@ test_that("adjust_rate: All tests pass",
 
       expect_equal(adjust_rate(x = x, time_x = time_x, method = method,
                                by = by, time_by = time_by,
-                               by2 = by2, time_by2 = time_by2)$adjusted.rate,
+                               by2 = by2, time_by2 = time_by2)$rate.adjusted,
                    80.43592,
                    tolerance = 0.00001)
     })
@@ -2521,10 +2520,10 @@ test_that("adjust_rate: All tests pass",
     test_that("adjust_rate applies mean method by default", {
       ## should adjuast all by 4
       ar <- adjust_rate(x = c(10,20,30,40,50), by = c(2,3,4,5,6))
-      expect_equal(ar$adjusted.rate,
+      expect_equal(ar$rate.adjusted,
                    c(6,16,26,36,46))
     })
 
-  })
+ })
 
 sink() ## turns printing back on
