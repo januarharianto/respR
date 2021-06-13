@@ -119,6 +119,9 @@
 
 adjust_rate.ft <- function(x, by) {
 
+  ## Save function call for output
+  call <- match.call()
+
   # Validate inputs ---------------------------------------------------------
 
   if(!is.numeric(x) && class(x) != "calc_rate.ft")
@@ -140,7 +143,7 @@ adjust_rate.ft <- function(x, by) {
 
   # Make single mean value
   if(length(adjustment) > 1) {
-    warning("adjust_rate.ft: the 'by' input contains multiple rates. The mean value will be used to perform adjustments.")
+    warning("adjust_rate.ft: the 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
     adjustment <- mean(adjustment)
   }
 
@@ -150,24 +153,30 @@ adjust_rate.ft <- function(x, by) {
 
   # if multiple rates in x - message that all will be adjusted by same amount in by
   if(length(rate) > 1)
-    message("adjust_rate.ft: The 'x' input contains multiple rates. Each will be adjusted by the same value in 'by'.")
+    message("adjust_rate.ft: The 'x' input contains multiple rates. Each will be adjusted by the same value determined via 'by'.")
 
   # Perform adjustment ------------------------------------------------------
   rate.adjusted <- rate - adjustment
 
   # Output ------------------------------------------------------------------
 
-  # Make adjustment same length as rates for summary, printing etc.
-  adjustment_long <- rep(adjustment, length(rate.adjusted))
+  # is adjustment is a single value, make it same length as rates
+  # makes for easier printing etc.
+  if(length(adjustment) == 1) adjustment <- rep(adjustment, length(rate.adjusted))
+
+  inputs <- list(x = x,
+                 by = by)
 
   # Append results to input object
   if(class(x) == "calc_rate.ft") {
-    out <- list(call = x$call,
+    out <- list(call = call,
+                inputs = inputs,
                 dataframe = x$dataframe,
                 data = x$data,
                 input_type = x$input_type,
                 subsets = x$subsets,
-                summary = cbind(x$summary, adjustment = adjustment_long,
+                summary = cbind(x$summary,
+                                adjustment = adjustment,
                                 rate.adjusted = rate.adjusted),
                 from = x$from,
                 to = x$to,
@@ -181,9 +190,11 @@ adjust_rate.ft <- function(x, by) {
     # or make new one
   } else {
     out <- list(
+      call = call,
+      inputs = inputs,
       summary = data.table::data.table(rank = 1:length(rate.adjusted),
                                        rate = rate,
-                                       adjustment = adjustment_long,
+                                       adjustment = adjustment,
                                        rate.adjusted = rate.adjusted),
       rate = rate,
       adjustment = adjustment,

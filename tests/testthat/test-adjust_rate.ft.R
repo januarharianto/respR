@@ -85,10 +85,10 @@ test_that("adjust_rate.ft - stops if 'by' input not numeric or 'calc_rate.ft'", 
 test_that("adjust_rate.ft - warns if 'by' contains multiple rates", {
   expect_warning(adjust_rate.ft(x1,
                                 by = c(23,34)),
-                 regexp = "adjust_rate.ft: the 'by' input contains multiple rates. The mean value will be used to perform adjustments.")
+                 regexp = "adjust_rate.ft: the 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
   expect_warning(adjust_rate.ft(x1,
                                 by = xmany),
-                 regexp = "adjust_rate.ft: the 'by' input contains multiple rates. The mean value will be used to perform adjustments.")
+                 regexp = "adjust_rate.ft: the 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
 })
 
 test_that("adjust_rate.ft - stops if 'x' and 'by' are calc_rate.ft and have been determined using different 'flowrates'", {

@@ -648,21 +648,33 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
   # makes for easier printing etc.
   if(length(adjustment) == 1) adjustment <- rep(adjustment, length(rate.adjusted))
 
+  inputs <- list(x = x,
+                 by = by,
+                 by2 = by2,
+                 time_x = time_x,
+                 time_by = time_by,
+                 time_by2 = time_by2)
+
+  if(any(class(x) %in% c("calc_rate", "auto_rate"))) {
+    summary <- cbind(x$summary,
+                     adjustment = adjustment,
+                     rate.adjusted = rate.adjusted)
+  } else {
+    summary <- data.table::data.table(rank = 1:length(rate.adjusted),
+                                      rate = rate,
+                                      adjustment = adjustment,
+                                      rate.adjusted = rate.adjusted)
+  }
+
   # Append the results to the object
-  out <- c(call = call,
-           inputs = list(list(input.x = (x),
-                              input.by = (by),
-                              input.by2 = (by2),
-                              input.time_x = (time_x),
-                              input.time_by = (time_by),
-                              input.time_by2 = (time_by2))),
-           rate.input = list(rate),
-           list(
-             adjustment.method = method,
-             adjustment.model = out_model,
-             adjustment = adjustment,
-             rate.adjusted = rate.adjusted
-           ))
+  out <- list(call = call,
+              inputs = inputs,
+              summary = summary,
+              adjustment.method = method,
+              adjustment.model = out_model,
+              rate = rate,
+              adjustment = adjustment,
+              rate.adjusted = rate.adjusted)
 
   class(out) <- "adjust_rate"
   message(glue::glue("adjust_rate: Rate adjustments applied using \"{method}\" method. \nUse print() or summary() on output for more info."))
@@ -682,7 +694,7 @@ print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\nAdjustment was applied using the '", x$adjustment.method, "' method.", sep = "")
   cat("\n")
   cat("\nRank", pos, "of", length(x$rate.adjusted), "adjusted rate(s):")
-  cat("\nRate          :", x$rate.input[pos])
+  cat("\nRate          :", x$rate[pos])
   cat("\nAdjustment    :", x$adjustment[pos])
   cat("\nAdjusted Rate :", x$rate.adjusted[pos], "\n")
   cat("\n")
@@ -712,13 +724,7 @@ summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  if (length(object) == 3) rate <- object$input else
-    rate <- object$rate.input
-
-  out <- data.table::data.table(rank = pos,
-                                rate = rate[pos],
-                                adjustment = object$adjustment[pos],
-                                rate.adjusted = object$rate.adjusted[pos])
+  out <- object$summary[pos,]
 
   print(out)
   cat("-----------------------------------------\n")
