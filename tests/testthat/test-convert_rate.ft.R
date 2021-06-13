@@ -245,110 +245,110 @@ test_that("convert_rate.ft - outputs same results as calc_rate", {
   expect_equal(
     convert_rate.ft(-1.4,
                     o2.unit = "mg/l", flowrate.unit = "l/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-1.4,
                  o2.unit = "mg/l", time.unit = "s", volume = 1,
-                 output.unit = "mg/h", area = NULL, mass = NULL)$output.rate
+                 output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-0.001,
                     o2.unit = "mg/l", flowrate.unit = "ml/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-0.001,
                  o2.unit = "mg/l", time.unit = "s", volume = 1/1000,
-                 output.unit = "mg/h", area = NULL, mass = NULL)$output.rate
+                 output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-455,
                     o2.unit = "mg/l", flowrate.unit = "ul/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-455,
                  o2.unit = "mg/l", time.unit = "s", volume = 1/1000000,
-                 output.unit = "mg/h", area = NULL, mass = NULL)$output.rate
+                 output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-455,
                     o2.unit = "mg/l", flowrate.unit = "ul/d",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-455,
                  o2.unit = "mg/l", time.unit = "d", volume = 1/1000000,
-                 output.unit = "mg/h", area = NULL, mass = NULL)$output.rate
+                 output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crft1,
                     o2.unit = "mg/l", flowrate.unit = "ml/min",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(crft1$rate,
                  o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
-                 output.unit = "mg/h", area = NULL, mass = NULL)$output.rate
+                 output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crftmany,
                     o2.unit = "mg/l", flowrate.unit = "ml/min",
-                    output.unit = "umol h-1", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "umol h-1", area = NULL, mass = NULL)$rate.output,
     convert_rate(crftmany$rate,
                  o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
-                 output.unit = "umol h-1", area = NULL, mass = NULL)$output.rate
+                 output.unit = "umol h-1", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crftvec,
                     o2.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(crftvec$rate,
                  o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.1,
                     o2.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.1$rate.adjusted,
                  o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.many,
                     o2.unit = "%Air", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.many$rate.adjusted,
                  o2.unit = "%Air", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.width,
                     o2.unit = "%o2", flowrate.unit = "ml/min",
                     output.unit = "mol s-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.width$rate.adjusted,
                  o2.unit = "%o2", time.unit = "m", volume = 1/1000,
                  output.unit = "mol s-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.prod,
                     o2.unit = "umol/kg", flowrate.unit = "l/h",
                     output.unit = "mol s-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.prod$rate.adjusted,
                  o2.unit = "umol/kg", time.unit = "h", volume = 1/1,
                  output.unit = "mol s-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.vec,
                     o2.unit = "hPa", flowrate.unit = "l/h",
                     output.unit = "ml d-1", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.vec$rate.adjusted,
                  o2.unit = "hPa", time.unit = "h", volume = 1/1,
                  output.unit = "ml d-1", area = NULL, mass = NULL,
-                 S=S, t=t, P=P)$output.rate
+                 S=S, t=t, P=P)$rate.output
   )
 })
 
@@ -358,54 +358,54 @@ test_that("convert_rate.ft - outputs some known specific values", {
     # -1 mg in l/s should be -1*60*60  in mg/h
     convert_rate.ft(-1,
                     o2.unit = "mg/l", flowrate.unit = "l/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -1*60*60)
 
   expect_equal(
     convert_rate.ft(-2,
                     o2.unit = "mg/l", flowrate.unit = "l/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -2*60*60)
 
   expect_equal(
     convert_rate.ft(2,
                     o2.unit = "mg/l", flowrate.unit = "l/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     2*60*60)
   expect_equal(
     convert_rate.ft(-0.01,
                     o2.unit = "ug/l", flowrate.unit = "l/s",
-                    output.unit = "mg/h", area = NULL, mass = NULL)$output.rate,
+                    output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -0.01*60*60 / 1000)
   expect_equal(
     convert_rate.ft(-0.01,
                     o2.unit = "ml/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     -48.6154742081153)
   expect_equal(
     convert_rate.ft(-1,
                     o2.unit = "ml/l", flowrate.unit = "l/s",
                     output.unit = "umol/h", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     -151929.054239894)
   expect_equal(
     convert_rate.ft(-0.01,
                     o2.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s", area = NULL, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     -0.000319988)
   expect_equal(
     convert_rate.ft(-0.01,
                     o2.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s/kg", area = NULL, mass = 0.01,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     -0.000319988/0.01)
   expect_equal(
     convert_rate.ft(-0.01,
                     o2.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s/m2", area = 0.001, mass = NULL,
-                    S=S, t=t, P=P)$output.rate,
+                    S=S, t=t, P=P)$rate.output,
     -0.000319988/0.001)
 })
 
@@ -461,7 +461,7 @@ test_that("convert_rate.ft - objects work with summary().", {
   })
   sapply(objs, function(z) {
     expect_output(summary(eval(parse(text=z))),
-                  regexp = "rank input.rate")
+                  regexp = "rank rate.input")
   })
 
 })
@@ -513,44 +513,44 @@ test_that("convert_rate.ft - objects work with mean()", {
   expect_output(mean(conv.crft1),
                 regexp = "Mean of 1 output rates:")
   expect_equal(mean(conv.crft1, export = TRUE),
-               mean(conv.crft1$output.rate))
+               mean(conv.crft1$rate.output))
   expect_message(mean(conv.crft1),
-                 regexp = "Only 1 rate found in input. Returning mean rate anyway")
+                 regexp = "Only 1 rate found. Returning mean rate anyway")
 
   expect_error(mean(conv.crft1.ms),
                regexp = NA)
   expect_output(mean(conv.crft1.ms),
                 regexp = "Mean of 1 output rates:")
   expect_equal(mean(conv.crft1.ms, export = TRUE),
-               mean(conv.crft1.ms$output.rate))
+               mean(conv.crft1.ms$rate.output))
 
   expect_error(mean(conv.crftmany.as),
                regexp = NA)
   expect_output(mean(conv.crftmany.as),
                 regexp = "Mean of 101 output rates:")
   expect_equal(mean(conv.crftmany.as, export = TRUE),
-               mean(conv.crftmany.as$output.rate))
+               mean(conv.crftmany.as$rate.output))
 
   expect_error(mean(conv.adjft.many),
                regexp = NA)
   expect_output(mean(conv.adjft.many),
                 regexp = "Mean of 101 output rates:")
   expect_equal(mean(conv.adjft.many, export = TRUE),
-               mean(conv.adjft.many$output.rate))
+               mean(conv.adjft.many$rate.output))
 
   expect_error(mean(conv.adjft.many.ms),
                regexp = NA)
   expect_output(mean(conv.adjft.many.ms),
                 regexp = "Mean of 101 output rates:")
   expect_equal(mean(conv.adjft.many.ms, export = TRUE),
-               mean(conv.adjft.many.ms$output.rate))
+               mean(conv.adjft.many.ms$rate.output))
 
   expect_error(mean(conv.adjft.width.as),
                regexp = NA)
   expect_output(mean(conv.adjft.width.as),
                 regexp = "Mean of 635 output rates:")
   expect_equal(mean(conv.adjft.width.as, export = TRUE),
-               mean(conv.adjft.width.as$output.rate))
+               mean(conv.adjft.width.as$rate.output))
 })
 
 
@@ -603,7 +603,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                       flowrate.unit = z[[6]],
                                                       output.unit = z[[5]],
                                                       area = NULL, mass = NULL,
-                                                      S = S, t = t, P = P))$output.rate,
+                                                      S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
                                                    o2.unit = z[[2]],
@@ -611,7 +611,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                    volume = 1/as.numeric(z[[7]]),
                                                    output.unit = z[[5]],
                                                    area = NULL, mass = NULL,
-                                                   S = S, t = t, P = P))$output.rate,
+                                                   S = S, t = t, P = P))$rate.output,
                      label = glue::glue("FAILED on row {z[[8]]}"))
         #print(paste(z))
       })
@@ -658,7 +658,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                       output.unit = z[[5]],
                                                       area = NULL,
                                                       mass = as.numeric(z[[6]]),
-                                                      S = S, t = t, P = P))$output.rate,
+                                                      S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
                                                    o2.unit = z[[2]],
@@ -667,7 +667,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                    output.unit = z[[5]],
                                                    area = NULL,
                                                    mass = as.numeric(z[[6]]),
-                                                   S = S, t = t, P = P))$output.rate,
+                                                   S = S, t = t, P = P))$rate.output,
                      label = glue::glue("FAILED on row {z[[9]]}"))
         #print(paste(z))
       })
@@ -714,7 +714,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                       output.unit = z[[5]],
                                                       mass = NULL,
                                                       area = as.numeric(z[[6]]),
-                                                      S = S, t = t, P = P))$output.rate,
+                                                      S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
                                                    o2.unit = z[[2]],
@@ -723,7 +723,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                    output.unit = z[[5]],
                                                    mass = NULL,
                                                    area = as.numeric(z[[6]]),
-                                                   S = S, t = t, P = P))$output.rate,
+                                                   S = S, t = t, P = P))$rate.output,
                      label = glue::glue("FAILED on row {z[[9]]}"))
         #print(paste(z))
       })

@@ -18,11 +18,11 @@ convert_rate.ft(
 )
 }
 \arguments{
-\item{x}{numeric value or vector, or object of class \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
+\item{x}{numeric value or vector, object of class \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
 \code{\link[=adjust_rate.ft]{adjust_rate.ft()}}. Contains the rate(s) to be converted.}
 
 \item{o2.unit}{string. The dissolved oxygen unit of the original data used to
-determine the rate in 'x'.}
+determine the rate in \code{x}.}
 
 \item{flowrate.unit}{string. The unit of the flowrate through the
 respirometer. See Details.}
@@ -38,23 +38,17 @@ if you wish to calculate mass-specific rates.}
 specimen if you wish to calculate surface area-specific rates.}
 
 \item{S}{numeric. Salinity (ppt). Defaults to NULL. Used in conversion of
-some oxygen units. See \code{\link[=unit_args]{unit_args()}} for details. Fresh water should be
-entered as \code{S = 0}.}
+some oxygen units. Fresh water should be entered as \code{S = 0}.}
 
 \item{t}{numeric. Temperature(°C). Defaults to NULL. Used in conversion of
-some oxygen units. See \code{\link[=unit_args]{unit_args()}} for details.}
+some oxygen units.}
 
 \item{P}{numeric. Pressure (bar). Used in conversion of some oxygen units.
-Defaults to a standard value of 1.013253 bar. See \code{\link[=unit_args]{unit_args()}} for
-details.}
-}
-\value{
-Returns a \code{list} object containing inputs, metadata, summary data,
-and the converted \verb{$output.rate} rate in the \verb{$output.unit}.
+Defaults to a standard value of 1.013253 bar.}
 }
 \description{
 \code{convert_rate.ft} converts a unitless rate derived from \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
-\code{\link[=adjust_rate.ft]{adjust_rate.ft()}}, into an absolute rate (i.e. whole specimen or whole
+\code{\link[=adjust_rate.ft]{adjust_rate.ft()}} into an absolute rate (i.e. whole specimen or whole
 chamber), mass-specific rate (i.e. normalised by specimen mass), or
 area-specific rate (i.e. normalised by specimen surface area) in any common
 unit.
@@ -64,8 +58,13 @@ By default, \code{convert_rate.ft} converts the \verb{$rate} element from
 \code{calc_rate.ft} objects, or the \verb{$rate.adjusted} element from \code{adjust_rate.ft}
 objects if these are entered as the \code{x} input. Alternatively, a numeric value
 or vector of rates can be input as \code{x}.
+\subsection{Units}{
 
 The \code{o2.unit} of the original data used to calculated the rate is required.
+Concentration units should use only SI units (\code{L} or \code{kg}) for the
+denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air or
+oxygen is accepted, as are oxygen pressure units. See \code{\link[=unit_args]{unit_args()}} for
+details.
 
 An \code{output.unit} is also required. If left NULL, The default of \code{"mgO2/h"} is
 used, or \code{"mgO2/h/kg"} or \code{"mgO2/h/m2"} if a \code{mass} or \code{area} respectively
@@ -90,8 +89,33 @@ the time component does \emph{NOT} represent the units or recording interval of
 the original data.
 
 The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. Use \code{\link[=unit_args]{unit_args()}} to
-view a list of usable unit strings.
+to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. See \code{\link[=unit_args]{unit_args()}} for
+details of accepted units and their formatting. See also \code{\link[=convert_val]{convert_val()}}
+for simple conversion between units.
+}
+
+\subsection{Output}{
+
+Returns a \code{list} object containing the \verb{$rate.input}, and converted rate(s)
+in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and summary
+elements.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints a single result, by default the first converted rate.
+Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+\item \code{summary()}: prints summary table of all converted rates and metadata, or
+those specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The output
+can be saved as a separate dataframe by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all converted rates, or those specified by
+the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The output can be saved as a
+separate value by passing \code{export = TRUE}.
+}
+}
 }
 \examples{
 # Convert a single numeric rate to an absolute rate
