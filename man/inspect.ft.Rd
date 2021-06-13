@@ -102,16 +102,14 @@ result in warnings.
 
 \subsection{Plot}{
 
-A plot of the data is produced (unless \code{plot = FALSE}), depending on the
-inputs:
+If \code{plot = TRUE}, entered data is plotted against both time (bottom, blue
+axis) and row index (top, red axis), depending on the inputs:
 \itemize{
 \item a single \code{out.o2} column with either a paired \code{in.o2} column or
 \code{in.o2.value}: a two panel plot. The top plot is both outflow (black points)
-and inflow (grey points) oxygen against both time (bottom, blue axis) and row
-index (top, red axis). The bottom plot is the oxygen delta between outflow
-and inflow oxygen, essentially the oxygen uptake or production rate.
-\item a single \code{delta.o2} column: a one panel plot of oxygen delta values against
-time.
+and inflow (grey points) oxygen. The bottom plot is the oxygen delta between
+outflow and inflow oxygen, essentially the oxygen uptake or production rate.
+\item a single \code{delta.o2} column: a one panel plot of oxygen delta values.
 \item multiple \code{out.o2} or \code{delta.o2} columns: a grid plot of all \code{delta.o2} data
 (either as entered or calculated from \code{out.o2} and \code{in.o2}). Specific delta
 plots can be examined individually by using the \code{pos} input (e.g. \code{plot(x, pos = 2)}). Y-axes are not equal.
@@ -212,9 +210,9 @@ specimen rates.
 
 Output is a \code{list} object of class \code{inspect.ft} containing input parameters
 and data, data check summaries, and metadata, which can be passed to
-\code{\link[=calc_rate.ft]{calc_rate.ft()}} to determine rates. If there are failed checks or warnings,
-the row locations of the potentially problematic data can be found in
-\verb{$locs}.
+\code{\link[=calc_rate.ft]{calc_rate.ft()}} to determine rates. If there are failed checks or
+warnings, the row locations of the potentially problematic data can be found
+in \verb{$locs}.
 }
 
 \subsection{S3 Generic Functions}{

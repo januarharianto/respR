@@ -56,17 +56,15 @@
 #'
 #' ## Plot
 #'
-#' A plot of the data is produced (unless `plot = FALSE`), depending on the
-#' inputs:
+#' If `plot = TRUE`, entered data is plotted against both time (bottom, blue
+#' axis) and row index (top, red axis), depending on the inputs:
 #'
 #' - a single `out.o2` column with either a paired `in.o2` column or
 #' `in.o2.value`: a two panel plot. The top plot is both outflow (black points)
-#' and inflow (grey points) oxygen against both time (bottom, blue axis) and row
-#' index (top, red axis). The bottom plot is the oxygen delta between outflow
-#' and inflow oxygen, essentially the oxygen uptake or production rate.
+#' and inflow (grey points) oxygen. The bottom plot is the oxygen delta between
+#' outflow and inflow oxygen, essentially the oxygen uptake or production rate.
 #'
-#' - a single `delta.o2` column: a one panel plot of oxygen delta values against
-#' time.
+#' - a single `delta.o2` column: a one panel plot of oxygen delta values.
 #'
 #' - multiple `out.o2` or `delta.o2` columns: a grid plot of all `delta.o2` data
 #' (either as entered or calculated from `out.o2` and `in.o2`). Specific delta
@@ -165,9 +163,9 @@
 #'
 #' Output is a `list` object of class `inspect.ft` containing input parameters
 #' and data, data check summaries, and metadata, which can be passed to
-#' [`calc_rate.ft()`] to determine rates. If there are failed checks or warnings,
-#' the row locations of the potentially problematic data can be found in
-#' `$locs`.
+#' [`calc_rate.ft()`] to determine rates. If there are failed checks or
+#' warnings, the row locations of the potentially problematic data can be found
+#' in `$locs`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -543,14 +541,21 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     if (message && length(pos) == 1)
       cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
 
+    ## general settings
+    ## margins
+    bt <- 0.3
+    lf <- 0.3
+    tp <- 0.4
+    rt <- 0.1
+
     par(
       mfrow = n2mfrow(length(pos)),
-      mai = c(0.3, 0.3, 0.2, 0.1),
+      mai = c(bt, lf, tp, rt),
+      oma = c(0.1, 0.1, 0.1, 0.1),
       ps = 10,
       pch = 20,
       cex = 1,
-      cex.main = 1,
-      tck = -.05
+      cex.main = 1
     )
 
     # Plot all on same y axis range?????
@@ -559,14 +564,13 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     #ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
 
-
     lapply(pos, function(z) {
 
       ylim <- grDevices::extendrange(r = range(del.o2[[z]], na.rm = TRUE), f = 0.05) ## add a little more space
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
       plot(data.frame(time, del.o2[[z]]),
-           mgp = c(0, 0.5, 0),
+           mgp = c(0, 0.2, 0),
            ylim = ylim,
            xlab = "",
            ylab = "",
@@ -575,9 +579,33 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
            col.lab = "blue",
            col.axis = "blue",
            panel.first = grid())
+      # plot invisibly - to add row index x-axis
+      par(new = TRUE)
+      plot(data.frame(1:length(unlist(time)), del.o2[[z]]),
+           xlab = "",
+           ylab = "",
+           pch = "",
+           cex = .5,
+           axes = FALSE
+      )
+      axis(side = 3,
+           mgp = c(0, 0.2, 0),
+           col.axis = "red",
+           tck = -0.02)
+      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.3,
+            adj = 0)})
 
-      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 0.3)}
-    )
+    if(legend && length(pos) == 1) legend("topright",
+                                          "Row Index",
+                                          text.col = "red",
+                                          bg = "gray90",
+                                          cex = 0.6)
+
+    if(legend && length(pos) == 1) legend("bottomright",
+                                          "Time",
+                                          text.col = "blue",
+                                          bg = "gray90",
+                                          cex = 0.6)
 
     # Single dataset ----------------------------------------------------------
   } else if (length(x$data$delta.o2) == 1 || !is.null(pos)) {
