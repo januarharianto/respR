@@ -1,4 +1,4 @@
-#' Convert between units of dissolved oxygen.
+#' Convert between units of dissolved oxygen
 #'
 #' This is a conversion function that performs basic conversions between
 #' concentration or pressure units of dissolved oxygen (DO). Concentration units
@@ -12,11 +12,25 @@
 #' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. Use [unit_args()] to
 #' view a list of usable unit strings.
 #'
-#' @param x numeric value or vector. This is the dissolved oxygen (DO) value(s)
-#'   that you want to convert.
+#' ## Output
+#'
+#' Returns a `list` object of class `convert_DO` containing four elements:
+#' `$input` values, `$output` converted values, `$input.unit` and `$output.unit`
+#'
+#' ## S3 Generic Functions
+#'
+#' Saved output objects can be used in the generic S3 functions `print()` and
+#' `summary()`.
+#'
+#' - `print()`: prints input and converted values (up to first 20), plus input
+#' and output units.
+#'
+#' - `summary()`: simple wrapper for `print()` function. See above.
+#'
+#' @param x numeric. The dissolved oxygen (DO) value(s) to be converted.
 #' @param from string. The DO unit to convert *from*. See [unit_args()] for
 #'   details.
-#' @param to string. The unit to convert *to*. See [unit_args()] for details.
+#' @param to string. The DO unit to convert *to*. See [unit_args()] for details.
 #' @param S numeric. Salinity (ppt). Defaults to NULL. Required for conversion
 #'   of some units. See [unit_args()] for details.
 #' @param t numeric. Temperature(°C). Defaults to NULL. Required for conversion
@@ -24,12 +38,9 @@
 #' @param P numeric. Pressure (bar). Defaults to 1.013253. Required for
 #'   conversion of some units. See [unit_args()] for details.
 #'
-#' @return Returns a `list` object containing four elements: `$input` values,
-#'   `$output` (converted) values, `$input.unit` and `$output.unit`
-#'
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
 #' @export
-#'
+#' @md
 #' @examples
 #' # Convert a numeric value from/to units which do not require t, S and P
 #' convert_DO(8.21, from = "mg/L", to = "umol/L")
@@ -47,6 +58,9 @@
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                        P = 1.013253) {
+
+  ## Save function call for output
+  call <- match.call()
 
   # Validate input:
   if (!is.character(from)) stop("convert_DO: 'from' unit should be a character string.")
@@ -142,26 +156,40 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if(tou == verify_units('inHg',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
 
   # Generate output
-  out <- list(input = z, output = out, input.unit = from, output.unit = to)
-  # if (is.numeric(x)) {
-  #   out <- c(input = x, out)
-  #   } else out <- c(x, out)
+  out <- list(call = call,
+              input = z,
+              output = out,
+              input.unit = from,
+              output.unit = to)
 
   class(out) <- "convert_DO"
   return(out)
 }
 
-
-
 #' @export
 print.convert_DO <- function(x, ...) {
+
+  cat("\n# print.convert_DO # --------------------\n")
+  if(length(x$input) >= 20) cat("Showing only the first 20 conversions:\n")
+
+  cat("\nInput values:\n")
+  if(length(x$input) >= 20) {
+    print(head(x$input, 20))
+  } else print(x$input)
+
+  cat("Output values:\n")
   if(length(x$output) >= 20) {
-    cat("Showing only the first 20 conversions:\n")
     print(head(x$output, 20))
   } else print(x$output)
-  cat("\n Input unit:", x$input.unit)
+  cat("\nInput unit: ", x$input.unit)
   cat("\nOutput unit:", x$output.unit)
   cat("\n")
+  cat("-----------------------------------------\n")
+}
+
+#' @export
+summary.convert_DO <- function(object, ...) {
+  print(object)
 }
 
 #' Check unit string against a known database
@@ -410,7 +438,7 @@ verify_units <- function(unit, is) {
   }
 
 
-# Look for match ----------------------------------------------------------
+  # Look for match ----------------------------------------------------------
   string <- paste0('^', unit, '$')  # for exact matching
   chk <- lapply(all.units, function(x) grep(string, x))
   chk <- sapply(chk, function(x) length(x) > 0)

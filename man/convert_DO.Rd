@@ -2,18 +2,17 @@
 % Please edit documentation in R/convert_DO.R
 \name{convert_DO}
 \alias{convert_DO}
-\title{Convert between units of dissolved oxygen.}
+\title{Convert between units of dissolved oxygen}
 \usage{
 convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL, P = 1.013253)
 }
 \arguments{
-\item{x}{numeric value or vector. This is the dissolved oxygen (DO) value(s)
-that you want to convert.}
+\item{x}{numeric. The dissolved oxygen (DO) value(s) to be converted.}
 
 \item{from}{string. The DO unit to convert \emph{from}. See \code{\link[=unit_args]{unit_args()}} for
 details.}
 
-\item{to}{string. The unit to convert \emph{to}. See \code{\link[=unit_args]{unit_args()}} for details.}
+\item{to}{string. The DO unit to convert \emph{to}. See \code{\link[=unit_args]{unit_args()}} for details.}
 
 \item{S}{numeric. Salinity (ppt). Defaults to NULL. Required for conversion
 of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
@@ -23,10 +22,6 @@ of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
 \item{P}{numeric. Pressure (bar). Defaults to 1.013253. Required for
 conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
-}
-\value{
-Returns a \code{list} object containing four elements: \verb{$input} values,
-\verb{$output} (converted) values, \verb{$input.unit} and \verb{$output.unit}
 }
 \description{
 This is a conversion function that performs basic conversions between
@@ -40,6 +35,22 @@ specified. For freshwater experiments, salinity should be set to zero (i.e.
 The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. Use \code{\link[=unit_args]{unit_args()}} to
 view a list of usable unit strings.
+\subsection{Output}{
+
+Returns a \code{list} object of class \code{convert_DO} containing four elements:
+\verb{$input} values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()} and
+\code{summary()}.
+\itemize{
+\item \code{print()}: prints input and converted values (up to first 20), plus input
+and output units.
+\item \code{summary()}: simple wrapper for \code{print()} function. See above.
+}
+}
 }
 \examples{
 # Convert a numeric value from/to units which do not require t, S and P
