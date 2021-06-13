@@ -854,27 +854,27 @@ test_that("calc_rate.ft outputs plot", {
   expect_error(plot(crft.obj.1rate),
                regexp = NA)
   expect_output(plot(crft.obj.1rate),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 1")
   expect_error(plot(crft.obj.multrates),
                regexp = NA)
   expect_output(plot(crft.obj.multrates),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3")
   expect_error(plot(crft.obj.multrates.many),
                regexp = NA)
   expect_output(plot(crft.obj.multrates.many),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of")
   expect_output(plot(crft.obj.multrates),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of")
   expect_error(plot(crft.obj.1rate.delta.only),
                regexp = NA)
   expect_output(plot(crft.obj.1rate.delta.only),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of")
   expect_error(plot(crft.obj.multrate.delta.only),
                regexp = NA)
   expect_output(plot(crft.obj.multrate.delta.only),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of")
   expect_output(plot(crft.obj.multrate.delta.only),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of")
 })
 
 test_that("calc_rate.ft output plot stops if input is not an inspect.ft object", {
@@ -910,14 +910,14 @@ test_that("calc_rate.ft output plots when 'pos' is used", {
 
   expect_error(plot(crft.obj.multrates, pos = 2),
                regexp = NA)
-  expect_output(plot(crft.obj.multrates, pos = 2),
-                regexp = "Done")
+  expect_output(plot(crft.obj.multrates),
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ...")
   expect_output(plot(crft.obj.multrates, pos = 2),
                 regexp = "calc_rate.ft: Plotting rate from position 2 of 3 ...")
   expect_error(plot(crft.obj.multrate.delta.only, pos = 2),
                regexp = NA)
-  expect_output(plot(crft.obj.multrate.delta.only, pos = 2),
-                regexp = "Done")
+  expect_output(plot(crft.obj.multrate.delta.only),
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ...")
   expect_output(plot(crft.obj.multrate.delta.only, pos = 2),
                 regexp = "calc_rate.ft: Plotting rate from position 2 of 3 ...")
 })
@@ -927,15 +927,15 @@ test_that("calc_rate.ft output plot stops when 'pos' is out of range", {
   expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col,
                             from = 2:5, to = 1002:1005,
                             flowrate = 2, plot = TRUE, pos = 9),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
   expect_error(calc_rate.ft(insp.ft.obj.delta.1col,
                             from = 2:5, to = 1002:1005,
                             flowrate = 2, plot = TRUE, pos = 9),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
   expect_error(calc_rate.ft(insp.ft.obj.delta.1col,
                             from = 2:5, to = 1002:1005,
                             flowrate = 2, plot = TRUE, pos = 0),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 4 rates found.")
 
   ## objects
   # crft.obj.1rate
@@ -944,15 +944,15 @@ test_that("calc_rate.ft output plot stops when 'pos' is out of range", {
   # crft.obj.multrate.delta.only
 
   expect_error(plot(crft.obj.multrates, pos = 4),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
   expect_error(plot(crft.obj.multrate.delta.only, pos = 4),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
   expect_error(plot(crft.obj.multrate.delta.only, pos = 4),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
   expect_error(plot(crft.obj.multrate.delta.only, pos = 4),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
   expect_error(plot(crft.obj.multrate.delta.only, pos = 0),
-               regexp = "plot.calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
+               regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
 })
 
 test_that("calc_rate.ft output plots when 'rate.rev' is used", {
@@ -975,15 +975,15 @@ test_that("calc_rate.ft output plots when 'rate.rev' is used", {
   expect_error(plot(crft.obj.multrates, rate.rev = FALSE),
                regexp = NA)
   expect_output(plot(crft.obj.multrates, rate.rev = FALSE),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ...")
   expect_output(plot(crft.obj.multrates, rate.rev = FALSE),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ...")
   expect_error(plot(crft.obj.multrate.delta.only, rate.rev = FALSE),
                regexp = NA)
   expect_output(plot(crft.obj.multrate.delta.only, rate.rev = FALSE),
-                regexp = "Done")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ...")
   expect_output(plot(crft.obj.multrate.delta.only, rate.rev = FALSE),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ... \nTo plot others use 'pos'.")
 })
 
 test_that("calc_rate.ft output plots when 'legend' is used", {
@@ -1006,15 +1006,11 @@ test_that("calc_rate.ft output plots when 'legend' is used", {
   expect_error(plot(crft.obj.multrates, legend = FALSE),
                regexp = NA)
   expect_output(plot(crft.obj.multrates, legend = FALSE),
-                regexp = "Done")
-  expect_output(plot(crft.obj.multrates, legend = FALSE),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ... \nTo plot others use 'pos'.")
   expect_error(plot(crft.obj.multrate.delta.only, legend = FALSE),
                regexp = NA)
   expect_output(plot(crft.obj.multrate.delta.only, legend = FALSE),
-                regexp = "Done")
-  expect_output(plot(crft.obj.multrate.delta.only, legend = FALSE),
-                regexp = "calc_rate.ft: Plotting rate from position 1 of 3. To plot others use 'pos'.")
+                regexp = "calc_rate.ft: Plotting rate from position 1 of 3 ... \nTo plot others use 'pos'.")
 })
 
 test_that("calc_rate.ft objects can be printed.", {
@@ -1206,7 +1202,7 @@ test_that("calc_rate.ft objects work with mean()", {
   expect_equal(mean(crft.obj.value, export = TRUE),
                mean(crft.obj.value$rate))
   expect_message(mean(crft.obj.value),
-               regexp = "Only 1 rate found in input. Returning mean rate anyway")
+               regexp = "Only 1 rate found. Returning mean rate anyway")
 
   expect_error(mean(crft.obj.vector),
                regexp = NA)

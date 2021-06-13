@@ -4,49 +4,97 @@
 \alias{calc_rate}
 \title{Calculate rate of change in oxygen over time}
 \usage{
-calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE)
+calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...)
 }
 \arguments{
-\item{x}{data frame or object of class \code{inspect}. This is the data to
-process.}
+\item{x}{object of class \code{inspect} or \code{data.frame}. This is the timeseries of
+paired values of oxygen against time from which to calculate rates.}
 
-\item{from}{numeric value or vector. Defaults to \code{NULL}. Defines the lower
-bound(s) of the data frame to subset. Subsetting is based on the argument:
-\code{by}.}
+\item{from}{numeric value or vector. Defaults to \code{NULL}. The start of the
+region(s) over which you want to calculate the rate in the units specified
+in \code{by}. If a vector, each value must have a paired value in \code{to}.}
 
-\item{to}{numeric value or vector. Defaults to \code{NULL}. Defines the upper
-bound(s) of the data frame to subset. Subsetting is based on the argument:
-\code{by}.}
+\item{to}{numeric value or vector. Defaults to \code{NULL}. The end of the
+region(s) over which you want to calculate the rate in the units specified
+in \code{by}. If a vector, each value must have a paired value in \code{from}.}
 
-\item{by}{string. \code{time}, \code{row}, \code{o2} or \code{proportion} Defaults to \code{time}.This
-is the method used to subset the data.}
+\item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"} Defaults to
+\code{"time"}.This is the method used to subset the data region between \code{from}
+and \code{to}.}
 
 \item{plot}{logical. Defaults to \code{TRUE}. Plot the results.}
+
+\item{...}{Allows additional plotting controls to be passed, such as \code{pos}
+and \code{message = FALSE}.}
 }
 \value{
 A list object of class \code{calc_rate}.
 }
 \description{
-\code{calc_rate} calculates the rate of change in oxygen concentration over time
-in a data frame. You can perform a single regression on a subset of the data
-frame by calling the \code{from} and \code{to} arguments to specify the data region in
-terms of \code{oxygen} or \code{time} units, \code{row} region of the input data, or over a
-\code{proportion} of the total oxygen used or produced (note, this last option works
-poorly with noisy or fluctuating data). Multiple rates can
-be calculated by using these arguments to enter vectors of paired values in
-the appropriate metric. See Examples.
+Calculates rate of oxygen uptake or production from respirometry data. A rate
+can be determined over the whole dataset, or on subsets of the data using the
+\code{from} and \code{to} arguments to specify data regions in terms of \code{oxygen} or
+\code{time} units, \code{row} numbers of the input data, or over a \code{proportion} of the
+total oxygen used or produced (note, this last option works poorly with noisy
+or fluctuating data). Multiple rates can be extracted from the same dataset
+by using these arguments to enter vectors of paired values in the appropriate
+metric. See Examples.
 }
 \details{
-The results are plotted by default with various summary statistics for the
-regression. If multiple rates are determined, only the first is plotted.
-Others can be plotted by assigning the output and using the \code{pos} argument,
-for example \code{plot(x, pos = 2)}. The output object of class \code{calc_rate} also
-supports the other generic S3 functions \code{print}, \code{summary}, and \code{mean}. This
-last option outputs the mean value of all rates determined.
+The function calculates rates by fitting a linear model of oxygen against
+time, with the slope of this regression being the rate. There are no units
+involved in \code{calc_rate}. This is a deliberate decision. The units of oxygen
+concentration and time will be specified later in \code{\link[=convert_rate]{convert_rate()}} when
+rates are converted to specific output units.
 
-There are no units involved in \code{calc_rate}. This is a deliberate decision.
-Units are called in a later function when absolute and/or mass-specific rates
-of oxygen use are computed in \link{convert_rate} and \link{convert_DO}.
+For continuous data recordings, it is recommended a \code{data.frame} containing
+the data be prepared via \code{\link[=inspect]{inspect()}}, and entered as the \code{x} input. For
+data not prepared like this, \code{x} can be a 2-column \code{data.frame} containing
+numeric values of time (col 1) and oxygen (col 2) concentrations. If multiple
+columns are found in either \code{inspect} or data frame inputs, only the first
+two columns are used.
+\subsection{Specifying regions}{
+
+For calculating rates over specific regions of the data, the \code{from} and \code{to}
+inputs in the \code{by} units of \code{"time"} (the default), "\code{oxygen}", \code{"row"}, or
+\code{"proportion"} can be used. The \code{from} and \code{to} inputs do not need to be
+precise; the function will use the closest values found.
+
+Multiple regions can be examined within the same dataset by entering \code{from}
+and \code{to} as vectors of paired values to specify different regions. In this
+case, \verb{$rate} in the output will be a vector of multiple rates with each
+result corresponding to the position of the paired \code{from} and \code{to} inputs. If
+\code{from} and \code{to} are \code{NULL} (the default), the rate is determined over the
+entire dataset.
+}
+
+\subsection{Plot}{
+
+A plot is produced (provided \code{plot = TRUE}) showing the original data
+timeseries of oxygen against time, with the region specified via the \code{from}
+and \code{to} inputs highlighted, a close-up of this region with linear model
+coefficients, and summary plots of fit and residuals. If multiple rates have
+been calculated, by default the first is plotted. Others can be plotted by
+changing the \code{pos} argument either in the main function call, or by plotting
+the output, e.g. \code{plot(object, pos = 2)}. Console output messages can be
+suppressed using \code{message = FALSE}.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints a single result, by default the first rate. Others can be
+printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+\item \code{summary()}: prints summary table of all results and metadata, or those
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The output can be
+saved as a separate dataframe by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all rates, or those specified by the \code{pos}
+input. e.g. \code{mean(x, pos = 1:5)} The output can be saved as a separate value
+by passing \code{export = TRUE}.
+}
+}
 }
 \examples{
 # default - subset by 'time'
