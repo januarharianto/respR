@@ -1,6 +1,6 @@
 #' Explore and visualise respirometry data and check for common errors
 #'
-#' `inspect` is a data exploration and preparation function that visualises
+#' `inspect()` is a data exploration and preparation function that visualises
 #' respirometry data and scans it for errors that may affect the use of further
 #' functions in `respR`. It also subsets specified columns into a new `list`
 #' object that can be used in subsequent functions, reducing the need for
@@ -10,83 +10,111 @@
 #' quality control and exploratory step to help users explore and prepare their
 #' data prior to analysis.
 #'
-#' @details Given an input data frame, `x`, the function scans the `time` and
-#'   `oxygen` columns. By default, it is assumed the first column is time data,
-#'   and second is oxygen data, but the `time` and `oxygen` inputs can be used
-#'   to specify different columns.
+#' Given an input data frame, `x`, the function scans the `time` and `oxygen`
+#' columns. By default, it is assumed the first column is time data, and second
+#' is oxygen data, but the `time` and `oxygen` inputs can be used to specify
+#' different columns.
 #'
-#'   Time columns are checked for NA/NaN values, that values are sequential, for
-#'   duplicate values, and that they are numerically evenly-spaced. Oxygen
-#'   columns are only checked for NA/NaN data. See **Failed Checks** section for
-#'   what it means for analyses if these checks produce warnings. Once data
-#'   checks are complete, the function produces a list object which may be
-#'   directly loaded (or `%>%` piped) into [calc_rate()], [calc_rate.bg()], and
-#'   [auto_rate()] for further analyses.
+#' The `time` column is checked for missing (`NA/NaN`) values, that values are
+#' sequential, that there are no duplicate times, and that it is numerically
+#' evenly-spaced. Oxygen columns are simply checked for missing (`NA/NaN`) data.
+#' See **Failed Checks** section for what it means for analyses if these checks
+#' result in warnings. If assigned, the specified columns are saved to a `list`
+#' object for use in later functions such as [`calc_rate()`] and
+#' [`auto_rate()`]. A plot is also produced.
 #'
-#' @section Plotting: A plot of the data is also produced (unless `plot =
-#'   FALSE`), including a rolling regression plot, which calculates the rate of
-#'   change in oxygen across a rolling window set using the `width` operator
-#'   (default is `width = 0.1`, or 10% of the entire dataset). This plot
-#'   provides a quick visual inspection of how the rate varies over the course
-#'   of the experiment. This is for exploratory purposes only; later functions
-#'   allow rate to be calculated over specific regions. Each rate value is
-#'   plotted against the centre of the time window used to calculate them. Note
-#'   that by default the rolling rates are plotted on a reverse y-axis, because
-#'   oxygen uptake rates are returned as negative by `respR`. Therefore, higher
-#'   oxygen uptake rates occur higher on this plot (more negative). If you are
-#'   interested instead in oxygen production rates, which are positive, the
-#'   `rate.rev = FALSE` argument can be passed in either the `inspect` call, or
-#'   when using `plot()` on the output object. In this case, the rolling rate
-#'   values will be plotted not-reversed, with higher oxygen *production* rates
-#'   higher on the plot.
+#' ## Plot
 #'
-#'   If axis labels obscure parts of the plot they can be suppressed using
-#'   `legend = FALSE`. To suppress console output messages use `message =
-#'   FALSE`. Lastly, if using `plot()` on the output object, a different
-#'   `width` value can be passed than that used in the original call.
+#' A plot of the data is produced (unless `plot = FALSE`), of the data
+#' timeseries, plus a rolling regression plot. This shows the rate of change in
+#' oxygen across a rolling window specified using the `width` operator (default
+#' is `width = 0.1`, or 10% of the entire dataset). This plot provides a quick
+#' visual inspection of how the rate varies over the course of the experiment.
+#' Regions of stable and consistent rates can be identified on this plot as flat
+#' or level areas. This plot is for exploratory purposes only; later functions
+#' allow rate to be calculated over specific regions. Each rate value is plotted
+#' against the centre of the time window used to calculate it.
 #'
-#' @section Multiple Columns of Oxygen Data: For quick overview of larger
-#'   experiments, multiple oxygen columns can be scanned for errors and plotted
-#'   by using the `oxygen` argument to select multiple columns. These must
-#'   *share the same time column*. In this case, data checks are performed,
-#'   and a plot of each oxygen time series is produced, but no rolling rate plot
-#'   is produced. All data are plotted on the same axis range of both time and
-#'   oxygen (total range of data). This is chiefly exploratory functionality to
-#'   allow for a quick overview of a dataset, and it should be noted that while
-#'   the output `list` object will contain all columns in its `$dataframe`
-#'   element, subsequent functions in `respR` (`calc_rate`, `auto_rate`, etc.)
-#'   will by default only use the first two columns (`time`, and the first
-#'   specified `oxygen` column). To analyse multiple columns and determine
-#'   rates, best practice is to inspect and assign each time-oxygen column pair
-#'   as separate `inspect` objects. See examples.
+#' ***Note:*** Since `respR` is primarily used to examine oxygen consumption,
+#' the oxygen rate plot is by default plotted on a reverse y-axis. In `respR`
+#' oxygen uptake rates are negative since they represent a negative slope of
+#' oxygen against time. In these plots the axis is reversed so that higher
+#' uptake rates (i.e. more negative) will be higher on these plots. If you are
+#' interested instead in oxygen production rates, which are positive, the
+#' `rate.rev = FALSE` argument can be passed in either the `inspect` call, or
+#' when using `plot()` on the output object. In this case, the rate values will
+#' be plotted numerically, with higher oxygen *production* rates higher on the
+#' plot.
 #'
-#' @section Flowthrough Data: For flowthrough respirometry data, see the
-#'   specialised [`inspect.ft()`] function.
+#' If axis labels obscure parts of the plot they can be suppressed using `legend
+#' = FALSE`. Suppress console output messages with `message = FALSE`. Lastly, a
+#' different `width` value can be passed.
 #'
-#' @section Failed Checks: It should be noted the data checks in `inspect` are
-#'   mainly for exploratory purposes; they help diagnose and flag potential
-#'   issues with the data. For instance, long experiments may have had sensor
-#'   dropouts the user is unaware of. Others are not really issues at all. For
-#'   instance, an uneven time warning can result from using decimalised minutes,
-#'   which is a completely valid time metric, but happens to be numerically
-#'   unevenly spaced. As an additional check, if uneven time is found, the
-#'   minimum and maximum intervals in the time data are in the console output,
-#'   so a user can see immediately if there are large gaps in the data.
+#' ## Multiple Columns of Oxygen Data
 #'
-#'   If some of these checks fail, it should *generally* not hinder analysis of
-#'   the data. `respR` has been coded to rely on linear regressions on exact
-#'   data values, and not make assumptions about data spacing or order.
-#'   Therefore issues such as missing or NA/NaN values, duplicate or
-#'   non-sequential time values, or uneven time spacing should not cause any
-#'   erroneous results, as long as they do not occur over large regions of the
-#'   data. `inspect` however outputs locations (row numbers) of where these
-#'   issues occur (located in the `$locs` element of the output), allowing users
-#'   to amend them before analysis. We would recommend that to be completely
-#'   confident in any results from analysis of such data, and avoid obscure
-#'   errors, these issues be addressed before proceeding.
+#' For a quick overview of larger datasets, multiple oxygen columns can be
+#' inspected for errors and plotted by using the `oxygen` argument to select
+#' multiple columns. These must share the same `time` column. In this case, data
+#' checks are performed, with a plot of each oxygen time series, but no rolling
+#' rate plot is produced. All data are plotted on the same axis range of both
+#' time and oxygen (total range of data). This is chiefly exploratory
+#' functionality to allow for a quick overview of a dataset, and it should be
+#' noted that while the output `inspect` object will contain all columns in its
+#' `$dataframe` element, subsequent functions in `respR` (`calc_rate`,
+#' `auto_rate`, etc.) will by default only use the first two columns (`time`,
+#' and the first specified `oxygen` column). To analyse multiple columns and
+#' determine rates, best practice is to inspect and assign each time-oxygen
+#' column pair as separate `inspect` objects. See Examples.
 #'
-#' @param x data.frame. Accepts any object of class `data.frame` (incl.
-#'   `data.table`, `tibble`, etc.).
+#' ## Flowthrough Respirometry Data
+#'
+#' For flowthrough respirometry data, see the specialised [`inspect.ft()`]
+#' function.
+#'
+#' ## Failed Checks
+#'
+#' It should be noted the data checks in `inspect` are mainly for exploratory
+#' purposes; they help diagnose and flag potential issues with the data. For
+#' instance, long experiments may have had sensor dropouts the user is unaware
+#' of. Others are not really issues at all. For instance, an uneven time warning
+#' can result from using decimalised minutes, which is a completely valid time
+#' metric, but happens to be numerically unevenly spaced. As an additional
+#' check, if uneven time is found, the minimum and maximum intervals in the time
+#' data are in the console output, so a user can see immediately if there are
+#' large gaps in the data.
+#'
+#' If some of these checks fail, it should *generally* not hinder analysis of
+#' the data. `respR` has been coded to rely on linear regressions on exact data
+#' values, and not make assumptions about data spacing or order. Therefore
+#' issues such as missing or NA/NaN values, duplicate or non-sequential time
+#' values, or uneven time spacing should not cause any erroneous results, as
+#' long as they do not occur over large regions of the data. `inspect` however
+#' outputs locations (row numbers) of where these issues occur (located in the
+#' `$locs` element of the output), allowing users to amend them before analysis.
+#' We would recommend that to be completely confident in any results from
+#' analysis of such data, and avoid obscure errors, these issues be addressed
+#' before proceeding.
+#'
+#' ## Output
+#'
+#' Output is a `list` object of class `inspect`, with a `$dataframe` containing
+#' the specified `time` and `oxygen` columns, inputs, and metadata which can be
+#' passed to [`calc_rate()`] or [`auto_rate()`] to determine rates. If there are
+#' failed checks or warnings, the row locations of the potentially problematic
+#' data can be found in `$locs`.
+#'
+#' ## S3 Generic Functions
+#'
+#' Saved output objects can be used in the generic S3 functions `print()` and
+#' `summary()`.
+#'
+#' - `print()`: prints a summary of the checks performed on the data. If issues
+#' are found, locations (row numbers) are printed (up to first 20 occurrences).
+#'
+#' - `summary()`: simple wrapper for `print()` function. See above.
+#'
+#' @param x data.frame. Any object of class `data.frame` (incl. `data.table`,
+#'   `tibble`, etc.).
 #' @param time numeric integer. Defaults to 1. Specifies the column number of
 #'   the Time data.
 #' @param oxygen numeric vector of integers. Defaults to 2. Specifies the column
@@ -96,10 +124,8 @@
 #' @param plot logical. Defaults to TRUE. Plots the data. If 2 columns selected,
 #'   plots timeseries data, plus plot of rolling rate. If multiple columns,
 #'   plots all timeseries data only.
-#' @param ... Allows additional plotting controls to be passed. See **Plotting**
-#'   section.
-#'
-#' @return Output is a `list` object of class `inspect`.
+#' @param ... Allows additional plotting controls to be passed, such as `legend
+#'   = FALSE`, `message = FALSE`, `rate.rev = FALSE` and `pos`.
 #'
 #' @importFrom data.table data.table
 #' @export
@@ -198,8 +224,8 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   # save new data frame and create output object
   dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
 
-  out <- list(dataframe = dataframe,
-              call = call,
+  out <- list(call = call,
+              dataframe = dataframe,
               inputs = list(x = x,
                             time = time,
                             oxygen = oxygen,
@@ -211,16 +237,16 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   class(out) <- "inspect"
 
   # if no errors occur, send out a good message :D
-  if (!any(na.omit(unlist(checks)))){
-    message("inspect: No issues detected while inspecting data frame.")
-  } else {
-    message("inspect: Data issues detected:")
-    print(out)
-  }
+  if (!any(na.omit(unlist(checks))))
+    message("inspect: No issues detected while inspecting data frame.") else
+      message("inspect.ft: Data issues detected. For more information use print().")
 
   if (plot) plot(out, message = FALSE, width = width, ...)
 
-  return(out)
+  # Not all functions should print on assigning, but this one should
+  print(out)
+  ## invisible prevents it printing twice on assigning
+  return(invisible(out))
 }
 
 #' @export
@@ -286,8 +312,8 @@ print.inspect <- function(x, ...) {
 }
 
 #' @export
-summary.inspect <- function(x, ...) {
-  print(x)
+summary.inspect <- function(object, ...) {
+  print(object)
 }
 
 #' @export

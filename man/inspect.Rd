@@ -7,8 +7,8 @@
 inspect(x, time = NULL, oxygen = NULL, width = 0.1, plot = TRUE, ...)
 }
 \arguments{
-\item{x}{data.frame. Accepts any object of class \code{data.frame} (incl.
-\code{data.table}, \code{tibble}, etc.).}
+\item{x}{data.frame. Any object of class \code{data.frame} (incl. \code{data.table},
+\code{tibble}, etc.).}
 
 \item{time}{numeric integer. Defaults to 1. Specifies the column number of
 the Time data.}
@@ -23,14 +23,10 @@ plot as proportion of total length of data (0.01 to 1).}
 plots timeseries data, plus plot of rolling rate. If multiple columns,
 plots all timeseries data only.}
 
-\item{...}{Allows additional plotting controls to be passed. See \strong{Plotting}
-section.}
-}
-\value{
-Output is a \code{list} object of class \code{inspect}.
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{message = FALSE}, \code{rate.rev = FALSE} and \code{pos}.}
 }
 \description{
-\code{inspect} is a data exploration and preparation function that visualises
+\code{inspect()} is a data exploration and preparation function that visualises
 respirometry data and scans it for errors that may affect the use of further
 functions in \code{respR}. It also subsets specified columns into a new \code{list}
 object that can be used in subsequent functions, reducing the need for
@@ -41,87 +37,113 @@ quality control and exploratory step to help users explore and prepare their
 data prior to analysis.
 }
 \details{
-Given an input data frame, \code{x}, the function scans the \code{time} and
-\code{oxygen} columns. By default, it is assumed the first column is time data,
-and second is oxygen data, but the \code{time} and \code{oxygen} inputs can be used
-to specify different columns.
+Given an input data frame, \code{x}, the function scans the \code{time} and \code{oxygen}
+columns. By default, it is assumed the first column is time data, and second
+is oxygen data, but the \code{time} and \code{oxygen} inputs can be used to specify
+different columns.
 
-Time columns are checked for NA/NaN values, that values are sequential, for
-duplicate values, and that they are numerically evenly-spaced. Oxygen
-columns are only checked for NA/NaN data. See \strong{Failed Checks} section for
-what it means for analyses if these checks produce warnings. Once data
-checks are complete, the function produces a list object which may be
-directly loaded (or \verb{\%>\%} piped) into \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.bg]{calc_rate.bg()}}, and
-\code{\link[=auto_rate]{auto_rate()}} for further analyses.
-}
-\section{Plotting}{
- A plot of the data is also produced (unless \code{plot = FALSE}), including a rolling regression plot, which calculates the rate of
-change in oxygen across a rolling window set using the \code{width} operator
-(default is \code{width = 0.1}, or 10\% of the entire dataset). This plot
-provides a quick visual inspection of how the rate varies over the course
-of the experiment. This is for exploratory purposes only; later functions
-allow rate to be calculated over specific regions. Each rate value is
-plotted against the centre of the time window used to calculate them. Note
-that by default the rolling rates are plotted on a reverse y-axis, because
-oxygen uptake rates are returned as negative by \code{respR}. Therefore, higher
-oxygen uptake rates occur higher on this plot (more negative). If you are
+The \code{time} column is checked for missing (\code{NA/NaN}) values, that values are
+sequential, that there are no duplicate times, and that it is numerically
+evenly-spaced. Oxygen columns are simply checked for missing (\code{NA/NaN}) data.
+See \strong{Failed Checks} section for what it means for analyses if these checks
+result in warnings. If assigned, the specified columns are saved to a \code{list}
+object for use in later functions such as \code{\link[=calc_rate]{calc_rate()}} and
+\code{\link[=auto_rate]{auto_rate()}}. A plot is also produced.
+\subsection{Plot}{
+
+A plot of the data is produced (unless \code{plot = FALSE}), of the data
+timeseries, plus a rolling regression plot. This shows the rate of change in
+oxygen across a rolling window specified using the \code{width} operator (default
+is \code{width = 0.1}, or 10\% of the entire dataset). This plot provides a quick
+visual inspection of how the rate varies over the course of the experiment.
+Regions of stable and consistent rates can be identified on this plot as flat
+or level areas. This plot is for exploratory purposes only; later functions
+allow rate to be calculated over specific regions. Each rate value is plotted
+against the centre of the time window used to calculate it.
+
+\emph{\strong{Note:}} Since \code{respR} is primarily used to examine oxygen consumption,
+the oxygen rate plot is by default plotted on a reverse y-axis. In \code{respR}
+oxygen uptake rates are negative since they represent a negative slope of
+oxygen against time. In these plots the axis is reversed so that higher
+uptake rates (i.e. more negative) will be higher on these plots. If you are
 interested instead in oxygen production rates, which are positive, the
 \code{rate.rev = FALSE} argument can be passed in either the \code{inspect} call, or
-when using \code{plot()} on the output object. In this case, the rolling rate
-values will be plotted not-reversed, with higher oxygen \emph{production} rates
-higher on the plot.
+when using \code{plot()} on the output object. In this case, the rate values will
+be plotted numerically, with higher oxygen \emph{production} rates higher on the
+plot.
 
-If axis labels obscure parts of the plot they can be suppressed using
-\code{legend = FALSE}. To suppress console output messages use \code{message = FALSE}. Lastly, if using \code{plot()} on the output object, a different
-\code{width} value can be passed than that used in the original call.
+If axis labels obscure parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{message = FALSE}. Lastly, a
+different \code{width} value can be passed.
 }
 
-\section{Multiple Columns of Oxygen Data}{
- For quick overview of larger
-experiments, multiple oxygen columns can be scanned for errors and plotted
-by using the \code{oxygen} argument to select multiple columns. These must
-\emph{share the same time column}. In this case, data checks are performed,
-and a plot of each oxygen time series is produced, but no rolling rate plot
-is produced. All data are plotted on the same axis range of both time and
-oxygen (total range of data). This is chiefly exploratory functionality to
-allow for a quick overview of a dataset, and it should be noted that while
-the output \code{list} object will contain all columns in its \verb{$dataframe}
-element, subsequent functions in \code{respR} (\code{calc_rate}, \code{auto_rate}, etc.)
-will by default only use the first two columns (\code{time}, and the first
-specified \code{oxygen} column). To analyse multiple columns and determine
-rates, best practice is to inspect and assign each time-oxygen column pair
-as separate \code{inspect} objects. See examples.
+\subsection{Multiple Columns of Oxygen Data}{
+
+For a quick overview of larger datasets, multiple oxygen columns can be
+inspected for errors and plotted by using the \code{oxygen} argument to select
+multiple columns. These must share the same \code{time} column. In this case, data
+checks are performed, with a plot of each oxygen time series, but no rolling
+rate plot is produced. All data are plotted on the same axis range of both
+time and oxygen (total range of data). This is chiefly exploratory
+functionality to allow for a quick overview of a dataset, and it should be
+noted that while the output \code{inspect} object will contain all columns in its
+\verb{$dataframe} element, subsequent functions in \code{respR} (\code{calc_rate},
+\code{auto_rate}, etc.) will by default only use the first two columns (\code{time},
+and the first specified \code{oxygen} column). To analyse multiple columns and
+determine rates, best practice is to inspect and assign each time-oxygen
+column pair as separate \code{inspect} objects. See Examples.
 }
 
-\section{Flowthrough Data}{
- For flowthrough respirometry data, see the
-specialised \code{\link[=inspect.ft]{inspect.ft()}} function.
+\subsection{Flowthrough Respirometry Data}{
+
+For flowthrough respirometry data, see the specialised \code{\link[=inspect.ft]{inspect.ft()}}
+function.
 }
 
-\section{Failed Checks}{
- It should be noted the data checks in \code{inspect} are
-mainly for exploratory purposes; they help diagnose and flag potential
-issues with the data. For instance, long experiments may have had sensor
-dropouts the user is unaware of. Others are not really issues at all. For
-instance, an uneven time warning can result from using decimalised minutes,
-which is a completely valid time metric, but happens to be numerically
-unevenly spaced. As an additional check, if uneven time is found, the
-minimum and maximum intervals in the time data are in the console output,
-so a user can see immediately if there are large gaps in the data.
+\subsection{Failed Checks}{
+
+It should be noted the data checks in \code{inspect} are mainly for exploratory
+purposes; they help diagnose and flag potential issues with the data. For
+instance, long experiments may have had sensor dropouts the user is unaware
+of. Others are not really issues at all. For instance, an uneven time warning
+can result from using decimalised minutes, which is a completely valid time
+metric, but happens to be numerically unevenly spaced. As an additional
+check, if uneven time is found, the minimum and maximum intervals in the time
+data are in the console output, so a user can see immediately if there are
+large gaps in the data.
 
 If some of these checks fail, it should \emph{generally} not hinder analysis of
-the data. \code{respR} has been coded to rely on linear regressions on exact
-data values, and not make assumptions about data spacing or order.
-Therefore issues such as missing or NA/NaN values, duplicate or
-non-sequential time values, or uneven time spacing should not cause any
-erroneous results, as long as they do not occur over large regions of the
-data. \code{inspect} however outputs locations (row numbers) of where these
-issues occur (located in the \verb{$locs} element of the output), allowing users
-to amend them before analysis. We would recommend that to be completely
-confident in any results from analysis of such data, and avoid obscure
-errors, these issues be addressed before proceeding.
+the data. \code{respR} has been coded to rely on linear regressions on exact data
+values, and not make assumptions about data spacing or order. Therefore
+issues such as missing or NA/NaN values, duplicate or non-sequential time
+values, or uneven time spacing should not cause any erroneous results, as
+long as they do not occur over large regions of the data. \code{inspect} however
+outputs locations (row numbers) of where these issues occur (located in the
+\verb{$locs} element of the output), allowing users to amend them before analysis.
+We would recommend that to be completely confident in any results from
+analysis of such data, and avoid obscure errors, these issues be addressed
+before proceeding.
 }
 
+\subsection{Output}{
+
+Output is a \code{list} object of class \code{inspect}, with a \verb{$dataframe} containing
+the specified \code{time} and \code{oxygen} columns, inputs, and metadata which can be
+passed to \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}} to determine rates. If there are
+failed checks or warnings, the row locations of the potentially problematic
+data can be found in \verb{$locs}.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()} and
+\code{summary()}.
+\itemize{
+\item \code{print()}: prints a summary of the checks performed on the data. If issues
+are found, locations (row numbers) are printed (up to first 20 occurrences).
+\item \code{summary()}: simple wrapper for \code{print()} function. See above.
+}
+}
+}
 \examples{
 ## By default, inspects first 2 columns:
 inspect(sardine.rd)
