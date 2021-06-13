@@ -1,27 +1,41 @@
-#' Parse date-time data to numeric
+#' Parse date-time data to numeric time for use in respR functions
 #'
 #' A function to parse class POSIX.ct or text strings of date-time data to
 #' numeric time for use in `respR` functions.
 #'
-#' **Input**
+#' ## Input
 #'
-#' Input can be a vector, or data frame. If a vector, output is a vector of
-#' equal length containing numeric time data. If a data frame, the column(s) of
-#' the date-time data are specified using the `time =` input. By default the
-#' first column is assumed to contain the date-time data (i.e. `time = 1`).
+#' Input can be a vector, or data frame. If a data frame, the column(s) of the
+#' date-time data are specified using the `time` input. By default the first
+#' column is assumed to contain the date-time data (i.e. `time = 1`).
 #'
-#' Multiple columns can be specified (e.g. `time = c(1,2)`) if the date-time
-#' data is split over several columns (e.g. date in one column, time in
-#' another). If multiple columns are specified, the `format` setting should
-#' reflect the same order entered in `time`.
+#' If the date-time data is split over several columns (e.g. date in one column,
+#' time in another), multiple columns can be specified (e.g. `time = c(1,2)`).
+#' In this case, the `format` setting should reflect the correct order as
+#' entered in `time`.
 #'
-#' For data frame inputs, a data frame is returned which is identical to the
-#' input with a new column called `time_num` added as the last column.
+#' ## Output
+#'
+#' If input is a vector, output is a vector of equal length containing the
+#' numeric time data. For data frame inputs, an identical data frame is
+#' returned, with a new column called `time_num` added as the **last** column.
+#'
+#' Regardless of input, all data are parsed to numeric time data in seconds
+#' duration from the first entry starting at 1. If you want the times to start
+#' at a different time, a `start` value can be specified, in which case the
+#' series starts at that number (in seconds) and all subsequent times are
+#' shifted forward by the same amount.
+#'
+#' ## Time only data
 #'
 #' Time-only data, that is times which lack an associated date, can also be
 #' parsed. Normally, parsing time-only data will cause problems when the times
-#' cross midnight (i.e. 00:00:00). However, the function attempts to identify
+#' cross midnight (i.e. `00:00:00`). However, the function attempts to identify
 #' when this occurs and parse the data correctly.
+#'
+#' ## Formatting
+#'
+#' See the [lubridate()] package for detail on accepted formatting.
 #'
 #' Date-time data can be unspaced or separated by any combination of spaces,
 #' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -41,13 +55,7 @@
 #' - However, 24H formatting for 13-24h takes precedence over AM/PM \cr E.g.
 #' "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 #'
-#' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry starting at 1. If you want the times to start
-#' at a different time, a `start` value can be specified, in which case the
-#' series starts at that number (in seconds) and all subsequent times are
-#' shifted forward by the same amount.
-#'
-#' **Syntax**
+#' ## Syntax of 'format' input
 #'
 #' Specify the order of year, month, day, and time in your date-time input.
 #'
@@ -63,30 +71,23 @@
 #'
 #' `S` - Second as decimal number (00--59 or 0--59).
 #'
-#' `p` - AM/PM indicator for 12-h date-time format.
+#' `p` - AM/PM indicator for 12-h date-time format (i.e. 1.30 PM).
 #'
 #' Print the order in the `format` string argument, using separators if you
-#' choose to (optional): `"dmyHMS"`; `"dmy_HMS"` and `"d m y H M S"` are all the
-#' same. For more info see [lubridate()].
+#' choose (optional): `"dmyHMS"`; `"dmy_HMS"` and `"d m y H M S"` are all the
+#' same. See Examples.
 #'
 #' Single datasets should not span different time zones, so if a time zone is
-#' present it is ignored for the purposes of calculating numeric times. If
-#' multiple columns have been specified in the `time` argument, the `format`
-#' should reflect the proper order.
+#' present it is ignored for the purposes of calculating numeric times.
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.
 #' @param time numeric value or vector. Specifies column(s) containing date-time
 #'   data. Default is `1`.
 #' @param format string. Code describing structure of date-time data. See
-#'   details.
+#'   Details.
 #' @param start numeric. At what time (in seconds) should the formatted time
 #'   data start? Default is `1`.
-#'
-#' @return If input is a vector, a vector of same length containing numeric time
-#'   is returned. If input is a data frame, the same data frame is returned with
-#'   a new column, `time_num`, of numeric time data in seconds added as the last
-#'   column.
 #'
 #' @importFrom lubridate parse_date_time
 #'
@@ -107,8 +108,8 @@
 #'
 #' # convert when AM/PM is present
 #' x <- c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM")
-#' format_time(x, format = "dmyHMS") # this is wrong
-#' format_time(x, format = "dmyHMSp")
+#' format_time(x, format = "dmyHMS")  # this is wrong
+#' format_time(x, format = "dmyHMSp") # this is right
 #' ## [1]    0 3600 8040
 #'
 #' # convert dataframe with year-month-day hour-min-sec (ymdHMS default)
