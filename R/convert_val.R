@@ -1,15 +1,24 @@
-#' Convert values to a different unit
+#' Convert values of temperature, volume, mass, area, and atmospheric pressure
+#' to different units
 #'
 #' This is a basic function that converts values of temperature, volume, mass,
 #' area, and atmospheric pressure to different units. This can be useful in
 #' [convert_DO()], [convert_rate()], and [convert_rate.ft()] in which some
-#' inputs must be in specific units (e.g. atmospheric pressure in bar, area in
-#' m2). See examples.
+#' inputs must be in specific units (e.g. temperature in °C, atmospheric
+#' pressure in bar, area in m2). See Examples.
 #'
-#' @details
-#' If the `'to'` input is left `NULL`, these defaults are applied depending on
-#' the unit type of the `from` input: volume "L", temperature "C", mass "kg",
-#' area "m2", pressure "bar".
+#' If the `'to'` input is left `NULL`, the following defaults are applied
+#' depending on the unit type of the `from` input:
+#'
+#' - volume:        "L"
+#'
+#' - temperature:   "C"
+#'
+#' - mass:          "kg"
+#'
+#' - area:          "m2"
+#'
+#' - pressure:      "bar"
 #'
 #' A fuzzy string matching algorithm is used to accept different unit formatting
 #' styles. For example, `'msq', 'm2', 'M2', 'sqm'` are all parsed as metres
