@@ -4,11 +4,9 @@
 ^README\.Rmd$       # An Rmarkdown file used to generate README.md
 ^cran-comments\.md$ # Comments for CRAN submission
 ^NEWS\.md$          # A news file written in Markdown
-^\.travis\.yml$     # Used for continuous integration testing with travis
 ^manuscript$        # Folder that contains the files for the manuscript
 ^docs$              # Folder that stores HTML vignettes
 ^doc$               # Folder that stores HTML vignettes
-^\.travis\.yml$     # Travis files
 ^vignettes$         # Vignettes folder
 ^_pkgdown\.yml$
 ^index\.Rmd$
@@ -16,7 +14,6 @@
 
 # Insurance
 vignettes
-.travis.yml
 .Rproj
 ^misc$
 ^\.github$
