@@ -2,7 +2,7 @@
 ## rm(list=ls())
 ## testthat::test_file("tests/testthat/test-adjust_rate.R")
 
-sink("/dev/null") ## stops printing outputs on assigning
+#sink("/dev/null") ## stops printing outputs on assigning
 
 test_that("adjust_rate: All tests pass",
   {
@@ -2526,4 +2526,4 @@ test_that("adjust_rate: All tests pass",
 
  })
 
-sink() ## turns printing back on
+#sink() ## turns printing back on

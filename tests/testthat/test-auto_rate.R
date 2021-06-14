@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-sink("/dev/null") ## stops printing outputs on assigning
+#sink("/dev/null") ## stops printing outputs on assigning
 
 ## 2 col data from urchins.rd so it's fast, but does not output constant
 ## multi column warnings
@@ -397,4 +397,4 @@ test_that("auto_rate - plot defaults are correctly restored", {
 
 
 
-sink() ## turns printing back on
+#sink() ## turns printing back on

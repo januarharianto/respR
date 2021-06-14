@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-sink("/dev/null") ## stops printing console outputs on assigning
+#sink("/dev/null") ## stops printing console outputs on assigning
 
 
 # Create testing objects --------------------------------------------------
@@ -1258,4 +1258,4 @@ test_that("calc_rate.ft - plot defaults are correctly restored", {
                    paraft$mai)
 
 })
-sink() ## turns console summarying back on
+#sink() ## turns console summarying back on

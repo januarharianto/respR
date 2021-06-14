@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-sink("/dev/null") ## stops printing outputs on assigning
+#sink("/dev/null") ## stops printing outputs on assigning
 
 # Create testing objects --------------------------------------------------
 
@@ -447,4 +447,4 @@ test_that("adjust_rate.ft - objects work with mean()", {
                mean(adj.ft_obj.val$rate.adjusted))
 })
 
-sink() ## turns printing back on
+#sink() ## turns printing back on

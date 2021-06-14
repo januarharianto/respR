@@ -1,6 +1,6 @@
 ## test_file("tests/testthat/test-calc_pcrit.R")
 
-sink("/dev/null") ## stops printing of outputs on assigning
+#sink("/dev/null") ## stops printing of outputs on assigning
 
 test_that("calc_pcrit works with default values", {
   squid <- squid.rd[seq.int(1, nrow(squid.rd), 100), ]
@@ -105,5 +105,5 @@ test_that("calc_pcrit pcrit S3 generics work with both oxygen and rate arguments
 #                regexp = NA)
 # })
 
-sink() ## turns printing back on
+#sink() ## turns printing back on
 

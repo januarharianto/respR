@@ -1,6 +1,6 @@
 ## testthat::test_file("tests/testthat/test-subset_rate.R")
 
-sink("/dev/null") ## stops printing outputs on assigning
+#sink("/dev/null") ## stops printing outputs on assigning
 
 ## auto_rate object for testing
 ## contains both negative and positive rates
@@ -728,4 +728,4 @@ test_that("subset_rate - plot defaults are correctly restored", {
 ## this may cause problems with cmd-check....
 suppressWarnings(file.remove("Rplots.pdf"))
 
-sink() ## turns printing back on
+#sink() ## turns printing back on

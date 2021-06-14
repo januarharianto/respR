@@ -4,7 +4,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-sink("/dev/null") ## stops printing console outputs on assigning
+#sink("/dev/null") ## stops printing console outputs on assigning
 
 test_that("inspect works on 2-column data",
           expect_error(inspect(sardine.rd, plot = F),
@@ -216,4 +216,4 @@ test_that("inspect - plot defaults are correctly restored", {
 
 })
 
-sink() ## turns console printing back on
+#sink() ## turns console printing back on

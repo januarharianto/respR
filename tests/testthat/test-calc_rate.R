@@ -1,7 +1,7 @@
 ## rm(list=ls())
 ## test_file("tests/testthat/test-calc_rate.R")
 
-sink("/dev/null") ## stops printing outputs on assigning
+#sink("/dev/null") ## stops printing outputs on assigning
 
 test_that("calc_rate - outputs object of class calc_rate", {
   cr <- calc_rate(sardine.rd, plot = F)
@@ -709,4 +709,4 @@ test_that("calc_rate - plot defaults are correctly restored", {
 
 })
 
-sink() ## turns printing back on
+#sink() ## turns printing back on
