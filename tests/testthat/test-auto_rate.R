@@ -12,9 +12,7 @@ sink("/dev/null") ## stops printing outputs on assigning
 urch_data <- urchins.rd[,1:2]
 
 
-test_that("auto_rate accepts inspect and inspect_data objects", {
-  insp_d <- suppressWarnings(inspect_data(urch_data))
-  expect_error(auto_rate(insp_d), regexp = NA)
+test_that("auto_rate accepts inspect objects", {
   insp <- suppressWarnings(inspect(urch_data))
   expect_error(auto_rate(insp), regexp = NA)
 })

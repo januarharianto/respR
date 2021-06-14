@@ -106,8 +106,6 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
   # data.table doesn't like subsetting columns by variable names.
   if(any(class(x) %in% "inspect")) {
     x <- data.frame(x$dataframe)
-  } else if(any(class(x) %in% "inspect_data")) {
-    x <- data.frame(x$dataframe)
   } else {
     x <- data.frame(x)}
 

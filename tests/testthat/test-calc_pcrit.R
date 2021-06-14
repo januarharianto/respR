@@ -16,13 +16,6 @@ test_that("calc_pcrit accepts inspect objects", {
                regexp = NA)
 })
 
-test_that("calc_pcrit accepts inspect_data objects", {
-  squid <- squid.rd[seq.int(1, nrow(squid.rd), 100), ]
-  sq_id <- suppressWarnings(inspect_data(squid, plot = F))
-  expect_error(calc_pcrit(sq_id, plot = F, parallel = F),
-               regexp = NA)
-})
-
 test_that("calc_pcrit accepts data frame objects", {
   squid <- squid.rd[seq.int(1, nrow(squid.rd), 100), ]
   expect_error(calc_pcrit(squid, plot = F, parallel = F),

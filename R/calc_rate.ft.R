@@ -180,8 +180,6 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     xtype <- "df"
   } else if(any(class(x) == "inspect.ft")){
     xtype <- "insp"
-  } else if(any(class(x) == "inspect_data")){ #DEPRECATED - remove?
-    stop("calc_rate.ft: function does not accept 'inspect_data' objects. Please process the data via 'inspect.ft' instead.")
   } else if(any(class(x) == "inspect")){
     stop("calc_rate.ft: function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
   } else {

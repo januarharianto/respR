@@ -25,17 +25,6 @@ test_that("calc_rate.bg accepts multiple columns", {
   expect_equal(ncol(urbg$dataframe), 3)
 })
 
-test_that("calc_rate.bg accepts `inspect_data` objects", {
-  ur <- suppressWarnings(inspect_data(urchins.rd[,c(1,18)], plot = F))
-  expect_error(calc_rate.bg(ur,  plot = F),
-               NA)
-  urbg <- calc_rate.bg(ur,  plot = F)
-  expect_is(urbg,
-            "calc_rate.bg")
-  expect_equal(urbg$rate.bg,
-               -0.0007650013)
-})
-
 test_that("calc_rate.bg accepts `inspect` objects", {
   ur <- suppressWarnings(inspect(urchins.rd, time = 1, oxygen = 18, plot = F))
   expect_error(calc_rate.bg(ur,  plot = F),

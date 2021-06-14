@@ -127,7 +127,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   by <- verify_by(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
-  if(any(class(x) %in% "inspect_data")) x <- x$dataframe # this will be removed later
   if(any(class(x) %in% "inspect")) x <- x$dataframe
 
   # By now, x input must be a data frame object

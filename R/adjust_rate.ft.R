@@ -92,17 +92,14 @@
 #' @export
 #'
 #' @examples
-#' # Note that oxygen uptake rates are negative by default (since it represents a
-#' # decrease in dissolved oxygen and negative slope). Therefore, typically both
-#' # rate and background rate values are negative.
+#' # Note that in respR oxygen uptake rates are negative since
+#' # they represents a negative slope of oxygen against time.
+#' # Therefore, typically both rate and background rate values
+#' # are negative.
 #'
 #' # Simple background respiration correction to a single rate.
 #' # This is (-7.44) - (-0.04) = -7.40
 #' adjust_rate.ft(x = -7.44, by = -0.04)
-#'
-#' # Oxygen input adjustment
-#' # This is (-7.44) - (0.1) = -7.54
-#' adjust_rate.ft(x = -7.44, by = 0.1)
 #'
 #' # Mean background respiration correction to a single rate.
 #' adjust_rate.ft(x = -7.44, by = c(-0.04, -0.05, -0.06))

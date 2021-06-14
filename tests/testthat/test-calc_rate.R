@@ -73,16 +73,12 @@ test_that("calc_rate - stops with wrong 'by' inputs", {
                "'by' input not valid or not recognised")
 })
 
-test_that("calc_rate - correctly extracts dataframe from 'inspect' and 'inspect_data' objects", {
+test_that("calc_rate - correctly extracts dataframe from 'inspect' objects", {
   insp <- inspect(sardine.rd[1000:2000,], plot = F)
   cr <- calc_rate(insp, plot = F)
   expect_identical(cr$dataframe,
                    insp$dataframe)
 
-  inspd <- suppressWarnings(inspect_data(sardine.rd[1000:2000,], plot = F))
-  crd <- calc_rate(inspd, plot = F)
-  expect_identical(crd$dataframe,
-                   inspd$dataframe)
 })
 
 test_that("calc_rate - stops with non data.frame 'x' input", {

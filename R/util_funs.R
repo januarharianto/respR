@@ -126,7 +126,6 @@ check_evn <- function(x) {
 truncate_data <- function(x, from, to, by) {
 
   # import from other respR functions
-  if (any(class(x) %in% "inspect_data")) x <- x$dataframe
   if (any(class(x) %in% "inspect")) x <- x$dataframe
   if (any(class(x) %in% "inspect.ft")) x <- x$dataframe
 

@@ -227,12 +227,6 @@ test_that("calc_rate.ft - data.frame 'x' input, message that 'plot = TRUE' input
 
 # disallowed inputs -------------------------------------------------------
 
-# stop if inspect_data obj
-test_that("calc_rate.ft - stops with `inspect_data` 'x' input", {
-  expect_error(calc_rate.ft(
-    suppressWarnings(suppressMessages(inspect_data(flowthrough.rd, plot = F))), flowrate = 1.5, plot = FALSE),
-    "calc_rate.ft: function does not accept 'inspect_data' objects. Please process the data via 'inspect.ft' instead.")
-})
 
 # stop if inspect obj
 test_that("calc_rate.ft - stops with `inspect` 'x' input", {
