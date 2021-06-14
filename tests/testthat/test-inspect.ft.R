@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-#sink("/dev/null") ## stops printing console outputs on assigning
+capture.output({  ## stops printing console outputs on assigning
 
 # Create multicolumn dfs for testing --------------------------------------
 
@@ -486,4 +486,4 @@ test_that("inspect.ft - plot defaults are correctly restored", {
 })
 
 
-#sink() ## turns console printing back on
+}) ## turns console printing back on

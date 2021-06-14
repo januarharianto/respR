@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-#sink("/dev/null") ## stops printing outputs on assigning
+capture.output({  ## stops printing outputs on assigning
 
 test_that("convert_val - stops if from and to units not same type", {
   expect_error(convert_val(-273.15, "K", "kg"),
@@ -364,4 +364,4 @@ test_that("convert_val - works with vectors", {
   expect_equal(convert_val(10:20, "C", "K"),
                10:20 + 273.15)
 })
-#sink() ## turns printing back on
+}) ## turns printing back on

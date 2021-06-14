@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-#sink("/dev/null") ## stops printing outputs on assigning
+capture.output({  ## stops printing outputs on assigning
 
 test_that("subset_data - works with data.frame input", {
   # time
@@ -259,5 +259,5 @@ test_that("subset_data - warns if output is empty", {
                regexp = "subset_data: subsetting criteria result in empty dataset!")
 })
 
-#sink() ## turns printing back on
+}) ## turns printing back on
 

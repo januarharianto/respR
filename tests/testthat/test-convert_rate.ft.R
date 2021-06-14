@@ -5,7 +5,7 @@
 # x <- covr::package_coverage()
 # covr::report(x)
 
-#sink("/dev/null") ## stops printing outputs on assigning
+capture.output({  ## stops printing outputs on assigning
 
 # Create testing objects --------------------------------------------------
 
@@ -732,4 +732,4 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
 })
 
 
-#sink() ## turns printing back on
+}) ## turns printing back on

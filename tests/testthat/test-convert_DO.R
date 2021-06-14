@@ -1,6 +1,6 @@
 ## test_file("tests/testthat/test-convert_DO.R")
 
-#sink("/dev/null") ## stops printing outputs on assigning
+capture.output({  ## stops printing outputs on assigning
 
 test_that("convert_DO output conversions, using %Air, have expected results", {
   expect_equal(round(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253)$output, 3), 0.675)
@@ -169,4 +169,4 @@ test_that("convert_DO: warning if P is outside realistic range", {
 })
 
 
-#sink() ## turns printing back on
+}) ## turns printing back on

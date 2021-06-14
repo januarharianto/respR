@@ -1,7 +1,7 @@
 ## library(testthat)
 ## testthat::test_file("tests/testthat/test-convert_rate.R")
 
-#sink("/dev/null") ## stops printing outputs on assigning
+capture.output({  ## stops printing outputs on assigning
 
 test_that("convert_rate works with default values",
           expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", o2.unit = "mg/l")$rate.output),
@@ -494,4 +494,4 @@ test_that("convert_rate: different magnitudes of umol/mmol/mol changes rates by 
                             volume = 1.2, mass = 0.5)$rate.output*1000)
 })
 
-#sink() ## turns printing back on
+}) ## turns printing back on

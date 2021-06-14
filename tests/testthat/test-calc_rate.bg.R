@@ -1,7 +1,7 @@
 ## library(testthat)
 ## test_file("tests/testthat/test-calc_rate.bg.R")
 
-#sink("/dev/null") ## stops printing outputs on assigning in log
+capture.output({  ## stops printing outputs on assigning in log
 
 ## Accepts data.frame
 test_that("calc_rate.bg works using default arguments", {
@@ -92,4 +92,4 @@ test_that("calc_rate.bg - plot defaults are correctly restored", {
 })
 
 
-#sink() ## turns printing back on
+}) ## turns printing back on
