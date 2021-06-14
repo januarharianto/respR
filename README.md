@@ -1,9 +1,10 @@
 
 
+<!-- badges: start -->
 [![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR) [![Travis-CI Build Status](https://travis-ci.org/januarharianto/respR.svg?branch=master)](https://travis-ci.org/januarharianto/respR) [![codecov](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://codecov.io/gh/januarharianto/respR)
-[![HitCount](http://hits.dwyl.io/januarharianto/respR.svg)](http://hits.dwyl.io/januarharianto/respR)
-
+[![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions)
+<!-- badges: end -->
 
 # Welcome
 
@@ -41,12 +42,12 @@ out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
 
 ## Alternatively, use dplyr pipes:
 urchins.rd %>%        # using the urchins dataset,
-  select(1, 15) %>%   # select columns 1 and 15
-  inspect()     %>%   # inspect the data, then
-  auto_rate()   %>%   # automatically determine most linear segment
-  print()       %>%   # just a quick preview
-  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
-  
+select(1, 15) %>%   # select columns 1 and 15
+inspect()     %>%   # inspect the data, then
+auto_rate()   %>%   # automatically determine most linear segment
+print()       %>%   # just a quick preview
+convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
+
 ```
 
 ## Feedback and contributions

@@ -19,3 +19,4 @@ vignettes
 .travis.yml
 .Rproj
 ^misc$
+^\.github$
