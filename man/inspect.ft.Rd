@@ -50,17 +50,17 @@ for use in later functions in \code{respR}, such as \code{\link[=calc_rate.ft]{c
 }
 \details{
 \code{inspect.ft} is intended to be specific to \emph{flowthrough respirometry} data.
-In flowthrough respirometry (also known as 'open flow', 'open system' or
-'continuous flow' respirometry) rather than calculating a rate from a
-changing oxygen concentration recording in a sealed chamber, instead the
-difference (i.e. 'oxygen delta') between the inflowing and outflowing oxygen
-concentrations of a respirometer receiving water at a constant flow rate is
-used to calculate an oxygen consumption or production rate, typically after
-it has reached a steady state. Therefore, in general, regions of stable
-oxygen delta values (difference between outflow and inflow oxygen) are of
-interest. \code{inspect.ft} visualises and prepares the data for use in
-\code{\link[=calc_rate.ft]{calc_rate.ft()}}. By specifying data types in this function and saving the
-output, they do not need to be specified in later functions.
+In flowthrough respirometry (also known as 'open flow' or 'continuous flow'
+respirometry) rather than calculating a rate from a changing oxygen
+concentration recording in a sealed chamber, instead the difference (i.e.
+'oxygen delta') between the inflowing and outflowing oxygen concentrations of
+a respirometer receiving water at a constant flow rate is used to calculate
+an oxygen consumption or production rate, typically after it has reached a
+steady state. Therefore, in general, regions of stable oxygen delta values
+(difference between outflow and inflow oxygen) are of interest. \code{inspect.ft}
+visualises and prepares the data for use in \code{\link[=calc_rate.ft]{calc_rate.ft()}}. By specifying
+data types in this function and saving the output, they do not need to be
+specified in later functions.
 \subsection{Inputs}{
 
 \code{inspect.ft} requires at least two data inputs; a single column of numeric
