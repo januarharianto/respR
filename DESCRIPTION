@@ -1,9 +1,9 @@
 Package: respR
 Type: Package
 Title: Analyse, Convert, and Automate Respirometry-Related Data
-Date: 2019-04-08
+Date: 2021-06-14
 Version: 2.0.0
-Authors@R: as.person(c(
+Authors@R: person(c(
     "Januar Harianto <januar.harianto@sydney.edu.au> [aut, cre]", 
     "Nicholas Carey <nicholascarey@gmail.com> [aut]"))
 Description: A collection of functions that, when used together, provide a 
@@ -46,5 +46,4 @@ Suggests:
     FishResp,
     respirometry,
     testthat
-VignetteBuilder: 
-    knitr
+

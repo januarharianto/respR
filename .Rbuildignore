@@ -20,3 +20,4 @@ vignettes
 .Rproj
 ^misc$
 ^\.github$
+^appveyor\.yml$
