@@ -346,7 +346,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
   cat("\n")
   cat("Input:\n")
   print(x$rate.input[pos])
-  print(c(x$o2.unit, x$time.unit))
+  print(c(x$inputs$o2.unit, x$inputs$time.unit))
   cat("Converted:\n")
   print(x$rate.output[pos])
   print(x$output.unit)
