@@ -737,7 +737,6 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
   }
 
   if (message){
-    cat("Done.\n")
     cat("-----------------------------------------\n")
   }
 

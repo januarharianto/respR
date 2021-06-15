@@ -483,7 +483,7 @@ plot.inspect <- function(x, message = TRUE, width = NULL,
   }
 
   if (message){
-    cat("Done.\n")
+    cat("Plotting inspected columns ...\n")
     cat("-----------------------------------------\n")
   }
 
