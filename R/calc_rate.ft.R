@@ -598,7 +598,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0)
+    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
     points(time,
            in.o2,
            xlab = "",
@@ -620,7 +620,8 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = -0.02)
+         tck = -0.05,
+         mgp = c(0, 0.3, 0))
     box()
 
     ## green box for rate region
@@ -684,7 +685,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
 
   ## If delta only plot add legend and top axis here instead
   if(delta_only){
-    axis(side = 3, col.axis = "red", tck = -0.02)
+    axis(side = 3, col.axis = "red", tck = -0.05, mgp = c(0, 0.3, 0))
 
     if(legend) legend("topright",
                       "Row Index",
@@ -693,8 +694,8 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
                       cex = 0.5)
   }
 
-  axis(side = 2, las = 1, tck = 0) # simply to put yaxis lab colour back to black
-  axis(side = 1, col.lab = "blue", col.axis = "blue")
+  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
+  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = -0.05, mgp = c(0, 0.3, 0))
 
   box()
 
@@ -744,9 +745,9 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
     panel.first = grid()
   )
 
-  axis(side = 2, las = 1, tck = 0)
+  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
   axis(side = 1,col.lab = "blue",
-       col.axis = "blue")
+       col.axis = "blue", tck = -0.05, mgp = c(0, 0.3, 0))
 
   box()
 

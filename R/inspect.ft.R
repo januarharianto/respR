@@ -551,7 +551,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     par(
       mfrow = n2mfrow(length(pos)),
       mai = c(bt, lf, tp, rt),
-      oma = c(0.1, 0.1, 0.1, 0.1),
+      oma = c(0.1, 0.4, 0.1, 0.1),
       ps = 10,
       pch = 20,
       cex = 1,
@@ -570,15 +570,23 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
       plot(data.frame(time, del.o2[[z]]),
-           mgp = c(0, 0.2, 0),
+           #mgp = c(0, 0.2, 0),
+           axes = FALSE,
            ylim = ylim,
            xlab = "",
            ylab = "",
-           tck = -0.02,
+           #tck = -0.02,
            cex = 0.5,
-           col.lab = "blue",
-           col.axis = "blue",
+           #col.lab = "blue",
+           #col.axis = "blue",
            panel.first = grid())
+
+      box()
+      axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+      axis(side = 1, col.lab = "blue",
+           col.axis = "blue",
+           tck = -0.02, mgp = c(0, 0.3, 0))
+
       # plot invisibly - to add row index x-axis
       par(new = TRUE)
       plot(data.frame(1:length(unlist(time)), del.o2[[z]]),
@@ -589,7 +597,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
            axes = FALSE
       )
       axis(side = 3,
-           mgp = c(0, 0.2, 0),
+           mgp = c(0, 0.3, 0),
            col.axis = "red",
            tck = -0.02)
       title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.3,
@@ -651,7 +659,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0)
+    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
     points(unlist(time),
            in.o2[[pos]],
            xlab = "",
@@ -673,7 +681,8 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = -0.02)
+         tck = -0.03,
+         mgp = c(0, 0.3, 0))
     box()
     if(legend) legend("topright",
                       "Row Index",
@@ -710,9 +719,10 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
       panel.first = grid()
     )
 
-    axis(side = 2, las = 1, tck = 0) # simply to put yaxis lab colour back to black
+    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
     axis(side = 1,col.lab = "blue",
-         col.axis = "blue") # simply to put yaxis lab colour back to black
+         col.axis = "blue",
+         tck = -0.05, mgp = c(0, 0.3, 0))
 
     box()
 
