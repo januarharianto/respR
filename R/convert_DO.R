@@ -57,7 +57,7 @@
 #'   t = 15, S = 35)
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
-                       P = 1.013253) {
+                       P = NULL) {
 
   ## Save function call for output
   call <- match.call()
