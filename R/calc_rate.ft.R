@@ -170,8 +170,8 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   # flowrate
   # - required, single value, must be numeric
   input.val(flowrate, num = TRUE, int = FALSE, req = TRUE,
-                      max = 1, min = 1, range = c(-Inf,Inf),
-                      msg = "calc_rate.ft: 'flowrate'")
+            max = 1, min = 1, range = c(-Inf,Inf),
+            msg = "calc_rate.ft: 'flowrate'")
 
   # classify x
   if(is.numeric(x)){
@@ -227,7 +227,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     dt <- data.table::data.table(time = NA,
                                  delta.o2 = delta)
     data <- data.frame(out.o2 = x[[1]],
-                             in.o2 = x[[2]])
+                       in.o2 = x[[2]])
 
     ## summary for output
     summary <- data.frame(out.o2 = x[[1]], in.o2 = x[[2]], delta.o2 = delta)
@@ -297,28 +297,45 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     }
 
     # Validate 'from' and 'to' ------------------------------------------------
+
+    # from should not be higher than highest time
+    # to (time) should not be lower than lowest time
+    if(by == "time") if(any(sapply(from, function(z) z > t_range[2])))
+      stop("calc_rate.ft: some 'from' time values are higher than the values present in 'x'.")
+    if(by == "time") if(any(sapply(to, function(z) z < t_range[1])))
+      stop("calc_rate.ft: some 'to' time values are lower than the values present in 'x'.")
+    # from (row) should not be higher than last row
+    if(by == "row") if(any(sapply(from, function(z) z > r_range[2])))
+      stop("calc_rate.ft: some 'from' row numbers are beyond the number of rows present in 'x'.")
+
+    # if any are beyond start/end of data assume first/last value
+    if(by == "time") if(any(sapply(from, function(z) z < t_range[1])))
+      message("calc_rate.ft: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
+    if(by == "row") if(any(sapply(from, function(z) z < r_range[1])))
+      message("calc_rate.ft: some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
+    if(by == "time") if(any(sapply(to, function(z) z > t_range[2])))
+      message("calc_rate.ft: some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
+    if(by == "row") if(any(sapply(to, function(z) z > r_range[2])))
+      message("calc_rate.ft: some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
+
     # - numeric, within correct range of data (integer if by = row)
     # from
     if(by == "time") sapply(from, function(z)
       input.val(z, num = TRUE, int = FALSE,
-                          range = t_range,
-                          msg = "calc_rate.ft: 'from' - "))
+                msg = "calc_rate.ft: 'from' - "))
 
     if(by == "row") sapply(from, function(z)
       input.val(z, num = TRUE, int = TRUE,
-                          range = r_range,
-                          msg = "calc_rate.ft: 'from' - "))
+                msg = "calc_rate.ft: 'from' - "))
 
     # to
     if(by == "time") sapply(to, function(z)
       input.val(z, num = TRUE, int = FALSE,
-                          range = t_range,
-                          msg = "calc_rate.ft: 'to' - "))
+                msg = "calc_rate.ft: 'to' - "))
 
     if(by == "row") sapply(to, function(z)
       input.val(z, num = TRUE, int = TRUE,
-                          range = r_range,
-                          msg = "calc_rate.ft: 'to' - "))
+                msg = "calc_rate.ft: 'to' - "))
     # Ensure "from" and "to" are same length:
     if (length(from) != length(to)) stop("calc_rate.ft: 'from' and 'to' have unequal lengths.")
 
@@ -335,10 +352,14 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
     # Rolling width -----------------------------------------------------------
     if(!is.null(width)){
+      # width should only be used with by = "row"
+      if(by == "time")
+        stop("calc_rate.ft: `width` can only be used with 'by = \"row\"'.")
+
       # width should be single numeric
-      input.val(width, num = TRUE, int = FALSE, req = TRUE,
-                          max = 1, min = 1, range = c(-Inf, Inf),
-                          msg =  "calc_rate.ft: 'width'")
+      input.val(width, num = TRUE, int = TRUE, req = TRUE,
+                max = 1, min = 1, range = c(1, length(unlist(time))),
+                msg =  "calc_rate.ft: 'width'")
 
       # if width is not null, by and from should be NULL
       if(!is.null(from) || !is.null(to))
@@ -409,7 +430,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       input_type = xtype,
       subsets = dfs,
       summary = data.table(cbind(rank = 1:nrow(summary),
-        summary, flowrate = flowrate, rate = rate)),
+                                 summary, flowrate = flowrate, rate = rate)),
       from = from,
       to = to,
       by = by,
@@ -555,7 +576,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   if(message && pos > 1)
     cat(glue::glue('calc_rate.ft: Plotting rate from position {pos} of {nres} ...'), sep="\n")
 
-  # delta only --------------------------------------------------------------
+  # plot layout --------------------------------------------------------------
 
   ## if only delta o2 plot, it takes top two thirds,
   ## otherwise 3 plots
@@ -683,17 +704,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
     panel.first = grid()
   )
 
-  ## If delta only plot add legend and top axis here instead
-  if(delta_only){
-    axis(side = 3, col.axis = "red", tck = -0.05, mgp = c(0, 0.3, 0))
-
-    if(legend) legend("topright",
-                      "Row Index",
-                      text.col = "red",
-                      bg = "gray90",
-                      cex = 0.5)
-  }
-
   axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
   axis(side = 1, col.lab = "blue", col.axis = "blue", tck = -0.05, mgp = c(0, 0.3, 0))
 
@@ -719,6 +729,27 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
        max(na.omit(pos_y_data_delta)))
   abline(lm(pos_y_data_delta ~ pos_x_data), lwd = 1.2, lty = 3)
 
+  ## If delta only plot add legend and top axis here instead
+  if(delta_only){
+    # plot this invisibly - to add row index x-axis
+    par(new = TRUE)
+    plot(
+      seq(1, length(time)),
+      del.o2,
+      xlab = "",
+      ylab = "",
+      pch = "",
+      cex = .5,
+      axes = FALSE
+    )
+    axis(side = 3, col.axis = "red", tck = -0.05, mgp = c(0, 0.3, 0))
+
+    if(legend) legend("topright",
+                      "Row Index",
+                      text.col = "red",
+                      bg = "gray90",
+                      cex = 0.5)
+  }
 
   # Close up plot -----------------------------------------------------------
 
