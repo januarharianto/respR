@@ -25,7 +25,7 @@ xmany <- calc_rate.ft(insp.ft_obj,
 )
 xwidth <- calc_rate.ft(insp.ft_obj,
                        flowrate = 2,
-                       by = NULL, width = 300, plot = FALSE
+                       by = "row", width = 300, plot = FALSE
 )
 xprod <- calc_rate.ft(insp.ft_obj_prod,
                       flowrate = 2, from = 200, to = 500,
@@ -36,10 +36,10 @@ xprod <- calc_rate.ft(insp.ft_obj_prod,
 
 by_val <- -0.7
 by_vec <- seq(-0.75, -0.85, -0.01)
-by_crft <- calc_rate.ft(inspect.ft(flowthrough_mult.rd, out.o2 = 12, in.o2 = 13, plot = FALSE),
+by_crft <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 4, in.o2 = 8, plot = FALSE)),
                         flowrate = 2, plot = FALSE)
-by_crft_mult <- calc_rate.ft(inspect.ft(flowthrough_mult.rd, out.o2 = 12, in.o2 = 13, plot = FALSE),
-                             from = c(2000, 2500), to = c(2400, 2900),
+  by_crft_mult <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 4, in.o2 = 8, plot = FALSE)),
+                             from = c(2000, 2500), to = c(2400, 2900), by = "row",
                              flowrate = 2, plot = FALSE)
 # by_crft_nl <- calc_rate.ft(inspect.ft(flowthrough_nlbg.rd, out.o2 = 2, in.o2 = 3, plot = FALSE),
 #                         flowrate = 2, plot = FALSE)
@@ -95,7 +95,7 @@ test_that("adjust_rate.ft - stops if 'x' and 'by' are calc_rate.ft and have been
   expect_error(adjust_rate.ft(calc_rate.ft(insp.ft_obj,
                                            flowrate = 2,
                                            from = 200, to = 500, plot = FALSE),
-                              by = calc_rate.ft(inspect.ft(flowthrough_mult.rd, out.o2 = 12, in.o2 = 13, plot = FALSE),
+                              by = calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 12, in.o2 = 13, plot = FALSE)),
                                                 flowrate = 1.5, plot = FALSE)),
                regexp = "adjust_rate.ft: 'x' and by' input rates have been calculated using different 'flowrates'!")
 })
@@ -256,7 +256,7 @@ test_that("adjust_rate.ft - objects can be printed with 'pos' input.", {
   expect_error(print(adj.ft_obj.insp.width, pos = 100),
                regexp = NA)
   expect_output(print(adj.ft_obj.insp.width, pos = 100),
-                regexp = "Rank 100 of 635 adjusted")
+                regexp = "Rank 100 of 636 adjusted")
 
   expect_error(print(adj.ft_obj.vec, pos = 20),
                regexp = NA)
@@ -421,7 +421,7 @@ test_that("adjust_rate.ft - objects work with mean()", {
   expect_error(mean(adj.ft_obj.insp.width),
                regexp = NA)
   expect_output(mean(adj.ft_obj.insp.width),
-                regexp = "Mean of 635 adjusted rates:")
+                regexp = "Mean of 636 adjusted rates:")
   expect_equal(mean(adj.ft_obj.insp.width, export = TRUE),
                mean(adj.ft_obj.insp.width$rate.adjusted))
 

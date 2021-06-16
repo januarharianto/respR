@@ -136,11 +136,11 @@ capture.output({  ## stops printing console outputs on assigning
 
 
   ## 2 column input (i.e. time- and calculated delta)
-  insp.ft.obj <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                            in.o2 = 5, delta.o2 = NULL, plot = F)
+  insp.ft.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
+                            in.o2 = 5, delta.o2 = NULL, plot = F))
   ## multi column input (i.e. time- and calculated delta)
-  insp.ft.mult.obj <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                                 in.o2 = 5:7, delta.o2 = NULL, plot = F)
+  insp.ft.mult.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
+                                 in.o2 = 5:7, delta.o2 = NULL, plot = F))
 }
 
 
@@ -148,26 +148,26 @@ capture.output({  ## stops printing console outputs on assigning
 
 test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
   ## time = NULL
-  expect_message(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                            in.o2 = 5, delta.o2 = NULL, plot = F),
+  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
+                            in.o2 = 5, delta.o2 = NULL, plot = F)),
                  regexp = "inspect.ft: Applying column default of 'time = 1")
-  expect_error(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
+                          in.o2 = 5, delta.o2 = NULL, plot = F)),
                regexp = NA)
-  expect_equal(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = F)$data$time[[1]],
+  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
+                          in.o2 = 5, delta.o2 = NULL, plot = F))$data$time[[1]],
                flowthrough_mult.rd[[1]])
 
   # in.o2 = NULL & out.o2 = NULL & delta.o2 = NULL
-  expect_message(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, delta.o2 = NULL, plot = F),
+  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
+                            in.o2 = NULL, delta.o2 = NULL, plot = F)),
                  regexp = "inspect.ft: Applying column default of all non-time column\\(s\\) as 'delta.o2'")
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
+                          in.o2 = NULL, delta.o2 = NULL, plot = F)),
                regexp = NA)
-  expect_equal(as.data.frame(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                                        in.o2 = NULL, delta.o2 = NULL, plot = F)$data$delta.o2),
-               as.data.frame(flowthrough_mult.rd[,2:13]))
+  expect_equal(as.data.frame(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
+                                        in.o2 = NULL, delta.o2 = NULL, plot = F)$data$delta.o2)),
+               as.data.frame(flowthrough_mult.rd[,2:14]))
 })
 
 test_that("inspect.ft - stops if input column numbers found to conflict",{
@@ -198,26 +198,26 @@ test_that("inspect.ft - stops if both or in.o2 and in.o2.value have arguments",{
 })
 
 test_that("inspect.ft - correctly accepts and handles in.o2.value input",{
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F)$dataframe$in.o2.value,
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
+                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F))$dataframe$in.o2.value,
                regexp = NA)
-  expect_equal(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F)$dataframe$in.o2.value,
+  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
+                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F))$dataframe$in.o2.value,
                rep(9, nrow(flowthrough_mult.rd)))
 })
 
 test_that("inspect.ft - stops if out.o2 and in.o2 entered, but in.o2 does not have same number of columns or a single column.",{
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:6, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
+                          in.o2 = 5:6, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
                regexp = "inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:9, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
+                          in.o2 = 5:9, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
                regexp = "inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 4, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
+                          in.o2 = 4, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
                regexp = NA)
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 4:5, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
+                          in.o2 = 4:5, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
                regexp = NA)
 })
 
@@ -375,18 +375,18 @@ test_that("inspect.ft works with 2-column data", {
 })
 
 test_that("inspect.ft works with multi-column data", {
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:7, plot = F),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
+                          in.o2 = 5:7, plot = F)),
                regexp = NA)
-  expect_equal(ncol(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                               in.o2 = 5:7, plot = F)$dataframe),
+  expect_equal(ncol(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
+                               in.o2 = 5:7, plot = F))$dataframe),
                7 + 3) # 7 inputs, 3 delta calcs
 })
 
 
 test_that("inspect.ft outputs plots", {
-  expect_error(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = T),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
+                          in.o2 = 5, delta.o2 = NULL, plot = T)),
                regexp = NA)
   expect_output(plot(insp.ft.obj))
   expect_error(plot(insp.ft.obj),

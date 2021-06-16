@@ -6,36 +6,41 @@
 \title{Multi-column flowthrough respirometry data}
 \format{
 A data frame object consisting of 3740 rows (approx 62 mins of
-data),and 13 columns: time (col 1), oxygen outflow concentrations (cols
-2,3,4), inflow concentrations (cols 5,6,7, each paired with outflow
-columns), delta concentrations (cols 8,9,10, or difference between outflow
-and inflow concentrations), inflow concentrations recorded in a shared
-header tank (col 11), and outflow and inflow concentrations from a control
-or "blank" chamber (cols 12,13).
+data),and 14 columns: time (col 1), oxygen outflow concentrations (cols
+2,3,4,5), inflow concentrations (cols 6,7,8,9 each paired with the
+respective outflow column, the fourth being a control), delta oxygen values
+(cols 10,11,12,13 or difference between outflow and inflow concentrations),
+and inflow concentrations recorded in a shared header tank (col 14).
 }
 \usage{
 flowthrough_mult.rd
 }
 \description{
 A simulated dataset for testing and demonstrating flowthrough respirometry
-analyses. Contains one column of numeric time data (s), three columns of
-outflow oxygen concentrations (oxy.out.1, etc), three columns of inflow
-oxygen concentrations (oxy.in.1, etc.), and three columns of delta oxygen
-concentrations (oxy.delta.1, etc., which is simply the numeric difference
-between paired columns of out.o2 and in.o2). There is also a column of inflow
-oxygen concentrations as recorded from a shared header tank (oxy.header)
+analyses. Contains one column of numeric time data (col 1 in mins), four
+columns of outflow oxygen concentrations (cols 2:5), four columns of inflow
+oxygen concentrations (cols 6:9), and four columns of delta oxygen
+concentrations (cols 10:13, which is simply the numeric difference between
+paired columns of outflow and inflow). There is also a column of inflow oxygen
+concentrations as recorded from a shared header tank (col 14, oxy.header)
 supplying all chambers, to use as an alternative to the individual inflow
-oxygen recordings. In addition, there are two columns of recordings from an
-empty control respirometer, or "blank" experiment (oxy.out.blank,
-oxy.in.blank) to determine background respiration.
+oxygen recordings. Outflow (2:5) and inflow (6:9) columns are paired, with
+the first three containing specimens, and the fourth an empty control
+respirometer, or "blank" experiment (oxy.out.blank, oxy.in.blank) to
+determine background respiration.
 }
 \details{
-The third dataset (col 4) has a period of higher rates at around the 2000s
-timepoint, where the specimen increases its activity then slowly recovers to
-routine respiration levels.
+The third paired dataset (col 4 and col 8 pair) has a period of higher rates
+at around the 40 minute timepoint, where the specimen increases its activity then
+slowly recovers to routine respiration levels.
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
+\item Dissolved oxygen units: \verb{\%Air}
+\item Time units: \code{mins}
+\item Flow rate (\code{L/min}): \code{0.1}
+\item Specimen masses (\code{kg}): \verb{0.013, 0.015, 0.020}
+\item \code{t = 18}
+\item \code{S = 0}, i.e. freshwater
+\item \code{P = 1.013}
 }
 }
 \author{

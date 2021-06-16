@@ -98,11 +98,21 @@
 #' flowthrough respirometry system. Conducted at University of British Columbia,
 #' Vancouver, BC, Canada.
 #'
-#' - Dissolved oxygen units: mg/L
-#' - Time units: seconds
-#' - Flow rate (L/min): 0.00234
-#' - Inflow oxygen concentration (mean, mg/L): 8.88
-#' - Specimen ash-free dry mass (kg): 0.000070
+#' - Dissolved oxygen units: `mg/L`
+#'
+#' - Time units: `seconds`
+#'
+#' - Flow rate (`mL/min`): `2.34`
+#'
+#' - Inflow oxygen concentration (calculated assuming 100% air saturated, `mg/L`): `8.919`
+#'
+#' - Specimen ash-free dry mass (`kg`): `0.000070`
+#'
+#' - `t = 12`
+#'
+#' - `S = 30`
+#'
+#' - `P = 1.013`
 #'
 #' @md
 #' @author Nicholas Carey
@@ -115,33 +125,44 @@
 #' Multi-column flowthrough respirometry data
 #'
 #' A simulated dataset for testing and demonstrating flowthrough respirometry
-#' analyses. Contains one column of numeric time data (s), three columns of
-#' outflow oxygen concentrations (oxy.out.1, etc), three columns of inflow
-#' oxygen concentrations (oxy.in.1, etc.), and three columns of delta oxygen
-#' concentrations (oxy.delta.1, etc., which is simply the numeric difference
-#' between paired columns of out.o2 and in.o2). There is also a column of inflow
-#' oxygen concentrations as recorded from a shared header tank (oxy.header)
+#' analyses. Contains one column of numeric time data (col 1 in mins), four
+#' columns of outflow oxygen concentrations (cols 2:5), four columns of inflow
+#' oxygen concentrations (cols 6:9), and four columns of delta oxygen
+#' concentrations (cols 10:13, which is simply the numeric difference between
+#' paired columns of outflow and inflow). There is also a column of inflow oxygen
+#' concentrations as recorded from a shared header tank (col 14, oxy.header)
 #' supplying all chambers, to use as an alternative to the individual inflow
-#' oxygen recordings. In addition, there are two columns of recordings from an
-#' empty control respirometer, or "blank" experiment (oxy.out.blank,
-#' oxy.in.blank) to determine background respiration.
+#' oxygen recordings. Outflow (2:5) and inflow (6:9) columns are paired, with
+#' the first three containing specimens, and the fourth an empty control
+#' respirometer, or "blank" experiment (oxy.out.blank, oxy.in.blank) to
+#' determine background respiration.
 #'
-#' The third dataset (col 4) has a period of higher rates at around the 2000s
-#' timepoint, where the specimen increases its activity then slowly recovers to
-#' routine respiration levels.
+#' The third paired dataset (col 4 and col 8 pair) has a period of higher rates
+#' at around the 40 minute timepoint, where the specimen increases its activity then
+#' slowly recovers to routine respiration levels.
 #'
-#' - Dissolved oxygen units: mg/L
-#' - Time units: seconds
+#' - Dissolved oxygen units: `%Air`
+#'
+#' - Time units: `mins`
+#'
+#' - Flow rate (`L/min`): `0.1`
+#'
+#' - Specimen masses (`kg`): `0.013, 0.015, 0.020`
+#'
+#' - `t = 18`
+#'
+#' - `S = 0`, i.e. freshwater
+#'
+#' - `P = 1.013`
 #'
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 3740 rows (approx 62 mins of
-#'   data),and 13 columns: time (col 1), oxygen outflow concentrations (cols
-#'   2,3,4), inflow concentrations (cols 5,6,7, each paired with outflow
-#'   columns), delta concentrations (cols 8,9,10, or difference between outflow
-#'   and inflow concentrations), inflow concentrations recorded in a shared
-#'   header tank (col 11), and outflow and inflow concentrations from a control
-#'   or "blank" chamber (cols 12,13).
+#'   data),and 14 columns: time (col 1), oxygen outflow concentrations (cols
+#'   2,3,4,5), inflow concentrations (cols 6,7,8,9 each paired with the
+#'   respective outflow column, the fourth being a control), delta oxygen values
+#'   (cols 10,11,12,13 or difference between outflow and inflow concentrations),
+#'   and inflow concentrations recorded in a shared header tank (col 14).
 "flowthrough_mult.rd"
 
 #' Flowthrough respirometry data with non-linear background

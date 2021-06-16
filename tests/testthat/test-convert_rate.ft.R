@@ -23,7 +23,7 @@ crftmany <- calc_rate.ft(insp.ft_obj,
                          by = NULL, width = NULL, plot = FALSE)
 crftwidth <- calc_rate.ft(insp.ft_obj,
                           flowrate = 2,
-                          by = NULL, width = 300, plot = FALSE)
+                          by = "row", width = 300, plot = FALSE)
 crftprod <- calc_rate.ft(insp.ft_obj_prod,
                          flowrate = 2, from = 200, to = 500,
                          by = NULL, width = NULL, plot = FALSE)
@@ -548,7 +548,7 @@ test_that("convert_rate.ft - objects work with mean()", {
   expect_error(mean(conv.adjft.width.as),
                regexp = NA)
   expect_output(mean(conv.adjft.width.as),
-                regexp = "Mean of 635 output rates:")
+                regexp = "Mean of 636 output rates:")
   expect_equal(mean(conv.adjft.width.as, export = TRUE),
                mean(conv.adjft.width.as$rate.output))
 })

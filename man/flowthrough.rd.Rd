@@ -19,11 +19,14 @@ Vancouver, BC, Canada.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
-\item Flow rate (L/min): 0.00234
-\item Inflow oxygen concentration (mean, mg/L): 8.88
-\item Specimen ash-free dry mass (kg): 0.000070
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{seconds}
+\item Flow rate (\code{mL/min}): \code{2.34}
+\item Inflow oxygen concentration (calculated assuming 100\% air saturated, \code{mg/L}): \code{8.919}
+\item Specimen ash-free dry mass (\code{kg}): \code{0.000070}
+\item \code{t = 12}
+\item \code{S = 30}
+\item \code{P = 1.013}
 }
 }
 \author{

@@ -100,20 +100,20 @@ test_that("subset_data - includes all columns when subsetting", {
 
 test_that("subset_data - works with inspect.ft objects", {
   fthr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                      delta.o2 =  8:10, plot = FALSE))
+                                      delta.o2 =  10:12, plot = FALSE))
 
-  expect_error(subset_data(fthr, from = -0.3, to = -0.5, by = "oxygen"),
+  expect_error(subset_data(fthr, from = -3, to = -5, by = "oxygen"),
                regexp = NA)
-  expect_output(subset_data(fthr, from = -0.3, to = -0.5, by = "oxygen"),
+  expect_output(subset_data(fthr, from = -3, to = -5, by = "oxygen"),
                 regexp = "Subset data:")
-  expect_equal(nrow(subset_data(fthr, from = -0.3, to = -0.5, by = "oxygen")$dataframe),
-               590)
-  expect_error(subset_data(fthr, from = 1000, to = 2000, by = "time"),
+  expect_equal(nrow(subset_data(fthr, from = -3, to = -5, by = "oxygen")$dataframe),
+               553)
+  expect_error(subset_data(fthr, from = 10, to = 20, by = "time"),
                regexp = NA)
-  expect_output(subset_data(fthr, from = 1000, to = 2000, by = "time"),
+  expect_output(subset_data(fthr, from = 10, to = 20, by = "time"),
                 regexp = "Subset data:")
-  expect_equal(nrow(subset_data(fthr, from = 1000, to = 2000, by = "time")$dataframe),
-               1001)
+  expect_equal(nrow(subset_data(fthr, from = 10, to = 20, by = "time")$dataframe),
+               601)
   expect_error(subset_data(fthr, from = 70, to = 170, by = "row"),
                regexp = NA)
   expect_output(subset_data(fthr, from = 70, to = 170, by = "row"),
@@ -142,15 +142,15 @@ test_that("subset_data - class retained in output", {
 
 test_that("subset_data - stops if 'from' or 'to' malformed", {
   fthr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                      delta.o2 =  8:10, plot = FALSE))
+                                      delta.o2 =  10:12, plot = FALSE))
 
-  expect_error(subset_data(fthr, from = 3000, to = 2000, by = "time"),
+  expect_error(subset_data(fthr, from = 30, to = 20, by = "time"),
                regexp = "subset_data: 'to' - one or more inputs are outside the range of allowed values.")
-  expect_error(subset_data(fthr, from = NULL, to = 3800, by = "time"),
+  expect_error(subset_data(fthr, from = NULL, to = 38, by = "time"),
                regexp = "subset_data: 'from' - input is required.")
-  expect_error(subset_data(fthr, from = 8000, to = 2000, by = "time"),
+  expect_error(subset_data(fthr, from = 80, to = 20, by = "time"),
                regexp = "subset_data: 'from' - one or more inputs are outside the range of allowed values.")
-  expect_error(subset_data(fthr, from = 2001:2002, to = 3000, by = "time"),
+  expect_error(subset_data(fthr, from = 21:22, to = 30, by = "time"),
                regexp = "subset_data: 'from' - only 1 inputs allowed.")
 
   expect_error(subset_data(fthr, from = 3000.2, to = 2000, by = "row"),
@@ -194,12 +194,12 @@ test_that("subset_data - `inspect` objects work as expected in subsequent functi
 
 test_that("subset_data - `inspect.ft` objects work as expected in subsequent functions.", {
   fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                      out.o2 = 2, in.o2 = 5))
-  sub <- subset_data(fltr, from = 2000, to = 3000, by = "time")
+                                      out.o2 = 2, in.o2 = 6))
+  sub <- subset_data(fltr, from = 20, to = 30, by = "time")
   expect_error(calc_rate.ft(sub, flowrate = 1.5),
                regexp = NA)
   # rate from sub should be same as if sub was done in fn
-  expect_equal(calc_rate.ft(fltr, flowrate = 1.5, from = 2000, to = 3000)$rate,
+  expect_equal(calc_rate.ft(fltr, flowrate = 1.5, from = 20, to = 30)$rate,
                calc_rate.ft(sub, flowrate = 1.5)$rate)
 
 })
@@ -208,8 +208,8 @@ test_that("subset_data - `inspect.ft` objects work as expected in subsequent fun
 test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both been subset correctly", {
 
   fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                      out.o2 = 2, in.o2 = 5))
-  sub <- subset_data(fltr, from = 2000, to = 3000, by = "time")
+                                      out.o2 = 2, in.o2 = 6))
+  sub <- subset_data(fltr, from = 20, to = 30, by = "time")
   dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
@@ -232,7 +232,7 @@ test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both 
 
   fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
                                       delta.o2 = 8:10))
-  sub <- subset_data(fltr, from = 1567, to = 3200, by = "time")
+  sub <- subset_data(fltr, from = 15, to = 32, by = "time")
   dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
   dtt <- as.data.table(dtt)
   names(dtt) <- names(sub$dataframe)
