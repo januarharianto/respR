@@ -188,7 +188,7 @@ NEW: new example datasets
 - `background_lin.rd` - linear background, for testing new background correction functionality
 - `background_exp.rd` - exponential background, for testing new background correction functionality
 - `flowthrough_mult.rd` - multiple column flowthrough data
-- `flowthrough_nlbg.rd` - flowthrough data with non-linear/non-constant background recording
+- `flowthrough_sim.rd` - flowthrough data with increasing background recording
 - `algae.rd` - oxygen production data
 
 

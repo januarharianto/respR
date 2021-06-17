@@ -124,22 +124,22 @@
 
 #' Multi-column flowthrough respirometry data
 #'
-#' A simulated dataset for testing and demonstrating flowthrough respirometry
-#' analyses. Contains one column of numeric time data (col 1 in mins), four
-#' columns of outflow oxygen concentrations (cols 2:5), four columns of inflow
-#' oxygen concentrations (cols 6:9), and four columns of delta oxygen
+#' A semi-simulated dataset for testing and demonstrating flowthrough
+#' respirometry analyses. Contains one column of numeric time data (col 1 in
+#' mins), four columns of outflow oxygen concentrations (cols 2:5), four columns
+#' of inflow oxygen concentrations (cols 6:9), and four columns of delta oxygen
 #' concentrations (cols 10:13, which is simply the numeric difference between
-#' paired columns of outflow and inflow). There is also a column of inflow oxygen
-#' concentrations as recorded from a shared header tank (col 14, oxy.header)
-#' supplying all chambers, to use as an alternative to the individual inflow
-#' oxygen recordings. Outflow (2:5) and inflow (6:9) columns are paired, with
-#' the first three containing specimens, and the fourth an empty control
-#' respirometer, or "blank" experiment (oxy.out.blank, oxy.in.blank) to
-#' determine background respiration.
+#' paired columns of outflow and inflow). There is also a column of inflow
+#' oxygen concentrations as recorded from a shared header tank (col 14,
+#' oxy.header) supplying all chambers, to use as an alternative to the
+#' individual inflow oxygen recordings. Outflow (2:5) and inflow (6:9) columns
+#' are paired, with the first three containing specimens, and the fourth an
+#' empty control respirometer, or "blank" experiment (oxy.out.blank,
+#' oxy.in.blank) to determine background respiration.
 #'
 #' The third paired dataset (col 4 and col 8 pair) has a period of higher rates
-#' at around the 40 minute timepoint, where the specimen increases its activity then
-#' slowly recovers to routine respiration levels.
+#' at around the 40 minute timepoint, where the specimen increases its activity
+#' then slowly recovers to routine respiration levels.
 #'
 #' - Dissolved oxygen units: `%Air`
 #'
@@ -165,18 +165,19 @@
 #'   and inflow concentrations recorded in a shared header tank (col 14).
 "flowthrough_mult.rd"
 
-#' Flowthrough respirometry data with non-linear background
+#' Flowthrough respirometry data with increasing background rate
 #'
 #' A simulated dataset for testing and demonstrating flowthrough respirometry
 #' analyses and background adjustment when the background respiration is
-#' non-linear and increases over the course of the experiment. Contains one
-#' column of numeric time data (s), one column of specimen outflow oxygen
+#' increases over the course of the experiment. Contains one
+#' column of numeric time data (num_time), one column of specimen outflow oxygen
 #' concentrations (oxy.out.spec), one column of control or "blank" chamber
 #' outflow oxygen concentrations (oxy.out.blank), and one column of inflow
 #' oxygen concentrations as recorded from a shared header tank (oxy.header)
 #' supplying both chambers.
 #'
 #' - Dissolved oxygen units: mg/L
+#'
 #' - Time units: seconds
 #'
 #' @md
@@ -185,7 +186,7 @@
 #'   data),and 4 columns: time (col 1), specimen oxygen outflow concentrations
 #'   (col 2), control/blank chamber oxygen outflow concentrations (col 3), and
 #'   inflow concentrations recorded from a shared header tank (col 4).
-"flowthrough_nlbg.rd"
+"flowthrough_sim.rd"
 
 #' Output objects for the function `test_lin`
 #'

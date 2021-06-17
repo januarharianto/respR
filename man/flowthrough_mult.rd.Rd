@@ -16,23 +16,23 @@ and inflow concentrations recorded in a shared header tank (col 14).
 flowthrough_mult.rd
 }
 \description{
-A simulated dataset for testing and demonstrating flowthrough respirometry
-analyses. Contains one column of numeric time data (col 1 in mins), four
-columns of outflow oxygen concentrations (cols 2:5), four columns of inflow
-oxygen concentrations (cols 6:9), and four columns of delta oxygen
+A semi-simulated dataset for testing and demonstrating flowthrough
+respirometry analyses. Contains one column of numeric time data (col 1 in
+mins), four columns of outflow oxygen concentrations (cols 2:5), four columns
+of inflow oxygen concentrations (cols 6:9), and four columns of delta oxygen
 concentrations (cols 10:13, which is simply the numeric difference between
-paired columns of outflow and inflow). There is also a column of inflow oxygen
-concentrations as recorded from a shared header tank (col 14, oxy.header)
-supplying all chambers, to use as an alternative to the individual inflow
-oxygen recordings. Outflow (2:5) and inflow (6:9) columns are paired, with
-the first three containing specimens, and the fourth an empty control
-respirometer, or "blank" experiment (oxy.out.blank, oxy.in.blank) to
-determine background respiration.
+paired columns of outflow and inflow). There is also a column of inflow
+oxygen concentrations as recorded from a shared header tank (col 14,
+oxy.header) supplying all chambers, to use as an alternative to the
+individual inflow oxygen recordings. Outflow (2:5) and inflow (6:9) columns
+are paired, with the first three containing specimens, and the fourth an
+empty control respirometer, or "blank" experiment (oxy.out.blank,
+oxy.in.blank) to determine background respiration.
 }
 \details{
 The third paired dataset (col 4 and col 8 pair) has a period of higher rates
-at around the 40 minute timepoint, where the specimen increases its activity then
-slowly recovers to routine respiration levels.
+at around the 40 minute timepoint, where the specimen increases its activity
+then slowly recovers to routine respiration levels.
 \itemize{
 \item Dissolved oxygen units: \verb{\%Air}
 \item Time units: \code{mins}

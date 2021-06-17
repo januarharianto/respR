@@ -252,12 +252,12 @@ inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 8:10)
 # This experiment has increasing background respiration over time.
 # Inspecting outflow O2 with inflow header tank concentrations
 # suggests specimen rates (bottom delta.o2 plot) are increasing.
-inspect.ft(flowthrough_nlbg.rd, time = 1,
+inspect.ft(flowthrough_sim.rd, time = 1,
            out.o2 = 2, in.o2 = 4)
 
 # However, inspecting with recordings from a concurrent blank
 # control accounts for this and shows specimen rates are level
 # when background is taken into account.
-inspect.ft(flowthrough_nlbg.rd, time = 1,
+inspect.ft(flowthrough_sim.rd, time = 1,
            out.o2 = 2, in.o2 = 3)
 }

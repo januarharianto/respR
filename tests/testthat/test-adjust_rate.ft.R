@@ -41,7 +41,7 @@ by_crft <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 
   by_crft_mult <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 4, in.o2 = 8, plot = FALSE)),
                              from = c(2000, 2500), to = c(2400, 2900), by = "row",
                              flowrate = 2, plot = FALSE)
-# by_crft_nl <- calc_rate.ft(inspect.ft(flowthrough_nlbg.rd, out.o2 = 2, in.o2 = 3, plot = FALSE),
+# by_crft_nl <- calc_rate.ft(inspect.ft(flowthrough_sim.rd, out.o2 = 2, in.o2 = 3, plot = FALSE),
 #                         flowrate = 2, plot = FALSE)
 
 adj.ft_obj.insp.1 <- adjust_rate.ft(x1, by = by_val)
