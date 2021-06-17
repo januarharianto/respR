@@ -339,10 +339,11 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     # Ensure "from" and "to" are same length:
     if (length(from) != length(to)) stop("calc_rate.ft: 'from' and 'to' have unequal lengths.")
 
+    # This breaks conversion of single delta values, so removed for now
     # paired values of "from" and "to" can't be equal:
-    if(any(mapply(function(p,q) p == q,
-                  p = from,
-                  q = to))) stop("calc_rate.ft: some 'from' values are equal to the paired values in 'to'.")
+    # if(any(mapply(function(p,q) p == q,
+    #               p = from,
+    #               q = to))) stop("calc_rate.ft: some 'from' values are equal to the paired values in 'to'.")
 
     ## all 'from' should be less than its paired 'to'
     if(any(mapply(function(p,q) p > q,
@@ -721,14 +722,17 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
                     cex = 0.5)
 
   ## add coloured points of rate region
-  points(pos_y_data_delta ~ pos_x_data, col = "lightgreen",pch = 16,
-         cex = .5)
-  clip(min(na.omit(pos_x_data)),
-       max(na.omit(pos_x_data)),
-       min(na.omit(pos_y_data_delta)),
-       max(na.omit(pos_y_data_delta)))
-  abline(lm(pos_y_data_delta ~ pos_x_data), lwd = 1.2, lty = 3)
-
+  ## No need to do this if data are single points
+  ## Which happens when single delta value is converted
+  if(length(pos_y_data_delta) > 1){
+    points(pos_y_data_delta ~ pos_x_data, col = "lightgreen",pch = 16,
+           cex = .5)
+    clip(min(na.omit(pos_x_data)),
+         max(na.omit(pos_x_data)),
+         min(na.omit(pos_y_data_delta)),
+         max(na.omit(pos_y_data_delta)))
+    abline(lm(pos_y_data_delta ~ pos_x_data), lwd = 1.2, lty = 3)
+  }
   ## If delta only plot add legend and top axis here instead
   if(delta_only){
     # plot this invisibly - to add row index x-axis
@@ -792,11 +796,15 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   title(main = glue::glue("Close-up of Position {pos} of {nres}: Rate =  {pos_rate}"), line = 0.3)
 
   ## add lm trendline
-  clip(min(na.omit(pos_x_data)),
-       max(na.omit(pos_x_data)),
-       min(na.omit(all_rates)),
-       max(na.omit(all_rates)))
-  abline(lm(all_rates ~ pos_x_data), lwd = 1.2, lty = 3)
+  ## ## No need to do this if data are single points
+  ## Which happens when single delta value is converted
+  if(length(pos_x_data) > 1){
+    clip(min(na.omit(pos_x_data)),
+         max(na.omit(pos_x_data)),
+         min(na.omit(all_rates)),
+         max(na.omit(all_rates)))
+    abline(lm(all_rates ~ pos_x_data), lwd = 1.2, lty = 3)
+  }
 
   if (message){
     cat("-----------------------------------------\n")
