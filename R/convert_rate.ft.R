@@ -381,7 +381,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 #'
 #' @param unit flowrate unit input to be parsed
 #' @param which parse which component of unit? "time" or "vol"
-#'
+#' @keywords internal
 #' @export
 flow_unit_parse <- function(unit, which){
 

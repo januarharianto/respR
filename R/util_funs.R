@@ -1,12 +1,14 @@
 #' Pipe graphics direct from tidyverse-related package
 #' @importFrom magrittr %>%
 #' @name %>%
+#' @keywords internal
 #' @export
 NULL
 
 #' Select columns
 #' @importFrom dplyr select
 #' @name select
+#' @keywords internal
 #' @export
 NULL
 
