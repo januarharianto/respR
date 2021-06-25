@@ -1,16 +1,17 @@
 #' Randomly generate data for internal testing of `auto_rate()`'s linear method.
 #'
 #' Generate data of size `len` that is coerced to mimic common respirometry
-#' data. This is an internal function not meant for public use. We will modify
-#' this function at any time, which may irreversibly change the outputs. Do NOT
-#' use this for work! This function was first created to test `auto_rate()`
-#' using the other internal function, `test_lin()`, but we decided to publish
-#' the code as it is an effective (and visually-appealing) tool for teaching
-#' purposes. This function is by no means comprehensive and we encourage users
-#' to generate data that suit their own unique situations.
+#' data. This is an internal function not intending for public use, though may
+#' prove of interest or utility. We may modify this function at any time, which
+#' may irreversibly change the outputs. This function was first created to test
+#' `auto_rate()` using the other internal function, `test_lin()`, but we decided
+#' to publish the code as it is an effective (and visually-appealing) tool for
+#' teaching, testing and visualising purposes. This function is by no means
+#' comprehensive and we encourage users to generate data that suit their own
+#' unique situations.
 #'
 #' `sim_data()` creates 3 types of data that we think are common in respirometry
-#' or oxygen flux data. The data types can be selected using the `method`
+#' or oxygen flux data. The data types can be selected using the `type`
 #' argument:
 #'
 #' - `"default"`: data is made up of a linear segment of known length and slope,
