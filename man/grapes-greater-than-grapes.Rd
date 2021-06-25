@@ -6,3 +6,4 @@
 \description{
 Pipe graphics direct from tidyverse-related package
 }
+\keyword{internal}

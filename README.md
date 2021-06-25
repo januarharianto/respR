@@ -1,4 +1,4 @@
-# respR <a href='http://januarharianto.github.io/respR'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# <font style="font-family:'Courier New'">respR : A package for processing and analysing respirometry data</font> <a href='http://januarharianto.github.io/respR'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR)
@@ -13,14 +13,24 @@
 <!-- badges: end -->
 
 
-# Welcome
+`respR` is a package for `R` that provides a structural, reproducible workflow for the processing and analysis of respirometry data. 
+While the focus of the package is on aquatic respirometry, `respR` is largely unitless and so can process, explore, and determine rates from any respirometry data, and indeed linear relationships in any time-series data.
 
-`respR` is an R package that provides a structural, reproducible workflow for the processing and analysis of respirometry data. 
-While the focus of our package is on aquatic respirometry, `respR` is largely unitless and so can process linear relationships in any time-series data, such as oxygen flux or photosynthesis.
+Use `respR` to:
 
-[**This site**](https://januarharianto.github.io/respR/articles/respR.html) can show you how to get started, and has a range of vignettes covering the fuctionality of the package and example analyses for different respirometry experiment types. 
+- Automatically **import** raw data from various oxygen sensing equipment
+- Rapidly **inspect** data for common issues before analysis
+- **Explore** and **visualise** timeseries data
+- Perform **multiple regression analysis** on linear segments of data manually or automatically to calculate rates
+- **Adjust** rates for background oxygen consumption or production
+- **Convert** rates to any common unit of oxygen consumption or production
+- **Export** results quickly for reporting
 
-The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify citing it, not a problem at all, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found it useful, and we will help publicise your research. 
+A particular highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows rates to be extracted in a statistically objective manner. See `vignette("auto_rate")` for more details.
+
+The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify a citation, not a problem, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found `respR` useful, and we can help publicise your research, and add to the list [**here**]() of papers which have used it. 
+
+We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry!
 
 ## Installation
 `respR` will be submitted soon to CRAN. For now, use the `devtools` package to install the latest stable version:
@@ -30,49 +40,56 @@ install.packages("devtools")
 devtools::install_github("januarharianto/respR")
 ```
 
+## Getting started
+
+See [**here**](https://nicholascarey.github.io/respRsite/articles/respR.html) to get started. This site has a range of vignettes detailing the functionality, and a variety of example analyses. 
+
+We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will write you a script to get you started. 
+
 ## Usage
 
 For a quick evaluation of the package, try out the following code:
 
 ```r
-library(respR) # load the library
-
-# As lazy loading is in place, we do not need to call example data explicitly.
-# This example will use the `urchins.rd` example data.
+library(respR) # load the package
 
 # 1. check data for errors, select cols 1 and 15:
-urch <- inspect(urchins.rd, 1, 15) 
-# 2. automatically determine linear segment:
+urch <- inspect(urchins.rd, time = 1, oxygen = 15) 
+# 2. automatically determine most linear segment:
 rate <- auto_rate(urch)
-# 3. convert units
-out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
+# 3. convert
+out <- convert_rate(rate, 
+                    o2.unit = "mg/L", 
+                    time.unit = "min", 
+                    output.unit = "mg/h/kg", 
+                    volume = 0.6, 
+                    mass = 0.4)
+print(out)
 
-## Alternatively, use dplyr pipes:
+## Alternatively, use pipes:
 urchins.rd %>%        # using the urchins dataset,
-select(1, 15) %>%   # select columns 1 and 15
-inspect()     %>%   # inspect the data, then
-auto_rate()   %>%   # automatically determine most linear segment
-print()       %>%   # just a quick preview
-convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
-
+  select(1, 15) %>%   # select columns 1 and 15
+  inspect()     %>%   # inspect the data, then
+  auto_rate()   %>%   # automatically determine most linear segment
+  print()       %>%   # a quick preview
+  convert_rate("mg/L", "min", "mg/h/kg", 0.6, 0.4) # convert to units
 ```
 
 ## Feedback and contributions
 
-`respR` is under continuous development. If you have any bugs or feedback, you can contact us easily by [opening an issue](https://github.com/januarharianto/respr/issues). Alternatively, you can fork this project and create a pull request.
+`respR` is under continuous development. If you have any bugs or feedback, you can contact us by [**opening an issue**](https://github.com/januarharianto/respr/issues). Alternatively, you can fork the project and create a pull request.
 
 Please also feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
 
-## Collaborators
+## Developers
 
-- **Januar Harianto**, University of Sydney
-- **Nicholas Carey**, Scottish Association of Marine Science
-- **Maria Byrne**, University of Sydney
+- [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
+- [**Nicholas Carey**](https://github.com/nicholascarey), Scottish Association of Marine Science
 
 
-## Acknowledgements
+## See also
 
-The design of this package would not have been possible without inspiration from the following authors and their packages:
+These packages may also help you analyse respirometry data:
 
 - [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
 - [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
@@ -80,30 +97,3 @@ The design of this package would not have been possible without inspiration from
 - [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 - [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
-
-
-## References
-
-Clark, T. D., Sandblom, E., & Jutfelt, F. (2013). Aerobic scope measurements of fishes in an era of climate change: respirometry, relevance and recommendations. Journal of Experimental Biology, 216(15), 2771–2782. [doi: 10.1242/Jeb.084251](https://doi.org/10.1242/Jeb.084251)
-
-Gamble, S., Carton, A. G., & Pirozzi, I. (2014). Open-top static respirometry is a reliable method to determine the routine metabolic rate of barramundi, Lates calcarifer. Marine and Freshwater Behaviour and Physiology, 47(1), 19–28. [doi: 10.1080/10236244.2013.874119](https://doi.org/10.1080/10236244.2013.874119)
-
-Leclercq, N., Gattuso, J.-P. & Jaubert, J. (1999). Measurement of oxygen metabolism in open-top aquatic mesocosms: Application to a coral reef community. Marine Ecology Progress Series, 177, 299–304. [doi: 10.3354/meps177299](https://doi.org/10.3354/meps177299)
-
-Lighton, J.R.B. (2008). Measuring Metabolic Rates: A Manual for Scientists. Oxford University Press, USA.
-
-Morozov S., McCairns R.J.S., Merilä J. (2019) FishResp: R package and GUI application for analysis of aquatic respirometry data. Conservation Physiology 7(1). [doi:10.1093/conphys/coz003](https://doi.org/10.1093/conphys/coz003)
-
-Muggeo, V.M.R. (2003). Estimating regression models with unknown break-points. Statistics in Medicine, 22, 3055–3071. [doi: 10.1002/sim.1545](https://doi.org/10.1002/sim.1545)
-
-Muggeo, V. (2008). Segmented: An R package to fit regression models with broken-line relationships. R News, 8, 20–25.
-
-Silverman, B.W. (1986). Density Estimation for Statistics and Data Analysis. Chapman; Hall/CRC Press.
-
-Steffensen, J. F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiology and Biochemistry, 6(1), 49–59. [doi: 10.1007/BF02995809](https://doi.org/10.1007/BF02995809)
-
-Svendsen, M.B.S., Bushnell, P.G. & Steffensen, J.F. (2016). Design and setup of intermittent-flow respirometry system for aquatic organisms. Journal of Fish Biology, 88, 26–50. [doi: 10.1111/jfb.12797](https://doi.org/10.1111/jfb.12797)
-
-White, C.R. & Kearney, M.R. (2013). Determinants of inter-specific variation in basal metabolic rate. Journal of Comparative Physiology B: Biochemical, Systemic, and Environmental Physiology, 183, 1–26. [doi: 10.1007/s00360-012-0676-5](https://doi.org/10.1007/s00360-012-0676-5)
-
-Yeager, D.P. & Ultsch, G.R. (1989). Physiological regulation and conformation: A BASIC program for the determination of critical points. Physiological Zoology, 62, 888–907. [doi: 10.1086/physzool.62.4.30157935](https://doi.org/10.1086/physzool.62.4.30157935)
