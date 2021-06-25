@@ -1,0 +1,50 @@
+---
+title: respR in the scientific literature
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{respR in the scientific literature}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: custom.csl
+link-citations: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The following publications have used and cited `respR`. Please [**let us know**](mailto:nicholascarey@gmail.com) if you use the package in your work and we will include it in this list.
+
+We would love to hear about any other uses of the package: teaching, industry use, or anything.
+
+@bouyoucos2021c
+
+This paper...
+
+@burford2019c
+
+This paper looked for the first time at the effects of grouping on metabolic rate in a social squid. The very first paper to cite `respR`. A co-author may have had some influence on that... 🤔
+
+@durtsche2021c
+
+This paper
+
+@evensen2021b
+
+This one
+
+@gilbert2020
+
+This one
+
+@gomezisazaAnthropogenicDisturbancesFreshwater2020
+
+@gomezisaza2020
+
+@harianto2021
+
+## Full references

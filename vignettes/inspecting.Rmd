@@ -1,0 +1,129 @@
+---
+title: "Inspecting your data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Inspecting your data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 6, 
+               fig.height = 4,
+               fig.align = "center")
+```
+
+## Introduction
+
+The first step in any data analysis should be to visualise it and check it for errors that may affect analysis. 
+
+`inspect()` is a data exploration and preparation function that visualises
+respirometry data and checks it for issues that may affect the use of further
+functions in `respR`. It subsets specified columns into a new `list`
+object that can be used in subsequent functions, reducing the need for
+additional inputs. Note, use of `inspect` to prepare data for the subsequent
+functions is optional. All functions in `respR` can accept regular `R` data
+objects including data frames, data tables, tibbles, vectors, etc. It is a
+quality control and exploratory step to help users explore and prepare their
+data prior to analysis.
+
+## Data checks
+
+Given an input data frame, `x`, the function scans the `time` and `oxygen`
+columns. By default, it is assumed the first column is time data, and second
+is oxygen data, but the `time` and `oxygen` inputs can be used to specify
+different columns.
+
+The `time` column is checked for missing (`NA/NaN`) values, that values are
+sequential, that there are no duplicate times, and that it is numerically
+evenly-spaced. Oxygen columns are simply checked for missing (`NA/NaN`) data.
+If assigned, the specified columns are saved to a `list`
+object for use in later functions such as `calc_rate()` and
+`auto_rate()`.
+
+Here, we will check the included example data `urchins.rd`. 
+
+
+
+## Plot
+
+A plot of the data is produced (unless `plot = FALSE`), of the data
+timeseries, plus a rolling regression plot. This shows the rate of change in
+oxygen across a rolling window specified using the `width` operator (default
+is `width = 0.1`, or 10% of the entire dataset). This plot provides a quick
+visual inspection of how the rate varies over the course of the experiment.
+Regions of stable and consistent rates can be identified on this plot as flat
+or level areas. This plot is for exploratory purposes only; later functions
+allow rate to be calculated over specific regions. Each rate value is plotted
+against the centre of the time window used to calculate it.
+
+***Note:*** Since `respR` is primarily used to examine oxygen consumption,
+the oxygen rate plot is by default plotted on a reverse y-axis. In `respR`
+oxygen uptake rates are negative since they represent a negative slope of
+oxygen against time. In these plots the axis is reversed so that higher
+uptake rates (i.e. more negative) will be higher on these plots. If you are
+interested instead in oxygen production rates, which are positive, the
+`rate.rev = FALSE` argument can be passed in either the `inspect` call, or
+when using `plot()` on the output object. In this case, the rate values will
+be plotted numerically, with higher oxygen *production* rates higher on the
+plot.
+
+If axis labels obscure parts of the plot they can be suppressed using `legend
+= FALSE`. Suppress console output messages with `message = FALSE`. Lastly, a
+different `width` value can be passed.
+
+## Multiple Columns of Oxygen Data
+
+For a quick overview of larger datasets, multiple oxygen columns can be
+inspected for errors and plotted by using the `oxygen` argument to select
+multiple columns. These must share the same `time` column. In this case, data
+checks are performed, with a plot of each oxygen time series, but no rolling
+rate plot is produced. All data are plotted on the same axis range of both
+time and oxygen (total range of data). This is chiefly exploratory
+functionality to allow for a quick overview of a dataset, and it should be
+noted that while the output `inspect` object will contain all columns in its
+`$dataframe` element, subsequent functions in `respR` (`calc_rate`,
+`auto_rate`, etc.) will by default only use the first two columns (`time`,
+and the first specified `oxygen` column). To analyse multiple columns and
+determine rates, best practice is to inspect and assign each time-oxygen
+column pair as separate `inspect` objects. See Examples.
+
+## Flowthrough Respirometry Data
+
+For flowthrough respirometry data, see the specialised [`inspect.ft()`]
+function.
+
+## Failed Checks
+
+It should be noted the data checks in `inspect` are mainly for exploratory
+purposes; they help diagnose and flag potential issues with the data. For
+instance, long experiments may have had sensor dropouts the user is unaware
+of. Others are not really issues at all. For instance, an uneven time warning
+can result from using decimalised minutes, which is a completely valid time
+metric, but happens to be numerically unevenly spaced. As an additional
+check, if uneven time is found, the minimum and maximum intervals in the time
+data are in the console output, so a user can see immediately if there are
+large gaps in the data.
+
+If some of these checks fail, it should *generally* not hinder analysis of
+the data. `respR` has been coded to rely on linear regressions on exact data
+values, and not make assumptions about data spacing or order. Therefore
+issues such as missing or NA/NaN values, duplicate or non-sequential time
+values, or uneven time spacing should not cause any erroneous results, as
+long as they do not occur over large regions of the data. `inspect` however
+outputs locations (row numbers) of where these issues occur (located in the
+`$locs` element of the output), allowing users to amend them before analysis.
+We would recommend that to be completely confident in any results from
+analysis of such data, and avoid obscure errors, these issues be addressed
+before proceeding.
+

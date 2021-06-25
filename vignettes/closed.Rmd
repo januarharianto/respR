@@ -1,0 +1,226 @@
+---
+title: "Closed-chamber respirometry"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Closed-chamber respirometry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE, fig.width = 6, fig.height = 6)
+```
+
+
+## A typical respR workflow: Closed-chamber respirometry
+
+Here we describe a typical workflow for a **closed-chamber** respirometry experiment. The example data used here is `urchins.rd`, where the first column of the data frame is *time* data, while the remaining 18 columns are dissolved *$O_2$* data. Columns 18 and 19 contain background respiration recordings. The units are minutes and mg/L of $O_2$, however all analyses in `respR` are unitless, and we only consider units when we later come to convert rates.
+
+```{r}
+head(urchins.rd)
+```
+
+## 1: Check for common errors - `inspect()` 
+
+We first use `inspect()` to prepare the data and to check for:
+
+- Missing or non-numeric (`NA`/`NaN`) data
+- Sequential time data
+- Duplicate time data
+- Evenly-spaced time data
+
+By default, the function assumes the first column of the data frame is `time`, while the second column is `oxygen`. However, the `time = ` and `oxygen = ` arguments can modify that behaviour to select particular columns.
+
+```{r eval = F}
+urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
+```
+
+```{r echo = F, warning=FALSE}
+inspect(urchins.rd, time =  1, oxygen = 15)
+```
+
+```{r echo = F, fig.keep = "none", message = FALSE, results = "hide"}
+urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
+```
+
+From the plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression of the entire data series would therefore give an erroneous calculation of the true rate. However, the bottom output plot shows that over the initial stages of the experiment, oxygen uptake (as determined by a rolling rate across 10% of the entire data) is consistent at around -0.02, and so in this experiment this section would be most suitable for analysis.
+
+The function also warns us that time data is not *numerically* evenly-spaced. However, *this does not mean the data cannot be processed*. Rather than make assumptions that rows represent evenly spaced datapoints, the functions in `respR` use actual time values for analyses and calculations, and so even irregularly spaced data are analysed correctly. This warning is for information purposes only: it is to make the user aware that if they use row numbers for manual operations such as subsetting, the *same width* may not represent the *same time period*. For now, the data frame is saved as an object, `urchin` which contains the original data columns we selected coerced into a data frame, and various other metadata. 
+
+**It should be noted that using `inspect()` is optional** - the main functions in `respR` will readily accept regular `R` data structures (e.g. data frames, tibbles, vectors) as long as data are numeric and error-free. Running `inspect()` is a qualitative, exploratory step that highlights potential issues about the data before analysis. We use this particular example, with an obvious error towards the end, to illustrate the point that you should always visualise and explore your data before analysis. `respR` has been designed to make this easy. 
+
+**Note there is an older version of this function called `inspect_data()`** - this function has been deprecated, but kept in the package to maintain compatibility with older code. It will not be updated in the future, so users should use `inspect()`. 
+
+## 2: Process background respiration - `calc_rate.bg()` 
+
+The presence of microorganisms may be a potential source of experimental bias, and we may want to account for background respiration rates during experiments. Since background rates typically account for a small percentage of experimental rates, these so-called “blank” experiments are routinely conducted alongside, or before and after main experiments, and often the rates are averaged across several datasets to obtain a more accurate estimate of the correction.
+
+The function `calc_rate.bg()` is used to process background rate measurements, which must share the **same units of time and oxygen data as the experiments they will be used to correct**. It can also simultaneously process *multiple* background rate measurements, with the assumption that an average background rate will be applied. In `urchins.rd`, background respiration was recorded and saved in columns 18 and 19. We analyse the data using the specialised function `calc_rate.bg()` and save the output as an object. 
+
+```{r}
+bg <- calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+print(bg)
+```
+
+This `bg` object contains both individual background rates for each data column entered (`$bgrate`), and an averaged rate (`$mean`) which, by default, will be used as the correction when this is applied later in `adjust_rate`.
+
+## 3: Calculate oxygen uptake rate - `calc_rate()`
+
+Calling the function `calc_rate()` on the `inspect()` object, with no additional arguments, will prompt the function to perform a linear regression on the entire data series. 
+
+```{r}
+calc_rate(urchin) # same as: calc_rate(urchin$df)
+```
+
+Note how the function recognises the `inspect()` object, with no other inputs necessary. Alternatively, you can specify a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as oxygen data (if not in the first two columns, they should be processed via `inspect()` or otherwise put into this structure).
+
+In many cases, there is a need to truncate or subset the data before rate is determined. For example, we may want to exclude initial stages of instability, determine rate over an exact period of time, or within a threshold of O~2~ concentrations. Equipment interference or other factors may cause irregularities in the data. We can work around such errors by specifying the data regions over which we are interested in determining the rate.
+
+Based on the `from` and `to` arguments, a user may use `calc_rate()` to specify data ranges in one of four ways:
+
+- **Time** (`by = "time"`): *"What is the rate over a specific 25 minute period?"*
+- **Oxygen** (`by = "oxygen"`):  *"What is the rate between oxygen saturation points of 95% and 80%?"*
+- **Row** (`by = "row"`):        *"I'd like to determine rate between rows 11 and 273."*
+- **Proportion** (`by = "proportion"`): *"What is the rate from 4/5ths (0.8) to half (0.5) of total oxygen consumed?"*
+
+We do not need to be overly precise; for `oxygen` and `time` if input values do not match exactly to a value in the data, the function will identify the closest matching values, rounded down, and use these for subsequent calculations.
+
+Here we'll select a 25 minute period before the interference occurred:
+```{r}
+urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
+```
+
+The saved object can be explored using generic R commands. 
+```{r}
+print(urch_rate)
+
+summary(urch_rate)
+```
+
+The rate can be seen as the second entry `rate_b1`, and other summary data and model coefficients are saved in the object. In this case the `rsq` is 0.99, so this appears to be a very good estimate of this urchin's respiration rate. 
+
+The output also includes a `rate_2pt`. This is the rate determined by simple two-point calculation of difference in O~2~ divided by difference in Time. ***For almost all analyses, the `rate_b1` should be used***. See [Two-point analyses](https://januarharianto.github.io/respR/articles/twopoint.html) for an explanation of this output and when it might be useful 
+
+Plotting the output provides a series of diagnostic plots of the data subset that was analysed.
+
+```{r}
+plot(urch_rate)
+```
+
+## 4: Adjust for background respiration - `adjust_rate()`
+
+Since background rate has been calculated in `calc_rate.bg()`, adjustment is straightforward using the function `adjust_rate()`. The rate input to be adjusted can be an object of class `calc_rate` or `auto_rate`, or any numeric value. 
+
+```{r}
+urch_rate_adj <- adjust_rate(urch_rate, bg)
+urch_rate_adj
+```
+
+A background correction can also be entered manually. Care should be taken to include the correct (typically negative) sign.
+
+```{r}
+urch_rate_adj <- adjust_rate(urch_rate, -0.00083)
+urch_rate_adj
+```
+
+For experiments where there is a quantified background **input** of oxygen, such as in *open-tank* respirometry, `adjust_rate()` can be used to correct rates using a *positive* background value.
+
+```{r}
+urch_rate_adj <- adjust_rate(urch_rate, 0.002)
+urch_rate_adj
+```
+
+
+## 5: Convert the results - `convert_rate()`
+
+Note, that until this point `respR` has **not required units of time or oxygen to be entered**. Here, we convert calculated, unitless rates to specified output units. 
+
+For example, we may want to determine:
+
+1. **Absolute metabolic rate** - Total change in O~2~ per unit time within the chamber, that is whole animal or whole group metabolic rate 
+2. **Mass-specific metabolic rate** - Rate of oxygen consumption (or production) per unit time per unit mass of the specimen
+
+The function `convert_rate()` can be used to convert rate values to absolute or mass-specific values. This requires the units of the original data (`o2.unit`, `time.unit`), the `volume` of fluid in the chamber (in **L**), and for mass-specific rates the `mass` of the specimen (in **kg**). 
+
+**Note**: `volume` is volume of water in the respirometer, ***not the volume of the respirometer***. That is, it represents the ***effective volume***. A specimen occupies space in the respirometer, and so displaces some proportion of the water, which depending on its size might be significant and cause mis-estimates of respiration rates. Therefore the volume of water entered here should equal the total volume of the respirometer **minus the volume of the specimen**. 
+
+There are several approaches to determine the effective volume; calculating the specimen volume geometrically or via water displacement in a separate vessel, or calculated from the mass and density (e.g. for fish it is often assumed they have an equal density as water, that is ~1000 kg/m^3). Water volume could also be determined directly by pouring out the water at the end of the experiment, or by weighing the respirometer after the specimen has been removed. The [`respfun`](https://github.com/nicholascarey/respfun) utilities package has several functions to assist with determining the effective volume. 
+
+For an example of absolute oxygen uptake rate, we can convert the output of `calc_rate()` to O~2~ consumed per hour:
+
+```{r tidy = FALSE}
+convert_rate(urch_rate_adj, 
+             o2.unit = "mg/L", 
+             time.unit = "min", 
+             output.unit = "mg/h", 
+             volume = 1.09)
+```
+
+We can also convert to a mass-specific rate by adding a `mass` and specifying a mass-specific `output.unit`:
+
+```{r tidy = FALSE}
+convert_rate(urch_rate_adj, 
+             o2.unit = "mgl-1", 
+             time.unit = "m", 
+             output.unit = "mg/s/kg",
+             volume = 1.09, 
+             mass = 0.19)
+```
+
+Note how a "fuzzy" string matching algorithm automatically recognises variations in base units, allowing natural, intuitive input of units. For example, `"ml/s"`, `"mL/sec"`, `"milliliter/s"`, and `"millilitre/second"` are all equally identified as `mL/s`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`. For a reminder on what units are available to use, call `unit_args()`. Some units require temperature, salinity and atmospheric pressure to perform the conversion:
+
+```{r}
+unit_args()
+```
+
+
+## Summary
+
+This is an example of a straightforward analysis of a closed-chamber respirometry experiment. This entire analysis can be documented and shared in only a few lines of code, making it easily reproducible if the original data file is included:
+
+```{r results="hide", fig.keep="none", eval = FALSE, tidy = FALSE}
+# import and inspect
+urchin <- inspect(urchins.rd, time = 1, oxygen = 15)
+
+# Background
+bg <- calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+
+# Specimen rate
+urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
+
+# Adjust rate
+urch_rate_adj <- adjust_rate(urch_rate, bg)
+
+# Convert to final rate units
+urchin_MO2 <- convert_rate(urch_rate_adj,
+                           o2.unit = "mgl-1", 
+                           time.unit = "m", 
+                           output.unit = "mg/s/kg", 
+                           volume = 1.09, 
+                           mass = 0.19)
+
+```
+
+Using [`tidyverse`](https://www.tidyverse.org) practices (i.e. [`dplyr`](https://dplyr.tidyverse.org) pipes), can reduce this even further:
+
+```{r results="hide", fig.keep="none", eval = FALSE, tidy = FALSE}
+urchins.rd %>%                                           # With the data object,
+  inspect(1, 15) %>%                                     # inspect, then
+  calc_rate(from = 4, to = 29, by = "time") %>%          # calculate rate, then
+  print() %>%
+  adjust_rate(
+    calc_rate.bg(urchins.rd, time = 1, 
+                 oxygen = 18:19)) %>%                    # adjust bg rate, then
+  print() %>%
+  convert_rate(o2.unit = "mgl-1", time.unit = "m",     
+    output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) # convert units.
+
+```
+
+<!-- Other vignettes go into more detail about different experiment types and other analyses.  -->

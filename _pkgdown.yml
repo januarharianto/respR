@@ -1,56 +1,71 @@
-url: http://januarharianto.github.io/respR
+url: https://januarharianto.github.io/respR
 
 template:
   params:
-  bootswatch: cosmo
+    bootswatch: cosmo
 
 reference:
   - title: "Pre-processing"
     desc: >
-      Functions for manipulating and processing data files.
+      Functions for importing, processing, visualising and inspecting data:
     contents:
     - '`format_time`'
     - '`import_file`'
     - '`inspect`'
+    - '`inspect.ft`'
     - '`subsample`'
     - '`subset_data`'
 
   - title: "Analytical"
     desc: >
-      Functions for data analysis.
+      Functions for calculating rates of oxygen consumption or production:
     contents:
     - '`auto_rate`'
     - '`calc_rate`'
     - '`calc_rate.bg`'
     - '`calc_rate.ft`'
-    - '`pcrit`'
+    - '`calc_pcrit`'
 
-  - title: "Adjust/Convert"
+  - title: "Filter & Adjust"
     desc: >
-      Functions for data correction and unit conversions.
+      Functions for rate filtering and adjustment:
     contents:
+    - '`subset_rate`'
     - '`adjust_rate`'
+    - '`adjust_rate.ft`'
+
+  - title: "Convert"
+    desc: >
+      Functions for rate and unit conversions:
+    contents:
     - '`convert_DO`'
     - '`convert_rate`'
+    - '`convert_rate.ft`'
+    - '`convert_val`'
     - '`unit_args`'
 
-  - title: "Data files"
+  - title: "Data"
     desc: >
-      Sample data files.
+      Example data files:
     contents:
     - '`flowthrough.rd`'
+    - '`flowthrough_mult.rd`'
+    - '`flowthrough_sim.rd`'
     - '`intermittent.rd`'
     - '`sardine.rd`'
     - '`squid.rd`'
     - '`urchins.rd`'
+    - '`algae.rd`'
     - '`zeb_intermittent.rd`'
     - '`test_lin_data`'
+    - '`background_exp.rd`'
+    - '`background_lin.rd`'
 
-  - title: "Deprecated"
-    desc: >
-      Functions that are no longer supported/updated.
-    contents:
-    - '`inspect_data`'
+  # - title: "Deprecated"
+  #   desc: >
+  #     Functions that are no longer supported/updated.
+  #   contents:
+  #   - '`inspect_data`'
 
 navbar:
   type: inverse
@@ -65,10 +80,12 @@ navbar:
     - text: "List of Functions"
       href: reference/index.html
 
-    - text: Documentation
+    - text: Vignettes
       menu:
-      - text: "Importing your data"
+      - text: "Importing data"
         href: articles/importing.html
+      - text: "Inspecting data"
+        href: articles/inspecting.html
       - text: "auto_rate: Automatic detection of linear rates"
         href: articles/auto_rate.html
       - text: "Closed-chamber respirometry"
@@ -84,18 +101,26 @@ navbar:
       - text: "Two-point analysis"
         href: articles/twopoint.html
 
-    - text: Discussion
+    - text: Further Reading
       menu:
-      - text: "auto_rate: Performance in detecting linear regions"
-        href: articles/performance.html
-      - text: "auto_rate: Comparisons with LoLinR"
-        href: articles/auto_rate_comp.html
-      - text: "respR: Comparisons with other R packages"
-        href: articles/packages_comp.html
+      - text: "v2.0: Code changes"
+        href: articles/v2_code_change.html
       - text: "respR: Integration with the tidyverse"
         href: articles/tidyverse.html
       - text: "respR: Reporting reproducible analyses"
         href: articles/reproducibility.html
-      - text: "respR: When to use respR"
-        href: articles/usage.html
+      - text: "respR in the scientific literature"
+        href: articles/citations.html
+      - text: "References"
+        href: articles/refs.html
+      - text: Archived
+        menu:
+        - text: "auto_rate: Performance"
+          href: articles/auto_rate_performance.html
+        - text: "auto_rate: Comparisons with LoLinR"
+          href: articles/auto_rate_comp.html
+        - text: "respR: Comparisons with other R packages"
+          href: articles/packages_comp.html
+        - text: "respR: When to use respR"
+          href: articles/usage.html
 

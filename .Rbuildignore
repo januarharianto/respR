@@ -18,3 +18,4 @@ vignettes
 ^misc$
 ^\.github$
 ^appveyor\.yml$
+^pkgdown$
