@@ -157,6 +157,7 @@ The change will mean with some data it will give different results than the old 
 
 ========================== subset_data() ============================
 - NEW: support for `inspect.ft` objects
+- NEW: added 'quiet' input to allow console output to be suppressed. (still does for now, but make no print the default?)
 - CHANGE: Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple O2 column dataframes
 - CHANGE: Warns if output subset is empty
 - FIX: fix for failure with inspect() objects

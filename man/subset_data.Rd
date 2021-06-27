@@ -4,7 +4,7 @@
 \alias{subset_data}
 \title{Subset a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object}
 \usage{
-subset_data(x, from, to, by = "time")
+subset_data(x, from, to, by = "time", quiet = FALSE)
 }
 \arguments{
 \item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data to subset.}
@@ -16,6 +16,9 @@ argument \code{by}.}
 argument \code{by}. is based on the argument: \code{by}.}
 
 \item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"}.}
+
+\item{quiet}{logical. Controls if a summary of the output is printed to the
+console. Default is \code{FALSE}.}
 }
 \description{
 \code{subset_data} subsets a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object based
@@ -30,14 +33,14 @@ such as \code{calc_rate()} or \code{auto_rate}. See examples and vignettes.
 The function can subset data based on ranges of: \code{"time"}, \code{"oxygen"},
 \code{"row"} , or \code{"proportion"} of total oxygen used or produced (note, this last
 option works poorly with noisy or fluctuating data). For data frames, to
-subset by \code{"time"}, \code{"o2"}, or \code{"proportion"}, the time data is assumed to be in
-the first column, and oxygen data in the second column. For \code{inspect()} and
-\code{inspect.ft()} objects, the data will have been coerced to this structure
+subset by \code{"time"}, \code{"o2"}, or \code{"proportion"}, the time data is assumed to be
+in the first column, and oxygen data in the second column. For \code{inspect()}
+and \code{inspect.ft()} objects, the data will have been coerced to this structure
 already. In these cases the \verb{$dataframe} element in the output is replaced by
-the subset, and in \code{inspect.ft()} the \verb{$inputs} element is also subset
-and replaced. Note for \code{inspect.ft()} objects, the oxygen data in column 2
-will be either \code{out.o2} data or \code{delta.o2} data depending on what was
-inspected. The function can subset any data frame by \code{row}.
+the subset, and in \code{inspect.ft()} the \verb{$inputs} element is also subset and
+replaced. Note for \code{inspect.ft()} objects, the oxygen data in column 2 will
+be either \code{out.o2} data or \code{delta.o2} data depending on what was inspected.
+The function can subset any data frame by \code{row}.
 
 When multiple columns are present, for example time in column 1, and multiple
 columns of oxygen data, the subset object will include \emph{all} columns. In the
@@ -69,6 +72,10 @@ locations of any data issues highlighted when the object was originally
 inspected will no longer be accurate. If these are important, best practice
 is to subset the original dataframe, and process the subset through \code{inspect}
 or \code{inspect.ft}.
+
+A summary of the subset is printed to the console, to check it has subset the
+data as expected. To suppress this changing the default \code{quiet = FALSE} to
+\code{TRUE}.
 }
 }
 \examples{
