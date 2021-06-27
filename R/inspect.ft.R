@@ -1,7 +1,7 @@
 #' Explore and visualise flowthrough respirometry data and check for errors
 #'
 #' `inspect.ft` is a data exploration and preparation function that visualises
-#' flowthrough respirometry data, scans it for common issues, and prepares it
+#' flowthrough respirometry data, checks it for common issues, and prepares it
 #' for use in later functions in `respR`, such as [calc_rate.ft()].
 #'
 #' `inspect.ft` is intended to be specific to *flowthrough respirometry* data.
@@ -41,18 +41,30 @@
 #' these can be entered via the `delta.o2` input, and these are prepared and
 #' saved for rate calculations in `calc_rate.ft`.
 #'
-#' ## Data processing and validation checks
-#'
 #' Given an input data frame `x`, the function scans the columns specified via
 #' the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
 #' specified, by default the functions assumes the first column is `time`, and
 #' all others are `delta.o2` oxygen data.
 #'
+#' ## Check for numeric data
+#'
+#' `respR` requires data be in the form of paired values of numeric time and
+#' oxygen. All columns are checked that they contain numeric data before any
+#' other checks are performed. If any of the inspected columns do not contain
+#' numeric data the remaining checks for that column are skipped, and the
+#' function exits returning `NULL`, printing the summary of the checks. No plot
+#' is produced. Only when all inspected columns pass this numeric check can the
+#' resulting output object be saved and passed to other `respR` functions.
+#'
+#' ## Other checks
+#'
 #' The `time` column is checked for missing (`NA/NaN`) values, that values are
 #' sequential, that there are no duplicate times, and that it is numerically
 #' evenly-spaced. Oxygen columns are simply checked for missing (`NA/NaN`) data.
 #' See **Failed Checks** section for what it means for analyses if these checks
-#' result in warnings.
+#' result in warnings. If the output is assigned, the specified columns are
+#' saved to a `list` object for use in later functions such as
+#' [`calc_rate.ft()`]. A plot is also produced.
 #'
 #' ## Plot
 #'
@@ -86,12 +98,16 @@
 #' you are interested instead in oxygen production rates, which are positive,
 #' the `rate.rev = FALSE` argument can be passed in either the `inspect.ft`
 #' call, or when using `plot()` on the output object. In this case, the delta
-#' and rate values will be plotted numerically, with higher oxygen *production*
-#' rates higher on the plot.
+#' and rate values will be plotted numerically, and higher oxygen *production*
+#' rates will be higher on the plot.
+#'
+#' ## Additional plotting options
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
-#' the output object.
+#' the output object. Suppress console output messages with `message = FALSE`.
+#' If multiple columns have been inspected, the `pos` input can be used to
+#' examine each `out.o2`~`in.o2`~`del.o2` dataset.
 #'
 #' ## Multiple data columns
 #'
@@ -116,27 +132,32 @@
 #'
 #' ## Failed Checks
 #'
-#' It should be noted the data checks in `inspect.ft` are mainly for exploratory
-#' purposes; they help diagnose and flag potential issues with the data. For
-#' instance, long experiments may have had sensor dropouts the user is unaware
-#' of. Others are not really issues at all. For instance, an uneven time warning
-#' can result from using decimalised minutes, which is a completely valid time
-#' metric, but happens to be numerically unevenly spaced. As an additional
-#' check, if uneven time is found, the minimum and maximum intervals in the time
-#' data are in the console output, so a user can see immediately if there are
-#' large gaps in the data.
+#' The most important data check in `inspect.ft` is that all data columns are
+#' numeric. If any of these checks fail, the function skips the remaining checks
+#' for that column, the function exits returning `NULL`, and no output object or
+#' plot is produced.
 #'
-#' If some of these checks fail, it should *generally* not hinder analysis of
-#' the data. `respR` has been coded to rely on linear regressions on exact data
-#' values, and not make assumptions about data spacing or order. Therefore
-#' issues such as missing or NA/NaN values, duplicate or non-sequential time
-#' values, or uneven time spacing should not cause any erroneous results, as
-#' long as they do not occur over large regions of the data. `inspect.ft`
-#' however outputs locations (row numbers) of where these issues occur (located
-#' in the `$locs` element of the output), allowing users to amend them before
-#' analysis. We would recommend that to be completely confident in any results
-#' from analysis of such data, and avoid obscure errors, these issues be
-#' addressed before proceeding.
+#' The remaining data checks in `inspect.ft` are mainly exploratory and help
+#' diagnose and flag potential issues with the data that might affect rate
+#' calculations. For instance, long experiments may have had sensor dropouts the
+#' user is unaware of. Some might not be major issues. For instance, an uneven
+#' time warning can result from using decimalised minutes, which is a completely
+#' valid time metric, but happens to be numerically unevenly spaced. As an
+#' additional check, if uneven time is found, the minimum and maximum intervals
+#' in the time data are in the console output, so a user can see immediately if
+#' there are large gaps in the data.
+#'
+#' If some of these checks produce warnings, it should *generally* not hinder
+#' analysis of the data. `respR` has been coded to rely on linear regressions on
+#' exact data values, and not make assumptions about data spacing or order.
+#' Therefore issues such as missing or NA/NaN values, duplicate or
+#' non-sequential time values, or uneven time spacing should not cause any
+#' erroneous results, as long as they do not occur over large regions of the
+#' data. `inspect.ft` however outputs locations (row numbers) of where these
+#' issues occur (located in the `$locs` element of the output), allowing users
+#' to amend them before analysis. We would recommend that to be completely
+#' confident in any results from analysis of such data, and avoid obscure
+#' errors, these issues be addressed before proceeding.
 #'
 #' ## Background control or "blank" experiments
 #'
@@ -169,8 +190,10 @@
 #'
 #' ## S3 Generic Functions
 #'
-#' Saved output objects can be used in the generic S3 functions `print()` and
-#' `summary()`.
+#' Saved output objects can be used in the generic S3 functions `plot()`,
+#' `print()` and `summary()`.
+#'
+#' - `plot()`: plots the result.
 #'
 #' - `print()`: prints a summary of the checks performed on the data. If issues
 #' are found, locations (row numbers) are printed (up to first 20 occurrences).
@@ -332,12 +355,10 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   }
 
   ## in.o2 conc value - if present, make into vector same length as out.o2
-  ## and same number of cols????
   if(!is.null(in.o2.value)) {
     in.o2.all <- list(rep(in.o2.value, nrow(df)))
 
     names(in.o2.all) <- "in.o2.value"
-    #names(in.o2.all) <- sapply(1:length(in.o2.all), function(p) glue::glue("in.o2.value.{p}"))
   }
 
   ## if no delta input, calculate it
@@ -366,34 +387,41 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
     del.o2_results <- check_timeseries(del.o2.all, "oxygen")
 
   # issue warnings
+  # time
   if (any(unlist(time_results[[1]][1,])))
-    warning("NA/NaN values detected in Time column.", call. = F)
-  if (any(unlist(time_results[[1]][2,])))
-    warning("Non-sequential Time values found.", call. = F)
-  if (any(unlist(time_results[[1]][3,])))
-    warning("Duplicate Time values found.", call. = F)
-  if (any(unlist(time_results[[1]][4,])))
-    warning("Time values are not evenly-spaced (numerically).", call. = F)
+    warning("inspect.ft: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
+  if (any(unlist(time_results[[1]][2,]) == "TRUE"))
+    warning("inspect.ft: NA/NaN values detected in Time column.", call. = F)
+  if (any(unlist(time_results[[1]][3,]) == "TRUE"))
+    warning("inspect.ft: Non-sequential Time values found.", call. = F)
+  if (any(unlist(time_results[[1]][4,]) == "TRUE"))
+    warning("inspect.ft: Duplicate Time values found.", call. = F)
+  if (any(unlist(time_results[[1]][5,]) == "TRUE"))
+    warning("inspect.ft: Time values are not evenly-spaced (numerically).", call. = F)
+
+  # out.o2
   if (any(unlist(out.o2_results[[1]][1,])))
-    warning("NA/NaN values detected in Oxygen column(s).", call. = F)
+    warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
+  if (any(unlist(out.o2_results[[1]][2,]) == "TRUE"))
+    warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
+  # in.o2
   if (any(unlist(in.o2_results[[1]][1,])))
-    warning("NA/NaN values detected in Oxygen column(s).", call. = F)
+    warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo input returned.", call. = F)
+  if (any(unlist(in.o2_results[[1]][2,]) == "TRUE"))
+    warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
+  # del.o2
   if (any(unlist(del.o2_results[[1]][1,])))
-    warning("NA/NaN values detected in Oxygen column(s).", call. = F)
+    warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
+  if (any(unlist(del.o2_results[[1]][2,]) == "TRUE"))
+    warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
 
   # combine results
   checks <- cbind(time_results[[1]], out.o2_results[[1]], in.o2_results[[1]], del.o2_results[[1]])
   locs_raw <- cbind(time_results[[2]], out.o2_results[[2]], in.o2_results[[2]], del.o2_results[[2]])
 
   # output
-  ## rename columns:
-  ## ncol SHOULD leave only out o2 names
-  #colnames(checks) <- c(names(time.all), names(out.o2.all), names(in.o2.all), names(del.o2.all))
-
-  ##
   locs <- lapply(1:ncol(locs_raw), function(z) locs_raw[, z])
   names(locs) <- colnames(locs_raw)
-  ##
 
   # save new data frame and create output object
   if(is.null(out.o2.all) && is.null(in.o2.all)) {
@@ -426,23 +454,31 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   class(out) <- "inspect.ft"
 
   # if no errors occur, send out a good message :D
-  if (!any(na.omit(unlist(checks))))
+  if (!any(na.omit(unlist(checks) == "TRUE")))
     message("inspect.ft: No issues detected while inspecting data frame.") else
       message("inspect.ft: Data issues detected. For more information use print().")
 
-  if (plot) plot(out, message = FALSE, ...)
-
   # Not all functions should print on assigning, but this one should
   print(out)
-  ## invisible prevents it printing twice on assigning
-  return(invisible(out))
+
+  # If any inspected columns found to be non-numeric, print, but don't return object
+  # If this is the case, it can't be used in later fns anyway, so no point
+  # And skip plotting - avoids awkward code in plot() to handle the object having non-numeric data
+  # Warnings issued above.
+  if(any(unlist(checks[1,]))) {
+    return(invisible(NULL))
+  } else {
+    if (plot) plot(out, message = FALSE, ...)
+    ## invisible prevents it printing twice on assigning
+    return(invisible(out))
+  }
 }
 
 #' @export
 print.inspect.ft <- function(x, ...) {
   cat("\n# print.inspect.ft # --------------------\n")
   checks <- x$checks
-  locs_raw <- x$locs_raw
+  locs <- x$locs_raw
 
   # rename content:
   tab <- checks
@@ -455,29 +491,30 @@ print.inspect.ft <- function(x, ...) {
   cat("\n")
 
   # highlight locations that did not pass the tests (but only for 2-col dfs):
-  if (checks[, 1][[1]]) {
-    xnan <- locs_raw[, 1][[1]]
+  # No need to do this for numeric check - it's all or none
+  if (checks[, 1][[2]] != "skip" && checks[, 1][[2]]) {
+    xnan <- locs[, 1][[2]]
     cat("NA/NaN Time data locations: ")
     if (length(xnan) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xnan, 20))
   }
-  if (checks[, 1][[2]]) {
-    xseq <- locs_raw[, 1][[2]]
+  if (checks[, 1][[3]] != "skip" && checks[, 1][[3]]) {
+    xseq <- locs[, 1][[3]]
     cat("Non-sequential Time data locations ")
     if (length(xseq) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xseq, 20))
   }
-  if (checks[, 1][[3]]) {
-    xdup <- locs_raw[, 1][[3]]
+  if (checks[, 1][[4]] != "skip" && checks[, 1][[4]]) {
+    xdup <- locs[, 1][[4]]
     cat("Duplicate Time data locations ")
     if (length(xdup) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xdup, 20))
   }
-  if (checks[, 1][[4]]) {
-    xevn <- locs_raw[, 1][[4]]
+  if (checks[, 1][[5]] != "skip" && checks[, 1][[5]]) {
+    xevn <- locs[, 1][[5]]
     cat("Uneven Time data locations ")
     if (length(xevn) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
@@ -486,10 +523,10 @@ print.inspect.ft <- function(x, ...) {
     print(range(diff(na.omit(x$dataframe[[1]]))))
   }
 
-  #### CHANGE from length df to ncol checks
-  for(i in 2:ncol(x$checks)) { ## for multiple columns
-    if (checks[, i][[1]]) {
-      ynan <- locs_raw[, i][[1]]
+  for(i in 2:ncol(checks)) { ## for multiple columns
+    # use ncol(checks) because x$dataframe may have extra delta oxy calculated columns added
+    if (checks[, i][[2]] != "skip" && checks[, i][[2]]) {
+      ynan <- locs[,i][[2]]
       cat("NA/NaN locations ")
       if (length(ynan) > 20) cat("(first 20 shown) ")
       cat("in Oxygen column:", names(x$dataframe)[i], "\n")

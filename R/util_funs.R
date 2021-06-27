@@ -46,33 +46,74 @@ toc <- function() {
 ## combined check:
 check_timeseries <- function(x, type = "time") {
   if (type == "time") {
-    nan <- sapply(x, function(y) check_na(y))
-    seq <- sapply(x, function(y) check_seq(y))
-    dup <- sapply(x, function(y) check_dup(y))
-    evn <- sapply(x, function(y) check_evn(y))
+    num <- sapply(x, function(y) check_num(y))
+    ## if not numeric, no point doing these checks
+    ## So instead we 'skip'
+    if(!num[[1]][1]) nan <- sapply(x, function(y) check_na(y)) else
+      nan <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
+    if(!num[[1]][1]) seq <- sapply(x, function(y) check_seq(y)) else
+      seq <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
+    if(!num[[1]][1]) dup <- sapply(x, function(y) check_dup(y)) else
+      dup <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
+    if(!num[[1]][1]) evn <- sapply(x, function(y) check_evn(y)) else
+      evn <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     checks <- rbind(
-      nan[1, , drop = F], seq[1, , drop = F], dup[1, , drop = F],
+      num[1, , drop = F],
+      nan[1, , drop = F],
+      seq[1, , drop = F],
+      dup[1, , drop = F],
       evn[1, , drop = F]
     )
     locs <- rbind(
-      nan[2, , drop = F], seq[2, , drop = F], dup[2, , drop = F],
+      num[2, , drop = F],
+      nan[2, , drop = F],
+      seq[2, , drop = F],
+      dup[2, , drop = F],
       evn[2, , drop = F]
     )
   } else if (type == "oxygen") {
-    nan <- sapply(x, function(y) check_na(y))
+    num <- sapply(x, function(y) check_num(y))
+
+    # if oxy column has passed numeric check, do check NA
+    # otherwise return "skip"
+    nan <- sapply(1:length(x), function(y) {
+      if(!num[,y][[1]]) check_na(x[[y]]) else
+      return(list(check = "skip", which = integer(0)))
+    })
+
     seq <- NA
     dup <- NA
     evn <- NA
-    checks <- rbind(nan[1, , drop = F], seq[1], dup[1], evn[1])
-    locs <- rbind(nan[2, , drop = F], seq[1], dup[1], evn[1])
+    checks <- rbind(
+      num[1, , drop = F],
+      nan[1, , drop = F],
+      seq[1],
+      dup[1],
+      evn[1])
+    locs <- rbind(
+      num[2, , drop = F],
+      nan[2, , drop = F],
+      seq[1],
+      dup[1],
+      evn[1])
   }
 
   # rename rows - I'm sure I can make this more efficient... later..
-  rnames <- c("NA/NAN", "sequential", "duplicated", "evenly-spaced")
+  rnames <- c("numeric", "NA/NaN", "sequential", "duplicated", "evenly-spaced")
   rownames(checks) <- rnames
   rownames(locs) <- rnames
 
   return(list(checks, locs))
+}
+
+## check for non-numeric values - used in the function `inspect()`
+## Note - checks for NOT numeric
+check_num <- function(x) {
+  test <- !is.numeric(x)
+  check <- any(test)
+  highlight <- rep(check, length(x))
+  out <- list(check = check, which = highlight)
+  return(out)
 }
 
 ## check for NA values - used in the function `inspect()`
@@ -155,17 +196,17 @@ truncate_data <- function(x, from, to, by) {
     # use highest/lowest values if out of range
     if(from > o_range[2]) from <- o_range[2] else
       if(from < o_range[1]) from <- o_range[1]
-    if(to > o_range[2]) to <- o_range[2] else
-      if(to < o_range[1]) to <- o_range[1]
+      if(to > o_range[2]) to <- o_range[2] else
+        if(to < o_range[1]) to <- o_range[1]
 
-    ## dplyr::between needs them in low-high order
-    lower <- sort(c(from, to))[1]
-    upper <- sort(c(from, to))[2]
-    # indices of data between these
-    start <- min(which(dplyr::between(dt[[2]], lower, upper)))
-    end <- max(which(dplyr::between(dt[[2]], lower, upper)))
+        ## dplyr::between needs them in low-high order
+        lower <- sort(c(from, to))[1]
+        upper <- sort(c(from, to))[2]
+        # indices of data between these
+        start <- min(which(dplyr::between(dt[[2]], lower, upper)))
+        end <- max(which(dplyr::between(dt[[2]], lower, upper)))
 
-    out <- dt[start:end]
+        out <- dt[start:end]
   }
   if (by == "proportion") {
     ## has to handle by proportion produced as well as consumed!

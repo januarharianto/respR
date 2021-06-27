@@ -45,7 +45,7 @@ oxygen (should be negative values for oxygen uptake). If this is used,
 }
 \description{
 \code{inspect.ft} is a data exploration and preparation function that visualises
-flowthrough respirometry data, scans it for common issues, and prepares it
+flowthrough respirometry data, checks it for common issues, and prepares it
 for use in later functions in \code{respR}, such as \code{\link[=calc_rate.ft]{calc_rate.ft()}}.
 }
 \details{
@@ -84,20 +84,33 @@ value via \code{in.o2.value} and this is used to calculate the \code{delta.o2}.
 \emph{delta.o2 input option}: If delta oxygen values have already been calculated,
 these can be entered via the \code{delta.o2} input, and these are prepared and
 saved for rate calculations in \code{calc_rate.ft}.
-}
-
-\subsection{Data processing and validation checks}{
 
 Given an input data frame \code{x}, the function scans the columns specified via
 the \code{time}, \code{out.o2}, \code{in.o2} or \code{delta.o2} inputs. If no columns are
 specified, by default the functions assumes the first column is \code{time}, and
 all others are \code{delta.o2} oxygen data.
+}
+
+\subsection{Check for numeric data}{
+
+\code{respR} requires data be in the form of paired values of numeric time and
+oxygen. All columns are checked that they contain numeric data before any
+other checks are performed. If any of the inspected columns do not contain
+numeric data the remaining checks for that column are skipped, and the
+function exits returning \code{NULL}, printing the summary of the checks. No plot
+is produced. Only when all inspected columns pass this numeric check can the
+resulting output object be saved and passed to other \code{respR} functions.
+}
+
+\subsection{Other checks}{
 
 The \code{time} column is checked for missing (\code{NA/NaN}) values, that values are
 sequential, that there are no duplicate times, and that it is numerically
 evenly-spaced. Oxygen columns are simply checked for missing (\code{NA/NaN}) data.
 See \strong{Failed Checks} section for what it means for analyses if these checks
-result in warnings.
+result in warnings. If the output is assigned, the specified columns are
+saved to a \code{list} object for use in later functions such as
+\code{\link[=calc_rate.ft]{calc_rate.ft()}}. A plot is also produced.
 }
 
 \subsection{Plot}{
@@ -129,12 +142,17 @@ higher uptake rates (i.e. more negative) will be higher on these plots. If
 you are interested instead in oxygen production rates, which are positive,
 the \code{rate.rev = FALSE} argument can be passed in either the \code{inspect.ft}
 call, or when using \code{plot()} on the output object. In this case, the delta
-and rate values will be plotted numerically, with higher oxygen \emph{production}
-rates higher on the plot.
+and rate values will be plotted numerically, and higher oxygen \emph{production}
+rates will be higher on the plot.
+}
+
+\subsection{Additional plotting options}{
 
 If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
-the output object.
+the output object. Suppress console output messages with \code{message = FALSE}.
+If multiple columns have been inspected, the \code{pos} input can be used to
+examine each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset.
 }
 
 \subsection{Multiple data columns}{
@@ -161,27 +179,32 @@ equal numbers of columns.
 
 \subsection{Failed Checks}{
 
-It should be noted the data checks in \code{inspect.ft} are mainly for exploratory
-purposes; they help diagnose and flag potential issues with the data. For
-instance, long experiments may have had sensor dropouts the user is unaware
-of. Others are not really issues at all. For instance, an uneven time warning
-can result from using decimalised minutes, which is a completely valid time
-metric, but happens to be numerically unevenly spaced. As an additional
-check, if uneven time is found, the minimum and maximum intervals in the time
-data are in the console output, so a user can see immediately if there are
-large gaps in the data.
+The most important data check in \code{inspect.ft} is that all data columns are
+numeric. If any of these checks fail, the function skips the remaining checks
+for that column, the function exits returning \code{NULL}, and no output object or
+plot is produced.
 
-If some of these checks fail, it should \emph{generally} not hinder analysis of
-the data. \code{respR} has been coded to rely on linear regressions on exact data
-values, and not make assumptions about data spacing or order. Therefore
-issues such as missing or NA/NaN values, duplicate or non-sequential time
-values, or uneven time spacing should not cause any erroneous results, as
-long as they do not occur over large regions of the data. \code{inspect.ft}
-however outputs locations (row numbers) of where these issues occur (located
-in the \verb{$locs} element of the output), allowing users to amend them before
-analysis. We would recommend that to be completely confident in any results
-from analysis of such data, and avoid obscure errors, these issues be
-addressed before proceeding.
+The remaining data checks in \code{inspect.ft} are mainly exploratory and help
+diagnose and flag potential issues with the data that might affect rate
+calculations. For instance, long experiments may have had sensor dropouts the
+user is unaware of. Some might not be major issues. For instance, an uneven
+time warning can result from using decimalised minutes, which is a completely
+valid time metric, but happens to be numerically unevenly spaced. As an
+additional check, if uneven time is found, the minimum and maximum intervals
+in the time data are in the console output, so a user can see immediately if
+there are large gaps in the data.
+
+If some of these checks produce warnings, it should \emph{generally} not hinder
+analysis of the data. \code{respR} has been coded to rely on linear regressions on
+exact data values, and not make assumptions about data spacing or order.
+Therefore issues such as missing or NA/NaN values, duplicate or
+non-sequential time values, or uneven time spacing should not cause any
+erroneous results, as long as they do not occur over large regions of the
+data. \code{inspect.ft} however outputs locations (row numbers) of where these
+issues occur (located in the \verb{$locs} element of the output), allowing users
+to amend them before analysis. We would recommend that to be completely
+confident in any results from analysis of such data, and avoid obscure
+errors, these issues be addressed before proceeding.
 }
 
 \subsection{Background control or "blank" experiments}{
@@ -217,9 +240,10 @@ in \verb{$locs}.
 
 \subsection{S3 Generic Functions}{
 
-Saved output objects can be used in the generic S3 functions \code{print()} and
-\code{summary()}.
+Saved output objects can be used in the generic S3 functions \code{plot()},
+\code{print()} and \code{summary()}.
 \itemize{
+\item \code{plot()}: plots the result.
 \item \code{print()}: prints a summary of the checks performed on the data. If issues
 are found, locations (row numbers) are printed (up to first 20 occurrences).
 \item \code{summary()}: simple wrapper for \code{print()} function. See above.

@@ -12,6 +12,7 @@ NEW - these are the highlights. Add (just add, don't move) the most interesting 
 - NEW: adjust_rate - several new methods, including dynamic adjustments - HIGHLIGHT
 - NEW: flowthrough workflow - 4 new ft-specific functions - HIGHLIGHT
 - NEW: convert_val function. Simple conversion function
+- NEW: inspect and inspect.ft - new check that columns contain numeric data
 - Tested with R 4.1 and the new native pipes (`|>`)
 - Tested with Apple Silicon builds of R
 - Help documentation and vignettes rewritten and greatly expanded
@@ -25,10 +26,10 @@ Fixes and changes - General
 Changes
 - CHANGE: S3 Generic functions (print, summary, plot) revised to work consistently, produce much cleaner, consistent outputs.
 - CHANGE: added `rank` column to all `$summary` tables as first column. Helps a lot with consistent S3 summary outputs and generally keeping track of selecting summary rows
-- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass specific.
+- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass or area specific.
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: changed dataframe in function outputs to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
-- CHANGE: For consistency, changed primary input from `df` to `x` where appropriate (auto_rate, inspect, inspect.ft, subsample) (this was inconsistent and often confusing, in that `df` oftne did not have to be a data frame, but could be `inspect` etc.)
+- CHANGE: For consistency, changed primary input from `df` to `x` where appropriate (auto_rate, inspect, inspect.ft, subsample) (this was inconsistent and often confusing, in that `df` often did not have to be a data frame, but could be `inspect` etc.)
 - CHANGE: The deprecated functions `inspect_data` and `pcrit` have been removed
 - CHANGE: Outputs (where relevant) have function call saved to `$call` element
 - CHANGE: Messages, warnings and errors now state what function they originate from (not always clear, especially in pipes)
@@ -38,12 +39,12 @@ Changes
 - FIX:  Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 
 ========================== import_file() ============================
-- CHANGE: imports now generally don't remove any columns (e.g. empty or NA columns). Column names now much improved (unique names, data type linked to channel IDs).
-- CHANGE: import_file - updated supported systems list
 - NEW: Imports European style formatted numeric data which uses commas instead of points for decimals.
 - NEW: Support for Presens Datamanager files
-- FIX: Fix for PreSens Oxyvew csv and txt files not being imported as numeric data. Now separate parsing for each.
-- FIX: Fix for MiniDot files not being imported as numeric data.
+- CHANGE: imports now generally don't remove any columns (e.g. empty or NA columns). Column names now much improved (unique names, data type linked to channel IDs).
+- CHANGE: import_file - updated supported systems list
+- FIX: Fix for PreSens Oxyvew csv and txt files not being imported as numeric. Now separate parsing for each.
+- FIX: Fix for MiniDot files not being imported as numeric.
 - FIX: Fix for Pyro/Firesting numeric columns being imported as character when Firesting software replaces missing data with "---"
 
 ========================== format_time() ============================
@@ -64,6 +65,7 @@ Changes
 - CHANGE: Removed "input detected" message at start - other functions don't have this
 
 ========================== inspect() ============================
+- NEW: checks that each column contains numeric data. this is the most important check, and if any column fails, the function skips the reamining checks for that column and returns a NULL result
 - NEW: added `width` input for rolling reg plot (default 0.1)
 - NEW: `summary()` works on output (simply a wrapper for `print()`)
 - NEW: Can pass 'rate.rev = FALSE' to plot rates not reversed (for oxygen production respirometry)
@@ -74,7 +76,7 @@ Changes
 - CHANGE: Stops if 'oxygen' or 'time' columns not present in the input, or conflict
 - CHANGE: prints on assigning
 - CHANGE: output has additional elements `$call` and `$inputs`
-- CHANGE: output `$list` and `$list_raw` renamed `locs` and `$locs_raw`
+- CHANGE: output `$list` and `$list_raw` renamed `$locs` and `$locs_raw`
 - FIX: Rolling rate plot failed with even a single NA in time or oxygen data.
 - FIX: Fix for points sometimes being plotted twice slightly offset in big datasets.
 
@@ -82,17 +84,16 @@ Changes
 - NEW - 'rolling' method. Performs simple rolling regression of specified width, with NO ordering of results (seemed like an omission when we have the other options)
 - this goes nicely with subset_rate - allows users full control of selection criteria (albeit with fixed width regressions)
 - NEW 'highest' and 'lowest' methods for absolute min/max of rates
-- NEW 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates
-- Can only use these when rates all have the same sign
+- NEW 'maximum' and 'minimum' methods. Work the opposite way to 'min' and 'max' - now are strictly numerical, so correctly order oxygen production rates. Can only use these when rates all have the same sign.
 - New internal functions for this ordering - auto_rate_lowest, auto_rate_highest
 - Therefore internal functions auto_rate_min and auto_rate_max have been swapped around in terms of functionality.
-- Old methods ('min', 'max') still produce same results as old code but have a prominent warning
+- Old methods ('min', 'max') still produce same results as old code but have a prominent warning. Will properly deprecate in later version.
 - NEW: added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE (also added for other methods, but as an empty column)
 - NEW: plot updated with title showing which Rank current plot is, and better spacing
 
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
 - FIX: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
-- FIX: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- FIX: Issue #66: `auto_rate()` removed unused method argument `"default"`
 - FIX: auto_rate() - Fix for plots failing where result contains an NA (fix in multi.p() involving clip)
 - FIX: Fix for `auto_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
 - FIX: method = "max" was missing '$total_regs' element from metadata
@@ -109,9 +110,9 @@ Changes
 - NEW: can now import data and output rates using 'day' as time unit e.g. "mgO2/day/m2"
 - NEW: can now output oxygen used in moles e.g. "molO2/day/kg"
 - CHANGE: o2.unit = NULL and time.unit = NULL now stop function instead of applying a default unit
-- CHANGE: However, it now applies a default output unit for mass- and area specific rates as well as absolute rates.
-- CHANGE: $output.unit oxygen amount component now has "O2" appended. e.g. mgO2/h/g, umolO2/day/m2 (done at end, does not affect any conversions).
-- CHANGE: outputs renamed (e.g. output to rate.output, absolute to rate.absolute etc.). Did not affect code anywhere else since this is last function, but may affect users 1.x code
+- CHANGE: Now applies a default output unit for mass- and area specific rates as well as absolute rates.
+- CHANGE: $output.unit oxygen amount component now has "O2" appended. e.g. mgO2/h/g, umolO2/day/m2 (done at end of code, does not affect any conversions).
+- CHANGE: outputs renamed (e.g. `$output` to `$rate.output`, `$absolute` to `$rate.absolute` etc.). Did not affect code anywhere else since this is last function, but may affect users 1.x code for extracting/saving results.
 
 
 ========================== convert_DO() ============================
@@ -172,10 +173,6 @@ The change will mean with some data it will give different results than the old 
 - Completely new workflow, specific to flowthough data.
 - Will add more detail in vignettes. Help file is pretty complete
 
-inspect.ft
-- NEW: can pass `rate.rev = FALSE` to plot rates not on reverse y-axis (for oxygen production respirometry)
-- NEW: `summary()` works on output (simply a wrapper for `print()`)
-
 
 ========================== data ============================
 
@@ -206,7 +203,7 @@ All
 - All S3 (where appropriate) have `pos` input
 - All stop if 'pos' too high
 - Added `return(invisible(object))` where missing to allow piping
-- All print much better with nicer spacing, especially in pipes
+- All print more consistently with nicer spacing, especially in pipes
 - auto_rate - all S3 methods stop with message if no rates found (can happen with over-enthusiastic subsetting in new subset_rate fn)
 
 print.adjust_rate

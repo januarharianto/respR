@@ -129,8 +129,8 @@ overx <- auto_rate(sardine.rd, plot = FALSE, width = .6)
 # Plot ONLY the rolling regression plots for comparison:
 par(mfrow = c(1, 2), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
     cex = 1, cex.main = 1)
-respR:::plot.auto_rate(normx, choose = 3) ## CHANGE WHEN IN MASTER BACK TO REGULAR PLOT
-respR:::plot.auto_rate(overx, choose = 3)
+plot.auto_rate(normx, choose = 3) ## CHANGE WHEN IN MASTER BACK TO REGULAR PLOT
+plot.auto_rate(overx, choose = 3)
 ```
 
 Under perfectly linear conditions, we would expect a rolling regression output plot such as this to consist of a straight, horizontal line. 
@@ -225,7 +225,7 @@ Particular ranked results can be examined or extracted via the `plot` and `summa
 
 ```{r}
 ## Second most minimum rate detected
-respR:::plot.auto_rate(min_rate, pos = 2)
+plot.auto_rate(min_rate, pos = 2)
 summary(min_rate, pos = 2)
 ```
 
