@@ -90,6 +90,7 @@
 #'   data start? Default is `1`.
 #'
 #' @importFrom lubridate parse_date_time
+#' @importFrom purrr reduce
 #'
 #' @export
 #'
@@ -162,9 +163,16 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   # ERROR CHECK(S)
   # TODO: gotta add tryCatch() here if parse_date_time() fails.
 
+  ## changed from unlist to purrr::reduce here
+  ## Because of failure to convert i still don't really understand.
+  ## But 'unlist' on the data.table column of already posix date-times caused them
+  ## to be converted to unix times so then the 'format' was wrong.
+  ## Added purrr:reduce instead, which seems like it preserves the class
+  ## It's something to do with "ts" being a data.table/data.frame column.
+  ## Does not happen with vectors.
 
   # formate to datetime, then convert to interval in seconds:
-  dtm <- lubridate::parse_date_time(unlist(ts), format) # format to datetime
+  dtm <- lubridate::parse_date_time(purrr::reduce(ts, c), format) # format to datetime
   # calculate the difference in all times, from starting time (dtm[1])
   intervals <- as.numeric(difftime(dtm, dtm[1], units = "secs"))
 

@@ -23,9 +23,9 @@ test_that("format_time converts day-month-year hour-min", {
 })
 
 test_that("format_time converts when AM/PM is present", {
-          x <- c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM")
-          expect_equal(format_time(x, format = "dmyHMSp")[3], 8041)
-          })
+  x <- c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM")
+  expect_equal(format_time(x, format = "dmyHMSp")[3], 8041)
+})
 
 test_that("format_time accepts dataframes", {
   x <- data.frame(
@@ -99,7 +99,7 @@ test_that("format_time converts dataframe with separate date and time columns", 
                   date = c("2020-4-6", "2020-4-6", "2020-4-6",
                            "2020-4-6", "2020-4-6", "2020-4-6"),
                   text2 = c("text2","text2","text2",
-                           "text2","text2","text2"),
+                            "text2","text2","text2"),
                   time = c("3:25:01 PM", "3:25:11 PM", "3:25:21 PM",
                            "3:25:31 PM", "3:25:41 PM", "3:25:51 PM"))
   result <- format_time(x, time = c(2,4), format = "ymdHMSp")
@@ -195,4 +195,41 @@ test_that("format_time works across midnight when no dates provided", {
                regexp = NA)
   expect_message(format_time(x, time = 1, format = "HMSp"),
                  regexp = "Time\\(s) cross midnight, attempting to parse correctly...")
+})
+
+## This test in response to a failure to convert i still don't really understand.
+## But 'unlist' on the data.table column of already posix date-times caused them
+## to be converted to unix times so then the 'format' was wrong.
+## Added purrr:reduce instead, which seems like it preserves the class
+## It's something to do with it being a data.table or data.frame column.
+## Does not happen with vectors.
+
+test_that("format_time - works with times already formatted as POSIX", {
+
+  datetimes <- c("2013-05-23 13:02:40", "2013-05-23 13:02:41", "2013-05-23 13:02:42",
+                          "2013-05-23 13:02:43", "2013-05-23 13:02:44", "2013-05-23 13:02:45",
+                          "2013-05-23 13:02:46", "2013-05-23 13:02:47", "2013-05-23 13:02:48",
+                          "2013-05-23 13:02:49")
+  datetimes<-as.POSIXct(datetimes)
+
+  ## vector
+  expect_error(format_time(datetimes, 1, "ymdHMS"),
+               NA)
+  expect_equal(format_time(datetimes, 1, "ymdHMS"),
+               1:10)
+  ## df
+  df <- data.frame(times = datetimes,
+                   oxy = urchins.rd[[2]][1:10])
+  expect_error(format_time(df, 1, "ymdHMS"),
+               NA)
+  expect_equal(format_time(df, 1, "ymdHMS")[[3]],
+               1:10)
+  ## dt
+  dt <- data.table(times = datetimes,
+                   oxy = urchins.rd[[2]][1:10])
+  expect_error(format_time(dt, 1, "ymdHMS"),
+               NA)
+  expect_equal(format_time(dt, 1, "ymdHMS")[[3]],
+               1:10)
+
 })

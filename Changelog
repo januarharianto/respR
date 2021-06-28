@@ -52,6 +52,7 @@ Changes
 - FIX: fix for not appending new numeric time column onto a data.table
 - FIX: fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
 - FIX: fix for not working with multiple date-time columns if one of them wasn't column 1
+- FIX: fix for failing to format date-times which were already in POSIX/POSIX.ct format
 
 ========================== convert_val() ============================
 - New function
