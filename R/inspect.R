@@ -90,9 +90,9 @@
 #' ## Failed Checks
 #'
 #' The most important data check in `inspect` is that all data columns are
-#' numeric. If any of these checks fail, the function skips the remaining checks
-#' for that column, the function exits returning `NULL`, and no output object or
-#' plot is produced.
+#' numeric. If any column fails this check, the function skips the remaining
+#' checks for that column, the function exits returning `NULL`, and no output
+#' object or plot is produced.
 #'
 #' The remaining data checks in `inspect` are mainly exploratory and help
 #' diagnose and flag potential issues with the data that might affect rate
@@ -243,13 +243,13 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   # combine results
   checks <- cbind(x_results[[1]], y_results[[1]])
-  locs <- cbind(x_results[[2]], y_results[[2]])
+  locs_raw <- cbind(x_results[[2]], y_results[[2]])
 
   # output
   ## rename columns:
   colnames(checks) <- c(names(df[time]), names(df[oxygen]))
-  list <- lapply(1:ncol(locs), function(z) locs[, z])
-  names(list) <- c(names(df[time]), names(df[oxygen]))
+  locs <- lapply(1:ncol(locs_raw), function(z) locs_raw[, z])
+  names(locs) <- c(names(df[time]), names(df[oxygen]))
 
   # save new data frame and create output object
   dataframe <- data.table::data.table(cbind(df[time], df[oxygen]))
@@ -261,8 +261,8 @@ inspect <- function(x, time = NULL, oxygen = NULL,
                             oxygen = oxygen,
                             width = width),
               checks = checks,
-              locs_raw = locs,
-              locs = list)
+              locs_raw_raw = locs_raw,
+              locs = locs)
 
   class(out) <- "inspect"
 

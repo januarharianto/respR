@@ -58,14 +58,14 @@ check_timeseries <- function(x, type = "time") {
     if(!num[[1]][1]) evn <- sapply(x, function(y) check_evn(y)) else
       evn <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     checks <- rbind(
-      num[1, , drop = F],
+      num[1],
       nan[1, , drop = F],
       seq[1, , drop = F],
       dup[1, , drop = F],
       evn[1, , drop = F]
     )
     locs <- rbind(
-      num[2, , drop = F],
+      NA,
       nan[2, , drop = F],
       seq[2, , drop = F],
       dup[2, , drop = F],
@@ -85,13 +85,13 @@ check_timeseries <- function(x, type = "time") {
     dup <- NA
     evn <- NA
     checks <- rbind(
-      num[1, , drop = F],
+      num[1],
       nan[1, , drop = F],
       seq[1],
       dup[1],
       evn[1])
     locs <- rbind(
-      num[2, , drop = F],
+      NA,
       nan[2, , drop = F],
       seq[1],
       dup[1],

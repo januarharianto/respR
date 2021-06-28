@@ -123,9 +123,9 @@ function.
 \subsection{Failed Checks}{
 
 The most important data check in \code{inspect} is that all data columns are
-numeric. If any of these checks fail, the function skips the remaining checks
-for that column, the function exits returning \code{NULL}, and no output object or
-plot is produced.
+numeric. If any column fails this check, the function skips the remaining
+checks for that column, the function exits returning \code{NULL}, and no output
+object or plot is produced.
 
 The remaining data checks in \code{inspect} are mainly exploratory and help
 diagnose and flag potential issues with the data that might affect rate
