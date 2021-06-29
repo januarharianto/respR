@@ -237,7 +237,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   if (any(unlist(x_results[[1]][1,])))
     warning("inspect: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(x_results[[1]][2,]) == "TRUE"))
-    warning("inspect: Inf/-Inf values detected in Time column.", call. = F)
+    warning("inspect: Inf/-Inf values detected in Time column. Remove or replace before proceeding.", call. = F)
   if (any(unlist(x_results[[1]][3,]) == "TRUE"))
     warning("inspect: NA/NaN values detected in Time column.", call. = F)
   if (any(unlist(x_results[[1]][4,]) == "TRUE"))
@@ -250,7 +250,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   if (any(unlist(y_results[[1]][1,])))
     warning("inspect: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(y_results[[1]][2,]) == "TRUE"))
-    warning("inspect: Inf/-Inf values detected in Oxygen column(s).", call. = F)
+    warning("inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
   if (any(unlist(y_results[[1]][3,]) == "TRUE"))
     warning("inspect: NA/NaN values detected in Oxygen column(s).", call. = F)
 
