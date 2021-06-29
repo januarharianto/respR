@@ -49,6 +49,8 @@ check_timeseries <- function(x, type = "time") {
     num <- sapply(x, function(y) check_num(y))
     ## if not numeric, no point doing these checks
     ## So instead we 'skip'
+    if(!num[[1]][1]) inf <- sapply(x, function(y) check_inf(y)) else
+      inf <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     if(!num[[1]][1]) nan <- sapply(x, function(y) check_na(y)) else
       nan <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     if(!num[[1]][1]) seq <- sapply(x, function(y) check_seq(y)) else
@@ -58,7 +60,8 @@ check_timeseries <- function(x, type = "time") {
     if(!num[[1]][1]) evn <- sapply(x, function(y) check_evn(y)) else
       evn <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     checks <- rbind(
-      num[1],
+      num[1, , drop = F],
+      inf[1, , drop = F],
       nan[1, , drop = F],
       seq[1, , drop = F],
       dup[1, , drop = F],
@@ -66,6 +69,7 @@ check_timeseries <- function(x, type = "time") {
     )
     locs <- rbind(
       NA,
+      inf[2, , drop = F],
       nan[2, , drop = F],
       seq[2, , drop = F],
       dup[2, , drop = F],
@@ -74,8 +78,14 @@ check_timeseries <- function(x, type = "time") {
   } else if (type == "oxygen") {
     num <- sapply(x, function(y) check_num(y))
 
-    # if oxy column has passed numeric check, do check NA
+    # if oxy column has passed numeric check, do check
     # otherwise return "skip"
+    # check inf
+    inf <- sapply(1:length(x), function(y) {
+      if(!num[,y][[1]]) check_inf(x[[y]]) else
+      return(list(check = "skip", which = integer(0)))
+    })
+    # check nan
     nan <- sapply(1:length(x), function(y) {
       if(!num[,y][[1]]) check_na(x[[y]]) else
       return(list(check = "skip", which = integer(0)))
@@ -85,13 +95,15 @@ check_timeseries <- function(x, type = "time") {
     dup <- NA
     evn <- NA
     checks <- rbind(
-      num[1],
+      num[1, , drop = F],
+      inf[1, , drop = F],
       nan[1, , drop = F],
       seq[1],
       dup[1],
       evn[1])
     locs <- rbind(
       NA,
+      inf[2, , drop = F],
       nan[2, , drop = F],
       seq[1],
       dup[1],
@@ -99,7 +111,7 @@ check_timeseries <- function(x, type = "time") {
   }
 
   # rename rows - I'm sure I can make this more efficient... later..
-  rnames <- c("numeric", "NA/NaN", "sequential", "duplicated", "evenly-spaced")
+  rnames <- c("numeric", "Inf/-Inf", "NA/NaN", "sequential", "duplicated", "evenly-spaced  ")
   rownames(checks) <- rnames
   rownames(locs) <- rnames
 
@@ -119,6 +131,15 @@ check_num <- function(x) {
 ## check for NA values - used in the function `inspect()`
 check_na <- function(x) {
   test <- is.na(x)
+  check <- any(test)
+  highlight <- which(test)
+  out <- list(check = check, which = highlight)
+  return(out)
+}
+
+## check for Inf/-Inf values - used in the function `inspect()`
+check_inf <- function(x) {
+  test <- is.infinite(x)
   check <- any(test)
   highlight <- which(test)
   out <- list(check = check, which = highlight)
@@ -310,6 +331,30 @@ generate_mrdf <- function(dt, width) {
   data.table::setnames(rdt, 1:2, c("x", "y"))
   return(rdt)
 }
+
+#' Omit NA, NaN, Inf and -Inf from a vector or dataframe columns
+#'
+#' For using with, for example, range to get axis range values in 'inspect'.
+#' Previously, na.omit was used, then discovered data files with Inf values.
+#' This causes axis limit range to be Inf, and xlim/ylim don't accept infinite
+#' axes!
+#'
+#' If x is dataframe, it returns a vector of all columns appended together.
+#' Only useful for getting range in this case, don't use for anything else.
+#'
+#' @keywords internal
+#'
+#' @export
+nainf.omit <- function(x) {
+  if (is.vector(x)) z <- na.omit(x[is.finite(x)])
+
+  if (is.data.frame(x)) {
+    z <- lapply(x, function(y) na.omit(y[is.finite(y)]))
+    z <- as.vector(unlist(z))
+  }
+  return(z)
+}
+
 
 # Deal with pesky "no visible binding for global variable.." checks
 x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL

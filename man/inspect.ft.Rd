@@ -104,12 +104,13 @@ resulting output object be saved and passed to other \code{respR} functions.
 
 \subsection{Other checks}{
 
-The \code{time} column is checked for missing (\code{NA/NaN}) values, that values are
-sequential, that there are no duplicate times, and that it is numerically
-evenly-spaced. Oxygen columns are simply checked for missing (\code{NA/NaN}) data.
-See \strong{Failed Checks} section for what it means for analyses if these checks
-result in warnings. If the output is assigned, the specified columns are
-saved to a \code{list} object for use in later functions such as
+The \code{time} column is checked for missing (\code{NA/NaN}) values, infinite values
+both positive and negative (\code{Inf/-Inf}), that values are sequential, that
+there are no duplicate times, and that it is numerically evenly-spaced.
+Oxygen columns are checked for missing (\code{NA/NaN}) and infinite values
+(\code{Inf/-Inf}). See \strong{Failed Checks} section for what it means for analyses if
+these checks result in warnings. If the output is assigned, the specified
+columns are saved to a \code{list} object for use in later functions such as
 \code{\link[=calc_rate.ft]{calc_rate.ft()}}. A plot is also produced.
 }
 
@@ -183,6 +184,14 @@ The most important data check in \code{inspect.ft} is that all data columns are
 numeric. If any column fails this check, the function skips the remaining
 checks for that column, the function exits returning \code{NULL}, and no output
 object or plot is produced.
+
+The other failed check that requires action is the check for infinite values
+(\code{Inf/-Inf}). Some oxygen sensing systems add these in error when
+interference or data dropouts occur. Infinite values will cause problems when
+it comes to calculating rates, so need to be removed. If found, locations of
+these are printed and can be found in the output object under \verb{$locs}. Note,
+these values are not plotted, so special note should be taken of the warnings
+and console printout.
 
 The remaining data checks in \code{inspect.ft} are mainly exploratory and help
 diagnose and flag potential issues with the data that might affect rate

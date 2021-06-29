@@ -27,13 +27,14 @@
 #'
 #' ## Other checks
 #'
-#' The `time` column is checked for missing (`NA/NaN`) values, that values are
-#' sequential, that there are no duplicate times, and that it is numerically
-#' evenly-spaced. Oxygen columns are simply checked for missing (`NA/NaN`) data.
-#' See **Failed Checks** section for what it means for analyses if these checks
-#' result in warnings. If the output is assigned, the specified columns are
-#' saved to a `list` object for use in later functions such as [`calc_rate()`]
-#' and [`auto_rate()`]. A plot is also produced.
+#' The `time` column is checked for missing (`NA/NaN`) values, infinite values
+#' both positive and negative (`Inf/-Inf`), that values are sequential, that
+#' there are no duplicate times, and that it is numerically evenly-spaced.
+#' Oxygen columns are checked for missing (`NA/NaN`) and infinite values
+#' (`Inf/-Inf`). See **Failed Checks** section for what it means for analyses if
+#' these checks result in warnings. If the output is assigned, the specified
+#' columns are saved to a `list` object for use in later functions such as
+#' [`calc_rate()`] and [`auto_rate()`]. A plot is also produced.
 #'
 #' ## Plot
 #'
@@ -93,6 +94,14 @@
 #' numeric. If any column fails this check, the function skips the remaining
 #' checks for that column, the function exits returning `NULL`, and no output
 #' object or plot is produced.
+#'
+#' The other failed check that requires action is the check for infinite values
+#' (`Inf/-Inf`). Some oxygen sensing systems add these in error when
+#' interference or data dropouts occur. Infinite values will cause problems when
+#' it comes to calculating rates, so need to be removed. If found, locations of
+#' these are printed and can be found in the output object under `$locs`. Note,
+#' these values are not plotted, so special note should be taken of the warnings
+#' and console printout.
 #'
 #' The remaining data checks in `inspect` are mainly exploratory and help
 #' diagnose and flag potential issues with the data that might affect rate
@@ -228,17 +237,21 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   if (any(unlist(x_results[[1]][1,])))
     warning("inspect: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(x_results[[1]][2,]) == "TRUE"))
-    warning("inspect: NA/NaN values detected in Time column.", call. = F)
+    warning("inspect: Inf/-Inf values detected in Time column.", call. = F)
   if (any(unlist(x_results[[1]][3,]) == "TRUE"))
-    warning("inspect: Non-sequential Time values found.", call. = F)
+    warning("inspect: NA/NaN values detected in Time column.", call. = F)
   if (any(unlist(x_results[[1]][4,]) == "TRUE"))
-    warning("inspect: Duplicate Time values found.", call. = F)
+    warning("inspect: Non-sequential Time values found.", call. = F)
   if (any(unlist(x_results[[1]][5,]) == "TRUE"))
+    warning("inspect: Duplicate Time values found.", call. = F)
+  if (any(unlist(x_results[[1]][6,]) == "TRUE"))
     warning("inspect: Time values are not evenly-spaced (numerically).", call. = F)
 
   if (any(unlist(y_results[[1]][1,])))
     warning("inspect: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(y_results[[1]][2,]) == "TRUE"))
+    warning("inspect: Inf/-Inf values detected in Oxygen column(s).", call. = F)
+  if (any(unlist(y_results[[1]][3,]) == "TRUE"))
     warning("inspect: NA/NaN values detected in Oxygen column(s).", call. = F)
 
   # combine results
@@ -261,7 +274,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
                             oxygen = oxygen,
                             width = width),
               checks = checks,
-              locs_raw_raw = locs_raw,
+              locs_raw = locs_raw,
               locs = locs)
 
   class(out) <- "inspect"
@@ -316,34 +329,41 @@ print.inspect <- function(x, ...) {
   #   print(head(xnan, 20))
   # }
   if (checks[, 1][[2]] != "skip" && checks[, 1][[2]]) {
-    xnan <- locs[, 1][[2]]
+    xinf <- locs[, 1][[2]]
+    cat("Inf/-Inf Time data locations: ")
+    if (length(xinf) > 20) cat("(first 20 shown) ")
+    cat("in column:", names(x$dataframe)[1], "\n")
+    print(head(xinf, 20))
+  }
+  if (checks[, 1][[3]] != "skip" && checks[, 1][[3]]) {
+    xnan <- locs[, 1][[3]]
     cat("NA/NaN Time data locations: ")
     if (length(xnan) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xnan, 20))
   }
-  if (checks[, 1][[3]] != "skip" && checks[, 1][[3]]) {
-    xseq <- locs[, 1][[3]]
+  if (checks[, 1][[4]] != "skip" && checks[, 1][[4]]) {
+    xseq <- locs[, 1][[4]]
     cat("Non-sequential Time data locations ")
     if (length(xseq) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xseq, 20))
   }
-  if (checks[, 1][[4]] != "skip" && checks[, 1][[4]]) {
-    xdup <- locs[, 1][[4]]
+  if (checks[, 1][[5]] != "skip" && checks[, 1][[5]]) {
+    xdup <- locs[, 1][[5]]
     cat("Duplicate Time data locations ")
     if (length(xdup) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xdup, 20))
   }
-  if (checks[, 1][[5]] != "skip" && checks[, 1][[5]]) {
-    xevn <- locs[, 1][[5]]
+  if (checks[, 1][[6]] != "skip" && checks[, 1][[6]]) {
+    xevn <- locs[, 1][[6]]
     cat("Uneven Time data locations ")
     if (length(xevn) > 20) cat("(first 20 shown) ")
     cat("in column:", names(x$dataframe)[1], "\n")
     print(head(xevn, 20))
     cat("Minimum and Maximum intervals in uneven Time data: \n")
-    print(range(diff(na.omit(x$dataframe[[1]]))))
+    print(range(diff(nainf.omit(x$dataframe[[1]]))))
   }
 
   for(i in 2:ncol(checks)) { ## for multiple columns
@@ -357,7 +377,14 @@ print.inspect <- function(x, ...) {
     #   print(head(ynan, 20))
     # }
     if (checks[, i][[2]] != "skip" && checks[, i][[2]]) {
-      ynan <- locs[, i][[2]]
+      yinf <- locs[, i][[2]]
+      cat("Inf/-Inf locations ")
+      if (length(yinf) > 20) cat("(first 20 shown) ")
+      cat("in Oxygen column:", names(x$dataframe)[i], "\n")
+      print(head(yinf, 20))
+    }
+    if (checks[, i][[3]] != "skip" && checks[, i][[3]]) {
+      ynan <- locs[, i][[3]]
       cat("NA/NaN locations ")
       if (length(ynan) > 20) cat("(first 20 shown) ")
       cat("in Oxygen column:", names(x$dataframe)[i], "\n")
@@ -417,7 +444,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
         cex.main = 1,
         mgp = c(0, 0.5, 0))
 
-    ylim <- range(na.omit(dt[[2]]))
+    ylim <- range(nainf.omit(dt[[2]]))
     buffer <- diff(ylim)*0.05
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
@@ -471,7 +498,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
     rates <- roll_reg_plot(dt, width)
     half_width <- width/2
     xdt <- dt[[1]]
-    xlim <- range(na.omit(xdt))
+    xlim <- range(nainf.omit(xdt))
 
     ## now to get ylim, if width is higher than 0.1 we run roll_reg_plot with
     ## 0.1 width to get y range of rates, and plot against these. This means if
@@ -479,11 +506,11 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
     ## don't look weird - i.e. should get flatter with higher widths
     if(width > 0.1) {
       rates01 <- roll_reg_plot(dt, 0.1)
-      ylim <- range(na.omit(rates01))
+      ylim <- range(nainf.omit(rates01))
       buffer <- diff(ylim)*0.05
       ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
     } else {
-      ylim <- range(na.omit(rates))
+      ylim <- range(nainf.omit(rates))
       buffer <- diff(ylim)*0.05
       ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
     }
@@ -528,7 +555,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
         cex.main = 1,
         tck = -.05)
 
-    ylim <- range(na.omit(x$dataframe[,-1])) ## so all on same axes
+    ylim <- range(nainf.omit(x$dataframe[,-1])) ## so all on same axes
     buffer <- diff(ylim)*0.05
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 

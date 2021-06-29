@@ -66,7 +66,8 @@ Changes
 - CHANGE: Removed "input detected" message at start - other functions don't have this
 
 ========================== inspect() ============================
-- NEW: checks that each column contains numeric data. this is the most important check, and if any column fails, the function skips the reamining checks for that column and returns a NULL result
+- NEW: checks that each column contains numeric data. this is the most important check, and if any column fails, the function skips the remaining checks for that column and returns a NULL result
+- NEW: checks for infinite values (`Inf/-Inf`) in both time and oxygen
 - NEW: added `width` input for rolling reg plot (default 0.1)
 - NEW: `summary()` works on output (simply a wrapper for `print()`)
 - NEW: Can pass 'rate.rev = FALSE' to plot rates not reversed (for oxygen production respirometry)
