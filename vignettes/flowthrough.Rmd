@@ -930,7 +930,7 @@ print(rate3_abs)
 
 ## Notes
 
-- Note, that while it is required (for the `inspect.ft` at least), `time` data are never used in calculations, only for plotting and choosing regions. Higher resolution data will give more delta oxygen values to average, but in general the resolution or recording frequency of the data is less important than other factors such as ensuring equilibrium has been reached. 
+- Note, that while it is required (for `inspect.ft` at least), `time` data are never used in calculations, only for plotting and choosing regions. Higher resolution data will give more delta oxygen values to average, but in general the resolution or recording frequency of the data is less important than other factors such as ensuring equilibrium has been reached. 
 
 - To repeat, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
 

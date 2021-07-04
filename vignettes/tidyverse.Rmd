@@ -19,7 +19,9 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ## Working in the Tidyverse
 
-`respR` integrates nicely in the [tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. For more information about using pipes in particular, see the ["Pipes" chapter](http://r4ds.had.co.nz/pipes.html) in the online R for Data Science book.
+`respR` integrates nicely with the [tidyverse](https://www.tidyverse.org/), specifically with `dplyr` functions e.g. `select()`, `filter()` and `mutate()`, and `magrittr` pipe operators ("`%>%`") to clearly express workflows in an organised sequence. 
+
+It also works with the new native pipe operator (`|>`) introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/), however the `dpylr` pipes have some additional functionality. For more information, see the [**Pipes**](http://r4ds.had.co.nz/pipes.html) chapter in the online *R for Data Science* book.
 
 ## Examples
 

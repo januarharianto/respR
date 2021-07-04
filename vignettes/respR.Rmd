@@ -31,7 +31,7 @@ There are four broad methodological approaches in respirometry:
 - *Flowthrough* 
 - *Open tank or open arena*
 
-In **closed chamber** respirometry, $O_2$ decrease is measured within a hermetically sealed chamber of known volume, sometimes set within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the $O_2$ timeseries by assuming or fitting a linear relationship between oxygen and time, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in $O_2$ concentration over time, or in the case of a two-point measurement, the difference in $O_2$ concentration divided by time elapsed, and $V$ is the volume of fluid in the container (Lighton 2008).
+In **closed chamber** respirometry, $O_2$ decrease is measured within a hermetically sealed chamber of known volume, sometimes situated within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the $O_2$ timeseries by assuming or fitting a linear relationship between oxygen and time, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in $O_2$ concentration over time, or in the case of a two-point measurement, the difference in $O_2$ concentration divided by time elapsed, and $V$ is the volume of fluid in the container (Lighton 2008).
 
 In **intermittent flow** respirometry, $O_2$ is measured as described above, but periodically the chamber is flushed with new water or air, returning it to initial conditions, resealed, and the experiment repeated (Svendsen et al. 2016). This technique is essentially the same as closed respirometry, but with the ability to conduct many replicates relatively easily. Depending on the metabolic rate metric being investigated, the final rate can be calculated as the mean of multiple measures (e.g. Carey et al. 2016), the lowest or highest rates recorded in some portion of the trials (e.g. Stoffels 2015), or some other way of summarising the multiple rates recorded.
 
@@ -46,34 +46,27 @@ A final method is **open tank** or **open arena** respirometry, in which a tank 
 
 When working with respirometry data, you will often need to:
 
-1. Ensure that the data, or at least a **subset** of the data, is representative of the research question of interest.
-2. Perform an initial analysis of the data to **estimate** the rate of change in oxygen concentration or amount.
-3. Depending on the experimental setup, **correct** for background usage of oxygen by micro-organisms, or correct for oxygen flux from the air.
+1. Ensure that the data, or at least a **subset** of the data, is representative of the research question of interest, and free of errors.
+2. Determine **the rate of change** in oxygen across the data or a subset of it.
+3. Depending on the experiment, **adjust rates** for background usage of oxygen by micro-organisms, or for oxygen flux from the air.
 4. **Convert** the resulting unitless rate to the absolute (i.e. whole specimen or chamber) rate, a mass-specific rate, or an area-specific rate in the appropriate units.
 
 The `respR` package allows determination of common respirometry metrics and contains several functions to make this process straightforward.
 
 - It provides visual feedback and diagnostic plots to help you explore, subset and analyse your data.
 - It uses computational techniques such as *rolling regressions* and *kernel density estimates* to determine **maximum**, **minimum** or **most linear** rates within time-series data.
-- The package takes an object-oriented approach, with all functions outputting objects which can be read by subsequent functions.
-- By separating the workflow into a series of connected functions, you can "mix and match" functions to help you achieve your result.
+- The package takes an object-oriented approach, with functions outputting objects which can be read by subsequent functions, reducing the need for additional inputs.
 - Output objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data.
-
-## Example Data
-
-The package includes several example datasets,  that can be used immediately once `respR` is loaded. 
-
-```{r, echo=TRUE}
-data(package = "respR") # run for full list
-```
-
-These data were mostly obtained from actual experiments, and more information can be obtained by invoking the `?` command in the R console, for instance, `?urchins.rd`. 
 
 ## Vignettes and documentation 
 
-<!-- As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [Reference](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page.  -->
-<!-- In addition, we have prepared several vignettes describing typical analysis workflows found under **Articles**, or via these links: -->
-We have prepared several vignettes describing typical analysis workflows and how `respR` works:
+As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [**Reference**](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page. 
+
+In addition, we have prepared vignettes (i.e. guides) describing typical analysis workflows, and looking at several functions in more depth. These can be found under [**Articles**]().
+
+Under [**Further Reading**]() you can find more information, such as how to contact us and provide feedback, how `respR` is being used by the scientific community, and more.
+
+To get started check out one of these vignettes describing typical analysis workflows and how `respR` works:
 
 1. **[Importing data](https://januarharianto.github.io/respR/articles/importing.html)**  
 `respR` has functions to make it easy to bring in and prepare your data, including from the raw data files output by various respirometry systems.
@@ -112,16 +105,3 @@ Information about how `respR` integrates with `tidyverse` practices to streamlin
 12. **[A comparison of respR with other R packages](https://januarharianto.github.io/respR/articles/packages_comp.html)**  
     **[When to use respR](https://januarharianto.github.io/respR/articles/usage.html)**  
 The functionality and workflow of `respR` in comparison to other options, and when you should use it.
-
-
-## References
-
-Carey, Nicholas, Januar Harianto, and Maria Byrne. “Sea Urchins in a High-CO 2 World: Partitioned Effects of Body Size, Ocean Warming and Acidification on Metabolic Rate.” The Journal of Experimental Biology 219, no. 8 (April 15, 2016): 1178–86. https://doi.org/10.1242/jeb.136101.
-
-Gamble, S., A.G. Carton, and I. Pirozzi. “Open-Top Static Respirometry Is a Reliable Method to Determine the Routine Metabolic Rate of Barramundi, Lates Calcarifer.” Marine and Freshwater Behaviour and Physiology 47, no. 1 (January 2, 2014): 19–28. https://doi.org/10.1080/10236244.2013.874119.
-
-Leclercq, N, Jean-Pierre Gattuso, and J Jaubert. “Measurement of Oxygen Metabolism in Open-Top Aquatic Mesocosms:Application to a Coral Reef Community.” Marine Ecology Progress Series 177 (1999): 299–304. https://doi.org/10.3354/meps177299.
-
-Lighton, John R. B. Measuring Metabolic Rates. Oxford University Press, 2008. https://doi.org/10.1093/acprof:oso/9780195310610.001.0001.
-
-Stoffels, Rick J. “Physiological Trade-Offs Along a Fast-Slow Lifestyle Continuum in Fishes: What Do They Tell Us about Resistance and Resilience to Hypoxia?” Edited by Jodie L. Rummer. PLOS ONE 10, no. 6 (June 12, 2015): e0130303. https://doi.org/10.1371/journal.pone.0130303.

@@ -1,11 +1,11 @@
 ---
-title: respR v2 - Code changes
+title: v2.0 Code changes
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{respR v2 - Code changes}
+  %\VignetteIndexEntry{v2.0 Code changes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,15 +14,15 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-`respr v2.0` was a huge rewrite and rethinking of the entire package. During this process it quickly became clear we could not update the package satisfactorily without breaking some code from v1.x. Therefore, we took the decision to implement these and other improvements in the belief that it was better to do it now and have the package work consistently and logically well into the future. 
+`respr v2.0` was a huge rewrite and rethinking of the entire package. During this process it quickly became clear we could not update the package satisfactorily without breaking some code from v1.x. Therefore, we took the decision to implement these and a few other improvements in the belief that it was better to do it now and have the package work consistently and logically well into the future. 
 
-While the majority of the package workflows are in general unchanged, and older code *may* work, but there are enough changes that we recommend old code not be used with v2. `respR` workflows are generally concise and overall work in the same way, so updating code to be compatible should be relatively straightforward. 
+While the majority of the package workflows are in general unchanged, and older code *may* work, there are enough changes that we recommend old code be used very carefully with v2. `respR` workflows are generally concise and overall work in the same way, so any updating of code to be compatible should be relatively straightforward. 
 
 This is an *incomplete* summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
 
 IF you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see [here]() for information about how to include a link to `respR v1.1` so that this code will be reproducible in the future. 
 
-If you come across any changes that are not documented here, [**let us know**](mailto:nicholascarey@gmail.com) and we will add it to the list. 
+If you come across any changes that are not documented here, and you think should be, [let us know](mailto:nicholascarey@gmail.com) and we will add it to the list. 
 
 ### Deprecated functions
 
@@ -30,7 +30,7 @@ If you come across any changes that are not documented here, [**let us know**](m
 
 ### Pcrit analyses
 
-As well as `pcrit` being removed, `calc_prit` has been renamed `oxy_crit()` to avoid conflicts with another package. 
+As well as `pcrit` being removed, `calc_pcrit` has been renamed `oxy_crit()` to avoid conflicts with another package. 
 
 ### Flowthrough respirometry analyses
 
@@ -40,7 +40,7 @@ The entire workflow for analysing flowthrough respirometry data has changed. Any
 
 Several function inputs have been renamed to make them more consistent. 
 
- - All primary inputs are now `x` (was previously `df` in `auto_rate`, `inspect`, `inspect.ft`, and `subsample` among others). Any code using `df =` can be replaced with `x =`. 
+ - All primary inputs are now `x` (was previously `df` in `auto_rate`, `inspect`, and `subsample` among others). Any code using `df =` can be replaced with `x =`. 
  
  - Some functions have had inputs reordered (e.g. `auto_rate` now has `method` as second input). Therefore, code where inputs were not explicitly named may not work as it did previously.  
  
@@ -50,16 +50,16 @@ Several function inputs have been renamed to make them more consistent.
 
 Several functions have had their output object elements renamed to make them consistent. 
 
- - Data element renamed `$dataframe` instead of `$df`, `$data`, etc. 
+- Data element renamed `$dataframe` instead of `$df`, `$data`, etc. 
  
- - Output rate elements have consistent naming structure starting with `rate`, with a suffix where relevant:
-    - `convert_rate` : `output` changed to `rate.output`, `absolute` to `rate.absolute`
+- Output rate elements have consistent naming structure starting with `rate`, with a suffix where relevant:
+    - `convert_rate` : `$output` changed to `$rate.output`, `$absolute` to `$rate.absolute`
     - `calc_rate.bg` : `$bgrate` changed to `$rate.bg`, `$mean` to `$rate.bg.mean`
-    - `adjust_rate`  : `corrected` changed to `rate.adjusted`, `input.rate` to `rate.input`
+    - `adjust_rate`  : `$corrected` changed to `$rate.adjusted`, `$input.rate` to `$rate.input`
 
-Outputs have also been rearranged, so any referencing not using element names may not work the same (e.g. `output[[2]]`).
+- Outputs have also been rearranged, so any referencing not using element names may not work the same (e.g. `output[[2]]`).
 
-Summary tables (`$summary`) now have a `rank` column in position 1, have also in general been rearranged, new columns added, and some columns renamed. Therefore if column numbers or names have been used to extract results these may now be incorrect.
+- Summary tables (`$summary`) now have a `rank` column in position 1, and have also in general been rearranged, new columns added, and some columns renamed. Therefore if column numbers or names have been used to extract results these may now be incorrect.
 
 ## Function specific changes 
 
@@ -81,7 +81,7 @@ The `"max"` and `"min"` methods have been deprecated. These still work as before
 
 ### `convert_DO()`
 
-The `"%"` oxygen unit has been deprecated and replaced with `"%Air"`, and the additional unit of `"%O2"` added. In older code replace `"%"` (and other variations such as `"percent"`) with `"%Air"`. See `help("convert_DO")`.
+The `"%"` oxygen unit has been deprecated and replaced with `"%Air"`. In older code replace `"%"` (and other variations such as `"percent"`) with `"%Air"`. See `help("convert_DO")`. Note, the the additional unit of `"%O2"` has been added. These are not the same.
 
 ### `adjust_rate()`
 
@@ -98,6 +98,6 @@ A change to the code for determining `by = "o2"` ranges to ensure it works with 
 
 ### `inspect()`
 
-The output `$list` and `$list_raw` elements renamed `locs` and `$locs_raw`. Code should not need to be updated unless these were used to fix data issues in the relevant data frames.
+The output `$list` and `$list_raw` elements renamed `locs` and `$locs_raw`. Code should not need to be updated unless these were used to extract references to fix data issues in the relevant data frames.
 
 

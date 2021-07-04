@@ -1,0 +1,44 @@
+---
+title: Contact
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+resource_files:
+vignette: >
+  %\VignetteIndexEntry{Contact}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Developers
+
+`respR` is designed, programmed, and maintained by [Januar Harianto](https://github.com/januarharianto) and [Nicholas Carey](https://github.com/nicholascarey). We are biologists and created `respR` to assist with our own work, before realising it would be useful to the scientific community. We have done this almost entirely in our spare time, spending many hundreds of hours working on the package. 
+
+## Contact
+
+If you have any feedback about using `respR` feel free to get in touch: 
+
+- General questions or trouble getting started - contact via [**email**](mailto:nicholascarey@gmail.com)
+
+- Bugs, problems, or feature requests - open a [**Github Issue**](https://github.com/januarharianto/respR/issues)
+
+- Want to dive into the code and fix it? - fork the [**Github repo**](https://github.com/januarharianto/respR/) and do a [**Pull Request**](https://github.com/januarharianto/respR/pulls)
+
+## Twitter
+
+`respR` has a [Twitter account](https://twitter.com/respR_pkg). Follow for the latest news and updates. 
+
+
+## Slack
+
+Set up an open Slack?
+
+
+## Support
+
+Github sponsor?

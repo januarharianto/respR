@@ -82,9 +82,9 @@ navbar:
 
     - text: Vignettes
       menu:
-      - text: "Importing data"
+      - text: "import_file: Importing data"
         href: articles/importing.html
-      - text: "Inspecting data"
+      - text: "inspect: Inspecting data"
         href: articles/inspecting.html
       - text: "auto_rate: Automatic detection of linear rates"
         href: articles/auto_rate.html
@@ -103,16 +103,20 @@ navbar:
 
     - text: Further Reading
       menu:
-      - text: "v2.0: Code changes"
+      - text: "v2.0 Code changes"
         href: articles/v2_code_change.html
       - text: "respR: Integration with the tidyverse"
         href: articles/tidyverse.html
       - text: "respR: Reporting reproducible analyses"
         href: articles/reproducibility.html
-      - text: "respR in the scientific literature"
+      - text: "respR in use"
         href: articles/citations.html
+      - text: "Future features"
+        href: articles/future.html
       - text: "References"
         href: articles/refs.html
+      - text: "Contact"
+        href: articles/contact.html
       - text: Archived
         menu:
         - text: "auto_rate: Performance"

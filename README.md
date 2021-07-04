@@ -18,22 +18,29 @@ While the focus of the package is on aquatic respirometry, `respR` is largely un
 
 Use `respR` to:
 
-- Automatically **import** raw data from various oxygen sensing equipment
+- Automatically **import** raw data from various oxygen probe equipment
 - Rapidly **inspect** data for common issues before analysis
-- **Explore** and **visualise** timeseries data
+- **Explore** and **visualise** timeseries 
 - Perform **multiple regression analysis** on linear segments of data manually or automatically to calculate rates
 - **Adjust** rates for background oxygen consumption or production
 - **Convert** rates to any common unit of oxygen consumption or production
 - **Export** results quickly for reporting
 
-A particular highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows rates to be extracted in a statistically objective manner. See `vignette("auto_rate")` for more details.
+A highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows metabolic rates to be extracted in an objective manner. See `vignette("auto_rate")` for more details.
 
-The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify a citation, not a problem, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found `respR` useful, and we can help publicise your research, and add to the list [**here**]() of papers which have used it. 
+## Publication 
+
+<a href='https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' align="right" height="190" hspace = "20" /></a>
+
+`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR in use**]() page to see a list of published studies which have used the package to analyse their data.
+
+The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify a citation, we understand, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found `respR` useful, and we can help publicise your research. 
+
 
 We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry!
 
 ## Installation
-`respR` will be submitted soon to CRAN. For now, use the `devtools` package to install the latest stable version:
+Submission of `respR` to CRAN is planned. For now, use the `devtools` package to install the latest stable version:
 
 ```r
 install.packages("devtools")
@@ -44,7 +51,7 @@ devtools::install_github("januarharianto/respR")
 
 See [**here**](https://nicholascarey.github.io/respRsite/articles/respR.html) to get started. This site has a range of vignettes detailing the functionality, and a variety of example analyses. 
 
-We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will write you a script to get you started. 
+We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will help get you started. 
 
 ## Usage
 
@@ -77,23 +84,12 @@ urchins.rd %>%        # using the urchins dataset,
 
 ## Feedback and contributions
 
-`respR` is under continuous development. If you have any bugs or feedback, you can contact us by [**opening an issue**](https://github.com/januarharianto/respr/issues). Alternatively, you can fork the project and create a pull request.
+`respR` is under continuous development. If you have any bugs or feedback, you can contact us by [**opening an issue**](https://github.com/januarharianto/respr/issues).
 
-Please also feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
+Or feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
 
 ## Developers
 
 - [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
-- [**Nicholas Carey**](https://github.com/nicholascarey), Scottish Association of Marine Science
-
-
-## See also
-
-These packages may also help you analyse respirometry data:
-
-- [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
-- [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
-- [FishResp](https://fishresp.org) - Sergey Morozov
-- [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
-- [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
+- [**Nicholas Carey**](https://github.com/nicholascarey)
 

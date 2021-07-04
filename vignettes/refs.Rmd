@@ -33,10 +33,22 @@ Harianto, J., Carey, N., & Byrne, M. respR - An R Package for the Manipulation a
 &nbsp;  
 &nbsp;  
 
-## Other publications
+## See also
 
-The following publications were instrumental in developing `respR`.  
+These packages may also help you analyse respirometry data:
+
+- [FishResp](https://fishresp.org) - Sergey Morozov
+- [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
+- [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
+- [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
+- [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
+
+## References
+
+The following publications were instrumental in developing `respR` and writing the vignettes on this site.   
 &nbsp;  
+
+Carey, N., Harianto, J., & Byrne, M. (2016). Sea urchins in a high-CO2 world: partitioned effects of body size, ocean warming and acidification on metabolic rate. The Journal of Experimental Biology, 219(8), 1178–86. [doi: 10.1242/jeb.136101](https://doi.org/10.1242/jeb.136101)
 
 Clark, T. D., Sandblom, E., & Jutfelt, F. (2013). Aerobic scope measurements of fishes in an era of climate change: respirometry, relevance and recommendations. *Journal of Experimental Biology*, 216(15), 2771–2782. [doi: 10.1242/Jeb.084251](https://doi.org/10.1242/Jeb.084251)
 
@@ -54,7 +66,9 @@ Muggeo, V. (2008). Segmented: An R package to fit regression models with broken-
 
 Silverman, B.W. (1986). Density Estimation for Statistics and Data Analysis. Chapman; Hall/CRC Press.
 
-Steffensen, J. F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. *Fish Physiology and Biochemistry*, 6(1), 49–59. [doi: 10.1007/BF02995809](https://doi.org/10.1007/BF02995809)
+Steffensen, J.F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. *Fish Physiology and Biochemistry*, 6(1), 49–59. [doi: 10.1007/BF02995809](https://doi.org/10.1007/BF02995809)
+
+Stoffels, R.J. (2015). Physiological trade-offs along a fast-slow lifestyle continuum in fishes: what do they tell us about resistance and resilience to hypoxia? PLOS ONE, 10(6), e0130303. [doi: 10.1371/journal.pone.0130303](https://doi.org/10.1371/journal.pone.0130303)
 
 Svendsen, M.B.S., Bushnell, P.G. & Steffensen, J.F. (2016). Design and setup of intermittent-flow respirometry system for aquatic organisms. *Journal of Fish Biology*, 88, 26–50. [doi: 10.1111/jfb.12797](https://doi.org/10.1111/jfb.12797)
 
