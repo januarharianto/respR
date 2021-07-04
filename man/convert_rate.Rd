@@ -92,11 +92,16 @@ area-specific rates.
 
 Note, some oxygen input or output units require temperature (\code{t}) and
 salinity (\code{S}) to perform conversions. For freshwater experiments, salinity
-should be entered as zero (i.e. \code{S = 0}). Strictly speaking these also
-require an atmospheric pressure (\code{P}) input. In reality, it has a relatively
-minor effect within normal ranges, however the default value of 1.013253 bar
-(standard pressure at sea level) can be changed if desired. See \code{\link[=unit_args]{unit_args()}}
-for details.
+should be entered as zero (i.e. \code{S = 0}).
+
+Strictly speaking the atmospheric pressure (\code{P}) should also be supplied. If
+not, the default value of 1.013253 bar (standard pressure at sea level) is
+used. In most locations which have a normal range (outside extreme weather
+events) of around 20 millibars, any variability in pressure will have a
+relatively minor effect on dissolved oxygen, and even less on calculated
+rates. However, we would encourage users to enter the true value if they know
+it, or use historical weather data to find out what it was on the day. See
+\code{\link[=unit_args]{unit_args()}} for details.
 
 The function uses an internal database and a fuzzy string matching algorithm
 to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. See \code{\link[=unit_args]{unit_args()}} for
