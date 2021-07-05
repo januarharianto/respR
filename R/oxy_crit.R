@@ -1,4 +1,4 @@
-#' Calculate critical oxygen tension, \eqn{P_{crit}}{P[crit]}
+#' Calculate critical oxygen tensions
 #'
 #' A function to calculate the critical oxygen tension, or the O2 concentration
 #' below which uptake rate becomes dependent upon oxygen concentration. It is
@@ -6,13 +6,12 @@
 #' Yeager and Ultsch (1989), and the segmented regression approach, presented by
 #' Muggeo (2003).
 #'
-#' The default data input is an `inspect` or `inspect_data` object, or
-#' `data.frame` containing time~dissolved oxygen data (e.g. `squid.rd`). Columns
-#' of each can be specified, the default being they are the first two columns
-#' (i.e. `time = 1`, `oxygen = 2`). If an `inspect` or `inspect_data` object is
-#' used the data frame is extracted automatically and column identifiers are not
-#' required since these were already identified and extracted in those
-#' functions.
+#' The default data input is an `inspect` object, or `data.frame` containing
+#' time~dissolved oxygen data (e.g. `squid.rd`). Columns of each can be
+#' specified, the default being they are the first two columns (i.e. `time = 1`,
+#' `oxygen = 2`). If an `inspect` object is used the data frame is extracted
+#' automatically and column identifiers are not required since these were
+#' already identified and extracted in those functions.
 #'
 #' To calculate Pcrit, the function requires data in the form of oxygen uptake
 #' rate against dissolved oxygen (DO) concentration. The function performs a
@@ -28,7 +27,7 @@
 #' the two \eqn{P_{crit}}{P[crit]} analyses on these data directly without any
 #' processing.
 #'
-#' @param df data frame or object of class `inspect_data`. This is the data to
+#' @param x data frame or object of class `inspect`. This is the data to
 #'   analyse.
 #' @param time numeric vector. Defaults to NULL. This specifies the column
 #'   number of the time data.
@@ -36,13 +35,14 @@
 #'   number(s) of the oxygen data.
 #' @param rate numeric vector. Defaults to NULL. This specifies the column
 #'   number(s) of rate data.
-#' @param width numeric. Number of rows over which to perform the rolling
-#'   regression. Defaults to 0.1, or 10% of total rows.
+#' @param width numeric. Determines the width of the rolling regression used to
+#'   determine rolling rate. Proportion of the length of data. Defaults to 0.1,
+#'   or 10% of total rows.
 #' @param plot logical. Defaults to TRUE.
-#' @param parallel logical. Defaults to TRUE. Should parallel processing be
+#' @param parallel logical. Defaults to FALSE. Should parallel processing be
 #'   used?
 #'
-#' @return A list object of class `pcrit`.
+#' @return A list object of class `oxy_crit`.
 #'
 #' @importFrom data.table data.table setnames setorder rbindlist
 #' @importFrom parallel detectCores makeCluster clusterExport parLapply
@@ -64,26 +64,26 @@
 #' pcrit(squid.rd)
 #' }
 
-calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
-  width = 0.1, plot = TRUE, parallel = TRUE) {
+oxy_crit <- function(x, time = NULL, oxygen = NULL, rate = NULL,
+                       width = 0.1, plot = TRUE, parallel = FALSE) {
 
   # data validation
-  if (any(class(df) %in% "inspect_data")) df <- df$dataframe
-  if (any(class(df) %in% "inspect")) df <- df$dataframe
-  if (!is.data.frame(df)) stop("calc_pcrit: Input must be data.frame object.")
-  if (width > nrow(df)) stop("calc_pcrit: 'width' input is bigger than length of data.")
+  if (any(class(x) %in% "inspect")) df <- x$dataframe else
+    df <- x
+  if (!is.data.frame(df)) stop("oxy_crit: Input must be data.frame object.")
+  if (width > nrow(df)) stop("oxy_crit: 'width' input is bigger than length of data.")
 
   # conditions must be met before we continue
   if (!is.null(oxygen) & !is.null(rate)) {
     # one of "rate" or "oxygen" must be NULL
-    stop("calc_pcrit: Choose either an 'oxygen' or 'rate' column, cannot enter both.")
+    stop("oxy_crit: Choose either an 'oxygen' or 'rate' column, cannot enter both.")
   }
   # if "time" is not provided, check if we can still automate on the assumption
   # that the first column is "time":
   if (is.null(time) & !is.null(oxygen) & is.null(rate)) {
-    if (oxygen == 1) stop("calc_pcrit: Please specify a 'time' argument.")
+    if (oxygen == 1) stop("oxy_crit: Please specify a 'time' argument.")
   } else if (is.null(time) & is.null(oxygen) & !is.null(rate)) {
-    if (rate == 1) stop("calc_pcrit: Please specify a 'time' argument.")
+    if (rate == 1) stop("oxy_crit: Please specify a 'time' argument.")
   }
 
   # identify data -----
@@ -93,33 +93,33 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     col1 <- 1
     col2 <- 2
     convert <- TRUE
-    message('calc_pcrit: No inputs for data types. Using column 1 as "time" and column 2 as "oxygen". If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
+    message('oxy_crit: No inputs for data types. Using column 1 as "time" and column 2 as "oxygen". If you want to change this behaviour, please specify "time", "oxygen" or "rate" arguments.')
   } else if (is.numeric(time) & is.numeric(oxygen) & is.null(rate)) {
     # "time" and "oxygen" are used
     col1 <- time
     col2 <- oxygen
     convert <- TRUE
-    message("calc_pcrit: Performing analysis using raw oxygen data.")
+    message("oxy_crit: Performing analysis using raw oxygen data.")
   } else if (is.numeric(time) &
-      is.null(oxygen) & is.numeric(rate)) {
+             is.null(oxygen) & is.numeric(rate)) {
     # "time" and "rate" are used
     col1 <- time
     col2 <- rate
     convert <- FALSE
-    message("calc_pcrit: Performing analysis using existing rate data.")
+    message("oxy_crit: Performing analysis using existing rate data.")
   } else if (is.null(time) & is.numeric(oxygen) & is.null(rate)) {
     # only "oxygen" is used
     col1 <- 1 # automatically assume column 1 is time column
     col2 <- oxygen
     convert <- TRUE
-    message("calc_pcrit: Performing analysis using raw oxygen data.")
+    message("oxy_crit: Performing analysis using raw oxygen data.")
     message('Using column 1 as "time".')
   } else if (is.null(time) & is.null(oxygen) & is.numeric(rate)) {
     # only "rate" ise used
     col1 <- 1 # automatically assume column 1 is time column
     col2 <- rate
     convert <- FALSE
-    message("calc_pcrit: Performing analysis using existing rate data.")
+    message("oxy_crit: Performing analysis using existing rate data.")
     message("Using column 1 as 'time'.")
   }
 
@@ -183,7 +183,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
     result.segmented = seg$psi[2],
     convert = convert
   )
-  class(out) <- "calc_pcrit"
+  class(out) <- "oxy_crit"
 
   # Plot, if true
   if (plot) plot(out)
@@ -195,7 +195,7 @@ calc_pcrit <- function(df, time = NULL, oxygen = NULL, rate = NULL,
 
 
 #' @export
-print.calc_pcrit <- function(x, ...) {
+print.oxy_crit <- function(x, ...) {
   cat("--Broken stick (Yeager & Ultsch 1989)--\n")
   cat(sprintf("Sum RSS     %g\n", x$bstick.summary$sumRSS[1]))
   cat(sprintf("Intercept   %g\n", x$result.intercept))
@@ -208,7 +208,7 @@ print.calc_pcrit <- function(x, ...) {
 }
 
 #' @export
-summary.calc_pcrit <- function(object, export = FALSE, ...) {
+summary.oxy_crit <- function(object, export = FALSE, ...) {
   cat("Top Result for all Methods:\n")
 
   out <- cbind(
@@ -223,7 +223,7 @@ summary.calc_pcrit <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_pcrit <- function(x, ...) {
+plot.oxy_crit <- function(x, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -242,46 +242,48 @@ plot.calc_pcrit <- function(x, ...) {
   if (!x$convert) {
     message("Plotting...") # dummy text (make this better next time)
   } else {
-    plot(x$df, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
-      panel.first = grid(lwd = .7))
+    plot(x$dataframe, col = c1, pch = 21, xlab = "Time", ylab = "Oxygen", cex = .8,
+         panel.first = grid(lwd = .7))
     abline(h = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
     abline(h = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
     abline(h = x$result.segmented, col = "red", lwd = 2, lty = 4)
     legend("top", c(sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
-      sprintf("Intercept, %g", signif(x$result.intercept, 3)),
-      sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
-      col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2,
-      bty = "n", cex = 0.8, horiz = F)
+                    sprintf("Intercept, %g", signif(x$result.intercept, 3)),
+                    sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
+           col = c("red", "darkolivegreen", "steelblue"), lty = 1, lwd = 2,
+           bty = "n", cex = 0.8, horiz = F)
     title(main = expression("Original Series"), line = 0.5)
   }
 
   # Plot for broken-stick
   plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = .8,
-    panel.first = grid(lwd = .7))
+       panel.first = grid(lwd = .7))
   abline(lm(y ~ x, segment1), lwd = 1, lty = 4)
   abline(lm(y ~ x, segment2), lwd = 1, lty = 4)
   abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
   abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 3)
   legend("bottom", c(sprintf("Intercept, %g", signif(x$result.intercept, 3)),
-    sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
-    col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
-    cex = 0.8, horiz = F)
+                     sprintf("Midpoint, %g", signif(x$result.midpoint, 3))),
+         col = c("darkolivegreen", "steelblue"), lty = 1, lwd = 2, bty = "n",
+         cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Broken-Stick'), line = 0.5)
 
   # Plot for segmented (breakpoint)
   plot(x$df_rate_oxygen, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", lwd = 2, cex = .8,
-    panel.first = grid(lwd = .7))
+       panel.first = grid(lwd = .7))
   lines(x$bpoint.fit.df, lwd = 1, lty = 4)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)
   legend("bottom", sprintf("Breakpoint, %g", signif(x$result.segmented, 3)),
-    col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
+         col = "red", lty = 1, lwd = 2, bty = "n", cex = 0.8, horiz = F)
   title(main = expression('Rate vs PO'[2] * ', Segmented'), line = 0.5)
 
   # plot within
   aps <- c(x$result.intercept, x$result.midpoint, x$result.segmented)
-  subdf <- x$df_rate_oxygen[x > min(aps) * 0.99][x < max(aps) *1.01]
+  srow <- which.min(abs(x$df_rate_oxygen[[1]] - (min(aps) * 0.99))) -1
+  erow <- which.min(abs(x$df_rate_oxygen[[1]] - (max(aps) * 1.10))) +1
+  subdf <- x$df_rate_oxygen[srow:erow,]
   plot(subdf, col = c1, pch = 21, xlab = "Oxygen", ylab = "Rate", cex = 2,
-    panel.first = grid(lwd = .7))
+       panel.first = grid(lwd = .7))
   abline(v = x$result.intercept, col = "forestgreen", lwd = 2, lty = 2)
   abline(v = x$result.midpoint, col = "steelblue", lwd = 2, lty = 2)
   abline(v = x$result.segmented, col = "red", lwd = 2, lty = 2)

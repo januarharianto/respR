@@ -12,8 +12,19 @@ somewhat arbitrary.
 Possibly we incorporate this into a user exploration function}
 \usage{
 plot_overlaps(x)
+
+plot_overlaps(x)
 }
 \description{
+Plots auto_rate regressions in a way you can see how they
+overlap. If it's an auto_rate_subset object, it will plot
+the subset on the axes of the original results, so you can compare
+the subset and original easily.
+You can also specify an auto_rate $summary df directly, but then the axes
+limits will be drawn from the summary df not the original data, so may be
+somewhat arbitrary.
+Possibly we incorporate this into a user exploration function
+
 Plots auto_rate regressions in a way you can see how they
 overlap. If it's an auto_rate_subset object, it will plot
 the subset on the axes of the original results, so you can compare

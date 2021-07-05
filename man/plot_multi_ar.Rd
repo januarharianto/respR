@@ -9,8 +9,16 @@ THIS IS SLOOOOOOOW
 Will probably have to revert to base plotting}
 \usage{
 plot_multi_ar(x, n = 9)
+
+plot_multi_ar(x, n = 9)
 }
 \description{
+Plots multiple auto_rate results in a nice way
+x = auto_rate or auto_rate_filt object
+n = max no. of plots
+THIS IS SLOOOOOOOW
+Will probably have to revert to base plotting
+
 Plots multiple auto_rate results in a nice way
 x = auto_rate or auto_rate_filt object
 n = max no. of plots
