@@ -124,7 +124,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
   ## verify by input
-  by <- respR:::verify_by(by, msg = "calc_rate:")
+  by <- verify_by(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect")) x <- x$dataframe
@@ -218,10 +218,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   # Subset and run lm -------------------------------------------------------
   # Subset the data:
-  dt <- lapply(1:length(from), function(z) respR:::truncate_data(x, from[z], to[z], by))
+  dt <- lapply(1:length(from), function(z) truncate_data(x, from[z], to[z], by))
 
   # Perform lm on data and extract coefficients
-  coefs <- lapply(1:length(to), function(z) respR:::linear_fit(dt[[z]]))
+  coefs <- lapply(1:length(to), function(z) linear_fit(dt[[z]]))
 
   # Extract row, time and DO indices from subsets
   indices <- lapply(1:length(dt), function(z) extract_indices(x, dt, z))
@@ -342,10 +342,10 @@ plot.calc_rate <- function(x, pos = 1, message = TRUE, ...) {
       cex = 1,
       cex.main = 1)
 
-  respR:::multi.p(df, sdf)  # full timeseries with lmfit
-  respR:::sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
-  respR:::residual.p(fit)  # residual plot
-  respR:::qq.p(fit)  # qqplot
+  multi.p(df, sdf)  # full timeseries with lmfit
+  sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
+  residual.p(fit)  # residual plot
+  qq.p(fit)  # qqplot
   mtext(glue::glue("calc.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
