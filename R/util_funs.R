@@ -297,7 +297,7 @@ broken_stick <- function(dt, n) {
     splitpoint = dta[,x][nrow(dta)],
     sumRSS = trss,
     pcrit.intercept = intersect,
-    pcrit.mpoint = midpoint,
+    pcrit.midpoint = midpoint,
     l1_coef = line1,
     l2_coef = line2
 

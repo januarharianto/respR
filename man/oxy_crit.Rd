@@ -2,77 +2,224 @@
 % Please edit documentation in R/oxy_crit.R
 \name{oxy_crit}
 \alias{oxy_crit}
-\title{Calculate critical oxygen tensions}
+\title{Calculate critical oxygen values, such as PCrit}
 \usage{
 oxy_crit(
   x,
+  method = "bsr",
   time = NULL,
   oxygen = NULL,
   rate = NULL,
   width = 0.1,
+  parallel = FALSE,
+  thin = 5000,
   plot = TRUE,
-  parallel = FALSE
+  ...
 )
 }
 \arguments{
-\item{x}{data frame or object of class \code{inspect}. This is the data to
-analyse.}
+\item{x}{object of class \code{inspect} or a \code{data.frame} containing either paired
+oxygen~time values, or paired rate~oxygen values. See Details.}
 
-\item{time}{numeric vector. Defaults to NULL. This specifies the column
-number of the time data.}
+\item{method}{string. Defaults to \code{"bsr"}. Critical oxygen value analysis
+method. Either \code{"bsr"} or \code{"segmented"}. See Details.}
 
-\item{oxygen}{numeric vector. Defaults to NULL. This specifies the column
-number(s) of the oxygen data.}
+\item{time}{integer. Defaults to 1. Specifies column number of the time data.}
 
-\item{rate}{numeric vector. Defaults to NULL. This specifies the column
-number(s) of rate data.}
+\item{oxygen}{integer. Defaults to 2. Specifies column number of the oxygen
+data.}
 
-\item{width}{numeric. Determines the width of the rolling regression used to
-determine rolling rate. Proportion of the length of data. Defaults to 0.1,
-or 10\% of total rows.}
+\item{rate}{integer. Defaults to NULL. Specifies column number of the rate
+data.}
+
+\item{width}{numeric value between 0 and 1 representing proportion of the
+total data length. Determines the width of the rolling regression used to
+determine the rolling rate and the rolling mean of oxygen values the rate
+is paired with. Defaults to 0.1, representing 10\% of total rows.}
+
+\item{parallel}{logical. Defaults to FALSE. Enables parallel processing for
+computationally intensive analyses of large datasets.}
+
+\item{thin}{integer. Defaults to 5000. Number of rows to subsample \code{x} data
+to before running \code{"bsr"} analysis. No effect on datasets smaller than this
+value. To perform no subsampling enter as \code{NULL}. See Details.}
 
 \item{plot}{logical. Defaults to TRUE.}
 
-\item{parallel}{logical. Defaults to FALSE. Should parallel processing be
-used?}
-}
-\value{
-A list object of class \code{oxy_crit}.
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{message = FALSE}, and \code{choose}. See Plotting section.}
 }
 \description{
-A function to calculate the critical oxygen tension, or the O2 concentration
-below which uptake rate becomes dependent upon oxygen concentration. It is
-calculated by both the "broken-stick" regression (BSR) approach, adopted from
-Yeager and Ultsch (1989), and the segmented regression approach, presented by
-Muggeo (2003).
+A function to calculate the critical oxygen value, the oxygen tension or
+concentration below which an uptake rate transitions from independent to
+dependent on the oxygen supply, typically known as \emph{PCrit}.
 }
 \details{
-The default data input is an \code{inspect} object, or \code{data.frame} containing
-time~dissolved oxygen data (e.g. \code{squid.rd}). Columns of each can be
-specified, the default being they are the first two columns (i.e. \code{time = 1},
-\code{oxygen = 2}). If an \code{inspect} object is used the data frame is extracted
-automatically and column identifiers are not required since these were
-already identified and extracted in those functions.
+In earlier versions of \code{respR}, this function was known as \code{calc_pcrit}. It
+was renamed to avoid conflicts with a function of the same name in another
+package, and also because technically the \emph{P} in  \emph{PCrit} stands for the
+partial \emph{pressure} of oxygen. Since the function returns the value in the
+units of the data as entered, whether they are concentration or pressure
+units, this terminology can be technically in error. Instead, for the
+purposes of the documentation we refer to this as the \emph{Critical Oxygen
+Value}, or "\emph{COV}". If the units of oxygen are partial pressure units (e.g.
+kPa), this is equivalent to PCrit, otherwise they should be reported with
+this in mind.
+\subsection{Methods}{
 
-To calculate Pcrit, the function requires data in the form of oxygen uptake
-rate against dissolved oxygen (DO) concentration. The function performs a
-rolling regression on time~O2 data to determine rates, and matches these
-against a rolling mean of the DO data. The function then performs the two
-\eqn{P_{crit}}{P[crit]} analyses methods on these data. The width of the
-rolling regression is determined by the \code{width} argument. In most cases, the
-default width (10\% of the data length) works well, but this may vary with
-data that has abrupt changes in rate, or is particularly noisy.
+The \code{oxy_crit()} function provides two methods (one of which outputs two
+results) to calculate the \emph{COV}. These are selected using the \code{method} input.
+\subsection{Broken Stick Regression:    \code{method = "bsr"}}{
 
-Alternatively, existing rate~DO data may be used, with the \code{rate} input
-identifying the column with the rate data. In this case the function performs
-the two \eqn{P_{crit}}{P[crit]} analyses on these data directly without any
-processing.
+This is the default method, adapted from the “Broken-Stick” regression
+(\emph{BSR}) approach, of Yeager & Ultsch (1989), in which two segments of the
+data are iteratively fitted and the intersection with the smallest sum of the
+residual sum of squares between the two linear models is the estimated \emph{COV}.
+Two slightly different ways of reporting this breakpoint are detailed by
+Yeager & Ultsch (1989); the \emph{intercept} and \emph{midpoint}. These are usually
+very close in value, and the function returns both.
+
+The \code{thin} input influences the \emph{BSR} analysis. The method is very
+computationally intensive, so to speed up analyses the \code{thin} input will
+subsample datasets longer than this to this length before analysis. The
+default value of 5000 has in testing provided a good balance between speed
+and results accuracy and repeatability. However, results may vary with
+different datasets, so users should experiment with varying the value. To
+perform no subsampling and use the entire dataset enter \code{thin = NULL}. It has
+no effect on datasets shorter than the \code{thin} input.
+}
+
+\subsection{Segmented Regression:    \code{method = "segmented"}}{
+
+The second method is a wrapper for the "Segmented" regression approach,
+available as part of the \code{segmented} R package (Muggeo 2008), which estimates
+the \emph{COV} by iteratively fitting two intersecting models and selecting the
+value that minimises the “gap” between the fitted lines.
+}
+
+}
+
+\subsection{Inputs}{
+
+The data input \code{x} should be an \code{inspect} object or \code{data.frame} containing
+oxygen~time data, \emph{or} a \code{data.frame} containing rate~oxygen data.
+\subsection{Oxygen ~ Time data}{
+
+This is the typical input, where a timeseries of oxygen concentrations or
+partial pressures against time has been recorded, generally down to a very
+low value of oxygen. A column of \code{time} and a column of \code{oxygen} should be
+specified. The function defaults to \code{time = 1} and \code{oxygen = 2} if no other
+inputs are entered. If an \code{inspect} object is entered as the \code{x} input, the
+data frame is extracted automatically and column identifiers are not required
+since these were already entered in \code{inspect}. Note, if multiple \code{oxygen}
+columns were entered in \code{inspect} only the first entered one will be used in
+\code{oxy_crit}.
+
+To calculate the \emph{COV}, the function requires data in the form of oxygen
+uptake rate against oxygen value. Therefore, the function performs a rolling
+regression on the oxygen~time data to determine rates, and pairs these
+against a rolling mean of the oxygen data. The function then performs the
+selected analysis \code{method} on these data. The width of the rolling regression
+and rolling mean is determined by the \code{width} argument. The default is 0.1,
+representing 10\% of the length of the data. This performs well in testing,
+however performance may vary with data that has abrupt changes in rate, or is
+particularly noisy. Users should experiment with different \code{width} values to
+see how it affects results, and report this with their results and analysis
+parameters.
+}
+
+\subsection{Rate ~ Oxygen data}{
+
+Alternatively, if existing rolling oxygen uptake rates have been calculated,
+and have appropriate paired oxygen concentration or partial pressure values,
+these can be entered with the \code{rate} and \code{oxygen} inputs specifying the
+respective columns. In this case the function performs the selected analysis
+\code{method} on these data directly without any processing. The \code{width} input in
+this case is not relevant and is ignored.
+
+This option can only be used with data frame \code{x} inputs. Note, other columns
+such as time data may be present in the input, but are not required so need
+not be specified.
+}
+
+}
+
+\subsection{Plot}{
+
+A plot is produced (provided \code{plot = TRUE}) of the input data and results.
+The top panel is the input data, either the oxygen~time timeseries, or the
+rate~oxygen series, depending on what was entered in \code{x}. If the former, the
+critical oxygen value is indicated by a horizontal line, or two lines in the
+case of the Broken-Stick analysis. Note, since the two \emph{BSR} results are
+usually close in value these may overlay each other.
+
+The bottom plot is the rate~oxygen series upon which the analysis was
+conducted, either as input or as calculated. Critical oxygen values are
+indicated by vertical lines, and regression fits upon which the analysis was
+based by black dashed lines.
+\subsection{Additional plotting options}{
+
+If the legend obscures parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{message = FALSE}. Each panel
+can be plotted on its own using \code{choose = 1} or \code{choose = 2}. These inputs
+can be passed in either the main \code{oxy_crit} call or when calling \code{plot()} on
+the output object.
+}
+
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()} and
+\code{summary()}.
+\itemize{
+\item \code{print()}: prints the critical oxygen value for the particular \code{method}
+used.
+\item \code{summary()}: prints critical oxygen value, plus additional coefficients and
+metadata for the particular \code{method} used. See Yeager & Ultsch (1989) and
+Muggeo (2008) for what these represent. The summary can be exported as a
+separate data frame by passing \code{export = TRUE}.
+}
+}
+
+\subsection{Output}{
+
+Output is a \code{list} object of class \code{oxy_crit} containing input parameters and
+data, various summary data, metadata, and the primary output of interest
+\verb{$crit}, which is the critical oxygen value in the units of the oxygen data
+as entered. This can be converted to additional units using \code{convert_DO()}.
+Note, if the Broken-Stick analysis (\code{method == "bsr"}) has been used, \verb{$crit}
+will contain two results; \verb{$crit.intercept} and \verb{$crit.midpoint}. For full
+explanation of the difference between these see Yeager & Ultsch (1989),
+however they are generally very close in value.
+}
 }
 \examples{
-# Intensive, and a large dataset, so may take some time.
+# Intensive, and a large dataset, so these may take some time.
 \dontrun{
-data("squid.rd")
-pcrit(squid.rd)
+
+## Run on oxygen~time data.frame with default inputs
+oxy_crit(squid.rd)
+
+## Try a lower 'thin' input to speed up analysis
+oxy_crit(squid.rd, thin = 1000)
+
+## Use the Segmented method instead
+oxy_crit(squid.rd, method = "segmented")
+
+## Experiment with different 'width' input
+# Higher widths tend to oversmooth data
+oxy_crit(squid.rd, method = "segmented", width = 0.2)
+# Lower width in this case gives very similar result to default 0.1
+oxy_crit(squid.rd, method = "segmented", width = 0.05)
+
+## Run on oxygen~time data in 'inspect' object
+insp <- inspect(squid.rd, time = 1, oxygen = 2)
+oxy_crit(insp)
+
+## Run on already calculated rate~oxygen data
+# Generate using internal function
+o2.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
+# Analyse
+oxy_crit(o2.v.rates, oxygen = 1, rate = 2)
 }
 }
 \references{

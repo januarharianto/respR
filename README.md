@@ -43,7 +43,7 @@ We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please foll
 Submission of `respR` to CRAN is planned. For now, use the `devtools` package to install the latest stable version:
 
 ```r
-install.packages("devtools")
+install.packages("devtools") # Only need to do this once, and if it's not already installed!
 devtools::install_github("januarharianto/respR")
 ```
 
