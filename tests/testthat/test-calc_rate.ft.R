@@ -398,7 +398,7 @@ test_that("calc_rate.ft - accepts 'inspect.ft' input, gives correct messages and
   expect_message(suppressWarnings(calc_rate.ft(insp.ft.obj.outo2.multcols.ino2.multcols, flowrate = 1.5, plot = F)),
                  "calc_rate.ft: calculating rate from 'inspect.ft' object.")
   expect_warning(calc_rate.ft(insp.ft.obj.outo2.multcols.ino2.multcols, flowrate = 1.5, plot = F),
-                 "calc_rate.ft: Multiple columns of delta O2 data found in input.")
+                 "calc_rate.ft: Multiple columns of delta oxygen data found in input.")
 })
 
 

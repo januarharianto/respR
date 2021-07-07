@@ -57,11 +57,11 @@
 #' printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
 #' - `summary()`: prints summary table of all results and metadata, or those
-#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output can be
-#' saved as a separate dataframe by passing `export = TRUE`.
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary can
+#' be exported as a separate dataframe by passing `export = TRUE`.
 #'
 #' - `mean()`: calculates the mean of all rates, or those specified by the `pos`
-#' input. e.g. `mean(x, pos = 1:5)` The output can be saved as a separate value
+#' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
 #' @param x object of class `inspect` or `data.frame`. This is the timeseries of
@@ -135,7 +135,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   # Format as data.table
   x <- data.table::data.table(x)
   if (length(x) > 2) {
-    warning("calc_rate: Multiple columns of O2 data found in input.\n  Rate(s) will be calculated from first column only!\n  To extract rates from other columns, use 'inspect()' to save them as separate objects.")
+    warning("calc_rate: Multiple columns of oxygen data found in input.\n  Rate(s) will be calculated from first column only!\n  To extract rates from other columns, use 'inspect()' to save them as separate objects.")
     x <- x[, 1:2]
   }
 

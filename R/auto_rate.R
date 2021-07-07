@@ -127,11 +127,11 @@
 #' printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
 #' - `summary()`: prints summary table of all results and metadata, or those
-#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output can be
-#' saved as a separate dataframe by passing `export = TRUE`.
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary can
+#' be exported as a separate data frame by passing `export = TRUE`.
 #'
 #' - `mean()`: calculates the mean of all rates, or those specified by the `pos`
-#' input. e.g. `mean(x, pos = 1:5)` The output can be saved as a separate value
+#' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
 #' @param x data frame, or object of class `inspect` containing oxygen~time

@@ -95,11 +95,11 @@
 #' printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
 #' - `summary()`: prints summary table of all results and metadata, or those
-#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The output can be
-#' saved as a separate dataframe by passing `export = TRUE`.
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary can
+#' be exported as a separate data frame by passing `export = TRUE`.
 #'
 #' - `mean()`: calculates the mean of all rates, or those specified by the `pos`
-#' input. e.g. `mean(x, pos = 1:5)` The output can be saved as a separate value
+#' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
 #' ## Output
@@ -245,7 +245,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     data <- x$data
 
     if(length(data$delta) > 1)
-      warning("calc_rate.ft: Multiple columns of delta O2 data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
+      warning("calc_rate.ft: Multiple columns of delta oxygen data found in input. \n  Rate(s) will be calculated from first column only! \n  To extract rates from other columns, use inspect.ft to save them as separate objects.")
 
     ## put data in dt
     time <- data$time[[1]]

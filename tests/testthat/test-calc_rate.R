@@ -88,7 +88,7 @@ test_that("calc_rate - stops with non data.frame 'x' input", {
 
 test_that("calc_rate - warns with multi column input", {
   expect_warning(calc_rate(urchins.rd, plot = F),
-                 "calc_rate: Multiple columns of O2 data found in input.")
+                 "calc_rate: Multiple columns of oxygen data found in input.")
 })
 
 test_that("calc_rate - calcs rate over all available data if to and from are NULL", {

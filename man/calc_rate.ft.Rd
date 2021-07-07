@@ -144,10 +144,10 @@ Saved output objects can be used in the generic S3 functions \code{print()},
 \item \code{print()}: prints a single result, by default the first rate. Others can be
 printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
 \item \code{summary()}: prints summary table of all results and metadata, or those
-specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The output can be
-saved as a separate dataframe by passing \code{export = TRUE}.
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary can
+be exported as a separate data frame by passing \code{export = TRUE}.
 \item \code{mean()}: calculates the mean of all rates, or those specified by the \code{pos}
-input. e.g. \code{mean(x, pos = 1:5)} The output can be saved as a separate value
+input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate value
 by passing \code{export = TRUE}.
 }
 }
