@@ -460,14 +460,13 @@ against the centre of the time window used to calculate it. This plot provides a
 visual inspection of how the rate varies over the course of the experiment.
 Regions of stable and consistent rates can be identified on this plot as flat
 or level areas. This plot is for exploratory purposes only; later functions
-allow rate to be calculated over specific regions. Each rate value is plotted
-against the centre of the time window used to calculate it. 
+allow rate to be calculated over specific regions. 
 
-Note that since `respR` is primarily used to examine oxygen consumption,
-the rolling rate plot is by default plotted on a reverse y-axis. In `respR`
+Note, that because `respR` is primarily used to examine oxygen consumption,
+the rolling rate plot is plotted on a reverse y-axis. In `respR`
 oxygen uptake rates are negative since they represent a negative slope of
 oxygen against time. In rolling rate plots, by default the axis is reversed so that higher
-uptake rates (i.e. more negative) will be higher on these plots. If you are
+uptake rates (e.g. maximum or active rates) will be higher on these plots. If you are
 interested instead in oxygen production rates, which are positive, the
 `rate.rev = FALSE` argument can be passed in either the `inspect` call, or
 when using `plot()` on the output object. In this case, the rate values will
@@ -525,7 +524,7 @@ inspect(zeb_intermittent.rd)
 inspect(zeb_intermittent.rd[20000:24000,])
 ```
 
-This better shows us the structure of this intermittent-flow experiment, and that within these replicates specimen rates appear to be consistent at around -0.002. 
+This better shows us the structure of this intermittent-flow experiment, and that within these replicates specimen rates appear to be consistent at around -0.002. When subset like this, the `width` operator refers to the length of the subset not the original data. 
 
 ## Multiple columns of oxygen data
 

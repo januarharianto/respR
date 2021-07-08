@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Developers
 
-`respR` is designed, programmed, and maintained by [Januar Harianto](https://github.com/januarharianto) and [Nicholas Carey](https://github.com/nicholascarey). We are biologists and created `respR` to assist with our own work, before realising it would be useful to the scientific community. We have done this almost entirely in our spare time, spending many hundreds of hours working on the package. 
+`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and created `respR` to assist with our own work, before realising it would be useful to the scientific community. We have done this almost entirely in our spare time, spending many hundreds of hours working on the package. 
 
 ## Contact
 

@@ -30,7 +30,7 @@ If you come across any changes that are not documented here, and you think shoul
 
 ### Pcrit analyses
 
-As well as `pcrit` being removed, `calc_pcrit` has been renamed `oxy_crit()` to avoid conflicts with another package. 
+As well as `pcrit` being removed, `calc_pcrit` has been renamed `oxy_crit()` to avoid conflicts with another package. Any code using `calc_pcrit` can be replaced with `oxy_crit`, and *may* work, since the defaults have remained largely the same. Note however the new `method` input. Previously both currently supported methods were performed, but now only one is, selected using `method` with Broken-Stick regression the default. Therefore, outputs may not be the same. Output objects have been completely restructured and elements renamed, so any code extracting results from these will not work. 
 
 ### Flowthrough respirometry analyses
 
@@ -57,6 +57,8 @@ Several functions have had their output object elements renamed to make them con
     - `calc_rate.bg` : `$bgrate` changed to `$rate.bg`, `$mean` to `$rate.bg.mean`
     - `adjust_rate`  : `$corrected` changed to `$rate.adjusted`, `$input.rate` to `$rate.input`
 
+&nbsp;  
+
 - Outputs have also been rearranged, so any referencing not using element names may not work the same (e.g. `output[[2]]`).
 
 - Summary tables (`$summary`) now have a `rank` column in position 1, and have also in general been rearranged, new columns added, and some columns renamed. Therefore if column numbers or names have been used to extract results these may now be incorrect.
@@ -77,7 +79,7 @@ Primary input `df` now renamed to `x`. Any code using `df =` can be replaced wit
 
 Inputs have been reordered with `method` as second input. Code where inputs were not explicitly named may not work as it did previously. 
 
-The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note, new `"maximum"` and `"minimum"` methods **do not** work the same, as they order strictly numerically. See `help(auto_rate)`.
+The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note, new `"maximum"` and `"minimum"` methods **do not** work the same as `"max"/"min"`, as they order strictly numerically. See `help(auto_rate)`.
 
 ### `convert_DO()`
 
@@ -98,6 +100,6 @@ A change to the code for determining `by = "o2"` ranges to ensure it works with 
 
 ### `inspect()`
 
-The output `$list` and `$list_raw` elements renamed `locs` and `$locs_raw`. Code should not need to be updated unless these were used to extract references to fix data issues in the relevant data frames.
+The output `$list` and `$list_raw` elements renamed `$locs` and `$locs_raw`. Code should not need to be updated unless these were used to extract references to fix data issues in the relevant data frames.
 
 

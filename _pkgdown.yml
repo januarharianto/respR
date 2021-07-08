@@ -24,7 +24,7 @@ reference:
     - '`calc_rate`'
     - '`calc_rate.bg`'
     - '`calc_rate.ft`'
-    - '`calc_pcrit`'
+    - '`oxy_crit`'
 
   - title: "Filter & Adjust"
     desc: >
@@ -96,10 +96,12 @@ navbar:
         href: articles/intermittent2.html
       - text: "Flowthrough respirometry"
         href: articles/flowthrough.html
-      - text: "Pcrit analysis"
-        href: articles/pcrit.html
-      - text: "Two-point analysis"
+      - text: "oxy_crit: Critical oxygen analyses"
+        href: articles/oxycrit.html
+      - text: "calc_rate: Two-point rate calculation"
         href: articles/twopoint.html
+      - text: "convert_DO: Convert between units of dissolved oxygen"
+        href: articles/convert_DO.html
 
     - text: Further Reading
       menu:

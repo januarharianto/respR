@@ -844,7 +844,7 @@ result <- suppressMessages(summary(roll_rate_ms, pos = 1044, export = TRUE))
 ```
 
 
-This is just an example. Other results and columns in `$summary` can be used in a similar way to filter results, for instance to extract maximum or minimum rate values, or only those within a specific value range.
+This is just an example. Other results and columns in `$summary` can be used in a similar way to filter results, for instance to extract maximum or minimum rate values, only those within a specific value range, or all those within a specific percentile of rates.
 
 ## Case 9: Multiple rates from the same dataset
 

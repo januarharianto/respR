@@ -1,10 +1,11 @@
 ---
-title: "Two-point analyses"
+title: "calc_rate: Two-point rate calculation"
 output: 
   rmarkdown::html_vignette:
     toc: true
+    toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{Two-point analyses}
+  %\VignetteIndexEntry{calc_rate: Two-point rate calculation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,59 +14,94 @@ vignette: >
 library(knitr) # load knitr to enable options
 library(respR) # load respR
 
-opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
-  highlight = TRUE)
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 6, 
+               fig.height = 4,
+               fig.align = "center")
 ```
 
-Best practice in respirometry is almost always to use linear regression on multiple time-series recordings of oxygen concentrations, to derive a slope and thus rate of oxygen use. 
-Technically, an overall rate between any two timepoints can be calculated using only two O~2~ datapoints if they are accurate recordings, and in the past "*closed-bottle*" respirometry was common, where only the initial and final oxygen concentrations were recorded. However, in the modern day, there is little excuse for not using continuous data.
-Using only two values gives no information about how rates of use may have fluctutated, and are also obviously highly sensitive to error and inaccurate recordings. 
-Therefore rates determined using this method are unsafe. 
+## Introduction
+
+Best practice in respirometry is usually to use linear regression on timeseries recordings of oxygen concentrations to derive a slope and thus rate of oxygen use. 
+
+Technically, an overall rate between any two timepoints can be calculated using only two oxygen values if they are accurate recordings, and in the past "*closed-bottle*" respirometry was common, where only the initial and final oxygen concentrations were measured. In the modern day, there is little excuse for not using continuous data recordings, when it is relatively cheap and easy to do so. 
+Using only two values gives no information about how rates of use may have fluctuated, and are also obviously highly sensitive to error and inaccurate readings. 
 
 For some applications however, there may be valid reasons for using only two datapoints of oxygen concentration separated by a known time period to calculate a rate. 
-This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake rates *per se*, but rather in total oxygen flux over a time period. 
-An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. Smith Jr. 1987). 
-In such cases, even if continuous data exist, fitting a linear regression to these data may not give the correct information the investigator wants.
+This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake or productions rates *per se*, but rather in total oxygen flux over a time period. 
+An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. [Smith Jr. 1987]()). 
+In such cases, even if continuous data exist, fitting a linear regression to these data may not be appropriate, and in fact could be grossly incorrect. 
 This is particularly the case where oxygen or oxygen use fluctuates significantly over the time period of the experiment, such as with a diurnal rhythm.
 In such cases linear regressions may be significantly skewed.  
 
-`respR` has the ability to calculate two-point rates. 
-While we strongly recommend it not be used for analysis of data from any laboratory based studies looking at organismal metabolic rates, we have kept the functionality intact for the above use-cases, and for analysis of historical *closed-bottle* respirometry data. 
+`respR` includes the ability to calculate two-point rates. 
+While we recommend it not be used for analysis of data from any laboratory based studies looking at organismal metabolic rates, we have incorporated the functionality for the above use-cases, and for analysis of historical closed-bottle respirometry data. 
 
-## Two-point data
+## Example
 
-Simple two-point data can be entered into `calc.rate` in a 2x2 data frame (here created via typical R syntax):
-```{r}
-two_pt_data <- data.frame(time = c(0, 10), o2 = c(8.5, 6.3))
-two_pt_data
-```
-```{r, fig.keep="none"}
-two_pt_result <- calc_rate(two_pt_data, plot = FALSE)
-summary(two_pt_result)
+### Inspecting data
+This dataset contain recordings of oxygen from an eutrophic lake over a period of 40 hours starting at midnight. 
 
+```{r echo = F}
+lake <- read.csv("lake.csv")
+lake[[1]] <- round(lake[[1]], 2)
+names(lake) <- c("hours", "oxygen")
 ```
 
-The two-point rate can be seen at the end of the summary object. With only two datapoints, it will obviously be equal to the rate in the linear regression method. However, it can be extracted directly:
-
-```{r}
-two_pt_result$rate.2pt
+```{r warning=FALSE, message=FALSE, results='hide'}
+lake_insp <- inspect(lake)
 ```
 
-## Processing two-point rates
+We can see the oxygen in the lake fluctuates with a diurnal rhythm, increasing over the day and decreasing at night. The rolling rate similarly fluctuates, and because of this there are some strage artefacts in the calculated rates. 
 
-Two-point rates can be passed to `adjust_rate()` for background corrections, and `convert_rate` for conversion to the desired output units. However, if using an object of class `calc_rate` they must be specifically called using `$rate.2pt` or, by default, the adjustment or conversion will operate on the linear regression derived rate. 
-```{r}
-adjust_rate(two_pt_result$rate.2pt, by = -0.001)
+### Calculating rate
 
-convert_rate(two_pt_result$rate.2pt, o2.unit = "mg/L", time.unit = "h", output.unit = "mg/h/g", volume = 25, mass = 0.2)
+The researcher wants to know the overall rate of oxygen flux between 12 noon on the first day (hour 12) and 12 noon on the next (hour 36). We will use `calc_rate` as we normally would to get the rate between these two timepoints. 
+
+```{r tidy = F, warning=FALSE, message=FALSE, results='hide'}
+lake_rate <- calc_rate(lake_insp, 
+                       from = 12,
+                       to = 36,
+                       by = "time")
 ```
 
-The rate can alternatively be entered manually:
-```{r}
-convert_rate(-0.0224, o2.unit = "mg/L", time.unit = "h", output.unit = "mg/h/g", volume = 25, mass = 0.2)
+It is immediately clear the linear regression based rate completely misrepresents the overall oxygen flux and instead of a small or even negligible net oxygen flux, suggests there is a large net oxygen consumption. 
+
+
+```{r tidy = F}
+summary(lake_rate)
 ```
 
+However, looking at the summary we can see the `$rate.2pt` as the second from last column. This is simply the oxygen differential between the two timepoints divided by the time difference, and shows us there was a slight net oxygen production. In this case, this rate is much more relevant towards the research question.
 
-### References
+### Converting
 
-Smith Jr, K L. 1987. Food energy supply and demand: A discrepancy between particulate organic carbon flux and sediment community oxygen consumption in the deep ocean. Limnology and Oceanography 32(1). 
+This two-point rate will not be the one converted if we pass the `calc_rate` object to `convert_rate`, however we can  enter the two-point rate as a value to convert the rate to units.
+
+```{r tidy = F, eval = F}
+lake_rate_conv <- convert_rate(0.006235444,
+                               o2.unit = "mg/l",
+                               time.unit = "hrs",
+                               output.unit = "mg/h",
+                               volume = 1)
+```
+
+Alternatively, extract it directly.
+
+```{r tidy = F, eval = T}
+lake_rate_conv <- convert_rate(lake_rate$rate.2pt,
+                               o2.unit = "mg/l",
+                               time.unit = "hrs",
+                               output.unit = "mg/h",
+                               volume = 1)
+# print
+lake_rate_conv
+```
+
+Note here the `volume` input. This is not a respirometry experiment, so there is no "volume" as such. In this situation this should refer to the volume of the oxygen concentration unit (in this case litres), so the rate is dimensionally valid for *any* volume or mass of this lake. This will be the case for *any* units of oxygen, because internally they are all converted to mg/L before conversion to the output units. 
+
+

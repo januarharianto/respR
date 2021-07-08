@@ -1,10 +1,10 @@
 ---
-title: "Pcrit"
+title: "oxy_crit: Critical oxygen analyses"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Pcrit}
+  %\VignetteIndexEntry{oxy_crit: Critical oxygen analyses}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -49,27 +49,27 @@ market.squid <- inspect(squid.rd)
 
 We can see from the bottom plot, a rolling rate across 10\% of the total data, that the uptake rate is relatively consistent to around row 12,000, after which it declines steadily.
 We cannot tell from this plot which O~2~ concentration this represents. 
-For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated `calc_pcrit()` function. 
+For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated `oxy_crit()` function. 
 
 ### $P_{crit}$ function
 
-The `calc_pcrit()` function provides three methods to report the breakpoint in the rate ~ O~2~ relationship. 
+The `oxy_crit()` function provides three methods to report the breakpoint in the rate ~ O~2~ relationship. 
 
 The first two are from the “broken-stick” regression (BSR) approach, adapted from Yeager & Ultsch (1989) in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point.
 Two slightly different ways of reporting this breakpoint are detailed by Yeager & Ultsch (1989); the *intercept* and *midpoint*. These are usually close in value.
 
-The third method in the `calc_pcrit()` function is a wrapper for the "segmented regression"" approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines. 
+The third method in the `oxy_crit()` function is a wrapper for the "segmented regression"" approach, available as part of the `segmented` R package (Muggeo 2008), which estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the “gap” between the fitted lines. 
 
-Note that at present, `calc_pcrit` does not accept `inpect` or `inspect_data` objects, but we can easily call the data frame within these directly:
+Note that at present, `oxy_crit` does not accept `inpect` or `inspect_data` objects, but we can easily call the data frame within these directly:
 
 ```{r, eval = FALSE}
-market.squid.pcrit <- calc_pcrit(market.squid$df)
+market.squid.pcrit <- oxy_crit(market.squid$df)
 ```
 
 ```{r, echo = FALSE}
 # This is run in the background with parallel processing switched off.
 # We're doing this to pass the R CMD check...
-market.squid.pcrit <- calc_pcrit(market.squid$dataframe, parallel = FALSE)
+market.squid.pcrit <- oxy_crit(market.squid$dataframe, parallel = FALSE)
 ```
 
 ```{r, eval = FALSE}
@@ -85,7 +85,7 @@ The `print()` summary shows that, in this case, all three methods give very simi
 We should note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the different methods may provide different results.
 See the later section for some general discussion of the different methods. 
 
-**Note**, that the `calc_pcrit` function has a `width` input, which controls the width of the rolling regressions used to calculate the rolling rate values.
+**Note**, that the `oxy_crit` function has a `width` input, which controls the width of the rolling regressions used to calculate the rolling rate values.
 This necessarily affects estimations of the $P_{crit}$. 
 The default value of 0.1 of the total length of data in our testing seems to provide good results, but in some data changing this may give better results.
 
@@ -93,7 +93,7 @@ Also important to note is that the segmented (Muggeo) method sometimes gives a d
 See the documentation for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package and publications by Muggeo for the details of why this is, but briefly, it comes from a randomisation of the starting point for the initial analysis.
 The differences introduced by this are usually minor. 
 
-The `calc_pcrit()` function also includes a default `parallel = TRUE` argument.
+The `oxy_crit()` function also includes a default `parallel = TRUE` argument.
 This instructs the function to use parallel processing to speed up the analysis, if your system supports it.
 In the case of errors or problems using the function, changing this to `FALSE` is a good first step in diagnosing the problem.
 
@@ -105,14 +105,14 @@ These data can be either whole specimen rates ($\dot{V}O_2$), or mass-specific r
 
 ### Adjustments
 
-Note, the `calc_pcrit()` function does not support adjusting rates for background effects.
+Note, the `oxy_crit()` function does not support adjusting rates for background effects.
 Background O~2~ uptake should not affect $P_{crit}$ as it is typically minimal and assumed to be uniform over the course of an experiment. We are considering how to support background corrections in this function.
-For now, users should be aware that rates extracted from objects of class `calc_pcrit` will not have been background-corrected.
+For now, users should be aware that rates extracted from objects of class `oxy_crit` will not have been background-corrected.
 
 
 ### Extracting results
 
-Results of `calc_pcrit()` analyses can be extracted from the results object via the following:
+Results of `oxy_crit()` analyses can be extracted from the results object via the following:
 
 ```{r}
 # Broken-stick regression (Yeager & Ultsch, 1989)
@@ -136,7 +136,7 @@ summary(market.squid.pcrit)
 
 ## Comparisons to other implementations
 
-The `segmented` method included in the `calc_pcrit()` function in `respR` is simply a wrapper for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package by Muggeo (2008). 
+The `segmented` method included in the `oxy_crit()` function in `respR` is simply a wrapper for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package by Muggeo (2008). 
 Thus, comparing `respR` results to those from this package would be moot. 
 See the documentation of that package, plus publications by Muggeo for discussion of this method. 
 
@@ -174,7 +174,7 @@ fishMR_respR <- fishMR[46000:58000, c(2,6)]
 fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
 
 # perform respR pcrit analysis
-calc_pcrit(fishMR_respR)
+oxy_crit(fishMR_respR)
 ```
 
 Note that the `rMR` results (0.80 and 0.87) are different to those from `respR` (0.84 and 0.84).

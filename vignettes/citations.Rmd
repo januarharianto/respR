@@ -17,15 +17,19 @@ link-citations: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In the two years since publication, `respR` has picked up [23 citations](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+In the two years since publication, `respR` has picked up [24 citations](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-We are very happy to see the package being used to conduct quality, reproducible science, and keen to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating oxygen production rates of algae and corals, as well as the respiration rates of a wide range of species. 
+We are very happy to see the package being used to conduct quality, reproducible science, and keen to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating oxygen production rates of algae and corals, as well as the respiration rates of a wide range of species.
 
 If you use the package, we would appreciate a citation to the publication in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). Iff you use it for any purpose at all (e.g. teaching, industry use. environmental reports and monitoring, etc.) please [**let us know**](mailto:nicholascarey@gmail.com).
 
-## Studies using respR 
+## Studies using respR
 
 The following publications (most recent first) have used and cited `respR`. If we have missed yours, please [**let us know**](mailto:nicholascarey@gmail.com) and we will include it in the list.
+
+#### @prinzingAnalyticalMethodsMatter2021
+
+An excellent summary and guide to the best practices and tools available to estimate maximum metabolic rates. Goes into a lot of detail about rolling regressions, and the importance of the sampling window used, something that was instrumental to the design of `respR`. Very much required reading if you are interested in MMR, or just respirometry analyses in general.
 
 #### @ros2021
 
@@ -73,15 +77,15 @@ This study compared the results of different methods of determining maximum meta
 
 #### @závorka2020
 
-This is a really cool study looking at how warming may affect brain size and cognition in minnows, as well as metabolic rate. Warm fish had bigger brains, but weren't as good at finding their way through a maze! Awesome stuff. It used `respR` to determine SMR, MMR and aerobic scope. 
+This is a really cool study looking at how warming may affect brain size and cognition in minnows, as well as metabolic rate. Warm fish had bigger brains, but weren't as good at finding their way through a maze! Awesome stuff. It used `respR` to determine SMR, MMR and aerobic scope.
 
 #### @spindel2020
 
-We have a special fondness for studies doing respirometry on sea urchins (we feel your pain, especially the spines under the fingernails). This study compared the physiology of urchins from kelp barrens and kelp forests, and found those in barrens have dramatically reduced resting metabolic rates, by up to 40%. Cool stuff! 
+We have a special fondness for studies doing respirometry on sea urchins (we feel your pain, especially the spines under the fingernails). This study compared the physiology of urchins from kelp barrens and kelp forests, and found those in barrens have dramatically reduced resting metabolic rates, by up to 40%. Cool stuff!
 
 #### @rodriguez2020
 
-This is another study that used `respR` to determine the Pcrit, this time of an invasive bivalve, and the authors used it to show that the lack of metabolic regulation may limit the spread of this invader. 
+This is another study that used `respR` to determine the Pcrit, this time of an invasive bivalve, and the authors used it to show that the lack of metabolic regulation may limit the spread of this invader.
 
 #### @muller2020
 
@@ -89,7 +93,7 @@ This study looked at the effects of ocean acidification on a larval fish. The au
 
 #### @kurchaba2020
 
-Amazingly, this is the only study on zebrafish to cite `respR` so far, which is surprising given how many groups are working and doing respirometry on them. This study looked at the effects of microplastics on oxygen consumption and gene expression in larval zebrafish. They did not find any effects on metabolic rate, but did on the fish microbiome, which could lead to higher susceptibility to disease.  
+Amazingly, this is the only study on zebrafish to cite `respR` so far, which is surprising given how many groups are working and doing respirometry on them. This study looked at the effects of microplastics on oxygen consumption and gene expression in larval zebrafish. They did not find any effects on metabolic rate, but did on the fish microbiome, which could lead to higher susceptibility to disease.
 
 #### @internicolaMicroplasticsDelawareBay2020
 
@@ -107,11 +111,11 @@ Matthew Gilbert cited `respR` in his PhD thesis as an example of how analytical 
 
 #### @negrete2019
 
-Another study that used `respR` to determine the Pcrit, this time of an estuarine fish. This was an examination of methods of determining Pcrit, both the analytical method of processing the metabolic rate data, and the respirometry method used (closed vs. intermittent-flow). There has been concern that closed respirometry mis-estimates Pcrit, because of the build-up of toxic metabolic end products, and intermittent-flow methods are preferable. The authors showed here this is not the case, and results were the same with either method. Really interesting stuff, and essential reading if you are wanting to determine Pcrit via respirometry. 
+Another study that used `respR` to determine the Pcrit, this time of an estuarine fish. This was an examination of methods of determining Pcrit, both the analytical method of processing the metabolic rate data, and the respirometry method used (closed vs. intermittent-flow). There has been concern that closed respirometry mis-estimates Pcrit, because of the build-up of toxic metabolic end products, and intermittent-flow methods are preferable. The authors showed here this is not the case, and results were the same with either method. Really interesting stuff, and essential reading if you are wanting to determine Pcrit via respirometry.
 
 #### @harvey2019
 
-This study examined how diatoms dominate food webs under ocean acidification conditions. Another study that uses `respR` to examine both oxygen production as well as consumption rates. The authors used the package to determine net oxygen production by determining both production and respiration. 
+This study examined how diatoms dominate food webs under ocean acidification conditions. Another study that uses `respR` to examine both oxygen production as well as consumption rates. The authors used the package to determine net oxygen production by determining both production and respiration.
 
 #### @burford2019c
 

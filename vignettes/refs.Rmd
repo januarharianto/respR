@@ -66,6 +66,8 @@ Muggeo, V. (2008). Segmented: An R package to fit regression models with broken-
 
 Silverman, B.W. (1986). Density Estimation for Statistics and Data Analysis. Chapman; Hall/CRC Press.
 
+Smith Jr, K.L. (1987). Food energy supply and demand: A discrepancy between particulate organic carbon flux and sediment community oxygen consumption in the deep ocean. *Limnology and Oceanography*, 32(1). [doi: 10.4319/lo.1987.32.1.0201](http://doi.wiley.com/10.4319/lo.1987.32.1.0201)
+
 Steffensen, J.F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. *Fish Physiology and Biochemistry*, 6(1), 49–59. [doi: 10.1007/BF02995809](https://doi.org/10.1007/BF02995809)
 
 Stoffels, R.J. (2015). Physiological trade-offs along a fast-slow lifestyle continuum in fishes: what do they tell us about resistance and resilience to hypoxia? PLOS ONE, 10(6), e0130303. [doi: 10.1371/journal.pone.0130303](https://doi.org/10.1371/journal.pone.0130303)
