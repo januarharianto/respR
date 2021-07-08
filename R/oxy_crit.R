@@ -213,8 +213,11 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
     stop("oxy_crit: 'width' input should be between 0.001 to 0.999, representing a proportion of the total data length.")
 
   ## validate method
+  if(!(method %in% c("bsr", "segmented")))
+    stop("oxy_crit: 'method' input not recognised.")
   ## validate thin
-
+  input.val(thin, num = TRUE, int = TRUE, req = FALSE,
+            max = 1, min = 1, range = c(1,Inf), msg = "oxy_crit: 'thin' -")
   ## validate column inputs
   column.val(time, req = FALSE, min = 1, max = 1,
              range = c(1,ncol(df)), conflicts = c(oxygen, rate), msg = "oxy_crit: 'time' -")
@@ -222,10 +225,6 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
              range = c(1,ncol(df)), conflicts = c(time, rate), msg = "oxy_crit: 'oxygen' -")
   column.val(rate, req = FALSE, min = 1, max = 1,
              range = c(1,ncol(df)), conflicts = c(time, oxygen), msg = "oxy_crit: 'rate' -")
-
-  ## allowed inputs
-  ## time & oxygen
-  ## oxygen & rate
 
   ## Rate~Oxygen analysis can only be done with dfs not inspect
   if("inspect" %in% class(x) && !is.null(oxygen) && !is.null(rate))
@@ -295,7 +294,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
 
     # speed up large data by subsampling:
     if (!is.null(thin) && nrow(dt_mr) > thin) {
-      sdt <- subsample(dt_mr, n = round(nrow(dt_mr)/thin), plot = F)
+      sdt <- subsample(dt_mr, length.out = thin, plot = F)
     } else sdt <- dt_mr
     # generate index for iterative sampling.
     lseq <- seq.int(3, nrow(sdt) - 2) # generate sequence for lm
@@ -406,7 +405,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
   ## result
   summ <- unlist(object$summary)
 
-  out <- summ
+  out <- as.data.table(t(summ))
 
   if(object$method == "bsr") {
     cat("--Broken-Stick Analysis Summary--\n")
