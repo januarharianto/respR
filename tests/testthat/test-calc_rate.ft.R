@@ -289,6 +289,7 @@ test_that("calc_rate.ft - applies default 'by = 'time' correctly", {
                "time")
 })
 insp.ft.obj.outo2.1col.ino2.1col$dataframe
+
 # from/to input -----------------------------------------------------------
 
 test_that("calc_rate.ft - stops if 'from' and 'to' are unequal lengths", {
@@ -300,19 +301,51 @@ test_that("calc_rate.ft - stops if 'from' and 'to' are unequal lengths", {
                regexp = "calc_rate.ft: 'from' and 'to' have unequal lengths.")
 })
 
-
-test_that("calc_rate.ft - stops if any paired 'from' value is later than paired 'to' value", {
-  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5,
-                            from = 3, to = 2,
+test_that("calc_rate.ft - stops if 'from' or 'to' values out of data ranges", {
+  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 1000, to = 10,
                             by = "time", plot = F),
-               regexp = "calc_rate.ft: some 'from' values are greater than the paired values in 'to'.")
-  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5,
-                            from = 20:29, to = 1:10,
+               regexp = "calc_rate.ft: some 'from' time values are higher than the values present in 'x'.")
+  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 2, to = 0,
                             by = "time", plot = F),
+               regexp = "calc_rate.ft: some 'to' time values are lower than the values present in 'x'.")
+  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 4000, to = 5000,
+                            by = "row", plot = F),
+               regexp = "calc_rate.ft: some 'from' row numbers are beyond the number of rows present in 'x'.")
+  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 200:210, to = 100:110,
+                            by = "row", plot = F),
                regexp = "calc_rate.ft: some 'from' values are greater than the paired values in 'to'.")
 })
 
+test_that("calc_rate.ft - if 'from' or 'to' values below or above data bounds, use lowest/highest vsalues instead", {
+  expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0.01, to = 10,
+                            by = "time", plot = F),
+               regexp = "calc_rate.ft: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
+  expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0.01, to = 10,
+                            by = "time", plot = F)$summary$time,
+               0.02)
 
+  expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0, to = 10,
+                            by = "row", plot = F),
+               regexp = "calc_rate.ft: some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
+  expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0, to = 10,
+                            by = "row", plot = F)$summary$row,
+               1)
+
+  expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0.02, to = 70,
+                            by = "time", plot = F),
+               regexp = "calc_rate.ft: some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
+  expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 0.02, to = 70,
+                            by = "time", plot = F)$summary$endtime,
+               62.33)
+
+  expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 2, to = 4000,
+                            by = "row", plot = F),
+               regexp = "calc_rate.ft: some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
+  expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, from = 2, to = 4000,
+                            by = "row", plot = F)$summary$endrow,
+               3740)
+
+})
 
 # width input -------------------------------------------------------------
 
@@ -905,6 +938,14 @@ test_that("calc_rate.ft output plot stops when 'pos' is out of range", {
                regexp = "calc_rate.ft: Invalid 'pos' input: only 3 rates found.")
 })
 
+test_that("calc_rate.ft output plot stops when 'pos' more than 1 value", {
+  ## plots when functions runs
+  expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col,
+                            from = 2:5, to = 1002:1005,
+                            flowrate = 2, plot = TRUE, pos = 9:10),
+               regexp = "calc_rate: 'pos' should be a single value.")
+})
+
 test_that("calc_rate.ft output plots when 'rate.rev' is used", {
   ## plots when functions runs
   expect_error(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col,
@@ -1195,6 +1236,21 @@ test_that("calc_rate.ft objects work with mean()", {
                 regexp = "Mean of 3 output rates:")
   expect_equal(mean(crft.obj.multrate.delta.only, export = TRUE),
                mean(crft.obj.multrate.delta.only$rate))
+})
+
+test_that("calc_rate.ft objects work with mean() and 'pos' input", {
+
+  expect_error(mean(crft.obj.vector, pos = 1:10),
+               regexp = NA)
+  expect_output(mean(crft.obj.vector, pos = 1:10),
+                regexp = "Mean of rate results from entered 'pos' ranks:")
+  expect_equal(mean(crft.obj.vector, pos = 1:10, export = TRUE),
+               mean(crft.obj.vector$rate[1:10]))
+})
+
+test_that("calc_rate.ft - stops with mean() and invalid 'pos' input", {
+  expect_error(mean(crft.obj.vector, pos = 1000),
+               regexp = "mean.calc_rate.ft: Invalid 'pos' rank: only 935 rates found.")
 })
 
 

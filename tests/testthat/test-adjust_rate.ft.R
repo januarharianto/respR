@@ -447,5 +447,20 @@ test_that("adjust_rate.ft - objects work with mean()", {
                mean(adj.ft_obj.val$rate.adjusted))
 })
 
+test_that("adjust_rate.ft - objects work with mean() and 'pos' input", {
+
+  expect_error(mean(adj.ft_obj.insp.many, pos = 1:10),
+               regexp = NA)
+  expect_output(mean(adj.ft_obj.insp.many, pos = 1:10),
+                regexp = "Mean of adjusted rate results from entered 'pos' ranks:")
+  expect_equal(mean(adj.ft_obj.insp.many, pos = 1:10, export = TRUE),
+               mean(adj.ft_obj.insp.many$rate.adjusted[1:10]))
+})
+
+test_that("adjust_rate.ft - stops with mean() if 'pos' too high", {
+  expect_error(mean(adj.ft_obj.insp.many, pos = 200),
+               regexp = "mean.adjust_rate.ft: Invalid 'pos' rank: only 101 adjusted rates found.")
+})
+
 }) ## turns printing back on
 

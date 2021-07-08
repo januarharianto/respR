@@ -1,7 +1,7 @@
 # library(testthat)
 # rm(list=ls())
 # testthat::test_file("tests/testthat/test-convert_rate.ft.R")
-# covr::file_coverage("R/calc_rate.ft.R", "tests/testthat/test-convert_rate.ft.R")
+# covr::file_coverage("R/convert_rate.ft.R", "tests/testthat/test-convert_rate.ft.R")
 # x <- covr::package_coverage()
 # covr::report(x)
 
@@ -553,6 +553,17 @@ test_that("convert_rate.ft - objects work with mean()", {
                mean(conv.adjft.width.as$rate.output))
 })
 
+test_that("convert_rate.ft - objects work with mean() and 'pos' input", {
+
+  expect_error(mean(conv.adjft.many.ms, pos = 1:10),
+               regexp = NA)
+  expect_output(mean(conv.adjft.many.ms, pos = 1:10),
+                regexp = "Mean of rate results from entered 'pos' ranks")
+  expect_equal(mean(conv.adjft.many.ms, pos = 1:10,  export = TRUE),
+               mean(conv.adjft.many.ms$rate.output[1:10]))
+  expect_error(mean(conv.adjft.many.ms, pos = 150),
+                 regexp = "mean.convert_rate.ft: Invalid 'pos' rank: only 101 rates found.")
+})
 
 # Extensive output tests - skipped ----------------------------------------
 
