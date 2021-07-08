@@ -485,6 +485,9 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
       roll_width <- floor(width * nrow(df))
       ## Calc all rates, even there is a min_obs of only 1 datapoint
       ## This means rate is returned even if there are NA in data
+      ## Also replace Inf with NA of ylim in plot fails
+      df[[1]][which(is.infinite(df[[1]]))] <- NA
+      df[[2]][which(is.infinite(df[[2]]))] <- NA
       rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
                              roll_width, min_obs = 1)$coefficients[,2]
       ## However this means rates are ALSO calculated at the start of the data
