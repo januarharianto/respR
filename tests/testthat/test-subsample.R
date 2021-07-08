@@ -47,6 +47,13 @@ test_that("subsample output is correct lengths for data.frames", {
                752)
 })
 
+test_that("subsample works with and plots multi column df", {
+  expect_error(subsample(urchins.rd, n = 10, plot = T),
+               NA)
+  expect_message(subsample(urchins.rd, n = 10, plot = T),
+                 "subsample: plotting first column of data only.")
+})
+
 test_that("subsample output is correct lengths for vectors", {
   expect_equal(length(subsample(sardine.rd[[1]], n = 10, plot = F)),
                752)
