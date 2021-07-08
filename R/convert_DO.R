@@ -62,10 +62,6 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   ## Save function call for output
   call <- match.call()
 
-  # Validate input:
-  if (!is.character(from)) stop("convert_DO: 'from' unit should be a character string.")
-  if (!is.character(to)) stop("convert_DO: 'to' unit should be a character string.")
-
   # Verify the units:
   fru <- verify_units(from, 'o2')
   tou <- verify_units(to, 'o2')
