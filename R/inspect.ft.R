@@ -370,13 +370,11 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
     names(in.o2.all) <- "in.o2.value"
   }
 
-  ## if no delta input, calculate it
+  ## If no delta input - make it NULL for now,
+  ## We will calculate it after checks if out.o2 and in.out non-numeric check passes.
+  ## Otherwise failures here if non-numeric data
   if(is.null(delta.o2)) {
-    del.o2.all <- mapply(function(p,q) p-q,
-                         p = out.o2.all,
-                         q = in.o2.all,
-                         SIMPLIFY = FALSE)
-    names(del.o2.all) <- sapply(1:length(del.o2.all), function(p) glue::glue("delta.o2.calc.{p}"))
+    del.o2.all <- NULL
     ## otherwise extract it
   } else {
     del.o2.all <- lapply(1:length(df[delta.o2]), function(z) df[delta.o2][[z]])
@@ -439,6 +437,23 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   # output
   locs <- lapply(1:ncol(locs_raw), function(z) locs_raw[, z])
   names(locs) <- colnames(locs_raw)
+
+  # if in.o2 and out.o2 non-numeric checks have passed, now it's ok to calculate delta.o2
+  if(is.null(delta.o2) && !(any(unlist(out.o2_results[[1]][1,]))) && !(any(unlist(in.o2_results[[1]][1,])))) {
+    del.o2.all <- mapply(function(p,q) p-q,
+                         p = out.o2.all,
+                         q = in.o2.all,
+                         SIMPLIFY = FALSE)
+    names(del.o2.all) <- sapply(1:length(del.o2.all), function(p) glue::glue("delta.o2.calc.{p}"))
+    ## otherwise make dummy list so next part doesn't error.
+    ## It won't be returned anyway
+  } else if (is.null(delta.o2)) {
+    del.o2.all <- mapply(function(p,q) rep(NA, length(p)),
+                         p = out.o2.all,
+                         q = in.o2.all,
+                         SIMPLIFY = FALSE)
+    #names(del.o2.all) <- sapply(1:length(del.o2.all), function(p) glue::glue("delta.o2.calc.{p}"))
+  }
 
   # save new data frame and create output object
   if(is.null(out.o2.all) && is.null(in.o2.all)) {
