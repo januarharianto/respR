@@ -1,5 +1,11 @@
-## rm(list=ls())
-## test_file("tests/testthat/test-calc_rate.R")
+# rm(list=ls())
+# library(testthat)
+# test_file("tests/testthat/test-calc_rate.R")
+# covr::file_coverage("R/calc_rate.R", "tests/testthat/test-calc_rate.R")
+# x <- covr::package_coverage()
+# covr::report(x)
+# covr::report(covr::package_coverage())
+
 
 capture.output({  ## stops printing outputs on assigning
 
@@ -44,11 +50,42 @@ test_that("calc_rate - subsetting methods work and produce correct outputs", {
 
 test_that("calc_rate - S3 generics work", {
   cr <- calc_rate(sardine.rd, from = 2000, to = 4000, plot = F)
-
   expect_output(print(cr))
   expect_output(summary(cr))
   expect_output(plot(cr))
   expect_output(suppressWarnings(mean(cr)))
+
+  # multiple rates and 'pos'
+  cr <- calc_rate(sardine.rd, from = 2000:2020, to = 4000:4020, plot = F)
+  expect_output(print(cr, pos = 2))
+  expect_error(print(cr, pos = 2:3),
+                 "print.calc_rate: 'pos' must be a single value. To examine multiple results use summary().")
+  expect_error(print(cr, pos = 30),
+                 "print.calc_rate: Invalid 'pos' rank: only 21 rates found.")
+
+  expect_output(summary(cr, pos = 2:3))
+  expect_error(summary(cr, pos = 40),
+                 "summary.calc_rate: Invalid 'pos' rank: only 21 rates found.")
+  expect_is(summary(cr, pos = 2:3, export = TRUE),
+                 "data.frame")
+
+  expect_output(mean(cr, pos = 2:3))
+  expect_error(mean(cr, pos = 40),
+                 "mean.calc_rate: Invalid 'pos' rank: only 21 rates found.")
+  expect_is(mean(cr, pos = 2:3, export = TRUE),
+                 "numeric")
+  expect_equal(mean(cr, pos = 2:3, export = TRUE),
+               mean(cr$rate[2:3]))
+
+  # pos default applied
+  expect_output(plot(cr, pos = NULL))
+  expect_output(plot(cr, pos = 1))
+  expect_output(plot(cr, pos = 3))
+  expect_error(plot(cr, pos = 50),
+               "calc_rate: Invalid 'pos' rank: only 21 rates found.")
+  expect_error(plot(cr, pos = 1:2),
+               "calc_rate: 'pos' should be a single value.")
+
 })
 
 test_that("calc_rate - calling linear_fit (calc_rate) produces coefficients", {
@@ -371,6 +408,12 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 100, to = 93, plot = F, by = by)$summary$time[1]),
                0)
   expect_equal(suppressWarnings(calc_rate(sardine.rd, from = 100, to = 93, plot = F, by = by)$summary$row[1]),
+               1)
+  expect_message(calc_rate(algae.rd, from = 92, to = 97, plot = F, by = by),
+                 "calc_rate: some 'from' oxygen values are lower than the values in 'x'. The lowest available value will be used instead.")
+  expect_equal(suppressWarnings(calc_rate(algae.rd, from = 92, to = 97, plot = F, by = by)$summary$time[1]),
+               0.02)
+  expect_equal(suppressWarnings(calc_rate(algae.rd, from = 92, to = 97, plot = F, by = by)$summary$row[1]),
                1)
   # single values, one below
   expect_message(calc_rate(sardine.rd, from = 95, to = 80, plot = F, by = by),

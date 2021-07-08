@@ -3,6 +3,7 @@
 # covr::file_coverage("R/inspect.R", "tests/testthat/test-inspect.R")
 # x <- covr::package_coverage()
 # covr::report(x)
+# covr::report(covr::package_coverage())
 
 capture.output({  ## stops printing console outputs on assigning
 
@@ -43,15 +44,39 @@ test_that("inspect produces plot with extra options passed",
                             message = FALSE, width = 0.05),
                        regexp = NA))
 
+urmultrates <- suppressWarnings(inspect(urchins.rd, time =1, oxygen = 2:8,
+                                 plot = F))
+test_that("inspect gives multiple column message", {
+          expect_message((plot(urmultrates)),
+                       regexp = "inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
+          })
+
+test_that("inspect produces plot with 'pos' input passed", {
+          expect_error(suppressWarnings(plot(urmultrates, pos = 2)),
+                       regexp = NA)
+          })
+
+test_that("inspect gives error with plot and 'pos' too high", {
+          expect_error((plot(urmultrates, pos = 100)),
+                       regexp = "plot.inspect: Invalid 'pos' rank: only 7 oxygen columns found.")
+          })
+
 
 # suppressWarnings(file.remove("Rplots.pdf"))
 
 test_that("inspect objects can be printed", {
   expect_output(print(ur2c))
   expect_output(print(ur3c))
+  expect_output(summary(ur2c))
+  expect_output(summary(ur3c))
 })
 
 test_that("inspect objects with lots of results (20+) can be printed", {
+  # time Inf
+  urch <- urchins.rd[,1:2]
+  urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- Inf
+  urch_insp <- suppressWarnings(inspect(urch, plot = F))
+  expect_output(print(urch_insp))
   # time NA
   urch <- urchins.rd[,1:2]
   urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- NA
@@ -66,6 +91,11 @@ test_that("inspect objects with lots of results (20+) can be printed", {
   # time dup
   urch <- urchins.rd[,1:2]
   urch$time.min[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- 44.3
+  urch_insp <- suppressWarnings(inspect(urch))
+  expect_output(print(urch_insp))
+  # oxy Inf
+  urch <- urchins.rd[,1:2]
+  urch$a[c(2:4, 30:35, 120:127, 180:190, 200:204)] <- Inf
   urch_insp <- suppressWarnings(inspect(urch))
   expect_output(print(urch_insp))
   # oxy NA
@@ -100,7 +130,6 @@ test_that("inspect works with NULL inputs", {
   expect_equal(inspect(intermittent.rd, width = NULL, plot = F)$inputs$width,
                0.1)
 })
-
 
 test_that("inspect stops if input not df", {
   expect_error(inspect(as.matrix(urchins.rd), plot = F),
@@ -155,6 +184,22 @@ test_that("inspect: unevenly spaced time detected message",
 base <- select(intermittent.rd, 1,2)
 base[[3]] <- intermittent.rd[[2]]
 
+input <- as.data.frame(base)
+input[100,1] <- "99"
+str(input)
+
+test_that("inspect: Non-numeric in time detected",
+          expect_warning(inspect(input, plot = T),
+                         "inspect: Time column not numeric. Other column checks skipped."))
+
+input <- as.data.frame(base)
+input[100,1] <- Inf
+input[200:205,1] <- -Inf
+
+test_that("inspect: Inf in time detected",
+          expect_warning(inspect(input, plot = F),
+                         "inspect: Inf/-Inf values detected in Time column. Remove or replace before proceeding."))
+
 input <- base
 input[100,1] <- NA
 input[200:205,1] <- NA
@@ -162,6 +207,19 @@ input[200:205,1] <- NA
 test_that("inspect: NA in time detected",
           expect_warning(inspect(input, plot = F),
                          "NA/NaN values detected in Time column."))
+
+input <- as.data.frame(base)
+input[100,2] <- "7.09"
+test_that("inspect: Non-numeric in oxygen detected",
+          expect_warning(inspect(input, plot = T),
+                         "inspect: Oxygen column\\(s) not numeric. Other column checks skipped."))
+
+input <- as.data.frame(base)
+input[100,2] <- Inf
+input[200:205,2] <- -Inf
+test_that("inspect: Inf in oxygen detected",
+          expect_warning(inspect(input, plot = F),
+                         "inspect: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding."))
 
 input <- base
 input[100,2] <- NA
@@ -198,6 +256,8 @@ input <- base
 test_that("inspect: all good message if no errors",
           expect_message(suppressWarnings(inspect(input, plot = F)),
                          "No issues detected while inspecting data frame."))
+
+
 
 test_that("inspect - plot defaults are correctly restored", {
 
