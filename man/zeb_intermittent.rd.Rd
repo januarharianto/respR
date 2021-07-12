@@ -20,20 +20,23 @@ random noise, and volume and mass below are not the actual values from the
 experiment, but for example only.
 }
 \details{
-Dissolved oxygen units: mg/L
 \itemize{
+\item Dissolved oxygen units: mg/L
 \item Time units: seconds
 \item Chamber volume (L): 0.1
 \item Specimen wet mass (kg): 0.001
 }
 
-Replicate structure (Rows - Experiment section)
+Replicate structure (Rows - Experiment section):
 \itemize{
 \item 1:4999 - Start background recording
 \item 5000:5839 - First replicate for MMR (14 mins duration)
 \item 5840:75139 - 105 further replicates of 11 minutes duration each (660 rows)
 \item 75140:79251 - End background recording
 }
+
+Each replicate comprises a measurement period (12 minutes for replicate 1, 9
+minutes for all others) plus 2 minutes flush.
 }
 \author{
 Davide Thambithurai

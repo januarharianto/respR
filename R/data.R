@@ -3,14 +3,12 @@
 #' Multiple measurements of oxygen consumption in a single sea urchin,
 #' *Heliocidaris erythrogramma*, obtained using intermittent flow respirometry.
 #' The experiment was conducted at the Sydney Institute of Marine Science in
-#' Sydney, Australia. There are a total of 3 replicates where the respirometry
-#' chamber was flushed. Data was collected using a Vernier Optical DO probe
-#' (ODO-BTA).
+#' Sydney, Australia. There are a total of 3 replicates showing declining oxygen,
+#' separated by flushes where new water was added showing increasing oxygen.
+#' Data was collected using a Vernier Optical DO probe (ODO-BTA).
 #'
-#' - Dissolved oxygen units: mg/L
-#' - Time units: seconds
-#' - Chamber volume (L): 2.379
-#' - Specimen ash-free dry mass (kg): 0.006955
+#' - Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
+#' 2.379 - Specimen ash-free dry mass (kg): 0.006955
 #'
 #' @md
 #' @author Nicholas Carey
@@ -209,16 +207,26 @@
 #' random noise, and volume and mass below are not the actual values from the
 #' experiment, but for example only.
 #'
-#' Dissolved oxygen units: mg/L
+#' - Dissolved oxygen units: mg/L
+#'
 #' - Time units: seconds
+#'
 #' - Chamber volume (L): 0.1
+#'
 #' - Specimen wet mass (kg): 0.001
 #'
-#' Replicate structure (Rows - Experiment section)
+#' Replicate structure (Rows - Experiment section):
+#'
 #' - 1:4999 - Start background recording
+#'
 #' - 5000:5839 - First replicate for MMR (14 mins duration)
+#'
 #' - 5840:75139 - 105 further replicates of 11 minutes duration each (660 rows)
+#'
 #' - 75140:79251 - End background recording
+#'
+#' Each replicate comprises a measurement period (12 minutes for replicate 1, 9
+#' minutes for all others) plus 2 minutes flush.
 #'
 #' @md
 #' @author Davide Thambithurai
