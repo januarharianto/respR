@@ -105,6 +105,7 @@ Changes
 - Old methods ('min', 'max') still produce same results as old code but have a prominent warning. Will properly deprecate in later version.
 - NEW: added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE (also added for other methods, but as an empty column)
 - NEW: plot updated with title showing which Rank current plot is, and better spacing
+- NEW: plot has `rate.rev` input controlling plotting of the y-axis of the rolling rate plot. Default is `TRUE`, which means oxygen uptake rates will appear higher on the plot despite being lower numerically (i.e. more negative). Change this to `FALSE` to plot strictly numerically, if for instance youa re examining oxygen production so that higher production rates are higher.
 
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
 - FIX: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.

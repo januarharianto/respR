@@ -109,14 +109,18 @@
 #'
 #' A plot is produced (provided `plot = TRUE`) showing the original data
 #' timeseries of oxygen against time, with the rate result region highlighted, a
-#' close-up of this region with linear model coefficients, various summary plots
-#' of fit and residuals, and for the `linear` method the results of the kernel
-#' density analysis. If multiple rates have been calculated, by default the
-#' first is plotted. Others can be plotted by changing the `pos` argument either
-#' in the main function call, or by plotting the output, e.g. `plot(object, pos
-#' = 2)`. In addition, each sub-panel can be examined individually by using the
-#' `choose` input, e.g. `plot(object, choose = 2)`. Console output messages can
-#' be suppressed using `message = FALSE`.
+#' close-up of this region with linear model coefficients, a rolling rate plot
+#' (note the reversed y-axis so that higher oxygen consumption rates are
+#' higher), various summary plots of fit and residuals, and for the `linear`
+#' method the results of the kernel density analysis. If multiple rates have
+#' been calculated, by default the first is plotted. Others can be plotted by
+#' changing the `pos` argument either in the main function call, or by plotting
+#' the output, e.g. `plot(object, pos = 2)`. In addition, each sub-panel can be
+#' examined individually by using the `choose` input, e.g. `plot(object, choose
+#' = 2)`. Console output messages can be suppressed using `message = FALSE`. The
+#' rate in the rolling rate plot can be plotted *not* reversed by passing
+#' `rate.rev = FALSE`, for instance if examining oxygen production rates so that
+#' higher production rates appear higher.
 #'
 #' ## S3 Generic Functions
 #'
@@ -415,10 +419,8 @@ print.auto_rate <- function(x, pos = 1, ...) {
   return(invisible(x)) # this lets us continue with dplyr pipes
 }
 
-# OLD PLOTTING FUNCTION USING BASE PLOT.
-# Don't delete -- take as a reminder that this has been attempted before.
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, ...) {
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -473,7 +475,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, ...) {
           ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt)
       sub.p(sdt, rsq = rsq)
-      rollreg.p(rolldt, rate)
+      rollreg.p(rolldt, rate, rate.rev)
       residual.p(fit)
       qq.p(fit)
       layout(1)
@@ -501,7 +503,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, ...) {
           ps = 10, cex = 1, cex.main = 1)
       multi.p(dt, sdt) # full timeseries with lmfit
       sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
-      rollreg.p(rolldt, rate) # rolling regression series with markline
+      rollreg.p(rolldt, rate, rate.rev = rate.rev) # rolling regression series with markline
       density.p(dens, peaks, pos) # density plot
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
@@ -517,7 +519,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, ...) {
     }
   }
   if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
-  if (choose == 3) rollreg.p(rolldt, rate)  # rolling regression
+  if (choose == 3) rollreg.p(rolldt, rate, rate.rev)  # rolling regression
   if (choose == 4) {
     if (x$method != 'linear') {
       stop('auto_rate: density plot not available for "highest", "lowest", "maximum", "minimum", "rolling" and "interval" methods')

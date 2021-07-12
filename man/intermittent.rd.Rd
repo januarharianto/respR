@@ -15,16 +15,14 @@ intermittent.rd
 Multiple measurements of oxygen consumption in a single sea urchin,
 \emph{Heliocidaris erythrogramma}, obtained using intermittent flow respirometry.
 The experiment was conducted at the Sydney Institute of Marine Science in
-Sydney, Australia. There are a total of 3 replicates where the respirometry
-chamber was flushed. Data was collected using a Vernier Optical DO probe
-(ODO-BTA).
+Sydney, Australia. There are a total of 3 replicates showing declining oxygen,
+separated by flushes where new water was added showing increasing oxygen.
+Data was collected using a Vernier Optical DO probe (ODO-BTA).
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
-\item Chamber volume (L): 2.379
-\item Specimen ash-free dry mass (kg): 0.006955
+\item Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
+2.379 - Specimen ash-free dry mass (kg): 0.006955
 }
 }
 \author{
