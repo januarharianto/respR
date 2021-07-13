@@ -23,8 +23,8 @@ experiment, but for example only.
 \itemize{
 \item Dissolved oxygen units: mg/L
 \item Time units: seconds
-\item Chamber volume (L): 0.1
-\item Specimen wet mass (kg): 0.001
+\item Chamber volume (L): 0.12
+\item Specimen wet mass (kg): 0.0009
 }
 
 Replicate structure (Rows - Experiment section):

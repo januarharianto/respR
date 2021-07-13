@@ -76,11 +76,17 @@
 #' Grove, California.
 #'
 #' - Dissolved oxygen units: % air saturation
+#'
 #' - Temperature (°C): 15
+#'
 #' - Salinity: 35
+#'
 #' - Atm. Pressure (kPa): 1.013253
+#'
 #' - Time units: seconds
+#'
 #' - Chamber volume (L): 12.3
+#'
 #' - Specimen wet mass (kg): 0.0477
 #'
 #' @md
@@ -211,9 +217,9 @@
 #'
 #' - Time units: seconds
 #'
-#' - Chamber volume (L): 0.1
+#' - Chamber volume (L): 0.12
 #'
-#' - Specimen wet mass (kg): 0.001
+#' - Specimen wet mass (kg): 0.0009
 #'
 #' Replicate structure (Rows - Experiment section):
 #'
