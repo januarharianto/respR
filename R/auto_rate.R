@@ -451,7 +451,8 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev 
   start <- x$summary$row[pos]
   end <- x$summary$endrow[pos]
   sdt <- dt[start:end]
-  rolldt <- data.table::data.table(x = x$roll$endtime, y = x$roll$rate)
+  rolldt <- data.table::data.table(x = (x$roll$endtime+x$roll$time)/2,
+                                   y = x$roll$rate)
   rate <- x$summary$rate_b1[pos]
   rsq <- signif(x$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
@@ -510,7 +511,9 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev 
     }
   }
 
-  if(!isFALSE(choose)) par(oma = oma)
+  if(!isFALSE(choose))
+    par(mai = c(0.3, 0.3, 0.2, 0.2),
+        oma = c(0.4, 0.4, 0.3, 0.3))
   if (choose == 1) {
     multi.p(dt, sdt) # full timeseries with lmfit
     if (x$method == "interval") {
