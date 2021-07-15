@@ -12,11 +12,12 @@ A data frame object consisting of 20664 rows (approx 6 h of data),and
 background_lin.rd
 }
 \description{
-Linear background oxygen consumption data. After initial 30 minutes, data
-shows a generally linear background rate. Taken from a Loligo swim tunnel
-background recording. Oxygen recorded via a Witrox sensor in \% air saturation
-over nearly 6 hours at 1 second intervals. Data is from a real experiment,
-but decrease in oxygen has been slightly exaggerated for testing purposes.
+Background oxygen consumption data. After initial 30 minutes, data shows a
+background rate which increases linearly with respect to time. Taken from a
+Loligo swim tunnel background recording. Oxygen recorded via a Witrox sensor
+in \% air saturation over nearly 6 hours at 1 second intervals. Data is from a
+real experiment, but has been manipulated to show a linear increase in
+background rate for testing purposes.
 }
 \details{
 \itemize{
