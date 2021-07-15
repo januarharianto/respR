@@ -241,18 +241,46 @@
 "zeb_intermittent.rd"
 
 
-#' Background respirometry data (linear)
+#' Background respirometry data (constant)
 #'
-#' Linear background oxygen consumption data. After initial 30 minutes, data
-#' shows a generally linear background rate. Taken from a Loligo swim tunnel
+#' Background oxygen consumption data. After the initial 30 minutes, data shows
+#' a generally constant background rate. Taken from a Loligo swim tunnel
 #' background recording. Oxygen recorded via a Witrox sensor in % air saturation
-#' over nearly 6 hours at 1 second intervals. Data is from a real experiment,
-#' but decrease in oxygen has been slightly exaggerated for testing purposes.
+#' over nearly 6 hours at 1 second intervals. Data is from a real experiment.
 #'
 #' - Dissolved oxygen units: % Air Saturation
+#'
 #' - Time units: seconds
+#'
 #' - Swim tunnel volume: 12.3 L
+#'
 #' - Temperature: 14.5 C
+#'
+#' - Salinity: 34 ppt
+#'
+#' @md
+#' @author Nicholas Carey
+#' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
+#'   2 columns: time in seconds, oxygen in % air saturation.
+"background_con.rd"
+
+#' Background respirometry data (linear)
+#'
+#' Background oxygen consumption data. After initial 30 minutes, data shows a
+#' background rate which increases linearly with respect to time. Taken from a
+#' Loligo swim tunnel background recording. Oxygen recorded via a Witrox sensor
+#' in % air saturation over nearly 6 hours at 1 second intervals. Data is from a
+#' real experiment, but has been manipulated to show a linear increase in
+#' background rate for testing purposes.
+#'
+#' - Dissolved oxygen units: % Air Saturation
+#'
+#' - Time units: seconds
+#'
+#' - Swim tunnel volume: 12.3 L
+#'
+#' - Temperature: 14.5 C
+#'
 #' - Salinity: 34 ppt
 #'
 #' @md
@@ -264,17 +292,21 @@
 
 #' Background respirometry data (exponential)
 #'
-#' Exponential background oxygen consumption data. Data shows a generally
-#' increasing background rate. Taken from a Loligo swim tunnel background
-#' recording. Oxygen recorded via a Witrox sensor in % air saturation over
-#' nearly 6 hours at 1 second intervals. Data is from a real experiment, but
-#' oxygen decrease curve has been exaggerated to impose an exponential increase
-#' in background consumption for testing purposes.
+#' Background oxygen consumption data. Data shows a background rate which
+#' increases exponentially with respect to time. Taken from a Loligo swim tunnel
+#' background recording. Oxygen recorded via a Witrox sensor in % air saturation
+#' over nearly 6 hours at 1 second intervals. Data is from a real experiment,
+#' but oxygen decrease curve has been exaggerated to impose an exponential
+#' increase in background consumption for testing purposes.
 #'
 #' - Dissolved oxygen units: % Air Saturation
+#'
 #' - Time units: seconds
+#'
 #' - Swim tunnel volume: 12.3 L
+#'
 #' - Temperature: 14.5 C
+#'
 #' - Salinity: 34 ppt
 #'
 #' @md
