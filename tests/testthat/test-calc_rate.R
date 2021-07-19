@@ -101,8 +101,10 @@ test_that("calc_rate works with variations of `by` input", {
   expect_error(calc_rate(sardine.rd, plot = F, by = "O2"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "Row"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "r"), regexp = NA)
-  expect_error(calc_rate(sardine.rd, plot = F, by = "Proportion"), regexp = NA)
-  expect_error(calc_rate(sardine.rd, plot = F, by = "prop"), regexp = NA)
+  expect_error(calc_rate(sardine.rd, plot = F, by = "Proportion"),
+               regexp = "calc_rate: please enter a proportion 'from' input.")
+  expect_error(calc_rate(sardine.rd, plot = F, by = "prop"),
+               regexp = "calc_rate: please enter a proportion 'from' input.")
 })
 
 test_that("calc_rate - stops with wrong 'by' inputs", {
@@ -135,6 +137,88 @@ test_that("calc_rate - calcs rate over all available data if to and from are NUL
                    cr$subsets[[1]])
   expect_identical(nrow(cr$dataframe),
                    cr$summary$endrow)
+})
+
+test_that("calc_rate - correctly handles 'from' NULL", {
+  urch <- urchins.rd[20:200,1:2]
+  expect_error(calc_rate(urch, from = NULL, to = 20, by = "time", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = NULL, to = 20, by = "time", plot = FALSE)$summary$time,
+               urch[[1]][1])
+
+  expect_error(calc_rate(urch, from = NULL, to = 20, by = "row", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = NULL, to = 20, by = "row", plot = FALSE)$summary$row,
+               1)
+
+  expect_error(calc_rate(urch, from = NULL, to = 7, by = "o2", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = NULL, to = 7, by = "o2", plot = FALSE)$summary$oxy,
+               urch[[2]][1])
+
+  expect_error(calc_rate(urch, from = NULL, to = 0.8, by = "prop"),
+               regexp = "calc_rate: please enter a proportion 'from' input.")
+})
+
+test_that("calc_rate - correctly handles 'to' NULL", {
+  urch <- urchins.rd[20:200,1:2]
+  expect_error(calc_rate(urch, from = 5, to = NULL, by = "time", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = 5, to = NULL, by = "time", plot = FALSE)$summary$endtime,
+               urch[[1]][181])
+
+  expect_error(calc_rate(urch, from = 5, to = NULL, by = "row", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = 5, to = NULL, by = "row", plot = FALSE)$summary$endrow,
+               181)
+
+  expect_error(calc_rate(urch, from = 7.5, to = NULL, by = "o2", plot = FALSE),
+               regexp = NA)
+  expect_equal(calc_rate(urch, from = 7.5, to = NULL, by = "o2", plot = FALSE)$summary$endoxy,
+               urch[[2]][181])
+
+  expect_error(calc_rate(urch, from = 0.2, to = NULL, by = "prop"),
+               regexp = "calc_rate: please enter a proportion 'to' input.")
+})
+
+
+test_that("calc_rate - correctly handles 'from' and 'to' NULL", {
+  urch <- urchins.rd[20:200,1:2]
+  # all NULL - deafults - applies by= "time"
+  expect_error(calc_rate(urch),
+               regexp = NA)
+  expect_equal(calc_rate(urch)$summary$time,
+               urch[[1]][1])
+  expect_equal(calc_rate(urch)$summary$endtime,
+               urch[[1]][nrow(urch)])
+  expect_equal(calc_rate(urch)$summary$oxy,
+               urch[[2]][1])
+  expect_equal(calc_rate(urch)$summary$endoxy,
+               urch[[2]][nrow(urch)])
+  # by "row"
+  expect_error(calc_rate(urch, by = "row"),
+               regexp = NA)
+  expect_equal(calc_rate(urch, by = "row")$summary$row,
+               1)
+  expect_equal(calc_rate(urch, by = "row")$summary$endrow,
+               181)
+  expect_equal(calc_rate(urch, by = "row")$summary$oxy,
+               urch[[2]][1])
+  expect_equal(calc_rate(urch, by = "row")$summary$endoxy,
+               urch[[2]][nrow(urch)])
+  # by "o2"
+  expect_error(calc_rate(urch, by = "o2"),
+               regexp = NA)
+  expect_equal(calc_rate(urch, by = "o2")$summary$row,
+               1)
+  expect_equal(calc_rate(urch, by = "o2")$summary$endrow,
+               181)
+  expect_equal(calc_rate(urch, by = "o2")$summary$oxy,
+               urch[[2]][1])
+  expect_equal(calc_rate(urch, by = "o2")$summary$endoxy,
+               urch[[2]][nrow(urch)])
+
+
 })
 
 test_that("calc_rate - stops if 'from' and 'to' are unequal length", {

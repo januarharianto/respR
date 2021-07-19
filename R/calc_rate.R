@@ -120,6 +120,12 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   ## Save function call for output
   call <- match.call()
+  ## Save inputs for output
+  inputs <- list(x = x,
+                 from = from,
+                 to = to,
+                 by = by,
+                 plot = plot)
 
   # Validate inputs
   # Will migrate to assertive package when I get used to it..
@@ -127,23 +133,34 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   by <- verify_by(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
-  if(any(class(x) %in% "inspect")) x <- x$dataframe
+  if(any(class(x) %in% "inspect")) df <- x$dataframe else
+    df <- x
 
-  # By now, x input must be a data frame object
-  if(!is.data.frame(x)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.")
+  # By now, df input must be a data frame object - but check
+  if(!is.data.frame(df)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.")
 
   # Format as data.table
-  x <- data.table::data.table(x)
-  if (length(x) > 2) {
+  df <- data.table::data.table(df)
+  if (length(df) > 2) {
     warning("calc_rate: Multiple columns of oxygen data found in input.\n  Rate(s) will be calculated from first column only!\n  To extract rates from other columns, use 'inspect()' to save them as separate objects.")
-    x <- x[, 1:2]
+    df <- df[, 1:2]
   }
 
-  # If 'from' and 'to' are NULL, we assume that the user is analysing all data
-  if (all(sapply(list(from, to), is.null))) {
-    from <- 1; to <- nrow(x); by <- "row"
+  # Apply NULL defaults
+  if(is.null(from)){
+    if(by == "time") from <- min(df[[1]])
+    if(by == "row") from <- 1
+    if(by == "o2") from <- df[[2]][1] # first oxygen value
+    if(by == "proportion")
+      stop("calc_rate: please enter a proportion 'from' input.")
   }
-
+  if(is.null(to)){
+    if(by == "time") to <- max(df[[1]])
+    if(by == "row") to <- nrow(df)
+    if(by == "o2") to <- df[[2]][nrow(df)] # last oxygen value
+    if(by == "proportion")
+      stop("calc_rate: please enter a proportion 'to' input.")
+  }
 
   # from/to checks  ---------------------------------------------------------
 
@@ -160,7 +177,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
                   p = from,
                   q = to))) stop("calc_rate: some 'from' time values are later than the paired values in 'to'.")
 
-    t_range <- range(x[[1]], na.rm = TRUE)
+    t_range <- range(df[[1]], na.rm = TRUE)
     if(any(sapply(from, function(z) z > t_range[2])))
       stop("calc_rate: some 'from' time values are higher than the values present in 'x'.")
     if(any(sapply(to, function(z) z < t_range[1])))
@@ -176,7 +193,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
                   p = from,
                   q = to))) stop("calc_rate: some 'from' row numbers are higher than the paired values in 'to'.")
 
-    r_range <- range(1:nrow(x))
+    r_range <- range(1:nrow(df))
     if(any(sapply(from, function(z) z > r_range[2])))
       stop("calc_rate: some 'from' row numbers are beyond the number of rows present in 'x'.")
     if(any(sapply(to, function(z) z > r_range[2])))
@@ -184,7 +201,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   }
 
   if(by == "o2"){
-    o_range <- range(x[[2]], na.rm = TRUE)
+    o_range <- range(df[[2]], na.rm = TRUE)
 
     ## can't have 'from' and 'to' both below or both above o2 range
     if(any(mapply(function(p,q) p < o_range[1] && q < o_range[1],
@@ -218,17 +235,17 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   # Subset and run lm -------------------------------------------------------
   # Subset the data:
-  dt <- lapply(1:length(from), function(z) truncate_data(x, from[z], to[z], by))
+  dt <- lapply(1:length(from), function(z) truncate_data(df, from[z], to[z], by))
 
   # Perform lm on data and extract coefficients
   coefs <- lapply(1:length(to), function(z) linear_fit(dt[[z]]))
 
   # Extract row, time and DO indices from subsets
-  indices <- lapply(1:length(dt), function(z) extract_indices(x, dt, z))
+  indices <- lapply(1:length(dt), function(z) extract_indices(df, dt, z))
 
   # Extract row, time and DO indices from subsets and add to results
-  rdt <- data.table::rbindlist(lapply(1:length(to), function(x)
-    cbind(coefs[[x]], indices[[x]])))
+  rdt <- data.table::rbindlist(lapply(1:length(to), function(z)
+    cbind(coefs[[z]], indices[[z]])))
 
   # Include twopoint method in table
   # And `rate` at end on its own in case people use 2pt by mistake
@@ -242,12 +259,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   # Generate output ---------------------------------------------------------
   out <- list(
     call = call,
-    dataframe = x,
+    inputs = inputs,
+    dataframe = df,
     subsets = dt,
     summary = cbind(rank = 1:nrow(rdt), rdt),
-    from = from,
-    to = to,
-    by = by,
     rate.2pt = rdt$rate.2pt,
     rate = rate
   )
