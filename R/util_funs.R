@@ -195,17 +195,40 @@ truncate_data <- function(x, from, to, by) {
 
   dt <- data.table::as.data.table(x)
 
+  ## replace NULL inputs with defaults
+  if (is.null(by)) by <- "time"
+
+  ## verify by just in case
+  by <- verify_by(by)
+
+  ## replace NULL inputs with defaults
+  if(is.null(from)){
+    if(by == "time") from <- min(dt[[1]], na.rm = TRUE)
+    if(by == "row") from <- 1
+    if(by == "o2") from <- dt[[2]][1] # first oxygen value
+    if(by == "proportion")
+      stop("Please enter a proportion 'from' input.")
+  }
+  if(is.null(to)){
+    if(by == "time") to <- max(dt[[1]], na.rm = TRUE)
+    if(by == "row") to <- nrow(dt)
+    if(by == "o2") to <- dt[[2]][nrow(dt)] # last oxygen value
+    if(by == "proportion")
+      stop("Please enter a proportion 'to' input.")
+  }
+
   ## time is ok, since it is always increasing
   if (by == "time") {
+    # if values out of range use lowest/highest available
+    rng <- range(dt[[1]], na.rm = TRUE)
+    if(from < rng[1]) from <- rng[1]
+    if(to > rng[2]) to <- rng[2]
     out <- dt[dt[[1]] >= from & dt[[1]] <= to]
   }
   ## row is ok, since it is always increasing
   if (by == "row") {
-    ## Check rows within range
-    if(from > nrow(dt)) stop("'from' row is greater than total number of rows.")
-    ## Use last row if to row too large
+    # if to value out of range use highest available
     if(to > nrow(dt)) to <- nrow(dt)
-
     out <- dt[from:to]
   }
   ## o2 could be increasing or decreasing
@@ -224,29 +247,27 @@ truncate_data <- function(x, from, to, by) {
         lower <- sort(c(from, to))[1]
         upper <- sort(c(from, to))[2]
         # indices of data between these
-        start <- min(which(dplyr::between(dt[[2]], lower, upper)))
-        end <- max(which(dplyr::between(dt[[2]], lower, upper)))
+        start <- min(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
+        end <- max(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
 
         out <- dt[start:end]
   }
   if (by == "proportion") {
     ## has to handle by proportion produced as well as consumed!
-    mx <- max(dt[[2]])
-    mn <- min(dt[[2]])
+    mx <- max(dt[[2]], na.rm = TRUE)
+    mn <- min(dt[[2]], na.rm = TRUE)
     ## dplyr::between needs them in low-high order
     lower <- sort(c(from, to))[1]
     upper <- sort(c(from, to))[2]
     # indices of data between these
     start <- min(which(dplyr::between(dt[[2]],
                                       (lower * (mx - mn) + mn),
-                                      (upper * (mx - mn) + mn))))
+                                      (upper * (mx - mn) + mn))),
+                 na.rm = TRUE)
     end <- max(which(dplyr::between(dt[[2]],
                                     (lower * (mx - mn) + mn),
-                                    (upper * (mx - mn) + mn))))
-
-    # Old method - only works with oxy decrease
-    #start <- Position(function(z) z <= (from * (mx - mn) + mn), dt[[2]])
-    #end <- Position(function(z) z <= (to * (mx - mn) + mn), dt[[2]])
+                                    (upper * (mx - mn) + mn))),
+               na.rm = TRUE)
 
     out <- dt[start:end]
   }

@@ -159,6 +159,7 @@ Changes
 
 ========================== calc_rate() ============================
 - NEW: plot updated with title showing which Rank current plot is, and better spacing
+- NEW: now calculates from start of the data if 'from' is NULL, and to the end of the data if `to` is NULL.
 - CHANGE: Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: added a bunch of new input checks
 - CHANGE: output elements renamed
@@ -175,6 +176,7 @@ The change will mean with some data it will give different results than the old 
 ========================== subset_data() ============================
 - NEW: support for `inspect.ft` objects
 - NEW: added 'quiet' input to allow console output to be suppressed. (still does for now, but make no print the default?) - also add this to others which print by default? Think it's only inspect/inspect.ft
+- NEW: now subsets from start of the data if 'from' is NULL, and to the end of the data if `to` is NULL.
 - CHANGE: Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple O2 column dataframes
 - CHANGE: Warns if output subset is empty
 - FIX: fix for failure with inspect() objects

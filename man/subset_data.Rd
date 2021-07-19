@@ -4,7 +4,7 @@
 \alias{subset_data}
 \title{Subset a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object}
 \usage{
-subset_data(x, from, to, by = "time", quiet = FALSE)
+subset_data(x, from = NULL, to = NULL, by = "time", quiet = FALSE)
 }
 \arguments{
 \item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data to subset.}

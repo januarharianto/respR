@@ -85,7 +85,7 @@
 #' subset_data(sardine.rd, from = 94, to = 91, by = "o2") %>%
 #' auto_rate()
 
-subset_data <- function(x, from, to, by = "time", quiet = FALSE) {
+subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
 
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect")) {
@@ -97,45 +97,53 @@ subset_data <- function(x, from, to, by = "time", quiet = FALSE) {
   ## verify by input
   by <- verify_by(by, msg = "subset_data:")
 
+  ## replace NULL inputs
+  if(is.null(from)){
+    if(by == "time") from <- min(dt[[1]])
+    if(by == "row") from <- 1
+    if(by == "o2") from <- dt[[2]][1] # first oxygen value
+    if(by == "proportion")
+      stop("subset_data: please enter a proportion 'from' input.")
+  }
+  if(is.null(to)){
+    if(by == "time") to <- max(dt[[1]])
+    if(by == "row") to <- nrow(dt)
+    if(by == "o2") to <- dt[[2]][nrow(dt)] # last oxygen value
+    if(by == "proportion")
+      stop("subset_data: please enter a proportion 'to' input.")
+  }
+
   ## if time, 'from' required, single val, not bigger than max value in time
   if(by == "time") {
-    input.val(from,  num = TRUE, int = FALSE, req = TRUE,
+    input.val(from,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(0, max(dt[[1]])),
               msg = "subset_data: 'from' -")
     ## if time, 'to' required, single val, greater than from
-    input.val(to,  num = TRUE, int = FALSE, req = TRUE,
+    input.val(to,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(from, Inf),
-              msg = "subset_data: 'to' -")}
+              msg = "subset_data: 'to' -")
+    }
 
   ## if row, 'from' required, single val, integer
   if(by == "row") {
-    input.val(from,  num = TRUE, int = TRUE, req = TRUE,
+    input.val(from,  num = TRUE, int = TRUE, req = FALSE,
               max = 1, min = 1, range = c(1, nrow(dt)),
               msg = "subset_data: 'from' -")
     ## if row, 'to' required, single val, integer, greater than from
-    input.val(to,  num = TRUE, int = TRUE, req = TRUE,
+    input.val(to,  num = TRUE, int = TRUE, req = FALSE,
               max = 1, min = 1, range = c(from+1, Inf),
               msg = "subset_data: 'to' -")}
 
   ## if o2 or prop, 'from' & 'to' required, single val, numeric
   if(by == "o2" || by == "proportion") {
-    input.val(from,  num = TRUE, int = FALSE, req = TRUE,
+    input.val(from,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(-Inf, Inf),
               msg = "subset_data: 'from' -")
-    input.val(to,  num = TRUE, int = FALSE, req = TRUE,
+    input.val(to,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(-Inf, Inf),
               msg = "subset_data: 'to' -")}
 
-  # Subset based on rule "by"
-  if (by == "time") {
-    out <- dt[dt[[1]] >= from & dt[[1]] <= to]
-  } else if (by == "row") {
-    out <- dt[from:to]
-  } else if (by == "o2") {
-    out <- truncate_data(dt, from, to, by)
-  } else if (by == "proportion") {
-    out <- truncate_data(dt, from, to, by)
-  }
+  out <- truncate_data(dt, from, to, by)
 
   # inspect.ft has an additional element that needs subset - $data
   if (any(class(x) %in% "inspect.ft")) {
