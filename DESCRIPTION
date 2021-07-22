@@ -35,6 +35,7 @@ Imports:
     readxl,
     roll,
     segmented,
+    sf (== 1.0),
     stats,
     stringr,
     utils,
