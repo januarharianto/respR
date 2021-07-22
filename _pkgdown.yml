@@ -58,6 +58,7 @@ reference:
     - '`algae.rd`'
     - '`zeb_intermittent.rd`'
     - '`test_lin_data`'
+    - '`background_con.rd`'
     - '`background_exp.rd`'
     - '`background_lin.rd`'
 
@@ -82,24 +83,30 @@ navbar:
 
     - text: Vignettes
       menu:
-      - text: "import_file: Importing data"
-        href: articles/importing.html
-      - text: "inspect: Inspecting data"
-        href: articles/inspecting.html
-      - text: "auto_rate: Automatic detection of linear rates"
-        href: articles/auto_rate.html
+      - text: "---- Complete Workflows ----"
       - text: "Closed-chamber respirometry"
         href: articles/closed.html
-      - text: "Intermittent-flow respirometry: Simple example"
-        href: articles/intermittent.html
-      - text: "Intermittent-flow respirometry: Complex example"
-        href: articles/intermittent2.html
+      - text: "Intermittent-flow respirometry: Short experiment"
+        href: articles/intermittent_short.html
+      - text: "Intermittent-flow respirometry: Long experiment"
+        href: articles/intermittent_long.html
       - text: "Flowthrough respirometry"
         href: articles/flowthrough.html
       - text: "oxy_crit: Critical oxygen analyses"
         href: articles/oxycrit.html
       - text: "calc_rate: Two-point rate calculation"
         href: articles/twopoint.html
+      - text: "---- Function Guides ----"
+      - text: "import_file & format_time: Import and prepare data"
+        href: articles/importing.html
+      - text: "inspect: Inspecting data"
+        href: articles/inspecting.html
+      - text: "auto_rate: Automatic detection of linear rates"
+        href: articles/auto_rate.html
+      - text: "subset_rate: Filtering auto_rate results"
+        href: articles/subset_rate.html
+      - text: "adjust_rate: Adjusting rates for background"
+        href: articles/adjust_rate.html
       - text: "convert_DO: Convert between units of dissolved oxygen"
         href: articles/convert_DO.html
 

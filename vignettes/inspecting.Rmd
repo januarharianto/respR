@@ -19,8 +19,8 @@ opts_chunk$set(collapse = TRUE,
                cache = FALSE, 
                tidy = TRUE, 
                highlight = TRUE, 
-               fig.width = 6, 
-               fig.height = 4,
+               fig.width = 7, 
+               fig.height = 3.5,
                fig.align = "center")
 ```
 
@@ -254,7 +254,7 @@ If we look at this region, it is clear what the problem is.
 data[297:302,]
 ```
 
-Where times have crossed midnight, our `lubridate` code has failed to parse it correctly. The lack of dates along with times means it has incorrectly calculated the elapsed time. 
+Where times have crossed midnight, our code has failed to parse it correctly. The lack of dates along with times means we have incorrectly calculated the elapsed time. 
 
 ## Remedies
 

@@ -19,3 +19,4 @@ vignettes
 ^\.github$
 ^appveyor\.yml$
 ^pkgdown$
+Changelog

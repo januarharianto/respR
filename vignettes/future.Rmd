@@ -17,10 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Future features
 
-These features are in development, planned or being considered. Happy to take any input as to which we should work on first
+These features are in development, planned or being considered. We are happy to take any input as to which we should prioritise.
 
 - intermittent-flow - function to identify replicates and run calc_rate or auto_rate on each one, the summarise the result
 
 - Pcrit - further methods
 
-
+- Shiny app.

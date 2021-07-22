@@ -15,8 +15,17 @@ library(respR) # load respR
 # library(dplyr) # for some piping exercises
 library(DiagrammeR) # flowcharts... and more
 
-opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE,
-  highlight = TRUE, fig.width = 6, fig.height = 6)
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(width = 999,
+                                scipen = 999, 
+                                digits = 3))
 ```
 
 ## Introduction
@@ -125,12 +134,51 @@ normx <- auto_rate(sardine.rd, plot = FALSE)
 
 # Perform linear detection using manual width of 0.6:
 overx <- auto_rate(sardine.rd, plot = FALSE, width = .6)
+```
+
+```{r echo = F, message=FALSE, results='hide'}
+# rolling regression
+
+r2 <- adjustcolor("goldenrod1", alpha.f = 1)  
+
+rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE, 
+                         xlim = NULL, ylim = NULL) {
+  if(is.null(xlim)) xlim <- range(rolldf[[1]])
+  if(is.null(ylim)) ylim <- range(rolldf[[2]])
+  if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
+  plot(rolldf, xlab = "", ylab = "", bg = r2, col = r2,
+       xlim = xlim,
+       ylim = ylim,
+       pch = 21,
+       lwd = 1, 
+       cex = 0.9, 
+       panel.first = grid(lwd = .7),
+       tck = -0.02, 
+       mgp = c(0, 0.4, 0))
+  # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
+  abline(h = ranked.b1, lty = 2)
+  title(main = ("Rolling Rate vs Time"), line = 0.3, font = 2)
+}
 
 # Plot ONLY the rolling regression plots for comparison:
-par(mfrow = c(1, 2), mai = c(0.4, 0.4, 0.3, 0.3), ps = 10,
-    cex = 1, cex.main = 1)
-respR:::plot.auto_rate(normx, choose = 3) ## CHANGE WHEN IN MASTER BACK TO REGULAR PLOT
-respR:::plot.auto_rate(overx, choose = 3)
+par(mfrow = c(1, 2), 
+    mai = c(0.4, 0.4, 0.3, 0.3),
+    oma = c(0.4, 0.4, 0.3, 0.3),
+    cex.main = 1,
+    cex = 0.9)
+
+rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2, 
+                                      y = normx$roll$rate)
+rate_norm <- normx$summary$rate_b1[1]
+rollreg.plot(rolldt_norm, rate_norm, rate.rev = TRUE)
+
+rolldt_over <- data.table::data.table(x = (overx$roll$endtime + overx$roll$time)/2, 
+                                      y = overx$roll$rate)
+rate_over <- overx$summary$rate_b1[1]
+rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE, 
+             xlim = range(rolldt_norm[[1]]), 
+             ylim = range(rolldt_norm[[2]]))
+
 ```
 
 Under perfectly linear conditions, we would expect a rolling regression output plot such as this to consist of a straight, horizontal line. 
@@ -225,7 +273,7 @@ Particular ranked results can be examined or extracted via the `plot` and `summa
 
 ```{r}
 ## Second most minimum rate detected
-respR:::plot.auto_rate(min_rate, pos = 2)
+plot(min_rate, pos = 2)
 summary(min_rate, pos = 2)
 ```
 

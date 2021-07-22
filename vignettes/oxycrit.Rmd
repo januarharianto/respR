@@ -3,6 +3,7 @@ title: "oxy_crit: Critical oxygen analyses"
 output: 
   rmarkdown::html_vignette:
     toc: true
+    toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{oxy_crit: Critical oxygen analyses}
   %\VignetteEngine{knitr::rmarkdown}
@@ -51,7 +52,7 @@ We can see from the bottom plot, a rolling rate across 10\% of the total data, t
 We cannot tell from this plot which O~2~ concentration this represents. 
 For now, we can see the dataset is free of errors or issues, so we can pass the saved `market.squid` object to the dedicated `oxy_crit()` function. 
 
-### $P_{crit}$ function
+### `oxy_crit` function
 
 The `oxy_crit()` function provides three methods to report the breakpoint in the rate ~ O~2~ relationship. 
 
@@ -188,7 +189,7 @@ However, note that the user still needs to carefully consider the width (the def
 The rolling vs. interval regression methods in the `rMR` and `respR` implementations of BSR also make it difficult to directly compare their outputs using the same inputs. 
 However, the fact that the two BSR `respR` results (0.84 and 0.84) are identical to each other, and also extremely close to the result from the `segmented` method (0.85) (which uses a completely different technique to identify breakpoints), suggests that the `respR` implementation is reliable. 
 
-## Discussion of $P_{crit}$ estimation methods
+## Discussion of Pcrit estimation methods
 
 Currently `respR` has implemented three methods of calculating a breakpoint in the relationship of O~2~ uptake rate to O~2~ concentration. 
 It is in our plans to support several more (e.g. Duggleby, 1984; Lighton and Turner, 2004, Marshall et al., 2013), and additionally, metrics which describe the degree of oxyregulation of a specimen in intermediate cases (e.g. Tang, 1933; Mueller & Seymour, 2011). 

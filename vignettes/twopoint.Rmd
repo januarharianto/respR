@@ -56,7 +56,7 @@ names(lake) <- c("hours", "oxygen")
 lake_insp <- inspect(lake)
 ```
 
-We can see the oxygen in the lake fluctuates with a diurnal rhythm, increasing over the day and decreasing at night. The rolling rate similarly fluctuates, and because of this there are some strage artefacts in the calculated rates. 
+We can see the oxygen in the lake fluctuates with a diurnal rhythm, increasing over the day and decreasing at night. The rolling rate similarly fluctuates, and because of this there are some artefacts in the calculated rates. 
 
 ### Calculating rate
 

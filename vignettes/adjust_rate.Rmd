@@ -1,0 +1,386 @@
+---
+title: "adjust_rate: Adjusting rates for background"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{adjust_rate: Adjusting rates for background}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 4,
+               fig.align = "center",
+               R.options = list(width = 999,
+                                scipen = 999, 
+                                digits = 3))
+```
+
+## Introduction {#adjintro}
+
+New in `respR` v2.0 is the ability for `adjust_rate` to perform dynamic and other types of adjustments to calculated rates. 
+
+After calculating background rates from a control or "blank" experiment, the function can adjust rates in `calc_rate`, `auto_rate`, or numeric values in the following ways:
+
+- By a single value
+
+- By a mean of multiple values
+
+- By a rate determined from an equivalent window in a concurrently-run control
+
+- By a dynamic rate which changes over the course of an experiment
+
+In addition, there are several variations on these adjustment methods. Note, that while there is a special function for calculating background rates, `calc_rate.bg()`, for most of these cases numeric values can also be entered. While we use the `inspect()` function extensively to prepare data for calculating rates, the functions also accept data frames. We'll show examples of these below. 
+
+### Measurement units and running controls
+
+`respR` analyses are largely unitless; units are only required when the rates come to be converted in `convert_rate()`. However, note that the raw background data should be in the *same units* of time and oxygen as the raw data used to calculate the rate to be adjusted. The background recording should also be conducted using the same equipment and under the same conditions as the experiment to be adjusted, or as close as is practically possible. This includes using the same or identical respirometry chambers; in our experience the vast majority of background oxygen use comes from bacterial growth on the internal surfaces of the respirometer, not from organisms in the water. 
+
+Note that in general the background recording does not have to be conducted at the same time as experiments, or even over the same duration as the experimental chambers to be corrected. While this is ideal practice, it's not always practical. Its purpose it to establish a general background oxygen change per unit time relationship to be applied to specimen experiments of any length. 
+
+### When should adjustments be applied?
+
+Adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates and so no adjustments are necessary (e.g. [Burford et al. 2019]()).
+
+In the `respR` general workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate` or `auto_rate` or rate values (oxygen change per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
+
+### Sign of the rates {#sign}
+
+If entering specimen or background rates as values care should be taken to enter them with the correct *sign*. In `respR` oxygen uptake rates are negative, as they represent a negative slope of oxygen against time. Background rates will normally also be a negative value (though not always). For oxygen production rates, which are positive, the background rates may be negative or positive. And there are other cases where background rates may be positive, such as in open-tank or open-arena respirometry where oxygen may be added at the water surface.
+
+### Pipes
+
+Note, we will use the new native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) extensively in this vignette to save space and streamline the code. These can be replaced with `dplyr` pipes (`%>%`) if you have not yet updated. Alternatively, save the output objects and enter them as the first input of the next function.
+
+### Flowthrough respirometry
+
+See `vignette("flowthrough")` for how to adjust flowthrough respirometry rates. 
+
+## Case studies
+In this vignette we will run through several hypothetical case studies which should cover most use cases. If there are any we have not, please [**get in touch**](mailto:nicholascarey@gmail.com) and we'll try to cover them here or build in support in a future update. 
+
+## Case 1: Single specimen chamber and a single control {#case1}
+
+*"We have a single experiment chamber and have extracted a single rate from it, and we want to adjust it by a background rate from a single blank chamber"*
+
+This is the most simple adjustment operation. This is for cases where a single blank experiment has been run to determine the background rate of oxygen use or production, and you want to use this rate to adjust one or more specimen rates. 
+
+The `urchins.rd` dataset has recordings of oxygen consumption from 16 sea urchins, plus two background recordings in columns 18 and 19. We will adjust a single rate from one urchin determined via `calc_rate` using one of these background chambers. 
+
+### Calculate background rate
+```{r eval = FALSE, warning=FALSE, message=FALSE, fig.keep=2}
+## inspect and calculate background rate using calc_rate.bg
+bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
+  calc_rate.bg() 
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.keep=2, results='hold'}
+## inspect and calculate background rate using calc_rate.bg
+bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
+  calc_rate.bg(message = FALSE) |>
+  print()
+```
+
+Note that using `inspect()` to prepare data, while we strongly recommend it (see `vignette("inspecting")`), is optional. `calc_rate.bg` will also accept a `data.frame` directly, and has its own column identifier inputs. This code will perform exactly the same rate calculation.
+
+```{r warning=FALSE, message=FALSE, fig.keep='none'}
+## inspect and calculate background rate using calc_rate.bg
+calc_rate.bg(urchins.rd, time = 1, oxygen = 18) 
+```
+
+### Calculate specimen rate
+
+Now we calculate the rate of one of the specimens. 
+
+```{r eval = TRUE, warning=FALSE, message=FALSE, results='hide', fig.keep='none'}
+## inspect and calculate urchin rate using calc_rate
+urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
+  calc_rate(from = 10, to = 30, by = "time")
+```
+
+```{r echo = FALSE, warning=FALSE, message=FALSE, fig.keep=1}
+## inspect and calculate urchin rate using calc_rate
+plot(urch, message = FALSE)
+print(urch)
+```
+
+### Adjust rate
+
+Now we have saved both the background rate and the specimen rate we can go ahead and adjust. The `adjust_rate` function has a `method` input which determines how the `by` input is applied. The default for this is `"mean"`, and in this case with a single value will have the same result. However, there is a specific `"value"` method to specify single background values.
+
+```{r message=FALSE}
+## adjust rate
+urch_adj <- adjust_rate(urch, by = bg, method = "value")
+print(urch_adj)
+```
+
+This same adjustment operation can be conducted by entering numeric inputs, or a mix of objects and numeric inputs. Care should be taken when entering values manually to use the correct *sign* with the rate. See note [above](#sign).
+
+```{r message=FALSE}
+## adjust rate
+urch_adj <- adjust_rate(-0.0286, by = -0.000765, method = "value")
+print(urch_adj)
+```
+
+The saved `urch_adj` object has a `$rate.adjusted` element which is the rate that will be converted when it is passed to `convert_rate()` for final conversion to units. 
+
+## Case 2: Single specimen chamber, multiple rates and a single control {#case2}
+
+*"We have a single experiment chamber and have extracted multiple rates from it, and we want to adjust them by a background rate from a single blank chamber"*
+
+The same operation as [Case 1](#case1) can be performed on objects containing multiple rates, such as from `auto_rate` or where `calc_rate` has been used to extract multiple rates. Here we'll use `auto_rate` which typically returns several results. We won't show the plots this time 
+
+### Calculate background and specimen rates
+
+```{r warning=FALSE, message=FALSE, results='hide', fig.keep='none'}
+## inspect and calculate background rate using calc_rate.bg
+bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
+  calc_rate.bg()
+
+## inspect and calculate urchin rate using auto_rate and default inputs
+urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
+  auto_rate() 
+
+```
+
+### Adjust rates
+
+```{r message=FALSE}
+## adjust rate
+urch_adj <- adjust_rate(urch, by = bg, method = "value")
+summary(urch_adj)
+```
+
+Note how the single `$adjustment` value has been applied to each `$rate` to give a `$rate.adjusted`. This is the rate that will be converted when the object is passed to `convert_rate`. 
+
+Again, this same operation can be performed using values, if a vector of rates is passed. 
+
+```{r message=FALSE, tidy=FALSE}
+## adjust rate
+urch_adj <- adjust_rate(c(-0.02927, -0.02534, -0.03239, -0.03195), 
+                        by = -0.000765, 
+                        method = "value")
+summary(urch_adj)
+```
+
+Obviously in this case there are no regression coefficients or other data to report.
+
+## Case 3: Multiple specimen chambers and a single control
+
+*"We have multiple specimen chambers and a single control chamber"*
+
+The same background rate can be used to correct multiple experimental chambers. All that needs to be done is save the background rate object and use it to adjust as many experimental rates as we want.
+
+Here we save the background rate as above, and also calculate rates from two of the urchins in the `urchins.rd` dataset. 
+
+### Calculate background and specimen rates
+
+```{r warning=FALSE, message=FALSE, results='hide', fig.keep='none'}
+## inspect and calculate background rate
+bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
+  calc_rate.bg()
+
+## inspect and calculate FIRST urchin rate
+urch1 <- inspect(urchins.rd, time = 1, oxygen = 2) |>
+  calc_rate()
+
+## inspect and calculate SECOND urchin rate
+urch2 <- inspect(urchins.rd, time = 1, oxygen = 3) |>
+  calc_rate()
+```
+
+### Adjust rates
+
+Now we can use the `bg` object to adjust both specimen rates. As separate objects we have to do this in two operations. 
+
+```{r message=FALSE}
+## adjust rate
+urch1_adj <- adjust_rate(urch1, by = bg)
+urch2_adj <- adjust_rate(urch2, by = bg)
+```
+
+```{r echo=FALSE}
+print(urch1_adj)
+print(urch2_adj)
+```
+
+Of course, it is possible to perform this same adjustment for both specimens in one operation by using a vector of values for the two specimen rates. 
+
+```{r message=FALSE}
+urch_adj <- adjust_rate(c(-0.0278, -0.0206), by = bg)
+summary(urch_adj)
+```
+
+Note, we haven't specified a `method` in this example. The default method is `"mean"` which averages all the background rates in `by` (see next example). With only one background rate, this will obviously have the same result. 
+
+## Case 4: Multiple controls
+
+*"We run many experiments in parallel and use empty chambers as controls when available. We want to use a mean background adjustment value based on multiple control chambers"* 
+
+Sometimes multiple background controls are run alongside specimen experiments, or as a block of control experiments in the downtime between specimen experiments. It is also quite common to have multiple chambers set up to run in parallel, and when some are not being used for specimens, rather than have them switched off they are run empty as controls. In these cases we may want to apply the average background rate from several chambers as the adjustment value. This can increase the robustness of background estimations, by averaging out any variations between chambers, although it is always a good idea to examine the control data carefully for consistency. 
+
+In the `urchins.rd` data, there are two control chambers in columns 18 and 19. We will calculate a mean background rate from these and use this to adjust a specimen rate. We use the `oxygen` column identifier input to select multiple background columns via regular R syntax. 
+
+### Calculate background rates
+
+```{r warning=FALSE, message=FALSE, results='hide', fig.keep=2}
+## inspect and calculate background rate from two chambers
+bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
+  calc_rate.bg()
+```
+
+By default, `calc_rate.bg` will plot all the calculated background columns (though you can use the `pos` input to select which). If we print the result we can see both calculated background rates, and the mean value. 
+
+```{r}
+print(bg)
+```
+
+### Data frame input
+
+Again, note that using `inspect()` to prepare data, while we strongly recommend it (see `vignette("inspecting")`), is optional. `calc_rate.bg` will also accept a `data.frame` directly, and has its own column identifier inputs. This code will perform exactly the same rate calculation.
+
+```{r warning=FALSE, message=FALSE, fig.keep='none'}
+## inspect and calculate background rate from two chambers
+calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19, plot = FALSE)
+```
+
+### Background data structure
+
+In the above example the background data are in the same data frame and share a `time` column. What if they are not? What if the controls are separate datasets of different lengths? 
+
+These data are from a separate shorter background experiment. We want to use them with the above ones to apply a mean adjustment value based on all five controls. 
+
+```{r echo = FALSE, results ='hide'}
+## create some new bg data
+bg_exp <- as.data.frame(urchins.rd[20:219,c(1,19,18)])
+bg_exp[,1] <- urchins.rd[1:200,1]
+bg_exp[,2] <- bg_exp[,2] + 0.01
+bg_exp[,3] <- bg_exp[,3] + 0.01
+bg_exp[1:20,3] <- bg_exp[1:20,3] - 0.01
+bg_exp[[4]] <- as.numeric(unlist(urchins.rd[50:249,19]))
+bg_exp[c(seq(1,199,2)),4] <- bg_exp[seq(1,199,2),4] + 0.05
+str(bg_exp)
+names(bg_exp) <- c("time.min", "b3", "b4", "b5")
+```
+
+```{r message = FALSE, results='hide'}
+bg2 <- calc_rate.bg(bg_exp)
+```
+
+```{r echo = FALSE}
+print(bg2)
+```
+
+Note the default behaviour of `calc_rate.bg` when no other arguments are provided is to use all columns, assuming column 1 is `time` and all other columns are `oxygen` data.
+
+### Adjust using multiple background rates
+
+To calculate a mean background rate across different datasets in one `calc_rate.bg` command they would have to be in the same data frame and share the same time column. It is of course possible in R to put them into this form. Even if they are different lengths, you could fill empty rows with `NA`, and this would not affect calculated rates, as they are derived from linear models which simply ignore `NA` values. 
+
+However, there are easier approaches to accomplish the same thing. We have saved two background objects (`bg`, `bg2`), one with two rates, one with three. We could calculate the mean rate ourselves and enter it as the adjustment (we'll adjust one of the specimen rates we calculated above). 
+
+```{r message = FALSE}
+adj <- sum(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832)/5
+adjust_rate(urch1, by = adj)
+```
+
+Or, enter the five background rates directly as a numeric vector.
+
+```{r message = FALSE}
+adjust_rate(urch1, by = c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832))
+```
+
+Or we could use the object names and extract the `$rate.bg` element directly while combining to a vector.
+
+```{r message = FALSE, tidy = FALSE}
+adjust_rate(urch1, by = c(bg$rate.bg,
+                          bg2$rate.bg))
+```
+
+The fact that `adjust_rate` (as well as most `respR` functions) accepts numeric values, vectors and other data forms means there can be many approaches to accomplish the same result.
+
+## Case 5: Multiple specimen chambers, each with a paired blank chamber
+
+*"We are running multiple chambers, each with its own paired control chamber. Each chamber will be adjusted by this paired control only."*
+
+Some multiple chamber experiments are set up like this, with each specimen chamber having its own control. Of course, from the examples above (particularly [Case 1](#case1)), these are relatively easy to handle on an individual basis. 
+
+However, if you have extracted rates from the chambers and their controls, these can be used in `adjust_rate` using `method = "paired"` so that each specimen rate is adjusted by the background rate in the same position. 
+
+This method requires numeric inputs only. 
+
+### Calculate specimen and background rates
+
+Again, we'll use the `urchins.rd` dataset, and we will say that the two background columns (18 & 19) are paired with the first two specimen columns (2 & 3), that is 2 adjusted by 18, and 3 adjusted by 19. 
+
+
+
+
+## Case 6: Specimen chamber with a concurrent blank chamber
+
+"Our background rate may fluctuate. We want to correct the specimen rate by the background rate from the same time period"
+
+## Case 6: Dynamic linear correction
+
+"We have background recordings from before and after the experiment and want to apply an adjustment assuming the rate changed over the experiment linearly"
+
+See `vignette("intermittent_long")` for an example of this use case, but we will briefly repeat it here. 
+
+## Case 7: Dynamic exponential correction
+
+## Case : Oxygen production rates
+
+## Case : Oxygen input - e.g. leak or open tank
+
+
+## Case : Using only part of a background recording
+
+*"We want to only use a part of a background recording to adjust our specimen rate"*
+
+You may have noticed `calc_rate.bg` does not have region selection inputs in the way `calc_rate` does. It calculates the rate across the whole oxygen~time dataset as entered. This might cause problems when you don't want to use all of the background data, there is a data anomaly at the start or end, or it is only part of a larger dataset, such as when it has been conducted in the same chamber as the specimen prior to it being inserted, and so is part of the same data recording. In general, R makes it easy to subset datasets to separate objects, however `respR` has a dedicated function to do this for respirometry data: `subset_data()`. 
+
+Here, we have a background recording, but the chamber was left open until the researcher was ready to start the experiment proper at around timepoint 5000, so the initial stages are not useful. 
+
+```{r echo = FALSE}
+bg_data <- background_con.rd
+bg_data[1:5000,2] <- bg_data[1:5000,2] - (bg_data[2:5001,2] - 94.9)
+bg_data[1:5000,2][which(bg_data[1:5000,2]>95)] <- bg_data[1:5000,2][which(bg_data[1:5000,2]>95)]-0.2
+```
+
+```{r results='hide', message=FALSE}
+inspect(bg_data)
+```
+
+Using this complete dataset would give an incorrect background rate estimation. Instead we use `subset_data` to subset only the data region we are interested in and pass it to `calc_rate.bg`. This subsetting can be performed using `"time"`, `"row"`, or `"oxygen"` ranges. 
+
+```{r message=FALSE, results='hide'}
+bg <- subset_data(bg_data, from = 5000) |>
+  calc_rate.bg()
+```
+
+We can use the fact that the default is `method = "time"` to subset from timepoint 5000. If we don't specify a `to` input the default behaviour is to subset to the end of the dataset.
+
+Now we can use this background rate to adjuct a specimen rate. 
+
+```{r message=FALSE, fig.keep='none', results='hide'}
+sard <- inspect(sardine.rd) |>
+  calc_rate(from = 2000, to = 4000) |>
+  adjust_rate(by = bg) 
+```
+
+```{r}
+print(sard)
+```
+
+

@@ -1,11 +1,11 @@
 ---
-title: "import_file: Importing your data"
+title: "import_file & format_time: Import and prepare data"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{import_file: Importing your data}
+  %\VignetteIndexEntry{import_file & format_time: Import and prepare data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

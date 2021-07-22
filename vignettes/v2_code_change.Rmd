@@ -14,13 +14,13 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-`respr v2.0` was a huge rewrite and rethinking of the entire package. During this process it quickly became clear we could not update the package satisfactorily without breaking some code from v1.x. Therefore, we took the decision to implement these and a few other improvements in the belief that it was better to do it now and have the package work consistently and logically well into the future. 
+`respr v2.0` was a huge rewrite and rethinking of the entire package. During this process it quickly became clear we could not update the package satisfactorily without breaking some code from v1.x. Therefore, we took the decision to implement these and a few other improvements in the belief that it was better to do it now and have the package work consistently and logically well into the future even if it meant some v1.x code may break.
 
 While the majority of the package workflows are in general unchanged, and older code *may* work, there are enough changes that we recommend old code be used very carefully with v2. `respR` workflows are generally concise and overall work in the same way, so any updating of code to be compatible should be relatively straightforward. 
 
-This is an *incomplete* summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
+This is an incomplete summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
 
-IF you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see [here]() for information about how to include a link to `respR v1.1` so that this code will be reproducible in the future. 
+IF you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see [here]() for information about how to include a link to `respR v1.1` so that your code will remain reproducible in the future. 
 
 If you come across any changes that are not documented here, and you think should be, [let us know](mailto:nicholascarey@gmail.com) and we will add it to the list. 
 
@@ -40,7 +40,7 @@ The entire workflow for analysing flowthrough respirometry data has changed. Any
 
 Several function inputs have been renamed to make them more consistent. 
 
- - All primary inputs are now `x` (was previously `df` in `auto_rate`, `inspect`, and `subsample` among others). Any code using `df =` can be replaced with `x =`. 
+ - All primary inputs are now `x` (was previously `df` in `auto_rate`, `inspect`, and `subsample` among others). Any code specifically using `df =` can be replaced with `x =`, otherwise it will not be affected.
  
  - Some functions have had inputs reordered (e.g. `auto_rate` now has `method` as second input). Therefore, code where inputs were not explicitly named may not work as it did previously.  
  
@@ -67,7 +67,7 @@ Several functions have had their output object elements renamed to make them con
 
 ### `import_file()`
 
-This function has been rewritten to be less aggressive about removing empty or non-numeric columns. Now, all columns are retained, where possible. Column renaming has been changed to be more robust, provide unique names, and remove problematic characters. The result is any previous datasets imported using this function will have different column structures and references. Best option is to reimport the data, check the structure, and edit any column references in subsequent code. 
+This function has been rewritten to be less aggressive about removing empty or non-numeric columns, or those containing data which wasn't time or oxygen, such as temperature. Now, all columns are retained, where possible. Column renaming has been updated to be much more robust, ensuring unique column names, and removing problematic characters. The result is any previous datasets imported using this function will likely have different column structures and naming. Best option is to reimport the data, check the structure, and edit any column references in subsequent code. 
 
 ### `format_time()`
 
@@ -79,7 +79,7 @@ Primary input `df` now renamed to `x`. Any code using `df =` can be replaced wit
 
 Inputs have been reordered with `method` as second input. Code where inputs were not explicitly named may not work as it did previously. 
 
-The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note, new `"maximum"` and `"minimum"` methods **do not** work the same as `"max"/"min"`, as they order strictly numerically. See `help(auto_rate)`.
+The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note the new `"maximum"` and `"minimum"` methods **do not** work the same as `"max"/"min"`, as they order strictly numerically. See `help(auto_rate)`.
 
 ### `convert_DO()`
 
