@@ -10,7 +10,7 @@ Description: A collection of functions that, when used together, provide a
     complete and structured workflow for the analysis of respirometry-related
     data. See the respR GitHub webpage for documentation and examples.
 URL: https://januarharianto.github.io/respR, https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
-Depends: R (>= 3.3), sf (<= 1.0-0)
+Depends: R (>= 3.3)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -32,6 +32,7 @@ Imports:
     marelac,
     methods,
     purrr,
+    Rcpp,
     readxl,
     roll,
     segmented,
