@@ -497,7 +497,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 
     # mean bg rate - using new S3 function support
     invisible(capture.output(adjustment <- sapply(out_model,
-                                                  function(x) suppressWarnings(mean(x, export =TRUE)))))
+                                                  function(x) suppressMessages(mean(x, export = TRUE)))))
     adjustment <- unname(unlist(adjustment))
 
     ## check rate and adjustment are equal lengths
