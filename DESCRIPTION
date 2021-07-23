@@ -32,7 +32,6 @@ Imports:
     marelac,
     methods,
     purrr,
-    Rcpp,
     readxl,
     roll,
     segmented,
