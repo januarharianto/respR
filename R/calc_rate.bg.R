@@ -241,7 +241,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, ...) {
 
   if(length(pos) == 1) mtext(glue::glue("calc.rate.bg: Rank {pos} of {nres} Background Rates"),
                              outer = TRUE, cex = 1.2, line = 0.3, font = 2) else
-                               mtext(glue::glue("calc.rate.bg: All Background Rates"),
+                               mtext(glue::glue("calc.rate.bg: All {nres} of {nres} Background Rates"),
                                      outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
   if(!quiet && length(pos) == 1)
