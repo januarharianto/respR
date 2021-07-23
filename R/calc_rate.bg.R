@@ -101,6 +101,10 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
 
   ## Save function call for output
   call <- match.call()
+  inputs <- list(x = x,
+                 time = time,
+                 oxygen = oxygen,
+                 plot = plot)
 
   # Import x from inspect function. We convert to data.frame object here as
   # data.table doesn't like subsetting columns by variable names.
@@ -155,6 +159,7 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
   # Generate output:
   bg <- summary$rate_b1
   out <- list(call = call,
+              inputs = inputs,
               dataframe = dt,
               lm = fit,
               summary = summary,
