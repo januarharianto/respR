@@ -626,10 +626,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
     ## general settings
     ## margins
-    bt <- 0.3
+    bt <- 0.25
     lf <- 0.3
-    tp <- 0.4
-    rt <- 0.1
+    tp <- 0.3
+    rt <- 0.05
 
     par(
       mfrow = n2mfrow(length(pos)),
@@ -665,10 +665,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            panel.first = grid())
 
       box()
-      axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+      axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.1, 0))
       axis(side = 1, col.lab = "blue",
            col.axis = "blue",
-           tck = -0.02, mgp = c(0, 0.3, 0))
+           tck = 0, mgp = c(0, 0, 0))
 
       # plot invisibly - to add row index x-axis
       par(new = TRUE)
@@ -680,10 +680,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            axes = FALSE
       )
       axis(side = 3,
-           mgp = c(0, 0.3, 0),
+           mgp = c(0, 0, 0),
            col.axis = "red",
-           tck = -0.02)
-      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.3,
+           tck = 0)
+      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1,
             adj = 0)})
 
     if(legend && length(pos) == 1) legend("topright",
@@ -764,7 +764,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = -0.03,
+         tck = 0,
          mgp = c(0, 0.3, 0))
     box()
     if(legend) legend("topright",
@@ -805,7 +805,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
     axis(side = 1,col.lab = "blue",
          col.axis = "blue",
-         tck = -0.05, mgp = c(0, 0.3, 0))
+         tck = 0, mgp = c(0, 0.3, 0))
 
     box()
 
