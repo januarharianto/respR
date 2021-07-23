@@ -122,7 +122,7 @@ oxygen \emph{production} rates higher on the plot.
 
 If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
-the output object. Console output messages can be suppressed using \code{message = FALSE}.
+the output object. Console output messages can be suppressed using \code{quiet = TRUE}.
 }
 
 \subsection{Background control or "blank" experiments}{

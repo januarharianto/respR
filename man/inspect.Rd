@@ -23,7 +23,7 @@ plot as proportion of total length of data (0.01 to 1).}
 plots timeseries data, plus plot of rolling rate. If multiple columns,
 plots all timeseries data only.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{message = FALSE}, \code{rate.rev = FALSE} and \code{pos}. A different
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different
 \code{width} can also be passed in \code{plot()} commands on output objects.}
 }
 \description{
@@ -94,7 +94,7 @@ on the plot.
 A different \code{width} value can be passed to see how it affects estimation of
 the rolling rate. If axis labels obscure parts of the plot they can be
 suppressed using \code{legend = FALSE}. Suppress console output messages with
-\code{message = FALSE}. If multiple columns have been inspected, the \code{pos} input
+\code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input
 can be used to examine each time~oxygen dataset.
 }
 

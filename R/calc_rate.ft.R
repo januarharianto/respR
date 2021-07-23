@@ -73,8 +73,8 @@
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
-#' the output object. Console output messages can be suppressed using `message =
-#' FALSE`.
+#' the output object. Console output messages can be suppressed using `quiet =
+#' TRUE`.
 #'
 #' ## Background control or "blank" experiments
 #'
@@ -529,7 +529,7 @@ mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 }
 
 #' @export
-plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
+plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
                               legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -538,7 +538,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   if(x$input_type != "insp")
     stop("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
 
-  if (message)
+  if (!quiet)
     cat("\n# plot.calc_rate.ft # -------------------\n")
 
   # extract data
@@ -570,11 +570,11 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
   pos_x_data <- time[pos_from_row:pos_to_row]
   pos_y_data_delta <- del.o2[pos_from_row:pos_to_row]
 
-  if(message && pos == 1 && nres == 1)
+  if(!quiet && pos == 1 && nres == 1)
     cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ..."), sep="\n")
-  if(message && pos == 1 && nres > 1)
+  if(!quiet && pos == 1 && nres > 1)
     cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
-  if(message && pos > 1)
+  if(!quiet && pos > 1)
     cat(glue::glue('calc_rate.ft: Plotting rate from position {pos} of {nres} ...'), sep="\n")
 
   # plot layout --------------------------------------------------------------
@@ -806,7 +806,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, message = TRUE,
     abline(lm(all_rates ~ pos_x_data), lwd = 1.2, lty = 3)
   }
 
-  if (message){
+  if (!quiet){
     cat("-----------------------------------------\n")
   }
 

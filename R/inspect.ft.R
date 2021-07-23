@@ -106,7 +106,7 @@
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
-#' the output object. Suppress console output messages with `message = FALSE`.
+#' the output object. Suppress console output messages with `quiet = TRUE`.
 #' If multiple columns have been inspected, the `pos` input can be used to
 #' examine each `out.o2`~`in.o2`~`del.o2` dataset.
 #'
@@ -228,7 +228,7 @@
 #'   `out.o2` and `in.o2` should be NULL.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `message = FALSE`, `rate.rev = FALSE` and `pos`.
+#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`.
 #'
 #' @importFrom data.table data.table
 #' @export
@@ -500,7 +500,7 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   if(any(unlist(checks[1,]))) {
     return(invisible(NULL))
   } else {
-    if (plot) plot(out, message = FALSE, ...)
+    if (plot) plot(out, quiet = TRUE, ...)
     ## invisible prevents it printing twice on assigning
     return(invisible(out))
   }
@@ -590,13 +590,13 @@ summary.inspect.ft <- function(object, ...) {
 }
 
 #' @export
-plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
+plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                             legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  if (message)
+  if (!quiet)
     cat("\n# plot.inspect.ft # ---------------------\n")
 
   # extract data
@@ -612,7 +612,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
   ## if multiple columns or only delta.o2 data inspected, just plot grid of all delta.o2
   if (length(del.o2) > 1 || is.null(out.o2)){
 
-    if(message && is.null(pos) && length(del.o2) > 1)
+    if(!quiet && is.null(pos) && length(del.o2) > 1)
       cat("inspect.ft: Plotting all delta oxygen columns. To plot a specific dataset use 'pos'.\n")
 
     if(is.null(pos))
@@ -621,7 +621,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     if(any(pos > length(del.o2)))
       stop("inspect.ft: Invalid 'pos' input: only ", length(del.o2), " data inputs found.")
 
-    if (message && length(pos) == 1)
+    if (!quiet && length(pos) == 1)
       cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
 
     ## general settings
@@ -705,7 +705,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
     if(pos > length(x$data$delta.o2))
       stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.o2), " data inputs found.")
 
-    if (message)
+    if (!quiet)
       cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
 
     ## general settings
@@ -819,7 +819,7 @@ plot.inspect.ft <- function(x, pos = NULL, message = TRUE,
 
   }
 
-  if (message){
+  if (!quiet){
     cat("-----------------------------------------\n")
   }
 

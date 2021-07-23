@@ -26,7 +26,7 @@ to apply the \code{width} input.}
 \item{plot}{logical. Plot the results. Defaults to TRUE.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos},
-\code{choose}, and \code{message = FALSE}.}
+\code{choose}, and \code{quiet = TRUE}.}
 }
 \value{
 A list object of class \code{auto_rate}.
@@ -146,7 +146,7 @@ method the results of the kernel density analysis. If multiple rates have
 been calculated, by default the first is plotted. Others can be plotted by
 changing the \code{pos} argument either in the main function call, or by plotting
 the output, e.g. \code{plot(object, pos = 2)}. In addition, each sub-panel can be
-examined individually by using the \code{choose} input, e.g. \code{plot(object, choose = 2)}. Console output messages can be suppressed using \code{message = FALSE}. The
+examined individually by using the \code{choose} input, e.g. \code{plot(object, choose = 2)}. Console output messages can be suppressed using \code{quiet = TRUE}. The
 rate in the rolling rate plot can be plotted \emph{not} reversed by passing
 \code{rate.rev = FALSE}, for instance if examining oxygen production rates so that
 higher production rates appear higher.

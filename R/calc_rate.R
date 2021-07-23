@@ -46,7 +46,7 @@
 #' been calculated, by default the first is plotted. Others can be plotted by
 #' changing the `pos` argument either in the main function call, or by plotting
 #' the output, e.g. `plot(object, pos = 2)`. Console output messages can be
-#' suppressed using `message = FALSE`.
+#' suppressed using `quiet = TRUE`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -77,7 +77,7 @@
 #'   and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`
-#'   and `message = FALSE`.
+#'   and `quiet = TRUE`.
 #'
 #' @importFrom data.table data.table rbindlist
 #' @import utils
@@ -322,7 +322,7 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate <- function(x, pos = 1, message = TRUE, ...) {
+plot.calc_rate <- function(x, pos = 1, quiet = FALSE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -335,7 +335,7 @@ plot.calc_rate <- function(x, pos = 1, message = TRUE, ...) {
   if(pos > nres || pos < 1)
     stop("calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
 
-  if(message) {
+  if(!quiet) {
     cat("\n# plot.calc_rate # ----------------------\n")
     if(pos == 1 && nres == 1)
       cat(glue::glue("calc_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
@@ -364,7 +364,7 @@ plot.calc_rate <- function(x, pos = 1, message = TRUE, ...) {
   mtext(glue::glue("calc.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
-  if(message) cat("-----------------------------------------\n")
+  if(!quiet) cat("-----------------------------------------\n")
 
   return(invisible(x))
 }

@@ -41,7 +41,7 @@ Changes
 - NEW: `method` input. This sets the method to use to determine the critical oxygen value. At present either `"bsr"` for Broken-Stick or `"segmented"` for the Segmented method. Previously both were performed.
 - NEW: `thin` input. Defaults to 5000. This applies only to the Broken-Stick regression analysis. If the dataset is longer than this, this sets the number of rows to subsample it to before running the analysis. The BSR method is quite computationally intensive, so this speeds up the analysis. In testing, values above this have little effect on the result, but this may vary with different data. To prevent any subsampling and use the entire dataset enter this as `NULL`.
 
-- NEW: S3 Generics: plot() has the additional inputs `legend`, `message` and `choose`. summary() allows results to be exported via `export = TRUE`.
+- NEW: S3 Generics: plot() has the additional inputs `legend`, `quiet` and `choose`. summary() allows results to be exported via `export = TRUE`.
 
 - CHANGE: `parallel = FALSE` is now the default. Use `parallel = TRUE` if your datasets are particularly large, or the function is taking too long to process.
 - CHANGE: An increase to the internal `thin` value (see above) from 1000 to 5000 may mean results will differ slightly from the previous version (but should be more accurate).
@@ -219,6 +219,7 @@ New utility validation fns
 
 All
 - Made inputs consistent (for summary first input should be 'object', but in all others 'x', or gives CMD check error)
+- All plot S3 have `quiet` input to suppress console output
 - All summary S3 (where appropriate) have `export = TRUE` for export of summary table/value
 - All S3 (where appropriate) have `pos` input
 - All stop if 'pos' too high

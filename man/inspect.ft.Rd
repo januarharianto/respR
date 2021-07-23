@@ -41,7 +41,7 @@ oxygen (should be negative values for oxygen uptake). If this is used,
 
 \item{plot}{logical. Defaults to TRUE. Plots the data. See Details.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{message = FALSE}, \code{rate.rev = FALSE} and \code{pos}.}
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}.}
 }
 \description{
 \code{inspect.ft} is a data exploration and preparation function that visualises
@@ -151,7 +151,7 @@ rates will be higher on the plot.
 
 If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
-the output object. Suppress console output messages with \code{message = FALSE}.
+the output object. Suppress console output messages with \code{quiet = TRUE}.
 If multiple columns have been inspected, the \code{pos} input can be used to
 examine each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset.
 }

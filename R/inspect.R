@@ -64,7 +64,7 @@
 #' A different `width` value can be passed to see how it affects estimation of
 #' the rolling rate. If axis labels obscure parts of the plot they can be
 #' suppressed using `legend = FALSE`. Suppress console output messages with
-#' `message = FALSE`. If multiple columns have been inspected, the `pos` input
+#' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input
 #' can be used to examine each time~oxygen dataset.
 #'
 #' ## Multiple Columns of Oxygen Data
@@ -157,7 +157,7 @@
 #'   plots timeseries data, plus plot of rolling rate. If multiple columns,
 #'   plots all timeseries data only.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `message = FALSE`, `rate.rev = FALSE` and `pos`. A different
+#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different
 #'   `width` can also be passed in `plot()` commands on output objects.
 #'
 #' @importFrom data.table data.table
@@ -294,7 +294,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   if(any(unlist(checks[1,]))) {
     return(invisible(NULL))
   } else {
-    if (plot) plot(out, message = FALSE, width = width, ...)
+    if (plot) plot(out, quiet = TRUE, width = width, ...)
     ## invisible prevents it printing twice on assigning
     return(invisible(out))
   }
@@ -402,7 +402,7 @@ summary.inspect <- function(object, ...) {
 }
 
 #' @export
-plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
+plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                          legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -416,7 +416,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
   if(any(pos > nres))
     stop("plot.inspect: Invalid 'pos' rank: only ", nres, " oxygen columns found.")
 
-  if (message){
+  if (!quiet){
     cat("\n# plot.inspect # ------------------------\n")
     cat("Plotting inspected columns ...\n")
   }
@@ -549,7 +549,8 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
 
   } else {
     ## plot every column anyway - without rate plot
-    message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
+    if(!quiet)
+      message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
     par(mfrow = n2mfrow(length(dt) - 1),
         mai = c(0.3, 0.5, 0.2, 0.1),
         ps = 10,
@@ -581,7 +582,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, message = TRUE,
     )
   }
 
-  if (message){
+  if (!quiet){
     cat("-----------------------------------------\n")
   }
 

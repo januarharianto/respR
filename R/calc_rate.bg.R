@@ -59,7 +59,7 @@
 #' oxygen against time, with the rate and linear model coefficients. Single
 #' rates can be plotted by changing the `pos` argument either in the main
 #' function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
-#' Console output messages can be suppressed using `message = FALSE`.
+#' Console output messages can be suppressed using `quiet = TRUE`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -86,7 +86,7 @@
 #' @param plot logical. Defaults to TRUE. Defaults to TRUE. Plots the data. See
 #'   Details.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`
-#'   and `message = FALSE`.
+#'   and `quiet = TRUE`.
 #'
 #' @importFrom data.table data.table
 #'
@@ -215,7 +215,7 @@ summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate.bg <- function(x, pos = NULL, message = TRUE, ...) {
+plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -228,7 +228,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, message = TRUE, ...) {
   if(!is.null(pos)) nplot <- 1 else
     nplot <- nres
 
-  if(message) cat("\n# plot.calc_rate.bg # -------------------\n")
+  if(!quiet) cat("\n# plot.calc_rate.bg # -------------------\n")
   par(mfrow = n2mfrow(nplot),
       oma = c(1, 1, 1.5, 0),
       mai = c(0.2, 0.2, 0.1, 0.1),
@@ -244,12 +244,12 @@ plot.calc_rate.bg <- function(x, pos = NULL, message = TRUE, ...) {
                                mtext(glue::glue("calc.rate.bg: All Background Rates"),
                                      outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
-  if(message && length(pos) == 1)
+  if(!quiet && length(pos) == 1)
     cat(glue::glue("calc_rate.bg: Plotting background rate from position {pos} of {nres} ..."), sep="\n")
-  else if(message)
+  else if(!quiet)
     cat(glue::glue("calc_rate.bg: Plotting all {nres} background rates ..."), sep="\n")
 
-  if(message) cat("-----------------------------------------\n")
+  if(!quiet) cat("-----------------------------------------\n")
 
   return(invisible(x))
 }

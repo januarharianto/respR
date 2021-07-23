@@ -117,7 +117,7 @@
 #' changing the `pos` argument either in the main function call, or by plotting
 #' the output, e.g. `plot(object, pos = 2)`. In addition, each sub-panel can be
 #' examined individually by using the `choose` input, e.g. `plot(object, choose
-#' = 2)`. Console output messages can be suppressed using `message = FALSE`. The
+#' = 2)`. Console output messages can be suppressed using `quiet = TRUE`. The
 #' rate in the rolling rate plot can be plotted *not* reversed by passing
 #' `rate.rev = FALSE`, for instance if examining oxygen production rates so that
 #' higher production rates appear higher.
@@ -151,7 +151,7 @@
 #'   to apply the `width` input.
 #' @param plot logical. Plot the results. Defaults to TRUE.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`,
-#'   `choose`, and `message = FALSE`.
+#'   `choose`, and `quiet = TRUE`.
 #'
 #' @return A list object of class `auto_rate`.
 #'
@@ -420,7 +420,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
 }
 
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev = TRUE, ...) {
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -436,7 +436,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev 
   if(pos > nres)
     stop("auto_rate: Invalid 'pos' rank: only ", nres, " rates found.")
 
-  if(message) {
+  if(!quiet) {
     cat("\n# plot.auto_rate # ----------------------\n")
     if(pos == 1 && nres == 1)
       cat(glue::glue("auto_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
@@ -534,7 +534,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, message = TRUE, rate.rev 
   mtext(glue::glue("auto.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
-  if (message) cat("-----------------------------------------\n")
+  if (!quiet) cat("-----------------------------------------\n")
 
 
   return(invisible(x))

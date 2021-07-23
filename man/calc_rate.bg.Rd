@@ -21,7 +21,7 @@ the \code{time} column.}
 Details.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos}
-and \code{message = FALSE}.}
+and \code{quiet = TRUE}.}
 }
 \value{
 A list object of class \code{calc_bg.rate}.
@@ -90,7 +90,7 @@ A plot is produced (provided \code{plot = TRUE}) showing all examined columns of
 oxygen against time, with the rate and linear model coefficients. Single
 rates can be plotted by changing the \code{pos} argument either in the main
 function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
-Console output messages can be suppressed using \code{message = FALSE}.
+Console output messages can be suppressed using \code{quiet = TRUE}.
 }
 
 \subsection{S3 Generic Functions}{

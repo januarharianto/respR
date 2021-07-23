@@ -46,7 +46,7 @@ value. To perform no subsampling enter as \code{NULL}. See Details.}
 
 \item{plot}{logical. Defaults to TRUE.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{message = FALSE}, and \code{choose}. See Plotting section.}
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, and \code{choose}. See Plotting section.}
 }
 \description{
 A function to calculate the critical oxygen value, the oxygen tension or
@@ -158,7 +158,7 @@ indicated by vertical lines, and regression fits upon which the analysis was
 based by black dashed lines.
 \subsection{Additional plotting options}{
 
-If the legend obscures parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{message = FALSE}. Each panel
+If the legend obscures parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{quiet = TRUE}. Each panel
 can be plotted on its own using \code{choose = 1} or \code{choose = 2}. These inputs
 can be passed in either the main \code{oxy_crit} call or when calling \code{plot()} on
 the output object.

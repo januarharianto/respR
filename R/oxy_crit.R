@@ -105,7 +105,7 @@
 #' ### Additional plotting options
 #'
 #' If the legend obscures parts of the plot they can be suppressed using `legend
-#' = FALSE`. Suppress console output messages with `message = FALSE`. Each panel
+#' = FALSE`. Suppress console output messages with `quiet = TRUE`. Each panel
 #' can be plotted on its own using `choose = 1` or `choose = 2`. These inputs
 #' can be passed in either the main `oxy_crit` call or when calling `plot()` on
 #' the output object.
@@ -154,7 +154,7 @@
 #'   value. To perform no subsampling enter as `NULL`. See Details.
 #' @param plot logical. Defaults to TRUE.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `message = FALSE`, and `choose`. See Plotting section.
+#'   = FALSE`, `quiet = TRUE`, and `choose`. See Plotting section.
 #'
 #' @importFrom data.table data.table as.data.table setnames setorder rbindlist
 #' @importFrom parallel detectCores makeCluster clusterExport parLapply
@@ -424,14 +424,14 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-plot.oxy_crit <- function(x, legend = TRUE, message = TRUE, choose = NULL, ...) {
+plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  if(message && !x$convert)
+  if(!quiet && !x$convert)
     message("plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.")
-  if(message && x$convert)
+  if(!quiet && x$convert)
     message("plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.")
 
   # Prepare data
