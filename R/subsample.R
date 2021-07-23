@@ -31,9 +31,9 @@
 subsample <- function(x, n = NULL, length.out = NULL, random_start = FALSE, plot = TRUE) {
 
   if(is.null(n) && is.null(length.out))
-    stop("One of 'n' or 'length.out' is required.")
+    stop("subsample: One of 'n' or 'length.out' is required.")
   if(!is.null(n) && !is.null(length.out))
-    stop("Only one of 'n' or 'length.out' should be entered.")
+    stop("subsample: Only one of 'n' or 'length.out' should be entered.")
 
   # df or vector
   if(is.data.frame(x)) index <- 1:nrow(x) else
