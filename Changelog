@@ -133,6 +133,7 @@ Changes
 
 ========================== convert_DO() ============================
 - NEW: Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
+- NEW: Added `value.out` input. If `value.out = TRUE`, the converted values are output as a numeric vector, rather than within a `list` object.
 - CHANGE: Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure!
 - CHANGE: Added warning for 'P' atmospheric pressure values being outside realistic range
 - FIX: Fix for error with non-numeric x inputs

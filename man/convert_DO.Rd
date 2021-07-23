@@ -4,7 +4,15 @@
 \alias{convert_DO}
 \title{Convert between units of dissolved oxygen}
 \usage{
-convert_DO(x, from = NULL, to = NULL, S = NULL, t = NULL, P = NULL)
+convert_DO(
+  x,
+  from = NULL,
+  to = NULL,
+  S = NULL,
+  t = NULL,
+  P = NULL,
+  value.out = FALSE
+)
 }
 \arguments{
 \item{x}{numeric. The dissolved oxygen (DO) value(s) to be converted.}
@@ -22,6 +30,9 @@ of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
 \item{P}{numeric. Pressure (bar). Defaults to 1.013253. Required for
 conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
+
+\item{value.out}{logical. Defaults to FALSE. If TRUE, returns only the
+converted values as a numeric vector.}
 }
 \description{
 This is a conversion function that performs basic conversions between
@@ -37,8 +48,12 @@ to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mg
 view a list of usable unit strings.
 \subsection{Output}{
 
-Returns a \code{list} object of class \code{convert_DO} containing four elements:
-\verb{$input} values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}
+Returns a \code{list} object of class \code{convert_DO} containing five elements:
+\verb{$call} the function call, \verb{$input} values, \verb{$output} converted values,
+\verb{$input.unit} and \verb{$output.unit}.
+
+Alternatively, if \code{value.out = TRUE} returns only the converted values as a
+numeric vector.
 }
 
 \subsection{S3 Generic Functions}{

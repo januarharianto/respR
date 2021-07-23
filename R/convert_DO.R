@@ -14,8 +14,12 @@
 #'
 #' ## Output
 #'
-#' Returns a `list` object of class `convert_DO` containing four elements:
-#' `$input` values, `$output` converted values, `$input.unit` and `$output.unit`
+#' Returns a `list` object of class `convert_DO` containing five elements:
+#' `$call` the function call, `$input` values, `$output` converted values,
+#' `$input.unit` and `$output.unit`.
+#'
+#' Alternatively, if `value.out = TRUE` returns only the converted values as a
+#' numeric vector.
 #'
 #' ## S3 Generic Functions
 #'
@@ -37,6 +41,8 @@
 #'   of some units. See [unit_args()] for details.
 #' @param P numeric. Pressure (bar). Defaults to 1.013253. Required for
 #'   conversion of some units. See [unit_args()] for details.
+#' @param value.out logical. Defaults to FALSE. If TRUE, returns only the
+#'   converted values as a numeric vector.
 #'
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
 #' @export
@@ -57,7 +63,7 @@
 #'   t = 15, S = 35)
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
-                       P = NULL) {
+                       P = NULL, value.out = FALSE) {
 
   ## Save function call for output
   call <- match.call()
@@ -159,7 +165,9 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
               output.unit = to)
 
   class(out) <- "convert_DO"
-  return(out)
+
+  if(value.out) return(out$output) else
+    return(out)
 }
 
 #' @export
