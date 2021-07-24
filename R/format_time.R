@@ -171,8 +171,11 @@ format_time <- function(x, time = 1, format = "ymdHMS", start = 1) {
   ## It's something to do with "ts" being a data.table/data.frame column.
   ## Does not happen with vectors.
 
-  # formate to datetime, then convert to interval in seconds:
-  dtm <- lubridate::parse_date_time(purrr::reduce(ts, c), format) # format to datetime
+  # formate to datetime
+  dtm <- suppressWarnings(lubridate::parse_date_time(purrr::reduce(ts, c), format))
+  if (all(is.na(dtm)))
+    stop("format_time: failed to parse data. Please check 'format' input.")
+
   # calculate the difference in all times, from starting time (dtm[1])
   intervals <- as.numeric(difftime(dtm, dtm[1], units = "secs"))
 
