@@ -627,9 +627,9 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     ## general settings
     ## margins
     bt <- 0.25
-    lf <- 0.3
-    tp <- 0.3
-    rt <- 0.05
+    lf <- 0.4
+    tp <- 0.4
+    rt <- 0.1
 
     par(
       mfrow = n2mfrow(length(pos)),
@@ -653,22 +653,18 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
       plot(data.frame(time, del.o2[[z]]),
-           #mgp = c(0, 0.2, 0),
            axes = FALSE,
            ylim = ylim,
            xlab = "",
            ylab = "",
-           #tck = -0.02,
            cex = 0.5,
-           #col.lab = "blue",
-           #col.axis = "blue",
            panel.first = grid())
 
       box()
-      axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.1, 0))
+      axis(side = 2, las = 1, tck = tck, mgp = c(0, 0.3, 0))
       axis(side = 1, col.lab = "blue",
            col.axis = "blue",
-           tck = 0, mgp = c(0, 0, 0))
+           tck = tck, mgp = mgp)
 
       # plot invisibly - to add row index x-axis
       par(new = TRUE)
@@ -680,10 +676,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            axes = FALSE
       )
       axis(side = 3,
-           mgp = c(0, 0, 0),
-           col.axis = "red",
-           tck = 0)
-      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1,
+           tck = tck,
+           mgp = c(0, 0.2, 0),
+           col.axis = "red")
+      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.3,
             adj = 0)})
 
     if(legend && length(pos) == 1) legend("topright",
@@ -713,7 +709,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     bt <- 0
     lf <- 0.5
     tp <- 0.6
-    rt <- 0.3
+    rt <- 0.2
 
     m <- rbind(c(1,1,1), c(1,1,1), c(2,2,2))
     layout(m)
