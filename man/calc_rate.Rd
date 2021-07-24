@@ -76,8 +76,9 @@ and \code{to} inputs highlighted, a close-up of this region with linear model
 coefficients, and summary plots of fit and residuals. If multiple rates have
 been calculated, by default the first is plotted. Others can be plotted by
 changing the \code{pos} argument either in the main function call, or by plotting
-the output, e.g. \code{plot(object, pos = 2)}. Console output messages can be
-suppressed using \code{quiet = TRUE}.
+the output, e.g. \code{plot(object, pos = 2)}. Each sub-panel can be plotted
+individually by using the \code{choose} input, e.g. \code{plot(object, choose = 2)}.
+Console output messages can be suppressed using \code{quiet = TRUE}.
 }
 
 \subsection{S3 Generic Functions}{

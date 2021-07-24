@@ -41,7 +41,8 @@ Changes
 - NEW: `method` input. This sets the method to use to determine the critical oxygen value. At present either `"bsr"` for Broken-Stick or `"segmented"` for the Segmented method. Previously both were performed.
 - NEW: `thin` input. Defaults to 5000. This applies only to the Broken-Stick regression analysis. If the dataset is longer than this, this sets the number of rows to subsample it to before running the analysis. The BSR method is quite computationally intensive, so this speeds up the analysis. In testing, values above this have little effect on the result, but this may vary with different data. To prevent any subsampling and use the entire dataset enter this as `NULL`.
 
-- NEW: S3 Generics: plot() has the additional inputs `legend`, `quiet` and `choose`. summary() allows results to be exported via `export = TRUE`.
+- NEW: S3 Generics: `plot()` has the additional inputs `legend`, `quiet` and `choose`.
+- NEW: S3 Generics: `summary()` allows results to be exported via `export = TRUE`.
 
 - CHANGE: `parallel = FALSE` is now the default. Use `parallel = TRUE` if your datasets are particularly large, or the function is taking too long to process.
 - CHANGE: An increase to the internal `thin` value (see above) from 1000 to 5000 may mean results will differ slightly from the previous version (but should be more accurate).
@@ -161,6 +162,8 @@ Changes
 ========================== calc_rate() ============================
 - NEW: plot updated with title showing which Rank current plot is, and better spacing
 - NEW: now calculates from start of the data if 'from' is NULL, and to the end of the data if `to` is NULL.
+- NEW: S3 Generics: `plot()` has the additional input `choose`.
+
 - CHANGE: Detects and warns if multi-column input (matches auto_rate behaviour)
 - CHANGE: added a bunch of new input checks
 - CHANGE: output elements renamed

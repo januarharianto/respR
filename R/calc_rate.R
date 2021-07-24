@@ -45,8 +45,9 @@
 #' coefficients, and summary plots of fit and residuals. If multiple rates have
 #' been calculated, by default the first is plotted. Others can be plotted by
 #' changing the `pos` argument either in the main function call, or by plotting
-#' the output, e.g. `plot(object, pos = 2)`. Console output messages can be
-#' suppressed using `quiet = TRUE`.
+#' the output, e.g. `plot(object, pos = 2)`. Each sub-panel can be plotted
+#' individually by using the `choose` input, e.g. `plot(object, choose = 2)`.
+#' Console output messages can be suppressed using `quiet = TRUE`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -322,7 +323,7 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate <- function(x, pos = 1, quiet = FALSE, ...) {
+plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -334,6 +335,16 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, ...) {
     stop("calc_rate: 'pos' should be a single value.")
   if(pos > nres || pos < 1)
     stop("calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
+
+  # set plot layout based on 'choose'
+  if(is.null(choose)) {
+    choose <- 1:4
+    mfrow = c(2,2)
+  } else {
+    mfrow = c(1,1)
+  }
+  if(any(choose > 4))
+    stop("plot.calc_rate: 'choose' input should be 1 to 4 or 'NULL' for all.")
 
   if(!quiet) {
     cat("\n# plot.calc_rate # ----------------------\n")
@@ -350,17 +361,17 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, ...) {
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
-  par(mfrow = c(2, 2),
+  par(mfrow = mfrow,
       oma = c(0.4, 0.4, 1.5, 0.2),
       mai = c(0.3, 0.3, 0.2, 0.2),
       ps = 10,
       cex = 1,
       cex.main = 1)
 
-  multi.p(df, sdf)  # full timeseries with lmfit
-  sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
-  residual.p(fit)  # residual plot
-  qq.p(fit)  # qqplot
+  if(1 %in% choose) multi.p(df, sdf)  # full timeseries with lmfit
+  if(2 %in% choose) sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
+  if(3 %in% choose) residual.p(fit)  # residual plot
+  if(4 %in% choose) qq.p(fit)  # qqplot
   mtext(glue::glue("calc.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
