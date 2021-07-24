@@ -362,8 +362,8 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL, ...) {
   rsq <- signif(summary(fit)$r.squared, 3)
 
   par(mfrow = mfrow,
-      oma = c(0.4, 0.4, 1.5, 0.2),
-      mai = c(0.3, 0.3, 0.2, 0.2),
+      oma = c(0.5, 1, 1.5, 0),
+      mai = c(0.3, 0.15, 0.2, 0.1),
       ps = 10,
       cex = 1,
       cex.main = 1)

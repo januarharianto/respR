@@ -463,7 +463,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
 
   ## plot params
   mai = c(0.3, 0.15, 0.2, 0.1)
-  oma = c(1, 1, 1.5, 0)
+  oma = c(0.5, 1, 1.5, 0)
 
   # PLOT BASED ON METHOD
   if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "rolling")) {
