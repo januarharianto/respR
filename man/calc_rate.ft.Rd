@@ -164,8 +164,7 @@ represent rates and coefficients such as a high r-squared are important.
 Here, they represent the stability of the data region, in that the closer the
 slope is to zero, and lower the r-squared, the less the delta oxygen values
 in that region vary. They are included to enable possible future
-functionality where stable regions may be automatically identified, and
-should generally be ignored.
+functionality where stable regions may be automatically identified.
 }
 }
 \examples{

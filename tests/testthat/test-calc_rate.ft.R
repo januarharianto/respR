@@ -10,7 +10,7 @@ capture.output({  ## stops printing console outputs on assigning
 
 # Create testing objects --------------------------------------------------
 #
-## df
+{
 df <-  data.frame(time = flowthrough.rd[[2]], delta = flowthrough.rd[[3]])
 
 ## inspect.ft objects
@@ -54,7 +54,7 @@ crft.obj.1rate.delta.only <- calc_rate.ft(insp.ft.obj.delta.1col,
 crft.obj.multrate.delta.only <- calc_rate.ft(insp.ft.obj.delta.1col,
                                              from = c(5, 1005, 2005), to = c(900, 1900, 2900),by = "row",
                                              flowrate = 2, plot = F)
-
+}
 
 # 'flowrate' input --------------------------------------------------------
 
@@ -285,10 +285,10 @@ test_that("calc_rate.ft - applies default 'by = 'time' correctly", {
                             by = NULL, plot = F)$rate,
                mean(insp.ft.obj.outo2.1col.ino2.1col$dataframe$delta.o2.calc.1[3:3737]*1.5))
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5,
-                            by = NULL, plot = F)$by,
+                            by = NULL, plot = F)$inputs$by,
                "time")
 })
-insp.ft.obj.outo2.1col.ino2.1col$dataframe
+
 
 # from/to input -----------------------------------------------------------
 
@@ -438,24 +438,24 @@ test_that("calc_rate.ft - accepts 'inspect.ft' input, gives correct messages and
 test_that("calc_rate.ft - if 'from' and 'to' are NULL, defaults to using all data - by = 'time'.", {
   # from
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = 900, by = "time")$from,
+                            from = NULL, to = 900, by = "time")$inputs$from,
                0.02)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
                               from = NULL, to = 900, by = "time")$summary$from,
                  "calc_rate.ft: 'from' input NULL. Applying default 'from' of first time value.")
   # to
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = 1, to = NULL, by = "time")$to,
+                            from = 1, to = NULL, by = "time")$inputs$to,
                62.33)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
                               from = 1, to = NULL, by = "time")$summary$to,
                  "calc_rate.ft: 'to' input NULL. Applying default 'to' of last time value.")
   # both
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = NULL, by = "time")$from,
+                            from = NULL, to = NULL, by = "time")$inputs$from,
                0.02)
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = NULL, by = "time")$to,
+                            from = NULL, to = NULL, by = "time")$inputs$to,
                62.33)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
                               from = NULL, to = NULL, by = "time")$summary$to,
@@ -465,27 +465,27 @@ test_that("calc_rate.ft - if 'from' and 'to' are NULL, defaults to using all dat
 test_that("calc_rate.ft - if 'from' and 'to' are NULL, defaults to using all data - by = 'row'.", {
   # from
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = 900, by = "row")$from,
+                            from = NULL, to = 900, by = "row")$inputs$from,
                1)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                              from = NULL, to = 900, by = "row")$from,
+                              from = NULL, to = 900, by = "row")$inputs$from,
                  "calc_rate.ft: 'from' input NULL. Applying default 'from' of first row.")
   # to
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = 1, to = NULL, by = "row")$to,
+                            from = 1, to = NULL, by = "row")$inputs$to,
                3740)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                              from = 1, to = NULL, by = "row")$to,
+                              from = 1, to = NULL, by = "row")$inputs$to,
                  "calc_rate.ft: 'to' input NULL. Applying default 'to' of last row.")
   # both
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = NULL, by = "row")$from,
+                            from = NULL, to = NULL, by = "row")$inputs$from,
                1)
   expect_equal(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                            from = NULL, to = NULL, by = "row")$to,
+                            from = NULL, to = NULL, by = "row")$inputs$to,
                3740)
   expect_message(calc_rate.ft(insp.ft.obj.outo2.1col.ino2.1col, flowrate = 1.5, plot = F,
-                              from = NULL, to = NULL, by = "row")$to,
+                              from = NULL, to = NULL, by = "row")$inputs$to,
                  "calc_rate.ft: 'from' and 'to' inputs NULL. Applying default of calculating rate from entire dataset.")
 })
 

@@ -129,7 +129,7 @@ adjust_rate.ft <- function(x, by) {
 
   # if both crft objs, check flowrate is equal
   if(class(x) ==  "calc_rate.ft" && class(by) == "calc_rate.ft"){
-    flowrate_equal <- x$flowrate == by$flowrate
+    flowrate_equal <- x$inputs$flowrate == by$inputs$flowrate
     if(!flowrate_equal)
       stop("adjust_rate.ft: 'x' and by' input rates have been calculated using different 'flowrates'! \nBackground adjustments should be determined at the same flowrate. \nIf you still want to proceed, you can enter the 'by' adjustment as a value.")
   }
@@ -161,41 +161,39 @@ adjust_rate.ft <- function(x, by) {
   # makes for easier printing etc.
   if(length(adjustment) == 1) adjustment <- rep(adjustment, length(rate.adjusted))
 
-  inputs <- list(x = x,
-                 by = by)
-
   # Append results to input object
   if(class(x) == "calc_rate.ft") {
     out <- list(call = call,
-                inputs = inputs,
+                inputs = list(x = x,
+                              by = by,
+                              from = x$from,
+                              to = x$to,
+                              by = x$by,
+                              width = x$width,
+                              flowrate = x$flowrate),
                 dataframe = x$dataframe,
                 data = x$data,
-                input_type = x$input_type,
                 subsets = x$subsets,
+                delta.o2 = x$delta.o2,
+                input_type = x$input_type,
                 summary = cbind(x$summary,
                                 adjustment = adjustment,
                                 rate.adjusted = rate.adjusted),
-                from = x$from,
-                to = x$to,
-                by = x$by,
-                width = x$width,
-                flowrate = x$flowrate,
-                delta.o2 = x$delta.o2,
                 rate = rate,
                 adjustment = adjustment,
                 rate.adjusted = rate.adjusted)
     # or make new one
   } else {
-    out <- list(
-      call = call,
-      inputs = inputs,
-      summary = data.table::data.table(rank = 1:length(rate.adjusted),
-                                       rate = rate,
-                                       adjustment = adjustment,
-                                       rate.adjusted = rate.adjusted),
-      rate = rate,
-      adjustment = adjustment,
-      rate.adjusted = rate.adjusted)
+    out <- list(call = call,
+                inputs = list(x = x,
+                              by = by),
+                summary = data.table::data.table(rank = 1:length(rate.adjusted),
+                                                 rate = rate,
+                                                 adjustment = adjustment,
+                                                 rate.adjusted = rate.adjusted),
+                rate = rate,
+                adjustment = adjustment,
+                rate.adjusted = rate.adjusted)
   }
 
   class(out) <- "adjust_rate.ft"

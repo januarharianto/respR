@@ -114,8 +114,7 @@
 #' Here, they represent the stability of the data region, in that the closer the
 #' slope is to zero, and lower the r-squared, the less the delta oxygen values
 #' in that region vary. They are included to enable possible future
-#' functionality where stable regions may be automatically identified, and
-#' should generally be ignored.
+#' functionality where stable regions may be automatically identified.
 #'
 #' @param x numeric value or vector of delta oxygen values, a 2-column
 #'   `data.frame` of outflow (col 1) and inflow (col 2) oxygen values, or an
@@ -422,25 +421,23 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
   # Summary and output ------------------------------------------------------
 
-  # Generate output
-  out <-
-    list(
-      call = call,
-      dataframe = as.data.frame(dt),
-      data = data,
-      input_type = xtype,
-      subsets = dfs,
-      summary = data.table(cbind(rank = 1:nrow(summary),
-                                 summary, flowrate = flowrate, rate = rate)),
-      from = from,
-      to = to,
-      by = by,
-      width = width,
-      flowrate = flowrate,
-      delta.o2 = delta,
-      rate = rate)
-  class(out) <- "calc_rate.ft"
+  # save inputs for output
+  inputs <- list(x = x, flowrate = flowrate, from = from, to = to,
+                 by = by, width = width, plot = plot)
 
+  # Generate output
+  out <- list(call = call,
+              inputs = inputs,
+              dataframe = as.data.frame(dt),
+              data = data,
+              subsets = dfs,
+              delta.o2 = delta,
+              input_type = xtype,
+              summary = data.table(cbind(rank = 1:nrow(summary),
+                                         summary, flowrate = flowrate, rate = rate)),
+              rate = rate)
+
+  class(out) <- "calc_rate.ft"
 
   # Plot --------------------------------------------------------------------
   if (plot) plot(out, ...)
@@ -586,22 +583,29 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   ## set layout
   layout(m)
 
-  ## general settings
-  ## margins
-  bt <- 0
-  lf <- 0.5
-  tp <- 0.6
-  rt <- 0.3
   ## general plot settings
-  par(mai = c(bt, lf, tp, rt),
-      ps = 10,
+  par(ps = 10,
       cex = 1,
       cex.main = 1,
-      mgp = c(0, 0.5, 0))
+      mgp = c(0, 0.2, 0))
 
+  ## margins
+  bt <- 0
+  lf <- 0.4
+  tp <- 0.6
+  rt <- 0.1
+
+  # margins
+  oma = c(0,0,0,0)
+  mai_outin <- c(bt, lf, 0.35, rt) # outflow/inflow plot
+  mai_close <- c(0.25, lf, 0.2, rt) # bottom close plot
+  mai_delta <- c(0.25, lf, 0.2, rt) # middle delta plot
+  mai_delta_only <- c(0.25, lf, 0.35, rt) # if delta only plot
 
   # in.o2 - out.o2 plot -----------------------------------------------------
   if (!delta_only) {
+
+    par(mai = mai_outin)
 
     ## ylim for outflow and inflow plots - plus 10%
     ylim <- range(range(out.o2), range(in.o2), na.rm = TRUE) ## so all on same axes
@@ -620,7 +624,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0))
     points(time,
            in.o2,
            xlab = "",
@@ -642,8 +646,8 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = -0.05,
-         mgp = c(0, 0.3, 0))
+         tck = 0,
+         mgp = c(0, 0, 0))
     box()
 
     ## green box for rate region
@@ -676,15 +680,15 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
                       pch=16,
                       cex=0.4)
 
-    title(main = "Outflow - Inflow O2", line = 1.8)
+    title(main = "Outflow - Inflow O2", line = 1)
   }
 
   # Delta plot --------------------------------------------------------------
 
   # if this is the top plot, set margins to have more space for axis
   # otherwise less space needed
-  if(delta_only) par(mai = c(0.4, lf, tp, rt)) else
-    par(mai = c(0.4, lf, 0.2, rt))
+  if(delta_only) par(mai = mai_delta_only) else
+    par(mai = mai_delta)
 
   ## ylim  - plus 10%
   ylim <- range(na.omit(del.o2)) ## so all on same axes
@@ -705,13 +709,13 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     panel.first = grid()
   )
 
-  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
-  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = -0.05, mgp = c(0, 0.3, 0))
+  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0)) # simply to put yaxis lab colour back to black
+  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = 0, mgp = c(0, 0, 0))
 
   box()
 
   ## Title
-  if(delta_only) title(main = glue::glue("Delta O2"), line = 1.8) else
+  if(delta_only) title(main = glue::glue("Delta O2"), line = 1) else
     title(main = glue::glue("Delta O2"), line = 0.3)
 
   ## This will have bottom legend regardless
@@ -746,7 +750,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
       cex = .5,
       axes = FALSE
     )
-    axis(side = 3, col.axis = "red", tck = -0.05, mgp = c(0, 0.3, 0))
+    axis(side = 3, col.axis = "red", tck = 0, mgp = c(0, 0, 0))
 
     if(legend) legend("topright",
                       "Row Index",
@@ -758,9 +762,9 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   # Close up plot -----------------------------------------------------------
 
   ## NOTE we switch y axis to rate values for each subset not delta values
-  all_rates <- x$dataframe$delta[pos_from_row:pos_to_row] * x$flowrate
+  all_rates <- x$dataframe$delta[pos_from_row:pos_to_row] * x$inputs$flowrate
 
-  par(mai = c(0.4, lf, 0.2, rt))
+  par(mai = mai_close)
   ylim <- range(na.omit(all_rates))
   buffer <- diff(ylim)*0.1
   ylim <- c(ylim[1] - buffer, ylim[2] + buffer)
@@ -780,9 +784,9 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     panel.first = grid()
   )
 
-  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0))
   axis(side = 1,col.lab = "blue",
-       col.axis = "blue", tck = -0.05, mgp = c(0, 0.3, 0))
+       col.axis = "blue", tck = 0, mgp = c(0, 0, 0))
 
   box()
 
