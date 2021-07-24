@@ -434,15 +434,16 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     ## margins
     bt <- 0
     lf <- 0.5
-    tp <- 0.6
-    rt <- 0.3
+    tp <- 0.5
+    rt <- 0.2
 
     par(mfrow = c(2, 1),
         mai = c(bt, lf, tp, rt),
         ps = 10,
         cex = 1,
         cex.main = 1,
-        mgp = c(0, 0.5, 0))
+        tck = tck,
+        mgp = mgp)
 
     ylim <- range(nainf.omit(dt[[2]]))
     buffer <- diff(ylim)*0.05
@@ -460,7 +461,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+    axis(side = 2, las = 1, tck = tck, mgp = c(0, 0.3, 0))
     #title(xlab = "Time", line = 1)
     ## add row index axis
     par(new = TRUE)
@@ -471,14 +472,14 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          pch = "",
          cex = .5,
          axes = FALSE)
-    axis(side = 3, col.axis = "red")
+    axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
     box()
     if(legend) legend("topright",
                       "Row Index",
                       text.col = "red",
                       bg = "gray90",
                       cex = 0.7)
-    title(main = "Full Timeseries", line = 2)
+    title(main = "Full Timeseries", line = 1.5)
 
     ## Adding this fn here to avoid using static_roll
     roll_reg_plot <- function(df, width) {
@@ -530,9 +531,9 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          pch = 16,
          cex = .5,
          axes = FALSE,)
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0), cex.axis = 0.9)
+    axis(side = 2, las = 1, cex.axis = 0.9, tck = tck, mgp = c(0, 0.3, 0))
     # to put yaxis label colour back to black
-    axis(side = 1, col.lab = "blue", col.axis = "blue")
+    axis(side = 1, col.lab = "blue", col.axis = "blue", tck = tck, mgp = mgp)
     ## Added dashed line at rate = 0 - for when rates are +ve and -ve
     abline(h = 0, lty = 2)
     grid()
@@ -552,12 +553,12 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     if(!quiet)
       message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
     par(mfrow = n2mfrow(length(dt) - 1),
-        mai = c(0.3, 0.5, 0.2, 0.1),
+        mai = c(0.25, 0.3, 0.25, 0.05),
+        oma = c(0.1, 0.4, 0.1, 0.1),
         ps = 10,
         pch = 20,
         cex = 1,
-        cex.main = 1,
-        tck = -.05)
+        cex.main = 1)
 
     ylim <- range(nainf.omit(x$dataframe[,-1])) ## so all on same axes
     buffer <- diff(ylim)*0.05
@@ -575,8 +576,8 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
         panel.first = grid(),
         axes = FALSE
       )
-      axis(side = 1, las = 1, tck = 0, col.axis = "blue", mgp = c(0, 0.3, 0))
-      axis(side = 2, las = 1, tck = 0, col.axis = "black", mgp = c(0, 0.3, 0))
+      axis(side = 1, las = 1, col.axis = "blue", tck = tck, mgp = mgp)
+      axis(side = 2, las = 1, col.axis = "black", tck = tck, mgp = c(0, 0.3, 0))
       box()
       title(main = glue::glue("Column: {names(dt)[z+1]}"), line = 0.3)}
     )
