@@ -18,11 +18,11 @@ d2 <- adjustcolor("darkslateblue", alpha.f = .75)
 #   par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5))
 pch <- 21
 cex <- .5
-tck <- -0.02 # size of axis ticks
+tck <- -0.01 # size of axis ticks
 # 1 = distance of axis label from axis
 # 2 = distance of tick labels from ticks
 # 3 = distance of ticks from axis
-mgp <- c(0, 0.4, 0)
+mgp <- c(0, 0.1, 0)
 
 
 multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {

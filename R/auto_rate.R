@@ -462,7 +462,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
   peaks <- x$peaks[, 2:3]
 
   ## plot params
-  mai = c(0.3, 0.3, 0.2, 0.2)
+  mai = c(0.3, 0.15, 0.2, 0.1)
   oma = c(1, 1, 1.5, 0)
 
   # PLOT BASED ON METHOD
