@@ -25,13 +25,13 @@ tck <- -0.01 # size of axis ticks
 mgp <- c(0, 0.1, 0)
 
 
-multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {
+multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '', legend = TRUE) {
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
   plot(df, xlab = xl, ylab = yl, bg = r1, col = r1, pch = pch, cex = .3,
        panel.first = grid(lwd = .7),
-       tck = tck, mgp = mgp)
+       tck = tck, mgp = mgp, axes = FALSE)
   invisible(lapply(sdf, function(x) points(x, pch = pch, bg = r2, col = r2,
                                            cex = cex)))
   invisible(lapply(sdf, function(z) {
@@ -44,13 +44,38 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '') {
          max(na.omit(z$y)))
     abline(lm(y ~ x, z), lwd = 1.2, lty = 3)
   }))
+
+  axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
+  axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
+  box()
+  if(legend) legend("bottomleft",
+                    "Time",
+                    text.col = "blue",
+                    bg = "gray90",
+                    cex = 0.5)
+  if(legend) legend("topright",
+                    "Row",
+                    text.col = "red",
+                    bg = "gray90",
+                    cex = 0.5)
+  ## add row index axis
+  par(new = TRUE)
+  plot(seq(1, nrow(df)),
+       df[[2]],
+       xlab = "",
+       ylab = "",
+       pch = "",
+       cex = .5,
+       axes = FALSE)
+  axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+
   if (title == T)
-    title(main = ("Full Timeseries"), line = 0.3, font = 2)
+    title(main = ("Full Timeseries"), line = 1.2, font = 2)
   # title(main = paste0("r2 = ", signif(rsq, 3)), line = -1.5, font.main = 1)
 }
 
 # a plot of the subset only
-sub.p <- function(sdf, rep = 1, rsq, title = T) {
+sub.p <- function(sdf, rep = 1, rsq, rownums, title = TRUE, legend = TRUE) {
   if (is.null(nrow(sdf)))
     sdf <- sdf[[rep]]
   names(sdf) <- c("x", "y")
@@ -62,11 +87,27 @@ sub.p <- function(sdf, rep = 1, rsq, title = T) {
   # plot the graph
   plot(sdf, xlab = "", ylab = "", pch = pch, bg = r2, col = r2, cex = cex,
        panel.first = grid(lwd = .7),
-       tck = tck, mgp = mgp)
+       tck = tck, mgp = mgp, axes = FALSE)
   abline(fit, lwd = 1.5, lty = 2)
-  if (title == T) title(main = ("Close-up Region"), line = 0.3, font = 2)
-  title(main = eq, line = -1.5, font.main = 1)
-  if (!is.null(rsq)) title(main = paste0("r2 = ", rsq), line = -2.5, font.main = 1)
+
+  axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
+  axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
+  box()
+
+  ## add row index axis
+  par(new = TRUE)
+  plot(rownums,
+       sdf[[2]],
+       xlab = "",
+       ylab = "",
+       pch = "",
+       cex = .5,
+       axes = FALSE)
+  axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+
+  if (title == T) title(main = ("Close-up Region"), line = 1.2, font = 2)
+  if(legend) title(main = eq, line = -1.5, font.main = 1)
+  if (legend && !is.null(rsq)) title(main = paste0("r2 = ", rsq), line = -2.5, font.main = 1)
 }
 
 # a plot of residuals
@@ -79,7 +120,7 @@ residual.p <- function(fit) {
   if(length(fit$fitted.values) > 5)
     lines(suppressWarnings(loess.smooth(fit$fitted.values, fit$residuals)),
           col = "black", lwd = 2)
-  title(main = ("Std. Residuals vs Fitted Values"), line = 0.3, font = 2)
+  title(main = ("Std. Residuals \nvs Fitted Values"), line = 0.3, font = 2)
   abline(0, 0, lty = 3, lwd = 1.5)
 }
 
@@ -92,32 +133,45 @@ qq.p <- function(fit) {
   qqnorm(vals, main = "", xlab = "", ylab = "", bg = r2, col = r2,
          pch = pch, cex = cex, panel.first = grid(lwd = .7),
          tck = tck, mgp = mgp)
-  title(main = ("Theoretical Q. vs Std. Residuals"), line = 0.3, font = 2)
+  title(main = ("Theoretical Q. \nvs Std. Residuals"), line = 0.3, font = 2)
   qqline(vals, lty = 3, lwd = 1.5)
 }
-
 
 # kernel density plot
 density.p <- function(dens, peaks, rank = 1) {
   plot(dens, main = "", xlab = "", ylab = "", panel.first = grid(lwd = .7),
        tck = tck, mgp = mgp)
   polygon(dens, col = r2, border = r2)
-  title(main = expression(bold("Density of Rolling"~beta[1])), line = 0.47)
+  title(main = expression(bold("Density of Rolling"~beta[1])), line = 0.5)
   abline(v = peaks[rank, ][1][,1], lty = 2)  # indicate position on density plot
 }
 
 # rolling regression
-rollreg.p <- function(rolldf, ranked.b1, rate.rev = TRUE) {
+rollreg.p <- function(rolldf, ranked.b1, rownums, rate.rev = TRUE) {
   ylim <- range(rolldf[[2]])
   if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
   plot(rolldf, xlab = "", ylab = "", bg = r2, col = r2,
        ylim = ylim,
        pch = pch,
        lwd = 1, cex = cex, panel.first = grid(lwd = .7),
-       tck = tck, mgp = mgp)
-  # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
+       tck = tck, mgp = mgp, axes = FALSE)
+
+  axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
+  axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
   abline(h = ranked.b1, lty = 2)
-  title(main = ("Rolling Rate vs Time"), line = 0.3, font = 2)
+  box()
+
+  ## add row index axis
+  par(new = TRUE)
+  plot(rownums,
+       rolldf[[2]],
+       xlab = "",
+       ylab = "",
+       pch = "",
+       cex = .5,
+       axes = FALSE)
+  axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+  title(main = ("Rolling Rate"), line = 1.2, font = 2)
 }
 
 # Unused, but maybe for next time?

@@ -87,10 +87,12 @@ applied as an adjustment value if desired.
 \subsection{Plot}{
 
 A plot is produced (provided \code{plot = TRUE}) showing all examined columns of
-oxygen against time, with the rate and linear model coefficients. Single
-rates can be plotted by changing the \code{pos} argument either in the main
-function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
-Console output messages can be suppressed using \code{quiet = TRUE}.
+oxygen against time (bottom blue axis) and row index (top red axis), with the
+rate and linear model coefficients. Single rates can be plotted by changing
+the \code{pos} argument either in the main function call, or by plotting the
+output, e.g. \code{plot(object, pos = 2)}. Console output messages can be
+suppressed using \code{quiet = TRUE}. If equations obscure the plot they can be
+suppressed using \code{legend = FALSE}.
 }
 
 \subsection{S3 Generic Functions}{

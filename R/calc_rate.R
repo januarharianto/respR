@@ -40,14 +40,17 @@
 #' ## Plot
 #'
 #' A plot is produced (provided `plot = TRUE`) showing the original data
-#' timeseries of oxygen against time, with the region specified via the `from`
-#' and `to` inputs highlighted, a close-up of this region with linear model
-#' coefficients, and summary plots of fit and residuals. If multiple rates have
-#' been calculated, by default the first is plotted. Others can be plotted by
-#' changing the `pos` argument either in the main function call, or by plotting
-#' the output, e.g. `plot(object, pos = 2)`. Each sub-panel can be plotted
-#' individually by using the `choose` input, e.g. `plot(object, choose = 2)`.
-#' Console output messages can be suppressed using `quiet = TRUE`.
+#' timeseries of oxygen against time (bottom blue axis) and row index (top red
+#' axis), with the region specified via the `from` and `to` inputs highlighted.
+#' Second panel is a close-up of the rate region with linear model coefficients,
+#' and summary plots of fit and residuals. If multiple rates have been
+#' calculated, by default the first (`pos = 1`) is plotted. Others can be
+#' plotted by changing the `pos` argument either in the main function call, or
+#' by plotting the output, e.g. `plot(object, pos = 2)`. Each sub-panel can be
+#' plotted individually by using the `choose` input, e.g. `plot(object, choose =
+#' 2)`. Console output messages can be suppressed using `quiet = TRUE`. If axis
+#' labels or other text boxes obscure parts of the plot they can be suppressed
+#' using `legend = FALSE`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -323,7 +326,8 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL, ...) {
+plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL,
+                           legend = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -362,14 +366,18 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL, ...) {
   rsq <- signif(summary(fit)$r.squared, 3)
 
   par(mfrow = mfrow,
-      oma = c(0.5, 1, 1.5, 0),
-      mai = c(0.3, 0.15, 0.2, 0.1),
+      oma = c(0.4, 1, 1.5, 0.4),
+      mai = c(0.3, 0.15, 0.35, 0.15),
       ps = 10,
       cex = 1,
       cex.main = 1)
 
-  if(1 %in% choose) multi.p(df, sdf)  # full timeseries with lmfit
-  if(2 %in% choose) sub.p(sdf, rsq = signif(rsq, 3)) # subset timeseries
+  ## need row numbers for subp plot
+  rownums <- x$summary$row[pos]:x$summary$endrow[pos]
+
+  if(1 %in% choose) multi.p(df, sdf, legend = legend)  # full timeseries with lmfit
+  if(2 %in% choose) sub.p(sdf, rsq = signif(rsq, 3), rownums = rownums,
+                          legend = legend) # subset timeseries
   if(3 %in% choose) residual.p(fit)  # residual plot
   if(4 %in% choose) qq.p(fit)  # qqplot
   mtext(glue::glue("calc.rate: Rank {pos} of {nres} Total Rates"),

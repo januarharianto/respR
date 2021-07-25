@@ -108,19 +108,27 @@
 #' ## Plot
 #'
 #' A plot is produced (provided `plot = TRUE`) showing the original data
-#' timeseries of oxygen against time, with the rate result region highlighted, a
-#' close-up of this region with linear model coefficients, a rolling rate plot
-#' (note the reversed y-axis so that higher oxygen consumption rates are
-#' higher), various summary plots of fit and residuals, and for the `linear`
-#' method the results of the kernel density analysis. If multiple rates have
-#' been calculated, by default the first is plotted. Others can be plotted by
-#' changing the `pos` argument either in the main function call, or by plotting
-#' the output, e.g. `plot(object, pos = 2)`. In addition, each sub-panel can be
-#' examined individually by using the `choose` input, e.g. `plot(object, choose
-#' = 2)`. Console output messages can be suppressed using `quiet = TRUE`. The
+#' timeseries of oxygen against time (bottom blue axis) and row index (top red
+#' axis), with the rate result region highlighted. Second panel is a close-up of
+#' the rate region with linear model coefficients. Third panel is a rolling rate
+#' plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
+#' higher), of rate calculated across the input `width` for the whole dataset.
+#' Each rate is plotted against the middle of the time and row range used to
+#' calculate it. The dashed line indicates the value of the current rate result
+#' plotted in panels 1 and 2. The other plots are summary plots of fit and
+#' residuals, and for the `linear` method the results of the kernel density
+#' analysis.
+#'
+#' If multiple rates have been calculated, by default the first (`pos = 1`) is
+#' plotted. Others can be plotted by changing the `pos` argument either in the
+#' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
+#' In addition, each sub-panel can be examined individually by using the
+#' `choose` input, e.g. `plot(object, choose = 2)`. Console output messages can
+#' be suppressed using `quiet = TRUE`. If axis labels or other text boxes
+#' obscure parts of the plot they can be suppressed using `legend = FALSE`. The
 #' rate in the rolling rate plot can be plotted *not* reversed by passing
-#' `rate.rev = FALSE`, for instance if examining oxygen production rates so that
-#' higher production rates appear higher.
+#' `rate.rev = FALSE`, for instance when examining oxygen production rates so
+#' that higher production rates appear higher.
 #'
 #' ## S3 Generic Functions
 #'
@@ -200,7 +208,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
   # verify & apply methods
   ## OLD METHOD
   if (method == 'max') {
-    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but may be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
@@ -219,7 +227,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
 
     ## OLD METHOD
   } else if (method == 'min') {
-    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but may be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
@@ -420,7 +428,8 @@ print.auto_rate <- function(x, pos = 1, ...) {
 }
 
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev = TRUE, ...) {
+plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
+                           legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -450,9 +459,12 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
   dt <- x$dataframe
   start <- x$summary$row[pos]
   end <- x$summary$endrow[pos]
+  rownums <- start:end
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = (x$roll$endtime+x$roll$time)/2,
                                    y = x$roll$rate)
+  rownums_mid <- 1:nrow(rolldt) + round((x$roll$endrow[1] - x$roll$row[1])/2)
+  # middle row of each regression for roll rate plot
   rate <- x$summary$rate_b1[pos]
   rsq <- signif(x$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
@@ -461,9 +473,10 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
   dens <- x$density
   peaks <- x$peaks[, 2:3]
 
+
   ## plot params
-  mai = c(0.3, 0.15, 0.2, 0.1)
-  oma = c(0.5, 1, 1.5, 0)
+  oma <- c(0.4, 1, 1.5, 0.4)
+  mai <- c(0.3, 0.15, 0.35, 0.15)
 
   # PLOT BASED ON METHOD
   if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "rolling")) {
@@ -471,12 +484,14 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
 
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
       layout(mat)
-      par(mai = mai,
-          oma = oma,
-          ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt)
-      sub.p(sdt, rsq = rsq)
-      rollreg.p(rolldt, rate, rate.rev)
+      par(oma = oma,
+          mai = mai,
+          ps = 10,
+          cex = 1,
+          cex.main = 1)
+      multi.p(dt, sdt, legend = legend)
+      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)
+      rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)
       residual.p(fit)
       qq.p(fit)
       layout(1)
@@ -485,13 +500,13 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
     if (choose == FALSE) {
 
       par(mfrow = c(2, 2),
-          mai = mai,
           oma = oma,
+          mai = mai,
           ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt)
+      multi.p(dt, sdt, legend = legend)
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
-      sub.p(sdt, rsq = rsq)
+      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)
       residual.p(fit)
       qq.p(fit)
     }
@@ -499,37 +514,47 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE, rate.rev =
     if (choose == FALSE) {
 
       par(mfrow = c(2, 3),
-          mai = mai,
           oma = oma,
+          mai = mai,
           ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt) # full timeseries with lmfit
-      sub.p(sdt, rsq = rsq) # closed-up (subset timeseries)
-      rollreg.p(rolldt, rate, rate.rev = rate.rev) # rolling regression series with markline
-      density.p(dens, peaks, pos) # density plot
+      multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
+      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend) # closed-up (subset timeseries)
+      rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev = rate.rev) # rolling regression series with markline
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
+      density.p(dens, peaks, pos) # density plot
     }
   }
 
   if(!isFALSE(choose))
-    par(mai = c(0.3, 0.3, 0.2, 0.2),
-        oma = c(0.4, 0.4, 0.3, 0.3))
+    par(oma = c(0.4, 1, 1.5, 0.4),
+        mai = c(0.3, 0.15, 0.35, 0.15),
+        ps = 10,
+        cex = 1,
+        cex.main = 1)
+
   if (choose == 1) {
-    multi.p(dt, sdt) # full timeseries with lmfit
+    multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
     if (x$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
     }
   }
-  if (choose == 2) sub.p(sdt, rsq = rsq)  # subset plot
-  if (choose == 3) rollreg.p(rolldt, rate, rate.rev)  # rolling regression
-  if (choose == 4) {
+  if (choose == 2)
+    sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)  # subset plot
+  if (choose == 3)
+    rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)  # rolling regression
+  if (choose == 4)
+    residual.p(fit) # residual plot
+  if (choose == 5)
+    qq.p(fit)  #qq plot
+  if (choose == 6) {
     if (x$method != 'linear') {
-      stop('auto_rate: density plot not available for "highest", "lowest", "maximum", "minimum", "rolling" and "interval" methods')
-    } else density.p(dens, peaks, pos)  # density
+      stop('auto_rate: density plot only available for "linear" method.')
+    } else {
+      density.p(dens, peaks, pos)  # density
+    }
   }
-  if (choose == 5) residual.p(fit)  # residual plot
-  if (choose == 6) qq.p(fit)  #qq plot
 
   mtext(glue::glue("auto.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)

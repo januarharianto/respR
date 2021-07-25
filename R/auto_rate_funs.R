@@ -67,12 +67,11 @@ validate_auto_rate <- function(df, by, method) {
     msg = "auto_rate: The 'by' argument must be 'time' or 'row'"
   )
   assertthat::assert_that(
-    method %in% c("default", "linear", "max", "min", "interval",
+    method %in% c("linear", "max", "min", "interval",
                   "rolling",
                   "highest", "lowest", "maximum", "minimum"),
     msg = "auto_rate: The 'method' argument is not recognised: it should be 'linear',
     'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'"
-    # leave out max/min from message - old operators, we don't want them to be used
   )
   return(list(by = by, df = data.table(df)))
 }
