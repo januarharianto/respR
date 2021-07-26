@@ -4,9 +4,9 @@
 #' on a given set of criteria. The function is ideal for passing only some
 #' regions of your data to other functions such as [`calc_rate()`] and
 #' [`auto_rate()`], either by saving them as a new object or through the use of
-#' pipes (`%>%`). It is also ideal for use with intermittent-flow data in loops,
-#' where each replicate can be extracted and passed to an analytical function
-#' such as `calc_rate()` or `auto_rate`. See examples and vignettes.
+#' pipes (`%>%` or `|>`). It is also very useful with intermittent-flow data in
+#' loops, where each replicate can be extracted and passed to an analytical
+#' function such as `calc_rate` or `auto_rate`. See examples and vignettes.
 #'
 #' The function can subset data based on ranges of: `"time"`, `"oxygen"`,
 #' `"row"` , or `"proportion"` of total oxygen used or produced (note, this last
@@ -26,13 +26,14 @@
 #' the first column of oxygen data (i.e. column 2), and all subsequent columns
 #' are subset between the same rows regardless of oxygen values.
 #'
-#' For `"time"` and `"row"` subsetting, `from` and `to` should be in correct
-#' order. No warning or messages are given if the values are beyond those in the
-#' dataframe. For instance, if `to = 100` and there are only 50 rows in the
-#' data, the last row (50) will be used instead. The same for `from` and `to`
-#' time values outside those in the data frame. For `"time"` subsetting, the
-#' values do not need to be precise; the function will use the closest values
-#' found.
+#' For all methods, if exact matching values of `from` and `to` are not present
+#' in the data, the closest values are used. For `"time"` and `"row"`
+#' subsetting, `from` and `to` should be in correct order. No warning or
+#' messages are given if the values are beyond those in the dataframe. For
+#' instance, if `to = 100` and there are only 50 rows in the data, the last row
+#' (50) will be used instead. The same for `from` and `to` time values outside
+#' those in the data frame. For `"time"` subsetting, the values do not need to
+#' be precise; the function will use the closest values found.
 #'
 #' For `"o2"` or `"proportion"` subsetting, `from` and `to` are generally
 #' interchangeable, and the function will subset data *between* the first and

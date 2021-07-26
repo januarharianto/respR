@@ -223,7 +223,10 @@ truncate_data <- function(x, from, to, by) {
     rng <- range(dt[[1]], na.rm = TRUE)
     if(from < rng[1]) from <- rng[1]
     if(to > rng[2]) to <- rng[2]
-    out <- dt[dt[[1]] >= from & dt[[1]] <= to]
+    #out <- dt[dt[[1]] >= from & dt[[1]] <= to] # old method
+    # new method - finds closest value to each time
+    out <- dt[dt[[1]] >= dt[[1]][which.min(abs(dt[[1]] - from))]
+              & dt[[1]] <= dt[[1]][which.min(abs(dt[[1]] - to))]]
   }
   ## row is ok, since it is always increasing
   if (by == "row") {

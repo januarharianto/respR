@@ -138,17 +138,18 @@ gaps in the data.
 \subsection{Plot}{
 
 A plot is produced (provided \code{plot = TRUE}) showing the original data
-timeseries of oxygen against time, with the rate result region highlighted,
-against both time and row index. Second plot is a close-up of the rate region
-with linear model coefficients. Third plot is a rolling rate plot (note the
-reversed y-axis so that higher oxygen uptake rates are plotted higher), of
-rate calculated across the input \code{width} across the whole dataset. Each rate
-is plotted against the middle of the time and row range used to calculate it.
-The dashed line indicates the value of the current rate result plotted in
-panles 1 and 2. The other plots are summary plots of fit and residuals, and
-for the \code{linear} method the results of the kernel density analysis.
+timeseries of oxygen against time (bottom blue axis) and row index (top red
+axis), with the rate result region highlighted. Second panel is a close-up of
+the rate region with linear model coefficients. Third panel is a rolling rate
+plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
+higher), of rate calculated across the input \code{width} for the whole dataset.
+Each rate is plotted against the middle of the time and row range used to
+calculate it. The dashed line indicates the value of the current rate result
+plotted in panels 1 and 2. The other plots are summary plots of fit and
+residuals, and for the \code{linear} method the results of the kernel density
+analysis.
 
-If multiple rates have been calculated, by default the first (\code{pos = 1}is
+If multiple rates have been calculated, by default the first (\code{pos = 1}) is
 plotted. Others can be plotted by changing the \code{pos} argument either in the
 main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
 In addition, each sub-panel can be examined individually by using the
@@ -156,8 +157,8 @@ In addition, each sub-panel can be examined individually by using the
 be suppressed using \code{quiet = TRUE}. If axis labels or other text boxes
 obscure parts of the plot they can be suppressed using \code{legend = FALSE}. The
 rate in the rolling rate plot can be plotted \emph{not} reversed by passing
-\code{rate.rev = FALSE}, for instance if examining oxygen production rates so that
-higher production rates appear higher.
+\code{rate.rev = FALSE}, for instance when examining oxygen production rates so
+that higher production rates appear higher.
 }
 
 \subsection{S3 Generic Functions}{

@@ -71,14 +71,16 @@ entire dataset.
 \subsection{Plot}{
 
 A plot is produced (provided \code{plot = TRUE}) showing the original data
-timeseries of oxygen against time, with the region specified via the \code{from}
-and \code{to} inputs highlighted, a close-up of this region with linear model
-coefficients, and summary plots of fit and residuals. If multiple rates have
-been calculated, by default the first is plotted. Others can be plotted by
-changing the \code{pos} argument either in the main function call, or by plotting
-the output, e.g. \code{plot(object, pos = 2)}. Each sub-panel can be plotted
-individually by using the \code{choose} input, e.g. \code{plot(object, choose = 2)}.
-Console output messages can be suppressed using \code{quiet = TRUE}.
+timeseries of oxygen against time (bottom blue axis) and row index (top red
+axis), with the region specified via the \code{from} and \code{to} inputs highlighted.
+Second panel is a close-up of the rate region with linear model coefficients,
+and summary plots of fit and residuals. If multiple rates have been
+calculated, by default the first (\code{pos = 1}) is plotted. Others can be
+plotted by changing the \code{pos} argument either in the main function call, or
+by plotting the output, e.g. \code{plot(object, pos = 2)}. Each sub-panel can be
+plotted individually by using the \code{choose} input, e.g. \code{plot(object, choose = 2)}. Console output messages can be suppressed using \code{quiet = TRUE}. If axis
+labels or other text boxes obscure parts of the plot they can be suppressed
+using \code{legend = FALSE}.
 }
 
 \subsection{S3 Generic Functions}{

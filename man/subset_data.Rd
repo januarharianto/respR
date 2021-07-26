@@ -25,9 +25,9 @@ console. Default is \code{FALSE}.}
 on a given set of criteria. The function is ideal for passing only some
 regions of your data to other functions such as \code{\link[=calc_rate]{calc_rate()}} and
 \code{\link[=auto_rate]{auto_rate()}}, either by saving them as a new object or through the use of
-pipes (\verb{\%>\%}). It is also ideal for use with intermittent-flow data in loops,
-where each replicate can be extracted and passed to an analytical function
-such as \code{calc_rate()} or \code{auto_rate}. See examples and vignettes.
+pipes (\verb{\%>\%} or \verb{|>}). It is also very useful with intermittent-flow data in
+loops, where each replicate can be extracted and passed to an analytical
+function such as \code{calc_rate} or \code{auto_rate}. See examples and vignettes.
 }
 \details{
 The function can subset data based on ranges of: \code{"time"}, \code{"oxygen"},
@@ -48,13 +48,14 @@ case of subsetting \code{by = "o2"} or \code{by = "proportion"}, subsetting is b
 the first column of oxygen data (i.e. column 2), and all subsequent columns
 are subset between the same rows regardless of oxygen values.
 
-For \code{"time"} and \code{"row"} subsetting, \code{from} and \code{to} should be in correct
-order. No warning or messages are given if the values are beyond those in the
-dataframe. For instance, if \code{to = 100} and there are only 50 rows in the
-data, the last row (50) will be used instead. The same for \code{from} and \code{to}
-time values outside those in the data frame. For \code{"time"} subsetting, the
-values do not need to be precise; the function will use the closest values
-found.
+For all methods, if exact matching values of \code{from} and \code{to} are not present
+in the data, the closest values are used. For \code{"time"} and \code{"row"}
+subsetting, \code{from} and \code{to} should be in correct order. No warning or
+messages are given if the values are beyond those in the dataframe. For
+instance, if \code{to = 100} and there are only 50 rows in the data, the last row
+(50) will be used instead. The same for \code{from} and \code{to} time values outside
+those in the data frame. For \code{"time"} subsetting, the values do not need to
+be precise; the function will use the closest values found.
 
 For \code{"o2"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
 interchangeable, and the function will subset data \emph{between} the first and

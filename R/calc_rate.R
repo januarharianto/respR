@@ -462,8 +462,14 @@ extract_indices <- function(x, subsets, n) {
   fl <- subsets[[n]][, .SD[c(1, .N)]]
   # Add row indices while flattening data into a row:
   out <- data.table::data.table(
-    row = match(fl[[1]][1], x[[1]]), endrow = match(fl[[1]][2], x[[1]]),
-    time = fl[[1]][1], endtime =  fl[[1]][2],
-    oxy =fl[[2]][1], endoxy = fl[[2]][2])
+    row = match(fl[[1]][1], x[[1]]),
+    ## endrow - we want LAST match here, since this matches by=time behaviour
+    ## fixes row refs if there are duplicate times
+    endrow = tail(which(fl[[1]][2] == x[[1]]), 1),
+    time = fl[[1]][1],
+    endtime =  fl[[1]][2],
+    oxy =fl[[2]][1],
+    endoxy = fl[[2]][2])
   return(out)
 }
+
