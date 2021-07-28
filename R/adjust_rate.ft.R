@@ -108,11 +108,6 @@
 #' out <- adjust_rate.ft(x = c(-7.44, -7.20, -7.67),
 #'                    by = c(-0.04, -0.05, -0.06))
 #' summary(out)
-#'
-#' # Paired background respiration correction to multiple rates.
-#' out <- adjust_rate.ft(x = c(-7.44, -7.20, -7.67),
-#'                    by = c(-0.04, -0.05, -0.06))
-#' summary(out)
 
 adjust_rate.ft <- function(x, by) {
 
