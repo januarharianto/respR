@@ -475,7 +475,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
     lx <- nrow(x$dataframe)
     lby <- nrow(bg_df)
     if(abs(diff(c(lx, lby)))/lx > 0.05)
-      warning("adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. \nmethod = \"concurrent\" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. \nAdjustments have been attempted anyway, using shared time values in the 'x' and 'by' inputs where available.")
+      warning("adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. \nmethod = \"concurrent\" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. \nAdjustments have been attempted anyway, using shared or closest time values in the 'x' and 'by' inputs.")
 
     ## Check all bg regression time values within range of those in x rates
     if(any(!(data.table::between(starts, min(bg_df[[1]]), max(bg_df[[1]])))) ||
