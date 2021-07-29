@@ -29,9 +29,9 @@ opts_chunk$set(collapse = TRUE,
 
 This vignette shows a intermittent-flow analysis from a lengthy experiment, with over 100 replicates and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. 
 
-The example data (`zeb_intermittent.rd`) was kindly provided by Dr. Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. It is comprised of one replicate of 14 minutes duration (12 minutes recording, 2 minutes flushing), followed by 105 replicates of 11 minutes duration (9 minutes recording, 2 minutes flushing). See `?zeb_intermittent.rd` for row locations of all stages. 
+The example data (`zeb_intermittent.rd`) was kindly provided by Dr. Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. It is comprised of one replicate of 14 minutes duration (12 minutes recording, 2 minutes flushing), followed by 105 replicates of 11 minutes duration (9 minutes recording, 2 minutes flushing). See `help(zeb_intermittent.rd)` for row locations of all stages. 
 
-See [here]() for an example with a smaller dataset, which covers in more detail the basics of analysing intermittent-flow data, and is a better starting point if you are new to the package. Even if not, we would recommend reading both before starting your analysis. 
+See `vignette("intermittent_short")` for an example with a smaller dataset, which covers in more detail the basics of analysing intermittent-flow data, and is a better starting point if you are new to `respR` or analysing these types of experiment. Even if not, we would recommend reading both before starting your analysis. 
 
 ## Experiment overview
 
@@ -71,10 +71,10 @@ The initial and end sections of the data will be used to calculate background ra
 We subset these regions, and save them as separate `calc_rate.bg` objects. Here we use the new native pipe operator (`|>`) introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/). These can be substituted for `dpylr` pipes (`%>%`) if you have not yet updated.
 
 ```{r fig.keep="last", message=FALSE, warning=FALSE, results="hide"} 
-bg_start <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
+bg_pre <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
   calc_rate.bg()
 
-bg_end <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
+bg_post <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
   calc_rate.bg()
 ```
 
@@ -82,14 +82,14 @@ The two different background rates (only the end one is plotted above) have been
 We can see the actual values by printing them
 
 ```{r}
-bg_start
+bg_pre
 ```
 
 ```{r R.options = list(scipen = 999, digits = 4)}
-bg_end
+bg_post
 ```
 
-We can see the background rate increasing by around 70% over the course of the experiment. We will use these later in [Adjusting rates](#adjust) to apply a dynamic background adjustment to rates based on their time during the experiment.
+We can see the background rate increases by around 70% over the course of the experiment. We will use these later in [Adjusting rates](#adjust) to apply a dynamic background adjustment to rates based on their time during the experiment.
 
 ## Calculating MMR {#mmr}
 
@@ -277,8 +277,8 @@ For MMR, we only have one `auto_rate` object, so it's relatively easy to adjust.
 
 ```{r tidy = FALSE}
 zeb_mmr_adj <- adjust_rate(zeb_mmr, 
-                           by = bg_start, 
-                           by2 = bg_end,
+                           by = bg_pre, 
+                           by2 = bg_post,
                            method = "linear")
 ```
 
@@ -296,8 +296,8 @@ Because we saved an `auto_rate` object for each replicate in a `list`, the proce
 
 ```{r results = "hide", message=FALSE, tidy = FALSE}
 zeb_rmr_adj <- lapply(zeb_rmr, function(z) adjust_rate(z, 
-                                                       by = bg_start, 
-                                                       by2 = bg_end,
+                                                       by = bg_pre, 
+                                                       by2 = bg_post,
                                                        method = "linear"))
 ```
 
@@ -315,8 +315,8 @@ The process for adjusting the SMR rates is identical to the above.
 
 ```{r results = "hide", message=FALSE, tidy = FALSE}
 zeb_smr_adj <- lapply(zeb_smr, function(z) adjust_rate(z, 
-                                                       by = bg_start, 
-                                                       by2 = bg_end,
+                                                       by = bg_pre, 
+                                                       by2 = bg_post,
                                                        method = "linear"))
 ```
 
@@ -491,9 +491,9 @@ The above is a lengthy description of an analysis, so this vignette may not give
 zeb <- inspect(zeb_intermittent.rd)
 
 # Background --------------------------------------------------------------
-bg_start <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
+bg_pre <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
   calc_rate.bg()
-bg_end <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
+bg_post <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
   calc_rate.bg()
 
 # Replicate structure -----------------------------------------------------
@@ -518,8 +518,8 @@ zeb_smr <- lapply(zeb_smr_subsets, function(z) auto_rate(z,
 
 # Adjust ------------------------------------------------------------------
 zeb_smr_adj <- lapply(zeb_smr, function(z) adjust_rate(z, 
-                                                       by = bg_start, 
-                                                       by2 = bg_end,
+                                                       by = bg_pre, 
+                                                       by2 = bg_post,
                                                        method = "linear"))
 
 # Convert -----------------------------------------------------------------
@@ -546,6 +546,5 @@ zeb_smr_final
 
 The ultimate aim of `respR` was to enable reproducible analyses and clear reporting of them. This is an example of how we might report the above analysis in a manuscript.
 
-"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to extract the lowest rate across a three minute window from each replicate. Rates were adjusted for background using pre- and post-experiment blank recordings with no specimen, assuming a linear increase in background rate over time. SMR was defined as the mean of the lowest 10th percentile of adjusted rates."
-
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to extract the lowest rate across a three minute window from each replicate. Rates were adjusted for background using pre- and post-experiment blank recordings with no specimen, assuming a linear increase in background rate over time. SMR was defined as the mean of the lowest 10th percentile of adjusted rates."*
 

@@ -133,7 +133,7 @@ Below, we show the differences in the shape of the rolling regressions when usin
 normx <- auto_rate(sardine.rd, plot = FALSE)
 
 # Perform linear detection using manual width of 0.6:
-overx <- auto_rate(sardine.rd, plot = FALSE, width = .6)
+overx <- auto_rate(sardine.rd, plot = FALSE, width = 0.6)
 ```
 
 ```{r echo = F, message=FALSE, results='hide'}
@@ -181,6 +181,7 @@ rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE,
 
 ```
 
+
 Under perfectly linear conditions, we would expect a rolling regression output plot such as this to consist of a straight, horizontal line. 
 Since KDE automatically aggregates stable values, a poor selection of the `width` value may result in a badly-characterised rolling estimate output.
 In the example presented above, while the default width showed a pattern of relative stability in rate after 3,000 seconds, that information was lost when a `width` of `0.6` was used.
@@ -189,12 +190,11 @@ Thus, the KDE technique would not have had the appropriate information necessary
 ## Automatic detection of linear rates
 By default, `auto_rate` identifies the *most linear* region of the data (i.e. `method = "linear"`):
 
-```{r}
+```{r results='hide'}
 x <- auto_rate(sardine.rd)
 ```
 
-This method detects the *most consistently linear* region of the data, that is the most consistent rate observed during the experiment. It does this in a statistically rigorous, unsupervised manner, with the advantage being this removes observer subjectivity in choosing which rate is most appropriate to report in their results. 
-It calculates these *most linear* rates across all possible data window widths, so this also removes the need to the user to specify this. 
+This method detects the *most consistently linear* region of the data, that is the most consistent rate observed during the experiment. It does this in a rigorous, unsupervised manner, with the advantage being this removes observer subjectivity in choosing which rate is most appropriate to report in their results. 
 It is a statistically robust way of indentifying and reporting consistent rates in respirometry data, such as those representative of routine metabolic rates. 
 
 ### Exploring the results
