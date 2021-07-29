@@ -1,0 +1,16 @@
+citHeader("To cite respR in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "respR — An R package for the manipulation and analysis of respirometry data",
+  author   = "Januar Harianto, Nicholas Carey, Maria Byrne",
+  journal  = "Methods in Ecology and Evolution",
+  year     = 2019,
+  volume   = 10,
+  number   = 6,
+  pages    = "912-920",
+  url      = "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162",
+  textVersion = paste(
+
+  )
+)
