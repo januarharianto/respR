@@ -20,3 +20,4 @@ vignettes
 ^appveyor\.yml$
 ^pkgdown$
 Changelog
+^CITATION\.cff$
