@@ -395,7 +395,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       # subset data for each from-to pair
       dfs <- lapply(1:length(from), function(z) truncate_data(dt, from[z], to[z], by))
 
-      indices <- lapply(1:length(dfs), function(z) respR::extract_indices(dt, dfs, z))
+      indices <- lapply(1:length(dfs), function(z) extract_indices(dt, dfs, z))
 
       summary <- Reduce(rbind, indices)
 

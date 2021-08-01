@@ -32,12 +32,12 @@
 #'
 #' The `thin` input influences the *BSR* analysis. The method is very
 #' computationally intensive, so to speed up analyses the `thin` input will
-#' subsample datasets longer than this to this length before analysis. The
-#' default value of 5000 has in testing provided a good balance between speed
-#' and results accuracy and repeatability. However, results may vary with
-#' different datasets, so users should experiment with varying the value. To
-#' perform no subsampling and use the entire dataset enter `thin = NULL`. It has
-#' no effect on datasets shorter than the `thin` input.
+#' subsample datasets longer than this input to this number or rows before
+#' analysis. The default value of 5000 has in testing provided a good balance
+#' between speed and results accuracy and repeatability. However, results may
+#' vary with different datasets, so users should experiment with varying the
+#' value. To perform no subsampling and use the entire dataset enter `thin =
+#' NULL`. It has no effect on datasets shorter than the `thin` input.
 #'
 #' ### Segmented Regression:    `method = "segmented"`
 #'
@@ -102,13 +102,24 @@
 #' indicated by vertical lines, and regression fits upon which the analysis was
 #' based by black dashed lines.
 #'
+#' Note, that in `respR` oxygen uptake rates are negative since they represent a
+#' negative slope of oxygen against time, therefore by default rates are plotted
+#' on a reverse y-axis so higher rates appear higher on the plot. If analysing
+#' already calculated rates which are positive values this behaviour can be
+#' reversed by passing `rate.rev = FALSE` in either the main function call or
+#' when calling `plot()` on the output object. There is no issue with using
+#' positive rate values; they will give identical critical value results in the
+#' analysis.
+#'
 #' ### Additional plotting options
 #'
 #' If the legend obscures parts of the plot they can be suppressed using `legend
 #' = FALSE`. Suppress console output messages with `quiet = TRUE`. Each panel
-#' can be plotted on its own using `choose = 1` or `choose = 2`. These inputs
-#' can be passed in either the main `oxy_crit` call or when calling `plot()` on
-#' the output object.
+#' can be plotted on its own using `choose = 1` or `choose = 2`. If using
+#' already-calculated, positive rate values to identify critical oxygen values,
+#' the y-axis of the rolling rate plot can be plotted *not* reversed by passing
+#' `rate.rev = FALSE` These inputs can be passed in either the main `oxy_crit`
+#' call or when calling `plot()` on the output object.
 #'
 #' ## S3 Generic Functions
 #'
@@ -151,10 +162,12 @@
 #'   computationally intensive analyses of large datasets.
 #' @param thin integer. Defaults to 5000. Number of rows to subsample `x` data
 #'   to before running `"bsr"` analysis. No effect on datasets smaller than this
-#'   value. To perform no subsampling enter as `NULL`. See Details.
+#'   value or with `"segmented"` method. To perform no subsampling enter as
+#'   `NULL`. See Details.
 #' @param plot logical. Defaults to TRUE.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `quiet = TRUE`, and `choose`. See Plotting section.
+#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE`, and `choose`. See Plotting
+#'   section.
 #'
 #' @importFrom data.table data.table as.data.table setnames setorder rbindlist
 #' @importFrom parallel detectCores makeCluster clusterExport parLapply
@@ -303,9 +316,9 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
       no_cores <- parallel::detectCores() - 1  # use n-1 cores
       cl <- parallel::makeCluster(no_cores)  # initiate cluster and use those cores
       # parallel::clusterExport(cl, "broken_stick") # import function to use
-      results <- parallel::parLapply(cl, lseq, function(z) respR::broken_stick(sdt, z))
+      results <- parallel::parLapply(cl, lseq, function(z) broken_stick(sdt, z))
       parallel::stopCluster(cl)  # release cores
-    } else results <- lapply(lseq, function(z) respR:: broken_stick(sdt,z))
+    } else results <- lapply(lseq, function(z) broken_stick(sdt,z))
     # convert output to data.table:
     results <- data.table::rbindlist(results)
     # arrange by increasing total sum of squares of residuals
@@ -382,15 +395,15 @@ print.oxy_crit <- function(x, ...) {
 
   if(x$method == "bsr") {
     cat("Broken-Stick (Yeager & Ultsch 1989):\n\n")
-    cat(sprintf("Sum RSS     %g\n", x$summary$sumRSS))
-    cat(sprintf("Intercept   %g\n", x$summary$crit.intercept))
-    cat(sprintf("Midpoint    %g\n", x$summary$crit.midpoint))
+    cat("Sum RSS     ", x$summary$sumRSS, "\n")
+    cat("Intercept   ", x$summary$crit.intercept, "\n")
+    cat("Midpoint    ", x$summary$crit.midpoint, "\n")
   }
 
   if(x$method == "segmented"){
     cat("Segmented (Muggeo 2003):\n\n")
-    cat(sprintf("Std. Err.   %g\n", x$summary$std.err))
-    cat(sprintf("Breakpoint  %g\n", x$summary$crit.segmented))
+    cat("Std. Err.   ", x$summary$std.err, "\n")
+    cat("Breakpoint  ", x$summary$crit.segmented, "\n")
   }
 
   cat("\n-----------------------------------------\n")
@@ -424,7 +437,8 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL, ...) {
+plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
+                          rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -516,14 +530,14 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL, ...) {
 
       # Legend
       if(x$method == "bsr"){
-        leg <- c(glue::glue("Intercept (BSR): ", signif(bsr.intercept, 3)),
-                 glue::glue("Midpoint (BSR): ", signif(bsr.midpoint, 3)))
+        leg <- c(glue::glue("Intercept (BSR): ", signif(bsr.intercept, 4)),
+                 glue::glue("Midpoint (BSR): ", signif(bsr.midpoint, 4)))
         line_cols <- line_cols_bsr
         line_types <- line_types_bsr
       }
 
       if(x$method == "segmented"){
-        leg <- c(glue::glue("Breakpoint (Seg): ", signif(seg.breakpoint, 3)))
+        leg <- c(glue::glue("Breakpoint (Seg): ", signif(seg.breakpoint, 4)))
         line_cols <- line_cols_seg
         line_types <- line_types_seg
       }
@@ -546,15 +560,18 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL, ...) {
 
   # Plot 2 - Broken Stick ---------------------------------------------------
   if(x$method == "bsr" && 2 %in% choose) {
+    ylim <- grDevices::extendrange(
+      r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
+    if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
     plot(x$df_rate_oxygen, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-         panel.first = grid(lwd = .7), tck = tck)
+         panel.first = grid(lwd = .7), tck = tck, ylim = ylim)
     abline(lm(rate ~ oxygen, segment1), lwd = line_wt_add, lty = line_type_add, col = line_col_add)
     abline(lm(rate ~ oxygen, segment2), lwd = line_wt_add, lty = line_type_add, col = line_col_add)
     abline(v = bsr.intercept, col = line_cols_bsr[1], lwd = line_wt, lty = line_types_bsr[1])
     abline(v = bsr.midpoint, col = line_cols_bsr[2], lwd = line_wt, lty = line_types_bsr[2])
     if(legend) legend("bottomright",
-                      c(glue::glue("Intercept (BSR): ", signif(bsr.intercept, 3)),
-                        glue::glue("Midpoint (BSR): ", signif(bsr.midpoint, 3))),
+                      c(glue::glue("Intercept (BSR): ", signif(bsr.intercept, 4)),
+                        glue::glue("Midpoint (BSR): ", signif(bsr.midpoint, 4))),
                       col = line_cols_bsr,
                       lty = line_types_bsr,
                       lwd = line_wt,
@@ -578,7 +595,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL, ...) {
     lines(fitsub, type = "l", lwd = line_wt_add, lty = line_type_add, col = line_col_add)
     abline(v = seg.breakpoint, col = line_cols_seg, lwd = line_wt, lty = line_types_seg)
     if(legend) legend("bottomright",
-                      glue::glue("Breakpoint (Seg): ", signif(seg.breakpoint, 3)),
+                      glue::glue("Breakpoint (Seg): ", signif(seg.breakpoint, 4)),
                       col = line_cols_seg,
                       lty = line_types_seg,
                       lwd = line_wt,

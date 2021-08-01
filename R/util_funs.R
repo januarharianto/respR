@@ -351,7 +351,7 @@ generate_mrdf <- function(dt, width) {
   rolly <- static_roll(dt, width)
 
   # Then, combine into new data.table
-  rdt <- data.table::data.table(rollx, abs(rolly$rate_b1))
+  rdt <- data.table::data.table(rollx, rolly$rate_b1)
   data.table::setnames(rdt, 1:2, c("x", "y"))
   return(rdt)
 }

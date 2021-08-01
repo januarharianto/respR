@@ -42,11 +42,13 @@ computationally intensive analyses of large datasets.}
 
 \item{thin}{integer. Defaults to 5000. Number of rows to subsample \code{x} data
 to before running \code{"bsr"} analysis. No effect on datasets smaller than this
-value. To perform no subsampling enter as \code{NULL}. See Details.}
+value or with \code{"segmented"} method. To perform no subsampling enter as
+\code{NULL}. See Details.}
 
 \item{plot}{logical. Defaults to TRUE.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, and \code{choose}. See Plotting section.}
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE}, and \code{choose}. See Plotting
+section.}
 }
 \description{
 A function to calculate the critical oxygen value, the oxygen tension or
@@ -80,12 +82,11 @@ very close in value, and the function returns both.
 
 The \code{thin} input influences the \emph{BSR} analysis. The method is very
 computationally intensive, so to speed up analyses the \code{thin} input will
-subsample datasets longer than this to this length before analysis. The
-default value of 5000 has in testing provided a good balance between speed
-and results accuracy and repeatability. However, results may vary with
-different datasets, so users should experiment with varying the value. To
-perform no subsampling and use the entire dataset enter \code{thin = NULL}. It has
-no effect on datasets shorter than the \code{thin} input.
+subsample datasets longer than this input to this number or rows before
+analysis. The default value of 5000 has in testing provided a good balance
+between speed and results accuracy and repeatability. However, results may
+vary with different datasets, so users should experiment with varying the
+value. To perform no subsampling and use the entire dataset enter \code{thin = NULL}. It has no effect on datasets shorter than the \code{thin} input.
 }
 
 \subsection{Segmented Regression:    \code{method = "segmented"}}{
@@ -156,12 +157,23 @@ The bottom plot is the rate~oxygen series upon which the analysis was
 conducted, either as input or as calculated. Critical oxygen values are
 indicated by vertical lines, and regression fits upon which the analysis was
 based by black dashed lines.
+
+Note, that in \code{respR} oxygen uptake rates are negative since they represent a
+negative slope of oxygen against time, therefore by default rates are plotted
+on a reverse y-axis so higher rates appear higher on the plot. If analysing
+already calculated rates which are positive values this behaviour can be
+reversed by passing \code{rate.rev = FALSE} in either the main function call or
+when calling \code{plot()} on the output object. There is no issue with using
+positive rate values; they will give identical critical value results in the
+analysis.
 \subsection{Additional plotting options}{
 
 If the legend obscures parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{quiet = TRUE}. Each panel
-can be plotted on its own using \code{choose = 1} or \code{choose = 2}. These inputs
-can be passed in either the main \code{oxy_crit} call or when calling \code{plot()} on
-the output object.
+can be plotted on its own using \code{choose = 1} or \code{choose = 2}. If using
+already-calculated, positive rate values to identify critical oxygen values,
+the y-axis of the rolling rate plot can be plotted \emph{not} reversed by passing
+\code{rate.rev = FALSE} These inputs can be passed in either the main \code{oxy_crit}
+call or when calling \code{plot()} on the output object.
 }
 
 }
