@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE,
                tidy = FALSE, 
                highlight = TRUE, 
                fig.width = 10, 
-               fig.height = 4,
+               fig.height = 5,
                fig.align = "center",
                R.options = list(width = 999,
                                 scipen = 999, 
@@ -560,10 +560,7 @@ Additional plotting controls can be passed in either the main `inspect` call or 
 
 Most notable is `rate.rev = FALSE`. This means rates in the rolling rate plot will be plotted on a normal y-axis, that is not reversed. This allows oxygen production rates to be plotted correctly, with higher rates appearing higher on the plot. 
 
-If axis labels obscure parts of the plot they can be suppressed using `legend
-= FALSE`. 
-Console output messages can be suppressed with `message = FALSE` (in `plot()` only). 
-Lastly, a different `width` value can be passed to see how it affects the rolling rate plot. 
+If axis labels obscure parts of the plot they can be suppressed using `legend = FALSE`. Console output messages can be suppressed with `quiet = TRUE` (in `plot()` only). Lastly, a different `width` value can be passed to see how it affects the rolling rate plot. 
 
 This example examining oxygen production in algae uses some of these options. 
 

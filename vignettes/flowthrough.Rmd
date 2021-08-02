@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE,
                tidy = FALSE, 
                highlight = TRUE, 
                fig.width = 10, 
-               fig.height = 4,
+               fig.height = 5,
                fig.align = "center",
                R.options = list(width = 999,
                                 scipen = 999, 
@@ -49,7 +49,7 @@ The inflow concentration is typically a simultaneous recording, but an alternati
 
 Typically the first step in data analysis is inspecting and visualising the data. 
 
-The `inspect.ft` function can be used to quickly examine and visualise outflow and inflow data from a single chamber, but also a large multi-column dataset. Using it with no arguments will inspect and plot every column, assuming `time` is in column 1 and all others are delta oxygen data (`delta.o2`). Even if your data is not delta oxygen values, you can use this without saving the result for a quick look at the data. Note, if you otherwise do not tell it otherwise, the function assumes data are delta oxygen and plots them on a reverse y-axis. However, we can use the `rate.rev` argument to override this
+The `inspect.ft` function can be used to quickly examine and visualise outflow and inflow data from a single chamber, but also a large multi-column dataset. Using it with no arguments will inspect and plot every column, assuming `time` is in column 1 and all others are delta oxygen data (`delta.o2`). Even if your data is not delta oxygen values, you can use this without saving the result for a quick look at the data. Note, if you do not tell it otherwise, the function assumes data are delta oxygen and plots them on a reverse y-axis. However, we can use the `rate.rev` argument to override this
 
 ```{r}
 inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
@@ -936,4 +936,4 @@ print(rate3_abs)
 
 - To repeat, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
 
-- The functions in the flowthrough workflow, where appropriate, support the generic S3 functions `plot`, `print`, `summary`, and `mean`. These have various additional arguments such a `pos`, `message`, and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output (`rate`, `rate.adjusted`, or `rate.output`). This can be output as a value by passing `export = TRUE`. 
+- The functions in the flowthrough workflow, where appropriate, support the generic S3 functions `plot`, `print`, `summary`, and `mean`. These have various additional arguments such as `pos`, `quiet`, and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output (`rate`, `rate.adjusted`, or `rate.output`). This can be output as a value by passing `export = TRUE`. 

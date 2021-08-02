@@ -19,7 +19,7 @@ opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE,
 
 ## **Note**
 
-*This page has been archived and will not be updated. This is because it was submitted as part of the [publication](https://doi.org/10.1111/2041-210X.13162) of `respR` in Methods in Ecology and Evolution, and has been retained unchanged for reference. *
+*This page has been archived and will not be updated. This is because it was submitted as part of the [publication](https://doi.org/10.1111/2041-210X.13162) of `respR` in Methods in Ecology and Evolution, and has been retained unchanged for reference. Any results and code outputs shown are from `respR v1.1` code. Subsequent updates to `respR` should produce the same or very similar results. *
 
 ## Introduction
 

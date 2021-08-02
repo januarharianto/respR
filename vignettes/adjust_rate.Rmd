@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE,
                tidy = FALSE, 
                highlight = TRUE, 
                fig.width = 10, 
-               fig.height = 4,
+               fig.height = 5,
                fig.align = "center",
                R.options = list(width = 999,
                                 scipen = 999, 
@@ -1091,7 +1091,7 @@ For example, let's take the [example from above](#lineareg2) of the linearly inc
 
 ```{r}
 duration <- 70000 # starting duration
-under10 <- NA # This will hold our logical test result
+under10 <- TRUE # This will hold our logical test result
 
 # Is the background rate under 10% of the specimen rate?
 # while it is, repeat, adding 1 hour to duration each time 
@@ -1120,3 +1120,7 @@ while (under10) {
 ```
 
 Now we can see this level of background rate will be reached in round 53 hours, so our current experiments of 24h are well within this. If we wanted to run them even longer however, this gives us a good idea of the maximum duration before the background rate might interfere with good estimates of specimen rate. 
+
+### S3 generics
+
+As with most outputs in `respR`, `adjust_rate` objects support the generic S3 functions `print`, `summary`, and `mean`. These have the additional arguments `pos` and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output `$rate.adjusted`. This can be output as a value by passing `export = TRUE`.

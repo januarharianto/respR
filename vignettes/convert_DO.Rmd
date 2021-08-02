@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE,
                tidy = TRUE, 
                highlight = TRUE, 
                fig.width = 6, 
-               fig.height = 4,
+               fig.height = 5,
                fig.align = "center")
 ```
 

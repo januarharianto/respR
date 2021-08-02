@@ -247,6 +247,8 @@ The `summary` function also allows the entire summary table to be extracted and 
 rep1_df <- summary(rep1_ms_rate, export = TRUE, pos = 1:5)
 ```
 
+## Advanced selection of rate results
+
 For more advanced selection of `auto_rate` results, including selection by r-squared range, rate value or percentile, data region and many more see `subset_rate()` and `vignette("subset_rate")` for full explanation and examples. This would typically be done before passing the object to `convert_rate`.
 
 ## Longer intermittent-flow experiments

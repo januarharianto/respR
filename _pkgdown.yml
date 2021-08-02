@@ -94,8 +94,6 @@ navbar:
         href: articles/flowthrough.html
       - text: "oxy_crit: Critical oxygen analyses"
         href: articles/oxycrit.html
-      - text: "calc_rate: Two-point rate calculation"
-        href: articles/twopoint.html
       - text: "---- Function Guides ----"
       - text: "import_file & format_time: Import and prepare data"
         href: articles/importing.html
@@ -109,6 +107,9 @@ navbar:
         href: articles/adjust_rate.html
       - text: "convert_DO: Convert between units of dissolved oxygen"
         href: articles/convert_DO.html
+      - text: "---- Miscellaneous ----"
+      - text: "calc_rate: Two-point rate calculation"
+        href: articles/twopoint.html
 
     - text: Further Reading
       menu:
@@ -129,11 +130,15 @@ navbar:
       - text: Archived
         menu:
         - text: "auto_rate: Performance"
-          href: articles/auto_rate_performance.html
+          href: articles/archive/auto_rate_performance.html
         - text: "auto_rate: Comparisons with LoLinR"
-          href: articles/auto_rate_comp.html
+          href: articles/archive/auto_rate_comp.html
+        - text: "oxy_crit: Comparisons with other packages"
+          href: articles/archive/oxy_crit_comp.html
+        - text: "oxy_crit: Discussion of Pcrit estimation methods"
+          href: articles/archive/oxy_crit_disc.html
         - text: "respR: Comparisons with other R packages"
-          href: articles/packages_comp.html
+          href: articles/archive/packages_comp.html
         - text: "respR: When to use respR"
-          href: articles/usage.html
+          href: articles/archive/usage.html
 

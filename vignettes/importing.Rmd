@@ -20,7 +20,7 @@ opts_chunk$set(collapse = TRUE,
                tidy = TRUE, 
                highlight = TRUE, 
                fig.width = 6, 
-               fig.height = 4,
+               fig.height = 5,
                fig.align = "center")
 ```
 
@@ -74,6 +74,20 @@ This function requires only a single input, the path to the file. Everything els
 `import_file` supports several systems at present, including Firesting, Pyro, PreSens, MiniDOT, Loligo Witrox, Vernier and more. See `import_file()` for full list. 
 
 Note however, some files may fail to import as expected because of structural or version differences we have not encountered. We would encourage users to [send us sample files for testing](mailto:nicholascarey@gmail.com), especially any they have problems with, or from systems we do not yet support. 
+
+## Import failures
+
+Oxygen probe system output formats are changed frequently, or may contain differences we have not been able to test for. If a file fails to import, please consider sending it to us by opening a [Github issue](https://github.com/januarharianto/respR/issues) or via [email](mailto:nicholascarey@gmail.com). The more files we have for testing, the more robust and useful the function becomes. 
+
+If you can't import the data via `import_file`, consider trying the following functions, which are the ones we use internally:
+
+- `read.csv()` - Also imports `.txt` files. The `nrows` and `skip` inputs are particularly useful.
+
+- `fread()` - In the `data.table` package. Also imports `.txt` files. Faster and more efficient than `read.csv`. Like `read.csv`, the `nrows` and `skip` inputs are particularly useful.
+
+- `read_excel` & `read_xlsx` - in the `read_excel` package. 
+
+- `readLines` - a powerful, but crude, tool that dumps the entire text content of files. Requires a lot of processing afterwards to get any useful data. A last resort option. 
 
 
 # `format_time()`
@@ -196,20 +210,6 @@ exp_notes <- data.frame(times = times, events = events)
 format_time(exp_notes, format = "HM")
 
 ```
-
-# Import failures
-
-Oxygen probe system output formats are changed frequently, or may contain differences we have not been able to test for. If a file fails to import, please consider sending it to us by opening a [Github issue](https://github.com/januarharianto/respR/issues) or via [email](mailto:nicholascarey@gmail.com). The more files we have for testing, the more robust and useful the function becomes. 
-
-If you can't import teh data via `import_file`, consider trying the following functions, which are the ones we use internally:
-
-- `read.csv()` - Also imports `.txt` files. The `nrows` and `skip` inputs are particularly useful.
-
-- `fread()` - In the `data.table` package. Also imports `.txt` files. Faster and more efficient than `read.csv`. Like `read.csv`, the `nrows` and `skip` inputs are particularly useful.
-
-- `read_excel` & `read_xlsx` - in the `read_excel` package. 
-
-- `readLines` - a powerful, but crude, tool that dumps the entire text content of files. Requires a lot of processing afterwards to get any useful data. A last resort option. 
 
 # Checking output and next steps
 
