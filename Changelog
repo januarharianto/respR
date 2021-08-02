@@ -16,6 +16,7 @@ NEW - these are the highlights. Add (just add, don't move) the most interesting 
 - Tested with R 4.1 and the new native pipes (`|>`)
 - Tested with Apple Silicon builds of R
 - Help documentation and vignettes rewritten and greatly expanded
+- `citation("respR")` returns the citation to the `respR` journal publication.
 
 
 Fixes and changes - General
@@ -41,10 +42,11 @@ Changes
 - NEW: `method` input. This sets the method to use to determine the critical oxygen value. At present either `"bsr"` for Broken-Stick or `"segmented"` for the Segmented method. Previously both were performed.
 - NEW: `thin` input. Defaults to 5000. This applies only to the Broken-Stick regression analysis. If the dataset is longer than this, this sets the number of rows to subsample it to before running the analysis. The BSR method is quite computationally intensive, so this speeds up the analysis. In testing, values above this have little effect on the result, but this may vary with different data. To prevent any subsampling and use the entire dataset enter this as `NULL`.
 
-- NEW: S3 Generics: `plot()` has the additional inputs `legend`, `quiet` and `choose`.
+- NEW: S3 Generics: `plot()` has the additional inputs `legend`, `quiet`, `rate.rev` and `choose`.
 - NEW: S3 Generics: `summary()` allows results to be exported via `export = TRUE`.
 
 - CHANGE: `parallel = FALSE` is now the default. Use `parallel = TRUE` if your datasets are particularly large, or the function is taking too long to process.
+- CHANGE: now plots uptake rates as negative in the rolling rate plot on a reversed y-axis. Plots look the same, except y-axis values are now negative. There is a `rate.rev` input to control this, for instance if you are using the function with existing positive rate values.
 - CHANGE: An increase to the internal `thin` value (see above) from 1000 to 5000 may mean results will differ slightly from the previous version (but should be more accurate).
 - CHANGE: Output has been completely restructured and elements renamed. Previous code used to extract results will likely now not work.
 
@@ -62,7 +64,7 @@ Changes
 - FIX: Fix for Pyro/Firesting numeric columns being imported as character when Firesting software replaces missing data with "---"
 
 ========================== format_time() ============================
-- CHANGE: numeric time column name changed from `elapsed` to `time.num` (elapsed is not a good term, esp. for non-english speakers)
+- CHANGE: numeric time column name changed from `elapsed` to `time.num`
 - FIX: fix for not appending new numeric time column onto a data.table
 - FIX: fix for data.frames columns being renamed on return (by using data.frame instead of cbind)
 - FIX: fix for not working with multiple date-time columns if one of them wasn't column 1
