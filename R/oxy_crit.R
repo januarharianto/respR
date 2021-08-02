@@ -515,8 +515,11 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
   # Plot 1 - Timeseries -----------------------------------------------------
   if(1 %in% choose) {
     if (!x$convert) {
+      ylim <- grDevices::extendrange(
+        r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
+      if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
       plot(x$dataframe, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-           panel.first = grid(lwd = .7), tck = tck)
+           panel.first = grid(lwd = .7), tck = tck, ylim=ylim)
       title(main = "Rate~Oxygen Timeseries", line = 0.5)
     } else {
       plot(x$dataframe, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
@@ -585,8 +588,11 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
 
   # Plot 2 - Segmented ------------------------------------------------------
   if(x$method == "segmented" && 2 %in% choose) {
+    ylim <- grDevices::extendrange(
+      r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
+    if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
     plot(x$df_rate_oxygen, col = c1, pch = pch, xlab = "", ylab = "", lwd = 2, cex = ptcex,
-         panel.first = grid(lwd = .7), tck = tck)
+         panel.first = grid(lwd = .7), tck = tck, ylim=ylim)
     # subsample fit model otherwise dahsed line type is too dense to see
     if (nrow(x$results$seg) > 1000)
       fitsub <- subsample(x$results$seg, length.out = 1000, plot = F)
