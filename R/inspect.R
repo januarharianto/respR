@@ -64,8 +64,8 @@
 #' A different `width` value can be passed to see how it affects estimation of
 #' the rolling rate. If axis labels obscure parts of the plot they can be
 #' suppressed using `legend = FALSE`. Suppress console output messages with
-#' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input
-#' can be used to examine each time~oxygen dataset.
+#' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input can
+#' be used to examine each time~oxygen dataset.
 #'
 #' ## Multiple Columns of Oxygen Data
 #'
@@ -118,12 +118,12 @@
 #' exact data values, and not make assumptions about data spacing or order.
 #' Therefore issues such as missing or NA/NaN values, duplicate or
 #' non-sequential time values, or uneven time spacing should not cause any
-#' erroneous results, as long as they do not occur over large regions of the
-#' data. `inspect` however outputs locations (row numbers) of where these issues
-#' occur (located in the `$locs` element of the output), allowing users to amend
-#' them before analysis. We would recommend that to be completely confident in
-#' any results from analysis of such data, and avoid obscure errors, these
-#' issues be addressed before proceeding.
+#' erroneous rate results, as long as they do not occur over large regions of
+#' the data. `inspect` however outputs locations (row numbers) of where these
+#' issues occur (located in the `$locs` element of the output), allowing users
+#' to amend them before analysis. We would strongly recommend that to be
+#' completely confident in any results from analysis of such data, and avoid
+#' obscure errors, these issues be addressed before proceeding.
 #'
 #' ## Output
 #'
@@ -157,8 +157,8 @@
 #'   plots timeseries data, plus plot of rolling rate. If multiple columns,
 #'   plots all timeseries data only.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different
-#'   `width` can also be passed in `plot()` commands on output objects.
+#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different `width`
+#'   can also be passed in `plot()` commands on output objects.
 #'
 #' @importFrom data.table data.table
 #' @export
