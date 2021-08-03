@@ -15,7 +15,7 @@
     <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
-    <updated>2021-08-03T15:48:23+00:00</updated>
+    <updated>2021-08-03T20:26:14+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -319,7 +319,7 @@
     </terms>
   </locale>
   <macro name="author-bib">
-    <names variable="composer" delimiter=", ">
+    <names variable="composer" font-weight="bold" delimiter=", ">
       <name font-weight="bold" and="symbol" delimiter-precedes-last="always" initialize-with="" name-as-sort-order="all"/>
       <substitute>
         <names variable="author"/>

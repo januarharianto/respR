@@ -8,6 +8,12 @@ vignette: >
   %\VignetteIndexEntry{oxy_crit: Critical oxygen analyses}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+zotero: true
+bibliography: references_oxycrit.bib
+csl: resprcsl.csl
+link-citations: true
+nocite: |
+  @dugglebyRegressionAnalysisNonlinear1984a; @leivaPhysiologicalResponsesGhost2015; @lightonThermolimitRespirometryObjective2004; @mangumResponsesAquaticInvertebrates1973a; @marshallEstimatingPhysiologicalTolerances2013; @monteiroCardiorespiratoryResponsesGraded2013; @muellerRegulationIndexNew2011; @muggeoModelingTemperatureEffects2008; @negreteMethodologicalEvaluationDetermination2019b; @nickersonEstimatingPhysiologicalThresholds1989; @reemeyerStandardizingDeterminationInterpretation2019a; @reganDonThrowFish2019; @reganRatesHypoxiaInduction2017; @rodgersDoubleWhammyNitrate2021a; @rogersNewAnalysisHypoxia2016a; @seibelOxygenSupplyCapacity2020; @seibelOxygenSupplyCapacity2021; @stinchcombeGeneticsEvolutionFunctionvalued2012; @tangRateOxygenConsumption1933; @ultschUtilityDeterminationCrit2019; @vanwinkleOxyconformersOxyregulatorsQuantitative1975; @woodFallacyCritAre2018; @yeagerPhysiologicalRegulationConformation1989
 ---
 
 ```{r setup, echo = F, message=FALSE}
@@ -28,90 +34,83 @@ opts_chunk$set(collapse = TRUE,
                                 digits = 5))
 ```
 
-# Introduction
+## Introduction
 
-Some species are *oxyconformers*, with their routine oxygen uptake rate directly proportional to the oxygen supply available from the environment. 
-So, for example, at 50\% oxygen their uptake rate will be half that at 100\% oxygen. Many species however are *oxyregulators*, and are able to regulate uptake and maintain routine rates as oxygen supply declines until some critical oxygen value (COV) is reached. The oxygen value below which routine uptake becomes unsustainable is termed the critical partial pressure of oxygen, or $P_{crit}$. 
-Historically, this was expressed in units of partial pressure of oxygen (e.g. kPa), but it is also commonly expressed in units of concentration. 
-Note however, the classification of species into strict oxyconformers and oxyregulators is simplistic; there is a continuum of responses between these extremes, and many intermediate cases (Mueller and Seymour, 2011). 
+Some species are *oxyconformers*, with their routine oxygen uptake rate directly proportional to the oxygen supply available from the environment. So, for example, at 50% oxygen their uptake rate will be half that at 100% oxygen. Many species however are *oxyregulators*, and are able to regulate uptake and maintain routine rates as oxygen supply declines until some critical oxygen value (COV) is reached. The oxygen value below which routine uptake becomes unsustainable is termed the critical partial pressure of oxygen, or $P_{crit}$. Historically, this was expressed in units of partial pressure of oxygen (e.g. kPa), but it is also commonly expressed in units of concentration. Note however, the classification of species into strict oxyconformers and oxyregulators is simplistic; there is a continuum of responses between these extremes, and many intermediate cases [@muellerRegulationIndexNew2011].
 
-$P_{crit}$ is typically determined in long duration, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber, and the resulting oxygen trace is used to identify the breakpoint in the relationship of uptake rate to oxygen concentration. 
+$P_{crit}$ is typically determined in long duration, closed respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber, and the resulting oxygen trace is used to identify the breakpoint in the relationship of uptake rate to oxygen concentration.
 
-# `oxy_crit`
+## `oxy_crit`
 
-`oxy_crit()` is the `respR` function that determines critical oxygen values. It accepts two forms of data input. 
+`oxy_crit()` is the `respR` function that determines critical oxygen values. It accepts two forms of data input.
 
-The first is the general structure that all other `respR` functions accept, a `data.frame` or `inspect` object containing paired values of time and oxygen pressure or concentration. For data frame inputs, if time and oxygen are not the first and second columns respectively, the columns can be specified with the `time` and `oxygen` inputs. For inspect objects, these will have been specified already.  These `time~oxygen` data are used to calculate a rolling rate of the specified `width`, the default being 0.1 or 10% of the width of the entire dataset. This rolling rate, similar to the lower panel in the `inspect` plot in the example [below](#inspect), is the data upon which the critical point analysis is conducted. 
+The first is the general structure that all other `respR` functions accept, a `data.frame` or `inspect` object containing paired values of time and oxygen pressure or concentration. For data frame inputs, if time and oxygen are not the first and second columns respectively, the columns can be specified with the `time` and `oxygen` inputs. For inspect objects, these will have been specified already. These `time~oxygen` data are used to calculate a rolling rate of the specified `width`, the default being 0.1 or 10% of the width of the entire dataset. This rolling rate, similar to the lower panel in the `inspect` plot in the example [below](#inspect), is the data upon which the critical point analysis is conducted.
 
-The second data input option is to enter a `data.frame` containing already calculated rates, paired with relevant oxygen values. These columns can be specified using the `rate` and `oxygen` inputs. In this case, the function does not calculate a rolling rate internally, and the critical point analysis is performed on the input data directly. 
+The second data input option is to enter a `data.frame` containing already calculated rates, paired with relevant oxygen values. These columns can be specified using the `rate` and `oxygen` inputs. In this case, the function does not calculate a rolling rate internally, and the critical point analysis is performed on the input data directly.
 
-## Methods
+### Methods
 
 The `oxy_crit()` function currently provides two methods to detect the breakpoint in the `rate~oxygen` relationship. With high-resolution, relatively non-noisy data these typically return similar results, but results may vary depending on the characteristics of the data.
 
-### Broken-stick
+#### Broken-stick
 
 `method = "bsr"`
 
-The first method is the "broken-stick" regression (BSR) approach adapted from [Yeager & Ultsch (1989)](), in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point.
-Two slightly different ways of reporting this breakpoint are detailed by Yeager & Ultsch; the *intercept* and *midpoint*. These are usually close in value, and `oxy_crit` returns both. 
+The first method is the "broken-stick" regression (BSR) approach adapted from @yeagerPhysiologicalRegulationConformation1989, in which two segments of the data are iteratively fitted and the intersection with the smallest sum of the residual sum of squares between the two linear models is the estimated critical point. Two slightly different ways of reporting this breakpoint are detailed by Yeager & Ultsch; the *intercept* and *midpoint*. These are usually close in value, and `oxy_crit` returns both.
 
-### Segmented {#seg}
+#### Segmented {#seg}
 
 `method = "segmented"`
 
-The second method is a wrapper for the "segmented regression" approach available as part of the [`segmented`](https://cran.r-project.org/web/packages/segmented/index.html) R package by Vito Muggeo ([2008]()). This estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the "gap" between the fitted lines. 
+The second method is a wrapper for the "segmented regression" approach available as part of the [`segmented`](https://cran.r-project.org/web/packages/segmented/index.html) R package by @muggeoModelingTemperatureEffects2008. This estimates the critical point by iteratively fitting two intersecting models and selecting the point that minimises the "gap" between the fitted lines.
 
-## Additional inputs
+### Additional inputs
 
-The function has the following additional inputs: 
+The function has the following additional inputs:
 
-### `width`
+#### `width`
 
-For data entered as `time` and `oxygen` values, this controls the width of the internally calculated rolling regression which provides the rates upon which the critical point analysis is conducted. The default is `0.1`, representing 10% of the length of the dataset and seems to perform well with most data we have tested it with. However, the `width` should be chosen carefully after experimenting with different values and examining the results. Too low a value and the rolling rate will be noisy making it more difficult to detect a critical breakpoint, too high and it will be oversmoothed. See [here]() for a discussion of the implications of overfitting rolling rates. This is an important analysis parameter with major implications for the output values and should be reported alongside the results. 
+For data entered as `time` and `oxygen` values, this controls the width of the internally calculated rolling regression which provides the rates upon which the critical point analysis is conducted. The default is `0.1`, representing 10% of the length of the dataset and seems to perform well with most data we have tested it with. However, the `width` should be chosen carefully after experimenting with different values and examining the results. Too low a value and the rolling rate will be noisy making it more difficult to detect a critical breakpoint, too high and it will be oversmoothed. See [here]() for a discussion of the implications of overfitting rolling rates. This is an important analysis parameter with major implications for the output values and should be reported alongside the results.
 
-### `thin`
+#### `thin`
 
-This affects the `"bsr"` method only, which is very computationally intensive. This will thin large datasets which take a prohibitively long time to process to more manageable lengths. This is entered as an integer value, and the data frame will be uniformly subsampled to this number of rows before analysis. The default value of 5000 has in testing provided a good balance between speed and results accuracy and repeatability. However, results may vary with different datasets, so users should experiment with varying the value. To perform no subsampling and use the entire dataset enter `thin = NULL`. It has no effect on datasets shorter than the `thin` input, or on the `"segmented"` method. As an example, on the `squid.rd` data no subsampling increases the processing time from ~6s to more than 60s, and outputs identical results. 
+This affects the `"bsr"` method only, which is very computationally intensive. This will thin large datasets which take a prohibitively long time to process to more manageable lengths. This is entered as an integer value, and the data frame will be uniformly subsampled to this number of rows before analysis. The default value of 5000 has in testing provided a good balance between speed and results accuracy and repeatability. However, results may vary with different datasets, so users should experiment with varying the value. To perform no subsampling and use the entire dataset enter `thin = NULL`. It has no effect on datasets shorter than the `thin` input, or on the `"segmented"` method. As an example, on the `squid.rd` data no subsampling increases the processing time from \~6s to more than 60s, and outputs identical results.
 
-### `parallel` 
+#### `parallel`
 
-Default is `FALSE`. This allows the use of parallel processing in running the analysis. If your dataset is particularly large or high resolution and analyses are taking a prohibitively long time to process try changing this to `TRUE`. Note, this option sometimes causes errors depending on the system or platform, so should only be used if it is really needed. 
+Default is `FALSE`. This allows the use of parallel processing in running the analysis. If your dataset is particularly large or high resolution and analyses are taking a prohibitively long time to process try changing this to `TRUE`. Note, this option sometimes causes errors depending on the system or platform, so should only be used if it is really needed.
 
-### `plot` 
+#### `plot`
 
-Default is `TRUE`. Controls if a plot is produced.  
+Default is `TRUE`. Controls if a plot is produced.
 
-# Example analysis
+## Example analysis
 
 Here we will run through an example critical oxygen value analysis of a dataset included with `respR`.
 
-## Data
+### Data
 
-The example data, `squid.rd`, contains data from an experiment on the market squid, *Doryteuthis opalescens*. More information about the data, including its source and methods, can be obtained with `?squid.rd`. 
+The example data, `squid.rd`, contains data from an experiment on the market squid, *Doryteuthis opalescens*. More information about the data, including its source and methods, can be obtained with `?squid.rd`.
 
 ```{r}
 squid.rd
 ```
 
-## Inspecting data {#inspect}
+### Inspecting data {#inspect}
 
-We can visualise and examine the dataset using the `inspect` function. 
+We can visualise and examine the dataset using the `inspect` function.
 
 ```{r}
 squid <- inspect(squid.rd)
 ```
 
-Note how the date are plotted against both time (bottom blue axis) and row index (top red axis), which in these data, recordings of oxygen once per second, happen to be equivalent. We can see from the bottom plot, a rolling rate across 10\% of the total data, that the uptake rate is relatively consistent to around row 12,000, after which it declines steadily.
-We cannot easily tell from these plots what oxygen concentration this occurs at. 
-For now, we can see the dataset is free of errors or issues, so we can pass the saved `squid` object to the dedicated `oxy_crit()` function. 
+Note how the date are plotted against both time (bottom blue axis) and row index (top red axis), which in these data, recordings of oxygen once per second, happen to be equivalent. We can see from the bottom plot, a rolling rate across 10% of the total data, that the uptake rate is relatively consistent to around row 12,000, after which it declines steadily. We cannot easily tell from these plots what oxygen concentration this occurs at. For now, we can see the dataset is free of errors or issues, so we can pass the saved `squid` object to the dedicated `oxy_crit()` function.
 
+### Critical oxygen value analyses
 
-## Critical oxygen value analyses
+We will process the squid data using both methods and compare the results.
 
-We will process the squid data using both methods and compare the results. 
-
-## Broken-stick analysis {#bsr}
+### Broken-stick analysis {#bsr}
 
 This is the default method, so does not need to be explicitly specified with the `method` input, and we will let the default `width = 0.1` be applied.
 
@@ -124,10 +123,9 @@ print(squid.bsr)
 plot(squid.bsr, quiet = TRUE)
 ```
 
-The output figure shows the two different BSR results, the *intercept* and *midpoint* critical oxygen values, indicated by horizontal lines against the original timeseries data and vertical lines on a `rate~oxygen` plot. In this case, the lines overlay each other, and the `print()` output shows that, in these data, both methods give virtually identical values for the critical oxygen concentration: 2.61 mg L^-1^. 
-We should note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the two different BSR methods may provide different results.
+The output figure shows the two different BSR results, the *intercept* and *midpoint* critical oxygen values, indicated by horizontal lines against the original timeseries data and vertical lines on a `rate~oxygen` plot. In this case, the lines overlay each other, and the `print()` output shows that, in these data, both methods give virtually identical values for the critical oxygen concentration: 2.61 mg L^-1^. We should note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the two different BSR methods may provide different results.
 
-#### Summary results
+##### Summary results
 
 Full analysis results can be seen using `summary()`.
 
@@ -135,21 +133,20 @@ Full analysis results can be seen using `summary()`.
 summary(squid.bsr)
 ```
 
-#### Changing the width
+##### Changing the width
 
-Let's change the `width` input to see how it affects the results. We'll try smaller and larger `width` values. We can also use `choose` to output only the rolling rate plot. 
+Let's change the `width` input to see how it affects the results. We'll try smaller and larger `width` values. We can also use `choose` to output only the rolling rate plot.
 
 ```{r message=FALSE, results='hide', fig.height=3}
 oxy_crit(squid, width = 0.05, choose = 2)
 oxy_crit(squid, width = 0.2, choose = 2)
 ```
 
-Note how the rolling rate plot with the higher width is much smoother, with a less pronounced breakpoint. Increasing the width by too much can smooth out critical breaks, which is the very thing that the function is trying to detect. We can see the smaller width gives a similar result as the default, while the larger width estimates the breakpoints as a slightly higher value. Therefore, in this case the default value of 0.1 seems to be appropriate and give reliable results. Again, this should be reported in the analysis methods alongside results. 
+Note how the rolling rate plot with the higher width is much smoother, with a less pronounced breakpoint. Increasing the width by too much can smooth out critical breaks, which is the very thing that the function is trying to detect. We can see the smaller width gives a similar result as the default, while the larger width estimates the breakpoints as a slightly higher value. Therefore, in this case the default value of 0.1 seems to be appropriate and give reliable results. Again, this should be reported in the analysis methods alongside results.
 
+### Segmented analysis
 
-## Segmented analysis
-
-Now we'll run the analysis using the `"segmented"` method, again with the default `width = 0.1`. 
+Now we'll run the analysis using the `"segmented"` method, again with the default `width = 0.1`.
 
 ```{r results='hide', fig.keep='none'}
 squid.seg <- oxy_crit(squid, method = "segmented")
@@ -160,11 +157,11 @@ print(squid.seg)
 plot(squid.seg, quiet = TRUE)
 ```
 
-For these particular data, we get the exact same result as the BSR method: 2.61 mg L^-1^. This will not be the case with every dataset. 
+For these particular data, we get the exact same result as the BSR method: 2.61 mg L^-1^. This will not be the case with every dataset.
 
 Note that the segmented method sometimes returns a different value when the exact same code is run. The differences are almost always minor. See the documentation for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package and publications by Muggeo for the details of why this is, but briefly, it stems from randomising the starting point for the initial analysis.
 
-#### Summary results
+##### Summary results
 
 Full analysis results can be seen using `summary()`.
 
@@ -172,7 +169,7 @@ Full analysis results can be seen using `summary()`.
 summary(squid.seg)
 ```
 
-#### Changing the width
+##### Changing the width
 
 Again, let's try different `width` inputs.
 
@@ -181,15 +178,13 @@ oxy_crit(squid, width = 0.05, method = "segmented", choose = 2)
 oxy_crit(squid, width = 0.2, method = "segmented", choose = 2)
 ```
 
-We can see again we get the same values as in the BSR method above. The higher width tends to oversmooth the rolling rate, and gives a slightly different result. 
+We can see again we get the same values as in the BSR method above. The higher width tends to oversmooth the rolling rate, and gives a slightly different result.
 
-## Use of existing rate data
+### Use of existing rate data
 
-The example above used raw `time~oxygen` data, and so the function calculated a rolling rate internally, then performed the breakpoint analysis on these data. 
-However, the function can accept already calculated `rate~oxygen` data, and the function will perform the analysis using these data directly. 
-These rates can be either absolute rates (i.e. whole specimen or whole chamber), or mass-specific rates; both will give identical critical value results. The rates can also be unitless rates, that is the rate values output by `respR` functions such as `calc_rate` and `auto_rate` before conversion to proper oxygen rate units, *or* rates already converted to units. As long as all rates are dimensionally equivalent, the critical oxygen analysis will output identical results. 
+The example above used raw `time~oxygen` data, and so the function calculated a rolling rate internally, then performed the breakpoint analysis on these data. However, the function can accept already calculated `rate~oxygen` data, and the function will perform the analysis using these data directly. These rates can be either absolute rates (i.e. whole specimen or whole chamber), or mass-specific rates; both will give identical critical value results. The rates can also be unitless rates, that is the rate values output by `respR` functions such as `calc_rate` and `auto_rate` before conversion to proper oxygen rate units, *or* rates already converted to units. As long as all rates are dimensionally equivalent, the critical oxygen analysis will output identical results.
 
-Here, we'll use the `"rolling"` method in `auto_rate()` to perform a rolling regression on the squid data to get a rolling rate, and we'll convert these to a mass-specific rate in `mlO2/h/g`. We'll pair these values in a data frame with a rolling mean of the oxygen value from the same window using the [`roll`](https://cran.r-project.org/web/packages/roll/index.html) package. 
+Here, we'll use the `"rolling"` method in `auto_rate()` to perform a rolling regression on the squid data to get a rolling rate, and we'll convert these to a mass-specific rate in `mlO2/h/g`. We'll pair these values in a data frame with a rolling mean of the oxygen value from the same window using the [`roll`](https://cran.r-project.org/web/packages/roll/index.html) package.
 
 This dataset will be shorter by the input `width` setting, because the rolling methods start at row `width/2` and run to `width/2` before the final row. There are ways of having these functions output results of the same length, but it necessarily involves using partial windows at the start and end of the data, and can give questionable results in these regions which adversely affect the analysis.
 
@@ -217,17 +212,17 @@ squid_oxy_rate <- data.frame(oxy,
                              rate)
 ```
 
-Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate` inputs to specify the columns. 
+Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate` inputs to specify the columns.
 
 ```{r}
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 ```
 
-Note that we get identical critical values as the analysis on `time~oxygen` data [above](#bsr), despite the very different rate values (y-axis) and the fact these are *mass-specific* rates. 
+Note that we get identical critical values as the analysis on `time~oxygen` data [above](#bsr), despite the very different rate values (y-axis) and the fact these are *mass-specific* rates.
 
-## Extracting results
+### Extracting results
 
-Results of `oxy_crit` analyses can be extracted from the results object. The critical oxygen value is in the `$crit` element. If the `"bsr"` method has been used it will contain both results, if the `"segmented"` method it is a single value. 
+Results of `oxy_crit` analyses can be extracted from the results object. The critical oxygen value is in the `$crit` element. If the `"bsr"` method has been used it will contain both results, if the `"segmented"` method it is a single value.
 
 ```{r}
 ## bsr results
@@ -257,64 +252,16 @@ seg_res <- summary(squid.seg, export = TRUE)
 seg_res
 ```
 
-# Which method to use
+## Which method to use
 
-With high resolution, non-noisy data the BSR and Segmented methods identify very similar, if not identical, critical oxygen values (COVs). This will vary with other data, and one of the methods might work better than the other depending on the characteristics of the data. Which to report should be informed after familiarisation with how they work and testing with the data. Most importantly analyses should be reported alongside parameters such as the width of the rolling regression. 
+With high resolution, non-noisy data the BSR and Segmented methods identify very similar, if not identical, critical oxygen values (COVs). This will vary with other data, and one of the methods might work better than the other depending on the characteristics of the data. Which to report should be informed after familiarisation with how they work and testing with the data. Most importantly analyses should be reported alongside parameters such as the width of the rolling regression.
 
-There are additional methods to identify critical breakpoints in time~oxygen data, such as the non-linear regression method of [Marshall et al. 2013](https://doi.org/10.1242/jeb.085712), and the α-method of [Seibel et al. 2021](https://doi.org/10.1242/jeb.242210). It is our plans to support these and others in updates to `oxy_crit`, as well as metrics which describe the degree of oxyregulation of a specimen in intermediate cases (e.g. Tang, 1933; Mueller & Seymour, 2011). 
+There are additional methods to identify critical breakpoints in time\~oxygen data, such as the non-linear regression method of @marshallEstimatingPhysiologicalTolerances2013, and the α-method of @seibelOxygenSupplyCapacity2021. It is our plans to support these and others in updates to `oxy_crit`, as well as metrics which describe the degree of oxyregulation of a specimen in intermediate cases e.g. [@tangRateOxygenConsumption1933; @muellerRegulationIndexNew2011].
 
-There is a huge literature (see [below](#refs)) and healthy debate about the use and application of $P_{crit}$, much of it very recent. Before running any COV analysis you should familiarise yourself with the literature, particularly critiques of the different methods, and their utility. 
+There is a huge literature (see [below](#refs)) and healthy debate about the use and application of $P_{crit}$, much of it very recent. Before running any COV analysis you should familiarise yourself with the literature, particularly critiques of the different methods, and their utility.
 
-We particularly recommend the recent debate by [Wood 2018](https://doi.org/10.1242/jeb.163717) and [Regan et al. 2019](https://doi.org/10.1242/jeb.200253), and also [Ultsch & Regan, 2019](https://doi.org/10.1242/jeb.203646). Also be sure to check out the latest developments by [Seibel et al. 2021](https://doi.org/10.1242/jeb.242210).
+We particularly recommend the recent debate by @woodFallacyCritAre2018 and @reganDonThrowFish2019, and also @ultschUtilityDeterminationCrit2019. Also be sure to check out the latest developments by @seibelOxygenSupplyCapacity2021.
 
-An important point to note is that $P_{crit}$ and COVs are most frequently used as a *comparative* metric. Since analytical options chosen by the investigator such as regression width inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than consideration of the ultimate COVs *per se*. 
-Therefore, it is important that investigators fully report the parameters under which these analyses have been conducted. 
-This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to judge if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward - see `vignette("reproducibility")`.
+An important point to note is that $P_{crit}$ and COVs are most frequently used as a *comparative* metric. Since analytical options chosen by the investigator such as regression width inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than consideration of the ultimate values *per se*. Therefore, it is important that investigators fully report the parameters under which these analyses have been conducted. This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to judge if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward - see `vignette("reproducibility")`.
 
-# References {#refs}
-
-**Duggleby, Ronald G., 1984.** Regression Analysis of Nonlinear Arrhenius Plots: An Empirical Model and a Computer Program, *Computers in Biology and Medicine*, 14(4), 447–55 https://doi.org/10.1016/0010-4825(84)90045-3
-
-**Leiva, Félix P., Mauricio A. Urbina, Juan Pablo Cumillaf, Paulina Gebauer, and Kurt Paschke, 2015.** Physiological Responses of the Ghost Shrimp Neotrypaea Uncinata (Milne Edwards 1837) (Decapoda: Thalassinidea) to Oxygen Availability and Recovery after Severe Environmental Hypoxia, *Comparative Biochemistry and Physiology Part A: Molecular & Integrative Physiology*, 189, 30–37 https://doi.org/10.1016/j.cbpa.2015.07.008
-
-**Lighton, J. R. B., and Robbin J Turner, 2004.** Thermolimit Respirometry: An Objective Assessment of Critical Thermal Maxima in Two Sympatric Desert Harvester Ants, Pogonomyrmex Rugosus and P. Californicus, *Journal of Experimental Biology*, 207(11), 1903–13 https://doi.org/10.1242/jeb.00970
-
-**Mangum, Charlotte, and Webster Van Winkle, 1973.** Responses of Aquatic Invertebrates to Declining Oxygen Conditions, *American Zoologist*, 13(2), 529–41 https://doi.org/10.1093/icb/13.2.529
-
-**Marshall, Dustin, Michael Bode, and Craig R. White, 2013.** Estimating Physiological Tolerances - a Comparison of Traditional Approaches to Nonlinear Regression Techniques, *Journal of Experimental Biology*, jeb.085712 https://doi.org/10.1242/jeb.085712
-
-**Monteiro, Diana Amaral, Juliana Montovani Thomaz, Francisco Tadeu Rantin, and Ana Lúcia Kalinin, 2013.** Cardiorespiratory Responses to Graded Hypoxia in the Neotropical Fish Matrinxã (Brycon Amazonicus) and Traíra (Hoplias Malabaricus) after Waterborne or Trophic Exposure to Inorganic Mercury, *Aquatic Toxicology*, 140–141, 346–55 https://doi.org/10.1016/j.aquatox.2013.06.011
-
-**Mueller, Casey A., and Roger S. Seymour, 2011.** The Regulation Index: A New Method for Assessing the Relationship between Oxygen Consumption and Environmental Oxygen, *Physiological and Biochemical Zoology*, 84(5), 522–32 https://doi.org/10.1086/661953
-
-**Muggeo, Vito M. R., 2008.** Modeling Temperature Effects on Mortality: Multiple Segmented Relationships with Common Break Points, *Biostatistics*, 9(4), 613–20 https://doi.org/10.1093/biostatistics/kxm057
-
-**Negrete, Benjamin, and Andrew J. Esbaugh, 2019.** A Methodological Evaluation of the Determination of Critical Oxygen Threshold in an Estuarine Teleost, *Biology Open*, bio.045310 https://doi.org/10.1242/bio.045310
-
-Nickerson, David M., Douglas E. Facey, and Gary D. Grossman, 1989.** Estimating Physiological Thresholds with Continuous Two-Phase Regression, *Physiological Zoology*, 62(4),866–87 https://doi.org/10.1086/physzool.62.4.30157934
-
-**Reemeyer, Jessica E., and Bernard B. Rees, 2019.** Standardizing the Determination and Interpretation of PCrit in Fishes, *Journal of Experimental Biology*, jeb.210633 https://doi.org/10.1242/jeb.210633
-
-**Regan, Matthew D., Milica Mandic, Rashpal S. Dhillon, Gigi Y. Lau, Anthony P. Farrell, Patricia M. Schulte, Brad A. Seibel, Neb Speers-Roesch, Gordon R. Ultsch, Jeffrey G. Richards, 2019.** Don't Throw the Fish out with the Respirometry Water, *Journal of Experimental Biology*, 222(6), jeb200253 https://doi.org/10.1242/jeb.200253
-
-**Regan, Matthew D., and Jeffrey G. Richards, 2017**. Rates of Hypoxia Induction Alter Mechanisms of O2 Uptake and the Critical O2 Tension of Goldfish, *The Journal of Experimental Biology*, 220(14), 2536–44 https://doi.org/10.1242/jeb.154948
-
-**Rodgers, Essie M., April Grace R. Opinion, Daniel F. Gomez Isaza, Božidar Rašković, Vesna Poleksić, and Gudrun De Boeck, 2021.** Double Whammy: Nitrate Pollution Heightens Susceptibility to Both Hypoxia and Heat in a Freshwater Salmonid, *Science of The Total Environment*, 765, 142777 https://doi.org/10.1016/j.scitotenv.2020.142777
-
-**Rogers, Nicholas J., Mauricio A. Urbina, Erin E. Reardon, David J. McKenzie, and Rod W. Wilson, 2016.** A New Analysis of Hypoxia Tolerance in Fishes Using a Database of Critical Oxygen Level ( Pcrit ), *Conservation Physiology*, 4(1) https://doi.org/10.1093/conphys/cow012
-
-**Seibel, Brad A., Alyssa Andres, Matthew A. Birk, Alexandra L. Burns, C. Tracy Shaw, Alexander W. Timpe, Christina J. Welsh, 2021.** Oxygen Supply Capacity Breathes New Life into Critical Oxygen Partial Pressure (Pcrit), *Journal of Experimental Biology*, 224(8) https://doi.org/10.1242/jeb.242210
-
-**Seibel, Brad A., and Curtis Deutsch, 2020.** Oxygen Supply Capacity in Animals Evolves to Meet Maximum Demand at the Current Oxygen Partial Pressure Regardless of Size or Temperature, *Journal of Experimental Biology*, jeb.210492 https://doi.org/10.1242/jeb.210492
-
-**Stinchcombe, John R., and Mark Kirkpatrick, 2012.** Genetics and Evolution of Function-Valued Traits: Understanding Environmentally Responsive Phenotypes, *Trends in Ecology & Evolution*, 27(11), 637–47 https://doi.org/10.1016/j.tree.2012.07.002
-
-**Tang, Pei-Sung, 1933.** On the Rate of Oxygen Consumption by Tissues and Lower Organisms as a Function of Oxygen Tension, *The Quarterly Review of Biology*, 8(3), 260–74 https://doi.org/10.1086/394439
-
-**Ultsch, Gordon R., and Matthew D. Regan, 2019.** The Utility and Determination of PCrit in Fishes, *Journal of Experimental Biology*, 222(22), jeb203646 https://doi.org/10.1242/jeb.203646
-
-**van Winkle, Webster, and Charlotte Mangum, 1975.** Oxyconformers and Oxyregulators: A Quantitative Index, *Journal of Experimental Marine Biology and Ecology*, 17(2), 103–10 https://doi.org/10.1016/0022-0981(75)90025-8
-
-**Wood, Chris M., 2018.** The Fallacy of the PCrit – Are There More Useful Alternatives?, *Journal of Experimental Biology*, 221(22), jeb163717 https://doi.org/10.1242/jeb.163717
-
-**Yeager, Dorian P., and Gordon R. Ultsch, 1989.** Physiological Regulation and Conformation: A BASIC Program for the Determination of Critical Points, *Physiological Zoology*, 62(4), 888–907 https://doi.org/10.1086/physzool.62.4.30157935
+## References {#refs}

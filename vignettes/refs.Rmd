@@ -10,6 +10,12 @@ vignette: >
   %\VignetteIndexEntry{References}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+zotero: true
+bibliography: references_refs.bib
+csl: resprcsl.csl
+link-citations: true
+nocite: |
+  @leclercqMeasurementOxygenMetabolism1999; @lightonMeasuringMetabolicRates2008; @marshallEstimatingPhysiologicalTolerances2013; @morozovFishRespPackageGUI2019; @muggeoEstimatingRegressionModels2003; @muggeoModelingTemperatureEffects2008; @raykarFastOptimalBandwidth2006; @sheatherReliableDataBasedBandwidth1991; @silvermanDensityEstimationStatistics1986; @smithjrFoodEnergySupply1987; @steffensenErrorsRespirometryAquatic1989; @stoffelsPhysiologicalTradeOffsFastSlow2015; @svendsenDesignSetupIntermittentflow2016; @whiteDeterminantsInterspecificVariation2013; @yeagerPhysiologicalRegulationConformation1989; @zivotModelingFinancialTime2006; @killenGuidelinesReportingMethods2021; @jonesBriefSurveyBandwidth1996; @gambleOpentopStaticRespirometry2014; @clarkAerobicScopeMeasurements2013; @careySeaUrchinsHighCO2016
 ---
 
 ```{r setup, include = FALSE}
@@ -21,71 +27,31 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo = F, out.width = "200px", fig.align = "center", out.width= "20%", out.extra='style="float:right; padding:10px"'}
 knitr::include_graphics("img/mee_cover.jpg")
 ```
-`respR` has been peer reviewed and published. Please cite this paper if you use it in your work:  
-&nbsp;  
 
+`respR` has been peer reviewed and published. Please cite this paper if you use it in your work:\
+ 
 
-Harianto, J., Carey, N., & Byrne, M. respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912–920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
+Harianto, J., Carey, N., & Byrne, M. respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912--920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
 
-
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
+ \
+ \
+ \
+ 
 
 ## See also
 
 These packages may also help you analyse respirometry data:
 
-- [FishResp](https://fishresp.org) - Sergey Morozov
-- [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
-- [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
-- [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
-- [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
+-   [FishResp](https://fishresp.org) - Sergey Morozov
+-   [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
+-   [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
+-   [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
+-   [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
-Also be sure to check out the [FishResp](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building systems at a fraction of the cost of commercial systems. 
+Also be sure to check out the [FishResp](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.
 
 ## References
 
-The following publications were instrumental in developing `respR` and writing the vignettes on this site.   
-&nbsp;  
-
-Carey, N., Harianto, J., & Byrne, M. (2016). Sea urchins in a high-CO2 world: partitioned effects of body size, ocean warming and acidification on metabolic rate. The Journal of Experimental Biology, 219(8), 1178–86. [doi: 10.1242/jeb.136101](https://doi.org/10.1242/jeb.136101)
-
-Clark, T. D., Sandblom, E., & Jutfelt, F. (2013). Aerobic scope measurements of fishes in an era of climate change: respirometry, relevance and recommendations. *Journal of Experimental Biology*, 216(15), 2771–2782. [doi: 10.1242/Jeb.084251](https://doi.org/10.1242/Jeb.084251)
-
-Gamble, S., Carton, A. G., & Pirozzi, I. (2014). Open-top static respirometry is a reliable method to determine the routine metabolic rate of barramundi, Lates calcarifer. *Marine and Freshwater Behaviour and Physiology*, 47(1), 19–28. [doi: 10.1080/10236244.2013.874119](https://doi.org/10.1080/10236244.2013.874119)
-
-Killen, S., Christensen, E., Cortese, D., Zavorka, L., Norin, T., Cotgrove, L., Crespel, A. Munson, A., Nati, J.J.H., Papatheodoulou, M., & McKenzie, D.J. (2021). Guidelines for reporting methods to estimate metabolic rates by aquatic intermittent-flow respirometry. *EcoEvoRxiv*. [doi: 10.32942/osf.io/gnzh7](https://doi.org/10.32942/osf.io/gnzh7)
-
-Leclercq, N., Gattuso, J.-P. & Jaubert, J. (1999). Measurement of oxygen metabolism in open-top aquatic mesocosms: Application to a coral reef community. *Marine Ecology Progress Series*, 177, 299–304. [doi: 10.3354/meps177299](https://doi.org/10.3354/meps177299)
-
-Lighton, J.R.B. (2008). Measuring Metabolic Rates: A Manual for Scientists. Oxford University Press, USA.
-
-Morozov S., McCairns R.J.S., Merilä J. (2019) FishResp: R package and GUI application for analysis of aquatic respirometry data. *Conservation Physiology* 7(1). [doi:10.1093/conphys/coz003](https://doi.org/10.1093/conphys/coz003)
-
-Muggeo, V.M.R. (2003). Estimating regression models with unknown break-points. *Statistics in Medicine*, 22, 3055–3071. [doi: 10.1002/sim.1545](https://doi.org/10.1002/sim.1545)
-
-Muggeo, V. (2008). Segmented: An R package to fit regression models with broken-line relationships. R News, 8, 20–25.
-
-Silverman, B.W. (1986). Density Estimation for Statistics and Data Analysis. Chapman; Hall/CRC Press.
-
-Smith Jr, K.L. (1987). Food energy supply and demand: A discrepancy between particulate organic carbon flux and sediment community oxygen consumption in the deep ocean. *Limnology and Oceanography*, 32(1). [doi: 10.4319/lo.1987.32.1.0201](http://doi.wiley.com/10.4319/lo.1987.32.1.0201)
-
-Steffensen, J.F. (1989). Some errors in respirometry of aquatic breathers: How to avoid and correct for them. *Fish Physiology and Biochemistry*, 6(1), 49–59. [doi: 10.1007/BF02995809](https://doi.org/10.1007/BF02995809)
-
-Stoffels, R.J. (2015). Physiological trade-offs along a fast-slow lifestyle continuum in fishes: what do they tell us about resistance and resilience to hypoxia? PLOS ONE, 10(6), e0130303. [doi: 10.1371/journal.pone.0130303](https://doi.org/10.1371/journal.pone.0130303)
-
-Svendsen, M.B.S., Bushnell, P.G. & Steffensen, J.F. (2016). Design and setup of intermittent-flow respirometry system for aquatic organisms. *Journal of Fish Biology*, 88, 26–50. [doi: 10.1111/jfb.12797](https://doi.org/10.1111/jfb.12797)
-
-White, C.R. & Kearney, M.R. (2013). Determinants of inter-specific variation in basal metabolic rate. *Journal of Comparative Physiology B: Biochemical, Systemic, and Environmental Physiology*, 183, 1–26. [doi: 10.1007/s00360-012-0676-5](https://doi.org/10.1007/s00360-012-0676-5)
-
-Yeager, D.P. & Ultsch, G.R. (1989). Physiological regulation and conformation: A BASIC program for the determination of critical points. *Physiological Zoology*, 62, 888–907. [doi: 10.1086/physzool.62.4.30157935](https://doi.org/10.1086/physzool.62.4.30157935)
-
-Jones, M. C., Marron, J. S., & Sheather, S. J. (1996). A Brief Survey of Bandwidth Selection for Density Estimation. Journal of the American Statistical Association, 91(433), 401–407. doi:10.1080/01621459.1996.10476701
-
-Raykar, V., & Duraiswami, R. (2006). Fast optimal bandwidth selection for kernel density estimation. In Proceedings of the Sixth SIAM International Conference on Data Mining (Vol. 2006). doi:10.1137/1.9781611972764.53
-
-Sheather, S. J., & Jones, M. C. (1991). A Reliable Data-Based Bandwidth Selection Method for Kernel Density Estimation. Journal of the Royal Statistical Society. Series B (Methodological), 53(3), 683–690.
-
-Zivot, E., & Wang, J. (2006). Modeling Financial Time Series with S-PLUS (2nd ed.). New York: Springer-Verlag.
+The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here]() for references specific to critical oxygen analyses.
+ \
+ \
