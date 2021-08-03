@@ -72,6 +72,21 @@ sardine_new <- cbind(sardine.rd,
 sardine_new
 ```
 
+Alternatively, the `value.out` input to `convert_DO` can be used to make it output numeric converted values rather than a `list` object.
+
+```{r echo = T, tidy = F}
+conv <- convert_DO(sardine.rd$Oxygen, # data to convert
+                   from = "%Air",     # oxygen unit to convert from
+                   to = "mmol/kg",    # oxygen unit to convert to
+                   t = 15,            # in C
+                   S = 35,            # in ppt
+                   P = 1.013,
+                   value.out = TRUE)         # in bar
+
+head(conv)
+```
+
+
 ### Percent oxygen saturation
 
 Note the difference between percent air saturation (`%Air`), where air saturated water is ~100%, and percent oxygen saturation (`%O2`), where air saturated water is ~20.946% *oxygen* saturated. In other words, ` %O2 = %Air * 0.20946 `. Some oxygen probe systems output in both units, or tend to use one over the other, so take care not to confuse them. 
@@ -85,7 +100,7 @@ convert_DO(100, "%Air", "%O2",
 
 ## Example 2 - Oxygen pressure units
 
-`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `mmol/kg` column we just added, using `$output` to extract the values directly. 
+`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `mmol/kg` column we just added, using the `value.out` input to output numeric values.
 
 ```{r tidy = F}
 sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,  
@@ -93,12 +108,13 @@ sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,
                               to = "hPa",  
                               t = 15,            
                               S = 35,            
-                              P = 1.013)$output     
+                              P = 1.013,
+                              value.out = TRUE)     
 
 sardine_new
 ```
 
-Note, how the `from` unit is still recognised. Unit conversions in `respR` use a very forgiving, fuzzy algorithm to recognise different variations of units. 
+Note, how the `from` unit is still recognised. Unit conversions in `respR` use a very forgiving, fuzzy algorithm to recognise different variations of unit strings. 
 
 ## Example 3 - Converting single values
 

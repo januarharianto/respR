@@ -43,6 +43,8 @@ These packages may also help you analyse respirometry data:
 - [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 - [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
+Also be sure to check out the [FishResp](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building systems at a fraction of the cost of commercial systems. 
+
 ## References
 
 The following publications were instrumental in developing `respR` and writing the vignettes on this site.   
@@ -79,3 +81,11 @@ Svendsen, M.B.S., Bushnell, P.G. & Steffensen, J.F. (2016). Design and setup of 
 White, C.R. & Kearney, M.R. (2013). Determinants of inter-specific variation in basal metabolic rate. *Journal of Comparative Physiology B: Biochemical, Systemic, and Environmental Physiology*, 183, 1–26. [doi: 10.1007/s00360-012-0676-5](https://doi.org/10.1007/s00360-012-0676-5)
 
 Yeager, D.P. & Ultsch, G.R. (1989). Physiological regulation and conformation: A BASIC program for the determination of critical points. *Physiological Zoology*, 62, 888–907. [doi: 10.1086/physzool.62.4.30157935](https://doi.org/10.1086/physzool.62.4.30157935)
+
+Jones, M. C., Marron, J. S., & Sheather, S. J. (1996). A Brief Survey of Bandwidth Selection for Density Estimation. Journal of the American Statistical Association, 91(433), 401–407. doi:10.1080/01621459.1996.10476701
+
+Raykar, V., & Duraiswami, R. (2006). Fast optimal bandwidth selection for kernel density estimation. In Proceedings of the Sixth SIAM International Conference on Data Mining (Vol. 2006). doi:10.1137/1.9781611972764.53
+
+Sheather, S. J., & Jones, M. C. (1991). A Reliable Data-Based Bandwidth Selection Method for Kernel Density Estimation. Journal of the Royal Statistical Society. Series B (Methodological), 53(3), 683–690.
+
+Zivot, E., & Wang, J. (2006). Modeling Financial Time Series with S-PLUS (2nd ed.). New York: Springer-Verlag.

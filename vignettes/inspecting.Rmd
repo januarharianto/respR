@@ -212,7 +212,7 @@ This check is performed on the `time` column only.
 
 Numeric time values are expected to be sequential, that is increasing in value. A failure of this check could be an indication of problems importing the file or of converting date-time values to numeric time using `format_time()` or other methods. This check helps flag up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem that needs investigating. 
 
-A warning here is not necessarily a major issue. `respR` relies on linear regressions on time~oxygen paired data values to calculate rates. The order of these are not important when fitting linear regressions; so as long as the correct time values are paired with the correct oxygen values, the rate results will be identical. However, to be fully confident in results and avoid obscure errors, we would recommend the data be amended to be sequential. 
+Non-sequential time values could cause unknown issues, so to be fully confident in results and avoid obscure errors, we would strongly recommend the data be amended to be sequential. 
 
 ## Example
 
@@ -288,7 +288,7 @@ This check is performed on the `time` column only.
 
 Duplicate time values can result from rounding time values, or the system accidentally recording two values close together, or some other issues causing values to be repeated or duplicated. 
 
-As with [non-sequential time](#seqcheck), this warning is not necessarily a major issue. `respR` relies on linear regressions on time~oxygen paired data values to calculate rates. When fitting linear regressions, duplicates will not affect results so as long as the data are genuine values. However, the check flags up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem. 
+This warning is not necessarily a major issue. `respR` relies on linear regressions on time~oxygen paired data values to calculate rates. When fitting linear regressions, duplicates will not affect results so as long as the data are genuine values. However, the check flags up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem. 
 
 ## Example 1
 

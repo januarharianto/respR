@@ -2,10 +2,10 @@
 <style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
   <!-- This style was edited with the Visual CSL Editor (https://editor.citationstyles.org/visualEditor/) -->
   <info>
-    <title>American Psychological Association 7th edition</title>
+    <title>csl.for.respr.csl</title>
     <title-short>APA</title-short>
-    <id>http://www.zotero.org/styles/american-psychological-association-7th-edition</id>
-    <link href="http://www.zotero.org/styles/american-psychological-association-7th-edition" rel="self"/>
+    <id>http://www.zotero.org/styles/cslforresprcsl</id>
+    <link href="http://www.zotero.org/styles/cslforresprcsl" rel="self"/>
     <link href="http://www.zotero.org/styles/apa-6th-edition" rel="template"/>
     <link href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" rel="documentation"/>
     <author>
@@ -15,7 +15,7 @@
     <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
-    <updated>2021-06-24T17:23:22+00:00</updated>
+    <updated>2021-08-03T15:48:23+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
@@ -1344,7 +1344,7 @@
         <choose>
           <if variable="volume">
             <group>
-              <text variable="volume" font-style="italic"/>
+              <text variable="volume" font-style="normal"/>
               <text variable="issue" prefix="(" suffix=")"/>
             </group>
           </if>
