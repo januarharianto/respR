@@ -23,8 +23,8 @@ plot as proportion of total length of data (0.01 to 1).}
 plots timeseries data, plus plot of rolling rate. If multiple columns,
 plots all timeseries data only.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different
-\code{width} can also be passed in \code{plot()} commands on output objects.}
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
+can also be passed in \code{plot()} commands on output objects.}
 }
 \description{
 \code{inspect()} is a data exploration and preparation function that visualises
@@ -94,8 +94,8 @@ on the plot.
 A different \code{width} value can be passed to see how it affects estimation of
 the rolling rate. If axis labels obscure parts of the plot they can be
 suppressed using \code{legend = FALSE}. Suppress console output messages with
-\code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input
-can be used to examine each time~oxygen dataset.
+\code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input can
+be used to examine each time~oxygen dataset.
 }
 
 \subsection{Multiple Columns of Oxygen Data}{
@@ -151,12 +151,12 @@ analysis of the data. \code{respR} has been coded to rely on linear regressions 
 exact data values, and not make assumptions about data spacing or order.
 Therefore issues such as missing or NA/NaN values, duplicate or
 non-sequential time values, or uneven time spacing should not cause any
-erroneous results, as long as they do not occur over large regions of the
-data. \code{inspect} however outputs locations (row numbers) of where these issues
-occur (located in the \verb{$locs} element of the output), allowing users to amend
-them before analysis. We would recommend that to be completely confident in
-any results from analysis of such data, and avoid obscure errors, these
-issues be addressed before proceeding.
+erroneous rate results, as long as they do not occur over large regions of
+the data. \code{inspect} however outputs locations (row numbers) of where these
+issues occur (located in the \verb{$locs} element of the output), allowing users
+to amend them before analysis. We would strongly recommend that to be
+completely confident in any results from analysis of such data, and avoid
+obscure errors, these issues be addressed before proceeding.
 }
 
 \subsection{Output}{
