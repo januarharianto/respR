@@ -3,10 +3,10 @@
 cff-version: 1.2.0
 message: "If you use respR in your research, please cite it using this publication."
 authors:
-  - family-names: Carey
-    given-names: Nicholas
-  - family-names: Harianto
-    given-names: Januar
+  - family-names: "Carey"
+    given-names: "Nicholas"
+  - family-names: "Harianto"
+    given-names: "Januar"
 abstract: respR is a package for R that provides a structural, reproducible workflow for the processing and analysis of respirometry data. While the focus of the package is on aquatic respirometry, respR is largely unitless and so can process, explore, and determine rates from any respirometry data, and indeed linear relationships in any time-series data.
 title: respR - A package for processing and analysing respirometry data
 version: 2.0.0
@@ -17,6 +17,7 @@ keywords:
   - metabolism
   - oxygen
 license: "GPL-3"
+url: "https://github.com/januarharianto/respR"
 references:
   - type: article
     authors:
