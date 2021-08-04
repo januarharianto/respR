@@ -9,28 +9,9 @@ authors:
   - family-names: "Harianto"
     given-names: "Januar"
     orcid: "https://orcid.org/0000-0000-0000-0000"
-abstract: "respR is a package for R that provides a structural, reproducible workflow for the processing and analysis of respirometry data. While the focus of the package is on aquatic respirometry, respR is largely unitless and so can process, explore, and determine rates from any respirometry data, and indeed linear relationships in any time-series data."
 title: "respR - A package for processing and analysing respirometry data"
 version: 2.0.0
 doi: 10.1111/2041-210X.13162
 date-released: 2019-02-01
-keywords:
-  - respirometry
-  - metabolism
-  - oxygen
-license: "GPL-3"
 url: "https://github.com/januarharianto/respR"
-references:
-  - type: article
-    authors:
-      - Januar Harianto
-      - Nicholas Carey
-      - Maria Byrne
-    title: respR — An R package for the manipulation and analysis of respirometry data
-    journal: Methods in Ecology and Evolution
-    volume: 10
-    issue: 6
-    pages: 912-920
-    url: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162
-    doi: 10.1111/2041-210X.13162
 ...
