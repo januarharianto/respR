@@ -216,7 +216,8 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))
     abline(h = 0, lty = 2)
-    lines(
+    if(length(df$real) > 5)
+      lines(
       suppressWarnings(loess.smooth(df$real, (df$real - df$measured))),
       col = "black", lwd = 1.5
     )
