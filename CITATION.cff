@@ -16,13 +16,10 @@ title: "respR — An R package for the manipulation and analysis of respirometry
 version: 2.0.0
 doi: 10.1111/2041-210X.13162
 date-released: 2019-02-01
-url: "https://github.com/januarharianto/respR"
-references:
+url: "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162"
 type: article
 journal: Methods in Ecology and Evolution
 volume: 10
 issue: 6
 pages: 912-920
-url: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162
-doi: 10.1111/2041-210X.13162
 ...
