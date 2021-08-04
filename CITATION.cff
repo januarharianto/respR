@@ -5,10 +5,12 @@ message: "If you use respR in your research, please cite it using this publicati
 authors:
   - family-names: "Carey"
     given-names: "Nicholas"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
   - family-names: "Harianto"
     given-names: "Januar"
-abstract: respR is a package for R that provides a structural, reproducible workflow for the processing and analysis of respirometry data. While the focus of the package is on aquatic respirometry, respR is largely unitless and so can process, explore, and determine rates from any respirometry data, and indeed linear relationships in any time-series data.
-title: respR - A package for processing and analysing respirometry data
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+abstract: "respR is a package for R that provides a structural, reproducible workflow for the processing and analysis of respirometry data. While the focus of the package is on aquatic respirometry, respR is largely unitless and so can process, explore, and determine rates from any respirometry data, and indeed linear relationships in any time-series data."
+title: "respR - A package for processing and analysing respirometry data"
 version: 2.0.0
 doi: 10.1111/2041-210X.13162
 date-released: 2019-02-01
