@@ -1,7 +1,7 @@
 # YAML 1.2
 ---
 cff-version: 1.2.0
-message: "If you use respR in your research, please cite it using this publication."
+message: "If you use respR in your research, please cite it using this publication in Methods in Ecology and Evolution."
 authors:
   - family-names: "Carey"
     given-names: "Nicholas"
