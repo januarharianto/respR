@@ -1,4 +1,7 @@
-citHeader("To cite respR in publications use:")
+citHeader("Please cite respR in publications using the following journal article:
+
+Harianto, J., Carey, N. and Byrne, M. (2019). respR - An R package for the manipulation and analysis of respirometry data. Methods in Ecology and Evolution, 10(6), 912–920. doi: 10.1111/2041-210X.13162.
+url: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162")
 
 citEntry(
   entry    = "Article",
@@ -10,6 +13,7 @@ citEntry(
   number   = 6,
   pages    = "912-920",
   url      = "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162",
+  doi      = "10.1111/2041-210X.13162",
   textVersion = paste(
 
   )

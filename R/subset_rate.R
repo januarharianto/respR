@@ -287,7 +287,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   # index of rows which are unique
   ## note only columns 1:7 since 8 is 'density' if 'linear' method
   ## Revised this line because auto_rate summary columns were rejigged around
-  ## ¢density should occur on column 5, but only in auto_rate linear method
+  ## $density should occur on column 5, but only in auto_rate linear method
   ## objects. But this should still catch them all
   index_unique <- which(!duplicated(x$summary[,c(2:4,6:8)]))
 

@@ -25,14 +25,15 @@ Fixes and changes - General
 - FIX: Proper par() restoration behaviour. (Definitely fixed now - put them next to each other at start and use on.exit() to restore and it stills works if there is some sort of error that causes it to exit early). Unit tests for this added to all fns which plot too.
 
 Changes
-- CHANGE: S3 Generic functions (print, summary, plot) revised to work consistently, produce much cleaner, consistent outputs.
+- CHANGE: S3 Generic functions (print, summary, plot) revised to produce much cleaner, consistent outputs.
 - CHANGE: added `rank` column to all `$summary` tables as first column. Helps a lot with consistent S3 summary outputs and generally keeping track of selecting summary rows
-- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass or area specific.
+- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass- or area-specific.
 - CHANGE: Updated startup message for full MEE citation
 - CHANGE: changed dataframe in function outputs to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
 - CHANGE: For consistency, changed primary input from `df` to `x` where appropriate (auto_rate, inspect, inspect.ft, subsample) (this was inconsistent and often confusing, in that `df` often did not have to be a data frame, but could be `inspect` etc.)
 - CHANGE: The deprecated functions `inspect_data` and `pcrit` have been removed
 - CHANGE: Outputs (where relevant) have function call saved to `$call` element
+- CHANGE: Outputs (where relevant) have all inputs saved to `$inputs` element
 - CHANGE: Messages, warnings and errors now state what function they originate from (not always clear, especially in pipes)
 
 
@@ -40,7 +41,7 @@ Changes
 
 - NEW: This replaces the `calc_pcrit` function from v1.1
 - NEW: `method` input. This sets the method to use to determine the critical oxygen value. At present either `"bsr"` for Broken-Stick or `"segmented"` for the Segmented method. Previously both were performed.
-- NEW: `thin` input. Defaults to 5000. This applies only to the Broken-Stick regression analysis. If the dataset is longer than this, this sets the number of rows to subsample it to before running the analysis. The BSR method is quite computationally intensive, so this speeds up the analysis. In testing, values above this have little effect on the result, but this may vary with different data. To prevent any subsampling and use the entire dataset enter this as `NULL`.
+- NEW: `thin` input. Defaults to 5000. This applies only to the Broken-Stick regression analysis. If the dataset is longer than this, this determines the number of rows it is uniformly subsampled to before running the analysis. The BSR method is quite computationally intensive, so this speeds it up. In testing, values above this have little effect on the result, but this may vary with different data. To prevent any subsampling and use the entire dataset enter this as `NULL`.
 
 - NEW: S3 Generics: `plot()` has the additional inputs `legend`, `quiet`, `rate.rev` and `choose`.
 - NEW: S3 Generics: `summary()` allows results to be exported via `export = TRUE`.
@@ -109,7 +110,7 @@ Changes
 - Old methods ('min', 'max') still produce same results as old code but have a prominent warning. Will properly deprecate in later version.
 - NEW: added the Kernel Density metric '$density' to the '$summary' table for the 'linear' method. This allows you to see how the results are ranked in regards to KDE (also added for other methods, but as an empty column)
 - NEW: Plot updated with title showing which Rank current plot is. Also now plots oxygen and rate against both time and row index.
-- NEW: plot has `rate.rev` input controlling plotting of the y-axis of the rolling rate plot. Default is `TRUE`, which means oxygen uptake rates will appear higher on the plot despite being lower numerically (i.e. more negative). Change this to `FALSE` to plot strictly numerically, if for instance youa re examining oxygen production so that higher production rates are higher.
+- NEW: plot has `rate.rev` input controlling plotting of the y-axis of the rolling rate plot. Default is `TRUE`, which means oxygen uptake rates will appear higher on the plot despite being lower numerically (i.e. more negative). Change this to `FALSE` to plot strictly numerically, if for instance you are examining oxygen production so that higher production rates are higher.
 - NEW: S3 Generics: `plot()` has the additional inputs `choose` to plot selected panels, and `legend` to suppress the legend and other labels.
 
 - FIX: plot() works correctly on `auto_rate` objects (missing #' @export)
@@ -132,7 +133,7 @@ Changes
 - NEW: can now output oxygen used in moles e.g. "molO2/day/kg"
 - CHANGE: o2.unit = NULL and time.unit = NULL now stop function instead of applying a default unit
 - CHANGE: Now applies a default output unit for mass- and area specific rates as well as absolute rates.
-- CHANGE: $output.unit oxygen amount component now has "O2" appended. e.g. mgO2/h/g, umolO2/day/m2 (done at end of code, does not affect any conversions).
+- CHANGE: $output.unit oxygen amount component now has "O2" appended to ensure it is not confused with the mass-specific component. e.g. mgO2/h/mg, umolO2/day/m2 (done at end of code, does not affect any conversions).
 - CHANGE: outputs renamed (e.g. `$output` to `$rate.output`, `$absolute` to `$rate.absolute` etc.). Did not affect code anywhere else since this is last function, but may affect users 1.x code for extracting/saving results.
 
 
@@ -140,7 +141,7 @@ Changes
 - NEW: Added support for % oxygen saturation ('%O2') units. % air saturation is now '%Air' and the previous '%' operator for this has been deprecated.
 - NEW: Added `value.out` input. If `value.out = TRUE`, the converted values are output as a numeric vector, rather than within a `list` object.
 - CHANGE: Removed ability to accept objects of class `calc_rate`, `auto_rate` or `adjust_rate`. This didn't make any sense in this function as rates are not a DO measure!
-- CHANGE: Added warning for 'P' atmospheric pressure values being outside realistic range
+- CHANGE: Added warning for 'P' atmospheric pressure values being outside a realistic range
 - FIX: Fix for error with non-numeric x inputs
 
 
@@ -208,12 +209,12 @@ The change will mean with some data it will give different results than the old 
 - CHANGE: flowthrough.rd amended to make delta column (i.e. rates) negative values
 
 NEW: new example datasets
+- `background_con.rd` - constant level background, for testing new background correction functionality
 - `background_lin.rd` - linear increasing background, for testing new background correction functionality
 - `background_exp.rd` - exponential increasing background, for testing new background correction functionality
 - `flowthrough_mult.rd` - multiple column flowthrough data
 - `flowthrough_sim.rd` - flowthrough data with increasing background recording
 - `algae.rd` - oxygen production data
-
 
 
 ========================== internals ============================
