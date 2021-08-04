@@ -1,7 +1,7 @@
 # YAML 1.2
 ---
 cff-version: 1.2.0
-message: If you use respR in your research, please cite it using this publication in Methods in Ecology and Evolution.
+message: "If you use respR in your research, please cite it using this publication in Methods in Ecology and Evolution."
 authors:
   - family-names: "Carey"
     given-names: "Nicholas"
@@ -17,9 +17,11 @@ version: 2.0.0
 doi: 10.1111/2041-210X.13162
 date-released: 2019-02-01
 url: "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162"
-type: article
-journal: Methods in Ecology and Evolution
-volume: 10
-issue: 6
-pages: 912-920
+references:
+  - type: article
+    authors:
+      - Januar Harianto
+      - Nicholas Carey
+      - Maria Byrne
+    title: respR — An R package for the manipulation and analysis of respirometry data
 ...
