@@ -217,13 +217,13 @@ convert_rate.ft <- function(x,
   # Convert DO unit first
   if (A %in% c("mmol.o2", "umol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
-    RO2 <- adjust_scale(RO2$output, "mmol.o2", A)
+    RO2 <- adjust_scale(RO2, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {
     RO2 <- convert_DO(rate, oxy, "mg/L", S, t, P)
-    RO2 <- adjust_scale(RO2$output, "mg.o2", A)
+    RO2 <- adjust_scale(RO2, "mg.o2", A)
   } else if (A == "ml.o2") {
     RO2 <- convert_DO(rate, oxy, "mL/L", S, t, P)
-    RO2 <- adjust_scale(RO2$output, "ml.o2", A)
+    RO2 <- adjust_scale(RO2, "ml.o2", A)
   }
 
   ## Approach here -

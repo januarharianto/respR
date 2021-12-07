@@ -1,5 +1,5 @@
-#' Automatically determine most linear, maximum and minimum oxygen uptake or
-#' production rates
+#' Automatically determine most linear, highest, lowest and rolling oxygen
+#' uptake or production rates
 #'
 #' `auto_rate` performs rolling regressions on a dataset to determine the *most
 #' linear, highest, lowest, maximum, minimum, rolling*, and *interval* rates of

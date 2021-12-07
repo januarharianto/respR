@@ -2,8 +2,8 @@
 % Please edit documentation in R/auto_rate.R
 \name{auto_rate}
 \alias{auto_rate}
-\title{Automatically determine most linear, maximum and minimum oxygen uptake or
-production rates}
+\title{Automatically determine most linear, highest, lowest and rolling oxygen
+uptake or production rates}
 \usage{
 auto_rate(x, method = "linear", width = NULL, by = "row", plot = TRUE, ...)
 }

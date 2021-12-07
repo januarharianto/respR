@@ -11,7 +11,7 @@ convert_DO(
   S = NULL,
   t = NULL,
   P = NULL,
-  value.out = FALSE
+  value.out = TRUE
 )
 }
 \arguments{
@@ -31,8 +31,9 @@ of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 \item{P}{numeric. Pressure (bar). Defaults to 1.013253. Required for
 conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.}
 
-\item{value.out}{logical. Defaults to FALSE. If TRUE, returns only the
-converted values as a numeric vector.}
+\item{value.out}{logical. Defaults to \code{TRUE} in which case the converted
+values are returned as a numeric vector. if \code{FALSE} a list object of class
+\code{convert_DO} is returned.}
 }
 \description{
 This is a conversion function that performs basic conversions between
@@ -48,18 +49,16 @@ to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mg
 view a list of usable unit strings.
 \subsection{Output}{
 
-Returns a \code{list} object of class \code{convert_DO} containing five elements:
-\verb{$call} the function call, \verb{$input} values, \verb{$output} converted values,
-\verb{$input.unit} and \verb{$output.unit}.
-
-Alternatively, if \code{value.out = TRUE} returns only the converted values as a
-numeric vector.
+By default (\code{value.out = TRUE}) outputs a numeric vector of the converted
+values. If \code{value.out = FALSE} a \code{list} object of class \code{convert_DO} is
+returned containing five elements: \verb{$call} the function call, \verb{$input}
+values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}.
 }
 
 \subsection{S3 Generic Functions}{
 
-Saved output objects can be used in the generic S3 functions \code{print()} and
-\code{summary()}.
+Saved output objects (if \code{value.out = FALSE} is used) can be entered in the
+generic S3 functions \code{print()} and \code{summary()}.
 \itemize{
 \item \code{print()}: prints input and converted values (up to first 20), plus input
 and output units.
