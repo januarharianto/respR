@@ -66,17 +66,18 @@ These are the current methods by which rates in \code{auto_rate} objects
 can be subset. Matching results are \emph{retained} in the output:
 \subsection{\code{NULL}, \code{unique}}{
 
-Subsets only unique results, that is removes any duplicate regressions from
-the input \verb{$summary}. \code{n} is ignored.
+Subsets only unique results, that is for any regressions in the input
+\verb{$summary} table that are identical (except the \verb{$density} column), it
+retains the top ranked one only. \code{n} is ignored.
 }
 
 \subsection{\code{positive}, \code{negative}}{
 
-Subsets all \code{positive} (>0) or \code{negative} (<0) rates. \code{n} is ignored. Useful
-in intermittent respirometry where \code{auto_rate} may identify linear regions
-of oxygen increase during flushes. Note, to keep mathematically consistent,
-\code{respR} outputs oxygen consumption (i.e. respiration) rates as \emph{negative}
-values.
+Subsets all \code{positive} (>0) or \code{negative} (<0) rates. \code{n} is ignored.
+Useful, for example, in intermittent respirometry where \code{auto_rate} may
+identify linear regions of oxygen increase during flushes. Note, \code{respR}
+outputs oxygen consumption (i.e. respiration) rates as \emph{negative} values,
+production rates as \emph{positive}.
 }
 
 \subsection{\code{nonzero}, \code{zero}}{
@@ -93,8 +94,8 @@ they subset the highest and lowest \emph{\strong{absolute}} rate values. That is
 rates are all negative, \code{method = 'highest'} will retain the highest
 magnitude rates regardless of the sign, that is the \emph{most negative}.
 Essentially, these options ignore the sign of the rate. \code{n} indicates how
-many of the lowest/highest rates to retain See \code{min} and \code{max} options for
-extracting numerical low/high rates.
+many of the lowest/highest rates to retain See \code{minimum} and \code{maximum}
+options for extracting \emph{numerically} lowest and highest rates.
 }
 
 \subsection{\code{lowest_percentile}, \code{highest_percentile}}{
@@ -185,38 +186,47 @@ completely contained within others. In such cases summary operations such as
 taking an average of the rate values may be questionable, as certain values
 will be weighted higher due to these multiple, overlapping results. This
 method removes overlapping rates, using \code{n} as a threshold to determine
-degree of permitted overlap. It is recommended this method be used after all
+degree of permitted overlap. It is recommended this method be used after
 other selection criteria have been applied, as it is quite aggressive about
-removing rates, including high-ranked ones, and can be computationally
-intensive when there are many results. While it can be used with \code{auto_rate}
-results determined via the \code{rolling}, \code{lowest}, or \code{highest} methods, by
-their nature these methods produce all possible overlapping regressions,
-ordered in various ways, so other subsetting methods are probably more
-appropriate.
+removing rates, and can be \emph{very} computationally intensive when there are
+many results.
 
-Permitted overlap is determined by \code{n}, which indicates the minimum
-proportion of each particular regression which must overlap with another for
-it to be regarded as overlapping.  For example, \code{n = 0.2} means a regression
-would have to overlap with another by 20\% or more of its total length to be
-regarded as overlapping.
+While it can be used with \code{auto_rate} results determined via the \code{rolling},
+\code{lowest}, or \code{highest} methods, by their nature these methods produce \emph{all
+possible} overlapping regressions, ordered in various ways, so other
+subsetting methods are more appropriate. The \code{overlap} method should only be
+used in combination with the \code{auto_rate} \code{linear} results, unless you have a
+specific reason for doing so.
 
-The \code{overlap} method does two separate operations. First, regardless of the
-\code{n} value, any rate regressions which are completely contained within
-another are removed. Secondly, for each regression in \verb{$summary} how many
-other regressions it overlaps with (accounting for \code{n}) is determined. The
-one which overlaps with the most others is then removed. In the event of
-several regressions overlapping with equal numbers of others, the one lowest
-in the \verb{$summary} table is removed. This will be the least ranked one (i.e.
-lowest density value) in the case of the \code{auto_rate} \code{linear} method. In the
-case of \code{auto_rate} \code{rolling}, \code{lowest}, or \code{highest} methods, this order is
-determined by the method. In general, the \code{overlap} subsetting should only
-be used in combination with the \code{auto_rate} \code{linear} method, unless you have
-a specific reason for doing so.
+The \code{plot_ar()} function is very useful for plotting \code{auto_rate} objects,
+and the results of \code{subset_rate} operations upon them, to visualise where
+regression results in the summary table occur in relation to the original
+dataset. See Examples.
 
-This analysis is repeated iteratively until only non-overlapping rates
-(accounting for \code{n}) are retained. If \code{n = 0}, only rates which do not
-overlap at all are retained. If \code{n = 1}, only rates which are entirely
-contained within another are removed.
+Permitted overlap is determined by \code{n}, which indicates the proportion of
+each particular regression which must overlap with another for it to be
+regarded as overlapping. For example, \code{n = 0.2} means a regression would
+have to overlap with at least one other by at least 20\% of its total length
+to be regarded as overlapping.
+
+The \code{overlap} method performs two operations:
+
+First, regardless of the \code{n} value, any rate regressions which are
+completely contained within another are removed (this is also the only
+operation if \code{n = 1}).
+
+Secondly, for each regression in \verb{$summary} starting from the lowest ranked
+(i.e. bottom of the summary table), the function checks if it overlaps with
+any others (accounting for \code{n}). If not, the next lowest is checked, and the
+function progresses up the summary table until it finds one that does. The
+first to be found overlapping is then removed, and the process repeats
+starting again from the bottom of the summary table. This is repeated
+iteratively until only non-overlapping rates (accounting for \code{n}) are
+retained.
+
+If \code{n = 0}, only rates which do not overlap at all, that is share \emph{no} data,
+are retained. If \code{n = 1}, only rates which are 100\% contained within at
+least one other are removed.
 }
 
 \subsection{Output}{

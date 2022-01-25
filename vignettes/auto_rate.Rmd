@@ -22,7 +22,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
+               R.options = list(
                                 scipen = 999, 
                                 digits = 3))
 ```
@@ -132,7 +132,7 @@ Every regression of the specified `width` across the timeseries is calculated, t
 
 #### When this method might be applied
 
-When you are looking for the lowest rates, representative of resting, basal or standard metabolic rates. 
+When you are looking for the lowest rates across a *specific time window*, representative of resting, basal or standard metabolic rates. 
 
 ### `method = "highest"`
 
@@ -140,7 +140,7 @@ Every regression of the specified `width` across the timeseries is calculated, t
 
 #### When this method might be applied
 
-When you are looking for the highest rates, representative of maximum or active metabolic rates. 
+When you are looking for the highest rates across a *specific time window*, representative of maximum or active metabolic rates. 
 
 ### `method = "minimum"`, `method = "maximum"`
 
@@ -150,7 +150,7 @@ Every regression of the specified `width` across the entire timeseries is calcul
 
 #### When these methods might be applied
 
-Generally, for most analyses where high or low rates are of interest the `highest` or `lowest` methods should be used instead. However, when rates are a mix of negative and positive and you want the highest or lowest these can be used, but note they order by *numerical* value; the highest *uptake* rates will be most `minimum`. 
+Generally, for most analyses where high or low rates are of interest the `highest` or `lowest` methods should be used instead. However, when rates are a mix of negative and positive and you want the highest or lowest these can be used, but note they order by *numerical* value; the highest oxygen *uptake* rates will be most `minimum`. 
 
 ### `method = "rolling"`
 
@@ -185,12 +185,12 @@ While you should experiment with different values to see the effects on the anal
 
 Below, we show the differences in the shape of the rolling regressions when using the default `width = 0.2` versus a value of `0.6` with the dataset `sardine.rd`:
 
-```{r rollreg_demo}
+```{r rollreg_demo, fig.keep='none'}
 # Perform linear detection; default width when not specified is 0.2:
-normx <- auto_rate(sardine.rd, plot = FALSE)
+normx <- auto_rate(sardine.rd)
 
 # Perform linear detection using manual width of 0.6:
-overx <- auto_rate(sardine.rd, plot = FALSE, width = 0.6)
+overx <- auto_rate(sardine.rd, width = 0.6)
 ```
 
 ```{r echo = F, message=FALSE, results='hide'}
@@ -251,12 +251,12 @@ By contrast, if the `width` is too low the rolling rate is unstable and heavily 
 
 Here we'll compare the default `width = 0.2` to a lower value of 5% of the data, `width = 0.05`. 
 
-```{r rollreg_demo2}
+```{r rollreg_demo2, fig.keep='none'}
 # Perform linear detection; default width when not specified is 0.2:
-normx <- auto_rate(sardine.rd, plot = FALSE)
+normx <- auto_rate(sardine.rd)
 
 # Perform linear detection using manual width of 0.05:
-underx <- auto_rate(sardine.rd, plot = FALSE, width = 0.05)
+underx <- auto_rate(sardine.rd, width = 0.05)
 ```
 
 ```{r echo = F, message=FALSE, results='hide'}
@@ -308,11 +308,13 @@ rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE,
 
 ```
 
-A lower width leads to much more variable rolling rate estimates. Note how we have had to adjust the y-axis limits to fit the results. In this example (results not shown) the `linear` analysis was only able to identify 9 linear regions compared to 46 with the default width. If we were interested in highest or lowest rates, this would also prove problematic since the rates are so variable. 
+A lower width leads to much more variable rolling rate estimates. Note how we have had to adjust the y-axis limits to fit the results (the left plot is the same data as in the previous section with different axis values). In this particular analysis (results not shown) the `linear` method was only able to identify 9 linear regions compared to 46 with the default width. If we were interested in highest or lowest rates, this would also prove problematic since the rates are so variable. 
 
 ### Appropriate widths
 
 The `width` value should be carefully considered; too low and it fails to capture accurate rates and is unduly influenced by data noise or variability, too high and the data is overfitted with important physiological or behavioural states smoothed out. Whatever value is used, this should be reported in the analytical methods alongside results. 
+
+See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
 
 ## Example Analysis
 
@@ -326,7 +328,7 @@ By default, `auto_rate` identifies the *most linear* regions of the data (i.e. `
 x <- auto_rate(sardine.rd)
 ```
 
-This method detects the *most consistently linear* regions of the data, that is the most consistent rates observed during the experiment. It does this in a rigorous, unsupervised manner, with the advantage being this removes observer subjectivity in choosing which rate is most appropriate to report in their results. 
+This method detects the *most consistently linear* regions of the data, that is the most consistent rates observed during the experiment. It does this in a rigorous, unsupervised manner, with the advantage being that this removes observer subjectivity in choosing which rate is most appropriate to report in their results. 
 It is a statistically robust way of indentifying and reporting consistent rates in respirometry data, such as those representative of routine or standard metabolic rates. 
 
 ### Exploring the results
@@ -341,17 +343,17 @@ print(x, pos = 2)
 plot(x, pos = 2)
 ```
 
-As a fully automated, unsupervised machine learning method of identifying linear data `auto_rate` is fallible, and the results should *always* be inspected and explored. 
+**Users should take special note** that as a fully automated, unsupervised machine learning method of identifying linear data `auto_rate` is fallible, and the results should *always* be inspected and explored. 
 In this case the function has identified a total of 46 linear regions. They can be viewed by calling `summary()`
 
 ```{r}
 summary(x)
 ```
 
-The first rate result looks good: it has a high r-squared, is sustained over a duration of 50 minutes, and the rate value is consistent with the other results. 
+In this case the first rate result looks good: it has a high r-squared, is sustained over a duration of 50 minutes, and the rate value is consistent with the other results. 
 However in some cases, other ranked results may be more appropriate to report depending on the metabolic rate metric being investigated. 
 
-While the first result is the highest in terms of the kernel density value, the user is free to choose and report other linear results if they satisfy other desirable criteria, for instance are above a particular r-squared value. A peculiarity of the KDE analysis, is that sometimes the top ranked result does not necessarily have the highest r-squared. This is a counter intuitive result, but explained by the fact that the function learns the shape of the entire dataset, so a particular regression from a linear region might be most representative of the rates in that region, but just happen to be fit to values which return a lower r-squared. This does not mean it is not a valid result; arguably, it is more valid, since it is accurately describing the localised shape of the data. 
+While the first result is the highest in terms of the kernel density value, the user is free to choose and report other linear results if they satisfy other desirable criteria, for instance are above a particular r-squared value or span a minimum time window. One peculiarity to take note of in the KDE analysis, is that sometimes the top ranked result does not necessarily have the highest r-squared. This is a counter intuitive result, but explained by the fact that the function learns the shape of the entire dataset, so a particular regression from a linear region might be most representative of the rates in that region, but just happen to be fit to values which return a lower r-squared. This does not mean it is not a valid result; arguably, it is more valid, since it is accurately describing the localised shape of the data. See Chabot et al. ([2021]()) for discussion of r-squared values in metabolic rate measurements.
 
 The `pos` input can also be used in `summary` to view particular row ranges. We'll look at the first 10. 
 
@@ -413,7 +415,7 @@ print(low_rate)
 summary(low_rate)
 ```
 
-Note, the output objects of the `highest` and `lowest` are essentially identical, the only difference being the results are ordered descending or ascending by rate, respectively. 
+Note, the output objects of the `highest` and `lowest` methods are virtually identical, the only difference being the results are ordered descending or ascending by rate, respectively. 
 
 ### Rolling rates
 
@@ -435,12 +437,12 @@ Saved `auto_rate` objects can be passed to subsequent `respR` functions for furt
 
 ## Plot
 
-When using `auto_rate`, a plot of the results is produced (unless `plot = FALSE`). If there are multiple results each can be plotted individually using `pos`. Each panel can be plotted on its own using `choose` with values 1 to 6. If labels or legends obscure parts of the plot they can be suppressed using `legend = FALSE`. Console output messages can be suppressed with `quite = TRUE`. Lastly, the rolling rate plot can be plotted on an unreversed y-axis with `rate.rev = FALSE`, if for instance you are examining oxygen production rates. 
+When using `auto_rate`, a plot of the results is produced (unless `plot = FALSE`). If there are multiple results each can be plotted individually using `pos`. Each panel can be plotted on its own using `choose` with values 1 to 6. If labels or legends obscure parts of the plot they can be suppressed using `legend = FALSE`. Console output messages can be suppressed with `quiet = TRUE`. Lastly, the rolling rate plot can be plotted on an unreversed y-axis with `rate.rev = FALSE`, if for instance you are examining oxygen production rates. 
 
-The first panel is the complete timeseries of oxygen against both time (bottom blue axis) and row index (top red axis) with the current rate regression highlighted in yellow. The next plot is a close-up of this rate region. The next is a rolling rate plot across the entire timeseries at the input `width` (see [here](#width)). The next two are diagnsotic plots of the fitted values vs. residuals for the current rate result. Lastly, the sixth panel (only for the `linear` method) is a plot of the kernel density analysis output, which is the density peaks of stable rate values. 
+The first panel is the complete timeseries of oxygen against both time (bottom blue axis) and row index (top red axis) with the `pos` rate regression (defualt is `pos = 1`) highlighted in yellow. The next plot is a close-up of this rate region. The next is a rolling rate plot across the entire timeseries at the input `width` (see [here](#width)). The next two are diagnsotic plots of the fitted values vs. residuals for the current rate result. Lastly, the sixth panel (only for the `linear` method) is a plot of the kernel density analysis output, which is the density peaks of stable rate values. 
 
 ## Notes
 
 - `auto_rate` does not currently support analysis of flowthrough respirometry data. See `vignette("flowthrough")` for analysis of these experiments. 
 
-- With intermittent-flow respirometry data there is a strong possibility flush periods will confuse the `auto_rate` algorithms, so it shoudl only be run on subsets of the data containing actual speciemn measurements. The `subset_data` function is ideal for subsetting and passing data regions of interest to other functions. See `vignette("intermittent_long")`.
+- With intermittent-flow respirometry data there is a strong possibility flush periods will confuse the `auto_rate` algorithms, so it should only be run on subsets of the data containing actual specimen measurements. The `subset_data` function is ideal for subsetting and passing data regions of interest to other functions. See `vignette("intermittent_long")`.

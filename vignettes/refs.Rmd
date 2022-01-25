@@ -15,7 +15,7 @@ bibliography: references_refs.bib
 csl: resprcsl.csl
 link-citations: true
 nocite: |
-  @leclercqMeasurementOxygenMetabolism1999; @lightonMeasuringMetabolicRates2008; @marshallEstimatingPhysiologicalTolerances2013; @morozovFishRespPackageGUI2019; @muggeoEstimatingRegressionModels2003; @muggeoModelingTemperatureEffects2008; @raykarFastOptimalBandwidth2006; @sheatherReliableDataBasedBandwidth1991; @silvermanDensityEstimationStatistics1986; @smithjrFoodEnergySupply1987; @steffensenErrorsRespirometryAquatic1989; @stoffelsPhysiologicalTradeOffsFastSlow2015; @svendsenDesignSetupIntermittentflow2016; @whiteDeterminantsInterspecificVariation2013; @yeagerPhysiologicalRegulationConformation1989; @zivotModelingFinancialTime2006; @killenGuidelinesReportingMethods2021; @jonesBriefSurveyBandwidth1996; @gambleOpentopStaticRespirometry2014; @clarkAerobicScopeMeasurements2013; @careySeaUrchinsHighCO2016
+  @leclercqMeasurementOxygenMetabolism1999; @lightonMeasuringMetabolicRates2008; @marshallEstimatingPhysiologicalTolerances2013; @morozovFishRespPackageGUI2019; @muggeoEstimatingRegressionModels2003; @muggeoModelingTemperatureEffects2008; @raykarFastOptimalBandwidth2006; @sheatherReliableDataBasedBandwidth1991; @silvermanDensityEstimationStatistics1986; @smithjrFoodEnergySupply1987; @steffensenErrorsRespirometryAquatic1989; @stoffelsPhysiologicalTradeOffsFastSlow2015; @svendsenDesignSetupIntermittentflow2016; @whiteDeterminantsInterspecificVariation2013; @yeagerPhysiologicalRegulationConformation1989; @zivotModelingFinancialTime2006; @killenGuidelinesReportingMethods2021; @jonesBriefSurveyBandwidth1996; @gambleOpentopStaticRespirometry2014; @clarkAerobicScopeMeasurements2013; @careySeaUrchinsHighCO2016; @prinzingAnalyticalMethodsMatter2021; @chabotValidOxygenUptake2021
 ---
 
 ```{r setup, include = FALSE}
@@ -52,6 +52,5 @@ Also be sure to check out the [FishResp](https://fishresp.org) site, where the d
 
 ## References
 
-The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here]() for references specific to critical oxygen analyses.
- \
+The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here]() for references specific to critical oxygen analyses.  \
  \

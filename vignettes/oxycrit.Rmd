@@ -13,7 +13,7 @@ bibliography: references_oxycrit.bib
 csl: resprcsl.csl
 link-citations: true
 nocite: |
-  @dugglebyRegressionAnalysisNonlinear1984a; @leivaPhysiologicalResponsesGhost2015; @lightonThermolimitRespirometryObjective2004; @mangumResponsesAquaticInvertebrates1973a; @marshallEstimatingPhysiologicalTolerances2013; @monteiroCardiorespiratoryResponsesGraded2013; @muellerRegulationIndexNew2011; @muggeoModelingTemperatureEffects2008; @negreteMethodologicalEvaluationDetermination2019b; @nickersonEstimatingPhysiologicalThresholds1989; @reemeyerStandardizingDeterminationInterpretation2019a; @reganDonThrowFish2019; @reganRatesHypoxiaInduction2017; @rodgersDoubleWhammyNitrate2021a; @rogersNewAnalysisHypoxia2016a; @seibelOxygenSupplyCapacity2020; @seibelOxygenSupplyCapacity2021; @stinchcombeGeneticsEvolutionFunctionvalued2012; @tangRateOxygenConsumption1933; @ultschUtilityDeterminationCrit2019; @vanwinkleOxyconformersOxyregulatorsQuantitative1975; @woodFallacyCritAre2018; @yeagerPhysiologicalRegulationConformation1989
+  @dugglebyRegressionAnalysisNonlinear1984a; @leivaPhysiologicalResponsesGhost2015; @lightonThermolimitRespirometryObjective2004; @mangumResponsesAquaticInvertebrates1973a; @marshallEstimatingPhysiologicalTolerances2013; @monteiroCardiorespiratoryResponsesGraded2013; @muellerRegulationIndexNew2011; @muggeoModelingTemperatureEffects2008; @negreteMethodologicalEvaluationDetermination2019b; @nickersonEstimatingPhysiologicalThresholds1989; @reemeyerStandardizingDeterminationInterpretation2019a; @reganDonThrowFish2019; @reganRatesHypoxiaInduction2017; @rodgersDoubleWhammyNitrate2021a; @rogersNewAnalysisHypoxia2016a; @seibelOxygenSupplyCapacity2020; @seibelOxygenSupplyCapacity2021; @stinchcombeGeneticsEvolutionFunctionvalued2012; @tangRateOxygenConsumption1933; @ultschUtilityDeterminationCrit2019; @vanwinkleOxyconformersOxyregulatorsQuantitative1975; @woodFallacyCritAre2018; @yeagerPhysiologicalRegulationConformation1989; @snyderEffectClosedIntermittentflow2016
 ---
 
 ```{r setup, echo = F, message=FALSE}
@@ -29,7 +29,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
+               R.options = list(
                                 #scipen = 999, 
                                 digits = 5))
 ```

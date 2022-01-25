@@ -17,23 +17,48 @@ link-citations: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In the two years since publication, `respR` has picked up [24 citations](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+```{r echo = F, warning=FALSE, message=FALSE}
+# This is ridiculously over the top to get this number, but good to learn :D
+# Quite slow tho...
+# Dump GScholar page
+dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en"))
+# Find location of n citations line
+loc <- grep("About [0-9]+ results \\(", dump)
+# Extract it
+strng <- stringr::str_extract(dump[loc], "About [0-9]+ results \\(")
+# Extract the number
+ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
+```
 
-We are very happy to see the package being used to conduct quality, reproducible science, and keen to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating oxygen production rates of algae and corals, as well as the respiration rates of a wide range of species.
+In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has picked up [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-If you use the package, we would appreciate a citation to the publication in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). Iff you use it for any purpose at all (e.g. teaching, industry use. environmental reports and monitoring, etc.) please [**let us know**](mailto:nicholascarey@gmail.com).
+We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
+
+If you use the package, we would appreciate a citation to the publication in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any purpose at all (e.g. teaching, industry use. environmental reports and monitoring, etc.) please [**let us know**](mailto:nicholascarey@gmail.com).
 
 ## Studies using respR
 
-The following publications (most recent first) have used and cited `respR`. If we have missed yours, please [**let us know**](mailto:nicholascarey@gmail.com) and we will include it in the list.
+The following publications (most recent first) have used and cited `respR`. If we have missed one, please [**let us know**](mailto:nicholascarey@gmail.com) and we will include it in the list.
 
-#### @killenGuidelinesReportingMethods2021
+#### @mallonLightDrivenDynamics2022
 
-Excellent summary and guide to best practices in intermittent-flow respirometry. Still in preprint, so lots of opportunity to provide feedback. Essential reading!
+Coralline algae
+
+#### @burnsMetabolicRateCritical2021
+ 
+Alexandra Burns used `respR` in this MSc project, looking at oxygen supply capacity under different temperatures in a species of shrimp. Congrats on the Masters! 🥳
+
+#### @prokkolaGeneticCouplingLifehistory2021
+
+In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. This is a preprint and we are looking forward to seeing it in a journal soon. 
+
+#### @killenGuidelinesReportingMethods2021a
+
+Excellent summary and guide to best practices in conducting, analysing and reporting intermittent-flow respirometry studies. Essential reading!
 
 #### @prinzingAnalyticalMethodsMatter2021
 
-An excellent summary and guide to the best practices and tools available to estimate maximum metabolic rates. Goes into a lot of detail about rolling regressions, and the importance of the sampling window used, something that was instrumental to the design of `respR`. Very much required reading if you are interested in MMR, or just respirometry analyses in general.
+An excellent summary and guide to the best practices and tools available to estimate maximum metabolic rates. Goes into a lot of detail about rolling regressions, and the importance of the sampling window used, something that was instrumental to the design of `respR`, and is relevant to all metabolic rate calculations not just MMR. Very much required reading if you are interested in respirometry analyses in general.
 
 #### @rosEnvironmentalStressResponses2021
 

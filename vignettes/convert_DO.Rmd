@@ -60,19 +60,19 @@ conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    S = 35,            # in ppt
                    P = 1.013)         # in bar
 
-print(conv)
+head(conv)
 ```
 
-Note, the output object is a `list` object of class `convert_DO` containing the input and output data and units. To use the converted values we can extract them from the `$output` element. For example, we can create a new data frame adding the column of the actual concentrations. 
+By default the function outputs a numeric vector of converted values, which can be saved to it's own object or in this case we will add it to the original data frame.
 
 ```{r}
 sardine_new <- cbind(sardine.rd,
-                     mmol_kg = conv$output)
+                     mmol_kg = conv)
 
 sardine_new
 ```
 
-Alternatively, the `value.out` input to `convert_DO` can be used to make it output numeric converted values rather than a `list` object.
+Alternatively, if `value.out = FALSE` the output is a `list` object which can be used with `print` for a convenient summary output. 
 
 ```{r echo = T, tidy = F}
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
@@ -80,10 +80,10 @@ conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    to = "mmol/kg",    # oxygen unit to convert to
                    t = 15,            # in C
                    S = 35,            # in ppt
-                   P = 1.013,
-                   value.out = TRUE)         # in bar
+                   P = 1.013,         # in bar
+                   value.out = FALSE)  # output vector of values
 
-head(conv)
+print(conv)
 ```
 
 
@@ -108,8 +108,7 @@ sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,
                               to = "hPa",  
                               t = 15,            
                               S = 35,            
-                              P = 1.013,
-                              value.out = TRUE)     
+                              P = 1.013)     
 
 sardine_new
 ```
@@ -138,22 +137,26 @@ Here, we have been reading an old paper and want to convert an oxygen value to `
 convert_DO(4.6, 
            from = "ml/L",  
            to = "mg/L",
-           t = convert_val(65, from = "F"), # must be in C
+           t = convert_val(65, from = "F"), # needs to be in C
            S = 30, 
-           P = convert_val(775, from = "Torr")) # must be in bar
+           P = convert_val(775, from = "Torr"), # needs to be in bar
+           value.out = FALSE) 
 ```
 
 Notice two convenient aspects:
 
- - We don't need to tell `convert_val` what the value is a measurement *of* - it is recognised automatically using the `from` unit. 
+ - We don't need to tell `convert_val` what parameter (temperature, pressure, etc.) the value is a measurement *of* - it is recognised automatically using the `from` unit. 
  
- - We don't need to specify a `to` unit (although you can). The defaults for these are set to the required input units of `t` and `P`, that is `°C` and `bar`. 
+ - We don't need to specify a `to` unit (although it's possible to). The defaults for these are set to the required input units of `t` and `P`, that is `°C` and `bar`. 
 
-We can compare these to double check:
+The `convert_val()` function can also be used for general conversions of temperature, volume, mass, area, and atmospheric pressure in many common units:
 
 ```{r}
-convert_val(775, from = "Torr")
-convert_val(775, from = "Torr", to = "bar")
+convert_val(0, from = "C", to = "K")
+convert_val(1, from = "L", to = "ml")
+convert_val(10000, from = "mg", to = "kg")
+convert_val(0.0077, from = "m2", to = "mm2")
+convert_val(775, from = "Torr", to = "mbar")
 ```
 
 See also `convert_rate()` where `convert_val` can be used in a similar way with the `volume`, `mass`, and `area` inputs.

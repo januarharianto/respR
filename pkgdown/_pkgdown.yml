@@ -2,7 +2,11 @@ url: https://januarharianto.github.io/respR
 
 template:
   params:
+    bootstrap: 5
     bootswatch: cosmo
+
+code:
+  width: 999
 
 reference:
   - title: "Pre-processing"
@@ -94,9 +98,13 @@ navbar:
         href: articles/flowthrough.html
       - text: "oxy_crit: Critical oxygen analyses"
         href: articles/oxycrit.html
+      - text: "Oxygen production respirometry"
+        href: articles/oxy_production.html
       - text: "---- Function Guides ----"
       - text: "import_file & format_time: Import and prepare data"
         href: articles/importing.html
+      - text: "convert_DO: Convert between units of dissolved oxygen"
+        href: articles/convert_DO.html
       - text: "inspect: Inspecting data"
         href: articles/inspecting.html
       - text: "auto_rate: Automatic detection of linear rates"
@@ -105,22 +113,22 @@ navbar:
         href: articles/subset_rate.html
       - text: "adjust_rate: Adjusting rates for background"
         href: articles/adjust_rate.html
-      - text: "convert_DO: Convert between units of dissolved oxygen"
-        href: articles/convert_DO.html
       - text: "---- Miscellaneous ----"
       - text: "calc_rate: Two-point rate calculation"
         href: articles/twopoint.html
 
     - text: Further Reading
       menu:
-      - text: "v2.0 Code changes"
-        href: articles/v2_code_change.html
-      - text: "respR: Integration with the tidyverse"
-        href: articles/tidyverse.html
-      - text: "respR: Reporting reproducible analyses"
-        href: articles/reproducibility.html
       - text: "respR in use"
         href: articles/citations.html
+      - text: "v2.0 Code changes"
+        href: articles/v2_code_change.html
+      - text: "Installing and running v1.1 code"
+        href: articles/v1_code.html
+      - text: "Integration with the tidyverse"
+        href: articles/tidyverse.html
+      - text: "Open science and reproducibility"
+        href: articles/reproducibility.html
       - text: "Future features"
         href: articles/future.html
       - text: "References"

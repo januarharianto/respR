@@ -22,7 +22,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
+               R.options = list(
                                 scipen = 999, 
                                 digits = 3))
 ```
@@ -100,7 +100,7 @@ insp1 <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2.value = 8.919)
 ```{r eval = T, echo = F}
 # inspect
 insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2.value = 8.919, plot = F)))
-plot(insp1, message = FALSE)
+plot(insp1, quiet = TRUE)
 ```
 
 The data checks show us there are no structural issues with the data, such as missing values or gaps. The top plot shows outflow and the entered, constant inflow oxygen against both time (bottom axis) and row index (top axis), which are the same here because data are recorded every second. The bottom plot shows the calculated delta oxygen values, which is a proxy for the rate. In these plots, consistent oxygen uptake or production rates will be represented by level regions. Here there is some fluctuation towards the end of the data, but the first 400 rows look to have stable rates. 
@@ -116,7 +116,7 @@ rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
 # calculate rate
 rate1 <- suppressMessages(calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34, plot = FALSE))
 print(rate1)
-plot(rate1, message = FALSE)
+plot(rate1, quiet = TRUE)
 ```
 
 `calc_rate.ft` calculates the rate by averaging all delta oxygen values within the chosen data region, and multiplying this by the flowrate. The bottom plot shows this region in close-up. Note, the dashed line is only there to illustrate the trend. 
@@ -184,7 +184,7 @@ insp2 <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2 = 3)
 ```{r eval = T, echo = F}
 # inspect
 insp2 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2 = 3, plot = F)))
-plot(insp2, message = FALSE)
+plot(insp2, quiet = TRUE)
 ```
 
 Compared to the `inspect.ft` plot in [Case 1](#case1plot), we can see that at least some of the variation in rate (the delta oxygen values) is explained by variation in inflowing oxygen. This means in this case delta oxygen are more consistent, so we will use the entire dataset to calculate the rate. 
@@ -201,7 +201,7 @@ rate2 <- calc_rate.ft(insp2, flowrate = 2.34)
 # calculate rate
 rate2 <- suppressMessages(calc_rate.ft(insp2, flowrate = 2.34, plot = FALSE))
 print(rate2)
-plot(rate2, message = FALSE)
+plot(rate2, quiet = TRUE)
 ```
 
 The slightly lower rate value we get here than in Case 1 (1.65 vs 1.74) suggests the header tank supply is not quite at the theoretical maximum air saturation that we calculated in [Case 1](#case1oxy), and demonstrates that it is always a good idea to have a recording of the inflow water or shared water source if it is practical to do so. 
@@ -248,7 +248,7 @@ insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6, plot = F)
-plot(insp3, message = FALSE)
+plot(insp3, quiet = TRUE)
 ```
 
 Here we see a warning about not evenly-spaced time values. This comes from this dataset using decimalised minutes as the time values and can be safely ignored (the full `print()` command provides more details). 
@@ -268,7 +268,7 @@ rate3 <- calc_rate.ft(insp3, from = 30, flowrate = 0.1)
 # calculate rate
 rate3 <- suppressMessages(calc_rate.ft(insp3, from = 30, flowrate = 0.1, plot = FALSE))
 print(rate3)
-plot(rate3, message = FALSE)
+plot(rate3, quiet = TRUE)
 ```
 
 ### Calculate background rate {#case3bg}
@@ -283,7 +283,7 @@ bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 5, in.o2 = 9)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 bg <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 5, in.o2 = 9)))
-plot(bg, message = FALSE)
+plot(bg, quiet = TRUE)
 ```
 
 Here we see there is a slight but noticeable difference in outflow and inflow oxygen due to microbial action. Moreover, it appears to be constant, so we can use the entire dataset to calculate a background rate. 
@@ -299,7 +299,7 @@ bgrate <- calc_rate.ft(bg, flowrate = 0.1)
 # calculate rate
 bgrate <- suppressMessages(bgrate <- calc_rate.ft(bg, flowrate = 0.1, plot = FALSE))
 print(bgrate)
-plot(bgrate, message = FALSE)
+plot(bgrate, quiet = TRUE)
 ```
 
 ### Adjust rate
@@ -389,7 +389,7 @@ insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 11)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp4 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 11)))
-plot(insp4, message = FALSE)
+plot(insp4, quiet = TRUE)
 ```
 
 When delta oxygen data are inspected, only one plot is produced of the entered delta oxygen values. Again we see the experiment has not reached equilibrium until after around 20 minutes, so we will not use any data before this. 
@@ -407,7 +407,7 @@ rate4 <- calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 # calculate rate
 rate4 <- suppressMessages(calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1, plot = F))
 print(rate4)
-plot(rate4, message = FALSE)
+plot(rate4, quiet = TRUE)
 ```
 
 ### Adjust rate
@@ -464,7 +464,7 @@ insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 8)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp5 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 8, plot = FALSE)))
-plot(insp5, message = FALSE)
+plot(insp5, quiet = TRUE)
 ```
 
 Note how delta oxygen are plotted on a reverse y-axis, so that higher uptake rates are plotted higher, even though they are lower numerically (more negative). If you are examining oxygen *production* rates, you can pass the `rate.rev = FALSE` argument in the main call or when plotting the output to see higher production rates plotted higher. 
@@ -481,7 +481,7 @@ insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
 # inspect
 insp5 <- suppressWarnings(suppressMessages(subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
                                              inspect.ft(time = 1, out.o2 = 4, in.o2 = 8, plot = FALSE)))
-plot(insp5, message = FALSE)
+plot(insp5, quiet = TRUE)
 ```
 
 Note, the row index x-axis now refers to the subset not the original data. We can see the highest active rate occurs between around 38 and 42 minutes, so we will use this region to calculate the active rate.
@@ -496,7 +496,7 @@ rate5 <- calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1)
 ```{r eval = T, echo = F}
 # calculate rate
 rate5 <- suppressMessages(calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1, plot = FALSE))
-plot(rate5, message = FALSE)
+plot(rate5, quiet = TRUE)
 ```
 
 ### Adjust rate
@@ -560,7 +560,7 @@ insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 4)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 4, plot = FALSE))
-plot(insp6, message = FALSE)
+plot(insp6, quiet = TRUE)
 ```
 
 Here we see, after the initial period before the experiment has reached equilibrium, the specimen rate apparently continues to increase. This suggests that the background rate may not be constant. 
@@ -577,7 +577,7 @@ bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 3, in.o2 = 4)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 bg <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 3, in.o2 = 4, plot = FALSE))
-plot(bg, message = FALSE)
+plot(bg, quiet = TRUE)
 ```
 
 We can see the background rate increases as the experiment progresses, in what looks like a constant manner. With the presumption that this is also occurring in the specimen chamber, we only need to use the outflow recording from the control chamber as the `in.o2` input to account for this. 
@@ -592,7 +592,7 @@ insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 3)
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 3, plot = FALSE))
-plot(insp6, message = FALSE)
+plot(insp6, quiet = TRUE)
 ```
 
 Now we see that when the background is accounted for, the specimen rates are consistent, and we can go ahead and calculate a rate.
@@ -607,7 +607,7 @@ rate6 <- calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```{r eval = T, echo = F}
 # calculate rate
 rate6 <- suppressMessages(calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1, plot = FALSE))
-plot(rate6, message = FALSE)
+plot(rate6, quiet = TRUE)
 ```
 
 

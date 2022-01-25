@@ -47,16 +47,17 @@
 #'
 #'  ## `NULL`, `unique`
 #'
-#'  Subsets only unique results, that is removes any duplicate regressions from
-#'  the input `$summary`. `n` is ignored.
+#'  Subsets only unique results, that is for any regressions in the input
+#'  `$summary` table that are identical (except the `$density` column), it
+#'  retains the top ranked one only. `n` is ignored.
 #'
 #'  ## `positive`, `negative`
 #'
-#'  Subsets all `positive` (>0) or `negative` (<0) rates. `n` is ignored. Useful
-#'  in intermittent respirometry where `auto_rate` may identify linear regions
-#'  of oxygen increase during flushes. Note, to keep mathematically consistent,
-#'  `respR` outputs oxygen consumption (i.e. respiration) rates as *negative*
-#'  values.
+#'  Subsets all `positive` (>0) or `negative` (<0) rates. `n` is ignored.
+#'  Useful, for example, in intermittent respirometry where `auto_rate` may
+#'  identify linear regions of oxygen increase during flushes. Note, `respR`
+#'  outputs oxygen consumption (i.e. respiration) rates as *negative* values,
+#'  production rates as *positive*.
 #'
 #'  ## `nonzero`, `zero`
 #'
@@ -71,8 +72,8 @@
 #'  rates are all negative, `method = 'highest'` will retain the highest
 #'  magnitude rates regardless of the sign, that is the *most negative*.
 #'  Essentially, these options ignore the sign of the rate. `n` indicates how
-#'  many of the lowest/highest rates to retain See `min` and `max` options for
-#'  extracting numerical low/high rates.
+#'  many of the lowest/highest rates to retain See `minimum` and `maximum`
+#'  options for extracting *numerically* lowest and highest rates.
 #'
 #'  ## `lowest_percentile`, `highest_percentile`
 #'
@@ -160,38 +161,47 @@
 #'  taking an average of the rate values may be questionable, as certain values
 #'  will be weighted higher due to these multiple, overlapping results. This
 #'  method removes overlapping rates, using `n` as a threshold to determine
-#'  degree of permitted overlap. It is recommended this method be used after all
+#'  degree of permitted overlap. It is recommended this method be used after
 #'  other selection criteria have been applied, as it is quite aggressive about
-#'  removing rates, including high-ranked ones, and can be computationally
-#'  intensive when there are many results. While it can be used with `auto_rate`
-#'  results determined via the `rolling`, `lowest`, or `highest` methods, by
-#'  their nature these methods produce all possible overlapping regressions,
-#'  ordered in various ways, so other subsetting methods are probably more
-#'  appropriate.
+#'  removing rates, and can be *very* computationally intensive when there are
+#'  many results.
 #'
-#'  Permitted overlap is determined by `n`, which indicates the minimum
-#'  proportion of each particular regression which must overlap with another for
-#'  it to be regarded as overlapping.  For example, `n = 0.2` means a regression
-#'  would have to overlap with another by 20% or more of its total length to be
-#'  regarded as overlapping.
+#'  While it can be used with `auto_rate` results determined via the `rolling`,
+#'  `lowest`, or `highest` methods, by their nature these methods produce *all
+#'  possible* overlapping regressions, ordered in various ways, so other
+#'  subsetting methods are more appropriate. The `overlap` method should only be
+#'  used in combination with the `auto_rate` `linear` results, unless you have a
+#'  specific reason for doing so.
 #'
-#'  The `overlap` method does two separate operations. First, regardless of the
-#'  `n` value, any rate regressions which are completely contained within
-#'  another are removed. Secondly, for each regression in `$summary` how many
-#'  other regressions it overlaps with (accounting for `n`) is determined. The
-#'  one which overlaps with the most others is then removed. In the event of
-#'  several regressions overlapping with equal numbers of others, the one lowest
-#'  in the `$summary` table is removed. This will be the least ranked one (i.e.
-#'  lowest density value) in the case of the `auto_rate` `linear` method. In the
-#'  case of `auto_rate` `rolling`, `lowest`, or `highest` methods, this order is
-#'  determined by the method. In general, the `overlap` subsetting should only
-#'  be used in combination with the `auto_rate` `linear` method, unless you have
-#'  a specific reason for doing so.
+#'  The `plot_ar()` function is very useful for plotting `auto_rate` objects,
+#'  and the results of `subset_rate` operations upon them, to visualise where
+#'  regression results in the summary table occur in relation to the original
+#'  dataset. See Examples.
 #'
-#'  This analysis is repeated iteratively until only non-overlapping rates
-#'  (accounting for `n`) are retained. If `n = 0`, only rates which do not
-#'  overlap at all are retained. If `n = 1`, only rates which are entirely
-#'  contained within another are removed.
+#'  Permitted overlap is determined by `n`, which indicates the proportion of
+#'  each particular regression which must overlap with another for it to be
+#'  regarded as overlapping. For example, `n = 0.2` means a regression would
+#'  have to overlap with at least one other by at least 20% of its total length
+#'  to be regarded as overlapping.
+#'
+#'  The `overlap` method performs two operations:
+#'
+#'  First, regardless of the `n` value, any rate regressions which are
+#'  completely contained within another are removed (this is also the only
+#'  operation if `n = 1`).
+#'
+#'  Secondly, for each regression in `$summary` starting from the lowest ranked
+#'  (i.e. bottom of the summary table), the function checks if it overlaps with
+#'  any others (accounting for `n`). If not, the next lowest is checked, and the
+#'  function progresses up the summary table until it finds one that does. The
+#'  first to be found overlapping is then removed, and the process repeats
+#'  starting again from the bottom of the summary table. This is repeated
+#'  iteratively until only non-overlapping rates (accounting for `n`) are
+#'  retained.
+#'
+#'  If `n = 0`, only rates which do not overlap at all, that is share *no* data,
+#'  are retained. If `n = 1`, only rates which are 100% contained within at
+#'  least one other are removed.
 #'
 #'  ## Output
 #'
@@ -257,6 +267,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   ## Validate method
   if(!is.null(method) && !(method %in% c("unique",
                                          "overlap",
+                                         "overlap_new",
                                          "duration",
                                          "density",
                                          "manual",
@@ -572,128 +583,180 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     keep <- sort(keep)
   }
 
+  # overlap -------------------------------------------------------------
+  if(method == "overlap"){
 
-  # overlap -----------------------------------------------------------------
-  if(method == "overlap") {
     if(is.null(n)) {
       n <- 0
       message("subset_rate: 'overlap' method applying default 'n = 0', no overlapping permitted.")
     }
-    if(n < 0 || n > 1) stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
-    #if(x$method != "linear") stop("subset_rate: The 'overlap' method should only be used with results determined via the auto_rate 'linear' method.")
+    if(n < 0 || n > 1)
+      stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
     message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
-    message(glue::glue("subset_rate: Subsetting rates which overlap by {n*100}% or less..."))
+    message(glue::glue("subset_rate: Subsetting rates which overlap by at least {n*100}% ..."))
+
+    ##### First - remove contained
 
     ## extract summary df
     df <- x$summary
-    ## reverse it, since we will process from lowest ranked to top ranked in loops
-    df <- df[nrow(df):1]
+    #
+    # insides <- TRUE # to get while loop started
+    #
+    # ## while at least one regression is inside another,
+    # ## go from bottom row to top
+    # ## the one closest the bottom which is contained gets removed
+    # ## then repeat while loop
+    # while(any(insides)){
+    #   ## object to save logical test results to
+    #   insides <- rep(NA, nrow(df))
+    #   ## loop from last row to first
+    #   for(i in nrow(df):1) {
+    #     start <- df$row[i] # start of reg in data
+    #     end <- df$endrow[i] # end of reg in data
+    #
+    #     insides[i] <- any(start >= df$row[-i] & end <= df$endrow[-i])
+    #   }
+    #
+    #   ## if any are inside (contained), go to last one and remove it
+    #   if(any(insides)) {
+    #     remove <- tail(which(insides), 1)
+    #     df <- df[-remove,]
+    #   }
+    # }
+    #
+    # ## which to keep
+    # keep <- which(x$summary$rank %in% df$rank)
+    #
+    # ## subset df to keep non-contained
+    # df <- x$summary[keep,]
 
-    ## Add these to use later
+    #### Second - remove overlapping
+
+    # basically repeat above, but take account of n
+
+    ## add row width col
     df$row_width <- df$endrow - df$row
-    df$orig_row_no <- nrow(df):1
 
+    overlaps <- TRUE # to get while loop started
 
-    ################# FIRST - remove contained #####################
-    ## i.e. remove all regressions completely contained within another longer one
-
-    ## Need two dfs here, one to do loop with, another to modify
-    out_df <- df
-
-    ## so for each row we see if that regression is contained within any others
-    ## if so - it gets removed from the other df
-    ## Have to match by original row number, as rows are being removed on each loop
-    for(i in 1:nrow(df)){
-
-      orig_row <- df$orig_row_no[i] # original row of reg in summary
-      start <- df$row[i] # start of reg in data
-      end <- df$endrow[i] # end of reg in data
-
-      ## Which other regs is it contained within?
-      inside <- which(start >= df$row & end <= df$endrow)
-      # It will match to itself, so remove this one
-      if(any(inside == i)) inside <- inside[-which(inside == i)]
-
-      ## If 'inside' has anything in it now, then this reg is within at least one other reg
-      ## Therefore we want to remove it.
-      ## Find this reg within output df, using matching of original row no.,
-      ## and remove that row
-      if(length(inside) > 0) {
-        row_to_remove <- match(orig_row, out_df$orig_row_no)
-        out_df <- out_df[-row_to_remove,]
-      }
-    }
-
-    ################# SECOND - remove partial overlaps #####################
-    ## Now we remove any regressions that overlap each other
-
-    ## Here we loop through the df multiple times (while loop), because the multiple
-    ## overlapping relationships change everytime you remove one.
-    ## It will change in place as we do this.
-    ## For each row of the summary df (for loop) we check how many other regs that
-    ## one overlaps with (accounting for n)
-    ## Then we sort and rank these.
-    ## The one which overlaps with the most others gets removed.
-    ## If there are multiple ones with the same no. of overlaps, the lowest ranked
-    ## one gets removed (i.e. the lowest in auto_rate summary df ordering)
-    ## After this one is removed the analysis is repeated (next i of while loop).
-    ## It only stops when there are no more overlaps remaining (accounting for n)
-    ## This **should** leave relatively higher ranked ones which don't overlap.
-
-    ## Create objects to be used in loop
-    sort <- table(c(1,1)) ## so it's not 0 long, which would stop while loop
-    top <- NULL ## which row to remove before next loop
-
-    while(length(sort) > 0){
-
-      ## exclude row identified in previous loop
-      if(!is.null(top)) out_df <- out_df[-top,]
-
-      ## empty list for results of for loop
-      results <- list()
-
-      ## loop
-      for(i in 1:nrow(out_df)) {
-
-        start <- out_df$row[i] # start of reg
-        end <- out_df$endrow[i] # end of reg
-        width <- out_df$row_width[i] # width of reg
+    ## while at least one regression is overlapping,
+    ## go from bottom row to top
+    ## the one closest the bottom which is overlapping gets removed
+    ## then repeat while loop
+    while(any(overlaps)){
+      ## object to save logical test results to
+      overlaps <- rep(NA, nrow(df))
+      ## loop from last row to first
+      for(i in nrow(df):1) {
+        start <- df$row[i] # start of reg in data
+        end <- df$endrow[i] # end of reg in data
+        width <- df$row_width[i] # width of reg
         overlap <- round(width * n) # allowed overlap
+
+        overlaps[i] <- any(df$row[-i]+overlap <= end & df$endrow[-i]-overlap >= start)
+        #overlaps[i] <- any(start >= df$row[-i]overlap & end <= df$endrow[-i])
 
         ## For each regression in df (df[i,]) - which *other* regressions overlap it?
         ## They need to have start row (plus overlap) BEFORE end row of i reg
         ## And end row (minus overlap) AFTER start row of i reg
-        overlaps <- which(out_df$row+overlap <= end & out_df$endrow-overlap >= start)
-
-        ## May match with itself due to rounding of overlap, so remove it
-        if(any(overlaps == i)) overlaps <- overlaps[-which(overlaps == i)]
-
-        ## Save
-        results[[i]] <- overlaps
+        #overlaps <- which(out_df$row+overlap <= end & out_df$endrow-overlap >= start)
 
       }
 
-      ## sort all results from into table
-      ## this will order by
-      ## first - total number of other regs each reg in out_df overlaps with
-      ## second - by row number of summary df
-      ## so in event of multiple rows have same number of overlaps, lower numbers are
-      ## lower ranked regs (because we reversed the df earlier)
-      sort <-sort(table(unlist(results)), decreasing = TRUE)
+      ## if any are inside (contained), go to last one and remove it
+      if(any(overlaps)) {
+        remove <- tail(which(overlaps), 1)
+        df <- df[-remove,]
+      }
 
-      ## So FIRST one is the one which overlaps the MOST other regressions
-      ## and is lower ranked (i.e. lower row number)
-      ## So we exclude this for next loop
-      top <- as.numeric(names(sort)[1])
-
-      ## Loop repeats, every time removing this most overlapping, least ranked regression
-      ## until sort is empty, indicating none of the remaining overlap any others
-      ## (after accounting for n overlap tolerance)
+      keep <- which(x$summary$rank %in% df$rank)
+      keep <- sort(keep)
     }
 
-    ## keep is simply the remaining original row numbers (reversed back)
-    keep <- rev(out_df$orig_row_no)
-  }
+    ## May match with itself due to rounding of overlap, so remove it
+    #if(any(overlaps == i)) overlaps <- overlaps[-which(overlaps == i)]
+
+  } ### end overlap
+
+  # overlap_new -------------------------------------------------------------
+  if(method == "overlap_new"){
+
+    if(is.null(n)) {
+      n <- 0
+      message("subset_rate: 'overlap' method applying default 'n = 0', no overlapping permitted.")
+    }
+    if(n < 0 || n > 1)
+      stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
+    message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
+    message(glue::glue("subset_rate: Subsetting rates which overlap by at least {n*100}% ..."))
+
+    ##### First - remove contained
+
+    ## extract summary df
+    df <- x$summary
+    df$row_width <- df$endrow - df$row
+
+    insides <- TRUE # to get while loop started
+
+    ## while at least one regression is inside another,
+    ## go from bottom row to top
+    ## the one closest the bottom which is contained gets removed
+    ## then repeat while loop
+    while(any(insides)){
+      ## object to save logical test results to
+      insides <- rep(NA, nrow(df))
+      ## loop from last row to first
+      for(i in nrow(df):1) {
+        start <- df$row[i] # start of reg in data
+        end <- df$endrow[i] # end of reg in data
+
+        insides[i] <- any(start >= df$row[-i] & end <= df$endrow[-i])
+      }
+
+      ## if any are inside (contained), go to last one and remove it
+      if(any(insides)) {
+        remove <- tail(which(insides), 1)
+        df <- df[-remove,]
+      }
+    }
+
+    ## second
+
+    max_overlap <- data.frame(rank = NA,
+                              max_overlap = 1)
+
+    while(any(max_overlap[[2]] > n)) {
+
+      max_overlap <- data.frame(rank = NA,
+                              max_overlap = NA)
+      for(i in 1:nrow(df)){
+        rank <- df[i,1]
+        start <- df$row[i] # start of reg in data
+        end <- df$endrow[i] # end of reg in data
+        width <- df$row_width[i]
+
+        overlap_props <- data.frame(t(apply(df[-i,], 1, function(z) {
+          c(z[1],
+            prop = length(intersect(start:end, z[6]:z[7]))/width)
+        })))
+        max_overlap[i,] <- cbind(rank,
+                                 max(overlap_props$prop))
+
+      }
+      # because which.max returns only first result
+      remove <- tail(which(max_overlap$max_overlap == max(max_overlap$max_overlap)),1)
+
+      df <- df[-remove,]
+
+      cat("done", nrow(max_overlap))
+    }   # end of while loop
+
+      keep <- which(x$summary$rank %in% df$rank)
+      keep <- sort(keep)
+    }
+
+
+   ### end overlap
 
 
   # Subset auto_rate object -------------------------------------------------

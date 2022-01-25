@@ -22,7 +22,9 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999))
+               R.options = list(
+                                scipen = 999, 
+                                digits = 4))
 ```
 
 Intermittent-flow respirometry involves obtaining multiple replicates in an experiment by periodically flushing the respirometer with new water or air after a set period of time or O~2~ decrease. 
@@ -116,7 +118,7 @@ u_rep1 <- inspect(intermittent.rd[1:1900,])
 u_rate1 <- calc_rate(rep1, from = 7, to = 6.6, by = "o2")
 ```
 
-However, we can also use the dedicated `subset_data()` function, which allows for easy subsetting by time, oxygen or row number from both data frames and `inspect` objects. Here, we use the `inspect` object we [saved earlier](#inspect) using the whole dataset, to create new `inspect` objects for each replicate. These can be treated like any other `inspect` object, including being passed to `print` and `plot`.
+However, we can also use the dedicated `subset_data()` function, which allows for easy subsetting by time, oxygen or row number from both data frames and `inspect` objects. Here, we use the `inspect` object we [saved earlier](#inspect) containing the whole dataset, to create new `inspect` objects for each replicate. These can be treated like any other `inspect` object, including being passed to `print` and `plot`.
 
 ```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
 # Create separate replicate data frames
@@ -140,9 +142,10 @@ See later section [Converting rates](#convert) for how to convert these to units
 
 
 ## Analysis with `auto_rate`
-To more rigorously identify *lowest*, *highest* or *most linear* rates within each replicate we can use the `auto_rate()` function. See other [vignettes]() for more detail on using `auto_rate`. 
 
-`auto_rate` is designed to either run every regression of a fixed width across a dataset (`"rolling"`, `"lowest"` and `"highest"` methods), or use [kernel density analysis]() to identify the most`"linear"` regions, that is regions of most consistent and stable rates. Therefore it does not have region selection functionality by time, row or oxygen as `calc_rate` [does]({#calc_rate). 
+To more rigorously identify *lowest*, *highest* or *most linear* rates within each replicate we can use the `auto_rate()` function. See `vignette("auto_rate")` for more detail on using `auto_rate`. 
+
+`auto_rate` is designed to either run every regression of a fixed width across a dataset (`"rolling"`, `"lowest"` and `"highest"` methods), or use [kernel density analysis]() to identify the most`"linear"` regions, that is regions of most consistent and stable rates. Therefore it does not have region selection functionality by time, row or oxygen as `calc_rate` [does](#calc_rate). 
 
 It is also likely to work poorly with intermittent-flow data like this which shows sharp, oscillating oxygen patterns. Therefore, similar to the [above example](#oxygen) with `calc_rate` oxygen regions, we need to subset each replicate before running `auto_rate` on it. 
 
@@ -183,7 +186,7 @@ See also `subset_rate()` and `vignette("subset_rate")`. This is a function speci
 ar_low_1 <- auto_rate(u_rep1, method = "lowest", width = 300, by = "time") 
 ```
 
-This method fits every regression of the specified width across the entire dataset, and orders them from lowest to highest. (Note, this ordering is by *absolute* value, that is it ignores the sign of the rate; the `"minimum"` and `"maximum"` methods order strictly numerically).
+This method fits every regression of the specified width across the entire dataset, and orders them from lowest to highest. Note, this ordering is by *absolute* value, that is it ignores the sign of the rate; the `"minimum"` and `"maximum"` methods order strictly numerically.
 
 ```{r}
 summary(ar_low_1)

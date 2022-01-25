@@ -1,4 +1,4 @@
-# <font style="font-family:'Courier New'">respR : A package for processing and analysing respirometry data</font> <a href='http://januarharianto.github.io/respR'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# <a href='http://januarharianto.github.io/respR'> <img src='man/figures/logo.png' align="right" width="11%" /></a> <font style="font-family:'Courier New'">respR : Processing and analysis of respirometry data</font> 
 
 <!-- badges: start -->
 [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR)
@@ -30,12 +30,11 @@ A highlight of the package is the `auto_rate()` function. This uses machine lear
 
 ## Publication 
 
-<a href='https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' align="right" height="190" hspace = "20" /></a>
+<a href='https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' align="right" width="22%" hspace = "20" /></a>
 
 `respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR in use**]() page to see a list of published studies which have used the package to analyse their data.
 
-The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify a citation, we understand, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found `respR` useful, and we can help publicise your research. 
-
+The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. If you don't have the space, or feel you haven't used it enough to justify a citation, we understand, but please do [**let us know**](mailto:nicholascarey@gmail.com) anyway. We would like to keep track of studies which have found `respR` useful, and we can help promote your research. 
 
 We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry!
 
@@ -49,7 +48,7 @@ devtools::install_github("januarharianto/respR")
 
 ## Getting started
 
-See [**here**](https://nicholascarey.github.io/respRsite/articles/respR.html) to get started. This site has a range of vignettes detailing the functionality, and a variety of example analyses. 
+See [**here**](https://nicholascarey.github.io/respRsite/articles/respR.html) to get started. This site has a range of vignettes detailing the functionality and example workflows. 
 
 We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will help get you started. 
 
@@ -84,12 +83,10 @@ urchins.rd %>%        # using the urchins dataset,
 
 ## Feedback and contributions
 
-`respR` is under continuous development. If you have any bugs or feedback, you can contact us by [**opening an issue**](https://github.com/januarharianto/respr/issues).
-
-Or feel free to [**email**](mailto:nicholascarey@gmail.com) with any feedback or problems you may encounter.
+See [Contact]() page for ways of getting in touch and providing feedback. 
 
 ## Developers
 
 - [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
-- [**Nicholas Carey**](https://github.com/nicholascarey)
+- [**Nicholas Carey**](https://github.com/nicholascarey), Marine Science Scotland
 

@@ -25,7 +25,10 @@ tck <- -0.01 # size of axis ticks
 mgp <- c(0, 0.1, 0)
 
 
-multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '', legend = TRUE) {
+# axes = which axes to draw
+multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
+                    axes = c(1,2,3), legend = TRUE) {
+
   names(df) <- c("x", "y")
   if (!is.null(nrow(sdf)))
     sdf <- list(sdf)
@@ -45,19 +48,21 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '', legend = TRUE)
     abline(lm(y ~ x, z), lwd = 1.2, lty = 3)
   }))
 
-  axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
-  axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
+  if(1 %in% axes) axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
+  if(2 %in% axes) axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
+
   box()
-  if(legend) legend("bottomleft",
-                    "Time",
-                    text.col = "blue",
-                    bg = "gray90",
-                    cex = 0.5)
-  if(legend) legend("topright",
-                    "Row",
-                    text.col = "red",
-                    bg = "gray90",
-                    cex = 0.5)
+
+  if(legend && 1 %in% axes) legend("bottomleft",
+                                   "Time",
+                                   text.col = "blue",
+                                   bg = "gray90",
+                                   cex = 0.5)
+  if(legend && 3 %in% axes) legend("topright",
+                                   "Row",
+                                   text.col = "red",
+                                   bg = "gray90",
+                                   cex = 0.5)
   ## add row index axis
   par(new = TRUE)
   plot(seq(1, nrow(df)),
@@ -67,7 +72,7 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '', legend = TRUE)
        pch = "",
        cex = .5,
        axes = FALSE)
-  axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+  if(3 %in% axes) axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
 
   if (title == T)
     title(main = ("Full Timeseries"), line = 1.2, font = 2)
@@ -273,53 +278,108 @@ plot_multi_ar <- function(x, n = 9){
 }
 
 
-#' Plots auto_rate regressions in a way you can see how they
-#' overlap. If it's an auto_rate_subset object, it will plot
-#' the subset on the axes of the original results, so you can compare
-#' the subset and original easily.
-#' You can also specify an auto_rate $summary df directly, but then the axes
-#' limits will be drawn from the summary df not the original data, so may be
-#' somewhat arbitrary.
-#' Possibly we incorporate this into a user exploration function
+#' Plot auto_rate summary tables
+#'
+#' Plots `auto_rate` summary table regressions in a way that visualises how they
+#' are positioned within the data timeseries. If it is an `auto_rate_subset`
+#' object, it will plot the subset regressions using the ranks of the original
+#' results, so you can compare the subset and original.
+#'
+#' @param x `auto_rate` or `auto_rate_subset` object
+#' @param highlight integer. Which summary table rank regression to highlight.
+#'   Default is 1. If the input is an `auto_rate_subset` object this refers to
+#'   the rank from the original, unsubset results. Should be within `pos` range.
+#' @param pos integer(s). Which summary table ranks to plot in lower plot.
+#'   Defaults to all.
+#' @param legend logical. Suppress plot legends.
+#'
+#' @export
 #' @keywords internal
-plot_overlaps <- function(x){
 
-  if(is.data.frame(x)) df <- x else
-    df <- x$summary
+plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE){
 
-  if(is.data.frame(x))maxy <- nrow(x) else
-    if(("original" %in% names(x))) maxy <- nrow(x$original$summary) else
-      maxy <- nrow(x$summary)
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
 
-    miny <- 0
-    minx <- 0
-    if(is.data.frame(x))maxx <- max(x$endrow) else
-      maxx <- nrow(x$dataframe)
+  if(!("auto_rate" %in% class(x)))
+    stop("plot_ar: 'x' should be an 'auto_rate' or 'auto_rate_subset' object.")
 
-    if(("original" %in% names(x))) {
-      o_df <- x$original$summary
+  ## set margins
+  oma <- c(0.4, 0.2, 0.4, 0.1)
+  mai_1 <- c(0.1, 0.2, 0.35, 0.15)
+  mai_2 <- c(0.3, 0.2, 0.2, 0.15)
 
-      colsToUse <- intersect(colnames(df), colnames(o_df))
-      o_rows <- match(do.call("paste", as.data.frame(df)[, colsToUse]),
-                      do.call("paste", as.data.frame(o_df)[, colsToUse]))
+  ## set layout
+  m <- rbind(c(1,1,1), c(2,2,2), c(2,2,2))
+  layout(m)
 
-      o_df$row_no <- 1:nrow(o_df)
-    }
+  ## general plot settings
+  par(oma = oma,
+      ps = 10,
+      cex = 1,
+      cex.main = 1,
+      pch = pch,
+      tck = tck,
+      mgp = mgp)
 
-    df$row_no <- 1:nrow(df)
+  ## extract data
+  subset <- "original" %in% names(x) # has it already been subset?
+  if(is.null(pos))
+    if(subset) pos <- 1:nrow(x$original$summary) else
+      pos <- 1:nrow(x$summary)
+  # highlight shouldn't be outside pos selection
+  if(any(!(highlight %in% pos)))
+    stop("plot_ar: 'highlight' is not within range of 'pos'.")
+  # highlight shouldn't be bigger than number of results
+  if(any(highlight > nrow(x$summary)))
+    stop("plot_ar: 'highlight' is greater than number of rate results present.")
 
-    plot(minx:maxx, seq(miny, maxy, length.out=length(minx:maxx)),
-         ylim = c(maxy,miny),
-         col = "white",
-         ylab="$summary table ranking",
-         xlab="orginal data rows")
+  dt <- x$dataframe
+  summ <- x$summary[pos,]
+  if(subset) o_summ <- x$original$summary[pos,]
+  start <- summ$row[highlight]
+  end <- summ$endrow[highlight]
+  rownums <- start:end
+  sub_dt <- dt[start:end]
 
-    if(("original" %in% names(x))) {for(i in 1:nrow(df)) {
-      segments(df$row[i], o_rows[i], x1 = df$endrow[i], y1 = o_rows[i],
-               lwd=3, col = "blue")}
-    } else {for(i in 1:nrow(df)) {
-      segments(df$row[i], df$row_no[i], x1 = df$endrow[i], y1 = df$row_no[i],
-               lwd=3, col = "blue")}}
+  par(mai = mai_1)
+  multi.p(dt, sub_dt, axes = c(2,3), legend = legend)
 
-    invisible(return(x)) ## to allow it to be used within pipes - still prints though...
+  # Overlap plot ------------------------------------------------------------
+
+  # Axis limits
+  ## how many summary rows to plot. if already filtered, original
+  if(subset) maxy <- nrow(o_summ) else
+    maxy <- nrow(x$summary)
+  miny <- 0
+  maxx <- nrow(dt)
+  minx <- 0
+
+  par(mai = mai_2)
+  plot(minx:maxx, seq(miny, maxy, length.out=length(minx:maxx)),
+       ylim = c(maxy,miny),
+       col = "white",
+       ylab="",
+       xlab="",
+       axes = FALSE,
+       panel.first = grid(lwd = .7))
+  box()
+  for(i in 1:nrow(summ))
+    segments(summ$row[i], summ$rank[i], x1 = summ$endrow[i], y1 = summ$rank[i],
+             lwd=3, col = r1)
+  axis(side = 2, col.axis = "black", tck = tck, mgp = mgp)
+  segments(summ$row[highlight], summ$rank[highlight], x1 = summ$endrow[highlight], y1 = summ$rank[highlight],
+           lwd=3, col = r2)
+  title("Summary Table Rank (Descending)")
+  # invisible plot to get time axis
+  par(new=TRUE)
+  plot(dt[[1]], dt[[2]], pch = "", xlab = "", ylab = "", axes = FALSE)
+  axis(side = 1, col.axis = "blue", tck = tck, mgp = mgp)
+  if(legend) legend("bottomleft",
+                    "Time",
+                    text.col = "blue",
+                    bg = "gray90",
+                    cex = 0.5)
+
+  invisible(return(x)) ## to allow it to be used within pipes - still prints though...
 }

@@ -3,7 +3,7 @@ title: "inspect: Inspecting data"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    toc_depth: 2
+    toc_depth: 4
 vignette: >
   %\VignetteIndexEntry{inspect: Inspecting data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,12 +22,12 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
+               R.options = list(
                                 scipen = 999, 
                                 digits = 3))
 ```
 
-# Introduction
+## Introduction
 
 The first step in any data analysis should be to visualise the data and check it for errors. 
 
@@ -45,18 +45,28 @@ data prior to analysis.
 
 Depending on the data type, the function will perform a series of checks. These were informed by experiences working with real respirometry data from a variety of systems, and the data issues that were most frequently encountered.
 
-## Flowthrough respirometry data
+### Flowthrough respirometry data
 
 Most of the following is also relevant to `inspect.ft()` which is a special function for inspecting flowthrough respirometry data. See `vignette("flowthrough")` for specific examples.
 
-# Data checks
+## Data checks
 
-# Numeric 
+## Successful check
+
+This is what a successful `inspect` check looks like; all columns are numeric and without missing values, and the time data are sequential, unique values and with even spacing. 
+
+```{r}
+inspect(sardine.rd)
+```
+
+This dataset is therefore ready to be passed to further `respR` functions. While we have in general designed `respR` to be robust to data which might contain these issues, we have not been able to test every combination of them. Therefore, to be fully confident in results and avoid obscure errors we strongly recommend data be amended to pass these tests wherever possible. 
+
+## Numeric 
 Many datasets on being imported to R, for esoteric reasons, can have column data types misclassified. A stray character or even space may cause an entire column of numeric data to be classed as a non-numeric format such as `character`. For example, some versions of the Pyro and Firesting systems software replace missing data with `"---"`, which causes the entire column to be classed as `character` when imported to R. Often this is a single entry in a random location where a data recording has been missed, or at the very end of a column, so not obvious when the head of the data is given a quick look. 
 
-The first and most important check `inspect` performs is the specified `time` and `oxygen` columns are numeric. If this check fails, the rest of the checks for that column are skipped, and the function exits returning a `NULL` value. No plot is produced. `respR` functions cannot process non-numeric data, so only when all inspected columns pass this check will the function output an `inspect` object that can be passed to subsequent functions.
+The first and most important check `inspect` performs is that the specified `time` and `oxygen` columns are numeric. If this check fails, the rest of the checks for that column are skipped, and the function exits returning a `NULL` value. No plot is produced. `respR` functions cannot process non-numeric data, so only when all inspected columns pass this check will the function output an `inspect` object that can be passed to subsequent functions.
 
-## Example
+### Example
 
 This dataset has a single time value missing and replaced with `"---"`, which causes the entire column to be classed as `character`. This is not at all obvious if you view a portion of the data not containing the missing value.
 
@@ -87,7 +97,7 @@ insp <- suppressMessages(inspect(df))
 ```
 
 
-## Remedies
+### Remedies
 
 There are many ways to fix an issue such as this, from editing the original file, to numerous potential solutions within R. The easiest in this case is probably using `as.numeric()`. On data such as this it will parse the obviously numeric values to numeric, and where it cannot, replace them with an `NA`. 
 
@@ -127,11 +137,11 @@ insp <- suppressMessages(inspect(df))
 
 Now the saved object `insp` can be passed to functions such as `calc_rate()`.
 
-# Inf/-Inf  {#infcheck}
+## Inf/-Inf  {#infcheck}
 
 The next most important check is for infinite (or minus infinite) values. Some oxygen sensing systems add these in error when interference or data dropouts occur. Infinite values will cause problems when it comes to calculating rates, so need to be removed. 
 
-## Example
+### Example
 
 This datasets contains an infinite oxygen value. 
 
@@ -150,7 +160,7 @@ We can see a warning, and the output also lists the locations (row numbers) of t
 data[20:25,]
 ```
 
-## Remedies {#inffix}
+### Remedies {#inffix}
 
 Infinite values **must** be removed or replaced, or it will severely affect rate calculations, and may have other unknown effects in subsequent functions. Depending on how many, where they occur, etc., the appropriate way to do this will vary. Here, we could remove the row entirely, but since it is a single value we can just replace it with an intermediate value which won't affect rate calculations.
 
@@ -164,7 +174,7 @@ insp <- inspect(data)
 
 Now the saved object `insp` can be passed to functions such as `calc_rate()`.
 
-# NA/NaN  {#nacheck}
+## NA/NaN  {#nacheck}
 
 The third check is to look for missing data, that is `NA` or `NaN` values. This is perhaps the most common issue encountered when importing raw respirometry data files to R. Many oxygen probe systems or computers struggle with high recording frequencies, experience probe dropouts, suffer interference, or other issues, and the typical practice is to fill the resulting data gaps with `NA` or `NaN`. 
 
@@ -172,7 +182,7 @@ The third check is to look for missing data, that is `NA` or `NaN` values. This 
 
 If `inspect` finds `NA/NaN` data, it outputs the locations (row numbers) to assist with removing or filling them. 
 
-## Example
+### Example
 
 This dataset has two columns of oxygen, one with a single `NA` and one with a larger chunk of values missing. 
 
@@ -194,7 +204,7 @@ insp <- suppressWarnings(suppressMessages(inspect(df, time = 1, oxygen = 2:3, pl
 
 The output console message gives a warning and prints the locations (up to the first 20) of the missing values in the respective column.
 
-## Remedies
+### Remedies
 
 The locations can also be found in the output object in the `$locs` element with the name of the column.
 
@@ -206,7 +216,7 @@ insp$locs$oxy2$`NA/NaN`
 
 These can be used to extract or fill the missing values, or simply remove these rows. See above [example](#inffix).
 
-# Sequential Time  {#seqcheck}
+## Sequential Time  {#seqcheck}
 
 This check is performed on the `time` column only. 
 
@@ -214,7 +224,7 @@ Numeric time values are expected to be sequential, that is increasing in value. 
 
 Non-sequential time values could cause unknown issues, so to be fully confident in results and avoid obscure errors, we would strongly recommend the data be amended to be sequential. 
 
-## Example
+### Example
 
 This imported dataset contains time~oxygen data values, but no numeric time. 
 
@@ -259,7 +269,7 @@ data[297:302,]
 
 Where times have crossed midnight, our code has failed to parse it correctly. The lack of dates along with times means we have incorrectly calculated the elapsed time. 
 
-## Remedies
+### Remedies
 
 If this particular issue is detected, it is usually an indication of a deeper problem, so the actual remedy will depend on the situation, from editing the original data file, to various solutions within R, such as reordering rows. 
 
@@ -282,7 +292,7 @@ inspect(data, time = 5, oxygen = 4)
 ```
 
 
-# Duplicate Time 
+## Duplicate Time 
 
 This check is performed on the `time` column only. 
 
@@ -290,7 +300,7 @@ Duplicate time values can result from rounding time values, or the system accide
 
 This warning is not necessarily a major issue. `respR` relies on linear regressions on time~oxygen paired data values to calculate rates. When fitting linear regressions, duplicates will not affect results so as long as the data are genuine values. However, the check flags up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem. 
 
-## Example 1
+### Example 1
 
 This dataset has been recorded at approximately 1 second intervals, but at 0.1s precision, and when rounded to the nearest second this leads to lots of duplicated values. 
 
@@ -322,11 +332,11 @@ inspect(data_round)
 suppressMessages(suppressWarnings(inspect(data_round, plot = F)))
 ```
 
-## Remedies
+### Remedies
 
 In this case, `inspect` produces a duplicate times warning, however it can be safely ignored. These values are perfectly valid at this precision, and when it comes to fitting linear regressions and calculating rates will not realistically affect rate calculations. However, an alternative option would be to not round the times at all; `respR` will happily accept any form of numeric decimalised time value. 
 
-## Example 2
+### Example 2
 
 This dataset by contrast contains several duplicated rows. The `inspect` call detects and identifies these, allowing them to be checked or amended. 
 
@@ -353,7 +363,7 @@ data[dupes,]
 
 ```
 
-## Remedies
+### Remedies
 
 Like other checks, if or how to amend this issue will depend on the situation. Here, these duplicate rows could affect rate calculations, if for instance we are determining rates over a specific row width across the dataset (by contrast a rate using a `time` width would be unaffected). They could also affect other reported outputs such as the r-squared. It's probably easiest to just remove them, and `inspect` the data again. 
 
@@ -365,11 +375,11 @@ data <- data[-dupes[-1],]
 inspect(data)
 ```
 
-# Evenly Spaced Time  {#evencheck}
+## Evenly Spaced Time  {#evencheck}
 
 Depending on the time metric, this is perhaps the most frequently seen warning. Generally, respirometry data are recorded at regular intervals. Any irregular intervals between time values are an indication that something might have gone wrong: the system stopped recording for a period, some data were lost when imported, rows were removed accidentally, or some other reason. The purpose of this check is to find and report any such gaps in the data. If these are found, the locations are returned, and in addition the maximum and minimum intervals in the time data. 
 
-## Example 1
+### Example 1
 
 One reason this check might produce warnings is through use of a metric such as decimalised minutes. For example, data recorded once per second, but converted to minutes is used in the `flowthrough_mult.rd` example data.
 
@@ -388,11 +398,11 @@ inspect(flowthrough_mult.rd)
 
 ```
 
-## Remedies
+### Remedies
 
 While there are too many locations printed here to get a handle on if there are *actual* gaps in the data, the additional print out of the minimum and maximum time intervals tells us the intervals are what we would expect with these time values, so in the case of these data they are fine to pass to subsequent functions. 
 
-## Example 2
+### Example 2
 
 If there were a larger time gap in the data, this check would flag it up. This dataset is missing a large number of rows. 
 
@@ -414,11 +424,11 @@ While there is only one time gap location at row 341, we can see this is a large
 data[340:344, ]
 ```
 
-## Remedies
+### Remedies
 
 Like many of the issues, if or how to fix this depends on the context. In this case it may have been an accidental deletion or importing problem. However, you can still calculate rates across these gaps, which will be perfectly reportable, as long as care is taken to understand the implications of doing this. 
 
-## Calculating rates across gaps
+### Calculating rates across gaps
 
 `calc_rate()` allows you to calculate a rate using a `"row"` or `"time"` interval. In this dataset, because the time is in seconds and recording interval once per second, they are therefore equivalent to the row numbers. Any rates calculated in a complete region of the data before the gap will be identical for either method. 
 
@@ -452,7 +462,9 @@ Such gaps may also affect rolling rate determinations, such as in the `auto_rate
 
 Note also, because of the missing rows, all rows *after* the gap will not conform to the same time values, although as long as they don't include the gap will represent an equivalent time *window*. 
 
-# Plot
+## Notes
+
+### Plot
 
 When using `inspect`, a plot of the inspected data is produced (unless `plot = FALSE`), against both time (bottom blue axis) and row index (top red axis).
 
@@ -476,7 +488,7 @@ when using `plot()` on the output object. In this case, the rate values will
 be plotted not reversed, with higher oxygen *production* rates higher on the
 plot.
 
-## Rolling rate
+### Rolling rate plot
 
 Some datasets may benefit from changing the `width` to get a better idea of how the rate fluctuates across the data. This is helpful to inform the regions from which to extract rates in later functions, as well as an appropriate time or row window to use when extracting rates.
 
@@ -496,7 +508,7 @@ With a higher `width` rates after the initial period are much more stable. This 
 
 If we are interested in the very lowest rate, it seems to occur just before timepoint 6000 (although see `auto_rate()` for extracting the lowest rates).
 
-## Intermittent-flow data
+### Intermittent-flow data
 
 Note, intermittent-flow data will include rates across flush periods, which can skew results, and possibly make the output difficult to interpret.
 
@@ -506,14 +518,14 @@ inspect(intermittent.rd)
 
 Here the flushes skew the rolling rates, but within each replicate rates seem to be a consistent value of around -0.0005. 
 
-However, you can always use `inspect` without saving the result for a closer look at regions of the data.
+However, you can always use `inspect` without saving the result for a closer look at regions of the data, though note the `width` input will apply to the subset, not the original data length.
 
 ```{r results='hide', message=FALSE}
 inspect(intermittent.rd[1:1800,])
 ```
 
 
-## Inspect portions of long experiments
+### Inspect portions of long experiments
 
 For really long experiments, both the timeseries and rolling rate plot may be difficult to interpret. This experiment on a zebra fish is 22h long and nearly 80000 rows. 
 
@@ -529,7 +541,7 @@ inspect(zeb_intermittent.rd[20000:24000,])
 
 This better shows us the structure of this intermittent-flow experiment, and that within these replicates specimen rates appear to be consistent at around -0.002. When subset like this, the `width` operator refers to the length of the subset not the original data. 
 
-## Multiple columns of oxygen data
+### Multiple columns of oxygen data
 
 For a quick overview of larger datasets, multiple oxygen columns can be
 inspected by using the `oxygen` argument to select
@@ -554,7 +566,7 @@ inspect(urchins.rd, time = 1, oxygen = 8:19)
 
 This gives us a quick visual overview of the dataset, allowing us to, for example, see the experiments which have some sort of issues, and which are controls (the last two here).
 
-## Additional plotting options
+### Additional plotting options
 
 Additional plotting controls can be passed in either the main `inspect` call or when using `plot()` on the output object. 
 

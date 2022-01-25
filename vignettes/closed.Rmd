@@ -4,6 +4,7 @@ output:
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 4
+
 vignette: >
   %\VignetteIndexEntry{Closed-chamber respirometry}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,8 +23,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
-                                scipen = 999, 
+               R.options = list(scipen = 999, 
                                 digits = 3))
 ```
 
@@ -44,15 +44,13 @@ The typical workflow in `respR` is to process a data frame containing paired val
 
 A typical workflow involves some or all of the following functions:
 
-`import_file()` & `format_time()` - import data and prepare it for use in `respR`
-
-`inspect()` - visualise the data and check it for common issues
-
-`calc_rate()` and `auto_rate()` - extract rates from the entire dataset or regions of it, manually or automatically
-
-`adjust_rate()` - adjust the rate values for background oxygen use or production 
-
-`convert_rate()` - convert the final adjusted rate to any common units of oxygen use or production
+|  |  |
+| -- | -- |
+| `import_file()` & `format_time()` | Import data and prepare it for use in `respR` |
+| `inspect()` | Visualise the data and check it for common issues|
+| `calc_rate()` & `auto_rate()` | Extract rates from the entire dataset or regions of it, manually or automatically |
+| `adjust_rate()` | Adjust the rate values for background oxygen consumption or production |
+| `convert_rate()` | Convert the final adjusted rate to any common units of oxygen consumption or production |
 
 
 ### Importing and preparing data
@@ -77,7 +75,7 @@ Once data is in the form of a `data.frame` of paired time and oxygen values, we 
 
 - Time data are numerically *evenly-spaced* 
 
-See `vignette("inspecting")` for a full description and example of what these checks entail, the implications of them failing or producing warnings, and other inputs in the function.
+See `vignette("inspecting")` for a full description and examples of what these checks entail, the implications of them failing or producing warnings, and other inputs in the function.
 
 #### Inspect entire dataset
 

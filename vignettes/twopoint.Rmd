@@ -22,7 +22,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(width = 999,
+               R.options = list(
                                 scipen = 999, 
                                 digits = 3))
 ```
