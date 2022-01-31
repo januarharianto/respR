@@ -40,6 +40,27 @@ If you use the package, we would appreciate a citation to the publication in [Me
 
 The following publications (most recent first) have used and cited `respR`. If we have missed one, please [**let us know**](mailto:nicholascarey@gmail.com) and we will include it in the list.
 
+
+#### @bergerRegionalVulnerabilityAssessment2022
+
+Thesis
+
+#### @wuEndocrineDisruptionPlastic2022
+
+Nick
+
+#### @guitardIncreasedParasiteLoad2022
+
+Parasites
+
+#### @prokkolaGeneticCouplingLifehistory2022
+
+In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. This is a preprint and we are looking forward to seeing it in a journal soon. 
+
+#### @burfordRapidRangeExpansion2022
+
+Squid v fish
+
 #### @mallonLightDrivenDynamics2022
 
 Coralline algae
@@ -47,10 +68,6 @@ Coralline algae
 #### @burnsMetabolicRateCritical2021
  
 Alexandra Burns used `respR` in this MSc project, looking at oxygen supply capacity under different temperatures in a species of shrimp. Congrats on the Masters! 🥳
-
-#### @prokkolaGeneticCouplingLifehistory2021
-
-In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. This is a preprint and we are looking forward to seeing it in a journal soon. 
 
 #### @killenGuidelinesReportingMethods2021a
 
