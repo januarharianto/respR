@@ -4,7 +4,7 @@
 \alias{plot_ar}
 \title{Plot auto_rate summary tables}
 \usage{
-plot_ar(x, highlight = 1, pos = NULL, legend = TRUE)
+plot_ar(x, highlight = 1, pos = NULL, legend = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{auto_rate} or \code{auto_rate_subset} object}

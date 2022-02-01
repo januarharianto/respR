@@ -73,9 +73,10 @@
 #' axis) and row index (top, red axis), depending on the inputs:
 #'
 #' - a single `out.o2` column with either a paired `in.o2` column or
-#' `in.o2.value`: a two panel plot. The top plot is both outflow (black points)
-#' and inflow (grey points) oxygen. The bottom plot is the oxygen delta between
-#' outflow and inflow oxygen, essentially the oxygen uptake or production rate.
+#' `in.o2.value`: a two panel plot. The top plot is both outflow (green points)
+#' and inflow (turquoise points) oxygen. The bottom plot is the oxygen delta
+#' (black points) between outflow and inflow oxygen, essentially the oxygen
+#' uptake or production rate.
 #'
 #' - a single `delta.o2` column: a one panel plot of oxygen delta values.
 #'
@@ -106,9 +107,9 @@
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
-#' the output object. Suppress console output messages with `quiet = TRUE`.
-#' If multiple columns have been inspected, the `pos` input can be used to
-#' examine each `out.o2`~`in.o2`~`del.o2` dataset.
+#' the output object. Suppress console output messages with `quiet = TRUE`. If
+#' multiple columns have been inspected, the `pos` input can be used to examine
+#' each `out.o2`~`in.o2`~`del.o2` dataset.
 #'
 #' ## Multiple data columns
 #'
@@ -624,17 +625,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     if (!quiet && length(pos) == 1)
       cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
 
-    ## general settings
-    ## margins
-    bt <- 0.25
-    lf <- 0.4
-    tp <- 0.4
-    rt <- 0.1
-
     par(
       mfrow = n2mfrow(length(pos)),
-      mai = c(bt, lf, tp, rt),
-      oma = c(0.1, 0.4, 0.1, 0.1),
+      mai = mai,
+      oma = oma,
       ps = 10,
       pch = 20,
       cex = 1,
@@ -658,13 +652,15 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            xlab = "",
            ylab = "",
            cex = 0.5,
+           col = ftcol_del,
            panel.first = grid())
 
       box()
-      axis(side = 2, las = 1, tck = tck, mgp = c(0, 0.3, 0))
+      axis(side = 2, las = las, tck = tck, mgp = mgp)
       axis(side = 1, col.lab = "blue",
            col.axis = "blue",
-           tck = tck, mgp = mgp)
+           tck = tck,
+           mgp = mgp)
 
       # plot invisibly - to add row index x-axis
       par(new = TRUE)
@@ -677,10 +673,11 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
       )
       axis(side = 3,
            tck = tck,
-           mgp = c(0, 0.2, 0),
+           mgp = mgp,
            col.axis = "red")
-      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.3,
-            adj = 0)})
+      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.2,
+            adj = 0)
+    })
 
     if(legend && length(pos) == 1) legend("topright",
                                           "Row Index",
@@ -693,6 +690,8 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                                           text.col = "blue",
                                           bg = "gray90",
                                           cex = 0.6)
+    mtext("inspect.ft: Inspecting Selected Columns",
+          outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     # Single dataset ----------------------------------------------------------
   } else if (length(x$data$delta.o2) == 1 || !is.null(pos)) {
@@ -704,20 +703,14 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     if (!quiet)
       cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
 
-    ## general settings
-    ## margins
-    bt <- 0
-    lf <- 0.5
-    tp <- 0.6
-    rt <- 0.2
-
     m <- rbind(c(1,1,1), c(1,1,1), c(2,2,2))
     layout(m)
-    par(mai = c(bt, lf, tp, rt),
+    par(oma = oma,
+        mai = mai,
         ps = 10,
         cex = 1,
         cex.main = 1,
-        mgp = c(0, 0.5, 0))
+        mgp = mgp)
 
     ## ylim for outflow and inflow plots - plus 10%
     ylim <- range(range(nainf.omit(out.o2[[pos]])), range(nainf.omit(in.o2[[pos]]))) ## so all on same axes
@@ -733,12 +726,13 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
          ylim = ylim,
          pch = 16,
          cex = .5,
+         col = ftcol_out,
          axes = FALSE,
          col.lab = "blue",
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0))
+    axis(side = 2, las = las, tck = tck, mgp = mgp)
     points(unlist(time),
            in.o2[[pos]],
            xlab = "",
@@ -746,7 +740,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            ylim = ylim,
            pch = 16,
            cex = .5,
-           col = "grey")
+           col = ftcol_in)
     # plot invisibly - to add row index x-axis
     par(new = TRUE)
     plot(
@@ -760,8 +754,8 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = 0,
-         mgp = c(0, 0.3, 0))
+         tck = tck,
+         mgp = mgp)
     box()
     if(legend) legend("topright",
                       "Row Index",
@@ -771,14 +765,15 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
     if(legend) legend("right",
                       legend=c("Inflow O2", "Outflow O2"),
-                      col=c("grey", "black"),
+                      col=c(ftcol_in, ftcol_out),
                       pch=16,
                       cex=0.8)
 
-    title(main = "Outflow ~ Inflow O2", line = 1.8)
+    mtext("Outflow ~ Inflow O2",
+          outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     # Delta plot --------------------------------------------------------------
-    par(mai = c(0.4, lf, 0.2, rt))
+    par(mai = mai)
     ## ylim  - plus 10%
     ylim <- range(nainf.omit(del.o2[[pos]])) ## so all on same axes
     buffer <- diff(ylim)*0.1
@@ -794,14 +789,16 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
       ylim = ylim, # reverse y axis
       pch = 16,
       cex = .5,
+      col = ftcol_del,
       axes = FALSE,
       panel.first = grid()
     )
 
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.3, 0)) # simply to put yaxis lab colour back to black
+    axis(side = 2, las = las, tck = tck, mgp = mgp) # simply to put yaxis lab colour back to black
     axis(side = 1,col.lab = "blue",
          col.axis = "blue",
-         tck = 0, mgp = c(0, 0.3, 0))
+         tck = tck,
+         mgp = mgp)
 
     box()
 
@@ -811,7 +808,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                       bg = "gray90",
                       cex = 0.6)
 
-    title(main = glue::glue("Delta O2 (i.e. Unitless Rate)"), line = 0.3)
+    mtext("Delta O2",
+          outer = FALSE, cex = 1.2, line = 1.2, font = 2)
+    mtext(glue::glue("(i.e. Unitless Rate)"),
+          outer = FALSE, cex = 1, line = 0.3, font = 2)
 
   }
 

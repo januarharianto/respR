@@ -473,11 +473,6 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   dens <- x$density
   peaks <- x$peaks[, 2:3]
 
-
-  ## plot params
-  oma <- c(0.4, 1, 1.5, 0.4)
-  mai <- c(0.3, 0.15, 0.35, 0.15)
-
   # PLOT BASED ON METHOD
   if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "rolling")) {
     if (choose == FALSE) {
@@ -527,8 +522,8 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   }
 
   if(!isFALSE(choose))
-    par(oma = c(0.4, 1, 1.5, 0.4),
-        mai = c(0.3, 0.15, 0.35, 0.15),
+    par(oma = oma,
+        mai = mai,
         ps = 10,
         cex = 1,
         cex.main = 1)

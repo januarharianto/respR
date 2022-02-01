@@ -55,10 +55,10 @@
 #' For rates calculated from `inspect.ft` inputs, a plot is produced (provided
 #' `plot = TRUE`) showing the original data timeseries of inflow and outflow
 #' oxygen (if present, top plot), oxygen delta values (middle or top plot) with
-#' the region specified via the `from` and `to` inputs highlighted, and a
-#' close-up of this region with calculated rate value (bottom plot). If multiple
-#' rates have been calculated, by default the first is plotted. Others can be
-#' plotted by changing the `pos` argument, e.g. `plot(object, pos = 2)`.
+#' the region specified via the `from` and `to` inputs highlighted in orange,
+#' and a close-up of this region with calculated rate value (bottom plot). If
+#' multiple rates have been calculated, by default the first is plotted. Others
+#' can be plotted by changing the `pos` argument, e.g. `plot(object, pos = 2)`.
 #'
 #' ***Important:*** Since `respR` is primarily used to examine oxygen
 #' consumption, the delta oxygen and rate plots are by default plotted on a
@@ -587,20 +587,20 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   par(ps = 10,
       cex = 1,
       cex.main = 1,
-      mgp = c(0, 0.2, 0))
+      mgp = mgp,
+      oma = oma)
 
   ## margins
   bt <- 0
-  lf <- 0.4
-  tp <- 0.6
-  rt <- 0.1
+  lf <- 0.15
+  tp <- 0.35
+  rt <- 0.15
 
   # margins
-  oma = c(0,0,0,0)
-  mai_outin <- c(bt, lf, 0.35, rt) # outflow/inflow plot
+  mai_outin <- c(0.15, lf, 0.25, rt) # outflow/inflow plot
   mai_close <- c(0.25, lf, 0.2, rt) # bottom close plot
   mai_delta <- c(0.25, lf, 0.2, rt) # middle delta plot
-  mai_delta_only <- c(0.25, lf, 0.35, rt) # if delta only plot
+  mai_delta_only <- c(0.25, lf, 0.25, rt) # if delta only plot
 
   # in.o2 - out.o2 plot -----------------------------------------------------
   if (!delta_only) {
@@ -619,12 +619,13 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
          ylim = ylim,
          pch = 16,
          cex = .5,
+         col = ftcol_out,
          axes = FALSE,
          col.lab = "blue",
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0))
+    axis(side = 2, las = las, tck = tck, mgp = mgp)
     points(time,
            in.o2,
            xlab = "",
@@ -632,7 +633,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
            ylim = ylim,
            pch = 16,
            cex = .5,
-           col = "grey")
+           col = ftcol_in)
     # plot this invisibly - to add row index x-axis
     par(new = TRUE)
     plot(
@@ -646,18 +647,18 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     )
     axis(side = 3,
          col.axis = "red",
-         tck = 0,
-         mgp = c(0, 0, 0))
+         tck = tck,
+         mgp = mgp)
     box()
 
-    ## green box for rate region
+    ## box for rate region
     abline(v = pos_from_time,
-           col = rgb(15/255,245/255,53/255,  alpha = 0.3),
+           col = ftcol_rate_ln,
            lty = 1,
            lwd = 3)
 
     abline(v = pos_to_time,
-           col = rgb(15/255,245/255,53/255,  alpha = 0.3),
+           col = ftcol_rate_ln,
            lty = 1,
            lwd = 3)
 
@@ -665,7 +666,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
          ybottom = y_range[1],
          xright = pos_to_time,
          ytop = y_range[2],
-         col = rgb(15/255,245/255,53/255,  alpha = 0.15),
+         col = ftcol_rate_bx,
          lty = 0)
 
     if(legend) legend("topright",
@@ -676,11 +677,12 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
 
     if(legend) legend("right",
                       legend=c("Inflow O2", "Outflow O2"),
-                      col=c("grey", "black"),
+                      col=c(ftcol_in, ftcol_out),
                       pch=16,
                       cex=0.4)
 
-    title(main = "Outflow - Inflow O2", line = 1)
+    mtext("Outflow - Inflow O2",
+          outer = TRUE, cex = 1, line = 0, font = 2)
   }
 
   # Delta plot --------------------------------------------------------------
@@ -705,17 +707,18 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     ylim = ylim,
     pch = 16,
     cex = .5,
+    col = ftcol_del,
     axes = FALSE,
     panel.first = grid()
   )
 
-  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0)) # simply to put yaxis lab colour back to black
-  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = 0, mgp = c(0, 0, 0))
+  axis(side = 2, las = las, tck = tck, mgp = mgp) # simply to put yaxis lab colour back to black
+  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = tck, mgp = mgp)
 
   box()
 
   ## Title
-  if(delta_only) title(main = glue::glue("Delta O2"), line = 1) else
+  if(delta_only) mtext("Delta O2", outer = TRUE, cex = 1, line = 0, font = 2) else
     title(main = glue::glue("Delta O2"), line = 0.3)
 
   ## This will have bottom legend regardless
@@ -729,7 +732,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   ## No need to do this if data are single points
   ## Which happens when single delta value is converted
   if(length(pos_y_data_delta) > 1){
-    points(pos_y_data_delta ~ pos_x_data, col = "lightgreen",pch = 16,
+    points(pos_y_data_delta ~ pos_x_data, col = ftcol_rate_pt, pch = 16,
            cex = .5)
     clip(min(na.omit(pos_x_data)),
          max(na.omit(pos_x_data)),
@@ -750,7 +753,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
       cex = .5,
       axes = FALSE
     )
-    axis(side = 3, col.axis = "red", tck = 0, mgp = c(0, 0, 0))
+    axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
 
     if(legend) legend("topright",
                       "Row Index",
@@ -774,7 +777,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   plot(
     pos_x_data,
     all_rates,
-    col = "lightgreen",
+    col = ftcol_rate_pt,
     xlab = "",
     ylab = "",
     ylim = ylim,
@@ -784,9 +787,9 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     panel.first = grid()
   )
 
-  axis(side = 2, las = 1, tck = 0, mgp = c(0, 0.2, 0))
+  axis(side = 2, las = las, tck = tck, mgp = mgp)
   axis(side = 1,col.lab = "blue",
-       col.axis = "blue", tck = 0, mgp = c(0, 0, 0))
+       col.axis = "blue", tck = tck, mgp = mgp)
 
   box()
 

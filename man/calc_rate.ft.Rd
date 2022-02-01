@@ -104,10 +104,10 @@ convert rates to specific units of oxygen uptake or production.
 For rates calculated from \code{inspect.ft} inputs, a plot is produced (provided
 \code{plot = TRUE}) showing the original data timeseries of inflow and outflow
 oxygen (if present, top plot), oxygen delta values (middle or top plot) with
-the region specified via the \code{from} and \code{to} inputs highlighted, and a
-close-up of this region with calculated rate value (bottom plot). If multiple
-rates have been calculated, by default the first is plotted. Others can be
-plotted by changing the \code{pos} argument, e.g. \code{plot(object, pos = 2)}.
+the region specified via the \code{from} and \code{to} inputs highlighted in orange,
+and a close-up of this region with calculated rate value (bottom plot). If
+multiple rates have been calculated, by default the first is plotted. Others
+can be plotted by changing the \code{pos} argument, e.g. \code{plot(object, pos = 2)}.
 
 \emph{\strong{Important:}} Since \code{respR} is primarily used to examine oxygen
 consumption, the delta oxygen and rate plots are by default plotted on a

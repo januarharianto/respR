@@ -13,6 +13,13 @@ r2 <- adjustcolor("goldenrod1", alpha.f = 1)  # secondary colour
 r3 <- adjustcolor("darkgrey", alpha.f = .2)  # plot background colour
 d1 <- adjustcolor("tomato", alpha.f = .75)
 d2 <- adjustcolor("darkslateblue", alpha.f = .75)
+# colours for flowthrough plots
+ftcol_in <- adjustcolor("turquoise", alpha.f = 1) # inflow o2
+ftcol_out <- adjustcolor("lightgreen", alpha.f = 1) # outflow o2
+ftcol_del <- adjustcolor("black", alpha.f = 0.9) # delta o2
+ftcol_rate_pt <- adjustcolor("goldenrod1", alpha.f = 1) # highlighted rate points
+ftcol_rate_bx <- adjustcolor("goldenrod1",  alpha.f = 0.2) # highlighted rate region box bg
+ftcol_rate_ln <- adjustcolor("goldenrod1",  alpha.f = 0.25) # highlighted rate region line
 
 # panel <- c(rect(par("usr")[1], par("usr")[3], par("usr")[2],
 #   par("usr")[4], col = r3), grid(col = "white", lty = 1, lwd = 1.5))
@@ -24,6 +31,14 @@ tck <- -0.01 # size of axis ticks
 # 3 = distance of ticks from axis
 mgp <- c(0, 0.1, 0)
 
+# standard margins
+# outer
+oma <- c(0.4, 1, 1.5, 0.4)
+# inner
+mai <- c(0.3, 0.15, 0.35, 0.15)
+
+# standard axis rotation
+las <- 0
 
 # axes = which axes to draw
 multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
@@ -76,7 +91,6 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
 
   if (title == T)
     title(main = ("Full Timeseries"), line = 1.2, font = 2)
-  # title(main = paste0("r2 = ", signif(rsq, 3)), line = -1.5, font.main = 1)
 }
 
 # a plot of the subset only
@@ -296,7 +310,7 @@ plot_multi_ar <- function(x, n = 9){
 #' @export
 #' @keywords internal
 
-plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE){
+plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original

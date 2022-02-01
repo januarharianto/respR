@@ -430,15 +430,9 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
 
   if (length(dt) == 2) {
 
-    ## general settings
-    ## margins
-    bt <- 0
-    lf <- 0.5
-    tp <- 0.5
-    rt <- 0.2
-
     par(mfrow = c(2, 1),
-        mai = c(bt, lf, tp, rt),
+        oma = oma,
+        mai = mai,
         ps = 10,
         cex = 1,
         cex.main = 1,
@@ -461,8 +455,8 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = 1, tck = tck, mgp = c(0, 0.3, 0))
-    #title(xlab = "Time", line = 1)
+    axis(side = 2, las = las, tck = tck, mgp = mgp)
+
     ## add row index axis
     par(new = TRUE)
     plot(seq(1, nrow(dt)),
@@ -479,7 +473,8 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                       text.col = "red",
                       bg = "gray90",
                       cex = 0.7)
-    title(main = "Full Timeseries", line = 1.5)
+    mtext("Full Timeseries",
+          outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     ## Adding this fn here to avoid using static_roll
     roll_reg_plot <- function(df, width) {
@@ -521,7 +516,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
 
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-    par(mai = c(0.4, lf, 0.3, rt))
+    par(mai = mai)
     plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
          xlim = xlim,
          ylim = ylim,
@@ -530,8 +525,9 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          ylab = "",
          pch = 16,
          cex = .5,
+         col = r2,
          axes = FALSE,)
-    axis(side = 2, las = 1, cex.axis = 0.9, tck = tck, mgp = c(0, 0.3, 0))
+    axis(side = 2, las = las, cex.axis = 0.9, tck = tck, mgp = mgp)
     # to put yaxis label colour back to black
     axis(side = 1, col.lab = "blue", col.axis = "blue", tck = tck, mgp = mgp)
     ## Added dashed line at rate = 0 - for when rates are +ve and -ve
@@ -543,8 +539,10 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                       text.col = "blue",
                       bg = "gray90",
                       cex = 0.7)
-    title(main = glue::glue("Rolling Rate  (Moving Window of {width} Width)"),
-          line = 0.4)
+    mtext("Rolling Rate",
+          outer = FALSE, cex = 1.2, line = 1.2, font = 2)
+    mtext(glue::glue("(moving window of {width} width)"),
+          outer = FALSE, cex = 1, line = 0.3, font = 2)
 
     # Multi column plot -------------------------------------------------------
 
@@ -553,8 +551,8 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     if(!quiet)
       message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
     par(mfrow = n2mfrow(length(dt) - 1),
-        mai = c(0.25, 0.3, 0.25, 0.05),
-        oma = c(0.1, 0.4, 0.1, 0.1),
+        mai = mai,
+        oma = oma,
         ps = 10,
         pch = 20,
         cex = 1,
@@ -565,22 +563,42 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     sapply(1:(length(dt) - 1), function(z) {
-      plot(
-        data.frame(dt[[1]], dt[[z + 1]]),
-        ylim = ylim,
-        xlab = "",
-        ylab = "",
-        cex = 0.5,
-        col.lab = "blue",
-        col.axis = "blue",
-        panel.first = grid(),
-        axes = FALSE
-      )
-      axis(side = 1, las = 1, col.axis = "blue", tck = tck, mgp = mgp)
-      axis(side = 2, las = 1, col.axis = "black", tck = tck, mgp = c(0, 0.3, 0))
+
+      plot(data.frame(dt[[1]], dt[[z + 1]]),
+           ylim = ylim,
+           xlab = "",
+           ylab = "",
+           cex = 0.5,
+           col.lab = "blue",
+           col.axis = "blue",
+           panel.first = grid(),
+           axes = FALSE)
+
       box()
-      title(main = glue::glue("Column: {names(dt)[z+1]}"), line = 0.3)}
+      axis(side = 1, las = las, col.axis = "blue", tck = tck, mgp = mgp)
+      axis(side = 2, las = las, col.axis = "black", tck = tck, mgp = mgp)
+
+      # plot invisibly - to add row index x-axis
+      par(new = TRUE)
+      plot(data.frame(1:length(dt[[1]]), dt[[z + 1]]),
+           xlab = "",
+           ylab = "",
+           pch = "",
+           cex = .5,
+           axes = FALSE
+      )
+      axis(side = 3,
+           tck = tck,
+           mgp = mgp,
+           col.axis = "red")
+
+
+      title(main = glue::glue("Column: {names(dt)[z+1]}"), line = 1.2,
+            adj = 0)
+    }
     )
+    mtext("inspect: Inspecting Selected Columns",
+          outer = TRUE, cex = 1.2, line = 0.3, font = 2)
   }
 
   if (!quiet){

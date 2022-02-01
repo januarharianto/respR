@@ -120,9 +120,10 @@ If \code{plot = TRUE}, entered data is plotted against both time (bottom, blue
 axis) and row index (top, red axis), depending on the inputs:
 \itemize{
 \item a single \code{out.o2} column with either a paired \code{in.o2} column or
-\code{in.o2.value}: a two panel plot. The top plot is both outflow (black points)
-and inflow (grey points) oxygen. The bottom plot is the oxygen delta between
-outflow and inflow oxygen, essentially the oxygen uptake or production rate.
+\code{in.o2.value}: a two panel plot. The top plot is both outflow (green points)
+and inflow (turquoise points) oxygen. The bottom plot is the oxygen delta
+(black points) between outflow and inflow oxygen, essentially the oxygen
+uptake or production rate.
 \item a single \code{delta.o2} column: a one panel plot of oxygen delta values.
 \item multiple \code{out.o2} or \code{delta.o2} columns: a grid plot of all \code{delta.o2} data
 (either as entered or calculated from \code{out.o2} and \code{in.o2}). Specific delta
@@ -151,9 +152,9 @@ rates will be higher on the plot.
 
 If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
-the output object. Suppress console output messages with \code{quiet = TRUE}.
-If multiple columns have been inspected, the \code{pos} input can be used to
-examine each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset.
+the output object. Suppress console output messages with \code{quiet = TRUE}. If
+multiple columns have been inspected, the \code{pos} input can be used to examine
+each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset.
 }
 
 \subsection{Multiple data columns}{
