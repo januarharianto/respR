@@ -173,7 +173,9 @@ can be plotted on its own using \code{choose = 1} or \code{choose = 2}. If using
 already-calculated, positive rate values to identify critical oxygen values,
 the y-axis of the rolling rate plot can be plotted \emph{not} reversed by passing
 \code{rate.rev = FALSE} These inputs can be passed in either the main \code{oxy_crit}
-call or when calling \code{plot()} on the output object.
+call or when calling \code{plot()} on the output object. If axis labels
+(particularly y-axis) are difficult to read, \code{las = 2} can be passed to make
+axis labels horizontal. In addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins.
 }
 
 }

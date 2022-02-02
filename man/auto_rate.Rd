@@ -148,17 +148,24 @@ calculate it. The dashed line indicates the value of the current rate result
 plotted in panels 1 and 2. The other plots are summary plots of fit and
 residuals, and for the \code{linear} method the results of the kernel density
 analysis.
+}
+
+\subsection{Additional plotting options}{
 
 If multiple rates have been calculated, by default the first (\code{pos = 1}) is
 plotted. Others can be plotted by changing the \code{pos} argument either in the
 main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
 In addition, each sub-panel can be examined individually by using the
-\code{choose} input, e.g. \code{plot(object, choose = 2)}. Console output messages can
-be suppressed using \code{quiet = TRUE}. If axis labels or other text boxes
-obscure parts of the plot they can be suppressed using \code{legend = FALSE}. The
-rate in the rolling rate plot can be plotted \emph{not} reversed by passing
-\code{rate.rev = FALSE}, for instance when examining oxygen production rates so
-that higher production rates appear higher.
+\code{choose} input, e.g. \code{plot(object, choose = 2)}.
+
+Console output messages can be suppressed using \code{quiet = TRUE}. If axis
+labels or other text boxes obscure parts of the plot they can be suppressed
+using \code{legend = FALSE}. The rate in the rolling rate plot can be plotted
+\emph{not} reversed by passing \code{rate.rev = FALSE}, for instance when examining
+oxygen production rates so that higher production rates appear higher. If
+axis labels (particularly y-axis) are difficult to read, \code{las = 2} can be
+passed to make axis labels horizontal. In addition, \code{oma} (outer margins,
+default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins.
 }
 
 \subsection{S3 Generic Functions}{

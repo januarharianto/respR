@@ -71,10 +71,18 @@
 #' this case, the delta and rate values will be plotted numerically, with higher
 #' oxygen *production* rates higher on the plot.
 #'
+#' ## Additional plotting options
+#'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
 #' the output object. Console output messages can be suppressed using `quiet =
-#' TRUE`.
+#' TRUE`. Console output messages can be suppressed using `quiet = TRUE`. If
+#' axis labels or other text boxes obscure parts of the plot they can be
+#' suppressed using `legend = FALSE`. If axis labels (particularly y-axis) are
+#' difficult to read, `las = 2` can be passed to make axis labels horizontal. In
+#' addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5, 0.4)`), and
+#' `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`) can be used
+#' to adjust plot margins.
 #'
 #' ## Background control or "blank" experiments
 #'
@@ -583,29 +591,20 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   ## set layout
   layout(m)
 
-  ## general plot settings
-  par(ps = 10,
+  # Apply default plotting params
+  par(oma = oma_def,
+      mai = mai_def_top_ext,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
       cex = 1,
       cex.main = 1,
-      mgp = mgp,
-      oma = oma)
-
-  ## margins
-  bt <- 0
-  lf <- 0.15
-  tp <- 0.35
-  rt <- 0.15
-
-  # margins
-  mai_outin <- c(0.15, lf, 0.25, rt) # outflow/inflow plot
-  mai_close <- c(0.25, lf, 0.2, rt) # bottom close plot
-  mai_delta <- c(0.25, lf, 0.2, rt) # middle delta plot
-  mai_delta_only <- c(0.25, lf, 0.25, rt) # if delta only plot
+      ps = 10)
+  par(...)
 
   # in.o2 - out.o2 plot -----------------------------------------------------
   if (!delta_only) {
-
-    par(mai = mai_outin)
 
     ## ylim for outflow and inflow plots - plus 10%
     ylim <- range(range(out.o2), range(in.o2), na.rm = TRUE) ## so all on same axes
@@ -617,7 +616,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
          xlab = "",
          ylab = "",
          ylim = ylim,
-         pch = 16,
          cex = .5,
          col = ftcol_out,
          axes = FALSE,
@@ -625,30 +623,25 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = las, tck = tck, mgp = mgp)
+    axis(side = 2)
     points(time,
            in.o2,
            xlab = "",
            ylab = "",
            ylim = ylim,
-           pch = 16,
            cex = .5,
            col = ftcol_in)
     # plot this invisibly - to add row index x-axis
     par(new = TRUE)
-    plot(
-      seq(1, length(time)),
-      out.o2,
-      xlab = "",
-      ylab = "",
-      pch = "",
-      cex = .5,
-      axes = FALSE
-    )
-    axis(side = 3,
-         col.axis = "red",
-         tck = tck,
-         mgp = mgp)
+    plot(seq(1, length(time)),
+         out.o2,
+         xlab = "",
+         ylab = "",
+         pch = "",
+         cex = .5,
+         axes = FALSE)
+
+    axis(side = 3, col.axis = "red")
     box()
 
     ## box for rate region
@@ -676,21 +669,16 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
                       cex = 0.5)
 
     if(legend) legend("right",
-                      legend=c("Inflow O2", "Outflow O2"),
-                      col=c(ftcol_in, ftcol_out),
-                      pch=16,
-                      cex=0.4)
+                      legend = c("Inflow O2", "Outflow O2"),
+                      col = c(ftcol_in, ftcol_out),
+                      pch = pch_def,
+                      cex = 0.4)
 
     mtext("Outflow - Inflow O2",
           outer = TRUE, cex = 1, line = 0, font = 2)
   }
 
   # Delta plot --------------------------------------------------------------
-
-  # if this is the top plot, set margins to have more space for axis
-  # otherwise less space needed
-  if(delta_only) par(mai = mai_delta_only) else
-    par(mai = mai_delta)
 
   ## ylim  - plus 10%
   ylim <- range(na.omit(del.o2)) ## so all on same axes
@@ -699,21 +687,18 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
 
   if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-  plot(
-    time,
-    del.o2,
-    xlab = "",
-    ylab = "",
-    ylim = ylim,
-    pch = 16,
-    cex = .5,
-    col = ftcol_del,
-    axes = FALSE,
-    panel.first = grid()
-  )
+  plot(time,
+       del.o2,
+       xlab = "",
+       ylab = "",
+       ylim = ylim,
+       cex = .5,
+       col = ftcol_del,
+       axes = FALSE,
+       panel.first = grid())
 
-  axis(side = 2, las = las, tck = tck, mgp = mgp) # simply to put yaxis lab colour back to black
-  axis(side = 1, col.lab = "blue", col.axis = "blue", tck = tck, mgp = mgp)
+  axis(side = 2) # simply to put yaxis lab colour back to black
+  axis(side = 1, col.lab = "blue", col.axis = "blue")
 
   box()
 
@@ -732,7 +717,8 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   ## No need to do this if data are single points
   ## Which happens when single delta value is converted
   if(length(pos_y_data_delta) > 1){
-    points(pos_y_data_delta ~ pos_x_data, col = ftcol_rate_pt, pch = 16,
+    points(pos_y_data_delta ~ pos_x_data,
+           col = ftcol_rate_pt,
            cex = .5)
     clip(min(na.omit(pos_x_data)),
          max(na.omit(pos_x_data)),
@@ -744,16 +730,15 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   if(delta_only){
     # plot this invisibly - to add row index x-axis
     par(new = TRUE)
-    plot(
-      seq(1, length(time)),
-      del.o2,
-      xlab = "",
-      ylab = "",
-      pch = "",
-      cex = .5,
-      axes = FALSE
-    )
-    axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+    plot(seq(1, length(time)),
+         del.o2,
+         xlab = "",
+         ylab = "",
+         pch = "",
+         cex = .5,
+         axes = FALSE)
+
+    axis(side = 3, col.axis = "red")
 
     if(legend) legend("topright",
                       "Row Index",
@@ -767,29 +752,24 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   ## NOTE we switch y axis to rate values for each subset not delta values
   all_rates <- x$dataframe$delta[pos_from_row:pos_to_row] * x$inputs$flowrate
 
-  par(mai = mai_close)
   ylim <- range(na.omit(all_rates))
   buffer <- diff(ylim)*0.1
   ylim <- c(ylim[1] - buffer, ylim[2] + buffer)
 
   if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-  plot(
-    pos_x_data,
-    all_rates,
-    col = ftcol_rate_pt,
-    xlab = "",
-    ylab = "",
-    ylim = ylim,
-    pch = 16,
-    cex = .5,
-    axes = FALSE,
-    panel.first = grid()
-  )
+  plot(pos_x_data,
+       all_rates,
+       col = ftcol_rate_pt,
+       xlab = "",
+       ylab = "",
+       ylim = ylim,
+       cex = .5,
+       axes = FALSE,
+       panel.first = grid())
 
-  axis(side = 2, las = las, tck = tck, mgp = mgp)
-  axis(side = 1,col.lab = "blue",
-       col.axis = "blue", tck = tck, mgp = mgp)
+  axis(side = 2)
+  axis(side = 1, col.lab = "blue", col.axis = "blue")
 
   box()
 
@@ -798,7 +778,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
                     text.col = "blue",
                     bg = "gray90",
                     cex = 0.5)
-
 
   title(main = glue::glue("Close-up of Position {pos} of {nres}: Rate =  {pos_rate}"), line = 0.3)
 

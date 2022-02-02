@@ -95,7 +95,10 @@ A different \code{width} value can be passed to see how it affects estimation of
 the rolling rate. If axis labels obscure parts of the plot they can be
 suppressed using \code{legend = FALSE}. Suppress console output messages with
 \code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input can
-be used to examine each time~oxygen dataset.
+be used to examine each time~oxygen dataset. If axis labels (particularly
+y-axis) are difficult to read, \code{las = 2} can be passed to make axis labels
+horizontal. In addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)})
+can be used to adjust plot margins.
 }
 
 \subsection{Multiple Columns of Oxygen Data}{

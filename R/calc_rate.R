@@ -43,14 +43,21 @@
 #' timeseries of oxygen against time (bottom blue axis) and row index (top red
 #' axis), with the region specified via the `from` and `to` inputs highlighted.
 #' Second panel is a close-up of the rate region with linear model coefficients,
-#' and summary plots of fit and residuals. If multiple rates have been
-#' calculated, by default the first (`pos = 1`) is plotted. Others can be
-#' plotted by changing the `pos` argument either in the main function call, or
-#' by plotting the output, e.g. `plot(object, pos = 2)`. Each sub-panel can be
-#' plotted individually by using the `choose` input, e.g. `plot(object, choose =
-#' 2)`. Console output messages can be suppressed using `quiet = TRUE`. If axis
-#' labels or other text boxes obscure parts of the plot they can be suppressed
-#' using `legend = FALSE`.
+#' and summary plots of fit and residuals.
+#'
+#' ## Additional plotting options
+#'
+#' If multiple rates have been calculated, by default the first (`pos = 1`) is
+#' plotted. Others can be plotted by changing the `pos` argument either in the
+#' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
+#' In addition, each sub-panel can be examined individually by using the
+#' `choose` input, e.g. `plot(object, choose = 2)`.
+#'
+#' Console output messages can be suppressed using `quiet = TRUE`. If axis
+#' labels (particularly y-axis) are difficult to read, `las = 2` can be passed
+#' to make axis labels horizontal. In addition, `oma` (outer margins, default
+#' `oma = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3,
+#' 0.15, 0.35, 0.15)`) can be used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -365,12 +372,19 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL,
   fit <- lm(sdf[[2]] ~ sdf[[1]], sdf)
   rsq <- signif(summary(fit)$r.squared, 3)
 
+  # Apply default plotting params
   par(mfrow = mfrow,
-      oma = oma,
-      mai = mai,
+      oma = oma_def,
+      mai = mai_def,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
       ps = 10,
       cex = 1,
       cex.main = 1)
+  # allows params overriding defaults to be passed
+  par(...)
 
   ## need row numbers for subp plot
   rownums <- x$summary$row[pos]:x$summary$endrow[pos]

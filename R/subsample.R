@@ -73,20 +73,16 @@ plot.sub <- function(o_data, subset){
   if(is.data.frame(o_data)){
     o_data <- o_data[,1:2]
     sub_data <- subset[,1:2]
-    xlab <- names(o_data)[1]
-    ylab <- names(o_data)[2]
   } else {
     o_data <- o_data
     sub_data <- subset
-    xlab <- "Row"
-    ylab <- "Data"
   }
 
   par(mfrow=c(1,2),
-      oma = c(1, 1, 1, 0.2),
-      mai = c(0.3, 0.3, 0.2, 0.2),
-      mgp = c(0, 0.3, 0),
-      tck = tck)
+      oma = oma_def,
+      mai = mai_def,
+      mgp = mgp_def,
+      tck = tck_def)
 
   plot(o_data, axes = FALSE, xlab = "", ylab = "",
        panel.first = c(rect(par("usr")[1],
@@ -95,10 +91,8 @@ plot.sub <- function(o_data, subset){
                             par("usr")[4], col = r3), grid(col = "white",
                                                            lty = 1, lwd = 1.5)))
   box()
-  axis(1, col = r1, pch = 16)
-  mtext(xlab, line = 1.2, side = 1)
-  axis(2, col = r1, pch = 16)
-  mtext(ylab, line = 1.2, side = 2)
+  axis(1, col = r1, pch = pch_def)
+  axis(2, col = r1, pch = pch_def)
   mtext("Full Data", line = 0.5)
 
   plot(sub_data, axes = FALSE, xlab = "", ylab = "",
@@ -108,10 +102,8 @@ plot.sub <- function(o_data, subset){
                             par("usr")[4], col = r3), grid(col = "white",
                                                            lty = 1, lwd = 1.5)))
   box()
-  axis(1, col = r1, pch = 16)
-  mtext(xlab, line = 1.2, side = 1)
-  axis(2, col = r1, pch = 16)
-  mtext(ylab, line = 1.2, side = 2)
+  axis(1, col = r1, pch = pch_def)
+  axis(2, col = r1, pch = pch_def)
   mtext("Subsample Data", line = 0.5)
 }
 

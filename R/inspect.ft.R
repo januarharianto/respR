@@ -109,7 +109,11 @@
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
 #' the output object. Suppress console output messages with `quiet = TRUE`. If
 #' multiple columns have been inspected, the `pos` input can be used to examine
-#' each `out.o2`~`in.o2`~`del.o2` dataset.
+#' each `out.o2`~`in.o2`~`del.o2` dataset. If axis labels (particularly y-axis)
+#' are difficult to read, `las = 2` can be passed to make axis labels
+#' horizontal. In addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5,
+#' 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`)
+#' can be used to adjust plot margins.
 #'
 #' ## Multiple data columns
 #'
@@ -608,6 +612,15 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
   if(length(in.o2) == 1) in.o2 <- rep(in.o2, length(out.o2)) # makes plotting easier
   del.o2 <- x$data$delta.o2
 
+  # Apply default plotting params
+  par(oma = oma_def,
+      mai = mai_def,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
+      cex = cex_def)
+
   # Multi column plot -------------------------------------------------------
 
   ## if multiple columns or only delta.o2 data inspected, just plot grid of all delta.o2
@@ -625,21 +638,16 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     if (!quiet && length(pos) == 1)
       cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
 
-    par(
-      mfrow = n2mfrow(length(pos)),
-      mai = mai,
-      oma = oma,
-      ps = 10,
-      pch = 20,
-      cex = 1,
-      cex.main = 1
-    )
+    par(mfrow = n2mfrow(length(pos)),
+        ps = 10,
+        cex = 1,
+        cex.main = 1,
+        ...)
 
     # Plot all on same y axis range?????
     #ylim <- range(na.omit(del.o2[pos])) ## so all on same axes
     #buffer <- diff(ylim)*0.1
     #ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
 
     lapply(pos, function(z) {
 
@@ -656,14 +664,11 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            panel.first = grid())
 
       box()
-      axis(side = 2, las = las, tck = tck, mgp = mgp)
-      axis(side = 1, col.lab = "blue",
-           col.axis = "blue",
-           tck = tck,
-           mgp = mgp)
+      axis(side = 2)
+      axis(side = 1, col.lab = "blue", col.axis = "blue")
 
       # plot invisibly - to add row index x-axis
-      par(new = TRUE)
+      par(new = TRUE, ...)
       plot(data.frame(1:length(unlist(time)), del.o2[[z]]),
            xlab = "",
            ylab = "",
@@ -671,10 +676,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            cex = .5,
            axes = FALSE
       )
-      axis(side = 3,
-           tck = tck,
-           mgp = mgp,
-           col.axis = "red")
+      axis(side = 3, col.axis = "red")
       title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.2,
             adj = 0)
     })
@@ -705,18 +707,18 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
     m <- rbind(c(1,1,1), c(1,1,1), c(2,2,2))
     layout(m)
-    par(oma = oma,
-        mai = mai,
+
+    par(mai = mai_def_top_ext, # this one needs extra space
         ps = 10,
         cex = 1,
         cex.main = 1,
-        mgp = mgp)
+        ...)
+    par(...) # to allow oma and mai to be overridden
 
     ## ylim for outflow and inflow plots - plus 10%
     ylim <- range(range(nainf.omit(out.o2[[pos]])), range(nainf.omit(in.o2[[pos]]))) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
 
     # Outflow plot ------------------------------------------------------------
     plot(unlist(time),
@@ -724,7 +726,6 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
          xlab = "",
          ylab = "",
          ylim = ylim,
-         pch = 16,
          cex = .5,
          col = ftcol_out,
          axes = FALSE,
@@ -732,48 +733,45 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = las, tck = tck, mgp = mgp)
+    axis(side = 2)
     points(unlist(time),
            in.o2[[pos]],
            xlab = "",
            ylab = "",
            ylim = ylim,
-           pch = 16,
            cex = .5,
            col = ftcol_in)
     # plot invisibly - to add row index x-axis
+
     par(new = TRUE)
-    plot(
-      seq(1, nrow(dt)),
-      out.o2[[pos]],
-      xlab = "",
-      ylab = "",
-      pch = "",
-      cex = .5,
-      axes = FALSE
-    )
-    axis(side = 3,
-         col.axis = "red",
-         tck = tck,
-         mgp = mgp)
+
+    plot(seq(1, nrow(dt)),
+         out.o2[[pos]],
+         xlab = "",
+         ylab = "",
+         pch = "",
+         cex = .5,
+         axes = FALSE)
+
+    axis(side = 3, col.axis = "red")
     box()
+
     if(legend) legend("topright",
                       "Row Index",
                       text.col = "red",
                       bg = "gray90",
                       cex = 0.6)
-
     if(legend) legend("right",
-                      legend=c("Inflow O2", "Outflow O2"),
-                      col=c(ftcol_in, ftcol_out),
-                      pch=16,
-                      cex=0.8)
+                      legend = c("Inflow O2", "Outflow O2"),
+                      pch = pch_def,
+                      col = c(ftcol_in, ftcol_out),
+                      cex = 0.8)
 
     mtext("Outflow ~ Inflow O2",
           outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     # Delta plot --------------------------------------------------------------
-    par(mai = mai)
+
     ## ylim  - plus 10%
     ylim <- range(nainf.omit(del.o2[[pos]])) ## so all on same axes
     buffer <- diff(ylim)*0.1
@@ -781,24 +779,20 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-    plot(
-      unlist(time),
-      del.o2[[pos]],
-      xlab = "",
-      ylab = "",
-      ylim = ylim, # reverse y axis
-      pch = 16,
-      cex = .5,
-      col = ftcol_del,
-      axes = FALSE,
-      panel.first = grid()
-    )
+    plot(unlist(time),
+         del.o2[[pos]],
+         xlab = "",
+         ylab = "",
+         ylim = ylim, # reverse y axis
+         cex = .5,
+         col = ftcol_del,
+         axes = FALSE,
+         panel.first = grid())
 
-    axis(side = 2, las = las, tck = tck, mgp = mgp) # simply to put yaxis lab colour back to black
-    axis(side = 1,col.lab = "blue",
-         col.axis = "blue",
-         tck = tck,
-         mgp = mgp)
+    axis(side = 2) # simply to put yaxis lab colour back to black
+    axis(side = 1,
+         col.lab = "blue",
+         col.axis = "blue")
 
     box()
 

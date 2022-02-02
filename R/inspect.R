@@ -65,7 +65,11 @@
 #' the rolling rate. If axis labels obscure parts of the plot they can be
 #' suppressed using `legend = FALSE`. Suppress console output messages with
 #' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input can
-#' be used to examine each time~oxygen dataset.
+#' be used to examine each time~oxygen dataset. If axis labels (particularly
+#' y-axis) are difficult to read, `las = 2` can be passed to make axis labels
+#' horizontal. In addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5,
+#' 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`)
+#' can be used to adjust plot margins.
 #'
 #' ## Multiple Columns of Oxygen Data
 #'
@@ -428,16 +432,23 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
   # if width is NULL use original one
   if(is.null(width)) width <- x$inputs$width
 
+  # Apply default plotting params
+  par(oma = oma_def,
+      # this one needs more space at top for two panel plot
+      mai = mai_def_top_ext,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
+      cex = cex_def)
+
   if (length(dt) == 2) {
 
     par(mfrow = c(2, 1),
-        oma = oma,
-        mai = mai,
         ps = 10,
         cex = 1,
         cex.main = 1,
-        tck = tck,
-        mgp = mgp)
+        ...)
 
     ylim <- range(nainf.omit(dt[[2]]))
     buffer <- diff(ylim)*0.05
@@ -448,17 +459,16 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          xlab = "",
          ylab = "",
          ylim = ylim,
-         pch = 16,
          cex = .5,
          axes = FALSE,
          col.lab = "blue",
          col.axis = "blue",
          panel.first = grid())
 
-    axis(side = 2, las = las, tck = tck, mgp = mgp)
+    axis(side = 2)
 
     ## add row index axis
-    par(new = TRUE)
+    par(new = TRUE, ...)
     plot(seq(1, nrow(dt)),
          dt[[2]],
          xlab = "",
@@ -466,7 +476,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          pch = "",
          cex = .5,
          axes = FALSE)
-    axis(side = 3, col.axis = "red", tck = tck, mgp = mgp)
+    axis(side = 3, col.axis = "red")
     box()
     if(legend) legend("topright",
                       "Row Index",
@@ -516,20 +526,18 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
 
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-    par(mai = mai)
     plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
          xlim = xlim,
          ylim = ylim,
          # reversed axis
          xlab = "",
          ylab = "",
-         pch = 16,
          cex = .5,
          col = r2,
          axes = FALSE,)
-    axis(side = 2, las = las, cex.axis = 0.9, tck = tck, mgp = mgp)
+    axis(side = 2, cex.axis = 0.9)
     # to put yaxis label colour back to black
-    axis(side = 1, col.lab = "blue", col.axis = "blue", tck = tck, mgp = mgp)
+    axis(side = 1, col.lab = "blue", col.axis = "blue")
     ## Added dashed line at rate = 0 - for when rates are +ve and -ve
     abline(h = 0, lty = 2)
     grid()
@@ -550,13 +558,14 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     ## plot every column anyway - without rate plot
     if(!quiet)
       message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
+
     par(mfrow = n2mfrow(length(dt) - 1),
-        mai = mai,
-        oma = oma,
+        # put back to default mai for multi plot so column titles are visible
+        mai = mai_def,
         ps = 10,
-        pch = 20,
         cex = 1,
-        cex.main = 1)
+        cex.main = 1,
+        ...)
 
     ylim <- range(nainf.omit(x$dataframe[,-1])) ## so all on same axes
     buffer <- diff(ylim)*0.05
@@ -575,11 +584,11 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
            axes = FALSE)
 
       box()
-      axis(side = 1, las = las, col.axis = "blue", tck = tck, mgp = mgp)
-      axis(side = 2, las = las, col.axis = "black", tck = tck, mgp = mgp)
+      axis(side = 1, col.axis = "blue")
+      axis(side = 2, col.axis = "black")
 
       # plot invisibly - to add row index x-axis
-      par(new = TRUE)
+      par(new = TRUE, ...)
       plot(data.frame(1:length(dt[[1]]), dt[[z + 1]]),
            xlab = "",
            ylab = "",
@@ -587,11 +596,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
            cex = .5,
            axes = FALSE
       )
-      axis(side = 3,
-           tck = tck,
-           mgp = mgp,
-           col.axis = "red")
-
+      axis(side = 3, col.axis = "red")
 
       title(main = glue::glue("Column: {names(dt)[z+1]}"), line = 1.2,
             adj = 0)

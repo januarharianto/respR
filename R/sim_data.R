@@ -133,7 +133,7 @@ sim_data <- function(len = 300, type = "default", sd = .05, preview = TRUE) {
   ) # convert to data frame
   if (preview) {
     plot(df, xlab = "", ylab = "", cex = .75, mgp = c(0,0,0), tck = .01,
-      pch = 16, panel.first = grid())
+      pch = pch_def, panel.first = grid())
   }
 
   ## Grab indices for benchmark tests

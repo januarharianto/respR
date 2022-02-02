@@ -41,7 +41,7 @@ test_that("inspect produces plot with higher width values",
 
 test_that("inspect produces plot with extra options passed",
           expect_error(plot(ur2c, legend = FALSE, rate.rev = FALSE,
-                            message = FALSE, width = 0.05),
+                            quiet = TRUE, width = 0.05),
                        regexp = NA))
 
 urmultrates <- suppressWarnings(inspect(urchins.rd, time =1, oxygen = 2:8,

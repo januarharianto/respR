@@ -234,6 +234,7 @@ All
 - All stop if 'pos' too high
 - Added `return(invisible(object))` where missing to allow piping
 - All print more consistently with nicer spacing, especially in pipes
+- All plotting functions accept generic `par()` arguments such as `oma`, `mai`, `tck`, `mgp`, `las`, and `pch` to allow default parameters to be changed. Particularly useful are `las = 1` to make axis labels horizontal and adjusting the second of the four `mai` (inner margins) input to make the y-axis labels more readable.
 - auto_rate - all S3 methods stop with message if no rates found (can happen with over-enthusiastic subsetting in new subset_rate fn)
 
 print.adjust_rate

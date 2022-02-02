@@ -17,6 +17,8 @@ the rank from the original, unsubset results. Should be within \code{pos} range.
 Defaults to all.}
 
 \item{legend}{logical. Suppress plot legends.}
+
+\item{...}{Allows additional plotting controls to be passed.}
 }
 \description{
 Plots \code{auto_rate} summary table regressions in a way that visualises how they

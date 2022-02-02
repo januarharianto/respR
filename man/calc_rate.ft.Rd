@@ -119,10 +119,19 @@ rates, which are positive, the \code{rate.rev = FALSE} argument can be passed in
 either the \code{inspect.ft} call, or when using \code{plot()} on the output object. In
 this case, the delta and rate values will be plotted numerically, with higher
 oxygen \emph{production} rates higher on the plot.
+}
+
+\subsection{Additional plotting options}{
 
 If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
-the output object. Console output messages can be suppressed using \code{quiet = TRUE}.
+the output object. Console output messages can be suppressed using \code{quiet = TRUE}. Console output messages can be suppressed using \code{quiet = TRUE}. If
+axis labels or other text boxes obscure parts of the plot they can be
+suppressed using \code{legend = FALSE}. If axis labels (particularly y-axis) are
+difficult to read, \code{las = 2} can be passed to make axis labels horizontal. In
+addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and
+\code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used
+to adjust plot margins.
 }
 
 \subsection{Background control or "blank" experiments}{

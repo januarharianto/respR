@@ -119,7 +119,11 @@
 #' already-calculated, positive rate values to identify critical oxygen values,
 #' the y-axis of the rolling rate plot can be plotted *not* reversed by passing
 #' `rate.rev = FALSE` These inputs can be passed in either the main `oxy_crit`
-#' call or when calling `plot()` on the output object.
+#' call or when calling `plot()` on the output object. If axis labels
+#' (particularly y-axis) are difficult to read, `las = 2` can be passed to make
+#' axis labels horizontal. In addition, `oma` (outer margins, default `oma =
+#' c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15,
+#' 0.35, 0.15)`) can be used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -466,16 +470,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
   # Plot settings -----------------------------------------------------------
   # Point character colour and type
   c1 <- adjustcolor("lightgreen", alpha.f = 1)
-  pch <- 16
 
-  # inner margins
-  bt <- 0.3
-  lf <- 0.3
-  tp <- 0.3
-  rt <- 0.2
-
-  # tick size
-  tck <- -0.01
   # point size
   ptcex <- 0.5
   # legend text size
@@ -506,11 +501,16 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
 
   ## general plot settings
   par(mfrow = mfrow,
-      mai = c(bt, lf, tp, rt),
+      oma = oma_def,
+      mai = mai_def_top_ext,
+      mgp = mgp_def,
+      tck = tck_def,
+      las = las_def,
+      pch = pch_def,
       ps = 10,
       cex = 1,
-      cex.main = 1,
-      mgp = c(0, 0.2, 0))
+      cex.main = 1)
+  par(...)
 
   # Plot 1 - Timeseries -----------------------------------------------------
   if(1 %in% choose) {
@@ -518,12 +518,13 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
       ylim <- grDevices::extendrange(
         r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
-      plot(x$dataframe, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-           panel.first = grid(lwd = .7), tck = tck, ylim=ylim)
-      title(main = "Rate~Oxygen Timeseries", line = 0.5)
+      plot(x$dataframe, col = c1, xlab = "", ylab = "", cex = ptcex,
+           panel.first = grid(lwd = .7), ylim=ylim)
+      mtext("Rate~Oxygen Timeseries",
+            outer = TRUE, cex = 1.2, line = 0, font = 2)
     } else {
-      plot(x$dataframe, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-           panel.first = grid(lwd = .7), tck = tck)
+      plot(x$dataframe, col = c1, xlab = "", ylab = "", cex = ptcex,
+           panel.first = grid(lwd = .7))
       if(x$method == "bsr")
         abline(h = bsr.intercept, col = line_cols_bsr[1], lwd = line_wt, lty = line_types_bsr[1])
       if(x$method == "bsr")
@@ -550,13 +551,15 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
                         col = line_cols,
                         lty = line_types,
                         lwd = line_wt,
-                        #bg = "gray90",
-                        xjust = 1, yjust = 1,
-                        bty = "n", horiz = F,
+                        xjust = 1,
+                        yjust = 1,
+                        bty = "n",
+                        horiz = F,
                         cex = legcex,
                         y.intersp = leg.y.intersp)
 
-      title(main = "Oxygen~Time Timeseries", line = 0.5)
+      mtext("Oxygen~Time Timeseries",
+            outer = TRUE, cex = 1.2, line = 0, font = 2)
     }
   }
 
@@ -566,8 +569,8 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
     ylim <- grDevices::extendrange(
       r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
-    plot(x$df_rate_oxygen, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-         panel.first = grid(lwd = .7), tck = tck, ylim = ylim)
+    plot(x$df_rate_oxygen, col = c1, xlab = "", ylab = "", cex = ptcex,
+         panel.first = grid(lwd = .7), ylim = ylim)
     abline(lm(rate ~ oxygen, segment1), lwd = line_wt_add, lty = line_type_add, col = line_col_add)
     abline(lm(rate ~ oxygen, segment2), lwd = line_wt_add, lty = line_type_add, col = line_col_add)
     abline(v = bsr.intercept, col = line_cols_bsr[1], lwd = line_wt, lty = line_types_bsr[1])
@@ -591,8 +594,8 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
     ylim <- grDevices::extendrange(
       r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
-    plot(x$df_rate_oxygen, col = c1, pch = pch, xlab = "", ylab = "", lwd = 2, cex = ptcex,
-         panel.first = grid(lwd = .7), tck = tck, ylim=ylim)
+    plot(x$df_rate_oxygen, col = c1, xlab = "", ylab = "", lwd = 2, cex = ptcex,
+         panel.first = grid(lwd = .7), ylim=ylim)
     # subsample fit model otherwise dahsed line type is too dense to see
     if (nrow(x$results$seg) > 1000)
       fitsub <- subsample(x$results$seg, length.out = 1000, plot = F)
@@ -612,20 +615,6 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
                       y.intersp = leg.y.intersp)
     title(main = "Segmented Result (Rate~Oxygen)", line = 0.5)
   }
-
-  # Plot 4 - Close-up -------------------------------------------------------
-  # if(4 %in% choose) {
-  #   aps <- c(bsr.intercept, bsr.midpoint, seg.breakpoint)
-  #   srow <- which.min(abs(x$df_rate_oxygen[[1]] - (min(aps) * 0.95))) -1
-  #   erow <- which.min(abs(x$df_rate_oxygen[[1]] - (max(aps) * 1.05))) +1
-  #   subdf <- x$df_rate_oxygen[srow:erow,]
-  #   plot(subdf, col = c1, pch = pch, xlab = "", ylab = "", cex = ptcex,
-  #        panel.first = grid(lwd = .7), tck = tck)
-  #   abline(v = bsr.intercept, col = line_cols[1], lwd = line_wt, lty = line_types[1])
-  #   abline(v = bsr.midpoint, col = line_cols[2], lwd = line_wt, lty = line_types[2])
-  #   abline(v = seg.breakpoint, col = line_cols[3], lwd = line_wt, lty = line_types[3])
-  #   title(main = "Region Close-Up (All Results)", line = 0.5)
-  # }
 
   return(invisible(x))
 }

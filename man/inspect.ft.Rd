@@ -154,7 +154,10 @@ If the legend or labels obscure part of the plot, they can be suppressed via
 \code{legend = FALSE} in either the \code{inspect.ft} call, or when using \code{plot()} on
 the output object. Suppress console output messages with \code{quiet = TRUE}. If
 multiple columns have been inspected, the \code{pos} input can be used to examine
-each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset.
+each \code{out.o2}~\code{in.o2}~\code{del.o2} dataset. If axis labels (particularly y-axis)
+are difficult to read, \code{las = 2} can be passed to make axis labels
+horizontal. In addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)})
+can be used to adjust plot margins.
 }
 
 \subsection{Multiple data columns}{

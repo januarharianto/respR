@@ -232,25 +232,41 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
     nplot <- nres
 
   if(!quiet) cat("\n# plot.calc_rate.bg # -------------------\n")
+
+  # Apply default plotting params
   par(mfrow = n2mfrow(nplot),
-      oma = c(0.4, 1, 1.5, 0.4),
-      mai = c(0.2, 0.1, 0.2, 0.1),
+      oma = oma_def,
+      mai = mai_def,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
       ps = 10,
       cex = 1,
       cex.main = 1)  # replace par settings
+  # allows params overriding defaults to be passed
+  par(...)
 
-  if(length(pos) == 1) sub.p(data.frame(x$dataframe[[1]],
-                                        x$dataframe[[pos + 1]]),
-                             rsq = NULL,
-                             rownums = rownums,
-                             title = F,
-                             legend = legend)
-  else lapply(1:nres, function(z) sub.p(data.frame(x$dataframe[[1]],
-                                                   x$dataframe[[z + 1]]),
-                                        rsq = NULL,
-                                        rownums = rownums,
-                                        title = F,
-                                        legend = legend))
+  if(length(pos) == 1) {
+    sub.p(data.frame(x$dataframe[[1]],
+                     x$dataframe[[pos + 1]]),
+          rsq = NULL,
+          rownums = rownums,
+          title = F,
+          legend = legend)
+    title(main = glue::glue("Column: {names(x$dataframe)[pos+1]}"), line = 1.2,
+          adj = 0)
+
+  } else lapply(1:nres, function(z) {
+    sub.p(data.frame(x$dataframe[[1]],
+                     x$dataframe[[z + 1]]),
+          rsq = NULL,
+          rownums = rownums,
+          title = F,
+          legend = legend)
+    title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 1.2,
+          adj = 0)
+  })
 
   if(length(pos) == 1) mtext(glue::glue("calc.rate.bg: Rank {pos} of {nres} Background Rates"),
                              outer = TRUE, cex = 1.2, line = 0.3, font = 2) else

@@ -188,7 +188,7 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     plot(
       signif(df$real,3), signif(df$measured,3), main = "", xlab = "", ylab = "",
       xaxt = "n", yaxt = "n",
-      pch = 21,
+      pch = pch_def,
       cex = .6,
       bg = c1,
       col = c1
@@ -211,7 +211,7 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
       xlim = c(max(abs(df$real)), -max(abs(df$real))),
       ylim = c(max(abs((df$real-df$measured))),-max(abs((df$real-df$measured)))),
       xaxt = "n", yaxt = "n",
-      pch = 21, bg = c1, col = c1, cex = .6
+      pch = pch_def, bg = c1, col = c1, cex = .6
     )
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))

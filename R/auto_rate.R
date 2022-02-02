@@ -119,16 +119,23 @@
 #' residuals, and for the `linear` method the results of the kernel density
 #' analysis.
 #'
+#' ## Additional plotting options
+#'
 #' If multiple rates have been calculated, by default the first (`pos = 1`) is
 #' plotted. Others can be plotted by changing the `pos` argument either in the
 #' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
 #' In addition, each sub-panel can be examined individually by using the
-#' `choose` input, e.g. `plot(object, choose = 2)`. Console output messages can
-#' be suppressed using `quiet = TRUE`. If axis labels or other text boxes
-#' obscure parts of the plot they can be suppressed using `legend = FALSE`. The
-#' rate in the rolling rate plot can be plotted *not* reversed by passing
-#' `rate.rev = FALSE`, for instance when examining oxygen production rates so
-#' that higher production rates appear higher.
+#' `choose` input, e.g. `plot(object, choose = 2)`.
+#'
+#' Console output messages can be suppressed using `quiet = TRUE`. If axis
+#' labels or other text boxes obscure parts of the plot they can be suppressed
+#' using `legend = FALSE`. The rate in the rolling rate plot can be plotted
+#' *not* reversed by passing `rate.rev = FALSE`, for instance when examining
+#' oxygen production rates so that higher production rates appear higher. If
+#' axis labels (particularly y-axis) are difficult to read, `las = 2` can be
+#' passed to make axis labels horizontal. In addition, `oma` (outer margins,
+#' default `oma = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai
+#' = c(0.3, 0.15, 0.35, 0.15)`) can be used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -434,6 +441,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
+  # how many rates
   nres <- length(x$rate)
 
   ## warning if empty
@@ -473,45 +481,47 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   dens <- x$density
   peaks <- x$peaks[, 2:3]
 
+  # Apply default plotting params
+  par(oma = oma_def,
+      mai = mai_def,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
+      cex = cex_def)
+
   # PLOT BASED ON METHOD
-  if (x$method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "rolling")) {
+  if (x$method %in% c("max", "min", "maximum", "minimum",
+                      "highest", "lowest", "rolling", "interval")) {
     if (choose == FALSE) {
 
-      mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = TRUE)
+      mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5),
+                    nrow = 2, byrow = TRUE)
       layout(mat)
-      par(oma = oma,
-          mai = mai,
-          ps = 10,
+
+      par(ps = 10,
           cex = 1,
-          cex.main = 1)
+          cex.main = 1,
+          ...)
+
       multi.p(dt, sdt, legend = legend)
+      if(x$method == "interval") abline(v = startint, lty = 3)
+      if(x$method == "interval") abline(v = interval, lty = 3)
       sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)
       rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)
       residual.p(fit)
       qq.p(fit)
       layout(1)
     }
-  } else if (x$method == "interval") {
-    if (choose == FALSE) {
-
-      par(mfrow = c(2, 2),
-          oma = oma,
-          mai = mai,
-          ps = 10, cex = 1, cex.main = 1)
-      multi.p(dt, sdt, legend = legend)
-      abline(v = startint, lty = 3)
-      abline(v = interval, lty = 3)
-      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)
-      residual.p(fit)
-      qq.p(fit)
-    }
   } else if (x$method == "linear") {
     if (choose == FALSE) {
 
       par(mfrow = c(2, 3),
-          oma = oma,
-          mai = mai,
-          ps = 10, cex = 1, cex.main = 1)
+          ps = 10,
+          cex = 1,
+          cex.main = 1,
+          ...)
+
       multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
       sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend) # closed-up (subset timeseries)
       rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev = rate.rev) # rolling regression series with markline
@@ -522,11 +532,11 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   }
 
   if(!isFALSE(choose))
-    par(oma = oma,
-        mai = mai,
-        ps = 10,
+
+    par(ps = 10,
         cex = 1,
-        cex.main = 1)
+        cex.main = 1,
+        ...)
 
   if (choose == 1) {
     multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
