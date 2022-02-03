@@ -130,12 +130,12 @@ Here we need to tell the function the units of oxygen of the original data and o
 ```{r eval = F, tidy = FALSE}
 # absolute rate
 rate1_abs <- convert_rate.ft(rate1,  
-                             o2.unit = "mg/L",  
+                             oxy.unit = "mg/L",  
                              flowrate.unit = "ml/min",  
                              output.unit = "mg/h")  
 # mass-specific rate  
 rate1_ms <- convert_rate.ft(rate1,  
-                            o2.unit = "mg/L",  
+                            oxy.unit = "mg/L",  
                             flowrate.unit = "ml/min",  
                             mass = 0.000070,  # mass must always be in kg
                             output.unit = "mg/h/g")  
@@ -144,12 +144,12 @@ rate1_ms <- convert_rate.ft(rate1,
 ```{r eval = T, echo = F}
 # absolute rate
 rate1_abs <- suppressMessages(convert_rate.ft(rate1, 
-                                              o2.unit = "mg/L",
+                                              oxy.unit = "mg/L",
                                               flowrate.unit = "ml/min",
                                               output.unit = "mg/h"))
 # mass-specific rate
 rate1_ms <- suppressMessages(convert_rate.ft(rate1, 
-                                             o2.unit = "mg/L",
+                                             oxy.unit = "mg/L",
                                              flowrate.unit = "ml/min",
                                              mass = 0.000070,
                                              output.unit = "mg/h/g"))
@@ -213,7 +213,7 @@ We will convert to only the mass-specific rate this time.
 ```{r eval = F, tidy = FALSE}
 # mass-specific rate  
 rate2_ms <- convert_rate.ft(rate2,  
-                            o2.unit = "mg/L",  
+                            oxy.unit = "mg/L",  
                             flowrate.unit = "ml/min",  
                             mass = 0.000070,  
                             output.unit = "mg/h/g")  
@@ -222,7 +222,7 @@ rate2_ms <- convert_rate.ft(rate2,
 ```{r eval = T, echo = F}
 # mass-specific rate
 rate2_ms <- suppressMessages(convert_rate.ft(rate2, 
-                                             o2.unit = "mg/L",
+                                             oxy.unit = "mg/L",
                                              flowrate.unit = "ml/min",
                                              mass = 0.000070,
                                              output.unit = "mg/h/g"))
@@ -356,7 +356,7 @@ Because the original oxygen data were in units of percent air saturation, we nee
 ```{r eval = F, tidy = FALSE}
 # absolute rate  
 rate3_abs <- convert_rate.ft(rate3adj,  
-                             o2.unit = "%Air",  
+                             oxy.unit = "%Air",  
                              flowrate.unit = "L/min",  
                              output.unit = "ml/h",
                              t = 18, S = 0, P = 1.013)  
@@ -365,7 +365,7 @@ rate3_abs <- convert_rate.ft(rate3adj,
 ```{r eval = T, echo = F}
 # absolute rate  
 rate3_abs <- suppressMessages(convert_rate.ft(rate3adj,  
-                                              o2.unit = "%Air",  
+                                              oxy.unit = "%Air",  
                                               flowrate.unit = "L/min",  
                                               output.unit = "ml/h",
                                               t = 18, S = 0, P = 1.013))
@@ -432,7 +432,7 @@ Now we convert the adjusted rate.
 ```{r eval = F, tidy = FALSE}
 # mass-specific rate  
 rate4_abs <- convert_rate.ft(rate4adj,  
-                             o2.unit = "%Air",  
+                             oxy.unit = "%Air",  
                              flowrate.unit = "L/min",  
                              output.unit = "ml/h",
                              t = 18, S = 0, P = 1.013)  
@@ -441,7 +441,7 @@ rate4_abs <- convert_rate.ft(rate4adj,
 ```{r eval = T, echo = F}
 # mass-specific rate
 rate4_abs <- suppressMessages(convert_rate.ft(rate4adj,  
-                                              o2.unit = "%Air",  
+                                              oxy.unit = "%Air",  
                                               flowrate.unit = "L/min",  
                                               output.unit = "ml/h",
                                               t = 18, S = 0, P = 1.013))
@@ -521,7 +521,7 @@ Lastly we convert the adjusted rate, this time to a mass-specific rate, and try 
 ```{r eval = F, tidy = FALSE}
 # mass-specific rate  
 rate5_ms <- convert_rate.ft(rate5adj,  
-                            o2.unit = "%Air",  
+                            oxy.unit = "%Air",  
                             flowrate.unit = "L/min",  
                             output.unit = "umol/h/g",
                             mass = 0.020,
@@ -531,7 +531,7 @@ rate5_ms <- convert_rate.ft(rate5adj,
 ```{r eval = T, echo = F}
 # mass-specific rate
 rate5_ms <- suppressMessages(convert_rate.ft(rate5adj,  
-                                             o2.unit = "%Air",  
+                                             oxy.unit = "%Air",  
                                              flowrate.unit = "L/min",  
                                              output.unit = "umol/h/g",
                                              mass = 0.020,
@@ -643,7 +643,7 @@ Now all we need to do is the usual workflow: `inspect.ft` > `calc_rate.ft` > `co
 insp7 <- inspect.ft(df, time = 1, out.o2 = 2, in.o2 = 3)
 rate7 <- calc_rate.ft(insp7, flowrate = 0.25)
 rate7_abs <- convert_rate.ft(rate7,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 ```
@@ -655,7 +655,7 @@ insp7 <- inspect.ft(df, time = 1, out.o2 = 2, in.o2 = 3, plot = F)
 ```{r eval = T, echo = F, message=FALSE, warning=FALSE}
 rate7 <- calc_rate.ft(insp7, flowrate = 0.25, plot = F)
 rate7_abs <- convert_rate.ft(rate7,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 
@@ -680,7 +680,7 @@ ratebg <- calc_rate.ft(delbg, flowrate = 0.25)
 rate7_adj <- adjust_rate.ft(rate7, by = ratebg)
 
 rate7_abs <- convert_rate.ft(rate7_adj,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 ```
@@ -699,7 +699,7 @@ ratebg <- calc_rate.ft(delbg, flowrate = 0.25, plot = FALSE)
 rate7_adj <- adjust_rate.ft(rate7, by = ratebg)
 
 rate7_abs <- convert_rate.ft(rate7_adj,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 print(rate7)
@@ -721,7 +721,7 @@ inflows <- 8.04
 deltas <- outflows - inflows
 rates <- calc_rate.ft(deltas, flowrate = 0.25)
 rates_abs <- convert_rate.ft(rates,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 ```
@@ -737,7 +737,7 @@ deltas <- outflows - inflows
 
 rates <- calc_rate.ft(deltas, flowrate = 0.25, plot = FALSE)
 rates_abs <- convert_rate.ft(rates,
-                             o2.unit = "mg/l",  
+                             oxy.unit = "mg/l",  
                              flowrate.unit = "L/min",  
                              output.unit = "mg/h")
 print(rates_abs)
@@ -822,7 +822,7 @@ To get the final rate we just need to adjust and convert all rates, and extract 
 roll_rate_adj <- adjust_rate.ft(roll_rate, by = bgrate)
 
 roll_rate_ms <- convert_rate.ft(roll_rate_adj,  
-                                o2.unit = "%Air",  
+                                oxy.unit = "%Air",  
                                 flowrate.unit = "L/min",  
                                 output.unit = "umol/h/g",
                                 mass = 0.020,
@@ -836,7 +836,7 @@ result <- summary(roll_rate_ms, pos = 1044, export = TRUE)
 roll_rate_adj <- suppressMessages(adjust_rate.ft(roll_rate, by = bgrate))
 
 roll_rate_ms <- suppressMessages(convert_rate.ft(roll_rate_adj,  
-                                                 o2.unit = "%Air",  
+                                                 oxy.unit = "%Air",  
                                                  flowrate.unit = "L/min",  
                                                  output.unit = "umol/h/g",
                                                  mass = 0.020,
@@ -917,7 +917,7 @@ rate3_abs <-
   inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6) %>%
   calc_rate.ft(from = 30, flowrate = 0.1) %>%
   adjust_rate.ft(by = bgrate) %>%
-  convert_rate.ft(o2.unit = "%Air",  
+  convert_rate.ft(oxy.unit = "%Air",  
                   flowrate.unit = "L/min",  
                   output.unit = "ml/h",
                   t = 18, S = 0, P = 1.013)

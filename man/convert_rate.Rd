@@ -7,7 +7,7 @@ area-specific rate}
 \usage{
 convert_rate(
   x,
-  o2.unit = NULL,
+  oxy.unit = NULL,
   time.unit = NULL,
   output.unit = NULL,
   volume = NULL,
@@ -22,7 +22,7 @@ convert_rate(
 \item{x}{numeric value or vector, or object of class \code{auto_rate},
 \code{calc_rate}, \code{adjust_rate}, or \code{calc_rate.bg.}}
 
-\item{o2.unit}{string. The dissolved oxygen unit of the original data used to
+\item{oxy.unit}{string. The dissolved oxygen unit of the original data used to
 determine the rate in \code{x}.}
 
 \item{time.unit}{string. The time unit of the original data used to determine
@@ -74,7 +74,7 @@ with calculating effective volumes.
 
 \subsection{Units}{
 
-The \code{o2.unit} of the original data used to calculated the rate is required.
+The \code{oxy.unit} of the original data used to calculated the rate is required.
 Concentration units should use only SI units (\code{L} or \code{kg}) for the
 denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air or
 oxygen is accepted, as are oxygen pressure units. See \code{\link[=unit_args]{unit_args()}} for
@@ -134,26 +134,26 @@ separate value by passing \code{export = TRUE}.
 }
 \examples{
 # Convert a single numeric rate to an absolute rate
-convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min', volume = 1.2)
 
 # Convert a single numeric rate to a mass-specific rate
-convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 
 # Convert a single numeric rate to an area-specific rate
-convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min/cm2', volume = 1.2, area = 0.0002)
 
 # Convert a single rate derived via calc_rate to mass-specific
 x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
-convert_rate(x, o2.unit = '\%Air', time.unit = 's',
+convert_rate(x, oxy.unit = '\%Air', time.unit = 's',
   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
   S =35, t = 15, P = 1.013)
 
 # Convert multiple rates derived via auto_rate to area-specific
 x <- auto_rate(sardine.rd)
-rates <- convert_rate(x, o2.unit = '\%Air', time.unit = 's',
+rates <- convert_rate(x, oxy.unit = '\%Air', time.unit = 's',
   output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
   S =35, t = 15, P = 1.013)
 summary(rates)

@@ -23,7 +23,7 @@
 #'
 #' ## Units
 #'
-#' The `o2.unit` of the original data used to calculated the rate is required.
+#' The `oxy.unit` of the original data used to calculated the rate is required.
 #' Concentration units should use only SI units (`L` or `kg`) for the
 #' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
 #' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
@@ -82,7 +82,7 @@
 #'
 #' @param x numeric value or vector, or object of class `auto_rate`,
 #'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.`
-#' @param o2.unit string. The dissolved oxygen unit of the original data used to
+#' @param oxy.unit string. The dissolved oxygen unit of the original data used to
 #'   determine the rate in `x`.
 #' @param time.unit string. The time unit of the original data used to determine
 #'   the rate in `x`.
@@ -108,31 +108,31 @@
 #'
 #' @examples
 #' # Convert a single numeric rate to an absolute rate
-#' convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+#' convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
 #'   output.unit = 'mg/min', volume = 1.2)
 #'
 #' # Convert a single numeric rate to a mass-specific rate
-#' convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+#' convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
 #'   output.unit = 'mg/min/kg', volume = 1.2, mass = 0.5)
 #'
 #' # Convert a single numeric rate to an area-specific rate
-#' convert_rate(0.09, o2.unit = 'mg/l', time.unit = 's',
+#' convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
 #'   output.unit = 'mg/min/cm2', volume = 1.2, area = 0.0002)
 #'
 #' # Convert a single rate derived via calc_rate to mass-specific
 #' x <- calc_rate(sardine.rd, from = 200, to = 1800, by = "time")
-#' convert_rate(x, o2.unit = '%Air', time.unit = 's',
+#' convert_rate(x, oxy.unit = '%Air', time.unit = 's',
 #'   output.unit = 'mg/h/g', volume = 12.3, mass = 0.05,
 #'   S =35, t = 15, P = 1.013)
 #'
 #' # Convert multiple rates derived via auto_rate to area-specific
 #' x <- auto_rate(sardine.rd)
-#' rates <- convert_rate(x, o2.unit = '%Air', time.unit = 's',
+#' rates <- convert_rate(x, oxy.unit = '%Air', time.unit = 's',
 #'   output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
 #'   S =35, t = 15, P = 1.013)
 #' summary(rates)
 
-convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL,
+convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NULL,
                          volume = NULL, mass = NULL, area = NULL,
                          S = NULL, t = NULL, P = 1.013253) {
 
@@ -140,8 +140,8 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   call <- match.call()
 
   # Validate inputs If units are set to NULL, use default values.
-  if (is.null(o2.unit) || is.numeric(o2.unit))
-    stop("convert_rate: the 'o2.unit' of the original data is required.")
+  if (is.null(oxy.unit) || is.numeric(oxy.unit))
+    stop("convert_rate: the 'oxy.unit' of the original data is required.")
   if (is.null(time.unit) || is.numeric(time.unit))
     stop("convert_rate: the 'time.unit' of the original data is required.")
 
@@ -190,8 +190,8 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
     message("convert_rate: object of class `calc_rate.bg` detected. Converting all background rates in '$rate.bg'.")
   } else stop("convert_rate: 'x' input is not valid.")
 
-  # Validate o2.unit & time.unit
-  oxy <- verify_units(o2.unit, "o2")
+  # Validate oxy.unit & time.unit
+  oxy <- verify_units(oxy.unit, "o2")
   time <- verify_units(time.unit, "time")
 
   # Validate output.unit
@@ -238,7 +238,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
     stop("convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 
   # Format unit strings to look nicer
-  o2.unit <- stringr::str_replace(oxy, "\\..*", "")
+  oxy.unit <- stringr::str_replace(oxy, "\\..*", "")
   time.unit <- stringr::str_replace(time, "\\..*", "")
 
   ## Add "O2" to output O2 unit string for clarity
@@ -280,7 +280,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   if (is.mass.spec) {
     summary <- data.table(rank = 1:length(rate),
                           rate.input = rate,
-                          o2.unit = o2.unit,
+                          oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
                           mass = mass,
@@ -294,7 +294,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   } else if (is.area.spec) {
     summary <- data.table(rank = 1:length(rate),
                           rate.input = rate,
-                          o2.unit = o2.unit,
+                          oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
                           mass = NA,
@@ -307,7 +307,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   } else {
     summary <- data.table(rank = 1:length(rate),
                           rate.input = rate,
-                          o2.unit = o2.unit,
+                          oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
                           mass = NA,
@@ -323,7 +323,7 @@ convert_rate <- function(x, o2.unit = NULL, time.unit = NULL, output.unit = NULL
   # Assemble output ---------------------------------------------------------
 
   ## Save inputs
-  inputs <- list(x = x, o2.unit = o2.unit, time.unit = time.unit, output.unit = output.unit,
+  inputs <- list(x = x, oxy.unit = oxy.unit, time.unit = time.unit, output.unit = output.unit,
                  volume = volume, mass = mass, area = area,
                  S = S, t = t, P = P)
 
@@ -351,7 +351,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
   cat("\n")
   cat("Input:\n")
   print(x$rate.input[pos])
-  print(c(x$inputs$o2.unit, x$inputs$time.unit))
+  print(c(x$inputs$oxy.unit, x$inputs$time.unit))
   cat("Converted:\n")
   print(x$rate.output[pos])
   print(x$output.unit)

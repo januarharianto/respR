@@ -44,7 +44,7 @@ Several function inputs have been renamed to make them more consistent.
  
  - Some functions have had inputs reordered (e.g. `auto_rate` now has `method` as second input). Therefore, code where inputs were not explicitly named may not work as it did previously.  
  
- - Some input defaults have been changed. E.g. in `convert_rate`, `o2.unit = NULL` and `time.unit = NULL` now stop the function instead of applying a default unit.
+ - Some input defaults have been changed. E.g. in `convert_rate`, `oxy.unit = NULL` and `time.unit = NULL` now stop the function instead of applying a default unit.
 
 ### Output structural changes
 
@@ -104,4 +104,5 @@ A change to the code for determining `by = "oxygen"` ranges to ensure it works w
 
 The output `$list` and `$list_raw` elements renamed `$locs` and `$locs_raw`. Code should not need to be updated unless these were used to extract references to fix data issues in the relevant data frames.
 
-
+### `convert_rate()`
+The `o2.unit` has been renamed to `oxy.unit`. Previous code with `o2.unit` as a named input will therefore fail to run. To update code, simply do a 'find-and-replace' for the old and new inputs. 

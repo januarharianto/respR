@@ -194,7 +194,7 @@ squid_ar <- auto_rate(squid.rd, method = "rolling", width = 0.1, plot = FALSE)
 ## Convert rates
 squid_conv <- convert_rate(squid_ar,
                            time.unit = "sec",
-                           o2.unit = "mg/L",
+                           oxy.unit = "mg/L",
                            output.unit = "ml/h/g",
                            volume = 12.3,
                            mass = 0.02141,

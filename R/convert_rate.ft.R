@@ -14,7 +14,7 @@
 #'
 #' ## Units
 #'
-#' The `o2.unit` of the original data used to calculated the rate is required.
+#' The `oxy.unit` of the original data used to calculated the rate is required.
 #' Concentration units should use only SI units (`L` or `kg`) for the
 #' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
 #' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
@@ -72,7 +72,7 @@
 #'
 #' @param x numeric value or vector, object of class [calc_rate.ft()] or
 #'   [adjust_rate.ft()]. Contains the rate(s) to be converted.
-#' @param o2.unit string. The dissolved oxygen unit of the original data used to
+#' @param oxy.unit string. The dissolved oxygen unit of the original data used to
 #'   determine the rate in `x`.
 #' @param flowrate.unit string. The unit of the flowrate through the
 #'   respirometer. See Details.
@@ -106,7 +106,7 @@
 #'
 
 convert_rate.ft <- function(x,
-                            o2.unit = NULL,
+                            oxy.unit = NULL,
                             flowrate.unit = NULL,
                             output.unit = NULL,
                             mass = NULL,
@@ -131,9 +131,9 @@ convert_rate.ft <- function(x,
     message("convert_rate.ft: object of class 'adjust_rate.ft' detected. Converting '$rate.adjusted' element.")
   } else stop("convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
 
-  # o2.unit, flowrate.unit, required
-  input.val(o2.unit, num = FALSE, req = TRUE,
-                      msg = "convert_rate.ft: 'o2.unit'")
+  # oxy.unit, flowrate.unit, required
+  input.val(oxy.unit, num = FALSE, req = TRUE,
+                      msg = "convert_rate.ft: 'oxy.unit'")
   input.val(flowrate.unit, num = FALSE, req = TRUE,
                       msg = "convert_rate.ft: 'flowrate.unit'")
 
@@ -158,8 +158,8 @@ convert_rate.ft <- function(x,
   if (!is.null(mass) && !is.null(area))
     stop("convert_rate.ft: Cannot have inputs for both 'mass' and 'area'.")
 
-  # Validate o2.unit & flowrate.unit
-  oxy <- verify_units(o2.unit, "o2")
+  # Validate oxy.unit & flowrate.unit
+  oxy <- verify_units(oxy.unit, "o2")
   flow <- verify_units(flowrate.unit, "flow")
 
   # Validate output.unit
@@ -206,7 +206,7 @@ convert_rate.ft <- function(x,
     stop("convert_rate.ft: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 
   # Format unit strings to look nicer
-  o2.unit <- stringr::str_replace(oxy, "\\..*", "")
+  oxy.unit <- stringr::str_replace(oxy, "\\..*", "")
   flow.unit <- stringr::str_replace(flow, "\\..*", "")
 
   ## Add "O2" to output O2 unit string for clarity
@@ -268,7 +268,7 @@ convert_rate.ft <- function(x,
   if(is.null(area)) area <- NA
 
   summary <- data.table::data.table(rate.input = rate,
-                                    o2.unit = o2.unit,
+                                    oxy.unit = oxy.unit,
                                     flowrate.unit = flowrate.unit,
                                     mass = mass,
                                     area = area,
@@ -280,7 +280,7 @@ convert_rate.ft <- function(x,
 
   out <- list(call = call,
               inputs = list(x = x,
-                            o2.unit = o2.unit,
+                            oxy.unit = oxy.unit,
                             flowrate.unit = flowrate.unit,
                             output.unit = output.unit,
                             mass = mass,
@@ -309,7 +309,7 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
   cat("Rank", pos, "of", length(x$rate.output), "result(s)\n")
   cat("Input:\n")
   print(x$summary$rate.input[pos])
-  print(c(x$summary$o2.unit[1], x$summary$flowrate.unit[1]))
+  print(c(x$summary$oxy.unit[1], x$summary$flowrate.unit[1]))
   cat("Converted:\n")
   print(x$rate.output[pos])
   print(x$output.unit[1])

@@ -47,7 +47,7 @@ urchins.rd |>                                            # Using the urchins dat
   calc_rate(from = 4, to = 29, by = "time") |>           # calculate rate between times 4 and 29
   adjust_rate(by = calc_rate.bg(urchins.rd, time = 1,    # calculate the background...
                                 oxygen = 18:19)) |>      # ... and adjust rate
-  convert_rate(o2.unit = "mgl-1", time.unit = "m",     
+  convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
                output.unit = "mg/s/kg", 
                volume = 1.09, mass = 0.19)               # and finally convert
 ```
@@ -92,14 +92,14 @@ exp_1_max_rate <- auto_rate(exp_1, method = "highest", width = 900)
 ## Convert rates to mass-specific units using the experimental parameters
 exp_1_linear_rate_conv <- convert_rate(exp_1_linear_rate, 
                                        output.unit = "mg/h/kg",
-                                       o2.unit = exp_param$DO.unit,
+                                       oxy.unit = exp_param$DO.unit,
                                        time.unit = exp_param$time.unit,
                                        volume = exp_param$volume,
                                        mass = exp_param$mass)
 
 exp_1_max_rate_conv <- convert_rate(exp_1_max_rate, 
                                     output.unit = "mg/h/kg",
-                                    o2.unit = exp_param$DO.unit,
+                                    oxy.unit = exp_param$DO.unit,
                                     time.unit = exp_param$time.unit,
                                     volume = exp_param$volume,
                                     mass = exp_param$mass)

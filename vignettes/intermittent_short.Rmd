@@ -207,14 +207,14 @@ We will convert the [most linear](#linear) rates we determined above, but this w
 ```{r tidy = F}
 # absolute rate
 rep1_abs_rate <- convert_rate(ar_lin_1,               # auto_rate, calc_rate, or adjust_rate object
-                              o2.unit = "mg/L",       # units of the original oxygen data
+                              oxy.unit = "mg/L",       # units of the original oxygen data
                               time.unit = "s",        # units of the original time data
                               output.unit = "mg/h",   # see unit_args() for supported units
                               volume = 2.379)         # effective volume of the respirometry chamber in L
 
 # mass-specific rate
 rep1_ms_rate <- convert_rate(ar_lin_1,               
-                             o2.unit = "mg/L",       
+                             oxy.unit = "mg/L",       
                              time.unit = "s",        
                              output.unit = "mg/h/g", # note - changed to a mass-specific unit
                              volume = 2.379,         

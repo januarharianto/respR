@@ -97,7 +97,7 @@ convert_val(10000, "ug", "mg")
 # Here, chamber volume is 200 ml, pressure measured in mbar.
 x <- suppressWarnings(inspect(urchins.rd, 1, 2))
 rate <- calc_rate(x, from = 20, to = 30)
-convert_rate(rate, o2.unit = "ml/l", time.unit = "min",
+convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
              output.unit = "mg/h",
              volume = convert_val(200, "ml", "L"),
              S = 35, t = 15,
@@ -108,7 +108,7 @@ convert_rate(rate, o2.unit = "ml/l", time.unit = "min",
 # to be specified:
 x <- suppressWarnings(inspect(urchins.rd, 1, 2))
 rate <- calc_rate(x, from = 20, to = 30)
-convert_rate(rate, o2.unit = "ml/l", time.unit = "min",
+convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
              output.unit = "mg/h",
              volume = convert_val(200, "ml"),
              S = 35, t = 15,

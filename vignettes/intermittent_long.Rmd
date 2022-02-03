@@ -342,7 +342,7 @@ Converting the MMR is relatively simple. This will convert every rate in the obj
 
 ```{r tidy = FALSE, message = FALSE}
 zeb_mmr_conv <- convert_rate(zeb_mmr_adj,
-                             o2.unit = "mg/L",       # oxygen units of the original data
+                             oxy.unit = "mg/L",       # oxygen units of the original data
                              time.unit = "secs",     # time units of the original data
                              output.unit = "mg/h/g", 
                              volume = 0.12,           # effective volume of the respirometer in L
@@ -356,7 +356,7 @@ Once again we will use `lapply` to loop through the SMR list of `adjust_rate` ob
 
 ```{r tidy = FALSE, message = FALSE}
 zeb_rmr_conv <- lapply(zeb_rmr_adj, function(z) convert_rate(z,
-                                                             o2.unit = "mg/L", 
+                                                             oxy.unit = "mg/L", 
                                                              time.unit = "secs",
                                                              output.unit = "mg/h/g",
                                                              volume = 0.12,         
@@ -376,7 +376,7 @@ The process is the same for the SMR results.
 
 ```{r tidy = FALSE, message = FALSE}
 zeb_smr_conv <- lapply(zeb_smr_adj, function(z) convert_rate(z,
-                                                             o2.unit = "mg/L", 
+                                                             oxy.unit = "mg/L", 
                                                              time.unit = "secs",
                                                              output.unit = "mg/h/g",
                                                              volume = 0.12,         
@@ -524,7 +524,7 @@ zeb_smr_adj <- lapply(zeb_smr, function(z) adjust_rate(z,
 
 # Convert -----------------------------------------------------------------
 zeb_smr_conv <- lapply(zeb_smr_adj, function(z) convert_rate(z,
-                                                             o2.unit = "mg/L", 
+                                                             oxy.unit = "mg/L", 
                                                              time.unit = "secs",
                                                              output.unit = "mg/h/g",
                                                              volume = 0.12,         

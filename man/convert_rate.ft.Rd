@@ -7,7 +7,7 @@ absolute, mass-specific or area-specific rates}
 \usage{
 convert_rate.ft(
   x,
-  o2.unit = NULL,
+  oxy.unit = NULL,
   flowrate.unit = NULL,
   output.unit = NULL,
   mass = NULL,
@@ -21,7 +21,7 @@ convert_rate.ft(
 \item{x}{numeric value or vector, object of class \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
 \code{\link[=adjust_rate.ft]{adjust_rate.ft()}}. Contains the rate(s) to be converted.}
 
-\item{o2.unit}{string. The dissolved oxygen unit of the original data used to
+\item{oxy.unit}{string. The dissolved oxygen unit of the original data used to
 determine the rate in \code{x}.}
 
 \item{flowrate.unit}{string. The unit of the flowrate through the
@@ -60,7 +60,7 @@ objects if these are entered as the \code{x} input. Alternatively, a numeric val
 or vector of rates can be input as \code{x}.
 \subsection{Units}{
 
-The \code{o2.unit} of the original data used to calculated the rate is required.
+The \code{oxy.unit} of the original data used to calculated the rate is required.
 Concentration units should use only SI units (\code{L} or \code{kg}) for the
 denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air or
 oxygen is accepted, as are oxygen pressure units. See \code{\link[=unit_args]{unit_args()}} for

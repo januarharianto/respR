@@ -39,7 +39,7 @@ Air Saturation), \code{"\%O2"} (i.e. \% Oxygen Saturation), \verb{"Torr", "hPa",
 
 \strong{\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}
 
-\strong{Oxygen concentration or pressure units for \code{o2.unit} argument:}
+\strong{Oxygen concentration or pressure units for \code{oxy.unit} argument:}
 
 Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
 denominator.

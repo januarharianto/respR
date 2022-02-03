@@ -30,7 +30,7 @@
 #'
 #' **[convert_rate()] and [convert_rate.ft()]**
 #'
-#' **Oxygen concentration or pressure units for `o2.unit` argument:**
+#' **Oxygen concentration or pressure units for `oxy.unit` argument:**
 #'
 #' Oxygen concentration units should use SI units (`L` or `kg`) for the
 #' denominator.

@@ -65,7 +65,7 @@ urch <- inspect(urchins.rd, time = 1, oxygen = 15)
 rate <- auto_rate(urch)
 # 3. convert
 out <- convert_rate(rate, 
-                    o2.unit = "mg/L", 
+                    oxy.unit = "mg/L", 
                     time.unit = "min", 
                     output.unit = "mg/h/kg", 
                     volume = 0.6, 

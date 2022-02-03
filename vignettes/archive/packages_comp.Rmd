@@ -175,7 +175,7 @@ rates_respR <- calc_rate(fishMR_respR,
 # convert rates
 rates_respR_conv <- convert_rate(rates_respR,
                                  time.unit = "s",
-                                 o2.unit = "mg/L",
+                                 oxy.unit = "mg/L",
                                  volume = 1,
                                  output.unit = "mg/h")
 
@@ -338,7 +338,7 @@ spec1_r_adj <- adjust_rate(spec1_r, bg_r)
 # FishResp calculates this internally
 spec1_rates <- convert_rate(spec1_r_adj,
                       time.unit = "s",
-                      o2.unit = "mg/L",
+                      oxy.unit = "mg/L",
                       output.unit = "mg/h/kg",
                       mass = 0.00186,
                       volume = 0.24814) 

@@ -47,76 +47,76 @@ S=30
 t=15
 P=1.01
 
-conv.crft1 <- convert_rate.ft(crft1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crft1 <- convert_rate.ft(crft1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                               output.unit = "mg/h",
                               mass = NULL, area = NULL,
                               S=S, t=t, P=P)
-conv.crft1.ms <- convert_rate.ft(crft1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crft1.ms <- convert_rate.ft(crft1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                  output.unit = "mg/h/g",
                                  mass = 0.4, area = NULL,
                                  S=S, t=t, P=P)
-conv.crft1.as <- convert_rate.ft(crft1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crft1.as <- convert_rate.ft(crft1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                  output.unit = "mg/h/cm2",
                                  mass = NULL, area = 0.01,
                                  S=S, t=t, P=P)
-conv.crftmany <- convert_rate.ft(crftmany, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftmany <- convert_rate.ft(crftmany, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                  output.unit = "mg/h",
                                  mass = NULL, area = NULL,
                                  S=S, t=t, P=P)
-conv.crftmany.ms <- convert_rate.ft(crftmany, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftmany.ms <- convert_rate.ft(crftmany, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                     output.unit = "mg/h/g",
                                     mass = 0.4, area = NULL,
                                     S=S, t=t, P=P)
-conv.crftmany.as <- convert_rate.ft(crftmany, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftmany.as <- convert_rate.ft(crftmany, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                     output.unit = "mg/h/cm2",
                                     mass = NULL, area = 0.01,
                                     S=S, t=t, P=P)
-conv.crftwidth <- convert_rate.ft(crftwidth, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftwidth <- convert_rate.ft(crftwidth, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                   output.unit = "mg/h",
                                   mass = NULL, area = NULL,
                                   S=S, t=t, P=P)
-conv.crftwidth.ms <- convert_rate.ft(crftwidth, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftwidth.ms <- convert_rate.ft(crftwidth, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                      output.unit = "mg/h/g",
                                      mass = 0.4, area = NULL,
                                      S=S, t=t, P=P)
-conv.crftwidth.as <- convert_rate.ft(crftwidth, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.crftwidth.as <- convert_rate.ft(crftwidth, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                      output.unit = "mg/h/cm2",
                                      mass = NULL, area = 0.01,
                                      S=S, t=t, P=P)
 
-conv.adjft.1 <- convert_rate.ft(adjft.1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.1 <- convert_rate.ft(adjft.1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                 output.unit = "mg/h",
                                 mass = NULL, area = NULL,
                                 S=S, t=t, P=P)
-conv.adjft.1.ms <- convert_rate.ft(adjft.1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.1.ms <- convert_rate.ft(adjft.1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                    output.unit = "mg/h/g",
                                    mass = 0.4, area = NULL,
                                    S=S, t=t, P=P)
-conv.adjft.1.as <- convert_rate.ft(adjft.1, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.1.as <- convert_rate.ft(adjft.1, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                    output.unit = "mg/h/cm2",
                                    mass = NULL, area = 0.01,
                                    S=S, t=t, P=P)
-conv.adjft.many <- convert_rate.ft(adjft.many, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.many <- convert_rate.ft(adjft.many, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                    output.unit = "mg/h",
                                    mass = NULL, area = NULL,
                                    S=S, t=t, P=P)
-conv.adjft.many.ms <- convert_rate.ft(adjft.many, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.many.ms <- convert_rate.ft(adjft.many, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                       output.unit = "mg/h/g",
                                       mass = 0.4, area = NULL,
                                       S=S, t=t, P=P)
-conv.adjft.many.as <- convert_rate.ft(adjft.many, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.many.as <- convert_rate.ft(adjft.many, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                       output.unit = "mg/h/cm2",
                                       mass = NULL, area = 0.01,
                                       S=S, t=t, P=P)
-conv.adjft.width <- convert_rate.ft(adjft.width, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.width <- convert_rate.ft(adjft.width, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                     output.unit = "mg/h",
                                     mass = NULL, area = NULL,
                                     S=S, t=t, P=P)
-conv.adjft.width.ms <- convert_rate.ft(adjft.width, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.width.ms <- convert_rate.ft(adjft.width, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                        output.unit = "mg/h/g",
                                        mass = 0.4, area = NULL,
                                        S=S, t=t, P=P)
-conv.adjft.width.as <- convert_rate.ft(adjft.width, o2.unit = "mg/l", flowrate.unit = "L/m",
+conv.adjft.width.as <- convert_rate.ft(adjft.width, oxy.unit = "mg/l", flowrate.unit = "L/m",
                                        output.unit = "mg/h/cm2",
                                        mass = NULL, area = 0.01,
                                        S=S, t=t, P=P)
@@ -125,83 +125,83 @@ conv.adjft.width.as <- convert_rate.ft(adjft.width, o2.unit = "mg/l", flowrate.u
 
 test_that("convert_rate.ft - stops if 'x' input not numeric, calc_rate.ft, or adjust_rate.ft", {
   expect_error(convert_rate.ft("string",
-                               o2.unit = "mg/l", flowrate.unit = "l/s"),
+                               oxy.unit = "mg/l", flowrate.unit = "l/s"),
                regexp = "convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
   expect_error(convert_rate.ft(flowthrough.rd,
-                               o2.unit = "mg/l", flowrate.unit = "l/s"),
+                               oxy.unit = "mg/l", flowrate.unit = "l/s"),
                regexp = "convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
   expect_error(convert_rate.ft(inspect(flowthrough.rd, plot = FALSE),
-                               o2.unit = "mg/l", flowrate.unit = "l/s"),
+                               oxy.unit = "mg/l", flowrate.unit = "l/s"),
                regexp = "convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
 })
 
-test_that("convert_rate.ft - stops if 'o2.unit' is missing", {
+test_that("convert_rate.ft - stops if 'oxy.unit' is missing", {
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = NULL, flowrate.unit = "l/s"),
-               regexp = "convert_rate.ft: 'o2.unit' input is required.")
+                               oxy.unit = NULL, flowrate.unit = "l/s"),
+               regexp = "convert_rate.ft: 'oxy.unit' input is required.")
 })
 
 test_that("convert_rate.ft - stops if 'flowrate.unit' is missing", {
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = NULL),
+                               oxy.unit = "mg/l", flowrate.unit = NULL),
                regexp = "convert_rate.ft: 'flowrate.unit' input is required.")
 })
 
 test_that("convert_rate.ft - `output.unit` defaults successfully applied if missing", {
   # absolute
   expect_warning(convert_rate.ft(-1.4,
-                                 o2.unit = "mg/l", flowrate.unit = "l/s",
+                                 oxy.unit = "mg/l", flowrate.unit = "l/s",
                                  output.unit = NULL),
                  regexp = "convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h'.")
   expect_identical(suppressWarnings(convert_rate.ft(-1.4,
-                                                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                                                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                                                     output.unit = NULL))$output.unit,
                    "mgO2/hour")
   # mass-spec
   expect_warning(convert_rate.ft(-1.4,
-                                 o2.unit = "mg/l", flowrate.unit = "l/s",
+                                 oxy.unit = "mg/l", flowrate.unit = "l/s",
                                  output.unit = NULL, mass = 2),
                  regexp = "convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h/kg'.")
   expect_identical(suppressWarnings(convert_rate.ft(-1.4,
-                                                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                                                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                                                     output.unit = NULL, mass = 2))$output.unit,
                    "mgO2/hour/kg")
   # area-spec
   expect_warning(convert_rate.ft(-1.4,
-                                 o2.unit = "mg/l", flowrate.unit = "l/s",
+                                 oxy.unit = "mg/l", flowrate.unit = "l/s",
                                  output.unit = NULL, area = 2),
                  regexp = "convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h/m2'.")
   expect_identical(suppressWarnings(convert_rate.ft(-1.4,
-                                                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                                                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                                                     output.unit = NULL, area = 2))$output.unit,
                    "mgO2/hour/m2")
 })
 
 test_that("convert_rate.ft - stops is both 'mass' and 'area' have inputs.", {
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = "l/s",
+                               oxy.unit = "mg/l", flowrate.unit = "l/s",
                                output.unit = NULL, area = 2, mass = 3),
                regexp = "convert_rate.ft: Cannot have inputs for both 'mass' and 'area'.")
 })
 
 test_that("convert_rate.ft - stops if 'output.unit' requires a 'mass' or 'area' input and neither is provided", {
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = "l/s",
+                               oxy.unit = "mg/l", flowrate.unit = "l/s",
                                output.unit = "mg/h/kg", area = NULL, mass = NULL),
                "convert_rate.ft: 'output.unit' requires a value for 'mass' or 'area'")
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = "l/s",
+                               oxy.unit = "mg/l", flowrate.unit = "l/s",
                                output.unit = "mg/h/m2", area = NULL, mass = NULL),
                "convert_rate.ft: 'output.unit' requires a value for 'mass' or 'area'")
 })
 
 test_that("convert_rate.ft - stops if a 'mass' or 'area' input entered but output.unit is not mass- or area-specific", {
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = "l/s",
+                               oxy.unit = "mg/l", flowrate.unit = "l/s",
                                output.unit = "mg/h", area = NULL, mass = 2),
                "convert_rate.ft: a 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mg/l", flowrate.unit = "l/s",
+                               oxy.unit = "mg/l", flowrate.unit = "l/s",
                                output.unit = "mg/h", area = 2, mass = NULL),
                "convert_rate.ft: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 })
@@ -209,17 +209,17 @@ test_that("convert_rate.ft - stops if a 'mass' or 'area' input entered but outpu
 test_that("convert_rate.ft - stops if units require t, S and P", {
 
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mL/L", flowrate.unit = "l/s",
+                               oxy.unit = "mL/L", flowrate.unit = "l/s",
                                output.unit = "mg/h/mm2", area = 2, mass = NULL,
                                S = NULL, t = NULL, P = NULL),
                "convert_DO: Input or output units require Salinity input")
   expect_error(convert_rate.ft(-1.4,
-                               o2.unit = "mL/L", flowrate.unit = "l/s",
+                               oxy.unit = "mL/L", flowrate.unit = "l/s",
                                output.unit = "mg/h/mm2", area = 2, mass = NULL,
                                S = 35, t = NULL, P = NULL),
                "convert_DO: Input or output units require Temperature input")
   expect_message(convert_rate.ft(-1.4,
-                                 o2.unit = "mL/L", flowrate.unit = "l/s",
+                                 oxy.unit = "mL/L", flowrate.unit = "l/s",
                                  output.unit = "mg/h/mm2", area = 2, mass = NULL,
                                  S = 35, t = 15, P = NULL),
                  "convert_DO: Input or output units require Atmospheric Pressure input")
@@ -244,109 +244,109 @@ test_that("convert_rate.ft - stops if units require t, S and P", {
 test_that("convert_rate.ft - outputs same results as calc_rate", {
   expect_equal(
     convert_rate.ft(-1.4,
-                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-1.4,
-                 o2.unit = "mg/l", time.unit = "s", volume = 1,
+                 oxy.unit = "mg/l", time.unit = "s", volume = 1,
                  output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-0.001,
-                    o2.unit = "mg/l", flowrate.unit = "ml/s",
+                    oxy.unit = "mg/l", flowrate.unit = "ml/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-0.001,
-                 o2.unit = "mg/l", time.unit = "s", volume = 1/1000,
+                 oxy.unit = "mg/l", time.unit = "s", volume = 1/1000,
                  output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-455,
-                    o2.unit = "mg/l", flowrate.unit = "ul/s",
+                    oxy.unit = "mg/l", flowrate.unit = "ul/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-455,
-                 o2.unit = "mg/l", time.unit = "s", volume = 1/1000000,
+                 oxy.unit = "mg/l", time.unit = "s", volume = 1/1000000,
                  output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(-455,
-                    o2.unit = "mg/l", flowrate.unit = "ul/d",
+                    oxy.unit = "mg/l", flowrate.unit = "ul/d",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(-455,
-                 o2.unit = "mg/l", time.unit = "d", volume = 1/1000000,
+                 oxy.unit = "mg/l", time.unit = "d", volume = 1/1000000,
                  output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crft1,
-                    o2.unit = "mg/l", flowrate.unit = "ml/min",
+                    oxy.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     convert_rate(crft1$rate,
-                 o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "mg/h", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crftmany,
-                    o2.unit = "mg/l", flowrate.unit = "ml/min",
+                    oxy.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "umol h-1", area = NULL, mass = NULL)$rate.output,
     convert_rate(crftmany$rate,
-                 o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "umol h-1", area = NULL, mass = NULL)$rate.output
   )
   expect_equal(
     convert_rate.ft(crftvec,
-                    o2.unit = "mg/l", flowrate.unit = "ml/min",
+                    oxy.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(crftvec$rate,
-                 o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.1,
-                    o2.unit = "mg/l", flowrate.unit = "ml/min",
+                    oxy.unit = "mg/l", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.1$rate.adjusted,
-                 o2.unit = "mg/l", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "mg/l", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.many,
-                    o2.unit = "%Air", flowrate.unit = "ml/min",
+                    oxy.unit = "%Air", flowrate.unit = "ml/min",
                     output.unit = "mL s-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.many$rate.adjusted,
-                 o2.unit = "%Air", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "%Air", time.unit = "m", volume = 1/1000,
                  output.unit = "mL s-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.width,
-                    o2.unit = "%o2", flowrate.unit = "ml/min",
+                    oxy.unit = "%o2", flowrate.unit = "ml/min",
                     output.unit = "mol s-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.width$rate.adjusted,
-                 o2.unit = "%o2", time.unit = "m", volume = 1/1000,
+                 oxy.unit = "%o2", time.unit = "m", volume = 1/1000,
                  output.unit = "mol s-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.prod,
-                    o2.unit = "umol/kg", flowrate.unit = "l/h",
+                    oxy.unit = "umol/kg", flowrate.unit = "l/h",
                     output.unit = "mol s-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.prod$rate.adjusted,
-                 o2.unit = "umol/kg", time.unit = "h", volume = 1/1,
+                 oxy.unit = "umol/kg", time.unit = "h", volume = 1/1,
                  output.unit = "mol s-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
   expect_equal(
     convert_rate.ft(adjft.vec,
-                    o2.unit = "hPa", flowrate.unit = "l/h",
+                    oxy.unit = "hPa", flowrate.unit = "l/h",
                     output.unit = "ml d-1", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     convert_rate(adjft.vec$rate.adjusted,
-                 o2.unit = "hPa", time.unit = "h", volume = 1/1,
+                 oxy.unit = "hPa", time.unit = "h", volume = 1/1,
                  output.unit = "ml d-1", area = NULL, mass = NULL,
                  S=S, t=t, P=P)$rate.output
   )
@@ -357,53 +357,53 @@ test_that("convert_rate.ft - outputs some known specific values", {
   expect_equal(
     # -1 mg in l/s should be -1*60*60  in mg/h
     convert_rate.ft(-1,
-                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -1*60*60)
 
   expect_equal(
     convert_rate.ft(-2,
-                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -2*60*60)
 
   expect_equal(
     convert_rate.ft(2,
-                    o2.unit = "mg/l", flowrate.unit = "l/s",
+                    oxy.unit = "mg/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     2*60*60)
   expect_equal(
     convert_rate.ft(-0.01,
-                    o2.unit = "ug/l", flowrate.unit = "l/s",
+                    oxy.unit = "ug/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL)$rate.output,
     -0.01*60*60 / 1000)
   expect_equal(
     convert_rate.ft(-0.01,
-                    o2.unit = "ml/l", flowrate.unit = "l/s",
+                    oxy.unit = "ml/l", flowrate.unit = "l/s",
                     output.unit = "mg/h", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     -48.6154742081153)
   expect_equal(
     convert_rate.ft(-1,
-                    o2.unit = "ml/l", flowrate.unit = "l/s",
+                    oxy.unit = "ml/l", flowrate.unit = "l/s",
                     output.unit = "umol/h", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     -151929.054239894)
   expect_equal(
     convert_rate.ft(-0.01,
-                    o2.unit = "umol/l", flowrate.unit = "l/s",
+                    oxy.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s", area = NULL, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     -0.000319988)
   expect_equal(
     convert_rate.ft(-0.01,
-                    o2.unit = "umol/l", flowrate.unit = "l/s",
+                    oxy.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s/kg", area = NULL, mass = 0.01,
                     S=S, t=t, P=P)$rate.output,
     -0.000319988/0.01)
   expect_equal(
     convert_rate.ft(-0.01,
-                    o2.unit = "umol/l", flowrate.unit = "l/s",
+                    oxy.unit = "umol/l", flowrate.unit = "l/s",
                     output.unit = "mg/s/m2", area = 0.001, mass = NULL,
                     S=S, t=t, P=P)$rate.output,
     -0.000319988/0.001)
@@ -581,7 +581,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
       # random rates
       o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
       # input o2 units
-      o2.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
+      oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),
       flow.time.units = c("s", "m", "h", "d"),
@@ -610,14 +610,14 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
     test_that("convert_rate and convert_rate.ft output same results - ABSOLUTE RATES", {
       apply(grid_abs, 1, function(z) {
         expect_equal(suppressMessages(convert_rate.ft(as.numeric(z[[1]]),
-                                                      o2.unit = z[[2]],
+                                                      oxy.unit = z[[2]],
                                                       flowrate.unit = z[[6]],
                                                       output.unit = z[[5]],
                                                       area = NULL, mass = NULL,
                                                       S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
-                                                   o2.unit = z[[2]],
+                                                   oxy.unit = z[[2]],
                                                    time.unit = z[[4]],
                                                    volume = 1/as.numeric(z[[7]]),
                                                    output.unit = z[[5]],
@@ -634,7 +634,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
       # random rates
       o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
       # input o2 units
-      o2.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
+      oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),
       flow.time.units = c("s", "m", "h", "d"),
@@ -664,7 +664,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
     test_that("convert_rate and convert_rate.ft output same results - MASS SPECIFIC", {
       apply(grid_ms, 1, function(z) {
         expect_equal(suppressMessages(convert_rate.ft(as.numeric(z[[1]]),
-                                                      o2.unit = z[[2]],
+                                                      oxy.unit = z[[2]],
                                                       flowrate.unit = z[[7]],
                                                       output.unit = z[[5]],
                                                       area = NULL,
@@ -672,7 +672,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                       S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
-                                                   o2.unit = z[[2]],
+                                                   oxy.unit = z[[2]],
                                                    time.unit = z[[4]],
                                                    volume = 1/as.numeric(z[[8]]),
                                                    output.unit = z[[5]],
@@ -690,7 +690,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
       # random rates
       o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
       # input o2 units
-      o2.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
+      oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),
       flow.time.units = c("s", "m", "h", "d"),
@@ -720,7 +720,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
     test_that("convert_rate and convert_rate.ft output same results - AREA SPECIFIC", {
       apply(grid_as, 1, function(z) {
         expect_equal(suppressMessages(convert_rate.ft(as.numeric(z[[1]]),
-                                                      o2.unit = z[[2]],
+                                                      oxy.unit = z[[2]],
                                                       flowrate.unit = z[[7]],
                                                       output.unit = z[[5]],
                                                       mass = NULL,
@@ -728,7 +728,7 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
                                                       S = S, t = t, P = P))$rate.output,
 
                      suppressMessages(convert_rate(as.numeric(z[[1]]),
-                                                   o2.unit = z[[2]],
+                                                   oxy.unit = z[[2]],
                                                    time.unit = z[[4]],
                                                    volume = 1/as.numeric(z[[8]]),
                                                    output.unit = z[[5]],
