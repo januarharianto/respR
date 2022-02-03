@@ -765,6 +765,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                       legend = c("Inflow O2", "Outflow O2"),
                       pch = pch_def,
                       col = c(ftcol_in, ftcol_out),
+                      bg = "white",
                       cex = 0.8)
 
     mtext("Outflow ~ Inflow O2",
