@@ -13,8 +13,8 @@ reference:
     desc: >
       Functions for importing, processing, visualising and inspecting data:
     contents:
-    - '`format_time`'
     - '`import_file`'
+    - '`format_time`'
     - '`inspect`'
     - '`inspect.ft`'
     - '`subsample`'
