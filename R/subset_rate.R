@@ -595,44 +595,10 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
     message(glue::glue("subset_rate: Subsetting rates which overlap by at least {n*100}% ..."))
 
-    ##### First - remove contained
-
     ## extract summary df
     df <- x$summary
-    #
-    # insides <- TRUE # to get while loop started
-    #
-    # ## while at least one regression is inside another,
-    # ## go from bottom row to top
-    # ## the one closest the bottom which is contained gets removed
-    # ## then repeat while loop
-    # while(any(insides)){
-    #   ## object to save logical test results to
-    #   insides <- rep(NA, nrow(df))
-    #   ## loop from last row to first
-    #   for(i in nrow(df):1) {
-    #     start <- df$row[i] # start of reg in data
-    #     end <- df$endrow[i] # end of reg in data
-    #
-    #     insides[i] <- any(start >= df$row[-i] & end <= df$endrow[-i])
-    #   }
-    #
-    #   ## if any are inside (contained), go to last one and remove it
-    #   if(any(insides)) {
-    #     remove <- tail(which(insides), 1)
-    #     df <- df[-remove,]
-    #   }
-    # }
-    #
-    # ## which to keep
-    # keep <- which(x$summary$rank %in% df$rank)
-    #
-    # ## subset df to keep non-contained
-    # df <- x$summary[keep,]
 
-    #### Second - remove overlapping
-
-    # basically repeat above, but take account of n
+    #### Remove overlapping
 
     ## add row width col
     df$row_width <- df$endrow - df$row
@@ -652,15 +618,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
         end <- df$endrow[i] # end of reg in data
         width <- df$row_width[i] # width of reg
         overlap <- round(width * n) # allowed overlap
-
         overlaps[i] <- any(df$row[-i]+overlap <= end & df$endrow[-i]-overlap >= start)
-        #overlaps[i] <- any(start >= df$row[-i]overlap & end <= df$endrow[-i])
-
-        ## For each regression in df (df[i,]) - which *other* regressions overlap it?
-        ## They need to have start row (plus overlap) BEFORE end row of i reg
-        ## And end row (minus overlap) AFTER start row of i reg
-        #overlaps <- which(out_df$row+overlap <= end & out_df$endrow-overlap >= start)
-
       }
 
       ## if any are inside (contained), go to last one and remove it
@@ -672,92 +630,87 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
       keep <- which(x$summary$rank %in% df$rank)
       keep <- sort(keep)
     }
-
-    ## May match with itself due to rounding of overlap, so remove it
-    #if(any(overlaps == i)) overlaps <- overlaps[-which(overlaps == i)]
-
   } ### end overlap
 
   # overlap_new -------------------------------------------------------------
-  if(method == "overlap_new"){
-
-    if(is.null(n)) {
-      n <- 0
-      message("subset_rate: 'overlap' method applying default 'n = 0', no overlapping permitted.")
-    }
-    if(n < 0 || n > 1)
-      stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
-    message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
-    message(glue::glue("subset_rate: Subsetting rates which overlap by at least {n*100}% ..."))
-
-    ##### First - remove contained
-
-    ## extract summary df
-    df <- x$summary
-    df$row_width <- df$endrow - df$row
-
-    insides <- TRUE # to get while loop started
-
-    ## while at least one regression is inside another,
-    ## go from bottom row to top
-    ## the one closest the bottom which is contained gets removed
-    ## then repeat while loop
-    while(any(insides)){
-      ## object to save logical test results to
-      insides <- rep(NA, nrow(df))
-      ## loop from last row to first
-      for(i in nrow(df):1) {
-        start <- df$row[i] # start of reg in data
-        end <- df$endrow[i] # end of reg in data
-
-        insides[i] <- any(start >= df$row[-i] & end <= df$endrow[-i])
-      }
-
-      ## if any are inside (contained), go to last one and remove it
-      if(any(insides)) {
-        remove <- tail(which(insides), 1)
-        df <- df[-remove,]
-      }
-    }
-
-    ## second
-
-    max_overlap <- data.frame(rank = NA,
-                              max_overlap = 1)
-
-    while(any(max_overlap[[2]] > n)) {
-
-      max_overlap <- data.frame(rank = NA,
-                              max_overlap = NA)
-      for(i in 1:nrow(df)){
-        rank <- df[i,1]
-        start <- df$row[i] # start of reg in data
-        end <- df$endrow[i] # end of reg in data
-        width <- df$row_width[i]
-
-        overlap_props <- data.frame(t(apply(df[-i,], 1, function(z) {
-          c(z[1],
-            prop = length(intersect(start:end, z[6]:z[7]))/width)
-        })))
-        max_overlap[i,] <- cbind(rank,
-                                 max(overlap_props$prop))
-
-      }
-      # because which.max returns only first result
-      remove <- tail(which(max_overlap$max_overlap == max(max_overlap$max_overlap)),1)
-
-      df <- df[-remove,]
-
-      cat("done", nrow(max_overlap))
-    }   # end of while loop
-
-      keep <- which(x$summary$rank %in% df$rank)
-      keep <- sort(keep)
-    }
-
-
-   ### end overlap
-
+  # Rewrote this. Can't remember why or what main difference is.
+  # But doesn't seem to work quite as well.
+  # Leaving here for now
+  # if(method == "overlap_new"){
+  #
+  #   if(is.null(n)) {
+  #     n <- 0
+  #     message("subset_rate: 'overlap' method applying default 'n = 0', no overlapping permitted.")
+  #   }
+  #   if(n < 0 || n > 1)
+  #     stop("subset_rate: For 'overlap' method 'n' must be between 0 and 1 inclusive.")
+  #   message(glue::glue("subset_rate: The 'overlap' method can be computationally intensive and may take some time."))
+  #   message(glue::glue("subset_rate: Subsetting rates which overlap by at least {n*100}% ..."))
+  #
+  #   ##### First - remove contained
+  #
+  #   ## extract summary df
+  #   df <- x$summary
+  #   df$row_width <- df$endrow - df$row
+  #
+  #   insides <- TRUE # to get while loop started
+  #
+  #   ## while at least one regression is inside another,
+  #   ## go from bottom row to top
+  #   ## the one closest the bottom which is contained gets removed
+  #   ## then repeat while loop
+  #   while(any(insides)){
+  #     ## object to save logical test results to
+  #     insides <- rep(NA, nrow(df))
+  #     ## loop from last row to first
+  #     for(i in nrow(df):1) {
+  #       start <- df$row[i] # start of reg in data
+  #       end <- df$endrow[i] # end of reg in data
+  #       insides[i] <- any(start >= df$row[-i] & end <= df$endrow[-i])
+  #     }
+  #
+  #     ## if any are inside (contained), go to last one and remove it
+  #     if(any(insides)) {
+  #       remove <- tail(which(insides), 1)
+  #       df <- df[-remove,]
+  #     }
+  #   }
+  #
+  #   ## second
+  #
+  #   max_overlap <- data.frame(rank = NA,
+  #                             max_overlap = 1)
+  #
+  #   while(any(max_overlap[[2]] > n)) {
+  #
+  #     max_overlap <- data.frame(rank = NA,
+  #                             max_overlap = NA)
+  #     for(i in 1:nrow(df)){
+  #       rank <- df[i,1]
+  #       start <- df$row[i] # start of reg in data
+  #       end <- df$endrow[i] # end of reg in data
+  #       width <- df$row_width[i]
+  #
+  #       overlap_props <- data.frame(t(apply(df[-i,], 1, function(z) {
+  #         c(z[1],
+  #           prop = length(intersect(start:end, z[6]:z[7]))/width)
+  #       })))
+  #       max_overlap[i,] <- cbind(rank,
+  #                                max(overlap_props$prop))
+  #
+  #     }
+  #     # because which.max returns only first result
+  #     remove <- tail(which(max_overlap$max_overlap == max(max_overlap$max_overlap)),1)
+  #
+  #     df <- df[-remove,]
+  #
+  #     cat("done", nrow(max_overlap))
+  #   }   # end of while loop
+  #
+  #     keep <- which(x$summary$rank %in% df$rank)
+  #     keep <- sort(keep)
+  #   }
+  ### end overlap_new
 
   # Subset auto_rate object -------------------------------------------------
 
@@ -770,7 +723,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
     output$peaks <- output$peaks[keep,]
   }
 
-  ## save original ar object if it isn't already there
+  ## save original auto_rate object if it isn't already there
   if(!("original" %in% names(output))) output$original <- input_x
 
   ## save subsetting criteria
@@ -783,13 +736,11 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   ## Add custom ADDITIONAL class
   ## Maybe different way of doing this, but:
-  ## 1. for analysis documentation purposes new object should have indiciation it was an
+  ## 1. for analysis documentation purposes new object should have indication it was an
   ## auto_rate object that was manipulated, i.e. not original
   ## 2. can't replace 'auto_rate' class because generic S3 functions will stop working
   ## (unless we just duplicate these for new class)
   if(!("auto_rate_subset" %in% class(output))) class(output) <- c(class(output), "auto_rate_subset")
-
-
 
   # Plot --------------------------------------------------------------------
 
