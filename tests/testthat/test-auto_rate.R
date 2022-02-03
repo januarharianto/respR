@@ -174,7 +174,7 @@ test_that("auto_rate works with variations of `by` input", {
 })
 
 test_that("auto_rate error produced with wrong by", {
-  expect_error(auto_rate(urch_data, plot = F, by = "o2"),
+  expect_error(auto_rate(urch_data, plot = F, by = "oxygen"),
                "auto_rate: The 'by' argument must be 'time' or 'row'")
 })
 

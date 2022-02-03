@@ -115,7 +115,7 @@ Here, we want to calculate rates between the oxygen values of 7 and 6.6 mg/L wit
 
 ```{r eval = F}
 u_rep1 <- inspect(intermittent.rd[1:1900,])
-u_rate1 <- calc_rate(rep1, from = 7, to = 6.6, by = "o2")
+u_rate1 <- calc_rate(rep1, from = 7, to = 6.6, by = "oxygen")
 ```
 
 However, we can also use the dedicated `subset_data()` function, which allows for easy subsetting by time, oxygen or row number from both data frames and `inspect` objects. Here, we use the `inspect` object we [saved earlier](#inspect) containing the whole dataset, to create new `inspect` objects for each replicate. These can be treated like any other `inspect` object, including being passed to `print` and `plot`.
@@ -129,13 +129,13 @@ u_rep3 <- subset_data(urchin_int, from = 3700, to = 4831, by = "time")
 
 Now we can calculate the rate from each, showing the results from the third one here.
 ```{r eval = F}
-u_rate1 <- calc_rate(u_rep1, from = 7, to = 6.6, by = "o2")
-u_rate2 <- calc_rate(u_rep2, from = 7, to = 6.6, by = "o2")
-u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "o2")
+u_rate1 <- calc_rate(u_rep1, from = 7, to = 6.6, by = "oxygen")
+u_rate2 <- calc_rate(u_rep2, from = 7, to = 6.6, by = "oxygen")
+u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "oxygen")
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
-u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "o2")
+u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "oxygen")
 ```
 
 See later section [Converting rates](#convert) for how to convert these to units.

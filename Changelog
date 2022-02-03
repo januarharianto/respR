@@ -177,8 +177,8 @@ Changes
 - FIX: plots full 4 panel plot by default (was multi.p fn of df and regression only..)
 - FIX: fix for failure to plot with very small datasets (2-5 values)
 - FIX: Fix for `calc_rate` failing to work when there were NA in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing. )
-- FIX - by = "proportion" and by = "o2" now work correctly with oxygen production data.
-About the above. All changes made to truncate_data. Previously these methods didn't work with rising O2 as the code for finding the from/to values assumed it was decreasing. Now it identifes all data within the range of from/to. Essentially this makes from/to interchangeable. This however breaks the previous behaviour where it found first occurrence of 'from', then the first occurrence of 'to' after that, so you could use it with intermittent-flow data and it would get the from-to rate from the first replicate. This is such a niche use case, it's not worth trying to fix it (although i almost figured it out actually). Users with these data need to know how to subset them anyway, so they can just subset this replicate too.
+- FIX - by = "proportion" and by = "oxygen" now work correctly with oxygen production data.
+About the above. All changes made to truncate_data. Previously these methods didn't work with rising oxygen as the code for finding the from/to values assumed it was decreasing. Now it identifes all data within the range of from/to. Essentially this makes from/to interchangeable. This however breaks the previous behaviour where it found first occurrence of 'from', then the first occurrence of 'to' after that, so you could use it with intermittent-flow data and it would get the from-to rate from the first replicate. This is such a niche use case, it's not worth trying to fix it (although i almost figured it out actually). Users with these data need to know how to subset them anyway, so they can just subset this replicate too.
 The change will mean with some data it will give different results than the old way, because of the way the from-to region is identified internally. Old way - first occurrence of the 'from' value, then first occurrence of the 'to' value after that. New way - first occurrence of the 'from' value, then LAST occurrence of the 'to' value after that. With most data any difference in rates should be very minor. I can only see this making a difference in really noisy or really shallow data.
 
 
@@ -186,10 +186,10 @@ The change will mean with some data it will give different results than the old 
 - NEW: support for `inspect.ft` objects
 - NEW: added 'quiet' input to allow console output to be suppressed. (still does for now, but make no print the default?) - also add this to others which print by default? Think it's only inspect/inspect.ft
 - NEW: now subsets from start of the data if 'from' is NULL, and to the end of the data if `to` is NULL.
-- CHANGE: Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple O2 column dataframes
+- CHANGE: Rewrote help docs - especially specified by = oxygen/proportion applies to first column in multiple oxygen column dataframes
 - CHANGE: Warns if output subset is empty
 - FIX: fix for failure with inspect() objects
-- FIX: by = "proportion" and by = "o2" now work correctly with oxygen production data (changes made to truncate_data)
+- FIX: by = "proportion" and by = "oxygen" now work correctly with oxygen production data (changes made to truncate_data)
 - Note changes above now generally result in larger/longer subsets. Extra rows are at the end (because of change in identifying where 'to' is - see comment on calc_rate)
 
 
@@ -248,7 +248,7 @@ summary.convert_rate
 
 print.inspect
 - NEW: if uneven time, now prints min and max intervals found
-- NEW: time error locations now printed out when multiple o2 columns inspected
+- NEW: time error locations now printed out when multiple oxygen columns inspected
 
 print.auto_rate
 - CHANGE: prints all results of interval method regardless of pos or width

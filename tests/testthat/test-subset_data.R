@@ -46,7 +46,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("subset_data - works by O2", {
-    sub <- subset_data(sardine.rd, from = 93, to = 92, by = "o2")
+    sub <- subset_data(sardine.rd, from = 93, to = 92, by = "oxygen")
     expect_is(sub,
               "data.frame")
   })
@@ -58,7 +58,7 @@ capture.output({  ## stops printing outputs on assigning
       expect_error(subset_data(sardine.rd, from = 2000, to = 3000, by = "Row"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 2000, to = 3000, by = "r"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 95, to = 94, by = "Oxygen"), regexp = NA)
-      expect_error(subset_data(sardine.rd, from = 95, to = 94, by = "O2"), regexp = NA)
+      expect_error(subset_data(sardine.rd, from = 95, to = 94, by = "oxygen"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 0.8, to = 0.6, by = "Prop"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 0.8, to = 0.6, by = "p"), regexp = NA)
     })
@@ -158,7 +158,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(subset_data(fthr, from = 2001:2002, to = 3000, by = "row"),
                  regexp = "subset_data: 'from' - only 1 inputs allowed.")
 
-    expect_error(subset_data(fthr, from = 2:3, to = 3800, by = "o2"),
+    expect_error(subset_data(fthr, from = 2:3, to = 3800, by = "oxygen"),
                  regexp = "subset_data: 'from' - only 1 inputs allowed.")
   })
 
@@ -266,7 +266,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(as.numeric(subset_data(urch, from = NULL, to = 20, by = "row")[1,1]),
                  3.2)
 
-    expect_error(subset_data(urch, from = NULL, to = 7, by = "o2"),
+    expect_error(subset_data(urch, from = NULL, to = 7, by = "oxygen"),
                  regexp = NA)
     expect_equal(as.numeric(subset_data(urch, from = NULL, to = 20, by = "row")[1,2]),
                  7.75)
@@ -287,9 +287,9 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(tail(subset_data(urch, from = 5, to = NULL, by = "row")[[1]], 1),
                  33.2)
 
-    expect_error(subset_data(urch, from = 7, to = NULL, by = "o2"),
+    expect_error(subset_data(urch, from = 7, to = NULL, by = "oxygen"),
                  regexp = NA)
-    expect_equal(tail(subset_data(urch, from = 5, to = NULL, by = "o2")[[2]], 1),
+    expect_equal(tail(subset_data(urch, from = 5, to = NULL, by = "oxygen")[[2]], 1),
                  6.90)
 
     expect_error(subset_data(urch, from = 0.7, to = NULL, by = "prop"),
@@ -321,15 +321,15 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(tail(subset_data(urch, by = "row")[[2]], 1),
                  urch[[2]][nrow(urch)])
     # by "o2"
-    expect_error(subset_data(urch, by = "o2"),
+    expect_error(subset_data(urch, by = "oxygen"),
                  regexp = NA)
-    expect_equal(subset_data(urch, by = "o2")[[1]][1],
+    expect_equal(subset_data(urch, by = "oxygen")[[1]][1],
                  urch[[1]][1])
-    expect_equal(tail(subset_data(urch, by = "o2")[[1]], 1),
+    expect_equal(tail(subset_data(urch, by = "oxygen")[[1]], 1),
                  urch[[1]][nrow(urch)])
-    expect_equal(subset_data(urch, by = "o2")[[2]][1],
+    expect_equal(subset_data(urch, by = "oxygen")[[2]][1],
                  urch[[2]][1])
-    expect_equal(tail(subset_data(urch, by = "o2")[[2]], 1),
+    expect_equal(tail(subset_data(urch, by = "oxygen")[[2]], 1),
                  urch[[2]][nrow(urch)])
 
   })

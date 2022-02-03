@@ -30,7 +30,7 @@ test_that("calc_rate - subsetting methods work and produce correct outputs", {
   expect_equal(nrow(cr$subsets[[1]]),
                2001)
 
-  cr <- calc_rate(sardine.rd, 94, 93, by = "o2", plot = F)
+  cr <- calc_rate(sardine.rd, 94, 93, by = "oxygen", plot = F)
   expect_is(cr,
             "calc_rate")
   expect_equal(as.numeric(cr$subsets[[1]][1,2]),
@@ -98,7 +98,7 @@ test_that("calc_rate works with variations of `by` input", {
   expect_error(calc_rate(sardine.rd, plot = F, by = "Time"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "T"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "Oxygen"), regexp = NA)
-  expect_error(calc_rate(sardine.rd, plot = F, by = "O2"), regexp = NA)
+  expect_error(calc_rate(sardine.rd, plot = F, by = "oxygen"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "Row"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "r"), regexp = NA)
   expect_error(calc_rate(sardine.rd, plot = F, by = "Proportion"),
@@ -151,9 +151,9 @@ test_that("calc_rate - correctly handles 'from' NULL", {
   expect_equal(calc_rate(urch, from = NULL, to = 20, by = "row", plot = FALSE)$summary$row,
                1)
 
-  expect_error(calc_rate(urch, from = NULL, to = 7, by = "o2", plot = FALSE),
+  expect_error(calc_rate(urch, from = NULL, to = 7, by = "oxygen", plot = FALSE),
                regexp = NA)
-  expect_equal(calc_rate(urch, from = NULL, to = 7, by = "o2", plot = FALSE)$summary$oxy,
+  expect_equal(calc_rate(urch, from = NULL, to = 7, by = "oxygen", plot = FALSE)$summary$oxy,
                urch[[2]][1])
 
   expect_error(calc_rate(urch, from = NULL, to = 0.8, by = "prop"),
@@ -172,9 +172,9 @@ test_that("calc_rate - correctly handles 'to' NULL", {
   expect_equal(calc_rate(urch, from = 5, to = NULL, by = "row", plot = FALSE)$summary$endrow,
                181)
 
-  expect_error(calc_rate(urch, from = 7.5, to = NULL, by = "o2", plot = FALSE),
+  expect_error(calc_rate(urch, from = 7.5, to = NULL, by = "oxygen", plot = FALSE),
                regexp = NA)
-  expect_equal(calc_rate(urch, from = 7.5, to = NULL, by = "o2", plot = FALSE)$summary$endoxy,
+  expect_equal(calc_rate(urch, from = 7.5, to = NULL, by = "oxygen", plot = FALSE)$summary$endoxy,
                urch[[2]][181])
 
   expect_error(calc_rate(urch, from = 0.2, to = NULL, by = "prop"),
@@ -207,15 +207,15 @@ test_that("calc_rate - correctly handles 'from' and 'to' NULL", {
   expect_equal(calc_rate(urch, by = "row")$summary$endoxy,
                urch[[2]][nrow(urch)])
   # by "o2"
-  expect_error(calc_rate(urch, by = "o2"),
+  expect_error(calc_rate(urch, by = "oxygen"),
                regexp = NA)
-  expect_equal(calc_rate(urch, by = "o2")$summary$row,
+  expect_equal(calc_rate(urch, by = "oxygen")$summary$row,
                1)
-  expect_equal(calc_rate(urch, by = "o2")$summary$endrow,
+  expect_equal(calc_rate(urch, by = "oxygen")$summary$endrow,
                181)
-  expect_equal(calc_rate(urch, by = "o2")$summary$oxy,
+  expect_equal(calc_rate(urch, by = "oxygen")$summary$oxy,
                urch[[2]][1])
-  expect_equal(calc_rate(urch, by = "o2")$summary$endoxy,
+  expect_equal(calc_rate(urch, by = "oxygen")$summary$endoxy,
                urch[[2]][nrow(urch)])
 
 
@@ -469,7 +469,7 @@ test_that("calc_rate - by = 'row' outputs correct results with oxygen production
          s = to_rev)
 })
 
-# by = "o2" checks --------------------------------------------------------
+# by = "oxygen" checks --------------------------------------------------------
 
 test_that("calc_rate - by = 'o2' stops with paired values of from and to *both* below or *both* above o2 data range", {
   by <- "o2"

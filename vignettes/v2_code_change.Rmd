@@ -98,7 +98,7 @@ This function has been completely rewritten to incorporate several new adjustmen
 
 ### `calc_rate()` and `subset_data()`
 
-A change to the code for determining `by = "o2"` ranges to ensure it works with both oxygen production data as well as oxygen uptake data, means that output results may differ from those in v1.1. The previous behaviour was the function found the first occurrence of the `from` value, then the first occurrence of `to`, with rates determined between these bounds. Now, it finds the first occurrence of `from`, then the *last* occurrence of `to`. With most data any difference in rates as a result of this change should be minor. Also as a result, data subsets in `subset_data()` using this method now tend to be longer. 
+A change to the code for determining `by = "oxygen"` ranges to ensure it works with both oxygen production data as well as oxygen uptake data, means that output results may differ from those in v1.1. The previous behaviour was the function found the first occurrence of the `from` value, then the first occurrence of `to`, with rates determined between these bounds. Now, it finds the first occurrence of `from`, then the *last* occurrence of `to`. With most data any difference in rates as a result of this change should be minor. Also as a result, data subsets in `subset_data()` using this method now tend to be longer. 
 
 ### `inspect()`
 
