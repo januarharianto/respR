@@ -100,7 +100,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_data - works with inspect.ft objects", {
     fthr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                        delta.o2 =  10:12, plot = FALSE))
+                                        delta.oxy =  10:12, plot = FALSE))
 
     expect_error(subset_data(fthr, from = -3, to = -5, by = "oxygen"),
                  regexp = NA)
@@ -142,7 +142,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_data - stops if 'from' or 'to' malformed", {
     fthr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                        delta.o2 =  10:12, plot = FALSE))
+                                        delta.oxy =  10:12, plot = FALSE))
 
     expect_error(subset_data(fthr, from = 30, to = 20, by = "time"),
                  regexp = "subset_data: 'to' - one or more inputs are outside the range of allowed values.")
@@ -188,7 +188,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_data - `inspect.ft` objects work as expected in subsequent functions.", {
     fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                        out.o2 = 2, in.o2 = 6))
+                                        out.oxy = 2, in.oxy = 6))
     sub <- subset_data(fltr, from = 20, to = 30, by = "time")
     expect_error(calc_rate.ft(sub, flowrate = 1.5),
                  regexp = NA)
@@ -202,7 +202,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("subset_data - `inspect.ft` $dataframe and $inputs elements have both been subset correctly", {
 
     fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                        out.o2 = 2, in.o2 = 6))
+                                        out.oxy = 2, in.oxy = 6))
     sub <- subset_data(fltr, from = 20, to = 30, by = "time")
     dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
     dtt <- as.data.table(dtt)
@@ -225,7 +225,7 @@ capture.output({  ## stops printing outputs on assigning
                      sub$dataframe)
 
     fltr <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1,
-                                        delta.o2 = 8:10))
+                                        delta.oxy = 8:10))
     sub <- subset_data(fltr, from = 15, to = 32, by = "time")
     dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
     dtt <- as.data.table(dtt)
@@ -234,7 +234,7 @@ capture.output({  ## stops printing outputs on assigning
                      sub$dataframe)
 
     fltr <- suppressWarnings(inspect.ft(flowthrough.rd, time = 1,
-                                        out.o2 = 2, in.o2 = 3))
+                                        out.oxy = 2, in.oxy = 3))
     sub <- subset_data(fltr, from = 123, to = 654, by = "row")
     dtt <- sapply(sub$data, function(z) rbind.data.frame(z))
     dtt <- as.data.table(dtt)
@@ -320,7 +320,7 @@ capture.output({  ## stops printing outputs on assigning
                  urch[[2]][1])
     expect_equal(tail(subset_data(urch, by = "row")[[2]], 1),
                  urch[[2]][nrow(urch)])
-    # by "o2"
+    # by "oxygen"
     expect_error(subset_data(urch, by = "oxygen"),
                  regexp = NA)
     expect_equal(subset_data(urch, by = "oxygen")[[1]][1],

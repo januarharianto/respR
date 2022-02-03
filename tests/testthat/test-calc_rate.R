@@ -206,7 +206,7 @@ test_that("calc_rate - correctly handles 'from' and 'to' NULL", {
                urch[[2]][1])
   expect_equal(calc_rate(urch, by = "row")$summary$endoxy,
                urch[[2]][nrow(urch)])
-  # by "o2"
+  # by "oxygen"
   expect_error(calc_rate(urch, by = "oxygen"),
                regexp = NA)
   expect_equal(calc_rate(urch, by = "oxygen")$summary$row,
@@ -471,8 +471,8 @@ test_that("calc_rate - by = 'row' outputs correct results with oxygen production
 
 # by = "oxygen" checks --------------------------------------------------------
 
-test_that("calc_rate - by = 'o2' stops with paired values of from and to *both* below or *both* above o2 data range", {
-  by <- "o2"
+test_that("calc_rate - by = 'oxygen' stops with paired values of from and to *both* below or *both* above oxygen data range", {
+  by <- "oxygen"
   expect_error(calc_rate(sardine.rd[1000:2000,], from = 90, to = 85, plot = F, by = by),
                "calc_rate: some paired 'from' and 'to' values are both below the range of oxygen data in 'x'.")
   expect_error(calc_rate(sardine.rd[1000:2000,], from = c(90,93.9), to = c(85,94.4), plot = F, by = by),
@@ -483,8 +483,8 @@ test_that("calc_rate - by = 'o2' stops with paired values of from and to *both* 
                "calc_rate: some paired 'from' and 'to' values are both above the range of oxygen data in 'x'.")
 })
 
-test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses closest available value", {
-  by <- "o2"
+test_that("calc_rate - by = 'oxygen' warns with oxygen values out of range, but uses closest available value", {
+  by <- "oxygen"
   # range is 89.7 to 95.7
   # single values, one above
   expect_message(calc_rate(sardine.rd, from = 100, to = 93, plot = F, by = by),
@@ -549,8 +549,8 @@ test_that("calc_rate - by = 'o2' warns with o2 values out of range, but uses clo
                nrow(sardine.rd))
 })
 
-test_that("calc_rate - by = 'o2' outputs correct results", {
-  by <- "o2"
+test_that("calc_rate - by = 'oxygen' outputs correct results", {
+  by <- "oxygen"
 
   from <- 94
   to <- 91
@@ -583,8 +583,8 @@ test_that("calc_rate - by = 'o2' outputs correct results", {
 
 })
 
-test_that("calc_rate - by = 'o2' - check 'from' and 'to' are interchangeable", {
-  by <- "o2"
+test_that("calc_rate - by = 'oxygen' - check 'from' and 'to' are interchangeable", {
+  by <- "oxygen"
 
   from <- 94
   to <- 91
@@ -605,8 +605,8 @@ test_that("calc_rate - by = 'o2' - check 'from' and 'to' are interchangeable", {
 
 })
 
-test_that("calc_rate - by = 'o2' outputs correct results with oxygen production data", {
-  by <- "o2"
+test_that("calc_rate - by = 'oxygen' outputs correct results with oxygen production data", {
+  by <- "oxygen"
 
   sardine_rev <- sardine.rd
   sardine_rev[[2]] <- rev(sardine_rev[[2]])

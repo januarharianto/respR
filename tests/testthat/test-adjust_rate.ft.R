@@ -9,10 +9,10 @@ capture.output({  ## stops printing outputs on assigning
 
 # Create testing objects --------------------------------------------------
 
-insp.ft_obj <- inspect.ft(flowthrough.rd, delta.o2 = 4, plot = FALSE)
-## o2 production data
+insp.ft_obj <- inspect.ft(flowthrough.rd, delta.oxy = 4, plot = FALSE)
+## oxygen production data
 insp.ft_obj_prod <- inspect.ft(cbind(flowthrough.rd[,1], -1*(flowthrough.rd[,4])),
-                               time = 1, delta.o2 = 2, plot = FALSE)
+                               time = 1, delta.oxy = 2, plot = FALSE)
 
 # x objects
 x1 <- calc_rate.ft(insp.ft_obj,
@@ -36,12 +36,12 @@ xprod <- calc_rate.ft(insp.ft_obj_prod,
 
 by_val <- -0.7
 by_vec <- seq(-0.75, -0.85, -0.01)
-by_crft <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 4, in.o2 = 8, plot = FALSE)),
+by_crft <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.oxy = 4, in.oxy = 8, plot = FALSE)),
                         flowrate = 2, plot = FALSE)
-  by_crft_mult <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 4, in.o2 = 8, plot = FALSE)),
+  by_crft_mult <- calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.oxy = 4, in.oxy = 8, plot = FALSE)),
                              from = c(2000, 2500), to = c(2400, 2900), by = "row",
                              flowrate = 2, plot = FALSE)
-# by_crft_nl <- calc_rate.ft(inspect.ft(flowthrough_sim.rd, out.o2 = 2, in.o2 = 3, plot = FALSE),
+# by_crft_nl <- calc_rate.ft(inspect.ft(flowthrough_sim.rd, out.oxy = 2, in.oxy = 3, plot = FALSE),
 #                         flowrate = 2, plot = FALSE)
 
 adj.ft_obj.insp.1 <- adjust_rate.ft(x1, by = by_val)
@@ -95,7 +95,7 @@ test_that("adjust_rate.ft - stops if 'x' and 'by' are calc_rate.ft and have been
   expect_error(adjust_rate.ft(calc_rate.ft(insp.ft_obj,
                                            flowrate = 2,
                                            from = 200, to = 500, plot = FALSE),
-                              by = calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.o2 = 12, in.o2 = 13, plot = FALSE)),
+                              by = calc_rate.ft(suppressWarnings(inspect.ft(flowthrough_mult.rd, out.oxy = 12, in.oxy = 13, plot = FALSE)),
                                                 flowrate = 1.5, plot = FALSE)),
                regexp = "adjust_rate.ft: 'x' and by' input rates have been calculated using different 'flowrates'!")
 })

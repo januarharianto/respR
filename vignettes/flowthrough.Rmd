@@ -49,7 +49,7 @@ The inflow concentration is typically a simultaneous recording, but an alternati
 
 Typically the first step in data analysis is inspecting and visualising the data. 
 
-The `inspect.ft` function can be used to quickly examine and visualise outflow and inflow data from a single chamber, but also a large multi-column dataset. Using it with no arguments will inspect and plot every column, assuming `time` is in column 1 and all others are delta oxygen data (`delta.o2`). Even if your data is not delta oxygen values, you can use this without saving the result for a quick look at the data. Note, if you do not tell it otherwise, the function assumes data are delta oxygen and plots them on a reverse y-axis. However, we can use the `rate.rev` argument to override this
+The `inspect.ft` function can be used to quickly examine and visualise outflow and inflow data from a single chamber, but also a large multi-column dataset. Using it with no arguments will inspect and plot every column, assuming `time` is in column 1 and all others are delta oxygen data (`delta.oxy`). Even if your data is not delta oxygen values, you can use this without saving the result for a quick look at the data. Note, if you do not tell it otherwise, the function assumes data are delta oxygen and plots them on a reverse y-axis. However, we can use the `rate.rev` argument to override this
 
 ```{r}
 inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
@@ -90,16 +90,16 @@ convert_DO(100, from = "%Air", to = "mg/L",
 ```
 
 ### Inspect data
-Now we know the concentration of the header tank we can enter this as the `in.o2.value` in `inspect.ft`, which will allow it to calculate an oxygen delta. We use `time` and `out.o2` to specify the respective columns. 
+Now we know the concentration of the header tank we can enter this as the `in.oxy.value` in `inspect.ft`, which will allow it to calculate an oxygen delta. We use `time` and `out.oxy` to specify the respective columns. 
 
 ```{r eval = F}
 # inspect
-insp1 <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2.value = 8.919)
+insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.919)
 ```
 
 ```{r eval = T, echo = F}
 # inspect
-insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2.value = 8.919, plot = F)))
+insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.919, plot = F)))
 plot(insp1, quiet = TRUE)
 ```
 
@@ -172,18 +172,18 @@ print(rate1_final)
 ## Case 2: Outflow and inflow oxygen
 *"We have both outflow and inflow oxygen recordings. We also know from pilot trials background is negligible, so we don't need to perform an adjustment."*
 
-This is a very similar analysis to [Case 1](#case1) above, but we will use the inflow oxygen recording as the `in.o2` input. The process is otherwise the same: `inspect.ft`, `calc_rate.ft`, and `convert_rate.ft`.
+This is a very similar analysis to [Case 1](#case1) above, but we will use the inflow oxygen recording as the `in.oxy` input. The process is otherwise the same: `inspect.ft`, `calc_rate.ft`, and `convert_rate.ft`.
 
 
 ### Inspect data
 ```{r eval = F}
 # inspect
-insp2 <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2 = 3)
+insp2 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
 
 ```{r eval = T, echo = F}
 # inspect
-insp2 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2, in.o2 = 3, plot = F)))
+insp2 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, plot = F)))
 plot(insp2, quiet = TRUE)
 ```
 
@@ -242,12 +242,12 @@ We will use `inspect.ft` to examine the first specimen column pair of outflow an
 
 ```{r eval = F}
 # inspect
-insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6)
+insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6, plot = F)
+insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6, plot = F)
 plot(insp3, quiet = TRUE)
 ```
 
@@ -277,12 +277,12 @@ The fourth column pair contains outflow and inflow oxygen from a blank control c
 
 ```{r eval = F}
 # inspect
-bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 5, in.o2 = 9)
+bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-bg <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 5, in.o2 = 9)))
+bg <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)))
 plot(bg, quiet = TRUE)
 ```
 
@@ -377,18 +377,18 @@ print(rate3_abs)
 ## Case 4: Delta oxygen values
 *"We have already calculated a delta oxygen between outflow and inflow oxygen concentrations."*
 
-For cases where delta oxygen between outflow and inflow concentrations has already been calculated, these data can be inspected using the `delta.o2` input and used to calculate rates. `flowthrough_mult.rd` contains these in columns 10 to 13. We will use the second column of these. 
+For cases where delta oxygen between outflow and inflow concentrations has already been calculated, these data can be inspected using the `delta.oxy` input and used to calculate rates. `flowthrough_mult.rd` contains these in columns 10 to 13. We will use the second column of these. 
 
 ### Inspect data
 
 ```{r eval = F}
 # inspect
-insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 11)
+insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-insp4 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 11)))
+insp4 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)))
 plot(insp4, quiet = TRUE)
 ```
 
@@ -458,12 +458,12 @@ Inspecting the data from the third chamber, we can see a prominent area where th
 
 ```{r eval = F}
 # inspect 
-insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 8)
+insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-insp5 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 8, plot = FALSE)))
+insp5 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8, plot = FALSE)))
 plot(insp5, quiet = TRUE)
 ```
 
@@ -474,13 +474,13 @@ Since we are only interested in this active region, we can use the `subset_data(
 ```{r eval = F}
 # subset and inspect
 insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
-  inspect.ft(time = 1, out.o2 = 4, in.o2 = 8)
+  inspect.ft(time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
 insp5 <- suppressWarnings(suppressMessages(subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
-                                             inspect.ft(time = 1, out.o2 = 4, in.o2 = 8, plot = FALSE)))
+                                             inspect.ft(time = 1, out.oxy = 4, in.oxy = 8, plot = FALSE)))
 plot(insp5, quiet = TRUE)
 ```
 
@@ -544,7 +544,7 @@ print(rate5_ms)
 ## Case 6: Non-constant background rates
 *"We want to correct for both non-constant background activity and any possible fluctuation in inflow oxygen concentrations using a concurrent empty control or \"blank\" chamber."*
 
-In some experiments, as well as possible fluctuations in the oxygen content of the inflowing water, the background rate may change over the course of the experiment. While the former will be accounted for by having an inflow oxygen recording, they can both be accounted for simultaneously by using the outflow recording from a blank control chamber to adjust a specimen chamber. This can be done by using it as the `in.o2` input in `inspect.ft`. 
+In some experiments, as well as possible fluctuations in the oxygen content of the inflowing water, the background rate may change over the course of the experiment. While the former will be accounted for by having an inflow oxygen recording, they can both be accounted for simultaneously by using the outflow recording from a blank control chamber to adjust a specimen chamber. This can be done by using it as the `in.oxy` input in `inspect.ft`. 
 
 The `flowthrough_sim.rd` dataset contains data from an experiment where the background rate increases as the experiment progresses. There are four columns; time, outflow oxygen from the specimen and blank chambers, and the inflow oxygen in a header tank supplying both.
 
@@ -554,12 +554,12 @@ We will inspect the specimen chamber as we normally would, using the header tank
 
 ```{r eval = F}
 # inspect 
-insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 4)
+insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 4, plot = FALSE))
+insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4, plot = FALSE))
 plot(insp6, quiet = TRUE)
 ```
 
@@ -571,27 +571,27 @@ If we examine the background data in the same way:
 
 ```{r eval = F}
 # inspect 
-bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 3, in.o2 = 4)
+bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-bg <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 3, in.o2 = 4, plot = FALSE))
+bg <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4, plot = FALSE))
 plot(bg, quiet = TRUE)
 ```
 
-We can see the background rate increases as the experiment progresses, in what looks like a constant manner. With the presumption that this is also occurring in the specimen chamber, we only need to use the outflow recording from the control chamber as the `in.o2` input to account for this. 
+We can see the background rate increases as the experiment progresses, in what looks like a constant manner. With the presumption that this is also occurring in the specimen chamber, we only need to use the outflow recording from the control chamber as the `in.oxy` input to account for this. 
 
 ### Account for background
 
 ```{r eval = F}
 # inspect 
-insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 3)
+insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
 
 ```{r eval = T, echo = F, results = "hide"}
 # inspect
-insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.o2 = 2, in.o2 = 3, plot = FALSE))
+insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3, plot = FALSE))
 plot(insp6, quiet = TRUE)
 ```
 
@@ -640,7 +640,7 @@ df <- data.frame(time = 1,
 Now all we need to do is the usual workflow: `inspect.ft` > `calc_rate.ft` > `convert_rate.ft`.
 
 ```{r eval = F, tidy = FALSE}
-insp7 <- inspect.ft(df, time = 1, out.o2 = 2, in.o2 = 3)
+insp7 <- inspect.ft(df, time = 1, out.oxy = 2, in.oxy = 3)
 rate7 <- calc_rate.ft(insp7, flowrate = 0.25)
 rate7_abs <- convert_rate.ft(rate7,
                              oxy.unit = "mg/l",  
@@ -649,7 +649,7 @@ rate7_abs <- convert_rate.ft(rate7,
 ```
 
 ```{r eval = T, echo = F, message=FALSE, warning=FALSE, results = "hide"}
-insp7 <- inspect.ft(df, time = 1, out.o2 = 2, in.o2 = 3, plot = F)
+insp7 <- inspect.ft(df, time = 1, out.oxy = 2, in.oxy = 3, plot = F)
 ```
 
 ```{r eval = T, echo = F, message=FALSE, warning=FALSE}
@@ -761,12 +761,12 @@ In this example, we want to extract the most consistent rate sustained across a 
 ### Inspect data
 ```{r eval = F}
 ## inspect
-insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 7)
+insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
 ```
 
 ```{r eval = T, echo =F, results = "hide", message=FALSE, warning=FALSE}
 ## inspect
-insp8 <- insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 4, in.o2 = 7, plot = F)
+insp8 <- insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7, plot = F)
 plot(insp8)
 ```
 
@@ -857,7 +857,7 @@ As can be seen in the above example, where we used a rolling window, multiple ra
 ### Inspect and calculate rates
 ```{r eval = F, tidy = FALSE}
 # inspect 
-insp9 <- inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 3, in.o2 = 7)
+insp9 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 3, in.oxy = 7)
 # calculate rates
 rate9 <- calc_rate.ft(insp9, 
                       from = c(25, 35, 45), 
@@ -868,7 +868,7 @@ rate9 <- calc_rate.ft(insp9,
 
 ```{r eval = T, echo = F, results = "hide"}
 
-insp9 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 3, in.o2 = 7, plot = FALSE)))
+insp9 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 3, in.oxy = 7, plot = FALSE)))
 
 rate9 <- suppressMessages(calc_rate.ft(insp9, 
                                        from = c(25, 35, 45), 
@@ -909,12 +909,12 @@ We will repeat the analysis from [Case 3](#case3), but use piping to feed the re
 ```{r eval = FALSE, tidy = FALSE}
 ## calc background rate (might only need to be done once)
 bgrate <- 
-  inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 5, in.o2 = 9) %>%
+  inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9) %>%
   calc_rate.ft(flowrate = 0.1)
 
 # inspect > calc rate > adjust > convert
 rate3_abs <- 
-  inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2, in.o2 = 6) %>%
+  inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6) %>%
   calc_rate.ft(from = 30, flowrate = 0.1) %>%
   adjust_rate.ft(by = bgrate) %>%
   convert_rate.ft(oxy.unit = "%Air",  

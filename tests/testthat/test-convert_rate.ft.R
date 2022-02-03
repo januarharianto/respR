@@ -9,10 +9,10 @@ capture.output({  ## stops printing outputs on assigning
 
 # Create testing objects --------------------------------------------------
 
-insp.ft_obj <- inspect.ft(flowthrough.rd, delta.o2 = 4, plot = FALSE)
-## o2 production data
+insp.ft_obj <- inspect.ft(flowthrough.rd, delta.oxy = 4, plot = FALSE)
+## oxygen production data
 insp.ft_obj_prod <- inspect.ft(cbind(flowthrough.rd[,1], -1*(flowthrough.rd[,4])),
-                               time = 1, delta.o2 = 2, plot = FALSE)
+                               time = 1, delta.oxy = 2, plot = FALSE)
 
 # x objects
 crft1 <- calc_rate.ft(insp.ft_obj,
@@ -579,8 +579,8 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
 
     inputs_abs <- list(
       # random rates
-      o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
-      # input o2 units
+      oxy.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
+      # input oxygen units
       oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),
@@ -632,8 +632,8 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
     # not row indexes change because of extra mass/area columns
     inputs_ms <- list(
       # random rates
-      o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
-      # input o2 units
+      oxy.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
+      # input oxygen units
       oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),
@@ -688,8 +688,8 @@ test_that("convert_rate and convert_rate.ft output same results - huge block of 
 
     inputs_as <- list(
       # random rates
-      o2.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
-      # input o2 units
+      oxy.rates = c(-0.002755, -0.035, -0.88, -5.42, 0.00132, 0.0484, 0.5902, 6.4747),
+      # input oxygen units
       oxy.units = c("mg/l", "hPa", "ug/l", "%Air", "mmol/L", "umol/kg", "inHg", "mL/L"),
       # flow units separated
       flow.vol.units = c("ul", "ml", "L"),

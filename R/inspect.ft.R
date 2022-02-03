@@ -20,31 +20,31 @@
 #' ## Inputs
 #'
 #' `inspect.ft` requires at least two data inputs; a single column of numeric
-#' `time` data, with *either* a column of paired `out.o2` concentrations (i.e.
+#' `time` data, with *either* a column of paired `out.oxy` concentrations (i.e.
 #' the exhalent or 'downstream' concentrations), *or* a column of already
-#' calculated `delta.o2` values, that is the difference between outflow and
+#' calculated `delta.oxy` values, that is the difference between outflow and
 #' inflow concentrations, or the outflow concentration corrected by a background
 #' recording from a 'blank' or empty chamber.
 #'
-#' *out.o2 input option*: If an `out.o2` column has been specified, in order to
-#' calculate the oxygen delta (and therefore a rate in [calc_rate.ft()]) there
-#' must also be an inflow oxygen concentration input (i.e. the inhalent or
-#' 'upstream' concentration). This will generally be a column of paired `in.o2`
-#' concentrations, in which case the paired values of `out.o2` and `in.o2` are
-#' used to calculate the oxygen `delta.o2`, which is saved in the output, and
+#' *out.oxy input option*: If an `out.oxy` column has been specified, in order
+#' to calculate the oxygen delta (and therefore a rate in [calc_rate.ft()])
+#' there must also be an inflow oxygen concentration input (i.e. the inhalent or
+#' 'upstream' concentration). This will generally be a column of paired `in.oxy`
+#' concentrations, in which case the paired values of `out.oxy` and `in.oxy` are
+#' used to calculate the oxygen `delta.oxy`, which is saved in the output, and
 #' used to determine a rate in [calc_rate.ft()]. Alternatively, if the inflow
 #' oxygen concentration is a known, generally unvarying concentration (such as
 #' fully air-saturated water from a header tank) this can be entered as a single
-#' value via `in.o2.value` and this is used to calculate the `delta.o2`.
+#' value via `in.oxy.value` and this is used to calculate the `delta.oxy`.
 #'
-#' *delta.o2 input option*: If delta oxygen values have already been calculated,
-#' these can be entered via the `delta.o2` input, and these are prepared and
-#' saved for rate calculations in `calc_rate.ft`.
+#' *delta.oxy input option*: If delta oxygen values have already been
+#' calculated, these can be entered via the `delta.oxy` input, and these are
+#' prepared and saved for rate calculations in `calc_rate.ft`.
 #'
 #' Given an input data frame `x`, the function scans the columns specified via
-#' the `time`, `out.o2`, `in.o2` or `delta.o2` inputs. If no columns are
+#' the `time`, `out.oxy`, `in.oxy` or `delta.oxy` inputs. If no columns are
 #' specified, by default the functions assumes the first column is `time`, and
-#' all others are `delta.o2` oxygen data.
+#' all others are `delta.oxy` oxygen data.
 #'
 #' ## Check for numeric data
 #'
@@ -72,23 +72,23 @@
 #' If `plot = TRUE`, entered data is plotted against both time (bottom, blue
 #' axis) and row index (top, red axis), depending on the inputs:
 #'
-#' - a single `out.o2` column with either a paired `in.o2` column or
-#' `in.o2.value`: a two panel plot. The top plot is both outflow (green points)
+#' - a single `out.oxy` column with either a paired `in.oxy` column or
+#' `in.oxy.value`: a two panel plot. The top plot is both outflow (green points)
 #' and inflow (turquoise points) oxygen. The bottom plot is the oxygen delta
 #' (black points) between outflow and inflow oxygen, essentially the oxygen
 #' uptake or production rate.
 #'
-#' - a single `delta.o2` column: a one panel plot of oxygen delta values.
+#' - a single `delta.oxy` column: a one panel plot of oxygen delta values.
 #'
-#' - multiple `out.o2` or `delta.o2` columns: a grid plot of all `delta.o2` data
-#' (either as entered or calculated from `out.o2` and `in.o2`). Specific delta
-#' plots can be examined individually by using the `pos` input (e.g. `plot(x,
-#' pos = 2)`). Y-axes are not equal.
+#' - multiple `out.oxy` or `delta.oxy` columns: a grid plot of all `delta.oxy`
+#' data (either as entered or calculated from `out.oxy` and `in.oxy`). Specific
+#' delta plots can be examined individually by using the `pos` input (e.g.
+#' `plot(x, pos = 2)`). Y-axes are not equal.
 #'
 #' - unspecified columns: all columns are plotted assuming `time` is in column
-#' 1, and all others are oxygen `delta.o2` data. Y-axes are not equal.
+#' 1, and all others are oxygen `delta.oxy` data. Y-axes are not equal.
 #'
-#' In delta plots, that is those plotting `delta.o2` values, either directly
+#' In delta plots, that is those plotting `delta.oxy` values, either directly
 #' entered or calculated, consistent oxygen uptake or production rates will be
 #' represented by flat or level regions.
 #'
@@ -109,32 +109,32 @@
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
 #' the output object. Suppress console output messages with `quiet = TRUE`. If
 #' multiple columns have been inspected, the `pos` input can be used to examine
-#' each `out.o2`~`in.o2`~`del.o2` dataset. If axis labels (particularly y-axis)
-#' are difficult to read, `las = 2` can be passed to make axis labels
+#' each `out.oxy`~`in.oxy`~`del.oxy` dataset. If axis labels (particularly
+#' y-axis) are difficult to read, `las = 2` can be passed to make axis labels
 #' horizontal. In addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5,
 #' 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`)
 #' can be used to adjust plot margins.
 #'
 #' ## Multiple data columns
 #'
-#' For a quick overview of larger experiments, multiple columns of `out.o2`,
-#' `in.o2` and `delta.o2` can be inspected, but must share the same numeric time
-#' data column specified by the `time` input. Note, multiple column inspection
-#' is chiefly intended to be exploratory functionality to provide a quick
-#' overview of larger datasets. While the output will contain all data columns
-#' in `$dataframe` and `$data`, subsequent functions such as [calc_rate.ft()]
-#' will use only the first `delta.o2` column for calculating rates. Best
-#' practice is to inspect and assign each individual experiment or column pair
-#' as separate `inspect.ft` objects. See Examples.
+#' For a quick overview of larger experiments, multiple columns of `out.oxy`,
+#' `in.oxy` and `delta.oxy` can be inspected, but must share the same numeric
+#' time data column specified by the `time` input. Note, multiple column
+#' inspection is chiefly intended to be exploratory functionality to provide a
+#' quick overview of larger datasets. While the output will contain all data
+#' columns in `$dataframe` and `$data`, subsequent functions such as
+#' [calc_rate.ft()] will use only the first `delta.oxy` column for calculating
+#' rates. Best practice is to inspect and assign each individual experiment or
+#' column pair as separate `inspect.ft` objects. See Examples.
 #'
-#' If multiple `out.o2` columns are specified, `in.o2` can be a single column
+#' If multiple `out.oxy` columns are specified, `in.oxy` can be a single column
 #' (if for example all chambers are supplied from the same header tank), in
-#' which case it is used to calculate an oxygen delta for all `out.o2` columns.
-#' A single `in.o2.value` in the same units as `out.o2` can also be specified.
-#' There can also be multiple `in.o2` columns, in which case it is assumed each
-#' `out.o2` column is paired with each `in.o2` at the same position, and used to
-#' calculate the oxygen `delta.o2`. Therefore, `out.o2` and `in.o2` must have
-#' equal numbers of columns.
+#' which case it is used to calculate an oxygen delta for all `out.oxy` columns.
+#' A single `in.oxy.value` in the same units as `out.oxy` can also be specified.
+#' There can also be multiple `in.oxy` columns, in which case it is assumed each
+#' `out.oxy` column is paired with each `in.oxy` at the same position, and used
+#' to calculate the oxygen `delta.oxy`. Therefore, `out.oxy` and `in.oxy` must
+#' have equal numbers of columns.
 #'
 #' ## Failed Checks
 #'
@@ -177,8 +177,8 @@
 #'
 #' For experiments in which the specimen data is to be background corrected by a
 #' concurrently-run control experiment, `inspect.ft` can be used by specifying
-#' the specimen experiment as `out.o2`, and the "blank" as the `in.o2` input. In
-#' this way, any variations in oxygen in the specimen data due to background
+#' the specimen experiment as `out.oxy`, and the "blank" as the `in.oxy` input.
+#' In this way, any variations in oxygen in the specimen data due to background
 #' microbial activity, or for any other reason such as fluctuations in inflow
 #' oxygen, are accounted for in the delta oxygen calculations, and therefore in
 #' the rate calculated in [`calc_rate.ft()`]. See the vignettes on the website
@@ -214,23 +214,23 @@
 #'
 #' - `summary()`: simple wrapper for `print()` function. See above.
 #'
-#' @param x `data.frame` containing columns of `time` and `out.o2` or `delta.o2`
-#'   concentrations, and optionally `in.o2`.
+#' @param x `data.frame` containing columns of `time` and `out.oxy` or
+#'   `delta.oxy` concentrations, and optionally `in.oxy`.
 #' @param time integer. Defaults to 1. Specifies the column number of the time
 #'   data.
-#' @param out.o2 integer(s). Defaults to `NULL`. Specifies the column number(s)
+#' @param out.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
 #'   of outflow O2 data.
-#' @param in.o2 integer(s). Defaults to `NULL`. Specifies the column number(s)
+#' @param in.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
 #'   of inflow O2 data.
-#' @param in.o2.value numeric value. Defaults to `NULL`. If there is no
-#'   continuous `in.o2` data, this specifies a fixed value of oxygen
-#'   concentration for inflowing water in same units as `out.o2`, and is used
-#'   with `out.o2` to calculate a `delta.o2`.
-#' @param delta.o2 integer(s). Defaults to all non-time columns if no other
+#' @param in.oxy.value numeric value. Defaults to `NULL`. If there is no
+#'   continuous `in.oxy` data, this specifies a fixed value of oxygen
+#'   concentration for inflowing water in same units as `out.oxy`, and is used
+#'   with `out.oxy` to calculate a `delta.oxy`.
+#' @param delta.oxy integer(s). Defaults to all non-time columns if no other
 #'   inputs given. Specifies the column number(s) of delta O2 data, for when the
 #'   user has already calculated the difference between outflow and inflow
 #'   oxygen (should be negative values for oxygen uptake). If this is used,
-#'   `out.o2` and `in.o2` should be NULL.
+#'   `out.oxy` and `in.oxy` should be NULL.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`.
@@ -241,40 +241,40 @@
 #' @examples
 #'
 #' # inspect outflow and inflow O2 data
-#' x <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
-#'                 in.o2 = 3)
+#' x <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
+#'                 in.oxy = 3)
 #' print(x)
 #' plot(x)
 #'
 #' # inspect outflow O2 data with inflow as a known value
-#' x <- inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
-#'                 in.o2.value = 8.9)
+#' x <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
+#'                 in.oxy.value = 8.9)
 #' print(x)
 #' plot(x)
 #'
 #' # inspect already calculated delta O2 data
-#' inspect.ft(flowthrough.rd, time = 1, delta.o2 = 4)
+#' inspect.ft(flowthrough.rd, time = 1, delta.oxy = 4)
 #'
 #' # inspect multiple columns for a quick overview
-#' inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 8:10)
+#' inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 8:10)
 #'
 #' # Inspect outflow and use a blank control chamber as background
 #' # correction
 #' #
 #' # This experiment has increasing background respiration over time.
 #' # Inspecting outflow O2 with inflow header tank concentrations
-#' # suggests specimen rates (bottom delta.o2 plot) are increasing.
+#' # suggests specimen rates (bottom delta.oxy plot) are increasing.
 #' inspect.ft(flowthrough_sim.rd, time = 1,
-#'            out.o2 = 2, in.o2 = 4)
+#'            out.oxy = 2, in.oxy = 4)
 #'
 #' # However, inspecting with recordings from a concurrent blank
 #' # control accounts for this and shows specimen rates are level
 #' # when background is taken into account.
 #' inspect.ft(flowthrough_sim.rd, time = 1,
-#'            out.o2 = 2, in.o2 = 3)
+#'            out.oxy = 2, in.oxy = 3)
 
-inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
-                       in.o2.value = NULL, delta.o2 = NULL, plot = TRUE, ...) {
+inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
+                       in.oxy.value = NULL, delta.oxy = NULL, plot = TRUE, ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -290,44 +290,44 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
     time <- 1
   }
 
-  ## only one of in.o2 or in.o2.value should be entered
-  if(!is.null(in.o2) && !is.null(in.o2.value))
-    stop("inspect.ft: Only one of 'in.o2' or 'in.o2.value' can be entered.")
+  ## only one of in.oxy or in.oxy.value should be entered
+  if(!is.null(in.oxy) && !is.null(in.oxy.value))
+    stop("inspect.ft: Only one of 'in.oxy' or 'in.oxy.value' can be entered.")
 
-  ## if in.o2 entered, out.o2 must be entered
-  if(!is.null(in.o2) && (is.null(out.o2)))
-    stop("inspect.ft: An 'in.o2' input requires paired 'out.o2' column(s).")
+  ## if in.oxy entered, out.oxy must be entered
+  if(!is.null(in.oxy) && (is.null(out.oxy)))
+    stop("inspect.ft: An 'in.oxy' input requires paired 'out.oxy' column(s).")
 
-  ## if out.o2 entered, one of in.o2 or in.o2.value must be entered
-  if(!is.null(out.o2) && (is.null(in.o2) && is.null(in.o2.value)))
-    stop("inspect.ft: With 'out.o2' data, paired 'in.o2' columns or an 'in.o2.value' is required.")
+  ## if out.oxy entered, one of in.oxy or in.oxy.value must be entered
+  if(!is.null(out.oxy) && (is.null(in.oxy) && is.null(in.oxy.value)))
+    stop("inspect.ft: With 'out.oxy' data, paired 'in.oxy' columns or an 'in.oxy.value' is required.")
 
-  ## if out.o2 entered, in.o2 must be either same no. of columns or a single column
-  if(!is.null(out.o2) && !(is.null(in.o2))){
-    ncol_o <- length(out.o2)
-    ncol_i <- length(in.o2)
+  ## if out.oxy entered, in.oxy must be either same no. of columns or a single column
+  if(!is.null(out.oxy) && !(is.null(in.oxy))){
+    ncol_o <- length(out.oxy)
+    ncol_i <- length(in.oxy)
     if(ncol_o != ncol_i && ncol_i != 1)
-      stop("inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
+      stop("inspect.ft: With 'out.oxy' data, 'in.oxy' must be a single column or an equal number of paired columns.")
   }
 
-  # if delta.o2 entered, out.o2, in.o2 & in.o2.value should be NULL
-  if(!is.null(delta.o2) && (!is.null(out.o2) || !is.null(in.o2) || !is.null(in.o2.value)))
-    stop("inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
+  # if delta.oxy entered, out.oxy, in.oxy & in.oxy.value should be NULL
+  if(!is.null(delta.oxy) && (!is.null(out.oxy) || !is.null(in.oxy) || !is.null(in.oxy.value)))
+    stop("inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
 
   # Apply input defaults ----------------------------------------------------
 
-  ## After all that, if these are still NULL assume all non-time are delta.o2
-  if (is.null(out.o2) && is.null(delta.o2)) {
-    message("inspect.ft: Applying column default of all non-time column(s) as 'delta.o2'")
+  ## After all that, if these are still NULL assume all non-time are delta.oxy
+  if (is.null(out.oxy) && is.null(delta.oxy)) {
+    message("inspect.ft: Applying column default of all non-time column(s) as 'delta.oxy'")
     listcols <- seq.int(1, ncol(x))
-    delta.o2 <- listcols[!listcols %in% time]
+    delta.oxy <- listcols[!listcols %in% time]
   }
 
 
   # Final input checks ------------------------------------------------------
 
   ## check for duplicate column numbers
-  inputs <- list(time, out.o2, in.o2, delta.o2)
+  inputs <- list(time, out.oxy, in.oxy, delta.oxy)
   if(column.conflict(inputs)) {
     dupe_cols <- column.conflict(inputs, id = TRUE)
     stop(glue::glue("inspect.ft: Input columns conflict. Column(s) {glue::glue_collapse(dupe_cols, \", \", last = \" and \")} are entered more than once."))
@@ -335,12 +335,12 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   ## check column inputs are valid
   column.val(time, req = TRUE, max = 1, range = c(1, ncol(x)),
              msg = "inspect.ft: 'time' -")
-  column.val(out.o2, req = FALSE, max = ncol(x)-1, range = c(1, ncol(x)),
-             msg = "inspect.ft: 'out.o2' -")
-  column.val(in.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
-             msg = "inspect.ft: 'in.o2' -")
-  column.val(delta.o2, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
-             msg = "inspect.ft: 'delta.o2' -")
+  column.val(out.oxy, req = FALSE, max = ncol(x)-1, range = c(1, ncol(x)),
+             msg = "inspect.ft: 'out.oxy' -")
+  column.val(in.oxy, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
+             msg = "inspect.ft: 'in.oxy' -")
+  column.val(delta.oxy, req = FALSE, max = ncol(x)-1, range = c(0, ncol(x)),
+             msg = "inspect.ft: 'delta.oxy' -")
 
   # Extract data ------------------------------------------------------------
 
@@ -352,51 +352,51 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
 
   ## out oxy
   # if no input, null
-  if(is.null(out.o2)) {
-    out.o2.all <- NULL
+  if(is.null(out.oxy)) {
+    out.oxy.all <- NULL
   } else {
-    out.o2.all <- lapply(1:length(df[out.o2]), function(z) df[out.o2][[z]])
-    names(out.o2.all) <- names(df[out.o2])
+    out.oxy.all <- lapply(1:length(df[out.oxy]), function(z) df[out.oxy][[z]])
+    names(out.oxy.all) <- names(df[out.oxy])
   }
 
-  ## in.o2
+  ## in.oxy
   # if no input, null
-  if(is.null(in.o2)) {
-    in.o2.all <- NULL
+  if(is.null(in.oxy)) {
+    in.oxy.all <- NULL
   } else {
-    in.o2.all <- lapply(1:length(df[in.o2]), function(z) df[in.o2][[z]])
-    names(in.o2.all) <- names(df[in.o2])
+    in.oxy.all <- lapply(1:length(df[in.oxy]), function(z) df[in.oxy][[z]])
+    names(in.oxy.all) <- names(df[in.oxy])
   }
 
-  ## in.o2 conc value - if present, make into vector same length as out.o2
-  if(!is.null(in.o2.value)) {
-    in.o2.all <- list(rep(in.o2.value, nrow(df)))
+  ## in.oxy conc value - if present, make into vector same length as out.oxy
+  if(!is.null(in.oxy.value)) {
+    in.oxy.all <- list(rep(in.oxy.value, nrow(df)))
 
-    names(in.o2.all) <- "in.o2.value"
+    names(in.oxy.all) <- "in.oxy.value"
   }
 
   ## If no delta input - make it NULL for now,
-  ## We will calculate it after checks if out.o2 and in.out non-numeric check passes.
+  ## We will calculate it after checks if out.oxy and in.out non-numeric check passes.
   ## Otherwise failures here if non-numeric data
-  if(is.null(delta.o2)) {
-    del.o2.all <- NULL
+  if(is.null(delta.oxy)) {
+    del.oxy.all <- NULL
     ## otherwise extract it
   } else {
-    del.o2.all <- lapply(1:length(df[delta.o2]), function(z) df[delta.o2][[z]])
-    names(del.o2.all) <- names(df[delta.o2])
+    del.oxy.all <- lapply(1:length(df[delta.oxy]), function(z) df[delta.oxy][[z]])
+    names(del.oxy.all) <- names(df[delta.oxy])
   }
 
   ## Do Data Checks
   time_results <- check_timeseries(time.all, "time")
 
-  if(is.null(out.o2)) out.o2_results <- NULL else
-    out.o2_results <- check_timeseries(out.o2.all, "oxygen")
+  if(is.null(out.oxy)) out.oxy_results <- NULL else
+    out.oxy_results <- check_timeseries(out.oxy.all, "oxygen")
 
-  if(is.null(in.o2)) in.o2_results <- NULL else
-    in.o2_results <- check_timeseries(in.o2.all, "oxygen")
+  if(is.null(in.oxy)) in.oxy_results <- NULL else
+    in.oxy_results <- check_timeseries(in.oxy.all, "oxygen")
 
-  if(is.null(delta.o2)) del.o2_results <- NULL else
-    del.o2_results <- check_timeseries(del.o2.all, "oxygen")
+  if(is.null(delta.oxy)) del.oxy_results <- NULL else
+    del.oxy_results <- check_timeseries(del.oxy.all, "oxygen")
 
   # issue warnings
   # time
@@ -413,77 +413,77 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   if (any(unlist(time_results[[1]][6,]) == "TRUE"))
     warning("inspect.ft: Time values are not evenly-spaced (numerically).", call. = F)
 
-  # out.o2
-  if (any(unlist(out.o2_results[[1]][1,])))
+  # out.oxy
+  if (any(unlist(out.oxy_results[[1]][1,])))
     warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
-  if (any(unlist(out.o2_results[[1]][2,]) == "TRUE"))
+  if (any(unlist(out.oxy_results[[1]][2,]) == "TRUE"))
     warning("inspect.ft: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
-  if (any(unlist(out.o2_results[[1]][3,]) == "TRUE"))
+  if (any(unlist(out.oxy_results[[1]][3,]) == "TRUE"))
     warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
-  # in.o2
-  if (any(unlist(in.o2_results[[1]][1,])))
+  # in.oxy
+  if (any(unlist(in.oxy_results[[1]][1,])))
     warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo input returned.", call. = F)
-  if (any(unlist(in.o2_results[[1]][2,]) == "TRUE"))
+  if (any(unlist(in.oxy_results[[1]][2,]) == "TRUE"))
     warning("inspect.ft: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
-  if (any(unlist(in.o2_results[[1]][3,]) == "TRUE"))
+  if (any(unlist(in.oxy_results[[1]][3,]) == "TRUE"))
     warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
-  # del.o2
-  if (any(unlist(del.o2_results[[1]][1,])))
+  # del.oxy
+  if (any(unlist(del.oxy_results[[1]][1,])))
     warning("inspect.ft: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
-  if (any(unlist(del.o2_results[[1]][2,]) == "TRUE"))
+  if (any(unlist(del.oxy_results[[1]][2,]) == "TRUE"))
     warning("inspect.ft: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
-  if (any(unlist(del.o2_results[[1]][3,]) == "TRUE"))
+  if (any(unlist(del.oxy_results[[1]][3,]) == "TRUE"))
     warning("inspect.ft: NA/NaN values detected in Oxygen column(s).", call. = F)
 
   # combine results
-  checks <- cbind(time_results[[1]], out.o2_results[[1]], in.o2_results[[1]], del.o2_results[[1]])
-  locs_raw <- cbind(time_results[[2]], out.o2_results[[2]], in.o2_results[[2]], del.o2_results[[2]])
+  checks <- cbind(time_results[[1]], out.oxy_results[[1]], in.oxy_results[[1]], del.oxy_results[[1]])
+  locs_raw <- cbind(time_results[[2]], out.oxy_results[[2]], in.oxy_results[[2]], del.oxy_results[[2]])
 
   # output
   locs <- lapply(1:ncol(locs_raw), function(z) locs_raw[, z])
   names(locs) <- colnames(locs_raw)
 
-  # if in.o2 and out.o2 non-numeric checks have passed, now it's ok to calculate delta.o2
-  if(is.null(delta.o2) && !(any(unlist(out.o2_results[[1]][1,]))) && !(any(unlist(in.o2_results[[1]][1,])))) {
-    del.o2.all <- mapply(function(p,q) p-q,
-                         p = out.o2.all,
-                         q = in.o2.all,
+  # if in.oxy and out.oxy non-numeric checks have passed, now it's ok to calculate delta.oxy
+  if(is.null(delta.oxy) && !(any(unlist(out.oxy_results[[1]][1,]))) && !(any(unlist(in.oxy_results[[1]][1,])))) {
+    del.oxy.all <- mapply(function(p,q) p-q,
+                         p = out.oxy.all,
+                         q = in.oxy.all,
                          SIMPLIFY = FALSE)
-    names(del.o2.all) <- sapply(1:length(del.o2.all), function(p) glue::glue("delta.o2.calc.{p}"))
+    names(del.oxy.all) <- sapply(1:length(del.oxy.all), function(p) glue::glue("delta.oxy.calc.{p}"))
     ## otherwise make dummy list so next part doesn't error.
     ## It won't be returned anyway
-  } else if (is.null(delta.o2)) {
-    del.o2.all <- mapply(function(p,q) rep(NA, length(p)),
-                         p = out.o2.all,
-                         q = in.o2.all,
+  } else if (is.null(delta.oxy)) {
+    del.oxy.all <- mapply(function(p,q) rep(NA, length(p)),
+                         p = out.oxy.all,
+                         q = in.oxy.all,
                          SIMPLIFY = FALSE)
-    #names(del.o2.all) <- sapply(1:length(del.o2.all), function(p) glue::glue("delta.o2.calc.{p}"))
+    #names(del.oxy.all) <- sapply(1:length(del.oxy.all), function(p) glue::glue("delta.oxy.calc.{p}"))
   }
 
   # save new data frame and create output object
-  if(is.null(out.o2.all) && is.null(in.o2.all)) {
+  if(is.null(out.oxy.all) && is.null(in.oxy.all)) {
     dataframe <- data.table::data.table(cbind(data.frame(time.all),
-                                              del.o2.all))
+                                              del.oxy.all))
   } else {
     dataframe <- data.table::data.table(cbind(data.frame(time.all),
-                                              out.o2.all,
-                                              in.o2.all,
-                                              del.o2.all))
+                                              out.oxy.all,
+                                              in.oxy.all,
+                                              del.oxy.all))
   }
 
   out <- list(call = call,
               dataframe = dataframe,
               inputs = list(df = x,
                             time = time,
-                            out.o2 = out.o2,
-                            in.o2 = in.o2,
-                            in.o2.value = in.o2.value,
-                            delta.o2 = delta.o2,
+                            out.oxy = out.oxy,
+                            in.oxy = in.oxy,
+                            in.oxy.value = in.oxy.value,
+                            delta.oxy = delta.oxy,
                             plot = plot),
               data = list(time = time.all,
-                          out.o2 = out.o2.all,
-                          in.o2 = in.o2.all,
-                          delta.o2 = del.o2.all),
+                          out.oxy = out.oxy.all,
+                          in.oxy = in.oxy.all,
+                          delta.oxy = del.oxy.all),
               checks = checks,
               locs_raw = locs_raw,
               locs = locs)
@@ -607,10 +607,10 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
   # extract data
   dt <- x$dataframe
   time <- x$data$time
-  out.o2 <- x$data$out.o2
-  in.o2 <- x$data$in.o2
-  if(length(in.o2) == 1) in.o2 <- rep(in.o2, length(out.o2)) # makes plotting easier
-  del.o2 <- x$data$delta.o2
+  out.oxy <- x$data$out.oxy
+  in.oxy <- x$data$in.oxy
+  if(length(in.oxy) == 1) in.oxy <- rep(in.oxy, length(out.oxy)) # makes plotting easier
+  del.oxy <- x$data$delta.oxy
 
   # Apply default plotting params
   par(oma = oma_def,
@@ -623,20 +623,20 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
   # Multi column plot -------------------------------------------------------
 
-  ## if multiple columns or only delta.o2 data inspected, just plot grid of all delta.o2
-  if (length(del.o2) > 1 || is.null(out.o2)){
+  ## if multiple columns or only delta.oxy data inspected, just plot grid of all delta.oxy
+  if (length(del.oxy) > 1 || is.null(out.oxy)){
 
-    if(!quiet && is.null(pos) && length(del.o2) > 1)
+    if(!quiet && is.null(pos) && length(del.oxy) > 1)
       cat("inspect.ft: Plotting all delta oxygen columns. To plot a specific dataset use 'pos'.\n")
 
     if(is.null(pos))
-      pos <- seq.int(1, length(del.o2))
+      pos <- seq.int(1, length(del.oxy))
 
-    if(any(pos > length(del.o2)))
-      stop("inspect.ft: Invalid 'pos' input: only ", length(del.o2), " data inputs found.")
+    if(any(pos > length(del.oxy)))
+      stop("inspect.ft: Invalid 'pos' input: only ", length(del.oxy), " data inputs found.")
 
     if (!quiet && length(pos) == 1)
-      cat('inspect.ft: Plotting delta.o2 data from position', pos, 'of', length(del.o2), '... \n')
+      cat('inspect.ft: Plotting delta.oxy data from position', pos, 'of', length(del.oxy), '... \n')
 
     par(mfrow = n2mfrow(length(pos)),
         ps = 10,
@@ -645,16 +645,16 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
         ...)
 
     # Plot all on same y axis range?????
-    #ylim <- range(na.omit(del.o2[pos])) ## so all on same axes
+    #ylim <- range(na.omit(del.oxy[pos])) ## so all on same axes
     #buffer <- diff(ylim)*0.1
     #ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     lapply(pos, function(z) {
 
-      ylim <- grDevices::extendrange(r = range(del.o2[[z]], na.rm = TRUE), f = 0.05) ## add a little more space
+      ylim <- grDevices::extendrange(r = range(del.oxy[[z]], na.rm = TRUE), f = 0.05) ## add a little more space
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-      plot(data.frame(time, del.o2[[z]]),
+      plot(data.frame(time, del.oxy[[z]]),
            axes = FALSE,
            ylim = ylim,
            xlab = "",
@@ -669,7 +669,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
       # plot invisibly - to add row index x-axis
       par(new = TRUE, ...)
-      plot(data.frame(1:length(unlist(time)), del.o2[[z]]),
+      plot(data.frame(1:length(unlist(time)), del.oxy[[z]]),
            xlab = "",
            ylab = "",
            pch = "",
@@ -677,7 +677,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
            axes = FALSE
       )
       axis(side = 3, col.axis = "red")
-      title(main = glue::glue("Column: {names(del.o2)[z]}"), line = 1.2,
+      title(main = glue::glue("Column: {names(del.oxy)[z]}"), line = 1.2,
             adj = 0)
     })
 
@@ -696,11 +696,11 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
           outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     # Single dataset ----------------------------------------------------------
-  } else if (length(x$data$delta.o2) == 1 || !is.null(pos)) {
+  } else if (length(x$data$delta.oxy) == 1 || !is.null(pos)) {
 
     if(is.null(pos)) pos <- 1
-    if(pos > length(x$data$delta.o2))
-      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.o2), " data inputs found.")
+    if(pos > length(x$data$delta.oxy))
+      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.oxy), " data inputs found.")
 
     if (!quiet)
       cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
@@ -716,13 +716,13 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     par(...) # to allow oma and mai to be overridden
 
     ## ylim for outflow and inflow plots - plus 10%
-    ylim <- range(range(nainf.omit(out.o2[[pos]])), range(nainf.omit(in.o2[[pos]]))) ## so all on same axes
+    ylim <- range(range(nainf.omit(out.oxy[[pos]])), range(nainf.omit(in.oxy[[pos]]))) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     # Outflow plot ------------------------------------------------------------
     plot(unlist(time),
-         out.o2[[pos]],
+         out.oxy[[pos]],
          xlab = "",
          ylab = "",
          ylim = ylim,
@@ -735,7 +735,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
 
     axis(side = 2)
     points(unlist(time),
-           in.o2[[pos]],
+           in.oxy[[pos]],
            xlab = "",
            ylab = "",
            ylim = ylim,
@@ -746,7 +746,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     par(new = TRUE)
 
     plot(seq(1, nrow(dt)),
-         out.o2[[pos]],
+         out.oxy[[pos]],
          xlab = "",
          ylab = "",
          pch = "",
@@ -774,14 +774,14 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     # Delta plot --------------------------------------------------------------
 
     ## ylim  - plus 10%
-    ylim <- range(nainf.omit(del.o2[[pos]])) ## so all on same axes
+    ylim <- range(nainf.omit(del.oxy[[pos]])) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
     plot(unlist(time),
-         del.o2[[pos]],
+         del.oxy[[pos]],
          xlab = "",
          ylab = "",
          ylim = ylim, # reverse y axis

@@ -39,7 +39,7 @@ to be in the first column, and oxygen data in the second column. For
 this structure already. In these cases the \verb{$dataframe} element in the output
 is replaced by the subset, and in \code{inspect.ft()} the \verb{$inputs} element is
 also subset and replaced. Note for \code{inspect.ft()} objects, the oxygen data in
-column 2 will be either \code{out.o2} data or \code{delta.o2} data depending on what
+column 2 will be either \code{out.oxy} data or \code{delta.oxy} data depending on what
 was inspected. The function can subset any data frame by \code{row}.
 
 When multiple columns are present, for example time in column 1, and multiple

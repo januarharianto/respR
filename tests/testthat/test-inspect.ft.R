@@ -116,118 +116,118 @@ capture.output({  ## stops printing console outputs on assigning
   ft_mult_time_uneven_mult[831:882,1]
   ft_mult_time_uneven_mult <- ft_mult_time_uneven_mult[-seq(832, 872, 2),]
 
-  ## non-numeric in out.o2
-  ft_mult_out.o2_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
-  ft_mult_out.o2_nonnum_1[432,2]
-  ft_mult_out.o2_nonnum_1[432,2] <- "92.95885"
+  ## non-numeric in out.oxy
+  ft_mult_out.oxy_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
+  ft_mult_out.oxy_nonnum_1[432,2]
+  ft_mult_out.oxy_nonnum_1[432,2] <- "92.95885"
 
-  ## non-numeric in in.o2
-  ft_mult_in.o2_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
-  ft_mult_in.o2_nonnum_1[432,6]
-  ft_mult_in.o2_nonnum_1[432,6] <- "97.19841"
+  ## non-numeric in in.oxy
+  ft_mult_in.oxy_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
+  ft_mult_in.oxy_nonnum_1[432,6]
+  ft_mult_in.oxy_nonnum_1[432,6] <- "97.19841"
 
-  ## non-numeric in delta.o2
-  ft_mult_delta.o2_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
-  ft_mult_delta.o2_nonnum_1[432,10]
-  ft_mult_delta.o2_nonnum_1[432,10] <- "-4.239564"
+  ## non-numeric in delta.oxy
+  ft_mult_delta.oxy_nonnum_1 <- as.data.frame(flowthrough_mult.rd)
+  ft_mult_delta.oxy_nonnum_1[432,10]
+  ft_mult_delta.oxy_nonnum_1[432,10] <- "-4.239564"
 
-  ## NaN in out.o2
-  ft_mult_out.o2_nan_1 <- flowthrough_mult.rd
-  ft_mult_out.o2_nan_1[432,2] <- NA
+  ## NaN in out.oxy
+  ft_mult_out.oxy_nan_1 <- flowthrough_mult.rd
+  ft_mult_out.oxy_nan_1[432,2] <- NA
 
-  ft_mult_out.o2_nan_3 <- flowthrough_mult.rd
-  ft_mult_out.o2_nan_3[432,2] <- NA
-  ft_mult_out.o2_nan_3[624,2] <- NA
-  ft_mult_out.o2_nan_3[724,2] <- NA
-  ft_mult_out.o2_nan_3[624,3] <- NA
-  ft_mult_out.o2_nan_3[724,3] <- NA
+  ft_mult_out.oxy_nan_3 <- flowthrough_mult.rd
+  ft_mult_out.oxy_nan_3[432,2] <- NA
+  ft_mult_out.oxy_nan_3[624,2] <- NA
+  ft_mult_out.oxy_nan_3[724,2] <- NA
+  ft_mult_out.oxy_nan_3[624,3] <- NA
+  ft_mult_out.oxy_nan_3[724,3] <- NA
 
-  ft_mult_out.o2_nan_mult <- flowthrough_mult.rd
-  ft_mult_out.o2_nan_mult[432:461,2] <- NA
-  ft_mult_out.o2_nan_mult[622:671,2] <- NA
+  ft_mult_out.oxy_nan_mult <- flowthrough_mult.rd
+  ft_mult_out.oxy_nan_mult[432:461,2] <- NA
+  ft_mult_out.oxy_nan_mult[622:671,2] <- NA
 
-  ## NaN in in.o2
-  ft_mult_in.o2_nan_1 <- flowthrough_mult.rd
-  ft_mult_in.o2_nan_1[432,5] <- NA
+  ## NaN in in.oxy
+  ft_mult_in.oxy_nan_1 <- flowthrough_mult.rd
+  ft_mult_in.oxy_nan_1[432,5] <- NA
 
-  ft_mult_in.o2_nan_3 <- flowthrough_mult.rd
-  ft_mult_in.o2_nan_3[432,5] <- NA
-  ft_mult_in.o2_nan_3[624,5] <- NA
-  ft_mult_in.o2_nan_3[724,5] <- NA
-  ft_mult_in.o2_nan_3[624,6] <- NA
-  ft_mult_in.o2_nan_3[724,6] <- NA
+  ft_mult_in.oxy_nan_3 <- flowthrough_mult.rd
+  ft_mult_in.oxy_nan_3[432,5] <- NA
+  ft_mult_in.oxy_nan_3[624,5] <- NA
+  ft_mult_in.oxy_nan_3[724,5] <- NA
+  ft_mult_in.oxy_nan_3[624,6] <- NA
+  ft_mult_in.oxy_nan_3[724,6] <- NA
 
-  ft_mult_in.o2_nan_mult <- flowthrough_mult.rd
-  ft_mult_in.o2_nan_mult[432:461,5] <- NA
-  ft_mult_in.o2_nan_mult[622:671,5] <- NA
+  ft_mult_in.oxy_nan_mult <- flowthrough_mult.rd
+  ft_mult_in.oxy_nan_mult[432:461,5] <- NA
+  ft_mult_in.oxy_nan_mult[622:671,5] <- NA
 
-  ## NaN in delta.o2
-  ft_mult_delta.o2_nan_1 <- flowthrough_mult.rd
-  ft_mult_delta.o2_nan_1[432,8] <- NA
+  ## NaN in delta.oxy
+  ft_mult_delta.oxy_nan_1 <- flowthrough_mult.rd
+  ft_mult_delta.oxy_nan_1[432,8] <- NA
 
-  ft_mult_delta.o2_nan_3 <- flowthrough_mult.rd
-  ft_mult_delta.o2_nan_3[432,8] <- NA
-  ft_mult_delta.o2_nan_3[624,8] <- NA
-  ft_mult_delta.o2_nan_3[724,8] <- NA
-  ft_mult_delta.o2_nan_3[624,9] <- NA
-  ft_mult_delta.o2_nan_3[724,9] <- NA
+  ft_mult_delta.oxy_nan_3 <- flowthrough_mult.rd
+  ft_mult_delta.oxy_nan_3[432,8] <- NA
+  ft_mult_delta.oxy_nan_3[624,8] <- NA
+  ft_mult_delta.oxy_nan_3[724,8] <- NA
+  ft_mult_delta.oxy_nan_3[624,9] <- NA
+  ft_mult_delta.oxy_nan_3[724,9] <- NA
 
-  ft_mult_delta.o2_nan_mult <- flowthrough_mult.rd
-  ft_mult_delta.o2_nan_mult[432:461,8] <- NA
-  ft_mult_delta.o2_nan_mult[622:671,8] <- NA
+  ft_mult_delta.oxy_nan_mult <- flowthrough_mult.rd
+  ft_mult_delta.oxy_nan_mult[432:461,8] <- NA
+  ft_mult_delta.oxy_nan_mult[622:671,8] <- NA
 
-  ## inf in out.o2
-  ft_mult_out.o2_inf_1 <- flowthrough_mult.rd
-  ft_mult_out.o2_inf_1[432,2] <- Inf
+  ## inf in out.oxy
+  ft_mult_out.oxy_inf_1 <- flowthrough_mult.rd
+  ft_mult_out.oxy_inf_1[432,2] <- Inf
 
-  ft_mult_out.o2_inf_3 <- flowthrough_mult.rd
-  ft_mult_out.o2_inf_3[432,2] <- Inf
-  ft_mult_out.o2_inf_3[624,2] <- Inf
-  ft_mult_out.o2_inf_3[724,2] <- Inf
-  ft_mult_out.o2_inf_3[624,3] <- Inf
-  ft_mult_out.o2_inf_3[724,3] <- Inf
+  ft_mult_out.oxy_inf_3 <- flowthrough_mult.rd
+  ft_mult_out.oxy_inf_3[432,2] <- Inf
+  ft_mult_out.oxy_inf_3[624,2] <- Inf
+  ft_mult_out.oxy_inf_3[724,2] <- Inf
+  ft_mult_out.oxy_inf_3[624,3] <- Inf
+  ft_mult_out.oxy_inf_3[724,3] <- Inf
 
-  ft_mult_out.o2_inf_mult <- flowthrough_mult.rd
-  ft_mult_out.o2_inf_mult[432:461,2] <- Inf
-  ft_mult_out.o2_inf_mult[622:671,2] <- Inf
+  ft_mult_out.oxy_inf_mult <- flowthrough_mult.rd
+  ft_mult_out.oxy_inf_mult[432:461,2] <- Inf
+  ft_mult_out.oxy_inf_mult[622:671,2] <- Inf
 
-  ## inf in in.o2
-  ft_mult_in.o2_inf_1 <- flowthrough_mult.rd
-  ft_mult_in.o2_inf_1[432,5] <- Inf
+  ## inf in in.oxy
+  ft_mult_in.oxy_inf_1 <- flowthrough_mult.rd
+  ft_mult_in.oxy_inf_1[432,5] <- Inf
 
-  ft_mult_in.o2_inf_3 <- flowthrough_mult.rd
-  ft_mult_in.o2_inf_3[432,5] <- Inf
-  ft_mult_in.o2_inf_3[624,5] <- Inf
-  ft_mult_in.o2_inf_3[724,5] <- Inf
-  ft_mult_in.o2_inf_3[624,6] <- Inf
-  ft_mult_in.o2_inf_3[724,6] <- Inf
+  ft_mult_in.oxy_inf_3 <- flowthrough_mult.rd
+  ft_mult_in.oxy_inf_3[432,5] <- Inf
+  ft_mult_in.oxy_inf_3[624,5] <- Inf
+  ft_mult_in.oxy_inf_3[724,5] <- Inf
+  ft_mult_in.oxy_inf_3[624,6] <- Inf
+  ft_mult_in.oxy_inf_3[724,6] <- Inf
 
-  ft_mult_in.o2_inf_mult <- flowthrough_mult.rd
-  ft_mult_in.o2_inf_mult[432:461,5] <- Inf
-  ft_mult_in.o2_inf_mult[622:671,5] <- Inf
+  ft_mult_in.oxy_inf_mult <- flowthrough_mult.rd
+  ft_mult_in.oxy_inf_mult[432:461,5] <- Inf
+  ft_mult_in.oxy_inf_mult[622:671,5] <- Inf
 
-  ## inf in delta.o2
-  ft_mult_delta.o2_inf_1 <- flowthrough_mult.rd
-  ft_mult_delta.o2_inf_1[432,8] <- Inf
+  ## inf in delta.oxy
+  ft_mult_delta.oxy_inf_1 <- flowthrough_mult.rd
+  ft_mult_delta.oxy_inf_1[432,8] <- Inf
 
-  ft_mult_delta.o2_inf_3 <- flowthrough_mult.rd
-  ft_mult_delta.o2_inf_3[432,8] <- Inf
-  ft_mult_delta.o2_inf_3[624,8] <- Inf
-  ft_mult_delta.o2_inf_3[724,8] <- Inf
-  ft_mult_delta.o2_inf_3[624,9] <- Inf
-  ft_mult_delta.o2_inf_3[724,9] <- Inf
+  ft_mult_delta.oxy_inf_3 <- flowthrough_mult.rd
+  ft_mult_delta.oxy_inf_3[432,8] <- Inf
+  ft_mult_delta.oxy_inf_3[624,8] <- Inf
+  ft_mult_delta.oxy_inf_3[724,8] <- Inf
+  ft_mult_delta.oxy_inf_3[624,9] <- Inf
+  ft_mult_delta.oxy_inf_3[724,9] <- Inf
 
-  ft_mult_delta.o2_inf_mult <- flowthrough_mult.rd
-  ft_mult_delta.o2_inf_mult[432:461,8] <- Inf
-  ft_mult_delta.o2_inf_mult[622:671,8] <- Inf
+  ft_mult_delta.oxy_inf_mult <- flowthrough_mult.rd
+  ft_mult_delta.oxy_inf_mult[432:461,8] <- Inf
+  ft_mult_delta.oxy_inf_mult[622:671,8] <- Inf
 
 
   ## 2 column input (i.e. time- and calculated delta)
-  insp.ft.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                            in.o2 = 5, delta.o2 = NULL, plot = F))
+  insp.ft.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2,
+                            in.oxy = 5, delta.oxy = NULL, plot = F))
   ## multi column input (i.e. time- and calculated delta)
-  insp.ft.mult.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                                 in.o2 = 5:7, delta.o2 = NULL, plot = F))
+  insp.ft.mult.obj <- suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4,
+                                 in.oxy = 5:7, delta.oxy = NULL, plot = F))
 }
 
 
@@ -235,278 +235,278 @@ capture.output({  ## stops printing console outputs on assigning
 
 test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
   ## time = NULL
-  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                            in.o2 = 5, delta.o2 = NULL, plot = F)),
+  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.oxy = 2,
+                            in.oxy = 5, delta.oxy = NULL, plot = F)),
                  regexp = "inspect.ft: Applying column default of 'time = 1")
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = F)),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.oxy = 2,
+                          in.oxy = 5, delta.oxy = NULL, plot = F)),
                regexp = NA)
-  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = F))$data$time[[1]],
+  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = NULL, out.oxy = 2,
+                          in.oxy = 5, delta.oxy = NULL, plot = F))$data$time[[1]],
                flowthrough_mult.rd[[1]])
 
-  # in.o2 = NULL & out.o2 = NULL & delta.o2 = NULL
-  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, delta.o2 = NULL, plot = F)),
-                 regexp = "inspect.ft: Applying column default of all non-time column\\(s\\) as 'delta.o2'")
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, delta.o2 = NULL, plot = F)),
+  # in.oxy = NULL & out.oxy = NULL & delta.oxy = NULL
+  expect_message(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, delta.oxy = NULL, plot = F)),
+                 regexp = "inspect.ft: Applying column default of all non-time column\\(s\\) as 'delta.oxy'")
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, delta.oxy = NULL, plot = F)),
                regexp = NA)
-  expect_equal(as.data.frame(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                                        in.o2 = NULL, delta.o2 = NULL, plot = F)$data$delta.o2)),
+  expect_equal(as.data.frame(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = NULL,
+                                        in.oxy = NULL, delta.oxy = NULL, plot = F)$data$delta.oxy)),
                as.data.frame(flowthrough_mult.rd[,2:14]))
 })
 
 test_that("inspect.ft - stops if input column numbers found to conflict",{
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2:6,
-                          in.o2 = 5:9, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:6,
+                          in.oxy = 5:9, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: Input columns conflict.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, delta.o2 = 1:10, plot = F),
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, delta.oxy = 1:10, plot = F),
                regexp = "inspect.ft: Input columns conflict.")
 })
 
-test_that("inspect.ft - stops if out.o2 entered and neither or in.o2 or in.o2.value have arguments",{
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: With 'out.o2' data, paired 'in.o2' columns or an 'in.o2.value' is required.")
+test_that("inspect.ft - stops if out.oxy entered and neither or in.oxy or in.oxy.value have arguments",{
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:3,
+                          in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: With 'out.oxy' data, paired 'in.oxy' columns or an 'in.oxy.value' is required.")
 })
 
-test_that("inspect.ft - stops if in.o2 entered and out.o2 does not have argument",{
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: An 'in.o2' input requires paired 'out.o2' column\\(s\\).")
+test_that("inspect.ft - stops if in.oxy entered and out.oxy does not have argument",{
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: An 'in.oxy' input requires paired 'out.oxy' column\\(s\\).")
 })
 
-test_that("inspect.ft - stops if both or in.o2 and in.o2.value have arguments",{
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 4, in.o2.value = 5, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: Only one of 'in.o2' or 'in.o2.value' can be entered.")
+test_that("inspect.ft - stops if both or in.oxy and in.oxy.value have arguments",{
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:3,
+                          in.oxy = 4, in.oxy.value = 5, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: Only one of 'in.oxy' or 'in.oxy.value' can be entered.")
 })
 
-test_that("inspect.ft - correctly accepts and handles in.o2.value input",{
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F))$dataframe$in.o2.value,
+test_that("inspect.ft - correctly accepts and handles in.oxy.value input",{
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2,
+                          in.oxy = NULL, in.oxy.value = 9, delta.oxy = NULL, plot = F))$dataframe$in.oxy.value,
                regexp = NA)
-  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = NULL, in.o2.value = 9, delta.o2 = NULL, plot = F))$dataframe$in.o2.value,
+  expect_equal(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2,
+                          in.oxy = NULL, in.oxy.value = 9, delta.oxy = NULL, plot = F))$dataframe$in.oxy.value,
                rep(9, nrow(flowthrough_mult.rd)))
 })
 
-test_that("inspect.ft - stops if out.o2 and in.o2 entered, but in.o2 does not have same number of columns or a single column.",{
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:6, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
-               regexp = "inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:9, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
-               regexp = "inspect.ft: With 'out.o2' data, 'in.o2' must be a single column or an equal number of paired columns.")
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 4, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
+test_that("inspect.ft - stops if out.oxy and in.oxy entered, but in.oxy does not have same number of columns or a single column.",{
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4,
+                          in.oxy = 5:6, in.oxy.value = NULL, delta.oxy = NULL, plot = F)),
+               regexp = "inspect.ft: With 'out.oxy' data, 'in.oxy' must be a single column or an equal number of paired columns.")
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4,
+                          in.oxy = 5:9, in.oxy.value = NULL, delta.oxy = NULL, plot = F)),
+               regexp = "inspect.ft: With 'out.oxy' data, 'in.oxy' must be a single column or an equal number of paired columns.")
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:3,
+                          in.oxy = 4, in.oxy.value = NULL, delta.oxy = NULL, plot = F)),
                regexp = NA)
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 4:5, in.o2.value = NULL, delta.o2 = NULL, plot = F)),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:3,
+                          in.oxy = 4:5, in.oxy.value = NULL, delta.oxy = NULL, plot = F)),
                regexp = NA)
 })
 
-test_that("inspect.ft - stops if delta.o2 entered and out.o2, in.o2 or in.o2.value have arguments",{
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
-                          in.o2 = NULL, in.o2.value = 4, delta.o2 = 3, plot = F),
-               regexp = "inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
-                          in.o2 = 4, in.o2.value = NULL, delta.o2 = 3, plot = F),
-               regexp = "inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 4,
-                          in.o2 = 5, in.o2.value = NULL, delta.o2 = 3, plot = F),
-               regexp = "inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, in.o2.value = 4, delta.o2 = 3, plot = F),
-               regexp = "inspect.ft: With 'delta.o2' data, 'out.o2', 'in.o2' and 'in.o2.value' should be NULL.")
+test_that("inspect.ft - stops if delta.oxy entered and out.oxy, in.oxy or in.oxy.value have arguments",{
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
+                          in.oxy = NULL, in.oxy.value = 4, delta.oxy = 3, plot = F),
+               regexp = "inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
+                          in.oxy = 4, in.oxy.value = NULL, delta.oxy = 3, plot = F),
+               regexp = "inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 4,
+                          in.oxy = 5, in.oxy.value = NULL, delta.oxy = 3, plot = F),
+               regexp = "inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, in.oxy.value = 4, delta.oxy = 3, plot = F),
+               regexp = "inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
 })
 
 test_that("inspect.ft - stops if x not a dataframe", {
-  expect_error(inspect.ft(as.matrix(flowthrough.rd), time = 1, out.o2 = 2,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(as.matrix(flowthrough.rd), time = 1, out.oxy = 2,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'x' must be data.frame object.")
-  expect_error(inspect.ft(flowthrough.rd[[1]], time = 1, out.o2 = 2,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(flowthrough.rd[[1]], time = 1, out.oxy = 2,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'x' must be data.frame object.")
-  expect_error(inspect.ft("blah", time = 1, out.o2 = 2,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft("blah", time = 1, out.oxy = 2,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'x' must be data.frame object.")
 })
 
 test_that("inspect.ft - stops if column inputs malformed", {
   ## time
-  expect_error(inspect.ft(flowthrough.rd, time = 1.1, out.o2 = 2,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(flowthrough.rd, time = 1.1, out.oxy = 2,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'time' - some column inputs are not integers.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1:2, out.o2 = 3,
-                          in.o2 = 4, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(flowthrough.rd, time = 1:2, out.oxy = 3,
+                          in.oxy = 4, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'time' - cannot enter more than 1 column\\(s\\) with this input or this dataset.")
-  expect_error(inspect.ft(flowthrough.rd, time = 8, out.o2 = 2,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_error(inspect.ft(flowthrough.rd, time = 8, out.oxy = 2,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: 'time' - one or more column inputs are out of range of allowed data columns.")
-  ## out.o2
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2.1,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' - some column inputs are not integers")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 4:9,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 8:9,
-                          in.o2 = 3, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' - one or more column inputs are out of range of allowed data columns.")
-  ## in.o2
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2,
-                          in.o2 = 3.1, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'in.o2' - some column inputs are not integers.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 4:9,
-                          in.o2 = 2, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'out.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = 2:3,
-                          in.o2 = 8:9, in.o2.value = NULL, delta.o2 = NULL, plot = F),
-               regexp = "inspect.ft: 'in.o2' - one or more column inputs are out of range of allowed data columns.")
-  ## delta.o2
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, in.o2.value = NULL, delta.o2 = 4.1, plot = F),
-               regexp = "inspect.ft: 'delta.o2' - some column inputs are not integers")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, in.o2.value = NULL, delta.o2 = 2:5, plot = F),
-               regexp = "inspect.ft: 'delta.o2' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
-  expect_error(inspect.ft(flowthrough.rd, time = 1, out.o2 = NULL,
-                          in.o2 = NULL, in.o2.value = NULL, delta.o2 = 5, plot = F),
-               regexp = "inspect.ft: 'delta.o2' - one or more column inputs are out of range of allowed data columns.")
+  ## out.oxy
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2.1,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'out.oxy' - some column inputs are not integers")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 4:9,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'out.oxy' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 8:9,
+                          in.oxy = 3, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'out.oxy' - one or more column inputs are out of range of allowed data columns.")
+  ## in.oxy
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
+                          in.oxy = 3.1, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'in.oxy' - some column inputs are not integers.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 4:9,
+                          in.oxy = 2, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'out.oxy' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:3,
+                          in.oxy = 8:9, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
+               regexp = "inspect.ft: 'in.oxy' - one or more column inputs are out of range of allowed data columns.")
+  ## delta.oxy
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 4.1, plot = F),
+               regexp = "inspect.ft: 'delta.oxy' - some column inputs are not integers")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 2:5, plot = F),
+               regexp = "inspect.ft: 'delta.oxy' - cannot enter more than 3 column\\(s\\) with this input or this dataset.")
+  expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
+                          in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 5, plot = F),
+               regexp = "inspect.ft: 'delta.oxy' - one or more column inputs are out of range of allowed data columns.")
 })
 
 
   test_that("inspect.ft - outputs correct warnings", {
 
   ## time nonnum
-  expect_warning(inspect.ft(ft_mult_time_nonnum_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nonnum_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Time column not numeric. Other column checks skipped.")
   ## time Inf
-  expect_warning(inspect.ft(ft_mult_time_inf_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_inf_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Time column. Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_time_inf_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_inf_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Time column. Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_time_inf_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_inf_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Time column. Remove or replace before proceeding.")
   ## time NA
-  expect_warning(inspect.ft(ft_mult_time_nan_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nan_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Time column.")
-  expect_warning(inspect.ft(ft_mult_time_nan_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nan_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Time column.")
-  expect_warning(inspect.ft(ft_mult_time_nan_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nan_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Time column.")
   ## time non-seq
-  expect_warning(inspect.ft(ft_mult_time_nonseq_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nonseq_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Non-sequential Time values found.")
-  expect_warning(inspect.ft(ft_mult_time_nonseq_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nonseq_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Non-sequential Time values found.")
-  expect_warning(inspect.ft(ft_mult_time_nonseq_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_nonseq_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Non-sequential Time values found.")
   ## time duplicates
-  expect_warning(inspect.ft(ft_mult_time_dupe_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_dupe_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Duplicate Time values found.")
-  expect_warning(inspect.ft(ft_mult_time_dupe_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_dupe_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Duplicate Time values found.")
-  expect_warning(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Duplicate Time values found.")
   ## time uneven
-  expect_warning(inspect.ft(ft_mult_time_uneven_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_uneven_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Time values are not evenly-spaced")
-  expect_warning(inspect.ft(ft_mult_time_uneven_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_uneven_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Time values are not evenly-spaced")
-  expect_warning(inspect.ft(ft_mult_time_uneven_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_time_uneven_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "Time values are not evenly-spaced.")
-  ## out.o2 nonnum
-  expect_warning(inspect.ft(ft_mult_out.o2_nonnum_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 6:8, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## out.oxy nonnum
+  expect_warning(inspect.ft(ft_mult_out.oxy_nonnum_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 6:8, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Oxygen column\\(s) not numeric. Other column checks skipped.")
-  ## out.o2 Inf
-  expect_warning(inspect.ft(ft_mult_out.o2_inf_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## out.oxy Inf
+  expect_warning(inspect.ft(ft_mult_out.oxy_inf_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_out.o2_inf_3, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_out.oxy_inf_3, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_out.o2_inf_mult, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_out.oxy_inf_mult, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  ## out.o2 NA
-  expect_warning(inspect.ft(ft_mult_out.o2_nan_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## out.oxy NA
+  expect_warning(inspect.ft(ft_mult_out.oxy_nan_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_out.o2_nan_3, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_out.oxy_nan_3, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_out.o2_nan_mult, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_out.oxy_nan_mult, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  ## out.o2 nonnum
-  expect_warning(inspect.ft(ft_mult_in.o2_nonnum_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 6:8, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## out.oxy nonnum
+  expect_warning(inspect.ft(ft_mult_in.oxy_nonnum_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 6:8, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Oxygen column\\(s) not numeric. Other column checks skipped.")
-  ## in.o2 Inf
-  expect_warning(inspect.ft(ft_mult_in.o2_inf_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## in.oxy Inf
+  expect_warning(inspect.ft(ft_mult_in.oxy_inf_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_in.o2_inf_3, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_in.oxy_inf_3, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_in.o2_inf_mult, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_in.oxy_inf_mult, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  ## in.o2 NA
-  expect_warning(inspect.ft(ft_mult_in.o2_nan_1, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  ## in.oxy NA
+  expect_warning(inspect.ft(ft_mult_in.oxy_nan_1, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_in.o2_nan_3, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_in.oxy_nan_3, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_in.o2_nan_mult, time = 1, out.o2 = 2:4,
-                            in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F),
+  expect_warning(inspect.ft(ft_mult_in.oxy_nan_mult, time = 1, out.oxy = 2:4,
+                            in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
 
-  ## delta.o2 non-numeric
-  expect_warning(inspect.ft(ft_mult_delta.o2_nonnum_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  ## delta.oxy non-numeric
+  expect_warning(inspect.ft(ft_mult_delta.oxy_nonnum_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "inspect.ft: Oxygen column\\(s) not numeric. Other column checks skipped.")
-  ## delta.o2 Inf
-  expect_warning(inspect.ft(ft_mult_delta.o2_inf_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  ## delta.oxy Inf
+  expect_warning(inspect.ft(ft_mult_delta.oxy_inf_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_delta.o2_inf_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  expect_warning(inspect.ft(ft_mult_delta.oxy_inf_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  expect_warning(inspect.ft(ft_mult_delta.o2_inf_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  expect_warning(inspect.ft(ft_mult_delta.oxy_inf_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "inspect.ft: Inf/-Inf values detected in Oxygen column\\(s). Remove or replace before proceeding.")
-  ## delta.o2 NA
-  expect_warning(inspect.ft(ft_mult_delta.o2_nan_1, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  ## delta.oxy NA
+  expect_warning(inspect.ft(ft_mult_delta.oxy_nan_1, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_delta.o2_nan_3, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  expect_warning(inspect.ft(ft_mult_delta.oxy_nan_3, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
-  expect_warning(inspect.ft(ft_mult_delta.o2_nan_mult, time = 1, out.o2 = NULL,
-                            in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F),
+  expect_warning(inspect.ft(ft_mult_delta.oxy_nan_mult, time = 1, out.oxy = NULL,
+                            in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F),
                  regexp = "NA/NaN values detected in Oxygen column\\(s\\).")
 })
 
@@ -519,17 +519,17 @@ test_that("inspect.ft works with 2-column data", {
 })
 
 test_that("inspect.ft works with multi-column data", {
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                          in.o2 = 5:7, plot = F)),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4,
+                          in.oxy = 5:7, plot = F)),
                regexp = NA)
-  expect_equal(ncol(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4,
-                               in.o2 = 5:7, plot = F))$dataframe),
+  expect_equal(ncol(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4,
+                               in.oxy = 5:7, plot = F))$dataframe),
                7 + 3) # 7 inputs, 3 delta calcs
 })
 
 test_that("inspect.ft outputs plots", {
-  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                          in.o2 = 5, delta.o2 = NULL, plot = T)),
+  expect_error(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2,
+                          in.oxy = 5, delta.oxy = NULL, plot = T)),
                regexp = NA)
   expect_output(plot(insp.ft.obj))
   expect_error(plot(insp.ft.obj),
@@ -565,40 +565,40 @@ test_that("inspect.ft does not plot when 'pos =' input too large", {
                regexp = NA)
 
   ## various errors/warnings
-  ob1 <- suppressWarnings(inspect.ft(ft_mult_out.o2_nan_mult, time = 1, out.o2 = 2:4,
-                                     in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob2 <- suppressWarnings(inspect.ft(ft_mult_time_nonseq_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob3 <- suppressWarnings(inspect.ft(ft_mult_time_nan_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob4 <- suppressWarnings(inspect.ft(ft_mult_out.o2_nan_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob5 <- suppressWarnings(inspect.ft(ft_mult_out.o2_nan_mult, time = 1, out.o2 = 2:4,
-                                     in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob6 <- suppressWarnings(inspect.ft(ft_mult_in.o2_nan_3, time = 1, out.o2 = 2:4,
-                                     in.o2 = 5:7, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob7 <- suppressWarnings(inspect.ft(ft_mult_delta.o2_nan_1, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F))
-  ob8 <- suppressWarnings(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob8 <- suppressWarnings(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob9 <- suppressWarnings(inspect.ft(ft_mult_time_inf_1, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob10 <- suppressWarnings(inspect.ft(ft_mult_time_inf_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob11 <- suppressWarnings(inspect.ft(ft_mult_out.o2_inf_1, time = 1, out.o2 = 2,
-                                     in.o2 = 6, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob12 <- suppressWarnings(inspect.ft(ft_mult_out.o2_inf_mult, time = 1, out.o2 = 2:4,
-                                     in.o2 = 6:8, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob13 <- suppressWarnings(inspect.ft(ft_mult_in.o2_inf_1, time = 1, out.o2 = 2,
-                                     in.o2 = 6, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob14 <- suppressWarnings(inspect.ft(ft_mult_in.o2_inf_mult, time = 1, out.o2 = 2:4,
-                                     in.o2 = 6:8, in.o2.value = NULL, delta.o2 = NULL, plot = F))
-  ob15 <- suppressWarnings(inspect.ft(ft_mult_delta.o2_inf_1, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8, plot = F))
-  ob16 <- suppressWarnings(inspect.ft(ft_mult_delta.o2_inf_mult, time = 1, out.o2 = NULL,
-                                     in.o2 = NULL, in.o2.value = NULL, delta.o2 = 8:10, plot = F))
+  ob1 <- suppressWarnings(inspect.ft(ft_mult_out.oxy_nan_mult, time = 1, out.oxy = 2:4,
+                                     in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob2 <- suppressWarnings(inspect.ft(ft_mult_time_nonseq_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob3 <- suppressWarnings(inspect.ft(ft_mult_time_nan_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob4 <- suppressWarnings(inspect.ft(ft_mult_out.oxy_nan_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob5 <- suppressWarnings(inspect.ft(ft_mult_out.oxy_nan_mult, time = 1, out.oxy = 2:4,
+                                     in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob6 <- suppressWarnings(inspect.ft(ft_mult_in.oxy_nan_3, time = 1, out.oxy = 2:4,
+                                     in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob7 <- suppressWarnings(inspect.ft(ft_mult_delta.oxy_nan_1, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F))
+  ob8 <- suppressWarnings(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob8 <- suppressWarnings(inspect.ft(ft_mult_time_dupe_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob9 <- suppressWarnings(inspect.ft(ft_mult_time_inf_1, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob10 <- suppressWarnings(inspect.ft(ft_mult_time_inf_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob11 <- suppressWarnings(inspect.ft(ft_mult_out.oxy_inf_1, time = 1, out.oxy = 2,
+                                     in.oxy = 6, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob12 <- suppressWarnings(inspect.ft(ft_mult_out.oxy_inf_mult, time = 1, out.oxy = 2:4,
+                                     in.oxy = 6:8, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob13 <- suppressWarnings(inspect.ft(ft_mult_in.oxy_inf_1, time = 1, out.oxy = 2,
+                                     in.oxy = 6, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob14 <- suppressWarnings(inspect.ft(ft_mult_in.oxy_inf_mult, time = 1, out.oxy = 2:4,
+                                     in.oxy = 6:8, in.oxy.value = NULL, delta.oxy = NULL, plot = F))
+  ob15 <- suppressWarnings(inspect.ft(ft_mult_delta.oxy_inf_1, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8, plot = F))
+  ob16 <- suppressWarnings(inspect.ft(ft_mult_delta.oxy_inf_mult, time = 1, out.oxy = NULL,
+                                     in.oxy = NULL, in.oxy.value = NULL, delta.oxy = 8:10, plot = F))
 
 
   expect_output(print(ob1))

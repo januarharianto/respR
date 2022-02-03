@@ -37,7 +37,7 @@
 #' over time (or there may be other variations such as in the inflow oxygen
 #' concentrations), it is recommended you *NOT* use this function. Instead, the
 #' paired blank oxygen concentration data should be used in [`inspect.ft`] as
-#' the `in.o2` input. In this way, the calculated specimen delta oxygen values
+#' the `in.oxy` input. In this way, the calculated specimen delta oxygen values
 #' take account of whatever background or other variation in oxygen is occurring
 #' in the blank chamber with respect to time.
 #'
@@ -169,7 +169,7 @@ adjust_rate.ft <- function(x, by) {
                 dataframe = x$dataframe,
                 data = x$data,
                 subsets = x$subsets,
-                delta.o2 = x$delta.o2,
+                delta.oxy = x$delta.oxy,
                 input_type = x$input_type,
                 summary = cbind(x$summary,
                                 adjustment = adjustment,

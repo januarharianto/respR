@@ -141,7 +141,7 @@ control experiments in the same way as specimen rates are determined. The
 saved objects can be used as the \code{by} input in \code{\link{adjust_rate.ft}}. For
 experiments in which the specimen data is to be corrected by a
 concurrently-run control experiment, best option is to use this as the
-\code{in.o2} input in \code{\link[=inspect.ft]{inspect.ft()}}. See help file for that function, or the
+\code{in.oxy} input in \code{\link[=inspect.ft]{inspect.ft()}}. See help file for that function, or the
 vignettes on the website for examples.
 }
 

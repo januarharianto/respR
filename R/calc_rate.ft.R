@@ -91,7 +91,7 @@
 #' saved objects can be used as the `by` input in [`adjust_rate.ft`]. For
 #' experiments in which the specimen data is to be corrected by a
 #' concurrently-run control experiment, best option is to use this as the
-#' `in.o2` input in [`inspect.ft()`]. See help file for that function, or the
+#' `in.oxy` input in [`inspect.ft()`]. See help file for that function, or the
 #' vignettes on the website for examples.
 #'
 #' ## S3 Generic Functions
@@ -208,11 +208,11 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     ## elements for output
     dfs <- NULL
     dt <- data.table::data.table(time = NA,
-                                 delta.o2 = delta)
-    data <- data.frame(delta.o2 = x)
+                                 delta.oxy = delta)
+    data <- data.frame(delta.oxy = x)
 
     ## summary for output
-    summary <- data.frame(out.o2 = NA, in.o2 = NA, delta.o2 = delta)
+    summary <- data.frame(out.oxy = NA, in.oxy = NA, delta.oxy = delta)
 
     # no need to plot
     if(plot) {
@@ -232,12 +232,12 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     ## empty elements for output
     dfs <- NULL
     dt <- data.table::data.table(time = NA,
-                                 delta.o2 = delta)
-    data <- data.frame(out.o2 = x[[1]],
-                       in.o2 = x[[2]])
+                                 delta.oxy = delta)
+    data <- data.frame(out.oxy = x[[1]],
+                       in.oxy = x[[2]])
 
     ## summary for output
-    summary <- data.frame(out.o2 = x[[1]], in.o2 = x[[2]], delta.o2 = delta)
+    summary <- data.frame(out.oxy = x[[1]], in.oxy = x[[2]], delta.oxy = delta)
 
     if(plot) {
       message("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
@@ -256,8 +256,8 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
     ## put data in dt
     time <- data$time[[1]]
-    delta.o2 <- data$delta.o2[[1]]
-    dt <- data.table::data.table(time = time, delta.o2 = delta.o2)
+    delta.oxy <- data$delta.oxy[[1]]
+    dt <- data.table::data.table(time = time, delta.oxy = delta.oxy)
 
     # ranges
     t_range <- range(time, na.rm = TRUE)
@@ -391,7 +391,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       # so may as well save them
       names(summary)[2] <- "slope_b1"
       # add mean rate (delta) value for each subset using row numbers
-      summary$delta_mean <- mapply(function(p,q) mean(delta.o2[p:q]),
+      summary$delta_mean <- mapply(function(p,q) mean(delta.oxy[p:q]),
                                    p = summary$row,
                                    q = summary$endrow)
       delta <- summary$delta_mean
@@ -414,7 +414,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
                        summary[,1:4])
       names(summary)[2] <- "slope_b1"
 
-      summary$delta_mean <- mapply(function(p,q) mean(delta.o2[p:q]),
+      summary$delta_mean <- mapply(function(p,q) mean(delta.oxy[p:q]),
                                    p = summary$row,
                                    q = summary$endrow)
       delta <- summary$delta_mean
@@ -439,7 +439,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
               dataframe = as.data.frame(dt),
               data = data,
               subsets = dfs,
-              delta.o2 = delta,
+              delta.oxy = delta,
               input_type = xtype,
               summary = data.table(cbind(rank = 1:nrow(summary),
                                          summary, flowrate = flowrate, rate = rate)),
@@ -549,14 +549,14 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   # extract data
   # only first columns
   time <- unlist(x$data$time)
-  out.o2 <- x$data$out.o2[[1]]
-  in.o2 <- x$data$in.o2[[1]]
-  del.o2 <- x$data$delta.o2[[1]]
+  out.oxy <- x$data$out.oxy[[1]]
+  in.oxy <- x$data$in.oxy[[1]]
+  delta.oxy <- x$data$delta.oxy[[1]]
   nres <- length(x$rate) # number of rates
   # is it delta only rates?
   delta_only <-
-    is.null(x$data$out.o2) && is.null(x$data$in.o2)
-  if(!(delta_only)) y_range <- range(in.o2, out.o2, na.rm = TRUE) # for plotting rate region rectangle
+    is.null(x$data$out.oxy) && is.null(x$data$in.oxy)
+  if(!(delta_only)) y_range <- range(in.oxy, out.oxy, na.rm = TRUE) # for plotting rate region rectangle
   rate_mean <- signif(x$rate, digits = 5) # rounded mean rate for inclusion in plot
 
   # validate pos input
@@ -573,7 +573,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   pos_to_time <- x$summary$endrow[pos] # # for plotting rate subset region
 
   pos_x_data <- time[pos_from_row:pos_to_row]
-  pos_y_data_delta <- del.o2[pos_from_row:pos_to_row]
+  pos_y_data_delta <- delta.oxy[pos_from_row:pos_to_row]
 
   if(!quiet && pos == 1 && nres == 1)
     cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ..."), sep="\n")
@@ -584,7 +584,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
 
   # plot layout --------------------------------------------------------------
 
-  ## if only delta o2 plot, it takes top two thirds,
+  ## if only delta oxygen plot, it takes top two thirds,
   ## otherwise 3 plots
   if (delta_only) m <- rbind(c(1,1,1), c(1,1,1), c(2,2,2)) else
     m <- rbind(c(1,1,1), c(2,2,2), c(3,3,3))
@@ -603,16 +603,16 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
       ps = 10)
   par(...)
 
-  # in.o2 - out.o2 plot -----------------------------------------------------
+  # in.oxy - out.oxy plot -----------------------------------------------------
   if (!delta_only) {
 
     ## ylim for outflow and inflow plots - plus 10%
-    ylim <- range(range(out.o2), range(in.o2), na.rm = TRUE) ## so all on same axes
+    ylim <- range(range(out.oxy), range(in.oxy), na.rm = TRUE) ## so all on same axes
     buffer <- diff(ylim)*0.1
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     plot(time,
-         out.o2,
+         out.oxy,
          xlab = "",
          ylab = "",
          ylim = ylim,
@@ -625,7 +625,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
 
     axis(side = 2)
     points(time,
-           in.o2,
+           in.oxy,
            xlab = "",
            ylab = "",
            ylim = ylim,
@@ -634,7 +634,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     # plot this invisibly - to add row index x-axis
     par(new = TRUE)
     plot(seq(1, length(time)),
-         out.o2,
+         out.oxy,
          xlab = "",
          ylab = "",
          pch = "",
@@ -681,14 +681,14 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   # Delta plot --------------------------------------------------------------
 
   ## ylim  - plus 10%
-  ylim <- range(na.omit(del.o2)) ## so all on same axes
+  ylim <- range(na.omit(delta.oxy)) ## so all on same axes
   buffer <- diff(ylim)*0.1
   ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
   if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
   plot(time,
-       del.o2,
+       delta.oxy,
        xlab = "",
        ylab = "",
        ylim = ylim,
@@ -731,7 +731,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     # plot this invisibly - to add row index x-axis
     par(new = TRUE)
     plot(seq(1, length(time)),
-         del.o2,
+         delta.oxy,
          xlab = "",
          ylab = "",
          pch = "",

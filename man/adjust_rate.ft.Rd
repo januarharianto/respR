@@ -57,7 +57,7 @@ actual experiments in parallel, and background rate may increase or decrease
 over time (or there may be other variations such as in the inflow oxygen
 concentrations), it is recommended you \emph{NOT} use this function. Instead, the
 paired blank oxygen concentration data should be used in \code{\link{inspect.ft}} as
-the \code{in.o2} input. In this way, the calculated specimen delta oxygen values
+the \code{in.oxy} input. In this way, the calculated specimen delta oxygen values
 take account of whatever background or other variation in oxygen is occurring
 in the blank chamber with respect to time.
 

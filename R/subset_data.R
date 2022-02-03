@@ -17,7 +17,7 @@
 #' this structure already. In these cases the `$dataframe` element in the output
 #' is replaced by the subset, and in `inspect.ft()` the `$inputs` element is
 #' also subset and replaced. Note for `inspect.ft()` objects, the oxygen data in
-#' column 2 will be either `out.o2` data or `delta.o2` data depending on what
+#' column 2 will be either `out.oxy` data or `delta.oxy` data depending on what
 #' was inspected. The function can subset any data frame by `row`.
 #'
 #' When multiple columns are present, for example time in column 1, and multiple

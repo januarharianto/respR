@@ -15,20 +15,20 @@ df <-  data.frame(time = flowthrough.rd[[2]], delta = flowthrough.rd[[3]])
 
 ## inspect.ft objects
 insp.ft.obj.outO2.1col.inO2.1col<- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1,
-                                                               out.o2 = 2, in.o2 = 6, plot = F)))
-insp.ft.obj.outO2.1col.inO2.value <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2,
-                                                                 in.o2.value = 9.05, delta.o2 = NULL, plot = F)))
-insp.ft.obj.delta.1col <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = NULL,
-                                                      in.o2 = NULL, delta.o2 = 10, plot = F)))
+                                                               out.oxy = 2, in.oxy = 6, plot = F)))
+insp.ft.obj.outO2.1col.inO2.value <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2,
+                                                                 in.oxy.value = 9.05, delta.oxy = NULL, plot = F)))
+insp.ft.obj.delta.1col <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = NULL,
+                                                      in.oxy = NULL, delta.oxy = 10, plot = F)))
 
 insp.ft.obj.outO2.multcols.inO2.multcols <-
-  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4, in.o2 = 6:8, plot = F)))
+  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4, in.oxy = 6:8, plot = F)))
 
 insp.ft.obj.outO2.multcols.inO2.value <-
-  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.o2 = 2:4, in.o2.value = 9.05, plot = F)))
+  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2:4, in.oxy.value = 9.05, plot = F)))
 
 insp.ft.obj.delta.multcols <-
-  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.o2 = 10:12, plot = F)))
+  suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 10:12, plot = F)))
 
 ## calc_rate.ft objects for testing plotting, printing etc.
 crft.obj.value <- calc_rate.ft(-0.8,
@@ -283,7 +283,7 @@ test_that("calc_rate.ft - accepts correct 'by' inputs", {
 test_that("calc_rate.ft - applies default 'by = 'time' correctly", {
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0.05, to = 62.28,
                             by = NULL, plot = F)$rate,
-               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[3:3737]*1.5))
+               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[3:3737]*1.5))
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5,
                             by = NULL, plot = F)$inputs$by,
                "time")
@@ -412,7 +412,7 @@ test_that("calc_rate.ft - 'width' outputs correct results.", {
                             width = wd,
                             by = "row",
                             plot = F)$rate[1],
-               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[1:(wd)])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[1:(wd)])*1.5)
 })
 
 
@@ -490,7 +490,7 @@ test_that("calc_rate.ft - if 'from' and 'to' are NULL, defaults to using all dat
 })
 
 # insp.ft.obj.outO2.1col.inO2.1col
-test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with single columns of in.o2 and out.o2.", {
+test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with single columns of in.oxy and out.oxy.", {
   from = 100
   to = 400
   # single columns in inspect.ft object
@@ -504,14 +504,14 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
   # mean rate
   ## by time (+1 to from and to for time offset from row)
 
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
-               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -525,27 +525,27 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time (+1 to from and to for time offset from row)
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                c(
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)
   )
   ## mean of all
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                (c(
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.1col$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)
                ))
 })
 
 # insp.ft.obj.outO2.1col.inO2.value
-test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with single column of out.o2 and in.o2.value.", {
+test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with single column of out.oxy and in.oxy.value.", {
   from = 100
   to = 400
   # single columns in inspect.ft object
@@ -558,13 +558,13 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.value, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
   # mean rate
 
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.value, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
-               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -578,22 +578,22 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time ( to from and to for time offset from row)
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.value, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.value, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                c(
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)
   )
   ## mean of all
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.value, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                (c(
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.1col.inO2.value$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)
                ))
 })
 
@@ -613,13 +613,13 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.delta.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from):(to)])*1.5)
+               mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from):(to)])*1.5)
   # mean rate
 
   ## by row
   expect_equal(calc_rate.ft(insp.ft.obj.delta.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
-               mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from):(to)])*1.5)
+               mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -633,28 +633,28 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time ( to from and to for time offset from row)
   expect_equal(calc_rate.ft(insp.ft.obj.delta.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate[1],
-               mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(calc_rate.ft(insp.ft.obj.delta.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                c(
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[3]):(to[3])])*1.5)
   )
   ## mean of all
   expect_equal(calc_rate.ft(insp.ft.obj.delta.1col, flowrate = 1.5, plot = F,
                             from = from, to = to, by = "row")$rate,
                (c(
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.delta.1col$data$delta.o2[[1]][(from[3]):(to[3])])*1.5)
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.delta.1col$data$delta.oxy[[1]][(from[3]):(to[3])])*1.5)
                ))
 })
 
 
 # insp.ft.obj.outO2.multcols.inO2.multcols
-test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of both in.o2 and out.o2 data", {
+test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of both in.oxy and out.oxy data", {
   from = 100
   to = 400
   # single columns in inspect.ft object
@@ -667,13 +667,13 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
   # mean rate
 
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
-               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -687,26 +687,26 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time ( to from and to for time offset from row)
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                c(
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5))
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5))
 
   ## mean of all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                (c(
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)))
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.multcols$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)))
 })
 
 # insp.ft.obj.outO2.multcols.inO2.value
-test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of out.o2 data and in.o2.value", {
+test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of out.oxy data and in.oxy.value", {
   from = 100
   to = 400
   # single columns in inspect.ft object
@@ -719,13 +719,13 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.value, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
   # mean rate
 
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.value, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
-               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from):(to)])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -739,26 +739,26 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time ( to from and to for time offset from row)
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.value, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.value, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                c(
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5))
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5))
 
   ## mean of all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.value, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                (c(
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.o2.calc.1[(from[3]):(to[3])])*1.5)))
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.outO2.multcols.inO2.value$dataframe$delta.oxy.calc.1[(from[3]):(to[3])])*1.5)))
 })
 
 # insp.ft.obj.delta.multcols
-test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of delta.o2 data", {
+test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj with multiple columns of delta.oxy data", {
   from = 100
   to = 400
   # single columns in inspect.ft object
@@ -771,13 +771,13 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.delta.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from):(to)])*1.5)
+               mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from):(to)])*1.5)
   # mean rate
 
   ## by row
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.delta.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
-               mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from):(to)])*1.5)
+               mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from):(to)])*1.5)
 
   ## multiple from and to
   from = c(100,200,300)
@@ -791,22 +791,22 @@ test_that("calc_rate.ft - accepts and gives correct results for inspect.ft obj w
   ## by time ( to from and to for time offset from row)
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.delta.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate[1],
-               mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[1]):(to[1])])*1.5)
+               mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5)
   ## all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.delta.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                c(
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[3]):(to[3])])*1.5))
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[3]):(to[3])])*1.5))
 
   ## mean of all
   expect_equal(suppressWarnings(calc_rate.ft(insp.ft.obj.delta.multcols, flowrate = 1.5, plot = F,
                                              from = from, to = to, by = "row"))$rate,
                (c(
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[1]):(to[1])])*1.5,
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[2]):(to[2])])*1.5,
-                 mean(insp.ft.obj.delta.multcols$data$delta.o2[[1]][(from[3]):(to[3])])*1.5)))
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[1]):(to[1])])*1.5,
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[2]):(to[2])])*1.5,
+                 mean(insp.ft.obj.delta.multcols$data$delta.oxy[[1]][(from[3]):(to[3])])*1.5)))
 })
 
 
@@ -1094,15 +1094,15 @@ test_that("calc_rate.ft objects work with summary()", {
   expect_error(summary(crft.obj.value),
                regexp = NA)
   expect_output(summary(crft.obj.value),
-                regexp = "out.o2")
+                regexp = "out.oxy")
   expect_error(summary(crft.obj.vector),
                regexp = NA)
   expect_output(summary(crft.obj.vector),
-                regexp = "out.o2")
+                regexp = "out.oxy")
   expect_error(summary(crft.obj.df),
                regexp = NA)
   expect_output(summary(crft.obj.df),
-                regexp = "out.o2")
+                regexp = "out.oxy")
 
   expect_error(summary(crft.obj.1rate),
                regexp = NA)
@@ -1261,7 +1261,7 @@ test_that("calc_rate.ft - plot defaults are correctly restored", {
   # save par before
   parb4 <- par(no.readonly = TRUE)
   # now use a fn with plot
-  calc_rate.ft(inspect.ft(flowthrough.rd, 1, delta.o2 = 4), flowrate = 1.5)
+  calc_rate.ft(inspect.ft(flowthrough.rd, 1, delta.oxy = 4), flowrate = 1.5)
   # save after
   paraft <- par(no.readonly = TRUE)
   # mai is something changed from the default,
