@@ -83,7 +83,7 @@
 #' @param to numeric value or vector. Defaults to `NULL`. The end of the
 #'   region(s) over which you want to calculate the rate in the units specified
 #'   in `by`. If a vector, each value must have a paired value in `from`.
-#' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"` Defaults to
+#' @param by string. `"time"`, `"row"`, `"oxygen"` or `"proportion"` Defaults to
 #'   `"time"`.This is the method used to subset the data region between `from`
 #'   and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.
@@ -103,13 +103,13 @@
 #' # default - subset by 'time'
 #' calc_rate(sardine.rd, from = 200, to = 1800)
 #'
-#' # subset by O2
-#' calc_rate(sardine.rd, 94, 91, by = 'o2')
+#' # subset by oxygen
+#' calc_rate(sardine.rd, 94, 91, by = 'oxygen')
 #'
 #' # subset by row
 #' calc_rate(sardine.rd, 1, 1000, by = 'row')
 #'
-#' # subset by proportion of total O2 used
+#' # subset by proportion of total oxygen used
 #' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
 #'
 #' ## summary and print
@@ -161,14 +161,14 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   if(is.null(from)){
     if(by == "time") from <- min(df[[1]])
     if(by == "row") from <- 1
-    if(by == "o2") from <- df[[2]][1] # first oxygen value
+    if(by == "oxygen") from <- df[[2]][1] # first oxygen value
     if(by == "proportion")
       stop("calc_rate: please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(df[[1]])
     if(by == "row") to <- nrow(df)
-    if(by == "o2") to <- df[[2]][nrow(df)] # last oxygen value
+    if(by == "oxygen") to <- df[[2]][nrow(df)] # last oxygen value
     if(by == "proportion")
       stop("calc_rate: please enter a proportion 'to' input.")
   }
@@ -211,10 +211,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
       message("calc_rate: some 'to' row numbers are higher than the number of rows present in 'x'. The final row number will be used instead.")
   }
 
-  if(by == "o2"){
+  if(by == "oxygen"){
     o_range <- range(df[[2]], na.rm = TRUE)
 
-    ## can't have 'from' and 'to' both below or both above o2 range
+    ## can't have 'from' and 'to' both below or both above oxygen range
     if(any(mapply(function(p,q) p < o_range[1] && q < o_range[1],
                   p = from,
                   q = to))) stop("calc_rate: some paired 'from' and 'to' values are both below the range of oxygen data in 'x'.")
@@ -222,7 +222,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
                   p = from,
                   q = to))) stop("calc_rate: some paired 'from' and 'to' values are both above the range of oxygen data in 'x'.")
 
-    ## if any 'from' or 'to' are above or below o2 range
+    ## if any 'from' or 'to' are above or below oxygen range
     if(any(sapply(from, function(z) z > o_range[2]))) {
       message("calc_rate: some 'from' oxygen values are higher than the values in 'x'. The highest available value will be used instead.")
     } else if(any(sapply(from, function(z) z < o_range[1]))) {

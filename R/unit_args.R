@@ -92,12 +92,12 @@
 #'
 unit_args <- function() {
 
-  o2unit <- c("mg/L", "ug/L", "mmol/L", "umol/L")
-  o2unit_tsp <- c("mL/L", "mg/kg",
+  oxyunit <- c("mg/L", "ug/L", "mmol/L", "umol/L")
+  oxyunit_tsp <- c("mL/L", "mg/kg",
                   "ug/kg", "mmol/kg", "umol/kg", "mL/kg",
                   "%Air", "%O2", "Torr",
                   "hPa", "kPa", "mmHg", "inHg")
-  o2unit_out <- c("ug", "mg", "umol", "mmol", "mol", "mL")
+  oxyunit_out <- c("ug", "mg", "umol", "mmol", "mol", "mL")
   timeunit <- c("sec", "min", "hour", "day")
   massunit <- c("ug", "mg", "g", "kg")
   areaunit <- c("mm2", "cm2", "m2", "km2")
@@ -110,9 +110,9 @@ unit_args <- function() {
   cat("\n# Input Units # --------------------------------------\n")
   cat("Oxygen concentration units should use SI units (`L` or `kg`) for the denominator.\n\n")
   cat("Oxygen Concentration or Pressure Units - Do not require t, S and P\n")
-  print(o2unit)
+  print(oxyunit)
   cat("Oxygen Concentration or Pressure Units - Require t, S and P\n")
-  print(o2unit_tsp)
+  print(oxyunit_tsp)
   cat("\nVolume units for use in flow rates in calc_rate.ft and convert_rate.ft")
   cat("\n(e.g. as in 'ml/min', 'L/s', etc.)\n")
   print(flowunit)
@@ -129,7 +129,7 @@ unit_args <- function() {
   cat("Mass-specific rates:   O2/Time/Mass  e.g. 'mg/sec/ug',  'umol/min/g',   'mL/h/kg'\n")
   cat("Area-specific rates:   O2/Time/Area  e.g. 'mg/sec/mm2', 'umol/min/cm2', 'mL/h/m2'\n")
   cat("\nOutput Oxygen amount units\n")
-  print(o2unit_out)
+  print(oxyunit_out)
   cat("\nOutput Time units\n")
   print(timeunit)
   cat("\nOutput Mass units for mass-specific rates\n")

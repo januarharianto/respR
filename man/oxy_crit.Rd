@@ -231,9 +231,9 @@ oxy_crit(insp)
 
 ## Run on already calculated rate~oxygen data
 # Generate using internal function
-o2.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
+oxy.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
 # Analyse
-oxy_crit(o2.v.rates, oxygen = 1, rate = 2)
+oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
 }
 }
 \references{

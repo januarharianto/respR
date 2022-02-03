@@ -28,7 +28,7 @@ verify_by <- function(by, req = TRUE,
 
   if (req && is.null(by)) stop(glue::glue("{msg} 'by' input is required."))
   else if("t" %in% which && by %in% time_variations) by <- "time"
-  else if("o" %in% which && by %in% ox_variations) by <- "o2"
+  else if("o" %in% which && by %in% ox_variations) by <- "oxygen"
   else if("r" %in% which && by %in% row_variations) by <- "row"
   else if("p" %in% which && by %in% prop_variations) by <- "proportion"
   else stop(glue::glue("{msg} 'by' input not valid or not recognised."))

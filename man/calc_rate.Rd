@@ -18,7 +18,7 @@ in \code{by}. If a vector, each value must have a paired value in \code{to}.}
 region(s) over which you want to calculate the rate in the units specified
 in \code{by}. If a vector, each value must have a paired value in \code{from}.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"} Defaults to
+\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"} Defaults to
 \code{"time"}.This is the method used to subset the data region between \code{from}
 and \code{to}.}
 
@@ -111,13 +111,13 @@ by passing \code{export = TRUE}.
 # default - subset by 'time'
 calc_rate(sardine.rd, from = 200, to = 1800)
 
-# subset by O2
-calc_rate(sardine.rd, 94, 91, by = 'o2')
+# subset by oxygen
+calc_rate(sardine.rd, 94, 91, by = 'oxygen')
 
 # subset by row
 calc_rate(sardine.rd, 1, 1000, by = 'row')
 
-# subset by proportion of total O2 used
+# subset by proportion of total oxygen used
 x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
 
 ## summary and print

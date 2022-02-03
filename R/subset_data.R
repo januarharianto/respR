@@ -11,14 +11,14 @@
 #' The function can subset data based on ranges of: `"time"`, `"oxygen"`,
 #' `"row"` , or `"proportion"` of total oxygen used or produced (note, this last
 #' option works poorly with noisy or fluctuating data). For data frames, to
-#' subset by `"time"`, `"o2"`, or `"proportion"`, the time data is assumed to be
-#' in the first column, and oxygen data in the second column. For `inspect()`
-#' and `inspect.ft()` objects, the data will have been coerced to this structure
-#' already. In these cases the `$dataframe` element in the output is replaced by
-#' the subset, and in `inspect.ft()` the `$inputs` element is also subset and
-#' replaced. Note for `inspect.ft()` objects, the oxygen data in column 2 will
-#' be either `out.o2` data or `delta.o2` data depending on what was inspected.
-#' The function can subset any data frame by `row`.
+#' subset by `"time"`, `"oxygen"`, or `"proportion"`, the time data is assumed
+#' to be in the first column, and oxygen data in the second column. For
+#' `inspect()` and `inspect.ft()` objects, the data will have been coerced to
+#' this structure already. In these cases the `$dataframe` element in the output
+#' is replaced by the subset, and in `inspect.ft()` the `$inputs` element is
+#' also subset and replaced. Note for `inspect.ft()` objects, the oxygen data in
+#' column 2 will be either `out.o2` data or `delta.o2` data depending on what
+#' was inspected. The function can subset any data frame by `row`.
 #'
 #' When multiple columns are present, for example time in column 1, and multiple
 #' columns of oxygen data, the subset object will include *all* columns. In the
@@ -102,14 +102,14 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
   if(is.null(from)){
     if(by == "time") from <- min(dt[[1]])
     if(by == "row") from <- 1
-    if(by == "o2") from <- dt[[2]][1] # first oxygen value
+    if(by == "oxygen") from <- dt[[2]][1] # first oxygen value
     if(by == "proportion")
       stop("subset_data: please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(dt[[1]])
     if(by == "row") to <- nrow(dt)
-    if(by == "o2") to <- dt[[2]][nrow(dt)] # last oxygen value
+    if(by == "oxygen") to <- dt[[2]][nrow(dt)] # last oxygen value
     if(by == "proportion")
       stop("subset_data: please enter a proportion 'to' input.")
   }
@@ -135,8 +135,8 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
               max = 1, min = 1, range = c(from+1, Inf),
               msg = "subset_data: 'to' -")}
 
-  ## if o2 or prop, 'from' & 'to' required, single val, numeric
-  if(by == "o2" || by == "proportion") {
+  ## if oxygen or prop, 'from' & 'to' required, single val, numeric
+  if(by == "oxygen" || by == "proportion") {
     input.val(from,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(-Inf, Inf),
               msg = "subset_data: 'from' -")

@@ -205,14 +205,14 @@ truncate_data <- function(x, from, to, by) {
   if(is.null(from)){
     if(by == "time") from <- min(dt[[1]], na.rm = TRUE)
     if(by == "row") from <- 1
-    if(by == "o2") from <- dt[[2]][1] # first oxygen value
+    if(by == "oxygen") from <- dt[[2]][1] # first oxygen value
     if(by == "proportion")
       stop("Please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(dt[[1]], na.rm = TRUE)
     if(by == "row") to <- nrow(dt)
-    if(by == "o2") to <- dt[[2]][nrow(dt)] # last oxygen value
+    if(by == "oxygen") to <- dt[[2]][nrow(dt)] # last oxygen value
     if(by == "proportion")
       stop("Please enter a proportion 'to' input.")
   }
@@ -234,8 +234,8 @@ truncate_data <- function(x, from, to, by) {
     if(to > nrow(dt)) to <- nrow(dt)
     out <- dt[from:to]
   }
-  ## o2 could be increasing or decreasing
-  if (by == "o2") {
+  ## oxygen could be increasing or decreasing
+  if (by == "oxygen") {
 
     # data range
     o_range <- range(dt[[2]], na.rm = TRUE)
