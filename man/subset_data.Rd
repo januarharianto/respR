@@ -15,7 +15,7 @@ argument \code{by}.}
 \item{to}{numeric. The upper bounds of the data to subset based on the
 argument \code{by}. is based on the argument: \code{by}.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"o2"} or \code{"proportion"}.}
+\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"}.}
 
 \item{quiet}{logical. Controls if a summary of the output is printed to the
 console. Default is \code{FALSE}.}
@@ -44,7 +44,7 @@ was inspected. The function can subset any data frame by \code{row}.
 
 When multiple columns are present, for example time in column 1, and multiple
 columns of oxygen data, the subset object will include \emph{all} columns. In the
-case of subsetting \code{by = "o2"} or \code{by = "proportion"}, subsetting is based on
+case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is based on
 the first column of oxygen data (i.e. column 2), and all subsequent columns
 are subset between the same rows regardless of oxygen values.
 
@@ -57,7 +57,7 @@ instance, if \code{to = 100} and there are only 50 rows in the data, the last ro
 those in the data frame. For \code{"time"} subsetting, the values do not need to
 be precise; the function will use the closest values found.
 
-For \code{"o2"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
+For \code{"oxygen"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
 interchangeable, and the function will subset data \emph{between} the first and
 last occurrences (or closest occurrences) of these values. It works best with
 generally increasing or decreasing oxygen data, but results may vary with
@@ -85,7 +85,7 @@ x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
 plot(x)
 
 # Subset by oxygen:
-subset_data(sardine.rd, from = 94, to = 91, by = "o2")
+subset_data(sardine.rd, from = 94, to = 91, by = "oxygen")
 
 # Subset by row:
 subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
@@ -94,6 +94,6 @@ subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 
 # Pass (via piping) only part of a dataset to auto_rate()
-subset_data(sardine.rd, from = 94, to = 91, by = "o2") \%>\%
+subset_data(sardine.rd, from = 94, to = 91, by = "oxygen") \%>\%
 auto_rate()
 }

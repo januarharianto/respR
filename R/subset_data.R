@@ -22,7 +22,7 @@
 #'
 #' When multiple columns are present, for example time in column 1, and multiple
 #' columns of oxygen data, the subset object will include *all* columns. In the
-#' case of subsetting `by = "o2"` or `by = "proportion"`, subsetting is based on
+#' case of subsetting `by = "oxygen"` or `by = "proportion"`, subsetting is based on
 #' the first column of oxygen data (i.e. column 2), and all subsequent columns
 #' are subset between the same rows regardless of oxygen values.
 #'
@@ -35,7 +35,7 @@
 #' those in the data frame. For `"time"` subsetting, the values do not need to
 #' be precise; the function will use the closest values found.
 #'
-#' For `"o2"` or `"proportion"` subsetting, `from` and `to` are generally
+#' For `"oxygen"` or `"proportion"` subsetting, `from` and `to` are generally
 #' interchangeable, and the function will subset data *between* the first and
 #' last occurrences (or closest occurrences) of these values. It works best with
 #' generally increasing or decreasing oxygen data, but results may vary with
@@ -62,7 +62,7 @@
 #'   argument `by`.
 #' @param to numeric. The upper bounds of the data to subset based on the
 #'   argument `by`. is based on the argument: `by`.
-#' @param by string. `"time"`, `"row"`, `"o2"` or `"proportion"`.
+#' @param by string. `"time"`, `"row"`, `"oxygen"` or `"proportion"`.
 #' @param quiet logical. Controls if a summary of the output is printed to the
 #'   console. Default is `FALSE`.
 #'
@@ -74,7 +74,7 @@
 #' plot(x)
 #'
 #' # Subset by oxygen:
-#' subset_data(sardine.rd, from = 94, to = 91, by = "o2")
+#' subset_data(sardine.rd, from = 94, to = 91, by = "oxygen")
 #'
 #' # Subset by row:
 #' subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
@@ -83,7 +83,7 @@
 #' subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 #'
 #' # Pass (via piping) only part of a dataset to auto_rate()
-#' subset_data(sardine.rd, from = 94, to = 91, by = "o2") %>%
+#' subset_data(sardine.rd, from = 94, to = 91, by = "oxygen") %>%
 #' auto_rate()
 
 subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
