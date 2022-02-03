@@ -208,6 +208,7 @@ The change will mean with some data it will give different results than the old 
 
 - CHANGE: Example data are now all data.tables
 - CHANGE: flowthrough.rd amended to make delta column (i.e. rates) negative values
+- CHANGE: flowthrough.rd column names changed to "time", "oxy.out", "oxy.in" and "oxy.delta"
 
 NEW: new example datasets
 - `background_con.rd` - constant level background, for testing new background correction functionality

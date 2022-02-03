@@ -17,9 +17,9 @@ r3 <- adjustcolor("darkgrey", alpha.f = .2)  # plot background colour
 d1 <- adjustcolor("tomato", alpha.f = .75)
 d2 <- adjustcolor("darkslateblue", alpha.f = .75)
 # colours for flowthrough plots
-ftcol_in <- adjustcolor("turquoise", alpha.f = 1) # inflow o2
-ftcol_out <- adjustcolor("lightgreen", alpha.f = 1) # outflow o2
-ftcol_del <- adjustcolor("black", alpha.f = 0.9) # delta o2
+ftcol_in <- adjustcolor("turquoise", alpha.f = 1) # inflow oxy
+ftcol_out <- adjustcolor("lightgreen", alpha.f = 1) # outflow oxy
+ftcol_del <- adjustcolor("black", alpha.f = 0.9) # delta oxy
 ftcol_rate_pt <- adjustcolor("goldenrod1", alpha.f = 1) # highlighted rate points
 ftcol_rate_bx <- adjustcolor("goldenrod1",  alpha.f = 0.2) # highlighted rate region box bg
 ftcol_rate_ln <- adjustcolor("goldenrod1",  alpha.f = 0.25) # highlighted rate region line

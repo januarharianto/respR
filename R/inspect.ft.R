@@ -350,7 +350,7 @@ inspect.ft <- function(x, time = NULL, out.o2 = NULL, in.o2 = NULL,
   time.all <- lapply(1:length(df[time]), function(z) df[time][[z]])
   names(time.all) <- names(df[time])
 
-  ## out o2
+  ## out oxy
   # if no input, null
   if(is.null(out.o2)) {
     out.o2.all <- NULL

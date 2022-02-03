@@ -80,7 +80,7 @@ knitr::include_graphics("img/oxy_crit_comp/oxy_crit_comp_02.png")
 ```{r eval = FALSE}
 ## respR PCrit Analysis
 
-# extract time and o2 column, and format to numeric time starting at zero
+# extract time and oxygen column, and format to numeric time starting at zero
 fishMR_respR <- fishMR[46000:58000, c(2,6)]
 fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
 

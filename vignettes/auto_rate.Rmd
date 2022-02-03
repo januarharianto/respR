@@ -251,7 +251,7 @@ By contrast, if the `width` is too low the rolling rate is unstable and heavily 
 
 Here we'll compare the default `width = 0.2` to a lower value of 5% of the data, `width = 0.05`. 
 
-```{r rollreg_demo2, fig.keep='none'}
+```{r rollreg_demo_2, fig.keep='none'}
 # Perform linear detection; default width when not specified is 0.2:
 normx <- auto_rate(sardine.rd)
 
