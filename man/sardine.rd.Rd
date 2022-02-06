@@ -5,16 +5,17 @@
 \alias{sardine.rd}
 \title{Respirometry data of the sardine, \emph{Sardinops sagax}}
 \format{
-A data frame object consisting of 2 columns (time and \% oxygen
-saturation) and 7513 rows (approx 2.1h of data).
+A data frame object consisting of 3 columns (time, \% air saturation
+and temperature) and 7513 rows (approx 2.1h of data).
 }
 \usage{
 sardine.rd
 }
 \description{
 A single experiment on the sardine species \emph{Sardinops sagax} in a Loligo
-Systems swim tunnel and Witrox oxygen probe system. Oxygen content recorded
-in \% air saturation. Temperature, salinity and atmospheric pressure are
+Systems swim tunnel and Witrox oxygen probe system. There are three columns:
+'Time' in seconds, 'Oxygen' content recorded in \% air saturation, and
+'Temperature' in °C. Mean temperature, salinity and atmospheric pressure are
 supplied below to allow for conversion to oxygen concentration units.
 }
 \details{
@@ -22,9 +23,9 @@ Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
 Grove, California.
 \itemize{
 \item Dissolved oxygen units: \% air saturation
-\item Temperature (°C): 15
+\item Temperature (°C): 14.8
 \item Salinity: 35
-\item Atm. Pressure (kPa): 1.013253
+\item Atm. Pressure (bar): 1.013253
 \item Time units: seconds
 \item Chamber volume (L): 12.3
 \item Specimen wet mass (kg): 0.0477

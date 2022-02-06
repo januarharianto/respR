@@ -34,7 +34,7 @@ pch_def <- 16
 cex_def <- 0.5
 
 # default tick size
-tck_def <- -0.01 # size of axis ticks
+tck_def <- -0.015 # size of axis ticks
 
 # default axis distances
 # 1 = distance of axis label from axis

@@ -178,7 +178,7 @@ test_that("subset_rate works with auto_rate method = interval object (OLD METHOD
 # Check duplicates are removed --------------------------------------------
 
 ## use sardine.rd here as it produces multiple duplicates
-ar_obj_sard <- auto_rate(sardine.rd, plot = FALSE)
+ar_obj_sard <- auto_rate(sardine.rd[,1:2], plot = FALSE)
 
 test_that("subset_rate: method = NULL   - correct message", {
   expect_message(ar_obj_uniq <- subset_rate(ar_obj_sard, plot = FALSE),

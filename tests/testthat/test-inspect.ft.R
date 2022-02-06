@@ -254,7 +254,7 @@ test_that("inspect.ft - works with NULL inputs and applies defaults correctly",{
                regexp = NA)
   expect_equal(as.data.frame(suppressWarnings(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = NULL,
                                         in.oxy = NULL, delta.oxy = NULL, plot = F)$data$delta.oxy)),
-               as.data.frame(flowthrough_mult.rd[,2:14]))
+               as.data.frame(flowthrough_mult.rd[,2:15]))
 })
 
 test_that("inspect.ft - stops if input column numbers found to conflict",{
@@ -512,9 +512,9 @@ test_that("inspect.ft - stops if column inputs malformed", {
 
 
 test_that("inspect.ft works with 2-column data", {
-  expect_error(inspect.ft(sardine.rd, plot = F),
+  expect_error(inspect.ft(sardine.rd[,1:2], plot = F),
                regexp = NA)
-  expect_equal(ncol(inspect.ft(sardine.rd, plot = F)$dataframe),
+  expect_equal(ncol(inspect.ft(sardine.rd[,1:2], plot = F)$dataframe),
                2)
 })
 

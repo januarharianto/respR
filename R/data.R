@@ -68,8 +68,9 @@
 #' Respirometry data of the sardine, *Sardinops sagax*
 #'
 #' A single experiment on the sardine species *Sardinops sagax* in a Loligo
-#' Systems swim tunnel and Witrox oxygen probe system. Oxygen content recorded
-#' in % air saturation. Temperature, salinity and atmospheric pressure are
+#' Systems swim tunnel and Witrox oxygen probe system. There are three columns:
+#' 'Time' in seconds, 'Oxygen' content recorded in % air saturation, and
+#' 'Temperature' in °C. Mean temperature, salinity and atmospheric pressure are
 #' supplied below to allow for conversion to oxygen concentration units.
 #'
 #' Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
@@ -77,11 +78,11 @@
 #'
 #' - Dissolved oxygen units: % air saturation
 #'
-#' - Temperature (°C): 15
+#' - Temperature (°C): 14.8
 #'
 #' - Salinity: 35
 #'
-#' - Atm. Pressure (kPa): 1.013253
+#' - Atm. Pressure (bar): 1.013253
 #'
 #' - Time units: seconds
 #'
@@ -91,8 +92,8 @@
 #'
 #' @md
 #' @author Nicholas Carey
-#' @format A data frame object consisting of 2 columns (time and % oxygen
-#'   saturation) and 7513 rows (approx 2.1h of data).
+#' @format A data frame object consisting of 3 columns (time, % air saturation
+#'   and temperature) and 7513 rows (approx 2.1h of data).
 "sardine.rd"
 
 
@@ -112,11 +113,11 @@
 #'
 #' - Specimen ash-free dry mass (`kg`): `0.000070`
 #'
-#' - `t = 12`
+#' - Temperature (°C): `t = 12`
 #'
-#' - `S = 30`
+#' - Salinity: `S = 30`
 #'
-#' - `P = 1.013`
+#' - Atm. Pressure (bar): `P = 1.013`
 #'
 #' @md
 #' @author Nicholas Carey
@@ -135,11 +136,14 @@
 #' concentrations (cols 10:13, which is simply the numeric difference between
 #' paired columns of outflow and inflow). There is also a column of inflow
 #' oxygen concentrations as recorded from a shared header tank (col 14,
-#' oxy.header) supplying all chambers, to use as an alternative to the
-#' individual inflow oxygen recordings. Outflow (2:5) and inflow (6:9) columns
-#' are paired, with the first three containing specimens, and the fourth an
-#' empty control respirometer, or "blank" experiment (oxy.out.blank,
-#' oxy.in.blank) to determine background respiration.
+#' `oxy.header`) supplying all chambers, to use as an alternative to the
+#' individual inflow oxygen recordings. Lastly, there is a column of temperature
+#' data (col 15, `temperature` in °C).
+#'
+#' Outflow (2:5) and inflow (6:9) columns are paired, with the first three
+#' containing specimens, and the fourth an empty control respirometer, or
+#' "blank" experiment (oxy.out.blank, oxy.in.blank) to determine background
+#' respiration.
 #'
 #' The third paired dataset (col 4 and col 8 pair) has a period of higher rates
 #' at around the 40 minute timepoint, where the specimen increases its activity
@@ -151,22 +155,23 @@
 #'
 #' - Flow rate (`L/min`): `0.1`
 #'
-#' - Specimen masses (`kg`): `0.013, 0.015, 0.020`
+#' - Specimen masses: (`kg`): `0.013, 0.015, 0.020`
 #'
-#' - `t = 18`
+#' - Mean temperature (°C): `t = 18`
 #'
-#' - `S = 0`, i.e. freshwater
+#' - Salinity: `S = 0`, i.e. freshwater
 #'
-#' - `P = 1.013`
+#' - Atmospheric pressure (bar): `P = 1.013`
 #'
 #' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 3740 rows (approx 62 mins of
-#'   data),and 14 columns: time (col 1), oxygen outflow concentrations (cols
+#'   data),and 15 columns: time (col 1), oxygen outflow concentrations (cols
 #'   2,3,4,5), inflow concentrations (cols 6,7,8,9 each paired with the
 #'   respective outflow column, the fourth being a control), delta oxygen values
 #'   (cols 10,11,12,13 or difference between outflow and inflow concentrations),
-#'   and inflow concentrations recorded in a shared header tank (col 14).
+#'   inflow concentrations recorded in a shared header tank (col 14), and
+#'   temperature (col 15).
 "flowthrough_mult.rd"
 
 #' Flowthrough respirometry data with increasing background rate
@@ -174,7 +179,7 @@
 #' A simulated dataset for testing and demonstrating flowthrough respirometry
 #' analyses and background adjustment when the background respiration is
 #' increases over the course of the experiment. Contains one
-#' column of numeric time data (num_time), one column of specimen outflow oxygen
+#' column of numeric time data (num.time), one column of specimen outflow oxygen
 #' concentrations (oxy.out.spec), one column of control or "blank" chamber
 #' outflow oxygen concentrations (oxy.out.blank), and one column of inflow
 #' oxygen concentrations as recorded from a shared header tank (oxy.header)

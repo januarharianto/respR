@@ -11,9 +11,9 @@
 #' data prior to analysis.
 #'
 #' Given an input data frame, `x`, the function scans the `time` and `oxygen`
-#' columns. By default, it is assumed the first column is time data, and second
-#' is oxygen data, but the `time` and `oxygen` inputs can be used to specify
-#' different columns.
+#' columns. If these are left `NULL`, by default it is assumed the first column
+#' is time data, and all other columns are oxygen data. However, best practice
+#' is to use the `time` and `oxygen` inputs to specify particular columns.
 #'
 #' ## Check for numeric data
 #'
@@ -59,6 +59,18 @@
 #' be plotted numerically, and higher oxygen *production* rates will be higher
 #' on the plot.
 #'
+#' ## Plot an additional data source
+#'
+#' Using the `add.data` input an additional data source, for example
+#' temperature, can be plotted alongside the oxygen timeseries. This input
+#' should be an integer indicating a column in the input `x` data frame sharing
+#' the same time data. None of the data checks are performed on this column; it
+#' is simply to give a basic visual aid in the plot to, for example, help decide
+#' if regions of the data should be used or not used because this parameter was
+#' variable. It is saved in the output as a vector under `$add.data`. It is
+#' plotted in blue on a separate y-axis on the main timeseries plot. It is *not*
+#' plotted if multiple oxygen columns are inspected. See examples.
+#'
 #' ## Additional plotting options
 #'
 #' A different `width` value can be passed to see how it affects estimation of
@@ -67,25 +79,26 @@
 #' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input can
 #' be used to examine each time~oxygen dataset. If axis labels (particularly
 #' y-axis) are difficult to read, `las = 2` can be passed to make axis labels
-#' horizontal. In addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5,
-#' 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`)
-#' can be used to adjust plot margins.
+#' horizontal, and  `oma` (outer margins, default `oma = c(0.4, 1, 1.5, 0.4)`)
+#' or `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`) can be
+#' used to adjust plot margins. See examples.
 #'
 #' ## Multiple Columns of Oxygen Data
 #'
 #' For a quick overview of larger datasets, multiple oxygen columns can be
 #' inspected for errors and plotted by using the `oxygen` argument to select
-#' multiple columns. These must share the same `time` column. In this case, data
-#' checks are performed, with a plot of each oxygen time series, but no rolling
-#' rate plot is produced. All data are plotted on the same axis range of both
-#' time and oxygen (total range of data). This is chiefly exploratory
-#' functionality to allow for a quick overview of a dataset, and it should be
-#' noted that while the output `inspect` object will contain all columns in its
-#' `$dataframe` element, subsequent functions in `respR` (`calc_rate`,
-#' `auto_rate`, etc.) will by default only use the first two columns (`time`,
-#' and the first specified `oxygen` column). To analyse multiple columns and
-#' determine rates, best practice is to inspect and assign each time-oxygen
-#' column pair as separate `inspect` objects. See Examples.
+#' multiple columns (by default, all non-time columns are inspected as oxygen
+#' columns if no `oxygen` input is specified). These must share the same `time`
+#' column. In this case, data checks are performed, with a plot of each oxygen
+#' time series, but no rolling rate plot is produced. All data are plotted on
+#' the same axis range of both time and oxygen (total range of data). This is
+#' chiefly exploratory functionality to allow for a quick overview of a dataset,
+#' and it should be noted that while the output `inspect` object will contain
+#' all columns in its `$dataframe` element, subsequent functions in `respR`
+#' (`calc_rate`, `auto_rate`, etc.) will by default only use the first two
+#' columns (`time`, and the first specified `oxygen` column). To analyse
+#' multiple columns and determine rates, best practice is to inspect and assign
+#' each time-oxygen column pair as separate `inspect` objects. See Examples.
 #'
 #' ## Flowthrough Respirometry Data
 #'
@@ -151,15 +164,18 @@
 #'
 #' @param x data.frame. Any object of class `data.frame` (incl. `data.table`,
 #'   `tibble`, etc.).
-#' @param time numeric integer. Defaults to 1. Specifies the column number of
-#'   the Time data.
-#' @param oxygen numeric vector of integers. Defaults to 2. Specifies the column
+#' @param time integer. Defaults to 1. Specifies the column number of the Time
+#'   data.
+#' @param oxygen vector of integers. Defaults to 2. Specifies the column
 #'   number(s) of the Oxygen data.
 #' @param width numeric. Defaults to 0.1. Width used in the rolling regression
 #'   plot as proportion of total length of data (0.01 to 1).
-#' @param plot logical. Defaults to TRUE. Plots the data. If 2 columns selected,
-#'   plots timeseries data, plus plot of rolling rate. If multiple columns,
-#'   plots all timeseries data only.
+#' @param plot logical. Defaults to `TRUE`. Plots the data. If 2 columns
+#'   selected, plots timeseries data, plus plot of rolling rate. If multiple
+#'   columns, plots all timeseries data only.
+#' @param add.data integer. Defaults to `NULL`. Specifies the column number of
+#'   an optional additional data source that will be plotted in blue alongside
+#'   the full oxygen timeseries.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different `width`
 #'   can also be passed in `plot()` commands on output objects.
@@ -187,9 +203,13 @@
 #' inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
 #'         legend = FALSE, rate.rev = FALSE)
 #'
+#' ## Plot additional data source
+#'
+#'
+#' ## Plot  - use las and mai
 
 inspect <- function(x, time = NULL, oxygen = NULL,
-                    width = 0.1, plot = TRUE, ...) {
+                    width = 0.1, plot = TRUE, add.data = NULL, ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -210,8 +230,11 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   ## oxygen: Apply default
   if (is.null(oxygen)) {
-    message("inspect: Applying column default of 'oxygen = 2'")
-    oxygen <- 2
+    #message("inspect: Applying column default of 'oxygen = 2'")
+    #oxygen <- 2
+    message("inspect: Applying column default of all non-time column(s) as 'oxygen'")
+    listcols <- seq.int(1, ncol(x))
+    oxygen <- listcols[!listcols %in% time]
   }
   column.val(oxygen, req = TRUE, min = 1, max = Inf,
              range = c(1,ncol(x)), conflicts = time,
@@ -233,6 +256,12 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   # extract data
   xval <- lapply(1:length(df[time]), function(z) df[time][[z]])
   yval <- lapply(1:length(df[oxygen]), function(z) df[oxygen][[z]])
+  if(!is.null(add.data)) {
+    input.val(add.data, num = TRUE, int = TRUE, req = FALSE,
+              max = 1, min = 1, range = c(1, ncol(df)),
+              msg = "inspect: 'add.data' -")
+    add.data <- df[[add.data]]
+  }
 
   x_results <- check_timeseries(xval, "time")
   y_results <- check_timeseries(yval, "oxygen")
@@ -273,10 +302,13 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   out <- list(call = call,
               dataframe = dataframe,
+              add.data = add.data,
               inputs = list(x = x,
                             time = time,
                             oxygen = oxygen,
-                            width = width),
+                            width = width,
+                            plot = plot,
+                            add.data = add.data),
               checks = checks,
               locs_raw = locs_raw,
               locs = locs)
@@ -442,6 +474,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
       pch = pch_def,
       cex = cex_def)
 
+  # single dataset ----------------------------------------------------------
   if (length(dt) == 2) {
 
     par(mfrow = c(2, 1),
@@ -450,15 +483,11 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
         cex.main = 1,
         ...)
 
-    ylim <- range(nainf.omit(dt[[2]]))
-    buffer <- diff(ylim)*0.05
-    ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
     plot(dt[[1]],
          dt[[2]],
          xlab = "",
          ylab = "",
-         ylim = ylim,
+         ylim = grDevices::extendrange(nainf.omit(dt[[2]]), f = 0.05),
          cex = .5,
          axes = FALSE,
          col.lab = "blue",
@@ -477,6 +506,24 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
          cex = .5,
          axes = FALSE)
     axis(side = 3, col.axis = "red")
+
+    # if add.data plot it too
+    if(!is.null(x$add.data)) {
+      par(new = TRUE, mgp = c(0, 0.13, 0))
+      plot(seq(1, nrow(dt)),
+           x$add.data,
+           ylim = grDevices::extendrange(x$add.data, f = 1),
+           xlab = "",
+           ylab = "",
+           pch = ".",
+           cex = .5,
+           axes = FALSE,
+           col = "blue")
+      axis(side = 4, col.axis = "blue")
+      par(mgp = mgp_def) # set back default mgp
+      par(...) # or allow custom one to overwrite it
+    }
+
     box()
     if(legend) legend("topright",
                       "Row Index",
@@ -515,20 +562,20 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     ## don't look weird - i.e. should get flatter with higher widths
     if(width > 0.1) {
       rates01 <- roll_reg_plot(dt, 0.1)
-      ylim <- range(nainf.omit(rates01))
-      buffer <- diff(ylim)*0.05
-      ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
+      y_lim <- range(nainf.omit(rates01))
+      buffer <- diff(y_lim)*0.05
+      y_lim <- c(y_lim[1] - buffer, y_lim[2] + buffer) ## add a little more space
     } else {
-      ylim <- range(nainf.omit(rates))
-      buffer <- diff(ylim)*0.05
-      ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
+      y_lim <- range(nainf.omit(rates))
+      buffer <- diff(y_lim)*0.05
+      y_lim <- c(y_lim[1] - buffer, y_lim[2] + buffer) ## add a little more space
     }
 
-    if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
+    if(rate.rev) y_lim <- rev(y_lim) ## reverse y-axis
 
     plot((rates) ~ xdt[floor(half_width * length(xdt)):(floor(half_width * length(xdt)) + (length(rates) - 1))],
          xlim = xlim,
-         ylim = ylim,
+         ylim = y_lim,
          # reversed axis
          xlab = "",
          ylab = "",
@@ -557,7 +604,9 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
   } else {
     ## plot every column anyway - without rate plot
     if(!quiet)
-      message("inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
+      message("plot.inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
+    if(!quiet && !is.null(x$add.data))
+      message("plot.inspect: Additional data source cannot be plotted for multiple columns.")
 
     par(mfrow = n2mfrow(length(dt) - 1),
         # put back to default mai for multi plot so column titles are visible
@@ -567,14 +616,10 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
         cex.main = 1,
         ...)
 
-    ylim <- range(nainf.omit(x$dataframe[,-1])) ## so all on same axes
-    buffer <- diff(ylim)*0.05
-    ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
     sapply(1:(length(dt) - 1), function(z) {
 
       plot(data.frame(dt[[1]], dt[[z + 1]]),
-           ylim = ylim,
+           ylim = grDevices::extendrange(nainf.omit(x$dataframe[,-1]), f = 0.05),
            xlab = "",
            ylab = "",
            cex = 0.5,

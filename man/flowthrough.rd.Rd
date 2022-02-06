@@ -24,9 +24,9 @@ Vancouver, BC, Canada.
 \item Flow rate (\code{mL/min}): \code{2.34}
 \item Inflow oxygen concentration (calculated assuming 100\% air saturated, \code{mg/L}): \code{8.919}
 \item Specimen ash-free dry mass (\code{kg}): \code{0.000070}
-\item \code{t = 12}
-\item \code{S = 30}
-\item \code{P = 1.013}
+\item Temperature (°C): \code{t = 12}
+\item Salinity: \code{S = 30}
+\item Atm. Pressure (bar): \code{P = 1.013}
 }
 }
 \author{

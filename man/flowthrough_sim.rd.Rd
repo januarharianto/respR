@@ -17,7 +17,7 @@ flowthrough_sim.rd
 A simulated dataset for testing and demonstrating flowthrough respirometry
 analyses and background adjustment when the background respiration is
 increases over the course of the experiment. Contains one
-column of numeric time data (num_time), one column of specimen outflow oxygen
+column of numeric time data (num.time), one column of specimen outflow oxygen
 concentrations (oxy.out.spec), one column of control or "blank" chamber
 outflow oxygen concentrations (oxy.out.blank), and one column of inflow
 oxygen concentrations as recorded from a shared header tank (oxy.header)

@@ -103,6 +103,18 @@
 #' and rate values will be plotted numerically, and higher oxygen *production*
 #' rates will be higher on the plot.
 #'
+#' ## Plot an additional data source
+#'
+#' Using the `add.data` input an additional data source, for example
+#' temperature, can be plotted alongside the oxygen timeseries. This input
+#' should be an integer indicating a column in the input `x` data frame sharing
+#' the same time data. None of the data checks are performed on this column; it
+#' is simply to give a basic visual aid in the plot to, for example, help decide
+#' if regions of the data should be used or not used because this parameter was
+#' variable. It is saved in the output as a vector under `$add.data`. It is
+#' plotted in blue on a separate y-axis on the main timeseries plot. It is *not*
+#' plotted if multiple oxygen columns are inspected. See examples.
+#'
 #' ## Additional plotting options
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
@@ -232,6 +244,9 @@
 #'   oxygen (should be negative values for oxygen uptake). If this is used,
 #'   `out.oxy` and `in.oxy` should be NULL.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
+#' @param add.data integer. Defaults to `NULL`. Specifies the column number of
+#'   an optional additional data source that will be plotted in blue alongside
+#'   the full oxygen timeseries.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`.
 #'
@@ -274,7 +289,8 @@
 #'            out.oxy = 2, in.oxy = 3)
 
 inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
-                       in.oxy.value = NULL, delta.oxy = NULL, plot = TRUE, ...) {
+                       in.oxy.value = NULL, delta.oxy = NULL, plot = TRUE,
+                       add.data = NULL, ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -386,6 +402,14 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
     names(del.oxy.all) <- names(df[delta.oxy])
   }
 
+  ## Additional data
+  if(!is.null(add.data)) {
+    input.val(add.data, num = TRUE, int = TRUE, req = FALSE,
+              max = 1, min = 1, range = c(1, ncol(df)),
+              msg = "inspect.ft: 'add.data' -")
+    add.data <- df[[add.data]]
+  }
+
   ## Do Data Checks
   time_results <- check_timeseries(time.all, "time")
 
@@ -473,13 +497,15 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
 
   out <- list(call = call,
               dataframe = dataframe,
+              add.data = add.data,
               inputs = list(df = x,
                             time = time,
                             out.oxy = out.oxy,
                             in.oxy = in.oxy,
                             in.oxy.value = in.oxy.value,
                             delta.oxy = delta.oxy,
-                            plot = plot),
+                            plot = plot,
+                            add.data = add.data),
               data = list(time = time.all,
                           out.oxy = out.oxy.all,
                           in.oxy = in.oxy.all,
@@ -627,16 +653,18 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
   if (length(del.oxy) > 1 || is.null(out.oxy)){
 
     if(!quiet && is.null(pos) && length(del.oxy) > 1)
-      cat("inspect.ft: Plotting all delta oxygen columns. To plot a specific dataset use 'pos'.\n")
+      cat("plot.inspect.ft: Plotting all delta oxygen columns. To plot a specific dataset use 'pos'.\n")
+    if(!quiet && !is.null(x$add.data))
+      message("plot.inspect.ft: Additional data source cannot be plotted for multiple columns.")
 
     if(is.null(pos))
       pos <- seq.int(1, length(del.oxy))
 
     if(any(pos > length(del.oxy)))
-      stop("inspect.ft: Invalid 'pos' input: only ", length(del.oxy), " data inputs found.")
+      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(del.oxy), " data inputs found.")
 
     if (!quiet && length(pos) == 1)
-      cat('inspect.ft: Plotting delta.oxy data from position', pos, 'of', length(del.oxy), '... \n')
+      cat('plot.inspect.ft: Plotting delta.oxy data from position', pos, 'of', length(del.oxy), '... \n')
 
     par(mfrow = n2mfrow(length(pos)),
         ps = 10,
@@ -754,8 +782,25 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
          axes = FALSE)
 
     axis(side = 3, col.axis = "red")
-    box()
 
+    # if add.data plot it too
+    if(!is.null(x$add.data)) {
+      par(new = TRUE, mgp = c(0, 0.13, 0))
+      plot(seq(1, nrow(dt)),
+           x$add.data,
+           ylim = grDevices::extendrange(x$add.data, f = 1),
+           xlab = "",
+           ylab = "",
+           pch = ".",
+           cex = .5,
+           axes = FALSE,
+           col = "blue")
+      axis(side = 4, col.axis = "blue")
+      par(mgp = mgp_def) # set back default mgp
+      par(...) # or allow custom one to overwrite it
+    }
+
+    box()
     if(legend) legend("topright",
                       "Row Index",
                       text.col = "red",

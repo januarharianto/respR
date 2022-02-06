@@ -116,7 +116,7 @@ test_that("convert_rate S3 generics work as expected", {
                mean(res_as$rate.output))
 
   ## check multiple rates have correct mean
-  rate <- suppressWarnings(inspect(urchins.rd, plot = F)) %>%
+  rate <- suppressWarnings(inspect(urchins.rd[,1:2], plot = F)) %>%
     auto_rate(plot = F) %>%
     convert_rate(oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
                  volume = 0.0032245, area = 0.000001429)
@@ -186,7 +186,7 @@ test_that("convert_rate outputs correct conversion values - absolute rates", {
   expect_equal(res$summary$rate.abs, 236.739, tolerance = 0.001)
 
   # changing magnitude of inputs and outputs changes rate by right amount
-  rate <- auto_rate(sardine.rd, plot = F)
+  rate <- suppressWarnings(auto_rate(sardine.rd, plot = F))
 
   # sign of the rate
   expect_equal(
@@ -262,7 +262,7 @@ test_that("convert_rate outputs correct conversion values - mass-specific rates"
   expect_equal(res$summary$rate.m.spec, 0.00001972825, tolerance = 0.000001)
 
   # changing magnitude of inputs and outputs changes rate by right amount
-  rate <- auto_rate(sardine.rd, plot = F)
+  rate <- suppressWarnings(auto_rate(sardine.rd, plot = F))
 
   # sign of the rate
   expect_equal(
@@ -378,7 +378,7 @@ test_that("convert_rate outputs correct conversion values - area-specific rates"
   expect_equal(res$summary$rate.a.spec, 1.972825, tolerance = 0.000001)
 
   # changing magnitude of inputs and outputs changes rate by right amount
-  rate <- auto_rate(sardine.rd, plot = F)
+  rate <- suppressWarnings(auto_rate(sardine.rd, plot = F))
   # time metric in output
   expect_equal(
     convert_rate(rate, oxy.unit = "%Air", time.unit = "s", output.unit = "mg/h/cm2", volume = 10, S = 35, t = 14, P = 1.013253,

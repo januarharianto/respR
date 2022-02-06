@@ -385,7 +385,7 @@ test_that("auto_rate - plot defaults are correctly restored", {
   # save par before
   parb4 <- par(no.readonly = TRUE)
   # now use a fn with plot
-  auto_rate(sardine.rd[1:1000,])
+  auto_rate(squid.rd[1:1000,])
   # save after
   paraft <- par(no.readonly = TRUE)
   # mai is something changed from the default,

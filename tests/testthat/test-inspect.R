@@ -12,9 +12,9 @@ test_that("inspect works on 2-column data",
                        regexp = NA))
 
 test_that("inspect works on multi-column data", {
-  ## default first 2 columns
+  ## defaults to all columns
   expect_equal(ncol(suppressWarnings(inspect(urchins.rd, plot = F)$dataframe)),
-               2)
+               19)
   ## differnt 2 columns
   expect_equal(ncol(suppressWarnings(inspect(urchins.rd, time = 1, oxygen = 3, plot = F)$dataframe)),
                2)
@@ -119,7 +119,7 @@ test_that("inspect works with NULL inputs", {
   expect_error(inspect(intermittent.rd, oxygen = NULL, plot = F),
                regexp = NA)
   expect_message(inspect(intermittent.rd, time = NULL, plot = F),
-                 regexp = "inspect: Applying column default of 'oxygen = 2'")
+                 regexp = "inspect: Applying column default of all non-time column\\(s\\) as 'oxygen'")
   expect_equal(inspect(intermittent.rd, time = NULL, plot = F)$inputs$oxygen,
                2)
 
@@ -154,7 +154,7 @@ test_that("inspect stops if time/oxygen/width column inputs malformed", {
   expect_error(inspect(urchins.rd, time = "string", plot = F),
                "inspect: 'time' - column input is not numeric.")
   # conflicts
-  expect_error(inspect(urchins.rd, time = 2, oxygen = NULL, plot = F),
+  expect_error(inspect(urchins.rd, time = 2, oxygen = 2, plot = F),
                "inspect: 'oxygen' - one or more column inputs conflicts with other inputs.")
 
   expect_error(inspect(urchins.rd, time = 1, oxygen = 0.5, plot = F),

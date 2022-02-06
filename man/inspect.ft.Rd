@@ -12,6 +12,7 @@ inspect.ft(
   in.oxy.value = NULL,
   delta.oxy = NULL,
   plot = TRUE,
+  add.data = NULL,
   ...
 )
 }
@@ -40,6 +41,10 @@ oxygen (should be negative values for oxygen uptake). If this is used,
 \code{out.oxy} and \code{in.oxy} should be NULL.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data. See Details.}
+
+\item{add.data}{integer. Defaults to \code{NULL}. Specifies the column number of
+an optional additional data source that will be plotted in blue alongside
+the full oxygen timeseries.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}.}
 }
@@ -147,6 +152,19 @@ the \code{rate.rev = FALSE} argument can be passed in either the \code{inspect.f
 call, or when using \code{plot()} on the output object. In this case, the delta
 and rate values will be plotted numerically, and higher oxygen \emph{production}
 rates will be higher on the plot.
+}
+
+\subsection{Plot an additional data source}{
+
+Using the \code{add.data} input an additional data source, for example
+temperature, can be plotted alongside the oxygen timeseries. This input
+should be an integer indicating a column in the input \code{x} data frame sharing
+the same time data. None of the data checks are performed on this column; it
+is simply to give a basic visual aid in the plot to, for example, help decide
+if regions of the data should be used or not used because this parameter was
+variable. It is saved in the output as a vector under \verb{$add.data}. It is
+plotted in blue on a separate y-axis on the main timeseries plot. It is \emph{not}
+plotted if multiple oxygen columns are inspected. See examples.
 }
 
 \subsection{Additional plotting options}{

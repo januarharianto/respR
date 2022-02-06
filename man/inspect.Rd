@@ -4,24 +4,36 @@
 \alias{inspect}
 \title{Explore and visualise respirometry data and check for common errors}
 \usage{
-inspect(x, time = NULL, oxygen = NULL, width = 0.1, plot = TRUE, ...)
+inspect(
+  x,
+  time = NULL,
+  oxygen = NULL,
+  width = 0.1,
+  plot = TRUE,
+  add.data = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{data.frame. Any object of class \code{data.frame} (incl. \code{data.table},
 \code{tibble}, etc.).}
 
-\item{time}{numeric integer. Defaults to 1. Specifies the column number of
-the Time data.}
+\item{time}{integer. Defaults to 1. Specifies the column number of the Time
+data.}
 
-\item{oxygen}{numeric vector of integers. Defaults to 2. Specifies the column
+\item{oxygen}{vector of integers. Defaults to 2. Specifies the column
 number(s) of the Oxygen data.}
 
 \item{width}{numeric. Defaults to 0.1. Width used in the rolling regression
 plot as proportion of total length of data (0.01 to 1).}
 
-\item{plot}{logical. Defaults to TRUE. Plots the data. If 2 columns selected,
-plots timeseries data, plus plot of rolling rate. If multiple columns,
-plots all timeseries data only.}
+\item{plot}{logical. Defaults to \code{TRUE}. Plots the data. If 2 columns
+selected, plots timeseries data, plus plot of rolling rate. If multiple
+columns, plots all timeseries data only.}
+
+\item{add.data}{integer. Defaults to \code{NULL}. Specifies the column number of
+an optional additional data source that will be plotted in blue alongside
+the full oxygen timeseries.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
 can also be passed in \code{plot()} commands on output objects.}
@@ -39,9 +51,9 @@ data prior to analysis.
 }
 \details{
 Given an input data frame, \code{x}, the function scans the \code{time} and \code{oxygen}
-columns. By default, it is assumed the first column is time data, and second
-is oxygen data, but the \code{time} and \code{oxygen} inputs can be used to specify
-different columns.
+columns. If these are left \code{NULL}, by default it is assumed the first column
+is time data, and all other columns are oxygen data. However, best practice
+is to use the \code{time} and \code{oxygen} inputs to specify particular columns.
 \subsection{Check for numeric data}{
 
 \code{respR} requires data be in the form of paired values of numeric time and
@@ -89,6 +101,19 @@ be plotted numerically, and higher oxygen \emph{production} rates will be higher
 on the plot.
 }
 
+\subsection{Plot an additional data source}{
+
+Using the \code{add.data} input an additional data source, for example
+temperature, can be plotted alongside the oxygen timeseries. This input
+should be an integer indicating a column in the input \code{x} data frame sharing
+the same time data. None of the data checks are performed on this column; it
+is simply to give a basic visual aid in the plot to, for example, help decide
+if regions of the data should be used or not used because this parameter was
+variable. It is saved in the output as a vector under \verb{$add.data}. It is
+plotted in blue on a separate y-axis on the main timeseries plot. It is \emph{not}
+plotted if multiple oxygen columns are inspected. See examples.
+}
+
 \subsection{Additional plotting options}{
 
 A different \code{width} value can be passed to see how it affects estimation of
@@ -97,25 +122,27 @@ suppressed using \code{legend = FALSE}. Suppress console output messages with
 \code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input can
 be used to examine each time~oxygen dataset. If axis labels (particularly
 y-axis) are difficult to read, \code{las = 2} can be passed to make axis labels
-horizontal. In addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)})
-can be used to adjust plot margins.
+horizontal, and  \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)})
+or \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be
+used to adjust plot margins. See examples.
 }
 
 \subsection{Multiple Columns of Oxygen Data}{
 
 For a quick overview of larger datasets, multiple oxygen columns can be
 inspected for errors and plotted by using the \code{oxygen} argument to select
-multiple columns. These must share the same \code{time} column. In this case, data
-checks are performed, with a plot of each oxygen time series, but no rolling
-rate plot is produced. All data are plotted on the same axis range of both
-time and oxygen (total range of data). This is chiefly exploratory
-functionality to allow for a quick overview of a dataset, and it should be
-noted that while the output \code{inspect} object will contain all columns in its
-\verb{$dataframe} element, subsequent functions in \code{respR} (\code{calc_rate},
-\code{auto_rate}, etc.) will by default only use the first two columns (\code{time},
-and the first specified \code{oxygen} column). To analyse multiple columns and
-determine rates, best practice is to inspect and assign each time-oxygen
-column pair as separate \code{inspect} objects. See Examples.
+multiple columns (by default, all non-time columns are inspected as oxygen
+columns if no \code{oxygen} input is specified). These must share the same \code{time}
+column. In this case, data checks are performed, with a plot of each oxygen
+time series, but no rolling rate plot is produced. All data are plotted on
+the same axis range of both time and oxygen (total range of data). This is
+chiefly exploratory functionality to allow for a quick overview of a dataset,
+and it should be noted that while the output \code{inspect} object will contain
+all columns in its \verb{$dataframe} element, subsequent functions in \code{respR}
+(\code{calc_rate}, \code{auto_rate}, etc.) will by default only use the first two
+columns (\code{time}, and the first specified \code{oxygen} column). To analyse
+multiple columns and determine rates, best practice is to inspect and assign
+each time-oxygen column pair as separate \code{inspect} objects. See Examples.
 }
 
 \subsection{Flowthrough Respirometry Data}{
@@ -203,4 +230,8 @@ inspect(urchins.rd, time = 1, oxygen = c(11:19))
 inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
         legend = FALSE, rate.rev = FALSE)
 
+## Plot additional data source
+
+
+## Plot  - use las and mai
 }
