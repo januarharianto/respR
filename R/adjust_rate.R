@@ -1,18 +1,12 @@
-#' Adjustment function to account for background respiration or oxygen flux in
-#' respirometry experiments.
+#' Adjust rates to account for background respiration or oxygen flux.
 #'
 #' The `adjust_rate` function adjusts an oxygen uptake or production rate (for
 #' example, as determined in [`calc_rate()`] or [`auto_rate()`]) for background
-#' oxygen use by microbial organisms, or other removal (or input) of oxygen
+#' oxygen use by microbial organisms, or for other removal or input of oxygen
 #' during a respirometry experiment. The function accepts numeric values, as
 #' well as regular `respR` objects, and data frames. See [`calc_rate.bg()`] for
 #' determining background rates, which is the recommended way of passing
 #' background rates to `adjust_rate`.
-#'
-#' ***Note:*** take special care with the *sign* of the rate used for
-#' adjustments. In `respR` oxygen uptake rates are negative, as they represent a
-#' negative slope of oxygen against time. Background rates will normally also be
-#' a negative value. See Examples.
 #'
 #' `adjust_rate` allows the rate, or multiple rates, in `x` to be adjusted in a
 #' number of ways, as detailed below. Note that for those methods which accept
@@ -24,6 +18,11 @@
 #' exception to this is the `"paired"` method, where each rate in `by` (i.e.
 #' rate in each oxygen column) is paired with the rate at the same position in
 #' `x` and used to adjust it.
+#'
+#' ***Note:*** take special care with the *sign* of the rate used for
+#' adjustments. In `respR` oxygen uptake rates are negative, as they represent a
+#' negative slope of oxygen against time. Background rates will normally also be
+#' a negative value, while any input of oxygen would be positive. See Examples.
 #'
 #' ***Methods***
 #'
@@ -126,22 +125,22 @@
 #' numeric value, numeric vector, or a `calc_rate` or `auto_rate` object
 #' containing single or multiple rates. The `by` input is the first background
 #' recording or rate value, and `by2` the second background recording or rate
-#' value. Again, these must all share the *same numeric time data or scale, and
-#' time and oxygen units with each other, and with the rates in `x`. The `x`
-#' rates do not necessarily need to be at intermediate timepoints to the
-#' `by/by2` times. these are used only to establish a *time~background rate*
-#' linear relationship, which can be extrapolated before or after the time
-#' values used to calculate it. The `by` and `by2` inputs can be a `data.frame`,
-#' `inspect` or `calc_rate.bg` object containing background time~oxygen data.
-#' Alternatively, the rate `x`, and background rates `by` and `by2` can be
-#' entered as values, in which case the associated timepoints at which these
-#' were determined (generally the midpoint of the time range over which the
-#' linear regression was fit) must be entered as `time_x`, `time_by`, and
-#' `time_by2` (these timepoints are otherwise extracted from the input objects).
-#' Multiple `x` rates with multiple `time_x` timepoints can be entered and
-#' adjusted, but only one linear background rate relationship applied, that is
-#' `by`, `by2`, `time_by`, and `time_by2` must be single numeric values in the
-#' correct units.
+#' value.
+#'
+#' While it is typical, the `x` rates do not necessarily need to be at
+#' intermediate timepoints to the `by/by2` times. these are used only to
+#' establish a *time~background rate* linear relationship, which can be
+#' extrapolated before or after the time values used to calculate it. The `by`
+#' and `by2` inputs can be a `data.frame`, `inspect` or `calc_rate.bg` object
+#' containing background time~oxygen data. Alternatively, the rate `x`, and
+#' background rates `by` and `by2` can be entered as values, in which case the
+#' associated timepoints at which these were determined (generally the midpoint
+#' of the time range over which the linear regression was fit) must be entered
+#' as `time_x`, `time_by`, and `time_by2` (these timepoints are otherwise
+#' automatically extracted from the input objects). Multiple `x` rates with
+#' multiple `time_x` timepoints can be entered and adjusted, but only one linear
+#' background rate relationship applied, that is `by`, `by2`, `time_by`, and
+#' `time_by2` must be single numeric values in the correct units.
 #'
 #' `"exponential"` - This is a dynamic adjustment, intended for experiments in
 #' which the background oxygen rate *changes* over the course of the experiment
@@ -152,6 +151,12 @@
 #' exponentially. This is identical to the `"linear"` method (see above for
 #' requirements), except the adjustment is calculated as an exponential
 #' relationship of the form - `lm(log(c(by, by2)) ~ c(time_by, time_by2))`.
+#'
+#' ## Output
+#'
+#' Output is a list object of class `adjust_rate` containing all inputs, input
+#' rates, adjustment values, adjustment method and model (if relevant), and the
+#' primary output of interest `$rate.adjusted`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -201,18 +206,14 @@
 #'   was calculated. Used only in dynamic adjustments (`"linear"` or
 #'   `"exponential"`). See Details.
 #'
-#' @return Output is a list object of class `adjust_rate` containing all inputs,
-#'   input rates, adjustment values, adjustment method and model (if relevant),
-#'   and the primary output of interest `$rate.adjusted`.
-#'
 #' @export
 #'
 #' @examples
-#' # Note that oxygen uptake rates are negative by default (since it represents a
-#' # decrease in dissolved oxygen and negative slope). Therefore, typically both
-#' # rate and background rate values are negative.
+#' # Note that oxygen uptake rates are negative in respR since they represent a
+#' # decrease in dissolved oxygen and negative slope. Typically both
+#' # specimen rate and background rate values are negative.
 #'
-#' # Simple background respiration correction to a single rate.
+#' # Simple background adjustment to a single rate
 #' # This is (-7.44) - (-0.04) = -7.40
 #' adjust_rate(x = -7.44, by = -0.04, method = "value")
 #'
@@ -236,6 +237,7 @@
 #'                    method = "paired")
 #' summary(out)
 #'
+#' \dontrun{
 #' # Dynamic linear adjustment
 #' # With a linear relationship between the 'by' and 'by2' rates,
 #' # at the midpoint time value the adjustment to 'x' should be -0.5
@@ -252,6 +254,38 @@
 #'                    time_by = 0, time_by2 = 1000,
 #'                    method = "linear")
 #' summary(out)
+#'
+#' # A complete workflow using objects instead of values.
+#'
+#' # Extract a single replicate from the middle of the zebrafish data
+#' # and calculate rates
+#' zeb_rate <- subset_data(zeb_intermittent.rd,
+#'                         from = 38300,
+#'                         to = 38720,
+#'                         by = "time") %>%
+#'   inspect() %>%
+#'   auto_rate()
+#'
+#' # Calculate background rate at start of experiment
+#' bg_start <- subset_data(zeb_intermittent.rd, 1, 4999, "time") %>%
+#'   inspect() %>%
+#'   calc_rate.bg() %>%
+#'   print()
+#'
+#' # Calculate background rate at end of experiment
+#' bg_end <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") %>%
+#'   inspect() %>%
+#'   calc_rate.bg() %>%
+#'   print()
+#'
+#' # Perform a dynamic linear adjustment
+#' adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
+#'             method = "linear") %>%
+#'   summary()
+#'
+#' # Note the adjustment values applied are somewhere between the
+#' # start and end background rate values
+#' }
 
 adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_by = NULL, time_by2 = NULL) {
 

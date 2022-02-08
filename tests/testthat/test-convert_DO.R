@@ -25,14 +25,14 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(round(convert_DO(10, "%Air", "umol/kg", S = 35, t = 25, P = 1.013253), 3), 20.619)
     expect_equal(round(convert_DO(10, "%Air", "ml/kg", S = 35, t = 25, P = 1.013253), 3), 0.504)
     expect_equal(round(convert_DO(10, "%Air", "%Air", S = 35, t = 25, P = 1.013253), 3), 10)
-    expect_equal(round(convert_DO(10, "%Air", "%O2", S = 35, t = 25, P = 1.013253), 3), 2.095)
+    expect_equal(round(convert_DO(10, "%Air", "%Oxy", S = 35, t = 25, P = 1.013253), 3), 2.095)
     expect_equal(round(convert_DO(10, "%Air", "hPa", S = 35, t = 25, P = 1.013253), 3), 20.854)
     expect_equal(round(convert_DO(10, "%Air", "kPa", S = 35, t = 25, P = 1.013253), 3), 2.085)
     expect_equal(round(convert_DO(10, "%Air", "mmHg", S = 35, t = 25, P = 1.013253), 3), 15.642)
     expect_equal(round(convert_DO(10, "%Air", "inHg", S = 35, t = 25, P = 1.013253), 3), 0.616)
     expect_equal(round(convert_DO(10, "%Air", "Torr", S = 35, t = 25, P = 1.013253), 3), 15.642)
   })
-  ## check that `from` arguments do not produce error
+  ## check that `from` inputs do not produce error
 
   ## regexp: regular expression to test against. If omitted, just asserts that
   ## code produces some output, messsage, warning or error. Alternatively, you can
@@ -50,7 +50,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(convert_DO(10, "umol/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "ml/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "%O2", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "%Oxy", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "Torr", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "hPa", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "kPa", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
@@ -70,7 +70,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_is(convert_DO(10, "umol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "ml/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "%O2", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "%Oxy", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "Torr", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "hPa", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "kPa", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
@@ -132,7 +132,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("convert_DO stops if % operator (old one) is used", {
     expect_error(convert_DO(10, "%", "mg/l", S = 35, t = 25, P = 1.013253),
-                 regexp = "verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%O2\" instead. See unit_args().")
+                 regexp = "verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args().")
   })
 
   test_that("convert_DO - stops if unit not recognised", {
@@ -142,7 +142,7 @@ capture.output({  ## stops printing outputs on assigning
 
   ## checks against respirometry::conv_o2 results
 
-  test_that("convert_DO: %Air and %O2 return same results as respirometry::conv_o2", {
+  test_that("convert_DO: %Air and %Oxy return same results as respirometry::conv_o2", {
 
     ## variables
     PercAir_in <- c(seq(100,50,-10))
@@ -158,10 +158,10 @@ capture.output({  ## stops printing outputs on assigning
                         P_in = P_in)
     grid[[5]] <- seq(1:nrow(grid))
 
-    # %O2
+    # %Oxy
     # respR results
     res_respR <- apply(grid, 1, function(x) {
-      suppressWarnings(convert_DO(x = x[1], from = "%O2", to = "mg/L", t = x[2], S = x[3], P = x[4]))
+      suppressWarnings(convert_DO(x = x[1], from = "%Oxy", to = "mg/L", t = x[2], S = x[3], P = x[4]))
     })
 
     # respirometry results

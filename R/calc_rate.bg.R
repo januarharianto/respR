@@ -4,10 +4,10 @@
 #' or control respirometry experiments, to allow for background adjustments of
 #' experimental data. It accepts background oxygen~time data as data frames and
 #' `inspect` objects. The data must be in the same time and oxygen units as the
-#' data used from which the rate to be adjusted was extracted. Multiple columns
-#' of background oxygen measurements can be examined as long as they share the
-#' same time data. The function returns rates for all columns, and also
-#' calculates a mean rate.
+#' data from which the rate which will be adjusted was extracted. Multiple
+#' columns of background oxygen measurements can be entered as long as they
+#' share the same time data. In this case the function returns rates for all
+#' columns, and also calculates a mean rate.
 #'
 #' The main difference between `calc_rate.bg` and `calc_rate`, is that this
 #' function allows a rate to be determined from the same region of multiple
@@ -31,17 +31,16 @@
 #'
 #' ## Background respiration vs background input of oxygen
 #'
-#' `calc_rate.bg` can easily quantify oxygen *input* rates as well as
-#' consumption rates. Most users will be interested in this function because
-#' background rates are typically consumption rates from microbial activity,
-#' that need to be quantified and their effects removed from experimental
-#' specimen rates. However, there are some experiments where oxygen input is of
-#' interest, for example open tank or open arena respirometry where the input of
-#' oxygen from the open water surface is of interest. There are also cases in
-#' closed respirometry where there may be an input of oxygen via leaks or
-#' production from photosynthesis, which need to be quantified. `calc_rate.bg`
-#' is capable of quantifying production rates as well as consumption, and these
-#' can be used for adjustments in [`adjust_rate()`].
+#' Most users will be using this function to account for background oxygen
+#' consumption rates from microbial activity that need to be quantified and
+#' their effects removed from experimental specimen rates. However, there are
+#' some experiments where oxygen *input* rates may be of interest, for example
+#' in open tank or open arena respirometry where the input of oxygen from the
+#' water surface has been calculated or quantified. There are also cases in
+#' closed respirometry where there may be an input of oxygen via leaks or oxygen
+#' production from photosynthesis which need to be quantified. `calc_rate.bg` is
+#' readily capable of quantifying production rates as well as consumption, and
+#' these can also be used for adjustments in [`adjust_rate()`].
 #'
 #' ## Output
 #'
@@ -50,7 +49,7 @@
 #' `$rate.bg`, which contains a rate for each oxygen column present in the input
 #' data. There is also `$rate.bg.mean` containing the mean of all background
 #' rates. Note, this is not used in `adjust_rate`, where the `method` input
-#' there determines how `$rate.bg` are applied, but can easily be extracted and
+#' there determines how `$rate.bg` is applied, but can easily be extracted and
 #' applied as an adjustment value if desired.
 #'
 #' ## Plot
@@ -58,10 +57,10 @@
 #' A plot is produced (provided `plot = TRUE`) showing all examined columns of
 #' oxygen against time (bottom blue axis) and row index (top red axis), with the
 #' rate and linear model coefficients. Single rates can be plotted by changing
-#' the `pos` argument either in the main function call, or by plotting the
-#' output, e.g. `plot(object, pos = 2)`. Console output messages can be
-#' suppressed using `quiet = TRUE`. If equations obscure the plot they can be
-#' suppressed using `legend = FALSE`.
+#' the `pos` input either in the main function call, or by plotting the output,
+#' e.g. `plot(object, pos = 2)`. Console output messages can be suppressed using
+#' `quiet = TRUE`. If equations obscure the plot they can be suppressed using
+#' `legend = FALSE`.
 #'
 #' ## S3 Generic Functions
 #'
@@ -78,26 +77,41 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
-#' @param x `data.frame` or `inspect` object. This is the data to process.
+#' @param x `data.frame` or `inspect` object. This is the data to extract
+#'   background rate(s) from.
 #' @param time integer. Defaults to 1. This specifies the column number of the
 #'   time data.
 #' @param oxygen integer value or vector. This specifies the column number(s) of
 #'   the oxygen data. Multiple columns of oxygen can be specified. If NULL,
-#'   function assumes oxygen data are in all columns of the data frame except
+#'   function assumes oxygen data are in *all* columns of the data frame except
 #'   the `time` column.
-#' @param plot logical. Defaults to TRUE. Defaults to TRUE. Plots the data. See
-#'   Details.
-#' @param ... Allows additional plotting controls to be passed, such as `pos`
-#'   and `quiet = TRUE`.
+#' @param plot logical. Defaults to TRUE. Plots the data. See Details.
+#' @param ... Allows additional plotting controls to be passed, such as `pos`,
+#'   `legend = FALSE`, and `quiet = TRUE`.
 #'
 #' @importFrom data.table data.table
 #'
-#' @return A list object of class `calc_bg.rate`.
 #' @export
 #'
 #' @examples
-#' data("urchins.rd")
-#' calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+#' # Inspect and calculate background rate from two columns
+#' inspect(urchins.rd, time = 1, oxygen = 18:19) %>%
+#'   calc_rate.bg()
+#'
+#' # Same example but enter as a data frame, save as an object and use
+#' # in adjust_rate
+#' bg_rate <- calc_rate.bg(urchins.rd,
+#'                         time = 1,
+#'                         oxygen = 18:19,
+#'                         plot = FALSE)
+#'
+#' inspect(urchins.rd, 1, 2, plot = FALSE) %>%
+#'   calc_rate(from = 10, to = 30, by = "time", plot = FALSE) %>%
+#'   adjust_rate(by = bg_rate)
+#'
+#' # Subset single column data first before calculating background rate
+#' subset_data(background_con.rd, from = 5000, to = 20000, by = "time") %>%
+#'   calc_rate.bg()
 
 calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
 

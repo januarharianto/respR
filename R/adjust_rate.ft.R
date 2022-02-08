@@ -3,16 +3,11 @@
 #'
 #' The `adjust_rate.ft` function adjusts an oxygen uptake or production rate
 #' (for example, as determined in [`calc_rate.ft()`]) for background oxygen use
-#' by microbial organisms, or other removal (or input) of oxygen during
+#' by microbial organisms, or other removal or input of oxygen during
 #' *flowthrough* respirometry experiments. The function accepts numeric values,
-#' as well as `calc_rate.ft` objects. Numeric `x` inputs should be rates
-#' calculated as an oxygen delta * flowrate. Units will be specified in
-#' [`convert_rate.ft()`] when rates are converted to specific output units.
-#'
-#' ***Note:*** take special care with the *sign* of the rate used for
-#' adjustments. In `respR` oxygen uptake rates are negative, as they represent a
-#' negative slope of oxygen against time. Background rates will normally also be
-#' a negative value. See Examples.
+#' as well as `calc_rate.ft` objects. Numeric `x` and `by` inputs should be
+#' rates calculated as the **oxygen delta * flowrate**. Units will be specified
+#' in [`convert_rate.ft()`] when rates are converted to specific output units.
 #'
 #' `adjust_rate.ft` allows the rate, or multiple rates, in `x` to be adjusted by
 #' the background rate in `by`. There are several ways of determining the
@@ -26,27 +21,30 @@
 #' [`inspect.ft()`] and [`calc_rate.ft()`] functions and then entered as the
 #' `by` input as either a value or the saved `calc_rate.ft` object. In this
 #' case, the `$rate` element of the `calc_rate.ft` object is used to adjust all
-#' rates in `x`. If there are multiple rates in `$rate`, the mean value is used.
-#' In this way, a single blank experiment can be applied to several specimen
-#' experiments. Alternatively, the rate from several blank experiments can be
-#' averaged to provide a single adjustment value, and this entered via `by` as a
-#' numeric value.
+#' rates in `x`. If there are multiple background rates in `$rate`, the mean
+#' value is used. In this way, a single blank experiment can be applied to
+#' several specimen experiments. Alternatively, the rate from several blank
+#' experiments can be averaged to provide a single adjustment value, and this
+#' entered via `by` as a numeric value.
 #'
 #' For experiments in which an empty "blank" experiment has been run alongside
 #' actual experiments in parallel, and background rate may increase or decrease
-#' over time (or there may be other variations such as in the inflow oxygen
+#' over time (or there may be other variations for example in the inflow oxygen
 #' concentrations), it is recommended you *NOT* use this function. Instead, the
 #' paired blank oxygen concentration data should be used in [`inspect.ft`] as
 #' the `in.oxy` input. In this way, the calculated specimen delta oxygen values
 #' take account of whatever background or other variation in oxygen is occurring
-#' in the blank chamber with respect to time.
-#'
-#' For all background experiments, it is important the same `flowrate` is used.
+#' in the blank chamber with respect to time. See examples in the vignettes on
+#' the website.
 #'
 #' For adjustments, all rates in `x`, whether entered as values or as a
 #' `calc_rate.ft` object, are adjusted by subtracting the mean of all background
-#' rates in `by`. Again, take special note of the *sign* of these rates. See
-#' Examples.
+#' rates in `by`.
+#'
+#' **Note:** take special care with the *sign* of the rate used for adjustments.
+#' In `respR` oxygen uptake rates are negative, as they represent a negative
+#' slope of oxygen against time. Background rates will normally also be a
+#' negative value. See Examples.
 #'
 #' ## Output
 #'
@@ -82,32 +80,57 @@
 #'
 #' @param x numeric. A single numeric value, numeric vector, or object of class
 #'   `calc_rate.ft`. This is the experimental rate value(s) to be adjusted.
-#' @param by numeric. A numeric value, numeric vector or object of class
+#' @param by numeric. A numeric value, numeric vector, or object of class
 #'   `calc_rate.ft`. This contains the background rate used to perform the
-#'   adjustment to `x`. If the vector or `calc_rate.ft` contains multiple rates,
-#'   they will be averaged to produce a single adjustment value.
-#'
-#' @return Output is a list object of class `adjust_rate.ft`
+#'   adjustment to `x`. If the vector or `calc_rate.ft` object contains multiple
+#'   rates, they will be averaged to produce a single adjustment value.
 #'
 #' @export
 #'
 #' @examples
-#' # Note that in respR oxygen uptake rates are negative since
-#' # they represents a negative slope of oxygen against time.
-#' # Therefore, typically both rate and background rate values
-#' # are negative.
+#' # Note that oxygen uptake rates are negative in respR
+#' # since they represent a decrease in dissolved oxygen
+#' # and negative slope. Typically both specimen rate and
+#' # background rate values are negative.
 #'
-#' # Simple background respiration correction to a single rate.
-#' # This is (-7.44) - (-0.04) = -7.40
-#' adjust_rate.ft(x = -7.44, by = -0.04)
+#' # ----------------------------------------------------
+#' # Simple background respiration correction to a single
+#' # rate.
 #'
-#' # Mean background respiration correction to a single rate.
-#' adjust_rate.ft(x = -7.44, by = c(-0.04, -0.05, -0.06))
+#' # Note, 'x' and 'by' should both be rates calculated as
+#' # the delta oxygen value, the difference between inflow
+#' # and outflow oxygen, multiplied by the flowrate.
 #'
-#' # Mean background respiration correction to multiple rates.
-#' out <- adjust_rate.ft(x = c(-7.44, -7.20, -7.67),
-#'                    by = c(-0.04, -0.05, -0.06))
+#' # This is (-0.98) - (-0.04) = -0.94
+#' adjust_rate.ft(x = -0.98, by = -0.04)
+#'
+#' # ----------------------------------------------------
+#' # Mean background adjustment to a single rate.
+#' adjust_rate.ft(x = -0.98, by = c(-0.04, -0.05, -0.06))
+#'
+#' # ----------------------------------------------------
+#' # Mean background adjustment to multiple rates.
+#' out <- adjust_rate.ft(x = c(-0.98, -0.87, -0.91),
+#'                       by = c(-0.04, -0.05, -0.06))
 #' summary(out)
+#'
+#' # ----------------------------------------------------
+#' # Adjustment using calc_rate.ft objects
+#' # Specimen rate
+#' sp_rate <- flowthrough_mult.rd %>%
+#'   inspect.ft(time = 1, out.oxy = 2, in.oxy = 6) %>%
+#'   calc_rate.ft(from = 30, flowrate = 0.1)
+#'
+#' # Background rate
+#' bg_rate <- flowthrough_mult.rd %>%
+#'   inspect.ft(time = 1, out.oxy = 5, in.oxy = 9) %>%
+#'   calc_rate.ft(flowrate = 0.1)
+#'
+#' # Perform adjustment
+#' adj_rate <- adjust_rate.ft(sp_rate, by = bg_rate)
+#' print(adj_rate)
+#' summary(adj_rate)
+#' # ----------------------------------------------------
 
 adjust_rate.ft <- function(x, by) {
 
@@ -135,7 +158,7 @@ adjust_rate.ft <- function(x, by) {
 
   # Make single mean value
   if(length(adjustment) > 1) {
-    warning("adjust_rate.ft: the 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
+    message("adjust_rate.ft: the 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
     adjustment <- mean(adjustment)
   }
 

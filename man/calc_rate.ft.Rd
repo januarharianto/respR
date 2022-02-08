@@ -44,7 +44,8 @@ the specified width in the units specified in \code{by}. For use with
 
 \item{plot}{logical. Defaults to TRUE. Plots the data.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{rate.rev = FALSE}, and \code{pos}.}
+\item{...}{Allows additional plotting controls to be passed such as \code{pos},
+\code{quiet = TRUE}, \code{legend = FALSE}, and \code{rate.rev = FALSE}.}
 }
 \description{
 Calculates rate of oxygen uptake or production in flowthrough respirometry
@@ -56,12 +57,12 @@ returned from different regions of continuous data, or a rolling rate of a
 specific window size performed across the whole dataset.
 }
 \details{
-The function calculates rates by averaging the delta oxygen values across the
-dataset, or from specified subsets of the data, and then using the \code{flowrate}
-to convert these to rates. There are no units involved in \code{calc_rate.ft}.
-This is a deliberate decision. The units of oxygen concentration and flowrate
-will be specified later in \code{\link[=convert_rate.ft]{convert_rate.ft()}} when rates are converted to
-specific output units.
+\code{calc_rate.ft} calculates rates by averaging delta oxygen values across the
+whole dataset, or from specified subsets of the data. The \code{flowrate} is then
+used to convert these average delta values to rates. There are no units
+involved in \code{calc_rate.ft}. This is a deliberate decision. The units of
+oxygen concentration and flowrate will be specified later in
+\code{\link[=convert_rate.ft]{convert_rate.ft()}} when rates are converted to specific output units.
 
 For continuous data recordings, it is recommended a \code{data.frame} containing
 the data be prepared via \code{\link[=inspect.ft]{inspect.ft()}}, and entered as the \code{x} input.
@@ -75,8 +76,8 @@ and \code{by} inputs are unnecessary and are ignored.
 \subsection{Specifying regions}{
 
 For calculating rates over specific regions of the data, the \code{from} and \code{to}
-inputs in the \code{by} units of \code{"time"} (the default) or \code{"row"}) can be used
-for \code{inspect.ft()} inputs. All delta oxygen values within this region are
+inputs in the \code{by} units of \code{"time"} (the default) or \code{"row"} can be used for
+\code{\link[=inspect.ft]{inspect.ft()}} inputs. All delta oxygen values within this region are
 converted to rates, and averaged to produce a overall rate for the region
 (\verb{$rate} in the output). Multiple regions can be examined within the same
 dataset by entering \code{from} and \code{to} as vectors of paired values to specify
@@ -95,7 +96,7 @@ entire dataset, and returned as a vector of rate values in \verb{$rate}.
 In order to convert delta oxygen values to a oxygen uptake or production
 rate, the \code{flowrate} input is required. This must be in a volume (L, ml, or
 ul) per unit time (s,m,h,d), for example in \code{L/s}. The units are not required
-to be entered in here; you will specify them in \code{\link[=convert_rate.ft]{convert_rate.ft()}} to
+to be entered here; they will be specified in \verb{[convert_rate.ft()}] to
 convert rates to specific units of oxygen uptake or production.
 }
 
@@ -107,7 +108,7 @@ oxygen (if present, top plot), oxygen delta values (middle or top plot) with
 the region specified via the \code{from} and \code{to} inputs highlighted in orange,
 and a close-up of this region with calculated rate value (bottom plot). If
 multiple rates have been calculated, by default the first is plotted. Others
-can be plotted by changing the \code{pos} argument, e.g. \code{plot(object, pos = 2)}.
+can be plotted by changing the \code{pos} input, e.g. \code{plot(object, pos = 2)}.
 
 \emph{\strong{Important:}} Since \code{respR} is primarily used to examine oxygen
 consumption, the delta oxygen and rate plots are by default plotted on a
@@ -115,7 +116,7 @@ reverse y-axis. In \code{respR} oxygen uptake rates are negative since they
 represent a negative slope of oxygen against time. In these plots the axis is
 reversed so that higher uptake rates (i.e. more negative rates) will be
 higher on these plots. If you are interested instead in oxygen production
-rates, which are positive, the \code{rate.rev = FALSE} argument can be passed in
+rates, which are positive, the \code{rate.rev = FALSE} input can be passed in
 either the \code{inspect.ft} call, or when using \code{plot()} on the output object. In
 this case, the delta and rate values will be plotted numerically, with higher
 oxygen \emph{production} rates higher on the plot.
@@ -128,17 +129,17 @@ If the legend or labels obscure part of the plot, they can be suppressed via
 the output object. Console output messages can be suppressed using \code{quiet = TRUE}. Console output messages can be suppressed using \code{quiet = TRUE}. If
 axis labels or other text boxes obscure parts of the plot they can be
 suppressed using \code{legend = FALSE}. If axis labels (particularly y-axis) are
-difficult to read, \code{las = 2} can be passed to make axis labels horizontal. In
-addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and
-\code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used
-to adjust plot margins.
+difficult to read, \code{las = 2} can be passed to make axis labels horizontal,
+and\code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai}
+(inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot
+margins.
 }
 
 \subsection{Background control or "blank" experiments}{
 
 \code{calc_rate.ft} can also be used to determine background rates from empty
-control experiments in the same way as specimen rates are determined. The
-saved objects can be used as the \code{by} input in \code{\link{adjust_rate.ft}}. For
+control experiments in the same way specimen rates are determined. The saved
+objects can be used as the \code{by} input in \code{\link[=adjust_rate.ft]{adjust_rate.ft()}}. For
 experiments in which the specimen data is to be corrected by a
 concurrently-run control experiment, best option is to use this as the
 \code{in.oxy} input in \code{\link[=inspect.ft]{inspect.ft()}}. See help file for that function, or the
@@ -171,23 +172,54 @@ regression coefficients alongside other metadata. These \emph{should not be
 confused} with those in other functions such as \code{calc_rate} where slopes
 represent rates and coefficients such as a high r-squared are important.
 Here, they represent the stability of the data region, in that the closer the
-slope is to zero, and lower the r-squared, the less the delta oxygen values
-in that region vary. They are included to enable possible future
-functionality where stable regions may be automatically identified.
+slope is to zero the less the delta oxygen values, and therefore rates, in
+that region vary. These are included to enable possible future functionality
+where stable regions may be automatically identified.
 }
 }
 \examples{
-# Single numeric value
+# Single numeric delta oxygen value. The delta oxygen is the difference
+# between inflow and outflow oxygen.
+calc_rate.ft(-0.8, flowrate = 1.6)
 
+# Numeric vector of multiple delta oxygen values
+ft_rates <- calc_rate.ft(c(-0.8, -0.88, -0.9, -0.76), flowrate = 1.6)
+print(ft_rates)
+summary(ft_rates)
 
-# Numeric vector of two values
+# Calculate rate from entire dataset
+inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) \%>\%
+  calc_rate.ft(flowrate = 2.34)
 
+# Calculate rate from a region based on time
+inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) \%>\%
+  calc_rate.ft(flowrate = 2.34, from = 200, to = 400, by = "time")
 
-# inspect.ft object
-#single delta
+# Calculate rate from multiple regions
+inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) \%>\%
+  calc_rate.ft(flowrate = 2.34,
+               from = c(200, 400, 600),
+               to = c(300, 500, 700),
+               by = "row") \%>\%
+  summary()
 
-#multiple from/to
+# Calculate rate from existing delta oxygen values
+inspect.ft(flowthrough.rd, time = 1, delta.oxy = 4) \%>\%
+  calc_rate.ft(flowrate = 2.34, from = 200, to = 400, by = "time")
 
-#width
+# Calculate rate from a background recording
+inspect.ft(flowthrough_mult.rd,
+           time = 1,
+           out.oxy = 5,
+           in.oxy = 9) \%>\%
+  calc_rate.ft(flowrate = 0.1, from = 20, to = 40, by = "time") \%>\%
+  summary()
 
+# Calculate a rolling rate
+inspect.ft(flowthrough_mult.rd,
+           time = 1,
+           out.oxy = 2,
+           in.oxy = 6) \%>\%
+  calc_rate.ft(flowrate = 0.1, width = 500, by = "row") \%>\%
+  summary()
 }

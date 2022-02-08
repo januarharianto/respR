@@ -2,9 +2,9 @@
 #'
 #' `inspect.ft` is a data exploration and preparation function that visualises
 #' flowthrough respirometry data, checks it for common issues, and prepares it
-#' for use in later functions in `respR`, such as [calc_rate.ft()].
+#' for use in later functions in `respR`, such as [`calc_rate.ft()`].
 #'
-#' `inspect.ft` is intended to be specific to *flowthrough respirometry* data.
+#' `inspect.ft` is intended to be specific to *flowthrough* respirometry data.
 #' In flowthrough respirometry (also known as 'open flow' or 'continuous flow'
 #' respirometry) rather than calculating a rate from a changing oxygen
 #' concentration recording in a sealed chamber, instead the difference (i.e.
@@ -13,7 +13,7 @@
 #' an oxygen consumption or production rate, typically after it has reached a
 #' steady state. Therefore, in general, regions of stable oxygen delta values
 #' (difference between outflow and inflow oxygen) are of interest. `inspect.ft`
-#' visualises and prepares the data for use in [calc_rate.ft()]. By specifying
+#' visualises and prepares the data for use in [`calc_rate.ft()`]. By specifying
 #' data types in this function and saving the output, they do not need to be
 #' specified in later functions.
 #'
@@ -26,25 +26,26 @@
 #' inflow concentrations, or the outflow concentration corrected by a background
 #' recording from a 'blank' or empty chamber.
 #'
-#' *out.oxy input option*: If an `out.oxy` column has been specified, in order
-#' to calculate the oxygen delta (and therefore a rate in [calc_rate.ft()])
+#' **out.oxy input option**: If an `out.oxy` column has been specified, in order
+#' to calculate the oxygen delta (and therefore a rate in [`calc_rate.ft()`])
 #' there must also be an inflow oxygen concentration input (i.e. the inhalent or
 #' 'upstream' concentration). This will generally be a column of paired `in.oxy`
 #' concentrations, in which case the paired values of `out.oxy` and `in.oxy` are
-#' used to calculate the oxygen `delta.oxy`, which is saved in the output, and
-#' used to determine a rate in [calc_rate.ft()]. Alternatively, if the inflow
-#' oxygen concentration is a known, generally unvarying concentration (such as
-#' fully air-saturated water from a header tank) this can be entered as a single
-#' value via `in.oxy.value` and this is used to calculate the `delta.oxy`.
+#' used to calculate the oxygen `delta.oxy`, which is saved in the output and
+#' used to determine a rate in [`calc_rate.ft()`]. Alternatively, if the inflow
+#' oxygen concentration is a known, generally unvarying value (such as fully
+#' air-saturated water from a header tank) this can be entered as a single value
+#' via `in.oxy.value` and this is used to calculate the `delta.oxy`.
 #'
-#' *delta.oxy input option*: If delta oxygen values have already been
+#' **delta.oxy input option**: If delta oxygen values have already been
 #' calculated, these can be entered via the `delta.oxy` input, and these are
 #' prepared and saved for rate calculations in `calc_rate.ft`.
 #'
 #' Given an input data frame `x`, the function scans the columns specified via
 #' the `time`, `out.oxy`, `in.oxy` or `delta.oxy` inputs. If no columns are
-#' specified, by default the functions assumes the first column is `time`, and
-#' all others are `delta.oxy` oxygen data.
+#' specified, by default the function assumes the first column is `time`, and
+#' all others are `delta.oxy` oxygen data.  However, best practice is to use the
+#' inputs to specify particular columns.
 #'
 #' ## Check for numeric data
 #'
@@ -75,8 +76,8 @@
 #' - a single `out.oxy` column with either a paired `in.oxy` column or
 #' `in.oxy.value`: a two panel plot. The top plot is both outflow (green points)
 #' and inflow (turquoise points) oxygen. The bottom plot is the oxygen delta
-#' (black points) between outflow and inflow oxygen, essentially the oxygen
-#' uptake or production rate.
+#' (black points) between outflow and inflow oxygen, essentially a unitless
+#' oxygen uptake or production rate.
 #'
 #' - a single `delta.oxy` column: a one panel plot of oxygen delta values.
 #'
@@ -98,10 +99,10 @@
 #' slope of oxygen against time. In these plots the axis is reversed so that
 #' higher uptake rates (i.e. more negative) will be higher on these plots. If
 #' you are interested instead in oxygen production rates, which are positive,
-#' the `rate.rev = FALSE` argument can be passed in either the `inspect.ft`
-#' call, or when using `plot()` on the output object. In this case, the delta
-#' and rate values will be plotted numerically, and higher oxygen *production*
-#' rates will be higher on the plot.
+#' the `rate.rev = FALSE` input can be passed in either the `inspect.ft` call,
+#' or when using `plot()` on the output object. In this case, the delta and rate
+#' values will be plotted numerically, and higher oxygen *production* rates will
+#' be higher on the plot.
 #'
 #' ## Plot an additional data source
 #'
@@ -135,7 +136,7 @@
 #' inspection is chiefly intended to be exploratory functionality to provide a
 #' quick overview of larger datasets. While the output will contain all data
 #' columns in `$dataframe` and `$data`, subsequent functions such as
-#' [calc_rate.ft()] will use only the first `delta.oxy` column for calculating
+#' [`calc_rate.ft()`] will use only the first `delta.oxy` column for calculating
 #' rates. Best practice is to inspect and assign each individual experiment or
 #' column pair as separate `inspect.ft` objects. See Examples.
 #'
@@ -145,8 +146,8 @@
 #' A single `in.oxy.value` in the same units as `out.oxy` can also be specified.
 #' There can also be multiple `in.oxy` columns, in which case it is assumed each
 #' `out.oxy` column is paired with each `in.oxy` at the same position, and used
-#' to calculate the oxygen `delta.oxy`. Therefore, `out.oxy` and `in.oxy` must
-#' have equal numbers of columns.
+#' to calculate the oxygen `delta.oxy`. In this case, `out.oxy` and `in.oxy`
+#' must have equal numbers of columns.
 #'
 #' ## Failed Checks
 #'
@@ -231,16 +232,16 @@
 #' @param time integer. Defaults to 1. Specifies the column number of the time
 #'   data.
 #' @param out.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
-#'   of outflow O2 data.
+#'   of outflow oxygen data.
 #' @param in.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
-#'   of inflow O2 data.
+#'   of inflow oxygen data.
 #' @param in.oxy.value numeric value. Defaults to `NULL`. If there is no
 #'   continuous `in.oxy` data, this specifies a fixed value of oxygen
 #'   concentration for inflowing water in same units as `out.oxy`, and is used
 #'   with `out.oxy` to calculate a `delta.oxy`.
 #' @param delta.oxy integer(s). Defaults to all non-time columns if no other
-#'   inputs given. Specifies the column number(s) of delta O2 data, for when the
-#'   user has already calculated the difference between outflow and inflow
+#'   inputs given. Specifies the column number(s) of delta oxygen data, for when
+#'   the user has already calculated the difference between outflow and inflow
 #'   oxygen (should be negative values for oxygen uptake). If this is used,
 #'   `out.oxy` and `in.oxy` should be NULL.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
@@ -255,29 +256,28 @@
 #'
 #' @examples
 #'
-#' # inspect outflow and inflow O2 data
+#' # Inspect outflow and inflow oxygen data
 #' x <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
 #'                 in.oxy = 3)
 #' print(x)
 #' plot(x)
 #'
-#' # inspect outflow O2 data with inflow as a known value
+#' # Inspect outflow oxygen data with inflow oxygen as a known value in
+#' # the same units
 #' x <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
-#'                 in.oxy.value = 8.9)
-#' print(x)
-#' plot(x)
+#'                 in.oxy.value = 8.90)
 #'
-#' # inspect already calculated delta O2 data
+#' # Inspect already calculated delta oxygen data
 #' inspect.ft(flowthrough.rd, time = 1, delta.oxy = 4)
 #'
 #' # inspect multiple columns for a quick overview
-#' inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 8:10)
+#' inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 10:12)
 #'
 #' # Inspect outflow and use a blank control chamber as background
 #' # correction
 #' #
 #' # This experiment has increasing background respiration over time.
-#' # Inspecting outflow O2 with inflow header tank concentrations
+#' # Inspecting outflow oxygen with inflow header tank concentrations
 #' # suggests specimen rates (bottom delta.oxy plot) are increasing.
 #' inspect.ft(flowthrough_sim.rd, time = 1,
 #'            out.oxy = 2, in.oxy = 4)
@@ -287,6 +287,9 @@
 #' # when background is taken into account.
 #' inspect.ft(flowthrough_sim.rd, time = 1,
 #'            out.oxy = 2, in.oxy = 3)
+#'
+#' # Inspect and plot an additional data type
+#'
 
 inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
                        in.oxy.value = NULL, delta.oxy = NULL, plot = TRUE,
@@ -807,13 +810,13 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                       bg = "gray90",
                       cex = 0.6)
     if(legend) legend("right",
-                      legend = c("Inflow O2", "Outflow O2"),
+                      legend = c("Inflow", "Outflow"),
                       pch = pch_def,
                       col = c(ftcol_in, ftcol_out),
                       bg = "white",
                       cex = 0.8)
 
-    mtext("Outflow ~ Inflow O2",
+    mtext("Outflow ~ Inflow Oxygen",
           outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
     # Delta plot --------------------------------------------------------------
@@ -848,7 +851,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                       bg = "gray90",
                       cex = 0.6)
 
-    mtext("Delta O2",
+    mtext("Delta Oxygen",
           outer = FALSE, cex = 1.2, line = 1.2, font = 2)
     mtext(glue::glue("(i.e. Unitless Rate)"),
           outer = FALSE, cex = 1, line = 0.3, font = 2)

@@ -17,8 +17,7 @@ validate_auto_rate(df, by, method)
 a data.frame object of the original data
 }
 \description{
-This is an internal function for \code{auto_rate()}. Used to validate input
-arguments.
+This is an internal function for \code{auto_rate()}. Used to validate inputs
 }
 \examples{
 # this will pass:
@@ -31,7 +30,7 @@ validate_auto_rate(df, by = "row", method = "max")
 # df <- c(1:40)
 # validate_auto_rate(df, by = "row", method = "max")
 
-# this will fail as `by` argument isn't recognised:
+# this will fail as `by` input isn't recognised:
 # set.seed(88)
 # df <- c(1:40)
 # validate_auto_rate(df, by = "rat", method = "max")
@@ -41,7 +40,7 @@ validate_auto_rate(df, by = "row", method = "max")
 # df <- c(1:40)
 # validate_auto_rate(df, by = "row", method = "max")
 
-# this will fail as `method` argument isn't recognised:
+# this will fail as `method` input isn't recognised:
 # set.seed(88)
 # df <- c(1:40)
 # validate_auto_rate(df, by = "row", method = "moo")

@@ -2,8 +2,7 @@
 % Please edit documentation in R/adjust_rate.R
 \name{adjust_rate}
 \alias{adjust_rate}
-\title{Adjustment function to account for background respiration or oxygen flux in
-respirometry experiments.}
+\title{Adjust rates to account for background respiration or oxygen flux.}
 \usage{
 adjust_rate(
   x,
@@ -52,26 +51,16 @@ was calculated. Used only in dynamic adjustments (\code{"linear"} or
 was calculated. Used only in dynamic adjustments (\code{"linear"} or
 \code{"exponential"}). See Details.}
 }
-\value{
-Output is a list object of class \code{adjust_rate} containing all inputs,
-input rates, adjustment values, adjustment method and model (if relevant),
-and the primary output of interest \verb{$rate.adjusted}.
-}
 \description{
 The \code{adjust_rate} function adjusts an oxygen uptake or production rate (for
 example, as determined in \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}}) for background
-oxygen use by microbial organisms, or other removal (or input) of oxygen
+oxygen use by microbial organisms, or for other removal or input of oxygen
 during a respirometry experiment. The function accepts numeric values, as
 well as regular \code{respR} objects, and data frames. See \code{\link[=calc_rate.bg]{calc_rate.bg()}} for
 determining background rates, which is the recommended way of passing
 background rates to \code{adjust_rate}.
 }
 \details{
-\emph{\strong{Note:}} take special care with the \emph{sign} of the rate used for
-adjustments. In \code{respR} oxygen uptake rates are negative, as they represent a
-negative slope of oxygen against time. Background rates will normally also be
-a negative value. See Examples.
-
 \code{adjust_rate} allows the rate, or multiple rates, in \code{x} to be adjusted in a
 number of ways, as detailed below. Note that for those methods which accept
 them, \code{by} and \code{by2} inputs of class \code{calc_rate.bg}, \code{data.frame} or
@@ -82,6 +71,11 @@ all rates calculated for all oxygen columns is used to perform adjustments
 exception to this is the \code{"paired"} method, where each rate in \code{by} (i.e.
 rate in each oxygen column) is paired with the rate at the same position in
 \code{x} and used to adjust it.
+
+\emph{\strong{Note:}} take special care with the \emph{sign} of the rate used for
+adjustments. In \code{respR} oxygen uptake rates are negative, as they represent a
+negative slope of oxygen against time. Background rates will normally also be
+a negative value, while any input of oxygen would be positive. See Examples.
 
 \emph{\strong{Methods}}
 
@@ -184,22 +178,22 @@ applying it to the \code{by~by2} linear relationship. The \code{x} input can be 
 numeric value, numeric vector, or a \code{calc_rate} or \code{auto_rate} object
 containing single or multiple rates. The \code{by} input is the first background
 recording or rate value, and \code{by2} the second background recording or rate
-value. Again, these must all share the *same numeric time data or scale, and
-time and oxygen units with each other, and with the rates in \code{x}. The \code{x}
-rates do not necessarily need to be at intermediate timepoints to the
-\code{by/by2} times. these are used only to establish a \emph{time~background rate}
-linear relationship, which can be extrapolated before or after the time
-values used to calculate it. The \code{by} and \code{by2} inputs can be a \code{data.frame},
-\code{inspect} or \code{calc_rate.bg} object containing background time~oxygen data.
-Alternatively, the rate \code{x}, and background rates \code{by} and \code{by2} can be
-entered as values, in which case the associated timepoints at which these
-were determined (generally the midpoint of the time range over which the
-linear regression was fit) must be entered as \code{time_x}, \code{time_by}, and
-\code{time_by2} (these timepoints are otherwise extracted from the input objects).
-Multiple \code{x} rates with multiple \code{time_x} timepoints can be entered and
-adjusted, but only one linear background rate relationship applied, that is
-\code{by}, \code{by2}, \code{time_by}, and \code{time_by2} must be single numeric values in the
-correct units.
+value.
+
+While it is typical, the \code{x} rates do not necessarily need to be at
+intermediate timepoints to the \code{by/by2} times. these are used only to
+establish a \emph{time~background rate} linear relationship, which can be
+extrapolated before or after the time values used to calculate it. The \code{by}
+and \code{by2} inputs can be a \code{data.frame}, \code{inspect} or \code{calc_rate.bg} object
+containing background time~oxygen data. Alternatively, the rate \code{x}, and
+background rates \code{by} and \code{by2} can be entered as values, in which case the
+associated timepoints at which these were determined (generally the midpoint
+of the time range over which the linear regression was fit) must be entered
+as \code{time_x}, \code{time_by}, and \code{time_by2} (these timepoints are otherwise
+automatically extracted from the input objects). Multiple \code{x} rates with
+multiple \code{time_x} timepoints can be entered and adjusted, but only one linear
+background rate relationship applied, that is \code{by}, \code{by2}, \code{time_by}, and
+\code{time_by2} must be single numeric values in the correct units.
 
 \code{"exponential"} - This is a dynamic adjustment, intended for experiments in
 which the background oxygen rate \emph{changes} over the course of the experiment
@@ -210,6 +204,13 @@ the end after it is taken out, and the background rate is found to increase
 exponentially. This is identical to the \code{"linear"} method (see above for
 requirements), except the adjustment is calculated as an exponential
 relationship of the form - \code{lm(log(c(by, by2)) ~ c(time_by, time_by2))}.
+\subsection{Output}{
+
+Output is a list object of class \code{adjust_rate} containing all inputs, input
+rates, adjustment values, adjustment method and model (if relevant), and the
+primary output of interest \verb{$rate.adjusted}.
+}
+
 \subsection{S3 Generic Functions}{
 
 Saved output objects can be used in the generic S3 functions \code{print()},
@@ -227,11 +228,11 @@ separate value by passing \code{export = TRUE}.
 }
 }
 \examples{
-# Note that oxygen uptake rates are negative by default (since it represents a
-# decrease in dissolved oxygen and negative slope). Therefore, typically both
-# rate and background rate values are negative.
+# Note that oxygen uptake rates are negative in respR since they represent a
+# decrease in dissolved oxygen and negative slope. Typically both
+# specimen rate and background rate values are negative.
 
-# Simple background respiration correction to a single rate.
+# Simple background adjustment to a single rate
 # This is (-7.44) - (-0.04) = -7.40
 adjust_rate(x = -7.44, by = -0.04, method = "value")
 
@@ -255,6 +256,7 @@ out <- adjust_rate(x = c(-7.44, -7.20, -7.67),
                    method = "paired")
 summary(out)
 
+\dontrun{
 # Dynamic linear adjustment
 # With a linear relationship between the 'by' and 'by2' rates,
 # at the midpoint time value the adjustment to 'x' should be -0.5
@@ -271,4 +273,36 @@ out <- adjust_rate(x = c(-10, -11, -12),
                    time_by = 0, time_by2 = 1000,
                    method = "linear")
 summary(out)
+
+# A complete workflow using objects instead of values.
+
+# Extract a single replicate from the middle of the zebrafish data
+# and calculate rates
+zeb_rate <- subset_data(zeb_intermittent.rd,
+                        from = 38300,
+                        to = 38720,
+                        by = "time") \%>\%
+  inspect() \%>\%
+  auto_rate()
+
+# Calculate background rate at start of experiment
+bg_start <- subset_data(zeb_intermittent.rd, 1, 4999, "time") \%>\%
+  inspect() \%>\%
+  calc_rate.bg() \%>\%
+  print()
+
+# Calculate background rate at end of experiment
+bg_end <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") \%>\%
+  inspect() \%>\%
+  calc_rate.bg() \%>\%
+  print()
+
+# Perform a dynamic linear adjustment
+adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
+            method = "linear") \%>\%
+  summary()
+
+# Note the adjustment values applied are somewhere between the
+# start and end background rate values
+}
 }

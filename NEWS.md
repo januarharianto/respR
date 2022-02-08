@@ -17,7 +17,7 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 Quick fixes and changes.
 
 - **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
-- **FIXED**: Issue #66: `auto_rate()` included references to the method argument called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
+- **FIXED**: Issue #66: `auto_rate()` included references to the method input called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
 - **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
 - **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
 
@@ -36,7 +36,7 @@ Lots of updates! First, we have a new function, `calc_pcrit()`, which we will us
 - NEW: `calc_pcrit()` is a **new function** that will be developed in parallel to the current `pcrit()` function. In the future we intend to use `calc_pcrit()` to incorporate new methods. 
 - NEW: `import_file()` supports even more files! Added more parsers for Vernier, PRESENS and Loligo systems.
 - NEW: `format_time()` can now calculate time elapsed even if date information is not provided (e.g. "HMS"-only data). 
-- NEW: The `by` argument in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `verify_by()` which uses brute force matching to recognise different ways of writing the same text.
+- NEW: The `by` input in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `verify_by()` which uses brute force matching to recognise different ways of writing the same text.
 
 ### Fixes
 
@@ -47,12 +47,12 @@ Lots of updates! First, we have a new function, `calc_pcrit()`, which we will us
     - FIX: Positive rates were not reflected accurately in plots.
     - FIX: Plot of rolling regression was not sensitive for smaller changes in datasets. The rolling window has been reduced to 10% of the length of the dataset to address this.
 - **`convert_rate()`**:
-    - FIX: Now stops if a `"mass"` argument is provided but `"output.unit"` is not a mass-specific unit. 
+    - FIX: Now stops if a `"mass"` input is provided but `"output.unit"` is not a mass-specific unit. 
     - FIX: Properly accepts objects of class `calc_rate.bg`.
     - FIX: Optimised the syntax for the recognition of `output.unit` in the code.
 - **`calc_rate.ft()`**:
     - FIX: Critical error in returned rates sometimes outputting values with the wrong sign.
-    - FIX: Optimised code - the `"time"` argument has been removed as it was not used.
+    - FIX: Optimised code - the `"time"` input has been removed as it was not used.
     - FIX: Properly accepts objects of class `inspect`.
 - **`pcrit()`**:
     - FIX: Properly accepts objects of class `inspect` and `inspect_data`. Please note that the `inspect_data()` function is deprecated and will be removed in the near future.
@@ -131,7 +131,7 @@ We are getting close to a 0.1 release, which will be ready for CRAN.
 - FIX: Major updates to documentation.
 - NEW: `subset_data()` now contains examples.
 - NEW: Flowthrough vignette is now integrated into website. 
-- FIX: `inspect_data()` plot output was plotting only columns 1 and 2 by default, even when other columns are selected in arguments.
+- FIX: `inspect_data()` plot output was plotting only columns 1 and 2 by default, even when other columns are selected in inputs.
 - FIX: `convert_rate()` was not accepting objects of class `calc_rate.ft`.
 
 # Version 0.0.1

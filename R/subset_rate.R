@@ -21,7 +21,7 @@
 #'  *Note:* when choosing a `method`, keep in mind that to remain mathematically
 #'  consistent, `respR` outputs oxygen consumption (i.e. respiration) rates as
 #'  negative values. This is particularly important in the difference between
-#'  `highest/lowest` and `min/max` methods. See Details.
+#'  `highest/lowest` and `minimum/maximum` methods. See Details.
 #'
 #'  When a `$rate` result is omitted by the subsetting criteria, all associated
 #'  data in `$summary` (i.e. the associated row) is removed. Summary results are
@@ -32,13 +32,13 @@
 #'  removal of duplicate results. Due to the way it works, the `auto_rate`
 #'  kernel-density analysis occasionally identifies linear regions that are
 #'  identical, and these appear as identical rows in the output `$summary`,
-#'  except for different `$density` values. For all methods, lower ranked
-#'  regressions are removed and only unique regressions are retained. To apply
-#'  only this duplicate removal method, use the default `method = NULL` or
-#'  `method = "unique"`.
+#'  except for different `$density` values. The lower ranked duplicates are
+#'  removed and only unique regressions are retained. To apply only this
+#'  duplicate removal method, use the default `method = NULL` or `method =
+#'  "unique"`.
 #'
 #'  Generally speaking, for most large datasets we recommend using
-#'  [subset_data()] and then running `auto_rate` on the subset(s) of the data
+#'  [`subset_data()`] and then running `auto_rate` on the subset(s) of the data
 #'  you are interested in, rather than run it on the whole dataset and relying
 #'  on `subset_rate` to filter it afterwards.
 #'
@@ -173,7 +173,7 @@
 #'  used in combination with the `auto_rate` `linear` results, unless you have a
 #'  specific reason for doing so.
 #'
-#'  The `plot_ar()` function is very useful for plotting `auto_rate` objects,
+#'  The [`plot_ar()`] function is very useful for plotting `auto_rate` objects,
 #'  and the results of `subset_rate` operations upon them, to visualise where
 #'  regression results in the summary table occur in relation to the original
 #'  dataset. See Examples.
@@ -777,7 +777,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 #     message("Over 20 results found. Plotting first 20 only...")
 #   }
 #   par(mar = c(0.1,0.1,0.1,0.1))
-#   if(n != 0) for(i in 1:n) capture.output(plot(output, pos = i, choose =1, axes = FALSE))
+#   if(n != 0) for(i in 1:n) capture.output(plot(output, pos = i, panel =1, axes = FALSE))
 #   on.exit(par(parorig)) # revert par settings to original
 # }
 

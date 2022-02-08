@@ -15,18 +15,18 @@ flowthrough_sim.rd
 }
 \description{
 A simulated dataset for testing and demonstrating flowthrough respirometry
-analyses and background adjustment when the background respiration is
-increases over the course of the experiment. Contains one
-column of numeric time data (num.time), one column of specimen outflow oxygen
-concentrations (oxy.out.spec), one column of control or "blank" chamber
-outflow oxygen concentrations (oxy.out.blank), and one column of inflow
-oxygen concentrations as recorded from a shared header tank (oxy.header)
+analyses and background adjustment when the background respiration rate
+increases over the course of the experiment. Contains one column of numeric
+time data (\verb{$num.time}), one column of specimen outflow oxygen concentrations
+(\verb{$oxy.out.spec}), one column of control or "blank" chamber outflow oxygen
+concentrations (\verb{$oxy.out.blank}), and one column of inflow oxygen
+concentrations as recorded from a shared header tank (\verb{$oxy.header})
 supplying both chambers.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{seconds}
 }
 }
 \author{

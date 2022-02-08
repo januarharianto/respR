@@ -54,10 +54,10 @@
 #' oxygen against time. In these plots the axis is reversed so that higher
 #' uptake rates (i.e. more negative) will be higher on these plots. If you are
 #' interested instead in oxygen production rates, which are positive, the
-#' `rate.rev = FALSE` argument can be passed in either the `inspect` call, or
-#' when using `plot()` on the output object. In this case, the rate values will
-#' be plotted numerically, and higher oxygen *production* rates will be higher
-#' on the plot.
+#' `rate.rev = FALSE` input can be passed in either the `inspect` call, or when
+#' using `plot()` on the output object. In this case, the rate values will be
+#' plotted numerically, and higher oxygen *production* rates will be higher on
+#' the plot.
 #'
 #' ## Plot an additional data source
 #'
@@ -86,7 +86,7 @@
 #' ## Multiple Columns of Oxygen Data
 #'
 #' For a quick overview of larger datasets, multiple oxygen columns can be
-#' inspected for errors and plotted by using the `oxygen` argument to select
+#' inspected for errors and plotted by using the `oxygen` input to select
 #' multiple columns (by default, all non-time columns are inspected as oxygen
 #' columns if no `oxygen` input is specified). These must share the same `time`
 #' column. In this case, data checks are performed, with a plot of each oxygen
@@ -166,13 +166,14 @@
 #'   `tibble`, etc.).
 #' @param time integer. Defaults to 1. Specifies the column number of the Time
 #'   data.
-#' @param oxygen vector of integers. Defaults to 2. Specifies the column
-#'   number(s) of the Oxygen data.
-#' @param width numeric. Defaults to 0.1. Width used in the rolling regression
-#'   plot as proportion of total length of data (0.01 to 1).
-#' @param plot logical. Defaults to `TRUE`. Plots the data. If 2 columns
-#'   selected, plots timeseries data, plus plot of rolling rate. If multiple
-#'   columns, plots all timeseries data only.
+#' @param oxygen integer or vector of integers. Defaults to all non-time columns
+#'   if no other inputs given. Specifies the column number(s) of the Oxygen
+#'   data.
+#' @param width numeric, 0.01 to 1. Defaults to 0.1. Width used in the rolling
+#'   regression plot as proportion of total length of data.
+#' @param plot logical. Defaults to `TRUE`. Plots the data. If `time` and single
+#'   `oxygen` columns selected, plots timeseries data, plus plot of rolling
+#'   rate. If multiple `oxygen` columns, plots all timeseries data only.
 #' @param add.data integer. Defaults to `NULL`. Specifies the column number of
 #'   an optional additional data source that will be plotted in blue alongside
 #'   the full oxygen timeseries.
@@ -184,29 +185,37 @@
 #' @export
 #'
 #' @examples
-#' ## By default, inspects first 2 columns:
+#' ## By default, inspects all columns, assuming time is in 1 and all others
+#' ## are oxygen:
 #' inspect(sardine.rd)
 #'
+#' ## Instead, specify time and oxygen columns
+#' inspect(sardine.rd, time = 1, oxygen = 2)
+#'
+#' ## Use add.data input to plot an additional data type
+#' ## (this column is not checked)
+#' inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
+#'
 #' ## Adjust the width of the rolling rate plot:
-#' inspect(sardine.rd, width = 0.2)
+#' inspect(sardine.rd, 1, 2, width = 0.2)
 #'
 #' ## Inspect specific columns in multicolumn datasets:
 #' inspect(urchins.rd, time = 1, oxygen = 4)
 #'
-#' ## Inspect multiple columns for an overview
+#' ## Inspect multiple columns for a quick overview
 #' ## of a large dataset:
 #' inspect(urchins.rd, time = 1, oxygen = c(11:19))
 #'
-#' ## Inspect oxygen production data, choose a width that gives
+#' ## Inspect oxygen production data, use a width that gives
 #' ## a better rolling rate, and use extra plotting options to
-#' ## suppress legend, and ensure rates are not plotted reversed:
+#' ## suppress legend, and ensure rates are plotted not reversed:
 #' inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
 #'         legend = FALSE, rate.rev = FALSE)
 #'
-#' ## Plot additional data source
-#'
-#'
-#' ## Plot  - use las and mai
+#' ## Pass additional plotting inputs to override defaults and
+#' ## allow better y-axis label visibility
+#' inspect(sardine.rd, time = 1, oxygen = 2,
+#'         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
 
 inspect <- function(x, time = NULL, oxygen = NULL,
                     width = 0.1, plot = TRUE, add.data = NULL, ...) {

@@ -6,7 +6,7 @@
 \title{Oxygen production respirometry data}
 \format{
 A data frame object consisting of 1200 rows (20 h of data),and
-2 columns: time in hours, oxygen in \% air saturation.
+2 columns: \verb{$Time} in hours, \verb{$Oxygen} in \% air saturation.
 }
 \usage{
 algae.rd
@@ -17,11 +17,11 @@ over time.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: \% Air Saturation
-\item Time units: hours
-\item Respirometer volume: 0.1 L
-\item Temperature: 12 C
-\item Salinity: 30 ppt
+\item Dissolved oxygen units: \verb{\% Air Saturation}
+\item Time units: \code{hours}
+\item Respirometer volume (L): \code{0.1}
+\item Temperature (°C): \code{12}
+\item Salinity: \code{30}
 }
 }
 \author{

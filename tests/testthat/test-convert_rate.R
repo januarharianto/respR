@@ -9,7 +9,7 @@ test_that("convert_rate works with default values",
 
 # use known warnings to do these checks
 # maybe make this more specific later
-test_that("convert_rate falls back to default arguments properly", {
+test_that("convert_rate falls back to default inputs properly", {
   expect_warning(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l"),
                  "convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h'")
   expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l")$output.unit),

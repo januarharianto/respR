@@ -36,22 +36,28 @@ values are returned as a numeric vector. if \code{FALSE} a list object of class
 \code{convert_DO} is returned.}
 }
 \description{
-This is a conversion function that performs basic conversions between
-concentration or pressure units of dissolved oxygen (DO). Concentration units
-should use SI units (\code{L} or \code{kg}) for the denominator. Some DO units require
-temperature (\code{t}), salinity (\code{S}), and atmospheric pressure (\code{P}) to be
-specified. For freshwater experiments, salinity should be set to zero (i.e.
-\code{S = 0}). See \code{\link[=unit_args]{unit_args()}} for details of accepted units.
+This is a conversion function that performs conversions between concentration
+and pressure units of dissolved oxygen (DO).
 }
 \details{
 The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. Use \code{\link[=unit_args]{unit_args()}} to
-view a list of usable unit strings.
+to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/L"},
+\code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
+\verb{[unit_args()]} for details of accepted units.
+
+Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
+denominator.
+
+Some DO units require temperature (\code{t}), salinity (\code{S}), and atmospheric
+pressure (\code{P}) to be specified; if this is the case the function will stop
+and prompt for them. For the atmospheric pressure input (P), a default value
+of 1.013 bar (standard pressure at sea level) is applied if not otherwise
+entered. For freshwater experiments, salinity should be set to zero (i.e. \code{S = 0}).
 \subsection{Output}{
 
-By default (\code{value.out = TRUE}) outputs a numeric vector of the converted
-values. If \code{value.out = FALSE} a \code{list} object of class \code{convert_DO} is
-returned containing five elements: \verb{$call} the function call, \verb{$input}
+By default (\code{value.out = TRUE}) the output is a numeric vector of converted
+values. If \code{value.out = FALSE} output is a \code{list} object of class
+\code{convert_DO} containing five elements: \verb{$call} the function call, \verb{$input}
 values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}.
 }
 
@@ -78,6 +84,9 @@ convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
 convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "\%Air",
   t = 15, S = 35)
+
+\dontrun{
 convert_DO(sardine.rd[[2]], from = "\%Air", to = "torr",
   t = 15, S = 35)
+  }
 }

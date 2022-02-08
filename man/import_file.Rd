@@ -12,50 +12,51 @@ import_file(path, export = FALSE)
 \item{export}{logical. If TRUE, exports the data as a \code{csv} to the same
 directory, as determined by the \code{path} parameter.}
 }
-\value{
-a data frame object of all columned data
-}
 \description{
 Automatically import data from different respirometry hardware and software
-systems. The aim is to work with most commercial DO sensors available in the
-market with little input from the user. The function extracts data columns
-from the file and generally cleans up column names (e.g. removes whitespace
-and characters which cause text encoding issues) to make the data easier to
-work with. Files should be raw output files where possible; files opened and
-re-saved in a different format or filetype will likely fail to import.
+systems. The aim is to work with most commercial oxygen sensors available in
+the market with minimal input from the user. The function extracts data
+columns from the file, removes redundant rows of metadata, and generally
+cleans up column names (e.g. removes whitespace and characters which cause
+text encoding issues) to make the data easier to work with. Files should be
+sensor system raw output files where possible; files opened and re-saved in a
+different format will likely fail to import.
 }
 \details{
-Currently works for:
+Currently tested and working for:
 \itemize{
 \item Firesting
 \item Pyro (another name for Firesting)
 \item PreSens OXY10
 \item PreSens OXY4
 \item PreSens (OxyView generic, including multiplate systems)
-\item PreSens/Loligo 24-Well Multiplate System (Excel files)
+\item PreSens/Loligo 24-Well Multiplate System (output Excel files)
 \item MiniDOT
-\item Loligo AutoResp ('_raw' files output, not metadata files)
+\item Loligo AutoResp ('_raw' files output, \emph{not} metadata files)
 \item Loligo Witrox (same as AutoResp, without metadata)
-\item Vernier (raw qmbl, csv, txt, (not yet gmbl))
+\item Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
 \item NeoFox
 \item Qbox Aqua
 }
 
+Files with European numeric formatting (i.e. commas instead of points to
+denote decimals) are supported, and will be converted to point decimals on
+import. This is new functionality, so please provide feedback for any files
+for which this might fail.
+
 We are always looking for sample files to improve the function. Please send
 them to us via \href{mailto:nicholascarey@gmail.com}{email}, or via a \href{https://github.com/januarharianto/respR/issues}{Github issue}.
 
-Files with European formatting (i.e. commas instead of points to denote
-decimals) are supported, and will be converted to point-decimals on import.
-This is experimental functionality, so please provide feedback for any files
-for which this might fail.
-
 While the devices listed above are supported, the import functionality is
-experimental due to limited access to output files. This will improve over
-time as users provide feedback and sample files. We are releasing this as it
-is, without any warranty, so that some people can still benefit from the
-functionality as it gets better. Users should be careful using this function,
-check the imported data, and be prepared to import data by themselves since
-it is a fundamental skill in R.
+experimental due to limited access to sample files. This should improve over
+time as users provide feedback and samples. Users should however be careful
+using this function, carefully check the imported data, and be prepared to
+import data by other functions such as \code{\link[=read.csv]{read.csv()}} since it is a
+fundamental basic in data analyses in R.
+\subsection{Output}{
+
+A \code{data.frame} object of all columned data
+}
 }
 \examples{
 NULL

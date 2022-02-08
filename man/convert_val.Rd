@@ -13,59 +13,65 @@ convert_val(x, from = NULL, to = NULL)
 \item{from}{string. Unit of the original values.}
 
 \item{to}{string. Unit to be converted to. These defaults are applied if left
-NULL: volume "L", temperature "C", mass "kg", area "m2", pressure "bar".}
-}
-\value{
-Output is a numeric vector of converted values.
+\code{NULL}: volume \code{"L"}, temperature \code{"C"}, mass \code{"kg"}, area \code{"m2"}, pressure
+\code{"bar"}.}
 }
 \description{
 This is a basic function that converts values of temperature, volume, mass,
 area, and atmospheric pressure to different units. This can be useful in
-\code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}}, and \code{\link[=convert_rate.ft]{convert_rate.ft()}} in which some
-inputs must be in specific units (e.g. temperature in °C, atmospheric
-pressure in bar, area in m2). See Examples.
+\code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}}, and \code{\link[=convert_rate.ft]{convert_rate.ft()}} where some inputs
+must be in specific units (e.g. temperature in °C, atmospheric pressure in
+bar, area in m2). See Examples.
 }
 \details{
+Note the type of unit does not need to be specified. The function will
+automatically recognise it using the \code{from} unit.
+
 If the \code{'to'} input is left \code{NULL}, the following defaults are applied
 depending on the unit type of the \code{from} input:
 \itemize{
-\item volume:        "L"
-\item temperature:   "C"
-\item mass:          "kg"
-\item area:          "m2"
-\item pressure:      "bar"
+\item volume:        \code{"L"}
+\item temperature:   \code{"C"}
+\item mass:          \code{"kg"}
+\item area:          \code{"m2"}
+\item pressure:      \code{"bar"}
 }
 
 A fuzzy string matching algorithm is used to accept different unit formatting
-styles. For example, \verb{'msq', 'm2', 'M2', 'sqm'} are all parsed as metres
+styles. For example, \code{"msq"} \code{"m2"}, \code{"M2"}, \code{"sqm"} are all parsed as metres
 squared of area.
-
-\strong{Units Accepted}
+\subsection{Accepted Units}{
 
 \emph{Temperature:}
 \itemize{
-\item "C", "K", "F"
+\item \code{"C"}, \code{"K"}, \code{"F"}
 }
 
 \emph{Pressure:}
 \itemize{
-\item "kPa", "hPa", "Pa", "ubar", "mbar", "bar", "atm" (standard atmospheres),
-"Torr"
+\item \code{"kPa"}, \code{"hPa"}, \code{"Pa"}, \code{"ubar"}, \code{"mbar"}, \code{"bar"}, \code{"Torr"}, \code{"atm"}
+(note, this is standard atmospheres).
 }
 
 \emph{Volume:}
 \itemize{
-\item "uL", "mL", "L"
+\item \code{"uL"}, \code{"mL"}, \code{"L"}
 }
 
 \emph{Mass:}
 \itemize{
-\item "ug", "mg", "g", "kg"
+\item \code{"ug"}, \code{"mg"}, \code{"g"}, \code{"kg"}
 }
 
 \emph{Area:}
 \itemize{
-\item "mm2", "cm2", "m2", "km2"
+\item \code{"mm2"}, \code{"cm2"}, \code{"m2"}, \code{"km2"}
+}
+}
+
+\subsection{Output}{
+
+Output is a numeric vector of converted values.
 }
 }
 \examples{
@@ -74,8 +80,8 @@ convert_val(10, "ml", "L")
 convert_val(10:15, "ml", "L")
 
 # Convert temperature
-convert_val(-273.15, "K", "C")
-convert_val(-40, "F", "C")
+convert_val(-273.15, "C", "K")
+convert_val(-40, "C", "F")
 convert_val(c(2,4,6,8), "C", "F")
 
 # Convert pressure
@@ -94,23 +100,29 @@ convert_val(10000, "ug", "mg")
 # Use directly in a respR function which requires inputs to be
 # in a specific unit. For example, in convert_rate() pressure
 # must be in 'bar' and respirometer volume in 'L'.
-# Here, chamber volume is 200 ml, pressure measured in mbar.
+# Here, we know chamber volume is 200 ml, and pressure measured in mbar.
 x <- suppressWarnings(inspect(urchins.rd, 1, 2))
+
 rate <- calc_rate(x, from = 20, to = 30)
-convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
+
+convert_rate(rate,
+             oxy.unit = "ml/l",
+             time.unit = "min",
              output.unit = "mg/h",
              volume = convert_val(200, "ml", "L"),
-             S = 35, t = 15,
+             S = 35,
+             t = 15,
              P = convert_val(1010, "mbar", "bar"))
 
 # Note, the default 'to' units are set to those respR requires in
-# these functions ("L" and "bar" here), so do not necessarily need
+# these functions ('L' and 'bar' here), so do not necessarily need
 # to be specified:
-x <- suppressWarnings(inspect(urchins.rd, 1, 2))
-rate <- calc_rate(x, from = 20, to = 30)
-convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
+convert_rate(rate,
+             oxy.unit = "ml/l",
+             time.unit = "min",
              output.unit = "mg/h",
              volume = convert_val(200, "ml"),
-             S = 35, t = 15,
+             S = 35,
+             t = 15,
              P = convert_val(1010, "mbar"))
 }

@@ -8,12 +8,12 @@
 #' returned from different regions of continuous data, or a rolling rate of a
 #' specific window size performed across the whole dataset.
 #'
-#' The function calculates rates by averaging the delta oxygen values across the
-#' dataset, or from specified subsets of the data, and then using the `flowrate`
-#' to convert these to rates. There are no units involved in `calc_rate.ft`.
-#' This is a deliberate decision. The units of oxygen concentration and flowrate
-#' will be specified later in [`convert_rate.ft()`] when rates are converted to
-#' specific output units.
+#' `calc_rate.ft` calculates rates by averaging delta oxygen values across the
+#' whole dataset, or from specified subsets of the data. The `flowrate` is then
+#' used to convert these average delta values to rates. There are no units
+#' involved in `calc_rate.ft`. This is a deliberate decision. The units of
+#' oxygen concentration and flowrate will be specified later in
+#' [`convert_rate.ft()`] when rates are converted to specific output units.
 #'
 #' For continuous data recordings, it is recommended a `data.frame` containing
 #' the data be prepared via [`inspect.ft()`], and entered as the `x` input.
@@ -28,8 +28,8 @@
 #' ## Specifying regions
 #'
 #' For calculating rates over specific regions of the data, the `from` and `to`
-#' inputs in the `by` units of `"time"` (the default) or `"row"`) can be used
-#' for `inspect.ft()` inputs. All delta oxygen values within this region are
+#' inputs in the `by` units of `"time"` (the default) or `"row"` can be used for
+#' [`inspect.ft()`] inputs. All delta oxygen values within this region are
 #' converted to rates, and averaged to produce a overall rate for the region
 #' (`$rate` in the output). Multiple regions can be examined within the same
 #' dataset by entering `from` and `to` as vectors of paired values to specify
@@ -47,7 +47,7 @@
 #' In order to convert delta oxygen values to a oxygen uptake or production
 #' rate, the `flowrate` input is required. This must be in a volume (L, ml, or
 #' ul) per unit time (s,m,h,d), for example in `L/s`. The units are not required
-#' to be entered in here; you will specify them in [`convert_rate.ft()`] to
+#' to be entered here; they will be specified in `[convert_rate.ft()`] to
 #' convert rates to specific units of oxygen uptake or production.
 #'
 #' ## Plot
@@ -58,7 +58,7 @@
 #' the region specified via the `from` and `to` inputs highlighted in orange,
 #' and a close-up of this region with calculated rate value (bottom plot). If
 #' multiple rates have been calculated, by default the first is plotted. Others
-#' can be plotted by changing the `pos` argument, e.g. `plot(object, pos = 2)`.
+#' can be plotted by changing the `pos` input, e.g. `plot(object, pos = 2)`.
 #'
 #' ***Important:*** Since `respR` is primarily used to examine oxygen
 #' consumption, the delta oxygen and rate plots are by default plotted on a
@@ -66,7 +66,7 @@
 #' represent a negative slope of oxygen against time. In these plots the axis is
 #' reversed so that higher uptake rates (i.e. more negative rates) will be
 #' higher on these plots. If you are interested instead in oxygen production
-#' rates, which are positive, the `rate.rev = FALSE` argument can be passed in
+#' rates, which are positive, the `rate.rev = FALSE` input can be passed in
 #' either the `inspect.ft` call, or when using `plot()` on the output object. In
 #' this case, the delta and rate values will be plotted numerically, with higher
 #' oxygen *production* rates higher on the plot.
@@ -79,16 +79,16 @@
 #' TRUE`. Console output messages can be suppressed using `quiet = TRUE`. If
 #' axis labels or other text boxes obscure parts of the plot they can be
 #' suppressed using `legend = FALSE`. If axis labels (particularly y-axis) are
-#' difficult to read, `las = 2` can be passed to make axis labels horizontal. In
-#' addition, `oma` (outer margins, default `oma = c(0.4, 1, 1.5, 0.4)`), and
-#' `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`) can be used
-#' to adjust plot margins.
+#' difficult to read, `las = 2` can be passed to make axis labels horizontal,
+#' and`oma` (outer margins, default `oma = c(0.4, 1, 1.5, 0.4)`), and `mai`
+#' (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`) used to adjust plot
+#' margins.
 #'
 #' ## Background control or "blank" experiments
 #'
 #' `calc_rate.ft` can also be used to determine background rates from empty
-#' control experiments in the same way as specimen rates are determined. The
-#' saved objects can be used as the `by` input in [`adjust_rate.ft`]. For
+#' control experiments in the same way specimen rates are determined. The saved
+#' objects can be used as the `by` input in [`adjust_rate.ft()`]. For
 #' experiments in which the specimen data is to be corrected by a
 #' concurrently-run control experiment, best option is to use this as the
 #' `in.oxy` input in [`inspect.ft()`]. See help file for that function, or the
@@ -120,9 +120,9 @@
 #' confused* with those in other functions such as `calc_rate` where slopes
 #' represent rates and coefficients such as a high r-squared are important.
 #' Here, they represent the stability of the data region, in that the closer the
-#' slope is to zero, and lower the r-squared, the less the delta oxygen values
-#' in that region vary. They are included to enable possible future
-#' functionality where stable regions may be automatically identified.
+#' slope is to zero the less the delta oxygen values, and therefore rates, in
+#' that region vary. These are included to enable possible future functionality
+#' where stable regions may be automatically identified.
 #'
 #' @param x numeric value or vector of delta oxygen values, a 2-column
 #'   `data.frame` of outflow (col 1) and inflow (col 2) oxygen values, or an
@@ -145,26 +145,57 @@
 #'   the specified width in the units specified in `by`. For use with
 #'   `inspect.ft` inputs only.
 #' @param plot logical. Defaults to TRUE. Plots the data.
-#' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `rate.rev = FALSE`, and `pos`.
+#' @param ... Allows additional plotting controls to be passed such as `pos`,
+#'   `quiet = TRUE`, `legend = FALSE`, and `rate.rev = FALSE`.
 #'
 #' @importFrom data.table data.table
 #' @export
 #'
 #' @examples
-#' # Single numeric value
+#' # Single numeric delta oxygen value. The delta oxygen is the difference
+#' # between inflow and outflow oxygen.
+#' calc_rate.ft(-0.8, flowrate = 1.6)
 #'
+#' # Numeric vector of multiple delta oxygen values
+#' ft_rates <- calc_rate.ft(c(-0.8, -0.88, -0.9, -0.76), flowrate = 1.6)
+#' print(ft_rates)
+#' summary(ft_rates)
 #'
-#' # Numeric vector of two values
+#' # Calculate rate from entire dataset
+#' inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) %>%
+#'   calc_rate.ft(flowrate = 2.34)
 #'
+#' # Calculate rate from a region based on time
+#' inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) %>%
+#'   calc_rate.ft(flowrate = 2.34, from = 200, to = 400, by = "time")
 #'
-#' # inspect.ft object
-#' #single delta
+#' # Calculate rate from multiple regions
+#' inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, ) %>%
+#'   calc_rate.ft(flowrate = 2.34,
+#'                from = c(200, 400, 600),
+#'                to = c(300, 500, 700),
+#'                by = "row") %>%
+#'   summary()
 #'
-#' #multiple from/to
+#' # Calculate rate from existing delta oxygen values
+#' inspect.ft(flowthrough.rd, time = 1, delta.oxy = 4) %>%
+#'   calc_rate.ft(flowrate = 2.34, from = 200, to = 400, by = "time")
 #'
-#' #width
+#' # Calculate rate from a background recording
+#' inspect.ft(flowthrough_mult.rd,
+#'            time = 1,
+#'            out.oxy = 5,
+#'            in.oxy = 9) %>%
+#'   calc_rate.ft(flowrate = 0.1, from = 20, to = 40, by = "time") %>%
+#'   summary()
 #'
+#' # Calculate a rolling rate
+#' inspect.ft(flowthrough_mult.rd,
+#'            time = 1,
+#'            out.oxy = 2,
+#'            in.oxy = 6) %>%
+#'   calc_rate.ft(flowrate = 0.1, width = 500, by = "row") %>%
+#'   summary()
 
 calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
                          by = NULL, width = NULL, plot = TRUE, ...) {

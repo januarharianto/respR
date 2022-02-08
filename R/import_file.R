@@ -1,49 +1,63 @@
 #' Import respirometry system output files
 #'
 #' Automatically import data from different respirometry hardware and software
-#' systems. The aim is to work with most commercial DO sensors available in the
-#' market with little input from the user. The function extracts data columns
-#' from the file and generally cleans up column names (e.g. removes whitespace
-#' and characters which cause text encoding issues) to make the data easier to
-#' work with. Files should be raw output files where possible; files opened and
-#' re-saved in a different format or filetype will likely fail to import.
+#' systems. The aim is to work with most commercial oxygen sensors available in
+#' the market with minimal input from the user. The function extracts data
+#' columns from the file, removes redundant rows of metadata, and generally
+#' cleans up column names (e.g. removes whitespace and characters which cause
+#' text encoding issues) to make the data easier to work with. Files should be
+#' sensor system raw output files where possible; files opened and re-saved in a
+#' different format will likely fail to import.
 #'
-#' Currently works for:
-#'  - Firesting
-#'  - Pyro (another name for Firesting)
-#'  - PreSens OXY10
-#'  - PreSens OXY4
-#'  - PreSens (OxyView generic, including multiplate systems)
-#'  - PreSens/Loligo 24-Well Multiplate System (Excel files)
-#'  - MiniDOT
-#'  - Loligo AutoResp ('_raw' files output, not metadata files)
-#'  - Loligo Witrox (same as AutoResp, without metadata)
-#'  - Vernier (raw qmbl, csv, txt, (not yet gmbl))
-#'  - NeoFox
-#'  - Qbox Aqua
+#' Currently tested and working for:
+#'
+#' - Firesting
+#'
+#' - Pyro (another name for Firesting)
+#'
+#' - PreSens OXY10
+#'
+#' - PreSens OXY4
+#'
+#' - PreSens (OxyView generic, including multiplate systems)
+#'
+#' - PreSens/Loligo 24-Well Multiplate System (output Excel files)
+#'
+#' - MiniDOT
+#'
+#' - Loligo AutoResp ('_raw' files output, *not* metadata files)
+#'
+#' - Loligo Witrox (same as AutoResp, without metadata)
+#'
+#' - Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
+#'
+#' - NeoFox
+#'
+#' - Qbox Aqua
+#'
+#' Files with European numeric formatting (i.e. commas instead of points to
+#' denote decimals) are supported, and will be converted to point decimals on
+#' import. This is new functionality, so please provide feedback for any files
+#' for which this might fail.
 #'
 #' We are always looking for sample files to improve the function. Please send
 #' them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
 #' issue](https://github.com/januarharianto/respR/issues).
 #'
-#' Files with European formatting (i.e. commas instead of points to denote
-#' decimals) are supported, and will be converted to point-decimals on import.
-#' This is experimental functionality, so please provide feedback for any files
-#' for which this might fail.
-#'
 #' While the devices listed above are supported, the import functionality is
-#' experimental due to limited access to output files. This will improve over
-#' time as users provide feedback and sample files. We are releasing this as it
-#' is, without any warranty, so that some people can still benefit from the
-#' functionality as it gets better. Users should be careful using this function,
-#' check the imported data, and be prepared to import data by themselves since
-#' it is a fundamental skill in R.
+#' experimental due to limited access to sample files. This should improve over
+#' time as users provide feedback and samples. Users should however be careful
+#' using this function, carefully check the imported data, and be prepared to
+#' import data by other functions such as [`read.csv()`] since it is a
+#' fundamental basic in data analyses in R.
+#'
+#' ## Output
+#'
+#' A `data.frame` object of all columned data
 #'
 #' @param path string. Path to file.
 #' @param export logical. If TRUE, exports the data as a `csv` to the same
 #'   directory, as determined by the `path` parameter.
-#'
-#' @return a data frame object of all columned data
 #'
 #' @importFrom data.table data.table fread
 #' @importFrom readxl read_excel
@@ -53,6 +67,7 @@
 #' @export
 #'
 #' @examples NULL
+
 import_file <- function(path, export = FALSE) {
 
   cat("\n# import_file # -------------------------\n")

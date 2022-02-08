@@ -40,7 +40,7 @@ or alternatively via \verb{\%>\%} piping. See Examples.
 \emph{Note:} when choosing a \code{method}, keep in mind that to remain mathematically
 consistent, \code{respR} outputs oxygen consumption (i.e. respiration) rates as
 negative values. This is particularly important in the difference between
-\code{highest/lowest} and \code{min/max} methods. See Details.
+\code{highest/lowest} and \code{minimum/maximum} methods. See Details.
 
 When a \verb{$rate} result is omitted by the subsetting criteria, all associated
 data in \verb{$summary} (i.e. the associated row) is removed. Summary results are
@@ -51,10 +51,9 @@ Regardless of which \code{method} is chosen, the first operation conducted is
 removal of duplicate results. Due to the way it works, the \code{auto_rate}
 kernel-density analysis occasionally identifies linear regions that are
 identical, and these appear as identical rows in the output \verb{$summary},
-except for different \verb{$density} values. For all methods, lower ranked
-regressions are removed and only unique regressions are retained. To apply
-only this duplicate removal method, use the default \code{method = NULL} or
-\code{method = "unique"}.
+except for different \verb{$density} values. The lower ranked duplicates are
+removed and only unique regressions are retained. To apply only this
+duplicate removal method, use the default \code{method = NULL} or \code{method = "unique"}.
 
 Generally speaking, for most large datasets we recommend using
 \code{\link[=subset_data]{subset_data()}} and then running \code{auto_rate} on the subset(s) of the data
@@ -198,7 +197,7 @@ subsetting methods are more appropriate. The \code{overlap} method should only b
 used in combination with the \code{auto_rate} \code{linear} results, unless you have a
 specific reason for doing so.
 
-The \code{plot_ar()} function is very useful for plotting \code{auto_rate} objects,
+The \code{\link[=plot_ar]{plot_ar()}} function is very useful for plotting \code{auto_rate} objects,
 and the results of \code{subset_rate} operations upon them, to visualise where
 regression results in the summary table occur in relation to the original
 dataset. See Examples.

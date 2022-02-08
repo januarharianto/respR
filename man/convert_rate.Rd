@@ -20,17 +20,18 @@ convert_rate(
 }
 \arguments{
 \item{x}{numeric value or vector, or object of class \code{auto_rate},
-\code{calc_rate}, \code{adjust_rate}, or \code{calc_rate.bg.}}
+\code{calc_rate}, \code{adjust_rate}, or \code{calc_rate.bg.} Contains the rate(s) to be
+converted.}
 
-\item{oxy.unit}{string. The dissolved oxygen unit of the original data used to
+\item{oxy.unit}{string. The dissolved oxygen unit of the original raw data
+used to determine the rate in \code{x}.}
+
+\item{time.unit}{string. The time unit of the original raw data used to
 determine the rate in \code{x}.}
 
-\item{time.unit}{string. The time unit of the original data used to determine
-the rate in \code{x}.}
-
 \item{output.unit}{string. The output unit to convert the input rate to.
-Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
-"O2/Time/Area".}
+Should be in the correct order: "Oxygen/Time" or "Oxygen/Time/Mass" or
+"Oxygen/Time/Area".}
 
 \item{volume}{numeric. Volume of water in \emph{\strong{litres}} in the respirometer or
 respirometer loop.}
@@ -42,7 +43,7 @@ specimen if you wish to calculate mass-specific rates.}
 the specimen if you wish to calculate surface area-specific rates.}
 
 \item{S}{numeric. Salinity (ppt). Defaults to NULL. Used in conversion of
-some oxygen units. Fresh water should be entered as \code{S = 0}.}
+some oxygen units. Freshwater should be entered as \code{S = 0}.}
 
 \item{t}{numeric. Temperature(°C). Defaults to NULL. Used in conversion of
 some oxygen units.}
@@ -64,30 +65,32 @@ objects, and the \verb{$rate.bg} from \code{calc_rate.bg} objects. Additionally,
 numeric value or vector of rates can be input as \code{x}.
 \subsection{Respirometer volume}{
 
-Note, the \code{volume} input represents the \emph{effective volume} of the
-respirometer, that is volume of fluid in the respirometry chamber, \strong{not}
-the total respirometer volume or the specimen volume. Generally, this should
-be the volume of the respirometer minus the volume of the specimen.
+The \code{volume} of the respirometer is required and should be in litres (\code{L}).
+Note, the \code{volume} represents the \emph{effective volume} of the respirometer,
+that is \emph{volume of water} in the respirometry chamber. This is not
+necessarily the same as the volume of the respirometer. Typically, it is the
+volume of the respirometer \emph{minus} the volume of the specimen.
 \href{https://github.com/nicholascarey/respfun#eff_vol}{See here} for help
-with calculating effective volumes.
+with calculating effective volumes. It also does not refer to the specimen
+volume.
 }
 
 \subsection{Units}{
 
-The \code{oxy.unit} of the original data used to calculated the rate is required.
-Concentration units should use only SI units (\code{L} or \code{kg}) for the
+The \code{oxy.unit} of the original raw data used to calculate the rate is
+required. Concentration units should use only SI units (\code{L} or \code{kg}) for the
 denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air or
 oxygen is accepted, as are oxygen pressure units. See \code{\link[=unit_args]{unit_args()}} for
 details.
 
-The \code{time.unit} of the original data used to calculated the rate is also
+The \code{time.unit} of the original raw data used to calculate the rate is also
 required.
 
-An \code{output.unit} is also required. If left NULL, The default of \code{"mgO2/h"} is
-used, or \code{"mgO2/h/kg"} or \code{"mgO2/h/m2"} if a \code{mass} or \code{area} respectively
-has been entered. The \code{output.unit} must be in the sequence \emph{O2-Time} (e.g.
-\code{"mg/h"}) for absolute rates, \emph{O2-Time-Mass} (e.g. \code{"mg/h/kg"}) for
-mass-specific rates, and \emph{O2-Time-Area} (e.g. \code{"mg/h/cm2"}) for surface
+An \code{output.unit} is also required. If left \code{NULL}, The default of \code{"mgO2/h"}
+is used, or \code{"mgO2/h/kg"} or \code{"mgO2/h/m2"} if a \code{mass} or \code{area} respectively
+has been entered. The \code{output.unit} must be in the sequence \emph{Oxygen-Time}
+(e.g. \code{"mg/h"}) for absolute rates, \emph{Oxygen-Time-Mass} (e.g. \code{"mg/h/kg"}) for
+mass-specific rates, and \emph{Oxygen-Time-Area} (e.g. \code{"mg/h/cm2"}) for surface
 area-specific rates.
 
 Note, some oxygen input or output units require temperature (\code{t}) and
@@ -99,19 +102,20 @@ not, the default value of 1.013253 bar (standard pressure at sea level) is
 used. In most locations which have a normal range (outside extreme weather
 events) of around 20 millibars, any variability in pressure will have a
 relatively minor effect on dissolved oxygen, and even less on calculated
-rates. However, we would encourage users to enter the true value if they know
-it, or use historical weather data to find out what it was on the day. See
-\code{\link[=unit_args]{unit_args()}} for details.
+rates. However, we would encourage users to enter the actual value if they
+know it, or use historical weather data to find out what it was on the day.
+See \code{\link[=unit_args]{unit_args()}} for details.
 
 The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles. For example, \verb{'mg/l', 'mg/L', 'mgL-1', 'mg l-1', 'mg.l-1'} are all parsed the same. See \code{\link[=unit_args]{unit_args()}} for
-details of accepted units and their formatting. See also \code{\link[=convert_val]{convert_val()}}
-for simple conversion between units.
+to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/L"},
+\code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
+\code{\link[=unit_args]{unit_args()}} for details of accepted units and their formatting. See also
+\code{\link[=convert_val]{convert_val()}} for simple conversion between non-oxygen units.
 }
 
 \subsection{Output}{
 
-Returns a \code{list} object containing the \verb{$rate.input}, and converted rate(s)
+Output is a \code{list} object containing the \verb{$rate.input}, and converted rate(s)
 in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and summary
 elements.
 }

@@ -5,7 +5,7 @@
 \title{Automatically determine most linear, highest, lowest and rolling oxygen
 uptake or production rates}
 \usage{
-auto_rate(x, method = "linear", width = NULL, by = "row", plot = TRUE, ...)
+auto_rate(x, method = "linear", width = 0.2, by = "row", plot = TRUE, ...)
 }
 \arguments{
 \item{x}{data frame, or object of class \code{inspect} containing oxygen~time
@@ -21,29 +21,25 @@ length, or a value above 1 representing an exact width in the \code{by} input.
 See Details.}
 
 \item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. Metric by which
-to apply the \code{width} input.}
+to apply the \code{width} input if it is above 1.}
 
-\item{plot}{logical. Plot the results. Defaults to TRUE.}
+\item{plot}{logical. Defaults to TRUE. Plot the results.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos},
-\code{choose}, and \code{quiet = TRUE}.}
-}
-\value{
-A list object of class \code{auto_rate}.
+\code{panel}, and \code{quiet = TRUE}.}
 }
 \description{
 \code{auto_rate} performs rolling regressions on a dataset to determine the \emph{most
 linear, highest, lowest, maximum, minimum, rolling}, and \emph{interval} rates of
-change in oxygen concentration over time. Initially, a rolling regression of
-the specified \code{width} is performed on the entire dataset. Then, based on the
-"\code{method}" argument, the resulting regressions are ranked or ordered, and the
-output is summarised.
+change in oxygen against time. A rolling regression of the specified \code{width}
+is performed on the entire dataset, then based on the "\code{method}" input,
+the resulting regressions are ranked or ordered, and the output summarised.
 }
 \details{
 \subsection{Ranking and ordering algorithms}{
 
 Currently, \code{auto_rate} contains seven ranking and ordering algorithms that
-can be applied using the \code{method} argument:
+can be applied using the \code{method} input:
 \itemize{
 \item \code{linear}: Uses kernel density estimation (KDE) to learn the shape of the
 entire dataset and \emph{automatically identify} the most linear regions of the
@@ -93,12 +89,13 @@ methods should be used.
 \item \code{rolling}: A rolling regression of the specified \code{width} is performed
 across the entire timeseries. No reordering of results is performed.
 \item \code{interval}: multiple, successive, non-overlapping regressions of the
-specified 'width' are extracted from the rolled regressions, ordered by time.
+specified 'width' are extracted from the rolling regressions, ordered by
+time.
 \item NOTE: \code{max}, \code{min}: These methods were used in previous versions of \code{respR}
 but have been deprecated. They were intended to order oxygen uptake
 (negative) rates by magnitude, but this resulted in incorrect ordering of
 oxygen production (positive) rates. They have been retained for code
-compatibility, but may be removed in a future version of \code{respR}, and so
+compatibility, but will be removed in a future version of \code{respR}, and so
 \emph{should not be used}.
 }
 }
@@ -121,10 +118,10 @@ The units of oxygen concentration and time will be specified later in
 
 The \code{width} input defaults to 0.2. If it is a value between 0 and 1, it
 represents a proportion of the total data length, as in the equation
-\verb{floor(width * number of data rows)}. For example, 0.2 represents a
-regression rolling window of 20\% of the data. Otherwise, if 1 or greater, the
+\verb{floor(width * number of data rows)}. For example, 0.2 represents a rolling
+window of 20\% of the data width. Otherwise, if entered as 1 or greater, the
 width is an exact value in either number of rows or in the units of time
-data, as specified via the \code{by} argument.
+data, as specified via the \code{by} input.
 
 In most cases, \code{by} should be left as the default \code{"row"}, and the \code{width}
 chosen with this in mind, as it is considerably more computationally
@@ -145,18 +142,19 @@ plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
 higher), of rate calculated across the input \code{width} for the whole dataset.
 Each rate is plotted against the middle of the time and row range used to
 calculate it. The dashed line indicates the value of the current rate result
-plotted in panels 1 and 2. The other plots are summary plots of fit and
-residuals, and for the \code{linear} method the results of the kernel density
-analysis.
+plotted in panels 1 and 2. The fourth and fifth panels are summary plots of
+fit and residuals, and for the \code{linear} method the sisth panel the results of
+the kernel density analysis, with the dashed line again indicating the value
+of the current rate result plotted in panels 1 and 2.
 }
 
 \subsection{Additional plotting options}{
 
 If multiple rates have been calculated, by default the first (\code{pos = 1}) is
-plotted. Others can be plotted by changing the \code{pos} argument either in the
+plotted. Others can be plotted by changing the \code{pos} input either in the
 main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
 In addition, each sub-panel can be examined individually by using the
-\code{choose} input, e.g. \code{plot(object, choose = 2)}.
+\code{panel} input, e.g. \code{plot(object, panel = 2)}.
 
 Console output messages can be suppressed using \code{quiet = TRUE}. If axis
 labels or other text boxes obscure parts of the plot they can be suppressed
@@ -164,8 +162,8 @@ using \code{legend = FALSE}. The rate in the rolling rate plot can be plotted
 \emph{not} reversed by passing \code{rate.rev = FALSE}, for instance when examining
 oxygen production rates so that higher production rates appear higher. If
 axis labels (particularly y-axis) are difficult to read, \code{las = 2} can be
-passed to make axis labels horizontal. In addition, \code{oma} (outer margins,
-default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins.
+passed to make axis labels horizontal, and \code{oma} (outer margins,
+default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
 }
 
 \subsection{S3 Generic Functions}{
@@ -183,26 +181,32 @@ input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate val
 by passing \code{export = TRUE}.
 }
 }
+
+\subsection{Output}{
+
+Output is a \code{list} object of class \code{auto_rate}.
+}
 }
 \examples{
-# most linear section of the entire data
-auto_rate(sardine.rd)
+# Most linear section of an entire dataset
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate()
 
 \dontrun{
 # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
-low_rates <- auto_rate(sardine.rd, method = "lowest", width = 600, by = "time")
-# View summary of lowest rate results
-summary(low_rates)
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate(method = "lowest", width = 600, by = "time")
+ summary()
 
 # What is the highest oxygen consumption rate over a 10 minute (600s) period?
-high_rates <- auto_rate(sardine.rd, method = "highest", width = 600, by = "time")
-# View summary of lowest rate results
-summary(high_rates)
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate(method = "highest", width = 600, by = "time")
+ summary()
 
 # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 # period in intermittent-flow respirometry data?
-# NOTE: because uptake rates are negative, this would be the HIGHEST uptake rate.
+# NOTE: because uptake rates are negative, this would actually be
+# the HIGHEST uptake rate.
 auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
 }
-
 }

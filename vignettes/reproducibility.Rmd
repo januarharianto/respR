@@ -37,7 +37,7 @@ In the era of cheap data storage, and easy sharing of code and files online, the
 
 ## Readable, concise code
 
-The functions in `respR` have been designed to have clear, unambiguous arguments describing the operators and the parameters used in analysis. Therefore, given some familiarity with the package functions, the code is very human-readable, and it is usually clear under what parameters an analysis was conducted. We have minimised the number of function operators where possible, mainly to streamline and simplify analyses, but this also has the side benefit of making input code less verbose and more readable. 
+The functions in `respR` have been designed to have clear, unambiguous inputs describing the parameters used in analysis. Therefore, given some familiarity with the package functions, the code is very human-readable, and it is usually clear under what parameters an analysis was conducted. We have minimised the number of function operators where possible, mainly to streamline and simplify analyses, but this also has the side benefit of making input code less verbose and more readable. 
 
 This readable code, along with the fact that an end-to-end workflow could potentially consist of processing raw data through as few as three functions, means a `respR` analysis for a single experiment could consist of only a few lines of code. For example (this example uses the native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/)):
 

@@ -155,7 +155,7 @@ capture.output({  ## stops printing of outputs on assigning
   })
 
   test_that("oxy_crit - oxy_crit S3 generics work with both oxygen/time and rate/oxygen inputs,
-            and both methods, export, and choose options", {
+            and both methods, export, and panel options", {
     # oxygen
     pcr <- oxy_crit(squid, plot = F)
     expect_output(print(pcr))
@@ -163,10 +163,10 @@ capture.output({  ## stops printing of outputs on assigning
     expect_is(summary(pcr, export = TRUE),
               "data.frame")
     expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, choose = 1), regexp = NA)
-    expect_error(plot(pcr, choose = 2), regexp = NA)
-    expect_error(plot(pcr, choose = 3),
-                 "plot.oxy_crit: 'choose' input should be 1 to 2 or 'NULL' for both.")
+    expect_error(plot(pcr, panel = 1), regexp = NA)
+    expect_error(plot(pcr, panel = 2), regexp = NA)
+    expect_error(plot(pcr, panel = 3),
+                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
     # rate
     pcr <- oxy_crit(squid_rate, oxygen = 1, rate = 2, plot = F)
     expect_output(print(pcr))
@@ -174,10 +174,10 @@ capture.output({  ## stops printing of outputs on assigning
     expect_is(summary(pcr, export = TRUE),
               "data.frame")
     expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, choose = 1), regexp = NA)
-    expect_error(plot(pcr, choose = 2), regexp = NA)
-    expect_error(plot(pcr, choose = 3),
-                 "plot.oxy_crit: 'choose' input should be 1 to 2 or 'NULL' for both.")
+    expect_error(plot(pcr, panel = 1), regexp = NA)
+    expect_error(plot(pcr, panel = 2), regexp = NA)
+    expect_error(plot(pcr, panel = 3),
+                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
     # segmented method
     # oxygen
     pcr <- oxy_crit(squid, method = "segmented", plot = F)
@@ -186,10 +186,10 @@ capture.output({  ## stops printing of outputs on assigning
     expect_is(summary(pcr, export = TRUE),
               "data.frame")
     expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, choose = 1), regexp = NA)
-    expect_error(plot(pcr, choose = 2), regexp = NA)
-    expect_error(plot(pcr, choose = 3),
-                 "plot.oxy_crit: 'choose' input should be 1 to 2 or 'NULL' for both.")
+    expect_error(plot(pcr, panel = 1), regexp = NA)
+    expect_error(plot(pcr, panel = 2), regexp = NA)
+    expect_error(plot(pcr, panel = 3),
+                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
     # rate
     pcr <- oxy_crit(squid_rate, method = "segmented", oxygen = 1, rate = 2, plot = F)
     expect_output(print(pcr))
@@ -197,10 +197,10 @@ capture.output({  ## stops printing of outputs on assigning
     expect_is(summary(pcr, export = TRUE),
               "data.frame")
     expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, choose = 1), regexp = NA)
-    expect_error(plot(pcr, choose = 2), regexp = NA)
-    expect_error(plot(pcr, choose = 3),
-                 "plot.oxy_crit: 'choose' input should be 1 to 2 or 'NULL' for both.")
+    expect_error(plot(pcr, panel = 1), regexp = NA)
+    expect_error(plot(pcr, panel = 2), regexp = NA)
+    expect_error(plot(pcr, panel = 3),
+                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
   })
 
   # This is failing...

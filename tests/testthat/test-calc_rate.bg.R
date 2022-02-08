@@ -4,7 +4,7 @@
 capture.output({  ## stops printing outputs on assigning in log
 
 ## Accepts data.frame
-test_that("calc_rate.bg works using default arguments", {
+test_that("calc_rate.bg works using default inputs", {
   ## Analyses all columns by default
   urbg <- calc_rate.bg(urchins.rd,  plot = F)
   expect_is(urbg,

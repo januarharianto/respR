@@ -34,10 +34,10 @@ test_that("auto_rate subsets out 2 columns from larger dataset", {
 
 test_that("auto_rate stops with malformed method", {
   expect_error(auto_rate(urch_data, method = "wrong"),
-               regexp = "auto_rate: The 'method' argument is not recognised: ")
+               regexp = "auto_rate: The 'method' input is not recognised: ")
 })
 
-test_that("auto_rate works using default arguments", {
+test_that("auto_rate works using default inputs", {
   ar <- auto_rate(urch_data, plot = F)
   expect_is(ar,
             "auto_rate")
@@ -47,7 +47,7 @@ test_that("auto_rate works using default arguments", {
             "data.frame")
 })
 
-test_that("auto_rate works by default with `highest` argument", {
+test_that("auto_rate works by default with `highest` input", {
   ar <- auto_rate(urch_data, plot = F, method = "highest")
   expect_is(ar,
             "auto_rate")
@@ -56,7 +56,7 @@ test_that("auto_rate works by default with `highest` argument", {
             "auto_rate")
 })
 
-test_that("auto_rate  works by default with `lowest` argument", {
+test_that("auto_rate  works by default with `lowest` input", {
   ar <- auto_rate(urch_data, plot = F, method = "lowest")
   expect_is(ar,
             "auto_rate")
@@ -92,15 +92,15 @@ test_that("auto_rate can be plotted with highest/lowest/interval methods", {
   suppressWarnings(file.remove("Rplots.pdf"))
 })
 
-test_that("auto_rate: panels 1 to 6 can be plot with choose", {
+test_that("auto_rate: panels 1 to 6 can be plot with panel", {
   ## plots individual panels
   ar <- auto_rate(urch_data, plot = F)
-  expect_output(plot(ar, choose =1))
-  expect_output(plot(ar, choose =2))
-  expect_output(plot(ar, choose =3))
-  expect_output(plot(ar, choose =4))
-  expect_output(plot(ar, choose =5))
-  expect_output(plot(ar, choose =6))
+  expect_output(plot(ar, panel =1))
+  expect_output(plot(ar, panel =2))
+  expect_output(plot(ar, panel =3))
+  expect_output(plot(ar, panel =4))
+  expect_output(plot(ar, panel =5))
+  expect_output(plot(ar, panel =6))
 })
 
 test_that("auto_rate: different results can be plot with pos", {
@@ -175,7 +175,7 @@ test_that("auto_rate works with variations of `by` input", {
 
 test_that("auto_rate error produced with wrong by", {
   expect_error(auto_rate(urch_data, plot = F, by = "oxygen"),
-               "auto_rate: The 'by' argument must be 'time' or 'row'")
+               "auto_rate: The 'by' input must be 'time' or 'row'")
 })
 
 test_that("auto_rate works with method = interval and by = time", {

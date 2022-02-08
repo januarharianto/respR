@@ -3,56 +3,62 @@
 #'
 #' This is a basic function that converts values of temperature, volume, mass,
 #' area, and atmospheric pressure to different units. This can be useful in
-#' [convert_DO()], [convert_rate()], and [convert_rate.ft()] in which some
-#' inputs must be in specific units (e.g. temperature in °C, atmospheric
-#' pressure in bar, area in m2). See Examples.
+#' [convert_DO()], [convert_rate()], and [convert_rate.ft()] where some inputs
+#' must be in specific units (e.g. temperature in °C, atmospheric pressure in
+#' bar, area in m2). See Examples.
+#'
+#' Note the type of unit does not need to be specified. The function will
+#' automatically recognise it using the `from` unit.
 #'
 #' If the `'to'` input is left `NULL`, the following defaults are applied
 #' depending on the unit type of the `from` input:
 #'
-#' - volume:        "L"
+#' - volume:        `"L"`
 #'
-#' - temperature:   "C"
+#' - temperature:   `"C"`
 #'
-#' - mass:          "kg"
+#' - mass:          `"kg"`
 #'
-#' - area:          "m2"
+#' - area:          `"m2"`
 #'
-#' - pressure:      "bar"
+#' - pressure:      `"bar"`
 #'
 #' A fuzzy string matching algorithm is used to accept different unit formatting
-#' styles. For example, `'msq', 'm2', 'M2', 'sqm'` are all parsed as metres
+#' styles. For example, `"msq"` `"m2"`, `"M2"`, `"sqm"` are all parsed as metres
 #' squared of area.
 #'
-#' **Units Accepted**
+#' ## Accepted Units
 #'
 #' *Temperature:*
 #'
-#' - "C", "K", "F"
+#' - `"C"`, `"K"`, `"F"`
 #'
 #' *Pressure:*
 #'
-#' - "kPa", "hPa", "Pa", "ubar", "mbar", "bar", "atm" (standard atmospheres),
-#' "Torr"
+#' - `"kPa"`, `"hPa"`, `"Pa"`, `"ubar"`, `"mbar"`, `"bar"`, `"Torr"`, `"atm"`
+#' (note, this is standard atmospheres).
 #'
 #' *Volume:*
 #'
-#' - "uL", "mL", "L"
+#' - `"uL"`, `"mL"`, `"L"`
 #'
 #' *Mass:*
 #'
-#' - "ug", "mg", "g", "kg"
+#' - `"ug"`, `"mg"`, `"g"`, `"kg"`
 #'
 #' *Area:*
 #'
-#' - "mm2", "cm2", "m2", "km2"
+#' - `"mm2"`, `"cm2"`, `"m2"`, `"km2"`
+#'
+#' ## Output
+#'
+#' Output is a numeric vector of converted values.
 #'
 #' @param x numeric value or vector. Values to be converted to a different unit.
 #' @param from string. Unit of the original values.
 #' @param to string. Unit to be converted to. These defaults are applied if left
-#'   NULL: volume "L", temperature "C", mass "kg", area "m2", pressure "bar".
-#'
-#' @return Output is a numeric vector of converted values.
+#'   `NULL`: volume `"L"`, temperature `"C"`, mass `"kg"`, area `"m2"`, pressure
+#'   `"bar"`.
 #'
 #' @importFrom marelac convert_p convert_T
 #' @export
@@ -63,8 +69,8 @@
 #' convert_val(10:15, "ml", "L")
 #'
 #' # Convert temperature
-#' convert_val(-273.15, "K", "C")
-#' convert_val(-40, "F", "C")
+#' convert_val(-273.15, "C", "K")
+#' convert_val(-40, "C", "F")
 #' convert_val(c(2,4,6,8), "C", "F")
 #'
 #' # Convert pressure
@@ -83,24 +89,30 @@
 #' # Use directly in a respR function which requires inputs to be
 #' # in a specific unit. For example, in convert_rate() pressure
 #' # must be in 'bar' and respirometer volume in 'L'.
-#' # Here, chamber volume is 200 ml, pressure measured in mbar.
+#' # Here, we know chamber volume is 200 ml, and pressure measured in mbar.
 #' x <- suppressWarnings(inspect(urchins.rd, 1, 2))
+#'
 #' rate <- calc_rate(x, from = 20, to = 30)
-#' convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
+#'
+#' convert_rate(rate,
+#'              oxy.unit = "ml/l",
+#'              time.unit = "min",
 #'              output.unit = "mg/h",
 #'              volume = convert_val(200, "ml", "L"),
-#'              S = 35, t = 15,
+#'              S = 35,
+#'              t = 15,
 #'              P = convert_val(1010, "mbar", "bar"))
 #'
 #' # Note, the default 'to' units are set to those respR requires in
-#' # these functions ("L" and "bar" here), so do not necessarily need
+#' # these functions ('L' and 'bar' here), so do not necessarily need
 #' # to be specified:
-#' x <- suppressWarnings(inspect(urchins.rd, 1, 2))
-#' rate <- calc_rate(x, from = 20, to = 30)
-#' convert_rate(rate, oxy.unit = "ml/l", time.unit = "min",
+#' convert_rate(rate,
+#'              oxy.unit = "ml/l",
+#'              time.unit = "min",
 #'              output.unit = "mg/h",
 #'              volume = convert_val(200, "ml"),
-#'              S = 35, t = 15,
+#'              S = 35,
+#'              t = 15,
 #'              P = convert_val(1010, "mbar"))
 
 convert_val <- function(x, from = NULL, to = NULL) {

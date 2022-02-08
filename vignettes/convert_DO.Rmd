@@ -89,10 +89,10 @@ print(conv)
 
 ### Percent oxygen saturation
 
-Note the difference between percent air saturation (`%Air`), where air saturated water is ~100%, and percent oxygen saturation (`%O2`), where air saturated water is ~20.946% *oxygen* saturated. In other words, ` %O2 = %Air * 0.20946 `. Some oxygen probe systems output in both units, or tend to use one over the other, so take care not to confuse them. 
+Note the difference between percent air saturation (`%Air`), where air saturated water is ~100%, and percent oxygen saturation (`%Oxy`), where air saturated water is ~20.946% *oxygen* saturated. In other words, ` %Oxy = %Air * 0.20946 `. Some oxygen probe systems output in both units, or tend to use one over the other, so take care not to confuse them. 
 
 ```{r}
-convert_DO(100, "%Air", "%O2",
+convert_DO(100, "%Air", "%Oxy",
            t = 15,
            S = 35,            
            P = 1.013)         

@@ -24,6 +24,8 @@ A function to parse class POSIX.ct or text strings of date-time data to
 numeric time for use in \code{respR} functions.
 }
 \details{
+\code{format_time} uses conversion functionality from the \code{\link{lubridate}}
+package.
 \subsection{Input}{
 
 Input can be a vector, or data frame. If a data frame, the column(s) of the
@@ -59,11 +61,11 @@ when this occurs and parse the data correctly.
 
 \subsection{Formatting}{
 
-See the \code{\link[=lubridate]{lubridate()}} package for detail on accepted formatting.
+See the \code{\link{lubridate}} package for more detail on acceptable
+formatting.
 
 Date-time data can be unspaced or separated by any combination of spaces,
 forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
-
 E.g. all these are parsed as the same date-time: \verb{"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23"}.
 \itemize{
 \item Times can be in 24H or 12H with AM/PM \cr E.g. "2010-02-28 13:10:23" or
@@ -93,64 +95,69 @@ Specify the order of year, month, day, and time in your date-time input.
 
 \code{S} - Second as decimal number (00--59 or 0--59).
 
-\code{p} - AM/PM indicator for 12-h date-time format (i.e. 1.30 PM).
+\code{p} - AM/PM indicator for 12-h date-time format (e.g. "01/12/2020 1:30:44 PM
+" would be \code{"dmyHMSp"}).
 
-Print the order in the \code{format} string argument, using separators if you
-choose (optional): \code{"dmyHMS"}; \code{"dmy_HMS"} and \code{"d m y H M S"} are all the
-same. See Examples.
+Specify the order using the \code{format} input, using separators or not
+(optional): \code{"dmyHMS"}; \code{"dmy_HMS"} and \code{"d m y H M S"} are all the same. See
+Examples.
 
-Single datasets should not span different time zones, so if a time zone is
-present it is ignored for the purposes of calculating numeric times.
+Single experimental datasets should never span different time zones, so if a
+time zone is present it is ignored for the purposes of calculating numeric
+times.
 }
 }
 \examples{
-# convert year-month-day hour-min-sec
+# Convert year-month-day hour-min-sec
 x <- c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11")
 format_time(x)
-## [1]    0 3600 4440
 
-# convert day-month-year hour-min
+# Convert day-month-year hour-min, and use a separator in the format
 x <- c("03-02-09 01:11", "03-02-09 02:11","03-02-09 02:25")
-format_time(x, format = "dmyHM")
-## [1]    0 3600 4440
+format_time(x, format = "dmy_HM")
 
-# convert when AM/PM is present
+# Convert when AM/PM is present
 x <- c("09-02-03 11:11:11 AM", "09-02-03 12:11:11 PM","09-02-03 01:25:11 PM")
-format_time(x, format = "dmyHMS")  # this is wrong
-format_time(x, format = "dmyHMSp") # this is right
-## [1]    0 3600 8040
+# This is WRONG - the AM/PM indicator is missing
+format_time(x, format = "dmyHMS")
+# This is correct
+format_time(x, format = "dmyHMSp")
 
-# convert dataframe with year-month-day hour-min-sec (ymdHMS default)
+# Convert dataframe with year-month-day hour-min-sec (ymdHMS default)
 x <- data.frame(
   x = c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11"),
   y = c(23, 34, 45))
 format_time(x, time = 1)
 
-# convert dataframe with time in different column and non-default format
+# Convert dataframe with time in a different column and non-default format
 x <- data.frame(
   x = c(23, 34, 45),
   y = c("09-02-2018 11:11:11 AM", "09-02-2018 12:11:11 PM","09-02-2018 01:25:11 PM"),
   z = c(56, 67, 78))
 format_time(x, time = 2, format = "dmyHMSp")
 
-# convert dataframe with separate date and time columns crossing midnight
+# Convert dataframe with separate date and time columns, and times crossing midnight
 x <- data.frame(
   w = c("09-02-18", "09-02-18","10-02-18"),
   x = c("22:11:11", "23:11:11","00:25:11"),
   y = c(23, 34, 45),
   z = c(56, 67, 78))
-format_time(x, time = 2, format = "HMS") # Crosses midnight, but parses correctly
-format_time(x, time = 1:2, format = "dmyHMS") # Include dates if present to be sure
-format_time(x, time = 2:1, format = "HMSdmy") # Different column order & format
+# Crosses midnight, but parses correctly even without dates
+format_time(x, time = 2, format = "HMS")
+# Include dates to double check
+format_time(x, time = 1:2, format = "dmyHMS")
+# Input same as different column order & appropriate format order
+format_time(x, time = 2:1, format = "HMSdmy")
 
-# convert dataframe with multiple date and time columns
+# Convert a data frame with date and time split over multiple columns
 x <- data.frame(
-  v = c("09-02", "09-02","10-02"),
+  u = c("09", "09","10"),
+  v = c("02", "02","02"),
   w = c("2018", "2018","2018"),
   x = c("22:11:11", "23:11:11","00:25:11"),
   y = c(23, 34, 45),
   z = c(56, 67, 78))
-format_time(x, time = 1:3, format = "dmyHMS")
+format_time(x, time = 1:4, format = "dmyHMS")
 }
 \seealso{
 \code{\link{lubridate}}

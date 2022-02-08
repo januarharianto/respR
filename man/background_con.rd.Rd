@@ -6,7 +6,7 @@
 \title{Background respirometry data (constant)}
 \format{
 A data frame object consisting of 20664 rows (approx 6 h of data),and
-2 columns: time in seconds, oxygen in \% air saturation.
+2 columns: \verb{$Time} in seconds, \verb{$Oxygen} in \% air saturation.
 }
 \usage{
 background_con.rd
@@ -19,11 +19,12 @@ over nearly 6 hours at 1 second intervals. Data is from a real experiment.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: \% Air Saturation
-\item Time units: seconds
-\item Swim tunnel volume: 12.3 L
-\item Temperature: 14.5 C
-\item Salinity: 34 ppt
+\item Dissolved oxygen units: \verb{\% Air Saturation}
+\item Time units: \code{seconds}
+\item Swim tunnel volume (L): \code{12.3}
+\item Temperature (°C): \code{14.5}
+\item Salinity: \code{34}
+\item Atm. Pressure (bar): \code{1.013253}
 }
 }
 \author{

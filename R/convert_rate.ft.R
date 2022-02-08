@@ -5,7 +5,8 @@
 #' [`adjust_rate.ft()`] into an absolute rate (i.e. whole specimen or whole
 #' chamber), mass-specific rate (i.e. normalised by specimen mass), or
 #' area-specific rate (i.e. normalised by specimen surface area) in any common
-#' unit.
+#' unit. These should be rates calculated as an oxygen delta (inflow minus
+#' outflow oxygen) multiplied by the flowrate.
 #'
 #' By default, `convert_rate.ft` converts the `$rate` element from
 #' `calc_rate.ft` objects, or the `$rate.adjusted` element from `adjust_rate.ft`
@@ -14,43 +15,48 @@
 #'
 #' ## Units
 #'
-#' The `oxy.unit` of the original data used to calculated the rate is required.
-#' Concentration units should use only SI units (`L` or `kg`) for the
+#' The `oxy.unit` of the original raw data used to calculated the rate is
+#' required. Concentration units should use only SI units (`L` or `kg`) for the
 #' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
 #' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
 #' details.
 #'
-#' An `output.unit` is also required. If left NULL, The default of `"mgO2/h"` is
-#' used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
-#' has been entered. The `output.unit` must be in the sequence *O2-Time* (e.g.
-#' `"mg/h"`) for absolute rates, *O2-Time-Mass* (e.g. `"mg/h/kg"`) for
-#' mass-specific rates, and *O2-Time-Area* (e.g. `"mg/h/cm2"`) for surface
+#' An `output.unit` is also required. If left `NULL`, The default of `"mgO2/h"`
+#' is used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
+#' has been entered. The `output.unit` must be in the sequence *Oxygen-Time*
+#' (e.g. `"mg/h"`) for absolute rates, *Oxygen-Time-Mass* (e.g. `"mg/h/kg"`) for
+#' mass-specific rates, and *Oxygen-Time-Area* (e.g. `"mg/h/cm2"`) for surface
 #' area-specific rates.
 #'
 #' Note, some oxygen input or output units require temperature (`t`) and
 #' salinity (`S`) to perform conversions. For freshwater experiments, salinity
-#' should be entered as zero (i.e. `S = 0`). Strictly speaking these also
-#' require an atmospheric pressure (`P`) input. In reality, it has a relatively
-#' minor effect within normal ranges, however the default value of 1.013253 bar
-#' (standard pressure at sea level) can be changed if desired. See [unit_args()]
-#' for details.
+#' should be entered as zero (i.e. `S = 0`).
+#'
+#' Strictly speaking the atmospheric pressure (`P`) should also be supplied. If
+#' not, the default value of 1.013253 bar (standard pressure at sea level) is
+#' used. In most locations which have a normal range (outside extreme weather
+#' events) of around 20 millibars, any variability in pressure will have a
+#' relatively minor effect on dissolved oxygen, and even less on calculated
+#' rates. However, we would encourage users to enter the actual value if they
+#' know it, or use historical weather data to find out what it was on the day.
+#' See [unit_args()] for details.
 #'
 #' The `flowrate.unit` is required and should be the units of the `flowrate`
 #' used in `calc_rate.ft` to calculate the rate, and should be in the form of
 #' volume (L, ml, or ul) per unit time (s,m,h,d), for example in `"L/s"`. Note,
 #' the volume component does *NOT* represent the volume of the respirometer, and
 #' the time component does *NOT* represent the units or recording interval of
-#' the original data.
+#' the original raw data.
 #'
 #' The function uses an internal database and a fuzzy string matching algorithm
-#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
-#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. See [`unit_args()`] for
-#' details of accepted units and their formatting. See also [`convert_val()`]
-#' for simple conversion between units.
+#' to accept various unit formatting styles. For example, `"mg/l"`, `"mg/L"`,
+#' `"mgL-1"`, `"mg l-1"`, `"mg.l-1"` are all parsed the same. See
+#' [`unit_args()`] for details of accepted units and their formatting. See also
+#' [`convert_val()`] for simple conversion between non-oxygen units.
 #'
 #' ## Output
 #'
-#' Returns a `list` object containing the `$rate.input`, and converted rate(s)
+#' Output is a `list` object containing the `$rate.input`, and converted rate(s)
 #' in `$rate.output` in the `$output.unit`, as well as inputs and summary
 #' elements.
 #'
@@ -70,15 +76,15 @@
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
 #' separate value by passing `export = TRUE`.
 #'
-#' @param x numeric value or vector, object of class [calc_rate.ft()] or
+#' @param x numeric value or vector, or object of class [calc_rate.ft()] or
 #'   [adjust_rate.ft()]. Contains the rate(s) to be converted.
-#' @param oxy.unit string. The dissolved oxygen unit of the original data used to
-#'   determine the rate in `x`.
-#' @param flowrate.unit string. The unit of the flowrate through the
+#' @param oxy.unit string. The dissolved oxygen units of the original raw data
+#'   used to determine the rate in `x`.
+#' @param flowrate.unit string. The units of the flowrate through the
 #'   respirometer. See Details.
 #' @param output.unit string. The output unit to convert the input rate to.
-#'   Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
-#'   "O2/Time/Area".
+#'   Should be in the correct order: "Oxygen/Time" or "Oxygen/Time/Mass" or
+#'   "Oxygen/Time/Area".
 #' @param mass numeric. Mass/weight in **kg**. This is the mass of the specimen
 #'   if you wish to calculate mass-specific rates.
 #' @param area numeric. Surface area in **m^2**. This is the surface area of the
@@ -95,15 +101,34 @@
 #'
 #' @examples
 #' # Convert a single numeric rate to an absolute rate
+#' convert_rate.ft(-0.09, oxy.unit = 'mg/l', flowrate.unit = 'L/s',
+#'                 output.unit = 'mg/min')
 #'
 #' # Convert a single numeric rate to a mass-specific rate
+#' convert_rate.ft(-0.09, oxy.unit = 'mg/l', flowrate.unit = 'L/s',
+#'                 output.unit = 'mg/min/kg', mass = 0.5)
 #'
 #' # Convert a single numeric rate to an area-specific rate
+#' convert_rate.ft(-0.09, oxy.unit = 'mg/l', flowrate.unit = 'L/s',
+#'                 output.unit = 'mg/min/cm2', area = 0.0002)
 #'
-#' # Convert a single rate derived via calc_rate to mass-specific
-#'
-#' # Convert multiple rates derived via auto_rate to area-specific
-#'
+#' # Full object-oriented workflow
+#' # Inspect, calculate rate, adjust rate, and convert
+#' # to a final mass-specific rate
+#' inspect.ft(flowthrough_mult.rd,
+#'            time = 1,
+#'            out.oxy = 2,
+#'            in.oxy = 6) %>%
+#'   calc_rate.ft(flowrate = 0.1,
+#'                from = 30,
+#'                to = 60,
+#'                by = "time") %>%
+#'   adjust_rate.ft(by = -0.032) %>%
+#'   convert_rate.ft(oxy.unit = '%Air',
+#'                   flowrate.unit = 'L/min',
+#'                   output.unit = 'mg/h/g',
+#'                   mass = 0.05,
+#'                   S =35, t = 15, P = 1.013)
 
 convert_rate.ft <- function(x,
                             oxy.unit = NULL,

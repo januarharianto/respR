@@ -47,22 +47,22 @@ value or with \code{"segmented"} method. To perform no subsampling enter as
 
 \item{plot}{logical. Defaults to TRUE.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE}, and \code{choose}. See Plotting
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE}, and \code{panel}. See Plotting
 section.}
 }
 \description{
-A function to calculate the critical oxygen value, the oxygen tension or
+A function to calculate critical oxygen values, the oxygen tension or
 concentration below which an uptake rate transitions from independent to
 dependent on the oxygen supply, typically known as \emph{PCrit}.
 }
 \details{
-In earlier versions of \code{respR}, this function was known as \code{calc_pcrit}. It
-was renamed to avoid conflicts with a function of the same name in another
-package, and also because technically the \emph{P} in  \emph{PCrit} stands for the
-partial \emph{pressure} of oxygen. Since the function returns the value in the
-units of the data as entered, whether they are concentration or pressure
-units, this terminology can be technically in error. Instead, for the
-purposes of the documentation we refer to this as the \emph{Critical Oxygen
+In earlier versions of \code{respR}, this function was known as \code{pcrit} or
+\code{calc_pcrit}. It was renamed to avoid conflicts with functions of the same
+name in another package, and also because technically the \emph{P} in  \emph{PCrit}
+stands for the partial \emph{pressure} of oxygen. Since the function returns the
+value in the units of the data as entered, whether they are concentration or
+pressure units, this terminology can be technically in error. Instead, for
+the purposes of the documentation we refer to this as the \emph{Critical Oxygen
 Value}, or "\emph{COV}". If the units of oxygen are partial pressure units (e.g.
 kPa), this is equivalent to PCrit, otherwise they should be reported with
 this in mind.
@@ -102,7 +102,7 @@ value that minimises the “gap” between the fitted lines.
 \subsection{Inputs}{
 
 The data input \code{x} should be an \code{inspect} object or \code{data.frame} containing
-oxygen~time data, \emph{or} a \code{data.frame} containing rate~oxygen data.
+oxygen~time data, or a \code{data.frame} containing rate~oxygen data.
 \subsection{Oxygen ~ Time data}{
 
 This is the typical input, where a timeseries of oxygen concentrations or
@@ -120,7 +120,7 @@ uptake rate against oxygen value. Therefore, the function performs a rolling
 regression on the oxygen~time data to determine rates, and pairs these
 against a rolling mean of the oxygen data. The function then performs the
 selected analysis \code{method} on these data. The width of the rolling regression
-and rolling mean is determined by the \code{width} argument. The default is 0.1,
+and rolling mean is determined by the \code{width} input. The default is 0.1,
 representing 10\% of the length of the data. This performs well in testing,
 however performance may vary with data that has abrupt changes in rate, or is
 particularly noisy. Users should experiment with different \code{width} values to
@@ -169,13 +169,13 @@ analysis.
 \subsection{Additional plotting options}{
 
 If the legend obscures parts of the plot they can be suppressed using \code{legend = FALSE}. Suppress console output messages with \code{quiet = TRUE}. Each panel
-can be plotted on its own using \code{choose = 1} or \code{choose = 2}. If using
+can be plotted on its own using \code{panel = 1} or \code{panel = 2}. If using
 already-calculated, positive rate values to identify critical oxygen values,
 the y-axis of the rolling rate plot can be plotted \emph{not} reversed by passing
 \code{rate.rev = FALSE} These inputs can be passed in either the main \code{oxy_crit}
 call or when calling \code{plot()} on the output object. If axis labels
 (particularly y-axis) are difficult to read, \code{las = 2} can be passed to make
-axis labels horizontal. In addition, \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins.
+axis labels horizontal, and \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
 }
 
 }
@@ -199,7 +199,7 @@ separate data frame by passing \code{export = TRUE}.
 Output is a \code{list} object of class \code{oxy_crit} containing input parameters and
 data, various summary data, metadata, and the primary output of interest
 \verb{$crit}, which is the critical oxygen value in the units of the oxygen data
-as entered. This can be converted to additional units using \code{convert_DO()}.
+as entered. This can be converted to additional units using \code{\link[=convert_DO]{convert_DO()}}.
 Note, if the Broken-Stick analysis (\code{method == "bsr"}) has been used, \verb{$crit}
 will contain two results; \verb{$crit.intercept} and \verb{$crit.midpoint}. For full
 explanation of the difference between these see Yeager & Ultsch (1989),
@@ -230,9 +230,9 @@ insp <- inspect(squid.rd, time = 1, oxygen = 2)
 oxy_crit(insp)
 
 ## Run on already calculated rate~oxygen data
-# Generate using internal function
+## (generated using an internal function)
 oxy.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
-# Analyse
+## Analyse
 oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
 }
 }

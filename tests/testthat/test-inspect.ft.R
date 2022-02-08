@@ -266,19 +266,19 @@ test_that("inspect.ft - stops if input column numbers found to conflict",{
                regexp = "inspect.ft: Input columns conflict.")
 })
 
-test_that("inspect.ft - stops if out.oxy entered and neither or in.oxy or in.oxy.value have arguments",{
+test_that("inspect.ft - stops if out.oxy entered and neither or in.oxy or in.oxy.value have inputs",{
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:3,
                           in.oxy = NULL, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: With 'out.oxy' data, paired 'in.oxy' columns or an 'in.oxy.value' is required.")
 })
 
-test_that("inspect.ft - stops if in.oxy entered and out.oxy does not have argument",{
+test_that("inspect.ft - stops if in.oxy entered and out.oxy does not have input",{
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = NULL,
                           in.oxy = 5:7, in.oxy.value = NULL, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: An 'in.oxy' input requires paired 'out.oxy' column\\(s\\).")
 })
 
-test_that("inspect.ft - stops if both or in.oxy and in.oxy.value have arguments",{
+test_that("inspect.ft - stops if both or in.oxy and in.oxy.value have inputs",{
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2:3,
                           in.oxy = 4, in.oxy.value = 5, delta.oxy = NULL, plot = F),
                regexp = "inspect.ft: Only one of 'in.oxy' or 'in.oxy.value' can be entered.")
@@ -308,7 +308,7 @@ test_that("inspect.ft - stops if out.oxy and in.oxy entered, but in.oxy does not
                regexp = NA)
 })
 
-test_that("inspect.ft - stops if delta.oxy entered and out.oxy, in.oxy or in.oxy.value have arguments",{
+test_that("inspect.ft - stops if delta.oxy entered and out.oxy, in.oxy or in.oxy.value have inputs",{
   expect_error(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
                           in.oxy = NULL, in.oxy.value = 4, delta.oxy = 3, plot = F),
                regexp = "inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")

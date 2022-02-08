@@ -13,8 +13,8 @@ reference:
     desc: >
       Functions for importing, processing, visualising and inspecting data:
     contents:
-    - '`import_file`'
     - '`format_time`'
+    - '`import_file`'
     - '`inspect`'
     - '`inspect.ft`'
     - '`subsample`'
@@ -34,9 +34,9 @@ reference:
     desc: >
       Functions for rate filtering and adjustment:
     contents:
-    - '`subset_rate`'
     - '`adjust_rate`'
     - '`adjust_rate.ft`'
+    - '`subset_rate`'
 
   - title: "Convert"
     desc: >
@@ -52,19 +52,19 @@ reference:
     desc: >
       Example data files:
     contents:
+    - '`algae.rd`'
+    - '`background_con.rd`'
+    - '`background_exp.rd`'
+    - '`background_lin.rd`'
     - '`flowthrough.rd`'
     - '`flowthrough_mult.rd`'
     - '`flowthrough_sim.rd`'
     - '`intermittent.rd`'
     - '`sardine.rd`'
     - '`squid.rd`'
-    - '`urchins.rd`'
-    - '`algae.rd`'
-    - '`zeb_intermittent.rd`'
     - '`test_lin_data`'
-    - '`background_con.rd`'
-    - '`background_exp.rd`'
-    - '`background_lin.rd`'
+    - '`urchins.rd`'
+    - '`zeb_intermittent.rd`'
 
   # - title: "Deprecated"
   #   desc: >

@@ -7,34 +7,31 @@
 calc_rate.bg(x, time = NULL, oxygen = NULL, plot = TRUE, ...)
 }
 \arguments{
-\item{x}{\code{data.frame} or \code{inspect} object. This is the data to process.}
+\item{x}{\code{data.frame} or \code{inspect} object. This is the data to extract
+background rate(s) from.}
 
 \item{time}{integer. Defaults to 1. This specifies the column number of the
 time data.}
 
 \item{oxygen}{integer value or vector. This specifies the column number(s) of
 the oxygen data. Multiple columns of oxygen can be specified. If NULL,
-function assumes oxygen data are in all columns of the data frame except
+function assumes oxygen data are in \emph{all} columns of the data frame except
 the \code{time} column.}
 
-\item{plot}{logical. Defaults to TRUE. Defaults to TRUE. Plots the data. See
-Details.}
+\item{plot}{logical. Defaults to TRUE. Plots the data. See Details.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{pos}
-and \code{quiet = TRUE}.}
-}
-\value{
-A list object of class \code{calc_bg.rate}.
+\item{...}{Allows additional plotting controls to be passed, such as \code{pos},
+\code{legend = FALSE}, and \code{quiet = TRUE}.}
 }
 \description{
 This function calculates the rate of change of oxygen over time from "blank"
 or control respirometry experiments, to allow for background adjustments of
 experimental data. It accepts background oxygen~time data as data frames and
 \code{inspect} objects. The data must be in the same time and oxygen units as the
-data used from which the rate to be adjusted was extracted. Multiple columns
-of background oxygen measurements can be examined as long as they share the
-same time data. The function returns rates for all columns, and also
-calculates a mean rate.
+data from which the rate which will be adjusted was extracted. Multiple
+columns of background oxygen measurements can be entered as long as they
+share the same time data. In this case the function returns rates for all
+columns, and also calculates a mean rate.
 }
 \details{
 The main difference between \code{calc_rate.bg} and \code{calc_rate}, is that this
@@ -60,17 +57,16 @@ to subset the data to specific regions you don't want to use, see
 
 \subsection{Background respiration vs background input of oxygen}{
 
-\code{calc_rate.bg} can easily quantify oxygen \emph{input} rates as well as
-consumption rates. Most users will be interested in this function because
-background rates are typically consumption rates from microbial activity,
-that need to be quantified and their effects removed from experimental
-specimen rates. However, there are some experiments where oxygen input is of
-interest, for example open tank or open arena respirometry where the input of
-oxygen from the open water surface is of interest. There are also cases in
-closed respirometry where there may be an input of oxygen via leaks or
-production from photosynthesis, which need to be quantified. \code{calc_rate.bg}
-is capable of quantifying production rates as well as consumption, and these
-can be used for adjustments in \code{\link[=adjust_rate]{adjust_rate()}}.
+Most users will be using this function to account for background oxygen
+consumption rates from microbial activity that need to be quantified and
+their effects removed from experimental specimen rates. However, there are
+some experiments where oxygen \emph{input} rates may be of interest, for example
+in open tank or open arena respirometry where the input of oxygen from the
+water surface has been calculated or quantified. There are also cases in
+closed respirometry where there may be an input of oxygen via leaks or oxygen
+production from photosynthesis which need to be quantified. \code{calc_rate.bg} is
+readily capable of quantifying production rates as well as consumption, and
+these can also be used for adjustments in \code{\link[=adjust_rate]{adjust_rate()}}.
 }
 
 \subsection{Output}{
@@ -80,7 +76,7 @@ linear models, summary information, and the primary output of interest
 \verb{$rate.bg}, which contains a rate for each oxygen column present in the input
 data. There is also \verb{$rate.bg.mean} containing the mean of all background
 rates. Note, this is not used in \code{adjust_rate}, where the \code{method} input
-there determines how \verb{$rate.bg} are applied, but can easily be extracted and
+there determines how \verb{$rate.bg} is applied, but can easily be extracted and
 applied as an adjustment value if desired.
 }
 
@@ -89,10 +85,10 @@ applied as an adjustment value if desired.
 A plot is produced (provided \code{plot = TRUE}) showing all examined columns of
 oxygen against time (bottom blue axis) and row index (top red axis), with the
 rate and linear model coefficients. Single rates can be plotted by changing
-the \code{pos} argument either in the main function call, or by plotting the
-output, e.g. \code{plot(object, pos = 2)}. Console output messages can be
-suppressed using \code{quiet = TRUE}. If equations obscure the plot they can be
-suppressed using \code{legend = FALSE}.
+the \code{pos} input either in the main function call, or by plotting the output,
+e.g. \code{plot(object, pos = 2)}. Console output messages can be suppressed using
+\code{quiet = TRUE}. If equations obscure the plot they can be suppressed using
+\code{legend = FALSE}.
 }
 
 \subsection{S3 Generic Functions}{
@@ -111,6 +107,22 @@ by passing \code{export = TRUE}.
 }
 }
 \examples{
-data("urchins.rd")
-calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+# Inspect and calculate background rate from two columns
+inspect(urchins.rd, time = 1, oxygen = 18:19) \%>\%
+  calc_rate.bg()
+
+# Same example but enter as a data frame, save as an object and use
+# in adjust_rate
+bg_rate <- calc_rate.bg(urchins.rd,
+                        time = 1,
+                        oxygen = 18:19,
+                        plot = FALSE)
+
+inspect(urchins.rd, 1, 2, plot = FALSE) \%>\%
+  calc_rate(from = 10, to = 30, by = "time", plot = FALSE) \%>\%
+  adjust_rate(by = bg_rate)
+
+# Subset single column data first before calculating background rate
+subset_data(background_con.rd, from = 5000, to = 20000, by = "time") \%>\%
+  calc_rate.bg()
 }

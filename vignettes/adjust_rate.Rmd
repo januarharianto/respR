@@ -385,7 +385,7 @@ bg2 <- calc_rate.bg(bg_exp)
 print(bg2)
 ```
 
-Note the default behaviour of `calc_rate.bg` when no other arguments are provided is to use all columns, assuming column 1 is `time` and all other columns are `oxygen` data.
+Note the default behaviour of `calc_rate.bg` when no other inputs are provided is to use all columns, assuming column 1 is `time` and all other columns are `oxygen` data.
 
 ### Adjust using multiple background rates
 
@@ -1122,4 +1122,4 @@ Now we can see this level of background rate will be reached in round 53 hours, 
 
 ### S3 generics
 
-As with most outputs in `respR`, `adjust_rate` objects support the generic S3 functions `print`, `summary`, and `mean`. These have the additional arguments `pos` and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output `$rate.adjusted`. This can be output as a value by passing `export = TRUE`.
+As with most outputs in `respR`, `adjust_rate` objects support the generic S3 functions `print`, `summary`, and `mean`. These have the additional inputs `pos` and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output `$rate.adjusted`. This can be output as a value by passing `export = TRUE`.

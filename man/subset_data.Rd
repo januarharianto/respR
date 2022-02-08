@@ -7,68 +7,68 @@
 subset_data(x, from = NULL, to = NULL, by = "time", quiet = FALSE)
 }
 \arguments{
-\item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data to subset.}
+\item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data from which
+to produce a subset.}
 
-\item{from}{numeric. The lower bounds of the data to subset based on the
-argument \code{by}.}
+\item{from}{numeric. The lower bounds of the subset based on the \code{by} input.}
 
-\item{to}{numeric. The upper bounds of the data to subset based on the
-argument \code{by}. is based on the argument: \code{by}.}
+\item{to}{numeric. The upper bounds of the subset based on the \code{by} input.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"}.}
+\item{by}{string. "time"\verb{, }"row"\verb{, }"oxygen"\code{or}"proportion"\verb{. Method by which to apply the }from\code{and}to` inputs.}
 
 \item{quiet}{logical. Controls if a summary of the output is printed to the
 console. Default is \code{FALSE}.}
 }
 \description{
 \code{subset_data} subsets a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object based
-on a given set of criteria. The function is ideal for passing only some
-regions of your data to other functions such as \code{\link[=calc_rate]{calc_rate()}} and
-\code{\link[=auto_rate]{auto_rate()}}, either by saving them as a new object or through the use of
-pipes (\verb{\%>\%} or \verb{|>}). It is also very useful with intermittent-flow data in
-loops, where each replicate can be extracted and passed to an analytical
-function such as \code{calc_rate} or \code{auto_rate}. See examples and vignettes.
+on a given set of criteria. The function is ideal for passing only selected
+regions of data to other functions such as \code{\link[=calc_rate]{calc_rate()}} and
+\code{\link[=auto_rate]{auto_rate()}}, either by saving the output as a new object or via the use
+of pipes (\verb{\%>\%} or \verb{|>}). It is also very useful in analysis of
+intermittent-flow data, where in a loop each replicate can be extracted and
+passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
+examples and vignettes.
 }
 \details{
-The function can subset data based on ranges of: \code{"time"}, \code{"oxygen"},
-\code{"row"} , or \code{"proportion"} of total oxygen used or produced (note, this last
-option works poorly with noisy or fluctuating data). For data frames, to
-subset by \code{"time"}, \code{"oxygen"}, or \code{"proportion"}, the time data is assumed
-to be in the first column, and oxygen data in the second column. For
-\code{inspect()} and \code{inspect.ft()} objects, the data will have been coerced to
-this structure already. In these cases the \verb{$dataframe} element in the output
-is replaced by the subset, and in \code{inspect.ft()} the \verb{$inputs} element is
-also subset and replaced. Note for \code{inspect.ft()} objects, the oxygen data in
-column 2 will be either \code{out.oxy} data or \code{delta.oxy} data depending on what
-was inspected. The function can subset any data frame by \code{row}.
+The function can subset data based on ranges of \code{"time"}, \code{"oxygen"}, \code{"row"}
+, or \code{"proportion"} of total oxygen used or produced (note, this last option
+works poorly with noisy or fluctuating data). For data frames, to subset by
+\code{"time"}, \code{"oxygen"}, or \code{"proportion"}, the time data is assumed to be in
+the first column, and oxygen data in the second column. For \code{\link[=inspect]{inspect()}} and
+\code{\link[=inspect.ft]{inspect.ft()}} objects, the data will have been coerced to this structure
+already. In these cases the \verb{$dataframe} element in the output is replaced by
+the subset, and in \code{inspect.ft} the \verb{$data} element is also subset and
+replaced. Note for \code{inspect.ft} objects, the oxygen data in column 2 will be
+either \code{out.oxy} data or \code{delta.oxy} data depending on what was inspected.
+The function can subset \emph{any} data frame by \code{row}.
 
 When multiple columns are present, for example time in column 1, and multiple
 columns of oxygen data, the subset object will include \emph{all} columns. In the
-case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is based on
-the first column of oxygen data (i.e. column 2), and all subsequent columns
-are subset between the same rows regardless of oxygen values.
+case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is
+based on the \emph{first} column of oxygen data (i.e. column 2), and all
+subsequent columns are subset between the same rows regardless of oxygen
+values.
 
 For all methods, if exact matching values of \code{from} and \code{to} are not present
 in the data, the closest values are used. For \code{"time"} and \code{"row"}
-subsetting, \code{from} and \code{to} should be in correct order. No warning or
-messages are given if the values are beyond those in the dataframe. For
-instance, if \code{to = 100} and there are only 50 rows in the data, the last row
-(50) will be used instead. The same for \code{from} and \code{to} time values outside
-those in the data frame. For \code{"time"} subsetting, the values do not need to
-be precise; the function will use the closest values found.
+subsetting, \code{from} and \code{to} should be in the correct order. No warning or
+messages are given if the input values are outside those in the data frame.
+For instance, if \code{to = 100} and there are only 50 rows in the data, the last
+row (50) will be used instead. The same for \code{from} and \code{to} time values
+outside those in the data frame.
 
 For \code{"oxygen"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
 interchangeable, and the function will subset data \emph{between} the first and
 last occurrences (or closest occurrences) of these values. It works best with
-generally increasing or decreasing oxygen data, but results may vary with
+generally increasing or decreasing oxygen data, and results may vary with
 other data such as intermittent flow data or those in \code{inspect.ft} objects.
 \subsection{Output}{
 
-If the input is an \code{inspect}, or \code{inspect.ft} object, output is an object of
-the same class containing the subset data.. For \code{data.frame}, inputs the
+If the input is an \code{inspect}, or \code{inspect.ft} object, the output is an object
+of the same class containing the subset data. For \code{data.frame} inputs the
 output is a \code{data.table} of the subset.
 
-\strong{Note for \code{inspect} and \code{inspect.ft} objects:} after subsetting the
+\strong{Note for \code{inspect} and \code{inspect.ft} objects:} after subsetting, the
 locations of any data issues highlighted when the object was originally
 inspected will no longer be accurate. If these are important, best practice
 is to subset the original dataframe, and process the subset through \code{inspect}
@@ -82,7 +82,6 @@ data as expected. To suppress this changing the default \code{quiet = FALSE} to
 \examples{
 # Subset by time:
 x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
-plot(x)
 
 # Subset by oxygen:
 subset_data(sardine.rd, from = 94, to = 91, by = "oxygen")
@@ -91,9 +90,11 @@ subset_data(sardine.rd, from = 94, to = 91, by = "oxygen")
 subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
 
 # Subset multiple columns:
+# In this case subsetting is based on the first two columns
 subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
 
-# Pass (via piping) only part of a dataset to auto_rate()
+# Pass (via piping) only a subset of a dataset to inspect() and auto_rate()
 subset_data(sardine.rd, from = 94, to = 91, by = "oxygen") \%>\%
-auto_rate()
+   inspect(time = 1, oxygen = 2) \%>\%
+   auto_rate()
 }

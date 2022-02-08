@@ -109,7 +109,7 @@ Again, note that using `inspect()` is optional. Functions in `respR` will accept
 
 #### Defaults
 
-Entering the `inspect` object `urchin` that we saved earlier into `calc_rate()` with no additional arguments, will prompt the function to perform a linear regression on the entire data series. 
+Entering the `inspect` object `urchin` that we saved earlier into `calc_rate()` with no additional inputs, will prompt the function to perform a linear regression on the entire data series. 
 
 ```{r fig.show='hold'}
 calc_rate(urchin) 
@@ -121,7 +121,7 @@ Note how the function recognises the `inspect()` object, with no other inputs ne
 
 In many cases, we want to select the region over which the rate is determined. For example, we may want to exclude initial stages of instability, determine the rate over an exact period of time, or within a threshold of oxygen concentrations. Equipment interference or other factors may cause irregularities in the data. `calc_rate` allows us to specify exact data regions allowing us to work around such issues.
 
-Based on the `from` and `to` arguments, a user may use `calc_rate()` to specify data ranges in several ways:
+Based on the `from` and `to` inputs, a user may use `calc_rate()` to specify data ranges in several ways:
 
 - **Time:** 
     - *"What is the rate over a specific 25 minute period?"*

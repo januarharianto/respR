@@ -3,15 +3,14 @@
 #'
 #' `auto_rate` performs rolling regressions on a dataset to determine the *most
 #' linear, highest, lowest, maximum, minimum, rolling*, and *interval* rates of
-#' change in oxygen concentration over time. Initially, a rolling regression of
-#' the specified `width` is performed on the entire dataset. Then, based on the
-#' "`method`" argument, the resulting regressions are ranked or ordered, and the
-#' output is summarised.
+#' change in oxygen against time. A rolling regression of the specified `width`
+#' is performed on the entire dataset, then based on the "`method`" input,
+#' the resulting regressions are ranked or ordered, and the output summarised.
 #'
 #' ## Ranking and ordering algorithms
 #'
 #' Currently, `auto_rate` contains seven ranking and ordering algorithms that
-#' can be applied using the `method` argument:
+#' can be applied using the `method` input:
 #'
 #' - `linear`: Uses kernel density estimation (KDE) to learn the shape of the
 #' entire dataset and *automatically identify* the most linear regions of the
@@ -67,13 +66,14 @@
 #' across the entire timeseries. No reordering of results is performed.
 #'
 #' - `interval`: multiple, successive, non-overlapping regressions of the
-#' specified 'width' are extracted from the rolled regressions, ordered by time.
+#' specified 'width' are extracted from the rolling regressions, ordered by
+#' time.
 #'
 #' - NOTE: `max`, `min`: These methods were used in previous versions of `respR`
 #' but have been deprecated. They were intended to order oxygen uptake
 #' (negative) rates by magnitude, but this resulted in incorrect ordering of
 #' oxygen production (positive) rates. They have been retained for code
-#' compatibility, but may be removed in a future version of `respR`, and so
+#' compatibility, but will be removed in a future version of `respR`, and so
 #' *should not be used*.
 #'
 #' ## Further selection and filtering of results
@@ -92,10 +92,10 @@
 #'
 #' The `width` input defaults to 0.2. If it is a value between 0 and 1, it
 #' represents a proportion of the total data length, as in the equation
-#' `floor(width * number of data rows)`. For example, 0.2 represents a
-#' regression rolling window of 20% of the data. Otherwise, if 1 or greater, the
+#' `floor(width * number of data rows)`. For example, 0.2 represents a rolling
+#' window of 20% of the data width. Otherwise, if entered as 1 or greater, the
 #' width is an exact value in either number of rows or in the units of time
-#' data, as specified via the `by` argument.
+#' data, as specified via the `by` input.
 #'
 #' In most cases, `by` should be left as the default `"row"`, and the `width`
 #' chosen with this in mind, as it is considerably more computationally
@@ -115,17 +115,18 @@
 #' higher), of rate calculated across the input `width` for the whole dataset.
 #' Each rate is plotted against the middle of the time and row range used to
 #' calculate it. The dashed line indicates the value of the current rate result
-#' plotted in panels 1 and 2. The other plots are summary plots of fit and
-#' residuals, and for the `linear` method the results of the kernel density
-#' analysis.
+#' plotted in panels 1 and 2. The fourth and fifth panels are summary plots of
+#' fit and residuals, and for the `linear` method the sisth panel the results of
+#' the kernel density analysis, with the dashed line again indicating the value
+#' of the current rate result plotted in panels 1 and 2.
 #'
 #' ## Additional plotting options
 #'
 #' If multiple rates have been calculated, by default the first (`pos = 1`) is
-#' plotted. Others can be plotted by changing the `pos` argument either in the
+#' plotted. Others can be plotted by changing the `pos` input either in the
 #' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
 #' In addition, each sub-panel can be examined individually by using the
-#' `choose` input, e.g. `plot(object, choose = 2)`.
+#' `panel` input, e.g. `plot(object, panel = 2)`.
 #'
 #' Console output messages can be suppressed using `quiet = TRUE`. If axis
 #' labels or other text boxes obscure parts of the plot they can be suppressed
@@ -133,9 +134,9 @@
 #' *not* reversed by passing `rate.rev = FALSE`, for instance when examining
 #' oxygen production rates so that higher production rates appear higher. If
 #' axis labels (particularly y-axis) are difficult to read, `las = 2` can be
-#' passed to make axis labels horizontal. In addition, `oma` (outer margins,
+#' passed to make axis labels horizontal, and `oma` (outer margins,
 #' default `oma = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai
-#' = c(0.3, 0.15, 0.35, 0.15)`) can be used to adjust plot margins.
+#' = c(0.3, 0.15, 0.35, 0.15)`) used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -153,6 +154,10 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
+#' ## Output
+#'
+#' Output is a `list` object of class `auto_rate`.
+#'
 #' @param x data frame, or object of class `inspect` containing oxygen~time
 #'   data.
 #' @param method string. `"linear"`, `"highest"`, `"lowest"`, `"maximum"`,
@@ -163,12 +168,10 @@
 #'   length, or a value above 1 representing an exact width in the `by` input.
 #'   See Details.
 #' @param by string. `"row"` or `"time"`. Defaults to `"row"`. Metric by which
-#'   to apply the `width` input.
-#' @param plot logical. Plot the results. Defaults to TRUE.
+#'   to apply the `width` input if it is above 1.
+#' @param plot logical. Defaults to TRUE. Plot the results.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`,
-#'   `choose`, and `quiet = TRUE`.
-#'
-#' @return A list object of class `auto_rate`.
+#'   `panel`, and `quiet = TRUE`.
 #'
 #' @md
 #'
@@ -177,31 +180,39 @@
 #' @export
 #'
 #' @examples
-#' # most linear section of the entire data
-#' auto_rate(sardine.rd)
+#' # Most linear section of an entire dataset
+#' inspect(sardine.rd, time = 1, oxygen =2) %>%
+#'  auto_rate()
 #'
 #' \dontrun{
 #' # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
-#' low_rates <- auto_rate(sardine.rd, method = "lowest", width = 600, by = "time")
-#' # View summary of lowest rate results
-#' summary(low_rates)
+#' inspect(sardine.rd, time = 1, oxygen =2) %>%
+#'  auto_rate(method = "lowest", width = 600, by = "time")
+#'  summary()
 #'
 #' # What is the highest oxygen consumption rate over a 10 minute (600s) period?
-#' high_rates <- auto_rate(sardine.rd, method = "highest", width = 600, by = "time")
-#' # View summary of lowest rate results
-#' summary(high_rates)
+#' inspect(sardine.rd, time = 1, oxygen =2) %>%
+#'  auto_rate(method = "highest", width = 600, by = "time")
+#'  summary()
 #'
 #' # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 #' # period in intermittent-flow respirometry data?
-#' # NOTE: because uptake rates are negative, this would be the HIGHEST uptake rate.
+#' # NOTE: because uptake rates are negative, this would actually be
+#' # the HIGHEST uptake rate.
 #' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
 #' }
-#'
-auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
+
+auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
                       plot = TRUE, ...) {
 
   ## Save function call for output
   call <- match.call()
+  ## Save inputs for output
+  inputs <- list(x = x,
+                 method = method,
+                 width = width,
+                 by = by,
+                 plot = plot)
 
   # perform checks
   checks <- validate_auto_rate(x, by, method)
@@ -220,6 +231,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -239,6 +251,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -257,6 +270,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -275,6 +289,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -292,6 +307,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -309,6 +325,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -326,6 +343,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -343,6 +361,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -362,6 +381,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
                            total_peaks = nrow(output$peaks),
                            kde_bw = output$density$bw)
     out <- list(call = call,
+                inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
@@ -377,7 +397,7 @@ auto_rate <- function(x, method = 'linear', width = NULL, by = 'row',
     ### Add density to summary table
     out$summary$density <- out$peaks$density
 
-  } else stop("auto_rate: 'method' argument not recognised")
+  } else stop("auto_rate: 'method' input not recognised")
 
   ## reorder output summary
   out$summary <- data.table::data.table(rank = 1:nrow(out$summary),
@@ -435,7 +455,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
 }
 
 #' @export
-plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
+plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
                            legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -493,7 +513,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
   # PLOT BASED ON METHOD
   if (x$method %in% c("max", "min", "maximum", "minimum",
                       "highest", "lowest", "rolling", "interval")) {
-    if (choose == FALSE) {
+    if (panel == FALSE) {
 
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5),
                     nrow = 2, byrow = TRUE)
@@ -514,7 +534,7 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
       layout(1)
     }
   } else if (x$method == "linear") {
-    if (choose == FALSE) {
+    if (panel == FALSE) {
 
       par(mfrow = c(2, 3),
           ps = 10,
@@ -531,29 +551,29 @@ plot.auto_rate <- function(x, pos = 1, choose = FALSE, quiet = FALSE,
     }
   }
 
-  if(!isFALSE(choose))
+  if(!isFALSE(panel))
 
     par(ps = 10,
         cex = 1,
         cex.main = 1,
         ...)
 
-  if (choose == 1) {
+  if (panel == 1) {
     multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
     if (x$method == "interval") {
       abline(v = startint, lty = 3)
       abline(v = interval, lty = 3)
     }
   }
-  if (choose == 2)
+  if (panel == 2)
     sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)  # subset plot
-  if (choose == 3)
+  if (panel == 3)
     rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)  # rolling regression
-  if (choose == 4)
+  if (panel == 4)
     residual.p(fit) # residual plot
-  if (choose == 5)
+  if (panel == 5)
     qq.p(fit)  #qq plot
-  if (choose == 6) {
+  if (panel == 6) {
     if (x$method != 'linear') {
       stop('auto_rate: density plot only available for "linear" method.')
     } else {

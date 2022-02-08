@@ -7,25 +7,23 @@
 Erythrogramma}, including background respiration}
 \format{
 A data frame object consisting of one column of time, 16 columns of
-urchin oxygen consumption (a-p) and 2 columns of background oxygen
-consumption (b1 & b2). There are 271 rows of data spanning 45 minutes.
+urchin oxygen consumption (\code{a} to \code{p}) and 2 columns of background oxygen
+consumption (\code{b1} & \code{b2}). There are 271 rows of data spanning 45 minutes.
 }
 \usage{
 urchins.rd
 }
 \description{
 Oxygen consumption data of 16 individual \emph{Heliocidaris erythrogramma}
-specimens. In addition, there are 2 measurements of background respiration.
-These were trial runs to determine the precision of the new Vernier Optical
-DO probes (ODO-BTA), and thus chamber volumes and specimen masses were not
-recorded.
+specimens. In addition, there are two columns of background respiration.
+These were trial runs to determine the precision of Vernier Optical DO probes
+(ODO-BTA), and thus chamber volumes, specimen masses and other parameters
+were not recorded.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: minutes
-\item Chamber volumes (L): N/A
-\item Specimen masses (kg): N/A
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{minutes}
 }
 }
 \author{

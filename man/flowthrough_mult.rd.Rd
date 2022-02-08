@@ -24,9 +24,9 @@ of inflow oxygen concentrations (cols 6:9), and four columns of delta oxygen
 concentrations (cols 10:13, which is simply the numeric difference between
 paired columns of outflow and inflow). There is also a column of inflow
 oxygen concentrations as recorded from a shared header tank (col 14,
-\code{oxy.header}) supplying all chambers, to use as an alternative to the
+\verb{$oxy.header}) supplying all chambers, to use as an alternative to the
 individual inflow oxygen recordings. Lastly, there is a column of temperature
-data (col 15, \code{temperature} in °C).
+data (col 15, \verb{$temperature} in °C).
 }
 \details{
 Outflow (2:5) and inflow (6:9) columns are paired, with the first three

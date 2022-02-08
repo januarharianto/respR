@@ -31,57 +31,51 @@ There are four broad methodological approaches in respirometry:
 - *Flowthrough* 
 - *Open tank or open arena*
 
-In **closed chamber** respirometry, oxygen decrease is measured within a hermetically sealed chamber of known volume, sometimes situated within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the oxygen timeseries by assuming or fitting a linear relationship between oxygen and time, and estimates of metabolic rate are straightforward in constant volume respirometry using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in oxygen concentration over time, or in the case of a two-point measurement, the difference in oxygen concentration divided by time elapsed, and $V$ is the volume of fluid in the container ([Lighton 2008]()).
+In **closed chamber** respirometry, oxygen decrease is measured within a hermetically sealed chamber of known volume, sometimes situated within a closed loop to allow mixing of the environment within the chamber. Oxygen recordings may be continuous through use of an oxygen probe, periodic through withdrawing water or gas samples at set intervals, or a two-point measurement consisting of the initial and final concentrations. Metabolic rates are estimated from the oxygen timeseries by fitting a linear regression of oxygen against time to all or part of the data. Estimates of metabolic rate are made using the equation: $$VO_2 = \dot O_2V$$ where $\dot O_2$ is the slope of the regression that describes the rate of change in oxygen against time, or in the case of a two-point measurement the difference in oxygen divided by the time elapsed, and $V$ is the volume of fluid in the container ([Lighton 2008]()).
 
-In **intermittent flow** respirometry, oxygen is measured as described above, but periodically the chamber is flushed with new water or air, returning it to initial conditions, resealed, and the experiment repeated ([Svendsen et al. 2016]()). This technique is essentially the same as closed respirometry, but with the ability to conduct many replicates relatively easily. Depending on the metabolic rate metric being investigated, the final rate can be calculated as the mean of multiple measures (e.g. [Carey et al. 2016]()), the lowest or highest rates recorded in some portion of the trials (e.g. [Stoffels 2015]()), or some other way of summarising the multiple rates recorded.
+In **intermittent flow** respirometry, oxygen is measured as described above, but the chamber is periodically flushed with new water or air, returning it to initial conditions, resealed, and the experiment repeated ([Svendsen et al. 2016]()). This technique is essentially the same as closed respirometry, but with the ability to conduct multiple replicates relatively easily. Depending on the metabolic rate metric being investigated, the final rate can be calculated as the mean of multiple measures (e.g. [Carey et al. 2016]()), the lowest or highest rates recorded in some portion of the trials (e.g. [Stoffels 2015]()), or some other way of summarising the multiple rates recorded.
 
-**Flowthrough** respirometry (also known as "open flow" or "continuous flow" respirometry) involves a closed chamber, but with a regulated flow of air or water through it at a precisely determined flowrate. After equilibrium has been achieved, the oxygen concentration differential (or 'oxygen delta') between the inflowing and outflowing recordings, along with the flowrate, allows calculation of the oxygen extracted from the flow volume per unit time: $$\dot{V}O_2 = (C_iO_2 - C_eO_2)FR$$ where $\dot{V}O_2$ is the rate of oxygen consumption over time, $C_iO_2$ and $C_eO_2$ are the incurrent and excurrent oxygen concentrations, and $FR$ is the flow rate through the system ([Lighton 2008]()).
+**Flowthrough** respirometry (also known as "open flow" or "continuous flow" respirometry) involves a closed chamber, but with a regulated flow of air or water through it at a precisely determined flowrate. After equilibrium has been reached, the oxygen concentration differential (or 'oxygen delta') between the inflowing and outflowing recordings, along with the flowrate, allows calculation of the oxygen extracted from the flow volume per unit time: $$\dot{V}O_2 = (C_iO_2 - C_eO_2)FR$$ where $\dot{V}O_2$ is the rate of oxygen consumption over time, $C_iO_2$ and $C_eO_2$ are the inflow and outflow oxygen concentrations, and $FR$ is the flow rate through the system ([Lighton 2008]()).
 
-A final method is **open tank** or **open arena** respirometry, in which a tank or semi-enclosed area open to the atmosphere is used, but the input or mixing rate of oxygen from the surroundings has been quantified or found to be negligible relative to oxygen consumption of the specimens ([Leclercq et al. 1999]()). It is seldom used, but for some applications it is a sufficient and practical methodology ([Gamble et al. 2014]()). The common equation used for open respirometry is: $$\dot{V}O_2 = \dot O_2V + \phi_d$$ where $\dot O_2V$ is the slope of the regression that relates oxygen concentration to time, $V$ is the volume of the arena and $\phi_d$ is the oxygen flux as determined by Fick's Law ([Leclercq et al. 1999]()).
+A final method is **open tank** or **open arena** respirometry, in which a tank or semi-enclosed area open to the atmosphere is used, but the input or mixing rate of oxygen from the surroundings has been quantified or found to be negligible relative to oxygen consumption of the specimens ([Leclercq et al. 1999]()). It is seldom used, but for some applications it is a sufficient and practical methodology ([Gamble et al. 2014]()). The common equation used for open respirometry is: $$\dot{V}O_2 = \dot O_2V + \phi_d$$ where $\dot O_2V$ is the slope of the regression of oxygen against time, $V$ is the volume of the arena, and $\phi_d$ is the oxygen flux at the surface as determined by Fick's Law ([Leclercq et al. 1999]()).
 
 
 ## The `respR` package
 
-`respR` is a package designed to process the data from all of these types of respirometry experiment. It is designed primarily for aquatic respirometry. However, because many of the main functions are unitless it is adaptable for use with gas respirometry, and indeed analysis of other data where a parameter may change over time. 
+`respR` is a package for [`R`](https://www.r-project.org) designed to process the data from all of these types of respirometry experiment. It is designed primarily for aquatic respirometry. However, because the majority of the functions are unitless it is adaptable for use with gas respirometry, and indeed analysis of other data where a parameter may change over time. 
 
 When working with respirometry data, you will often need to:
 
-1. Ensure that the data, or at least a **subset** of the data, is representative of the research question of interest, and free of errors.
-2. Determine **the rate of change** in oxygen across the data or a subset of it.
-3. Depending on the experiment, **adjust rates** for background usage of oxygen by micro-organisms, or for oxygen flux from the air.
-4. **Convert** the resulting unitless rate to the absolute (i.e. whole specimen or chamber) rate, a mass-specific rate, or an area-specific rate in the appropriate units.
+1. Ensure that the data or a subset of the data is representative towards the research question of interest, and **free of errors**.
+2. Determine the **rate of change** in oxygen across the data or subset.
+3. Depending on the experiment, **adjust rates** for background extraction of oxygen by micro-organisms, or for oxygen flux from the air.
+4. **Convert** the resulting unitless rate to an absolute (i.e. whole specimen or chamber) rate, a mass-specific rate, or an area-specific rate in appropriate units.
 
-The `respR` package allows determination of common respirometry metrics and contains several functions to make this process straightforward.
+The `respR` package contains several functions in a logical workflow to make this process straightforward:
 
 - It provides visual feedback and diagnostic plots to help you explore, subset and analyse your data.
-- It uses computational techniques such as *rolling regressions* and *kernel density estimates* to determine **maximum**, **minimum** or **most linear** rates within time-series data.
-- The package takes an object-oriented approach, with functions outputting objects which can be read by subsequent functions, reducing the need for additional inputs.
-- Output objects can also be saved or exported, and contain all raw data, parameters used in calculations, and results, allowing for a fully documented and reproducibile analysis of respirometry data.
+- It uses computational techniques such as *rolling regressions* and *kernel density estimates* to determine **maximum**, **minimum** or **most linear** rates within timeseries data.
+- It uses an object-oriented approach, with functions outputting objects which can be read by subsequent functions, reducing the need for additional inputs.
+- Output objects can be saved or exported, and contain raw data, parameters used in calculations, and results, allowing for fully documented and reproducible analyses of respirometry data.
 
 ## Vignettes and documentation 
 
-As well as through invoking the `?` command in R, documentation for the functions in `respR` can be found in the [**Reference**](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page. 
+Help documentation for the functions in `respR` can be found in the [**Reference**](https://januarharianto.github.io/respR/reference/index.html) link at the top of this page, via invoking the `?` command in R, or by searching in the Help panel in RStudio. 
 
-In addition, we have prepared vignettes (i.e. guides) describing typical analysis workflows, and looking at several functions in more depth. These can be found under [**Articles**]().
+In addition, this site contains multiple vignettes (i.e. user guides) describing typical analysis workflows, and looking at several functions in more depth. These can be found under [**Vignettes**]().
 
-Under [**Further Reading**]() you can find more information, such as how to contact us and provide feedback, how `respR` is being used by the scientific community, and more.
+Under [**Further Reading**]() you can find more information about the apckage and function, contact details and how to get help or provide feedback, how `respR` is being used by the scientific community, and more.
 
 To get started check out one of these vignettes describing typical analysis workflows and how `respR` works:
+
+2. **[Closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)**  
+This is the best place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
 
 1. **[Importing data](https://januarharianto.github.io/respR/articles/importing.html)**  
 `respR` has functions to make it easy to bring in and prepare your data, including from the raw data files output by various respirometry systems.
 
-2. **[Closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)**  
-This is a good place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
-
 3. **[auto_rate: Automatic detection of metabolic rates](https://januarharianto.github.io/respR/articles/auto_rate.html)**  
 Here we introduce the function `auto_rate()` for the automatic detection and estimation of **maximum**, **minimum** and **most linear** rates.
-
-4. **[Performance of auto_rate in detecting linear regions](https://januarharianto.github.io/respR/articles/performance.html)**  
-We use simulated data to test the accuracy of `auto_rate()`, and discuss the function's performance with focus on linear data detection.
-
-5. **[Comparative performance of auto_rate and LoLinR](https://januarharianto.github.io/respR/articles/auto_rate_comp.html)**  
-We make comparisons to another R package, `LoLinR`, using data from their package and simulated data. 
 
 6. **[Intermittent-flow respirometry: Simple example](https://januarharianto.github.io/respR/articles/intermittent.html)**  
     **[Intermittent-flow respirometry: Complex example](https://januarharianto.github.io/respR/articles/intermittent2.html)**  
@@ -93,15 +87,3 @@ Analysis of flowthrough respirometry data.
 8. **[PCrit](https://januarharianto.github.io/respR/articles/pcrit.html)**  
 Determine P~crit~ in long-term, closed chamber respirometry experiments.
 
-9. **[Two-point analyses](https://januarharianto.github.io/respR/articles/twopoint.html)**  
-Determine oxygen use rate using only two datapoints.
-
-10. **[Reproducibility](https://januarharianto.github.io/respR/articles/reproducibility.html)**  
-How `respR` has been designed to allow reporting of reproducible analyses.
-
-11. **[respR and the Tidyverse](https://januarharianto.github.io/respR/articles/tidyverse.html)**  
-Information about how `respR` integrates with `tidyverse` practices to streamline analytic workflows.
-
-12. **[A comparison of respR with other R packages](https://januarharianto.github.io/respR/articles/packages_comp.html)**  
-    **[When to use respR](https://januarharianto.github.io/respR/articles/usage.html)**  
-The functionality and workflow of `respR` in comparison to other options, and when you should use it.

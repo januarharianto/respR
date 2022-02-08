@@ -1,22 +1,28 @@
 #' Convert between units of dissolved oxygen
 #'
-#' This is a conversion function that performs basic conversions between
-#' concentration or pressure units of dissolved oxygen (DO). Concentration units
-#' should use SI units (`L` or `kg`) for the denominator. Some DO units require
-#' temperature (`t`), salinity (`S`), and atmospheric pressure (`P`) to be
-#' specified. For freshwater experiments, salinity should be set to zero (i.e.
-#' `S = 0`). See [unit_args()] for details of accepted units.
+#' This is a conversion function that performs conversions between concentration
+#' and pressure units of dissolved oxygen (DO).
 #'
 #' The function uses an internal database and a fuzzy string matching algorithm
-#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
-#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. Use [unit_args()] to
-#' view a list of usable unit strings.
+#' to accept various unit formatting styles. For example, `"mg/l"`, `"mg/L"`,
+#' `"mgL-1"`, `"mg l-1"`, `"mg.l-1"` are all parsed the same. See
+#' `[unit_args()]` for details of accepted units.
+#'
+#' Oxygen concentration units should use SI units (`L` or `kg`) for the
+#' denominator.
+#'
+#' Some DO units require temperature (`t`), salinity (`S`), and atmospheric
+#' pressure (`P`) to be specified; if this is the case the function will stop
+#' and prompt for them. For the atmospheric pressure input (P), a default value
+#' of 1.013 bar (standard pressure at sea level) is applied if not otherwise
+#' entered. For freshwater experiments, salinity should be set to zero (i.e. `S
+#' = 0`).
 #'
 #' ## Output
 #'
-#' By default (`value.out = TRUE`) outputs a numeric vector of the converted
-#' values. If `value.out = FALSE` a `list` object of class `convert_DO` is
-#' returned containing five elements: `$call` the function call, `$input`
+#' By default (`value.out = TRUE`) the output is a numeric vector of converted
+#' values. If `value.out = FALSE` output is a `list` object of class
+#' `convert_DO` containing five elements: `$call` the function call, `$input`
 #' values, `$output` converted values, `$input.unit` and `$output.unit`.
 #'
 #' ## S3 Generic Functions
@@ -58,8 +64,11 @@
 #' convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
 #' convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "%Air",
 #'   t = 15, S = 35)
+#'
+#' \dontrun{
 #' convert_DO(sardine.rd[[2]], from = "%Air", to = "torr",
 #'   t = 15, S = 35)
+#'   }
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                        P = NULL, value.out = TRUE) {
@@ -72,7 +81,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   tou <- verify_units(to, 'o2')
 
   # Units requiring t, S and/or P (all same for now)
-  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%Air.o2", "%O2.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
+  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%Air.o2", "%Oxy.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
                "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
                "mL/kg.o2")
 
@@ -128,7 +137,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if (fru == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
   #if (fru == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
   if (fru == verify_units('%Air',   'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
-  if (fru == verify_units('%O2',    'o2')) {c <-  z * oGas * omWt / oAtm / 1e3 / 100}
+  if (fru == verify_units('%Oxy',    'o2')) {c <-  z * oGas * omWt / oAtm / 1e3 / 100}
   if (fru == verify_units('mL/kg',  'o2')) {c <-  z * omWt / omVl * swDn / 1e3}
   if (fru == verify_units('Torr',   'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
   if (fru == verify_units('hPa',    'o2')) {c <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.235}
@@ -148,7 +157,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if(tou == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
   #if(tou == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
   if(tou == verify_units('%Air',   'o2')) {out <- c / omWt / oGas * 1e3 * 100}
-  if(tou == verify_units('%O2',    'o2')) {out <- c / omWt / oGas * oAtm * 1e3 * 100}
+  if(tou == verify_units('%Oxy',    'o2')) {out <- c / omWt / oGas * oAtm * 1e3 * 100}
   if(tou == verify_units('mL/kg',  'o2')) {out <- c / swDn * omVl / omWt * 1e3}
   if(tou == verify_units('Torr',   'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
   if(tou == verify_units('hPa',    'o2')) {out <- c / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
@@ -223,13 +232,13 @@ verify_units <- function(unit, is) {
   if (is == 'o2') {
 
     if(unit %in% c("%", "perc", "percent","percentage"))
-      stop("verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%O2\" instead. See unit_args().")
+      stop("verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args().")
 
     all.units <- list(
       '%Air.o2' = c('%Air.o2', '%air','%Air','%A','%a',
                     "percair","percentair","percentageair"),
 
-      '%O2.o2' = c('%O2.o2','%oxy','%Oxy','%OX','%OXY','%o2','%O2','%o','%O',
+      '%Oxy.o2' = c('%Oxy.o2','%oxy','%Oxy','%OX','%OXY','%o2','%Oxy','%o','%O',
                    "percoxygen","percentoxygen","percentageoxygen",
                    "percoxy","percentoxy","percentageoxy",
                    "perco2","percento2","percentageo2",

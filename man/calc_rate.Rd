@@ -24,20 +24,17 @@ and \code{to}.}
 
 \item{plot}{logical. Defaults to \code{TRUE}. Plot the results.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{pos}
-and \code{quiet = TRUE}.}
-}
-\value{
-A list object of class \code{calc_rate}.
+\item{...}{Allows additional plotting controls to be passed, such as \code{pos},
+\code{panel}, and \code{quiet = TRUE}.}
 }
 \description{
 Calculates rate of oxygen uptake or production from respirometry data. A rate
 can be determined over the whole dataset, or on subsets of the data using the
-\code{from} and \code{to} arguments to specify data regions in terms of \code{oxygen} or
+\code{from} and \code{to} inputs to specify data regions in terms of \code{oxygen} or
 \code{time} units, \code{row} numbers of the input data, or over a \code{proportion} of the
 total oxygen used or produced (note, this last option works poorly with noisy
 or fluctuating data). Multiple rates can be extracted from the same dataset
-by using these arguments to enter vectors of paired values in the appropriate
+by using these inputs to enter vectors of paired values in the appropriate
 metric. See Examples.
 }
 \details{
@@ -50,9 +47,9 @@ rates are converted to specific output units.
 For continuous data recordings, it is recommended a \code{data.frame} containing
 the data be prepared via \code{\link[=inspect]{inspect()}}, and entered as the \code{x} input. For
 data not prepared like this, \code{x} can be a 2-column \code{data.frame} containing
-numeric values of time (col 1) and oxygen (col 2) concentrations. If multiple
-columns are found in either \code{inspect} or data frame inputs, only the first
-two columns are used.
+numeric values of time (col 1) and oxygen (col 2). If multiple columns are
+found in either an \code{inspect} or data frame input, only the first two columns
+are used.
 \subsection{Specifying regions}{
 
 For calculating rates over specific regions of the data, the \code{from} and \code{to}
@@ -73,22 +70,21 @@ entire dataset.
 A plot is produced (provided \code{plot = TRUE}) showing the original data
 timeseries of oxygen against time (bottom blue axis) and row index (top red
 axis), with the region specified via the \code{from} and \code{to} inputs highlighted.
-Second panel is a close-up of the rate region with linear model coefficients,
-and summary plots of fit and residuals.
+Second panel is a close-up of the rate region with linear model coefficients.
+Third and fourth panels are summary plots of fit and residuals.
 }
 
 \subsection{Additional plotting options}{
 
 If multiple rates have been calculated, by default the first (\code{pos = 1}) is
-plotted. Others can be plotted by changing the \code{pos} argument either in the
+plotted. Others can be plotted by changing the \code{pos} input either in the
 main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
-In addition, each sub-panel can be examined individually by using the
-\code{choose} input, e.g. \code{plot(object, choose = 2)}.
+In addition, each sub-panel can be examined individually by using the \code{panel}
+input, e.g. \code{plot(object, panel = 2)}.
 
 Console output messages can be suppressed using \code{quiet = TRUE}. If axis
 labels (particularly y-axis) are difficult to read, \code{las = 2} can be passed
-to make axis labels horizontal. In addition, \code{oma} (outer margins, default
-\code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins.
+to make axis labels horizontal, and \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
 }
 
 \subsection{S3 Generic Functions}{
@@ -106,32 +102,37 @@ input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate val
 by passing \code{export = TRUE}.
 }
 }
+
+\subsection{Output}{
+
+Output is a \code{list} object of class \code{calc_rate}
+}
 }
 \examples{
-# default - subset by 'time'
-calc_rate(sardine.rd, from = 200, to = 1800)
+# Subset by 'time' (the default)
+inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) \%>\%
+  calc_rate(from = 200, to = 1800)
 
-# subset by oxygen
-calc_rate(sardine.rd, 94, 91, by = 'oxygen')
+# Subset by oxygen
+inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) \%>\%
+  calc_rate(94, 91, by = "oxygen")
 
-# subset by row
-calc_rate(sardine.rd, 1, 1000, by = 'row')
+# Subset by row
+inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) \%>\%
+  calc_rate(1000, 2000, by = "row")
 
-# subset by proportion of total oxygen used
-x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
-
-## summary and print
-summary(x)
-plot(x)
-
-# Using a vector in 'from' and 'to' perform multiple rate calculations:
+# Use a data frame input, and calculate rate from multiple regions by
+# using a vector in the 'from' and 'to' inputs
 x <- calc_rate(intermittent.rd,
                from = c(200,2300,4100),
                to = c(1800,3200,4600),
                by = 'time',
                plot = FALSE)
-# View all rates
+# Print and summary of results
+print(x)
 summary(x)
 # Plot the third of these results
 plot(x, pos = 3)
+# Plot only the timeseries plot and hide the legend
+plot(x, pos = 3, panel = 1, legend = FALSE)
 }

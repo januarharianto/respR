@@ -14,21 +14,21 @@ sardine.rd
 \description{
 A single experiment on the sardine species \emph{Sardinops sagax} in a Loligo
 Systems swim tunnel and Witrox oxygen probe system. There are three columns:
-'Time' in seconds, 'Oxygen' content recorded in \% air saturation, and
-'Temperature' in °C. Mean temperature, salinity and atmospheric pressure are
+\verb{$Time} in seconds, \verb{$Oxygen} content recorded in percent air saturation, and
+\verb{$Temperature} in °C. Mean temperature, salinity and atmospheric pressure are
 supplied below to allow for conversion to oxygen concentration units.
 }
 \details{
 Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
 Grove, California.
 \itemize{
-\item Dissolved oxygen units: \% air saturation
-\item Temperature (°C): 14.8
-\item Salinity: 35
-\item Atm. Pressure (bar): 1.013253
-\item Time units: seconds
-\item Chamber volume (L): 12.3
-\item Specimen wet mass (kg): 0.0477
+\item Dissolved oxygen units: \verb{\% air saturation}
+\item Time units: \code{seconds}
+\item Chamber volume (L): \code{12.3}
+\item Specimen wet mass (kg): \code{0.0477}
+\item Temperature (°C): \code{14.8}
+\item Salinity: \code{35}
+\item Atm. Pressure (bar): \code{1.013253}
 }
 }
 \author{

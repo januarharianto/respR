@@ -21,8 +21,10 @@ Data was collected using a Vernier Optical DO probe (ODO-BTA).
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L - Time units: seconds - Chamber volume (L):
-2.379 - Specimen ash-free dry mass (kg): 0.006955
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{seconds}
+\item Chamber volume (L): \code{2.379}
+\item Specimen ash-free dry mass (kg): \code{0.006955}
 }
 }
 \author{

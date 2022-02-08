@@ -14,29 +14,31 @@
 #'
 #' ## Respirometer volume
 #'
-#' Note, the `volume` input represents the *effective volume* of the
-#' respirometer, that is volume of fluid in the respirometry chamber, **not**
-#' the total respirometer volume or the specimen volume. Generally, this should
-#' be the volume of the respirometer minus the volume of the specimen.
+#' The `volume` of the respirometer is required and should be in litres (`L`).
+#' Note, the `volume` represents the *effective volume* of the respirometer,
+#' that is *volume of water* in the respirometry chamber. This is not
+#' necessarily the same as the volume of the respirometer. Typically, it is the
+#' volume of the respirometer *minus* the volume of the specimen.
 #' \href{https://github.com/nicholascarey/respfun#eff_vol}{See here} for help
-#' with calculating effective volumes.
+#' with calculating effective volumes. It also does not refer to the specimen
+#' volume.
 #'
 #' ## Units
 #'
-#' The `oxy.unit` of the original data used to calculated the rate is required.
-#' Concentration units should use only SI units (`L` or `kg`) for the
+#' The `oxy.unit` of the original raw data used to calculate the rate is
+#' required. Concentration units should use only SI units (`L` or `kg`) for the
 #' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
 #' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
 #' details.
 #'
-#' The `time.unit` of the original data used to calculated the rate is also
+#' The `time.unit` of the original raw data used to calculate the rate is also
 #' required.
 #'
-#' An `output.unit` is also required. If left NULL, The default of `"mgO2/h"` is
-#' used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
-#' has been entered. The `output.unit` must be in the sequence *O2-Time* (e.g.
-#' `"mg/h"`) for absolute rates, *O2-Time-Mass* (e.g. `"mg/h/kg"`) for
-#' mass-specific rates, and *O2-Time-Area* (e.g. `"mg/h/cm2"`) for surface
+#' An `output.unit` is also required. If left `NULL`, The default of `"mgO2/h"`
+#' is used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
+#' has been entered. The `output.unit` must be in the sequence *Oxygen-Time*
+#' (e.g. `"mg/h"`) for absolute rates, *Oxygen-Time-Mass* (e.g. `"mg/h/kg"`) for
+#' mass-specific rates, and *Oxygen-Time-Area* (e.g. `"mg/h/cm2"`) for surface
 #' area-specific rates.
 #'
 #' Note, some oxygen input or output units require temperature (`t`) and
@@ -48,19 +50,19 @@
 #' used. In most locations which have a normal range (outside extreme weather
 #' events) of around 20 millibars, any variability in pressure will have a
 #' relatively minor effect on dissolved oxygen, and even less on calculated
-#' rates. However, we would encourage users to enter the true value if they know
-#' it, or use historical weather data to find out what it was on the day. See
-#' [unit_args()] for details.
+#' rates. However, we would encourage users to enter the actual value if they
+#' know it, or use historical weather data to find out what it was on the day.
+#' See [unit_args()] for details.
 #'
 #' The function uses an internal database and a fuzzy string matching algorithm
-#' to accept various unit formatting styles. For example, `'mg/l', 'mg/L',
-#' 'mgL-1', 'mg l-1', 'mg.l-1'` are all parsed the same. See [`unit_args()`] for
-#' details of accepted units and their formatting. See also [`convert_val()`]
-#' for simple conversion between units.
+#' to accept various unit formatting styles. For example, `"mg/l"`, `"mg/L"`,
+#' `"mgL-1"`, `"mg l-1"`, `"mg.l-1"` are all parsed the same. See
+#' [`unit_args()`] for details of accepted units and their formatting. See also
+#' [`convert_val()`] for simple conversion between non-oxygen units.
 #'
 #' ## Output
 #'
-#' Returns a `list` object containing the `$rate.input`, and converted rate(s)
+#' Output is a `list` object containing the `$rate.input`, and converted rate(s)
 #' in `$rate.output` in the `$output.unit`, as well as inputs and summary
 #' elements.
 #'
@@ -81,14 +83,15 @@
 #' separate value by passing `export = TRUE`.
 #'
 #' @param x numeric value or vector, or object of class `auto_rate`,
-#'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.`
-#' @param oxy.unit string. The dissolved oxygen unit of the original data used to
+#'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.` Contains the rate(s) to be
+#'   converted.
+#' @param oxy.unit string. The dissolved oxygen unit of the original raw data
+#'   used to determine the rate in `x`.
+#' @param time.unit string. The time unit of the original raw data used to
 #'   determine the rate in `x`.
-#' @param time.unit string. The time unit of the original data used to determine
-#'   the rate in `x`.
 #' @param output.unit string. The output unit to convert the input rate to.
-#'   Should be in the correct order: "O2/Time" or "O2/Time/Mass" or
-#'   "O2/Time/Area".
+#'   Should be in the correct order: "Oxygen/Time" or "Oxygen/Time/Mass" or
+#'   "Oxygen/Time/Area".
 #' @param volume numeric. Volume of water in ***litres*** in the respirometer or
 #'   respirometer loop.
 #' @param mass numeric. Mass/weight in ***kg***. This is the mass of the
@@ -96,7 +99,7 @@
 #' @param area numeric. Surface area in ***m^2***. This is the surface area of
 #'   the specimen if you wish to calculate surface area-specific rates.
 #' @param S numeric. Salinity (ppt). Defaults to NULL. Used in conversion of
-#'   some oxygen units. Fresh water should be entered as `S = 0`.
+#'   some oxygen units. Freshwater should be entered as `S = 0`.
 #' @param t numeric. Temperature(°C). Defaults to NULL. Used in conversion of
 #'   some oxygen units.
 #' @param P numeric. Pressure (bar). Used in conversion of some oxygen units.

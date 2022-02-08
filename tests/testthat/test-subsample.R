@@ -30,12 +30,12 @@ test_that("subsample outputs vector if input is vector", {
   expect_is(ssm, "integer")
 })
 
-test_that("subsample random.start argument works as expected", {
+test_that("subsample random.start input works as expected", {
   expect_error(subsample(sardine.rd, n = 10, random_start = T),
                regexp = NA)
 })
 
-test_that("subsample will not break when plot argument is changed", {
+test_that("subsample will not break when plot input is changed", {
   expect_error(subsample(sardine.rd, n = 10, plot = F),
                regexp = NA)
 })

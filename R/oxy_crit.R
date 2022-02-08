@@ -1,16 +1,16 @@
 #' Calculate critical oxygen values, such as PCrit
 #'
-#' A function to calculate the critical oxygen value, the oxygen tension or
+#' A function to calculate critical oxygen values, the oxygen tension or
 #' concentration below which an uptake rate transitions from independent to
 #' dependent on the oxygen supply, typically known as *PCrit*.
 #'
-#' In earlier versions of `respR`, this function was known as `calc_pcrit`. It
-#' was renamed to avoid conflicts with a function of the same name in another
-#' package, and also because technically the *P* in  *PCrit* stands for the
-#' partial *pressure* of oxygen. Since the function returns the value in the
-#' units of the data as entered, whether they are concentration or pressure
-#' units, this terminology can be technically in error. Instead, for the
-#' purposes of the documentation we refer to this as the *Critical Oxygen
+#' In earlier versions of `respR`, this function was known as `pcrit` or
+#' `calc_pcrit`. It was renamed to avoid conflicts with functions of the same
+#' name in another package, and also because technically the *P* in  *PCrit*
+#' stands for the partial *pressure* of oxygen. Since the function returns the
+#' value in the units of the data as entered, whether they are concentration or
+#' pressure units, this terminology can be technically in error. Instead, for
+#' the purposes of the documentation we refer to this as the *Critical Oxygen
 #' Value*, or "*COV*". If the units of oxygen are partial pressure units (e.g.
 #' kPa), this is equivalent to PCrit, otherwise they should be reported with
 #' this in mind.
@@ -49,7 +49,7 @@
 #' ## Inputs
 #'
 #' The data input `x` should be an `inspect` object or `data.frame` containing
-#' oxygen~time data, *or* a `data.frame` containing rate~oxygen data.
+#' oxygen~time data, or a `data.frame` containing rate~oxygen data.
 #'
 #' ### Oxygen ~ Time data
 #'
@@ -68,7 +68,7 @@
 #' regression on the oxygen~time data to determine rates, and pairs these
 #' against a rolling mean of the oxygen data. The function then performs the
 #' selected analysis `method` on these data. The width of the rolling regression
-#' and rolling mean is determined by the `width` argument. The default is 0.1,
+#' and rolling mean is determined by the `width` input. The default is 0.1,
 #' representing 10% of the length of the data. This performs well in testing,
 #' however performance may vary with data that has abrupt changes in rate, or is
 #' particularly noisy. Users should experiment with different `width` values to
@@ -115,15 +115,15 @@
 #'
 #' If the legend obscures parts of the plot they can be suppressed using `legend
 #' = FALSE`. Suppress console output messages with `quiet = TRUE`. Each panel
-#' can be plotted on its own using `choose = 1` or `choose = 2`. If using
+#' can be plotted on its own using `panel = 1` or `panel = 2`. If using
 #' already-calculated, positive rate values to identify critical oxygen values,
 #' the y-axis of the rolling rate plot can be plotted *not* reversed by passing
 #' `rate.rev = FALSE` These inputs can be passed in either the main `oxy_crit`
 #' call or when calling `plot()` on the output object. If axis labels
 #' (particularly y-axis) are difficult to read, `las = 2` can be passed to make
-#' axis labels horizontal. In addition, `oma` (outer margins, default `oma =
-#' c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15,
-#' 0.35, 0.15)`) can be used to adjust plot margins.
+#' axis labels horizontal, and `oma` (outer margins, default `oma = c(0.4, 1,
+#' 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35,
+#' 0.15)`) used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -143,7 +143,7 @@
 #' Output is a `list` object of class `oxy_crit` containing input parameters and
 #' data, various summary data, metadata, and the primary output of interest
 #' `$crit`, which is the critical oxygen value in the units of the oxygen data
-#' as entered. This can be converted to additional units using `convert_DO()`.
+#' as entered. This can be converted to additional units using [`convert_DO()`].
 #' Note, if the Broken-Stick analysis (`method == "bsr"`) has been used, `$crit`
 #' will contain two results; `$crit.intercept` and `$crit.midpoint`. For full
 #' explanation of the difference between these see Yeager & Ultsch (1989),
@@ -170,7 +170,7 @@
 #'   `NULL`. See Details.
 #' @param plot logical. Defaults to TRUE.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE`, and `choose`. See Plotting
+#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE`, and `panel`. See Plotting
 #'   section.
 #'
 #' @importFrom data.table data.table as.data.table setnames setorder rbindlist
@@ -210,9 +210,9 @@
 #' oxy_crit(insp)
 #'
 #' ## Run on already calculated rate~oxygen data
-#' # Generate using internal function
+#' ## (generated using an internal function)
 #' oxy.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
-#' # Analyse
+#' ## Analyse
 #' oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
 #' }
 
@@ -441,7 +441,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
 }
 
 #' @export
-plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
+plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
                           rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -489,15 +489,15 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
   line_wt_add <- 1
   line_col_add <- "black"
 
-  # set plot layout based on 'choose'
-  if(is.null(choose)) {
-    choose <- 1:2
+  # set plot layout based on 'panel'
+  if(is.null(panel)) {
+    panel <- 1:2
     mfrow = c(2,1)
   } else {
     mfrow = c(1,1)
   }
-  if(any(choose > 2))
-    stop("plot.oxy_crit: 'choose' input should be 1 to 2 or 'NULL' for both.")
+  if(any(panel > 2))
+    stop("plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
 
   ## general plot settings
   par(mfrow = mfrow,
@@ -513,7 +513,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
   par(...)
 
   # Plot 1 - Timeseries -----------------------------------------------------
-  if(1 %in% choose) {
+  if(1 %in% panel) {
     if (!x$convert) {
       ylim <- grDevices::extendrange(
         r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
@@ -565,7 +565,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
 
 
   # Plot 2 - Broken Stick ---------------------------------------------------
-  if(x$method == "bsr" && 2 %in% choose) {
+  if(x$method == "bsr" && 2 %in% panel) {
     ylim <- grDevices::extendrange(
       r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
@@ -590,7 +590,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, choose = NULL,
   }
 
   # Plot 2 - Segmented ------------------------------------------------------
-  if(x$method == "segmented" && 2 %in% choose) {
+  if(x$method == "segmented" && 2 %in% panel) {
     ylim <- grDevices::extendrange(
       r = range(x$df_rate_oxygen$rate, na.rm = TRUE), f = 0.05) ## add a little more space
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis

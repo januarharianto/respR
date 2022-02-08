@@ -2,7 +2,7 @@
 ## testthat::test_file("tests/testthat/test-format_time.R")
 ## covr::file_coverage("R/format_time.R", "tests/testthat/test-format_time.R")
 
-test_that("format_time works with default arguments", {
+test_that("format_time works with default inputs", {
 
   x <- c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11")
   expect_error(format_time(x), regexp = NA)
@@ -176,7 +176,7 @@ test_that("format_time works across midnight when no dates provided", {
   expect_error(format_time(x, time = 1, format = "HMS"),
                regexp = NA)
   expect_message(format_time(x, time = 1, format = "HMS"),
-                 regexp = "Time\\(s) cross midnight, attempting to parse correctly...")
+                 regexp = "Times cross midnight, attempting to parse correctly...")
 
   ## doesn't confuse 11 am for 11 pm
   x <- c("11:59:11", "00:11:11")
@@ -186,7 +186,7 @@ test_that("format_time works across midnight when no dates provided", {
                regexp = NA)
 
   expect_message(format_time(x, time = 1, format = "HMS"),
-                 regexp = "Time\\(s) cross midnight, attempting to parse correctly...")
+                 regexp = "Times cross midnight, attempting to parse correctly...")
   ## works with "p" suffix for AM/PM present
   x <- c("11:59:11 PM", "00:11:11 AM")
   expect_equal(format_time(x, time = 1, format = "HMSp")[2],
@@ -194,7 +194,7 @@ test_that("format_time works across midnight when no dates provided", {
   expect_error(format_time(x, time = 1, format = "HMSp"),
                regexp = NA)
   expect_message(format_time(x, time = 1, format = "HMSp"),
-                 regexp = "Time\\(s) cross midnight, attempting to parse correctly...")
+                 regexp = "Times cross midnight, attempting to parse correctly...")
 })
 
 ## This test in response to a failure to convert i still don't really understand.

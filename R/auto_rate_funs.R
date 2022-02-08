@@ -1,7 +1,6 @@
 #' Validation function for auto_rate
 #'
-#' This is an internal function for `auto_rate()`. Used to validate input
-#' arguments.
+#' This is an internal function for `auto_rate()`. Used to validate inputs
 #'
 #' @param df data.frame object.
 #' @param by string.
@@ -24,7 +23,7 @@
 #' # df <- c(1:40)
 #' # validate_auto_rate(df, by = "row", method = "max")
 #'
-#' # this will fail as `by` argument isn't recognised:
+#' # this will fail as `by` input isn't recognised:
 #' # set.seed(88)
 #' # df <- c(1:40)
 #' # validate_auto_rate(df, by = "rat", method = "max")
@@ -34,7 +33,7 @@
 #' # df <- c(1:40)
 #' # validate_auto_rate(df, by = "row", method = "max")
 #'
-#' # this will fail as `method` argument isn't recognised:
+#' # this will fail as `method` input isn't recognised:
 #' # set.seed(88)
 #' # df <- c(1:40)
 #' # validate_auto_rate(df, by = "row", method = "moo")
@@ -56,7 +55,7 @@ validate_auto_rate <- function(df, by, method) {
     warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
     df <- df[, 1:2]
   }
-  by <- verify_by(by, msg = "auto_rate:") # validate `by` argument
+  by <- verify_by(by, msg = "auto_rate:") # validate `by` input
 
   assertthat::assert_that(
     is.data.frame(df),
@@ -64,13 +63,13 @@ validate_auto_rate <- function(df, by, method) {
   )
   assertthat::assert_that(
     by %in% c("time", "row"),
-    msg = "auto_rate: The 'by' argument must be 'time' or 'row'"
+    msg = "auto_rate: The 'by' input must be 'time' or 'row'"
   )
   assertthat::assert_that(
     method %in% c("linear", "max", "min", "interval",
                   "rolling",
                   "highest", "lowest", "maximum", "minimum"),
-    msg = "auto_rate: The 'method' argument is not recognised: it should be 'linear',
+    msg = "auto_rate: The 'method' input is not recognised: it should be 'linear',
     'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'"
   )
   return(list(by = by, df = data.table(df)))
@@ -456,7 +455,7 @@ rolling_reg_time <- function(df, width) {
 #' NULL
 calc_rolling_win <- function(dt, width, by) {
   # this is an internal function so we don't have to validate data too much
-  # however we make sure that input arguments are validated since they are
+  # however we make sure that inputs are validated since they are
   # obtained from user input
 
   # validation

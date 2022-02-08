@@ -483,7 +483,7 @@ oxygen uptake rates are negative since they represent a negative slope of
 oxygen against time. In rolling rate plots, by default the axis is reversed so that higher
 uptake rates (e.g. maximum or active rates) will be higher on these plots. If you are
 interested instead in oxygen production rates, which are positive, the
-`rate.rev = FALSE` argument can be passed in either the `inspect` call, or
+`rate.rev = FALSE` input can be passed in either the `inspect` call, or
 when using `plot()` on the output object. In this case, the rate values will
 be plotted not reversed, with higher oxygen *production* rates higher on the
 plot.
@@ -544,7 +544,7 @@ This better shows us the structure of this intermittent-flow experiment, and tha
 ### Multiple columns of oxygen data
 
 For a quick overview of larger datasets, multiple oxygen columns can be
-inspected by using the `oxygen` argument to select
+inspected by using the `oxygen` input to select
 multiple columns. These must share the same `time` column. In this case, data
 checks are performed, with a plot of each oxygen time series, but no rolling
 rate plot is produced. All data are plotted on the same axis range of both

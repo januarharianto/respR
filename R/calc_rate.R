@@ -3,11 +3,11 @@
 #'
 #' Calculates rate of oxygen uptake or production from respirometry data. A rate
 #' can be determined over the whole dataset, or on subsets of the data using the
-#' `from` and `to` arguments to specify data regions in terms of `oxygen` or
+#' `from` and `to` inputs to specify data regions in terms of `oxygen` or
 #' `time` units, `row` numbers of the input data, or over a `proportion` of the
 #' total oxygen used or produced (note, this last option works poorly with noisy
 #' or fluctuating data). Multiple rates can be extracted from the same dataset
-#' by using these arguments to enter vectors of paired values in the appropriate
+#' by using these inputs to enter vectors of paired values in the appropriate
 #' metric. See Examples.
 #'
 #' The function calculates rates by fitting a linear model of oxygen against
@@ -19,9 +19,9 @@
 #' For continuous data recordings, it is recommended a `data.frame` containing
 #' the data be prepared via [`inspect()`], and entered as the `x` input. For
 #' data not prepared like this, `x` can be a 2-column `data.frame` containing
-#' numeric values of time (col 1) and oxygen (col 2) concentrations. If multiple
-#' columns are found in either `inspect` or data frame inputs, only the first
-#' two columns are used.
+#' numeric values of time (col 1) and oxygen (col 2). If multiple columns are
+#' found in either an `inspect` or data frame input, only the first two columns
+#' are used.
 #'
 #' ## Specifying regions
 #'
@@ -42,22 +42,22 @@
 #' A plot is produced (provided `plot = TRUE`) showing the original data
 #' timeseries of oxygen against time (bottom blue axis) and row index (top red
 #' axis), with the region specified via the `from` and `to` inputs highlighted.
-#' Second panel is a close-up of the rate region with linear model coefficients,
-#' and summary plots of fit and residuals.
+#' Second panel is a close-up of the rate region with linear model coefficients.
+#' Third and fourth panels are summary plots of fit and residuals.
 #'
 #' ## Additional plotting options
 #'
 #' If multiple rates have been calculated, by default the first (`pos = 1`) is
-#' plotted. Others can be plotted by changing the `pos` argument either in the
+#' plotted. Others can be plotted by changing the `pos` input either in the
 #' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
-#' In addition, each sub-panel can be examined individually by using the
-#' `choose` input, e.g. `plot(object, choose = 2)`.
+#' In addition, each sub-panel can be examined individually by using the `panel`
+#' input, e.g. `plot(object, panel = 2)`.
 #'
 #' Console output messages can be suppressed using `quiet = TRUE`. If axis
 #' labels (particularly y-axis) are difficult to read, `las = 2` can be passed
-#' to make axis labels horizontal. In addition, `oma` (outer margins, default
-#' `oma = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3,
-#' 0.15, 0.35, 0.15)`) can be used to adjust plot margins.
+#' to make axis labels horizontal, and `oma` (outer margins, default `oma =
+#' c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3, 0.15,
+#' 0.35, 0.15)`) used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -75,6 +75,10 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
+#' ## Output
+#'
+#' Output is a `list` object of class `calc_rate`
+#'
 #' @param x object of class `inspect` or `data.frame`. This is the timeseries of
 #'   paired values of oxygen against time from which to calculate rates.
 #' @param from numeric value or vector. Defaults to `NULL`. The start of the
@@ -87,8 +91,8 @@
 #'   `"time"`.This is the method used to subset the data region between `from`
 #'   and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.
-#' @param ... Allows additional plotting controls to be passed, such as `pos`
-#'   and `quiet = TRUE`.
+#' @param ... Allows additional plotting controls to be passed, such as `pos`,
+#'   `panel`, and `quiet = TRUE`.
 #'
 #' @importFrom data.table data.table rbindlist
 #' @import utils
@@ -96,36 +100,35 @@
 #' @import graphics
 #' @import grDevices
 #'
-#' @return A list object of class `calc_rate`.
 #' @export
 #'
 #' @examples
-#' # default - subset by 'time'
-#' calc_rate(sardine.rd, from = 200, to = 1800)
+#' # Subset by 'time' (the default)
+#' inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) %>%
+#'   calc_rate(from = 200, to = 1800)
 #'
-#' # subset by oxygen
-#' calc_rate(sardine.rd, 94, 91, by = 'oxygen')
+#' # Subset by oxygen
+#' inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) %>%
+#'   calc_rate(94, 91, by = "oxygen")
 #'
-#' # subset by row
-#' calc_rate(sardine.rd, 1, 1000, by = 'row')
+#' # Subset by row
+#' inspect(sardine.rd, time = 1, oxygen = 2, plot = FALSE) %>%
+#'   calc_rate(1000, 2000, by = "row")
 #'
-#' # subset by proportion of total oxygen used
-#' x <- calc_rate(sardine.rd, .8, .2, by = 'proportion')
-#'
-#' ## summary and print
-#' summary(x)
-#' plot(x)
-#'
-#' # Using a vector in 'from' and 'to' perform multiple rate calculations:
+#' # Use a data frame input, and calculate rate from multiple regions by
+#' # using a vector in the 'from' and 'to' inputs
 #' x <- calc_rate(intermittent.rd,
 #'                from = c(200,2300,4100),
 #'                to = c(1800,3200,4600),
 #'                by = 'time',
 #'                plot = FALSE)
-#' # View all rates
+#' # Print and summary of results
+#' print(x)
 #' summary(x)
 #' # Plot the third of these results
 #' plot(x, pos = 3)
+#' # Plot only the timeseries plot and hide the legend
+#' plot(x, pos = 3, panel = 1, legend = FALSE)
 
 calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) {
 
@@ -333,7 +336,7 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' @export
-plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL,
+plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
                            legend = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -347,15 +350,15 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL,
   if(pos > nres || pos < 1)
     stop("calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
 
-  # set plot layout based on 'choose'
-  if(is.null(choose)) {
-    choose <- 1:4
+  # set plot layout based on 'panel'
+  if(is.null(panel)) {
+    panel <- 1:4
     mfrow = c(2,2)
   } else {
     mfrow = c(1,1)
   }
-  if(any(choose > 4))
-    stop("plot.calc_rate: 'choose' input should be 1 to 4 or 'NULL' for all.")
+  if(any(panel > 4))
+    stop("plot.calc_rate: 'panel' input should be 1 to 4 or 'NULL' for all.")
 
   if(!quiet) {
     cat("\n# plot.calc_rate # ----------------------\n")
@@ -389,11 +392,11 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, choose = NULL,
   ## need row numbers for subp plot
   rownums <- x$summary$row[pos]:x$summary$endrow[pos]
 
-  if(1 %in% choose) multi.p(df, sdf, legend = legend)  # full timeseries with lmfit
-  if(2 %in% choose) sub.p(sdf, rsq = signif(rsq, 3), rownums = rownums,
+  if(1 %in% panel) multi.p(df, sdf, legend = legend)  # full timeseries with lmfit
+  if(2 %in% panel) sub.p(sdf, rsq = signif(rsq, 3), rownums = rownums,
                           legend = legend) # subset timeseries
-  if(3 %in% choose) residual.p(fit)  # residual plot
-  if(4 %in% choose) qq.p(fit)  # qqplot
+  if(3 %in% panel) residual.p(fit)  # residual plot
+  if(4 %in% panel) qq.p(fit)  # qqplot
   mtext(glue::glue("calc.rate: Rank {pos} of {nres} Total Rates"),
         outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
