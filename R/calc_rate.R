@@ -346,9 +346,9 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
 
   if(is.null(pos)) pos <- 1
   if(length(pos) > 1)
-    stop("calc_rate: 'pos' should be a single value.")
+    stop("plot.calc_rate: 'pos' should be a single value.")
   if(pos > nres || pos < 1)
-    stop("calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
 
   # set plot layout based on 'panel'
   if(is.null(panel)) {
@@ -363,11 +363,11 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
   if(!quiet) {
     cat("\n# plot.calc_rate # ----------------------\n")
     if(pos == 1 && nres == 1)
-      cat(glue::glue("calc_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
+      cat(glue::glue("plot.calc_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
     if(pos == 1 && nres > 1)
-      cat(glue::glue("calc_rate: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
+      cat(glue::glue("plot.calc_rate: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
     if(pos > 1)
-      cat(glue::glue('calc_rate: Plotting rate from position {pos} of {nres} ...'), sep="\n")
+      cat(glue::glue('plot.calc_rate: Plotting rate from position {pos} of {nres} ...'), sep="\n")
   }
 
   df  <- x$dataframe

@@ -400,7 +400,11 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
-
+#' @export
+plot.convert_rate.ft <- function(x, ...) {
+  message("convert_rate.ft: plot() is not available for 'convert_rate.ft' objects.")
+  return(invisible(x))
+}
 
 #' Extracts time and volume units from flowrate unit already parsed by verify_units
 #'

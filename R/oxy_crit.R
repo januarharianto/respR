@@ -618,3 +618,9 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
 
   return(invisible(x))
 }
+
+#' @export
+mean.oxy_crit <- function(x, ...){
+  message("oxy_crit: mean() is not available for 'oxy_crit' objects.")
+  return(invisible(x))
+}

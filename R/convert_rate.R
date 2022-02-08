@@ -369,7 +369,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate.input)))
-    stop("summary.calc_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.")
+    stop("summary.convert_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.")
 
   cat("\n# summary.convert_rate # ----------------\n")
   if(is.null(pos)) {
@@ -423,6 +423,11 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' @export
+plot.convert_rate <- function(x, ...) {
+  message("convert_rate: plot() is not available for 'convert_rate' objects.")
+  return(invisible(x))
+}
 
 #' Convert between multipliers of the same unit, e.g. mg to kg
 #'

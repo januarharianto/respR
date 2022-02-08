@@ -239,9 +239,9 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
   nres <- length(x$rate.bg)
   rownums <- 1:nrow(x$dataframe)
   if(!is.null(pos) && length(pos) > 1)
-    stop("calc_rate: 'pos' should be a single value.")
+    stop("plot.calc_rate.bg: 'pos' should be a single value.")
   if(!is.null(pos) && pos > nres)
-    stop("calc_rate.bg: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.calc_rate.bg: Invalid 'pos' rank: only ", nres, " rates found.")
   if(!is.null(pos)) nplot <- 1 else
     nplot <- nres
 
@@ -288,9 +288,9 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
                                      outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
   if(!quiet && length(pos) == 1)
-    cat(glue::glue("calc_rate.bg: Plotting background rate from position {pos} of {nres} ..."), sep="\n")
+    cat(glue::glue("plot.calc_rate.bg: Plotting background rate from position {pos} of {nres} ..."), sep="\n")
   else if(!quiet)
-    cat(glue::glue("calc_rate.bg: Plotting all {nres} background rates ..."), sep="\n")
+    cat(glue::glue("plot.calc_rate.bg: Plotting all {nres} background rates ..."), sep="\n")
 
   if(!quiet) cat("-----------------------------------------\n")
 

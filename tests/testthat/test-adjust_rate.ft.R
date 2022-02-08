@@ -462,5 +462,10 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "mean.adjust_rate.ft: Invalid 'pos' rank: only 101 adjusted rates found.")
   })
 
+  test_that("adjust_rate.ft - stops with plot()", {
+    expect_message(plot(adj.ft_obj.insp.many),
+                   regexp = "adjust_rate.ft: plot\\(\\) is not available for 'adjust_rate.ft' objects.")
+  })
+
 }) ## turns printing back on
 

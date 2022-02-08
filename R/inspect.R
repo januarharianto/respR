@@ -447,6 +447,12 @@ summary.inspect <- function(object, ...) {
 }
 
 #' @export
+mean.inspect <- function(x, ...){
+  message("inspect: mean() is not available for 'inspect' objects.")
+  return(invisible(x))
+}
+
+#' @export
 plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                          legend = TRUE, rate.rev = TRUE, ...) {
 

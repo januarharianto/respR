@@ -624,6 +624,12 @@ summary.inspect.ft <- function(object, ...) {
 }
 
 #' @export
+mean.inspect.ft <- function(x, ...){
+  message("inspect.ft: mean() is not available for 'inspect.ft' objects.")
+  return(invisible(x))
+}
+
+#' @export
 plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
                             legend = TRUE, rate.rev = TRUE, ...) {
 
@@ -734,7 +740,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
       stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.oxy), " data inputs found.")
 
     if (!quiet)
-      cat('Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
+      cat('plot.inspect.ft: Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')
 
     m <- rbind(c(1,1,1), c(1,1,1), c(2,2,2))
     layout(m)

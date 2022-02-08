@@ -204,6 +204,18 @@ summary.convert_DO <- function(object, ...) {
   print(object)
 }
 
+#' @export
+plot.convert_DO <- function(x, ...) {
+  message("convert_DO: plot() is not available for 'convert_DO' objects.")
+  return(invisible(x))
+}
+
+#' @export
+mean.convert_DO <- function(x, ...) {
+  message("convert_DO: mean() is not available for 'convert_DO' objects.")
+  return(invisible(x))
+}
+
 #' Check unit string against a known database
 #'
 #' @keywords internal
