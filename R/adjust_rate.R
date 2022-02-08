@@ -797,6 +797,12 @@ mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' @export
+plot.adjust_rate <- function(x, ...){
+  message("adjust_rate: plot() is not available for 'adjust_rate' objects.")
+  return(invisible(x))
+}
+
 
 # Internal functions ------------------------------------------------------
 

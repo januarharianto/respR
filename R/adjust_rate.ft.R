@@ -304,3 +304,8 @@ mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 }
 
 
+#' @export
+plot.adjust_rate.ft <- function(x, ...){
+  message("adjust_rate.ft: plot() is not available for 'adjust_rate.ft' objects.")
+  return(invisible(x))
+}

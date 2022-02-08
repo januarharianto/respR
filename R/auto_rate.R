@@ -423,7 +423,7 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
 print.auto_rate <- function(x, pos = 1, ...) {
 
   ## warning if empty
-  if(length(x$rate) == 0) stop("print.auto_rate: No rates found in auto_rate x.")
+  if(length(x$rate) == 0) stop("print.auto_rate: No rates found in 'auto_rate' object.")
 
   cat("\n# print.auto_rate # ---------------------\n")
 
@@ -465,22 +465,22 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   nres <- length(x$rate)
 
   ## warning if empty
-  if(nres == 0) stop("auto_rate: No rates found in auto_rate x.")
+  if(nres == 0) stop("plot.auto_rate: Nothing to plot! No rates found in 'auto_rate' object.")
 
   ## pos 1 by default
   if(is.null(pos)) pos <-1
   ## warning if pos too low
   if(pos > nres)
-    stop("auto_rate: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.auto_rate: Invalid 'pos' rank: only ", nres, " rates found.")
 
   if(!quiet) {
     cat("\n# plot.auto_rate # ----------------------\n")
     if(pos == 1 && nres == 1)
-      cat(glue::glue("auto_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
+      cat(glue::glue("plot.auto_rate: Plotting rate from position {pos} of {nres} ..."), sep="\n")
     if(pos == 1 && nres > 1)
-      cat(glue::glue("auto_rate: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
+      cat(glue::glue("plot.auto_rate: Plotting rate from position {pos} of {nres} ... \nTo plot others use 'pos'"), sep="\n")
     if(pos > 1)
-      cat(glue::glue('auto_rate: Plotting rate from position {pos} of {nres} ...'), sep="\n")
+      cat(glue::glue('plot.auto_rate: Plotting rate from position {pos} of {nres} ...'), sep="\n")
   }
 
   # DEFINE OBJECTS
@@ -575,7 +575,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
     qq.p(fit)  #qq plot
   if (panel == 6) {
     if (x$method != 'linear') {
-      stop('auto_rate: density plot only available for "linear" method.')
+      stop('plot.auto_rate: density plot only available for "linear" method.')
     } else {
       density.p(dens, peaks, pos)  # density
     }
@@ -594,12 +594,12 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   ## warning if empty
-  if(length(object$rate) == 0) stop("auto_rate: No rates found in auto_rate object.")
+  if(length(object$rate) == 0) stop("summary.auto_rate: No rates found in 'auto_rate' object.")
 
   cat("\n# summary.auto_rate # -------------------\n")
 
   if(!is.null(pos) && pos > length(object$rate))
-    stop("auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("summary.auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
   ########### Summary Table ###################
   if (is.null(pos)) {
@@ -647,7 +647,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   ## warning if empty
-  if(length(x$rate) == 0) stop("auto_rate: No rates found in auto_rate x.")
+  if(length(x$rate) == 0) stop("mean.auto_rate: No rates found in 'auto_rate' object.")
 
   cat("\n# mean.auto_rate # ----------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
