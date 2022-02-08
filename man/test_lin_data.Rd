@@ -14,7 +14,7 @@ test_lin_data
 This data contains the results of 9 separate performance checks
 on the \code{\link[=auto_rate]{auto_rate()}} linear detection algorithm (i.e. \code{method = "linear"}).
 These test results are used to assess and discuss the performance of
-\code{auto_rate} in the online vignette found here \link{link}.
+\code{auto_rate} in the online vignette found here: .
 }
 \author{
 Januar Harianto

@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_file.R
 \name{import_file}
 \alias{import_file}
-\title{Import respirometry system output files}
+\title{Import respirometry system raw data files}
 \usage{
 import_file(path, export = FALSE)
 }
@@ -59,5 +59,11 @@ A \code{data.frame} object of all columned data
 }
 }
 \examples{
-NULL
+\dontrun{
+# Import a file
+import_file("path/to/file)
+
+# Import a file and export it to same directory as a csv
+import_file("path/to/file, export = TRUE)
+}
 }

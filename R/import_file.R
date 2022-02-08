@@ -1,4 +1,4 @@
-#' Import respirometry system output files
+#' Import respirometry system raw data files
 #'
 #' Automatically import data from different respirometry hardware and software
 #' systems. The aim is to work with most commercial oxygen sensors available in
@@ -66,7 +66,14 @@
 #'
 #' @export
 #'
-#' @examples NULL
+#' @examples
+#' \dontrun{
+#' # Import a file
+#' import_file("path/to/file)
+#'
+#' # Import a file and export it to same directory as a csv
+#' import_file("path/to/file, export = TRUE)
+#' }
 
 import_file <- function(path, export = FALSE) {
 
