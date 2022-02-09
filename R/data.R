@@ -28,13 +28,18 @@
 #'
 #' Oxygen consumption data of 16 individual *Heliocidaris erythrogramma*
 #' specimens. In addition, there are two columns of background respiration.
-#' These were trial runs to determine the precision of Vernier Optical DO probes
-#' (ODO-BTA), and thus chamber volumes, specimen masses and other parameters
-#' were not recorded.
 #'
 #' - Dissolved oxygen units: `mg/L`
 #'
 #' - Time units: `minutes`
+#'
+#' - Volume (L): `1.09`
+#'
+#' - Temperature (°C): `20`
+#'
+#' - Salinity: `30`
+#'
+#' - Atm. Pressure (bar): `1.01`
 #'
 #' @md
 #' @author Januar Harianto
