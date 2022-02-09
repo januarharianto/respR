@@ -5,6 +5,7 @@
 
 pkgdown::build_site()
 
+## Quicker
 pkgdown::build_site(lazy = TRUE, devel = TRUE)
 
 pkgdown::preview_site(pkg = ".", path = ".", preview = NA)

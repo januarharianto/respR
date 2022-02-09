@@ -87,7 +87,7 @@ This two-point rate will not be the one converted if we pass the `calc_rate` obj
 lake_rate_conv <- convert_rate(0.02213001,
                                oxy.unit = "mg/l",
                                time.unit = "hrs",
-                               output.unit = "mg/h",
+                               output.unit = "umol/h",
                                volume = 1)
 ```
 
@@ -97,7 +97,7 @@ Alternatively, extract it directly.
 lake_rate_conv <- convert_rate(lake_rate$rate.2pt,
                                oxy.unit = "mg/l",
                                time.unit = "hrs",
-                               output.unit = "mg/h",
+                               output.unit = "umol/h",
                                volume = 1)
 # print
 lake_rate_conv
