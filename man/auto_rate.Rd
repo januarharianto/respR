@@ -32,8 +32,8 @@ to apply the \code{width} input if it is above 1.}
 \code{auto_rate} performs rolling regressions on a dataset to determine the \emph{most
 linear, highest, lowest, maximum, minimum, rolling}, and \emph{interval} rates of
 change in oxygen against time. A rolling regression of the specified \code{width}
-is performed on the entire dataset, then based on the "\code{method}" input,
-the resulting regressions are ranked or ordered, and the output summarised.
+is performed on the entire dataset, then based on the "\code{method}" input, the
+resulting regressions are ranked or ordered, and the output summarised.
 }
 \details{
 \subsection{Ranking and ordering algorithms}{
@@ -151,10 +151,10 @@ of the current rate result plotted in panels 1 and 2.
 \subsection{Additional plotting options}{
 
 If multiple rates have been calculated, by default the first (\code{pos = 1}) is
-plotted. Others can be plotted by changing the \code{pos} input either in the
-main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
-In addition, each sub-panel can be examined individually by using the
-\code{panel} input, e.g. \code{plot(object, panel = 2)}.
+plotted. Others can be plotted by changing the \code{pos} input either in the main
+function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}. In
+addition, each sub-panel can be examined individually by using the \code{panel}
+input, e.g. \code{plot(object, panel = 2)}.
 
 Console output messages can be suppressed using \code{quiet = TRUE}. If axis
 labels or other text boxes obscure parts of the plot they can be suppressed
@@ -162,8 +162,7 @@ using \code{legend = FALSE}. The rate in the rolling rate plot can be plotted
 \emph{not} reversed by passing \code{rate.rev = FALSE}, for instance when examining
 oxygen production rates so that higher production rates appear higher. If
 axis labels (particularly y-axis) are difficult to read, \code{las = 2} can be
-passed to make axis labels horizontal, and \code{oma} (outer margins,
-default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
+passed to make axis labels horizontal, and \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
 }
 
 \subsection{S3 Generic Functions}{
@@ -184,7 +183,10 @@ by passing \code{export = TRUE}.
 
 \subsection{Output}{
 
-Output is a \code{list} object of class \code{auto_rate}.
+Output is a \code{list} object of class \code{auto_rate} containing input parameters
+and data, various summary data, metadata, linear models, and the primary
+output of interest \verb{$rate}, which can be background adjusted in
+\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
 }
 }
 \examples{

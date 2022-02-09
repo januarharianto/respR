@@ -4,8 +4,8 @@
 #' `auto_rate` performs rolling regressions on a dataset to determine the *most
 #' linear, highest, lowest, maximum, minimum, rolling*, and *interval* rates of
 #' change in oxygen against time. A rolling regression of the specified `width`
-#' is performed on the entire dataset, then based on the "`method`" input,
-#' the resulting regressions are ranked or ordered, and the output summarised.
+#' is performed on the entire dataset, then based on the "`method`" input, the
+#' resulting regressions are ranked or ordered, and the output summarised.
 #'
 #' ## Ranking and ordering algorithms
 #'
@@ -123,10 +123,10 @@
 #' ## Additional plotting options
 #'
 #' If multiple rates have been calculated, by default the first (`pos = 1`) is
-#' plotted. Others can be plotted by changing the `pos` input either in the
-#' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
-#' In addition, each sub-panel can be examined individually by using the
-#' `panel` input, e.g. `plot(object, panel = 2)`.
+#' plotted. Others can be plotted by changing the `pos` input either in the main
+#' function call, or by plotting the output, e.g. `plot(object, pos = 2)`. In
+#' addition, each sub-panel can be examined individually by using the `panel`
+#' input, e.g. `plot(object, panel = 2)`.
 #'
 #' Console output messages can be suppressed using `quiet = TRUE`. If axis
 #' labels or other text boxes obscure parts of the plot they can be suppressed
@@ -134,9 +134,9 @@
 #' *not* reversed by passing `rate.rev = FALSE`, for instance when examining
 #' oxygen production rates so that higher production rates appear higher. If
 #' axis labels (particularly y-axis) are difficult to read, `las = 2` can be
-#' passed to make axis labels horizontal, and `oma` (outer margins,
-#' default `oma = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai
-#' = c(0.3, 0.15, 0.35, 0.15)`) used to adjust plot margins.
+#' passed to make axis labels horizontal, and `oma` (outer margins, default `oma
+#' = c(0.4, 1, 1.5, 0.4)`), and `mai` (inner margins, default `mai = c(0.3,
+#' 0.15, 0.35, 0.15)`) used to adjust plot margins.
 #'
 #' ## S3 Generic Functions
 #'
@@ -156,7 +156,10 @@
 #'
 #' ## Output
 #'
-#' Output is a `list` object of class `auto_rate`.
+#' Output is a `list` object of class `auto_rate` containing input parameters
+#' and data, various summary data, metadata, linear models, and the primary
+#' output of interest `$rate`, which can be background adjusted in
+#' [`adjust_rate`] or converted to units in [`convert_rate`].
 #'
 #' @param x data frame, or object of class `inspect` containing oxygen~time
 #'   data.

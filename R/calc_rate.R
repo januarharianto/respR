@@ -3,11 +3,11 @@
 #'
 #' Calculates rate of oxygen uptake or production from respirometry data. A rate
 #' can be determined over the whole dataset, or on subsets of the data using the
-#' `from` and `to` inputs to specify data regions in terms of `oxygen` or
-#' `time` units, `row` numbers of the input data, or over a `proportion` of the
-#' total oxygen used or produced (note, this last option works poorly with noisy
-#' or fluctuating data). Multiple rates can be extracted from the same dataset
-#' by using these inputs to enter vectors of paired values in the appropriate
+#' `from` and `to` inputs to specify data regions in terms of `oxygen` or `time`
+#' units, `row` numbers of the input data, or over a `proportion` of the total
+#' oxygen used or produced (note, this last option works poorly with noisy or
+#' fluctuating data). Multiple rates can be extracted from the same dataset by
+#' using these inputs to enter vectors of paired values in the appropriate
 #' metric. See Examples.
 #'
 #' The function calculates rates by fitting a linear model of oxygen against
@@ -48,9 +48,9 @@
 #' ## Additional plotting options
 #'
 #' If multiple rates have been calculated, by default the first (`pos = 1`) is
-#' plotted. Others can be plotted by changing the `pos` input either in the
-#' main function call, or by plotting the output, e.g. `plot(object, pos = 2)`.
-#' In addition, each sub-panel can be examined individually by using the `panel`
+#' plotted. Others can be plotted by changing the `pos` input either in the main
+#' function call, or by plotting the output, e.g. `plot(object, pos = 2)`. In
+#' addition, each sub-panel can be examined individually by using the `panel`
 #' input, e.g. `plot(object, panel = 2)`.
 #'
 #' Console output messages can be suppressed using `quiet = TRUE`. If axis
@@ -77,7 +77,10 @@
 #'
 #' ## Output
 #'
-#' Output is a `list` object of class `calc_rate`
+#' Output is a `list` object of class `calc_rate` containing input parameters
+#' and data, various summary data, metadata, linear models, and the primary
+#' output of interest `$rate`, which can be background adjusted in
+#' [`adjust_rate`] or converted to units in [`convert_rate`].
 #'
 #' @param x object of class `inspect` or `data.frame`. This is the timeseries of
 #'   paired values of oxygen against time from which to calculate rates.

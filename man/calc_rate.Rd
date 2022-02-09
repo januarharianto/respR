@@ -30,11 +30,11 @@ and \code{to}.}
 \description{
 Calculates rate of oxygen uptake or production from respirometry data. A rate
 can be determined over the whole dataset, or on subsets of the data using the
-\code{from} and \code{to} inputs to specify data regions in terms of \code{oxygen} or
-\code{time} units, \code{row} numbers of the input data, or over a \code{proportion} of the
-total oxygen used or produced (note, this last option works poorly with noisy
-or fluctuating data). Multiple rates can be extracted from the same dataset
-by using these inputs to enter vectors of paired values in the appropriate
+\code{from} and \code{to} inputs to specify data regions in terms of \code{oxygen} or \code{time}
+units, \code{row} numbers of the input data, or over a \code{proportion} of the total
+oxygen used or produced (note, this last option works poorly with noisy or
+fluctuating data). Multiple rates can be extracted from the same dataset by
+using these inputs to enter vectors of paired values in the appropriate
 metric. See Examples.
 }
 \details{
@@ -77,9 +77,9 @@ Third and fourth panels are summary plots of fit and residuals.
 \subsection{Additional plotting options}{
 
 If multiple rates have been calculated, by default the first (\code{pos = 1}) is
-plotted. Others can be plotted by changing the \code{pos} input either in the
-main function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}.
-In addition, each sub-panel can be examined individually by using the \code{panel}
+plotted. Others can be plotted by changing the \code{pos} input either in the main
+function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}. In
+addition, each sub-panel can be examined individually by using the \code{panel}
 input, e.g. \code{plot(object, panel = 2)}.
 
 Console output messages can be suppressed using \code{quiet = TRUE}. If axis
@@ -105,7 +105,10 @@ by passing \code{export = TRUE}.
 
 \subsection{Output}{
 
-Output is a \code{list} object of class \code{calc_rate}
+Output is a \code{list} object of class \code{calc_rate} containing input parameters
+and data, various summary data, metadata, linear models, and the primary
+output of interest \verb{$rate}, which can be background adjusted in
+\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
 }
 }
 \examples{
