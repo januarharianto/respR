@@ -16,14 +16,15 @@ urchins.rd
 \description{
 Oxygen consumption data of 16 individual \emph{Heliocidaris erythrogramma}
 specimens. In addition, there are two columns of background respiration.
-These were trial runs to determine the precision of Vernier Optical DO probes
-(ODO-BTA), and thus chamber volumes, specimen masses and other parameters
-were not recorded.
 }
 \details{
 \itemize{
 \item Dissolved oxygen units: \code{mg/L}
 \item Time units: \code{minutes}
+\item Volume (L): \code{1.09}
+\item Temperature (°C): \code{20}
+\item Salinity: \code{30}
+\item Atm. Pressure (bar): \code{1.01}
 }
 }
 \author{
