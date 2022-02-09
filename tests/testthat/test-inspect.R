@@ -12,9 +12,9 @@ test_that("inspect works on 2-column data",
                        regexp = NA))
 
 test_that("inspect works on multi-column data", {
-  ## defaults to all columns
+  ## defaults to columns 1:2
   expect_equal(ncol(suppressWarnings(inspect(urchins.rd, plot = F)$dataframe)),
-               19)
+               2)
   ## differnt 2 columns
   expect_equal(ncol(suppressWarnings(inspect(urchins.rd, time = 1, oxygen = 3, plot = F)$dataframe)),
                2)
@@ -119,7 +119,7 @@ test_that("inspect works with NULL inputs", {
   expect_error(inspect(intermittent.rd, oxygen = NULL, plot = F),
                regexp = NA)
   expect_message(inspect(intermittent.rd, time = NULL, plot = F),
-                 regexp = "inspect: Applying column default of all non-time column\\(s\\) as 'oxygen'")
+                 regexp = "inspect: Applying column default of 'oxygen = 2'")
   expect_equal(inspect(intermittent.rd, time = NULL, plot = F)$inputs$oxygen,
                2)
 

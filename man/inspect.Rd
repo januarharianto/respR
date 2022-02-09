@@ -21,9 +21,8 @@ inspect(
 \item{time}{integer. Defaults to 1. Specifies the column number of the Time
 data.}
 
-\item{oxygen}{integer or vector of integers. Defaults to all non-time columns
-if no other inputs given. Specifies the column number(s) of the Oxygen
-data.}
+\item{oxygen}{integer or vector of integers. Defaults to 2. Specifies the
+column number(s) of the Oxygen data.}
 
 \item{width}{numeric, 0.01 to 1. Defaults to 0.1. Width used in the rolling
 regression plot as proportion of total length of data.}
@@ -52,9 +51,8 @@ data prior to analysis.
 }
 \details{
 Given an input data frame, \code{x}, the function scans the \code{time} and \code{oxygen}
-columns. If these are left \code{NULL}, by default it is assumed the first column
-is time data, and all other columns are oxygen data. However, best practice
-is to use the \code{time} and \code{oxygen} inputs to specify particular columns.
+columns. If these are left \code{NULL}, by default it is assumed column 1 is time
+data, and column 2 is oxygen data.
 \subsection{Check for numeric data}{
 
 \code{respR} requires data be in the form of paired values of numeric time and
@@ -132,18 +130,17 @@ used to adjust plot margins. See examples.
 
 For a quick overview of larger datasets, multiple oxygen columns can be
 inspected for errors and plotted by using the \code{oxygen} input to select
-multiple columns (by default, all non-time columns are inspected as oxygen
-columns if no \code{oxygen} input is specified). These must share the same \code{time}
-column. In this case, data checks are performed, with a plot of each oxygen
-time series, but no rolling rate plot is produced. All data are plotted on
-the same axis range of both time and oxygen (total range of data). This is
-chiefly exploratory functionality to allow for a quick overview of a dataset,
-and it should be noted that while the output \code{inspect} object will contain
-all columns in its \verb{$dataframe} element, subsequent functions in \code{respR}
-(\code{calc_rate}, \code{auto_rate}, etc.) will by default only use the first two
-columns (\code{time}, and the first specified \code{oxygen} column). To analyse
-multiple columns and determine rates, best practice is to inspect and assign
-each time-oxygen column pair as separate \code{inspect} objects. See Examples.
+multiple columns. These must share the same \code{time} column. In this case, data
+checks are performed, with a plot of each oxygen time series, but no rolling
+rate plot is produced. All data are plotted on the same axis range of both
+time and oxygen (total range of data). This is chiefly exploratory
+functionality to allow for a quick overview of a dataset, and it should be
+noted that while the output \code{inspect} object will contain all columns in its
+\verb{$dataframe} element, subsequent functions in \code{respR} (\code{calc_rate},
+\code{auto_rate}, etc.) will by default only use the first two columns (\code{time},
+and the first specified \code{oxygen} column). To analyse multiple columns and
+determine rates, best practice is to inspect and assign each time-oxygen
+column pair as separate \code{inspect} objects. See Examples.
 }
 
 \subsection{Flowthrough Respirometry Data}{
@@ -212,8 +209,7 @@ are found, locations (row numbers) are printed (up to first 20 occurrences).
 }
 }
 \examples{
-## By default, inspects all columns, assuming time is in 1 and all others
-## are oxygen:
+## By default, assumes time is col 1 and oxygen col2:
 inspect(sardine.rd)
 
 ## Instead, specify time and oxygen columns

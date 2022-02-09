@@ -11,9 +11,8 @@
 #' data prior to analysis.
 #'
 #' Given an input data frame, `x`, the function scans the `time` and `oxygen`
-#' columns. If these are left `NULL`, by default it is assumed the first column
-#' is time data, and all other columns are oxygen data. However, best practice
-#' is to use the `time` and `oxygen` inputs to specify particular columns.
+#' columns. If these are left `NULL`, by default it is assumed column 1 is time
+#' data, and column 2 is oxygen data.
 #'
 #' ## Check for numeric data
 #'
@@ -87,18 +86,17 @@
 #'
 #' For a quick overview of larger datasets, multiple oxygen columns can be
 #' inspected for errors and plotted by using the `oxygen` input to select
-#' multiple columns (by default, all non-time columns are inspected as oxygen
-#' columns if no `oxygen` input is specified). These must share the same `time`
-#' column. In this case, data checks are performed, with a plot of each oxygen
-#' time series, but no rolling rate plot is produced. All data are plotted on
-#' the same axis range of both time and oxygen (total range of data). This is
-#' chiefly exploratory functionality to allow for a quick overview of a dataset,
-#' and it should be noted that while the output `inspect` object will contain
-#' all columns in its `$dataframe` element, subsequent functions in `respR`
-#' (`calc_rate`, `auto_rate`, etc.) will by default only use the first two
-#' columns (`time`, and the first specified `oxygen` column). To analyse
-#' multiple columns and determine rates, best practice is to inspect and assign
-#' each time-oxygen column pair as separate `inspect` objects. See Examples.
+#' multiple columns. These must share the same `time` column. In this case, data
+#' checks are performed, with a plot of each oxygen time series, but no rolling
+#' rate plot is produced. All data are plotted on the same axis range of both
+#' time and oxygen (total range of data). This is chiefly exploratory
+#' functionality to allow for a quick overview of a dataset, and it should be
+#' noted that while the output `inspect` object will contain all columns in its
+#' `$dataframe` element, subsequent functions in `respR` (`calc_rate`,
+#' `auto_rate`, etc.) will by default only use the first two columns (`time`,
+#' and the first specified `oxygen` column). To analyse multiple columns and
+#' determine rates, best practice is to inspect and assign each time-oxygen
+#' column pair as separate `inspect` objects. See Examples.
 #'
 #' ## Flowthrough Respirometry Data
 #'
@@ -166,9 +164,8 @@
 #'   `tibble`, etc.).
 #' @param time integer. Defaults to 1. Specifies the column number of the Time
 #'   data.
-#' @param oxygen integer or vector of integers. Defaults to all non-time columns
-#'   if no other inputs given. Specifies the column number(s) of the Oxygen
-#'   data.
+#' @param oxygen integer or vector of integers. Defaults to 2. Specifies the
+#'   column number(s) of the Oxygen data.
 #' @param width numeric, 0.01 to 1. Defaults to 0.1. Width used in the rolling
 #'   regression plot as proportion of total length of data.
 #' @param plot logical. Defaults to `TRUE`. Plots the data. If `time` and single
@@ -185,8 +182,7 @@
 #' @export
 #'
 #' @examples
-#' ## By default, inspects all columns, assuming time is in 1 and all others
-#' ## are oxygen:
+#' ## By default, assumes time is col 1 and oxygen col2:
 #' inspect(sardine.rd)
 #'
 #' ## Instead, specify time and oxygen columns
@@ -239,11 +235,11 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   ## oxygen: Apply default
   if (is.null(oxygen)) {
-    #message("inspect: Applying column default of 'oxygen = 2'")
-    #oxygen <- 2
-    message("inspect: Applying column default of all non-time column(s) as 'oxygen'")
-    listcols <- seq.int(1, ncol(x))
-    oxygen <- listcols[!listcols %in% time]
+    message("inspect: Applying column default of 'oxygen = 2'")
+    oxygen <- 2
+    #message("inspect: Applying column default of all non-time column(s) as 'oxygen'")
+    #listcols <- seq.int(1, ncol(x))
+    #oxygen <- listcols[!listcols %in% time]
   }
   column.val(oxygen, req = TRUE, min = 1, max = Inf,
              range = c(1,ncol(x)), conflicts = time,
