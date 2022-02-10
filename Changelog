@@ -117,7 +117,9 @@ Function specific changes:
 - FIX: Fix for `auto_rate` failing to work when there were `NA` in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing.)
 - FIX: `method = "max"` was missing `$total_regs` element from metadata
 - FIX: Fixed an issue whereby under `by = "time"` and `method = "linear"` a non-proportional `width` (i.e. greater than 1) would get incorrectly passed as a row width rather than a time width. This was only an issue in data where time and row spacing were mismatched, for instance where time was in minutes or hours, or in seconds but not at one second intervals. This would not have affected returned rate *values*, but instead led to poor ranking of the returned rates.
+- FIX: Fixed an issue where the function would fail when assembling final output
 
+- CHANGE: Under the `"linear"` method, occasionally linear regions which were identical but had different density scores were identified. Any lower ranked duplicates are now removed.
 - CHANGE: Reordered inputs to put `method` second
 - CHANGE: Summary table reordered to be consistent with other functions
 - CHANGE: Tidied and reordered summary S3 printout

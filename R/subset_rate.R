@@ -28,15 +28,6 @@
 #'  not reordered in any way, only the non-matching rates removed. See
 #'  **Output** section for more details.
 #'
-#'  Regardless of which `method` is chosen, the first operation conducted is
-#'  removal of duplicate results. Due to the way it works, the `auto_rate`
-#'  kernel-density analysis occasionally identifies linear regions that are
-#'  identical, and these appear as identical rows in the output `$summary`,
-#'  except for different `$density` values. The lower ranked duplicates are
-#'  removed and only unique regressions are retained. To apply only this
-#'  duplicate removal method, use the default `method = NULL` or `method =
-#'  "unique"`.
-#'
 #'  Generally speaking, for most large datasets we recommend using
 #'  [`subset_data()`] and then running `auto_rate` on the subset(s) of the data
 #'  you are interested in, rather than run it on the whole dataset and relying
@@ -44,12 +35,6 @@
 #'
 #'@details These are the current methods by which rates in `auto_rate` objects
 #'  can be subset. Matching results are *retained* in the output:
-#'
-#'  ## `NULL`, `unique`
-#'
-#'  Subsets only unique results, that is for any regressions in the input
-#'  `$summary` table that are identical (except the `$density` column), it
-#'  retains the top ranked one only. `n` is ignored.
 #'
 #'  ## `positive`, `negative`
 #'
@@ -262,11 +247,10 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(any(x$rate > 0) && any(x$rate < 0)) message("subset_rate: Object contains both negative and positive rates. Ensure the chosen `method` is appropriate.")
 
   ## Specify a method
-  #if(is.null(method)) stop("subset_rate: Please specify a 'method'")
+  if(is.null(method)) stop("subset_rate: Please specify a 'method'")
 
   ## Validate method
-  if(!is.null(method) && !(method %in% c("unique",
-                                         "overlap",
+  if(!is.null(method) && !(method %in% c("overlap",
                                          "overlap_new",
                                          "duration",
                                          "density",
@@ -289,33 +273,6 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
                                          "nonzero",
                                          "negative",
                                          "positive"))) stop("subset_rate: 'method' input not recognised")
-
-
-  # Remove duplicates -------------------------------------------------------
-  # This happens regardless of any other subsetting operation.
-  # Could be moved to auto_rate function, so can be removed from here when it is.
-
-  # index of rows which are unique
-  ## note only columns 1:7 since 8 is 'density' if 'linear' method
-  ## Revised this line because auto_rate summary columns were rejigged around
-  ## $density should occur on column 5, but only in auto_rate linear method
-  ## objects. But this should still catch them all
-  index_unique <- which(!duplicated(x$summary[,c(2:4,6:8)]))
-
-  x$summary <- x$summary[index_unique,]
-  x$rate <- x$rate[index_unique]
-  x$metadata$subset_regs <- length(index_unique)
-
-  if(x$method == "linear"){
-    x$peaks <- x$peaks[index_unique,]
-  }
-
-  if(method == "unique" || is.null(method)){
-    message("subset_rate: Subsetting only unique regressions. `n` input ignored...")
-    method <- "unique"
-    keep <- 1:nrow(x$summary)
-    keep <- sort(keep)
-  }
 
   # Positive rates only -----------------------------------------------------
   if(method == "positive"){

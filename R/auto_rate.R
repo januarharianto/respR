@@ -418,9 +418,22 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### Add density to summary table
     out$summary$density <- out$peaks$density
 
+    ## Remove duplicate results
+    ### Index of unique rows. This keeps the first (top) row of any duplicates
+    ### so lower density ranked ones are removed - which is what we want
+    index_unique <- which(!duplicated(out$summary[,1:7]))
+
+    # now remove these from relevant places
+    out$summary <- out$summary[index_unique,]
+    out$rate <- out$rate[index_unique]
+    out$metadata$subset_regs <- length(index_unique)
+    out$peaks <- out$peaks[index_unique,]
+
   } else stop("auto_rate: 'method' input not recognised")
 
-  ## reorder output summary
+  # Assemble final output object --------------------------------------------
+
+  ## Reorder output summary table
   out$summary <- data.table::data.table(rank = 1:nrow(out$summary),
                                         intercept_b0 = out$summary$intercept_b0,
                                         rate_b1 = out$summary$rate_b1,

@@ -173,50 +173,11 @@ test_that("subset_rate works with auto_rate method = interval object (OLD METHOD
                3)
 })
 
-
-
-# Check duplicates are removed --------------------------------------------
-
-## use sardine.rd here as it produces multiple duplicates
-ar_obj_sard <- auto_rate(sardine.rd[,1:2], plot = FALSE)
-
+# Check NULL stops fn --------------------------------------------
 test_that("subset_rate: method = NULL   - correct message", {
-  expect_message(ar_obj_uniq <- subset_rate(ar_obj_sard, plot = FALSE),
-                 regexp = "subset_rate: Subsetting only unique regressions. `n` input ignored")
+  expect_error(ar_obj_uniq <- subset_rate(ar_obj_high, plot = FALSE),
+                 regexp = "subset_rate: Please specify a 'method'")
 })
-
-test_that("subset_rate: method = NULL   - works with NULL input", {
-  expect_error(ar_obj_uniq <- subset_rate(ar_obj_sard, plot = FALSE),
-               regexp = NA)
-})
-
-test_that("subset_rate: method = NULL   - correctly removes duplicates", {
-  ar_obj_uniq <- subset_rate(ar_obj_sard, method = NULL,
-                             plot = FALSE)
-  expect_equal(nrow(ar_obj_uniq$summary),
-               39)
-  expect_equal(ar_obj_uniq$summary[,c(2:4,6:8)], unique(ar_obj_sard$summary[,c(2:4,6:8)]))
-})
-
-test_that("subset_rate: method = unique   - correct message", {
-  expect_message(ar_obj_uniq <- subset_rate(ar_obj_sard, plot = FALSE),
-                 regexp = "subset_rate: Subsetting only unique regressions. `n` input ignored")
-})
-
-test_that("subset_rate: method = unique   - works", {
-  expect_error(ar_obj_uniq <- subset_rate(ar_obj_sard, method = "unique",
-                                          plot = FALSE),
-               regexp = NA)
-})
-
-test_that("subset_rate: method = unique   - correctly removes duplicates", {
-  ar_obj_uniq <- subset_rate(ar_obj_sard, method = "unique",
-                             plot = FALSE)
-  expect_equal(nrow(ar_obj_uniq$summary),
-               39)
-  expect_equal(ar_obj_uniq$summary[,c(2:4,6:8)], unique(ar_obj_sard$summary[,c(2:4,6:8)]))
-})
-
 
 # Check "positive" method -------------------------------------------------
 

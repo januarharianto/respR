@@ -47,14 +47,6 @@ data in \verb{$summary} (i.e. the associated row) is removed. Summary results ar
 not reordered in any way, only the non-matching rates removed. See
 \strong{Output} section for more details.
 
-Regardless of which \code{method} is chosen, the first operation conducted is
-removal of duplicate results. Due to the way it works, the \code{auto_rate}
-kernel-density analysis occasionally identifies linear regions that are
-identical, and these appear as identical rows in the output \verb{$summary},
-except for different \verb{$density} values. The lower ranked duplicates are
-removed and only unique regressions are retained. To apply only this
-duplicate removal method, use the default \code{method = NULL} or \code{method = "unique"}.
-
 Generally speaking, for most large datasets we recommend using
 \code{\link[=subset_data]{subset_data()}} and then running \code{auto_rate} on the subset(s) of the data
 you are interested in, rather than run it on the whole dataset and relying
@@ -63,13 +55,6 @@ on \code{subset_rate} to filter it afterwards.
 \details{
 These are the current methods by which rates in \code{auto_rate} objects
 can be subset. Matching results are \emph{retained} in the output:
-\subsection{\code{NULL}, \code{unique}}{
-
-Subsets only unique results, that is for any regressions in the input
-\verb{$summary} table that are identical (except the \verb{$density} column), it
-retains the top ranked one only. \code{n} is ignored.
-}
-
 \subsection{\code{positive}, \code{negative}}{
 
 Subsets all \code{positive} (>0) or \code{negative} (<0) rates. \code{n} is ignored.
