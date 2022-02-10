@@ -20,14 +20,14 @@
 #'
 #' ## Output
 #'
-#' By default (`value.out = TRUE`) the output is a numeric vector of converted
-#' values. If `value.out = FALSE` output is a `list` object of class
+#' By default (`simplify = TRUE`) the output is a numeric vector of converted
+#' values. If `simplify = FALSE` output is a `list` object of class
 #' `convert_DO` containing five elements: `$call` the function call, `$input`
 #' values, `$output` converted values, `$input.unit` and `$output.unit`.
 #'
 #' ## S3 Generic Functions
 #'
-#' Saved output objects (if `value.out = FALSE` is used) can be entered in the
+#' Saved output objects (if `simplify = FALSE` is used) can be entered in the
 #' generic S3 functions `print()` and `summary()`.
 #'
 #' - `print()`: prints input and converted values (up to first 20), plus input
@@ -45,7 +45,7 @@
 #'   of some units. See [unit_args()] for details.
 #' @param P numeric. Pressure (bar). Defaults to 1.013253. Required for
 #'   conversion of some units. See [unit_args()] for details.
-#' @param value.out logical. Defaults to `TRUE` in which case the converted
+#' @param simplify logical. Defaults to `TRUE` in which case the converted
 #'   values are returned as a numeric vector. if `FALSE` a list object of class
 #'   `convert_DO` is returned.
 #'
@@ -71,7 +71,7 @@
 #'   }
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
-                       P = NULL, value.out = TRUE) {
+                       P = NULL, simplify = TRUE) {
 
   ## Save function call for output
   call <- match.call()
@@ -174,7 +174,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
   class(out) <- "convert_DO"
 
-  if(value.out) return(out$output) else
+  if(simplify) return(out$output) else
     return(out)
 }
 
@@ -211,10 +211,36 @@ plot.convert_DO <- function(x, ...) {
 }
 
 #' @export
-mean.convert_DO <- function(x, ...) {
-  message("convert_DO: mean() is not available for 'convert_DO' objects.")
-  return(invisible(x))
+mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){
+
+  cat("\n# mean.convert_DO # ---------------------\n")
+  if(!is.null(pos) && any(pos > length(x$output)))
+    stop("mean.convert_DO: Invalid 'pos' rank: only ", length(x$output), " rates found.")
+  if(is.null(pos)) {
+    pos <- 1:length(x$output)
+    cat("Averaging all converted oxygen values.")
+    cat("\n")
+  } else{
+    cat("Averaging converted oxygen values from entered 'pos' ranks:")
+    cat("\n")
+  }
+  if(length(x$output[pos]) == 1)
+    message("Only 1 converted oxygen value found. Returning mean rate anyway...")
+  cat("\n")
+
+  n <- length(x$output[pos])
+  out <- mean(x$output[pos])
+  cat("Mean of", n, "converted oxygen values:\n")
+  print(out)
+  print(x$output.unit)
+  cat("-----------------------------------------\n")
+
+  if(export)
+    return(invisible(out)) else
+      return(invisible(x))
 }
+
+
 
 #' Check unit string against a known database
 #'

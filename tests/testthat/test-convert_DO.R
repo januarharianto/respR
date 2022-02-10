@@ -105,8 +105,8 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("convert_DO S3 generics work", {
 
-    ob <- convert_DO(10, "inHg", "mg/l", S = 35, t = 25, P = 1.013253, value.out = FALSE)
-    ob_many <- convert_DO(10:30, "inHg", "mg/l", S = 35, t = 25, P = 1.013253, value.out = FALSE)
+    ob <- convert_DO(10, "inHg", "mg/l", S = 35, t = 25, P = 1.013253, simplify = FALSE)
+    ob_many <- convert_DO(10:30, "inHg", "mg/l", S = 35, t = 25, P = 1.013253, simplify = FALSE)
 
     expect_error(print(ob),
                  NA)

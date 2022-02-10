@@ -72,7 +72,7 @@ sardine_new <- cbind(sardine.rd,
 sardine_new
 ```
 
-Alternatively, if `value.out = FALSE` the output is a `list` object which can be used with `print` for a convenient summary output. 
+Alternatively, if `simplify = FALSE` the output is a `list` object which can be used with `print` for a convenient summary output. 
 
 ```{r echo = T, tidy = F}
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
@@ -81,7 +81,7 @@ conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    t = 15,            # in C
                    S = 35,            # in ppt
                    P = 1.013,         # in bar
-                   value.out = FALSE)  # output vector of values
+                   simplify = FALSE)  # output vector of values
 
 print(conv)
 ```
@@ -100,7 +100,7 @@ convert_DO(100, "%Air", "%Oxy",
 
 ## Example 2 - Oxygen pressure units
 
-`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `mmol/kg` column we just added, using the `value.out` input to output numeric values.
+`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `mmol/kg` column we just added, using the `simplify` input to output numeric values.
 
 ```{r tidy = F}
 sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,  
@@ -140,7 +140,7 @@ convert_DO(4.6,
            t = convert_val(65, from = "F"), # needs to be in C
            S = 30, 
            P = convert_val(775, from = "Torr"), # needs to be in bar
-           value.out = FALSE) 
+           simplify = FALSE) 
 ```
 
 Notice two convenient aspects:
