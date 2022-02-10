@@ -2,8 +2,9 @@
 
 # Verify the 'by' input for calc_rate etc.
 # req - indicates if a 'by' input is required
+# default - what should be the default if by is NULL?
 # which - which 'by' methods does the function support?
-verify_by <- function(by, req = TRUE,
+verify_by <- function(by, req = TRUE, default = NULL,
                       which = c("t", "o", "r", "p"),
                       msg = ""){
   ## no doubt this is easier with regex
@@ -26,8 +27,15 @@ verify_by <- function(by, req = TRUE,
                        "pr", "Pr", "PR",
                        "p", "P")
 
+  # stop if required and not entered
   if (req && is.null(by)) stop(glue::glue("{msg} 'by' input is required."))
-  else if("t" %in% which && by %in% time_variations) by <- "time"
+
+  # if not required, and entered as NULL, apply default
+  if (!req && is.null(by) && !is.null(default)) {
+    by <- default
+    message(glue::glue("{msg} applying default 'by' input of {default}."))}
+
+  if("t" %in% which && by %in% time_variations) by <- "time"
   else if("o" %in% which && by %in% ox_variations) by <- "oxygen"
   else if("r" %in% which && by %in% row_variations) by <- "row"
   else if("p" %in% which && by %in% prop_variations) by <- "proportion"
