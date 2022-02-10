@@ -227,7 +227,10 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
   win <- calc_rolling_win(dt, width, by)  # determine width automatically
 
   # verify & apply methods
+
+  # max method --------------------------------------------------------------
   ## OLD METHOD
+  ## WE WILL DEPRECATE THIS IN LATER VERSION
   if (method == 'max') {
     warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
@@ -247,7 +250,9 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+    # min method --------------------------------------------------------------
     ## OLD METHOD
+    ## WE WILL DEPRECATE THIS IN LATER VERSION
   } else if (method == 'min') {
     warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
@@ -267,6 +272,8 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # maximum method ----------------------------------------------------------
     ### NOW ORDERS BY NUMERICAL VALUE I.E. CONSIDERS SIGN
   } else if (method == 'maximum') {
     output <- auto_rate_max(dt, win, by)
@@ -286,6 +293,7 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+    # minimum method ----------------------------------------------------------
     ### NOW ORDERS BY NUMERICAL VALUE I.E. CONSIDERS SIGN
   } else if (method == 'minimum') {
     output <- auto_rate_min(dt, win, by)
@@ -305,6 +313,8 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # interval method ---------------------------------------------------------
   } else if (method == 'interval') {
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
@@ -323,6 +333,8 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # rolling method ----------------------------------------------------------
   } else if (method == 'rolling') {
     output <- auto_rate_rolling(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
@@ -341,6 +353,8 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # highest method ----------------------------------------------------------
   } else if (method == 'highest') {
     output <- auto_rate_highest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
@@ -359,6 +373,8 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # lowest method -----------------------------------------------------------
   } else if (method == 'lowest') {
     output <- auto_rate_lowest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
@@ -377,8 +393,10 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
 
+
+    # linear method -----------------------------------------------------------
   } else if (method == 'linear') {
-    output <- auto_rate_linear(dt, win)
+    output <- auto_rate_linear(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll),
                            total_peaks = nrow(output$peaks),

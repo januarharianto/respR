@@ -297,7 +297,11 @@ auto_rate_interval <- function(dt, width, by) {
 #'
 #' @examples
 #' NULL
-auto_rate_linear <- function(dt, width, verify = TRUE) {
+auto_rate_linear <- function(dt, width, by, verify = TRUE) {
+
+  # Convert 'width' to rows if it is 'by = "time"' since kernel_method only
+  # takes row width
+  if(by == "time") width <- floor(width/diff(range(dt[[1]])) * nrow(dt))
 
   # define kde function
   kernel_method <- function(dt, width, top_only = FALSE) {
@@ -331,6 +335,10 @@ auto_rate_linear <- function(dt, width, verify = TRUE) {
     frags <- unname(mapply(function(x, y)
       frags[[x]][y], 1:length(frags), i))
     # remove zero-length data:
+    # First remove same position from peaks (ranked_index), or later there are
+    # issues with them not being same length
+    ranked_index <- ranked_index[which(sapply(frags, nrow) > 0),]
+    # then from fragments
     frags <- frags[sapply(frags, nrow) > 0]
     # convert fragments to single-data subsets:
     subsets <- lapply(1:length(frags), function(x)
@@ -459,9 +467,11 @@ calc_rolling_win <- function(dt, width, by) {
   # obtained from user input
 
   # validation
-  if (is.null(width)) width <- .2  # if no width is specified, set to 20 %
+  if (is.null(width)) width <- 0.2  # if no width is specified, set to 20 %
+
   # if width > 1, check that value does not exceed length of data:
-  if (width > 1 && width > nrow(dt)) stop("auto_rate: 'width' exceeds length of dataset")
+  if (by == "row" && width > 1 && width > nrow(dt)) stop("auto_rate: 'width' exceeds length of dataset")
+  if (by == "time" && width > 1 && width > diff(range(dt[[1]]))) stop("auto_rate: 'width' exceeds length of dataset")
 
   # perform calculations
   if (width <= 1 & by == 'time') {

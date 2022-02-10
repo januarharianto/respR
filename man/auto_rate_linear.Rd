@@ -4,7 +4,7 @@
 \alias{auto_rate_linear}
 \title{Linear detection method}
 \usage{
-auto_rate_linear(dt, width, verify = TRUE)
+auto_rate_linear(dt, width, by, verify = TRUE)
 }
 \arguments{
 \item{dt}{data.frame object.}
