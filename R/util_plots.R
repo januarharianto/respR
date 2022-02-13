@@ -188,12 +188,13 @@ density.p <- function(dens, peaks, rank = 1, ...) {
 }
 
 # rolling regression
-rollreg.p <- function(rolldf, ranked.b1, rownums, rate.rev = TRUE, ...) {
+rollreg.p <- function(rolldf, ranked.b1, rownums, xlim, rate.rev = TRUE, ...) {
   par(...)
-  ylim <- range(rolldf[[2]])
+  ylim <- grDevices::extendrange(nainf.omit(rolldf[[2]]), f = 0.05)
   if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
   plot(rolldf, xlab = "", ylab = "", bg = r2, col = r2,
        ylim = ylim,
+       xlim = xlim,
        lwd = 1, panel.first = grid(lwd = .7),
        axes = FALSE)
 
@@ -205,7 +206,6 @@ rollreg.p <- function(rolldf, ranked.b1, rownums, rate.rev = TRUE, ...) {
   ## add row index axis
   par(new = TRUE, ...)
   plot(rownums,
-       rolldf[[2]],
        xlab = "",
        ylab = "",
        pch = "",

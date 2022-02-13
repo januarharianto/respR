@@ -557,6 +557,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
       ## However this means rates are ALSO calculated at the start of the data
       ## before the width is even reached, so we remove these.
       rates <- rates[-(1:(roll_width-1))]
+      rates <- na.omit(rates)
       return(rates)
     }
 

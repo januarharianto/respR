@@ -102,8 +102,8 @@ Function specific changes:
 
 ========================== auto_rate() ============================
 - NEW - 'rolling' method. Performs simple rolling regression of specified width, with *no* ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
-- NEW `highest` and `lowest` methods for absolute minimum and maximum of rates regardless of sign
-- NEW `maximum` and `minimum` methods. These work the *opposite* way to `min` and `max` from v1.1. These are strictly numerical, so correctly order oxygen production rates, and can only be uses when rates all have the same sign. The `min`and `max` methods still produce same results as in v1.1 but have a prominent warning. These will be deprecated in a later version of `respR`.
+- NEW `highest` and `lowest` methods for absolute minimum and maximum of rates regardless of sign. These can only be used when rates all have the same sign.
+- NEW `maximum` and `minimum` methods. These work the *opposite* way to `min` and `max` from v1.1. These are strictly numerical, and order by value accounting for the sign. The `min`and `max` methods still produce same results as in v1.1 but have a prominent warning. These will be deprecated in a later version of `respR`.
 - (New internal functions for this ordering - `auto_rate_lowest`, `auto_rate_highest`. Therefore internal functions `auto_rate_min` and `auto_rate_max` have been swapped around in terms of functionality).
 - NEW: Added the Kernel Density metric `$density` to the `$summary` table for the `"linear"` method. This allows you to see how the results are ranked in regards to KDE (also present for other methods, but as an empty column).
 - NEW: Plot updated with title showing the Rank of the current plot. It also now plots oxygen and rate against both time and row index.
@@ -118,14 +118,16 @@ Function specific changes:
 - FIX: `method = "max"` was missing `$total_regs` element from metadata
 - FIX: Fixed an issue whereby under `by = "time"` and `method = "linear"` a non-proportional `width` (i.e. greater than 1) would get incorrectly passed as a row width rather than a time width. This was only an issue in data where time and row spacing were mismatched, for instance where time was in minutes or hours, or in seconds but not at one second intervals. This would not have affected returned rate *values*, but instead led to poor ranking of the returned rates.
 - FIX: Fixed an issue where the function would fail when assembling final output
+- FIX: Fixed an issue where rates would not be returned over regions which contained NA values. The function is now generally much more robust to missing values (though input data should whereever possible not contain NA values).
 
-- CHANGE: Under the `"linear"` method, occasionally linear regions which were identical but had different density scores were identified. Any lower ranked duplicates are now removed.
 - CHANGE: Reordered inputs to put `method` second
 - CHANGE: Summary table reordered to be consistent with other functions
 - CHANGE: Tidied and reordered summary S3 printout
   - summary table comes first, only prints out 20 rows max of results (via data.table)
   - new function (print_dens) for printing the density result more compactly
-
+- CHANGE: Under the `"linear"` method, occasionally linear regions which were identical but had different density scores were identified. Any lower ranked duplicate results are now removed.
+- CHANGE: The rolling regression plot (panel 3) is now plotted on the same x-axes of time and row as the full timeseries plot, and has better spacing.
+- CHANGE: The `width` input behaviour has changed slightly. Previously if it was a value between 0 and 1 it represented a proportional width of the whole dataset regardless of the `by` input. This now applies only to `by = "row"`. If `by = "time"` any value between 0 and 1 now represents (as with values above 1) a time window in the units of the time data.
 
 ========================== convert_rate() ============================
 - NEW: Can now convert to surface area-specific rates via the `area` input (accepts `"mm2"`, `"cm2"`, `"m2"`, `"km2"`)

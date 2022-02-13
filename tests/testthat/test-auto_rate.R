@@ -149,7 +149,7 @@ test_that("auto_rate summary export = TRUE works", {
 })
 
 test_that("static_roll (auto_rate) outputs a data frame object", {
-  sroll <- static_roll(urch_data, 1500)
+  sroll <- static_roll(urch_data, 40)
   expect_is(sroll,
             "data.frame")
 })
@@ -175,7 +175,7 @@ test_that("auto_rate works with variations of `by` input", {
 
 test_that("auto_rate error produced with wrong by", {
   expect_error(auto_rate(urch_data, plot = F, by = "oxygen"),
-               "auto_rate: The 'by' input must be 'time' or 'row'")
+               "auto_rate: 'by' input not valid or not recognised.")
 })
 
 test_that("auto_rate works with method = interval and by = time", {
@@ -184,15 +184,13 @@ test_that("auto_rate works with method = interval and by = time", {
                -0.0335646)
 })
 
-test_that("auto_rate works even if width is set to width of entire data", {
+test_that("auto_rate stopes even if width is set to width of entire data", {
   expect_error(auto_rate(urch_data, width = 271, by = "row", method = "lowest", plot = F),
-               regexp = NA)
+               regexp = "auto_rate: 'width' cannot be the total number of rows in the input data")
 })
 
 test_that("auto_rate works if width is set to less than 1", {
   expect_error(auto_rate(urch_data, width = 0.5, by = "row", method = "lowest", plot = F),
-               regexp = NA)
-  expect_error(auto_rate(urch_data, width = 0.5, by = "time", method = "lowest", plot = F),
                regexp = NA)
 })
 
@@ -352,8 +350,6 @@ test_that("auto_rate outputs expected results when method = 'min'", {
 
 test_that("auto_rate works when there are NA in the 'time' data", {
 
-  skip("skip - until we fix this")
-
   input_na <- squid.rd
   input_na[200:205,1] <- NA ##  time NA
   input_na[8000,1] <- NA ##  time NA
@@ -363,7 +359,7 @@ test_that("auto_rate works when there are NA in the 'time' data", {
   # this will cause errors in future if auto_rate changes, but for now
   # test output value
   expect_equal(auto_rate(input_na)$rate[1],
-               -3.067353e-04)
+               -0.0003067157)
 })
 
 

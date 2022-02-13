@@ -5,7 +5,7 @@
 \title{Automatically determine most linear, highest, lowest and rolling oxygen
 uptake or production rates}
 \usage{
-auto_rate(x, method = "linear", width = 0.2, by = "row", plot = TRUE, ...)
+auto_rate(x, method = "linear", width = NULL, by = "row", plot = TRUE, ...)
 }
 \arguments{
 \item{x}{data frame, or object of class \code{inspect} containing oxygen~time
@@ -15,10 +15,12 @@ data.}
 \code{"minimum"}, \code{"rolling"} or \code{"interval"}. Defaults to \code{"linear"}. See
 Details.}
 
-\item{width}{numeric. Width of the rolling regression. Defaults to 0.2.
-Either a value between 0 and 1 representing a proportion of the data
-length, or a value above 1 representing an exact width in the \code{by} input.
-See Details.}
+\item{width}{numeric. Width of the rolling regression. For \code{by = "row"},
+either a value between 0 and 1 representing a proportion of the data
+length, or an integer of 2 or greater representing an exact number of rows.
+If \code{by = "time"} it represents a time window in the units of the time data.
+If \code{NULL}, it defaults to 0.2 or a window of 20\% of the data length. See
+Details.}
 
 \item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. Metric by which
 to apply the \code{width} input if it is above 1.}
@@ -89,7 +91,7 @@ methods should be used.
 \item \code{rolling}: A rolling regression of the specified \code{width} is performed
 across the entire timeseries. No reordering of results is performed.
 \item \code{interval}: multiple, successive, non-overlapping regressions of the
-specified 'width' are extracted from the rolling regressions, ordered by
+specified \code{width} are extracted from the rolling regressions, ordered by
 time.
 \item NOTE: \code{max}, \code{min}: These methods were used in previous versions of \code{respR}
 but have been deprecated. They were intended to order oxygen uptake
@@ -116,20 +118,25 @@ The units of oxygen concentration and time will be specified later in
 
 \subsection{The \code{width} and \code{by} inputs}{
 
-The \code{width} input defaults to 0.2. If it is a value between 0 and 1, it
-represents a proportion of the total data length, as in the equation
-\verb{floor(width * number of data rows)}. For example, 0.2 represents a rolling
-window of 20\% of the data width. Otherwise, if entered as 1 or greater, the
-width is an exact value in either number of rows or in the units of time
-data, as specified via the \code{by} input.
+If \code{by = "time"}, the \code{width} input represents a time window in the units of
+the time data.
+
+If \code{by = "row"} and between 0 and 1, \code{width} represents a proportion of the
+total data length, as in the equation \verb{floor(width * number of data rows)}.
+For example, 0.2 represents a rolling window of 20\% of the data width.
+Otherwise, if entered as an integer of 2 or greater, the \code{width} represents
+the number of rows.
+
+For both \code{by} inputs, if left as \code{width = NULL} it defaults to 0.2 or a
+window of 20\% of the data length.
 
 In most cases, \code{by} should be left as the default \code{"row"}, and the \code{width}
 chosen with this in mind, as it is considerably more computationally
 efficient. Changing to \code{"time"} causes the function to perform checks for
 irregular time intervals at every iteration of the rolling regression, which
 adds to computation time. This is to ensure the specified \code{width} input is
-honoured in the time units and rates correctly calculated, even if there are
-gaps in the data.
+honoured in the time units and rates correctly calculated, even if the data
+is unevenly spaced or has gaps.
 }
 
 \subsection{Plot}{
@@ -139,7 +146,7 @@ timeseries of oxygen against time (bottom blue axis) and row index (top red
 axis), with the rate result region highlighted. Second panel is a close-up of
 the rate region with linear model coefficients. Third panel is a rolling rate
 plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
-higher), of rate calculated across the input \code{width} for the whole dataset.
+higher), of a rolling rate of the input \code{width} across the whole dataset.
 Each rate is plotted against the middle of the time and row range used to
 calculate it. The dashed line indicates the value of the current rate result
 plotted in panels 1 and 2. The fourth and fifth panels are summary plots of

@@ -55,16 +55,13 @@ validate_auto_rate <- function(df, by, method) {
     warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
     df <- df[, 1:2]
   }
-  by <- verify_by(by, msg = "auto_rate:") # validate `by` input
+  by <- verify_by(by,  which = c("t", "r"), msg = "auto_rate:") # validate `by` input
 
   assertthat::assert_that(
     is.data.frame(df),
     msg = "auto_rate: Input data must be of class 'data.frame' or 'inspect'"
   )
-  assertthat::assert_that(
-    by %in% c("time", "row"),
-    msg = "auto_rate: The 'by' input must be 'time' or 'row'"
-  )
+
   assertthat::assert_that(
     method %in% c("linear", "max", "min", "interval",
                   "rolling",
@@ -301,55 +298,7 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
 
   # Convert 'width' to rows if it is 'by = "time"' since kernel_method only
   # takes row width
-  if(by == "time") width <- floor(width/diff(range(dt[[1]])) * nrow(dt))
-
-  # define kde function
-  kernel_method <- function(dt, width, top_only = FALSE) {
-    # linear detection is always by row since linear detection is not dependent
-    # on time but more on the stability of the data
-    rollreg <- rolling_reg_row(dt, width)
-
-    # perform kernel density estimate
-    d <- density(rollreg$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
-    # extract bandwidth
-    bw <- d$bw
-    # identify peaks in kernel density:
-    peaks <- which(diff(sign(diff(d$y))) == -2) + 1
-    # match peaks to rate values:
-    index <- rbindlist(lapply(peaks, function(x)
-      data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]))
-    # rank density by size (biggest on top):
-    if (top_only) {
-      ranked_index <- index[order(-rank(density))][1]
-    } else ranked_index <- index[order(-rank(density))]
-
-    # identify data that match each peak rate:
-    frags <- lapply(ranked_index$peak_b1, function(x)
-      rollreg[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)])
-    # ensure that data segments that do not overlap are identified:
-    frags <- lapply(1:length(frags), function(x)
-      split(frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > width))))
-    # select longest fragments only:
-    i <- sapply(1:length(frags),
-      function(x) which.max(sapply(frags[[x]], nrow)))
-    frags <- unname(mapply(function(x, y)
-      frags[[x]][y], 1:length(frags), i))
-    # remove zero-length data:
-    # First remove same position from peaks (ranked_index), or later there are
-    # issues with them not being same length
-    ranked_index <- ranked_index[which(sapply(frags, nrow) > 0),]
-    # then from fragments
-    frags <- frags[sapply(frags, nrow) > 0]
-    # convert fragments to single-data subsets:
-    subsets <- lapply(1:length(frags), function(x)
-      truncate_data(
-        dt, min(frags[[x]]$row),
-        max(frags[[x]]$endrow), "row"
-      ))
-    out <- list(rollreg = rollreg, subsets = subsets,
-      peaks = ranked_index, density = d)
-    return(out)
-  }
+  if(by == "time") width <- floor(width/diff(range(nainf.omit(dt[[1]]))) * nrow(dt))
 
   # run kde
   kde <- kernel_method(dt, width)
@@ -376,11 +325,72 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
   results <- output[,2:8]
 
   out <- list(results = results, roll = kde$rollreg,
-    density = kde$density, peaks = kde$peaks)
+              density = kde$density, peaks = kde$peaks)
 
   class(out) <- append(class(out), "auto_rate_linear")
   return(out)
 }
+
+#' Kernel density function
+#'
+#' This is an internal function for `auto_rate()`
+#'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param top_only logical. Should only top ranked result be returned?
+#'
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' NULL
+kernel_method <- function(dt, width, top_only = FALSE) {
+  # linear detection is always by row since linear detection is not dependent
+  # on time but more on the stability of the data
+  rollreg <- rolling_reg_row(dt, width)
+
+  # perform kernel density estimate
+  d <- density(rollreg$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
+  # extract bandwidth
+  bw <- d$bw
+  # identify peaks in kernel density:
+  peaks <- which(diff(sign(diff(d$y))) == -2) + 1
+  # match peaks to rate values:
+  index <- rbindlist(lapply(peaks, function(x)
+    data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]))
+  # rank density by size (biggest on top):
+  if (top_only) {
+    ranked_index <- index[order(-rank(density))][1]
+  } else ranked_index <- index[order(-rank(density))]
+
+  # identify data that match each peak rate:
+  frags <- lapply(ranked_index$peak_b1, function(x)
+    rollreg[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)])
+  # ensure that data segments that do not overlap are identified:
+  frags <- lapply(1:length(frags), function(x)
+    split(frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > width))))
+  # select longest fragments only:
+  i <- sapply(1:length(frags),
+              function(x) which.max(sapply(frags[[x]], nrow)))
+  frags <- unname(mapply(function(x, y)
+    frags[[x]][y], 1:length(frags), i))
+  # remove zero-length data:
+  # First remove same position from peaks (ranked_index), or later there are
+  # issues with them not being same length
+  ranked_index <- ranked_index[which(sapply(frags, nrow) > 0),]
+  # then from fragments
+  frags <- frags[sapply(frags, nrow) > 0]
+  # convert fragments to single-data subsets:
+  subsets <- lapply(1:length(frags), function(x)
+    truncate_data(
+      dt, min(frags[[x]]$row),
+      max(frags[[x]]$endrow), "row"
+    ))
+  out <- list(rollreg = rollreg, subsets = subsets,
+              peaks = ranked_index, density = d)
+  return(out)
+}
+
 
 
 #' Perform regular rolling regression
@@ -400,8 +410,10 @@ rolling_reg_row <- function(df, width) {
   setnames(df, 1:2, c("x", "y"))
 
   # perform rolling regression based on row numbers
-  roll <- roll_lm(matrix(df[[1]]), matrix(df[[2]]), width)
-  roll <- na.omit(data.table(cbind(roll$coefficients, roll$r.squared)))
+  roll <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width, min_obs = 1)
+  roll <- data.table(cbind(roll$coefficients, roll$r.squared))
+  roll <- roll[-(1:(width-1)),]
+  roll <- na.omit(roll)
   setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
 
   # add row indices
@@ -427,6 +439,7 @@ rolling_reg_row <- function(df, width) {
 #' NULL
 rolling_reg_time <- function(df, width) {
   names(df) <- c('x','y')
+
   calc_coefs <- function(x, y) {
     b1 <- cov(x, y)/var(x)
     b0 <- mean(y) - (b1 * mean(x))
@@ -435,8 +448,8 @@ rolling_reg_time <- function(df, width) {
   }
   . <- x.x <- NULL
   results <- setDT(df)[.(start = x - width, end = x),
-    on = .(x >= start, x <= end),
-    as.list(calc_coefs(x.x, y)), by = .EACHI]
+                       on = .(x >= start, x <= end),
+                       as.list(calc_coefs(x.x, y)), by = .EACHI]
   setnames(results, 1:5, c('time', 'endtime', 'intercept_b0', 'rate_b1', 'rsq'))
   results <- results[time >= df[[1]][1]] # remove extra rows
   results[, row := seq_len(.N)]
@@ -446,6 +459,188 @@ rolling_reg_time <- function(df, width) {
   return(out)
 }
 
+#' Normal rolling regression
+#'
+#' This is an internal function.
+#'
+#' @importFrom roll roll_lm
+#' @keywords internal
+#' @export
+static_roll <- function(df, win) {
+  roll <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width = win, min_obs = 1)
+  # normally we would na.omit here, but next step will remove these initial NA rows anyway
+  roll <- data.table(cbind(roll$coefficients, roll$r.squared))
+  roll <- roll[-(1:(win-1)),]
+  roll <- na.omit(roll)
+  setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
+  return(roll)
+}
+
+#lm(df[[2]] ~ df[[1]], df) # lm of subset
+
+#' Perform time-width rolling regression
+#'
+#' This is an internal function. Used by [auto_rate()].
+#'
+#' @keywords internal
+#' @import parallel
+#' @export
+time_roll <- function(dt, width, parallel = FALSE) {
+  future_lapply <- plan <- NULL # global variables hack (unfortunate)
+  dt <- data.table::data.table(dt)
+  data.table::setnames(dt, 1:2, c("V1", "V2"))
+
+  # The cutoff specifies where to stop the rolling regression, based on width
+  time_cutoff <- max(dt[,1]) - width
+  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
+
+  # if(parallel) {
+  #   oplan <- plan()
+  #   on.exit(plan(oplan), add = TRUE)
+  #   if (os() == 'win') {
+  #     plan(multicore)
+  #   } else plan(multisession)
+  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
+  #     dt[[1]][x], dt[[1]][x] + width))
+  # } else {
+  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+  #     dt[[1]][x], dt[[1]][x] + width))
+  # }
+
+  # parallelisation
+  if (parallel) {
+    no_cores <- parallel::detectCores()  # calc the no. of cores available
+    if (os() == "win") {
+      cl <- parallel::makeCluster(no_cores)
+    } else cl <- parallel::makeCluster(no_cores, type = "FORK")
+    parallel::clusterExport(cl, "time_lm")
+    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
+                                                                     dt[[1]][x], dt[[1]][x] + width))
+    parallel::stopCluster(cl)  # stop cluster (release cores)
+  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
+                                                         dt[[1]][x], dt[[1]][x] + width))
+
+  out <- data.table::rbindlist(out)
+  return(out)
+}
+
+
+#' Subset data by time and perform a linear regression.
+#'
+#' This is an internal function. Used with [time_roll()] and [auto_rate()].
+#'
+#' @keywords internal
+#' @export
+time_lm <- function(df, start, end) {
+  dt <- data.table::data.table(df)
+  data.table::setnames(dt, 1:2, c("x", "y"))
+  sdt <- dt[x >= start & x <= end]
+  fit <- .lm.fit(cbind(1, sdt[[1]]), sdt[[2]])  # perform lm
+  coef <- coef(fit)
+  intercept_b0 <- coef[1]
+  rate_b1 <- coef[2]
+  # Calculate coef of determination (rsq) manually
+  ybar <- sdt[, mean(y)]
+  sst <- sum(sdt[, (y-ybar)*(y-ybar)])
+  ssr <- sum((fit$residuals)*(fit$residuals))
+  rsq <- 1-(ssr/sst)
+  out <- data.table::data.table(intercept_b0, rate_b1, rsq)
+  return(out)
+}
+
+
+#' Rolling regression
+#'
+#' @keywords internal
+#' @export
+rolling_reg <- function(dt, width, by, method) {
+  win <- width
+  # Rolling regression
+  if (by == "time") {
+    roll <- time_roll(dt, win, parallel = FALSE) # TODO: fix parallel here
+  } else if (by == "row") {
+    roll <- static_roll(dt, win)
+  }
+
+  # Attach row and time indices to the roll data
+  if (by == "time") {
+    roll[, row := seq_len(.N)]
+    endrow <- sapply(dt[roll[, row], x], function(z)
+      max(dt[, which(x <= z + win)]))
+    roll[, endrow := endrow]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
+  } else if (by == "row") {
+    roll[, row := seq_len(.N)]
+    roll[, endrow := roll[, row] + win - 1]
+    roll[, time := dt[roll[, row], x]]
+    roll[, endtime := dt[roll[, endrow], x]]
+  }
+  out <- list(roll = data.table(roll), win = win)
+  return(out)
+}
+
+#' Kernel density estimation and fitting
+#'
+#' @keywords internal
+#' @export
+kde_fit <- function(dt, width, by, method, use = "all") {
+  # perform rolling regression
+  reg <- rolling_reg(dt, width, by, method)
+  roll <- reg$roll
+  win <- reg$win
+
+  # If entire width of data frame is selected, there's nothing to detect!
+  if (nrow(roll) == 1) {
+    subsets <- list(truncate_data(dt, roll$row, roll$endrow, "row"))
+    d <- NULL
+    peaks <- roll$rate_b1
+    bw <- NULL
+
+  } else {
+    d <- density(roll$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
+    bw <- d$bw
+    peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
+    peaks <- lapply(peaks, function(x)
+      data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]) # match to roll
+    if (use == "all") {
+      peaks <- rbindlist(peaks)[order(-rank(density))] # rank by size
+    } else {
+      peaks <- rbindlist(peaks)[order(-rank(density))][1]
+    }
+    # match peaks to roll data
+    frags <- lapply(
+      peaks$peak_b1,
+      function(x) roll[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)]
+    )
+    # split non-overlapping rolls by window size
+    if (by == "row") {
+      frags <- lapply(1:length(frags), function(x) split(
+        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > win))
+      ))
+    } else {
+      frags <- lapply(1:length(frags), function(x) split(
+        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$time)) > win))
+      ))
+    }
+    # select longest fragments
+    i <- sapply(1:length(frags),
+                function(x) which.max(sapply(frags[[x]], nrow)))
+    frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
+    frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
+    # Convert fragments to subsets
+    subsets <- lapply(1:length(frags), function(x)
+      truncate_data(
+        dt, min(frags[[x]]$row),
+        max(frags[[x]]$endrow), "row"
+      ))
+  }
+  out <- list(
+    win = win, roll = roll, subsets = subsets, density = d,
+    peaks = peaks, bandwidth = bw
+  )
+  return(out)
+}
 
 #' Automatically calculate rolling window
 #'
@@ -455,31 +650,58 @@ rolling_reg_time <- function(df, width) {
 #' @param dt data.frame object.
 #' @param width numeric.
 #' @param by string.
+#' @param msg string. Attach function name for message (usually auto_rate)
 #'
 #' @return a numeric
 #' @export
 #' @keywords internal
 #' @examples
 #' NULL
-calc_rolling_win <- function(dt, width, by) {
-  # this is an internal function so we don't have to validate data too much
-  # however we make sure that inputs are validated since they are
-  # obtained from user input
+calc_win <- function(dt, width, by, msg) {
 
-  # validation
-  if (is.null(width)) width <- 0.2  # if no width is specified, set to 20 %
+  if(by == "row"){
+    if (is.null(width)) {
+      width <- 0.2  # if no width is specified, set to 20 %
+      message(glue::glue("{msg}Applying default 'width' of 0.2"))}
+    if(width > 1 && width > nrow(dt))
+      stop(glue::glue("{msg} 'width' exceeds length of dataset"))
+    if(width > 1 && !(width %% 1 == 0))
+      stop(glue::glue("{msg} 'width' should be an integer of 2 or higher"))
+    if(width == 1)
+      stop(glue::glue("{msg} 'width' cannot be 1 row"))
+    if(width == nrow(dt))
+      stop(glue::glue("{msg} 'width' cannot be the total number of rows in the input data"))
 
-  # if width > 1, check that value does not exceed length of data:
-  if (by == "row" && width > 1 && width > nrow(dt)) stop("auto_rate: 'width' exceeds length of dataset")
-  if (by == "time" && width > 1 && width > diff(range(dt[[1]]))) stop("auto_rate: 'width' exceeds length of dataset")
+    if (width < 1) win <- floor(width * nrow(dt))  # set to proportion of length of data
+    else win <- width
+  }
 
-  # perform calculations
-  if (width <= 1 & by == 'time') {
-    win <- floor(width * max(dt[[1]]))
-  } else if (width <= 1 & by == 'row') {
-    win <- floor(width * nrow(dt))  # set to 20 % of length of data
-  } else if (width > 1) {
+  if(by == "time"){
+    if (is.null(width)) {
+      # if no width is specified, set to 20 % of total time data range
+      width <- 0.2 * diff(range(nainf.omit(dt[[1]])))
+      message(glue::glue("{msg} Applying default 'width' of 20% of time data range"))}
+    if(width >= diff(range(nainf.omit(dt[[1]]))))
+      stop(glue::glue("{msg} 'width' cannot exceed or equal total time data range"))
+
     win <- width
   }
+
   return(win)
 }
+
+#' Prints the density object for summary.auto_rate S3
+#' Basically copied from stats:::print.density and edited to make
+#' it more compact
+#'
+#' @keywords internal
+#' @export
+print_dens <- function (x, digits = NULL, ...){
+  cat("\nCall: ", gsub("  ", "", deparse(x$call)), "\nData: ", x$data.name,
+      " (", x$n, " obs.)", ", Bandwidth 'bw' = ", formatC(x$bw,
+                                                          digits = digits), "\n", sep = "")
+  print(summary(as.data.frame(x[c("x", "y")])), digits = digits,
+        ...)
+  invisible(x)
+}
+

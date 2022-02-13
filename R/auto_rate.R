@@ -66,7 +66,7 @@
 #' across the entire timeseries. No reordering of results is performed.
 #'
 #' - `interval`: multiple, successive, non-overlapping regressions of the
-#' specified 'width' are extracted from the rolling regressions, ordered by
+#' specified `width` are extracted from the rolling regressions, ordered by
 #' time.
 #'
 #' - NOTE: `max`, `min`: These methods were used in previous versions of `respR`
@@ -90,20 +90,25 @@
 #'
 #' ## The `width` and `by` inputs
 #'
-#' The `width` input defaults to 0.2. If it is a value between 0 and 1, it
-#' represents a proportion of the total data length, as in the equation
-#' `floor(width * number of data rows)`. For example, 0.2 represents a rolling
-#' window of 20% of the data width. Otherwise, if entered as 1 or greater, the
-#' width is an exact value in either number of rows or in the units of time
-#' data, as specified via the `by` input.
+#' If `by = "time"`, the `width` input represents a time window in the units of
+#' the time data.
+#'
+#' If `by = "row"` and between 0 and 1, `width` represents a proportion of the
+#' total data length, as in the equation `floor(width * number of data rows)`.
+#' For example, 0.2 represents a rolling window of 20% of the data width.
+#' Otherwise, if entered as an integer of 2 or greater, the `width` represents
+#' the number of rows.
+#'
+#' For both `by` inputs, if left as `width = NULL` it defaults to 0.2 or a
+#' window of 20% of the data length.
 #'
 #' In most cases, `by` should be left as the default `"row"`, and the `width`
 #' chosen with this in mind, as it is considerably more computationally
 #' efficient. Changing to `"time"` causes the function to perform checks for
 #' irregular time intervals at every iteration of the rolling regression, which
 #' adds to computation time. This is to ensure the specified `width` input is
-#' honoured in the time units and rates correctly calculated, even if there are
-#' gaps in the data.
+#' honoured in the time units and rates correctly calculated, even if the data
+#' is unevenly spaced or has gaps.
 #'
 #' ## Plot
 #'
@@ -112,7 +117,7 @@
 #' axis), with the rate result region highlighted. Second panel is a close-up of
 #' the rate region with linear model coefficients. Third panel is a rolling rate
 #' plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
-#' higher), of rate calculated across the input `width` for the whole dataset.
+#' higher), of a rolling rate of the input `width` across the whole dataset.
 #' Each rate is plotted against the middle of the time and row range used to
 #' calculate it. The dashed line indicates the value of the current rate result
 #' plotted in panels 1 and 2. The fourth and fifth panels are summary plots of
@@ -166,10 +171,12 @@
 #' @param method string. `"linear"`, `"highest"`, `"lowest"`, `"maximum"`,
 #'   `"minimum"`, `"rolling"` or `"interval"`. Defaults to `"linear"`. See
 #'   Details.
-#' @param width numeric. Width of the rolling regression. Defaults to 0.2.
-#'   Either a value between 0 and 1 representing a proportion of the data
-#'   length, or a value above 1 representing an exact width in the `by` input.
-#'   See Details.
+#' @param width numeric. Width of the rolling regression. For `by = "row"`,
+#'   either a value between 0 and 1 representing a proportion of the data
+#'   length, or an integer of 2 or greater representing an exact number of rows.
+#'   If `by = "time"` it represents a time window in the units of the time data.
+#'   If `NULL`, it defaults to 0.2 or a window of 20% of the data length. See
+#'   Details.
 #' @param by string. `"row"` or `"time"`. Defaults to `"row"`. Metric by which
 #'   to apply the `width` input if it is above 1.
 #' @param plot logical. Defaults to TRUE. Plot the results.
@@ -205,8 +212,8 @@
 #' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
 #' }
 
-auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
-                      plot = TRUE, ...) {
+auto_rate <- function(x, method = "linear", width = NULL,
+                      by = "row", plot = TRUE, ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -224,7 +231,7 @@ auto_rate <- function(x, method = 'linear', width = 0.2, by = 'row',
 
   # prepare data
   data.table::setnames(dt, 1:2, c("x", "y")) # rename data columns
-  win <- calc_rolling_win(dt, width, by)  # determine width automatically
+  win <- calc_win(dt, width, by, "auto_rate:")  # determine width
 
   # verify & apply methods
 
@@ -521,17 +528,17 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   dt <- x$dataframe
   start <- x$summary$row[pos]
   end <- x$summary$endrow[pos]
-  rownums <- start:end
+  rownums_sub <- start:end
+  rownums <- 1:nrow(dt)
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = (x$roll$endtime+x$roll$time)/2,
                                    y = x$roll$rate)
-  rownums_mid <- 1:nrow(rolldt) + round((x$roll$endrow[1] - x$roll$row[1])/2)
+  xlim <- range(nainf.omit(x$dataframe$x))
   # middle row of each regression for roll rate plot
   rate <- x$summary$rate_b1[pos]
   rsq <- signif(x$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
-  interval <- x$summary$endtime
-  startint <- min(interval) - x$width
+  interval <- x$summary$endrow
   dens <- x$density
   peaks <- x$peaks[, 2:3]
 
@@ -559,10 +566,10 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
           ...)
 
       multi.p(dt, sdt, legend = legend)
-      if(x$method == "interval") abline(v = startint, lty = 3)
+      if(x$method == "interval") abline(v = 1, lty = 3)
       if(x$method == "interval") abline(v = interval, lty = 3)
-      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)
-      rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)
+      sub.p(sdt, rsq = rsq, rownums = rownums_sub, legend = legend)
+      rollreg.p(rolldt, rate, rownums = rownums, xlim = xlim, rate.rev)
       residual.p(fit)
       qq.p(fit)
       layout(1)
@@ -577,8 +584,8 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
           ...)
 
       multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
-      sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend) # closed-up (subset timeseries)
-      rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev = rate.rev) # rolling regression series with markline
+      sub.p(sdt, rsq = rsq, rownums = rownums_sub, legend = legend) # closed-up (subset timeseries)
+      rollreg.p(rolldt, rate, rownums = rownums, xlim = xlim, rate.rev) # rolling regression series with markline
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
       density.p(dens, peaks, pos) # density plot
@@ -595,14 +602,14 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   if (panel == 1) {
     multi.p(dt, sdt, legend = legend) # full timeseries with lmfit
     if (x$method == "interval") {
-      abline(v = startint, lty = 3)
+      abline(v = 1, lty = 3)
       abline(v = interval, lty = 3)
     }
   }
   if (panel == 2)
-    sub.p(sdt, rsq = rsq, rownums = rownums, legend = legend)  # subset plot
+    sub.p(sdt, rsq = rsq, rownums = rownums_sub, legend = legend)  # subset plot
   if (panel == 3)
-    rollreg.p(rolldt, rate, rownums = rownums_mid, rate.rev)  # rolling regression
+    rollreg.p(rolldt, rate, rownums = rownums, xlim = xlim, rate.rev)  # rolling regression
   if (panel == 4)
     residual.p(fit) # residual plot
   if (panel == 5)
@@ -709,222 +716,4 @@ mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
-
-#' Normal rolling regression
-#'
-#' This is an internal function.
-#'
-#' @importFrom roll roll_lm
-#' @keywords internal
-#' @export
-static_roll <- function(df, win) {
-  roll <- roll_lm(matrix(df[[1]]), matrix(df[[2]]), win)
-  roll <- na.omit(data.table(cbind(roll$coefficients, roll$r.squared)))
-  setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
-  return(roll)
-}
-
-
-#' Perform time-width rolling regression
-#'
-#' This is an internal function. Used by [auto_rate()].
-#'
-#' @keywords internal
-#' @import parallel
-#' @export
-time_roll <- function(dt, width, parallel = FALSE) {
-  future_lapply <- plan <- NULL # global variables hack (unfortunate)
-  dt <- data.table::data.table(dt)
-  data.table::setnames(dt, 1:2, c("V1", "V2"))
-
-  # The cutoff specifies where to stop the rolling regression, based on width
-  time_cutoff <- max(dt[,1]) - width
-  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
-
-  # if(parallel) {
-  #   oplan <- plan()
-  #   on.exit(plan(oplan), add = TRUE)
-  #   if (os() == 'win') {
-  #     plan(multicore)
-  #   } else plan(multisession)
-  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
-  #     dt[[1]][x], dt[[1]][x] + width))
-  # } else {
-  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-  #     dt[[1]][x], dt[[1]][x] + width))
-  # }
-
-  # parallelisation
-  if (parallel) {
-    no_cores <- parallel::detectCores()  # calc the no. of cores available
-    if (os() == "win") {
-      cl <- parallel::makeCluster(no_cores)
-    } else cl <- parallel::makeCluster(no_cores, type = "FORK")
-    parallel::clusterExport(cl, "time_lm")
-    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
-                                                                     dt[[1]][x], dt[[1]][x] + width))
-    parallel::stopCluster(cl)  # stop cluster (release cores)
-  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-                                                         dt[[1]][x], dt[[1]][x] + width))
-
-  out <- data.table::rbindlist(out)
-  return(out)
-}
-
-
-#' Subset data by time and perform a linear regression.
-#'
-#' This is an internal function. Used with [time_roll()] and [auto_rate()].
-#'
-#' @keywords internal
-#' @export
-time_lm <- function(df, start, end) {
-  dt <- data.table::data.table(df)
-  data.table::setnames(dt, 1:2, c("x", "y"))
-  sdt <- dt[x >= start & x <= end]
-  fit <- .lm.fit(cbind(1, sdt[[1]]), sdt[[2]])  # perform lm
-  coef <- coef(fit)
-  intercept_b0 <- coef[1]
-  rate_b1 <- coef[2]
-  # Calculate coef of determination (rsq) manually
-  ybar <- sdt[, mean(y)]
-  sst <- sum(sdt[, (y-ybar)*(y-ybar)])
-  ssr <- sum((fit$residuals)*(fit$residuals))
-  rsq <- 1-(ssr/sst)
-  out <- data.table::data.table(intercept_b0, rate_b1, rsq)
-  return(out)
-}
-
-
-#' Rolling regression
-#'
-#' @keywords internal
-#' @export
-rolling_reg <- function(dt, width, by, method) {
-  # win <- calc_window(dt, width, by) # this was wrong hmm
-  win <- width
-  # Rolling regression
-  if (by == "time") {
-    roll <- time_roll(dt, win, parallel = FALSE) # TODO: fix parallel here
-  } else if (by == "row") {
-    roll <- static_roll(dt, win)
-  }
-
-  # Attach row and time indices to the roll data
-  if (by == "time") {
-    roll[, row := seq_len(.N)]
-    endrow <- sapply(dt[roll[, row], x], function(z)
-      max(dt[, which(x <= z + win)]))
-    roll[, endrow := endrow]
-    roll[, time := dt[roll[, row], x]]
-    roll[, endtime := dt[roll[, endrow], x]]
-  } else if (by == "row") {
-    roll[, row := seq_len(.N)]
-    roll[, endrow := roll[, row] + win - 1]
-    roll[, time := dt[roll[, row], x]]
-    roll[, endtime := dt[roll[, endrow], x]]
-  }
-  out <- list(roll = data.table(roll), win = win)
-  return(out)
-}
-
-#' Kernel density estimation and fitting
-#'
-#' @keywords internal
-#' @export
-kde_fit <- function(dt, width, by, method, use = "all") {
-  # perform rolling regression
-  reg <- rolling_reg(dt, width, by, method)
-  roll <- reg$roll
-  win <- reg$win
-
-  # If entire width of data frame is selected, there's nothing to detect!
-  if (nrow(roll) == 1) {
-    subsets <- list(truncate_data(dt, roll$row, roll$endrow, "row"))
-    d <- NULL
-    peaks <- roll$rate_b1
-    bw <- NULL
-
-  } else {
-    d <- density(roll$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
-    bw <- d$bw
-    peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
-    peaks <- lapply(peaks, function(x)
-      data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]) # match to roll
-    if (use == "all") {
-      peaks <- rbindlist(peaks)[order(-rank(density))] # rank by size
-    } else {
-      peaks <- rbindlist(peaks)[order(-rank(density))][1]
-    }
-    # match peaks to roll data
-    frags <- lapply(
-      peaks$peak_b1,
-      function(x) roll[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)]
-    )
-    # split non-overlapping rolls by window size
-    if (by == "row") {
-      frags <- lapply(1:length(frags), function(x) split(
-        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > win))
-      ))
-    } else {
-      frags <- lapply(1:length(frags), function(x) split(
-        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$time)) > win))
-      ))
-    }
-    # select longest fragments
-    i <- sapply(1:length(frags),
-                function(x) which.max(sapply(frags[[x]], nrow)))
-    frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
-    frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
-    # Convert fragments to subsets
-    subsets <- lapply(1:length(frags), function(x)
-      truncate_data(
-        dt, min(frags[[x]]$row),
-        max(frags[[x]]$endrow), "row"
-      ))
-  }
-  out <- list(
-    win = win, roll = roll, subsets = subsets, density = d,
-    peaks = peaks, bandwidth = bw
-  )
-  return(out)
-}
-
-#' Calculate rolling window size for rolling regression
-#'
-#' @keywords internal
-#' @export
-calc_window <- function(dt, width, by) {
-  # Determine rolling window from `width`
-  if (is.null(width)) {
-    width <- .2
-    if (by == "time") win <- floor(width * max(dt[[1]]))
-    if (by == "row") win <- floor(width * nrow(dt))
-  } else if (is.numeric(width)) {
-    if (width <= 1) {
-      if (by == "time") win <- floor(width * max(dt[[1]]))
-      if (by == "row") win <- floor(width * nrow(dt))
-    } else if (width > 1) win <- width
-  } else {
-    stop("auto_rate: 'width' must be numeric.")
-  }
-  return(win)
-}
-
-
-
-#' Prints the density object for summary.auto_rate S3
-#' Basically copied from stats:::print.density and edited to make
-#' it more compact
-#'
-#' @keywords internal
-#' @export
-print_dens <- function (x, digits = NULL, ...){
-  cat("\nCall: ", gsub("  ", "", deparse(x$call)), "\nData: ", x$data.name,
-      " (", x$n, " obs.)", ", Bandwidth 'bw' = ", formatC(x$bw,
-                                                          digits = digits), "\n", sep = "")
-  print(summary(as.data.frame(x[c("x", "y")])), digits = digits,
-        ...)
-  invisible(x)
-}
 

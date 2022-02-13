@@ -414,13 +414,13 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       names(new_dt) <- c("x", "y")
 
       ## determine window size from width
-      win <- calc_window(new_dt, width, by)
+      win <- calc_win(new_dt, width, by, "calc_rate.ft:")
 
-      summary <- rolling_reg(new_dt, by = by, width = win, method = "linear")$roll
+      summary <- rolling_reg_row(new_dt, width = win)
       # rename rate_b1 to slope, since it's not rate yet
       # We might use these coefficients later to find regions of stable rates (i.e. slope ~ 0)
       # so may as well save them
-      names(summary)[2] <- "slope_b1"
+      names(summary)[6] <- "slope_b1"
       # add mean rate (delta) value for each subset using row numbers
       summary$delta_mean <- mapply(function(p,q) mean(delta.oxy[p:q]),
                                    p = summary$row,
