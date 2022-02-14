@@ -52,7 +52,7 @@ linear regions of the data, ranked by order of the KDE density analysis. This
 is present in the \verb{$summary} component of the output as \verb{$density}. Under
 this method, the \code{width} input is used as a starting seed value, but the
 resulting regressions may be of any width. See
-\href{https://januarharianto.github.io/respR/articles/auto_rate.html}{here}
+\href{https://github.com/januarharianto/respR}{here}
 for full details.
 \item \code{highest}: Every regression of the specified \code{width} across the entire
 timeseries is calculated, then ordered using \emph{\strong{absolute}} rate values from
