@@ -20,7 +20,7 @@ While the majority of the package workflows are in general unchanged, and older 
 
 This is an incomplete summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
 
-IF you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see `vignette("v1_code")` for information about how to include a link to `respR v1.1` so that your code will remain reproducible in the future. 
+If you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see `vignette("v1_code")` for information about how to include a link to `respR v1.1` so that your code will remain reproducible in the future. 
 
 If you come across any changes that are not documented here, and you think should be, [let us know](mailto:nicholascarey@gmail.com) and we will add it to the list. 
 
@@ -81,11 +81,14 @@ Inputs have been reordered with `method` as second input. Code where inputs were
 
 The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note the new `"maximum"` and `"minimum"` methods **do not** work the same as `"max"/"min"`, as they order strictly numerically. See `help(auto_rate)`.
 
+The `width` input behaviour has changed slightly. Previously if it was a value between 0 and 1 it represented a proportional width of the whole dataset regardless of the `by` input. This now applies only to `by = "row"`. If `by = "time"` any value between 0 and 1 now represents (as with values above 1) a time window in the units of the time data. Any code with `by = "time"` and `width` between 0 and 1 will now produce different outputs. Replace `by = "time"` with `by = "row"`
+and the results should match the previous version.
+
 ### `convert_DO()`
 
 By default, the function now outputs a vector of converted numeric values as opposed to the previous output which was a `list` object of class `convert_DO`. A new `simplify` logical input controls this, with the default being `TRUE`. Previous code which saved this output for later use can restore this behaviour by adding `simplify = FALSE` to the call. Code which used or extracted converted values by calling the `$output` element can be used by doing a search for this and replacing it with nothing, or deleting it. 
 
-The `"%"` oxygen unit has been deprecated and replaced with `"%Air"`. In older code replace `"%"` (and other variations such as `"percent"`) with `"%Air"`. See `help("convert_DO")`. Note, the the additional unit of `"%Oxy"` has been added. These are not the same. 
+The `"%"` oxygen unit has been deprecated and replaced with `"%Air"`. In older code replace `"%"` (and other variations such as `"percent"`) with `"%Air"`. See `help("convert_DO")`. Note, the additional unit of `"%Oxy"` has been added. These are not the same. 
 
 ### `adjust_rate()`
 

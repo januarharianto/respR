@@ -6,7 +6,9 @@ The more detail the better.
 
 For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then copy it in here when it is merged.
 
-NEW - these are the highlights. Add (*just add, don't move*) the most interesting stuff from fn-specific changes below.
+
+========================== NEW ============================
+- these are the highlights. Add (*just add, don't move*) the most interesting stuff from fn-specific changes below.
 
 - NEW: `subset_rate` function. This allows `auto_rate` results to be explored and filtered according to various criteria.
 - NEW: `auto_rate` "rolling" method. Performs fixed-width rolling regressions across the entire dataset with no ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
@@ -50,7 +52,7 @@ Function specific changes:
 - CHANGE: An increase to the internal `thin` value (see above) from 1000 to 5000 may mean results will differ slightly from the previous version, but should be more accurate.
 - CHANGE: Output has been completely restructured and elements renamed. Previous code used to extract results will likely now not work.
 
-- FIX:  Fix for problems of function importing `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
+- FIX:  Fix for problems of function importing `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::oxy_crit()`
 - FIX:  Fix for plot failure when results were very close together.
 
 
@@ -79,7 +81,7 @@ Function specific changes:
 - NEW: Plots have `legend` input to suppress equation text boxes
 - CHANGE: In the output `$bgrate` changed to `$rate.bg`
 - CHANGE: In the output `$mean` changed to `$rate.bg.mean`
-- CHANGE: Stops if 'oxygen' or 'time' columns not present in the input, or conflict
+- CHANGE: Stops if 'oxygen' or 'time' columns not present in the input, or conflict with each other
 - CHANGE: Removed "input detected" message at start
 
 ========================== inspect() ============================
@@ -89,7 +91,7 @@ Function specific changes:
 - NEW: An additional data type (for example temperature, salinity, etc.) can be plotted alongside the oxygen timeseries by using the `add.data` input. This should be a column number from the same input data frame and share the same `time` data. Data checks are *not* performed on this column (unless all columns are specifically inspected), it is simply a plotting aid to understand where the parameter may affect rates in different regions of the data. There is similar functionality in `inspect.ft`.
 - NEW: Can pass 'rate.rev = FALSE' to plot rates *not* numerically reversed (for oxygen production respirometry)
 - NEW: Can pass 'legend = FALSE' to suppress legends
-- NEW: `summary()` works on output (simply a wrapper for `print()`)
+- NEW: `summary()` now works on output (simply a wrapper for `print()`)
 - CHANGE: Multiple rate plot improved. Now all plot on same axis range, better colours and spacing.
 - CHANGE: Prints NA locations for all oxygen columns they are found in (previously only printed for first column)
 - CHANGE: If multiple columns are inspected, message that columns 1 and 2 are used by default by subsequent functions, although all are inspected.
@@ -101,20 +103,20 @@ Function specific changes:
 - FIX: Fix for points sometimes being plotted twice slightly offset in large datasets.
 
 ========================== auto_rate() ============================
-- NEW - 'rolling' method. Performs simple rolling regression of specified width, with *no* ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
-- NEW `highest` and `lowest` methods for absolute minimum and maximum of rates regardless of sign. These can only be used when rates all have the same sign.
-- NEW `maximum` and `minimum` methods. These work the *opposite* way to `min` and `max` from v1.1. These are strictly numerical, and order by value accounting for the sign. The `min`and `max` methods still produce same results as in v1.1 but have a prominent warning. These will be deprecated in a later version of `respR`.
-- (New internal functions for this ordering - `auto_rate_lowest`, `auto_rate_highest`. Therefore internal functions `auto_rate_min` and `auto_rate_max` have been swapped around in terms of functionality).
+- NEW - `"rolling"` method. Performs simple rolling regression of specified width, with *no* ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
+- NEW `"highest"` and `"lowest"` methods for *absolute* minimum and maximum rate values regardless of sign. These can only be used when rates all have the same sign.
+- NEW `"maximum"` and `"minimum"` methods. These work the *opposite* way to `"min"` and `"max"` from v1.1. These are strictly numerical, and order by value taking account of the sign.
+- The `"min"`and `"max"` methods have been deprecated, although they still work and produce the same results as in v1.1, but have a prominent warning. These will be removed entirely in a later version of `respR`.
 - NEW: Added the Kernel Density metric `$density` to the `$summary` table for the `"linear"` method. This allows you to see how the results are ranked in regards to KDE (also present for other methods, but as an empty column).
 - NEW: Added `$oxy` and `$endoxy` to the `$summary` table, so you can easily see roughly how much of an oxygen change each regression is using to calculate a rate. This also matches the summary table in `calc_rate`
 - NEW: Plot updated with title showing the Rank of the current plot. It also now plots oxygen and rate against both time and row index.
 - NEW: Plot has `rate.rev` input controlling plotting of the y-axis of the rolling rate plot. Default is `TRUE`, which means oxygen uptake rates will appear higher on the plot despite being lower numerically (i.e. more negative). Change this to `FALSE` to plot strictly numerically, if for instance you are examining oxygen production so that higher production rates are higher.
 - NEW: S3 Generics: `plot()` has the additional inputs `panel` to plot selected panels individually, and `legend` to suppress the legend and other labels.
 
-- FIX: `plot()` works correctly on `auto_rate` objects (missing #' @export)
+- FIX: `plot()` now works correctly on `auto_rate` objects
 - FIX: Fix for stopping with an obscure message when input datasets are small (Issue #58).
 - FIX: Removed unused method `"default"` (Issue #66)
-- FIX: Fix for plots failing where result contains an `NA` (fix in multi.p() involving clip)
+- FIX: Fix for plots failing where result contains an `NA`
 - FIX: Fix for `auto_rate` failing to work when there were `NA` in the time data. (due to range() failing to return a range (returns c(NA,NA). It needs `na.rm = TRUE` or na.omit() on the data. Many other fns like sum() and mean() fail in the same way, so similar errors may occur in other places. In general data with NAs needs further testing.)
 - FIX: `method = "max"` was missing `$total_regs` element from metadata
 - FIX: Fixed an issue whereby under `by = "time"` and `method = "linear"` a non-proportional `width` (i.e. greater than 1) would get incorrectly passed as a row width rather than a time width. This was only an issue in data where time and row spacing were mismatched, for instance where time was in minutes or hours, or in seconds but not at one second intervals. This would not have affected returned rate *values*, but instead led to poor ranking of the returned rates.

@@ -30,3 +30,20 @@ opts_chunk$set(collapse = TRUE,
 ## Introduction {#adjintro}
 
 Installing and running v1.1 code
+
+respR v2 contained numerous, unavoidable code breaking changes that means code written for use with v1.x may produce different outputs or fail to run. This page was created as a resource for those who have submitted v1.x code as part of a publication to include as a reference or resource so that it may still be reproducible in the future. 
+
+The final release of `respR` v1 is available [here] on Zenodo, or can be found [here] on Github. This contains all the files needed to compile respR v1.1 locally as a package via an RStudio project or other R installation. Alternatively, the functions can be found in the `R` folder within that archive, and can be run to be created locally, so with a little editing code can be amended to refer to these local functions. 
+
+Alternatively, already compiled package archives for Windows 10, macOS and Linux can be found [here]. 
+
+`devtools::install_github("januarharianto/respR@v1.0.5.1")`
+
+The included script contains details of the dependencies and the last versions of these tested and confirmed to work with v1.x, and how these can be installed from CRAN archives if more recent versions introduce changes which break code or functionality.
+
+This can also be viewed by running `installation_help()`
+
+Once respR v1.1 and its dependencies are installed, code should be able to be run
+
+
+

@@ -275,9 +275,9 @@ convert_rate(urch_rate_adj,
 
 A final and important step in respirometry analyses, particularly after the first rate from a new set of experiments or specimens has been calculated, is to *check the result* against rates from the same or similar species of the same size in as close as possible to the same conditions. This could be from previous analyses by the same user or group, or rates from one or more published studies. 
 
-Dealing with so many different units and conversions it is incredibly easy to introduce a small conversion error that will have a massive effect on the final calculated rate. Some of these errors even make it into published papers (the author writing this in his first paper only caught a x1000 multiplication for division error which caused rates to be off by a factor of a million at the proof stage 😬).
+Dealing with so many different units and conversions it is incredibly easy to introduce a small conversion error that will have a massive effect on the final calculated rate. Some of these errors even make it into published papers. This is why we would also recommend you check the result against more than one independent publication. 
 
-In the present example, at the time the experiments were done there were no published respirometry studies on this particular species of sea urchin. However, a quick Google Scholar search led to other papers from which we can get rates of other species of sea urchin at around the same size and temperature. In Moulin et al. (2015) *E. mathaei* has a respiration rate of around *0.2 to 0.5 umol/h/g* at 25°C, and in Kurihara et al. (2013) *H. pulcherrimus* it is around *0.6 umol/h/g* at 22°C. Let's check what our urchins rate is in these same units:
+In the present example, at the time the experiments were done there were no published respirometry studies on this particular species of sea urchin. However, a quick Google Scholar search led to other papers from which we can get rates of other species of sea urchin at around the same size and temperature. In Moulin et al. ([2015](vignette("refs"))). *E. mathaei* has a respiration rate of around *0.2 to 0.5 umol/h/g* at 25°C, and in Kurihara et al. ([2013](vignette("References"))) *H. pulcherrimus* it is around *0.6 umol/h/g* at 22°C. Let's check what our urchins rate is in these same units:
 
 ```{r tidy = FALSE}
 convert_rate(urch_rate_adj, 
@@ -288,7 +288,7 @@ convert_rate(urch_rate_adj,
              mass = 0.19)
 ```
 
-We can see our rate is consistent with these others from the literature, and any difference is easily within what we might expect given differences between species and temperature. Therefore it is unlikely we have made a major conversion error somewhere, and we can be confident our rates are in the right ballpark.
+We can see our rate is consistent with these others from the literature, and any difference is easily within what we might expect given differences between species and temperature. Generally speaking, if there is a order of magnitude difference or more it is a good indication that something has gone wrong. Therefore, here we can be fairly confident we have not made a major conversion error somewhere, and we have found that our rates are in the right ballpark.
 
 ## Summary
 

@@ -22,8 +22,7 @@ opts_chunk$set(collapse = TRUE,
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
-               R.options = list(
-                                scipen = 999, 
+               R.options = list(scipen = 999, 
                                 digits = 3))
 ```
 
@@ -55,9 +54,9 @@ The `inspect.ft` function can be used to quickly examine and visualise outflow a
 inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
 ```
 
-The result does not have to be saved. This functionality can be used simply to get a quick overview of a dataset, check there are no common issues, and make sure the columns contain the data we expect. Here, we can see columns 1 to 3 contain declining oxygen, and so as expected are the outflow oxygen data. We can see there are no anomalies in the inflow oxygen data (columns 5 to 8) that might affect calculated rates. We can quickly see the existing delta oxygen columns (9,10,11) have, when the experiment has reached equilibrium, consistent values (around -8), and that the background delta (column 12) is also consistent. 
+The result does not have to be saved. This functionality can be used simply to get a quick overview of a dataset, check there are no common issues, and make sure the columns contain the data we expect. Column 1 contains the time data. Here, we can see columns 2 to 4 contain declining oxygen, and so as expected are the outflow oxygen data. There is also outflow oxygen from a control experiment which does not appear to decline very much (column 5). We can see there are no anomalies in the inflow oxygen data (columns 6 to 9) that might affect calculated rates. We can quickly see the existing delta oxygen columns (10,11,12) have, when the experiment has reached equilibrium, consistent values (around -8), and that the background delta (column 13) is also consistent. There is also a column of oxygen recorded in a shared header tank (column 14), and one of temperature (column 15).
 
-Note, if multiple columns are inspected like this, and the object saved, subsequent functions such as `calc_rate.ft` will use only the first column of delta oxygen data for analysis. Best practice is to inspect each experimental dataset individually.
+Note, if multiple columns are inspected like this, and the object saved, subsequent functions such as `calc_rate.ft` will use only the first column of delta oxygen data for analysis. Best practice is to inspect each experimental dataset or group of columns individually. See later examples.
 
 ## Case Studies
 
@@ -89,24 +88,40 @@ convert_DO(100, from = "%Air", to = "mg/L",
            t = 12, S = 30)
 ```
 
+Therefore we know the theoretical concentration of the header tank in these conditions and this can be used as an inflow oxygen value. 
+
 ### Inspect data
-Now we know the concentration of the header tank we can enter this as the `in.oxy.value` in `inspect.ft`, which will allow it to calculate an oxygen delta. We use `time` and `out.oxy` to specify the respective columns. 
+The concentration of the header tank can be entered as the `in.oxy.value` in `inspect.ft`, which will allow it to calculate an oxygen delta. We use `time` and `out.oxy` to specify the respective columns. 
 
 ```{r eval = F}
 # inspect
-insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.919)
+insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92)
 ```
 
 ```{r eval = T, echo = F}
 # inspect
-insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.919, plot = F)))
+insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92, plot = F)))
 plot(insp1, quiet = TRUE)
 ```
 
-The data checks show us there are no structural issues with the data, such as missing values or gaps. The top plot shows outflow and the entered, constant inflow oxygen against both time (bottom axis) and row index (top axis), which are the same here because data are recorded every second. The bottom plot shows the calculated delta oxygen values, which is a proxy for the rate. In these plots, consistent oxygen uptake or production rates will be represented by level regions. Here there is some fluctuation towards the end of the data, but the first 400 rows look to have stable rates. 
+The data checks show us there are no structural issues with the data, such as missing values or gaps. The top plot shows outflow and the entered, constant inflow oxygen against both time (bottom axis) and row index (top axis), which are the same here because data are recorded every second. The bottom plot shows the calculated delta oxygen values, which is a proxy for the rate. In these plots, consistent oxygen uptake or production rates will be represented by level or flat regions. Here there is some fluctuation towards the end of the data, but the first 400 rows look to have stable rates. 
+
+To help with choosing regions of the data from which to calculate rates, you can pass the `width` input in the main function call or when plotting the output object. This should be a value between 0 and 1 representing a proportion of the total data length, and smooths the delta oxygen values by performing a rolling mean. 
+
+```{r eval = F}
+# inspect
+plot(insp1, width = 0.05)
+```
+
+```{r eval = T, echo = F}
+# inspect
+plot(insp1, width = 0.05, quiet = TRUE)
+```
+
+This is a visual aid and only affects plotted values. It does not alter the delta oxygen values in the output. 
 
 ### Calculate rate {#case1plot}
-Calculating a rate requires the `flowrate` of water through the respirometer, in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the units will be entered in a later function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`.
+Calculating a rate requires the `flowrate` of water through the respirometer, in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the units will be entered in a later conversion function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`.
 ```{r eval = F}
 # calculate rate
 rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
@@ -934,6 +949,14 @@ print(rate3_abs)
 
 - Note, that while it is required (for `inspect.ft` at least), `time` data are never used in calculations, only for plotting and choosing regions. Higher resolution data will give more delta oxygen values to average, but in general the resolution or recording frequency of the data is less important than other factors such as ensuring equilibrium has been reached. 
 
-- To repeat, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
+- To repeat an important point, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
+
+- As with `inspect()`, by using the `add.data` input an additional data source can be plotted in `inspect.ft` alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This is a visual aid only to help with selection of regions from which to extract rates. 
+
+```{r , results = "hide", message=FALSE, warning=FALSE}
+## Plot column 15 (temperature) alongside oxygen timeseries
+inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5, 
+           add.data = 15)
+```
 
 - The functions in the flowthrough workflow, where appropriate, support the generic S3 functions `plot`, `print`, `summary`, and `mean`. These have various additional inputs such as `pos`, `quiet`, and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output (`rate`, `rate.adjusted`, or `rate.output`). This can be output as a value by passing `export = TRUE`. 

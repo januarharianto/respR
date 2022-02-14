@@ -165,16 +165,6 @@ plot_ar(sard, highlight = 3, pos = 1:5)
 ```
 
 
-### Remove duplicates
-
-```{r}
-sard$summary[9:12,]
-```
-
-```{r}
-sard_sub <- subset_rate(sard)
-```
-
 ### Remove overlaps
 
 We'll look at a simple example to show how `linear` results from `auto_rate` may overlap.
@@ -210,3 +200,13 @@ plot_ar(sard_ar_sub)
 
 
 ### Summary of all - piping
+
+
+### zeb_intermittenet 
+- use rolling width
+- then negative only
+- then overlap 
+- to get single rate from each rep
+- then percentile high and low 
+- and mean for final rate
+
