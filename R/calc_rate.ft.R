@@ -414,7 +414,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       names(new_dt) <- c("x", "y")
 
       ## determine window size from width
-      win <- calc_win(new_dt, width, by, "calc_rate.ft:")
+      win <- calc_win(new_dt, width, by, "calc_rate.ft: ")
 
       summary <- rolling_reg_row(new_dt, width = win)
       # rename rate_b1 to slope, since it's not rate yet

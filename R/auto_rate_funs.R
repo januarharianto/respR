@@ -321,8 +321,8 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
       plot = FALSE
     )$summary))
   # reorder
-  # remove rank, oxy, endoxy, rate2pt columns
-  results <- output[,2:8]
+  # remove rank, rate2pt columns
+  results <- output[,2:10]
 
   out <- list(results = results, roll = kde$rollreg,
               density = kde$density, peaks = kde$peaks)
@@ -421,7 +421,9 @@ rolling_reg_row <- function(df, width) {
   roll[, endrow := row + width - 1]
   roll[, time := df[roll[, row], x]]
   roll[, endtime := df[roll[, endrow], x]]
-  out <- roll[, c(4:7, 1:3)]
+  roll[, oxy := df[roll[, row], y]]
+  roll[, endoxy := df[roll[, endrow], y]]
+  out <- roll[, c(4:9, 1:3)]
   return(out)
 }
 
@@ -455,7 +457,10 @@ rolling_reg_time <- function(df, width) {
   results[, row := seq_len(.N)]
   endrow <- sapply(results$endtime, function(i) df[, which(x == i)])
   results[, endrow := endrow]
-  out <- results[,c(6:7, 1:5)]
+  results[, oxy := df[results[, row], y]]
+  results[, endoxy := df[results[, endrow], y]]
+
+  out <- results[,c(6:7, 1:2, 8:9, 3:5)]
   return(out)
 }
 
@@ -662,15 +667,15 @@ calc_win <- function(dt, width, by, msg) {
   if(by == "row"){
     if (is.null(width)) {
       width <- 0.2  # if no width is specified, set to 20 %
-      message(glue::glue("{msg}Applying default 'width' of 0.2"))}
+      message(glue::glue("{msg} Applying default 'width' of 0.2"))}
     if(width > 1 && width > nrow(dt))
-      stop(glue::glue("{msg} 'width' exceeds length of dataset"))
+      stop(glue::glue("{msg}'width' exceeds length of dataset"))
     if(width > 1 && !(width %% 1 == 0))
-      stop(glue::glue("{msg} 'width' should be an integer of 2 or higher"))
+      stop(glue::glue("{msg}'width' should be an integer of 2 or higher"))
     if(width == 1)
-      stop(glue::glue("{msg} 'width' cannot be 1 row"))
+      stop(glue::glue("{msg}'width' cannot be 1 row"))
     if(width == nrow(dt))
-      stop(glue::glue("{msg} 'width' cannot be the total number of rows in the input data"))
+      stop(glue::glue("{msg}'width' cannot be the total number of rows in the input data"))
 
     if (width < 1) win <- floor(width * nrow(dt))  # set to proportion of length of data
     else win <- width

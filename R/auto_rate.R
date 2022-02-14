@@ -231,7 +231,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
 
   # prepare data
   data.table::setnames(dt, 1:2, c("x", "y")) # rename data columns
-  win <- calc_win(dt, width, by, "auto_rate:")  # determine width
+  win <- calc_win(dt, width, by, "auto_rate: ")  # determine width
 
   # verify & apply methods
 
@@ -450,6 +450,8 @@ auto_rate <- function(x, method = "linear", width = NULL,
                                         endrow = out$summary$endrow,
                                         time = out$summary$time,
                                         endtime = out$summary$endtime,
+                                        oxy = out$summary$oxy,
+                                        endoxy = out$summary$endoxy,
                                         rate = out$summary$rate_b1)
 
   class(out) <- 'auto_rate'
