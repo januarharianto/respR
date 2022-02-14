@@ -91,7 +91,11 @@
 #'
 #' In delta plots, that is those plotting `delta.oxy` values, either directly
 #' entered or calculated, consistent oxygen uptake or production rates will be
-#' represented by flat or level regions.
+#' represented by flat or level regions. The `width` input may help with
+#' selecting regions from which to extract rates, and can be passed in the main
+#' function call or using `plot()` on the output object. This smooths delta
+#' oxygen values by calculating a rolling mean across the data. See **Additional
+#' plotting options** below.
 #'
 #' ***Note:*** Since `respR` is primarily used to examine oxygen consumption,
 #' the delta oxygen and rate plots are by default plotted on a reverse y-axis.
@@ -117,6 +121,13 @@
 #' plotted if multiple oxygen columns are inspected. See examples.
 #'
 #' ## Additional plotting options
+#'
+#' The `width` input may help with selecting regions from which to extract
+#' rates. This smooths delta oxygen values by calculating a rolling mean across
+#' the data, and should be a value between 0 and 1 representing a proportion of
+#' the total data width. If left as the default `NULL` no smoothing is
+#' performed. This is a visual aid which only affects plotted values and does
+#' not alter output delta oxygen values.
 #'
 #' If the legend or labels obscure part of the plot, they can be suppressed via
 #' `legend = FALSE` in either the `inspect.ft` call, or when using `plot()` on
@@ -630,7 +641,7 @@ mean.inspect.ft <- function(x, ...){
 }
 
 #' @export
-plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
+plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                             legend = TRUE, rate.rev = TRUE, ...) {
 
   parorig <- par(no.readonly = TRUE) # save original par settings
@@ -646,7 +657,14 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
   in.oxy <- x$data$in.oxy
   if(length(in.oxy) == 1) in.oxy <- rep(in.oxy, length(out.oxy)) # makes plotting easier
   del.oxy <- x$data$delta.oxy
+  if(is.null(width)) win <- 1 else
+    win <- length(del.oxy[[1]]) * width
+  del.oxy.smooth <- lapply(del.oxy, function(z) roll::roll_mean(z, width = win, min_obs = 1))
 
+  # head(del.oxy[[1]])
+  # head(del.oxy.smooth[[1]])
+  # width = 0.1
+  #
   # Apply default plotting params
   par(oma = oma_def,
       mai = mai_def,
@@ -691,7 +709,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
       ylim <- grDevices::extendrange(r = range(del.oxy[[z]], na.rm = TRUE), f = 0.05) ## add a little more space
       if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
-      plot(data.frame(time, del.oxy[[z]]),
+      plot(data.frame(time, del.oxy.smooth[[z]]),
            axes = FALSE,
            ylim = ylim,
            xlab = "",
@@ -835,7 +853,7 @@ plot.inspect.ft <- function(x, pos = NULL, quiet = FALSE,
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
 
     plot(unlist(time),
-         del.oxy[[pos]],
+         del.oxy.smooth[[pos]],
          xlab = "",
          ylab = "",
          ylim = ylim, # reverse y axis

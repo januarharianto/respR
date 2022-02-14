@@ -6,27 +6,27 @@ The more detail the better.
 
 For now - direct changes/commits to dev go in here. Keep a separate changelog text file in each branch, then copy it in here when it is merged.
 
-NEW - these are the highlights. Add (*just add*, don't move) the most interesting stuff from fn-specific changes below.
+NEW - these are the highlights. Add (*just add, don't move*) the most interesting stuff from fn-specific changes below.
 
-- NEW: subset_rate function. This allows auto_rate results to be explored and filtered according to various criteria.
-- NEW: adjust_rate contains several new methods, including the ability to perform dynamic adjustments.
-- NEW: flowthrough respirometry workflow. There are four new flowthrough-specific functions and new functionality for exploring, calculating and adjusting rates from flowthrough respirometry data.
-- NEW: convert_val function. A simple conversion function to help with inputting experimental parameters in the correct units.
-- NEW: inspect and inspect.ft performs additional data checks: that columns contain numeric data and a check for infinite values
-- NEW: auto_rate "rolling" method. Performs fixed-width rolling regressions across the entire dataset with no ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
+- NEW: `subset_rate` function. This allows `auto_rate` results to be explored and filtered according to various criteria.
+- NEW: `auto_rate` "rolling" method. Performs fixed-width rolling regressions across the entire dataset with no ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
 - NEW: auto_rate "highest" and "lowest" methods for absolute minimum and maximum of rates regardless of sign
+- NEW: `adjust_rate` contains several new methods, including the ability to perform dynamic adjustments.
+- NEW: Completely new flowthrough respirometry workflow. There are four new flowthrough-specific functions and new functionality for exploring, calculating and adjusting rates from flowthrough respirometry data.
+- NEW: `inspect` and `inspect`.ft performs additional data checks: that columns contain numeric data and a check for infinite values
+- NEW: `convert_val` function. A simple conversion function to help with inputting experimental parameters in the correct units.
+- `citation("respR")` returns the citation to the `respR` journal publication, including a BibTeX entry for LaTeX users.
+- Help documentation and vignettes rewritten and greatly expanded
 - Tested with R 4.1 and the new native pipes (`|>`)
 - Tested with Apple Silicon builds of R
-- Help documentation and vignettes rewritten and greatly expanded
-- `citation("respR")` returns the citation to the `respR` journal publication, including a BibTeX entry for LaTeX users.
 
 Changes
 - CHANGE: S3 Generic functions (print, summary, plot) revised to produce much cleaner, consistent outputs.
-- CHANGE: Added `rank` column to all `$summary` tables as first column. Helps a lot with consistent S3 summary outputs and generally keeping track of selecting summary rows
-- CHANGE: Documentation - terminology clarifed. Rates now referred to as absolute (for whole animal or chamber) or mass- or area-specific.
+- CHANGE: Added `rank` column to all `$summary` tables as first column. Helps with consistent S3 summary outputs and generally keeping track of selecting summary rows
+- CHANGE: Documentation - terminology clarifed. Rates now referred to as "absolute" (for whole animal or chamber) and mass- or area-specific.
 - CHANGE: Updated startup message for full MEE citation
-- CHANGE: changed dataframe in function outputs to `$dataframe` for consistency (was $df, $data, $dataframe, etc. Makes for MUCH simpler code)
-- CHANGE: For consistency, changed primary input from `df` to `x` where appropriate (auto_rate, inspect, inspect.ft, subsample) (this was inconsistent and often confusing, in that `df` often did not have to be a data frame, but could be a different class of object.)
+- CHANGE: Changed the data frame in output objects to `$dataframe` for consistency (was previously `$df`, `$data`, `$dataframe`, etc.)
+- CHANGE: For consistency, changed primary function inputs from `df` to `x` where appropriate (`auto_rate`, `inspect`, `inspect.ft`, `subsample`). This was inconsistent and often confusing, in that `df` often did not have to be a data frame, but could be a different class of object.
 - CHANGE: The deprecated functions `inspect_data` and `pcrit` have been removed
 - CHANGE: Outputs (where relevant) have function call saved to `$call` element
 - CHANGE: Outputs (where relevant) have all inputs saved to `$inputs` element
@@ -267,6 +267,6 @@ All
 `mean.calc_rate.ft`
 `mean.convert_rate`
 `mean.convert_rate.ft`
-- NEW: These are new generic S3 functions for calculating mean rates, and work on the relevant output rate. None alter the output object, but have an `export` input so the mean values can be exported as a numeric value if `export = TRUE`. They also have a `pos` input (where relevant) to select a range of rates to average. Most useful is `mean.convert_rate` which can be used to output a final mean rate at the endof an analysis.
+- NEW: These are new generic S3 functions for calculating mean rates, and work on the relevant output rate. None alter the output object, but have an `export` input so the mean values can be exported as a numeric value if `export = TRUE`. They also have a `pos` input (where relevant) to select a range of rates to average. Most useful is `mean.convert_rate` which can be used to output a final mean rate at the end of an analysis.
 `mean.convert_DO`
 - This works as the above but averages converted oxygen values from `convert_DO`. The output must have been saved as a `convert_DO` object for this to work by using `simplify = FALSE` (otherwise `convert_DO` by default outputs a numeric vector upon which `mean()` works anyway and gives the same result).
