@@ -81,8 +81,12 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   tou <- verify_units(to, 'o2')
 
   # Units requiring t, S and/or P (all same for now)
-  tsp_req <- c("mL/L.o2", "mL/kg.o2", "%Air.o2", "%Oxy.o2", "Torr.o2p", "hPa.o2p", "kPa.o2p",
-               "inHg.o2p", "mmHg.o2p", "mg/kg.o2", "ug/kg.o2", "mmol/kg.o2", "umol/kg.o2",
+  tsp_req <- c("mL/L.o2", "cm3/L.o2", "mL/kg.o2",
+               "%Air.o2", "%Oxy.o2",
+               "Torr.o2p", "hPa.o2p", "kPa.o2p",
+               "inHg.o2p", "mmHg.o2p",
+               "mg/kg.o2", "ug/kg.o2",
+               "mol/kg.o2", "mmol/kg.o2", "umol/kg.o2",
                "mL/kg.o2")
 
   # Check t, S and P needed for units
@@ -128,11 +132,14 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   # First we convert all values to a standard unit, mg/L:
   if (fru == verify_units('mg/L',   'o2')) {c <-  z}
   if (fru == verify_units('ug/L',   'o2')) {c <-  z / 1e3}
+  if (fru == verify_units('mol/L',  'o2')) {c <-  z * omWt * 1e3}
   if (fru == verify_units('mmol/L', 'o2')) {c <-  z * omWt}
   if (fru == verify_units('umol/L', 'o2')) {c <-  z * omWt / 1e3}
   if (fru == verify_units('mL/L',   'o2')) {c <-  z * omWt / omVl}
+  if (fru == verify_units('cm3/L',  'o2')) {c <-  z * omWt / omVl}
   if (fru == verify_units('mg/kg',  'o2')) {c <-  z * swDn / 1e3}
   if (fru == verify_units('ug/kg',  'o2')) {c <-  z * swDn / 1e6}
+  if (fru == verify_units('mol/kg', 'o2')) {c <-  z * swDn * omWt}
   if (fru == verify_units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
   if (fru == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
   #if (fru == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
@@ -148,11 +155,14 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   # Then we convert mg/L to the final desired unit:
   if(tou == verify_units('mg/L',   'o2')) {out <- c}
   if(tou == verify_units('ug/L',   'o2')) {out <- c * 1e3}
+  if(tou == verify_units('mol/L',  'o2')) {out <- c / omWt / 1e3}
   if(tou == verify_units('mmol/L', 'o2')) {out <- c / omWt}
   if(tou == verify_units('umol/L', 'o2')) {out <- c / omWt * 1e3}
   if(tou == verify_units('mL/L',   'o2')) {out <- c / omWt * omVl}
+  if(tou == verify_units('cm3/L',  'o2')) {out <- c / omWt * omVl}
   if(tou == verify_units('mg/kg',  'o2')) {out <- c / swDn * 1e3}
   if(tou == verify_units('ug/kg',  'o2')) {out <- c / swDn * 1e6}
+  if(tou == verify_units('mol/kg', 'o2')) {out <- c / omWt / swDn}
   if(tou == verify_units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
   if(tou == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
   #if(tou == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
@@ -273,64 +283,143 @@ verify_units <- function(unit, is) {
       stop("verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args().")
 
     all.units <- list(
-      '%Air.o2' = c('%Air.o2', '%air','%Air','%A','%a',
+      '%Air.o2' = c('%Air.o2',
+                    '%air','%Air','%A','%a',
                     "percair","percentair","percentageair"),
 
-      '%Oxy.o2' = c('%Oxy.o2','%oxy','%Oxy','%OX','%OXY','%o2','%Oxy','%o','%O',
-                   "percoxygen","percentoxygen","percentageoxygen",
-                   "percoxy","percentoxy","percentageoxy",
-                   "perco2","percento2","percentageo2",
-                   "percoO2","percentO2","percentageO2"),
+      '%Oxy.o2' = c('%Oxy.o2',
+                    '%oxy','%Oxy','%OX','%OXY','%o2','%Oxy','%o','%O',
+                    "percoxygen","percentoxygen","percentageoxygen",
+                    "percoxy","percentoxy","percentageoxy",
+                    "perco2","percento2","percentageo2",
+                    "percoO2","percentO2","percentageO2"),
 
-      'ug/L.o2' = c('ug/L.o2','ug/L','ug/l','ug / L','ug / l','ugL-1',
-                    'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre'),
+      'ug/L.o2' = c('ug/L.o2',
+                    'ug/L','ug/l','ug / L','ug / l','ugL-1',
+                    'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre',
+                    'ugO2/L','ugO2/l','ugO2 / L','ugO2 / l','ugO2L-1',
+                    'ugO2l-1','ugO2 L-1','ugO2 l -1','ugO2 per liter','ugO2 per litre'),
 
-      'mmol/L.o2' = c('mmol/L.o2','mmol/L','mmol/l','mmol / L','mmol / l',
+      'mol/L.o2' = c('mol/L.o2',
+                     'mol/L','mol/l','mol / L','mol / l',
+                     'molL-1,','moll-1','mol L-1,','mol l-1',
+                     'mol per liter','mol per litre',
+                     'molO2/L','molO2/l','molO2 / L','molO2 / l',
+                     'molO2L-1,','molO2l-1','molO2 L-1,','molO2 l-1',
+                     'molO2 per liter','molO2 per litre'),
+
+      'mmol/L.o2' = c('mmol/L.o2',
+                      'mmol/L','mmol/l','mmol / L','mmol / l',
                       'mmolL-1,','mmoll-1','mmol L-1,','mmol l-1',
-                      'mmol per liter','mmol per litre'),
+                      'mmol per liter','mmol per litre',
+                      'mmolO2/L','mmolO2/l','mmolO2 / L','mmolO2 / l',
+                      'mmolO2L-1,','mmolO2l-1','mmolO2 L-1,','mmolO2 l-1',
+                      'mmolO2 per liter','mmolO2 per litre'),
 
-      'umol/L.o2' = c('umol/L.o2','umol/L','umol/l','umolL-1','umoll-1',
+      'umol/L.o2' = c('umol/L.o2',
+                      'umol/L','umol/l','umolL-1','umoll-1',
                       'umol / L','umol / l','umol L-1','umol l-1',
-                      'umol per litre','umol per liter'),
+                      'umol per litre','umol per liter',
+                      'umolO2/L','umolO2/l','umolO2L-1','umolO2l-1',
+                      'umolO2 / L','umolO2 / l','umolO2 L-1','umolO2 l-1',
+                      'umolO2 per litre','umolO2 per liter'),
 
-      'mL/L.o2' = c('mL/L.o2','ml/L','mL/L','mL/l','ml/l','mll-1','mLl-1',
+      'mL/L.o2' = c('mL/L.o2',
+                    'ml/L','mL/L','mL/l','ml/l','mll-1','mLl-1',
                     'mLL-1','mlL-1','ml / L','mL / L','mL / l','ml / l',
                     'ml l-1','mL l-1','mL L-1','ml L-1','ml per l','mL per L',
-                    'ml per L'),
+                    'ml per L',
+                    'mlO2/L','mLO2/L','mLO2/l','mlO2/l','mlO2l-1','mLO2l-1',
+                    'mLO2L-1','mlO2L-1','mlO2 / L','mLO2 / L','mLO2 / l','mlO2 / l',
+                    'mlO2 l-1','mLO2 l-1','mLO2 L-1','mlO2 L-1','mlO2 per l','mLO2 per L',
+                    'mlO2 per L'),
 
-      'mg/L.o2' = c('mg/L.o2','mg/L','mg/l','mg / l','mg / L','mgL-1','mgl-1',
-                    'mg L-1','mg l-1','mg per litre','mg per liter'),
+      # this is identical to ml/L - only used in v old papers
+      'cm3/L.o2' = c('cm3/L.o2',
+                    'cm3/L','cm3/L','cm3/l','cm3/l','cm3l-1','cm3l-1',
+                    'cm3L-1','cm3L-1','cm3 / L','cm3 / L','cm3 / l','cm3 / l',
+                    'cm3 l-1','cm3 l-1','cm3 L-1','cm3 L-1','cm3 per l','cm3 per L',
+                    'cm3 per L',
+                    'cm3O2/L','cm3O2/L','cm3O2/l','cm3O2/l','cm3O2l-1','cm3O2l-1',
+                    'cm3O2L-1','cm3O2L-1','cm3O2 / L','cm3O2 / L','cm3O2 / l','cm3O2 / l',
+                    'cm3O2 l-1','cm3O2 l-1','cm3O2 L-1','cm3O2 L-1','cm3O2 per l','cm3O2 per L',
+                    'cm3O2 per L'),
 
-      'mg/kg.o2' = c('mg/kg.o2','mg/kg','mg / kg','mgkg-1','mg kg-1',
-                     'mg per kg'),
+      'mg/L.o2' = c('mg/L.o2',
+                    'mg/L','mg/l','mg / l','mg / L','mgL-1','mgl-1',
+                    'mg L-1','mg l-1','mg per litre','mg per liter',
+                    'mgO2/L','mgO2/l','mgO2 / l','mgO2 / L','mgO2L-1','mgO2l-1',
+                    'mgO2 L-1','mgO2 l-1','mgO2 per litre','mgO2 per liter'),
 
-      'ug/kg.o2' = c('ug/kg.o2','ug/kg','ugkg-1','ug / kg','ug kg-1',
-                     'ug per kg'),
+      'mg/kg.o2' = c('mg/kg.o2',
+                     'mg/kg','mg / kg','mgkg-1','mg kg-1',
+                     'mg per kg',
+                     'mgO2/kg','mgO2 / kg','mgO2kg-1','mgO2 kg-1',
+                     'mgO2 per kg'),
 
-      'mL/kg.o2' = c('mL/kg.o2','ml/kg','mL/kg','mlkg-1','mLkg-1','ml / kg',
-                     'mL / kg','ml kg-1','mL kg-1','ml per kg'),
+      'ug/kg.o2' = c('ug/kg.o2',
+                     'ug/kg','ugkg-1','ug / kg','ug kg-1',
+                     'ug per kg',
+                     'ugO2/kg','ugO2kg-1','ugO2 / kg','ugO2 kg-1',
+                     'ugO2 per kg'),
 
-      'mmol/kg.o2' = c('mmol/kg.o2','mmol/kg','mmol/Kg','mmolkg-1','mmolKg-1',
+      'mL/kg.o2' = c('mL/kg.o2',
+                     'ml/kg','mL/kg','mlkg-1','mLkg-1','ml / kg',
+                     'mL / kg','ml kg-1','mL kg-1','ml per kg',
+                     'mlO2/kg','mLO2/kg','mlO2kg-1','mLO2kg-1','mlO2 / kg',
+                     'mLO2 / kg','mlO2 kg-1','mLO2 kg-1','mlO2 per kg'),
+
+      'mol/kg.o2' = c('mol/kg.o2',
+                      'mol/kg','mol/Kg','molkg-1','molKg-1',
+                      'mol / kg','mol / Kg','mol kg-1','mol Kg-1',
+                      'mol per kg','mol per Kg',
+                      'molO2/kg','molO2/Kg','molO2kg-1','molO2Kg-1',
+                      'molO2 / kg','molO2 / Kg','molO2 kg-1','molO2 Kg-1',
+                      'molO2 per kg','molO2 per Kg'),
+
+      'mmol/kg.o2' = c('mmol/kg.o2',
+                       'mmol/kg','mmol/Kg','mmolkg-1','mmolKg-1',
                        'mmol / kg','mmol / Kg','mmol kg-1','mmol Kg-1',
-                       'mmol per kg','mmol per Kg'),
+                       'mmol per kg','mmol per Kg',
+                       'mmolO2/kg','mmolO2/Kg','mmolO2kg-1','mmolO2Kg-1',
+                       'mmolO2 / kg','mmolO2 / Kg','mmolO2 kg-1','mmolO2 Kg-1',
+                       'mmolO2 per kg','mmolO2 per Kg'),
 
-      'umol/kg.o2' = c('umol/kg.o2','umol/kg','umol/Kg','umolkg-1,','umolKg-1',
+      'umol/kg.o2' = c('umol/kg.o2',
+                       'umol/kg','umol/Kg','umolkg-1,','umolKg-1',
                        'umol / kg','umol / Kg','umol kg-1,','umol Kg-1',
-                       'umol per kg','umol per Kg'),
+                       'umol per kg','umol per Kg',
+                       'umolO2/kg','umolO2/Kg','umolO2kg-1,','umolO2Kg-1',
+                       'umolO2 / kg','umolO2 / Kg','umolO2 kg-1,','umolO2 Kg-1',
+                       'umolO2 per kg','umolO2 per Kg'),
 
-      'Torr.o2p' = c('Torr.o2p','torr','TORR','Torr','Tor','tor'),
+      'Torr.o2p' = c('Torr.o2p',
+                     'torr','TORR','Torr','Tor','tor',
+                     'torrO2','TORRO2','TorrO2','TorO2','torO2'),
 
-      'hPa.o2p' = c('hPa.o2p','hPa','hpa','Hpa','HPA','HPa','hectopascal',
-                    'hpascal'),
+      'hPa.o2p' = c('hPa.o2p',
+                    'hPa','hpa','Hpa','HPA','HPa','hectopascal',
+                    'hpascal',
+                    'hPaO2','hpaO2','HpaO2','HPAO2','HPaO2','hectopascalO2',
+                    'hpascalO2'),
 
-      'kPa.o2p' = c('kPa.o2p','kPa','kpa','Kpa','KPA','KPa','kilopascal',
-                    'kpascal'),
+      'kPa.o2p' = c('kPa.o2p',
+                    'kPa','kpa','Kpa','KPA','KPa','kilopascal',
+                    'kpascal',
+                    'kPaO2','kpaO2','KpaO2','KPAO2','KPaO2','kilopascalO2',
+                    'kpascalO2'),
 
-      'mmHg.o2p' = c('mmHg.o2p','mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG',
-                     'millimeter of mercury','mm mercury'),
+      'mmHg.o2p' = c('mmHg.o2p',
+                     'mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG',
+                     'millimeter of mercury','mm mercury',
+                     'mmHgO2','mm HgO2','mmhgO2','mm hgO2','MMHGO2','MM HGO2',
+                     'millimeter of mercuryO2','mm mercuryO2'),
 
-      'inHg.o2p' = c('inHg.o2p','inHg','in Hg','inhg','in hg','INHG','IN HG',
-                     'inch of mercury','inch mercury'))
+      'inHg.o2p' = c('inHg.o2p',
+                     'inHg','in Hg','inhg','in hg','INHG','IN HG',
+                     'inch of mercury','inch mercury',
+                     'inHgO2','in HgO2','inhgO2','in hgO2','INHGO2','IN HGO2',
+                     'inch of mercuryO2','inch mercuryO2'))
   }
 
   # vol ---------------------------------------------------------------------
@@ -366,9 +455,9 @@ verify_units <- function(unit, is) {
     all.units <-  list(
       'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram'),
       'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram'),
-      'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol'),
-      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
       'mol.o2' = c('mol.o2','molo2','molO2','mol','mole'),
+      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
+      'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol'),
       'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
   }
 
