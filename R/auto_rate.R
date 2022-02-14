@@ -456,7 +456,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
 
   class(out) <- 'auto_rate'
 
-  if (plot) plot(out, ...)
+  if (plot) plot(out, quiet = TRUE, ...)
 
   return(out)
 }

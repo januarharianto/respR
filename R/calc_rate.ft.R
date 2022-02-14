@@ -479,7 +479,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   class(out) <- "calc_rate.ft"
 
   # Plot --------------------------------------------------------------------
-  if (plot) plot(out, ...)
+  if (plot) plot(out, quiet = TRUE,  ...)
 
   # Return ------------------------------------------------------------------
 

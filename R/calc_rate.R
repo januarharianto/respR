@@ -287,7 +287,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   class(out) <- "calc_rate"
 
   # Plot if TRUE
-  if (plot) plot(out, ...)
+  if (plot) plot(out, quiet = TRUE, ...)
 
   return(out)
 }
