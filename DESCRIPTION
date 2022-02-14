@@ -1,15 +1,24 @@
 Package: respR
 Type: Package
-Title: Analyse, Convert, and Automate Respirometry-Related Data
-Date: 2021-07-22
+Title: Import, Process, Analyse, and Calculate Rates from Respirometry Data
+Date: 2022-02-14
 Version: 2.0.0
+Maintainer: Nicholas Carey <nicholascarey@gmail.com>
 Authors@R: c(
-    person("Januar", "Harianto", email = "januar.harianto@sydney.edu.au", role = c("aut", "cre")), 
-    person("Nicholas", "Carey", email = "nicholascarey@gmail.com", role = c("aut")))
-Description: A collection of functions that, when used together, provide a 
-    complete and structured workflow for the analysis of respirometry-related
-    data. See the respR GitHub webpage for documentation and examples.
-URL: https://januarharianto.github.io/respR, https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
+    person(given = "Januar", 
+           family = "Harianto", 
+           role = c("aut"), 
+           email = "januar.harianto@sydney.edu.au"), 
+    person(given = "Nicholas", 
+           family = "Carey", 
+           role = c("aut", "cre"),
+           email = "nicholascarey@gmail.com"))
+Description: Provides a structural, reproducible workflow for the 
+    processing and analysis of respirometry data. It contains analytical 
+    functions and utilities for working with oxygen time-series to determine 
+    respiration or oxygen production rates, and to make it easier to report and 
+    share analyses. 
+URL: https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
 Depends: R (>= 3.3)
 License: GPL-3
 Encoding: UTF-8
