@@ -418,11 +418,14 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       # rename rate_b1 to slope, since it's not rate yet
       # We might use these coefficients later to find regions of stable rates (i.e. slope ~ 0)
       # so may as well save them
-      names(summary)[6] <- "slope_b1"
+      names(summary)[8] <- "slope_b1"
       # add mean rate (delta) value for each subset using row numbers
       summary$delta_mean <- mapply(function(p,q) mean(delta.oxy[p:q]),
                                    p = summary$row,
                                    q = summary$endrow)
+      # reorganise summary table
+      summary <- summary[,c(7:9,1:6,10)]
+
       delta <- summary$delta_mean
 
     } else {
@@ -440,7 +443,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
                                 p = indices,
                                 q = indices,
                                 r = dfs)),
-                       summary[,1:4])
+                       summary[,1:6])
       names(summary)[2] <- "slope_b1"
 
       summary$delta_mean <- mapply(function(p,q) mean(delta.oxy[p:q]),
