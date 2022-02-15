@@ -56,4 +56,3 @@ Suggests:
     FishResp,
     respirometry,
     testthat
-VignetteBuilder: knitr
