@@ -90,6 +90,8 @@
 #'
 #' - `"mm2", "cm2", "m2", "km2"`
 #'
+#' @return A print out to the console of accepted units
+#'
 #' @export
 #'
 #' @examples

@@ -50,6 +50,16 @@ value or with \code{"segmented"} method. To perform no subsampling enter as
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE}, and \code{panel}. See Plotting
 section.}
 }
+\value{
+Output is a \code{list} object of class \code{oxy_crit} containing input
+parameters and data, various summary data, metadata, and the primary output
+of interest \verb{$crit}, which is the critical oxygen value in the units of the
+oxygen data as entered. This can be converted to additional units using
+\code{\link[=convert_DO]{convert_DO()}}. Note, if the Broken-Stick analysis (\code{method == "bsr"})
+has been used, \verb{$crit} will contain two results; \verb{$crit.intercept} and
+\verb{$crit.midpoint}. For full explanation of the difference between these see
+Yeager & Ultsch (1989), however they are generally very close in value.
+}
 \description{
 A function to calculate critical oxygen values, the oxygen tension or
 concentration below which an uptake rate transitions from independent to
@@ -193,23 +203,9 @@ Muggeo (2008) for what these represent. The summary can be exported as a
 separate data frame by passing \code{export = TRUE}.
 }
 }
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{oxy_crit} containing input parameters and
-data, various summary data, metadata, and the primary output of interest
-\verb{$crit}, which is the critical oxygen value in the units of the oxygen data
-as entered. This can be converted to additional units using \code{\link[=convert_DO]{convert_DO()}}.
-Note, if the Broken-Stick analysis (\code{method == "bsr"}) has been used, \verb{$crit}
-will contain two results; \verb{$crit.intercept} and \verb{$crit.midpoint}. For full
-explanation of the difference between these see Yeager & Ultsch (1989),
-however they are generally very close in value.
-}
 }
 \examples{
-# Intensive, and a large dataset, so these may take some time.
-\dontrun{
-
+\donttest{
 ## Run on oxygen~time data.frame with default inputs
 oxy_crit(squid.rd)
 
@@ -231,7 +227,7 @@ oxy_crit(insp)
 
 ## Run on already calculated rate~oxygen data
 ## (generated using an internal function)
-oxy.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
+oxy.v.rates <- respR:::generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
 ## Analyse
 oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
 }

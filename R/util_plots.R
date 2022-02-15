@@ -301,6 +301,8 @@ plot_multi_ar <- function(x, n = 9, ...){
 #' @param legend logical. Suppress plot legends.
 #' @param ... Allows additional plotting controls to be passed.
 #'
+#' @return A plot of the auto_rate object results
+#'
 #' @export
 #' @keywords internal
 

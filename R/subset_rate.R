@@ -1,229 +1,234 @@
-#'@title Subset auto_rate results based on a range of criteria
+#' @title Subset auto_rate results based on a range of criteria
 #'
-#'@description The `auto_rate` function is powerful, but the output can be large
-#'  and difficult to explore. In addition, it may identify linear data regions,
-#'  but from areas of the data that are not of experimental interest.  As an
-#'  advanced, machine learning based process, it is also somewhat fallible and
-#'  on occasion may return questionable results.
+#' @description The `auto_rate` function is powerful, but the output can be
+#'   large and difficult to explore. In addition, it may identify linear data
+#'   regions, but from areas of the data that are not of experimental interest.
+#'   As an advanced, machine learning based process, it is also somewhat
+#'   fallible and on occasion may return questionable results.
 #'
-#'  The `subset_rate` function helps explore and filter `auto_rate` results by
-#'  subsetting according to various criteria. For example, extracting only
-#'  positive or negative rates, only the highest or lowest rates, only those
-#'  from certain data regions, and numerous other methods that allow advanced
-#'  filtering of results so the rates extracted are well-defined towards the
-#'  research question of interest. This also allows for highly consistent
-#'  reporting of results and rate selection criteria.
+#'   The `subset_rate` function helps explore and filter `auto_rate` results by
+#'   subsetting according to various criteria. For example, extracting only
+#'   positive or negative rates, only the highest or lowest rates, only those
+#'   from certain data regions, and numerous other methods that allow advanced
+#'   filtering of results so the rates extracted are well-defined towards the
+#'   research question of interest. This also allows for highly consistent
+#'   reporting of results and rate selection criteria.
 #'
-#'  Multiple subsetting criteria can be applied by assigning the output and
-#'  processing it through the function multiple times with different criteria,
-#'  or alternatively via `%>%` piping. See Examples.
+#'   Multiple subsetting criteria can be applied by assigning the output and
+#'   processing it through the function multiple times with different criteria,
+#'   or alternatively via `%>%` piping. See Examples.
 #'
-#'  *Note:* when choosing a `method`, keep in mind that to remain mathematically
-#'  consistent, `respR` outputs oxygen consumption (i.e. respiration) rates as
-#'  negative values. This is particularly important in the difference between
-#'  `highest/lowest` and `minimum/maximum` methods. See Details.
+#'   *Note:* when choosing a `method`, keep in mind that to remain
+#'   mathematically consistent, `respR` outputs oxygen consumption (i.e.
+#'   respiration) rates as negative values. This is particularly important in
+#'   the difference between `highest/lowest` and `minimum/maximum` methods. See
+#'   Details.
 #'
-#'  When a `$rate` result is omitted by the subsetting criteria, all associated
-#'  data in `$summary` (i.e. the associated row) is removed. Summary results are
-#'  not reordered in any way, only the non-matching rates removed. See
-#'  **Output** section for more details.
+#'   When a `$rate` result is omitted by the subsetting criteria, all associated
+#'   data in `$summary` (i.e. the associated row) is removed. Summary results
+#'   are not reordered in any way, only the non-matching rates removed. See
+#'   **Output** section for more details.
 #'
-#'  Generally speaking, for most large datasets we recommend using
-#'  [`subset_data()`] and then running `auto_rate` on the subset(s) of the data
-#'  you are interested in, rather than run it on the whole dataset and relying
-#'  on `subset_rate` to filter it afterwards.
+#'   Generally speaking, for most large datasets we recommend using
+#'   [`subset_data()`] and then running `auto_rate` on the subset(s) of the data
+#'   you are interested in, rather than run it on the whole dataset and relying
+#'   on `subset_rate` to filter it afterwards.
 #'
-#'@details These are the current methods by which rates in `auto_rate` objects
-#'  can be subset. Matching results are *retained* in the output:
+#' @details These are the current methods by which rates in `auto_rate` objects
+#'   can be subset. Matching results are *retained* in the output:
 #'
-#'  ## `positive`, `negative`
+#'   ## `positive`, `negative`
 #'
-#'  Subsets all `positive` (>0) or `negative` (<0) rates. `n` is ignored.
-#'  Useful, for example, in intermittent respirometry where `auto_rate` may
-#'  identify linear regions of oxygen increase during flushes. Note, `respR`
-#'  outputs oxygen consumption (i.e. respiration) rates as *negative* values,
-#'  production rates as *positive*.
+#'   Subsets all `positive` (>0) or `negative` (<0) rates. `n` is ignored.
+#'   Useful, for example, in intermittent respirometry where `auto_rate` may
+#'   identify linear regions of oxygen increase during flushes. Note, `respR`
+#'   outputs oxygen consumption (i.e. respiration) rates as *negative* values,
+#'   production rates as *positive*.
 #'
-#'  ## `nonzero`, `zero`
+#'   ## `nonzero`, `zero`
 #'
-#'  Retains all `nonzero` rates (i.e. removes any zero rates), or retains *only*
-#'  `zero` rates (i.e. removes all rates with any value). `n` is ignored.
+#'   Retains all `nonzero` rates (i.e. removes any zero rates), or retains
+#'   *only* `zero` rates (i.e. removes all rates with any value). `n` is
+#'   ignored.
 #'
-#'  ## `lowest`, `highest`
+#'   ## `lowest`, `highest`
 #'
-#'  Special note should be taken of these methods. They can only be used when
-#'  rates all have the same sign (i.e. are all negative or all positive). Here,
-#'  they subset the highest and lowest ***absolute*** rate values. That is, if
-#'  rates are all negative, `method = 'highest'` will retain the highest
-#'  magnitude rates regardless of the sign, that is the *most negative*.
-#'  Essentially, these options ignore the sign of the rate. `n` indicates how
-#'  many of the lowest/highest rates to retain See `minimum` and `maximum`
-#'  options for extracting *numerically* lowest and highest rates.
+#'   Special note should be taken of these methods. They can only be used when
+#'   rates all have the same sign (i.e. are all negative or all positive). Here,
+#'   they subset the highest and lowest ***absolute*** rate values. That is, if
+#'   rates are all negative, `method = 'highest'` will retain the highest
+#'   magnitude rates regardless of the sign, that is the *most negative*.
+#'   Essentially, these options ignore the sign of the rate. `n` indicates how
+#'   many of the lowest/highest rates to retain See `minimum` and `maximum`
+#'   options for extracting *numerically* lowest and highest rates.
 #'
-#'  ## `lowest_percentile`, `highest_percentile`
+#'   ## `lowest_percentile`, `highest_percentile`
 #'
-#'  Again, special note should be taken of these methods, which can only be used
-#'  when rates all have the same sign (i.e. all negative or all positive). These
-#'  methods retain the `n`'th lowest or highest percentile of ***absolute***
-#'  rate values. That is, if rates are all negative, `method =
-#'  'highest_percentile'` will retain the highest `n`'th percentile of rates
-#'  regardless of sign, that is the *most negative*. Essentially, these options
-#'  ignore the sign of the rate. Here `n` should be a percentile value between 0
-#'  and 1. For example, to extract the lowest 10th percentile of rates
-#'  regardless of sign, you would enter `method = 'lowest_percentile', n = 0.1`.
+#'   Again, special note should be taken of these methods, which can only be
+#'   used when rates all have the same sign (i.e. all negative or all positive).
+#'   These methods retain the `n`'th lowest or highest percentile of
+#'   ***absolute*** rate values. That is, if rates are all negative, `method =
+#'   'highest_percentile'` will retain the highest `n`'th percentile of rates
+#'   regardless of sign, that is the *most negative*. Essentially, these options
+#'   ignore the sign of the rate. Here `n` should be a percentile value between
+#'   0 and 1. For example, to extract the lowest 10th percentile of rates
+#'   regardless of sign, you would enter `method = 'lowest_percentile', n =
+#'   0.1`.
 #'
-#'  ## `minimum`, `maximum`
+#'   ## `minimum`, `maximum`
 #'
-#'  In contrast to `lowest` and `highest`, these are *strictly numerical*
-#'  options which take full account of the sign of the rate, and can be used
-#'  where rates are a mix of positive and negative. That is, `method =
-#'  'minimum'` will retain the minimum value numerical rates, including the most
-#'  negative. `n` indicates how many of the min/max rates to retain.
+#'   In contrast to `lowest` and `highest`, these are *strictly numerical*
+#'   options which take full account of the sign of the rate, and can be used
+#'   where rates are a mix of positive and negative. That is, `method =
+#'   'minimum'` will retain the minimum value numerical rates, including the
+#'   most negative. `n` indicates how many of the min/max rates to retain.
 #'
-#'  ## `minimum_percentile`, `maximum_percentile`
+#'   ## `minimum_percentile`, `maximum_percentile`
 #'
-#'  Like `min` and `max` these are *strictly numerical* inputs which retain the
-#'  `n`'th minimum or maximum percentile of the rates and take full account of
-#'  the sign. Here `n` should be a percentile value between 0 and 1. For
-#'  example, if rates are all negative (i.e. typical uptake rates), to extract
-#'  the lowest 10th percentile of rates, you would enter `method =
-#'  'maximum_percentile', n = 0.1`. This is because the *lowest* rates are the
-#'  *highest numerically* (`highest/lowest` percentile methods would be a better
-#'  option in this case however).
+#'   Like `min` and `max` these are *strictly numerical* inputs which retain the
+#'   `n`'th minimum or maximum percentile of the rates and take full account of
+#'   the sign. Here `n` should be a percentile value between 0 and 1. For
+#'   example, if rates are all negative (i.e. typical uptake rates), to extract
+#'   the lowest 10th percentile of rates, you would enter `method =
+#'   'maximum_percentile', n = 0.1`. This is because the *lowest* rates are the
+#'   *highest numerically* (`highest/lowest` percentile methods would be a
+#'   better option in this case however).
 #'
-#'  ## `rate`, `rsq`, `row`, `time`, `density`
+#'   ## `rate`, `rsq`, `row`, `time`, `density`
 #'
-#'  These methods refer to the respective columns of the `$summary` data frame.
-#'  For these, `n` should be a numeric vector of two values. Matching rates
-#'  which fall within the `n` range (inclusive) are retained. For example, to
-#'  retain only rates where the `rate` value is between 0.05 and 0.08: `method =
-#'  'rate', n = c(0.05, 0.08)`. To retain all rates with a R-Squared above 0.90:
-#'  `method = 'rsq', n = c(0.9, 1)`. The `row` and `time` ranges refer to the
-#'  `$row`-`$endrow` or `$time`-`$endtime` columns and original data source
-#'  (`$dataframe` element of the input), and can be used to constrain results to
-#'  rates from particular regions of the data (although usually a better option
-#'  is to \code{\link{subset_data}} prior to analysis). Note, `time` is not the
-#'  same as `duration` - see later section.
+#'   These methods refer to the respective columns of the `$summary` data frame.
+#'   For these, `n` should be a numeric vector of two values. Matching rates
+#'   which fall within the `n` range (inclusive) are retained. For example, to
+#'   retain only rates where the `rate` value is between 0.05 and 0.08: `method
+#'   = 'rate', n = c(0.05, 0.08)`. To retain all rates with a R-Squared above
+#'   0.90: `method = 'rsq', n = c(0.9, 1)`. The `row` and `time` ranges refer to
+#'   the `$row`-`$endrow` or `$time`-`$endtime` columns and original data source
+#'   (`$dataframe` element of the input), and can be used to constrain results
+#'   to rates from particular regions of the data (although usually a better
+#'   option is to \code{\link{subset_data}} prior to analysis). Note, `time` is
+#'   not the same as `duration` - see later section.
 #'
-#'  ## `time_omit`, `row_omit`
+#'   ## `time_omit`, `row_omit`
 #'
-#'  These methods refer to the original data, and are intended to *exclude*
-#'  rates determined over particular data regions. This is useful in the case
-#'  of, for example, a data anomaly such as a spike or sensor dropout. For
-#'  these, `n` can be a single value indicating a single data row or timepoint,
-#'  or a numeric vector of two values indicating a row or time range. Only rates
-#'  (i.e. regressions) which *do not* utilise that particular value or range are
-#'  retained in the output. For example, if an anomaly occurs precisely at
-#'  timepoint 3000,  `time_omit = 3000` will mean only rates determined solely
-#'  over regions before and after this will be retained. Similarly, if it occurs
-#'  over a time range this can be entered as, `time_omit = c(3000, 3200)`.
+#'   These methods refer to the original data, and are intended to *exclude*
+#'   rates determined over particular data regions. This is useful in the case
+#'   of, for example, a data anomaly such as a spike or sensor dropout. For
+#'   these, `n` can be a single value indicating a single data row or timepoint,
+#'   or a numeric vector of two values indicating a row or time range. Only
+#'   rates (i.e. regressions) which *do not* utilise that particular value or
+#'   range are retained in the output. For example, if an anomaly occurs
+#'   precisely at timepoint 3000,  `time_omit = 3000` will mean only rates
+#'   determined solely over regions before and after this will be retained.
+#'   Similarly, if it occurs over a time range this can be entered as,
+#'   `time_omit = c(3000, 3200)`.
 #'
-#'  ## `duration`
+#'   ## `duration`
 #'
-#'  This method allows subsetting of rates which occur within a duration range.
-#'  Here, `n` should be a numeric vector of two values indicating the duration
-#'  range you are interested in retaining. Use this to set minimum and maximum
-#'  durations in the time units of the original data. For example, `n =
-#'  c(0,500)` will retain only rates determined over a maximum of 500 time
-#'  units. To retain rates over a minimum duration, set this using the minimum
-#'  value plus the maximum duration (or simply infinity, e.g. `n = c(500,Inf)`).
+#'   This method allows subsetting of rates which occur within a duration range.
+#'   Here, `n` should be a numeric vector of two values indicating the duration
+#'   range you are interested in retaining. Use this to set minimum and maximum
+#'   durations in the time units of the original data. For example, `n =
+#'   c(0,500)` will retain only rates determined over a maximum of 500 time
+#'   units. To retain rates over a minimum duration, set this using the minimum
+#'   value plus the maximum duration (or simply infinity, e.g. `n =
+#'   c(500,Inf)`).
 #'
-#'  ## `manual`
+#'   ## `manual`
 #'
-#'  This method simply allows particular rows of the `$summary` data frame to be
-#'  manually selected to be retained. For example, to keep only the top ranked
-#'  result: `method = 'manual', n = 1`. To keep multiple rows use regular `R`
-#'  selection syntax: `n = 1:3`, `n = c(1,2,3)`, `n = c(5,8,10)`, etc. No value
-#'  of `n` should exceed the number of rows in the `$summary` data frame.
+#'   This method simply allows particular rows of the `$summary` data frame to
+#'   be manually selected to be retained. For example, to keep only the top
+#'   ranked result: `method = 'manual', n = 1`. To keep multiple rows use
+#'   regular `R` selection syntax: `n = 1:3`, `n = c(1,2,3)`, `n = c(5,8,10)`,
+#'   etc. No value of `n` should exceed the number of rows in the `$summary`
+#'   data frame.
 #'
-#'  ## `overlap`
+#'   ## `overlap`
 #'
-#'  This method removes rates which overlap, that is, linear regions or
-#'  regressions calculated by `auto_rate` which partly or completely share the
-#'  same rows of the original data. The `auto_rate` `linear` method may identify
-#'  multiple linear regions, some of which may substantially overlap, or even be
-#'  completely contained within others. In such cases summary operations such as
-#'  taking an average of the rate values may be questionable, as certain values
-#'  will be weighted higher due to these multiple, overlapping results. This
-#'  method removes overlapping rates, using `n` as a threshold to determine
-#'  degree of permitted overlap. It is recommended this method be used after
-#'  other selection criteria have been applied, as it is quite aggressive about
-#'  removing rates, and can be *very* computationally intensive when there are
-#'  many results.
+#'   This method removes rates which overlap, that is, linear regions or
+#'   regressions calculated by `auto_rate` which partly or completely share the
+#'   same rows of the original data. The `auto_rate` `linear` method may
+#'   identify multiple linear regions, some of which may substantially overlap,
+#'   or even be completely contained within others. In such cases summary
+#'   operations such as taking an average of the rate values may be
+#'   questionable, as certain values will be weighted higher due to these
+#'   multiple, overlapping results. This method removes overlapping rates, using
+#'   `n` as a threshold to determine degree of permitted overlap. It is
+#'   recommended this method be used after other selection criteria have been
+#'   applied, as it is quite aggressive about removing rates, and can be *very*
+#'   computationally intensive when there are many results.
 #'
-#'  While it can be used with `auto_rate` results determined via the `rolling`,
-#'  `lowest`, or `highest` methods, by their nature these methods produce *all
-#'  possible* overlapping regressions, ordered in various ways, so other
-#'  subsetting methods are more appropriate. The `overlap` method should only be
-#'  used in combination with the `auto_rate` `linear` results, unless you have a
-#'  specific reason for doing so.
+#'   While it can be used with `auto_rate` results determined via the `rolling`,
+#'   `lowest`, or `highest` methods, by their nature these methods produce *all
+#'   possible* overlapping regressions, ordered in various ways, so other
+#'   subsetting methods are more appropriate. The `overlap` method should only
+#'   be used in combination with the `auto_rate` `linear` results, unless you
+#'   have a specific reason for doing so.
 #'
-#'  The [`plot_ar()`] function is very useful for plotting `auto_rate` objects,
-#'  and the results of `subset_rate` operations upon them, to visualise where
-#'  regression results in the summary table occur in relation to the original
-#'  dataset. See Examples.
+#'   The [`plot_ar()`] function is very useful for plotting `auto_rate` objects,
+#'   and the results of `subset_rate` operations upon them, to visualise where
+#'   regression results in the summary table occur in relation to the original
+#'   dataset. See Examples.
 #'
-#'  Permitted overlap is determined by `n`, which indicates the proportion of
-#'  each particular regression which must overlap with another for it to be
-#'  regarded as overlapping. For example, `n = 0.2` means a regression would
-#'  have to overlap with at least one other by at least 20% of its total length
-#'  to be regarded as overlapping.
+#'   Permitted overlap is determined by `n`, which indicates the proportion of
+#'   each particular regression which must overlap with another for it to be
+#'   regarded as overlapping. For example, `n = 0.2` means a regression would
+#'   have to overlap with at least one other by at least 20% of its total length
+#'   to be regarded as overlapping.
 #'
-#'  The `overlap` method performs two operations:
+#'   The `overlap` method performs two operations:
 #'
-#'  First, regardless of the `n` value, any rate regressions which are
-#'  completely contained within another are removed (this is also the only
-#'  operation if `n = 1`).
+#'   First, regardless of the `n` value, any rate regressions which are
+#'   completely contained within another are removed (this is also the only
+#'   operation if `n = 1`).
 #'
-#'  Secondly, for each regression in `$summary` starting from the lowest ranked
-#'  (i.e. bottom of the summary table), the function checks if it overlaps with
-#'  any others (accounting for `n`). If not, the next lowest is checked, and the
-#'  function progresses up the summary table until it finds one that does. The
-#'  first to be found overlapping is then removed, and the process repeats
-#'  starting again from the bottom of the summary table. This is repeated
-#'  iteratively until only non-overlapping rates (accounting for `n`) are
-#'  retained.
+#'   Secondly, for each regression in `$summary` starting from the lowest ranked
+#'   (i.e. bottom of the summary table), the function checks if it overlaps with
+#'   any others (accounting for `n`). If not, the next lowest is checked, and
+#'   the function progresses up the summary table until it finds one that does.
+#'   The first to be found overlapping is then removed, and the process repeats
+#'   starting again from the bottom of the summary table. This is repeated
+#'   iteratively until only non-overlapping rates (accounting for `n`) are
+#'   retained.
 #'
-#'  If `n = 0`, only rates which do not overlap at all, that is share *no* data,
-#'  are retained. If `n = 1`, only rates which are 100% contained within at
-#'  least one other are removed.
+#'   If `n = 0`, only rates which do not overlap at all, that is share *no*
+#'   data, are retained. If `n = 1`, only rates which are 100% contained within
+#'   at least one other are removed.
 #'
-#'  ## Output
+#' @return The output of `subset_rate` is a `list` object which retains the
+#'   `auto_rate` class, with an additional `auto_rate_subset` class applied.
 #'
-#'  The output of `subset_rate` is a `list` object which retains the `auto_rate`
-#'  class, with an additional `auto_rate_subset` class applied.
+#'   It contains two additional elements: `$original` contains the original,
+#'   unaltered `auto_rate` object, which will be retained unaltered through
+#'   multiple subsetting operations, that is even after processing through the
+#'   function multiple times. `$subset_calls` contains the calls for every
+#'   subsetting operation that has been applied to the `$original` object, from
+#'   the first to the most recent. Note, if using piping (`%>%` or `|>`), the
+#'   `x` input in these appears as `"x = ."` where it has been piped from the
+#'   previous call. These additional elements ensure the output contains the
+#'   complete, reproducible history of the `auto_rate` object having been
+#'   subset.
 #'
-#'  It contains two additional elements: `$original` contains the original,
-#'  unaltered `auto_rate` object, which will be retained unaltered through
-#'  multiple subsetting operations, that is even after processing through the
-#'  function multiple times. `$subset_calls` contains the calls for every
-#'  subsetting operation that has been applied to the `$original` object, from
-#'  the first to the most recent. Note, if using piping (`%>%` or `|>`), the `x`
-#'  input in these appears as `"x = ."` where it has been piped from the
-#'  previous call. These additional elements ensure the output contains the
-#'  complete, reproducible history of the `auto_rate` object having been subset.
+#'   The `$summary` table contains a `$rank` column and the *original* rank of
+#'   each result is retained. The `$peaks` component (if present) of the
+#'   `auto_rate` object is adjusted, and a `$subset_regs` value is added to
+#'   `$metadata` indicating the number of regressions remaining after
+#'   subsetting.
 #'
-#'  The `$summary` table contains a `$rank` column and the *original* rank of
-#'  each result is retained. The `$peaks` component (if present) of the
-#'  `auto_rate` object is adjusted, and a `$subset_regs` value is added to
-#'  `$metadata` indicating the number of regressions remaining after subsetting.
+#' @param x list. An object of class `auto_rate` or `auto_rate_subset`.
+#' @param method string. Method by which to subset rate results. Matching
+#'   results are *retained* in the output. See Details.
+#' @param n numeric. Number, percentile, or range of results to return depending
+#'   on `method`. See Details.
+#' @param plot logical. Plots a summary of subset locations within data (up to a
+#'   maximum of the first 9 ranked results).
 #'
-#'@md
-#'@param x list. An object of class `auto_rate` or `auto_rate_subset`.
-#'@param method string. Method by which to subset rate results. Matching results
-#'  are *retained* in the output. See Details.
-#'@param n numeric. Number, percentile, or range of results to return depending
-#'  on `method`. See Details.
-#'@param plot logical. Plots a summary of subset locations within data (up to a
-#'  maximum of the first 9 ranked results).
+#' @export
 #'
-#'@export
+#' @importFrom glue glue
+#' @importFrom data.table between
+#' @importFrom stats quantile
 #'
-#'@importFrom glue glue
-#'@importFrom data.table between
-#'@importFrom stats quantile
-#'
-#'@examples
+#' @examples
 #'  ar_obj <- inspect(intermittent.rd, plot = FALSE) %>%
 #'  auto_rate(plot = FALSE)
 #'  ar_subs_neg <- subset_rate(ar_obj, method = "negative", plot = FALSE)

@@ -1,11 +1,11 @@
 ---
-title: "oxy_crit: Critical oxygen analyses"
+title: "Critical oxygen values (PCrit)"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 4
 vignette: >
-  %\VignetteIndexEntry{oxy_crit: Critical oxygen analyses}
+  %\VignetteIndexEntry{Critical oxygen values (PCrit)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 zotero: true

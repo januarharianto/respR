@@ -42,16 +42,6 @@
 #' readily capable of quantifying production rates as well as consumption, and
 #' these can also be used for adjustments in [`adjust_rate()`].
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `calc_rate.bg` containing original data,
-#' linear models, summary information, and the primary output of interest
-#' `$rate.bg`, which contains a rate for each oxygen column present in the input
-#' data. There is also `$rate.bg.mean` containing the mean of all background
-#' rates. Note, this is not used in `adjust_rate`, where the `method` input
-#' there determines how `$rate.bg` is applied, but can easily be extracted and
-#' applied as an adjustment value if desired.
-#'
 #' ## Plot
 #'
 #' A plot is produced (provided `plot = TRUE`) showing all examined columns of
@@ -76,6 +66,14 @@
 #' - `mean()`: calculates the mean of all rates, or those specified by the `pos`
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
+#'
+#' @return Output is a `list` object of class `calc_rate.bg` containing original
+#'   data, linear models, summary information, and the primary output of
+#'   interest `$rate.bg`, which contains a rate for each oxygen column present
+#'   in the input data. There is also `$rate.bg.mean` containing the mean of all
+#'   background rates. Note, this is not used in `adjust_rate`, where the
+#'   `method` input there determines how `$rate.bg` is applied, but can easily
+#'   be extracted and applied as an adjustment value if desired.
 #'
 #' @param x `data.frame` or `inspect` object. This is the data to extract
 #'   background rate(s) from.

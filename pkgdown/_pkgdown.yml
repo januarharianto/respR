@@ -96,7 +96,7 @@ navbar:
         href: articles/intermittent_long.html
       - text: "Flowthrough respirometry"
         href: articles/flowthrough.html
-      - text: "oxy_crit: Critical oxygen analyses"
+      - text: "Critical oxygen values (PCrit)"
         href: articles/oxycrit.html
       - text: "Oxygen production respirometry"
         href: articles/oxy_production.html
@@ -107,15 +107,21 @@ navbar:
         href: articles/convert_DO.html
       - text: "inspect: Inspecting data"
         href: articles/inspecting.html
+      - text: "calc_rate: Manually select and calculate rates"
+        href: articles/calc_rate.html
       - text: "auto_rate: Automatic detection of linear rates"
         href: articles/auto_rate.html
       - text: "subset_rate: Filtering auto_rate results"
         href: articles/subset_rate.html
       - text: "adjust_rate: Adjusting rates for background"
         href: articles/adjust_rate.html
+      - text: "subset_data: Subset data by time, row, or oxygen ranges"
+        href: articles/subset_data.html
       - text: "---- Miscellaneous ----"
       - text: "calc_rate: Two-point rate calculation"
         href: articles/twopoint.html
+      - text: "subsample: Thin larger datasets"
+        href: articles/subsample.html
 
     - text: Further Reading
       menu:

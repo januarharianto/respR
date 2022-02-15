@@ -19,7 +19,4 @@ a list object
 \description{
 This is an internal function for \code{auto_rate()}
 }
-\examples{
-NULL
-}
 \keyword{internal}

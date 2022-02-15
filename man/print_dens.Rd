@@ -8,6 +8,14 @@ it more compact}
 \usage{
 print_dens(x, digits = NULL, ...)
 }
+\arguments{
+\item{x}{auto_rate object.}
+
+\item{digits}{numeric.}
+}
+\value{
+Console output
+}
 \description{
 Prints the density object for summary.auto_rate S3
 Basically copied from stats:::print.density and edited to make

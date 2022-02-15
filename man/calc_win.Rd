@@ -22,7 +22,4 @@ a numeric
 The calculated value is used to determine the rolling window for rolling
 regressions.
 }
-\examples{
-NULL
-}
 \keyword{internal}

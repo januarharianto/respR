@@ -6,6 +6,14 @@
 \usage{
 time_roll(dt, width, parallel = FALSE)
 }
+\arguments{
+\item{width}{numeric. width in time}
+
+\item{df}{data.frame object.}
+}
+\value{
+a data.table object
+}
 \description{
 This is an internal function. Used by \code{\link[=auto_rate]{auto_rate()}}.
 }

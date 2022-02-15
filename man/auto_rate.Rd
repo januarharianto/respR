@@ -30,6 +30,12 @@ to apply the \code{width} input if it is above 1.}
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos},
 \code{panel}, and \code{quiet = TRUE}.}
 }
+\value{
+Output is a \code{list} object of class \code{auto_rate} containing input
+parameters and data, various summary data, metadata, linear models, and the
+primary output of interest \verb{$rate}, which can be background adjusted in
+\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
+}
 \description{
 \code{auto_rate} performs rolling regressions on a dataset to determine the \emph{most
 linear, highest, lowest, maximum, minimum, rolling}, and \emph{interval} rates of
@@ -52,8 +58,7 @@ linear regions of the data, ranked by order of the KDE density analysis. This
 is present in the \verb{$summary} component of the output as \verb{$density}. Under
 this method, the \code{width} input is used as a starting seed value, but the
 resulting regressions may be of any width. See
-\href{https://github.com/januarharianto/respR}{here}
-for full details.
+\href{https://github.com/januarharianto/respR}{here} for full details.
 \item \code{highest}: Every regression of the specified \code{width} across the entire
 timeseries is calculated, then ordered using \emph{\strong{absolute}} rate values from
 highest to lowest. Essentially, this option ignores the sign of the rate, and
@@ -187,35 +192,26 @@ input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate val
 by passing \code{export = TRUE}.
 }
 }
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{auto_rate} containing input parameters
-and data, various summary data, metadata, linear models, and the primary
-output of interest \verb{$rate}, which can be background adjusted in
-\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
-}
 }
 \examples{
 # Most linear section of an entire dataset
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
  auto_rate()
 
-\dontrun{
 # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
- auto_rate(method = "lowest", width = 600, by = "time")
+ auto_rate(method = "lowest", width = 600, by = "time") \%>\%
  summary()
 
 # What is the highest oxygen consumption rate over a 10 minute (600s) period?
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
- auto_rate(method = "highest", width = 600, by = "time")
+ auto_rate(method = "highest", width = 600, by = "time") \%>\%
  summary()
 
 # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 # period in intermittent-flow respirometry data?
 # NOTE: because uptake rates are negative, this would actually be
 # the HIGHEST uptake rate.
-auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
-}
+auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") \%>\%
+ summary()
 }

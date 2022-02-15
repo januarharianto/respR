@@ -4,7 +4,17 @@
 \alias{rolling_reg}
 \title{Rolling regression}
 \usage{
-rolling_reg(dt, width, by, method)
+rolling_reg(dt, width, by)
+}
+\arguments{
+\item{width}{numeric. width in number of rows or time}
+
+\item{by}{string. time or row}
+
+\item{df}{data.frame object.}
+}
+\value{
+a data.table object
 }
 \description{
 Rolling regression

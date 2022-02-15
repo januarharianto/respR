@@ -27,6 +27,12 @@ and \code{to}.}
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos},
 \code{panel}, and \code{quiet = TRUE}.}
 }
+\value{
+Output is a \code{list} object of class \code{calc_rate} containing input
+parameters and data, various summary data, metadata, linear models, and the
+primary output of interest \verb{$rate}, which can be background adjusted in
+\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
+}
 \description{
 Calculates rate of oxygen uptake or production from respirometry data. A rate
 can be determined over the whole dataset, or on subsets of the data using the
@@ -101,14 +107,6 @@ be exported as a separate dataframe by passing \code{export = TRUE}.
 input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate value
 by passing \code{export = TRUE}.
 }
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{calc_rate} containing input parameters
-and data, various summary data, metadata, linear models, and the primary
-output of interest \verb{$rate}, which can be background adjusted in
-\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
 }
 }
 \examples{

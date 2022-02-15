@@ -140,14 +140,6 @@
 #' completely confident in any results from analysis of such data, and avoid
 #' obscure errors, these issues be addressed before proceeding.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `inspect`, with a `$dataframe` containing
-#' the specified `time` and `oxygen` columns, inputs, and metadata which can be
-#' passed to [`calc_rate()`] or [`auto_rate()`] to determine rates. If there are
-#' failed checks or warnings, the row locations of the potentially problematic
-#' data can be found in `$locs`.
-#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `plot()`,
@@ -159,6 +151,12 @@
 #' are found, locations (row numbers) are printed (up to first 20 occurrences).
 #'
 #' - `summary()`: simple wrapper for `print()` function. See above.
+#'
+#' @return Output is a `list` object of class `inspect`, with a `$dataframe`
+#'   containing the specified `time` and `oxygen` columns, inputs, and metadata
+#'   which can be passed to [`calc_rate()`] or [`auto_rate()`] to determine
+#'   rates. If there are failed checks or warnings, the row locations of the
+#'   potentially problematic data can be found in `$locs`.
 #'
 #' @param x data.frame. Any object of class `data.frame` (incl. `data.table`,
 #'   `tibble`, etc.).

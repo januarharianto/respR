@@ -47,6 +47,19 @@ the specified width in the units specified in \code{by}. For use with
 \item{...}{Allows additional plotting controls to be passed such as \code{pos},
 \code{quiet = TRUE}, \code{legend = FALSE}, and \code{rate.rev = FALSE}.}
 }
+\value{
+Output is a \code{list} object of class \code{calc_rate.ft} containing input
+parameters and data, various summary data, metadata, and the primary output
+of interest \verb{$rate}, which can be background adjusted in \code{\link{adjust_rate.ft}}
+or converted to units in \code{\link{convert_rate.ft}}. Note the \verb{$summary} table
+contains linear regression coefficients alongside other metadata. These
+\emph{should not be confused} with those in other functions such as \code{calc_rate}
+where slopes represent rates and coefficients such as a high r-squared are
+important. Here, they represent the stability of the data region, in that
+the closer the slope is to zero the less the delta oxygen values, and
+therefore rates, in that region vary. These are included to enable possible
+future functionality where stable regions may be automatically identified.
+}
 \description{
 Calculates rate of oxygen uptake or production in flowthrough respirometry
 data given a \code{flowrate} and delta oxygen values, which can either be directly
@@ -160,21 +173,6 @@ be exported as a separate data frame by passing \code{export = TRUE}.
 input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate value
 by passing \code{export = TRUE}.
 }
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{calc_rate.ft} containing input parameters
-and data, various summary data, metadata, and the primary output of interest
-\verb{$rate}, which can be background adjusted in \code{\link{adjust_rate.ft}} or converted
-to units in \code{\link{convert_rate.ft}}. Note the \verb{$summary} table contains linear
-regression coefficients alongside other metadata. These \emph{should not be
-confused} with those in other functions such as \code{calc_rate} where slopes
-represent rates and coefficients such as a high r-squared are important.
-Here, they represent the stability of the data region, in that the closer the
-slope is to zero the less the delta oxygen values, and therefore rates, in
-that region vary. These are included to enable possible future functionality
-where stable regions may be automatically identified.
 }
 }
 \examples{

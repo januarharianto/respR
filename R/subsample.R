@@ -7,9 +7,7 @@
 #' element or row, or alternatively the `length.out` input uniformly subsamples
 #' the data to the desired length.
 #'
-#' ## Output
-#'
-#' Returns a subsampled data frame or vector object depending on input.
+#' @return Returns a subsampled data frame or vector object depending on input.
 #'
 #' @param x data frame or vector. The data to subsample.
 #' @param n numeric. Subsample every `n` elements or rows.

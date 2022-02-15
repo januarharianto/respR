@@ -6,6 +6,16 @@
 \usage{
 time_lm(df, start, end)
 }
+\arguments{
+\item{df}{data.frame object.}
+
+\item{start}{numeric. start time}
+
+\item{end}{numeric. end time}
+}
+\value{
+a data.table object
+}
 \description{
 This is an internal function. Used with \code{\link[=time_roll]{time_roll()}} and \code{\link[=auto_rate]{auto_rate()}}.
 }

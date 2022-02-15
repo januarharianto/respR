@@ -1,0 +1,22 @@
+---
+title: "subset_data: Subset data by time, row, or oxygen ranges"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{subset_data: Subset data by time, row, or oxygen ranges}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(respR)
+```
+
+    - extremely useful 
+    - and piping to other functions

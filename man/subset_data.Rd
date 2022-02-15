@@ -19,6 +19,11 @@ to produce a subset.}
 \item{quiet}{logical. Controls if a summary of the output is printed to the
 console. Default is \code{FALSE}.}
 }
+\value{
+\strong{Output}: If the input is an \code{inspect}, or \code{inspect.ft} object, the
+output is an object of the same class containing the subset data. For
+\code{data.frame} inputs the output is a \code{data.table} of the subset.
+}
 \description{
 \code{subset_data} subsets a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object based
 on a given set of criteria. The function is ideal for passing only selected
@@ -62,22 +67,16 @@ interchangeable, and the function will subset data \emph{between} the first and
 last occurrences (or closest occurrences) of these values. It works best with
 generally increasing or decreasing oxygen data, and results may vary with
 other data such as intermittent flow data or those in \code{inspect.ft} objects.
-\subsection{Output}{
 
-If the input is an \code{inspect}, or \code{inspect.ft} object, the output is an object
-of the same class containing the subset data. For \code{data.frame} inputs the
-output is a \code{data.table} of the subset.
-
-\strong{Note for \code{inspect} and \code{inspect.ft} objects:} after subsetting, the
+\strong{Note for \code{inspect} and \code{inspect.ft} object inputs:} after subsetting the
 locations of any data issues highlighted when the object was originally
 inspected will no longer be accurate. If these are important, best practice
-is to subset the original dataframe, and process the subset through \code{inspect}
-or \code{inspect.ft}.
+is to subset the original dataframe, and then process the subset through
+\code{inspect} or \code{inspect.ft}.
 
 A summary of the subset is printed to the console, to check it has subset the
 data as expected. To suppress this changing the default \code{quiet = FALSE} to
 \code{TRUE}.
-}
 }
 \examples{
 # Subset by time:

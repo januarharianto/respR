@@ -40,7 +40,6 @@
 #' Normally-distributed noise is added to the dataset to add variation, which
 #' can be modified using the `"sd"` input.
 #'
-#'
 #' @param len numeric. Defaults at 300. Number of observations in the dataset.
 #' @param type character. What kind of data should the function generate?
 #'   Available for use: "default", "corrupted" and "segmented".

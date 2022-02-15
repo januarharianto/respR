@@ -12,12 +12,9 @@ rolling_reg_row(df, width)
 \item{width}{numeric.}
 }
 \value{
-a a data.table object
+a data.table object
 }
 \description{
 Perform regular rolling regression
-}
-\examples{
-NULL
 }
 \keyword{internal}

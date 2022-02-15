@@ -75,12 +75,10 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `calc_rate` containing input parameters
-#' and data, various summary data, metadata, linear models, and the primary
-#' output of interest `$rate`, which can be background adjusted in
-#' [`adjust_rate`] or converted to units in [`convert_rate`].
+#' @return Output is a `list` object of class `calc_rate` containing input
+#'   parameters and data, various summary data, metadata, linear models, and the
+#'   primary output of interest `$rate`, which can be background adjusted in
+#'   [`adjust_rate`] or converted to units in [`convert_rate`].
 #'
 #' @param x object of class `inspect` or `data.frame`. This is the timeseries of
 #'   paired values of oxygen against time from which to calculate rates.
@@ -449,7 +447,6 @@ mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){
 #' @keywords internal
 #'
 #' @return A data frame object of `lm()` coefficients.
-#' @export
 linear_fit <- function(dt) {
   fit <- lm(dt[[2]] ~ dt[[1]], dt)
   b0   <- coef(fit)[[1]]
@@ -476,7 +473,6 @@ linear_fit <- function(dt) {
 #' @keywords internal
 #'
 #' @return A `data.table`` object.
-#' @export
 extract_indices <- function(x, subsets, n) {
   # This grabs the first and last-row data
   fl <- subsets[[n]][, .SD[c(1, .N)]]

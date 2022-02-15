@@ -6,6 +6,9 @@
 \usage{
 generate_mrdf(dt, width)
 }
+\value{
+a data.table object
+}
 \description{
 Generate a DO ~ PO2 data table from a DO timeseries
 }

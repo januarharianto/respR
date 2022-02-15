@@ -50,9 +50,7 @@
 #'
 #' - `"mm2"`, `"cm2"`, `"m2"`, `"km2"`
 #'
-#' ## Output
-#'
-#' Output is a numeric vector of converted values.
+#' @return Output is a numeric vector of converted values.
 #'
 #' @param x numeric value or vector. Values to be converted to a different unit.
 #' @param from string. Unit of the original values.
@@ -206,7 +204,6 @@ convert_val <- function(x, from = NULL, to = NULL) {
 #' Search for and classify units
 #'
 #' @keywords internal
-#' @export
 unit_type <- function(unit, msg = ""){
 
   all.units <- list(

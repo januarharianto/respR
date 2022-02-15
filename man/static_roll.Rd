@@ -6,6 +6,14 @@
 \usage{
 static_roll(df, win)
 }
+\arguments{
+\item{df}{data.frame object.}
+
+\item{win}{numeric. width in number of rows}
+}
+\value{
+a data.table object
+}
 \description{
 This is an internal function.
 }

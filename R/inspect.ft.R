@@ -218,14 +218,6 @@
 #' **Note**: All background calculations should be from experiments done at the
 #' *same flow rate* as the specimen experiments to be corrected.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `inspect.ft` containing input parameters
-#' and data, data check summaries, and metadata, which can be passed to
-#' [`calc_rate.ft()`] to determine rates. If there are failed checks or
-#' warnings, the row locations of the potentially problematic data can be found
-#' in `$locs`.
-#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `plot()`,
@@ -237,6 +229,12 @@
 #' are found, locations (row numbers) are printed (up to first 20 occurrences).
 #'
 #' - `summary()`: simple wrapper for `print()` function. See above.
+#'
+#' @return Output is a `list` object of class `inspect.ft` containing input
+#'   parameters and data, data check summaries, and metadata, which can be
+#'   passed to [`calc_rate.ft()`] to determine rates. If there are failed checks
+#'   or warnings, the row locations of the potentially problematic data can be
+#'   found in `$locs`.
 #'
 #' @param x `data.frame` containing columns of `time` and `out.oxy` or
 #'   `delta.oxy` concentrations, and optionally `in.oxy`.

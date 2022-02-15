@@ -23,7 +23,4 @@ positive
 \details{
 This is an internal function for \code{auto_rate()}
 }
-\examples{
-NULL
-}
 \keyword{internal}

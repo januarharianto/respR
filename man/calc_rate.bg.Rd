@@ -23,6 +23,15 @@ the \code{time} column.}
 \item{...}{Allows additional plotting controls to be passed, such as \code{pos},
 \code{legend = FALSE}, and \code{quiet = TRUE}.}
 }
+\value{
+Output is a \code{list} object of class \code{calc_rate.bg} containing original
+data, linear models, summary information, and the primary output of
+interest \verb{$rate.bg}, which contains a rate for each oxygen column present
+in the input data. There is also \verb{$rate.bg.mean} containing the mean of all
+background rates. Note, this is not used in \code{adjust_rate}, where the
+\code{method} input there determines how \verb{$rate.bg} is applied, but can easily
+be extracted and applied as an adjustment value if desired.
+}
 \description{
 This function calculates the rate of change of oxygen over time from "blank"
 or control respirometry experiments, to allow for background adjustments of
@@ -67,17 +76,6 @@ closed respirometry where there may be an input of oxygen via leaks or oxygen
 production from photosynthesis which need to be quantified. \code{calc_rate.bg} is
 readily capable of quantifying production rates as well as consumption, and
 these can also be used for adjustments in \code{\link[=adjust_rate]{adjust_rate()}}.
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{calc_rate.bg} containing original data,
-linear models, summary information, and the primary output of interest
-\verb{$rate.bg}, which contains a rate for each oxygen column present in the input
-data. There is also \verb{$rate.bg.mean} containing the mean of all background
-rates. Note, this is not used in \code{adjust_rate}, where the \code{method} input
-there determines how \verb{$rate.bg} is applied, but can easily be extracted and
-applied as an adjustment value if desired.
 }
 
 \subsection{Plot}{

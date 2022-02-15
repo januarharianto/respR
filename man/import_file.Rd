@@ -12,6 +12,9 @@ import_file(path, export = FALSE)
 \item{export}{logical. If TRUE, exports the data as a \code{csv} to the same
 directory, as determined by the \code{path} parameter.}
 }
+\value{
+A \code{data.frame} object of all columned data
+}
 \description{
 Automatically import data from different respirometry hardware and software
 systems. The aim is to work with most commercial oxygen sensors available in
@@ -53,10 +56,6 @@ time as users provide feedback and samples. Users should however be careful
 using this function, carefully check the imported data, and be prepared to
 import data by other functions such as \code{\link[=read.csv]{read.csv()}} since it is a
 fundamental basic in data analyses in R.
-\subsection{Output}{
-
-A \code{data.frame} object of all columned data
-}
 }
 \examples{
 \dontrun{

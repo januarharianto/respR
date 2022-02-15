@@ -35,6 +35,12 @@ conversion of some units. See \code{\link[=unit_args]{unit_args()}} for details.
 values are returned as a numeric vector. if \code{FALSE} a list object of class
 \code{convert_DO} is returned.}
 }
+\value{
+By default (\code{simplify = TRUE}) the output is a numeric vector of
+converted values. If \code{simplify = FALSE} output is a \code{list} object of class
+\code{convert_DO} containing five elements: \verb{$call} the function call, \verb{$input}
+values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}.
+}
 \description{
 This is a conversion function that performs conversions between concentration
 and pressure units of dissolved oxygen (DO).
@@ -53,14 +59,6 @@ pressure (\code{P}) to be specified; if this is the case the function will stop
 and prompt for them. For the atmospheric pressure input (P), a default value
 of 1.013 bar (standard pressure at sea level) is applied if not otherwise
 entered. For freshwater experiments, salinity should be set to zero (i.e. \code{S = 0}).
-\subsection{Output}{
-
-By default (\code{simplify = TRUE}) the output is a numeric vector of converted
-values. If \code{simplify = FALSE} output is a \code{list} object of class
-\code{convert_DO} containing five elements: \verb{$call} the function call, \verb{$input}
-values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}.
-}
-
 \subsection{S3 Generic Functions}{
 
 Saved output objects (if \code{simplify = FALSE} is used) can be entered in the
@@ -73,10 +71,10 @@ and output units.
 }
 }
 \examples{
-# Convert a numeric value from/to units which do not require t, S and P
+# Convert a numeric value from & to units which do not require t, S and P
 convert_DO(8.21, from = "mg/L", to = "umol/L")
 
-# Convert a numeric value from/to units which require t, S and P
+# Convert a numeric value from & to units which require t, S and P
 convert_DO(100, from = "\%Air", to = "mg L-1", S = 33, t = 18)
 convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 
@@ -84,9 +82,6 @@ convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
 convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "\%Air",
   t = 15, S = 35)
-
-\dontrun{
 convert_DO(sardine.rd[[2]], from = "\%Air", to = "torr",
   t = 15, S = 35)
-  }
 }

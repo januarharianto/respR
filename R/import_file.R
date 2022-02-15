@@ -51,9 +51,7 @@
 #' import data by other functions such as [`read.csv()`] since it is a
 #' fundamental basic in data analyses in R.
 #'
-#' ## Output
-#'
-#' A `data.frame` object of all columned data
+#' @return A `data.frame` object of all columned data
 #'
 #' @param path string. Path to file.
 #' @param export logical. If TRUE, exports the data as a `csv` to the same

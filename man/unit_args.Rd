@@ -7,6 +7,9 @@ convert_rate.ft}
 \usage{
 unit_args()
 }
+\value{
+A print out to the console of accepted units
+}
 \description{
 This is a basic function with no inputs. It prints to the console the units
 that can be used in the functions \code{\link[=convert_DO]{convert_DO()}}, \code{\link[=convert_rate]{convert_rate()}}, and

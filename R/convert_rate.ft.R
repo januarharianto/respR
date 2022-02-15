@@ -54,12 +54,6 @@
 #' [`unit_args()`] for details of accepted units and their formatting. See also
 #' [`convert_val()`] for simple conversion between non-oxygen units.
 #'
-#' ## Output
-#'
-#' Output is a `list` object containing the `$rate.input`, and converted rate(s)
-#' in `$rate.output` in the `$output.unit`, as well as inputs and summary
-#' elements.
-#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `print()`,
@@ -75,6 +69,10 @@
 #' - `mean()`: calculates the mean of all converted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
 #' separate value by passing `export = TRUE`.
+#'
+#' @return Output is a `list` object containing the `$rate.input`, and converted
+#'   rate(s) in `$rate.output` in the `$output.unit`, as well as inputs and
+#'   summary elements.
 #'
 #' @param x numeric value or vector, or object of class [calc_rate.ft()] or
 #'   [adjust_rate.ft()]. Contains the rate(s) to be converted.

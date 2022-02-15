@@ -38,6 +38,13 @@ the full oxygen timeseries.}
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
 can also be passed in \code{plot()} commands on output objects.}
 }
+\value{
+Output is a \code{list} object of class \code{inspect}, with a \verb{$dataframe}
+containing the specified \code{time} and \code{oxygen} columns, inputs, and metadata
+which can be passed to \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}} to determine
+rates. If there are failed checks or warnings, the row locations of the
+potentially problematic data can be found in \verb{$locs}.
+}
 \description{
 \code{inspect()} is a data exploration and preparation function that visualises
 respirometry data and checks it for errors that may affect the use of further
@@ -185,15 +192,6 @@ issues occur (located in the \verb{$locs} element of the output), allowing users
 to amend them before analysis. We would strongly recommend that to be
 completely confident in any results from analysis of such data, and avoid
 obscure errors, these issues be addressed before proceeding.
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{inspect}, with a \verb{$dataframe} containing
-the specified \code{time} and \code{oxygen} columns, inputs, and metadata which can be
-passed to \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}} to determine rates. If there are
-failed checks or warnings, the row locations of the potentially problematic
-data can be found in \verb{$locs}.
 }
 
 \subsection{S3 Generic Functions}{

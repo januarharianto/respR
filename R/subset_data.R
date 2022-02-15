@@ -42,21 +42,19 @@
 #' generally increasing or decreasing oxygen data, and results may vary with
 #' other data such as intermittent flow data or those in `inspect.ft` objects.
 #'
-#' ## Output
-#'
-#' If the input is an `inspect`, or `inspect.ft` object, the output is an object
-#' of the same class containing the subset data. For `data.frame` inputs the
-#' output is a `data.table` of the subset.
-#'
-#' **Note for `inspect` and `inspect.ft` objects:** after subsetting, the
+#' **Note for `inspect` and `inspect.ft` object inputs:** after subsetting the
 #' locations of any data issues highlighted when the object was originally
 #' inspected will no longer be accurate. If these are important, best practice
-#' is to subset the original dataframe, and process the subset through `inspect`
-#' or `inspect.ft`.
+#' is to subset the original dataframe, and then process the subset through
+#' `inspect` or `inspect.ft`.
 #'
 #' A summary of the subset is printed to the console, to check it has subset the
 #' data as expected. To suppress this changing the default `quiet = FALSE` to
 #' `TRUE`.
+#'
+#' @return **Output**: If the input is an `inspect`, or `inspect.ft` object, the
+#'   output is an object of the same class containing the subset data. For
+#'   `data.frame` inputs the output is a `data.table` of the subset.
 #'
 #' @param x `data.frame`, `inspect`, or `inspect.ft` object. The data from which
 #'   to produce a subset.

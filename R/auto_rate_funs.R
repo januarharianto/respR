@@ -9,34 +9,7 @@
 #' @return a data.frame object of the original data
 #'
 #' @importFrom assertthat assert_that
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' # this will pass:
-#' set.seed(88)
-#' df <- sim_data(len = 50)$df
-#' validate_auto_rate(df, by = "row", method = "max")
-#'
-#' # this will fail as df is not a data.frame object:
-#' # set.seed(88)
-#' # df <- c(1:40)
-#' # validate_auto_rate(df, by = "row", method = "max")
-#'
-#' # this will fail as `by` input isn't recognised:
-#' # set.seed(88)
-#' # df <- c(1:40)
-#' # validate_auto_rate(df, by = "rat", method = "max")
-#'
-#' # this will fail as df is not a data.frame object:
-#' # set.seed(88)
-#' # df <- c(1:40)
-#' # validate_auto_rate(df, by = "row", method = "max")
-#'
-#' # this will fail as `method` input isn't recognised:
-#' # set.seed(88)
-#' # df <- c(1:40)
-#' # validate_auto_rate(df, by = "row", method = "moo")
 validate_auto_rate <- function(df, by, method) {
 
   # # does df exist?
@@ -83,11 +56,7 @@ validate_auto_rate <- function(df, by, method) {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_min`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_min <- function(dt, width, by = 'row') {
   # perform rolling regression
   if (by == 'row') {
@@ -117,11 +86,7 @@ auto_rate_min <- function(dt, width, by = 'row') {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_max`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_max <- function(dt, width, by = 'row') {
   # perform rolling regression
   if (by == 'row') {
@@ -153,11 +118,7 @@ auto_rate_max <- function(dt, width, by = 'row') {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_highest`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_highest <- function(dt, width, by = 'row') {
   # perform rolling regression
   if (by == 'row') {
@@ -188,11 +149,7 @@ auto_rate_highest <- function(dt, width, by = 'row') {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_lowest`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_lowest <- function(dt, width, by = 'row') {
   # perform rolling regression
   if (by == 'row') {
@@ -222,11 +179,7 @@ auto_rate_lowest <- function(dt, width, by = 'row') {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_rolling`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_rolling <- function(dt, width, by = 'row') {
   # perform rolling regression
   if (by == 'row') {
@@ -256,11 +209,7 @@ auto_rate_rolling <- function(dt, width, by = 'row') {
 #' @param by string.
 #'
 #' @return a list object with appended class `auto_rate_interval`
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_interval <- function(dt, width, by) {
 
   if (by == 'row') {
@@ -289,11 +238,7 @@ auto_rate_interval <- function(dt, width, by) {
 #' @param verify logical. Should KDE be performed again to verify the detection?
 #'
 #' @return a list object
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 auto_rate_linear <- function(dt, width, by, verify = TRUE) {
 
   # Convert 'width' to rows if it is 'by = "time"' since kernel_method only
@@ -339,11 +284,8 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
 #' @param width numeric.
 #' @param top_only logical. Should only top ranked result be returned?
 #'
-#' @export
+#' @return A list object
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 kernel_method <- function(dt, width, top_only = FALSE) {
   # linear detection is always by row since linear detection is not dependent
   # on time but more on the stability of the data
@@ -398,13 +340,9 @@ kernel_method <- function(dt, width, top_only = FALSE) {
 #' @param df data.frame object.
 #' @param width numeric.
 #'
-#' @return a a data.table object
+#' @return a data.table object
 #' @importFrom roll roll_lm
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 rolling_reg_row <- function(df, width) {
   df <- data.table(df)
   setnames(df, 1:2, c("x", "y"))
@@ -434,11 +372,7 @@ rolling_reg_row <- function(df, width) {
 #' @param width numeric.
 #'
 #' @return a data.table object
-#' @export
 #' @keywords internal
-#'
-#' @examples
-#' NULL
 rolling_reg_time <- function(df, width) {
   names(df) <- c('x','y')
 
@@ -467,10 +401,12 @@ rolling_reg_time <- function(df, width) {
 #' Normal rolling regression
 #'
 #' This is an internal function.
+#' @param df data.frame object.
+#' @param win numeric. width in number of rows
 #'
+#' @return a data.table object
 #' @importFrom roll roll_lm
 #' @keywords internal
-#' @export
 static_roll <- function(df, win) {
   roll <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]), width = win, min_obs = 1)
   # normally we would na.omit here, but next step will remove these initial NA rows anyway
@@ -481,15 +417,15 @@ static_roll <- function(df, win) {
   return(roll)
 }
 
-#lm(df[[2]] ~ df[[1]], df) # lm of subset
-
 #' Perform time-width rolling regression
 #'
 #' This is an internal function. Used by [auto_rate()].
+#' @param df data.frame object.
+#' @param width numeric. width in time
 #'
+#' @return a data.table object
 #' @keywords internal
 #' @import parallel
-#' @export
 time_roll <- function(dt, width, parallel = FALSE) {
   future_lapply <- plan <- NULL # global variables hack (unfortunate)
   dt <- data.table::data.table(dt)
@@ -533,9 +469,12 @@ time_roll <- function(dt, width, parallel = FALSE) {
 #' Subset data by time and perform a linear regression.
 #'
 #' This is an internal function. Used with [time_roll()] and [auto_rate()].
+#' @param df data.frame object.
+#' @param start numeric. start time
+#' @param end numeric. end time
 #'
+#' @return a data.table object
 #' @keywords internal
-#' @export
 time_lm <- function(df, start, end) {
   dt <- data.table::data.table(df)
   data.table::setnames(dt, 1:2, c("x", "y"))
@@ -556,9 +495,13 @@ time_lm <- function(df, start, end) {
 
 #' Rolling regression
 #'
+#' @param df data.frame object.
+#' @param width numeric. width in number of rows or time
+#' @param by string. time or row
+#'
+#' @return a data.table object
 #' @keywords internal
-#' @export
-rolling_reg <- function(dt, width, by, method) {
+rolling_reg <- function(dt, width, by) {
   win <- width
   # Rolling regression
   if (by == "time") {
@@ -587,11 +530,15 @@ rolling_reg <- function(dt, width, by, method) {
 
 #' Kernel density estimation and fitting
 #'
+#' @param dt data.frame object.
+#' @param width numeric.
+#' @param by string. time or row
+#'
+#' @return A list object
 #' @keywords internal
-#' @export
-kde_fit <- function(dt, width, by, method, use = "all") {
+  kde_fit <- function(dt, width, by, use = "all") {
   # perform rolling regression
-  reg <- rolling_reg(dt, width, by, method)
+  reg <- rolling_reg(dt, width, by)
   roll <- reg$roll
   win <- reg$win
 
@@ -658,10 +605,7 @@ kde_fit <- function(dt, width, by, method, use = "all") {
 #' @param msg string. Attach function name for message (usually auto_rate)
 #'
 #' @return a numeric
-#' @export
 #' @keywords internal
-#' @examples
-#' NULL
 calc_win <- function(dt, width, by, msg) {
 
   if(by == "row"){
@@ -699,8 +643,11 @@ calc_win <- function(dt, width, by, msg) {
 #' Basically copied from stats:::print.density and edited to make
 #' it more compact
 #'
+#' @param x auto_rate object.
+#' @param digits numeric.
+#'
+#' @return Console output
 #' @keywords internal
-#' @export
 print_dens <- function (x, digits = NULL, ...){
   cat("\nCall: ", gsub("  ", "", deparse(x$call)), "\nData: ", x$data.name,
       " (", x$n, " obs.)", ", Bandwidth 'bw' = ", formatC(x$bw,

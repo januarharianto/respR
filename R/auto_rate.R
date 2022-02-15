@@ -21,8 +21,7 @@
 #' is present in the `$summary` component of the output as `$density`. Under
 #' this method, the `width` input is used as a starting seed value, but the
 #' resulting regressions may be of any width. See
-#' \href{https://github.com/januarharianto/respR}{here}
-#' for full details.
+#' \href{https://github.com/januarharianto/respR}{here} for full details.
 #'
 #' - `highest`: Every regression of the specified `width` across the entire
 #' timeseries is calculated, then ordered using ***absolute*** rate values from
@@ -159,12 +158,10 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `auto_rate` containing input parameters
-#' and data, various summary data, metadata, linear models, and the primary
-#' output of interest `$rate`, which can be background adjusted in
-#' [`adjust_rate`] or converted to units in [`convert_rate`].
+#' @return Output is a `list` object of class `auto_rate` containing input
+#'   parameters and data, various summary data, metadata, linear models, and the
+#'   primary output of interest `$rate`, which can be background adjusted in
+#'   [`adjust_rate`] or converted to units in [`convert_rate`].
 #'
 #' @param x data frame, or object of class `inspect` containing oxygen~time
 #'   data.
@@ -183,8 +180,6 @@
 #' @param ... Allows additional plotting controls to be passed, such as `pos`,
 #'   `panel`, and `quiet = TRUE`.
 #'
-#' @md
-#'
 #' @import data.table
 #'
 #' @export
@@ -194,23 +189,22 @@
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
 #'  auto_rate()
 #'
-#' \dontrun{
 #' # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
-#'  auto_rate(method = "lowest", width = 600, by = "time")
+#'  auto_rate(method = "lowest", width = 600, by = "time") %>%
 #'  summary()
 #'
 #' # What is the highest oxygen consumption rate over a 10 minute (600s) period?
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
-#'  auto_rate(method = "highest", width = 600, by = "time")
+#'  auto_rate(method = "highest", width = 600, by = "time") %>%
 #'  summary()
 #'
 #' # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 #' # period in intermittent-flow respirometry data?
 #' # NOTE: because uptake rates are negative, this would actually be
 #' # the HIGHEST uptake rate.
-#' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time")
-#' }
+#' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") %>%
+#'  summary()
 
 auto_rate <- function(x, method = "linear", width = NULL,
                       by = "row", plot = TRUE, ...) {

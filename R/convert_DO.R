@@ -18,13 +18,6 @@
 #' entered. For freshwater experiments, salinity should be set to zero (i.e. `S
 #' = 0`).
 #'
-#' ## Output
-#'
-#' By default (`simplify = TRUE`) the output is a numeric vector of converted
-#' values. If `simplify = FALSE` output is a `list` object of class
-#' `convert_DO` containing five elements: `$call` the function call, `$input`
-#' values, `$output` converted values, `$input.unit` and `$output.unit`.
-#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects (if `simplify = FALSE` is used) can be entered in the
@@ -34,6 +27,11 @@
 #' and output units.
 #'
 #' - `summary()`: simple wrapper for `print()` function. See above.
+#'
+#' @return By default (`simplify = TRUE`) the output is a numeric vector of
+#'   converted values. If `simplify = FALSE` output is a `list` object of class
+#'   `convert_DO` containing five elements: `$call` the function call, `$input`
+#'   values, `$output` converted values, `$input.unit` and `$output.unit`.
 #'
 #' @param x numeric. The dissolved oxygen (DO) value(s) to be converted.
 #' @param from string. The DO unit to convert *from*. See [unit_args()] for
@@ -51,12 +49,12 @@
 #'
 #' @importFrom marelac molvol molweight gas_satconc sw_dens vapor atmComp
 #' @export
-#' @md
+#'
 #' @examples
-#' # Convert a numeric value from/to units which do not require t, S and P
+#' # Convert a numeric value from & to units which do not require t, S and P
 #' convert_DO(8.21, from = "mg/L", to = "umol/L")
 #'
-#' # Convert a numeric value from/to units which require t, S and P
+#' # Convert a numeric value from & to units which require t, S and P
 #' convert_DO(100, from = "%Air", to = "mg L-1", S = 33, t = 18)
 #' convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 #'
@@ -64,11 +62,8 @@
 #' convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")
 #' convert_DO(c(8.01, 8.03, 8.05), from = "mg per litre", to = "%Air",
 #'   t = 15, S = 35)
-#'
-#' \dontrun{
 #' convert_DO(sardine.rd[[2]], from = "%Air", to = "torr",
 #'   t = 15, S = 35)
-#'   }
 
 convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                        P = NULL, simplify = TRUE) {

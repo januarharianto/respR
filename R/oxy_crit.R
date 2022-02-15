@@ -138,16 +138,14 @@
 #' Muggeo (2008) for what these represent. The summary can be exported as a
 #' separate data frame by passing `export = TRUE`.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `oxy_crit` containing input parameters and
-#' data, various summary data, metadata, and the primary output of interest
-#' `$crit`, which is the critical oxygen value in the units of the oxygen data
-#' as entered. This can be converted to additional units using [`convert_DO()`].
-#' Note, if the Broken-Stick analysis (`method == "bsr"`) has been used, `$crit`
-#' will contain two results; `$crit.intercept` and `$crit.midpoint`. For full
-#' explanation of the difference between these see Yeager & Ultsch (1989),
-#' however they are generally very close in value.
+#' @return Output is a `list` object of class `oxy_crit` containing input
+#'   parameters and data, various summary data, metadata, and the primary output
+#'   of interest `$crit`, which is the critical oxygen value in the units of the
+#'   oxygen data as entered. This can be converted to additional units using
+#'   [`convert_DO()`]. Note, if the Broken-Stick analysis (`method == "bsr"`)
+#'   has been used, `$crit` will contain two results; `$crit.intercept` and
+#'   `$crit.midpoint`. For full explanation of the difference between these see
+#'   Yeager & Ultsch (1989), however they are generally very close in value.
 #'
 #' @param x object of class `inspect` or a `data.frame` containing either paired
 #'   oxygen~time values, or paired rate~oxygen values. See Details.
@@ -187,9 +185,7 @@
 #'   broken-line relationships. R News 8:20–25.
 #'
 #' @examples
-#' # Intensive, and a large dataset, so these may take some time.
-#' \dontrun{
-#'
+#' \donttest{
 #' ## Run on oxygen~time data.frame with default inputs
 #' oxy_crit(squid.rd)
 #'
@@ -211,7 +207,7 @@
 #'
 #' ## Run on already calculated rate~oxygen data
 #' ## (generated using an internal function)
-#' oxy.v.rates <- generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
+#' oxy.v.rates <- respR:::generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
 #' ## Analyse
 #' oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
 #' }

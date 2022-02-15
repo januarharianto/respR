@@ -16,6 +16,9 @@ convert_val(x, from = NULL, to = NULL)
 \code{NULL}: volume \code{"L"}, temperature \code{"C"}, mass \code{"kg"}, area \code{"m2"}, pressure
 \code{"bar"}.}
 }
+\value{
+Output is a numeric vector of converted values.
+}
 \description{
 This is a basic function that converts values of temperature, volume, mass,
 area, and atmospheric pressure to different units. This can be useful in
@@ -67,11 +70,6 @@ squared of area.
 \itemize{
 \item \code{"mm2"}, \code{"cm2"}, \code{"m2"}, \code{"km2"}
 }
-}
-
-\subsection{Output}{
-
-Output is a numeric vector of converted values.
 }
 }
 \examples{

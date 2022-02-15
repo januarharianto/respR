@@ -20,6 +20,9 @@ position from which to start the subsample (applies to \code{n} input only).}
 columns in the data frame, only the first two are plotted. Vectors are
 plotted against a position index.}
 }
+\value{
+Returns a subsampled data frame or vector object depending on input.
+}
 \description{
 A simple function that subsamples a data frame or numeric vector in order to
 "thin" large datasets.
@@ -28,10 +31,6 @@ A simple function that subsamples a data frame or numeric vector in order to
 Two subsampling methods are provided. The \code{n} input selects every n'th
 element or row, or alternatively the \code{length.out} input uniformly subsamples
 the data to the desired length.
-\subsection{Output}{
-
-Returns a subsampled data frame or vector object depending on input.
-}
 }
 \examples{
 # Subsample by every 200th row:

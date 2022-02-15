@@ -13,10 +13,10 @@ kernel_method(dt, width, top_only = FALSE)
 
 \item{top_only}{logical. Should only top ranked result be returned?}
 }
+\value{
+A list object
+}
 \description{
 This is an internal function for \code{auto_rate()}
-}
-\examples{
-NULL
 }
 \keyword{internal}

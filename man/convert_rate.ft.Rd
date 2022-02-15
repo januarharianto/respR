@@ -46,6 +46,11 @@ some oxygen units.}
 \item{P}{numeric. Pressure (bar). Used in conversion of some oxygen units.
 Defaults to a standard value of 1.013253 bar.}
 }
+\value{
+Output is a \code{list} object containing the \verb{$rate.input}, and converted
+rate(s) in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and
+summary elements.
+}
 \description{
 \code{convert_rate.ft} converts a unitless rate derived from \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
 \code{\link[=adjust_rate.ft]{adjust_rate.ft()}} into an absolute rate (i.e. whole specimen or whole
@@ -99,13 +104,6 @@ to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/
 \code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
 \code{\link[=unit_args]{unit_args()}} for details of accepted units and their formatting. See also
 \code{\link[=convert_val]{convert_val()}} for simple conversion between non-oxygen units.
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object containing the \verb{$rate.input}, and converted rate(s)
-in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and summary
-elements.
 }
 
 \subsection{S3 Generic Functions}{

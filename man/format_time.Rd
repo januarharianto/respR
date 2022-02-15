@@ -19,13 +19,22 @@ Details.}
 \item{start}{numeric. At what time (in seconds) should the formatted time
 data start? Default is \code{1}.}
 }
+\value{
+\strong{Output}: If the input is a vector, output is a vector of equal
+length containing the numeric time data. For data frame inputs, an
+identical data frame is returned, with a new column named \code{time_num} added
+as the \strong{final} column.
+}
 \description{
 A function to parse class POSIX.ct or text strings of date-time data to
 numeric time for use in \code{respR} functions.
 }
 \details{
-\code{format_time} uses conversion functionality from the \code{\link{lubridate}}
-package.
+Regardless of input, all data are parsed to numeric time data in seconds
+duration from the first entry starting at 1. If you want the times to start
+at a different time, a \code{start} value can be specified, in which case the
+series starts at that number (in seconds) and all subsequent times are
+shifted forward by the same amount.
 \subsection{Input}{
 
 Input can be a vector, or data frame. If a data frame, the column(s) of the
@@ -36,19 +45,6 @@ If the date-time data is split over several columns (e.g. date in one column,
 time in another), multiple columns can be specified (e.g. \code{time = c(1,2)}).
 In this case, the \code{format} setting should reflect the correct order as
 entered in \code{time}.
-}
-
-\subsection{Output}{
-
-If input is a vector, output is a vector of equal length containing the
-numeric time data. For data frame inputs, an identical data frame is
-returned, with a new column called \code{time_num} added as the \strong{last} column.
-
-Regardless of input, all data are parsed to numeric time data in seconds
-duration from the first entry starting at 1. If you want the times to start
-at a different time, a \code{start} value can be specified, in which case the
-series starts at that number (in seconds) and all subsequent times are
-shifted forward by the same amount.
 }
 
 \subsection{Time only data}{

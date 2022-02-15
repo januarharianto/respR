@@ -110,19 +110,17 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
-#' ## Output
-#'
-#' Output is a `list` object of class `calc_rate.ft` containing input parameters
-#' and data, various summary data, metadata, and the primary output of interest
-#' `$rate`, which can be background adjusted in [`adjust_rate.ft`] or converted
-#' to units in [`convert_rate.ft`]. Note the `$summary` table contains linear
-#' regression coefficients alongside other metadata. These *should not be
-#' confused* with those in other functions such as `calc_rate` where slopes
-#' represent rates and coefficients such as a high r-squared are important.
-#' Here, they represent the stability of the data region, in that the closer the
-#' slope is to zero the less the delta oxygen values, and therefore rates, in
-#' that region vary. These are included to enable possible future functionality
-#' where stable regions may be automatically identified.
+#' @return Output is a `list` object of class `calc_rate.ft` containing input
+#'   parameters and data, various summary data, metadata, and the primary output
+#'   of interest `$rate`, which can be background adjusted in [`adjust_rate.ft`]
+#'   or converted to units in [`convert_rate.ft`]. Note the `$summary` table
+#'   contains linear regression coefficients alongside other metadata. These
+#'   *should not be confused* with those in other functions such as `calc_rate`
+#'   where slopes represent rates and coefficients such as a high r-squared are
+#'   important. Here, they represent the stability of the data region, in that
+#'   the closer the slope is to zero the less the delta oxygen values, and
+#'   therefore rates, in that region vary. These are included to enable possible
+#'   future functionality where stable regions may be automatically identified.
 #'
 #' @param x numeric value or vector of delta oxygen values, a 2-column
 #'   `data.frame` of outflow (col 1) and inflow (col 2) oxygen values, or an

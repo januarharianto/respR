@@ -152,12 +152,6 @@
 #' requirements), except the adjustment is calculated as an exponential
 #' relationship of the form - `lm(log(c(by, by2)) ~ c(time_by, time_by2))`.
 #'
-#' ## Output
-#'
-#' Output is a list object of class `adjust_rate` containing all inputs, input
-#' rates, adjustment values, adjustment method and model (if relevant), and the
-#' primary output of interest `$rate.adjusted`.
-#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `print()`,
@@ -174,7 +168,9 @@
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
 #' separate value by passing `export = TRUE`.
 #'
-#' @md
+#' @return Output is a list object of class `adjust_rate` containing all inputs,
+#'   input rates, adjustment values, adjustment method and model (if relevant),
+#'   and the primary output of interest `$rate.adjusted`.
 #'
 #' @param x numeric. A single numeric value, numeric vector, or object of class
 #'   `calc_rate` or `auto_rate`. This contains the experimental rate value(s) to
@@ -237,7 +233,6 @@
 #'                    method = "paired")
 #' summary(out)
 #'
-#' \dontrun{
 #' # Dynamic linear adjustment
 #' # With a linear relationship between the 'by' and 'by2' rates,
 #' # at the midpoint time value the adjustment to 'x' should be -0.5
@@ -285,7 +280,6 @@
 #'
 #' # Note the adjustment values applied are somewhere between the
 #' # start and end background rate values
-#' }
 
 adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_by = NULL, time_by2 = NULL) {
 

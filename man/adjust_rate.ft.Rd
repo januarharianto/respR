@@ -16,6 +16,19 @@ adjust_rate.ft(x, by)
 adjustment to \code{x}. If the vector or \code{calc_rate.ft} object contains multiple
 rates, they will be averaged to produce a single adjustment value.}
 }
+\value{
+\strong{Output}: If the \code{x} input is a \code{calc_rate.ft} object, the output will be identical
+in structure, but of class \code{adjust_rate.ft} and containing the additional
+elements \verb{$adjustment} and \verb{$rate.adjusted}, with these also added to
+\verb{$summary} metadata.
+
+If \code{x} is a numeric value or vector, the output is a \code{list} object of class
+\code{adjust_rate.ft} containing four elements: a \verb{$summary} table, \verb{$rate},
+\verb{$adjustment}, and \verb{$rate.adjusted}.
+
+For all outputs, the \verb{$rate.adjusted} element will be the one converted
+when the object is passed to \code{convert_rate.ft}.
+}
 \description{
 The \code{adjust_rate.ft} function adjusts an oxygen uptake or production rate
 (for example, as determined in \code{\link[=calc_rate.ft]{calc_rate.ft()}}) for background oxygen use
@@ -61,22 +74,7 @@ rates in \code{by}.
 \strong{Note:} take special care with the \emph{sign} of the rate used for adjustments.
 In \code{respR} oxygen uptake rates are negative, as they represent a negative
 slope of oxygen against time. Background rates will normally also be a
-negative value. See Examples.
-\subsection{Output}{
-
-If the \code{x} input is a \code{calc_rate.ft} object, the output will be identical in
-structure, but of class \code{adjust_rate.ft} and containing the additional
-elements \verb{$adjustment} and \verb{$rate.adjusted}, with these also added to
-\verb{$summary} metadata.
-
-If \code{x} is a numeric value or vector, the output is a \code{list} object of class
-\code{adjust_rate.ft} containing four elements: a \verb{$summary} table, \verb{$rate},
-\verb{$adjustment}, and \verb{$rate.adjusted}.
-
-For all outputs, the \verb{$rate.adjusted} element will be the one converted when
-the object is passed to \code{convert_rate.ft}.
-}
-
+negative value (though not always). See Examples.
 \subsection{S3 Generic Functions}{
 
 Saved output objects can be used in the generic S3 functions \code{print()},

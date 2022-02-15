@@ -19,30 +19,4 @@ a data.frame object of the original data
 \description{
 This is an internal function for \code{auto_rate()}. Used to validate inputs
 }
-\examples{
-# this will pass:
-set.seed(88)
-df <- sim_data(len = 50)$df
-validate_auto_rate(df, by = "row", method = "max")
-
-# this will fail as df is not a data.frame object:
-# set.seed(88)
-# df <- c(1:40)
-# validate_auto_rate(df, by = "row", method = "max")
-
-# this will fail as `by` input isn't recognised:
-# set.seed(88)
-# df <- c(1:40)
-# validate_auto_rate(df, by = "rat", method = "max")
-
-# this will fail as df is not a data.frame object:
-# set.seed(88)
-# df <- c(1:40)
-# validate_auto_rate(df, by = "row", method = "max")
-
-# this will fail as `method` input isn't recognised:
-# set.seed(88)
-# df <- c(1:40)
-# validate_auto_rate(df, by = "row", method = "moo")
-}
 \keyword{internal}

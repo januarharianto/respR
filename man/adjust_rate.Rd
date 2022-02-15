@@ -51,6 +51,11 @@ was calculated. Used only in dynamic adjustments (\code{"linear"} or
 was calculated. Used only in dynamic adjustments (\code{"linear"} or
 \code{"exponential"}). See Details.}
 }
+\value{
+Output is a list object of class \code{adjust_rate} containing all inputs,
+input rates, adjustment values, adjustment method and model (if relevant),
+and the primary output of interest \verb{$rate.adjusted}.
+}
 \description{
 The \code{adjust_rate} function adjusts an oxygen uptake or production rate (for
 example, as determined in \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}}) for background
@@ -204,13 +209,6 @@ the end after it is taken out, and the background rate is found to increase
 exponentially. This is identical to the \code{"linear"} method (see above for
 requirements), except the adjustment is calculated as an exponential
 relationship of the form - \code{lm(log(c(by, by2)) ~ c(time_by, time_by2))}.
-\subsection{Output}{
-
-Output is a list object of class \code{adjust_rate} containing all inputs, input
-rates, adjustment values, adjustment method and model (if relevant), and the
-primary output of interest \verb{$rate.adjusted}.
-}
-
 \subsection{S3 Generic Functions}{
 
 Saved output objects can be used in the generic S3 functions \code{print()},
@@ -256,7 +254,6 @@ out <- adjust_rate(x = c(-7.44, -7.20, -7.67),
                    method = "paired")
 summary(out)
 
-\dontrun{
 # Dynamic linear adjustment
 # With a linear relationship between the 'by' and 'by2' rates,
 # at the midpoint time value the adjustment to 'x' should be -0.5
@@ -304,5 +301,4 @@ adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
 
 # Note the adjustment values applied are somewhere between the
 # start and end background rate values
-}
 }

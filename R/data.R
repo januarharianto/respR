@@ -15,7 +15,6 @@
 #'
 #' - Specimen ash-free dry mass (kg): `0.006955`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 2 columns (time and dissolved
 #'   oxygen) and 4831 rows (approx 80 min of data).
@@ -41,7 +40,6 @@
 #'
 #' - Atm. Pressure (bar): `1.01`
 #'
-#' @md
 #' @author Januar Harianto
 #' @format A data frame object consisting of one column of time, 16 columns of
 #'   urchin oxygen consumption (`a` to `p`) and 2 columns of background oxygen
@@ -75,7 +73,6 @@
 #' Data kindly supplied by Ben Burford, Hopkins Marine Station, Stanford
 #' University.
 #'
-#' @md
 #' @author Ben Burford
 #' @format A data frame object consisting of 2 columns (`$Time` and `$Oxygen`)
 #'   and 34120 rows (approx 9.5h of data).
@@ -108,7 +105,6 @@
 #'
 #' - Atm. Pressure (bar): `1.013253`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 3 columns (time, % air saturation
 #'   and temperature) and 7513 rows (approx 2.1h of data).
@@ -137,7 +133,6 @@
 #'
 #' - Atm. Pressure (bar): `P = 1.013`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 935 rows (approx 16 mins of
 #'   data),and 4 columns: time, oxygen inflow and outflow concentrations, and
@@ -181,7 +176,6 @@
 #'
 #' - Atmospheric pressure (bar): `P = 1.013`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 3740 rows (approx 62 mins of
 #'   data),and 15 columns: time (col 1), oxygen outflow concentrations (cols
@@ -207,7 +201,6 @@
 #'
 #' - Time units: `seconds`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 3740 rows (approx 62 mins of
 #'   data),and 4 columns: time (col 1), specimen oxygen outflow concentrations
@@ -262,7 +255,6 @@
 #' Each replicate comprises a measurement period (12 minutes for replicate 1, 9
 #' minutes for all others) plus 2 minutes flush.
 #'
-#' @md
 #' @author Davide Thambithurai, University of Glasgow
 #' @format A data frame object consisting of 2 columns (time and dissolved
 #'   oxygen) and 79251 rows (approx 22h of data).
@@ -288,7 +280,6 @@
 #'
 #' - Atm. Pressure (bar): `1.013253`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
 #'   2 columns: `$Time` in seconds, `$Oxygen` in % air saturation.
@@ -315,7 +306,6 @@
 #'
 #' - Atm. Pressure (bar): `1.013253`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
 #'   2 columns: `$Time` in seconds, `$Oxygen` in % air saturation.
@@ -343,7 +333,6 @@
 #'
 #' - Atm. Pressure (bar): `1.013253`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 20664 rows (approx 6 h of data),and
 #'   2 columns: `$Time` in seconds, `$Oxygen` in % air saturation.
@@ -365,7 +354,6 @@
 #'
 #' - Salinity: `30`
 #'
-#' @md
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 1200 rows (20 h of data),and
 #'   2 columns: `$Time` in hours, `$Oxygen` in % air saturation.

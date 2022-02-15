@@ -3,8 +3,11 @@
 #' A function to parse class POSIX.ct or text strings of date-time data to
 #' numeric time for use in `respR` functions.
 #'
-#' `format_time` uses conversion functionality from the \code{\link{lubridate}}
-#' package.
+#' Regardless of input, all data are parsed to numeric time data in seconds
+#' duration from the first entry starting at 1. If you want the times to start
+#' at a different time, a `start` value can be specified, in which case the
+#' series starts at that number (in seconds) and all subsequent times are
+#' shifted forward by the same amount.
 #'
 #' ## Input
 #'
@@ -16,18 +19,6 @@
 #' time in another), multiple columns can be specified (e.g. `time = c(1,2)`).
 #' In this case, the `format` setting should reflect the correct order as
 #' entered in `time`.
-#'
-#' ## Output
-#'
-#' If input is a vector, output is a vector of equal length containing the
-#' numeric time data. For data frame inputs, an identical data frame is
-#' returned, with a new column called `time_num` added as the **last** column.
-#'
-#' Regardless of input, all data are parsed to numeric time data in seconds
-#' duration from the first entry starting at 1. If you want the times to start
-#' at a different time, a `start` value can be specified, in which case the
-#' series starts at that number (in seconds) and all subsequent times are
-#' shifted forward by the same amount.
 #'
 #' ## Time only data
 #'
@@ -84,6 +75,11 @@
 #' Single experimental datasets should never span different time zones, so if a
 #' time zone is present it is ignored for the purposes of calculating numeric
 #' times.
+#'
+#' @return **Output**: If the input is a vector, output is a vector of equal
+#'   length containing the numeric time data. For data frame inputs, an
+#'   identical data frame is returned, with a new column named `time_num` added
+#'   as the **final** column.
 #'
 #' @param x vector or data frame containing strings or class POSIX.ct date-time
 #'   data to be converted to numeric.

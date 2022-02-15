@@ -69,7 +69,7 @@ plot.temp <- function(x, y, width = NULL, pos = NULL, message = TRUE,
         cex.main = 1,
         mgp = c(0, 0.5, 0))
     
-    ylim <- range(nainf.omit(dt[[2]]), nainf.omit(dty[[2]]))
+    ylim <- range(respR:::nainf.omit(dt[[2]]), respR:::nainf.omit(dty[[2]]))
     buffer <- diff(ylim)*0.05
     ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
     

@@ -4,7 +4,17 @@
 \alias{kde_fit}
 \title{Kernel density estimation and fitting}
 \usage{
-kde_fit(dt, width, by, method, use = "all")
+kde_fit(dt, width, by, use = "all")
+}
+\arguments{
+\item{dt}{data.frame object.}
+
+\item{width}{numeric.}
+
+\item{by}{string. time or row}
+}
+\value{
+A list object
 }
 \description{
 Kernel density estimation and fitting

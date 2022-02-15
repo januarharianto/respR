@@ -17,3 +17,5 @@ pkgdown::build_home(preview = TRUE)
 
 pkgdown::build_article("closed")
 pkgdown::build_article("subset_rate")
+
+usethis::use_vignette("subsample", "subsample: Thin larger datasets")

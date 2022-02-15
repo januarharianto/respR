@@ -48,6 +48,13 @@ the full oxygen timeseries.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}.}
 }
+\value{
+Output is a \code{list} object of class \code{inspect.ft} containing input
+parameters and data, data check summaries, and metadata, which can be
+passed to \code{\link[=calc_rate.ft]{calc_rate.ft()}} to determine rates. If there are failed checks
+or warnings, the row locations of the potentially problematic data can be
+found in \verb{$locs}.
+}
 \description{
 \code{inspect.ft} is a data exploration and preparation function that visualises
 flowthrough respirometry data, checks it for common issues, and prepares it
@@ -271,15 +278,6 @@ specimen rates.
 
 \strong{Note}: All background calculations should be from experiments done at the
 \emph{same flow rate} as the specimen experiments to be corrected.
-}
-
-\subsection{Output}{
-
-Output is a \code{list} object of class \code{inspect.ft} containing input parameters
-and data, data check summaries, and metadata, which can be passed to
-\code{\link[=calc_rate.ft]{calc_rate.ft()}} to determine rates. If there are failed checks or
-warnings, the row locations of the potentially problematic data can be found
-in \verb{$locs}.
 }
 
 \subsection{S3 Generic Functions}{

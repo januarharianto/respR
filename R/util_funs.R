@@ -280,12 +280,10 @@ truncate_data <- function(x, from, to, by) {
 
 # FUNCTIONS for P_crit----------------------------
 
-
 #' Perform broken-stick regressions
-#'
+#' @return a data.table object
 #' @keywords internal
-#'
-#' @export
+
 broken_stick <- function(dt, n) {
   # Cut data into 2
   dta <- dt[1:n]
@@ -330,13 +328,9 @@ broken_stick <- function(dt, n) {
 }
 
 
-
-
 #' Generate a DO ~ PO2 data table from a DO timeseries
-#'
+#' @return a data.table object
 #' @keywords internal
-#'
-#' @export
 generate_mrdf <- function(dt, width) {
   # Ensure that dt is a data.table
   dt <- data.table::data.table(dt)
@@ -366,9 +360,8 @@ generate_mrdf <- function(dt, width) {
 #' If x is dataframe, it returns a vector of all columns appended together.
 #' Only useful for getting range in this case, don't use for anything else.
 #'
+#' @return original vector without NA or Inf values or df all cols appended without these
 #' @keywords internal
-#'
-#' @export
 nainf.omit <- function(x) {
   if (is.vector(x)) z <- na.omit(x[is.finite(x)])
 
@@ -378,7 +371,6 @@ nainf.omit <- function(x) {
   }
   return(z)
 }
-
 
 # Deal with pesky "no visible binding for global variable.." checks
 x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL

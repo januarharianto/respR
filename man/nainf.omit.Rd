@@ -6,6 +6,9 @@
 \usage{
 nainf.omit(x)
 }
+\value{
+original vector without NA or Inf values or df all cols appended without these
+}
 \description{
 For using with, for example, range to get axis range values in 'inspect'.
 Previously, na.omit was used, then discovered data files with Inf values.

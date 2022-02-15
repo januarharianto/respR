@@ -17,7 +17,4 @@ a data.table object
 \description{
 Perform rolling regression based on time units.
 }
-\examples{
-NULL
-}
 \keyword{internal}

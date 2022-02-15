@@ -20,6 +20,9 @@ Defaults to all.}
 
 \item{...}{Allows additional plotting controls to be passed.}
 }
+\value{
+A plot of the auto_rate object results
+}
 \description{
 Plots \code{auto_rate} summary table regressions in a way that visualises how they
 are positioned within the data timeseries. If it is an \code{auto_rate_subset}
