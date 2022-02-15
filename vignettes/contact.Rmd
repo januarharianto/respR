@@ -34,11 +34,18 @@ If you have any feedback about using `respR` feel free to get in touch:
 `respR` has a [Twitter account](https://twitter.com/respR_pkg). Follow for the latest news and updates. 
 
 
-## Slack
+## Slack and Discord
 
-Set up an open Slack?
+We have set up a Discord channel to discuss respR. Go [here](https://discord.gg/JKkarCTW4N) to request an invite. 
 
+Alternatively... Set up an open Slack?
+
+We are at present just trying these out. Which of them we will use going forward will depend on how many people use them. It is likely that we may abandon one or both if there isn't much interest or utility! 
 
 ## Support
+
+`respR` is free to use and always will be. We have spent literally hundreds of hours developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available, you just need to [**ask**](mailto:nicholascarey@gmail.com). 
+
+If 
 
 Github sponsor?

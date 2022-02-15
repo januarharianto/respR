@@ -185,6 +185,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Most linear section of an entire dataset
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
 #'  auto_rate()
@@ -205,6 +206,7 @@
 #' # the HIGHEST uptake rate.
 #' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") %>%
 #'  summary()
+#'  }
 
 auto_rate <- function(x, method = "linear", width = NULL,
                       by = "row", plot = TRUE, ...) {

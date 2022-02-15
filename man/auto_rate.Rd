@@ -194,6 +194,7 @@ by passing \code{export = TRUE}.
 }
 }
 \examples{
+\donttest{
 # Most linear section of an entire dataset
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
  auto_rate()
@@ -214,4 +215,5 @@ inspect(sardine.rd, time = 1, oxygen =2) \%>\%
 # the HIGHEST uptake rate.
 auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") \%>\%
  summary()
+ }
 }
