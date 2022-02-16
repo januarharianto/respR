@@ -339,6 +339,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   }
 }
 
+#' @return Print to console. No returned value.
 #' @export
 print.inspect <- function(x, ...) {
   cat("\n# print.inspect # -----------------------\n")
@@ -435,17 +436,20 @@ print.inspect <- function(x, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.inspect <- function(object, ...) {
   print(object)
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.inspect <- function(x, ...){
   message("inspect: mean() is not available for 'inspect' objects.")
   return(invisible(x))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                          legend = TRUE, rate.rev = TRUE, ...) {

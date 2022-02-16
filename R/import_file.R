@@ -711,7 +711,6 @@ parse_oxyview_txt <- function(path, dec = dec) {
 #' For European formatted files with commas as decimal separator
 #'
 #' @keywords internal
-#' @export
 get_dec <- function(path){
 
   ## approx nrows of file, then read in at bottom

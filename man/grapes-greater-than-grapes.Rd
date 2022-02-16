@@ -3,6 +3,9 @@
 \name{\%>\%}
 \alias{\%>\%}
 \title{Pipe graphics direct from tidyverse-related package}
+\value{
+No value returned
+}
 \description{
 Pipe graphics direct from tidyverse-related package
 }

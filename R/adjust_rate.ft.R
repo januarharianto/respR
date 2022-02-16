@@ -220,6 +220,7 @@ adjust_rate.ft <- function(x, by) {
 
 # S3 Generics -------------------------------------------------------------
 
+#' @return Print to console. No returned value.
 #' @export
 print.adjust_rate.ft <- function(x, pos = 1, ...) {
   if(length(pos) > 1)
@@ -239,7 +240,7 @@ print.adjust_rate.ft <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
-
+#' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
 summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
@@ -268,7 +269,7 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
-
+#' @return Print to console. No returned value.
 #' @export
 mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
@@ -299,7 +300,7 @@ mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
-
+#' @return A plot. No returned value.
 #' @export
 plot.adjust_rate.ft <- function(x, ...){
   message("adjust_rate.ft: plot() is not available for 'adjust_rate.ft' objects.")

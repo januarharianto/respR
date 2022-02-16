@@ -183,6 +183,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
     return(out)
 }
 
+#' @return Print to console. No returned value.
 #' @export
 print.convert_DO <- function(x, ...) {
 
@@ -204,17 +205,20 @@ print.convert_DO <- function(x, ...) {
   cat("-----------------------------------------\n")
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.convert_DO <- function(object, ...) {
   print(object)
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.convert_DO <- function(x, ...) {
   message("convert_DO: plot() is not available for 'convert_DO' objects.")
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){
 
@@ -250,7 +254,6 @@ mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){
 #' Check unit string against a known database
 #'
 #' @keywords internal
-#' @export
 verify_units <- function(unit, is) {
   # Not sure if worth ID'ing some of these using regex (too many variations)
   # EDIT: ok it's worth it, but I've come too far.... will fix in future version

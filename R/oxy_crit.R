@@ -206,10 +206,19 @@
 #' oxy_crit(insp)
 #'
 #' ## Run on already calculated rate~oxygen data
-#' ## (generated using an internal function)
-#' oxy.v.rates <- respR:::generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
-#' ## Analyse
-#' oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
+#' # Calculate a rolling rate
+#' rate <- auto_rate(squid.rd,
+#'                   method = "rolling",
+#'                   width = 0.1,
+#'                   plot = FALSE)$rate
+#'
+#' ## Calculate a rolling mean oxygen
+#' oxy <- na.omit(roll::roll_mean(squid.rd[[2]],
+#'                                width = 0.1 * nrow(squid.rd)))
+#' ## Combine to data.frame
+#' squid_rate_oxy <- data.frame(oxy, rate)
+#' ## Perform COV analysis
+#' oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
 #' }
 
 oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
@@ -387,6 +396,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
   return(out)
 }
 
+#' @return Print to console. No returned value.
 #' @export
 print.oxy_crit <- function(x, ...) {
 
@@ -411,6 +421,7 @@ print.oxy_crit <- function(x, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.oxy_crit <- function(object, export = FALSE, ...) {
   cat("\n# summary.oxy_crit # --------------------\n\n")
@@ -436,6 +447,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
   return(invisible(object))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
                           rate.rev = TRUE, ...) {
@@ -615,6 +627,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.oxy_crit <- function(x, ...){
   message("oxy_crit: mean() is not available for 'oxy_crit' objects.")

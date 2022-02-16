@@ -1,6 +1,7 @@
 #' Pipe graphics direct from tidyverse-related package
 #' @importFrom magrittr %>%
 #' @name %>%
+#' @return No value returned
 #' @keywords internal
 #' @export
 NULL
@@ -8,6 +9,7 @@ NULL
 #' Select columns
 #' @importFrom dplyr select
 #' @name select
+#' @return No value returned
 #' @keywords internal
 #' @export
 NULL

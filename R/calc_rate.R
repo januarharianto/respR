@@ -290,7 +290,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   return(out)
 }
 
-
+#' @return Print to console. No returned value.
 #' @export
 print.calc_rate <- function(x, pos = 1, ...) {
   cat("\n# print.calc_rate # ---------------------")
@@ -308,6 +308,7 @@ print.calc_rate <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
 summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -336,6 +337,7 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
                            legend = TRUE, ...) {
@@ -406,6 +408,7 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){
 

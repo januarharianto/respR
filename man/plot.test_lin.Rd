@@ -6,6 +6,9 @@
 \usage{
 \method{plot}{test_lin}(x, show = c("all", "a", "b", "c", "d"), ...)
 }
+\value{
+A plot. No returned value.
+}
 \description{
 This is an internal generic. Produces 4 plots.
 }

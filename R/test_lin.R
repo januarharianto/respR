@@ -109,6 +109,7 @@ test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
 #'
 #' This is an internal generic. Produces 4 plots.
 #'
+#' @return A plot. No returned value.
 #' @export
 #' @keywords internal
 plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {

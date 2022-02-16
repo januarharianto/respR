@@ -457,7 +457,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
   return(out)
 }
 
-
+#' @return Print to console. No returned value.
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
 
@@ -493,6 +493,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
   return(invisible(x)) # this lets us continue with dplyr pipes
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
                            legend = TRUE, rate.rev = TRUE, ...) {
@@ -629,6 +630,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
@@ -682,6 +684,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){
 

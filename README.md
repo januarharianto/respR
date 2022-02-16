@@ -21,7 +21,7 @@ Use `respR` to:
 - Automatically **import** raw data from various oxygen probe equipment
 - Rapidly **inspect** data for common issues before analysis
 - **Explore** and **visualise** timeseries 
-- Perform **multiple regression analysis** on data to manually or automatically calculate rates
+- Perform **multiple regression analysis** on data to manually or automatically to calculate rates
 - **Adjust** rates for background oxygen consumption or production
 - **Convert** rates to any common unit of oxygen consumption or production
 - **Export** results quickly for reporting
@@ -32,11 +32,13 @@ A highlight of the package is the `auto_rate()` function. This uses machine lear
 
 <a href='https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' align="right" width="22%" hspace = "20" /></a>
 
-`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR in use**](https://github.com/januarharianto/respR) page to see a list of published studies which have used the package to analyse their data.
-
 The package has also been [**peer reviewed and published**](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. 
 
-We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry!
+`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR in use**](https://github.com/januarharianto/respR) page to see a list of published studies which have used the package to analyse their data.
+
+We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry! 
+
+See [here](https://github.com/januarharianto/respR) for even more ways of getting in touch. 
 
  \
  \
@@ -44,16 +46,15 @@ We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please foll
  
 
 ## Installation
-Submission of `respR` to CRAN is planned. For now, use the `devtools` package to install the latest stable version:
+`respR` is now available on [CRAN](https://cran.r-project.org), and can be installed via the 'Packages' tab in RStudio or by running this command:
 
 ```r
-install.packages("devtools") # Only need to do this once, and if it's not already installed!
-devtools::install_github("januarharianto/respR")
+install.packages("respR")
 ```
 
 ## Getting started
 
-See [**here**](https://github.com/januarharianto/respR) to get started. This site has a range of vignettes detailing the functionality and example workflows. 
+Visit the `respR` [**website**](https://github.com/januarharianto/respR) to get started. The site has a range of vignettes detailing the functionality and example workflows, documentation, and more. 
 
 We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will help get you started. 
 

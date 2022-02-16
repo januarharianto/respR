@@ -712,6 +712,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 
 # S3 Generic functions ----------------------------------------------------
 
+#' @return Print to console. No returned value.
 #' @export
 print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\n# print.adjust_rate # -------------------\n")
@@ -733,6 +734,7 @@ print.adjust_rate <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
 summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -762,6 +764,7 @@ summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
 
@@ -791,6 +794,7 @@ mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.adjust_rate <- function(x, ...){
   message("adjust_rate: plot() is not available for 'adjust_rate' objects.")

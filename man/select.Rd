@@ -3,6 +3,9 @@
 \name{select}
 \alias{select}
 \title{Select columns}
+\value{
+No value returned
+}
 \description{
 Select columns
 }

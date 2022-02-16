@@ -226,10 +226,19 @@ insp <- inspect(squid.rd, time = 1, oxygen = 2)
 oxy_crit(insp)
 
 ## Run on already calculated rate~oxygen data
-## (generated using an internal function)
-oxy.v.rates <- respR:::generate_mrdf(squid.rd, 0.1*nrow(squid.rd))
-## Analyse
-oxy_crit(oxy.v.rates, oxygen = 1, rate = 2)
+# Calculate a rolling rate
+rate <- auto_rate(squid.rd,
+                  method = "rolling",
+                  width = 0.1,
+                  plot = FALSE)$rate
+
+## Calculate a rolling mean oxygen
+oxy <- na.omit(roll::roll_mean(squid.rd[[2]],
+                               width = 0.1 * nrow(squid.rd)))
+## Combine to data.frame
+squid_rate_oxy <- data.frame(oxy, rate)
+## Perform COV analysis
+oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
 }
 }
 \references{

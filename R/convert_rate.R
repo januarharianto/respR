@@ -338,6 +338,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   return(out)
 }
 
+#' @return Print to console. No returned value.
 #' @export
 print.convert_rate <- function(x, pos = 1, ...) {
   cat("\n# print.convert_rate # ------------------\n")
@@ -362,6 +363,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
@@ -390,6 +392,7 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 
@@ -420,6 +423,7 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.convert_rate <- function(x, ...) {
   message("convert_rate: plot() is not available for 'convert_rate' objects.")

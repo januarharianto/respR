@@ -549,6 +549,7 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
   }
 }
 
+#' @return Print to console. No returned value.
 #' @export
 print.inspect.ft <- function(x, ...) {
   cat("\n# print.inspect.ft # --------------------\n")
@@ -627,17 +628,20 @@ print.inspect.ft <- function(x, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.inspect.ft <- function(object, ...) {
   print(object)
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.inspect.ft <- function(x, ...){
   message("inspect.ft: mean() is not available for 'inspect.ft' objects.")
   return(invisible(x))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
                             legend = TRUE, rate.rev = TRUE, ...) {

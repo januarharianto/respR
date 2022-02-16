@@ -321,6 +321,7 @@ convert_rate.ft <- function(x,
 
 # S3 Generics -------------------------------------------------------------
 
+#' @return Print to console. No returned value.
 #' @export
 print.convert_rate.ft <- function(x, pos = NULL, ...) {
   cat("\n# print.convert_rate.ft # ---------------\n")
@@ -343,6 +344,7 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
   return(invisible(x))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
@@ -368,6 +370,7 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' @return Print to console. No returned value.
 #' @export
 mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
@@ -398,6 +401,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' @return A plot. No returned value.
 #' @export
 plot.convert_rate.ft <- function(x, ...) {
   message("convert_rate.ft: plot() is not available for 'convert_rate.ft' objects.")
@@ -409,7 +413,6 @@ plot.convert_rate.ft <- function(x, ...) {
 #' @param unit flowrate unit input to be parsed
 #' @param which parse which component of unit? "time" or "vol"
 #' @keywords internal
-#' @export
 flow_unit_parse <- function(unit, which){
 
   if(which == "vol"){
