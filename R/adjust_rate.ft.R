@@ -220,6 +220,7 @@ adjust_rate.ft <- function(x, by) {
 
 # S3 Generics -------------------------------------------------------------
 
+#' Print adjust_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 print.adjust_rate.ft <- function(x, pos = 1, ...) {
@@ -240,6 +241,7 @@ print.adjust_rate.ft <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' Summarise adjust_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -269,6 +271,7 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' Average adjust_rate.ft rates
 #' @return Print to console. No returned value.
 #' @export
 mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -300,6 +303,7 @@ mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' Plot adjust_rate.ft objects
 #' @return A plot. No returned value.
 #' @export
 plot.adjust_rate.ft <- function(x, ...){

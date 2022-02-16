@@ -321,6 +321,7 @@ convert_rate.ft <- function(x,
 
 # S3 Generics -------------------------------------------------------------
 
+#' Print convert_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate.ft <- function(x, pos = NULL, ...) {
@@ -344,6 +345,7 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
   return(invisible(x))
 }
 
+#' Summarise convert_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
@@ -370,6 +372,7 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' Average convert_rate.ft object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -401,6 +404,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' Plot convert_rate.ft objects
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate.ft <- function(x, ...) {

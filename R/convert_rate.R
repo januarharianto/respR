@@ -338,6 +338,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   return(out)
 }
 
+#' Print convert_rate objects
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate <- function(x, pos = 1, ...) {
@@ -363,6 +364,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' Summarise convert_rate objects
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -392,6 +394,7 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' Average convert_rate object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
@@ -423,6 +426,7 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' Plot convert_rate objects
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate <- function(x, ...) {

@@ -396,6 +396,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
   return(out)
 }
 
+#' Print oxy_crit objects
 #' @return Print to console. No returned value.
 #' @export
 print.oxy_crit <- function(x, ...) {
@@ -421,6 +422,7 @@ print.oxy_crit <- function(x, ...) {
   return(invisible(x))
 }
 
+#' Summarise oxy_crit objects
 #' @return Print to console. No returned value.
 #' @export
 summary.oxy_crit <- function(object, export = FALSE, ...) {
@@ -447,6 +449,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
   return(invisible(object))
 }
 
+#' Plot oxy_crit objects
 #' @return A plot. No returned value.
 #' @export
 plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
@@ -627,6 +630,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
   return(invisible(x))
 }
 
+#' Average oxy_crit object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.oxy_crit <- function(x, ...){

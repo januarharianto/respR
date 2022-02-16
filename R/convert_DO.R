@@ -183,6 +183,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
     return(out)
 }
 
+#' Print convert_DO objects
 #' @return Print to console. No returned value.
 #' @export
 print.convert_DO <- function(x, ...) {
@@ -205,12 +206,14 @@ print.convert_DO <- function(x, ...) {
   cat("-----------------------------------------\n")
 }
 
+#' Summarise convert_DO objects
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_DO <- function(object, ...) {
   print(object)
 }
 
+#' Plot convert_DO objects
 #' @return A plot. No returned value.
 #' @export
 plot.convert_DO <- function(x, ...) {
@@ -218,6 +221,7 @@ plot.convert_DO <- function(x, ...) {
   return(invisible(x))
 }
 
+#' Average convert_DO object values
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){

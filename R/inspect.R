@@ -339,6 +339,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   }
 }
 
+#' Print inspect objects
 #' @return Print to console. No returned value.
 #' @export
 print.inspect <- function(x, ...) {
@@ -436,12 +437,14 @@ print.inspect <- function(x, ...) {
   return(invisible(x))
 }
 
+#' Summarise inspect objects
 #' @return Print to console. No returned value.
 #' @export
 summary.inspect <- function(object, ...) {
   print(object)
 }
 
+#' Average inspect object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.inspect <- function(x, ...){
@@ -449,6 +452,7 @@ mean.inspect <- function(x, ...){
   return(invisible(x))
 }
 
+#' Plot inspect objects
 #' @return A plot. No returned value.
 #' @export
 plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
