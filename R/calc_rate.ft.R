@@ -491,6 +491,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
 # S3 Generics -------------------------------------------------------------
 
+#' Print calc_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate.ft <- function(x, pos = 1, ...) {
@@ -509,6 +510,7 @@ print.calc_rate.ft <- function(x, pos = 1, ...) {
   return(invisible(x))
 }
 
+#' Summarise calc_rate.ft objects
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -538,6 +540,7 @@ summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
       return(invisible(object))
 }
 
+#' Average calc_rate.ft object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -568,6 +571,7 @@ mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+#' Plot calc_rate.ft objects
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,

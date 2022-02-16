@@ -549,6 +549,7 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
   }
 }
 
+#' Print inspect.ft objects
 #' @return Print to console. No returned value.
 #' @export
 print.inspect.ft <- function(x, ...) {
@@ -628,12 +629,14 @@ print.inspect.ft <- function(x, ...) {
   return(invisible(x))
 }
 
+#' Summarise inspect.ft objects
 #' @return Print to console. No returned value.
 #' @export
 summary.inspect.ft <- function(object, ...) {
   print(object)
 }
 
+#' Average inspect.ft object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.inspect.ft <- function(x, ...){
@@ -641,6 +644,7 @@ mean.inspect.ft <- function(x, ...){
   return(invisible(x))
 }
 
+#' Plot inspect.ft objects
 #' @return A plot. No returned value.
 #' @export
 plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,

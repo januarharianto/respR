@@ -304,8 +304,6 @@ plot_multi_ar <- function(x, n = 9, ...){
 #' @return A plot of the auto_rate object results
 #'
 #' @export
-#' @keywords internal
-
 plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings

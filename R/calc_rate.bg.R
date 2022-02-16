@@ -186,6 +186,7 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
   return(out)
 }
 
+#' Print calc_rate.bg objects
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate.bg <- function(x, ...) {
@@ -200,6 +201,7 @@ print.calc_rate.bg <- function(x, ...) {
 
 }
 
+#' Summarise calc_rate.bg objects
 #' @return Print to console. No returned value.
 #' @export
 summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
@@ -229,6 +231,7 @@ summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
 
 }
 
+#' Plot calc_rate.bg objects
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) {
@@ -297,6 +300,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
   return(invisible(x))
 }
 
+#' Average calc_rate.bg object rates
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate.bg <- function(x, pos = NULL, export = FALSE, ...){
