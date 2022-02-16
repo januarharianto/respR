@@ -121,7 +121,7 @@ plot(insp1, width = 0.05, quiet = TRUE)
 This is a visual aid and only affects plotted values. It does not alter the delta oxygen values in the output. 
 
 ### Calculate rate {#case1plot}
-Calculating a rate requires the `flowrate` of water through the respirometer, in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the units will be entered in a later conversion function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`.
+Calculating a rate requires the `flowrate` of water through the respirometer in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the actual units will be entered in a later conversion function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`.
 ```{r eval = F}
 # calculate rate
 rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
@@ -288,7 +288,7 @@ plot(rate3, quiet = TRUE)
 
 ### Calculate background rate {#case3bg}
 
-The fourth column pair contains outflow and inflow oxygen from a blank control chamber that we will use to determine the contribution of microbial respiration to the oxygen used, with the assumption that this is the same in the specimen chambers. Note, it is important that background experiments are conducted with the same equipment, under the same conditions, and using the *same flowrate* as specimen experiments, and data are in the same units. They do not necessarily have to be run concurrently; `respR` allows you to save a background rate to adjust multiple different experiments. 
+The fourth column pair contains outflow and inflow oxygen from a blank control chamber that we will use to determine the contribution of microbial respiration to the oxygen used, with the assumption that this is the same in the specimen chambers. Note, it is important that background experiments are conducted with the same equipment, under the same conditions, and using the same flowrate as specimen experiments, and data are in the same units. They do not necessarily have to be run concurrently; `respR` allows you to save a background rate to adjust multiple different experiments. 
 
 ```{r eval = F}
 # inspect
@@ -915,14 +915,15 @@ The results can be adjusted and converted as in the above examples. Both `adjust
 
 ## Case 10: Concise, reportable analysis using piping
 
-*"We want to report our analyses in a reproducible way using as little space as possible."*
+*"We want to report our analyses in a reproducible way as concisely as possible."*
 
-The overall aim of `respR` is to enable easy reporting of reproducible data analyses. This example is simply to show how a complete analysis of a flowthrough respirometry experiment can be reported concisely. 
+The overall aim of `respR` is to facilitate reporting of reproducible data analyses. This example is simply to show how a complete analysis of a flowthrough respirometry experiment can be reported concisely. 
 
 We will repeat the analysis from [Case 3](#case3), but use piping to feed the results of one function into the next. We will use `%>%` or `dplyr` pipes here, but the new native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) work just as well. 
 
 ```{r eval = FALSE, tidy = FALSE}
-## calc background rate (might only need to be done once)
+## calc background rate 
+## (might only need to be done once and used for multiple experiments)
 bgrate <- 
   inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9) %>%
   calc_rate.ft(flowrate = 0.1)
@@ -951,7 +952,7 @@ print(rate3_abs)
 
 - To repeat an important point, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
 
-- As with `inspect()`, by using the `add.data` input an additional data source can be plotted in `inspect.ft` alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This is a visual aid only to help with selection of regions from which to extract rates. 
+- As with `inspect()`, by using the `add.data` input an additional data source (for example temperature) can be plotted in `inspect.ft` alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This input indicates a column number in the same input data frame sharing the same time data. This is a visual aid only to help with selection of regions from which to extract rates. 
 
 ```{r , results = "hide", message=FALSE, warning=FALSE}
 ## Plot column 15 (temperature) alongside oxygen timeseries
@@ -959,4 +960,4 @@ inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5,
            add.data = 15)
 ```
 
-- The functions in the flowthrough workflow, where appropriate, support the generic S3 functions `plot`, `print`, `summary`, and `mean`. These have various additional inputs such as `pos`, `quiet`, and `export`. See help files for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output (`rate`, `rate.adjusted`, or `rate.output`). This can be output as a value by passing `export = TRUE`. 
+- The functions in the flowthrough workflow, where appropriate, support the generic S3 functions `plot`, `print`, `summary`, and `mean`. These have various additional inputs such as `pos`, `quiet`, and `export`. See relevant function help file for additional information. In the case of `mean`, if there are multiple rates they return the mean value of the primary output (`rate`, `rate.adjusted`, or `rate.output`). This can be output as a value by passing `export = TRUE`. 

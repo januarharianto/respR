@@ -27,6 +27,21 @@ opts_chunk$set(collapse = TRUE,
                                 digits = 3))
 ```
 
-## Introduction {#adjintro}
+## Introduction {#intro}
 
-Installing and running v1.1 code
+While the great majority of respirometry studies are concerned with oxygen uptake by various organisms, there are mnay studies of plants, algae and organisms such as corals where oxygen production rates are of primary interest. We have designed `respR` to be able to process and calculate rates from oxygen production data in exactly the same way as for consumption data. In fact, the package has already [been used]() by several studies to determine the production rates of diatoms, algae, and corals. 
+
+Here we will use the included `algae.rd` dataset to briefly show how production data may be processed an d used to extract production rates. 
+
+
+Additional plotting options
+Additional plotting controls can be passed in either the main inspect call or when using plot() on the output object.
+
+Most notable is rate.rev = FALSE. This means rates in the rolling rate plot will be plotted on a normal y-axis, that is not reversed. This allows oxygen production rates to be plotted correctly, with higher rates appearing higher on the plot.
+
+If axis labels obscure parts of the plot they can be suppressed using legend = FALSE. Console output messages can be suppressed with quiet = TRUE (in plot() only). Lastly, a different width value can be passed to see how it affects the rolling rate plot.
+
+This example examining oxygen production in algae uses some of these options.
+
+inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
+         legend = FALSE, rate.rev = FALSE)

@@ -38,7 +38,7 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 We have set up a Discord channel to discuss respR. Go [here](https://discord.gg/JKkarCTW4N) to request an invite. 
 
-Alternatively... Set up an open Slack?
+Alternatively, join our open Slack workspace [here](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ). 
 
 We are at present just trying these out. Which of them we will use going forward will depend on how many people use them. It is likely that we may abandon one or both if there isn't much interest or utility! 
 
