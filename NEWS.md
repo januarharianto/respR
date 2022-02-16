@@ -1,3 +1,5 @@
+# respR 1.1.1
+
 # Version 1.1.0
 
 Lots of updates! First, we have a new function, `calc_pcrit()`, which we will use to include new methods in the future. We've also made some improvements to `import_file()` with increased support to more files from Vernier, PRESENS and Loligo systems.
