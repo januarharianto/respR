@@ -18,8 +18,8 @@ with and confirmed to work with v1.1.1, and suggestions about how to install
 them. More recent versions will likely work with v1.1.1, but in case they
 don't the earlier versions can be installed.
 
-If you need to run respR v1.1.1 code, it is probably best to do all of this
-on a base installation of R.
+If you need to run respR v1.1.1 code, it is probably easiest to install
+v1.1.1 and the following dependencies on a base installation of R.
 
 If you have trouble installing respR v1.1.1 (which if you are reading this is
 unlikely) you can install it using the following code.
@@ -32,7 +32,7 @@ https://github.com/januarharianto/respR/releases/tag/v1.1.1
 
 or from Zenodo:
 
-https://zenodo.org/record/3291840
+https://zenodo.org/record/6112437
 
 These zip archives, once unzipped, can be set up as an RStudio project and
 compiled locally as an R Package.
@@ -46,16 +46,21 @@ to work correctly without them. Later versions may (and probably will for
 many years) work fine, but these are the last versions tested and known to
 work with respR v.1.1.1.
 
-The most recent versions can be installed through the usual methods, or you
-can install a specific version by adapting the following code:
+The most recent versions can be installed through the usual methods, and will
+be installed automatically by installing respR. If they however cause issues,
+or you want to ensure the code is being run as it was intended in v1.1.1,
+uninstall them and install the older version.
+
+You can install a specific version of a package by adapting the following
+code:
 
 \code{devtools::install_version("lubridate", version = "1.8.0", repos = "http://cran.us.r-project.org")}
 
-You can also install these from downloaded package zip archives. Visit
-https://cran.r-project.org/src/contrib/Archive/ to view or download the
-archived versions of CRAN hosted packages.
+You can also install older versions from downloaded package zip archives.
+Visit https://cran.r-project.org/src/contrib/Archive/ to view and download
+the archived versions of CRAN hosted packages.
 
-Dependencies:
+Dependencies in v1.1.1 (most recent version tested and confirmed to work):
 
 broom 0.7.12, data.table 1.14.2, dplyr 1.0.8, ggplot2 3.3.5, graphics 4.1.2,
 grDevices 4.1.2, gridExtra 2.3, lubridate 1.8.0, magrittr 2.0.2, marelac

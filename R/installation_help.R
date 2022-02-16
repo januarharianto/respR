@@ -24,7 +24,7 @@
 #'
 #' or from Zenodo:
 #'
-#' https://zenodo.org/record/3291840
+#' https://zenodo.org/record/6112437
 #'
 #' These zip archives, once unzipped, can be set up as an RStudio project and
 #' compiled locally as an R Package.
