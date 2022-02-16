@@ -339,6 +339,9 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 }
 
 #' Print convert_rate objects
+#' @param x convert_rate object
+#' @param pos integer. Which result to print.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate <- function(x, pos = 1, ...) {
@@ -365,6 +368,10 @@ print.convert_rate <- function(x, pos = 1, ...) {
 }
 
 #' Summarise convert_rate objects
+#' @param object convert_rate object
+#' @param pos integer(s). Which summary row(s) to print.
+#' @param export logical. Export summary table as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -395,6 +402,10 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Average convert_rate object rates
+#' @param x convert_rate object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
@@ -427,6 +438,8 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 }
 
 #' Plot convert_rate objects
+#' @param x convert_rate object
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate <- function(x, ...) {

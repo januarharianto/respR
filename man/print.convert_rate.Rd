@@ -6,6 +6,13 @@
 \usage{
 \method{print}{convert_rate}(x, pos = 1, ...)
 }
+\arguments{
+\item{x}{convert_rate object}
+
+\item{pos}{integer. Which result to print.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

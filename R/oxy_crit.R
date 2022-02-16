@@ -397,6 +397,8 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
 }
 
 #' Print oxy_crit objects
+#' @param x oxy_crit object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.oxy_crit <- function(x, ...) {
@@ -423,6 +425,9 @@ print.oxy_crit <- function(x, ...) {
 }
 
 #' Summarise oxy_crit objects
+#' @param object oxy_crit object
+#' @param export logical. Export result as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.oxy_crit <- function(object, export = FALSE, ...) {
@@ -450,6 +455,12 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
 }
 
 #' Plot oxy_crit objects
+#' @param x oxy_crit object
+#' @param panel integer. Which panel to plot individually.
+#' @param quiet logical. Suppress console output.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
@@ -631,6 +642,8 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
 }
 
 #' Average oxy_crit object rates
+#' @param x oxy_crit object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.oxy_crit <- function(x, ...){

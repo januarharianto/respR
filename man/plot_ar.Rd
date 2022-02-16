@@ -29,4 +29,3 @@ are positioned within the data timeseries. If it is an \code{auto_rate_subset}
 object, it will plot the subset regressions using the ranks of the original
 results, so you can compare the subset and original.
 }
-\keyword{internal}

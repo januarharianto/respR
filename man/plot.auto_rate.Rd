@@ -14,6 +14,21 @@
   ...
 )
 }
+\arguments{
+\item{x}{auto_rate object}
+
+\item{pos}{integer. Which result to plot.}
+
+\item{panel}{integer. Which panel to plot individually.}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{rate.rev}{logical. Control direction of y-axis in rolling rate plot.}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

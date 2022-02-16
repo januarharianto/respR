@@ -6,6 +6,11 @@
 \usage{
 \method{print}{calc_rate.bg}(x, ...)
 }
+\arguments{
+\item{x}{calc_rate.bg object}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

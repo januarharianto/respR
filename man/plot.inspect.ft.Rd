@@ -14,6 +14,22 @@
   ...
 )
 }
+\arguments{
+\item{x}{inspect.ft object}
+
+\item{width}{numeric. Smoothing factor (rolling mean) for delta oxygen values
+as proportion of total data length (0 to 1)}
+
+\item{pos}{integer. Which result to plot.}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{rate.rev}{logical. Control direction of y-axis in delta oxygen plot.}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

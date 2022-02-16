@@ -6,6 +6,11 @@
 \usage{
 \method{mean}{inspect}(x, ...)
 }
+\arguments{
+\item{x}{inspect object}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

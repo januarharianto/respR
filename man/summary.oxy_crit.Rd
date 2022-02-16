@@ -6,6 +6,13 @@
 \usage{
 \method{summary}{oxy_crit}(object, export = FALSE, ...)
 }
+\arguments{
+\item{object}{oxy_crit object}
+
+\item{export}{logical. Export result as data frame.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

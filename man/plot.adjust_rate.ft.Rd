@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{adjust_rate.ft}(x, ...)
 }
+\arguments{
+\item{x}{adjust_rate.ft object}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

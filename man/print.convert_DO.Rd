@@ -6,6 +6,11 @@
 \usage{
 \method{print}{convert_DO}(x, ...)
 }
+\arguments{
+\item{x}{convert_DO object}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

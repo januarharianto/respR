@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{convert_rate.ft}(x, ...)
 }
+\arguments{
+\item{x}{convert_rate.ft object}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

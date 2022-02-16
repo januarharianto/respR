@@ -458,6 +458,9 @@ auto_rate <- function(x, method = "linear", width = NULL,
 }
 
 #' Print auto_rate objects
+#' @param x auto_rate object
+#' @param pos integer. Which result to print.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
@@ -495,6 +498,13 @@ print.auto_rate <- function(x, pos = 1, ...) {
 }
 
 #' Plot auto_rate objects
+#' @param x auto_rate object
+#' @param pos integer. Which result to plot.
+#' @param panel integer. Which panel to plot individually.
+#' @param quiet logical. Suppress console output.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
@@ -633,6 +643,10 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
 }
 
 #' Summarise auto_rate objects
+#' @param object auto_rate object
+#' @param pos integer(s). Which summary row(s) to print.
+#' @param export logical. Export summary table as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -688,6 +702,10 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Average auto_rate object rates
+#' @param x auto_rate object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){

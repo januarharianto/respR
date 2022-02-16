@@ -6,6 +6,15 @@
 \usage{
 \method{mean}{adjust_rate}(x, pos = NULL, export = FALSE, ...)
 }
+\arguments{
+\item{x}{adjust_rate object}
+
+\item{pos}{integer(s). Which result(s) to average.}
+
+\item{export}{logical. Export averaged values as single value.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

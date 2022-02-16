@@ -6,6 +6,15 @@
 \usage{
 \method{mean}{convert_rate.ft}(x, pos = NULL, export = FALSE, ...)
 }
+\arguments{
+\item{x}{convert_rate.ft object}
+
+\item{pos}{integer(s). Which result(s) to average.}
+
+\item{export}{logical. Export averaged values as single value.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

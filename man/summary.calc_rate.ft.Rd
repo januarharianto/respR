@@ -6,6 +6,15 @@
 \usage{
 \method{summary}{calc_rate.ft}(object, pos = NULL, export = FALSE, ...)
 }
+\arguments{
+\item{object}{calc_rate.ft object}
+
+\item{pos}{integer(s). Which summary row(s) to print.}
+
+\item{export}{logical. Export summary table as data frame.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

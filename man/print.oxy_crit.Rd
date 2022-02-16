@@ -6,6 +6,11 @@
 \usage{
 \method{print}{oxy_crit}(x, ...)
 }
+\arguments{
+\item{x}{oxy_crit object}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

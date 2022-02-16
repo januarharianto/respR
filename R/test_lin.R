@@ -105,10 +105,12 @@ test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
 }
 
 
-#' Plot output of `test_lin()`
+#' Plot output of test_lin
 #'
 #' This is an internal generic. Produces 4 plots.
-#'
+#' @param x test_lin object
+#' @param show string. Which result to show.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 #' @keywords internal

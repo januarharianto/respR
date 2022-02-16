@@ -2,9 +2,16 @@
 % Please edit documentation in R/test_lin.R
 \name{plot.test_lin}
 \alias{plot.test_lin}
-\title{Plot output of \code{test_lin()}}
+\title{Plot output of test_lin}
 \usage{
 \method{plot}{test_lin}(x, show = c("all", "a", "b", "c", "d"), ...)
+}
+\arguments{
+\item{x}{test_lin object}
+
+\item{show}{string. Which result to show.}
+
+\item{...}{Pass additional plotting parameters}
 }
 \value{
 A plot. No returned value.
