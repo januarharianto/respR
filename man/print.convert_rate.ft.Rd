@@ -6,6 +6,13 @@
 \usage{
 \method{print}{convert_rate.ft}(x, pos = NULL, ...)
 }
+\arguments{
+\item{x}{convert_rate.ft object}
+
+\item{pos}{integer. Which result to print.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{convert_DO}(x, ...)
 }
+\arguments{
+\item{x}{convert_DO object}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

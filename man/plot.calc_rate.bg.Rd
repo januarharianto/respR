@@ -6,6 +6,17 @@
 \usage{
 \method{plot}{calc_rate.bg}(x, pos = NULL, quiet = FALSE, legend = TRUE, ...)
 }
+\arguments{
+\item{x}{calc_rate.bg object}
+
+\item{pos}{integer. Which result to plot.}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

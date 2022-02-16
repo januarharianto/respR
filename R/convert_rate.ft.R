@@ -322,6 +322,9 @@ convert_rate.ft <- function(x,
 # S3 Generics -------------------------------------------------------------
 
 #' Print convert_rate.ft objects
+#' @param x convert_rate.ft object
+#' @param pos integer. Which result to print.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate.ft <- function(x, pos = NULL, ...) {
@@ -346,6 +349,10 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
 }
 
 #' Summarise convert_rate.ft objects
+#' @param object convert_rate.ft object
+#' @param pos integer(s). Which summary row(s) to print.
+#' @param export logical. Export summary table as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
@@ -373,6 +380,10 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Average convert_rate.ft object rates
+#' @param x convert_rate.ft object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -405,6 +416,8 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 }
 
 #' Plot convert_rate.ft objects
+#' @param x convert_rate.ft object
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate.ft <- function(x, ...) {

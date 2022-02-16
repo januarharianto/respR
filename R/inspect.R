@@ -340,6 +340,8 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 }
 
 #' Print inspect objects
+#' @param x inspect object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.inspect <- function(x, ...) {
@@ -438,6 +440,8 @@ print.inspect <- function(x, ...) {
 }
 
 #' Summarise inspect objects
+#' @param object inspect object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.inspect <- function(object, ...) {
@@ -445,6 +449,8 @@ summary.inspect <- function(object, ...) {
 }
 
 #' Average inspect object rates
+#' @param x inspect object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.inspect <- function(x, ...){
@@ -453,6 +459,14 @@ mean.inspect <- function(x, ...){
 }
 
 #' Plot inspect objects
+#' @param x inspect object
+#' @param width numeric. Width of rolling regression to determine rates in
+#'   rolling rate plot as proportion of total data length (0 to 1)
+#' @param pos integer. Which result to plot.
+#' @param quiet logical. Suppress console output.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,

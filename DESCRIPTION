@@ -13,10 +13,10 @@ Authors@R: c(
            family = "Carey", 
            role = c("aut", "cre"),
            email = "nicholascarey@gmail.com"))
-Description: Provides a structural, reproducible workflow for the 
-    processing and analysis of respirometry data. It contains analytical 
-    functions and utilities for working with oxygen time-series to determine 
-    respiration or oxygen production rates, and to make it easier to report and 
+Description: Provides a structural, reproducible workflow for the
+    processing and analysis of respirometry data. It contains analytical
+    functions and utilities for working with oxygen time-series to determine
+    respiration or oxygen production rates, and to make it easier to report and
     share analyses. 
 URL: https://github.com/januarharianto/respr, https://doi.org/10.5281/zenodo.2548601
 Depends: R (>= 3.3)

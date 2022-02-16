@@ -713,6 +713,9 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 # S3 Generic functions ----------------------------------------------------
 
 #' Print adjust_rate objects
+#' @param x adjust_rate object
+#' @param pos integer. Which result to print.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.adjust_rate <- function(x, pos = 1, ...) {
@@ -736,6 +739,10 @@ print.adjust_rate <- function(x, pos = 1, ...) {
 }
 
 #' Summarise adjust_rate objects
+#' @param object adjust_rate object
+#' @param pos integer(s). Which summary row(s) to print.
+#' @param export logical. Export summary table as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -767,6 +774,10 @@ summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Average adjust_rate object rates
+#' @param x adjust_rate object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
@@ -798,6 +809,8 @@ mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
 }
 
 #' Plot adjust_rate objects
+#' @param x calc_rate.bg object
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.adjust_rate <- function(x, ...){

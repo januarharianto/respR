@@ -291,6 +291,9 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 }
 
 #' Print calc_rate objects
+#' @param x calc_rate object
+#' @param pos integer. Which result to print.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate <- function(x, pos = 1, ...) {
@@ -310,6 +313,10 @@ print.calc_rate <- function(x, pos = 1, ...) {
 }
 
 #' Summarise calc_rate objects
+#' @param object calc_rate object
+#' @param pos integer(s). Which summary row(s) to print.
+#' @param export logical. Export summary table as data frame.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -340,6 +347,12 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Plot calc_rate objects
+#' @param x calc_rate.bg object
+#' @param pos integer. Which result to plot.
+#' @param panel integer. Which panel to plot individually.
+#' @param quiet logical. Suppress console output.
+#' @param legend logical. Suppress labels and legends.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
@@ -412,6 +425,10 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
 }
 
 #' Average calc_rate object rates
+#' @param x calc_rate object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){

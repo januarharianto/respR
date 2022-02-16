@@ -6,6 +6,19 @@
 \usage{
 \method{plot}{oxy_crit}(x, legend = TRUE, quiet = FALSE, panel = NULL, rate.rev = TRUE, ...)
 }
+\arguments{
+\item{x}{oxy_crit object}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{panel}{integer. Which panel to plot individually.}
+
+\item{rate.rev}{logical. Control direction of y-axis in rolling rate plot.}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

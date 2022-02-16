@@ -550,6 +550,8 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
 }
 
 #' Print inspect.ft objects
+#' @param x inspect.ft object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.inspect.ft <- function(x, ...) {
@@ -630,6 +632,8 @@ print.inspect.ft <- function(x, ...) {
 }
 
 #' Summarise inspect.ft objects
+#' @param object inspect.ft object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.inspect.ft <- function(object, ...) {
@@ -637,6 +641,8 @@ summary.inspect.ft <- function(object, ...) {
 }
 
 #' Average inspect.ft object rates
+#' @param x calc_rate.bg object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.inspect.ft <- function(x, ...){
@@ -645,6 +651,14 @@ mean.inspect.ft <- function(x, ...){
 }
 
 #' Plot inspect.ft objects
+#' @param x inspect.ft object
+#' @param width numeric. Smoothing factor (rolling mean) for delta oxygen values
+#'   as proportion of total data length (0 to 1)
+#' @param pos integer. Which result to plot.
+#' @param quiet logical. Suppress console output.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in delta oxygen plot.
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,

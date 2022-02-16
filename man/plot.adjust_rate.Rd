@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{adjust_rate}(x, ...)
 }
+\arguments{
+\item{x}{calc_rate.bg object}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

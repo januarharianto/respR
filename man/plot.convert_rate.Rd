@@ -6,6 +6,11 @@
 \usage{
 \method{plot}{convert_rate}(x, ...)
 }
+\arguments{
+\item{x}{convert_rate object}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

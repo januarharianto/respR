@@ -6,6 +6,13 @@
 \usage{
 \method{print}{calc_rate.ft}(x, pos = 1, ...)
 }
+\arguments{
+\item{x}{calc_rate.ft object}
+
+\item{pos}{integer. Which result to print.}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }

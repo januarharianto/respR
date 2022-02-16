@@ -184,6 +184,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 }
 
 #' Print convert_DO objects
+#' @param x convert_DO object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 print.convert_DO <- function(x, ...) {
@@ -207,6 +209,8 @@ print.convert_DO <- function(x, ...) {
 }
 
 #' Summarise convert_DO objects
+#' @param object convert_DO object
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_DO <- function(object, ...) {
@@ -214,6 +218,8 @@ summary.convert_DO <- function(object, ...) {
 }
 
 #' Plot convert_DO objects
+#' @param x convert_DO object
+#' @param ... Pass additional plotting parameters
 #' @return A plot. No returned value.
 #' @export
 plot.convert_DO <- function(x, ...) {
@@ -222,6 +228,10 @@ plot.convert_DO <- function(x, ...) {
 }
 
 #' Average convert_DO object values
+#' @param x convert_DO object
+#' @param pos integer(s). Which result(s) to average.
+#' @param export logical. Export averaged values as single value.
+#' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){

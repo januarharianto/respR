@@ -6,6 +6,19 @@
 \usage{
 \method{plot}{calc_rate.ft}(x, pos = NULL, quiet = FALSE, legend = TRUE, rate.rev = TRUE, ...)
 }
+\arguments{
+\item{x}{calc_rate.bg object}
+
+\item{pos}{integer. Which result to plot.}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{rate.rev}{logical. Control direction of y-axis in rolling rate plot.}
+
+\item{...}{Pass additional plotting parameters}
+}
 \value{
 A plot. No returned value.
 }

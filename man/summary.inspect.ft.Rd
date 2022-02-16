@@ -6,6 +6,11 @@
 \usage{
 \method{summary}{inspect.ft}(object, ...)
 }
+\arguments{
+\item{object}{inspect.ft object}
+
+\item{...}{Pass additional inputs}
+}
 \value{
 Print to console. No returned value.
 }
