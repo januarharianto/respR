@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "Please cite respR in publications using the following journal article:"
+authors:
+- family-names: "Harianto"
+  given-names: "Januar"
+  orcid: ""
+- family-names: "Carey"
+  given-names: "Nicholas"
+  orcid: ""
+title: "respR — An R package for the manipulation and analysis of respirometry data"
+version: 2.0.0
+doi: 10.5281/zenodo.2548601
+date-released: 2022-02-17
+url: "https://github.com/januarharianto/respR"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Harianto"
+    given-names: "Januar"
+    orcid: ""
+  - family-names: "Carey"
+    given-names: "Nicholas"
+    orcid: ""
+  - family-names: "Byrne"
+    given-names: "Maria"
+    orcid: ""
+  doi: "10.1111/2041-210X.13162"
+  journal: "Methods in Ecology and Evolution"
+  month: 2
+  start: 912 # First page number
+  end: 920 # Last page number
+  title: "respR — An R package for the manipulation and analysis of respirometry data"
+  issue: 6
+  volume: 10
+  year: 2019
