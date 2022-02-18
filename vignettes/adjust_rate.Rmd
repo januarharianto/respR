@@ -901,7 +901,7 @@ rate_adj <- adjust_rate(rate,
 summary(rate_adj)
 ```
 
-We would expect the background rate to be lower at all stages of an experiment except the very end under an exponential vs. a linear relationship. Here, we do see slightly lower adjustment values than in the linear example [above](#lineareg2). 
+Under an exponential vs. a linear background relationship we would expect the background rate to be lower at all stages of an experiment except the very end. Here, as expected we see slightly lower adjustment values than in the linear example [above](#lineareg2). 
 
 ### Exponential vs linear background 
 
@@ -1118,7 +1118,7 @@ while (under10) {
 }
 ```
 
-Now we can see this level of background rate will be reached in round 53 hours, so our current experiments of 24h are well within this. If we wanted to run them even longer however, this gives us a good idea of the maximum duration before the background rate might interfere with good estimates of specimen rate. 
+Now we can see this level of background rate will be reached in around 53 hours, so our current experiments of 24h are well within this. If we wanted to run them even longer however, this gives us a good idea of the maximum duration before the background rate might interfere with good estimates of specimen rate. 
 
 ### S3 generics
 

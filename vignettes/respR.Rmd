@@ -85,8 +85,8 @@ How to analyse and extract rates from relatively simple and much longer intermit
 Several complete analyses of different types of flowthrough respirometry experiments.
 
 **[Critical oxygen values](https://januarharianto.github.io/respR/articles/pcrit.html)**  
-Determine critical oxygen values, for example PCrit, from long-term, closed chamber respirometry experiments.
+Determine critical oxygen values, for example PCrit.
 
 **[Adjusting rates for background](https://januarharianto.github.io/respR/articles/pcrit.html)**  
-How `adjust_rate` allows you to perform all sorts of different adjustments to rates to account dor the metabolic action of microbial organisms. 
+How `adjust_rate` allows you to perform all sorts of different adjustments to account for the background oxygen use of microbial organisms. 
 

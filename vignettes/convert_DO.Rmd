@@ -28,17 +28,15 @@ opts_chunk$set(collapse = TRUE,
 
 Different oxygen probe systems output oxygen values in many different units of concentration or partial pressure, or even in a proportional unit such as relative percentage of dissolved air or oxygen. For example, it is very common to use water that has been 100% saturated with air through vigorous bubbling, mixing or stirring as the starting value of 100%, with percent saturation recorded as it declines, the assumption being this is the oxygen being removed by the specimen. 
 
-The `convert_DO` function allows you to convert between any commonly used unit of oxygen concentration, partial pressure, or percent air or oxygen saturation.
+The `convert_DO()` function allows you to convert between any commonly used unit of oxygen concentration, partial pressure, or percent air or oxygen saturation.
 
-Some unit conversions require temperature, salinity, and atmospheric pressure inputs in order to do conversions. The first two of these must be entered if they are needed. For the atmospheric pressure input (`P`), a default value of 1.013 bar (standard pressure at sea level) is applied if not entered. In most locations which have a normal range (outside of extreme weather
+Some unit conversions require temperature, salinity, and atmospheric pressure inputs in order to do conversions. The first two of these must be entered if they are required. For the atmospheric pressure input (`P`), a default value of 1.013 bar (standard pressure at sea level) is applied if not entered. In most locations which have a normal range (outside of extreme weather
 events) of around 20 millibars, any variability in pressure will have a
 relatively minor effect on dissolved oxygen, and even less on calculated
 rates. However, we would encourage users to enter the true value if they know
 it, or use historical weather data to find out what it was on the day of the experiment.
 
-Concentration units should be formatted as oxygen amount (volume or mass, in almost any unit) per unit volume or mass in SI units (L or kg) for the denominator. For example, `ml/kg` or `mg/L`. 
-
-See `unit_args()` for the various units that are accepted.
+Concentration units should be formatted as oxygen amount per unit volume or mass in SI units (L or kg) for the denominator. For example, `ml/kg` or `mg/L`. A range of different pressure units are also available. See `unit_args()` for the various units that are accepted.
 
 ## Example 1 - Saturation conversions
 
@@ -50,12 +48,12 @@ The `sardine.rd` dataset has oxygen values in percent air saturation, and the ac
 sardine.rd
 ```
 
-We will convert it to `mmol/kg`. In `convert_DO`, the `t`, `S` and `P` inputs must be in °C, ppt (‰), and bar.  
+We will convert it to `umol/kg`. In `convert_DO`, the `t`, `S` and `P` inputs must be in °C, ppt (‰), and bar.  
 
 ```{r echo = T, tidy = F}
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    from = "%Air",     # oxygen unit to convert from
-                   to = "mmol/kg",    # oxygen unit to convert to
+                   to = "umol/kg",    # oxygen unit to convert to
                    t = 15,            # in C
                    S = 35,            # in ppt
                    P = 1.013)         # in bar
@@ -63,11 +61,11 @@ conv <- convert_DO(sardine.rd$Oxygen, # data to convert
 head(conv)
 ```
 
-By default the function outputs a numeric vector of converted values, which can be saved to it's own object or in this case we will add it to the original data frame.
+By default the function outputs a numeric vector of converted values, which can be saved as it's own object. In this case we will add it to the original data frame.
 
 ```{r}
 sardine_new <- cbind(sardine.rd,
-                     mmol_kg = conv)
+                     umol_kg = conv)
 
 sardine_new
 ```
@@ -77,7 +75,7 @@ Alternatively, if `simplify = FALSE` the output is a `list` object which can be 
 ```{r echo = T, tidy = F}
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    from = "%Air",     # oxygen unit to convert from
-                   to = "mmol/kg",    # oxygen unit to convert to
+                   to = "umol/kg",    # oxygen unit to convert to
                    t = 15,            # in C
                    S = 35,            # in ppt
                    P = 1.013,         # in bar
@@ -100,11 +98,11 @@ convert_DO(100, "%Air", "%Oxy",
 
 ## Example 2 - Oxygen pressure units
 
-`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `mmol/kg` column we just added, using the `simplify` input to output numeric values.
+`convert_DO` can also convert between units of oxygen partial pressure. We will add a column of the same oxygen values in hectopascals, converting from the `umol/kg` column we just added.
 
 ```{r tidy = F}
-sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,  
-                              from = "mmol per kg",    
+sardine_new$hPa <- convert_DO(sardine_new$umol_kg,  
+                              from = "umol per kg",    
                               to = "hPa",  
                               t = 15,            
                               S = 35,            
@@ -113,7 +111,7 @@ sardine_new$hPa <- convert_DO(sardine_new$mmol_kg,
 sardine_new
 ```
 
-Note, how the `from` unit is still recognised. Unit conversions in `respR` use a very forgiving, fuzzy algorithm to recognise different variations of unit strings. 
+Note how the `from` unit is formatted differently but still recognised. Unit conversions in `respR` use a forgiving, fuzzy algorithm to recognise different variations of unit strings. 
 
 ## Example 3 - Converting single values
 
@@ -129,9 +127,9 @@ convert_DO(8,
 
 `respR` has a convenient helper function to assist with `convert_DO` (and `convert_rate()`) where certain inputs such as temperature or atmospheric pressure have to be in specific units. 
 
-`convert_val()` will convert between units of temperature, volume, mass, area, and atmospheric pressure. The utility of using it here, is that it will by default convert to the required units for the relevant `convert_DO` input. 
+`convert_val()` will convert between units of temperature, volume, mass, area, and atmospheric pressure. The utility of using it here is that it will by default convert to the required units for the relevant `convert_DO` input. 
 
-Here, we have been reading an old paper and want to convert an oxygen value to `mg/L`, and the temperature and atmospheric pressure values are in Fahrenheit and Torr. For the `t` and `P` inputs these must be in `°C` and `bar`. We could easily go to an online converter to do this, but `convert_val` can allow it within the `convert_DO` function call. 
+Let's say we have been reading an old paper and want to convert an oxygen value in `ml/L` to `mg/L`, and the temperature and atmospheric pressure values are in Fahrenheit and Torr. For the `t` and `P` inputs in `convert_DO` these must be in °C and bar. We could easily go to an online converter to do this, but `convert_val` can help do it right within the `convert_DO` function call. 
 
 ```{r tidy = F}
 convert_DO(4.6, 
@@ -147,7 +145,7 @@ Notice two convenient aspects:
 
  - We don't need to tell `convert_val` what parameter (temperature, pressure, etc.) the value is a measurement *of* - it is recognised automatically using the `from` unit. 
  
- - We don't need to specify a `to` unit (although it's possible to). The defaults for these are set to the required input units of `t` and `P`, that is `°C` and `bar`. 
+ - We don't need to specify a `to` unit (although it's possible to). The defaults for these are the required input units, that is `°C` and `bar`. 
 
 The `convert_val()` function can also be used for general conversions of temperature, volume, mass, area, and atmospheric pressure in many common units:
 

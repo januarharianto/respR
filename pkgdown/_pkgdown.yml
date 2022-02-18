@@ -125,11 +125,13 @@ navbar:
 
     - text: Further Reading
       menu:
+      - text: "What's new"
+        href: articles/whatsnew.html
       - text: "respR in use"
         href: articles/citations.html
-      - text: "v2.0 Code changes"
+      - text: "v2.0: Code changes"
         href: articles/v2_code_change.html
-      - text: "Installing and running v1.1 code"
+      - text: "v1.1: How to install and run older code"
         href: articles/v1_code.html
       - text: "Integration with the tidyverse"
         href: articles/tidyverse.html

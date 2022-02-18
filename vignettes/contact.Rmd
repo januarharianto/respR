@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Developers
 
-`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and created `respR` to assist with our own work, before realising it would be useful to the scientific community. We have done this almost entirely in our spare time, spending many hundreds of hours working on the package. 
+`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. 
 
 ## Contact
 
@@ -42,10 +42,13 @@ Alternatively, join our open Slack workspace [here](https://join.slack.com/t/res
 
 We are at present just trying these out. Which of them we will use going forward will depend on how many people use them. It is likely that we may abandon one or both if there isn't much interest or utility! 
 
-## Support
+## Support Us
 
 `respR` is free to use and always will be. We have spent literally hundreds of hours developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available, you just need to [**ask**](mailto:nicholascarey@gmail.com). 
 
-If 
+Maybe you have left over funding you are stuggling to spend, or maybe you just want to buy us a beer or a coffee. 
 
-Github sponsor?
+
+We tentative plans to make a Shiny version of respR, which may have ongoign hosting costs, so any donations will primarily go towards those. 
+
+If you have deeper or more extensive needs however, we are available 

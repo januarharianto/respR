@@ -59,9 +59,11 @@ We can see there are several rows of redundant information. There are also space
 
 ```{r eval = T}
 data <- import_file("Witrox_eg.txt")
+```
 
-## There are six columns, but we will print only 
-##the relevant date, numeric timestamp, and oxygen columns
+There are six columns, but we will print only the relevant date, numeric timestamp, and oxygen columns
+
+```{r eval = T}
 data[,c(1,2,6)]
 ```
 
@@ -92,9 +94,9 @@ If you can't import the data via `import_file`, consider trying the following fu
 
 # `format_time()`
 
-For files types that are not yet supported, or if you have already imported your data by other means, the `format_time()` function can parse date-time columns to numeric time-elapsed value, if the imported file does not contain it. Internally, it uses functionality in the package `lubridate` - see `help("lubridate")`. 
+For files types that are not yet supported, or if you have already imported your data by other means, the `format_time()` function can parse date-time columns to numeric time-elapsed values, if the imported file does not already contain this. Internally, it uses functionality in the package `lubridate`. 
 
-The date-times can either be passed as a `vector` (for example, so it can be appended to the original data), or as a `data.frame`. If the input is a vector, the output is a vector of the same length. If it is a data frame, the `time` input indicates the column number (or numbers, if it is split across several) containing the date-times, the default being `time = 1`. The resulting data frame will be identical, with a new column named `time.num` with the converted numeric time added as the *last* column. 
+The date-times can either be passed as a `vector` (for example, so it can be appended to the original data), or as a `data.frame`. If the input is a vector, the output is a vector of the same length. If it is a data frame, the `time` input indicates the column number (or numbers, if it is split across several) containing the date-times, the default being `time = 1`. The resulting data frame will be identical, with a new column named `time.num` containing the converted numeric time added as the *last* column. 
 
 We also need to specify the `format` of the date-times in the correct order. See `help(format_time)` for further info.
 
@@ -213,6 +215,6 @@ format_time(exp_notes, format = "HM")
 
 # Checking output and next steps
 
-After your data is in a paired, *numeric time~oxygen* structure, it can be passed to `inspect()` to check the importing or time formatting has worked, look for common errors, and visualise the dataset. See `vignette("inspecting")`.
+After your data is in a paired, numeric oxygen~time structure, it can be passed to `inspect()` to check the importing or time formatting has worked, look for common errors, and visualise the dataset. See `vignette("inspecting")`.
 
 

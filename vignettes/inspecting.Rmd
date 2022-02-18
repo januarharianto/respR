@@ -49,17 +49,15 @@ Depending on the data type, the function will perform a series of checks. These 
 
 Most of the following is also relevant to `inspect.ft()` which is a special function for inspecting flowthrough respirometry data. See `vignette("flowthrough")` for specific examples.
 
-## Data checks
-
 ## Successful check
 
-This is what a successful `inspect` check looks like; all columns are numeric and without missing values, and the time data are sequential, unique values and with even spacing. 
+This is what a successful `inspect` check looks like; all columns are numeric and without missing values, and the time data are sequential, unique values and with even spacing. See [plot](#plot) section below for details about the plot. 
 
 ```{r}
 inspect(sardine.rd)
 ```
 
-This dataset is therefore ready to be passed to further `respR` functions. While we have in general designed `respR` to be robust to data which might contain these issues, we have not been able to test every combination of them. Therefore, to be fully confident in results and avoid obscure errors we strongly recommend data be amended to pass these tests wherever possible. 
+This dataset is therefore ready to be passed to further `respR` functions. While we have in general designed `respR` to be robust to data which might contain these issues, we have not been able to test every eventuality. Therefore, to be fully confident in results and avoid obscure errors we strongly recommend data be amended to pass these tests wherever possible. 
 
 ## Numeric 
 Many datasets on being imported to R, for esoteric reasons, can have column data types misclassified. A stray character or even space may cause an entire column of numeric data to be classed as a non-numeric format such as `character`. For example, some versions of the Pyro and Firesting systems software replace missing data with `"---"`, which causes the entire column to be classed as `character` when imported to R. Often this is a single entry in a random location where a data recording has been missed, or at the very end of a column, so not obvious when the head of the data is given a quick look. 
@@ -462,9 +460,9 @@ Such gaps may also affect rolling rate determinations, such as in the `auto_rate
 
 Note also, because of the missing rows, all rows *after* the gap will not conform to the same time values, although as long as they don't include the gap will represent an equivalent time *window*. 
 
-## Notes
+## Additional notes and tips
 
-### Plot
+### Plot {#plot}
 
 When using `inspect`, a plot of the inspected data is produced (unless `plot = FALSE`), against both time (bottom blue axis) and row index (top red axis).
 
