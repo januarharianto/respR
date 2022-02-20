@@ -6,7 +6,6 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
 [![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/1c5ek2c0xf9htkjl?svg=true)](https://ci.appveyor.com/project/nicholascarey/respr-0ltva)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
 [![License](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363)
