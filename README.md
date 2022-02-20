@@ -41,12 +41,9 @@ The package has also been [**peer reviewed and published**](https://besjournals.
 
 We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry! 
 
-See [here](https://github.com/januarharianto/respR) for even more ways of getting in touch. 
+See [**here**](https://github.com/januarharianto/respR) for even more ways of getting in touch. 
 
  \
- \
- \
- 
 
 ## Installation
 `respR` is now available on [CRAN](https://cran.r-project.org), and can be installed via the 'Packages' tab in RStudio or by running this command:
