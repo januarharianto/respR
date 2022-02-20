@@ -1,10 +1,10 @@
 # <a href='https://github.com/januarharianto/respR'> <img src='man/figures/logo.png' align="right" width="11%" /></a> <font style="font-family:'Courier New'">respR : Processing and analysis of respirometry data</font> 
 
 <!-- badges: start -->
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
 <!-- [![metacran downloads](https://cranlogs.r-pkg.org/badges/respR)](https://cran.r-project.org/package=respR) -->
-[![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
 <!-- [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR) -->
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
 [![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/1c5ek2c0xf9htkjl?svg=true)](https://ci.appveyor.com/project/nicholascarey/respr-0ltva)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
@@ -43,10 +43,9 @@ We also have a [**Twitter account**](https://twitter.com/respR_pkg). Please foll
 
 See [**here**](https://github.com/januarharianto/respR) for even more ways of getting in touch. 
 
- \
-
 ## Installation
-`respR` is now available on [CRAN](https://cran.r-project.org), and can be installed via the 'Packages' tab in RStudio or by running this command:
+
+`respR` is now available on [**CRAN**](https://cran.r-project.org), and can be installed via the 'Packages' tab in RStudio or by running this command:
 
 ```r
 install.packages("respR")
@@ -89,11 +88,11 @@ urchins.rd %>%        # using the urchins dataset,
 
 ## Support pacckage development
 
-See [Support Us](https://github.com/januarharianto/respR) if you would like to help support the package development.
+See [**Support Us**](https://github.com/januarharianto/respR) if you would like to help support the package development.
 
 ## Feedback and contributions
 
-See [Contact](https://github.com/januarharianto/respR) page for ways of getting 
+See [**Contact**](https://github.com/januarharianto/respR) page for ways of getting 
 in touch and providing feedback. 
 
 ## Developers
