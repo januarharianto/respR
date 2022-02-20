@@ -87,6 +87,8 @@ auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 
 This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they don't add much to our understanding of what our final rate should be. Therefore, in this case the default `width` provided us with a good result, and there is no real reason to change it. This does however serve as a good example of how users should experiment with different widths to get an idea of how it might affect analyses. Certain datasets will benefit from this more than others. 
 
+See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
+
 ## Adjust rate
 
 Oxygen production rates can be adjusted in the exact same way as uptake rates. In most oxygen production respirometry, background is likely similar to that in uptake respirometry, that is microbial organisms are consuming oxygen. However there may be cases where some of the production could be contributed by other organisms, such as another algae growing on the surfaces of the respirometer. What is important is to quantify this by running blank experiments which are identical in every way except for the presence of the specimen you are interested in. See `vignette("adjust_rate")` for details of the numerous ways experiments can be background adjusted, most of which is equally relevant to oxygen production respirometry.
@@ -100,7 +102,7 @@ algae_rate_adj <- adjust_rate(algae_rate, by = -0.007)
 summary(algae_rate_adj)
 ```
 
-If however you find the control has a background *input* of oxygen it is entered as a positive value, in which case the specimed production rates have been *over-*estimated.
+If however you find the control has a background *input* of oxygen it is entered as a positive value, in which case the specimen production rates have been *over-*estimated.
 
 ```{r}
 adjust_rate(algae_rate, by = 0.009) |>
@@ -115,7 +117,7 @@ Production rates are converted to units in exactly the same way as uptake rates.
 
 New in `respR` v2.0 is the ability to output rates as surface-area specific, which is often used to express oxygen production of algae and corals per unit area, so we'll add an `area` input and specify an area-specific `output.unit`. 
 
-The `area` input must be in units of m^2. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit is m^2. Let's say our algae is 10 cm^2. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
+The `area` input must be in units of m^2. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit for area conversions is m^2. Let's say our algae is 10 cm^2. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
 
 ```{r tidy = FALSE}
 algae_rate_conv <- convert_rate(algae_rate_adj, 
@@ -127,7 +129,7 @@ algae_rate_conv <- convert_rate(algae_rate_adj,
                                 t = 12, S = 30, P =1.01)
 ```
 
-In this case, we were only interested in the top ranked rate result. We can extract it using `summary` and the `pos` and `export` inputs. We can see the area has been converted to m^2. 
+In this case, we were only interested in the top ranked rate result. We can extract it using `summary` and the `pos` and `export` inputs. We can see the converted `area` input in m^2 in the summary table. 
 
 ```{r}
 summary(algae_rate_conv, pos = 1, export = TRUE)

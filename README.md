@@ -2,6 +2,8 @@
 
 <!-- badges: start -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/respR)](https://cran.r-project.org/package=respR)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR)
 <!-- [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR) -->
 [![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/1c5ek2c0xf9htkjl?svg=true)](https://ci.appveyor.com/project/nicholascarey/respr-0ltva)
@@ -88,6 +90,10 @@ urchins.rd %>%        # using the urchins dataset,
   print()       %>%   # a quick preview
   convert_rate("mg/L", "min", "mg/h/kg", 0.6, 0.4) # convert to units
 ```
+
+## Support pacckage development
+
+See [Support Us](https://github.com/januarharianto/respR) if you would like to help support the package development.
 
 ## Feedback and contributions
 
