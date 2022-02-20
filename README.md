@@ -86,14 +86,13 @@ urchins.rd %>%        # using the urchins dataset,
   convert_rate("mg/L", "min", "mg/h/kg", 0.6, 0.4) # convert to units
 ```
 
-## Support pacckage development
+## Support package development
 
 See [**Support Us**](https://github.com/januarharianto/respR) if you would like to help support the package development.
 
-## Feedback and contributions
+## Feedback and help
 
-See [**Contact**](https://github.com/januarharianto/respR) page for ways of getting 
-in touch and providing feedback. 
+See [**Contact**](https://github.com/januarharianto/respR) page for ways of providing feedback and getting touch if you are having issues.
 
 ## Developers
 

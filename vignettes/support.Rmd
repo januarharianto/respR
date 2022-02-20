@@ -33,9 +33,9 @@ opts_chunk$set(collapse = TRUE,
 
 `respR` is free to use and always will be. We have spent literally hundreds of hours of our spare time developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available, you just need to [**ask**](mailto:nicholascarey@gmail.com). 
 
-Want to buy us a beer to say thanks? You can now support us directly via either [Github Sponsors](https://github.com/sponsors/nicholascarey) or [Paypal](https://www.paypal.me/njcarey) or [Starling](https://settleup.starlingbank.com/nicholascarey). 
+Several users have asked us how they can support development of the package. We have always told them a citation is sufficient, however you can now support us directly via either [Github Sponsors](https://github.com/sponsors/nicholascarey) or [Paypal](https://www.paypal.me/njcarey) or [Starling](https://settleup.starlingbank.com/nicholascarey). 
 
-Any donations will be very much appreciated and shared equally between the two of us. This could be anything from a one-off to buy us a beer, an ongoing few bucks a month for as long as you want, or if you have a big fat research grant you are struggling to spend as the end date approaches we are happy to help out as data analysis consultants (seriously - if you need an official invoice [**get in touch**](mailto:nicholascarey@gmail.com)).
+Any donations will be very much appreciated and shared equally between the two of us. This could be anything from a one-off tip to buy us a beer, an ongoing few bucks a month for as long as you want, or if you have a big fat research grant you are struggling to spend as the end date approaches we are happy to help out as data analysis consultants (seriously - if you need an official invoice [**get in touch**](mailto:nicholascarey@gmail.com)).
 
 ## Consult
 
