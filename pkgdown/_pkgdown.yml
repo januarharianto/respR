@@ -118,13 +118,19 @@ navbar:
       - text: "subset_data: Subset data by time, row, or oxygen ranges"
         href: articles/subset_data.html
       - text: "---- Miscellaneous ----"
-      - text: "calc_rate: Two-point rate calculation"
+      - text: "Two-point rate calculation"
         href: articles/twopoint.html
-      - text: "subsample: Thin larger datasets"
+      - text: "Thin larger datasets"
         href: articles/subsample.html
+      - text: "Integration with the tidyverse"
+        href: articles/tidyverse.html
+      - text: "Open science and reproducibility"
+        href: articles/reproducibility.html
 
-    - text: Further Reading
+    - text: More
       menu:
+      - text: "Support Us"
+        href: articles/support.html
       - text: "What's new"
         href: articles/whatsnew.html
       - text: "respR in use"
@@ -133,10 +139,6 @@ navbar:
         href: articles/v2_code_change.html
       - text: "v1.1: How to install and run older code"
         href: articles/v1_code.html
-      - text: "Integration with the tidyverse"
-        href: articles/tidyverse.html
-      - text: "Open science and reproducibility"
-        href: articles/reproducibility.html
       - text: "Future features"
         href: articles/future.html
       - text: "References"

@@ -31,24 +31,24 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 ## Twitter
 
-`respR` has a [Twitter account](https://twitter.com/respR_pkg). Follow for the latest news and updates. 
+`respR` has a [Twitter account](https://twitter.com/respR_pkg). Please follow for the latest news and updates. &nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
 
-## Slack and Discord
+## Discord
 
-We have set up a Discord channel to discuss respR. Go [here](https://discord.gg/JKkarCTW4N) to request an invite. 
+We have set up a Discord channel to discuss respR. Go [here](https://discord.gg/JKkarCTW4N) to request an invite. &nbsp; ![Discord](https://img.shields.io/discord/943124666573275146)](https://discord.gg/JKkarCTW4N)
 
-Alternatively, join our open Slack workspace [here](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ). 
+<!-- <iframe src="https://discord.com/widget?id=943124666573275146&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe> -->
 
-We are at present just trying these out. Which of them we will use going forward will depend on how many people use them. It is likely that we may abandon one or both if there isn't much interest or utility! 
+## Slack
 
-## Support Us
-
-`respR` is free to use and always will be. We have spent literally hundreds of hours developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available, you just need to [**ask**](mailto:nicholascarey@gmail.com). 
-
-Maybe you have left over funding you are stuggling to spend, or maybe you just want to buy us a beer or a coffee. 
+Alternatively, join our open Slack workspace [here](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ). &nbsp; ![](https://img.shields.io/badge/Slack-Join-orange)](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ)
 
 
-We tentative plans to make a Shiny version of respR, which may have ongoign hosting costs, so any donations will primarily go towards those. 
+## Note
 
-If you have deeper or more extensive needs however, we are available 
+We are at present just trying Discord and Slack out. Which of them we will use going forward will depend on if anyone uses them. It is very likely that we will abandon one or both if there isn't much interest or utility! 
+
+## Tip Jar 
+
+See `vignette("support")` for how you can throw us a few bucks in thanks.

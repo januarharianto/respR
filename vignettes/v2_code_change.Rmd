@@ -48,7 +48,9 @@ Several function inputs have been renamed to make them more consistent.
 
 ### Output structural changes
 
-Several functions have had their output object elements renamed to make them consistent. 
+The majority of function outputs have been restructured and many elements renamed. Any code that directly extracted results or parameters from these may not now work. Updating code should be relatively straightforward as error messages will state an element is missing or not found, or a `NULL`will be returned. Normal object-oriented workflows should not be affected as functions have been updated to recognise new element names. 
+
+The general changes include the following: 
 
 - Data element renamed `$dataframe` instead of `$df`, `$data`, etc. 
  
@@ -57,7 +59,6 @@ Several functions have had their output object elements renamed to make them con
     - `calc_rate.bg` : `$bgrate` changed to `$rate.bg`, `$mean` to `$rate.bg.mean`
     - `adjust_rate`  : `$corrected` changed to `$rate.adjusted`, `$input.rate` to `$rate.input`
 
-&nbsp;  
 
 - Outputs have also been rearranged, so any referencing not using element names may not work the same (e.g. `output[[2]]`).
 

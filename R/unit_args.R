@@ -19,7 +19,7 @@
 #'
 #' # [convert_DO()]
 #'
-#' ## Oxygen concentration or pressure units for `from` and `to`s:
+#' ## Oxygen concentration or pressure units for `from` and `to`:
 #'
 #' Oxygen concentration units should use SI units (`L` or `kg`) for the
 #' denominator.

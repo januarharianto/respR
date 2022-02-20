@@ -24,16 +24,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## respR publication
 
-```{r, echo = F, out.width = "200px", fig.align = "center", out.width= "20%", out.extra='style="float:right; padding:10px"'}
+```{r, echo = F, out.width = "200px", fig.align = "center", out.width= "30%", out.extra='style="float:right; padding:10px"'}
 knitr::include_graphics("img/mee_cover.jpg")
 ```
 
 `respR` has been peer reviewed and published. Please cite this paper if you use it in your work:\
  
 
-Harianto, J., Carey, N., & Byrne, M. respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912--920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
+**Harianto, J., Carey, N., & Byrne, M.** respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912--920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
 
- \
  \
  \
  

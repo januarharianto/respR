@@ -32,9 +32,9 @@ ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
 
 In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has picked up [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
+We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a very wide range of species, as well as oxygen production rates of algae and corals.
 
-If you use the package, we would appreciate a citation to the publication in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any purpose at all (e.g. teaching, industry use. environmental reports and monitoring, etc.) please [**let us know**](mailto:nicholascarey@gmail.com).
+If you use the package, we would appreciate a citation to the publication in [Methods in Ecology and Evolution](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use. environmental reports and monitoring, etc.) please [**let us know**](mailto:nicholascarey@gmail.com).
 
 ## Studies using respR
 
@@ -43,27 +43,28 @@ The following publications (most recent first) have used and cited `respR`. If w
 
 #### @bergerRegionalVulnerabilityAssessment2022
 
-Thesis
+Halle Berger used `respR` in this MSc thesis, looking at the response of the Dungeness crab to climate stressors in the context of a regional vulnerability assessment. They found that respiration rates of this species increased exponentially under higher temperatures. We hope the package proved useful in establishing this from your respirometry data. Congrats on the Masters! 🥳
+
 
 #### @wuEndocrineDisruptionPlastic2022
 
-Nick
+In this study Nicholas Wu examined how an endocrine disruptor in the environment exacerbated the effects of high temperatures on growth and metabolism in zebrafish. He used `respR` to calculate the resting MO2 of zebrafish under warming and exposure to plastic pollution. Nice work Nic!
 
 #### @guitardIncreasedParasiteLoad2022
 
-Parasites
+Joëlle Guitard and colleagues examined how parasite load affected metabolic rates and escape responses in a freshwater fish. They discovered that parasites reduced metabolic rates and also adversely affected escape responsiveness. They used `respR` to calculate MO2 and the `auto_rate` function to do 60 second rolling regressions from which MMR were calculated. Really nice write-up of the methods. Lots of detail, just what we like to see! 👌
 
 #### @prokkolaGeneticCouplingLifehistory2022
 
-In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. This is a preprint and we are looking forward to seeing it in a journal soon. 
+In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. After seeing it as a preprint we're delighted to see it published in a top journal. Nice work Jenni!  
 
 #### @burfordRapidRangeExpansion2022
 
-Squid v fish
+`respR` (and one of its developers) had a small role in this huge and extensive study by Ben Burford as part of his PhD. Ben used metabolic rate measurements to model the physiological sensitivity in terms of temperature and dissolved oxygen of a squid which occurs across a wide latitude range in the eastern Pacific, and how these may allow for rapid range expansions. Incredibly impressive, wide-ranging work.
 
 #### @mallonLightDrivenDynamics2022
 
-Coralline algae
+Jennifer Mallon is another researcher who took advantage of our open offer to help get users started with `respR` by sending us a data file. Great to see the work published! They looked at both oxygen uptake and production in coralline algae to calculate net photosynthesis. Really great to again see oxygen production being calculated using the package, not just consumption. 
 
 #### @burnsMetabolicRateCritical2021
  

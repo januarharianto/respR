@@ -97,16 +97,17 @@
 #'   ## `rate`, `rsq`, `row`, `time`, `density`
 #'
 #'   These methods refer to the respective columns of the `$summary` data frame.
-#'   For these, `n` should be a numeric vector of two values. Matching rates
-#'   which fall within the `n` range (inclusive) are retained. For example, to
-#'   retain only rates where the `rate` value is between 0.05 and 0.08: `method
-#'   = 'rate', n = c(0.05, 0.08)`. To retain all rates with a R-Squared above
-#'   0.90: `method = 'rsq', n = c(0.9, 1)`. The `row` and `time` ranges refer to
-#'   the `$row`-`$endrow` or `$time`-`$endtime` columns and original data source
-#'   (`$dataframe` element of the input), and can be used to constrain results
-#'   to rates from particular regions of the data (although usually a better
-#'   option is to \code{\link{subset_data}} prior to analysis). Note, `time` is
-#'   not the same as `duration` - see later section.
+#'   For these, `n` should be a vector of two values in numeric order (lowest to
+#'   highest numerically). Matching rates which fall within the `n` range
+#'   (inclusive) are retained. For example, to retain only rates where the
+#'   `rate` value is between 0.05 and 0.08: `method = 'rate', n = c(0.05,
+#'   0.08)`. To retain all rates with a R-Squared above 0.90: `method = 'rsq', n
+#'   = c(0.9, 1)`. The `row` and `time` ranges refer to the `$row`-`$endrow` or
+#'   `$time`-`$endtime` columns and original data source (`$dataframe` element
+#'   of the input), and can be used to constrain results to rates from
+#'   particular regions of the data (although usually a better option is to
+#'   \code{\link{subset_data}} prior to analysis). Note, `time` is not the same
+#'   as `duration` - see later section.
 #'
 #'   ## `time_omit`, `row_omit`
 #'

@@ -1,0 +1,47 @@
+---
+title: "Support Us"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Support Us}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F, warning = F, message = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                 scipen = 999, 
+                 digits = 3))
+```
+
+
+## Devs
+
+`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. 
+
+## Support 
+
+`respR` is free to use and always will be. We have spent literally hundreds of hours of our spare time developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available, you just need to [**ask**](mailto:nicholascarey@gmail.com). 
+
+Want to buy us a beer in thanks? You can now support us directly via either [Github Sponsors](https://github.com/sponsors/nicholascarey) or [Paypal](https://www.paypal.me/njcarey) or [Starling](https://settleup.starlingbank.com/nicholascarey). 
+
+Any donations will be very much appreciated, and shared equally between the two of us. This could be anything from a one-off to buy us a beer, an ongoing few bucks a month for as long as you want, or if you have a big fat research grant you are struggling to spend as the end date approaches we are happy to help out as data analysis consultants (seriously - if you need an official invoice [**get in touch**](mailto:nicholascarey@gmail.com)).
+
+## Consult
+
+Do you have a huge experiment or respirometry data load you want to analyse but just don't have the time to learn `R` or the `respR` package? Or just want to be sure it is being analysed correctly and rigorously? Having built this package and worked with respirometry data for over a decade, we are extremely skilled in analysing these data. For that reason, we are open to taking on short-term data analysis work. In return you get the confidence that your respirometry data are being analysed rigorously and correctly, and that the analysis is written up to publication quality. If you are interested in contracting us for short-term work please [**get in touch**](mailto:nicholascarey@gmail.com).
+
+## Training 
+
+We are also available for online courses or training (or potentially in person, when travel allows). [**Get in touch**](mailto:nicholascarey@gmail.com) to discuss dates, costs and logistics. 
+

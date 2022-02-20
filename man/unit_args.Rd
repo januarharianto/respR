@@ -28,7 +28,7 @@ formatting styles. For example, \code{"mg/l"}, \code{"mg/L"}, \code{"mgL-1"}, \c
 \code{"mg.l-1"} are all parsed the same.
 }
 \section{\code{\link[=convert_DO]{convert_DO()}}}{
-\subsection{Oxygen concentration or pressure units for \code{from} and \code{to}s:}{
+\subsection{Oxygen concentration or pressure units for \code{from} and \code{to}:}{
 
 Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
 denominator.

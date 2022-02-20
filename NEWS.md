@@ -312,16 +312,13 @@ NEW: New example datasets
 - FIX: All revised to work correctly with `|>` or `%>%` pipes
 
 
-
 ## Version 1.1.1
 
-Quick fixes and changes.
+This is the final release of v1 of `respR`.
 
-- **FIXED**: Issue #58: `auto_rate()` stops with obscure message when input datasets are small.
-- **FIXED**: Issue #66: `auto_rate()` included references to the method input called `"default"`, however that was deprecated some time ago. Code has been cleaned up to remove them.
-- **FIXED**: Issue #61: `pcrit()` and `calc_pcrit()` had issues importing the function `broken_stick()` into the cluster, resulting in the functions failing if the package wasn't loaded but called, i.e. using `respR::pcrit()`
-- **FIXED**: The `summary()` generic for the function `adjust_rate()` was never exported properly.
+There is only one change, the addition of function called `installation_help`. This function simply opens its own help file. It contains resources which may be helpful in running v1 code in the future, such as a list of dependencies and the latest versions known to work with v1.1.1, and how to install them. This is intended for users who have recently submitted v1.1 code as part of a publication, and investigators who may wish to reproduce their analyses in the future.
 
+The reason this may be necessary is because version 2.0 of `respR` will be released shortly and contains several code-breaking changes which means code written using v1.x will fail to run or return the same results. Using the information in this file an investigator should be able to install `respR` v1.1.1 and its dependencies and reproduce these analyses.
 
 ## Version 1.1.0
 
