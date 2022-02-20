@@ -55,4 +55,5 @@ Suggests:
     DiagrammeR,
     FishResp,
     respirometry,
-    testthat
+    testthat,
+    covr
