@@ -2,87 +2,218 @@
 % Please edit documentation in R/auto_rate.R
 \name{auto_rate}
 \alias{auto_rate}
-\title{Automatically determine rate of change in oxygen concentration over time}
+\title{Automatically determine most linear, highest, lowest and rolling oxygen
+uptake or production rates}
 \usage{
-auto_rate(
-  df,
-  width = NULL,
-  by = "row",
-  method = "linear",
-  plot = TRUE,
-  parallel = FALSE
-)
+auto_rate(x, method = "linear", width = NULL, by = "row", plot = TRUE, ...)
 }
 \arguments{
-\item{df}{data frame, or object of class \code{adjust_rate}. This is the data to
-process.}
+\item{x}{data frame, or object of class \code{inspect} containing oxygen~time
+data.}
 
-\item{width}{numeric. Width of the rolling regression. Defaults to
-\verb{floor(0.2*length of data)} if NULL. The length of data can either be time
-or row, as defined by the \code{by} argument. If a number is supplied and it is
-less than 1, the function automatically applies the equation \verb{floor(width * length of data}. Otherwise it will simply use the number as the width.}
+\item{method}{string. \code{"linear"}, \code{"highest"}, \code{"lowest"}, \code{"maximum"},
+\code{"minimum"}, \code{"rolling"} or \code{"interval"}. Defaults to \code{"linear"}. See
+Details.}
 
-\item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. However, if the
-function detects an irregular time series, a warning will be issued to
-recommend changing this argument to \code{"time"}. In most cases \code{"row"} is used
-by default as it is efficient. Switching to \code{"time"} causes the function to
-perform checks for irregular time at every iteration of the rolling
-regression, even if time is evenly spaced, which adds to computation time.}
+\item{width}{numeric. Width of the rolling regression. For \code{by = "row"},
+either a value between 0 and 1 representing a proportion of the data
+length, or an integer of 2 or greater representing an exact number of rows.
+If \code{by = "time"} it represents a time window in the units of the time data.
+If \code{NULL}, it defaults to 0.2 or a window of 20\% of the data length. See
+Details.}
 
-\item{method}{string. \code{"linear"}, \code{"max"}, \code{"min"} or \code{"interval"}. Defaults
-to \code{linear}. Note that if \code{"linear"} is selected, the argument \code{width} will
-be set to default.}
+\item{by}{string. \code{"row"} or \code{"time"}. Defaults to \code{"row"}. Metric by which
+to apply the \code{width} input if it is above 1.}
 
 \item{plot}{logical. Defaults to TRUE. Plot the results.}
 
-\item{parallel}{logical. Defaults to TRUE. Should parallel processing be
-used?}
+\item{...}{Allows additional plotting controls to be passed, such as \code{pos},
+\code{panel}, and \code{quiet = TRUE}.}
 }
 \value{
-A list object of class \code{auto_rate}.
+Output is a \code{list} object of class \code{auto_rate} containing input
+parameters and data, various summary data, metadata, linear models, and the
+primary output of interest \verb{$rate}, which can be background adjusted in
+\code{\link{adjust_rate}} or converted to units in \code{\link{convert_rate}}.
 }
 \description{
-\code{auto_rate} automatically performs a rolling regression on a data frame to
-determine the \emph{most linear, maximum, minimum}, or \emph{interval} rate of change
-in oxygen concentration over time. First, a rolling regression of specified
-\code{width} is performed on the entire dataset to obtain all possible values. The
-computations are then ranked (or, arranged), based on the "\code{logic}" argument,
-and the output is summarised.
+\code{auto_rate} performs rolling regressions on a dataset to determine the \emph{most
+linear, highest, lowest, maximum, minimum, rolling}, and \emph{interval} rates of
+change in oxygen against time. A rolling regression of the specified \code{width}
+is performed on the entire dataset, then based on the "\code{method}" input, the
+resulting regressions are ranked or ordered, and the output summarised.
 }
 \details{
-\strong{Units}
+\subsection{Ranking and ordering algorithms}{
 
-There are no units of measurement involved in \code{auto_rate}. This is a
-deliberate decision. Units are called in a later function when volumetric
-and/or mass-specific rates of oxygen use are computed in \code{\link[=convert_rate]{convert_rate()}} and
-\code{\link[=convert_DO]{convert_DO()}}.
-
-\emph{\strong{Ranking algorithms}}
-
-At present, \code{auto_rate()} contains four ranking algorithms that can be called
-with the argument \code{method}:
+Currently, \code{auto_rate} contains seven ranking and ordering algorithms that
+can be applied using the \code{method} input:
 \itemize{
-\item \code{linear}: Uses kernel density estimation (KDE) to detect the "most
-linear" sections of the timeseries. This is achieved by using the smoothing
-bandwidth of the KDE to re-sample the "peaks" in the KDE to determine linear
-regions in the data.
-\item \code{max}: regressions are arranged from highest values, to the lowest.
-\item \code{min}: regressions are arranged from lowest values, to the highest.
-\item \code{interval}: non-overlapping regressions are extracted from the rolled
-regrssions. They are not ranked.
+\item \code{linear}: Uses kernel density estimation (KDE) to learn the shape of the
+entire dataset and \emph{automatically identify} the most linear regions of the
+timeseries. This is achieved by using the smoothing bandwidth of the KDE to
+re-sample the "peaks" in the KDE to determine linear regions of the data. The
+summary output will contain only the regressions identified as coming from
+linear regions of the data, ranked by order of the KDE density analysis. This
+is present in the \verb{$summary} component of the output as \verb{$density}. Under
+this method, the \code{width} input is used as a starting seed value, but the
+resulting regressions may be of any width. See
+\href{https://github.com/januarharianto/respR}{here} for full details.
+\item \code{highest}: Every regression of the specified \code{width} across the entire
+timeseries is calculated, then ordered using \emph{\strong{absolute}} rate values from
+highest to lowest. Essentially, this option ignores the sign of the rate, and
+can only be used when rates all have the same sign. Rates will be ordered
+from highest to lowest in the \verb{$summary} table regardless of if they are
+oxygen uptake or oxygen production rates.
+\item \code{lowest}: Every regression of the specified \code{width} across the entire
+timeseries is calculated, then ordered using \emph{\strong{absolute}} rate values from
+lowest to highest. Essentially, this option ignores the sign of the rate, and
+can only be used when rates all have the same sign. Rates will be ordered
+from lowest to highest in the \verb{$summary} table regardless of if they are
+oxygen uptake or oxygen production rates.
+\item \code{maximum}: Every regression of the specified \code{width} across the entire
+timeseries is calculated, then ordered using \emph{\strong{numerical}} rate values from
+maximum to minimum. Takes \emph{\strong{full account of the sign of the rate}}.
+Therefore, oxygen uptake rates, which in \code{respR} are negative, would be
+ordered from lowest (least negative), to highest (most negative) in the
+summary table in numerical order. Therefore, generally this method should
+only be used when rates are a mix of oxygen consumption and production rates,
+such as when positive rates may result from regressions fit over flush
+periods in intermittent-flow respirometry. Generally, for most analyses where
+maximum or minimum rates are of interest the \code{"highest"} or \code{"lowest"}
+methods should be used.
+\item \code{minimum}: Every regression of the specified \code{width} across the entire
+timeseries is calculated, then ordered using \emph{\strong{numerical}} rate values from
+minimum to maximum. Takes \emph{\strong{full account of the sign of the rate}}.
+Therefore, oxygen uptake rates, which in \code{respR} are negative, would be
+ordered from highest (most negative) to lowest (least negative) in the
+summary table in numerical order. Therefore, generally this method should
+only be used when rates are a mix of oxygen consumption and production rates,
+such as when positive rates may result from regressions fit over flush
+periods in intermittent-flow respirometry. Generally, for most analyses where
+maximum or minimum rates are of interest the \code{"highest"} or \code{"lowest"}
+methods should be used.
+\item \code{rolling}: A rolling regression of the specified \code{width} is performed
+across the entire timeseries. No reordering of results is performed.
+\item \code{interval}: multiple, successive, non-overlapping regressions of the
+specified \code{width} are extracted from the rolling regressions, ordered by
+time.
+\item NOTE: \code{max}, \code{min}: These methods were used in previous versions of \code{respR}
+but have been deprecated. They were intended to order oxygen uptake
+(negative) rates by magnitude, but this resulted in incorrect ordering of
+oxygen production (positive) rates. They have been retained for code
+compatibility, but will be removed in a future version of \code{respR}, and so
+\emph{should not be used}.
+}
+}
+
+\subsection{Further selection and filtering of results}{
+
+For further selection or subsetting of \code{auto_rate} results, see the dedicated
+\code{\link[=subset_rate]{subset_rate()}} function, which allows subsetting of rates by various
+criteria, including r-squared, data region, percentiles, and more.
+}
+
+\subsection{Units}{
+
+There are no units involved in \code{auto_rate}. This is a deliberate decision.
+The units of oxygen concentration and time will be specified later in
+\code{\link[=convert_rate]{convert_rate()}} when rates are converted to specific output units.
+}
+
+\subsection{The \code{width} and \code{by} inputs}{
+
+If \code{by = "time"}, the \code{width} input represents a time window in the units of
+the time data.
+
+If \code{by = "row"} and between 0 and 1, \code{width} represents a proportion of the
+total data length, as in the equation \verb{floor(width * number of data rows)}.
+For example, 0.2 represents a rolling window of 20\% of the data width.
+Otherwise, if entered as an integer of 2 or greater, the \code{width} represents
+the number of rows.
+
+For both \code{by} inputs, if left as \code{width = NULL} it defaults to 0.2 or a
+window of 20\% of the data length.
+
+In most cases, \code{by} should be left as the default \code{"row"}, and the \code{width}
+chosen with this in mind, as it is considerably more computationally
+efficient. Changing to \code{"time"} causes the function to perform checks for
+irregular time intervals at every iteration of the rolling regression, which
+adds to computation time. This is to ensure the specified \code{width} input is
+honoured in the time units and rates correctly calculated, even if the data
+is unevenly spaced or has gaps.
+}
+
+\subsection{Plot}{
+
+A plot is produced (provided \code{plot = TRUE}) showing the original data
+timeseries of oxygen against time (bottom blue axis) and row index (top red
+axis), with the rate result region highlighted. Second panel is a close-up of
+the rate region with linear model coefficients. Third panel is a rolling rate
+plot (note the reversed y-axis so that higher oxygen uptake rates are plotted
+higher), of a rolling rate of the input \code{width} across the whole dataset.
+Each rate is plotted against the middle of the time and row range used to
+calculate it. The dashed line indicates the value of the current rate result
+plotted in panels 1 and 2. The fourth and fifth panels are summary plots of
+fit and residuals, and for the \code{linear} method the sisth panel the results of
+the kernel density analysis, with the dashed line again indicating the value
+of the current rate result plotted in panels 1 and 2.
+}
+
+\subsection{Additional plotting options}{
+
+If multiple rates have been calculated, by default the first (\code{pos = 1}) is
+plotted. Others can be plotted by changing the \code{pos} input either in the main
+function call, or by plotting the output, e.g. \code{plot(object, pos = 2)}. In
+addition, each sub-panel can be examined individually by using the \code{panel}
+input, e.g. \code{plot(object, panel = 2)}.
+
+Console output messages can be suppressed using \code{quiet = TRUE}. If axis
+labels or other text boxes obscure parts of the plot they can be suppressed
+using \code{legend = FALSE}. The rate in the rolling rate plot can be plotted
+\emph{not} reversed by passing \code{rate.rev = FALSE}, for instance when examining
+oxygen production rates so that higher production rates appear higher. If
+axis labels (particularly y-axis) are difficult to read, \code{las = 2} can be
+passed to make axis labels horizontal, and \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}), and \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) used to adjust plot margins.
+}
+
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints a single result, by default the first rate. Others can be
+printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+\item \code{summary()}: prints summary table of all results and metadata, or those
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary can
+be exported as a separate data frame by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all rates, or those specified by the \code{pos}
+input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate value
+by passing \code{export = TRUE}.
+}
 }
 }
 \examples{
-# most linear section of the entire data
-data("flowthrough.rd")
-auto_rate(flowthrough.rd, parallel = FALSE)
+\donttest{
+# Most linear section of an entire dataset
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate()
 
-# LONG EXAMPLES
-\dontrun{
-data("sardine.rd")
-# what is the lowest rate over a 10 minute (600s) period?
-auto_rate(sardine.rd, method = "min", width = 600, by = "time", parallel = FALSE)
-# what is the highest rate over a 10 minute (600s) period?
-auto_rate(sardine.rd, method = "max", width = 600, by = "time", parallel = FALSE)
-}
+# What is the lowest oxygen consumption rate over a 10 minute (600s) period?
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate(method = "lowest", width = 600, by = "time") \%>\%
+ summary()
+
+# What is the highest oxygen consumption rate over a 10 minute (600s) period?
+inspect(sardine.rd, time = 1, oxygen =2) \%>\%
+ auto_rate(method = "highest", width = 600, by = "time") \%>\%
+ summary()
+
+# What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
+# period in intermittent-flow respirometry data?
+# NOTE: because uptake rates are negative, this would actually be
+# the HIGHEST uptake rate.
+auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") \%>\%
+ summary()
+ }
 }
