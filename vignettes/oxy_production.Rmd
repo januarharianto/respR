@@ -29,7 +29,7 @@ opts_chunk$set(collapse = TRUE,
 
 ## Introduction {#intro}
 
-While the majority of respirometry studies are concerned with oxygen uptake by various organisms, there are many studies of organisms such as plants, algae and corals where oxygen production rates are of primary interest. We have designed `respR` to be able to process and calculate rates from oxygen production data in exactly the same way as for consumption data. In fact, the package has already [been used]() by several studies to determine the production rates of diatoms, algae, and corals. 
+While the majority of respirometry studies are concerned with oxygen uptake by various organisms, there are many studies of organisms such as plants, algae and corals where oxygen production rates are of primary interest. We have designed `respR` to be able to process and calculate rates from oxygen production data in exactly the same way as for consumption data. In fact, the package has already [been used](https://januarharianto.github.io/respR/articles/citations.html) by several studies to determine the production rates of diatoms, algae, and corals. 
 
 Here we will use the included `algae.rd` dataset to briefly show how production data may be processed and used to extract production rates. It contains 20 hours of data recorded once per minute on oxygen production by an algae. More information on the data can be seen by running `?algae.rd`.
 
@@ -77,7 +77,7 @@ In this analysis, we can easily see that the top ranked result is the one we wan
 
 ### Rolling rate widths in `auto_rate`
 
-We saw in the [inspect section](#inspect) above a higher `width` made the rolling rate much more consistent. It is not necessarily always the case increasing the default of `width = 0.2` will improve the results of `auto_rate` however, as it gives the KDE much less variation to work with. 
+We saw in the `inspect` [section](#inspect) above a higher `width` made the rolling rate much more consistent. It is not necessarily always the case increasing the default of `width = 0.2` will improve the results of `auto_rate` however, as it gives the KDE much less variation to work with. 
 
 Here is the summary table of the results when we increase the width to 0.5.
 
@@ -87,7 +87,7 @@ auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 
 This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they don't add much to our understanding of what our final rate should be. Therefore, in this case the default `width` provided us with a good result, and there is no real reason to change it. This does however serve as a good example of how users should experiment with different widths to get an idea of how it might affect analyses. Certain datasets will benefit from this more than others. 
 
-See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
+See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
 
 ## Adjust rate
 

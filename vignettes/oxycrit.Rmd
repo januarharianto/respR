@@ -72,7 +72,7 @@ The function has the following additional inputs:
 
 #### `width`
 
-For data entered as `time` and `oxygen` values, this controls the width of the internally calculated rolling regression which provides the rates upon which the critical point analysis is conducted. The default is `0.1`, representing 10% of the length of the dataset and seems to perform well with most data we have tested it with. However, the `width` should be chosen carefully after experimenting with different values and examining the results. Too low a value and the rolling rate will be noisy making it more difficult to detect a critical breakpoint, too high and it will be oversmoothed. See [here]() for a discussion of appropriate widths and the implications of overfitting rolling rates. This is an important analysis parameter with major implications for the output values and should be reported alongside the results.
+For data entered as `time` and `oxygen` values, this controls the width of the internally calculated rolling regression which provides the rates upon which the critical point analysis is conducted. The default is `0.1`, representing 10% of the length of the dataset and seems to perform well with most data we have tested it with. However, the `width` should be chosen carefully after experimenting with different values and examining the results. Too low a value and the rolling rate will be noisy making it more difficult to detect a critical breakpoint, too high and it will be oversmoothed. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for a discussion of appropriate widths and the implications of overfitting rolling rates, and also [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions. This is an important analysis parameter with major implications for the output values and should be reported alongside the results.
 
 #### `thin`
 
@@ -163,7 +163,7 @@ plot(squid.seg, quiet = TRUE)
 
 For these particular data, we get the exact same result as the BSR method: 2.61 mg L^-1^. This will not be the case with every dataset.
 
-Note that the segmented method sometimes returns a different value when the exact same code is run. The differences are almost always minor. See the documentation for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package and publications by Muggeo for the details of why this is, but briefly, it stems from randomising the starting point for the initial analysis.
+Note that the segmented method sometimes returns a different value when the exact same code is run. The differences are almost always minor. See the documentation for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package and publications by @muggeoModelingTemperatureEffects2008 for the details of why this is, but briefly, it stems from randomising the starting point for the initial analysis.
 
 #### Summary results
 
@@ -222,7 +222,7 @@ Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate` inputs to spe
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 ```
 
-Notice that we get identical critical values as the analysis on `oxygen~time` data [above](#bsr), despite the very different rate values (y-axis) and the fact these are *mass-specific* rates.
+Notice that we get identical critical values as the analysis on `oxygen~time` data [above](#bsr), despite the very different rate values (y-axis) and the fact these are *mass-specific* rates. Both absolute and mass-specific rates will give identical results.
 
 ### Extracting results
 

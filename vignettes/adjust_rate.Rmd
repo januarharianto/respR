@@ -154,7 +154,7 @@ Note that in general the background recording does not have to be conducted at t
 
 ### When should adjustments be applied?
 
-Adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates and so no adjustments are necessary (e.g. [Burford et al. 2019]()).
+Adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates and so no adjustments are necessary (e.g. [Burford et al. 2019](https://januarharianto.github.io/respR/articles/refs.html#references)).
 
 In the `respR` general workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate` or `auto_rate` or rate values (oxygen change per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
 
@@ -171,7 +171,7 @@ We use the new native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.c
 See `vignette("flowthrough")` for how to adjust flowthrough respirometry rates. 
 
 ## Case studies
-In this vignette we will run through several hypothetical case studies which should cover most use cases. If there are any we have not, please [**get in touch**](mailto:nicholascarey@gmail.com) and we'll try to cover them here or build in support in a future update. 
+In this vignette we will run through several hypothetical case studies which should cover most use cases. If there are any we have not, please [**get in touch**](https://januarharianto.github.io/respR/articles/contact.html) and we'll try to cover them here or build in support in a future update. 
 
 ## Case 1: Single specimen chamber and a single control {#case1}
 
@@ -962,7 +962,7 @@ adjust_rate(0.0887, -0.0145)
 
 *"Our respirometer is open to the air.  We want to correct oxygen uptake rates for oxygen **input** at the surface"*
 
-It is not just the rate to be adjusted that might be positive. There are scenarios and experiments where the background change in oxygen is an input, for example in open tank respirometry where the surface is open to the atmosphere and the input of new oxygen has been quantified or can be reliably estimated, such as by using Fick's Law (e.g. [Leclercq et al. 1999]()). 
+It is not just the rate to be adjusted that might be positive. There are scenarios and experiments where the background change in oxygen is an input, for example in open tank respirometry where the surface is open to the atmosphere and the input of new oxygen has been quantified or can be reliably estimated, such as by using Fick's Law (e.g. [Leclercq et al. 1999](https://januarharianto.github.io/respR/articles/refs.html#references)). 
 
 `adjust_rate` can therefore accept positive background rate values. 
 

@@ -26,7 +26,7 @@ opts_chunk$set(collapse = TRUE,
 
 Another useful utility function in `respR` in `subsample()`. This is intended to thin or reduce the resolution of large datasets so analysis processing times are reduced, which may be useful for computationally intensive functions such as `auto_rate()` and `oxy_crit()`.
 
-`respR` has been designed to be extremely fast in running analyses of large datasets, and as computing power increases over time, there is rarely any need to do this, and caution would suggest datasets are kept complete where possible. We have found it useful primarily to reduce data sizes to use with other [packages]() which take a prohibitively long time to process data, so their results can be compared with those of `respR`.
+`respR` has been designed to be extremely fast in running analyses of large datasets, and as computing power increases over time, there is rarely any need to do this, and caution would suggest datasets are kept complete where possible. We have found it useful primarily to reduce data sizes to use with other [packages](https://januarharianto.github.io/respR/articles/archive/auto_rate_comp.html) which take a prohibitively long time to process data, so their results can be compared with those of `respR`.
 
 `subsample` has two ways of selecting the degree of subsampling. The `n` input will cause every n'th element or row to be subsampled. The probably more useful `length.out` input uniformly subsamples the data to this total length or number of rows. 
 
