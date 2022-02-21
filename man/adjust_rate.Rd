@@ -2,36 +2,303 @@
 % Please edit documentation in R/adjust_rate.R
 \name{adjust_rate}
 \alias{adjust_rate}
-\title{Simple rate adjustment function (background or oxygen flux)}
+\title{Adjust rates to account for background respiration or oxygen flux.}
 \usage{
-adjust_rate(x, by)
+adjust_rate(
+  x,
+  by,
+  method = "mean",
+  by2 = NULL,
+  time_x = NULL,
+  time_by = NULL,
+  time_by2 = NULL
+)
 }
 \arguments{
-\item{x}{numeric. A single value, or any object of class \code{calc_rate} or \code{auto_rate}.
-This object contains the rate value that needs to be adjusted.}
+\item{x}{numeric. A single numeric value, numeric vector, or object of class
+\code{calc_rate} or \code{auto_rate}. This contains the experimental rate value(s) to
+be adjusted.}
 
-\item{by}{either a numeric, or an object of class \code{calc_rate.bg}. This is the
-value that is used to perform the correction/adjustment.}
+\item{by}{numeric. A single numeric value, numeric vector, or object of class
+\code{calc_rate.bg}. This is the background rate(s) used to perform the
+adjustment to \code{x}. Can also be a \code{data.frame} or \code{inspect} object for
+\code{"concurrent"}, \code{"linear"} or \code{"exponential"} adjustments. See Details.}
+
+\item{method}{string. Method of background adjustment. Defaults to \code{"mean"}.
+Other inputs are: \code{"value"}, \code{"paired"}, \code{"concurrent"}, \code{"linear"},
+\code{"exponential"}. See Details.}
+
+\item{by2}{numeric. Either a single numeric value, a \code{calc_rate.bg} object, a
+\code{data.frame} or \code{inspect} object. This is the source of the second
+background adjustment rate, and used only for dynamic adjustments
+(\code{"linear"} or \code{"exponential"}). See Details.}
+
+\item{time_x}{numeric. The timestamp(s) for the rate(s) in \code{x}, if it was
+entered as a numeric (otherwise it is extracted from the \code{x} input object).
+Generally this is the midpoint of the time range over which each \code{x} rate
+was calculated. Used only in dynamic adjustments (\code{"linear"} or
+\code{"exponential"}). See Details.}
+
+\item{time_by}{numeric. The timestamp of the background correction rate in
+\code{by}, if it was entered as a numeric (otherwise it is extracted from the
+\code{by} input object). Generally the midpoint of the time range over which it
+was calculated. Used only in dynamic adjustments (\code{"linear"} or
+\code{"exponential"}). See Details.}
+
+\item{time_by2}{numeric. The timestamp of the background correction rate in
+\code{by2}, if it was entered as a numeric (otherwise it is extracted from the
+\code{by2} input object). Generally the midpoint of the time range over which it
+was calculated. Used only in dynamic adjustments (\code{"linear"} or
+\code{"exponential"}). See Details.}
 }
 \value{
-A list object of class \code{adjust_rate}.
+Output is a list object of class \code{adjust_rate} containing all inputs,
+input rates, adjustment values, adjustment method and model (if relevant),
+and the primary output of interest \verb{$rate.adjusted}.
 }
 \description{
-A simple rate correction function. Please note that the \strong{sign} of the
-number must be considered in the correction. Background respiration is
-normally a negative number, while oxygen flux may or may not be negative.
+The \code{adjust_rate} function adjusts an oxygen uptake or production rate (for
+example, as determined in \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}}) for background
+oxygen use by microbial organisms, or for other removal or input of oxygen
+during a respirometry experiment. The function accepts numeric values, as
+well as regular \code{respR} objects, and data frames. See \code{\link[=calc_rate.bg]{calc_rate.bg()}} for
+determining background rates, which is the recommended way of passing
+background rates to \code{adjust_rate}.
 }
 \details{
-To account for background respiration and/or oxygen flux in open respirometry
-experiments, we have provided a simple function to perform either, or both,
-corrections. As a separate function we may develop this to support more
-complex correction methods (e.g. non-linear) in the future.
+\code{adjust_rate} allows the rate, or multiple rates, in \code{x} to be adjusted in a
+number of ways, as detailed below. Note that for those methods which accept
+them, \code{by} and \code{by2} inputs of class \code{calc_rate.bg}, \code{data.frame} or
+\code{inspect} can contain multiple columns of background oxygen data, as long as
+they share the same numeric time data in column 1. In this case, the mean of
+all rates calculated for all oxygen columns is used to perform adjustments
+(see \code{\link[=inspect]{inspect()}} and \code{\link[=calc_rate.bg]{calc_rate.bg()}} to coerce data to this form). The
+exception to this is the \code{"paired"} method, where each rate in \code{by} (i.e.
+rate in each oxygen column) is paired with the rate at the same position in
+\code{x} and used to adjust it.
+
+\emph{\strong{Note:}} take special care with the \emph{sign} of the rate used for
+adjustments. In \code{respR} oxygen uptake rates are negative, as they represent a
+negative slope of oxygen against time. Background rates will normally also be
+a negative value, while any input of oxygen would be positive. See Examples.
+
+\emph{\strong{Methods}}
+
+There are six methods of adjustment, briefly summarised here, with more
+detail below:
+
+\code{"value"} - All experimental rates in \code{x} are adjusted by a single background
+rate value in \code{by}.
+
+\code{"mean"} - This is the default method. All experimental rates in \code{x} are
+adjusted by the mean of all background rate values in \code{by}.
+
+\code{"paired"} - Experimental rates in \code{x} are adjusted by the background rate
+value at the same position in \code{by}. Therefore requires \code{x} and \code{by} to have
+the same number of rates.
+
+\code{"concurrent"} - Experimental rates in \code{x} are adjusted by a background rate
+calculated over the same time window in the data in \code{by}. Therefore requires
+\code{x} and \code{by} to share the same time data and length (broadly speaking).
+
+\code{"linear"} - The time values for experimental rates in \code{x} are used to
+calculate an adjustment value based on a background rate that changes
+\emph{linearly} with respect to time over the course of an experiment. Requires
+two background recordings or values (\code{by}, \code{by2}), and that all data share
+the same time data or scale.
+
+\code{"exponential"} - The time values for experimental rates in \code{x} are used to
+calculate an adjustment value based on a background rate that changes
+\emph{exponentially} with respect to time over the course of an experiment.
+Requires two background recordings or values (\code{by}, \code{by2}), and that all data
+share the same time data or scale.
+
+\emph{\strong{More Detail}}
+
+\code{"value"} - For experiments in which the rate from a single background
+experiment (or any single background value) is being used to adjust one or
+more specimen rates. Each rate in \code{x} is adjusted by the subtracting the
+single value in \code{by}. \code{x} can be a numeric value, numeric vector,
+\code{auto_rate}, or \code{calc_rate} object. \code{by} can be a single numeric value, or a
+\code{calc_rate.bg} object containing a single \verb{$rate.bg} (i.e. calculated from a
+2-column data frame of time~oxygen). All other inputs should be \code{NULL}.
+
+\code{"mean"} - For experiments in which the mean rate from multiple background
+experiments is being used to adjust one or more specimen rates. Each rate in
+\code{x} is adjusted by subtracting the \emph{mean} of all background rates in \code{by}.
+\code{x} can be a numeric value, numeric vector, \code{auto_rate}, or \code{calc_rate}
+object. \code{by} can be a numeric value, numeric vector, or \code{calc_rate.bg} object
+containing multiple \verb{$rate.bg}. All other inputs should be \code{NULL}. If \code{by} is
+a single value, this will obviously have the same output as the \code{"value"}
+method.
+
+\code{"paired"} - For experiments where multiple specimen experiments are being
+adjusted by multiple different background rates. This is a vectorised
+adjustment operation: rates in \code{x} are adjusted by the background rates at
+the same position in \code{by}. That is, the first \code{x} adjusted by the first \code{by},
+second \code{x} by second \code{by}, etc. \code{x} can be a numeric value, numeric vector,
+\code{auto_rate}, or \code{calc_rate} object. \code{by} can be a numeric vector \emph{of the same
+length}, or a \code{calc_rate.bg} object where the \verb{$rate.bg} element is the \emph{same
+length} as the rates in \code{x} to be adjusted. All other inputs should be
+\code{NULL}.
+
+\code{"concurrent"} - For experiments in which one or more concurrent "blanks" or
+background experiments are run alongside specimen experiments. Rates in \code{x}
+are adjusted by a background rate calculated over the same time window in the
+data in \code{by}. That is, the start and end time of each \code{x} rate is used to fit
+a linear regression and calculate a background rate in the \verb{$dataframe} in
+\code{by}. \code{x} must be an \code{auto_rate}, or \code{calc_rate} object. \code{by} must be a
+\code{data.frame}, \code{inspect} or \code{calc_rate.bg} object containing time~oxygen data.
+If there are multiple columns of background oxygen the mean rate across the
+same time window in all columns is used. In \code{calc_rate.bg} objects the
+\verb{$rate.bg} element is not used, only the \verb{$dataframe}. The \code{x} and \code{by} data
+must share (broadly) the \emph{same time data or scale in the same units}. If the
+\code{x} and \code{by} data differ in length by more than 5\% or some time values are
+not shared between the two datasets, a \code{warning} is given, but the adjustment
+is nevertheless performed using the available data, by using the closest
+matching time window in the background data.
+
+\code{"linear"} - This is a dynamic adjustment, intended for experiments in which
+the background oxygen rate \emph{changes} over the course of the experiment
+\emph{linearly} with respect to time. This is typical of long duration
+respirometry experiments in high temperatures, where a "blank" is conducted
+at the start of the experiment before the specimen is put in, and again at
+the end after it is taken out. It requires therefore two background
+recordings sharing the same numeric \emph{time data} or \emph{time scale}, in the same
+units as the experiment to be adjusted. These can also be entered as two rate
+\emph{values} with associated \emph{timestamps}, which again must share the same time
+scale and units as the rate to be adjusted. This method can also be used in
+experiments in which a concurrent blank experiment is conducted alongside
+specimen experiments (as described in the \code{concurrent} method above), but in
+which the background data is deemed too noisy to fit reliable regressions
+over the short timescales specimen rates are determined. In this case, \emph{any}
+two reliable segments of the background data of any duration can be used to
+determine how the background rate changes over the course of the experiment,
+and then this used to adjust specimen rates using the appropriate rate
+timestamps. The \emph{time~background rate} linear relationship is calculated
+using the midpoint of the time range of the \code{by} and \code{by2} rate regressions
+(or values plus timestamps). The adjustments to \code{x} rates are calculated by
+taking the midpoint of the time range over which it was determined and
+applying it to the \code{by~by2} linear relationship. The \code{x} input can be a
+numeric value, numeric vector, or a \code{calc_rate} or \code{auto_rate} object
+containing single or multiple rates. The \code{by} input is the first background
+recording or rate value, and \code{by2} the second background recording or rate
+value.
+
+While it is typical, the \code{x} rates do not necessarily need to be at
+intermediate timepoints to the \code{by/by2} times. these are used only to
+establish a \emph{time~background rate} linear relationship, which can be
+extrapolated before or after the time values used to calculate it. The \code{by}
+and \code{by2} inputs can be a \code{data.frame}, \code{inspect} or \code{calc_rate.bg} object
+containing background time~oxygen data. Alternatively, the rate \code{x}, and
+background rates \code{by} and \code{by2} can be entered as values, in which case the
+associated timepoints at which these were determined (generally the midpoint
+of the time range over which the linear regression was fit) must be entered
+as \code{time_x}, \code{time_by}, and \code{time_by2} (these timepoints are otherwise
+automatically extracted from the input objects). Multiple \code{x} rates with
+multiple \code{time_x} timepoints can be entered and adjusted, but only one linear
+background rate relationship applied, that is \code{by}, \code{by2}, \code{time_by}, and
+\code{time_by2} must be single numeric values in the correct units.
+
+\code{"exponential"} - This is a dynamic adjustment, intended for experiments in
+which the background oxygen rate \emph{changes} over the course of the experiment
+\emph{exponentially} with respect to time. This is typical of long duration
+respirometry experiments in high temperatures, where a "blank" is conducted
+at the start of the experiment before the specimen is put in, and again at
+the end after it is taken out, and the background rate is found to increase
+exponentially. This is identical to the \code{"linear"} method (see above for
+requirements), except the adjustment is calculated as an exponential
+relationship of the form - \code{lm(log(c(by, by2)) ~ c(time_by, time_by2))}.
+\subsection{S3 Generic Functions}{
+
+Saved output objects can be used in the generic S3 functions \code{print()},
+\code{summary()}, and \code{mean()}.
+\itemize{
+\item \code{print()}: prints a single result, by default the first adjusted rate.
+Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+\item \code{summary()}: prints summary table of all results and metadata, or those
+specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary can
+be exported as a separate dataframe by passing \code{export = TRUE}.
+\item \code{mean()}: calculates the mean of all adjusted rates, or those specified by
+the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
+separate value by passing \code{export = TRUE}.
+}
+}
 }
 \examples{
-# Note that respiration is negative by default (since it represents a
-# decrease in dissolved oxygen), so both values are negative!
-# Background respiration correction
-adjust_rate(-7.44, -0.04) # this is (-7.44) - (-0.04) = -7.40
-# Oxygen flux correction
-adjust_rate(-7.44, 0.1) # this is (-7.44) - (0.1) = -7.54
+# Note that oxygen uptake rates are negative in respR since they represent a
+# decrease in dissolved oxygen and negative slope. Typically both
+# specimen rate and background rate values are negative.
+
+# Simple background adjustment to a single rate
+# This is (-7.44) - (-0.04) = -7.40
+adjust_rate(x = -7.44, by = -0.04, method = "value")
+
+# Oxygen input adjustment
+# This is (-7.44) - (0.1) = -7.54
+adjust_rate(x = -7.44, by = 0.1, method = "value")
+
+# Mean background respiration correction to a single rate.
+adjust_rate(x = -7.44, by = c(-0.04, -0.05, -0.06),
+            method = "mean")
+
+# Mean background respiration correction to multiple rates.
+out <- adjust_rate(x = c(-7.44, -7.20, -7.67),
+                   by = c(-0.04, -0.05, -0.06),
+                   method = "mean")
+summary(out)
+
+# Paired background respiration correction to multiple rates.
+out <- adjust_rate(x = c(-7.44, -7.20, -7.67),
+                   by = c(-0.04, -0.05, -0.06),
+                   method = "paired")
+summary(out)
+
+# Dynamic linear adjustment
+# With a linear relationship between the 'by' and 'by2' rates,
+# at the midpoint time value the adjustment to 'x' should be -0.5
+adjust_rate(x = -10,
+            time_x = 500,
+            by = 0, by2 = -1,
+            time_by = 0, time_by2 = 1000,
+            method = "linear")
+
+# Same operation to multiple rates
+out <- adjust_rate(x = c(-10, -11, -12),
+                   time_x = c(500, 600, 700),
+                   by = 0, by2 = -1,
+                   time_by = 0, time_by2 = 1000,
+                   method = "linear")
+summary(out)
+
+# A complete workflow using objects instead of values.
+
+# Extract a single replicate from the middle of the zebrafish data
+# and calculate rates
+zeb_rate <- subset_data(zeb_intermittent.rd,
+                        from = 38300,
+                        to = 38720,
+                        by = "time") \%>\%
+  inspect() \%>\%
+  auto_rate()
+
+# Calculate background rate at start of experiment
+bg_start <- subset_data(zeb_intermittent.rd, 1, 4999, "time") \%>\%
+  inspect() \%>\%
+  calc_rate.bg() \%>\%
+  print()
+
+# Calculate background rate at end of experiment
+bg_end <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") \%>\%
+  inspect() \%>\%
+  calc_rate.bg() \%>\%
+  print()
+
+# Perform a dynamic linear adjustment
+adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
+            method = "linear") \%>\%
+  summary()
+
+# Note the adjustment values applied are somewhere between the
+# start and end background rate values
 }
