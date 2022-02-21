@@ -20,3 +20,6 @@ pkgdown::build_article("closed")
 pkgdown::build_article("subset_rate")
 
 usethis::use_vignette("support", "Support Us")
+
+
+usethis::use_pkgdown_github_pages()
