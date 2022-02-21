@@ -23,3 +23,4 @@ usethis::use_vignette("support", "Support Us")
 
 
 usethis::use_pkgdown_github_pages()
+pkgdown::deploy_to_branch()
