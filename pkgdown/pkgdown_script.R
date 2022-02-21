@@ -22,5 +22,11 @@ pkgdown::build_article("subset_rate")
 usethis::use_vignette("support", "Support Us")
 
 
-usethis::use_pkgdown_github_pages()
+# sets up GH Actions workflow. Which isn't working.
+#usethis::use_pkgdown_github_pages()
+
+
+## This deploys to the gh-pages branch, and runs the deploy workflow on GH Actions
+## Uses local changes - don't have to be pushed
+## (not sure about commits v local changes tho)
 pkgdown::deploy_to_branch()
