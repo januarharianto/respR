@@ -5,9 +5,9 @@
 \alias{flowthrough.rd}
 \title{Flowthrough respirometry data on the chiton, \emph{Mopalia lignosa}}
 \format{
-A data frame object consisting of and 935 rows (approx 16 mins of
+A data frame object consisting of 935 rows (approx 16 mins of
 data),and 4 columns: time, oxygen inflow and outflow concentrations, and
-oxygen delta (the difference between inflow and outflow concentrations).
+oxygen delta (the outflow minus inflow concentrations).
 }
 \usage{
 flowthrough.rd
@@ -19,11 +19,14 @@ Vancouver, BC, Canada.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
-\item Flow rate (L/min): 0.00234
-\item Inflow oxygen concentration (mean, mg/L): 8.88
-\item Specimen ash-free dry mass (kg): 0.000070
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{seconds}
+\item Flow rate (\code{mL/min}): \code{2.34}
+\item Inflow oxygen concentration (calculated assuming 100\% air saturated, \code{mg/L}): \code{8.919}
+\item Specimen ash-free dry mass (\code{kg}): \code{0.000070}
+\item Temperature (°C): \code{t = 12}
+\item Salinity: \code{S = 30}
+\item Atm. Pressure (bar): \code{P = 1.013}
 }
 }
 \author{

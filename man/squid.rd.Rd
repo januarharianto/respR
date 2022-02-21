@@ -3,30 +3,35 @@
 \docType{data}
 \name{squid.rd}
 \alias{squid.rd}
-\title{Respirometry data of the squid, \emph{Doryteuthis opalescens}, with P_crit}
+\title{Respirometry data of the squid, \emph{Doryteuthis opalescens}}
 \format{
-A data frame object consisting of 2 columns (time and dissolved
-oxygen) and 34120 rows (approx 9.5h of data).
+A data frame object consisting of 2 columns (\verb{$Time} and \verb{$Oxygen})
+and 34120 rows (approx 9.5h of data).
 }
 \usage{
 squid.rd
 }
 \description{
-A single experiment on the squid species \emph{Doryteuthis opalescens} in a
-Loligo Systems swim tunnel and Witrox oxygen probe system. Experiment
-conducted at Hopkins Marine Station, Stanford University, Pacific Grove,
-California.
+A single experiment on the squid species \emph{Doryteuthis opalescens} in a Loligo
+Systems swim tunnel and Witrox oxygen probe system. Oxygen was recorded to
+very low concentrations, making this dataset suitable for determining PCrit.
+Experiment conducted at Hopkins Marine Station, Stanford University, Pacific
+Grove, California. Mean temperature, salinity and atmospheric pressure are
+supplied below to allow for conversion to oxygen concentration units.
 }
 \details{
 \itemize{
-\item Dissolved oxygen units: mg/L
-\item Time units: seconds
-\item Chamber volume (L): 12.3
-\item Specimen wet mass (kg): 0.02141
+\item Dissolved oxygen units: \code{mg/L}
+\item Time units: \code{seconds}
+\item Chamber volume (L): \code{12.3}
+\item Specimen wet mass (kg): \code{0.02141}
+\item Temperature (°C): \code{14}
+\item Salinity: \code{35}
+\item Atm. Pressure (bar): \code{1.013253}
 }
 
-Data kindly supplied by Ben Burford, Hopkins Marine Station,
-Stanford University. \href{mailto:bburford@stanford.edu}{bburford@stanford.edu}
+Data kindly supplied by Ben Burford, Hopkins Marine Station, Stanford
+University.
 }
 \author{
 Ben Burford
