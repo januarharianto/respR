@@ -54,10 +54,7 @@ The package has also been [**peer reviewed and published**](https://besjournals.
 
  \
  \
- \
- \
- \
- \
+ 
 
 ## Contact, feedback and help
 
