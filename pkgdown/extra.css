@@ -1,0 +1,17 @@
+pre, pre code {
+  white-space: pre;
+  padding-right: 1rem;
+  overflow: auto;
+  word-wrap: normal;
+}
+
+/* */
+/* .fl      {color: blue;}
+/* .fu      {color: blue;} /* function */
+/* .ch,.st  {color: orange;} /* string */
+/* .kw      {color: black;} /* keyword */
+/* .co      {color: green;} /* comment */
+/* .message { color: gray;   font-weight: bolder;} */
+/* .error   { color: red;  font-weight: bolder;} */
+/* .warning { color: purple; font-weight: bolder;} */
+

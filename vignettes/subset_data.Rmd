@@ -1,0 +1,122 @@
+---
+title: "subset_data: Subset data by time, row, or oxygen ranges"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{subset_data: Subset data by time, row, or oxygen ranges}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F, warning = F, message = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                 scipen = 999, 
+                 digits = 3))
+```
+
+The purpose of this vignette is to highlight the `subset_data()` function, an extremely useful utility function in `respR`. 
+
+When working with a large respirometry dataset, sometimes you don't want to use all of it within another function. There can be a several reasons for this. Maybe it is an intermittent-flow dataset and you want to extract a single replicate, maybe you want to remove extraneous data at the start or end of a dataset, or maybe you just want to plot or inspect a small portion of a dataset for a quick look. 
+
+`subset_data` can let you pass subsets of data to other functions by ranges of time, row, or oxygen. This works not only on data frames, but also respR `inspect()` and `inspect.ft()` objects. Originally if you wanted to subset these you would have to subset the original data then `inspect` it again, potentially creating a new object. Using `subset_data` removes these steps. 
+
+It is especially useful when used with piping, either the new native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) or `%>%`  [`dplyr`](https://dplyr.tidyverse.org) pipes, for passing portions of a dataset without having to create a new object.
+
+R makes it fairly easy to subset data objects, but this function has several advantages, in that it lets you subset the data easily using the units you are already thinking about, reduces the proliferation of extra objects in the local environment that you need to keep track of, and can be used in loops to subset regions of longer datasets in a consistent way.
+
+
+## Subset by time
+
+The `squid.rd` dataset is extremely long. 
+
+```{r results='hide'}
+inspect(squid.rd)
+```
+
+Let's say we are only interested in the initial stages. 
+
+```{r results='hide', message=FALSE}
+x <- subset_data(squid.rd, from = 1, to = 10000, by = "time")
+inspect(x)
+```
+
+Now we can pass this object to further functions. 
+
+## Subset by row
+
+We can do the same thing using rows, which in this dataset which is per-second happen to be the same values. 
+
+```{r results='hide', message=FALSE}
+x <- subset_data(squid.rd, from = 1, to = 10000, by = "row")
+inspect(x)
+```
+
+
+## Subset by oxygen
+
+Let's say we are only interested in routine metabolic rates in normal conditions. In this long experiment oxygen declines to very low levels, so let's only select the higher values.
+
+```{r results='hide', message=FALSE}
+x <- subset_data(squid.rd, from = 8, to = 6.5, by = "oxygen")
+inspect(x)
+```
+
+```{r message=FALSE, R.options=list(digits = 5)}
+print(x)
+```
+
+Note how even though we use a value well above what is in the dataset (8.0) the function simply subsets from the start of the data, Similarly, there is no exact match to the value of 6.5, so the function finds the closest value, in this case 6.5035. 
+
+
+## Piping
+
+This is perhaps where `subset_data` comes into its own. We want to subset a single replicate from an intermittent flow experiment to calculate a rate. 
+
+```{r results='hide', message=FALSE}
+x <- inspect(intermittent.rd)
+```
+
+We have already inspected the dataset. Now we just subset out one replicate, pipe the data to `calc_rate` and other functions and output our final rate, all without having to create a new object.
+
+```{r message=FALSE}
+x |>
+  subset_data(from = 2100, to = 3500, by = "time", quiet = TRUE) |>
+  auto_rate() |>
+  adjust_rate(by = -0.00071) |>
+  convert_rate(oxy.unit = "mg/L",       
+               time.unit = "s",        
+               output.unit = "mg/h/g", 
+               volume = 2.379,         
+               mass = 0.006955) |>
+  summary(pos = 1:3)
+```
+
+See `vignette("intermittent_long")` for an example of how `subset_data` can be used in loops to subset replicates of long intermittent-flow experiments. 
+
+We can also use `subset_data` and pipes just to have a quick look at portions of big datasets without having to save anything.
+
+```{r message=FALSE, results='hide'}
+zeb_intermittent.rd |> 
+  subset_data(from = 10000, to = 13000, by = "time", quiet = TRUE) |>
+  inspect()
+```
+
+## Subset multiple columns:
+
+`subset_data` will also work on multi-column data frames (in the case of `by = "oxygen"` it bases the subsetting on the first column of oxygen only, but all other columns are subset to the same rows). 
+
+```{r message=FALSE}
+urchins.rd |> 
+  subset_data(from = 10, to = 20, by = "time", quiet = TRUE) |>
+  print(nrows = 10)
+```

@@ -1,0 +1,29 @@
+---
+title: "What's new"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{What's new}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+```
+
+This page contains the version changes for the latest updates to `respR`. 
+ \
+ \
+
+``` {r test, child="../NEWS.md", eval=TRUE}
+## This just reads the NEWS file and pastes it in, so we don't have to keep separate version update files, woop
+```

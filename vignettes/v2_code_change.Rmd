@@ -1,0 +1,112 @@
+---
+title: v2.0 Code changes
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{v2.0 Code changes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+`respr v2.0` was a huge rewrite and rethinking of the entire package. During this process it quickly became clear we could not update the package satisfactorily without breaking some code from v1.x. Therefore, we took the decision to implement these and a few other improvements in the belief that it was better to do it now and have the package work consistently and logically well into the future even if it meant some v1.x code may break.
+
+While the majority of the package workflows are in general unchanged, and older code *may* work, there are enough changes that we recommend old code be used very carefully with v2. `respR` workflows are generally concise and overall work in the same way, so any updating of code to be compatible should be relatively straightforward. 
+
+This is an incomplete summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
+
+If you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see `vignette("v1_code")` for information about how to include a link to `respR v1.1` so that your code will remain reproducible in the future. 
+
+If you come across any changes that are not documented here, and you think should be, [let us know](mailto:nicholascarey@gmail.com) and we will add it to the list. 
+
+### Deprecated functions
+
+`inspect_data` and `pcrit` were officially deprecated some time ago, and have been completely removed in this version. Update code to use `inspect()` and `oxy_crit()` instead.
+
+### Pcrit analyses
+
+As well as `pcrit` being removed, `calc_pcrit` has been renamed `oxy_crit()` to avoid conflicts with another package. Any code using `calc_pcrit` can be replaced with `oxy_crit`, and *may* work, since the defaults have remained largely the same. Note however the new `method` input. Previously both currently supported methods were performed, but now only one is, selected using `method` with Broken-Stick regression the default. Therefore, outputs may not be the same. Output objects have been completely restructured and elements renamed, so any code extracting results from these will not work. 
+
+### Flowthrough respirometry analyses
+
+The entire workflow for analysing flowthrough respirometry data has changed. Any previous code for analysing these types of data will likely not work, and should be rewritten using the four new specialised functions. See `vignette("flowthrough")` for more details.
+
+### Input changes
+
+Several function inputs have been renamed to make them more consistent. 
+
+ - All primary inputs are now `x` (was previously `df` in `auto_rate`, `inspect`, and `subsample` among others). Any code specifically using `df =` can be replaced with `x =`, otherwise it will not be affected.
+ 
+ - Some functions have had inputs reordered (e.g. `auto_rate` now has `method` as second input). Therefore, code where inputs were not explicitly named may not work as it did previously.  
+ 
+ - Some input defaults have been changed. E.g. in `convert_rate`, `oxy.unit = NULL` and `time.unit = NULL` now stop the function instead of applying a default unit.
+
+### Output structural changes
+
+The majority of function outputs have been restructured and many elements renamed. Any code that directly extracted results or parameters from these may not now work. Updating code should be relatively straightforward as error messages will state an element is missing or not found, or a `NULL`will be returned. Normal object-oriented workflows should not be affected as functions have been updated to recognise new element names. 
+
+The general changes include the following: 
+
+- Data element renamed `$dataframe` instead of `$df`, `$data`, etc. 
+ 
+- Output rate elements have consistent naming structure starting with `rate`, with a suffix where relevant:
+    - `convert_rate` : `$output` changed to `$rate.output`, `$absolute` to `$rate.absolute`
+    - `calc_rate.bg` : `$bgrate` changed to `$rate.bg`, `$mean` to `$rate.bg.mean`
+    - `adjust_rate`  : `$corrected` changed to `$rate.adjusted`, `$input.rate` to `$rate.input`
+
+
+- Outputs have also been rearranged, so any referencing not using element names may not work the same (e.g. `output[[2]]`).
+
+- Summary tables (`$summary`) now have a `rank` column in position 1, and have also in general been rearranged, new columns added, and some columns renamed. Therefore if column numbers or names have been used to extract results these may now be incorrect.
+
+## Function specific changes 
+
+### `import_file()`
+
+This function has been rewritten to be less aggressive about removing empty or non-numeric columns, or those containing data which wasn't time or oxygen, such as temperature. Now, all columns are retained, where possible. Column renaming has been updated to be much more robust, ensuring unique column names, and removing problematic characters. The result is any previous datasets imported using this function will likely have different column structures and naming. Best option is to reimport the data, check the structure, and edit any column references in subsequent code. 
+
+### `format_time()`
+
+If saving output as a data frame, the added numeric time column is now titled `time.num` rather than `elapsed`. If the reference `$elapsed` is used in code for some reason, find and replace `$elapsed` with `$time.num`.
+
+### `auto_rate()`
+
+Primary input `df` now renamed to `x`. Any code using `df =` can be replaced with `x =`.
+
+Inputs have been reordered with `method` as second input. Code where inputs were not explicitly named may not work as it did previously. 
+
+The `"max"` and `"min"` methods have been deprecated. These still work as before for now, so older code using these will still work, but they will be removed in a future version. Most users should use `"highest"` and `"lowest"` instead. Note the new `"maximum"` and `"minimum"` methods **do not** work the same as `"max"/"min"`, as they order strictly numerically. See `help(auto_rate)`.
+
+The `width` input behaviour has changed slightly. Previously if it was a value between 0 and 1 it represented a proportional width of the whole dataset regardless of the `by` input. This now applies only to `by = "row"`. If `by = "time"` any value between 0 and 1 now represents (as with values above 1) a time window in the units of the time data. Any code with `by = "time"` and `width` between 0 and 1 will now produce different outputs. Replace `by = "time"` with `by = "row"`
+and the results should match the previous version.
+
+### `convert_DO()`
+
+By default, the function now outputs a vector of converted numeric values as opposed to the previous output which was a `list` object of class `convert_DO`. A new `simplify` logical input controls this, with the default being `TRUE`. Previous code which saved this output for later use can restore this behaviour by adding `simplify = FALSE` to the call. Code which used or extracted converted values by calling the `$output` element can be used by doing a search for this and replacing it with nothing, or deleting it. 
+
+The `"%"` oxygen unit has been deprecated and replaced with `"%Air"`. In older code replace `"%"` (and other variations such as `"percent"`) with `"%Air"`. See `help("convert_DO")`. Note, the additional unit of `"%Oxy"` has been added. These are not the same. 
+
+### `adjust_rate()`
+
+This function has been completely rewritten to incorporate several new adjustment methods. The original inputs (`x` and `by`) have been retained as the first two inputs, and the default behaviour of applying the mean of all background rates in `by` as the adjustment value is also retained. Therefore, older code *should* work as before, but care should be taken that the desired adjustments are applied as expected.
+
+### `calc_rate()`
+
+- `$rate_2pt` element renamed to `$rate.2pt` 
+- `$summary` columns renamed and reordered
+
+### `calc_rate()` and `subset_data()`
+
+A change to the code for determining `by = "oxygen"` ranges to ensure it works with both oxygen production data as well as oxygen uptake data, means that output results may differ from those in v1.1. The previous behaviour was the function found the first occurrence of the `from` value, then the first occurrence of `to`, with rates determined between these bounds. Now, it finds the first occurrence of `from`, then the *last* occurrence of `to`. With most data any difference in rates as a result of this change should be minor. Also as a result, data subsets in `subset_data()` using this method now tend to be longer. 
+
+### `inspect()`
+
+The output `$list` and `$list_raw` elements renamed `$locs` and `$locs_raw`. Code should not need to be updated unless these were used to extract references to fix data issues in the relevant data frames.
+
+### `convert_rate()`
+The `o2.unit` has been renamed to `oxy.unit`. Previous code with `o2.unit` as a named input will therefore fail to run. To update code, simply do a 'find-and-replace' for the old and new inputs. 

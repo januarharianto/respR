@@ -1,0 +1,273 @@
+---
+title: "Intermittent-flow respirometry: Short experiment"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{Intermittent-flow respirometry: Short experiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                                scipen = 999, 
+                                digits = 4))
+```
+
+Intermittent-flow respirometry involves obtaining multiple replicates in an experiment by periodically flushing the respirometer with new water or air after a set period of time or oxygen decrease. 
+Typically, the oxygen probe system is left recording during flushes, and the system returning to ambient oxygen can be seen in the data trace. 
+If the dataset is not split into the separate replicates, this results in an dataset with oscillating levels of oxygen. 
+This vignette shows an example of how an intermittent-flow respirometry experiment can be analysed in `respR` to extract oxygen uptake or production rates. See `vignette("intermittent_long")` for an example of how a much longer, more regular intermittent-flow experiment with an increasing background rate can be analysed.
+
+## Example data
+
+The example data, `intermittent.rd`, contains intermittent-flow measurements of oxygen consumption in the sea urchin *Heliocidaris erythrogramma*. 
+Detailed information about the data can be viewed via `?intermittent.rd`. 
+
+## Inspecting the data {#inspect}
+
+The first step in any analysis should always be to visualise and inspect the data. For this we use the `inspect()` function. This scans for common issues in the data frame, plots the data, and saves it to an object to pass to the next stage of analysis.
+
+```{r eval = F}
+urchin_int <- inspect(intermittent.rd)
+```
+
+```{r echo = F, warning=FALSE}
+inspect(intermittent.rd)
+```
+
+```{r echo = F, fig.keep = "none", message = FALSE, results = "hide"}
+urchin_int <- inspect(intermittent.rd)
+```
+
+We can see from the top plot that this dataset has three replicates, separated by two flushes where new water was added. The flush periods obviously skew the bottom plot, which shows rate of change (positive or negative) in oxygen over a rolling window of 10% of the data. Note how rates are plotted on a reversed y-axis so that uptake rates are higher than production rates, or oxygen input rate in the case of the flushes (this can be changed by passing `rate.rev = FALSE`). 
+
+This plot provides a quick visual inspection of how the rate varies over the course of the experiment.
+Regions of stable and consistent rates can be identified on this plot as flat
+or level areas. This plot is for exploratory purposes only; later functions
+allow rate to be calculated over specific regions. Here, despite the flushes skewing the rate plot, specimen uptake rates (flat regions) appear to be relatively consistent within each experimental replicate with a value of around -0.005. 
+
+For a quick closer look, we can always use `inspect` without saving the result to check regions of the data, which can help us decide how we are going to proceed.
+
+```{r results='hide', message=FALSE}
+inspect(intermittent.rd[1:1800,])
+```
+
+Inspecting the first replicate shows us rate is indeed fairly consistent within the replicate, but fluctuates from around -0.0004 to -0.0008. However, bear in mind these rate values are determined over only a 10% window of the inspected data, and so are sensitive to noise. 
+
+`inspect` lets us pass a different `width` input for the purposes of the rolling regression plot. Let's try a wider window of 50% of the data.
+
+```{r results='hide', message=FALSE}
+inspect(intermittent.rd[1:1800,], width = 0.5)
+```
+
+Now we can see rate is much more consistent, although they decrease slightly over the course of the replicate. But we can tell that we would expect our extracted rates to be around -0.0006. Note the values in the rolling rate plot are plotted against the middle of the range over which they were calculated, which is why the values are centred like this. 
+
+## Analysis with `calc_rate` {#calc_rate}
+
+One way of extracting rates from intermittent data is via the `calc_rate()` function by using its `from` and `to` inputs to select the regions of the data which make up the replicates. 
+
+### Rate from time region
+The `calc_rate` function allows data regions to be chosen by `oxygen`, `time`, or `row` ranges. In the case of`row` or `time`, multiple subset regions can be specified. The `from` and `to` operators can be vectors with paired values. Using this we can extract a rate from each replicate with one command. 
+
+```{r tidy = FALSE, results = "hide"}
+urchin_int_rates <- calc_rate(urchin_int, 
+                              from = c(200, 2300, 4100), 
+                              to = c(1800, 3200, 4600), 
+                              by = "time")
+
+```
+
+```{r echo = F}
+print(urchin_int_rates)
+```
+
+By default, the first is shown in `print` and `plot`, but the `pos` input can be used to view others. 
+
+```{r results='hide'}
+plot(urchin_int_rates, pos = 2)
+```
+
+Calling `summary()` will show the coefficients, locations and values of all rates:
+```{r}
+summary(urchin_int_rates)
+```
+
+See the [Converting rates](#convert) section for how to convert these to specific units.
+
+### Rate from row region
+
+The rate region(s) can also be selected using row numbers. In this particular dataset, where oxygen has been recorded every second, these are equivalent to the time values, but this won't be the case for every dataset.  
+
+```{r results = "hide"}
+calc_rate(urchin_int, from = 400, to = 1600, by = "row")
+```
+
+
+### Rate from oxygen region {#oxygen}
+
+If we are interested in looking at rates over particular oxygen ranges within each replicate, we need to take a slightly different approach, because time and row values are unique and increase regularly, while oxygen does not. 
+
+Here, we want to calculate rates between the oxygen values of 7 and 6.6 mg/L within each replicate. There are several approaches to this. We could split up our original data frame into separate ones for each replicate. Or we could `inspect` each replicate separately, using regular R syntax before passing it to `calc_rate`. 
+
+```{r eval = F}
+u_rep1 <- inspect(intermittent.rd[1:1900,])
+u_rate1 <- calc_rate(rep1, from = 7, to = 6.6, by = "oxygen")
+```
+
+However, we can also use the dedicated `subset_data()` function, which allows for easy subsetting by time, oxygen or row number from both data frames and `inspect` objects. Here, we use the `inspect` object we [saved earlier](#inspect) containing the whole dataset, to create new `inspect` objects for each replicate. These can be treated like any other `inspect` object, including being passed to `print` and `plot`.
+
+```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
+# Create separate replicate data frames
+u_rep1 <- subset_data(urchin_int, from = 1, to = 1900, by = "time")
+u_rep2 <- subset_data(urchin_int, from = 2100, to = 3500, by = "time")
+u_rep3 <- subset_data(urchin_int, from = 3700, to = 4831, by = "time")
+```
+
+Now we can calculate the rate from each, showing the results from the third one here.
+```{r eval = F}
+u_rate1 <- calc_rate(u_rep1, from = 7, to = 6.6, by = "oxygen")
+u_rate2 <- calc_rate(u_rep2, from = 7, to = 6.6, by = "oxygen")
+u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "oxygen")
+```
+
+```{r eval = T, echo = F, results = "hide"}
+u_rate3 <- calc_rate(u_rep3, from = 7, to = 6.6, by = "oxygen")
+```
+
+See later section [Converting rates](#convert) for how to convert these to units.
+
+
+## Analysis with `auto_rate`
+
+To more rigorously identify *lowest*, *highest* or *most linear* rates within each replicate we can use the `auto_rate()` function. See `vignette("auto_rate")` for more detail on using `auto_rate`. 
+
+`auto_rate` is designed to either run every regression of a fixed width across a dataset (`"rolling"`, `"lowest"` and `"highest"` methods), or use [kernel density analysis]() to identify the most`"linear"` regions, that is regions of most consistent and stable rates. Therefore it does not have the region selection functionality by time, row or oxygen that `calc_rate` [does](#calc_rate). 
+
+The `"linear"` method is however likely to work poorly with intermittent-flow data like this which shows sharp, oscillating oxygen patterns. Therefore, similar to the [above example](#oxygen) with `calc_rate` oxygen regions, we need to subset each replicate before running `auto_rate` on it. 
+
+We will use only the first subset here, and calculate two rates:
+
+- the most `"linear"` rate of any width, which might be representative of *routine* metabolic rate
+
+- the `"lowest"` rate across a 5 minute (300s) time window, which might be more representative of *basal* or *standard* metabolic rate
+
+First, we subset the first replicate. Note that as well as data frames, `subset_data` can subset `inspect` objects to make a new `inspect` object containing the subset. 
+
+```{r results="hide"}
+## subset first replicate
+u_rep1 <- subset_data(urchin_int, from = 0, to = 1900, by = "time")
+```
+
+### Most linear rate {#linear}
+
+Running `auto_rate` with the default inputs will apply the `"linear"` method and a `width` of 0.2 (see `vignette("auto_rate"` for details on how the `width` affects analyses).
+
+```{r results="hide"}
+# default - most linear rate
+ar_lin_1 <- auto_rate(u_rep1) 
+```
+
+Depending on the data, `auto_rate` usually returns more than one result, that is it identifies multiple linear regions. In this example it has fit 1522 regressions and found 8 to be from linear regions of the data. The summary table shows these ordered from most to least linear by `density`, which is the kernel density analysis metric determining linearity. 
+
+```{r echo = T}
+summary(ar_lin_1)
+```
+
+The first result is generally the most appropriate to report. However, we would strongly encourage users to explore `auto_rate` results, especially to plot the result. As a machine-learning based process, the `auto_rate` algorithms are fallible, and on occasion return less than ideal results. Different ranked results can be plotted using the `pos` input (e.g. `plot(ar_lin_1, pos = 2)`). 
+
+See also `subset_rate()` and `vignette("subset_rate")`. This is a function specifically designed to filter `auto_rate` results according to varous criteria, including r-squared range, duration, highest and lowest percentile of rates, and many more. 
+
+### Lowest rate
+
+`auto_rate` can also identify the lowest (and highest) rates across a fixed width in time or rows.
+
+```{r results="hide"}
+# lowest rate of 300 width in the time metric
+ar_low_1 <- auto_rate(u_rep1, method = "lowest", width = 300, by = "time") 
+```
+
+This method fits every regression of the specified width across the entire dataset, and orders them from lowest to highest. Note that for the `"lowest"` and `"highest"` methods this ordering is by *absolute* value, that is it ignores the sign of the rate. The `"minimum"` and `"maximum"` methods order strictly numerically.
+
+```{r}
+summary(ar_low_1)
+```
+
+Again, the results can be explored using `plot`, `summary`, and `print` and the `pos` input, and the resulting object can be further filtered using `subset_rate()` - see `vignette("subset_rate")`. The lowest rate in in the top ranked position, so is generally the result of interest, however we might decide to use some other criteria or average several of the lowest rates. Again, see `vignette("subset_rate")` for more information. 
+
+## Background adjustments
+
+For background adjustments, the `adjust_rate()` function can be used on `calc_rate` and `auto_rate` objects containing single and multiple rates. `adjust_rate` can be used to adjust rates in a variety of ways, including by a single value or dynamic background rates which change over the course of an experiment. See the example in `vignette("intermittent_long")`, or `vignette("adjust_rate")` for a comprehensive guide to this function.
+
+## Converting rates {#convert}
+
+Once the rates have been determined, they can be converted to absolute (i.e. whole animal or whole chamber), mass-specific, or area-specific rates using `convert_rate()`. 
+
+We will convert the [most linear](#linear) rates we determined above, but this will be the same for any of the rate objects we have saved. 
+
+```{r tidy = F}
+# absolute rate
+rep1_abs_rate <- convert_rate(ar_lin_1,              # auto_rate, calc_rate, or adjust_rate object
+                              oxy.unit = "mg/L",     # oxygen units of the raw data
+                              time.unit = "s",       # time units of the raw data
+                              output.unit = "mg/h",  # see unit_args() for supported units
+                              volume = 2.379)        # effective volume of the respirometry chamber in L
+
+# mass-specific rate
+rep1_ms_rate <- convert_rate(ar_lin_1,               
+                             oxy.unit = "mg/L",       
+                             time.unit = "s",        
+                             output.unit = "mg/h/g", # note - changed to a mass-specific unit
+                             volume = 2.379,         
+                             mass = 0.006955)        # mass in kg - for mass-specific rates only
+
+rep1_abs_rate
+rep1_ms_rate
+```
+
+Only the first rate converted rate is shown in the `print` output, but all rates within the object are converted. They can be viewed via `summary`.
+
+```{r}
+summary(rep1_ms_rate)
+```
+
+
+## Extracting rate results 
+
+In an intermittent-flow experiment, we would now have a rate (or rates) for each replicate. 
+
+The final rate result depends on the particular research question and many other factors. For example, if interested in basal metabolic rates perhaps the lowest rate across a fixed time period in *any* replicate, or if interested in routine metabolic rates maybe a mean rate across all replicates. What is important is that these criteria are applied consistently and reported alongside the results. 
+
+Rates can be easily extracted from `convert_rate` objects for further analysis or selection in a variety of ways. 
+
+You can using `$rate.output` to get the numeric values.
+
+```{r}
+rep1_ms_rate$rate.output
+```
+
+The `summary` function also allows the entire summary table to be extracted and saved as a `data.frame` with `export = TRUE`. You can also use `pos` to view or export only a selection of rows.
+```{r}
+rep1_df <- summary(rep1_ms_rate, export = TRUE, pos = 1:5)
+```
+
+## Advanced selection of rate results
+
+For more advanced selection of `auto_rate` results, including selection by r-squared range, rate value or percentile, data region and many more see `subset_rate()` and `vignette("subset_rate")` for full explanation and examples. This would typically be done before passing the object to `convert_rate`.
+
+## Longer intermittent-flow experiments
+
+An example of analysis of a much longer, more regular intermittent-flow experiment can be seen in `vignette("intermittent_long")`. 

@@ -21,7 +21,7 @@
 #'   every iteration. **Note: will severely slow the function down.** Useful to
 #'   visualise what's being detected at every step. Defaults to FALSE.
 #'
-#' @return An object of class `test_lin`. Contains linear regressin results, and
+#' @return An object of class `test_lin`. Contains linear regression results, and
 #'   data required to plot diagnostics.
 #'
 #' @export
@@ -32,7 +32,8 @@
 #' x <- test_lin(reps = 3)
 #' # plot(x)
 #' # plot(x, "a")  # view only plot "A"
-#' # plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
+#' # plot(x, "d")  # view only plot "D". You know what to do (for other plots).
+
 test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
                      preview = FALSE, plot = FALSE) {
 
@@ -104,13 +105,20 @@ test_lin <- function(reps = 1, len = 300, sd = .05, type = "default",
 }
 
 
-#' Plot output of `test_lin()`
+#' Plot output of test_lin
 #'
 #' This is an internal generic. Produces 4 plots.
-#'
+#' @param x test_lin object
+#' @param show string. Which result to show.
+#' @param ... Pass additional plotting parameters
+#' @return A plot. No returned value.
 #' @export
 #' @keywords internal
 plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
   df <- x$df
   # bw <- "nrd0" # "nrd" "SJ-ste"
   c1 <- adjustcolor("peru", alpha.f = .4)
@@ -127,13 +135,13 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
   ls <- x$results
 
   options(scipen = 5) # adjust threshold for scientific notation
-  pardefault <- par(no.readonly = T) # save original par settings
+  parorig <- par(no.readonly = TRUE) # save original par settings
   if (any(show %in% "all")) {
     # mat <- matrix(c(1,2,5,3,4,5), nrow = 2, byrow = TRUE)
     # pardefault <- par(no.readonly = T)  # save original par settings
     # layout(mat)
     # par(mai=c(0.6,0.6,0.3,0.2), ps = 10, cex = 1, cex.main = 1)
-    pardefault <- par(no.readonly = T) # save original par settings
+    parorig <- par(no.readonly = TRUE) # save original par settings
     par(mfrow = c(2,2), mai = c(.5,.5,.3,.3), ps = 10, cex = 1, cex.main = 1)
   }
 
@@ -183,7 +191,7 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     plot(
       signif(df$real,3), signif(df$measured,3), main = "", xlab = "", ylab = "",
       xaxt = "n", yaxt = "n",
-      pch = 21,
+      pch = pch_def,
       cex = .6,
       bg = c1,
       col = c1
@@ -206,12 +214,13 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
       xlim = c(max(abs(df$real)), -max(abs(df$real))),
       ylim = c(max(abs((df$real-df$measured))),-max(abs((df$real-df$measured)))),
       xaxt = "n", yaxt = "n",
-      pch = 21, bg = c1, col = c1, cex = .6
+      pch = pch_def, bg = c1, col = c1, cex = .6
     )
     axis(2, mgp=c(3, .5, 0))
     axis(1, mgp=c(3, .5, 0))
     abline(h = 0, lty = 2)
-    lines(
+    if(length(df$real) > 5)
+      lines(
       suppressWarnings(loess.smooth(df$real, (df$real - df$measured))),
       col = "black", lwd = 1.5
     )
@@ -224,6 +233,6 @@ plot.test_lin <- function(x, show = c("all", "a", "b", "c", "d"), ...) {
     title(main = "Deviation from true rate", cex.main = .8)
   }
 
-  if (any(show %in% "all")) par(pardefault) # revert par settings to original
+  if (any(show %in% "all"))   on.exit(par(parorig)) # revert par settings to original
   return(invisible(x))
 }

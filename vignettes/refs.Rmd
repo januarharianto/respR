@@ -1,0 +1,55 @@
+---
+title: References
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+resource_files:
+  - img/mee_cover.jpg
+vignette: >
+  %\VignetteIndexEntry{References}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+zotero: true
+bibliography: references_refs.bib
+csl: resprcsl.csl
+link-citations: true
+nocite: |
+  [@careySeaUrchinsHighCO2016; @chabotValidOxygenUptake2021; @clarkAerobicScopeMeasurements2013; @gambleOpentopStaticRespirometry2014; @jonesBriefSurveyBandwidth1996; @killenGuidelinesReportingMethods2021; @kuriharaEffectOceanAcidification2013; @leclercqMeasurementOxygenMetabolism1999; @lightonMeasuringMetabolicRates2008; @marshallEstimatingPhysiologicalTolerances2013; @morozovFishRespPackageGUI2019; @moulinLongtermMesocosmsStudy2015; @muggeoEstimatingRegressionModels2003; @muggeoModelingTemperatureEffects2008; @prinzingAnalyticalMethodsMatter2021; @raykarFastOptimalBandwidth2006; @sheatherReliableDatabasedBandwidth1991; @silvermanDensityEstimationStatistics1986; @smithjrFoodEnergySupply1987; @steffensenErrorsRespirometryAquatic1989; @stoffelsPhysiologicalTradeoffsFastslow2015; @svendsenDesignSetupIntermittentflow2016; @whiteDeterminantsInterspecificVariation2013; @yeagerPhysiologicalRegulationConformation1989; @zivotModelingFinancialTime2006]
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## respR publication
+
+```{r, echo = F, out.width = "200px", fig.align = "center", out.width= "30%", out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics("img/mee_cover.jpg")
+```
+
+`respR` has been peer reviewed and published. Please cite this paper if you use it in your work:\
+ 
+
+**Harianto, J., Carey, N., & Byrne, M.** respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912--920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
+
+ \
+ \
+ 
+
+## See also
+
+These packages may also help you analyse respirometry data:
+
+-   [FishResp](https://fishresp.org) - Sergey Morozov
+-   [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
+-   [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
+-   [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
+-   [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
+
+Also be sure to check out the [FishResp](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.
+
+## References
+
+The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here]() for references specific to critical oxygen analyses.  \
+ \

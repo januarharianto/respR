@@ -1,0 +1,81 @@
+---
+title: "oxy_crit: Discussion of Pcrit estimation methods"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{oxy_crit: Discussion of Pcrit estimation methods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F, message=FALSE}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+library(rMR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = FALSE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                                #scipen = 999, 
+                                digits = 5))
+```
+
+## **Note**
+
+*This page has been archived and will not be updated. This is because it was submitted as part of the [publication](https://doi.org/10.1111/2041-210X.13162) of `respR` in Methods in Ecology and Evolution, and has been retained unchanged for reference. Any results and code outputs shown are from `respR v1.1` code. Subsequent updates to `respR` should produce the same or very similar results. *
+
+## Discussion of Pcrit estimation methods
+
+Currently `respR` has implemented three methods of calculating a breakpoint in the relationship of oxygen uptake rate to oxygen concentration. 
+It is in our plans to support several more (e.g. Duggleby, 1984; Lighton and Turner, 2004, Marshall et al., 2013), and additionally, metrics which describe the degree of oxyregulation of a specimen in intermediate cases (e.g. Tang, 1933; Mueller & Seymour, 2011). 
+Note also, the classification of species into strict oxyconformers and oxyregulators is simplistic. There is a continuum of responses between these extremes, and many intermediate cases (Mueller and Seymour, 2011). 
+
+Discussion of 'breakpoint' identification in time-series data is a whole branch of mathematics, which we do not have the expertise to discuss.
+The user should however be aware of the controversy around using the BSR method to estimate $P_{crit}$. 
+
+Marshall et al. (2013) discussed the limitations of the BSR methods, and found them to be inaccurate and prone to error. This publication is a convincing critique of the BSR methods, and posits that use of them was understandable in the past when computing power and analytical processing was limited, but that this should no longer be a limitation, and better methods are available.
+A very valid point from this analysis is that BSR approaches provide no estimates of error, making it difficult to judge just how reliable they are. 
+
+Whether or not this is the definitive critique of this method is still an open question; scientific methods persist through consensus, and BSR is still in use by many prominent physiologists in the years since this publication (Chu & Gale, 2017; Regan & Richards,2017; Stoffels et al. 2017).
+It remains to be seen if the non-linear regression (NLR) methods proposed by Marshall et al. will supplant other methods of estimating $P_{crit}$. 
+It is a rigorous method, which indeed appears to be more reliable, and we plan to support this method in a future update to `respR`. 
+
+As far as we are aware, there is no controversy around using the `segmented` method of Muggeo (2008), and in our testing it usually gives similar results to the BSR approach with data that is high-resolution and not particularly noisy.
+Until we implement other options such as the NLR methods of Marshall et al., we would encourage users to use the `segmented` method when in doubt, and carefully consider use of the BSR approach. 
+As we saw in the examples above, all three methods often give similar results, in which case it is likely the BSR results would be appropriate to report. 
+However, there may be cases where the results from these different methods differ. 
+
+Different methods are discussed amongst the literature cited below.
+It is important to note that $P_{crit}$ is most frequently used as a *comparative* metric. Since analytical options chosen by the investigator (such as regression width) inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than consideration of the ultimate values of $P_{crit}$ *per se*. 
+So, it is important that investigators fully report the parameters under which these analyses have been conducted. 
+This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to know if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward (see [open science and reproducibility using respR](https://januarharianto.github.io/respR/articles/reproducibility.html)).
+
+
+## References
+
+Chu, J. W. F., & Gale, K. S. P. (2017). Ecophysiological limits to aerobic metabolism in hypoxia determine epibenthic distributions and energy sequestration in the northeast Pacific ocean. Limnology and Oceanog- raphy, 62(1), 59-74. https://doi.org/10.1002/lno.10370
+
+Duggleby, R.G., 1984. Regression analysis of nonlinear Arrhenius plots: An empirical model and a computer program. Computers in Biology and Medicine 14, 447–455. https://doi.org/10.1016/0010-4825(84)90045-3
+
+Lighton, J.R.B., Turner, R.J., 2004. Thermolimit respirometry: an objective assessment of critical thermal maxima in two sympatric desert harvester ants, Pogonomyrmex rugosus and P. californicus. Journal of Experimental Biology 207, 1903–1913. https://doi.org/10.1242/jeb.00970
+
+Marshall, D.J., Bode, M., White, C.R., 2013. Estimating physiological tolerances - a comparison of traditional approaches to nonlinear regression techniques. Journal of Experimental Biology 216, 2176–2182. https://doi.org/10.1242/jeb.085712
+
+Mueller, C.A., Seymour, R.S., 2011. The Regulation Index: A New Method for Assessing the Relationship between Oxygen Consumption and Environmental Oxygen. Physiological and Biochemical Zoology 84, 522–532. https://doi.org/10.1086/661953
+
+Muggeo, V.M.R., 2008. Modeling temperature effects on mortality: multiple segmented relationships with common break points. Biostatistics 9, 613–620. https://doi.org/10.1093/biostatistics/kxm057
+
+Regan, M. D., & Richards, J. G. (2017). Rates of hypoxia induction alter mechanisms of O2 uptake and the critical O2 tension of goldfish. The Journal of Experimental Biology, 220(14), 2536-2544. https://doi.org/ 10.1242/jeb.154948
+
+Stoffels, R. J., Weatherman, K. E., & Allen-Ankins, S. (2017). Heat and hypoxia give a global invader, Gambusia holbrooki, the edge over a threatened endemic fish on Australian floodplains. Biological Inva- sions, 19(8), 2477-2489. https://doi.org/10.1007/s10530-017-1457-6
+
+Tang, P.-S., 1933. On the rate of oxygen consumption by tissues and lower organisms as a function of oxygen tension. The Quarterly Review of Biology 8, 260–274. https://doi.org/10.1086/394439
+
+Yeager, D.P., Ultsch, G.R., 1989. Physiological regulation and conformation: A BASIC program for the determination of critical points. Physiological Zoology 62, 888–907. https://doi.org/10.1086/physzool.62.4.30157935

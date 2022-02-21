@@ -6,6 +6,9 @@
 \usage{
 broken_stick(dt, n)
 }
+\value{
+a data.table object
+}
 \description{
 Perform broken-stick regressions
 }

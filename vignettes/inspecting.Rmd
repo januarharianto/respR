@@ -1,0 +1,581 @@
+---
+title: "inspect: Inspecting data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 4
+vignette: >
+  %\VignetteIndexEntry{inspect: Inspecting data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = FALSE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                                scipen = 999, 
+                                digits = 3))
+```
+
+## Introduction
+
+The first step in any data analysis should be to visualise the data and check it for errors. 
+
+`inspect()` is a data exploration and preparation function that visualises
+respirometry data and inspects it for issues that may affect the use of further
+functions in `respR`. The user designates columns as `time` and `oxygen`, and these are subset into a new `list`
+object that can be used in subsequent functions, reducing the need for
+additional inputs. 
+
+Note, use of `inspect` to prepare data for the subsequent
+functions is optional. Most functions in `respR` can accept regular `R` data
+objects including data frames, data tables, tibbles, vectors, etc. It is a
+quality control and exploration step to help users explore and prepare their
+data prior to analysis.
+
+Depending on the data type, the function will perform a series of checks. These were informed by experiences working with real respirometry data from a variety of systems, and the data issues that were most frequently encountered.
+
+### Flowthrough respirometry data
+
+Most of the following is also relevant to `inspect.ft()` which is a special function for inspecting flowthrough respirometry data. See `vignette("flowthrough")` for specific examples.
+
+## Successful check
+
+This is what a successful `inspect` check looks like; all columns are numeric and without missing values, and the time data are sequential, unique values and with even spacing. See [plot](#plot) section below for details about the plot. 
+
+```{r}
+inspect(sardine.rd)
+```
+
+This dataset is therefore ready to be passed to further `respR` functions. While we have in general designed `respR` to be robust to data which might contain these issues, we have not been able to test every eventuality. Therefore, to be fully confident in results and avoid obscure errors we strongly recommend data be amended to pass these tests wherever possible. 
+
+## Numeric 
+Many datasets on being imported to R, for esoteric reasons, can have column data types misclassified. A stray character or even space may cause an entire column of numeric data to be classed as a non-numeric format such as `character`. For example, some versions of the Pyro and Firesting systems software replace missing data with `"---"`, which causes the entire column to be classed as `character` when imported to R. Often this is a single entry in a random location where a data recording has been missed, or at the very end of a column, so not obvious when the head of the data is given a quick look. 
+
+The first and most important check `inspect` performs is that the specified `time` and `oxygen` columns are numeric. If this check fails, the rest of the checks for that column are skipped, and the function exits returning a `NULL` value. No plot is produced. `respR` functions cannot process non-numeric data, so only when all inspected columns pass this check will the function output an `inspect` object that can be passed to subsequent functions.
+
+### Example
+
+This dataset has a single time value missing and replaced with `"---"`, which causes the entire column to be classed as `character`. This is not at all obvious if you view a portion of the data not containing the missing value.
+
+```{r echo = F}
+df <- data.frame(time = 1:100, 
+                 oxy = urchins.rd[[2]][1:100])
+df[50,1] <- "---"
+```
+
+```{r echo = T}
+head(df)
+```
+
+Only by checking the structure is this obvious.
+
+```{r echo = T}
+str(df)
+```
+
+These data cannot be used in `respR` until this is remedied. This shows the output when this dataset is checked using `inspect`. 
+
+```{r echo = T, eval = F}
+inspect(df)
+```
+
+```{r echo = F, eval = T}
+insp <- suppressMessages(inspect(df))
+```
+
+
+### Remedies
+
+There are many ways to fix an issue such as this, from editing the original file, to numerous potential solutions within R. The easiest in this case is probably using `as.numeric()`. On data such as this it will parse the obviously numeric values to numeric, and where it cannot, replace them with an `NA`. 
+
+The problem value is in position 50.
+
+```{r echo = T, eval = T}
+df[48:52,]
+```
+
+We can try fixing the column with `as.numeric`, view the same rows, and check the structure. 
+
+```{r echo = T, eval = T}
+df[,1] <- as.numeric(df[,1])
+
+df[48:52,]
+
+str(df)
+```
+
+Now the column is numeric, but contains an `NA` value. `respR` has been designed to work with `NA` values in datasets, so analysing this one should not lead to any major issues. `respR` relies on linear regressions on exact data values to calculate rates, and `NA` values are simply ignored, so do not affect slopes and therefore calculated rates, unless they occur over large regions of the data.
+
+However, we would strongly recommend that to be completely confident in any results, and avoid obscure errors, `NA` values be removed or replaced where possible before proceeding. Later checks in `inspect` will identify locations of `NA` values (see [here](#nacheck)). In this case it is easy to fix, as it is obvious what the missing value is.
+
+```{r echo = T, eval = T}
+df[50,1] <- 50
+```
+
+Now we can inspect again, and this time save the result. 
+
+```{r echo = T, eval = F}
+insp <- inspect(df)
+```
+
+```{r echo = F, eval = T}
+insp <- suppressMessages(inspect(df))
+```
+
+Now the saved object `insp` can be passed to functions such as `calc_rate()`.
+
+## Inf/-Inf  {#infcheck}
+
+The next most important check is for infinite (or minus infinite) values. Some oxygen sensing systems add these in error when interference or data dropouts occur. Infinite values will cause problems when it comes to calculating rates, so need to be removed. 
+
+### Example
+
+This datasets contains an infinite oxygen value. 
+
+```{r echo = F} 
+data <- sardine.rd[502:600,]
+data[22,2] <- Inf
+```
+
+```{r fig.show='hide'}
+inspect(data)
+```
+
+We can see a warning, and the output also lists the locations (row numbers) of the `Inf` values (up to the first 20), and we can use this to view it and check.
+
+```{r}
+data[20:25,]
+```
+
+### Remedies {#inffix}
+
+Infinite values **must** be removed or replaced, or it will severely affect rate calculations, and may have other unknown effects in subsequent functions. Depending on how many, where they occur, etc., the appropriate way to do this will vary. Here, we could remove the row entirely, but since it is a single value we can just replace it with an intermediate value which won't affect rate calculations.
+
+```{r fig.show='hide'}
+data[22,2] <- (data[21,2] + data[23,2])/2
+
+data[20:25,]
+
+insp <- inspect(data)
+```
+
+Now the saved object `insp` can be passed to functions such as `calc_rate()`.
+
+## NA/NaN  {#nacheck}
+
+The third check is to look for missing data, that is `NA` or `NaN` values. This is perhaps the most common issue encountered when importing raw respirometry data files to R. Many oxygen probe systems or computers struggle with high recording frequencies, experience probe dropouts, suffer interference, or other issues, and the typical practice is to fill the resulting data gaps with `NA` or `NaN`. 
+
+`respR` has been designed to work with `NA` values in datasets, so analysing data with `NA/NaN` values should not lead to any major issues, unless they occur over large regions of the data. `respR` relies on linear regressions on exact data values to calculate rates, and `NA/NaN` values are simply ignored, so do not affect slopes and therefore calculated rates. However, we would strongly recommend that to be completely confident in any results, and avoid obscure errors, `NA/NaN` values be removed or replaced where possible before proceeding. 
+
+If `inspect` finds `NA/NaN` data, it outputs the locations (row numbers) to assist with removing or filling them. 
+
+### Example
+
+This dataset has two columns of oxygen, one with a single `NA` and one with a larger chunk of values missing. 
+
+```{r echo = F}
+df <- data.frame(time = 1:100, 
+                 oxy1 = urchins.rd[[2]][1:100],
+                 oxy2 = urchins.rd[[3]][1:100])
+df[23,2] <- NA
+df[57:61,3] <- NA
+```
+
+```{r echo = T, eval = F}
+insp <- inspect(df, time = 1, oxygen = 2:3, plot = FALSE)
+```
+
+```{r echo = F, eval = T}
+insp <- suppressWarnings(suppressMessages(inspect(df, time = 1, oxygen = 2:3, plot = FALSE)))
+```
+
+The output console message gives a warning and prints the locations (up to the first 20) of the missing values in the respective column.
+
+### Remedies
+
+The locations can also be found in the output object in the `$locs` element with the name of the column.
+
+```{r }
+insp$locs$oxy1$`NA/NaN`
+
+insp$locs$oxy2$`NA/NaN`
+```
+
+These can be used to extract or fill the missing values, or simply remove these rows. See above [example](#inffix).
+
+## Sequential Time  {#seqcheck}
+
+This check is performed on the `time` column only. 
+
+Numeric time values are expected to be sequential, that is increasing in value. A failure of this check could be an indication of problems importing the file or of converting date-time values to numeric time using `format_time()` or other methods. This check helps flag up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem that needs investigating. 
+
+Non-sequential time values could cause unknown issues, so to be fully confident in results and avoid obscure errors, we would strongly recommend the data be amended to be sequential. 
+
+### Example
+
+This imported dataset contains time~oxygen data values, but no numeric time. 
+
+```{r echo = T, eval = F}
+print(data)
+```
+
+```{r echo = F, eval = T}
+data <- import_file("zebrafish.csv")[,1:4]
+
+## There are six columns, but we will print only date and oxygen columns
+data
+```
+
+This is a small section of a real experiment where oxygen was recorded every 2 seconds. Note how the Firesting-Pyro system has exported times, *but not dates*, and that they cross over midnight. 
+
+We will use the `lubridate()` package to convert the times to numeric. The details are not that important, but briefly the times are converted to a date-time format R understands, then an elapsed time from the first entry is calculated. 
+
+```{r}
+# parse to posix
+data$parsed_time <- lubridate::parse_date_time(data[[1]], "HMS")
+# convert to numeric difference in seconds from start
+data$num_time <- as.numeric(difftime(data[[5]], data[[1,5]], units = "secs"))
+
+# check
+head(data)
+```
+
+Now we inspect the data using the new numeric time
+
+```{r eval = T, fig.show='hide'}
+inspect(data, time = 6, oxygen = 4)
+```
+
+Clearly there is something wrong, and the location where non-sequential time data has been found is row 299. The issue has also caused the evenly-spaced time check (see [here](#evencheck)) to fail, which we will cover later. Often the same issue will cause more than one check to fail. 
+
+If we look at this region, it is clear what the problem is. 
+
+```{r}
+data[297:302,]
+```
+
+Where times have crossed midnight, our code has failed to parse it correctly. The lack of dates along with times means we have incorrectly calculated the elapsed time. 
+
+### Remedies
+
+If this particular issue is detected, it is usually an indication of a deeper problem, so the actual remedy will depend on the situation, from editing the original data file, to various solutions within R, such as reordering rows. 
+
+Here, we can simply use the `respR` function `format_time()` (see also `vignette("importing")`), which has been designed to detect and fix this specific problem of times which cross midnight but have no date attached. `format_time` parses and converts the times to numeric and adds them as a new column. 
+
+```{r echo = F, eval = T, results = "hide"}
+data <- import_file("zebrafish.csv")[,1:4]
+```
+
+```{r}
+data <- format_time(data, time = 1, format = "HMS")
+
+data[297:302,]
+```
+
+If we `inspect` again, the problem is fixed.
+
+```{r eval = T, fig.show='hide'}
+inspect(data, time = 5, oxygen = 4)
+```
+
+
+## Duplicate Time 
+
+This check is performed on the `time` column only. 
+
+Duplicate time values can result from rounding time values, or the system accidentally recording two values close together, or some other issues causing values to be repeated or duplicated. 
+
+This warning is not necessarily a major issue. `respR` relies on linear regressions on time~oxygen paired data values to calculate rates. When fitting linear regressions, duplicates will not affect results so as long as the data are genuine values. However, the check flags up that *something* might have occurred to make this happen on import or processing, and might point to a larger problem. 
+
+### Example 1
+
+This dataset has been recorded at approximately 1 second intervals, but at 0.1s precision, and when rounded to the nearest second this leads to lots of duplicated values. 
+
+```{r eval = T, echo = F}
+
+data_orig <- data.frame(times = seq(1, 100, 1),
+                   oxy = urchins.rd[[5]][101:200])
+data_orig[[1]] <- data_orig[[1]] + runif(100, 0.01, 0.99)
+data_orig[[1]] <- round(data_orig[[1]], 1)
+data_round <- data_orig
+data_round[[1]] <- round(data_round[[1]])
+```
+
+```{r eval = T, echo = T}
+## original data
+head(data_orig, 5)
+
+## Before rounding
+head(data_orig$times, 10)
+## After rounding to nearest second
+head(data_round$times, 10)
+```
+
+```{r eval = F}
+inspect(data_round)
+```
+
+```{r eval = T, echo = F}
+suppressMessages(suppressWarnings(inspect(data_round, plot = F)))
+```
+
+### Remedies
+
+In this case, `inspect` produces a duplicate times warning, however it can be safely ignored. These values are perfectly valid at this precision, and when it comes to fitting linear regressions and calculating rates will not realistically affect rate calculations. However, an alternative option would be to not round the times at all; `respR` will happily accept any form of numeric decimalised time value. 
+
+### Example 2
+
+This dataset by contrast contains several duplicated rows. The `inspect` call detects and identifies these, allowing them to be checked or amended. 
+
+```{r eval = T, echo = F}
+
+data <- sardine.rd[2001:2200,]
+data <- data[c(1:100, rep(101, 10), 102:200),]
+```
+
+```{r eval = F, echo = T, fig.show='hide'}
+insp <- inspect(data)
+```
+
+```{r eval = T, echo = F, fig.show='hide'}
+insp <- suppressMessages(suppressWarnings(inspect(data)))
+```
+
+We can check these rows by extracting the relevant locations from the `$locs` element of the saved output, and we see that for some reason the row has been duplicated.
+
+```{r}
+dupes <- insp$locs$Time$duplicated
+
+data[dupes,]
+
+```
+
+### Remedies
+
+Like other checks, if or how to amend this issue will depend on the situation. Here, these duplicate rows could affect rate calculations, if for instance we are determining rates over a specific row width across the dataset (by contrast a rate using a `time` width would be unaffected). They could also affect other reported outputs such as the r-squared. It's probably easiest to just remove them, and `inspect` the data again. 
+
+```{r fig.show='hide'}
+## Remove all but the first duplicate row
+data <- data[-dupes[-1],]
+
+## inspect again
+inspect(data)
+```
+
+## Evenly Spaced Time  {#evencheck}
+
+Depending on the time metric, this is perhaps the most frequently seen warning. Generally, respirometry data are recorded at regular intervals. Any irregular intervals between time values are an indication that something might have gone wrong: the system stopped recording for a period, some data were lost when imported, rows were removed accidentally, or some other reason. The purpose of this check is to find and report any such gaps in the data. If these are found, the locations are returned, and in addition the maximum and minimum intervals in the time data. 
+
+### Example 1
+
+One reason this check might produce warnings is through use of a metric such as decimalised minutes. For example, data recorded once per second, but converted to minutes is used in the `flowthrough_mult.rd` example data.
+
+```{r}
+# seconds in decimal minutes
+head(flowthrough_mult.rd[[1]])
+
+# difference between each value
+diff(head(flowthrough_mult.rd[[1]]))
+```
+
+These have been converted to minutes and rounded, and we can see the intervals are not numerically consistent. This will cause this check to produce a warning in `inspect`.
+
+```{r fig.show='hide'}
+inspect(flowthrough_mult.rd)
+
+```
+
+### Remedies
+
+While there are too many locations printed here to get a handle on if there are *actual* gaps in the data, the additional print out of the minimum and maximum time intervals tells us the intervals are what we would expect with these time values, so in the case of these data they are fine to pass to subsequent functions. 
+
+### Example 2
+
+If there were a larger time gap in the data, this check would flag it up. This dataset is missing a large number of rows. 
+
+```{r echo = F}
+data <- intermittent.rd[2:501, ]
+data <- data[-(342:387),]
+```
+
+```{r, eval = F}
+insp <- inspect(data)
+```
+
+```{r, echo = F}
+insp <- suppressMessages(suppressWarnings(inspect(data)))
+```
+
+While there is only one time gap location at row 341, we can see this is a large gap of 47 seconds. 
+```{r}
+data[340:344, ]
+```
+
+### Remedies
+
+Like many of the issues, if or how to fix this depends on the context. In this case it may have been an accidental deletion or importing problem. However, you can still calculate rates across these gaps, which will be perfectly reportable, as long as care is taken to understand the implications of doing this. 
+
+### Calculating rates across gaps
+
+`calc_rate()` allows you to calculate a rate using a `"row"` or `"time"` interval. In this dataset, because the time is in seconds and recording interval once per second, they are therefore equivalent to the row numbers. Any rates calculated in a complete region of the data before the gap will be identical for either method. 
+
+```{r results='hide', fig.show='hide'}
+cr_row <- calc_rate(data, 100, 300, "row")
+cr_time <- calc_rate(data, 100, 300, "time")
+```
+
+```{r}
+summary(cr_row)
+summary(cr_time)
+```
+
+This will not be the case across the gap, or *after* it where row numbers will now *not* be equivalent to the time values. 
+
+```{r results='hide'}
+cr_row <- calc_rate(data, 200, 400, "row")
+cr_time <- calc_rate(data, 200, 400, "time")
+```
+
+```{r}
+summary(cr_row)
+summary(cr_time)
+```
+
+Note how the interval is correct in the respective metric, but now differs in the other. 
+
+Either of these is reportable depending on the research question or rate determination criteria, and a 'correct' rate in their own right. If however, for example, you want to report a rate across a consistent time window, the `by = "row"` result, while an accurate rate for that row interval, does not conform to the expected time window. 
+
+Such gaps may also affect rolling rate determinations, such as in the `auto_rate()` function, if done using `by = "row"`. 
+
+Note also, because of the missing rows, all rows *after* the gap will not conform to the same time values, although as long as they don't include the gap will represent an equivalent time *window*. 
+
+## Additional notes and tips
+
+### Plot {#plot}
+
+When using `inspect`, a plot of the inspected data is produced (unless `plot = FALSE`), against both time (bottom blue axis) and row index (top red axis).
+
+The top plot is the complete timeseries of oxygen against time. The bottom plot is a rolling regression plot. This shows the rate of change in
+oxygen across a rolling window specified using the `width` operator (default
+is `width = 0.1`, or 10% of the entire dataset). Each rate value is plotted
+against the centre of the time window used to calculate it. This plot provides a quick
+visual inspection of how the rate varies over the course of the experiment.
+Regions of stable and consistent rates can be identified on this plot as flat
+or level areas. This plot is for exploratory purposes only; later functions
+allow rate to be calculated over specific regions. 
+
+Note, that because `respR` is primarily used to examine oxygen consumption,
+the rolling rate plot is plotted on a reverse y-axis. In `respR`
+oxygen uptake rates are negative since they represent a negative slope of
+oxygen against time. In rolling rate plots, by default the axis is reversed so that higher
+uptake rates (e.g. maximum or active rates) will be higher on these plots. If you are
+interested instead in oxygen production rates, which are positive, the
+`rate.rev = FALSE` input can be passed in either the `inspect` call, or
+when using `plot()` on the output object. In this case, the rate values will
+be plotted not reversed, with higher oxygen *production* rates higher on the
+plot.
+
+### Rolling rate plot
+
+Some datasets may benefit from changing the `width` to get a better idea of how the rate fluctuates across the data. This is helpful to inform the regions from which to extract rates in later functions, as well as an appropriate time or row window to use when extracting rates.
+
+```{r results='hide', message=FALSE}
+## default width of 10%
+inspect(sardine.rd)
+```
+
+In these data, after an initial unstable period rates seem to stabilise, but there is still a lot of variability, with rates fluctuating between around -0.0006 and -0.0008.
+
+```{r results='hide', message=FALSE}
+## width of 20%
+inspect(sardine.rd, width = 0.2)
+```
+
+With a higher `width` rates after the initial period are much more stable. This tells us (presuming we are interested in routine rates) that we probably want to extract rates from after timepoint 2000, should not use a time window shorter than around 20% of the total data length, and that our extracted rate should be around -0.0007.
+
+If we are interested in the very lowest rate, it seems to occur just before timepoint 6000 (although see `auto_rate()` for extracting the lowest rates).
+
+### Intermittent-flow data
+
+Note, intermittent-flow data will include rates across flush periods, which can skew results, and possibly make the output difficult to interpret.
+
+```{r results='hide', message=FALSE}
+inspect(intermittent.rd)
+```
+
+Here the flushes skew the rolling rates, but within each replicate rates seem to be a consistent value of around -0.0005. 
+
+However, you can always use `inspect` without saving the result for a closer look at regions of the data, though note the `width` input will apply to the subset, not the original data length.
+
+```{r results='hide', message=FALSE}
+inspect(intermittent.rd[1:1800,])
+```
+
+
+### Inspect portions of long experiments
+
+For really long experiments, both the timeseries and rolling rate plot may be difficult to interpret. This experiment on a zebra fish is 22h long and nearly 80000 rows. 
+
+```{r results='hide', message=FALSE}
+inspect(zeb_intermittent.rd)
+```
+
+`inspect` can be used without saving the result for a closer look at smaller regions of the data, to better see what is going on. 
+
+```{r results='hide', message=FALSE}
+inspect(zeb_intermittent.rd[20000:24000,])
+```
+
+This better shows us the structure of this intermittent-flow experiment, and that within these replicates specimen rates appear to be consistent at around -0.002. When subset like this, the `width` operator refers to the length of the subset not the original data. 
+
+### Multiple columns of oxygen data
+
+For a quick overview of larger datasets, multiple oxygen columns can be
+inspected by using the `oxygen` input to select
+multiple columns. These must share the same `time` column. In this case, data
+checks are performed, with a plot of each oxygen time series, but no rolling
+rate plot is produced. All data are plotted on the same axis range of both
+time and oxygen (total range of data). 
+
+This is chiefly exploratory
+functionality to allow for a quick overview of a dataset. 
+Note, that if it is saved the output `inspect` object will contain all columns in its
+`$dataframe` element, but subsequent functions in `respR` (`calc_rate`,
+`auto_rate`, etc.) will by default only use the *first two* columns (`time`,
+and the first specified `oxygen` column). To analyse and
+determine rates from different columns, best practice is to inspect 
+and assign each time-oxygen
+column pair as separate `inspect` objects. 
+
+```{r results='hide', message=FALSE, warning=FALSE}
+inspect(urchins.rd, time = 1, oxygen = 8:19)
+```
+
+This gives us a quick visual overview of the dataset, allowing us to, for example, see the experiments which have some sort of issues, and which are controls (the last two here).
+
+### Additional plotting options
+
+Additional plotting controls can be passed in either the main `inspect` call or when using `plot()` on the output object. 
+
+Most notable is `rate.rev = FALSE`. This means rates in the rolling rate plot will be plotted on a normal y-axis, that is not reversed. This allows oxygen production rates to be plotted correctly, with higher rates appearing higher on the plot. 
+
+If axis labels obscure parts of the plot they can be suppressed using `legend = FALSE`. Console output messages can be suppressed with `quiet = TRUE` (in `plot()` only). Lastly, a different `width` value can be passed to see how it affects the rolling rate plot. 
+
+This example examining oxygen production in algae uses some of these options. 
+
+```{r results='hide', message=FALSE, warning=FALSE}
+inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
+         legend = FALSE, rate.rev = FALSE)
+```
+

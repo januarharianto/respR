@@ -1,0 +1,79 @@
+---
+title: "When to use respR"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{When to use respR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F, message=FALSE}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, comment = "#>", cache = FALSE, tidy = TRUE, 
+  highlight = TRUE)
+```
+
+## **Note**
+
+*This page has been archived and will not be updated. This is because it was submitted as part of the [publication](https://doi.org/10.1111/2041-210X.13162) of `respR` in Methods in Ecology and Evolution, and has been retained unchanged for reference. Any results and code outputs shown are from `respR v1.1` code. Subsequent updates to `respR` should produce the same or very similar results. *
+
+## Introduction
+
+We have designed `respR` to be able to explore, process and analyse *any and all* aquatic respirometry data, independent of the system used to collect it or type of experiment. 
+Because of the unitless nature of the majority of functions in the package, other respirometry data (e.g. aerobic), or other time series data examining other variables can be explored and analysed in `respR`. 
+
+The use of simple data structures (numeric vector and data frames) means there should be a low barrier to entry for anyone not completely new to R. 
+The unitless nature of the data (requiring only paired values of numeric time-elapsed, and an oxygen amount in any unit) greatly reduces the inputs each function requires, and simplifies any analysis using `respR` in comparison to other packages (see [A comparison of respR with other R packages](https://januarharianto.github.io/respR/articles/packages_comp.html)).
+Once the user has imported and prepared their data to this form (see [Importing your data](https://januarharianto.github.io/respR/articles/importing.html)), data analysis using respR is simple and intuitive.
+
+<!-- they never have to worry about specifying complex date-time formats, or numerous other information that often lead to input errors.  -->
+<!-- And at no point in a `respR` analysis should you have to tell it something you have already told it before.  -->
+
+<!-- ### Other options -->
+<!-- We want to be very clear - we have designed `respR` so there should be little reason for anyone to decide to use other options, whether that be Excel, your own R code, or other R packages.  -->
+<!-- So, in discussing when you should use `respR` over other options, it is perhaps easier to talk about when you should use *them*: -->
+
+## Other R respirometry packages 
+Both [rMR](https://cran.r-project.org/web/packages/rMR/index.html) and [FishResp](https://fishresp.org) centre around processing intermittent-flow, swim tunnel respirometry data with multiple, regularly-spaced replicates, particularly from Loligo Systems equipment. If this does not describe your experiment there is little point in considering these packages, as analysis of other respirometry experiments in them is challenging, if not impossible. 
+
+`respR` is more than capable of processing these intermittent flow experiments with a little forethought and data organisation ([see here](https://januarharianto.github.io/respR/articles/intermittent2.html)), and support for this will get better in the coming months. However, we would encourage users to explore these other packages and how they work; they are useful options and may contain functionality that suits your particular analyses or workflows better than `respR`. 
+
+## Linear detection
+Importantly, the packages mentioned above only allow manual selection of data regions over which to determine rates, such as over a specified time period. This is perfectly acceptable for many analyses, and `respR` has this functionality (although in a much more flexible implementation), but `respR` also has the `auto_rate()` function which identifies linear regions of respirometry data. 
+
+This powerful function allows identification of *most linear, minimum and maximum* rates in an **independent, objective, and statistically robust manner**. We would encourage the respirometry community to explore this objective method rather than rely on manual selection, which can leave investigators open to accusations of cherry picking and bias when reporting metabolic rates. 
+
+Another R package, `LoLinR`, can identify linear sections of non-linear data, athough using a fundamentally different method than `auto_rate()`. 
+However, `LoLinR` is extremely computationally inefficient, taking literally hours to days to process typical respirometry datasets. It does appears to perform well, even after subsampling longer data to the shorter lengths the function can handle, but `auto_rate` appears to perform equally well and can process these data in seconds without modification (see [here](https://januarharianto.github.io/respR/articles/auto_rate_comp.html)).
+
+<!-- Another R package `LoLinR` has similar linear detection functionality, but is not a serious option for most respirometry analyses due to its inability to process data more than a few hundred datapoints long in a realistic timeframe. If your data are less than around 200-400 (???? CHECK) points in length, `LoLinR` performs very well, and in fact better than `respR` in identifying linear regions of data. However, our testing has suggested (LINKS) that `respR` performs better on data longer than this. It also does this literally several orders of magnitude faster; our own respirometry datasets, which run from thousands to tens of thousands of datapoints in length, would take literally *years* to be processed by the functions in `LoLinR` but are processed by `auto_rate()` in seconds. Thinning such data to a few hundred points long to fit within the capabilities of `LoLinR` is not an acceptable solution in long-term experiments where this could lead to the removal of important biological information.  -->
+
+## Reproducibility 
+Our other main objective with `respR` was to provide a solution for reporting analyses of respirometry data in an easily reproducible form. See [Open science and reproducibility using respR](https://januarharianto.github.io/respR/articles/reproducibility.html) for an example, but in summary, an entire `respR` analysis can be reported in only a few lines of code. 
+Our careful selection of descriptive function names and input operators allow - we hope - this code to be readable and convey easy understanding about what is being done in the analysis, even without additional comments. 
+Inclusion of a raw data file with this code would allow anyone to reproduce it easily, and scrutinise each stage. We hope this makes the job of investigators, reviewers and editors easier. 
+
+## When should you consider other R packages for your analyses?
+
+We see only a few scenarios in which other R packages might be considered for analysing respirometry data: 
+
+- `LoLinR` - If your data is shorter than around 500 datapoints, and you would like to use a different linear detection method other than `auto_rate` in `respR`, `LoLinR` can achieve this. Note however, this package is not respirometry focussed. You would still need to utilise `respR` or other solutions to format and import respirometry data, apply background corrections, and convert the resulting slopes to particular units. If your data are longer than around 400-500 in length, `LoLinR` is not a practical option because of the time needed to process the data. 
+
+- `rMR` or `FishResp` - If you are doing intermittent-flow, swim tunnel experiments with regularly spaced replicates (particularly using Loligo Systems equipment) these are good options for analysing your data. These data are also able to be analysed in `respR` however: see [link](https://januarharianto.github.io/respR/articles/intermittent2.html). 
+
+- Gas/Air respirometry - We don't know of any options in R to analyse air respirometry experiments, and at present `respR` is chiefly designed to analyse aquatic respirometry data. However, the great majority of the exploratory and analytical functions are unit agnostic. The only step requiring units is conversion of slopes to rates in the function `convert_rate()`. While we have not done this, we imagine air respirometry data could easily be explored and rates determined, and most experienced investigators in air respirometry would be able to convert these to units themselves. We plan to add this support, but as aquatic biologists we have no experience with these data. Please get in [touch](mailto:nicholascarey@gmail.com) if you can help with this. 
+
+## So when should you use `respR` for your analyses?
+In our opinion, you should use `respR` if you have *any* aquatic respirometry data. 
+<!-- Admittedly we may not be objective, but we see no real benefits of using other options.  -->
+
+We have built `respR` to accept any and all types of experiment or data source easily.
+We have not processed every data format or variation of experiment, and there may be circumstances we have not anticipated. So, if for whatever reason some part of `respR` does not work for you please do [let us know](mailto:nicholascarey@gmail.com), and we will work to accommodate it.  
+
+
+
+

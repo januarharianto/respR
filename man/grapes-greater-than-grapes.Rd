@@ -2,7 +2,11 @@
 % Please edit documentation in R/util_funs.R
 \name{\%>\%}
 \alias{\%>\%}
-\title{Pipe graphics}
-\description{
-Pipe graphics
+\title{Pipe graphics direct from tidyverse-related package}
+\value{
+No value returned
 }
+\description{
+Pipe graphics direct from tidyverse-related package
+}
+\keyword{internal}

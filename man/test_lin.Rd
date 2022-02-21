@@ -35,7 +35,7 @@ every iteration. \strong{Note: will severely slow the function down.} Useful to
 visualise what's being detected at every step. Defaults to FALSE.}
 }
 \value{
-An object of class \code{test_lin}. Contains linear regressin results, and
+An object of class \code{test_lin}. Contains linear regression results, and
 data required to plot diagnostics.
 }
 \description{
@@ -50,6 +50,6 @@ predict true rate.
 x <- test_lin(reps = 3)
 # plot(x)
 # plot(x, "a")  # view only plot "A"
-# plot(x, "d")  # view only plot "D". You know what to do (for other plots)..
+# plot(x, "d")  # view only plot "D". You know what to do (for other plots).
 }
 \keyword{internal}

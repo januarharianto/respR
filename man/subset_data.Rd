@@ -2,50 +2,98 @@
 % Please edit documentation in R/subset_data.R
 \name{subset_data}
 \alias{subset_data}
-\title{Truncate a data frame to create a subset of the data}
+\title{Subset a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object}
 \usage{
-subset_data(x, from, to, by = "time")
+subset_data(x, from = NULL, to = NULL, by = "time", quiet = FALSE)
 }
 \arguments{
-\item{x}{data frame. The data to subset.}
+\item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data from which
+to produce a subset.}
 
-\item{from}{numeric. Defines the lower bound(s) of the data frame to subset.
-Subsetting is based on the argument: \code{by}.}
+\item{from}{numeric. The lower bounds of the subset based on the \code{by} input.}
 
-\item{to}{numeric. Defines the upper bound(s) of the data frame to subset.
-Subsetting is based on the argument: \code{by}.}
+\item{to}{numeric. The upper bounds of the subset based on the \code{by} input.}
 
-\item{by}{string. "time", "row", "o2" or "proportion".}
+\item{by}{string. "time"\verb{, }"row"\verb{, }"oxygen"\code{or}"proportion"\verb{. Method by which to apply the }from\code{and}to` inputs.}
+
+\item{quiet}{logical. Controls if a summary of the output is printed to the
+console. Default is \code{FALSE}.}
 }
 \value{
-A \code{data.table} object.
+\strong{Output}: If the input is an \code{inspect}, or \code{inspect.ft} object, the
+output is an object of the same class containing the subset data. For
+\code{data.frame} inputs the output is a \code{data.table} of the subset.
 }
 \description{
-This function extracts a subset data frame based on a given set of rules. Can
-subset data based on ranges of: time, oxygen, row number, or proportion. To
-subset by 'time' and by 'o2', the function assumes time is in the first
-column, and oxygen in the second column. To subset by 'proportion', the
-function calculates proportion data from the oxygen column. \strong{This function
-can subset any data frame by 'row'.}
+\code{subset_data} subsets a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object based
+on a given set of criteria. The function is ideal for passing only selected
+regions of data to other functions such as \code{\link[=calc_rate]{calc_rate()}} and
+\code{\link[=auto_rate]{auto_rate()}}, either by saving the output as a new object or via the use
+of pipes (\verb{\%>\%} or \verb{|>}). It is also very useful in analysis of
+intermittent-flow data, where in a loop each replicate can be extracted and
+passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
+examples and vignettes.
+}
+\details{
+The function can subset data based on ranges of \code{"time"}, \code{"oxygen"}, \code{"row"}
+, or \code{"proportion"} of total oxygen used or produced (note, this last option
+works poorly with noisy or fluctuating data). For data frames, to subset by
+\code{"time"}, \code{"oxygen"}, or \code{"proportion"}, the time data is assumed to be in
+the first column, and oxygen data in the second column. For \code{\link[=inspect]{inspect()}} and
+\code{\link[=inspect.ft]{inspect.ft()}} objects, the data will have been coerced to this structure
+already. In these cases the \verb{$dataframe} element in the output is replaced by
+the subset, and in \code{inspect.ft} the \verb{$data} element is also subset and
+replaced. Note for \code{inspect.ft} objects, the oxygen data in column 2 will be
+either \code{out.oxy} data or \code{delta.oxy} data depending on what was inspected.
+The function can subset \emph{any} data frame by \code{row}.
+
+When multiple columns are present, for example time in column 1, and multiple
+columns of oxygen data, the subset object will include \emph{all} columns. In the
+case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is
+based on the \emph{first} column of oxygen data (i.e. column 2), and all
+subsequent columns are subset between the same rows regardless of oxygen
+values.
+
+For all methods, if exact matching values of \code{from} and \code{to} are not present
+in the data, the closest values are used. For \code{"time"} and \code{"row"}
+subsetting, \code{from} and \code{to} should be in the correct order. No warning or
+messages are given if the input values are outside those in the data frame.
+For instance, if \code{to = 100} and there are only 50 rows in the data, the last
+row (50) will be used instead. The same for \code{from} and \code{to} time values
+outside those in the data frame.
+
+For \code{"oxygen"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
+interchangeable, and the function will subset data \emph{between} the first and
+last occurrences (or closest occurrences) of these values. It works best with
+generally increasing or decreasing oxygen data, and results may vary with
+other data such as intermittent flow data or those in \code{inspect.ft} objects.
+
+\strong{Note for \code{inspect} and \code{inspect.ft} object inputs:} after subsetting the
+locations of any data issues highlighted when the object was originally
+inspected will no longer be accurate. If these are important, best practice
+is to subset the original dataframe, and then process the subset through
+\code{inspect} or \code{inspect.ft}.
+
+A summary of the subset is printed to the console, to check it has subset the
+data as expected. To suppress this changing the default \code{quiet = FALSE} to
+\code{TRUE}.
 }
 \examples{
 # Subset by time:
-data("squid.rd")
 x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
-plot(x)
 
-data("flowthrough.rd")
-subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
-
-# Subset by O_2:
-data("sardine.rd")
-subset_data(sardine.rd, from = 94, to = 91, by = "o2")
-
-# Subset by proportion:
-data("sardine.rd")
-subset_data(sardine.rd, from = 0.8, to = 0.4, by = "proportion")
+# Subset by oxygen:
+subset_data(sardine.rd, from = 94, to = 91, by = "oxygen")
 
 # Subset by row:
-data("flowthrough.rd")
 subset_data(flowthrough.rd, from = 10, to = 750, by = "row")
+
+# Subset multiple columns:
+# In this case subsetting is based on the first two columns
+subset_data(flowthrough.rd, from = 50, to = 600, by = "time")
+
+# Pass (via piping) only a subset of a dataset to inspect() and auto_rate()
+subset_data(sardine.rd, from = 94, to = 91, by = "oxygen") \%>\%
+   inspect(time = 1, oxygen = 2) \%>\%
+   auto_rate()
 }

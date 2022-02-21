@@ -1,0 +1,212 @@
+---
+title: "subset_rate: Filtering auto_rate results"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{subset_rate: Filtering auto_rate results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(scipen = 999, 
+                                digits = 3))
+```
+
+- include how to report language example
+- don't trust linear? use rolling and apply your own criteria
+- include min/max filtering  
+- Can output min/max rate over time period, but sometimes this is lowest but clearly crappy. 
+- See NLA1_03 rep 5 for good example
+
+## Introduction {#adjintro}
+
+New in `respR v2.0` is the `subset_rate()` function, which is designed to allow `auto_rate()` results to be explored, subset and filtered.
+
+The `auto_rate` function uses machine learning techniques to *automatically* detect the **most linear** regions of a dataset, as well as having options to fit rolling regressions of a specified width over the entire dataset and ordering them in various ways.
+
+As multiple linear regions are often identified, or the results object contains literally thousands of regressions, the output can be large and difficult to explore. Which of the rates are 'best' or most appropriate to report may be confusing. In addition, it may identify linear data regions but from areas of the data that are not of experimental interest. As an advanced, machine learning based process the `linear` method is also somewhat fallible and on occasion may return questionable results.
+
+`subset_rate` helps explore and filter `auto_rate` results by selecting rates according to various criteria. For example, extracting only positive or negative rates, only the highest or lowest rates by number or percentile, those above a particular r-squared, only those from certain data regions, and numerous other methods that allow advanced filtering of results so the rates extracted are well-defined towards the research question of interest. This allows for application of consistent rate selection criteria and reporting of results. 
+
+Note that generally speaking, for large datasets, such as from intermittent-flow experiments, we recommend using `subset_data()` and  running `auto_rate` on the subset(s) of the data you are interested in, rather than run it on the whole dataset and relying on `subset_rate` to filter it afterwards.
+
+### Subsetting methods
+
+The function includes a wide array of criteria by which `auto_rate` results can be subset. The full list can be seen in the help file: `help(subset_rate)`. We will run through some specific examples below. Multiple subsetting criteria can be applied by assigning (i.e. saving) the output and processing it through the function multiple times with different criteria, or alternatively via piping (`%>%` or `|>`). See examples below. 
+
+### Overlapping results
+
+A notable aspect of `auto_rate` is that due to the machine learning algorithm, it can often return multiple linear regions from the same part of a dataset. These can even be identical. There is a special subsetting method to remove some or all of these. See examples below. 
+
+## Examples
+
+### Subsetting `method = "linear"` results
+
+We'll use the `sardine.rd` dataset, and let's say we are interested in extracting a standard metabolic rate, that is the lowest routine rate, one which may be representative of basal of maintenance metabolism.  
+
+We'll `inspect` the data and pipe the result to `auto_rate` using the default inputs of the `"linear"` method and `width = 0.2`.  
+
+```{r fig.keep='last', results='hide', message=FALSE}
+sard <- inspect(sardine.rd) |> 
+  auto_rate() 
+```
+
+We can see there are 46 linear regions detected, of which the above plot is the highest ranked one, or most linear according to the kernel density analysis. This does not necessarily mean it's the lowest rate, but is more like the most consistently maintained one. 
+
+Let's look at the entire `$summary` table. 
+
+```{r}
+print(sard$summary)
+```
+
+Obviously this is a lot of information to digest. The `rate`, which is the primary output we are interested in, varies in value by quite a lot. The r-squared of the regressions is fairly variable. The linear regions also occur all over the dataset. 
+
+#### plot_ar
+
+There is a handy function `plot_ar()` which plots `auto_rate` summary tables in a way that visualises where they occur in the context of the dataset. See [later section](#plot_ar_fn) for more details about this function.
+
+```{r results='hide'}
+plot_ar(sard)
+```
+
+In this plot each regression in `$summary` is represented in the lower plot by a bar representing its location within the timeseries. The top ranked result is highest, and the y-axis represents the `rank` position within the summary table descending from top to bottom. 
+
+From this plot the results are clearer. We can see many of the linear regions substantially overlap and are essentially from the same regions of the data. Some are even completely contained within others. We probably don't need all of these different results.  
+
+#### `subset_rate`
+
+The `subset_rate()` function allows us to filter out the results we are not interested in. One of the subsetting methods is to remove regressions which overlap. In the `overlap` method, the `n` input indicates the proportional degree of overlap to disallow. For `n = 1` rates which are entirely contained with another are removed, for `n = 0` only rates which do not overlap at all, that is share *no* data, are retained. For `n = 0.5` any regression which shares at least 50% of it's datapoints with another are removed. It is recommended this method be used after other selection criteria have been applied, as it is quite aggressive about removing rates, and can be computationally intensive when there are many results.
+
+Here we'll show an example of how it could be used to make `auto_rate` results more manageable. 
+
+Here, we remove all results that are contained within at least one other.  
+
+```{r fig.keep='last', message=FALSE, results='hide'}
+sard |> 
+  subset_rate(method = "overlap", n = 1) |>
+  plot_ar()
+```
+
+This greatly reduces the number of results, but there is still a substantial overlap between them. Therefore, let's adjust the overlap threshold to 0.9, that is regressions which share 90% or more of data with at least one other are removed. 
+
+```{r fig.keep='last', message=FALSE, results='hide'}
+sard |> 
+  subset_rate(method = "overlap", n = 0.9) |>
+  plot_ar()
+```
+
+```{r echo = FALSE, fig.keep='none', message=FALSE}
+sard |> 
+  subset_rate(method = "overlap", n = 0.9, plot = FALSE) |>
+  summary()
+```
+
+This has greatly reduced the number of linear regions, and is a much more manageable set of results, but let's apply a couple of additional criteria. 
+
+Let's say we are only interested in rate results with an r-squared above 0.95, and also that we are only interested in rates which are sustained for over 30 minutes (1800s). We can apply all three of our subsetting criteria by using pipes. 
+
+```{r fig.keep='last', message=FALSE}
+sard |> 
+  subset_rate(method = "rsq", n = c(0.95,1), plot = FALSE) |>
+  subset_rate(method = "duration", n = c(1800, Inf), plot = FALSE) |>
+  subset_rate(method = "overlap", n = 0.9, plot = FALSE) |>
+  plot_ar() |>
+  summary()
+```
+
+Now we are left with only three results. We could choose to select the highest ranked remaining one as our SMR, or maybe average the remaining three. The important point to take from this is that the same selection criteria can be consistently applied and documented across multiple analyses. 
+
+### Subsetting to get a minimum rate
+
+We'll use the `sardine.rd` dataset again, and let's say we are interested in extracting a standard metabolic rate, that is the lowest routine rate, one which may be representative of basal of maintenance metabolism.  
+
+There are a number of approaches we could take using a combination of `auto_rate` and `subset_rate`. Here we'll cover two of them: the first using the `linear` method and subsetting these linear regions to find the lowest, the second to run `auto_rate` with `method = "lowest"` and a fixed `width` and subset out the ones we are interested in while applying some additional criteria.
+
+#### `method = "linear"`
+
+We'll run `auto_rate` on the `squid.rd` data and examine the results. 
+
+
+
+#### `method = "lowest"`
+
+
+### Filtering rolling regressions 
+
+
+### Intermittent flow 
+
+By applying selective criteria `subset_rate` can also be used to extract rates from structured intermittent-flow data. 
+
+Our ultimate aim is to extract a consistent rate from each replicate. 
+
+
+
+## `plot_ar` function {#plot_ar_fn}
+
+Different regressions can be highlighted using the `highlight`input, and `pos` can control which regressions are plotted (the default being all). 
+
+```{r}
+plot_ar(sard, highlight = 3, pos = 1:5)
+```
+
+
+### Remove overlaps
+
+We'll look at a simple example to show how `linear` results from `auto_rate` may overlap.
+
+```{r results='hide'}
+urch_ar <- auto_rate(urchins.rd, plot = FALSE)
+plot_ar(urch_ar)
+```
+
+```{r}
+urch_ar_sub <- subset_rate(urch_ar,
+                           method = "overlap",
+                           n = 0.5,
+                           plot = FALSE)
+plot_ar(urch_ar_sub)
+```
+
+Let's look at a more complex example.
+
+```{r results='hide'}
+sard_ar <- auto_rate(sardine.rd, plot = FALSE)
+plot_ar(sard_ar)
+```
+
+
+```{r}
+sard_ar_sub <- subset_rate(sard_ar,
+                           method = "overlap",
+                           n = 0.5,
+                           plot = FALSE)
+plot_ar(sard_ar_sub)
+```
+
+
+### Summary of all - piping
+
+
+### zeb_intermittenet 
+- use rolling width
+- then negative only
+- then overlap 
+- to get single rate from each rep
+- then percentile high and low 
+- and mean for final rate
+

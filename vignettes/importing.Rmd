@@ -1,0 +1,220 @@
+---
+title: "import_file & format_time: Import and prepare data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{import_file & format_time: Import and prepare data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 6, 
+               fig.height = 5,
+               fig.align = "center")
+```
+
+# Introduction
+
+`respR` was designed to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. 
+Therefore, it is system-agnostic; the data need only be put into a very simple structure (numeric time against oxygen in any common units) to allow a full analysis to be conducted. 
+In fact, the entire package, with the exception of the final conversion step in `convert_rate`, treats data as unitless, so non-aquatic respirometry data, or any time-series data can be explored and analysed. 
+
+Each function has been designed to output objects which can be entered into subsequent functions reducing the need for additional inputs. 
+However, generic `R` data objects, including values, vectors and objects of class `data.frame`, `data.table` and `tibble`, are also recognised by most functions.
+The only structural data requirement is that the initial time\~oxygen data be in a specific structure: paired values of numeric time-elapsed (in secs, mins, hours or days) and oxygen amount (in any commonly used unit). 
+Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
+
+Two functions are provided to assist with bringing in and formatting your data correctly. 
+
+# `import_file()`
+
+Most oxygen probe systems allow data to be exported in easily readable formats (e.g. csv, txt) which contain the numeric time and oxygen data `respR` requires. These files are usually easily imported into R using generic functions such as `read.csv()` and the relevant columns specified when used in `respR` functions, or extracted into separate data frames. 
+
+Many systems however have raw output files with redundant information, or a structure that confuses importing functions. For example Loligo Systems AutoResp and Witrox files have several rows of metadata above the columns of raw data. While `read.csv()` has options to not import certain rows and columns, or the files could be edited beforehand, `respR` can import many raw data files from various systems without modification. 
+
+`import_file()` uses pattern recognition to identify the originating system of the file, imports it, formats columns and column names, and outputs a data frame that can be passed to `respR` functions.
+
+## Example
+
+This is a screenshot of what the file we want to import looks like in Excel.
+
+```{r, out.width = "700px", eval = T, echo = FALSE}
+knitr::include_graphics("img/witrox.png")
+```
+
+We can see there are several rows of redundant information. There are also spaces and odd characters in the column names that often cause text encoding errors when imported into R, such as ` & ` and square brackets. 
+
+`import_file` can bring in this file (situated in the current working directory, otherwise any external file can be specified with a filepath):
+
+```{r eval = T}
+data <- import_file("Witrox_eg.txt")
+```
+
+There are six columns, but we will print only the relevant date, numeric timestamp, and oxygen columns
+
+```{r eval = T}
+data[,c(1,2,6)]
+```
+
+As we can see, the function automatically recognises that this is a Witrox file, removes redundant rows, and renames the columns, removing spaces and problem characters while keeping unique identifiers. 
+
+This function requires only a single input, the path to the file. Everything else is handled automatically. The function will even automatically recognise data formatted in the European style using commas for decimals.
+
+## Supported systems
+
+`import_file` supports several systems at present, including Firesting, Pyro, PreSens, MiniDOT, Loligo Witrox, Vernier and more. See `import_file()` for full list. 
+
+Note however, some files may fail to import as expected because of structural or version differences we have not encountered. We would encourage users to [send us sample files for testing](mailto:nicholascarey@gmail.com), especially any they have problems with, or from systems we do not yet support. 
+
+## Import failures
+
+Oxygen probe system output formats are changed frequently, or may contain differences we have not been able to test for. If a file fails to import, please consider sending it to us by opening a [Github issue](https://github.com/januarharianto/respR/issues) or via [email](mailto:nicholascarey@gmail.com). The more files we have for testing, the more robust and useful the function becomes. 
+
+If you can't import the data via `import_file`, consider trying the following functions, which are the ones we use internally:
+
+- `read.csv()` - Also imports `.txt` files. The `nrows` and `skip` inputs are particularly useful.
+
+- `fread()` - In the `data.table` package. Also imports `.txt` files. Faster and more efficient than `read.csv`. Like `read.csv`, the `nrows` and `skip` inputs are particularly useful.
+
+- `read_excel` & `read_xlsx` - in the `read_excel` package. 
+
+- `readLines` - a powerful, but crude, tool that dumps the entire text content of files. Requires a lot of processing afterwards to get any useful data. A last resort option. 
+
+
+# `format_time()`
+
+For files types that are not yet supported, or if you have already imported your data by other means, the `format_time()` function can parse date-time columns to numeric time-elapsed values, if the imported file does not already contain this. Internally, it uses functionality in the package `lubridate`. 
+
+The date-times can either be passed as a `vector` (for example, so it can be appended to the original data), or as a `data.frame`. If the input is a vector, the output is a vector of the same length. If it is a data frame, the `time` input indicates the column number (or numbers, if it is split across several) containing the date-times, the default being `time = 1`. The resulting data frame will be identical, with a new column named `time.num` containing the converted numeric time added as the *last* column. 
+
+We also need to specify the `format` of the date-times in the correct order. See `help(format_time)` for further info.
+
+**Note**: numeric time data will always output in *seconds* regardless of the input format. These can easily be converted to other units using simple arithmetic (e.g. to hours: `time.num/60/60`).
+
+## Example
+
+Here's an example of a 2-column data frame with date-time data and oxygen. 
+
+```{r  echo = F, message = F, results="hide"}
+data <- import_file("Witrox_eg.txt")
+data <- data[,c(1,6)]
+data_v <- data[[1]]
+names(data) <- c("Date_Time", "O2_mg/L")
+```
+
+```{r}
+head(data, n = 5)
+```
+
+We will convert these as both `vector` and `data.frame` inputs.
+
+```{r}
+## Pass as vector
+data_2 <- format_time(data[[1]], format = "dmyHMSp")
+head(data_2)
+
+## Pass as data frame
+data_3 <- format_time(data, time = 1, format = "dmyHMSp")
+head(data_3)
+```
+
+## Modifying start time
+
+By default, the numeric time data will start at 1, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another, or you simply want to link a specific numeric time value to the start of the experiment. 
+
+```{r}
+## as data frame
+data_4 <- format_time(data, time = 1, format = "dmyHMSp", start = 1000)
+head(data_4)
+```
+
+
+## Split date-times
+
+In some oxygen probe system output files, the date and times are split across multiple columns. In these cases, formatting the time only data usually works, however the more careful and robust approach is to use both. This can be done by specifying multiple columns as the `time` input. Note, the `format` should reflect the correct order.
+
+These data have dates and times in different columns.
+
+```{r  echo = F, message = F, results="hide"}
+data <- data.frame(date = c("5/11/2017", "5/11/2017", "6/11/2017",
+                            "6/11/2017", "6/11/2017", "6/11/2017"),
+                   time = c("23:00", "23:30", "00:00", "00:30", "01:00", "01:30"),
+                   oxy = c(10.056, 10.015, 10.012, 10.027, 10.032, 10.073))
+```
+
+```{r}
+data
+```
+
+We use `time` to specify both columns, and have `format` in the same order.
+
+```{r}
+format_time(data, time = 1:2, format = "dmyHM")
+```
+
+
+## Time only data
+
+Some oxygen probe system files have time values, but no dates. These can also be parsed. This even works if the time values cross midnight. Note time data with AM/PM should have a `p` appended to the format.
+
+```{r  echo = F, message = F, results="hide"}
+data <- data.frame(time = c("11:00:00 PM", "11:30:00 PM", "00:00:00 AM", "00:30:00 AM", "01:00:00 AM", "01:30:00 AM"),
+                   oxy = c(10.056, 10.015, 10.012, 10.027, 10.032, 10.073))
+```
+
+```{r}
+format_time(data, time = 1, format = "HMSp")
+```
+
+
+## Dealing with timed events or notes
+
+What if there are important notes or events associated with specific times in your experiment? For example, flushing of chambers, imposing a treatment, changing the temperature, noting a response, etc. Resetting the times via formatting the time data may make these notes difficult to associate to certain stages of the analysis. This is easily dealt with by formatting the times of the events in the same way you formatted the data. You only need to make sure at least one event is associated with the *same start time* used for the experimental data. 
+
+Here's an example of some experimental notes (in some systems such notes can be entered in the software, and so may be included in output files, or they could be copied from a lab book into a csv file and imported). 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example data frame of Times and 'Events' or experimental notes
+times <- c("8/17/2016 9:42:02", "8/17/2016 9:52:02", "8/17/2016 9:54:34", "8/17/2016 10:19:02", "8/17/2016 12:04:54", "8/17/2016 14:31:22")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+exp_notes
+
+format_time(exp_notes, format = "mdyHMS")
+```
+
+These do not have to be in the same date-time format, or even at the same precision, depending on how accurately you need to know when events occurred. The important factors are associating at least one event with the *same start time* used to format the experimental time data, and using the correct `format` setting. 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example notes
+times <- c("9:42", "9:52", "9:54", "10:19", "12:04", "14:31")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+format_time(exp_notes, format = "HM")
+
+```
+
+# Checking output and next steps
+
+After your data is in a paired, numeric oxygen~time structure, it can be passed to `inspect()` to check the importing or time formatting has worked, look for common errors, and visualise the dataset. See `vignette("inspecting")`.
+
+
