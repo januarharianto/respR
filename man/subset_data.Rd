@@ -77,6 +77,11 @@ is to subset the original dataframe, and then process the subset through
 A summary of the subset is printed to the console, to check it has subset the
 data as expected. To suppress this changing the default \code{quiet = FALSE} to
 \code{TRUE}.
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 # Subset by time:

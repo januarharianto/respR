@@ -51,6 +51,11 @@
 #' import data by other functions such as [`read.csv()`] since it is a
 #' fundamental basic in data analyses in R.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return A `data.frame` object of all columned data
 #'
 #' @param path string. Path to file.

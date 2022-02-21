@@ -152,6 +152,11 @@
 #'
 #' - `summary()`: simple wrapper for `print()` function. See above.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return Output is a `list` object of class `inspect`, with a `$dataframe`
 #'   containing the specified `time` and `oxygen` columns, inputs, and metadata
 #'   which can be passed to [`calc_rate()`] or [`auto_rate()`] to determine

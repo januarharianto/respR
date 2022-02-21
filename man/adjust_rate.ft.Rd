@@ -17,10 +17,10 @@ adjustment to \code{x}. If the vector or \code{calc_rate.ft} object contains mul
 rates, they will be averaged to produce a single adjustment value.}
 }
 \value{
-\strong{Output}: If the \code{x} input is a \code{calc_rate.ft} object, the output will be identical
-in structure, but of class \code{adjust_rate.ft} and containing the additional
-elements \verb{$adjustment} and \verb{$rate.adjusted}, with these also added to
-\verb{$summary} metadata.
+\strong{Output}: If the \code{x} input is a \code{calc_rate.ft} object, the output
+will be identical in structure, but of class \code{adjust_rate.ft} and
+containing the additional elements \verb{$adjustment} and \verb{$rate.adjusted}, with
+these also added to \verb{$summary} metadata.
 
 If \code{x} is a numeric value or vector, the output is a \code{list} object of class
 \code{adjust_rate.ft} containing four elements: a \verb{$summary} table, \verb{$rate},
@@ -89,6 +89,12 @@ be exported as a separate dataframe by passing \code{export = TRUE}.
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
 separate value by passing \code{export = TRUE}.
 }
+}
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
 }
 }
 \examples{

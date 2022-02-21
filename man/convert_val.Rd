@@ -71,6 +71,12 @@ squared of area.
 \item \code{"mm2"}, \code{"cm2"}, \code{"m2"}, \code{"km2"}
 }
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 # Convert volume

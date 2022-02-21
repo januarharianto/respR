@@ -192,6 +192,12 @@ input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a separate val
 by passing \code{export = TRUE}.
 }
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 \donttest{

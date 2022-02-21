@@ -67,6 +67,11 @@
 #' input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a separate value
 #' by passing `export = TRUE`.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return Output is a `list` object of class `calc_rate.bg` containing original
 #'   data, linear models, summary information, and the primary output of
 #'   interest `$rate.bg`, which contains a rate for each oxygen column present

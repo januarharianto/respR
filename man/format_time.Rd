@@ -102,6 +102,12 @@ Single experimental datasets should never span different time zones, so if a
 time zone is present it is ignored for the purposes of calculating numeric
 times.
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 # Convert year-month-day hour-min-sec

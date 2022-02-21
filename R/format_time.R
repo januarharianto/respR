@@ -76,6 +76,11 @@
 #' time zone is present it is ignored for the purposes of calculating numeric
 #' times.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return **Output**: If the input is a vector, output is a vector of equal
 #'   length containing the numeric time data. For data frame inputs, an
 #'   identical data frame is returned, with a new column named `time_num` added

@@ -50,6 +50,11 @@
 #'
 #' - `"mm2"`, `"cm2"`, `"m2"`, `"km2"`
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return Output is a numeric vector of converted values.
 #'
 #' @param x numeric value or vector. Values to be converted to a different unit.

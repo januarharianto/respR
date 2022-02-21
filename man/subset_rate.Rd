@@ -237,6 +237,12 @@ If \code{n = 0}, only rates which do not overlap at all, that is share \emph{no}
 data, are retained. If \code{n = 1}, only rates which are 100\% contained within
 at least one other are removed.
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
  ar_obj <- inspect(intermittent.rd, plot = FALSE) \%>\%

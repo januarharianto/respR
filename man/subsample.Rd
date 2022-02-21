@@ -31,6 +31,11 @@ A simple function that subsamples a data frame or numeric vector in order to
 Two subsampling methods are provided. The \code{n} input selects every n'th
 element or row, or alternatively the \code{length.out} input uniformly subsamples
 the data to the desired length.
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 # Subsample by every 200th row:
