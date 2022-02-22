@@ -82,7 +82,7 @@ rd -> au -> rr -> or -> mm
 rr -> fi -> in
 rr -> un -> ro
 
-}")
+}", width = 400)
 ```
 
 
