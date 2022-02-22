@@ -48,7 +48,7 @@ Importantly, `auto_rate` has been optimised to be *extremely fast*. Other method
 
 This illustrates the main processes involved in `auto_rate`:
 
-```{r, echo = F, fig.height = 6}
+```{r, echo = F, fig.height = 6, fig.align = "left"}
 library(DiagrammeR)
 grViz("
 digraph a_nice_graph {
@@ -369,7 +369,7 @@ summary(sard_ar, pos = 1:10)
 
 Here, the 6th ranked result, while being a valid linear region, is conspicuously higher in rate value and occurs close to the start of the experiment. If we were interested in routine or standard metabolic rates, we would want to exclude this one, as it suggests the specimen might not yet be acclimated to the chamber. 
 
-In most cases the best option is to use the top ranked result unless there are specific reasons to exclude it. However, an investigator may opt to select several and take a mean of the resulting rates. For instance here, we might decide on a mean of the top 3 soince they have the highest `$density` values (note that typically we would do this after rates have been adjusted and converted - see later sections - but it is possible here too). We could just average the top 3 values ourselves, but the `mean` function will also work with `auto_rate` objects and accepts the `pos` input.
+In most cases the best option is to use the top ranked result unless there are specific reasons to exclude it. However, an investigator may opt to select several and take a mean of the resulting rates. For instance here, we might decide on a mean of the top 3 since they have the highest `$density` values (note that typically we would do this after rates have been adjusted and converted - see later sections - but it is possible here too). We could just average the top 3 values ourselves, but the `mean` function will also work with `auto_rate` objects and accepts the `pos` input.
 
 ```{r}
 mean(sard_ar, pos = 1:3)
