@@ -19,11 +19,11 @@ We are glad to announce that `respR` has reached version 2.0 and is finally [ava
 
 v2.0 has been a massive and thorough update where almost every corner of the package has been revised, rewritten, streamlined and tested. In addition, we have added a lot of new functionality which you can read about below. 
 
-We have also updated and added even more vignettes, function guides and more on our brand new [website](https://github.com/januarharianto/respR) detailing all the old and new functionality. 
+We have also updated and added even more vignettes, function guides and more on our brand new [website](https://januarharianto.github.io/respR) detailing all the old and new functionality. 
 
 Unfortunately, a major version update inevitably comes with some code breaking changes, and this one is no exception. We thought long and hard about introducing changes that might break code written for v1.1, but made the decision to fix as many as possible of the inconsistencies, bugs, and poor design decisions we made while we had the chance with this major version update. The upside of this is that the package will be much easier to update in the future without breaking existing code. 
 
-We have [created a page on the new website](https://github.com/januarharianto/respR) to detail how v2.0 code has changed and how you may go about revising your earlier code to update it. The good news is most of these changes will be very easy to make. If you have submitted code or are in the process of submitting it as part of a publication, we want this code to remain reproducible long into the future. See [here](https://github.com/januarharianto/respR) for how you can link to resources that will allow anyone to run v1.1 code and keep these analyses reproducible. 
+We have [created a page on the new website](https://januarharianto.github.io/respR/articles/v2_code_change.html) to detail how v2.0 code has changed and how you may go about revising your earlier code to update it. The good news is most of these changes will be very easy to make. If you have submitted code or are in the process of submitting it as part of a publication, we want this code to remain reproducible long into the future. See [here](https://januarharianto.github.io/respR/articles/v1_code.html) for how you can link to resources that will allow anyone to run v1.1 code and keep these analyses reproducible. 
 
 We are happy to say the package has never been more stable and even easier to use, and it is now on a great base upon which to build future functionality. Here are the major changes in this version:
 

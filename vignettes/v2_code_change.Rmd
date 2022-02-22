@@ -18,11 +18,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 While the majority of the package workflows are in general unchanged, and older code *may* work, there are enough changes that we recommend old code be used very carefully with v2. `respR` workflows are generally concise and overall work in the same way, so any updating of code to be compatible should be relatively straightforward. 
 
-This is an incomplete summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [here]() for full version notes for this release. 
+This is an incomplete summary of the major code changes in v2.0, with some suggestions for how to update older code to allow it to work.  See [**here**](https://januarharianto.github.io/respR/articles/whatsnew.html) for full version notes for this release. 
 
 If you have completed or are in the process of submitting a publication and `respR v1.x` code as supplementary information, see `vignette("v1_code")` for information about how to include a link to `respR v1.1` so that your code will remain reproducible in the future. 
 
-If you come across any changes that are not documented here, and you think should be, [let us know](mailto:nicholascarey@gmail.com) and we will add it to the list. 
+If you come across any changes that are not documented here, and you think should be, [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will add it to the list. 
 
 ### Deprecated functions
 

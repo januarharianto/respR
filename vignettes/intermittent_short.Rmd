@@ -155,7 +155,7 @@ See later section [Converting rates](#convert) for how to convert these to units
 
 To more rigorously identify *lowest*, *highest* or *most linear* rates within each replicate we can use the `auto_rate()` function. See `vignette("auto_rate")` for more detail on using `auto_rate`. 
 
-`auto_rate` is designed to either run every regression of a fixed width across a dataset (`"rolling"`, `"lowest"` and `"highest"` methods), or use [kernel density analysis]() to identify the most`"linear"` regions, that is regions of most consistent and stable rates. Therefore it does not have the region selection functionality by time, row or oxygen that `calc_rate` [does](#calc_rate). 
+`auto_rate` is designed to either run every regression of a fixed width across a dataset (`"rolling"`, `"lowest"` and `"highest"` methods), or use [kernel density analysis](https://januarharianto.github.io/respR/articles/auto_rate.html) to identify the most`"linear"` regions, that is regions of most consistent and stable rates. Therefore it does not have the region selection functionality by time, row or oxygen that `calc_rate` [does](#calc_rate). 
 
 The `"linear"` method is however likely to work poorly with intermittent-flow data like this which shows sharp, oscillating oxygen patterns. Therefore, similar to the [above example](#oxygen) with `calc_rate` oxygen regions, we need to subset each replicate before running `auto_rate` on it. 
 

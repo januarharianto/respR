@@ -63,7 +63,7 @@ Note, if multiple columns are inspected like this, and the object saved, subsequ
 `respR` contains several example flowthrough datasets:
 `flowthrough.rd`, `flowthrough_mult.rd`, `flowthrough_sim.rd`. 
 
-We will use these here to run through some specific use cases and example analyses of flowthrough respirometry that should cover most user needs. If there are any not covered please [**get in touch**](mailto:nicholascarey@gmail.com) and we will attempt to accommodate them. 
+We will use these here to run through some specific use cases and example analyses of flowthrough respirometry that should cover most user needs. If there are any not covered please [**get in touch**](https://januarharianto.github.io/respR/articles/contact.html) and we will attempt to accommodate them. 
 
 
 ## Case 1: Outflow oxygen only {#case1}

@@ -62,10 +62,15 @@
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
 #' separate value by passing `export = TRUE`.
 #'
-#' @return **Output**: If the `x` input is a `calc_rate.ft` object, the output will be identical
-#'   in structure, but of class `adjust_rate.ft` and containing the additional
-#'   elements `$adjustment` and `$rate.adjusted`, with these also added to
-#'   `$summary` metadata.
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
+#' @return **Output**: If the `x` input is a `calc_rate.ft` object, the output
+#'   will be identical in structure, but of class `adjust_rate.ft` and
+#'   containing the additional elements `$adjustment` and `$rate.adjusted`, with
+#'   these also added to `$summary` metadata.
 #'
 #'   If `x` is a numeric value or vector, the output is a `list` object of class
 #'   `adjust_rate.ft` containing four elements: a `$summary` table, `$rate`,

@@ -56,6 +56,11 @@ time as users provide feedback and samples. Users should however be careful
 using this function, carefully check the imported data, and be prepared to
 import data by other functions such as \code{\link[=read.csv]{read.csv()}} since it is a
 fundamental basic in data analyses in R.
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 \dontrun{

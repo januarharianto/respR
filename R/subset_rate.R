@@ -195,6 +195,11 @@
 #'   data, are retained. If `n = 1`, only rates which are 100% contained within
 #'   at least one other are removed.
 #'
+#'   ## More
+#'
+#'   For additional help, documentation, vignettes, and more visit the `respR`
+#'   website at <https://januarharianto.github.io/respR>
+#'
 #' @return The output of `subset_rate` is a `list` object which retains the
 #'   `auto_rate` class, with an additional `auto_rate_subset` class applied.
 #'

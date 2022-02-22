@@ -168,6 +168,11 @@
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
 #' separate value by passing `export = TRUE`.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return Output is a list object of class `adjust_rate` containing all inputs,
 #'   input rates, adjustment values, adjustment method and model (if relevant),
 #'   and the primary output of interest `$rate.adjusted`.

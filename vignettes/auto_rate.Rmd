@@ -48,7 +48,7 @@ Importantly, `auto_rate` has been optimised to be *extremely fast*. Other method
 
 This illustrates the main processes involved in `auto_rate`:
 
-```{r, echo = F, fig.height = 6}
+```{r, echo = F, fig.height = 6, fig.align = "left"}
 library(DiagrammeR)
 grViz("
 digraph a_nice_graph {
@@ -178,7 +178,7 @@ The `width` determines the exact width of the data segments produced for `highes
 
 Importantly however, for the `linear` detection method the `width` is a starting seed value, and does *not* restrict the width of the segments produced. The minimum width of the segments tends to be close to or slightly lower than the `width` input (though not always), however the upper widths are not restricted and can be of any width if the segments are found to be linear. 
 
-While you should experiment with different values to see the effects on the analysis, users should use caution when changing the `width`. Choosing an inappropriate width tends to overfit or underfit the rolling rates. See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
+While you should experiment with different values to see the effects on the analysis, users should use caution when changing the `width`. Choosing an inappropriate width tends to overfit or underfit the rolling rates. See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
 
 ### Overfitting
 
@@ -313,7 +313,7 @@ A lower width leads to much more variable rolling rate estimates. Note how we ha
 
 The `width` value should be carefully considered; too low and it fails to capture accurate rolling rates and is unduly influenced by data noise or variability, too high and the data is overfitted with important physiological or behavioural states smoothed out. Whatever value is used, this should be reported in the analytical methods alongside results. 
 
-See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
+See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
 
 ## Example Analysis
 
@@ -359,7 +359,7 @@ summary(sard_ar)
 In this case the first rate result looks good: it has a high r-squared, is sustained over a duration of 50 minutes, and the rate value is consistent with the other results. 
 However in some cases, other ranked results may be more appropriate to report depending on the metabolic rate metric being investigated. 
 
-While the first result is the highest in terms of the kernel density value, the user is free to select and report other linear results if they satisfy other desirable criteria, for instance are above a particular r-squared value or span a minimum time window. One peculiarity to take note of in the KDE analysis, is that sometimes the top ranked result does not necessarily have the highest r-squared. This is a counter intuitive result, but explained by the fact that the function learns the shape of the entire dataset, so a particular regression from a linear region might be most representative of the rates in that region, but just happen to be fit to values which return a lower r-squared. This does not mean it is not a valid result; arguably, it is more valid, since it is accurately describing the localised shape of the data. See Chabot et al. ([2021]()) for discussion of r-squared values in metabolic rate measurements.
+While the first result is the highest in terms of the kernel density value, the user is free to select and report other linear results if they satisfy other desirable criteria, for instance are above a particular r-squared value or span a minimum time window. One peculiarity to take note of in the KDE analysis, is that sometimes the top ranked result does not necessarily have the highest r-squared. This is a counter intuitive result, but explained by the fact that the function learns the shape of the entire dataset, so a particular regression from a linear region might be most representative of the rates in that region, but just happen to be fit to values which return a lower r-squared. This does not mean it is not a valid result; arguably, it is more valid, since it is accurately describing the localised shape of the data. See Chabot et al. ([2021](https://januarharianto.github.io/respR/articles/refs.html#references)) for discussion of r-squared values in metabolic rate measurements.
 
 The `pos` input can also be used in `summary` to view particular row ranges. We'll look at the first 10. 
 
@@ -369,7 +369,7 @@ summary(sard_ar, pos = 1:10)
 
 Here, the 6th ranked result, while being a valid linear region, is conspicuously higher in rate value and occurs close to the start of the experiment. If we were interested in routine or standard metabolic rates, we would want to exclude this one, as it suggests the specimen might not yet be acclimated to the chamber. 
 
-In most cases the best option is to use the top ranked result unless there are specific reasons to exclude it. However, an investigator may opt to select several and take a mean of the resulting rates. For instance here, we might decide on a mean of the top 3 soince they have the highest `$density` values (note that typically we would do this after rates have been adjusted and converted - see later sections - but it is possible here too). We could just average the top 3 values ourselves, but the `mean` function will also work with `auto_rate` objects and accepts the `pos` input.
+In most cases the best option is to use the top ranked result unless there are specific reasons to exclude it. However, an investigator may opt to select several and take a mean of the resulting rates. For instance here, we might decide on a mean of the top 3 since they have the highest `$density` values (note that typically we would do this after rates have been adjusted and converted - see later sections - but it is possible here too). We could just average the top 3 values ourselves, but the `mean` function will also work with `auto_rate` objects and accepts the `pos` input.
 
 ```{r}
 mean(sard_ar, pos = 1:3)

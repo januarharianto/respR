@@ -32,7 +32,7 @@ opts_chunk$set(collapse = TRUE,
 
 This page is intended to be a resource for those who have submitted v1.x code as part of a publication, or those who may want to reproduce v.1.x analyses in the future. 
 
-See [here]() for the major code breaking changes in v2.0 and how earlier code may be amended to run in the new version. 
+See [**here**](https://januarharianto.github.io/respR/articles/v2_code_change.html) for the major code breaking changes in v2.0 and how earlier code may be amended to run in the new version. 
 
 If you are in the process of submitting code as part of a publication and don't want to have to revise it to work with `respR` v2, or if it is too late to do so, please include a link to this page so others will find it easier to run the code in the future. For publications already published this page will remain on the website as a resource for anyone wanting to run the code or reproduce analyses. 
 
@@ -46,7 +46,7 @@ devtools::install_github("januarharianto/respR@v1.1.1")
 
 This will install v1.1.1 of the package and its dependencies (see [below](#deps)) as normal. 
 
-An alternative is to download the package source files and compile the package locally. These can be found [here](https://github.com/januarharianto/respR/releases/tag/v1.1.1) on Github, or [here](https://zenodo.org/record/6112437) on Zenodo. These contain all the files needed to compile `respR` v1.1.1 as a local package via an RStudio project or other R installation. 
+An alternative is to download the package source files and compile the package locally. These can be found [**here**](https://github.com/januarharianto/respR/releases/tag/v1.1.1) on Github, or [**here**](https://zenodo.org/record/6112437) on Zenodo. These contain all the files needed to compile `respR` v1.1.1 as a local package via an RStudio project or other R installation. 
 
 As a final option, the functions can be found in the `R` folder within that archive, and these scripts can be run to create the functions in the local environment. This may require some editing of code to refer to these local functions. 
 
@@ -60,7 +60,7 @@ Below is a list of the latest versions tested and known to work with v1.1.1. If 
 devtools::install_version("lubridate", version = "1.8.0", repos = "http://cran.us.r-project.org")`
 ```
 
-You can also install older versions from downloaded package zip archives. Visit the [CRAN Archive]( https://cran.r-project.org/src/contrib/Archive/) to view and download the archived versions of CRAN hosted packages.
+You can also install older versions from downloaded package zip archives. Visit the [**CRAN Archive**]( https://cran.r-project.org/src/contrib/Archive/) to view and download the archived versions of CRAN hosted packages.
 
 ### Dependencies in v1.1.1 {#deps}
 

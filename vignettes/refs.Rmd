@@ -47,9 +47,9 @@ These packages may also help you analyse respirometry data:
 -   [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 -   [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
-Also be sure to check out the [FishResp](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.
+Be sure to check out the [**FishResp**](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.
 
 ## References
 
-The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here]() for references specific to critical oxygen analyses.  \
+The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here](https://januarharianto.github.io/respR/articles/oxycrit.html#refs) for references specific to critical oxygen analyses.  \
  \

@@ -205,6 +205,12 @@ are found, locations (row numbers) are printed (up to first 20 occurrences).
 \item \code{summary()}: simple wrapper for \code{print()} function. See above.
 }
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 ## By default, assumes time is col 1 and oxygen col2:

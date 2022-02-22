@@ -36,7 +36,7 @@ Using only two values gives no information about how rates of use may have fluct
 
 For some applications however, there may be valid reasons for using only two datapoints of oxygen concentration separated by a known time period to calculate a rate. 
 This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake or productions rates *per se*, but rather in total oxygen flux over a time period. 
-An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. [Smith Jr. 1987]()). 
+An example of this is in respirometry studies of sediment communities, where oxygen flux is correlated with transport of other chemicals or nutrients (e.g. [Smith Jr. 1987](https://januarharianto.github.io/respR/articles/refs.html#references)). 
 In such cases, even if continuous data exist, fitting a linear regression to these data may not be appropriate, and in fact could be grossly incorrect. 
 This is particularly the case where oxygen or oxygen use fluctuates significantly over the time period of the experiment, such as with a diurnal rhythm.
 In such cases linear regressions may be significantly skewed.  

@@ -138,6 +138,11 @@
 #' Muggeo (2008) for what these represent. The summary can be exported as a
 #' separate data frame by passing `export = TRUE`.
 #'
+#' ## More
+#'
+#' For additional help, documentation, vignettes, and more visit the `respR`
+#' website at <https://januarharianto.github.io/respR>
+#'
 #' @return Output is a `list` object of class `oxy_crit` containing input
 #'   parameters and data, various summary data, metadata, and the primary output
 #'   of interest `$crit`, which is the critical oxygen value in the units of the

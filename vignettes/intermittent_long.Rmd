@@ -133,7 +133,7 @@ These are all aspects that may feed into rate selection criteria regarding a spe
 
 These are all valid options, as long as they are reported. However, we can also change the analysis parameters. The `width` input in `auto_rate` determines the width of the rolling regressions used to find linear regions. See `auto_rate()` and other vignettes for full details, but briefly in the case of the `"linear"` method this is the starting point for the analysis. Resulting regressions will vary in width, but in general the minimum width will be increased by increasing the `width`. The default value is 0.2, representing 20% of the data length. Here, with 10 minutes of data this would represent 2 minutes, which is quite a brief time window. So instead we will increase this to 0.4 (it can also be specified in the units of the `"by"` input).
 
-See [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) for an excellent discussion of appropriate widths in rolling regressions to determine MMR. 
+See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine MMR. 
 
 ```{r message=FALSE, warning=FALSE, results="hide", tidy = FALSE, fig.show='hide'}
 # define buffer and measure periods
@@ -161,7 +161,7 @@ plot(zeb_mmr, pos = 6)
 
 With non-linear data like this, such as from an animal recovering from exercise, changing the width over which a rate is determined necessarily changes the rate value. The researcher needs to keep this in mind, and find a balance between a width that provides a good estimation of the specimen's physiological state, but also is not affected by other factors such as data noise or anomalies. Most importantly, these decisions and criteria need to be reported. 
 
-High width values can lead to overfitting and mis-estimation of rates, while low widths underfitting and rate values which are too sensitive to data noise. See [here]() for discussion of this in the context of `auto_rate`, and how to choose an appropriate `wdith`.. We recommend reading [Prinzing et al. 2021](https://onlinelibrary.wiley.com/doi/10.1002/ece3.7732) to understand the nuances of determining MMR and regression widths. See also [Killen et al. 2021](https://doi.org/10.32942/osf.io/gnzh7). 
+High width values can lead to overfitting and mis-estimation of rates, while low widths underfitting and rate values which are too sensitive to data noise. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of this in the context of `auto_rate`, and how to choose an appropriate `width`. We recommend reading [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) to understand the nuances of determining MMR and regression widths. See also [Killen et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references). 
 
 ### Other options
 

@@ -40,6 +40,11 @@ By default (\code{simplify = TRUE}) the output is a numeric vector of
 converted values. If \code{simplify = FALSE} output is a \code{list} object of class
 \code{convert_DO} containing five elements: \verb{$call} the function call, \verb{$input}
 values, \verb{$output} converted values, \verb{$input.unit} and \verb{$output.unit}.
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \description{
 This is a conversion function that performs conversions between concentration

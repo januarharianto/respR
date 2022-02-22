@@ -61,5 +61,8 @@ These features are in development, planned or being considered. We are happy to 
 - A function for converting between units of oxygen uptake or production rate. Could be useful for comparing outputs to results from the literature.
 
 
+### Aerobic respirometry
+
+We are still desperate to [hear](https://januarharianto.github.io/respR/articles/contact.html) from users who have used (or tried to use) `respR` with data from air respirometry experiments so that we can get an idea of how we can update the package to directly support aerobic respirometry. 
 
 

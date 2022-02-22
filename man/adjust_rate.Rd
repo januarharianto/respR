@@ -224,6 +224,12 @@ the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as
 separate value by passing \code{export = TRUE}.
 }
 }
+
+\subsection{More}{
+
+For additional help, documentation, vignettes, and more visit the \code{respR}
+website at \url{https://januarharianto.github.io/respR}
+}
 }
 \examples{
 # Note that oxygen uptake rates are negative in respR since they represent a
