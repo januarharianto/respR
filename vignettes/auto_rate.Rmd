@@ -48,7 +48,7 @@ Importantly, `auto_rate` has been optimised to be *extremely fast*. Other method
 
 This illustrates the main processes involved in `auto_rate`:
 
-```{r, echo = F, fig.height = 6, fig.align = "left"}
+```{r, echo = F, fig.height = 6, fig.align = "center"}
 library(DiagrammeR)
 grViz("
 digraph a_nice_graph {
@@ -82,7 +82,7 @@ rd -> au -> rr -> or -> mm
 rr -> fi -> in
 rr -> un -> ro
 
-}")
+}", width = 400)
 ```
 
 
