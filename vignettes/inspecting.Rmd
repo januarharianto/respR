@@ -460,9 +460,7 @@ Such gaps may also affect rolling rate determinations, such as in the `auto_rate
 
 Note also, because of the missing rows, all rows *after* the gap will not conform to the same time values, although as long as they don't include the gap will represent an equivalent time *window*. 
 
-## Additional notes and tips
-
-### Plot {#plot}
+## Plot {#plot}
 
 When using `inspect`, a plot of the inspected data is produced (unless `plot = FALSE`), against both time (bottom blue axis) and row index (top red axis).
 
@@ -564,6 +562,15 @@ inspect(urchins.rd, time = 1, oxygen = 8:19)
 
 This gives us a quick visual overview of the dataset, allowing us to, for example, see the experiments which have some sort of issues, and which are controls (the last two here).
 
+### Plot an additional data type
+
+By using the `add.data` input an additional data source (for example temperature) can be plotted in alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This input indicates a column number in the same input data frame sharing the same time data. This column is not passed through the above checks. It is a visual aid only to help with selection of regions from which to extract rates. 
+
+```{r , results = "hide", message=FALSE, warning=FALSE}
+## Plot column 4 (temperature) alongside oxygen timeseries
+inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
+```
+
 ### Additional plotting options
 
 Additional plotting controls can be passed in either the main `inspect` call or when using `plot()` on the output object. 
@@ -572,10 +579,13 @@ Most notable is `rate.rev = FALSE`. This means rates in the rolling rate plot wi
 
 If axis labels obscure parts of the plot they can be suppressed using `legend = FALSE`. Console output messages can be suppressed with `quiet = TRUE` (in `plot()` only). Lastly, a different `width` value can be passed to see how it affects the rolling rate plot. 
 
+In addition, the generic `par()` inputs `oma`, `mai`, `tck`, `mgp`, `las`, and `pch` are accepted via `...` to allow default parameters to be changed. Particularly useful are `las = 1` to make axis labels horizontal and adjusting the second (left side) of the four `mai` (inner margins) input to make y-axis labels more readable.
+
 This example examining oxygen production in algae uses some of these options. 
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
-         legend = FALSE, rate.rev = FALSE)
+        legend = FALSE, rate.rev = FALSE, 
+        las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
 ```
 
