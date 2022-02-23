@@ -21,7 +21,8 @@
 #' is present in the `$summary` component of the output as `$density`. Under
 #' this method, the `width` input is used as a starting seed value, but the
 #' resulting regressions may be of any width. See
-#' \href{https://github.com/januarharianto/respR}{here} for full details.
+#' [here](https://januarharianto.github.io/respR/articles/auto_rate) for full
+#' details.
 #'
 #' - `highest`: Every regression of the specified `width` across the entire
 #' timeseries is calculated, then ordered using ***absolute*** rate values from
