@@ -121,7 +121,8 @@ plot(insp1, width = 0.05, quiet = TRUE)
 This is a visual aid and only affects plotted values. It does not alter the delta oxygen values in the output. 
 
 ### Calculate rate {#case1plot}
-Calculating a rate requires the `flowrate` of water through the respirometer in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the actual units will be entered in a later conversion function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`.
+Calculating a rate requires the `flowrate` of water through the respirometer in a volume (`ul`, `ml`, or `L`) per unit time (`sec`, `min`, `hr`, or `day`). Here, only the value is required; the actual units will be entered in a later conversion function. For this dataset experimental data are in `?flowthrough.rd`, and in this example the flowrate is `2.34 mL/min`. (Yes, this flowrate is extremely low! It was controlled with a peristaltic pump, and gives you an idea of what it takes to get a viable rate via flowthrough respirometry from a small coldwater mollusc!).
+
 ```{r eval = F}
 # calculate rate
 rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
@@ -183,12 +184,21 @@ rate1_final <- rate1_ms$rate.output
 print(rate1_final)
 ```
 
+Or you can use `summary` and `export = TRUE` to save the summary table as a new data frame.
+
+```{r results='hide'}
+rate1_final <- summary(rate1_ms, export = TRUE)
+```
+
+```{r}
+rate1_final
+```
+
 
 ## Case 2: Outflow and inflow oxygen
 *"We have both outflow and inflow oxygen recordings. We also know from pilot trials background is negligible, so we don't need to perform an adjustment."*
 
 This is a very similar analysis to [Case 1](#case1) above, but we will use the inflow oxygen recording as the `in.oxy` input. The process is otherwise the same: `inspect.ft`, `calc_rate.ft`, and `convert_rate.ft`.
-
 
 ### Inspect data
 ```{r eval = F}
@@ -202,7 +212,7 @@ insp2 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.
 plot(insp2, quiet = TRUE)
 ```
 
-Compared to the `inspect.ft` plot in [Case 1](#case1plot), we can see that at least some of the variation in rate (the delta oxygen values) is explained by variation in inflowing oxygen. This means in this case delta oxygen are more consistent, so we will use the entire dataset to calculate the rate. 
+Compared to the `inspect.ft` plot in [Case 1](#case1plot) the delta oxygen values are less variable, which suggests that at least some of the variation observed in the previous example is explained by variation in inflowing oxygen levels. This means that in this example delta oxygen are more consistent, so we will use the entire dataset to calculate the rate. 
 
 ### Calculate rate
 
@@ -334,7 +344,7 @@ print(rate3adj)
 
 We can see this performs a small but significant adjustment to the specimen rate.
 
-Note how `adjust_rate.ft` accepts `calc_rate.bg` objects for both inputs. This same background rate object can similarly be applied to the other specimen experiments in this dataset, or indeed other datasets if they are collected under the same conditions. However, it also accepts numeric values. This will give the exact same result. 
+Note how `adjust_rate.ft` can accept `calc_rate.ft` objects for both inputs. This same background rate object can similarly be applied to the other specimen experiments in this dataset, or indeed other datasets if they are collected under the same conditions. However, it also accepts numeric values. This will give the exact same result. 
 
 ```{r eval = F}
 # adjust rate
