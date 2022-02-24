@@ -439,7 +439,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(method == "rate"){
     if(length(n) != 2) stop("subset_rate: For 'rate' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with values between {n[1]} and {n[2]}..."))
-    keep <- sort(which(data.table::between(x$rate, n[1], n[2])))
+    n_order <- sort(n)
+    keep <- sort(which(data.table::between(x$rate, n_order[1], n_order[2])))
     keep <- sort(keep)
   }
 
@@ -448,7 +449,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(method == "rsq"){
     if(length(n) != 2) stop("subset_rate: For 'rsq' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with rsq values between {n[1]} and {n[2]}..."))
-    keep <- sort(which(data.table::between(x$summary$rsq, n[1], n[2])))
+    n_order <- sort(n)
+    keep <- sort(which(data.table::between(x$summary$rsq, n_order[1], n_order[2])))
     keep <- sort(keep)
   }
 

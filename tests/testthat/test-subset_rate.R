@@ -1,3 +1,4 @@
+## library(testthat)
 ## testthat::test_file("tests/testthat/test-subset_rate.R")
 
 capture.output({  ## stops printing outputs on assigning
@@ -426,6 +427,13 @@ test_that("subset_rate: method = rate   - check stops with n not length 2 vector
                regexp = "For 'rate' method 'n' must be a vector of two values.")
 })
 
+test_that("subset_rate: method = rate   - works if n entered either way round", {
+  expect_equal(subset_rate(ar_obj, method = "rate",
+                           n = c(0.0010, 0.0015), plot = FALSE)$rate,
+               subset_rate(ar_obj, method = "rate",
+                           n = c(0.0015, 0.0010), plot = FALSE)$rate)
+})
+
 # Check "rsq" method ------------------------------------------------------
 
 ar_subset_rsq <- subset_rate(ar_obj, method = "rsq",
@@ -441,6 +449,13 @@ test_that("subset_rate: method = rsq   - check stops with n not length 2 vector"
                regexp = "For 'rsq' method 'n' must be a vector of two values.")
   expect_error(subset_rate(ar_obj, method = "rsq", n = c(1,2,3), plot = FALSE),
                regexp = "For 'rsq' method 'n' must be a vector of two values.")
+})
+
+test_that("subset_rate: method = rsq   - works if n entered either way round", {
+  expect_equal(subset_rate(ar_obj, method = "rsq",
+                           n = c(0.6, 0.7), plot = FALSE)$rate,
+               subset_rate(ar_obj, method = "rsq",
+                           n = c(0.7, 0.6), plot = FALSE)$rate)
 })
 
 # Check "row" method ------------------------------------------------------
