@@ -686,10 +686,6 @@ plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     win <- length(del.oxy[[1]]) * width
   del.oxy.smooth <- lapply(del.oxy, function(z) roll::roll_mean(z, width = win, min_obs = 1))
 
-  # head(del.oxy[[1]])
-  # head(del.oxy.smooth[[1]])
-  # width = 0.1
-  #
   # Apply default plotting params
   par(oma = oma_def,
       mai = mai_def,
@@ -723,11 +719,6 @@ plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
         cex = 1,
         cex.main = 1,
         ...)
-
-    # Plot all on same y axis range?????
-    #ylim <- range(na.omit(del.oxy[pos])) ## so all on same axes
-    #buffer <- diff(ylim)*0.1
-    #ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
 
     lapply(pos, function(z) {
 
