@@ -158,7 +158,7 @@ sard |>
   summary()
 ```
 
-We can see there is still a lot of overlap in the results. We can also see of the ten lowest rates, there is a large variation in rate value, so we probably don't need to keep the ten lowest. We'll refine the analysis by removing overlaps and only keeping the 5 lowest rates. 
+We can see there is still a lot of overlap in the results. We can also see of the ten lowest rates, there is a large variation in rate value, so we probably don't need to keep the ten lowest. We'll refine the analysis by only keeping the 5 lowest rates, then  removing overlaps. 
 
 ```{r fig.keep='last', message=FALSE}
 sard |> 
@@ -199,14 +199,14 @@ sard |>
   plot_ar() 
 ```
 
-This plot is perhaps difficult to understand at first, but should beciome clear. The lowest rates are at the top of the summary table, so the plot shows most of these high ranking results are towards the end of the dataset. By contrast, high rates are at the start. This plot is essentially the rolling rate (panel 4) of the `auto_rate` plot just above flipped vertically. See how the lowest rates occur aroudn timepoitn 6000 in both. 
+This plot is perhaps difficult to understand at first, but should beciome clear. The lowest rates are at the top of the summary table, so the plot shows most of these high ranking results are towards the end of the dataset. By contrast, high rates are at the start. This plot is essentially the rolling rate (panel 4) of the `auto_rate` plot just above flipped vertically. See how the lowest rates occur around timepoint 6000 in both. 
 
 We are looking for lowest rates, so we don't need to keep any rates before around timepoint 3000. We can remove those using `time_omit` to input a range to omit. Let's also only keep those with r-squared above 0.9.
 
 ```{r fig.keep='last', message=FALSE}
 sard |>
   subset_rate(method = "rsq", n = c(0.9, 1), plot = FALSE) |>
-  subset_rate(method = "time_omit", n = c(0,3000), plot = FALSE) |>
+  subset_rate(method = "time_omit", n = 0:3000, plot = FALSE) |>
   plot_ar() |>
   summary()
 ```

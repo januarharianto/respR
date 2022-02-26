@@ -537,13 +537,13 @@ capture.output({  ## stops printing outputs on assigning
     ## check stops with n not numeric or integer
     expect_error(subset_rate(ar_obj, method = "row_omit",
                              n = "string", plot = FALSE),
-                 regexp = "subset_rate: For 'row_omit' method 'n' must contain integer values of row.")
+                 regexp = "subset_rate: For 'row_omit' method 'n' must only contain integer values of row.")
     expect_error(subset_rate(ar_obj, method = "row_omit",
                              n = 1.2, plot = FALSE),
-                 regexp = "subset_rate: For 'row_omit' method 'n' must contain integer values of row.")
+                 regexp = "subset_rate: For 'row_omit' method 'n' must only contain integer values of row.")
     expect_error(subset_rate(ar_obj, method = "row_omit",
                              n = c(1.2, 2.5), plot = FALSE),
-                 regexp = "subset_rate: For 'row_omit' method 'n' must contain integer values of row.")
+                 regexp = "subset_rate: For 'row_omit' method 'n' must only contain integer values of row.")
     ## check stops when out of range
     expect_error(subset_rate(ar_obj, method = "row_omit",
                              n = 5000, plot = FALSE),
@@ -628,7 +628,7 @@ capture.output({  ## stops printing outputs on assigning
     ## check stops with n not numeric
     expect_error(subset_rate(ar_obj, method = "time_omit",
                              n = "string", plot = FALSE),
-                 regexp = "subset_rate: For 'time_omit' method 'n' must contain numeric values of time.")
+                 regexp = "subset_rate: For 'time_omit' method 'n' must contain only numeric values of time.")
     ## check stops when out of range
     expect_error(subset_rate(ar_obj, method = "time_omit",
                              n = 5000, plot = FALSE),

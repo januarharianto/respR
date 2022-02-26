@@ -155,14 +155,15 @@ as \code{duration} - see later section.
 These methods refer to the original data, and are intended to \emph{exclude}
 rates determined over particular data regions. This is useful in the case
 of, for example, a data anomaly such as a spike or sensor dropout. For
-these, \code{n} can be a single value indicating a single data row or timepoint,
-or a numeric vector of two values indicating a row or time range. Only
-rates (i.e. regressions) which \emph{do not} utilise that particular value or
-range are retained in the output. For example, if an anomaly occurs
-precisely at timepoint 3000,  \code{time_omit = 3000} will mean only rates
-determined solely over regions before and after this will be retained.
-Similarly, if it occurs over a time range this can be entered as,
-\code{time_omit = c(3000, 3200)}.
+these inputs, \code{n} are values (a single value or multiple) indicating data
+rows or timepoints of the original data to exclude. Only rates (i.e.
+regressions) which \emph{do not} utilise those particular values are retained in
+the output. For example, if an anomaly occurs precisely at timepoint 3000,
+\code{time_omit = 3000} means only rates determined solely over regions before
+and after this will be retained. If it occurs over a range this can be
+entered as, \code{time_omit = c(3000:3200)}. If you want to exclude a regular
+occurrence, for example the flushes in intermittent-flow respirometry they
+can be entered as a vector, e.g. \code{row_omit = c(1000, 2000, 3000)}.
 }
 
 \subsection{\code{duration}}{

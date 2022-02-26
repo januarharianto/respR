@@ -249,11 +249,8 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # Checks ------------------------------------------------------------------
 
+  ## Check for valid auto_rate object
   if(!("auto_rate" %in% class(x))) stop("subset_rate: Input is not an 'auto_rate' object")
-
-  ## Check for empty auto_rate object
-  ## Can occur if previously subset by silly criteria
-  if(nrow(x$summary) == 0) stop("subset_rate: No rates found in $summary")
 
   ## pos and neg rates found
   if(any(x$rate > 0) && any(x$rate < 0)) message("subset_rate: Object contains both negative and positive rates. Ensure the chosen `method` is appropriate.")
