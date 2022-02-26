@@ -46,7 +46,7 @@ COV is typically determined in long duration, closed-chamber respirometry experi
 
 `oxy_crit()` is the `respR` function for determining critical oxygen values. It accepts two forms of data input.
 
-The first is the general structure that all other `respR` functions accept, a `data.frame` or `inspect` object containing paired values of time and oxygen pressure or concentration. For data frame inputs, if time and oxygen are not the first and second columns respectively, the columns can be specified with the `time` and `oxygen` inputs. For inspect objects, these will have been specified already. These `oxygen~time` data are used to calculate a rolling rate of the specified `width`, the default being 0.1 or 10% of the width of the entire dataset. This rolling rate, similar to the lower panel in the `inspect` plot in the example [below](#inspect), is the data upon which the critical value analysis is conducted.
+The first is the general structure that all other `respR` functions accept, a `data.frame` or `inspect` object containing paired values of time and oxygen pressure or concentration. For data frame inputs, if time and oxygen are not the first and second columns respectively, the columns can be specified with the `time` and `oxygen` inputs. For `inspect` objects, these will have been specified already. These `oxygen~time` data are used to calculate a rolling rate of the specified `width`, the default being 0.1 or 10% of the width of the entire dataset. This rolling rate, similar to the lower panel in the `inspect` plot in the example [below](#inspect), is the data upon which the critical value analysis is conducted.
 
 The second data input option is to enter a `data.frame` containing already calculated rates, paired with relevant oxygen values. Typically these would be the mean or central oxygen value of the range over which the rate was determined. These columns can be specified using the `rate` and `oxygen` inputs. In this case, the function does not calculate a rolling rate internally, and the critical point analysis is performed on the input data directly.
 
@@ -125,7 +125,7 @@ print(squid.bsr)
 plot(squid.bsr, quiet = TRUE)
 ```
 
-The output figure shows the two different BSR results, the *intercept* and *midpoint* critical oxygen values, indicated by horizontal lines against the original timeseries data and vertical lines on a `rate~oxygen` plot. In this case, the lines overlay each other, and the `print()` output shows that, in these data, both methods give virtually identical values for the critical oxygen concentration: 2.61 mg L^-1^. We should note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the two different BSR methods may provide different results.
+The output figure shows the two different BSR results, the *intercept* and *midpoint* critical oxygen values, indicated by horizontal lines against the original timeseries data and vertical lines on a `rate~oxygen` plot. In this case, the lines overlay each other, and the `print()` output shows that, in these data, both methods give virtually identical values for the COV: 2.61 mg L^-1^. Note that for some data, depending on various characteristics, such as noise, abruptness of the break, etc., the two different BSR methods may provide different results.
 
 #### Summary results
 
