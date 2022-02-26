@@ -139,15 +139,17 @@ better option in this case however).
 \subsection{\code{rate}, \code{rsq}, \code{row}, \code{time}, \code{density}}{
 
 These methods refer to the respective columns of the \verb{$summary} data frame.
-For these, \code{n} should be a vector of two values in numeric order (lowest to
-highest numerically). Matching rates which fall within the \code{n} range
-(inclusive) are retained. For example, to retain only rates where the
-\code{rate} value is between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The \code{row} and \code{time} ranges refer to the \verb{$row}-\verb{$endrow} or
-\verb{$time}-\verb{$endtime} columns and original data source (\verb{$dataframe} element
-of the input), and can be used to constrain results to rates from
-particular regions of the data (although usually a better option is to
-\code{\link{subset_data}} prior to analysis). Note, \code{time} is not the same
-as \code{duration} - see later section.
+For these, \code{n} should be a vector of two values. Matching regressions in
+which the respective parameter falls within the \code{n} range (inclusive) are
+retained. For example, to retain only rates where the \code{rate} value is
+between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all
+rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The
+\code{row} and \code{time} ranges refer to the \verb{$row}-\verb{$endrow} or \verb{$time}-\verb{$endtime}
+columns and original data source (\verb{$dataframe} element of the input), and
+can be used to constrain results to rates from particular regions of the
+data (although usually a better option is to \code{\link{subset_data}}
+prior to analysis). Note, \code{time} is not the same as \code{duration} - see later
+section.
 }
 
 \subsection{\code{time_omit}, \code{row_omit}}{
