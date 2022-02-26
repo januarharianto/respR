@@ -13,6 +13,12 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 
 ## Version 2.x.x -- 2022-xx-xx
 
+CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions covering any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
+
+CHANGE: `subset_rate`. For `method = "rate"` and `method = "rsq"`, the `n` input of two values can now be entered in either order. 
+
+CHANGE: `auto_rate` and `subset_rate`. These functions now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will not now stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` will result in a console message but no plot and will not stop any pipes. 
+
 FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
 
 
