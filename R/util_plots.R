@@ -249,7 +249,7 @@ plot_multi_ar <- function(x, n = 9, ...){
     start <- q[6]
     end <- q[7]
     rate <- q[3]
-    subset_no <- q[11]
+    subset_no <- q[13]
 
     rdf <- df[start:end]
     slope <- q[3]
@@ -311,6 +311,9 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
 
   if(!("auto_rate" %in% class(x)))
     stop("plot_ar: 'x' should be an 'auto_rate' or 'auto_rate_subset' object.")
+
+  if(length(x$rate) == 0)
+    stop("plot_ar: Nothing to plot! No rates found in 'auto_rate' object.")
 
   ## set layout
   m <- rbind(c(1,1,1), c(2,2,2), c(2,2,2))

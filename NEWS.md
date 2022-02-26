@@ -11,6 +11,11 @@ Fixed:        for any bug fixes.
 Security:     to invite users to upgrade in case of vulnerabilities. 
 --->
 
+## Version 2.x.x -- 2022-xx-xx
+
+FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
+
+
 ## Version 2.0.0 -- 2022-02-17
 
 It's been a long time - over two and a half years (!) since the last update. We are happy to see `respR` being used by the respirometry community in that time. Amazingly we have picked up over 30 citations, so we are very grateful and happy that so many scientists are finding the package of use. 
