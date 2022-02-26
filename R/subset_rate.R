@@ -114,14 +114,15 @@
 #'   These methods refer to the original data, and are intended to *exclude*
 #'   rates determined over particular data regions. This is useful in the case
 #'   of, for example, a data anomaly such as a spike or sensor dropout. For
-#'   these, `n` can be a single value indicating a single data row or timepoint,
-#'   or a numeric vector of two values indicating a row or time range. Only
-#'   rates (i.e. regressions) which *do not* utilise that particular value or
-#'   range are retained in the output. For example, if an anomaly occurs
-#'   precisely at timepoint 3000,  `time_omit = 3000` will mean only rates
-#'   determined solely over regions before and after this will be retained.
-#'   Similarly, if it occurs over a time range this can be entered as,
-#'   `time_omit = c(3000, 3200)`.
+#'   these inputs, `n` are values (a single value or multiple) indicating data
+#'   rows or timepoints of the original data to exclude. Only rates (i.e.
+#'   regressions) which *do not* utilise those particular values are retained in
+#'   the output. For example, if an anomaly occurs precisely at timepoint 3000,
+#'   `time_omit = 3000` means only rates determined solely over regions before
+#'   and after this will be retained. If it occurs over a range this can be
+#'   entered as, `time_omit = c(3000:3200)`. If you want to exclude a regular
+#'   occurrence, for example the flushes in intermittent-flow respirometry they
+#'   can be entered as a vector, e.g. `row_omit = c(1000, 2000, 3000)`.
 #'
 #'   ## `duration`
 #'
@@ -470,17 +471,23 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # row_omit ----------------------------------------------------------------
   if(method == "row_omit"){
-    if(length(n) > 2) stop("subset_rate: For 'row_omit' method 'n' must be a single value or vector of two values.")
-    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use original data row(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
-
-    if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
+    if(!(is.numeric(n)) || any(n %% 1 != 0))
+      stop("subset_rate: For 'row_omit' method 'n' must only contain integer values of row.")
+    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use original data row(s) in 'n' input..."))
     if(any(n > dim(x$dataframe)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
 
-    # which regs span n?
-    n_order <- sort(n) # in case entered wrong way round
-    keep1 <- which(x$summary$row >= n_order[2]) ## start is AFTER n
-    keep2 <- which(x$summary$endrow <= n_order[1]) ## end is BEFORE n
-    keep <- c(keep1, keep2)
+    n_order <- sort(n)
+    remove <- c() # empty obj for loop results
+    # for each n, go through summary table by row
+    # if it occurs between row and endrow then that row of summary gets removed
+    for(i in n_order){
+      remove_i <- which(apply(x$summary, 1, function(z) any(i %in% z[6]:z[7])))
+      remove <- sort(unique(c(remove, remove_i)))
+    }
+    # if nothing to remove, above outputs integer(0), so this is for that...
+    if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else
+      keep <- 1:nrow(x$summary)
+
     keep <- sort(keep)
   }
 
@@ -502,17 +509,26 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
 
   # time_omit ---------------------------------------------------------------
   if(method == "time_omit"){
-    if(length(n) > 2) stop("subset_rate: For 'time_omit' method 'n' must be a single value or vector of two values.")
-    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use time value(s) of {glue::glue_collapse(n, ", ", last = \" to \")}..."))
-    if(length(n) == 1) n <- c(n,n) ## if single value make 2-vec for code simplicity
+    if(!(is.numeric(n)))
+      stop("subset_rate: For 'time_omit' method 'n' must contain only numeric values of time.")
+    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use time value(s) in 'n' input..."))
     if(any(n < range(x$dataframe[[1]], na.rm = TRUE)[1]) || any(n > range(x$dataframe[[1]], na.rm = TRUE)[2]))
       stop("subset_rate: Input for 'n': time inputs out of time data range.")
 
-    # which regs span n?
-    n_order <- sort(n) # in case entered wrong way round
-    keep1 <- which(x$summary$time >= n_order[2]) ## start is AFTER n
-    keep2 <- which(x$summary$endtime <= n_order[1]) ## end is BEFORE n
-    keep <- c(keep1, keep2)
+    n_order <- sort(n)
+    remove <- c() # empty obj for loop results
+    # for each n, go through summary table by row
+    # if it occurs between time and endtime
+    # then that row of summary gets removed
+    for(i in n_order){
+      remove_i <- which(apply(x$summary, 1, function(z)
+        any(i >= z[8] && i <= z[9])))
+      remove <- sort(unique(c(remove, remove_i)))
+    }
+    # if nothing to remove, above outputs integer(0), so this is for that...
+    if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else
+      keep <- 1:nrow(x$summary)
+
     keep <- sort(keep)
   }
 
