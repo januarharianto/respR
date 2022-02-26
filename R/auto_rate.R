@@ -548,8 +548,11 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   # how many rates
   nres <- length(x$rate)
 
-  ## warning if empty
-  if(nres == 0) stop("plot.auto_rate: Nothing to plot! No rates found in 'auto_rate' object.")
+  ## warning if empty - but return to allow piping
+  if(nres == 0) {
+    message("plot.auto_rate: Nothing to plot! No rates found in 'auto_rate' object.")
+    return(invisible(x))
+  }
 
   ## pos 1 by default
   if(is.null(pos)) pos <-1

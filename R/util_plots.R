@@ -237,8 +237,10 @@ plot_multi_ar <- function(x, n = 9, ...){
   summ <- as.data.frame(x$summary)
 
   if(nres == 0) {
-    message("subset_rate: No rates to plot...")
-    return()}
+    message("subset_rate: Nothing to plot! No rates found in 'auto_rate' object.")
+    return()
+  }
+
   if(nres > n) message(glue::glue("subset_rate: Plotting first {n} of {nres} subset rate results only..."))
   if(nres < n) n <- nres
   subset_no <- 1:n
@@ -312,8 +314,11 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
   if(!("auto_rate" %in% class(x)))
     stop("plot_ar: 'x' should be an 'auto_rate' or 'auto_rate_subset' object.")
 
-  if(length(x$rate) == 0)
-    stop("plot_ar: Nothing to plot! No rates found in 'auto_rate' object.")
+  ## warning if empty - but return to allow piping
+  if(length(x$rate) == 0){
+    message("plot_ar: Nothing to plot! No rates found in 'auto_rate' object.")
+    return(invisible(x))
+  }
 
   ## set layout
   m <- rbind(c(1,1,1), c(2,2,2), c(2,2,2))
