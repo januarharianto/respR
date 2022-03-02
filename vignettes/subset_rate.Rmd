@@ -73,7 +73,7 @@ Obviously this is a lot of information to digest. The `rate`, which is the prima
 
 ### plot_ar {#plotar}
 
-There is a handy function `plot_ar()` which plots `auto_rate` summary tables in a way that visualises where they occur in the context of the dataset. See [later section](#plotar) for more details about this function.
+There is a handy function `plot_ar()` which plots `auto_rate` summary tables in a way that visualises where they occur in the context of the dataset. See [later section](#plotar) for more details about this function. Note, this is not the same as the plot produced by `subset_rate` and controlled with the `plot = TRUE` input. 
 
 ```{r results='hide'}
 plot_ar(sard)
@@ -85,7 +85,9 @@ From this plot the results are clearer. We can see many of the linear regions su
 
 ### `subset_rate`
 
-The `subset_rate()` function allows us to subset out only the results we are interested in. One of the subsetting methods is to remove regressions which overlap. In the `overlap` method, the `n` input indicates the proportional degree of overlap to allow for a result to be retained. For `n = 0` only rates which do not overlap at all, that is share *no* data, are retained. For `n = 1` rates which are entirely contained with another are removed. For `n = 0.5` any regression which shares at least 50% of it's datapoints with another are removed. It is recommended this method be used after other selection criteria have been applied, as it is quite aggressive about removing rates, and can be *very* computationally intensive when there are many results.
+The `subset_rate()` function allows us to subset out only the results we are interested in. One of the subsetting methods is to remove regressions which overlap. In the `overlap` method, the `n` input indicates the proportional degree of overlap to allow for a result to be retained. For `n = 0` only rates which do not overlap at all, that is share *no* data, are retained. For `n = 1` rates which are entirely contained with another are removed. For `n = 0.5` any regression which shares at least 50% of it's datapoints with another are removed. It performs this analysis working from the bottom of the summary table upwards, so lower ranked results are removed first. 
+
+It is recommended this method be used after other selection criteria have been applied, as it is quite aggressive about removing rates, and can be *very* computationally intensive when there are many results.
 
 Here we'll show an example of how it could be used to make `auto_rate` results more manageable. Let's remove all results that share 100% of their datapoints with at least one other.  
 
@@ -132,7 +134,7 @@ Now we are left with only three results. We could choose to select the highest r
 
 `subset_rate` allows you to apply very specific selection criteria in a specific priority order. Because of this is it straightforward to report the analysis in clear language. We might report the above analysis in just a short passage in the methods like this:
 
-*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` "linear" method was used to automatically identify linear regions of the data. RMR was defined as the lowest of these rates with r-squared above 0.95 sustained for at least 30 minutes."*
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The auto_rate "linear" method was used to automatically identify linear regions of the data. RMR was defined as the lowest of these rates with r-squared above 0.95 sustained for at least 30 minutes."*
 
 
 
@@ -171,14 +173,8 @@ sard |>
 
 Interestingly this is the same result we got [above](). In this dataset the most linear regions, that is those with most consistent rates, were also those of the lowest rates. This isn't always the case! 
 
-### Reporting the result
 
-`subset_rate` allows you to apply very specific selection criteria in a specific priority order. Because of this is it extremely easy to report the analysis. We might report the above analysis in just a short passage in the methods like this:
-
-*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to calculate a rolling regression of 20 minutes across the dataset. SMR was defined as the mean of the lowest rates with r-squared above 0.9."*
-
-
-#### `method = "lowest"`
+### `method = "lowest"`
 
 The SMR rates we extracted above occur over durations of 45 minutes to nearly an hour. But maybe we want to standardise our analyses and comparisons of different specimens by defining our SMR as the lowest rate across a specific duration, for example 20 minutes. We can use the `auto_rate` `method = "lowest"` to output all rates of this specific `width` and order them from lowest to highest value. Then we can apply some additional subsetting criteria.
 
@@ -211,7 +207,7 @@ sard |>
   summary()
 ```
 
-Now we are left with 1854 results, all from a couple of different regions of the data. We'll subset this down further by only taking the 500 lowest of these rates, then removing those which overlap with another by 90% or more. 
+Now we are left with 1854 results, all from a couple of different regions of the data. We'll subset this down further by only taking the 500 lowest of these rates, then removing those which overlap with another by 90% or more. We are doing the `"overlap"` method last because it is *extremely* computationally intensive and the time it takes increases exponentially with the number of results remaining. 
 
 ```{r fig.keep='last', message=FALSE}
 sard |>
@@ -239,6 +235,13 @@ sard |>
 Now we have no results! This is because in the original ordered results, none of the lowest 500 rates had an r-squared above 0.9. 
 
 This demonstrates how subsetting criteria should be consistently applied in the same priority order across different analyses. 
+
+
+### Reporting the result
+
+`subset_rate` allows you to apply very specific selection criteria in a specific priority order. Because of this is it extremely easy to report the analysis. We might report the above analysis in just a short passage in the methods like this:
+
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to calculate a rolling regression of 20 minutes across the dataset. SMR was defined as the mean of the lowest rates with r-squared above 0.9."*
 
 ## More examples
 
