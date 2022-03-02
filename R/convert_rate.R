@@ -83,7 +83,8 @@
 #'
 #' @return Output is a `list` object containing the `$rate.input`, and converted
 #'   rate(s) in `$rate.output` in the `$output.unit`, as well as inputs and
-#'   summary elements.
+#'   summary elements. Note, `$rate.abs` is the absolute rate in the output unit
+#'   minus the mass- or area-specific component.
 #'
 #' @param x numeric value or vector, or object of class `auto_rate`,
 #'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.` Contains the rate(s) to be

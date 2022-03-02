@@ -163,7 +163,7 @@ We are happy to say the package has never been more stable and even easier to us
 - NEW: Can now convert to surface area-specific rates via the `area` input (accepts `"mm2"`, `"cm2"`, `"m2"`, `"km2"`)
 - NEW: Can now import data and output rates using `"day"` as the time unit e.g. `"mgO2/day/m2"`
 - NEW: Can now output oxygen used in moles e.g. `"molO2/day/kg"`
-- NEW: Can now accept input oxygen concentration units in moles e.g. `"mol/L"`, `"mol/kg"` and percent oxygen saturation (`"%Oxy"`).
+- NEW: Can now accept input oxygen concentration units in moles e.g. `"mol/L"`, `"mol/kg"` and percent oxygen saturation (`"%Oxy"`). Because of this % air saturation is now `"%Air"` and the previous `"%"` operator for this has been deprecated.
 
 - CHANGE: The `o2.unit` input has been renamed to `oxy.unit`
 - CHANGE: `oxy.unit = NULL` and `time.unit = NULL` now stop the function instead of applying a default unit

@@ -54,7 +54,8 @@ Defaults to a standard value of 1.013253 bar.}
 \value{
 Output is a \code{list} object containing the \verb{$rate.input}, and converted
 rate(s) in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and
-summary elements.
+summary elements. Note, \verb{$rate.abs} is the absolute rate in the output unit
+minus the mass- or area-specific component.
 }
 \description{
 Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}},
