@@ -361,12 +361,12 @@ This means you can quantify a value for a background rate and apply it to many e
 
 ```{r eval = F}
 # adjust rate
-adjust_rate.ft(rate3, by = c(-0.030, -0.025, -0.040))
+adjust_rate.ft(rate3, by = c(-0.030, -0.032, -0.038, -0.040))
 ```
 
 ```{r eval = T, echo = F}
 # adjust rate
-tmp <- suppressMessages(adjust_rate.ft(rate3, by = c(-0.030, -0.025, -0.040)))
+tmp <- suppressMessages(adjust_rate.ft(rate3, c(-0.030, -0.032, -0.038, -0.040)))
 print(tmp)
 ```
 

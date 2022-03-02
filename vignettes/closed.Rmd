@@ -99,7 +99,7 @@ To extract rates, it is best to assign each time-oxygen column pair individually
 urchin <- inspect(urchins.rd, time =  1, oxygen = 15)
 ```
 
-Note how the data is plotted against both time (bottom blue axis) and row index (top red axis). From this plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression across the entire data series would therefore not be a representative estimate of the true routine respiration rate. However, the bottom plot, a rolling rate across a moving window of 10% of the data, shows that over the initial stages of the experiment oxygen uptake rate is consistent at around -0.02. In this experiment this region would be therefore be suitable for extracting rates, and we would not want to use any data after approximately the 27 minutes timepoint. 
+Note how the data is plotted against both time (bottom blue axis) and row index (top red axis). From this plot, we can see irregularities in these data near the end of the timeseries (in this case the specimen had interfered with the oxygen sensor). A linear regression across the entire data series would therefore not be a representative estimate of the true routine respiration rate. However, the bottom plot, a rolling rate across a moving window of 10% of the data, shows that over the initial stages of the experiment oxygen uptake rate is consistent at around -0.02. In this experiment this region would be therefore be suitable for extracting rates, and we would not want to use any data after approximately the 29 minutes timepoint. 
 
 For now, the data is saved as an object, `urchin` which contains the original data columns we selected coerced into a new data frame, and various other metadata. 
 
@@ -158,6 +158,8 @@ summary(urch_rate)
 
 The rate, which at this stage is unitless, can be seen as the final column, and other summary data and model coefficients are saved in the object. In this case the `rsq` is 0.99, so this appears to be a very good estimate of this urchin's routine respiration rate. 
 
+Note how the rate value is *negative*. In `respR` oxygen uptake rates are represented by negative values because they represent a negative slope of oxygen against time. By contrast, oxygen production rates would be *positive*. These uptake rates will typically be reported as positive values when you come to write-up the results. 
+
 #### Two-point rate
 
 The output also includes a `rate.2pt`. This is the rate determined by simple two-point calculation of difference in oxygen divided by difference in time. For almost all analyses, the `$rate` should be used. See `vignette("twopoint")` for an explanation of this output and when it might be useful.
@@ -166,11 +168,15 @@ The output also includes a `rate.2pt`. This is the rate determined by simple two
 
 The presence of micro-organisms and their oxygen use may be a potential source of experimental bias, and we usually want to account for background respiration rates during experiments by conducting empty or "blank" control experiments with no specimens to quantify it. 
 
-These control experiments are routinely conducted alongside, or before and after specimen experiments, or at an entirely different time, althoguh it is important they are done under the same conditions. Since the oxygen signal from these can be noisy and trends easily inflenced by outliers, often the background rates from several controls are averaged to obtain a more accurate estimate of the background rate. Once a background rate is determined, specimen rates are then adjusted by it. See `vignette("adjust_rate")` for detailed examples of the many types of adjustments that can be performed using `respR`.
+These control experiments are routinely conducted alongside, or before and after specimen experiments, or at an entirely different time. Whenever they are conducted, it is always important they are done under the exact same conditions using the same or equivalent equipment. Essentially these should be identical to regular experiments, except for the absence of the specimen you are interested in. 
+
+Since the oxygen signal from blank experiments can be noisy and trends easily influenced by outliers, often the background rates from several controls are averaged to obtain a more accurate estimate of the background rate. Once a background rate is determined, specimen rates are then adjusted by it. See `vignette("adjust_rate")` for detailed examples of the many types of adjustments that can be performed using `respR`.
 
 The function `calc_rate.bg()` is used to extract background rates from control recordings. These must share the **same units of time and oxygen** as the experimental rates they will be used to adjust. It can also process multiple background oxygen recordings, so that an average background rate will be applied in the `adjust_rate` function, or other adjustments requiring multiple recordings can be performed. In the `urchins.rd` data, background respiration was recorded and saved in columns 18 and 19. 
 
-We will determine background rates using `calc_rate.bg()`, which can calculate rates from multiple columns (unlike `calc_rate`), and save the output as an object. 
+We will determine background rates using `calc_rate.bg()`. Unlike `calc_rate`, which can calculate rates from *multiple* regions of a *single* oxygen column, this function can calculate rates across *single* region of *multiple* columns. 
+
+Here, we `inspect` the two data columns, and because they have no anomalies use the entire data to calculate a background rate (if we wanted to only use part of it we could pass it through `subset_data()` first). We save the output as a separate object. 
 
 ```{r results='hide', message=FALSE, warning=FALSE, fig.keep='last'}
 bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
@@ -181,7 +187,7 @@ bg_rate <- calc_rate.bg(bg_insp)
 bg_rate
 ```
 
-The `bg_rate` object contains both individual background rates for each data column entered (`$rate.bg`), and an averaged rate (`$rate.bg.mean`). We will determine how these are applied as an adjustment to the specimen rate in  `adjust_rate()`.
+The `bg_rate` object contains both individual background rates for each data column (`$rate.bg`), and an averaged rate (`$rate.bg.mean`). We will determine how these are applied as an adjustment to the specimen rate in  `adjust_rate()`.
 
 ### `adjust_rate` - adjust for background respiration
 
@@ -209,7 +215,7 @@ urch_rate_adj <- adjust_rate(-0.0218, by = -0.000833)
 urch_rate_adj
 ```
 
-We can see this is essentially the same result as above. The small mismatch in values is simply due to the lower precision of entered values compared to internal ones. 
+We can see this is essentially the same result as above. The small mismatch in values is simply due to the lower precision of entered values compared to internal ones (the number of decimal places printed depends on your own R options).
 
 ### `convert_rate` - convert the results
 
@@ -230,7 +236,7 @@ Conversion requires the units of the original raw data (`time.unit`, `oxy.unit`)
 
 ### Convert adjusted urchin rate
 
-For an example of absolute oxygen uptake rate, we can convert the output of `adjust_rate()` to oxygen consumed in mg per hour:
+For an example of absolute oxygen uptake rate, we can convert the output of `adjust_rate()` to oxygen consumed by the whole urchin in *mg per hour*:
 
 ```{r tidy = FALSE, eval = F}
 convert_rate(urch_rate_adj,         # urchin rate adjusted for background
@@ -268,7 +274,7 @@ convert_rate(urch_rate_adj,
              mass = 0.19)
 ```
 
-Note how we have changed the format of the time and oxygen units. A "fuzzy" string matching algorithm automatically recognises such variations, allowing natural, intuitive input. For example, `"ml/l"`, `"mL/L"`, "`ml L-1`", `"milliliter/liter"`, and `"millilitre/litre"` are all recognised as `ml/L`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`. To see what units are available to use in various functions, call `unit_args()` or `?unit_args()`. 
+Note how we have changed the format of the time and oxygen units. A "fuzzy" string matching algorithm automatically recognises such variations, allowing natural, intuitive input. For example, `"ml/l"`, `"mL/L"`, "`ml L-1`", `"milliliter/liter"`, and `"millilitre/litre"` are all recognised as `ml/L`. Unit delimiters can be any combination of a space, dot (`.`), forward-slash (`/`), or the "per" unit (`-1`). Thus, `"ml/kg"`, `"mL / kg"`, `"mL /kilogram"`, `"ml kg-1"` or `"ml.kg-1"` are equally recognised as `mL/kg`. To see what units are available to use in various functions, see `unit_args()`. 
 
 ```{r}
 unit_args()
@@ -296,17 +302,23 @@ summary(urch_rate_final)
 
 ### Final rate
 
-The final rate can be seen above in these console outputs. It can be extracted for further use from the saved object where it is `$rate.output`.
+The final rate can be seen above in these console outputs. It can be extracted for further use from the saved object where it is `$rate.output`. 
 
 ```{r}
 urch_rate_final$rate.output
+```
+
+Alternatively, use the `summary` function with `export` to save the summary table as a separate data frame. 
+
+```{r eval = FALSE}
+urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
 ```
 
 ### Check the result
 
 A final and important step in respirometry analyses, particularly after the first rate from a new set of experiments or specimens has been calculated, is to *check the result* against rates from the same or similar species of the same size in as close as possible to the same conditions. This could be from previous analyses by the same user or group, or rates from one or more published studies. 
 
-Dealing with so many different units and conversions it is incredibly easy to introduce a small conversion error that will have a massive effect on the final calculated rate. Some of these errors even make it into published papers. This is why we would also recommend you check the result against more than one independent publication. 
+Dealing with so many different units and conversions it is incredibly easy to introduce a small conversion error that will have a massive effect on the final calculated rate. These types of error occasionally make it into published papers. This is why we would also recommend you check the result against more than one independent publication. 
 
 In the present example, at the time the experiments were done there were no published respirometry studies on this particular species of sea urchin. However, a quick Google Scholar search led to other papers from which we can get rates of other species of sea urchin at around the same size and temperature. In Moulin et al. ([2015](https://januarharianto.github.io/respR/articles/refs.html#references)). *E. mathaei* has a respiration rate of around *0.2 to 0.5 umol/h/g* at 25°C, and in Kurihara et al. ([2013](https://januarharianto.github.io/respR/articles/refs.html#references)) *H. pulcherrimus* it is around *0.6 umol/h/g* at 22°C. Let's check what our urchins rate is in these same units:
 
@@ -328,7 +340,7 @@ convert_rate(urch_rate_adj,
              mass = 0.19)
 ```
 
-We can see our rate is consistent with these others from the literature, and any difference is easily within what we might expect given variation between species and a slightly different temperature. Generally speaking, if there is a order of magnitude difference or more it is a good indication that there may be a problem. Therefore, here we can be fairly confident we have not made a major conversion error, and we have found that our urchin rate is in the right ballpark.
+Generally speaking, if there is a order of magnitude difference or more it is a good indication that there may be a problem. Here, we can see our rate is consistent with these others from the literature, and any difference is easily within what we might expect given variation between species and temperature. Therefore, we can be fairly confident we have not made a conversion error, and have found that our urchin rate is in the right ballpark.
 
 ## Summary
 
