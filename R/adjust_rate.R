@@ -473,7 +473,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
       bg1 <- by
 
     # Extract x rate
-    if (class(x) %in% c("calc_rate", "auto_rate")) {
+    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
       rate <- x$rate
     } else rate <- x
 
@@ -502,7 +502,7 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
 
     ## background df
     if(is.data.frame(by)) bg_df <- by else
-      if(class(by) %in% c("inspect", "calc_rate.bg")) bg_df <- as.data.frame(by$dataframe)
+      if(any(class(by) %in% c("inspect", "calc_rate.bg"))) bg_df <- as.data.frame(by$dataframe)
 
     ## If data lengths differ by more than 5% warn
     lx <- nrow(x$dataframe)
@@ -547,14 +547,14 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
   if(dynamic) {
 
     ## Extract rate input
-    if (class(x) %in% c("calc_rate", "auto_rate")) {
+    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
       rate <- x$rate
     } else {
       rate <- x
     }
 
     # Extract rate timestamp(s)
-    if (class(x) %in% c("calc_rate", "auto_rate")) {
+    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
       t_rate <- (x$summary$time + x$summary$endtime)/2
     } else {
       t_rate <- time_x
