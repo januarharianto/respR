@@ -324,6 +324,9 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
     if(!(is.sn.nv.cr.ar(x)))
       stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
+    # this just matches adjust_rate.ft message
+    if(length(by) > 1)
+      message("adjust_rate: The 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
     if(!(is.sn.nv.crbg(by)))
       stop("adjust_rate: for method = 'mean' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
 
