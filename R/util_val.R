@@ -140,3 +140,97 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
     if(num && !in_range) stop(glue::glue("{msg} one or more inputs are outside the range of allowed values."))
   }
 }
+
+
+
+
+#' Validate adjust_rate method input
+#' @keywords internal
+val_meth <- function(method){
+  if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
+    stop("adjust_rate: 'method' input not recognised")
+  #' create logical for linear/exp methods
+  if(method == "linear" | method == "exponential") dynamic <- TRUE else
+    dynamic <- FALSE
+  return(dynamic)
+}
+
+
+#' Validates acceptable classes of inputs
+#' Set single or multiple inputs to TRUE. If x is any one of these a TRUE
+#' will be returned
+#' @keywords internal
+class.val <- function(x,
+                      int = FALSE,         # int of any length
+                      int.sing = FALSE,    # int single
+                      int.mult = FALSE,    # int multiple
+                      num = FALSE,         # numeric
+                      num.sing = FALSE,    # numeric single
+                      num.mult = FALSE,    # numeric multiple
+                      df = FALSE,          # data.frame
+                      cr = FALSE,          # calc_rate
+                      ar = FALSE,          # auto_rate
+                      crbg = FALSE,        # calc_rate.bg
+                      crbg.sing = FALSE,   # calc_rate.bg w/ single rate
+                      crbg.mult = FALSE,   # calc_rate.bg w/ multiple rates
+                      insp = FALSE){       # inspect
+
+  # any length integer
+  if(int) int.chk <- (x %% 1 == 0) else
+    int.chk <- NULL
+  # single integer
+  if(int.sing) int.sing.chk <- (x %% 1 == 0 && length(x) == 1) else
+    int.sing.chk <- NULL
+  # multiple integer
+  if(int.mult) int.mult.chk <- (all(x %% 1 == 0) && length(x) > 1) else
+    int.mult.chk <- NULL
+  # any length numeric
+  if(num) num.chk <- (is.numeric(x)) else
+    num.chk <- NULL
+  # single numeric value
+  if(num.sing) num.sing.chk <- (is.numeric(x) && length(x) == 1) else
+    num.sing.chk <- NULL
+  # multiple numeric value
+  if(num.mult) num.mult.chk <- (is.numeric(x) && length(x) > 1) else
+    num.mult.chk <- NULL
+  # data frame
+  if(df) df.chk <- is.data.frame(x) else
+    df.chk <- NULL
+  # calc_rate
+  if(cr) cr.chk <- any(class(x) %in% "calc_rate") else
+    cr.chk <- NULL
+  # auto_rate
+  if(ar) ar.chk <- any(class(x) %in% "auto_rate") else
+    ar.chk <- NULL
+  # calc_rate.bg
+  if(crbg) crbg.chk <- any(class(x) %in% "calc_rate.bg") else
+    crbg.chk <- NULL
+  # calc_rate.bg single rate
+  if(crbg.sing) crbg.sing.chk <- (any(class(x) %in% "calc_rate.bg") && length(x$rate.bg) == 1) else
+    crbg.sing.chk <- NULL
+  # calc_rate.bg multiple rate
+  if(crbg.mult) crbg.mult.chk <- (any(class(x) %in% "calc_rate.bg") && length(x$rate.bg) > 1) else
+    crbg.mult.chk <- NULL
+  # inspect
+  if(insp) insp.chk <- any(class(x) %in% "inspect") else
+    insp.chk <- NULL
+
+  # Assemble test results
+  res <- c(int.chk,
+           int.sing.chk,
+           int.mult.chk,
+           num.chk,
+           num.sing.chk,
+           num.mult.chk,
+           df.chk,
+           cr.chk,
+           ar.chk,
+           crbg.chk,
+           crbg.sing.chk,
+           crbg.mult.chk,
+           insp.chk)
+
+  final_res <- any(res)
+
+  return(final_res)
+}

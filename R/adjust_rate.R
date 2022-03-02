@@ -310,10 +310,10 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   ## all others should be NULL
   if(method == "value"){
 
-    if(!(is.sn.nv.cr.ar(x)))
+    if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(is.sn(by) || is.crbg.single(by)))
+    if(!(class.val(by, num.sing = TRUE, crbg.sing = TRUE)))
       stop("adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '$rate.bg'")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'value' the 'by2' input should be NULL.")
@@ -328,10 +328,11 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   ## all others should be NULL
   if(method == "mean"){
 
-    if(!(is.sn.nv.cr.ar(x)))
+    if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(is.sn.nv.crbg(by)))
+    if(!(class.val(by, num = TRUE, crbg = TRUE)))
+      #if(!(is.sn.nv.crbg(by)))
       stop("adjust_rate: for method = 'mean' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'mean' the 'by2' input should be NULL.")
@@ -348,10 +349,10 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   ## same length check in code, after rate and rate.bg extracted
   if(method == "paired"){
 
-    if(!(is.sn.nv.cr.ar(x)))
+    if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(is.sn.nv.crbg(by)))
+    if(!(class.val(by, num = TRUE, crbg = TRUE)))
       stop("adjust_rate: for method = 'paired' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'paired' the 'by2' input should be NULL.")
@@ -368,10 +369,10 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   ## all other inputs should be NULL
   if(method == "concurrent") {
 
-    if(!(is.cr.ar(x)))
+    if(!(class.val(x, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
 
-    if(!(is.df.insp.crbg(by)))
+    if(!(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE)))
       stop("adjust_rate: For method = \"concurrent\" the 'by' input must be a data.frame, inspect or calc_rate.bg object.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'concurrent' the 'by2' input should be NULL.")
@@ -389,14 +390,14 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   if(dynamic) {
 
     ## 'x'  - cannot be NULL - can be anything
-    if(!(is.sn.nv.cr.ar(x)))
+    if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop(glue::glue("adjust_rate: For method = \"{method}\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate' or 'auto_rate'."))
     ## 'time_x' - if 'x' is value or vector, 'time_x' must be numeric of same length
     if(is.numeric(x))
       if(!is.numeric(time_x) || length(x) != length(time_x))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'x' input, the 'time_x' must be a numeric input of the same length (i.e. timestamp(s) for all rates in 'x')."))
     ## 'time_x' - if 'x' is calc_rate or auto_rate, 'time_x' must be NULL
-    if(is.cr.ar(x))
+    if(class.val(x, cr = TRUE, ar = TRUE))
       if(!is.null(time_x))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a calc_rate or auto_rate 'x' input, the 'time_x' input must be NULL."))
 
@@ -404,26 +405,27 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
     ## no reason why you can't have value for one, calc_rate.bg for other....?
 
     ## 'by' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg
-    if(!is.sn(by) && !(is.df(by)) && !(is.insp(by)) && !(is.crbg(by)))
+    if(!(class.val(by, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE)))
+      #if(!is.sn(by) && !(is.df(by)) && !(is.insp(by)) && !(is.crbg(by)))
       stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by' input must be a single numeric value, or a data.frame, inspect or calc_rate.bg object containing background time~oxygen data."))
     ## if by is sn, then time_by must be sn
-    if(is.sn(by))
-      if(!is.sn(time_by))
+    if(class.val(by, num.sing = TRUE))
+      if(!class.val(time_by, num.sing = TRUE))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by' input, the 'time_by' input also requires a single numeric value (i.e. a timestamp for 'by' background rate)."))
     ## if by is anything else acceptable, time_by must be NULL
-    if(is.df(by) || is.insp(by) || is.crbg(by))
+    if(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE))
       if(!is.null(time_by))
         stop(glue::glue("adjust_rate: For method = \"{method}\", and a data.frame, inspect, or calc_rate.bg 'by' input, the 'time_by' must be NULL."))
 
     ## 'by2' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg
-    if(!is.sn(by2) && !(is.df(by2)) && !(is.insp(by2)) && !(is.crbg(by2)))
+    if(!class.val(by2, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE))
       stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by2' input must be a single numeric value, or a data.frame, inspect or calc_rate.bg object containing background time~oxygen data."))
     ## if by2 is sn, then time_by2 must be sn
-    if(is.sn(by2))
-      if(!is.sn(time_by2))
+    if(class.val(by2, num.sing = TRUE))
+      if(!class.val(time_by2, num.sing = TRUE))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by2' input, the 'time_by2' input also requires a single numeric value (i.e. a timestamp for 'by2' background rate)."))
     ## if by2 is anything else acceptable, time_by2 must be NULL
-    if(is.df(by2) || is.insp(by2) || is.crbg(by2))
+    if(class.val(by2, df = TRUE, insp = TRUE, crbg = TRUE))
       if(!is.null(time_by2))
         stop(glue::glue("adjust_rate: For method = \"{method}\", and a data.frame, inspect, or calc_rate.bg 'by2' input, the 'time_by2' must be NULL."))
   }
@@ -840,98 +842,6 @@ midpt <- function(p) {
   p1 <- min(p)
   p2 <- max(p)
   return((p1 + p2) / 2)
-}
-
-#' Validate that an input is a single numeric value
-#' @keywords internal
-is.sn <- function(x){
-  if(is.numeric(x) && length(x) == 1) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a single numeric value or calc_rate or auto_rate object
-#' @keywords internal
-is.sn.cr.ar <- function(x){
-  if((is.numeric(x) && length(x) == 1) ||  any(class(x) %in% c("calc_rate", "auto_rate"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is numeric vector longer than 1 or calc_rate or auto_rate object
-#' @keywords internal
-is.nv.cr.ar <- function(x){
-  if((is.numeric(x) && length(x) > 1) ||  any(class(x) %in% c("calc_rate", "auto_rate"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is single number or numeric vector or calc_rate or auto_rate object
-#' @keywords internal
-is.sn.nv.cr.ar <- function(x){
-  if((is.numeric(x)) ||  any(class(x) %in% c("calc_rate", "auto_rate"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a calc_rate or auto_rate object
-#' @keywords internal
-is.cr.ar <- function(x){
-  if(any(class(x) %in% c("calc_rate", "auto_rate"))) return(TRUE) else
-    return(FALSE)
-}
-
-#' Validate that an input is numeric vector longer than 1 or calc_rate.bg object
-#' @keywords internal
-is.nv.crbg <- function(x){
-  if(((is.numeric(x) && length(x) > 1)) || any(class(x) %in% c("calc_rate.bg"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a single numeric value or calc_rate.bg object
-#' @keywords internal
-is.sn.crbg <- function(x){
-  if(((is.numeric(x) && length(x) == 1)) ||  any(class(x) %in% c("calc_rate.bg"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a single value, numeric vector or calc_rate.bg object
-#' @keywords internal
-is.sn.nv.crbg <- function(x){
-  if((is.numeric(x)) ||  any(class(x) %in% c("calc_rate.bg"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a calc_rate.bg object
-#' @keywords internal
-is.crbg <- function(x){
-  if(any(class(x) %in% c("calc_rate.bg"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a calc_rate.bg object with a single $rate.bg or 2 columns of data
-#' @keywords internal
-is.crbg.single <- function(x){
-  if(any(class(x) %in% c("calc_rate.bg") && length(x$rate.bg) == 1)) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is an inspect object
-#' @keywords internal
-is.insp <- function(x){
-  if(any(class(x) %in% c("inspect"))) return(TRUE) else
-    return(FALSE)
-}
-#' Validate that an input is a dataframe
-#' @keywords internal
-is.df <- function(x){
-  if(is.data.frame(x)) return(TRUE) else
-    return(FALSE)
-}
-
-#' Validate that an input is data.frame, inspect or calc_rate.bg object
-#' @keywords internal
-is.df.insp.crbg <- function(x){
-  if((is.data.frame(x)) ||  any(class(x) %in% c("calc_rate.bg", "inspect"))) return(TRUE) else
-    return(FALSE)
-}
-
-#' Validate adjust_rate method input
-#' @keywords internal
-val_meth <- function(method){
-  if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
-    stop("adjust_rate: 'method' input not recognised")
-  #' create logical for linear/exp methods
-  if(method == "linear" | method == "exponential") dynamic <- TRUE else
-    dynamic <- FALSE
-  return(dynamic)
 }
 
 

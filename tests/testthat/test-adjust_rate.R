@@ -174,6 +174,8 @@ capture.output({  ## stops printing outputs on assigning
                    "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
       expect_error(adjust_rate(ar_obj, by = ar_obj, method = "value"),
                    "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
+      expect_error(adjust_rate(ar_obj, by = crbg_df3col, method = "value"),
+                   "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
       # Causes obscure R CMD CHECK error
       #expect_error(adjust_rate(ar_obj, by = bg_df2col, method = "value"),
       #            "adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '\\$rate.bg'")
