@@ -295,18 +295,18 @@ plot_multi_ar <- function(x, n = 9, ...){
 #' results, so you can compare the subset and original.
 #'
 #' @param x `auto_rate` or `auto_rate_subset` object
-#' @param highlight integer. Which summary table rank regression to highlight.
-#'   Default is 1. If the input is an `auto_rate_subset` object this refers to
-#'   the rank from the original, unsubset results. Should be within `pos` range.
-#' @param pos integer(s). Which summary table ranks to plot in lower plot.
-#'   Defaults to all.
+#' @param highlight integer. Which result in the summary table to highlight on
+#'   the plots. Defaults to 1. If it is outside the range of the `pos` input it
+#'   will be shown on the top plot, but will not be visible on the bottom plot.
+#' @param pos integer(s). What range of original summary table rows to plot in
+#'   lower plot. Defaults to all.
 #' @param legend logical. Suppress plot legends.
 #' @param ... Allows additional plotting controls to be passed.
 #'
 #' @return A plot of the auto_rate object results
 #'
 #' @export
-plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
+plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
@@ -336,21 +336,39 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
       ps = 10)
   par(...)
 
-  ## extract data
+  ## is it a subset object?
   subset <- "original" %in% names(x) # has it already been subset?
+
+  ## apply default pos
   if(is.null(pos))
     if(subset) pos <- 1:nrow(x$original$summary) else
       pos <- 1:nrow(x$summary)
-  # highlight shouldn't be outside pos selection
-  if(any(!(highlight %in% pos)))
-    stop("plot_ar: 'highlight' is not within range of 'pos'.")
-  # highlight shouldn't be bigger than number of results
-  if(any(highlight > nrow(x$summary)))
-    stop("plot_ar: 'highlight' is greater than number of rate results present.")
 
+  ## Extract data
   dt <- x$dataframe
-  summ <- x$summary[pos,]
-  if(subset) o_summ <- x$original$summary[pos,]
+  summ <- x$summary
+  # if(subset){
+  #   indx <- which(x$summary$rank %in% pos)
+  #   summ <- x$original$summary[indx]
+  # }
+
+  # apply default of highlight being the highest rank pos
+  if(is.null(highlight)) highlight <- 1
+
+  # If highlight isn't in pos ranks set it to highest rank one
+  if(highlight > nrow(summ)) {
+    message("plot_ar: 'highlight' too high. Applying default of first row.")
+    highlight <- 1
+  }
+
+  # # # highlight row shouldn't be outside pos selection range
+  # if(!(hl %in% pos)) {
+  #   message("plot_ar: 'highlight' is not within 'pos' range. Applying default of highest ranking result within 'pos' range.")
+  #   hl <- pos[1]
+  # }
+
+
+  # highlight subset
   start <- summ$row[highlight]
   end <- summ$endrow[highlight]
   rownums <- start:end
@@ -364,13 +382,15 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
 
   # Axis limits
   ## how many summary rows to plot. if already filtered, original
-  if(subset) maxy <- nrow(o_summ) else
-    maxy <- nrow(x$summary)
-  miny <- 0
-  maxx <- nrow(dt)
+  # if(subset) maxy <- nrow(o_summ) else
+  #    maxy <- nrow(summ)
+  miny <- min(pos)
+  maxy <- max(pos)
   minx <- 0
+  maxx <- nrow(dt)
 
-  plot(minx:maxx, seq(miny, maxy, length.out=length(minx:maxx)),
+  plot(minx:maxx,
+       seq(miny, maxy, length.out=length(minx:maxx)),
        ylim = c(maxy,miny),
        col = "white",
        ylab="",
@@ -379,14 +399,14 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
        panel.first = grid(lwd = .7))
   box()
   for(i in 1:nrow(summ))
-    segments(summ$row[i],
-             summ$rank[i],
+    segments(x0 = summ$row[i],
+             y0 = summ$rank[i],
              x1 = summ$endrow[i],
              y1 = summ$rank[i],
              lwd=3, col = r1)
   axis(side = 2, col.axis = "black")
-  segments(summ$row[highlight],
-           summ$rank[highlight],
+  segments(x0 = summ$row[highlight],
+           y0 = summ$rank[highlight],
            x1 = summ$endrow[highlight],
            y1 = summ$rank[highlight],
            lwd=3, col = r2)

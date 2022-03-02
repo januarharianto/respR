@@ -15,6 +15,8 @@ All version changes go in here now when you make a commit!
 
 ## Version 2.x.x -- 2022-xx-xx
 
+FIX: `plot_ar`. Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
+
 CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions covering any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
 
 CHANGE: `subset_rate`. For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in either order. 
