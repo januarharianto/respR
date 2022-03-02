@@ -19,6 +19,8 @@ FIX: `adjust_rate`. Fix for warnings when using `subset_rate` objects under the 
 
 FIX: `plot_ar`. Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
 
+CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` that the mean value will be used for adjustments. 
+
 CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions covering any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
 
 CHANGE: `subset_rate`. For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in either order. 

@@ -7,7 +7,7 @@
 adjust_rate(
   x,
   by,
-  method = "mean",
+  method = NULL,
   by2 = NULL,
   time_x = NULL,
   time_by = NULL,

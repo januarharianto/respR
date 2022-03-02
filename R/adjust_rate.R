@@ -286,10 +286,17 @@
 #' # Note the adjustment values applied are somewhere between the
 #' # start and end background rate values
 
-adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_by = NULL, time_by2 = NULL) {
+adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by = NULL, time_by2 = NULL) {
 
   ## Save function call for output
   call <- match.call()
+
+  # Apply default method ----------------------------------------------------
+
+  if(is.null(method) && length(by) > 1)
+    message("adjust_rate: The 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
+
+  if(is.null(method)) method <- "mean"
 
   # Validate inputs ---------------------------------------------------------
 
@@ -324,9 +331,6 @@ adjust_rate <- function(x, by, method = "mean", by2 = NULL, time_x = NULL, time_
     if(!(is.sn.nv.cr.ar(x)))
       stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    # this just matches adjust_rate.ft message
-    if(length(by) > 1)
-      message("adjust_rate: The 'by' input contains multiple background rates. The mean value will be used to perform adjustments.")
     if(!(is.sn.nv.crbg(by)))
       stop("adjust_rate: for method = 'mean' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
 
