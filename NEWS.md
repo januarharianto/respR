@@ -15,20 +15,20 @@ All version changes go in here now when you make a commit!
 
 ## Version 2.x.x -- 2022-xx-xx
 
-FIX: `adjust_rate`. Fix for warnings when using `subset_rate` objects under the paired or dynamic adjustment methods. 
 
-FIX: `plot_ar`. Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
+FIX: `adjust_rate` - Fix for warnings when using `subset_rate` objects under paired or dynamic adjustment methods. 
+FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
+FIX: `plot_ar` - Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
 
-CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` that the mean value will be used for adjustments. 
-
-CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions covering any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
+CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions utilising any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
 
 CHANGE: `subset_rate`. For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in either order. 
 
-CHANGE: `auto_rate` and `subset_rate`. These functions now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will not now stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` will result in a console message but no plot and will not stop any pipes. 
+CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` that the mean value will be used for adjustments. 
 
-FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
+CHANGE: `auto_rate` and `subset_rate`. These functions now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will *not* now stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` will result in a console message but no plot and also will not stop any pipes. 
 
+CHANGE: Internal codes changes mean the package `assertthat` is no longer a dependency. 
 
 ## Version 2.0.0 -- 2022-02-17
 
