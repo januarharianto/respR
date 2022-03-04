@@ -168,9 +168,13 @@ class.val <- function(x,
                       num.sing = FALSE,    # numeric single
                       num.mult = FALSE,    # numeric multiple
                       df = FALSE,          # data.frame
-                      cr = FALSE,          # calc_rate
-                      ar = FALSE,          # auto_rate
-                      crbg = FALSE,        # calc_rate.bg
+                      cr = FALSE,          # calc_rate any
+                      cr.sing = FALSE,     # calc_rate w/ single rate
+                      cr.mult = FALSE,     # calc_rate w/ multiple rates
+                      ar = FALSE,          # auto_rate any
+                      ar.sing = FALSE,     # auto_rate w/ single rate
+                      ar.mult = FALSE,     # auto_rate w/ multiple rates
+                      crbg = FALSE,        # calc_rate.bg any
                       crbg.sing = FALSE,   # calc_rate.bg w/ single rate
                       crbg.mult = FALSE,   # calc_rate.bg w/ multiple rates
                       insp = FALSE){       # inspect
@@ -199,9 +203,21 @@ class.val <- function(x,
   # calc_rate
   if(cr) cr.chk <- any(class(x) %in% "calc_rate") else
     cr.chk <- NULL
+  # calc_rate single rate
+  if(cr.sing) cr.sing.chk <- (any(class(x) %in% "calc_rate") && length(x$rate) == 1) else
+    cr.sing.chk <- NULL
+  # calc_rate multiple rate
+  if(cr.mult) cr.mult.chk <- (any(class(x) %in% "calc_rate") && length(x$rate) > 1) else
+    cr.mult.chk <- NULL
   # auto_rate
   if(ar) ar.chk <- any(class(x) %in% "auto_rate") else
     ar.chk <- NULL
+  # auto_rate single rate
+  if(ar.sing) ar.sing.chk <- (any(class(x) %in% "auto_rate") && length(x$rate) == 1) else
+    ar.sing.chk <- NULL
+  # auto_rate multiple rate
+  if(ar.mult) ar.mult.chk <- (any(class(x) %in% "auto_rate") && length(x$rate) > 1) else
+    ar.mult.chk <- NULL
   # calc_rate.bg
   if(crbg) crbg.chk <- any(class(x) %in% "calc_rate.bg") else
     crbg.chk <- NULL
@@ -216,6 +232,7 @@ class.val <- function(x,
     insp.chk <- NULL
 
   # Assemble test results
+  # (handily this only collects TRUE, NULL are omitted)
   res <- c(int.chk,
            int.sing.chk,
            int.mult.chk,
@@ -224,7 +241,11 @@ class.val <- function(x,
            num.mult.chk,
            df.chk,
            cr.chk,
+           cr.sing.chk,
+           cr.mult.chk,
            ar.chk,
+           ar.sing.chk,
+           ar.mult.chk,
            crbg.chk,
            crbg.sing.chk,
            crbg.mult.chk,

@@ -6,18 +6,19 @@
 #' during a respirometry experiment. The function accepts numeric values, as
 #' well as regular `respR` objects, and data frames. See [`calc_rate.bg()`] for
 #' determining background rates, which is the recommended way of passing
-#' background rates to `adjust_rate`.
+#' background rates to `adjust_rate`. Rates determined in `calc_rate` are also
+#' accepted as background rates.
 #'
 #' `adjust_rate` allows the rate, or multiple rates, in `x` to be adjusted in a
 #' number of ways, as detailed below. Note that for those methods which accept
-#' them, `by` and `by2` inputs of class `calc_rate.bg`, `data.frame` or
-#' `inspect` can contain multiple columns of background oxygen data, as long as
-#' they share the same numeric time data in column 1. In this case, the mean of
-#' all rates calculated for all oxygen columns is used to perform adjustments
-#' (see [`inspect()`] and [`calc_rate.bg()`] to coerce data to this form). The
-#' exception to this is the `"paired"` method, where each rate in `by` (i.e.
-#' rate in each oxygen column) is paired with the rate at the same position in
-#' `x` and used to adjust it.
+#' them, `by` and `by2` inputs of class `calc_rate`, `calc_rate.bg`,
+#' `data.frame` or `inspect` can contain multiple columns of background oxygen
+#' data, as long as they share the same numeric time data in column 1. In this
+#' case, the mean of all rates calculated for all oxygen columns is used to
+#' perform adjustments (see [`inspect()`] and [`calc_rate.bg()`] to coerce data
+#' to this form). The exception to this is the `"paired"` method, where each
+#' rate in `by` (i.e. rate in each oxygen column) is paired with the rate at the
+#' same position in `x` and used to adjust it.
 #'
 #' ***Note:*** take special care with the *sign* of the rate used for
 #' adjustments. In `respR` oxygen uptake rates are negative, as they represent a
@@ -61,18 +62,19 @@
 #' experiment (or any single background value) is being used to adjust one or
 #' more specimen rates. Each rate in `x` is adjusted by the subtracting the
 #' single value in `by`. `x` can be a numeric value, numeric vector,
-#' `auto_rate`, or `calc_rate` object. `by` can be a single numeric value, or a
+#' `auto_rate`, or `calc_rate` object. `by` can be a single numeric value, a
 #' `calc_rate.bg` object containing a single `$rate.bg` (i.e. calculated from a
-#' 2-column data frame of time~oxygen). All other inputs should be `NULL`.
+#' 2-column data frame of time~oxygen), or a `calc_rate` object containing a
+#' single `$rate`. All other inputs should be `NULL`.
 #'
 #' `"mean"` - For experiments in which the mean rate from multiple background
 #' experiments is being used to adjust one or more specimen rates. Each rate in
 #' `x` is adjusted by subtracting the *mean* of all background rates in `by`.
 #' `x` can be a numeric value, numeric vector, `auto_rate`, or `calc_rate`
-#' object. `by` can be a numeric value, numeric vector, or `calc_rate.bg` object
-#' containing multiple `$rate.bg`. All other inputs should be `NULL`. If `by` is
-#' a single value, this will obviously have the same output as the `"value"`
-#' method.
+#' object. `by` can be a numeric value, numeric vector, `calc_rate.bg` object
+#' containing multiple `$rate.bg`, or a `calc_rate` object containing multiple
+#' `$rate`. All other inputs should be `NULL`. If `by` is a single value, this
+#' will obviously have the same output as the `"value"` method.
 #'
 #' `"paired"` - For experiments where multiple specimen experiments are being
 #' adjusted by multiple different background rates. This is a vectorised
@@ -80,9 +82,9 @@
 #' the same position in `by`. That is, the first `x` adjusted by the first `by`,
 #' second `x` by second `by`, etc. `x` can be a numeric value, numeric vector,
 #' `auto_rate`, or `calc_rate` object. `by` can be a numeric vector *of the same
-#' length*, or a `calc_rate.bg` object where the `$rate.bg` element is the *same
-#' length* as the rates in `x` to be adjusted. All other inputs should be
-#' `NULL`.
+#' length*, a `calc_rate.bg` or `calc_rate` object where the `$rate.bg` or
+#' `$rate` element is the *same length* as the rates in `x` to be adjusted. All
+#' other inputs should be `NULL`.
 #'
 #' `"concurrent"` - For experiments in which one or more concurrent "blanks" or
 #' background experiments are run alongside specimen experiments. Rates in `x`
@@ -90,15 +92,16 @@
 #' data in `by`. That is, the start and end time of each `x` rate is used to fit
 #' a linear regression and calculate a background rate in the `$dataframe` in
 #' `by`. `x` must be an `auto_rate`, or `calc_rate` object. `by` must be a
-#' `data.frame`, `inspect` or `calc_rate.bg` object containing time~oxygen data.
-#' If there are multiple columns of background oxygen the mean rate across the
-#' same time window in all columns is used. In `calc_rate.bg` objects the
-#' `$rate.bg` element is not used, only the `$dataframe`. The `x` and `by` data
-#' must share (broadly) the *same time data or scale in the same units*. If the
-#' `x` and `by` data differ in length by more than 5% or some time values are
-#' not shared between the two datasets, a `warning` is given, but the adjustment
-#' is nevertheless performed using the available data, by using the closest
-#' matching time window in the background data.
+#' `data.frame`, `inspect`, `calc_rate.bg`, or `calc_rate` object containing
+#' time~oxygen data. If there are multiple columns of background oxygen the mean
+#' rate across the same time window in all columns is used. In `calc_rate.bg`
+#' and `calc_rate` objects the `$rate.bg` or `$rate` element is not used, only
+#' the `$dataframe`. The `x` and `by` data must share (broadly) the *same time
+#' data or scale in the same units*. If the `x` and `by` data differ in length
+#' by more than 5% or some time values are not shared between the two datasets,
+#' a warning is given, but the adjustment is nevertheless performed using the
+#' available data, by using the closest matching time window in the background
+#' data.
 #'
 #' `"linear"` - This is a dynamic adjustment, intended for experiments in which
 #' the background oxygen rate *changes* over the course of the experiment
@@ -181,16 +184,17 @@
 #'   `calc_rate` or `auto_rate`. This contains the experimental rate value(s) to
 #'   be adjusted.
 #' @param by numeric. A single numeric value, numeric vector, or object of class
-#'   `calc_rate.bg`. This is the background rate(s) used to perform the
-#'   adjustment to `x`. Can also be a `data.frame` or `inspect` object for
-#'   `"concurrent"`, `"linear"` or `"exponential"` adjustments. See Details.
+#'   `calc_rate.bg` or `calc_rate`. This is the background rate(s) used to
+#'   perform the adjustment to `x`. Can also be a `data.frame` or `inspect`
+#'   object for `"concurrent"`, `"linear"` or `"exponential"` adjustments. See
+#'   Details.
 #' @param method string. Method of background adjustment. Defaults to `"mean"`.
 #'   Other inputs are: `"value"`, `"paired"`, `"concurrent"`, `"linear"`,
 #'   `"exponential"`. See Details.
-#' @param by2 numeric. Either a single numeric value, a `calc_rate.bg` object, a
-#'   `data.frame` or `inspect` object. This is the source of the second
-#'   background adjustment rate, and used only for dynamic adjustments
-#'   (`"linear"` or `"exponential"`). See Details.
+#' @param by2 numeric. Either a single numeric value, a `calc_rate.bg` or
+#'   `calc_rate` object, a `data.frame`, or `inspect` object. This is the source
+#'   of the second background adjustment rate, and used only for dynamic
+#'   adjustments (`"linear"` or `"exponential"`). See Details.
 #' @param time_x numeric. The timestamp(s) for the rate(s) in `x`, if it was
 #'   entered as a numeric (otherwise it is extracted from the `x` input object).
 #'   Generally this is the midpoint of the time range over which each `x` rate
@@ -286,7 +290,8 @@
 #' # Note the adjustment values applied are somewhere between the
 #' # start and end background rate values
 
-adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by = NULL, time_by2 = NULL) {
+adjust_rate <- function(x, by, method = NULL, by2 = NULL,
+                        time_x = NULL, time_by = NULL, time_by2 = NULL) {
 
   ## Save function call for output
   call <- match.call()
@@ -306,15 +311,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
 
   # "value" checks ---------------------------------------------------------
   ## 'x' can be anything
-  ## 'by' must be single numeric value or calc_rate.bg with one value in $rate.bg
+  ## 'by' must be single numeric value or calc_rate.bg or calc_rate with one value in $rate.bg
   ## all others should be NULL
   if(method == "value"){
 
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(class.val(by, num.sing = TRUE, crbg.sing = TRUE)))
-      stop("adjust_rate: for method = 'value' the 'by' input must be a single numeric value or object of class 'calc_rate.bg' containing only one value in '$rate.bg'")
+    if(!(class.val(by, num.sing = TRUE, crbg.sing = TRUE, cr.sing = TRUE)))
+      stop("adjust_rate: for method = 'value' the 'by' input must be a single numeric value, 'calc_rate.bg' object with one value in '$rate.bg', or `calc_rate` object with one value in '$rate'")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'value' the 'by2' input should be NULL.")
     if(!is.null(time_x)) stop("adjust_rate: for method = 'value' the 'time_x' input should be NULL.")
@@ -331,9 +336,8 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(class.val(by, num = TRUE, crbg = TRUE)))
-      #if(!(is.sn.nv.crbg(by)))
-      stop("adjust_rate: for method = 'mean' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
+    if(!(class.val(by, num = TRUE, crbg = TRUE, cr = TRUE)))
+      stop("adjust_rate: for method = 'mean' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'mean' the 'by2' input should be NULL.")
     if(!is.null(time_x)) stop("adjust_rate: for method = 'mean' the 'time_x' input should be NULL.")
@@ -352,8 +356,8 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
 
-    if(!(class.val(by, num = TRUE, crbg = TRUE)))
-      stop("adjust_rate: for method = 'paired' the 'by' input must be numeric or object of class 'calc_rate.bg'.")
+    if(!(class.val(by, num = TRUE, crbg = TRUE, cr = TRUE)))
+      stop("adjust_rate: for method = 'paired' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'paired' the 'by2' input should be NULL.")
     if(!is.null(time_x)) stop("adjust_rate: for method = 'paired' the 'time_x' input should be NULL.")
@@ -365,15 +369,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
   # "concurrent" checks -----------------------------------------------------
 
   ## 'x' should be calc_rate/auto_rate and 'by' should be dataframe, or the
-  ## dataframe within an inspect or calc.rate.bg object
+  ## dataframe within an inspect or calc.rate.bg or calc_rate object
   ## all other inputs should be NULL
   if(method == "concurrent") {
 
     if(!(class.val(x, cr = TRUE, ar = TRUE)))
       stop("adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
 
-    if(!(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE)))
-      stop("adjust_rate: For method = \"concurrent\" the 'by' input must be a data.frame, inspect or calc_rate.bg object.")
+    if(!(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE)))
+      stop("adjust_rate: For method = \"concurrent\" the 'by' input must be a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object.")
 
     if(!is.null(by2)) stop("adjust_rate: for method = 'concurrent' the 'by2' input should be NULL.")
     if(!is.null(time_x)) stop("adjust_rate: for method = 'concurrent' the 'time_x' input should be NULL.")
@@ -404,30 +408,29 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
     ## by & by2 do not necessarily have to match in terms of class...
     ## no reason why you can't have value for one, calc_rate.bg for other....?
 
-    ## 'by' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg
-    if(!(class.val(by, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE)))
-      #if(!is.sn(by) && !(is.df(by)) && !(is.insp(by)) && !(is.crbg(by)))
-      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by' input must be a single numeric value, or a data.frame, inspect or calc_rate.bg object containing background time~oxygen data."))
+    ## 'by' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg or calc_rate
+    if(!(class.val(by, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE)))
+      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object containing background time~oxygen data."))
     ## if by is sn, then time_by must be sn
     if(class.val(by, num.sing = TRUE))
       if(!class.val(time_by, num.sing = TRUE))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by' input, the 'time_by' input also requires a single numeric value (i.e. a timestamp for 'by' background rate)."))
     ## if by is anything else acceptable, time_by must be NULL
-    if(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE))
+    if(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
       if(!is.null(time_by))
-        stop(glue::glue("adjust_rate: For method = \"{method}\", and a data.frame, inspect, or calc_rate.bg 'by' input, the 'time_by' must be NULL."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by' input, the 'time_by' must be NULL."))
 
-    ## 'by2' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg
-    if(!class.val(by2, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE))
-      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by2' input must be a single numeric value, or a data.frame, inspect or calc_rate.bg object containing background time~oxygen data."))
+    ## 'by2' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg or calc_rate
+    if(!class.val(by2, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
+      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by2' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or `calc_rate` object containing background time~oxygen data."))
     ## if by2 is sn, then time_by2 must be sn
     if(class.val(by2, num.sing = TRUE))
       if(!class.val(time_by2, num.sing = TRUE))
         stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by2' input, the 'time_by2' input also requires a single numeric value (i.e. a timestamp for 'by2' background rate)."))
     ## if by2 is anything else acceptable, time_by2 must be NULL
-    if(class.val(by2, df = TRUE, insp = TRUE, crbg = TRUE))
+    if(class.val(by2, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
       if(!is.null(time_by2))
-        stop(glue::glue("adjust_rate: For method = \"{method}\", and a data.frame, inspect, or calc_rate.bg 'by2' input, the 'time_by2' must be NULL."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by2' input, the 'time_by2' must be NULL."))
   }
 
 
@@ -437,19 +440,20 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
 
     ## Extract bg rate
     if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      bg1 <- by
+      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+        bg1 <- by
 
-    # Extract x rate
-    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
-      rate <- x$rate
-    } else rate <- x
+      # Extract x rate
+      if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
+        rate <- x$rate
+      } else rate <- x
 
-    # Use value for correction
-    adjustment <- unname(unlist(bg1))
-    out_model <- NULL
+      # Use value for correction
+      adjustment <- unname(unlist(bg1))
+      out_model <- NULL
 
-    #  Perform Adjustment
-    rate.adjusted <- unname(unlist(rate - adjustment))
+      #  Perform Adjustment
+      rate.adjusted <- unname(unlist(rate - adjustment))
   }
 
   # method = "mean" ---------------------------------------------------------
@@ -458,19 +462,20 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
 
     ## Extract bg rate
     if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      bg1 <- by
+      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+        bg1 <- by
 
-    # Extract x rate
-    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
-      rate <- x$rate
-    } else rate <- x
+      # Extract x rate
+      if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
+        rate <- x$rate
+      } else rate <- x
 
-    # Use mean value of rate.bg for correction
-    adjustment <- unname(unlist(mean(bg1)))
-    out_model <- NULL
+      # Use mean value of rate.bg for correction
+      adjustment <- unname(unlist(mean(bg1)))
+      out_model <- NULL
 
-    #  Perform Adjustment
-    rate.adjusted <- unname(unlist(rate - adjustment))
+      #  Perform Adjustment
+      rate.adjusted <- unname(unlist(rate - adjustment))
   }
 
   # method = "paired" -------------------------------------------------------
@@ -479,22 +484,23 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
 
     ## Extract bg rate
     if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      bg1 <- by
+      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+        bg1 <- by
 
-    # Extract x rate
-    if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
-      rate <- x$rate
-    } else rate <- x
+      # Extract x rate
+      if (any(class(x) %in% c("calc_rate", "auto_rate"))) {
+        rate <- x$rate
+      } else rate <- x
 
-    if(length(rate) != length(bg1))
-      stop("adjust_rate: for method = 'paired' the 'x' and 'by' inputs should have the same number of rates.")
+      if(length(rate) != length(bg1))
+        stop("adjust_rate: for method = 'paired' the 'x' and 'by' inputs should have the same number of rates.")
 
-    # Use paired values of rate.bg for correction
-    adjustment <- unname(unlist(bg1))
-    out_model <- NULL
+      # Use paired values of rate.bg for correction
+      adjustment <- unname(unlist(bg1))
+      out_model <- NULL
 
-    #  Perform Adjustment
-    rate.adjusted <- unname(unlist(rate - adjustment))
+      #  Perform Adjustment
+      rate.adjusted <- unname(unlist(rate - adjustment))
   }
 
 
@@ -511,7 +517,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
 
     ## background df
     if(is.data.frame(by)) bg_df <- by else
-      if(any(class(by) %in% c("inspect", "calc_rate.bg"))) bg_df <- as.data.frame(by$dataframe)
+      if(any(class(by) %in% c("inspect", "calc_rate.bg", "calc_rate"))) bg_df <- as.data.frame(by$dataframe)
 
     ## If data lengths differ by more than 5% warn
     lx <- nrow(x$dataframe)
@@ -572,7 +578,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
     ## Extract bg rates and timestamps
     # bg1
     ## as.data.frame() because of bug/failure of calc_rate.bg with data.tables. Can possibly remove when fixed.
-    if (any(class(by) %in% c("calc_rate.bg", "inspect"))){
+    if (any(class(by) %in% c("calc_rate.bg", "inspect", "calc_rate"))){
       bg1 <-  mean(calc_rate.bg(as.data.frame(by$dataframe), time = 1, oxygen = 2:length(by$dataframe), plot = FALSE)$rate.bg)
       t_bg1 <- midpt(by$dataframe[[1]])
     } else if (is.data.frame(by)) {
@@ -583,7 +589,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL, time_x = NULL, time_by
       t_bg1 <- time_by
     }
     # bg2
-    if (any(class(by2) %in% c("calc_rate.bg", "inspect"))){
+    if (any(class(by2) %in% c("calc_rate.bg", "inspect", "calc_rate"))){
       bg2 <-  mean(calc_rate.bg(as.data.frame(by2$dataframe), time = 1, oxygen = 2:length(by2$dataframe), plot = FALSE)$rate.bg)
       t_bg2 <- midpt(by2$dataframe[[1]])
     } else if (is.data.frame(by2)) {

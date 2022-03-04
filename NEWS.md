@@ -15,20 +15,23 @@ All version changes go in here now when you make a commit!
 
 ## Version 2.x.x -- 2022-xx-xx
 
+- NEW: The `calc_rate` function can now be used to calculate background rates for use in `adjust_rate` as the `by` adjustment input. The `by` input is no longer limited to using only `calc_rate.bg` objects (or numerics). While using a combination of `subset_data` and `calc_rate.bg` is the recommended way of determining background rates, there are circumstances when getting a rate via `calc_rate` might be easier ((of course, these rates could always previously have been entered manually as a numeric value). See [here](https://januarharianto.github.io/respR/articles/adjust_rate.html#crbgvcr) for further information about this. 
 
-FIX: `adjust_rate` - Fix for warnings when using `subset_rate` objects under paired or dynamic adjustment methods. 
-FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
-FIX: `plot_ar` - Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
+- CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions fit across any time or row value in `n` will be omitted. A continuous range of rows or time can still be entered by using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
 
-CHANGE: `subset_rate`. For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions utilising any time or row value in `n` will be omitted. A continuous range of rows or time can be entered using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.
+- CHANGE: `subset_rate`. For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in any order. 
 
-CHANGE: `subset_rate`. For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in either order. 
+- CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` confirming the mean value will be used for adjustments. 
 
-CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` that the mean value will be used for adjustments. 
+- CHANGE: `auto_rate` and `subset_rate`. These functions now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will *not* now stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` will result in a console message but no plot and also will not stop any pipes. 
 
-CHANGE: `auto_rate` and `subset_rate`. These functions now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will *not* now stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` will result in a console message but no plot and also will not stop any pipes. 
+- CHANGE: Internal codes changes mean the package `assertthat` is no longer a dependency. 
 
-CHANGE: Internal codes changes mean the package `assertthat` is no longer a dependency. 
+- FIX: `adjust_rate` - Fix for warnings when using `auto_rate` objects which have been passed through `subset_rate` with paired or dynamic adjustment methods. 
+
+- FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
+
+- FIX: `plot_ar` - Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
 
 ## Version 2.0.0 -- 2022-02-17
 
