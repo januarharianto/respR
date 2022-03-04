@@ -32,7 +32,7 @@ sard[[1]] <- sard[[1]]/60
 
 ## Introduction
 
-`calc_rate()` is the general function in `respR` for manually determining rates across user-defined ranges of time, row or oxygen value. This contrasts with `auto_rate()` which uses a degree of automation to determine rates in the `"linear"` method, or allows a rolling rates of a fixed width to be calculated across an entire dataset and then ordered in various ways. 
+`calc_rate()` is the general function in `respR` for manually determining rates across user-defined ranges of time, row or oxygen value. This contrasts with `auto_rate()` which uses a degree of automation to determine rates in the `"linear"` method, or allows rolling rates of a fixed width to be calculated across an entire dataset and then ordered in various ways. 
 
 ## Defaults
 
