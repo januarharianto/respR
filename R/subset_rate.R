@@ -701,16 +701,13 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   output$summary <- output$summary[keep,]
   output$rate <- output$rate[keep]
   output$metadata$subset_regs <- length(keep)
-
-  if(x$method == "linear"){
-    output$peaks <- output$peaks[keep,]
-  }
+  output$peaks <- output$peaks[keep,]
 
   ## save original auto_rate object if it isn't already there
-  if(!("original" %in% names(output))) output$original <- input_x
+  if(is.null(output$original)) output$original <- input_x
 
   ## save subsetting criteria
-  if(!("subset_calls" %in% names(output))){
+  if(is.null(output$subset_calls)) {
     output$subset_calls <- list()
     output$subset_calls[[1]] <- call
   } else {

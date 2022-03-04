@@ -261,16 +261,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -283,16 +288,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -304,16 +314,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -324,16 +339,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -344,16 +364,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -364,16 +389,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_rolling(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -384,16 +414,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_highest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -404,16 +439,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_lowest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -426,19 +466,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
                            total_regs = nrow(output$roll),
                            total_peaks = nrow(output$peaks),
                            kde_bw = output$density$bw)
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
-                summary = output$results,
-                rate    = output$results$rate_b1,
                 density = output$density,
                 peaks   = output$peaks,
                 bandwidth = output$density$bw,
-                metadata  = metadata)
+                metadata  = metadata,
+                summary = output$results,
+                rate    = output$results$rate_b1)
 
     ### Add density to summary table
     out$summary$density <- out$peaks$density

@@ -337,7 +337,7 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
   par(...)
 
   ## is it a subset object?
-  subset <- "original" %in% names(x) # has it already been subset?
+  subset <- !is.null(x$original) # has it already been subset?
 
   ## apply default pos
   if(is.null(pos))
@@ -410,8 +410,7 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
            x1 = summ$endrow[highlight],
            y1 = summ$rank[highlight],
            lwd=3, col = r2)
-  #title("Summary Table Rank (Descending)")
-  mtext("Summary Table Rank (Descending)",
+  mtext("Original Summary Table Rank (Descending)",
         outer = FALSE, cex = 1.2, line = 0.8, font = 2)
   # invisible plot to get time axis
   par(new=TRUE)
