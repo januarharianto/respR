@@ -196,6 +196,18 @@
 #'   data, are retained. If `n = 1`, only rates which are 100% contained within
 #'   at least one other are removed.
 #'
+#'   ## Plot
+#'
+#'   While output objects are plotted as normal `auto_rate` objects if used in
+#'   `plot()`, `subset_rate` has its own plotting functionality. This simply
+#'   plots a grid of the remaining rates in `$summary` up to the first 20. This
+#'   is simple functionality to give the user an idea of how subsetting is
+#'   reducing the number of rates, and where the remaining rates occur within
+#'   the data. It is really only useful once rates are down to fewer than 20
+#'   remaining, or for examining the effects of different subsetting options on
+#'   a small selection of rates. Therefore, the default is `plot = FALSE` to
+#'   prevent this being produced for every single subsetting operation.
+#'
 #'   ## More
 #'
 #'   For additional help, documentation, vignettes, and more visit the `respR`
@@ -226,8 +238,8 @@
 #'   results are *retained* in the output. See Details.
 #' @param n numeric. Number, percentile, or range of results to return depending
 #'   on `method`. See Details.
-#' @param plot logical. Plots a summary of subset locations within data (up to a
-#'   maximum of the first 9 ranked results).
+#' @param plot logical. Default FALSE. Plots a summary of subset locations
+#'   within data (up to a maximum of the first 20 ranked results).
 #'
 #' @export
 #'
@@ -240,7 +252,7 @@
 #'  auto_rate(plot = FALSE)
 #'  ar_subs_neg <- subset_rate(ar_obj, method = "negative", plot = FALSE)
 
-subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
+subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
 
   ## Save function call for output
   call <- match.call()
@@ -723,43 +735,18 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = TRUE){
   if(!("auto_rate_subset" %in% class(output))) class(output) <- c(class(output), "auto_rate_subset")
 
   # Plot --------------------------------------------------------------------
+  if(plot) plot_ar_grid(output)
 
-  ## This is SLOOOWWWWWW AS F
-  if(plot) plot_multi_ar(output, n = 9)
+## Message
+message(glue::glue(
+  "\n----- Subsetting complete. {length(input_x$rate) - length(keep)} rate(s) removed, {length(keep)} rate(s) remaining -----\n\n"))
 
-  ## Message
-  message(glue::glue(
-    "\n----- Subsetting complete. {length(input_x$rate) - length(keep)} rate(s) removed, {length(keep)} rate(s) remaining -----\n\n"))
-
-  ## Return
-  return(output)
+## Return
+return(output)
 
 }
 
 
-## older plot - faster but needs work to make it look nice ....
-
-# if(plot == TRUE){
-#
-#   parorig <- par(no.readonly = TRUE) # save original par settings
-#   n <- length(output$rate)
-#   if(n == 0) message("No matching plots found.")
-#   if(n == 1) par(mfrow = c(1,1))
-#   if(n == 2) par(mfrow = c(1,2))
-#   if(n %in% c(3,4)) par(mfrow = c(2,2))
-#   if(n %in% c(5,6)) par(mfrow = c(2,3))
-#   if(n %in% c(7,8,9)) par(mfrow = c(3,3))
-#   if(n %in% c(10:12)) par(mfrow = c(3,4))
-#   if(n %in% c(13:16)) par(mfrow = c(4,4)) ## start to get margins too large errors
-#   if(n %in% c(17:20)) par(mfrow = c(4,5))
-#   if(n > 20){
-#     par(mfrow = c(4,5))
-#     message("Over 20 results found. Plotting first 20 only...")
-#   }
-#   par(mar = c(0.1,0.1,0.1,0.1))
-#   if(n != 0) for(i in 1:n) capture.output(plot(output, pos = i, panel =1, axes = FALSE))
-#   on.exit(par(parorig)) # revert par settings to original
-# }
 
 
 

@@ -58,7 +58,7 @@ Joëlle Guitard and colleagues examined how parasite load affected metabolic rat
 
 In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. After seeing it as a preprint we're delighted to see it published in a top journal. Nice work Jenni!  
 
-#### @burfordRapidRangeExpansion2022
+#### @burfordRapidRangeExpansion2022a
 
 `respR` (and one of its developers) had a small role in this huge and extensive study by Ben Burford as part of his PhD. Ben used metabolic rate measurements to model the physiological sensitivity in terms of temperature and dissolved oxygen of a squid which occurs across a wide latitude range in the eastern Pacific, and how these may allow for rapid range expansions. Incredibly impressive, wide-ranging work.
 

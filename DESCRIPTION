@@ -29,10 +29,8 @@ RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Imports:
     broom,
-    cowplot,
     data.table,
     dplyr,
-    ggplot2,
     glue,
     graphics,
     grDevices,

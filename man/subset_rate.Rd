@@ -4,7 +4,7 @@
 \alias{subset_rate}
 \title{Subset auto_rate results based on a range of criteria}
 \usage{
-subset_rate(x, method = NULL, n = NULL, plot = TRUE)
+subset_rate(x, method = NULL, n = NULL, plot = FALSE)
 }
 \arguments{
 \item{x}{list. An object of class \code{auto_rate} or \code{auto_rate_subset}.}
@@ -15,8 +15,8 @@ results are \emph{retained} in the output. See Details.}
 \item{n}{numeric. Number, percentile, or range of results to return depending
 on \code{method}. See Details.}
 
-\item{plot}{logical. Plots a summary of subset locations within data (up to a
-maximum of the first 9 ranked results).}
+\item{plot}{logical. Default FALSE. Plots a summary of subset locations
+within data (up to a maximum of the first 20 ranked results).}
 }
 \value{
 The output of \code{subset_rate} is a \code{list} object which retains the
@@ -239,6 +239,19 @@ retained.
 If \code{n = 0}, only rates which do not overlap at all, that is share \emph{no}
 data, are retained. If \code{n = 1}, only rates which are 100\% contained within
 at least one other are removed.
+}
+
+\subsection{Plot}{
+
+While output objects are plotted as normal \code{auto_rate} objects if used in
+\code{plot()}, \code{subset_rate} has its own plotting functionality. This simply
+plots a grid of the remaining rates in \verb{$summary} up to the first 20. This
+is simple functionality to give the user an idea of how subsetting is
+reducing the number of rates, and where the remaining rates occur within
+the data. It is really only useful once rates are down to fewer than 20
+remaining, or for examining the effects of different subsetting options on
+a small selection of rates. Therefore, the default is \code{plot = FALSE} to
+prevent this being produced for every single subsetting operation.
 }
 
 \subsection{More}{
