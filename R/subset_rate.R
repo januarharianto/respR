@@ -94,7 +94,7 @@
 #'   *highest numerically* (`highest/lowest` percentile methods would be a
 #'   better option in this case however).
 #'
-#'   ## `rate`, `rsq`, `row`, `time`, `density`
+#'   ## `rate`, `rsq`, `rank`, `row`, `time`, `density`
 #'
 #'   These methods refer to the respective columns of the `$summary` data frame.
 #'   For these, `n` should be a vector of two values. Matching regressions in
@@ -103,11 +103,16 @@
 #'   between 0.05 and 0.08: `method = 'rate', n = c(0.05, 0.08)`. To retain all
 #'   rates with a R-Squared above 0.90: `method = 'rsq', n = c(0.9, 1)`. The
 #'   `row` and `time` ranges refer to the `$row`-`$endrow` or `$time`-`$endtime`
-#'   columns and original data source (`$dataframe` element of the input), and
+#'   columns and the original raw data (`$dataframe` element of the input), and
 #'   can be used to constrain results to rates from particular regions of the
 #'   data (although usually a better option is to \code{\link{subset_data}}
-#'   prior to analysis). Note, `time` is not the same as `duration` - see later
-#'   section.
+#'   prior to analysis). `rank` refers to the first column of the summary table,
+#'   which denotes the rank or ordering of the results as determined in the
+#'   original `auto_rate` call by the `method` input. This `rank` value is
+#'   retained unchanged regardless of how the results are subsequently subset or
+#'   reordered. Note, `time` is not the same as `duration` - see later section -
+#'   and `row` does not refer to rows of the summary table - see `manual` method
+#'   for this.
 #'
 #'   ## `time_omit`, `row_omit`
 #'
@@ -122,7 +127,37 @@
 #'   and after this will be retained. If it occurs over a range this can be
 #'   entered as, `time_omit = c(3000:3200)`. If you want to exclude a regular
 #'   occurrence, for example the flushes in intermittent-flow respirometry they
-#'   can be entered as a vector, e.g. `row_omit = c(1000, 2000, 3000)`.
+#'   can be entered as a vector, e.g. `row_omit = c(1000, 2000, 3000)`. Values
+#'   must match exactly to a value present in the dataset.
+#'
+#'   ## `oxygen`
+#'
+#'   This can be used to constrain rate result to regions of the data based on
+#'   oxygen values. `n` should be a vector of two values in the units of oxygen
+#'   in the raw data. Any rate regressions which use even a single value outside
+#'   of this range are excluded. Note the summary table columns `oxy` and
+#'   `endoxy` refer to the first and last oxygen values in the rate regression,
+#'   which should broadly indicate which results will be removed or retained,
+#'   but this method examines *every* oxygen value in the regression, not just
+#'   first and last.
+#'
+#'   ## `oxygen_omit`
+#'
+#'   Similar to `time_omit` and `row_omit` above, this can be used to *omit*
+#'   rate regressions which use particular oxygen values. For this `n` are
+#'   values (single or multiple) indicating oxygen values in the original raw
+#'   data to exclude. Every oxygen value used by each regression is checked, and
+#'   to be excluded an `n` value must match *exactly* to one in the data.
+#'   Therefore, note that if a regression is fit across the data region where
+#'   that value would occur, it is not necessarily excluded unless that *exact
+#'   value* occurs. You need to consider the precision of the data values
+#'   recorded. For example, if you wanted to exclude any rate using an oxygen
+#'   value of `7.0`, but your data are recorded to two decimals, any rates fit
+#'   across these data would be retained: `c(7.03, 7.02, 7.01, 6.99, 6.98,
+#'   ...)`. To get around this you can use regular R syntax to input vectors at
+#'   the correct precision, such as seq, e.g. `seq(from = 7.05, to = 6.96, by =
+#'   -0.01)`. Similarly, this can be used to input ranges of oxygen values to
+#'   exclude.
 #'
 #'   ## `duration`
 #'
@@ -272,7 +307,6 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
 
   ## Validate method
   if(!is.null(method) && !(method %in% c("overlap",
-                                         "overlap_new",
                                          "duration",
                                          "density",
                                          "manual",
@@ -280,7 +314,10 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
                                          "time_omit",
                                          "row",
                                          "row_omit",
+                                         "oxygen",
+                                         "oxygen_omit",
                                          "rsq",
+                                         "rank",
                                          "rate",
                                          "maximum_percentile",
                                          "minimum_percentile",
@@ -445,7 +482,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
   }
 
 
-  # rate range --------------------------------------------------------------
+  # rate --------------------------------------------------------------------
   if(method == "rate"){
     if(length(n) != 2) stop("subset_rate: For 'rate' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with values between {n[1]} and {n[2]}..."))
@@ -455,7 +492,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
   }
 
 
-  # rsq range ---------------------------------------------------------------
+  # rsq ---------------------------------------------------------------------
   if(method == "rsq"){
     if(length(n) != 2) stop("subset_rate: For 'rsq' method 'n' must be a vector of two values.")
     message(glue::glue("subset_rate: Subsetting rates with rsq values between {n[1]} and {n[2]}..."))
@@ -464,7 +501,22 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
     keep <- sort(keep)
   }
 
-  # row range ---------------------------------------------------------------
+
+  # rank --------------------------------------------------------------------
+  if(method == "rank"){
+    if(length(n) != 2) stop("subset_rate: For 'rank' method 'n' must be a vector of two values.")
+    #if(any(n > dim(x$summary$rank)[1])) stop("subset_rate: Input for 'n': rank inputs out of data frame range.")
+
+    message(glue::glue("subset_rate: Subsetting rates with rank values between {n[1]} and {n[2]}..."))
+
+    n_order <- sort(n) # in case entered wrong way round
+    keep1 <- which(x$summary$rank >= n_order[1])
+    keep2 <- which(x$summary$rank <= n_order[2])
+    keep <- keep1[keep1 %in% keep2]
+    keep <- sort(keep)
+  }
+
+  # row ---------------------------------------------------------------------
   if(method == "row"){
     if(length(n) != 2) stop("subset_rate: For 'row' method 'n' must be a vector of two values.")
     if(any(n > dim(x$dataframe)[1])) stop("subset_rate: Input for 'n': row inputs out of data frame range.")
@@ -500,7 +552,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
     keep <- sort(keep)
   }
 
-  # time range --------------------------------------------------------------
+  # time --------------------------------------------------------------------
   if(method == "time"){
     if(length(n) != 2) stop("subset_rate: For 'time' method 'n' must be a vector of two values.")
     if(any(n < range(x$dataframe[[1]], na.rm = TRUE)[1]) || any(n > range(x$dataframe[[1]], na.rm = TRUE)[2]))
@@ -542,7 +594,64 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
   }
 
 
-  # manual range ------------------------------------------------------------
+  # oxygen ------------------------------------------------------------------
+  if(method == "oxygen"){
+    if(length(n) != 2) stop("subset_rate: For 'oxygen' method 'n' must be a vector of two values.")
+
+    message(glue::glue("subset_rate: Subsetting rates which occur only between oxygen values {n[1]} and {n[2]}..."))
+
+    n_order <- sort(n)
+
+    # which rates have at least one oxygen value below first value
+    remove1 <- which(mapply(function(p,q) {any(x$dataframe$y[p:q] <= n_order[1])},
+                            p = x$summary$row,
+                            q = x$summary$endrow)
+    )
+    # which rates have at least one oxygen value above second value
+    remove2 <- which(mapply(function(p,q) {any(x$dataframe$y[p:q] >= n_order[2])},
+                            p = x$summary$row,
+                            q = x$summary$endrow)
+    )
+    # combine
+    remove <- sort(unique(c(remove1, remove2)))
+
+    # Convert to keep
+    # if nothing to remove, above outputs integer(0), so this is for that...
+    if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else
+      keep <- 1:nrow(x$summary)
+
+    keep <- sort(keep)
+  }
+
+
+  # oxygen_omit -------------------------------------------------------------
+  if(method == "oxygen_omit"){
+
+    if(!(is.numeric(n)))
+      stop("subset_rate: For 'oxygen_omit' method 'n' must contain only numeric values of oxygen.")
+    message(glue::glue("subset_rate: Subsetting rates which *DO NOT* use oxygen value(s) in 'n' input..."))
+
+    n_order <- sort(n)
+
+    # which rates have at least one oxygen_omit value?
+    remove <- c()
+    for(z in n_order) {
+    remove1 <- which(mapply(function(p,q) {any(x$dataframe$y[p:q] == z)},
+                            p = x$summary$row,
+                            q = x$summary$endrow))
+    remove <- sort(unique(c(remove1, remove)))
+    }
+
+    # Convert to keep
+    # if nothing to remove, above outputs integer(0), so this is for that...
+    if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else
+      keep <- 1:nrow(x$summary)
+
+    keep <- sort(keep)
+  }
+
+
+  # manual ------------------------------------------------------------------
   if(method == "manual"){
     # check within range of summary length
     if(!all(n %in% 1:nrow(x$summary))) stop("subset_rate: For 'manual' method: 'n' values are out of range of $summary data.frame rows...")
@@ -553,7 +662,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
   }
 
 
-  # density range ------------------------------------------------------------
+  # density ------------------------------------------------------------------
   if(method == "density"){
     if(x$method != "linear") stop("subset_rate: The 'density' method can only be used with results determined via the auto_rate 'linear' method.")
     if(length(n) != 2) stop("subset_rate: For 'density' method 'n' must be a vector of two values.")
@@ -577,6 +686,7 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
     keep <- keep1[keep1 %in% keep2]
     keep <- sort(keep)
   }
+
 
   # overlap -------------------------------------------------------------
   if(method == "overlap"){
@@ -737,12 +847,12 @@ subset_rate <- function(x, method = NULL, n = NULL, plot = FALSE){
   # Plot --------------------------------------------------------------------
   if(plot) plot_ar_grid(output)
 
-## Message
-message(glue::glue(
-  "\n----- Subsetting complete. {length(input_x$rate) - length(keep)} rate(s) removed, {length(keep)} rate(s) remaining -----\n\n"))
+  ## Message
+  message(glue::glue(
+    "\n----- Subsetting complete. {length(input_x$rate) - length(keep)} rate(s) removed, {length(keep)} rate(s) remaining -----\n\n"))
 
-## Return
-return(output)
+  ## Return
+  return(output)
 
 }
 

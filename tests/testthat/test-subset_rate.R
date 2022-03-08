@@ -475,7 +475,6 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "For 'row' method 'n' must be a vector of two values.")
   })
 
-
   # Check "row_omit" method -------------------------------------------------
 
   test_that("subset_rate: works with method = row_omit and a single n input", {
@@ -571,7 +570,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: works with method = time_omit and a single n input", {
     expect_error(ar_subset_time_omit <- subset_rate(ar_obj, method = "time_omit",
-                                                   n = 2201, plot = FALSE),
+                                                    n = 2201, plot = FALSE),
                  regexp = NA)
     expect_equal(nrow(subset_rate(ar_obj, method = "time_omit",
                                   n = 2201, plot = FALSE)$summary),
@@ -580,7 +579,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: with method = time_omit correctly omits rates with single n input", {
     ar_subset_time_omit <- subset_rate(ar_obj, method = "time_omit",
-                                      n = 2201, plot = FALSE)
+                                       n = 2201, plot = FALSE)
 
     ## check omitted row not within rows for each regression
     apply(ar_subset_time_omit$summary, 1, function(x)
@@ -589,7 +588,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: works with method = time_omit and n input of multiple values", {
     expect_error(ar_subset_time_omit <- subset_rate(ar_obj, method = "time_omit",
-                                                   n = c(1000,2000,3000), plot = FALSE),
+                                                    n = c(1000,2000,3000), plot = FALSE),
                  regexp = NA)
     ## check omitted rows not within rows for each regression
     apply(ar_subset_time_omit$summary, 1, function(x)
@@ -602,7 +601,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: works with method = time_omit and n input of range of values", {
     expect_error(ar_subset_time_omit <- subset_rate(ar_obj, method = "time_omit",
-                                                   n = c(1000:3000), plot = FALSE),
+                                                    n = c(1000:3000), plot = FALSE),
                  regexp = NA)
     ## check omitted rows not within rows for each regression
     apply(ar_subset_time_omit$summary, 1, function(x)
@@ -615,7 +614,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: works with method = time_omit and n input of two values", {
     expect_error(ar_subset_time_omit <- subset_rate(ar_obj, method = "time_omit",
-                                                   n = c(2000,3000), plot = FALSE),
+                                                    n = c(2000,3000), plot = FALSE),
                  regexp = NA)
     ## check omitted rows not within rows for each regression
     apply(ar_subset_time_omit$summary, 1, function(x)
@@ -633,6 +632,84 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(subset_rate(ar_obj, method = "time_omit",
                              n = 5000, plot = FALSE),
                  regexp = "subset_rate: Input for 'n': time inputs out of time data range.")
+  })
+
+
+  # Check "rank" method ------------------------------------------------------
+  ar_subset_rank <- subset_rate(ar_obj, method = "rank",
+                                n = c(4, 10), plot = FALSE)
+
+  test_that("subset_rate: method = rank   - check all within rank n range", {
+    sapply(ar_subset_rank$summary$rank, function(x) expect_gte(x, 4))
+    sapply(ar_subset_rank$summary$rank, function(x) expect_lte(x, 10))
+  })
+
+  test_that("subset_rate: method = rank   - check stops with n not length 2 vector", {
+    expect_error(subset_rate(ar_obj, method = "rank", n = 4, plot = FALSE),
+                 regexp = "For 'rank' method 'n' must be a vector of two values.")
+    expect_error(subset_rate(ar_obj, method = "rank", n = c(1,2,3), plot = FALSE),
+                 regexp = "For 'rank' method 'n' must be a vector of two values.")
+  })
+
+
+
+  # Check "oxygen" method ----------------------------------------------------
+  ar_subset_oxy <- subset_rate(ar_obj_high, method = "oxygen",
+                               c(7.35, 7), plot = FALSE)
+
+  # this doesn't strictly check proper functonality, in that the method checks
+  # *ALL* oxygen values in the original regression
+  test_that("subset_rate: method = oxygen   - check all within oxygen n range", {
+    sapply(ar_subset_oxy$summary$endoxy, function(x) expect_gte(x, 7))
+    sapply(ar_subset_oxy$summary$oxy, function(x) expect_lte(x, 7.35))
+  })
+
+  test_that("subset_rate: method = oxygen   - check stops with n not length 2 vector", {
+    expect_error(subset_rate(ar_obj, method = "oxygen", n = 4, plot = FALSE),
+                 regexp = "For 'oxygen' method 'n' must be a vector of two values.")
+    expect_error(subset_rate(ar_obj, method = "oxygen", n = c(1,2,3), plot = FALSE),
+                 regexp = "For 'oxygen' method 'n' must be a vector of two values.")
+  })
+
+
+
+  # Check "oxygen_omit" method ----------------------------------------------------
+  ar_subset_oxy_om <- subset_rate(ar_obj, method = "oxygen_omit",
+                                  c(7.00), plot = FALSE)
+
+  # this doesn't strictly check proper functonality, in that the method checks
+  # *ALL* oxygen_omit values in the original regression
+  test_that("subset_rate: method = oxygen_omit - no remaining results have ommitted value", {
+    for(z in 1:nrow(ar_subset_oxy_om$summary)) {
+      mapply(function(p,q) expect_false(any((ar_subset_oxy_om$dataframe$y[p:q] == 7.35))),
+             p = ar_subset_oxy_om$summary$row,
+             q = ar_subset_oxy_om$summary$endrow)
+    }
+  })
+
+  test_that("subset_rate: works with method = oxygen_omit and n input of multiple values", {
+    expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
+                                                    n = c(7, 6.9, 6.8), plot = FALSE),
+                 regexp = NA)
+  })
+
+  test_that("subset_rate: works with method = oxygen_omit and n input of range of values", {
+    expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
+                                                    n = c(7:5), plot = FALSE),
+                 regexp = NA)
+  })
+
+  test_that("subset_rate: works with method = oxygen_omit and n input of two values", {
+    expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
+                                                    n = c(7,6), plot = FALSE),
+                 regexp = NA)
+  })
+
+  test_that("subset_rate: stops with method = oxygen_omit and n input malformed", {
+    ## check stops with n not numeric
+    expect_error(subset_rate(ar_obj, method = "oxygen_omit",
+                             n = "string", plot = FALSE),
+                 regexp = "subset_rate: For 'oxygen_omit' method 'n' must contain only numeric values of oxygen.")
   })
 
 

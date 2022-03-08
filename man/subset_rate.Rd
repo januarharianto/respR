@@ -136,7 +136,7 @@ the lowest 10th percentile of rates, you would enter \verb{method = 'maximum_per
 better option in this case however).
 }
 
-\subsection{\code{rate}, \code{rsq}, \code{row}, \code{time}, \code{density}}{
+\subsection{\code{rate}, \code{rsq}, \code{rank}, \code{row}, \code{time}, \code{density}}{
 
 These methods refer to the respective columns of the \verb{$summary} data frame.
 For these, \code{n} should be a vector of two values. Matching regressions in
@@ -145,11 +145,16 @@ retained. For example, to retain only rates where the \code{rate} value is
 between 0.05 and 0.08: \verb{method = 'rate', n = c(0.05, 0.08)}. To retain all
 rates with a R-Squared above 0.90: \verb{method = 'rsq', n = c(0.9, 1)}. The
 \code{row} and \code{time} ranges refer to the \verb{$row}-\verb{$endrow} or \verb{$time}-\verb{$endtime}
-columns and original data source (\verb{$dataframe} element of the input), and
+columns and the original raw data (\verb{$dataframe} element of the input), and
 can be used to constrain results to rates from particular regions of the
 data (although usually a better option is to \code{\link{subset_data}}
-prior to analysis). Note, \code{time} is not the same as \code{duration} - see later
-section.
+prior to analysis). \code{rank} refers to the first column of the summary table,
+which denotes the rank or ordering of the results as determined in the
+original \code{auto_rate} call by the \code{method} input. This \code{rank} value is
+retained unchanged regardless of how the results are subsequently subset or
+reordered. Note, \code{time} is not the same as \code{duration} - see later section -
+and \code{row} does not refer to rows of the summary table - see \code{manual} method
+for this.
 }
 
 \subsection{\code{time_omit}, \code{row_omit}}{
@@ -165,7 +170,37 @@ the output. For example, if an anomaly occurs precisely at timepoint 3000,
 and after this will be retained. If it occurs over a range this can be
 entered as, \code{time_omit = c(3000:3200)}. If you want to exclude a regular
 occurrence, for example the flushes in intermittent-flow respirometry they
-can be entered as a vector, e.g. \code{row_omit = c(1000, 2000, 3000)}.
+can be entered as a vector, e.g. \code{row_omit = c(1000, 2000, 3000)}. Values
+must match exactly to a value present in the dataset.
+}
+
+\subsection{\code{oxygen}}{
+
+This can be used to constrain rate result to regions of the data based on
+oxygen values. \code{n} should be a vector of two values in the units of oxygen
+in the raw data. Any rate regressions which use even a single value outside
+of this range are excluded. Note the summary table columns \code{oxy} and
+\code{endoxy} refer to the first and last oxygen values in the rate regression,
+which should broadly indicate which results will be removed or retained,
+but this method examines \emph{every} oxygen value in the regression, not just
+first and last.
+}
+
+\subsection{\code{oxygen_omit}}{
+
+Similar to \code{time_omit} and \code{row_omit} above, this can be used to \emph{omit}
+rate regressions which use particular oxygen values. For this \code{n} are
+values (single or multiple) indicating oxygen values in the original raw
+data to exclude. Every oxygen value used by each regression is checked, and
+to be excluded an \code{n} value must match \emph{exactly} to one in the data.
+Therefore, note that if a regression is fit across the data region where
+that value would occur, it is not necessarily excluded unless that \emph{exact
+value} occurs. You need to consider the precision of the data values
+recorded. For example, if you wanted to exclude any rate using an oxygen
+value of \code{7.0}, but your data are recorded to two decimals, any rates fit
+across these data would be retained: \code{c(7.03, 7.02, 7.01, 6.99, 6.98, ...)}. To get around this you can use regular R syntax to input vectors at
+the correct precision, such as seq, e.g. \code{seq(from = 7.05, to = 6.96, by = -0.01)}. Similarly, this can be used to input ranges of oxygen values to
+exclude.
 }
 
 \subsection{\code{duration}}{
