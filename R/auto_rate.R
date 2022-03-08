@@ -542,7 +542,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
     stop("print.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
 
   method <- x$method
-  cat("Data is subset by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
+  cat("Data is extracted by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
   cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
   if (method == "linear")
     cat(nrow(x$summary), "linear regions detected in the kernel density estimate.\n")
