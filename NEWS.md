@@ -15,7 +15,7 @@ All version changes go in here now when you make a commit!
 
 ## Version 2.0.1 -- 2022-xx-xx
 
-Only XX weeks after 2.0.0, this is a quick update that fixes a few bugs and quite a large revision to the newest function `subset_rate`. 
+Only a month after 2.0.0, this is a quick update that fixes a few bugs and has quite a large revision to the newest function `subset_rate`. 
 
 ==================================== New =======================================
 
@@ -23,11 +23,12 @@ Only XX weeks after 2.0.0, this is a quick update that fixes a few bugs and quit
 
 =============================== subset_rate() ==================================
 
+- NEW: `subset_rate` can now *reorder* `auto_rate` results in various ways. This can be useful in several situations. See help docs and vignette on website for more information and examples.
 - NEW: There is a new `"rank"` method for subsetting based on the `$rank` column of the summary table. The rank always refers to the original rate ranking or ordering as determined in the original `auto_rate` call, which is retained unchanged regardless of how the results are subsequently subset or reordered.
 - NEW: There is a new `"oxygen"` method for subsetting based on oxygen values in the raw data. This can be used to constrain results to particular oxygen ranges. Conversely, to *exclude* particular oxygen values or ranges you can use the `oxygen_omit` method. See `help("subset_rate")` for specific details. 
 - CHANGE: For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions (i.e. rates) fit across any time or row value in `n` will be omitted. A continuous range of rows or time can still be entered by using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.  
 - CHANGE: For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in any order.   
-- CHANGE: The `plot` input default has been changed to `FALSE`, and the internal plotting for this function has been revised to be much quicker and show more plots (up to 20 from 9). See help file for more info, but briefly this plotting functionality is intended to provide a quick view of how many rates remain after subsetting and where they occur in the data. In many cases it does not need to be run in every `subset_rate` call. 
+- CHANGE: The `plot` input default has been changed to `FALSE`, and the internal plotting for this function has been revised to be much quicker and show more plots (up to a max of 20 from 9). See help file for more info but briefly, this plotting functionality is intended to provide a quick view of how many rates remain after subsetting and where they occur in the data. In many cases it does not need to be run in every `subset_rate` call. 
 - CHANGE: `subset_rate` and `auto_rate` now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will now *not* stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` and also will not stop any pipes, and will result in a console message but no plot. 
 
 =============================== General Changes ================================
@@ -43,6 +44,7 @@ Only XX weeks after 2.0.0, this is a quick update that fixes a few bugs and quit
 - FIX: `plot_ar` - Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
 
  ===============================================================================
+
 
 ## Version 2.0.0 -- 2022-02-17
 

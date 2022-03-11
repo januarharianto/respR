@@ -322,7 +322,7 @@ plot_ar_grid <- function(x, ...){
     bt <- 16:20
     lf <- c(1,6,11,16)
     tp <- 1:5
-    message("Over 20 results remaining. Plotting first 20 only...")
+    message("subset_rate: Over 20 results remaining. Plotting first 20 only...")
     plot.sub.grid(x, res, bt, lf, tp)
   }
 }

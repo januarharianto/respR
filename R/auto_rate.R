@@ -542,8 +542,8 @@ print.auto_rate <- function(x, pos = 1, ...) {
     stop("print.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
 
   method <- x$method
-  cat("Data is extracted by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
-  cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
+  cat("Data extracted by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
+  cat(sprintf("Rates computed using '%s' method.\n", x$ method))
   if (method == "linear")
     cat(nrow(x$summary), "linear regions detected in the kernel density estimate.\n")
   cat("To see all results use summary().\n")
@@ -558,7 +558,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
     times <- c(x$summary$time[pos], x$summary$endtime[pos])
 
   if (method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "linear", "rolling")) {
-    cat("\nRank", pos, "of", nrow(x$summary), ":\n")
+    cat("\nPosition", pos, "of", nrow(x$summary), ":\n")
     cat("Rate:", rate, "\n")
     cat("R.sq:", rsq, "\n")
     cat("Rows:", rows[1], "to", rows[2], "\n")

@@ -10,7 +10,9 @@ capture.output({  ## stops printing outputs on assigning
   ## for testing with zero/non-zero change a couple to zero
   ar_obj_w_0 <- ar_obj
   ar_obj_w_0$rate[3] <- 0
+  ar_obj_w_0$summary$rate[3] <- 0
   ar_obj_w_0$rate[9] <- 0
+  ar_obj_w_0$summary$rate[9] <- 0
 
   ## make subset by method test objects
   suppressWarnings(ar_subset_pos <- subset_rate(ar_obj, method = "positive", plot = FALSE))
@@ -174,6 +176,34 @@ capture.output({  ## stops printing outputs on assigning
                  3)
   })
 
+  test_that("subset_rate works with empty objects", {
+
+    empty_obj <- subset_rate(ar_obj, method = "rate", n = c(0.1, 1), plot = FALSE)
+
+    # works with S3
+    expect_output(print(empty_obj))
+    expect_message(print(empty_obj),
+                   "No rates found in auto_rate object.")
+    expect_output(summary(empty_obj))
+    expect_message(summary(empty_obj),
+                   "No rates found in auto_rate object.")
+    expect_output(mean(empty_obj))
+    expect_message(mean(empty_obj),
+                   "No rates found in auto_rate object.")
+
+    # subsetting
+    expect_error(subset_rate(empty_obj, method = "rsq", n = c(0.90,0.95), plot = FALSE),
+                 regexp = NA)
+    expect_message(subset_rate(empty_obj, method = "rsq", n = c(0.90,0.95), plot = FALSE),
+                   regexp = "----- Subsetting complete. 0 rate\\(s) removed, 0 rate\\(s) remaining -----")
+    # reordering
+    expect_error(subset_rate(empty_obj, method = "rsq", n = NULL, plot = FALSE),
+                 regexp = NA)
+    expect_message(subset_rate(empty_obj, method = "rsq", n = NULL, plot = FALSE),
+                   regexp = "----- Reordering complete. 0 rate\\(s) reordered by 'rsq' method -----")
+
+  })
+
   # Check NULL stops fn --------------------------------------------
   test_that("subset_rate: method = NULL   - correct message", {
     expect_error(ar_obj_uniq <- subset_rate(ar_obj_high, plot = FALSE),
@@ -196,7 +226,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: method = positive  - check message", {
     expect_message(subset_rate(ar_obj, method = "positive", plot = FALSE),
-                   "Subsetting all positive rate values. `n` input ignored.")
+                   "subset_rate: Subsetting all positive rate values. 'n' input ignored...")
   })
 
   # Check "negative" method -------------------------------------------------
@@ -215,7 +245,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: method = negative  - check message", {
     expect_message(subset_rate(ar_obj, method = "negative", plot = FALSE),
-                   "Subsetting all negative rate values. `n` input ignored.")
+                   "Subsetting all negative rate values. 'n' input ignored.")
   })
 
 
@@ -227,7 +257,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: method = nonzero  - check message", {
     expect_message(subset_rate(ar_obj, method = "nonzero", plot = FALSE),
-                   "Subsetting all non-zero rate values. `n` input ignored.")
+                   "Subsetting all non-zero rate values. 'n' input ignored.")
   })
 
   # Check "zero" method -----------------------------------------------------
@@ -238,7 +268,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: method = zero  - check message", {
     expect_message(subset_rate(ar_obj, method = "zero", plot = FALSE),
-                   "Subsetting all zero rate values. `n` input ignored.")
+                   "Subsetting all zero rate values. 'n' input ignored.")
   })
 
 
@@ -321,6 +351,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("subset_rate: method = lowest_percentile   - these should match", {
     ar_subset_pos_flip <- ar_subset_pos
     ar_subset_pos_flip$rate <- ar_subset_pos_flip$rate * -1
+    ar_subset_pos_flip$summary$rate <- ar_subset_pos_flip$summary$rate * -1
 
     expect_equal(subset_rate(ar_subset_pos, method = "lowest_percentile", n = 0.1, plot = FALSE)$rate,
                  subset_rate(ar_subset_pos_flip, method = "lowest_percentile", n = 0.1, plot = FALSE)$rate *-1)
@@ -331,6 +362,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("subset_rate: method = highest_percentile   - these should match", {
     ar_subset_pos_flip <- ar_subset_pos
     ar_subset_pos_flip$rate <- ar_subset_pos_flip$rate * -1
+    ar_subset_pos_flip$summary$rate <- ar_subset_pos_flip$summary$rate * -1
 
     expect_equal(subset_rate(ar_subset_pos, method = "highest_percentile", n = 0.1, plot = FALSE)$rate,
                  subset_rate(ar_subset_pos_flip, method = "highest_percentile", n = 0.1, plot = FALSE)$rate *-1)
@@ -689,19 +721,19 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("subset_rate: works with method = oxygen_omit and n input of multiple values", {
     expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
-                                                    n = c(7, 6.9, 6.8), plot = FALSE),
+                                                      n = c(7, 6.9, 6.8), plot = FALSE),
                  regexp = NA)
   })
 
   test_that("subset_rate: works with method = oxygen_omit and n input of range of values", {
     expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
-                                                    n = c(7:5), plot = FALSE),
+                                                      n = c(7:5), plot = FALSE),
                  regexp = NA)
   })
 
   test_that("subset_rate: works with method = oxygen_omit and n input of two values", {
     expect_error(ar_subset_oxygen_omit <- subset_rate(ar_obj, method = "oxygen_omit",
-                                                    n = c(7,6), plot = FALSE),
+                                                      n = c(7,6), plot = FALSE),
                  regexp = NA)
   })
 
@@ -848,7 +880,814 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
+
+
+  # Reordering checks -------------------------------------------------------
+
+  ## put ar_obj results in a random order
+  ar_obj_mixed_lin <- ar_obj
+  new_order_lin <- c(10, 9, 14, 13, 5, 2, 1 , 3, 8, 16, 6, 15, 7, 4, 12, 11)
+  ar_obj_mixed_lin$summary <- ar_obj_mixed_lin$summary[new_order_lin,]
+  ar_obj_mixed_lin$rate <- ar_obj_mixed_lin$summary$rate
+
+  # same with other auto_rate method that's not linear
+  ar_obj_mixed_high <- ar_obj_high
+  new_order_high <- sample(1:nrow(ar_obj_mixed_high$summary))
+  ar_obj_mixed_high$summary <- ar_obj_mixed_high$summary[new_order_high,]
+  ar_obj_mixed_high$rate <- ar_obj_mixed_high$summary$rate
+
+  # empty object
+  empty_obj <- subset_rate(ar_obj, method = "rate", n = c(0.1, 1), plot = FALSE)
+
+
+  # method = "rolling" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = rolling - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "rolling", n = 1, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "rolling", n = 1:10, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_high, method = "rolling", n = 1, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_high, method = "rolling", n = 1:10, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rolling' method. 'n' input ignored...")
+  })
+
+  test_that("subset_rate: method = rolling - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "rolling", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "rolling", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'rolling' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)$summary$row,
+                     sort(ar_obj$summary$row))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)$summary$row,
+                     sort(ar_obj_high$summary$row))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, row)$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, row)$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rolling", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rolling", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+  # method = "row" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = row - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'row' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'row' method.")
+  })
+
+  test_that("subset_rate: method = row - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "row", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "row", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'row' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)$summary$row,
+                     sort(ar_obj$summary$row))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)$summary$row,
+                     sort(ar_obj_high$summary$row))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, row)$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, row)$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "row", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "row", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+  # method = "time" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = time - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'time' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'time' method.")
+  })
+
+  test_that("subset_rate: method = time - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "time", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "time", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'time' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)$summary$time,
+                     sort(ar_obj$summary$time))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)$summary$time,
+                     sort(ar_obj_high$summary$time))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, time)$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, time)$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "time", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "time", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+  # method = "linear" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = linear - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "linear", n = 1, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "linear", n = 1:10, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_high, method = "linear", n = 1, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+    expect_message(subset_rate(ar_obj_mixed_high, method = "linear", n = 1:10, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'linear' method. 'n' input ignored...")
+  })
+
+  test_that("subset_rate: method = linear - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "linear", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "linear", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'linear' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)$summary$density,
+                     (ar_obj$summary$density))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)$summary$density,
+                     (ar_obj_high$summary$density))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, desc(density))$rank])
+    # will NOT be rearranged as no values in density column!
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)$rate,
+                     ar_obj_mixed_high$rate)
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "linear", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "linear", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "density" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = density - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'density' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'density' method.")
+  })
+
+  test_that("subset_rate: method = density - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "density", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "density", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'density' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)$summary$density,
+                     (ar_obj$summary$density))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)$summary$density,
+                     (ar_obj_high$summary$density))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, desc(density))$rank])
+    # will NOT be rearranged as no values in density column!
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)$rate,
+                     ar_obj_mixed_high$rate)
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "density", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "density", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "rank" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = rank - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rank' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rank' method.")
+  })
+
+  test_that("subset_rate: method = rank - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "rank", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "rank", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'rank' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)$summary$rank,
+                     (ar_obj$summary$rank))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)$summary$rank,
+                     (ar_obj_high$summary$rank))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)$rate,
+                     ar_obj$rate[arrange(ar_obj$summary, rank)$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, rank)$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rank", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rank", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "rsq" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = rsq - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rsq' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'rsq' method.")
+  })
+
+  test_that("subset_rate: method = rsq - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "rsq", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "rsq", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'rsq' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)$summary$rsq,
+                     rev(sort(ar_obj$summary$rsq)))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)$summary$rsq,
+                     rev(sort(ar_obj_high$summary$rsq)))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)$summary$rate)
+    # expect_identical(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)$rate,
+    #                  ar_obj$rate[arrange(ar_obj$summary, desc(rsq))$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, desc(rsq))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "rsq", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "rsq", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "lowest" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = lowest - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'lowest' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'lowest' method.")
+  })
+
+  test_that("subset_rate: method = lowest - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "lowest", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "lowest", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'lowest' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)$summary$lowest,
+                     rev(sort(ar_obj$summary$lowest)))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)$summary$lowest,
+                     rev(sort(ar_obj_high$summary$lowest)))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)$summary$rate)
+    # expect_identical(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)$rate,
+    #                  ar_subset_pos$rate[arrange(ar_subset_pos$summary, desc(rate))$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, desc(rate))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_subset_pos, method = "lowest", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_subset_pos$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "lowest", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "highest" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = highest - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'highest' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'highest' method.")
+  })
+
+  test_that("subset_rate: method = highest - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "highest", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "highest", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'highest' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)$summary$highest,
+                     rev(sort(ar_obj$summary$highest)))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)$summary$highest,
+                     rev(sort(ar_obj_high$summary$highest)))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)$summary$rate)
+    # expect_identical(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)$rate,
+    #                  ar_subset_pos$rate[arrange(ar_subset_pos$summary, desc(rate))$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, (rate))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_subset_pos, method = "highest", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_subset_pos$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "highest", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "minimum" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = minimum - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_subset_pos, method = "minimum", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'minimum' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'minimum' method.")
+  })
+
+  test_that("subset_rate: method = minimum - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "minimum", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "minimum", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'minimum' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)$summary$minimum,
+                     rev(sort(ar_obj$summary$minimum)))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)$summary$minimum,
+                     rev(sort(ar_obj_high$summary$minimum)))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)$rate,
+                      ar_obj$rate[arrange(ar_obj$summary, (rate))$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, (rate))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "minimum", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_mixed_lin$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "minimum", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # method = "maximum" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("subset_rate: method = maximum - correct message", {
+    # linear object
+    expect_message(subset_rate(ar_subset_pos, method = "maximum", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'maximum' method.")
+    # highest object
+    expect_message(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE),
+                   regexp = "subset_rate: Reordering results by 'maximum' method.")
+  })
+
+  test_that("subset_rate: method = maximum - works and correctly reorders results", {
+
+    # works
+    expect_error(subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE),
+                 NA)
+    expect_error(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(subset_rate(empty_obj, method = "maximum", n = NULL, plot = FALSE),
+                 NA)
+    expect_message(subset_rate(empty_obj, method = "maximum", n = NULL, plot = FALSE),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'maximum' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)$summary$maximum,
+                     rev(sort(ar_obj$summary$maximum)))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)$summary$maximum,
+                     rev(sort(ar_obj_high$summary$maximum)))
+
+    # $rate element correctly ordered
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)$rate,
+                      ar_obj$rate[arrange(ar_obj$summary, desc(rate))$rank])
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)$rate,
+                     subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)$summary$rate)
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)$rate,
+                     ar_obj_high$rate[arrange(ar_obj_high$summary, desc(rate))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(subset_rate(ar_obj_mixed_lin, method = "maximum", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_mixed_lin$rate))
+    expect_identical(subset_rate(ar_obj_mixed_high, method = "maximum", n = NULL, plot = FALSE)$metadata$subset_regs,
+                     length(ar_obj_high$rate))
+
+  })
+
+
+
+
+  # Remove plot pdf ---------------------------------------------------------
+
   ## this may cause problems with cmd-check....
+  ## .... but apparently not!
   suppressWarnings(file.remove("Rplots.pdf"))
 
 }) ## turns printing back on
+
+
