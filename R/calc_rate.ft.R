@@ -20,10 +20,12 @@
 #'
 #' For data not prepared like this, `x` can be a 2-column `data.frame`
 #' containing numeric values of outflow (col 1) and inflow (col 2) oxygen
-#' concentrations. Alternatively, `x` can be a numeric value or vector
-#' representing delta oxygen values (outflow oxygen concentration minus inflow
-#' oxygen concentration in the same units). In these cases, the `from`, `to`,
-#' and `by` inputs are unnecessary and are ignored.
+#' concentrations in that order. Alternatively, if `x` is a numeric value or
+#' vector it is treated as delta oxygen values (outflow oxygen concentration
+#' minus inflow oxygen concentration in the same units). In both these cases,
+#' the `from`, `to`, and `by` inputs are are ignored, and all delta oxygen
+#' values whether as entered or calculated from the inflow and outflow oxygen
+#' columns are converted to rates.
 #'
 #' ## Specifying regions
 #'
@@ -246,7 +248,9 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     data <- data.frame(delta.oxy = x)
 
     ## summary for output
-    summary <- data.frame(out.oxy = NA, in.oxy = NA, delta.oxy = delta)
+    summary <- data.frame(intercept_b0 = NA, slope_b1 = NA, rsq = NA,
+                          row = NA, endrow = NA, time = NA, endtime = NA,
+                          oxy = NA, endoxy = NA, delta_mean = delta)
 
     # no need to plot
     if(plot) {
@@ -271,7 +275,9 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
                        in.oxy = x[[2]])
 
     ## summary for output
-    summary <- data.frame(out.oxy = x[[1]], in.oxy = x[[2]], delta.oxy = delta)
+    summary <- data.frame(intercept_b0 = NA, slope_b1 = NA, rsq = NA,
+                          row = NA, endrow = NA, time = NA, endtime = NA,
+                          oxy = NA, endoxy = NA, delta_mean = delta)
 
     if(plot) {
       message("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
@@ -420,7 +426,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       win <- calc_win(new_dt, width, by, "calc_rate.ft: ")
 
       summary <- rolling_reg_row(new_dt, width = win)
-      # rename rate_b1 to slope, since it's not rate yet
+      # rename rate_b1 to slope, since it's not the rate
       # We might use these coefficients later to find regions of stable rates (i.e. slope ~ 0)
       # so may as well save them
       names(summary)[8] <- "slope_b1"

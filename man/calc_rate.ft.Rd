@@ -82,10 +82,12 @@ the data be prepared via \code{\link[=inspect.ft]{inspect.ft()}}, and entered as
 
 For data not prepared like this, \code{x} can be a 2-column \code{data.frame}
 containing numeric values of outflow (col 1) and inflow (col 2) oxygen
-concentrations. Alternatively, \code{x} can be a numeric value or vector
-representing delta oxygen values (outflow oxygen concentration minus inflow
-oxygen concentration in the same units). In these cases, the \code{from}, \code{to},
-and \code{by} inputs are unnecessary and are ignored.
+concentrations in that order. Alternatively, if \code{x} is a numeric value or
+vector it is treated as delta oxygen values (outflow oxygen concentration
+minus inflow oxygen concentration in the same units). In both these cases,
+the \code{from}, \code{to}, and \code{by} inputs are are ignored, and all delta oxygen
+values whether as entered or calculated from the inflow and outflow oxygen
+columns are converted to rates.
 \subsection{Specifying regions}{
 
 For calculating rates over specific regions of the data, the \code{from} and \code{to}

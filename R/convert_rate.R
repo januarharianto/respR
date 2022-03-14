@@ -2,10 +2,10 @@
 #' area-specific rate
 #'
 #' Converts a unitless rate derived from [`calc_rate()`], [`auto_rate()`],
-#' [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute (i.e. whole chamber
-#' or whole speciemn) rate, or mass-specific rate (i.e. normalised by specimen
-#' mass), or area-specific rate (i.e. normalised by specimen surface area) in
-#' any common unit.
+#' [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute rate (i.e. whole
+#' chamber or whole specimen), or mass-specific rate (i.e. normalised by
+#' specimen mass), or area-specific rate (i.e. normalised by specimen surface
+#' area) in any common unit.
 #'
 #' By default, `convert_rate` converts the primary `$rate` element from
 #' `calc_rate` and `auto_rate` objects, the `$rate.adjusted` from `adjust_rate`
@@ -27,25 +27,25 @@
 #'
 #' The `oxy.unit` of the original raw data used to calculate the rate is
 #' required. Concentration units should use only SI units (`L` or `kg`) for the
-#' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air or
-#' oxygen is accepted, as are oxygen pressure units. See [`unit_args()`] for
-#' details.
+#' denominator, e.g. `"mg/L"`, `"mmol/kg"`. Percentage saturation of air
+#' (`%Air`) or oxygen (`%Oxy`) is supported, as are oxygen pressure units. See
+#' [`unit_args()`] for details.
 #'
 #' The `time.unit` of the original raw data used to calculate the rate is also
-#' required.
+#' required (seconds, minutes, hours, or days).
 #'
-#' An `output.unit` is also required. If left `NULL`, The default of `"mgO2/h"`
-#' is used, or `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively
-#' has been entered. The `output.unit` must be in the sequence *Oxygen-Time*
+#' An `output.unit` is also required and must be in the sequence *Oxygen-Time*
 #' (e.g. `"mg/h"`) for absolute rates, *Oxygen-Time-Mass* (e.g. `"mg/h/kg"`) for
 #' mass-specific rates, and *Oxygen-Time-Area* (e.g. `"mg/h/cm2"`) for surface
-#' area-specific rates.
+#' area-specific rates. If left `NULL`, the default of `"mgO2/h"` is used, or
+#' `"mgO2/h/kg"` or `"mgO2/h/m2"` if a `mass` or `area` respectively has been
+#' entered.
 #'
 #' Note, some oxygen input or output units require temperature (`t`) and
 #' salinity (`S`) to perform conversions. For freshwater experiments, salinity
 #' should be entered as zero (i.e. `S = 0`).
 #'
-#' Strictly speaking the atmospheric pressure (`P`) should also be supplied. If
+#' Strictly speaking, the atmospheric pressure (`P`) should also be entered. If
 #' not, the default value of 1.013253 bar (standard pressure at sea level) is
 #' used. In most locations which have a normal range (outside extreme weather
 #' events) of around 20 millibars, any variability in pressure will have a
@@ -68,9 +68,12 @@
 #' - `print()`: prints a single result, by default the first converted rate.
 #' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' - `summary()`: prints summary table of all converted rates and metadata, or
-#' those specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary
-#' can be exported as a separate dataframe by passing `export = TRUE`.
+#' - `summary()`: prints a condensed version of the output `$summary` table of
+#' converted rates and metadata. Specific rows can be specified with the `pos`
+#' input. e.g. `summary(x, pos = 1:5)`. This can be exported as a separate data
+#' frame by passing `export = TRUE`. This will be the *full* summary table, not
+#' the one printed to the console, including all rate regression parameters, and
+#' data locations, adjustments if applied, units, and more.
 #'
 #' - `mean()`: calculates the mean of all converted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
@@ -81,10 +84,13 @@
 #' For additional help, documentation, vignettes, and more visit the `respR`
 #' website at <https://januarharianto.github.io/respR>
 #'
-#' @return Output is a `list` object containing the `$rate.input`, and converted
-#'   rate(s) in `$rate.output` in the `$output.unit`, as well as inputs and
-#'   summary elements. Note, `$rate.abs` is the absolute rate in the output unit
-#'   minus the mass- or area-specific component.
+#' @return Output is a `list` object of class `convert_rate` containing the
+#'   `$rate.input`, and converted rate(s) in `$rate.output` in the
+#'   `$output.unit`, as well as inputs and summary elements. Note, `$rate.abs`
+#'   is the *absolute* rate in the output unit minus the mass- or area-specific
+#'   component. The `$summary` table element contains all rate regression
+#'   parameters and data locations (depending on what class of object was
+#'   entered), adjustments (if applied), units, and more.
 #'
 #' @param x numeric value or vector, or object of class `auto_rate`,
 #'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.` Contains the rate(s) to be
@@ -110,6 +116,7 @@
 #'   Defaults to a standard value of 1.013253 bar.
 #'
 #' @importFrom stringr str_replace
+#' @importFrom data.table data.table as.data.table
 #' @export
 #'
 #' @examples
@@ -176,25 +183,78 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   if (!is.null(mass) && !is.null(area))
     stop("convert_rate: cannot have inputs for both 'mass' and 'area'.")
 
+
+  # Extract values ----------------------------------------------------------
+
+  # Create extended summary table
+  summ.ext <- data.table(rank = NA,
+                         intercept_b0 = NA,
+                         rate_b1 = NA,
+                         rsq = NA,
+                         density = NA,
+                         row = NA,
+                         endrow = NA,
+                         time = NA,
+                         endtime = NA,
+                         oxy = NA,
+                         endoxy = NA,
+                         rate = NA,
+                         adjustment = NA,
+                         rate.adjusted = NA)
+
   # Validate rate value based on object class
   if (is.numeric(x)) {
     rate <- x
+    summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
+    summ.ext$rank <- 1:length(rate)
+    summ.ext$rate <- rate
   } else if (class(x) %in% c("calc_rate")) {
     rate <- x$rate
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:4, 14, 5:13))
     message("convert_rate: object of class `calc_rate` detected. Converting all rates in '$rate'.")
   } else if (class(x) %in% c("auto_rate")) {
     rate <- x$rate
+    summ.ext <- x$summary
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
     message("convert_rate: object of class `auto_rate` detected. Converting all rates in '$rate'.")
-  } else if (class(x) %in% "adjust_rate") {
+  } else if (class(x) %in% "adjust_rate" && is.numeric(x$inputs$x)) {
     rate <- x$rate.adjusted
+    summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
+    summ.ext$rank <- x$summary$rank
+    summ.ext$rate <- x$summary$rate
+    summ.ext$adjustment <- x$summary$adjustment
+    summ.ext$rate.adjusted <- x$summary$rate.adjusted
     message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "calc_rate.ft") {
-    stop("convert_rate: object of class `calc_rate.ft` detected. \nPlease use 'convert_rate.ft' to convert the rate.")
+  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate") {
+    rate <- x$rate.adjusted
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "auto_rate") {
+    rate <- x$rate.adjusted
+    summ.ext <- x$summary
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
   } else if (class(x) %in% "calc_rate.bg") {
     ## possible warning if mass entered - no reason to have mass with bg data
     rate <- x$rate.bg
+    summ.ext <- x$summary
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:4, 14, 5:13))
     message("convert_rate: object of class `calc_rate.bg` detected. Converting all background rates in '$rate.bg'.")
+    if(!is.null(mass) || !is.null(area))
+      warning("convert_rate: A `calc_rate.bg` (i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?")
+  } else if (class(x) %in% "calc_rate.ft") {
+    stop("convert_rate: object of class `calc_rate.ft` detected. \nPlease use 'convert_rate.ft' to convert the rate.")
   } else stop("convert_rate: 'x' input is not valid.")
+
 
   # Validate oxy.unit & time.unit
   oxy <- verify_units(oxy.unit, "o2")
@@ -284,8 +344,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 
   # Generate output
   if (is.mass.spec) {
-    summary <- data.table(rank = 1:length(rate),
-                          rate.input = rate,
+    summary <- data.table(rate.input = rate,
                           oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
@@ -296,10 +355,10 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           rate.a.spec = NA,
                           output.unit = output.unit,
                           rate.output = VO2.mass.spec)
+    summ.ext <- cbind(summ.ext, summary)
 
   } else if (is.area.spec) {
-    summary <- data.table(rank = 1:length(rate),
-                          rate.input = rate,
+    summary <- data.table(rate.input = rate,
                           oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
@@ -310,9 +369,9 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           rate.a.spec = VO2.area.spec,
                           output.unit = output.unit,
                           rate.output = VO2.area.spec)
+    summ.ext <- cbind(summ.ext, summary)
   } else {
-    summary <- data.table(rank = 1:length(rate),
-                          rate.input = rate,
+    summary <- data.table(rate.input = rate,
                           oxy.unit = oxy.unit,
                           time.unit = time.unit,
                           volume = volume,
@@ -323,6 +382,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           rate.a.spec = NA,
                           output.unit = output.unit,
                           rate.output = VO2)
+    summ.ext <- cbind(summ.ext, summary)
   }
 
 
@@ -335,10 +395,10 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 
   out <- list(call = call,
               inputs = inputs,
-              summary = summary,
+              summary = summ.ext,
               rate.input = rate,
               output.unit = output.unit,
-              rate.output = summary$rate.output)
+              rate.output = summ.ext$rate.output)
 
   class(out) <- "convert_rate"
   return(out)
@@ -397,13 +457,14 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  out <- data.table(object$summary[pos,])
+  out <- data.table(object$summary[pos, c(1,15:25), with=FALSE])
+  out_exp <- data.table(object$summary[pos,])
 
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
-    return(invisible(out)) else
+    return(invisible(out_exp)) else
       return(invisible(object))
 }
 

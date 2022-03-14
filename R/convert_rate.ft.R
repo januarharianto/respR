@@ -62,9 +62,12 @@
 #' - `print()`: prints a single result, by default the first converted rate.
 #' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' - `summary()`: prints summary table of all converted rates and metadata, or
-#' those specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary
-#' can be exported as a separate dataframe by passing `export = TRUE`.
+#' - `summary()`: prints a condensed version of the output `$summary` table of
+#' converted rates and metadata. Specific rows can be specified with the `pos`
+#' input. e.g. `summary(x, pos = 1:5)`. This can be exported as a separate data
+#' frame by passing `export = TRUE`. This will be the *full* summary table, not
+#' the one printed to the console, including all rate parameters, data
+#' locations, adjustments if applied, units, and more.
 #'
 #' - `mean()`: calculates the mean of all converted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
@@ -77,7 +80,10 @@
 #'
 #' @return Output is a `list` object containing the `$rate.input`, and converted
 #'   rate(s) in `$rate.output` in the `$output.unit`, as well as inputs and
-#'   summary elements.
+#'   summary elements. Note, `$rate.abs` is the *absolute* rate in the output
+#'   unit minus the mass- or area-specific component. The `$summary` table
+#'   element contains all rate parameters and data locations (depending on what
+#'   class of object was entered), adjustments (if applied), units, and more.
 #'
 #' @param x numeric value or vector, or object of class [calc_rate.ft()] or
 #'   [adjust_rate.ft()]. Contains the rate(s) to be converted.
@@ -147,15 +153,39 @@ convert_rate.ft <- function(x,
 
   # Validate inputs ---------------------------------------------------------
 
+  # Create extended summary table
+  summ.ext <- data.table(rank = NA,
+                         intercept_b0 = NA,
+                         slope_b1 = NA,
+                         rsq = NA,
+                         row = NA,
+                         endrow = NA,
+                         time = NA,
+                         endtime = NA,
+                         oxy = NA,
+                         endoxy = NA,
+                         delta_mean = NA,
+                         flowrate = NA,
+                         rate = NA,
+                         adjustment = NA,
+                         rate.adjusted = NA)
+
   # Validate x
   if (is.numeric(x)) {
     rate <- x
+    summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
+    summ.ext$rank <- 1:length(rate)
+    summ.ext$rate <- rate
     message("convert_rate.ft: numeric input detected. Converting...")
   } else if ("calc_rate.ft" %in% class(x)) {
     rate <- x$rate
+    summ.ext <- x$summary
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
     message("convert_rate.ft: object of class 'calc_rate.ft' detected. Converting '$rate' element.")
   } else if ("adjust_rate.ft" %in% class(x)) {
     rate <- x$rate.adjusted
+    summ.ext <- x$summary
     message("convert_rate.ft: object of class 'adjust_rate.ft' detected. Converting '$rate.adjusted' element.")
   } else stop("convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
 
@@ -305,6 +335,7 @@ convert_rate.ft <- function(x,
                                     rate.a.spec = rate.a.spec,
                                     output.unit = output.unit,
                                     rate.output = VO2.out)
+  summary <- cbind(summ.ext, summary)
 
   out <- list(call = call,
               inputs = list(x = x,
@@ -375,12 +406,15 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
     cat("\n")
   }
-  out <- cbind(rank = pos, object$summary[pos,])
+
+  out <- data.table(object$summary[pos, c(1,16:25), with=FALSE])
+  out_exp <- data.table(object$summary[pos,])
+
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
-    return(invisible(out)) else
+    return(invisible(out_exp)) else
       return(invisible(object))
 }
 

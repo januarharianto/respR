@@ -15,11 +15,12 @@ All version changes go in here now when you make a commit!
 
 ## Version 2.0.1 -- 2022-xx-xx
 
-Only a month after 2.0.0, this is a quick update that fixes a few bugs and has quite a large revision to the newest function `subset_rate`. 
+Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a couple of enhancements, and has quite a large revision to the newest function `subset_rate`. 
 
 ==================================== New =======================================
 
 - NEW: The `calc_rate` function can now be used to calculate background rates for use in `adjust_rate` as the `by` adjustment input. In other words, the `by` input is no longer limited to using only `calc_rate.bg` objects (or numerics). While using a combination of `subset_data` and `calc_rate.bg` is the recommended way of determining background rates, there are circumstances when getting a rate via `calc_rate` might be easier (of course, these rates could always previously have been entered manually as a numeric value). See [here](https://januarharianto.github.io/respR/articles/adjust_rate.html#crbgvcr) for further information about this. 
+- NEW: The `convert_rate` and `convert_rate.ft` summary table elements in the output now contain all rate regression parameters, data locations, adjustments (if applied), units, and more. This makes it much easier to save and keep track of *all* relevant data regarding rate results. They can be saved by extracting `$summary` directly from the output, or using `summary(object, export = TRUE`). Note, `summary()` only prints a condensed version to the console as the full table is too large to print. 
 
 =============================== subset_rate() ==================================
 

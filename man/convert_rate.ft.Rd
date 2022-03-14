@@ -49,7 +49,10 @@ Defaults to a standard value of 1.013253 bar.}
 \value{
 Output is a \code{list} object containing the \verb{$rate.input}, and converted
 rate(s) in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and
-summary elements.
+summary elements. Note, \verb{$rate.abs} is the \emph{absolute} rate in the output
+unit minus the mass- or area-specific component. The \verb{$summary} table
+element contains all rate parameters and data locations (depending on what
+class of object was entered), adjustments (if applied), units, and more.
 }
 \description{
 \code{convert_rate.ft} converts a unitless rate derived from \code{\link[=calc_rate.ft]{calc_rate.ft()}} or
@@ -113,9 +116,12 @@ Saved output objects can be used in the generic S3 functions \code{print()},
 \itemize{
 \item \code{print()}: prints a single result, by default the first converted rate.
 Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
-\item \code{summary()}: prints summary table of all converted rates and metadata, or
-those specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary
-can be exported as a separate dataframe by passing \code{export = TRUE}.
+\item \code{summary()}: prints a condensed version of the output \verb{$summary} table of
+converted rates and metadata. Specific rows can be specified with the \code{pos}
+input. e.g. \code{summary(x, pos = 1:5)}. This can be exported as a separate data
+frame by passing \code{export = TRUE}. This will be the \emph{full} summary table, not
+the one printed to the console, including all rate parameters, data
+locations, adjustments if applied, units, and more.
 \item \code{mean()}: calculates the mean of all converted rates, or those specified by
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
 separate value by passing \code{export = TRUE}.
