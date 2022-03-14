@@ -28,13 +28,11 @@ LazyData: true
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Imports:
-    broom,
     data.table,
     dplyr,
     glue,
     graphics,
     grDevices,
-    gridExtra,
     lubridate,
     magrittr,
     marelac,
