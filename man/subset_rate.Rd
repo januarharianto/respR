@@ -342,7 +342,7 @@ This help file can be found online
 where it is much easier to read.
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

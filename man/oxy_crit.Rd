@@ -207,7 +207,7 @@ separate data frame by passing \code{export = TRUE}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

@@ -66,7 +66,7 @@ We are happy to say the package has never been more stable and even easier to us
 
 ================================== HIGHLIGHTS ==================================
 
-- NEW: `respR` is now [available on CRAN](https://cran.r-project.org/web/packages/respR/index.html). It can be installed just like any other package via the RStudio package manager tab or by running `install.packages("respR")`. If you want to be on the bleeding edge, for example test out the latest dev version, you can use `install.github()` and the `ref` input to select a different branch.
+- NEW: `respR` is now [available on CRAN](https://CRAN.R-project.org/package=respR). It can be installed just like any other package via the RStudio package manager tab or by running `install.packages("respR")`. If you want to be on the bleeding edge, for example test out the latest dev version, you can use `install.github()` and the `ref` input to select a different branch.
 - NEW: `subset_rate` function. This allows `auto_rate` results to be explored and filtered according to various criteria.
 - NEW: `plot_ar` function. This plots `auto_rate` objects in a way that visualises how results are distributed within the dataset. Pairs very nicely with `subset_rate` above. 
 - NEW: `adjust_rate` contains several new methods of adjusting for background respiration, including the ability to perform adjustments from paired or concurrent blank chambers, and to perform dynamic adjustments for background rates which change over the course of an experiment.

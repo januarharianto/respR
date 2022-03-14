@@ -80,7 +80,7 @@ data as expected. To suppress this changing the default \code{quiet = FALSE} to
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

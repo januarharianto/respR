@@ -155,7 +155,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @return Output is a `list` object of class `inspect`, with a `$dataframe`
 #'   containing the specified `time` and `oxygen` columns, inputs, and metadata
