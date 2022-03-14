@@ -349,6 +349,8 @@ zeb_mmr_conv <- convert_rate(zeb_mmr_adj,
 summary(zeb_mmr_conv)
 ```
 
+Note the summary table printed to the console via `summary()` is a condensed version. The object `$summary` element contains an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. 
+
 ### Convert RMR
 
 Once again we will use `lapply` to loop through the SMR list of `adjust_rate` objects and convert the rates for each replicate. 

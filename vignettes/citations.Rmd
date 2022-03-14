@@ -41,6 +41,14 @@ If you use the package, please include a citation to the publication in [**Metho
 The following publications (most recent first) have used and cited `respR`. If we have missed one, please [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
 
 
+#### @rochePathsGreaterConsensus2022
+
+Dom Roche et al. 
+
+#### @garnerCanSeagrassModify2022
+
+Seagrass
+
 #### @bergerRegionalVulnerabilityAssessment2022
 
 Halle Berger used `respR` in this MSc thesis, looking at the response of the Dungeness crab to climate stressors in the context of a regional vulnerability assessment. They found that respiration rates of this species increased exponentially under higher temperatures. We hope the package proved useful in establishing this from your respirometry data. Congrats on the Masters! 🥳
@@ -64,7 +72,7 @@ In this study Jenni Prokkola et al. examine the genetic basis of how energy meta
 
 #### @mallonLightDrivenDynamics2022
 
-Jennifer Mallon is another researcher who took advantage of our open offer to help get users started with `respR` by sending us a data file. Great to see the work published! They looked at both oxygen uptake and production in coralline algae to calculate net photosynthesis. Really great to again see oxygen production being calculated using the package, not just consumption. 
+Jennifer Mallon is another researcher who took advantage of our open offer to help get users started with `respR` by sending us a data file. Great to see the work published! They looked at both oxygen uptake and production in corals and coralline algae to calculate net photosynthesis. Really great to again see oxygen production being calculated using the package, not just consumption. 
 
 #### @burnsMetabolicRateCritical2021
  

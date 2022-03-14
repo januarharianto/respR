@@ -1,11 +1,11 @@
 ---
-title: "subset_rate: Filtering auto_rate results"
+title: "subset_rate: Exploring auto_rate results"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{subset_rate: Filtering auto_rate results}
+  %\VignetteIndexEntry{subset_rate: Exploring auto_rate results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
