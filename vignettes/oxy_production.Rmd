@@ -145,3 +145,5 @@ In this case, we were only interested in the top ranked rate result. We can extr
 ```{r}
 summary(algae_rate_conv, pos = 1, export = TRUE)
 ```
+
+The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 

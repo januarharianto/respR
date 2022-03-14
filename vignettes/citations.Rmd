@@ -43,11 +43,11 @@ The following publications (most recent first) have used and cited `respR`. If w
 
 #### @rochePathsGreaterConsensus2022
 
-Dom Roche et al. 
+Dom Roche et al. review the status of open science and reproducibility in experimental biology and their role in consensus building and cross-discipline collaborations. Very interesting paper and essential reading for anyone doing collaborative experimental biology and sharing their results. They gave `respR` a quick shout-out as an example of open-source software aiding cross-disciplinary collaboration. Thanks for the citation! 
 
 #### @garnerCanSeagrassModify2022
 
-Seagrass
+This study on Sydney rock oysters and the buffering effects of seagrasses on seawater pH used `respR` to examine the metabolic rates of oysters under different pH. The authors showed seagrasses boosted oyster growth at ambient pH, but did not do so at elevated pH. So seagrasses may not be able to buffer out the negative effects of ocean acidification. Cool study.
 
 #### @bergerRegionalVulnerabilityAssessment2022
 

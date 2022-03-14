@@ -184,7 +184,7 @@ rate1_final <- rate1_ms$rate.output
 print(rate1_final)
 ```
 
-Or you can use `summary` and `export = TRUE` to save the summary table as a new data frame.
+Or you can use `summary` and `export = TRUE` to save the summary table as a new data frame. The version printed to the console is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 ```{r results='hide'}
 rate1_final <- summary(rate1_ms, export = TRUE)
@@ -870,6 +870,7 @@ roll_rate_ms <- suppressMessages(convert_rate.ft(roll_rate_adj,
 result <- suppressMessages(summary(roll_rate_ms, pos = 1044, export = TRUE))
 ```
 
+The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 This is just an example. Other results and columns in `$summary` can be used in a similar way to filter results, for instance to extract maximum or minimum rate values, only those within a specific value range, or all those within a specific percentile of rates.
 
