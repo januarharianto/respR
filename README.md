@@ -40,7 +40,7 @@ install.packages("respR")
 
 ## Getting started
 
-Visit the `respR` [**website**](https://januarharianto.github.io/respR) to get started. The site has a range of vignettes detailing the functionality, plus example workflows, documentation, and more. 
+Visit the `respR` [**website**](https://januarharianto.github.io/respR/) to get started. The site has a range of vignettes detailing the functionality, plus example workflows, documentation, and more. 
 
 We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will help get you started. 
 
