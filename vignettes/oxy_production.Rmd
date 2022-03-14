@@ -63,6 +63,10 @@ algae_rate <- auto_rate(algae_insp, rate.rev = FALSE)
 
 This is a good opportunity to explain how the `auto_rate` `"linear"` method works and how to interpret the outputs. Briefly (see `vignette("auto_rate")` for more detail), the linear method uses the input `width` as a starting seed value to calculate a rolling rate across the dataset (seen in panel 3). It then uses these rates to identify linear regions using kernel density estimation (KDE, see panel 6). Peaks in this plot represent linear regions, that is areas of stable rates at that `width` representative of that region as a whole. It then re-samples these regions and runs additional linear analysis at different widths to arrive at a final rate for this region. This is why the final, high ranked rates tend to be over widths greater than the input `width`, as can be seen here with the top ranked result. 
 
+```{r}
+summary(algae_rate)
+```
+
 Here, we have a very good top ranked result; it is calculated over a large part of the dataset, is around the value we expected from inspecting it earlier, this value is in the middle of the range of rolling rates at the default input width (dashed line, panel 3), and has a high r-squared in comparison to the other results. 
 
 Generally, the higher and wider the peak in the KDE, the more linear the region. We can see three peaks in the KDE (panel 6). However, the other two are very much lower and narrower. Let's look at the second ranked result using `pos`. 
@@ -79,13 +83,20 @@ In this analysis, we can easily see that the top ranked result is the one we wan
 
 We saw in the `inspect` [section](#inspect) above a higher `width` made the rolling rate much more consistent. It is not necessarily always the case increasing the default of `width = 0.2` will improve the results of `auto_rate` however, as it gives the KDE much less variation to work with. 
 
-Here is the summary table of the results when we increase the width to 0.5.
+Here is the summary table of the results when we increase the width to 0.5. Note that the rolling rate plot (panel 3) in which the rate looks highly variable is now on a much narrower y-axis range. In fact, it is identical to the one in the `inspect` plot [above](#inspect) but on different axes ranges.
 
 ```{r}
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 ```
 
-This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they don't add much to our understanding of what our final rate should be. Therefore, in this case the default `width` provided us with a good result, and there is no real reason to change it. This does however serve as a good example of how users should experiment with different widths to get an idea of how it might affect analyses. Certain datasets will benefit from this more than others. 
+This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they are largely redundant as they broadly use the same range of the data. We can visualise this using the `plot_ar()` function. 
+
+```{r results='hide'}
+auto_rate(algae_insp, width = 0.5, rate.rev = FALSE, plot = FALSE) |>
+  plot_ar()
+```
+
+So we could use the top ranked result here, but the ultimate rate value barely differs from our earlier analysis, and in this case the default `width` provided us with a valid result, so there is no real reason to exclude it. This does however serve as a good example of how users should experiment with different widths in `auto_rate` to get an idea of how it might affect analyses. Certain datasets will benefit from this more than others. 
 
 See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine maximum metabolic rates, much of which is relevant to extracting rates of any kind. 
 
@@ -109,7 +120,7 @@ adjust_rate(algae_rate, by = 0.009) |>
   summary()
 ```
 
-See also [Case 9]() in `vignette("adjust_rate")` where we perform a similar adjustment to production rates. 
+See also [Case 9](https://januarharianto.github.io/respR/articles/adjust_rate.html#case-9-adjusting-oxygen-production-rates) in `vignette("adjust_rate")` where we perform a similar adjustment to production rates. 
 
 ## Convert rate
 
@@ -134,3 +145,5 @@ In this case, we were only interested in the top ranked rate result. We can extr
 ```{r}
 summary(algae_rate_conv, pos = 1, export = TRUE)
 ```
+
+The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 

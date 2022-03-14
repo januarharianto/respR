@@ -131,7 +131,7 @@ navbar:
       menu:
       - text: "Support Us"
         href: articles/support.html
-      - text: "What's new"
+      - text: "What's new & version notes"
         href: articles/whatsnew.html
       - text: "respR in use"
         href: articles/citations.html

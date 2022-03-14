@@ -132,7 +132,7 @@ cr_mean
 
 ### `plot`
 
-`calc_rate` objects can be plotted. `pos` can be used to select wwhich result to plot, and `panel` to plot individual panels. `legend` can be used to suppress labels and legend, and `quiet`to suppress console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. 
+`calc_rate` objects can be plotted. `pos` can be used to select which result to plot, and `panel` to plot individual panels. `legend` can be used to suppress labels and legend, and `quiet`to suppress console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. 
 
 Here we plot result 2, panel 2, hide the equation legend, rotate the axis labels, give the left axis more space, and increase the space from axis labels to axis ticks.
 

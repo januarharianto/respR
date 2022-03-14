@@ -302,13 +302,13 @@ summary(urch_rate_final)
 
 ### Final rate
 
-The final rate can be seen above in these console outputs. It can be extracted for further use from the saved object where it is `$rate.output`. 
+The final rate can be seen above in these console outputs. It can be extracted for further use from the saved object where it is `$rate.output`, or all results can be extracted using `$summary`. 
 
 ```{r}
 urch_rate_final$rate.output
 ```
 
-Alternatively, use the `summary` function with `export` to save the summary table as a separate data frame. 
+Alternatively, use the `summary` function with `export` to save the summary table as a separate data frame. The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 ```{r eval = FALSE}
 urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
@@ -367,20 +367,25 @@ urch_rate_final <- convert_rate(urch_rate_adj,
                                 output.unit = "mg/s/kg", 
                                 volume = 1.09, 
                                 mass = 0.19)
+
+# Extract full results for archiving or further analysis
+urch_rate_final_summary <- summary(urch_rate_final, export = TRUE)
+
 ```
 
 Using pipes, either the new native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) or `%>%`  [`dplyr`](https://dplyr.tidyverse.org) pipes, can condense this even further:
 
 ```{r results="hide", fig.keep="none", eval = FALSE, tidy = FALSE}
-urchins.rd |>                                            # Using the urchins data,
-  inspect(1, 15) |>                                      # inspect, then
-  calc_rate(from = 4, to = 29, by = "time") |>           # calculate rate, then
-  print() |>                                             # print for quick look,
-  adjust_rate(
-    calc_rate.bg(urchins.rd, time = 1,                   # calculate the background and
-                 oxygen = 18:19)) |>                     # adjust rate, then
-  print() |>                                             # print for another look,
+urch_rate <- urchins.rd |>                                   # Using the urchins data,
+  inspect(1, 15) |>                                          # inspect, then
+  calc_rate(from = 4, to = 29, by = "time") |>               # calculate rate, then
+  print() |>                                                 # print for quick look,
+  adjust_rate(  
+    calc_rate.bg(urchins.rd, time = 1,                       # calculate the background and
+                 oxygen = 18:19)) |>                         # adjust the rate, then
+  print() |>                                                 # print for another check,
   convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
-    output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) # and finally convert
+    output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) |>  # then convert
+  summary(export = TRUE)                    # and finally save
 ```
 

@@ -1,5 +1,3 @@
-# respR 2.0.1
-
 
 <!---
 Each version should:
@@ -15,7 +13,7 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.0.1 -- 2022-xx-xx
+## Version 2.0.1 -- 2022-03-14
 
 Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a couple of enhancements, and has quite a large revision to the newest function `subset_rate`. 
 
@@ -38,7 +36,7 @@ Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a c
 
 - CHANGE: `auto_rate` output objects have been rearranged slightly to be more consistent. 
 - CHANGE: If `method = "mean"` has not been user-specified, `adjust_rate` now issues a message if multiple rates have been entered in `by` confirming the mean value will be used for adjustments. 
-- CHANGE: Internal codes changes mean the packages `assertthat`, `ggplot2`, and `cowplot` are no longer dependencies. 
+- CHANGE: Internal codes changes mean the packages `assertthat`, `ggplot2`, `cowplot`, `broom`, and `gridExtra` are no longer dependencies. 
 
 ==================================== Fixes =====================================
 
@@ -53,11 +51,11 @@ Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a c
 
 It's been a long time - over two and a half years (!) since the last update. We are happy to see `respR` being used by the respirometry community in that time. Amazingly we have picked up over 30 citations, so we are very grateful and happy that so many scientists are finding the package of use. 
 
-We are glad to announce that `respR` has reached version 2.0 and is finally [available on CRAN](https://cran.r-project.org/web/packages/respR/index.html). 
+We are glad to announce that `respR` has reached version 2.0 and is finally [available on CRAN](https://CRAN.R-project.org/package=respR). 
 
 v2.0 has been a massive and thorough update where almost every corner of the package has been revised, rewritten, streamlined and tested. In addition, we have added a lot of new functionality which you can read about below. 
 
-We have also updated and added even more vignettes, function guides and more on our brand new [website](https://januarharianto.github.io/respR) detailing all the old and new functionality. 
+We have also updated and added even more vignettes, function guides and more on our brand new [website](https://januarharianto.github.io/respR/) detailing all the old and new functionality. 
 
 Unfortunately, a major version update inevitably comes with some code breaking changes, and this one is no exception. We thought long and hard about introducing changes that might break code written for v1.1, but made the decision to fix as many as possible of the inconsistencies, bugs, and poor design decisions we made while we had the chance with this major version update. The upside of this is that the package will be much easier to update in the future without breaking existing code. 
 

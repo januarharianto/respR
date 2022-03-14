@@ -665,15 +665,15 @@ Starting at timepoint 120, the replicates follow a specific cycle of 9 minutes c
 
 ```{r message=FALSE, results='hide'}
 # replicate start times - seq(from, to, by)
-reps <- seq(120, 2100, 660) 
+starts <- seq(120, 2100, 660) 
 # three minute buffer of data to exclude at the start of each replicate
 buffer <- 180 
 # period to measure after buffer
 measure <- 360
 
 rates <- calc_rate(interm_insp,
-                   from = reps + buffer,
-                   to = reps + buffer + measure,
+                   from = starts + buffer,
+                   to = starts + buffer + measure,
                    by = "time")
 ```
 

@@ -238,7 +238,7 @@ rep1_abs_rate
 rep1_ms_rate
 ```
 
-Only the first rate converted rate is shown in the `print` output, but all rates within the object are converted. They can be viewed via `summary`.
+Only the first rate converted rate is shown in the `print` output, but all rates within the object are converted. They can be viewed via `summary`. This shows a condensed version of the object `$summary` table. 
 
 ```{r}
 summary(rep1_ms_rate)
@@ -259,7 +259,8 @@ You can using `$rate.output` to get the numeric values.
 rep1_ms_rate$rate.output
 ```
 
-The `summary` function also allows the entire summary table to be extracted and saved as a `data.frame` with `export = TRUE`. You can also use `pos` to view or export only a selection of rows.
+The `summary` function also allows the entire summary table to be extracted and saved as a `data.frame` with `export = TRUE`. The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. You can also use `pos` to view or export only a selection of rows. 
+
 ```{r}
 rep1_df <- summary(rep1_ms_rate, export = TRUE, pos = 1:5)
 ```
