@@ -233,7 +233,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @return Output is a `list` object of class `inspect.ft` containing input
 #'   parameters and data, data check summaries, and metadata, which can be

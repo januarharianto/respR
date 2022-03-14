@@ -65,7 +65,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @return **Output**: If the `x` input is a `calc_rate.ft` object, the output
 #'   will be identical in structure, but of class `adjust_rate.ft` and
@@ -181,7 +181,7 @@ adjust_rate.ft <- function(x, by) {
   if(length(adjustment) == 1) adjustment <- rep(adjustment, length(rate.adjusted))
 
   # Append results to input object
-  if(class(x) == "calc_rate.ft") {
+  if(class(x) %in% "calc_rate.ft") {
     out <- list(call = call,
                 inputs = list(x = x,
                               by = by,

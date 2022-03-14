@@ -299,7 +299,7 @@
 #'   where it is much easier to read.
 #'
 #'   For additional help, documentation, vignettes, and more visit the `respR`
-#'   website at <https://januarharianto.github.io/respR>
+#'   website at <https://januarharianto.github.io/respR/>
 #'
 #' @return The output of `subset_rate` is a `list` object which retains the
 #'   `auto_rate` class, with an additional `auto_rate_subset` class applied.
