@@ -52,16 +52,20 @@ some oxygen units.}
 Defaults to a standard value of 1.013253 bar.}
 }
 \value{
-Output is a \code{list} object containing the \verb{$rate.input}, and converted
-rate(s) in \verb{$rate.output} in the \verb{$output.unit}, as well as inputs and
-summary elements.
+Output is a \code{list} object of class \code{convert_rate} containing the
+\verb{$rate.input}, and converted rate(s) in \verb{$rate.output} in the
+\verb{$output.unit}, as well as inputs and summary elements. Note, \verb{$rate.abs}
+is the \emph{absolute} rate in the output unit minus the mass- or area-specific
+component. The \verb{$summary} table element contains all rate regression
+parameters and data locations (depending on what class of object was
+entered), adjustments (if applied), units, and more.
 }
 \description{
 Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}},
-\code{\link[=adjust_rate]{adjust_rate()}}, or \code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute (i.e. whole chamber
-or whole speciemn) rate, or mass-specific rate (i.e. normalised by specimen
-mass), or area-specific rate (i.e. normalised by specimen surface area) in
-any common unit.
+\code{\link[=adjust_rate]{adjust_rate()}}, or \code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute rate (i.e. whole
+chamber or whole specimen), or mass-specific rate (i.e. normalised by
+specimen mass), or area-specific rate (i.e. normalised by specimen surface
+area) in any common unit.
 }
 \details{
 By default, \code{convert_rate} converts the primary \verb{$rate} element from
@@ -84,25 +88,25 @@ volume.
 
 The \code{oxy.unit} of the original raw data used to calculate the rate is
 required. Concentration units should use only SI units (\code{L} or \code{kg}) for the
-denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air or
-oxygen is accepted, as are oxygen pressure units. See \code{\link[=unit_args]{unit_args()}} for
-details.
+denominator, e.g. \code{"mg/L"}, \code{"mmol/kg"}. Percentage saturation of air
+(\verb{\%Air}) or oxygen (\verb{\%Oxy}) is supported, as are oxygen pressure units. See
+\code{\link[=unit_args]{unit_args()}} for details.
 
 The \code{time.unit} of the original raw data used to calculate the rate is also
-required.
+required (seconds, minutes, hours, or days).
 
-An \code{output.unit} is also required. If left \code{NULL}, The default of \code{"mgO2/h"}
-is used, or \code{"mgO2/h/kg"} or \code{"mgO2/h/m2"} if a \code{mass} or \code{area} respectively
-has been entered. The \code{output.unit} must be in the sequence \emph{Oxygen-Time}
+An \code{output.unit} is also required and must be in the sequence \emph{Oxygen-Time}
 (e.g. \code{"mg/h"}) for absolute rates, \emph{Oxygen-Time-Mass} (e.g. \code{"mg/h/kg"}) for
 mass-specific rates, and \emph{Oxygen-Time-Area} (e.g. \code{"mg/h/cm2"}) for surface
-area-specific rates.
+area-specific rates. If left \code{NULL}, the default of \code{"mgO2/h"} is used, or
+\code{"mgO2/h/kg"} or \code{"mgO2/h/m2"} if a \code{mass} or \code{area} respectively has been
+entered.
 
 Note, some oxygen input or output units require temperature (\code{t}) and
 salinity (\code{S}) to perform conversions. For freshwater experiments, salinity
 should be entered as zero (i.e. \code{S = 0}).
 
-Strictly speaking the atmospheric pressure (\code{P}) should also be supplied. If
+Strictly speaking, the atmospheric pressure (\code{P}) should also be entered. If
 not, the default value of 1.013253 bar (standard pressure at sea level) is
 used. In most locations which have a normal range (outside extreme weather
 events) of around 20 millibars, any variability in pressure will have a
@@ -125,9 +129,12 @@ Saved output objects can be used in the generic S3 functions \code{print()},
 \itemize{
 \item \code{print()}: prints a single result, by default the first converted rate.
 Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
-\item \code{summary()}: prints summary table of all converted rates and metadata, or
-those specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary
-can be exported as a separate dataframe by passing \code{export = TRUE}.
+\item \code{summary()}: prints a condensed version of the output \verb{$summary} table of
+converted rates and metadata. Specific rows can be specified with the \code{pos}
+input. e.g. \code{summary(x, pos = 1:5)}. This can be exported as a separate data
+frame by passing \code{export = TRUE}. This will be the \emph{full} summary table, not
+the one printed to the console, including all rate regression parameters, and
+data locations, adjustments if applied, units, and more.
 \item \code{mean()}: calculates the mean of all converted rates, or those specified by
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
 separate value by passing \code{export = TRUE}.
@@ -137,7 +144,7 @@ separate value by passing \code{export = TRUE}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

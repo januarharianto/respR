@@ -8,41 +8,36 @@
 #'
 #' @return a data.frame object of the original data
 #'
-#' @importFrom assertthat assert_that
 #' @keywords internal
-validate_auto_rate <- function(df, by, method) {
+validate_auto_rate <- function(x, by, method) {
 
-  # # does df exist?
-  # is_defined <- function(sym) {
-  #   sym <- deparse(substitute(sym))
-  #   env <- parent.frame()
-  #   exists(sym, env)
-  # }
-  # if (!is_defined(df)) stop('df object does not exist, please check')
+  # x validation
+  if (!(any(class(x) %in% c("inspect", "data.frame"))))
+    stop("auto_rate: Input data must be of class 'data.frame' or 'inspect'")
 
-  # convert data if necessary:
-  if (any(class(df) %in% "inspect")) df <- df$dataframe
+  # validate by
+  by <- verify_by(by,  which = c("t", "r"), msg = "auto_rate:") # validate `by` input
+
+  # validate method
+  if (!(method %in% c("linear", "max", "min", "interval",
+                      "rolling", "highest", "lowest", "maximum", "minimum")))
+    stop("auto_rate: The 'method' input is not recognised: it should be 'linear',
+    'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'")
+
+  # extract df
+  if (any(class(x) %in% "inspect")) df <- x$dataframe else
+    df <- x
 
   # select only first two columns by default if dataset is multi-column
   if (length(df) > 2) {
     warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
     df <- df[, 1:2]
   }
-  by <- verify_by(by,  which = c("t", "r"), msg = "auto_rate:") # validate `by` input
 
-  assertthat::assert_that(
-    is.data.frame(df),
-    msg = "auto_rate: Input data must be of class 'data.frame' or 'inspect'"
-  )
+  out <- list(by = by,
+              df = data.table(df))
 
-  assertthat::assert_that(
-    method %in% c("linear", "max", "min", "interval",
-                  "rolling",
-                  "highest", "lowest", "maximum", "minimum"),
-    msg = "auto_rate: The 'method' input is not recognised: it should be 'linear',
-    'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'"
-  )
-  return(list(by = by, df = data.table(df)))
+  return(out)
 }
 
 
@@ -536,7 +531,7 @@ rolling_reg <- function(dt, width, by) {
 #'
 #' @return A list object
 #' @keywords internal
-  kde_fit <- function(dt, width, by, use = "all") {
+kde_fit <- function(dt, width, by, use = "all") {
   # perform rolling regression
   reg <- rolling_reg(dt, width, by)
   roll <- reg$roll

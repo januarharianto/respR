@@ -62,8 +62,14 @@ las_def <- 0
 # Plotting functions ------------------------------------------------------
 
 # axes = which axes to draw
+# mgp_bt etc = separate mgp for axes if needed
 multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
-                    axes = c(1,2,3), legend = TRUE, ...) {
+                    axes = c(1,2,3), legend = TRUE,
+                    bt_mgp = NULL,
+                    lf_mgp = NULL,
+                    tp_mgp = NULL,
+                    rt_mgp = NULL,
+                    ...) {
 
   par(...)
   names(df) <- c("x", "y")
@@ -84,8 +90,8 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
     abline(lm(y ~ x, z), lwd = 1.2, lty = 3)
   }))
 
-  if(1 %in% axes) axis(side = 1, col.axis = "blue")
-  if(2 %in% axes) axis(side = 2, col.axis = "black")
+  if(1 %in% axes) axis(side = 1, col.axis = "blue", mgp = bt_mgp)
+  if(2 %in% axes) axis(side = 2, col.axis = "black", mgp = lf_mgp)
 
   box()
 
@@ -108,7 +114,7 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
        pch = "",
        cex = .5,
        axes = FALSE)
-  if(3 %in% axes) axis(side = 3, col.axis = "red")
+  if(3 %in% axes) axis(side = 3, col.axis = "red", mgp = tp_mgp)
 
   if (title == T)
     title(main = ("Full Timeseries"), line = 1.2, font = 2)
@@ -217,72 +223,110 @@ rollreg.p <- function(rolldf, ranked.b1, rownums, xlim, rate.rev = TRUE, ...) {
 
 
 #' Plots multiple auto_rate results in a nice way
-#' x = auto_rate or auto_rate_filt object
-#' n = max no. of plots
-#' THIS IS SLOOOOOOOW
-#' Will probably have to revert to base plotting
-#'
-#' @importFrom cowplot plot_grid
-#' @importFrom methods show
-#' @import ggplot2
+#' using base plot
+#' x = auto_rate or auto_rate_subset object
 #'
 #' @keywords internal
+plot_ar_grid <- function(x, ...){
 
-plot_multi_ar <- function(x, n = 9, ...){
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  nres <- length(x$rate) ## no. of results
-  df <- x$dataframe
-  summ <- as.data.frame(x$summary)
+  totres <- length(x$rate)
+  res <- length(x$rate)
 
-  if(nres == 0) {
-    message("subset_rate: No rates to plot...")
-    return()}
-  if(nres > n) message(glue::glue("subset_rate: Plotting first {n} of {nres} subset rate results only..."))
-  if(nres < n) n <- nres
-  subset_no <- 1:n
+  par(oma = c(2, 2, 2, 0.5), mar = c(0.1, 0.1, 2, 0.1))
 
-  ## save all ggplot2 plots to list
-  all_plots <- apply(cbind(summ[1:n,], subset_no), 1, function(q) {
+  plot.sub.grid <- function(x, res, bt, lf, tp) {
+    for(i in 1:res) {
+      dt <- x$dataframe
+      rate <- x$rate[i]
+      start <- x$summary$row[i]
+      end <- x$summary$endrow[i]
+      sdt <- dt[start:end]
+      ax <- c()
+      if(i %in% bt) ax <- c(ax, 1)
+      if(i %in% lf) ax <- c(ax, 2)
+      if(i %in% tp) ax <- c(ax, 3)
+      multi.p(dt, sdt, legend = F, title = F, axes = ax,
+              tck = -0.005,
+              mgp = c(0, 0.2, 0),
+              tp_mgp = c(0, 2, 0),
+              las = 1)
+      #title(glue::glue("tmp title"))
+      title(glue::glue("Subset {i} of {totres}:\nRate: {signif(rate, digits = 3)}"),
+            cex.main = 0.9)
+    }
+  }
 
-    start <- q[6]
-    end <- q[7]
-    rate <- q[3]
-    subset_no <- q[11]
-
-    rdf <- df[start:end]
-    slope <- q[3]
-    intercept <- q[2]
-
-    plt <-
-      ggplot() +
-      theme(plot.title = element_text(hjust = 1, family = "mono", size = 10)) +
-      theme(plot.margin = margin(0.1, 0.1, 0, 0, "cm")) +
-      geom_point(aes(x = df$x,
-                     y = df$y),
-                 color="darkgrey",) +
-      labs(x="", y="") +
-
-      geom_point(aes(x = rdf$x, y = rdf$y),
-                 color = "yellow1") +
-      stat_smooth(method = "lm") +
-      ggtitle(glue::glue("Subset {subset_no} of {nres}\nRate = {signif(rate, digits = 3)}"))
-
-    ## turns out clipping an lm in ggplot is a PITA...
-    plt <- plt + geom_segment(
-      aes(x = rdf$x[1], y = rdf$x[1]*slope+intercept,
-          xend = tail(rdf$x, 1), yend = tail(rdf$x, 1)*slope+intercept, ),
-      linetype = "dashed",
-      color = "black",
-      lwd = 0.8)
-
-    return(plt)
-  })
-
-  grd <- cowplot::plot_grid(plotlist = all_plots)
-  show(grd)
+  if(res == 0) message("subset_rate: No results to plot!")
+  if(res == 1)          {
+    par(mfrow = c(1,1))
+    bt <- 1
+    lf <- 1
+    tp <- 1
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res == 2)          {
+    par(mfrow = c(1,2))
+    bt <- 1:2
+    lf <- 1
+    tp <- 1:2
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res %in% c(3,4))   {
+    par(mfrow = c(2,2))
+    bt <- 3:4
+    lf <- c(1,3)
+    tp <- 1:2
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res %in% c(5,6))   {
+    par(mfrow = c(2,3))
+    bt <- 4:6
+    lf <- c(1,4)
+    tp <- 1:3
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res %in% c(7,8,9)) {
+    par(mfrow = c(3,3))
+    bt <- 7:9
+    lf <- c(1,4,7)
+    tp <- 1:3
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res %in% c(10:12)) {
+    par(mfrow = c(3,4))
+    bt <- 9:12
+    lf <- c(1,5,9)
+    tp <- 1:4
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res %in% c(13:16)) {
+    par(mfrow = c(4,4))
+    bt <- 13:16
+    lf <- c(1,5,9,13)
+    tp <- 1:4
+    plot.sub.grid(x, res, bt, lf, tp)
+  } ## start to get margins too large errors
+  if(res %in% c(17:20)) {
+    par(mfrow = c(4,5))
+    bt <- 16:20
+    lf <- c(1,6,11,16)
+    tp <- 1:5
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
+  if(res > 20){
+    res <- 20
+    par(mfrow = c(4,5))
+    bt <- 16:20
+    lf <- c(1,6,11,16)
+    tp <- 1:5
+    message("subset_rate: Over 20 results remaining. Plotting first 20 only...")
+    plot.sub.grid(x, res, bt, lf, tp)
+  }
 }
+
 
 
 #' Plot auto_rate summary tables
@@ -293,24 +337,30 @@ plot_multi_ar <- function(x, n = 9, ...){
 #' results, so you can compare the subset and original.
 #'
 #' @param x `auto_rate` or `auto_rate_subset` object
-#' @param highlight integer. Which summary table rank regression to highlight.
-#'   Default is 1. If the input is an `auto_rate_subset` object this refers to
-#'   the rank from the original, unsubset results. Should be within `pos` range.
-#' @param pos integer(s). Which summary table ranks to plot in lower plot.
-#'   Defaults to all.
+#' @param highlight integer. Which result in the summary table to highlight on
+#'   the plots. Defaults to 1. If it is outside the range of the `pos` input it
+#'   will be shown on the top plot, but will not be visible on the bottom plot.
+#' @param pos integer(s). What range of original summary table rows to plot in
+#'   lower plot. Defaults to all.
 #' @param legend logical. Suppress plot legends.
 #' @param ... Allows additional plotting controls to be passed.
 #'
 #' @return A plot of the auto_rate object results
 #'
 #' @export
-plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
+plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
   if(!("auto_rate" %in% class(x)))
     stop("plot_ar: 'x' should be an 'auto_rate' or 'auto_rate_subset' object.")
+
+  ## warning if empty - but return to allow piping
+  if(length(x$rate) == 0){
+    message("plot_ar: Nothing to plot! No rates found in 'auto_rate' object.")
+    return(invisible(x))
+  }
 
   ## set layout
   m <- rbind(c(1,1,1), c(2,2,2), c(2,2,2))
@@ -328,21 +378,39 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
       ps = 10)
   par(...)
 
-  ## extract data
-  subset <- "original" %in% names(x) # has it already been subset?
+  ## is it a subset object?
+  subset <- !is.null(x$original) # has it already been subset?
+
+  ## apply default pos
   if(is.null(pos))
     if(subset) pos <- 1:nrow(x$original$summary) else
       pos <- 1:nrow(x$summary)
-  # highlight shouldn't be outside pos selection
-  if(any(!(highlight %in% pos)))
-    stop("plot_ar: 'highlight' is not within range of 'pos'.")
-  # highlight shouldn't be bigger than number of results
-  if(any(highlight > nrow(x$summary)))
-    stop("plot_ar: 'highlight' is greater than number of rate results present.")
 
+  ## Extract data
   dt <- x$dataframe
-  summ <- x$summary[pos,]
-  if(subset) o_summ <- x$original$summary[pos,]
+  summ <- x$summary
+  # if(subset){
+  #   indx <- which(x$summary$rank %in% pos)
+  #   summ <- x$original$summary[indx]
+  # }
+
+  # apply default of highlight being the highest rank pos
+  if(is.null(highlight)) highlight <- 1
+
+  # If highlight isn't in pos ranks set it to highest rank one
+  if(highlight > nrow(summ)) {
+    message("plot_ar: 'highlight' too high. Applying default of first row.")
+    highlight <- 1
+  }
+
+  # # # highlight row shouldn't be outside pos selection range
+  # if(!(hl %in% pos)) {
+  #   message("plot_ar: 'highlight' is not within 'pos' range. Applying default of highest ranking result within 'pos' range.")
+  #   hl <- pos[1]
+  # }
+
+
+  # highlight subset
   start <- summ$row[highlight]
   end <- summ$endrow[highlight]
   rownums <- start:end
@@ -356,13 +424,15 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
 
   # Axis limits
   ## how many summary rows to plot. if already filtered, original
-  if(subset) maxy <- nrow(o_summ) else
-    maxy <- nrow(x$summary)
-  miny <- 0
-  maxx <- nrow(dt)
+  # if(subset) maxy <- nrow(o_summ) else
+  #    maxy <- nrow(summ)
+  miny <- min(pos)
+  maxy <- max(pos)
   minx <- 0
+  maxx <- nrow(dt)
 
-  plot(minx:maxx, seq(miny, maxy, length.out=length(minx:maxx)),
+  plot(minx:maxx,
+       seq(miny, maxy, length.out=length(minx:maxx)),
        ylim = c(maxy,miny),
        col = "white",
        ylab="",
@@ -371,19 +441,18 @@ plot_ar <- function(x, highlight = 1, pos = NULL, legend = TRUE, ...){
        panel.first = grid(lwd = .7))
   box()
   for(i in 1:nrow(summ))
-    segments(summ$row[i],
-             summ$rank[i],
+    segments(x0 = summ$row[i],
+             y0 = summ$rank[i],
              x1 = summ$endrow[i],
              y1 = summ$rank[i],
              lwd=3, col = r1)
   axis(side = 2, col.axis = "black")
-  segments(summ$row[highlight],
-           summ$rank[highlight],
+  segments(x0 = summ$row[highlight],
+           y0 = summ$rank[highlight],
            x1 = summ$endrow[highlight],
            y1 = summ$rank[highlight],
            lwd=3, col = r2)
-  #title("Summary Table Rank (Descending)")
-  mtext("Summary Table Rank (Descending)",
+  mtext("Original Summary Table Rank (Descending)",
         outer = FALSE, cex = 1.2, line = 0.8, font = 2)
   # invisible plot to get time axis
   par(new=TRUE)

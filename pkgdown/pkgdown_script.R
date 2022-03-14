@@ -27,6 +27,6 @@ usethis::use_vignette("support", "Support Us")
 
 
 ## This deploys to the gh-pages branch, and runs the deploy workflow on GH Actions
-## Uses local changes - don't have to be pushed
+## Uses local changes - don't have to be pushed - IS THIS RIGHT?
 ## (not sure about commits v local changes tho)
 pkgdown::deploy_to_branch()

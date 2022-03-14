@@ -144,23 +144,41 @@ After calculating background rates from a control or "blank" experiment, the fun
 
 In addition, there are several variations on these adjustment methods. 
 
-We use the interlinked `respR` functions of `inspect`, `calc_rate`, `calc_rate.bg` etc. in the following examples, but for most of these data frames or numeric values can also be used. We'll show some examples of these below. 
+We use the interlinked `respR` functions of `inspect`, `calc_rate`, `calc_rate.bg` etc. in the following examples, but for most data frames or numeric values can also be used. We'll show some examples of these below. 
 
 ### Measurement units and running controls
 
 `respR` analyses are largely unitless; units are only required when the rates come to be converted in `convert_rate()`. However, note that the raw background data should be in the *same units* of time and oxygen as the raw data used to calculate the rate being adjusted. The background recording should also be conducted using the same equipment and under the same conditions as the experiment to be adjusted, or as close as is practically possible. This includes using the same or identical respirometry chambers; in our experience the vast majority of background oxygen use comes from bacterial growth on the internal surfaces of the respirometer, not from organisms in the water. 
 
-Note that in general the background recording does not have to be conducted at the same time as experiments, or even over the same duration as the experimental chambers to be adjusted. While this is ideal practice, it's not always practical. Its purpose it to establish a general background oxygen change per unit time relationship to be applied to specimen experiments of any length. 
+Note that in general the background recording does not have to be conducted at the same time as experiments, or even over the same duration as the experimental chambers to be adjusted. While this is ideal practice, it's not always practical. Their purpose it to establish the general relationship of background oxygen change per unit time to be applied to specimen experiments of any length. 
 
 ### When should adjustments be applied?
 
 Adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates and so no adjustments are necessary (e.g. [Burford et al. 2019](https://januarharianto.github.io/respR/articles/refs.html#references)).
 
-In the `respR` general workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate` or `auto_rate` or rate values (oxygen change per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
+In the `respR` general workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate` or `auto_rate` or rate values (change in oxygen units per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
 
 ### Sign of the rates {#sign}
 
 If entering specimen or background rates as values, care should be taken to enter them with the correct *sign*. In `respR` oxygen uptake rates are negative, as they represent a negative slope of oxygen against time. Background rates will normally also be a negative value (though not always). For oxygen production rates, which are positive, the background rates may be negative or positive. And there are other cases where background rates may be positive, such as in open-tank or open-arena respirometry where oxygen may be added at the water surface.
+
+### Using `calc_rate.bg` or `calc_rate` for background rates {#crbgvcr}
+
+For the most part we use `calc_rate.bg` to determine background rates in the following examples, which are then passed to `adjust_rate` as the `by` input. However, `calc_rate()` can also be used to determine background rates for the `by` input. 
+
+These two functions are similar in functionality but have a couple of key differences.
+
+`calc_rate.bg` does not have the region selection inputs that `calc_rate` does. It calculates the rate across the whole oxygen~time dataset as entered. But it allows background rates to be calculated from multiple columns, which is required for several adjustment methods, and is the default behaviour if a multiple column dataset is entered. However, it also has `oxygen` and `time` column identifiers to specify particular columns, which `calc_rate` does not. If the background data needs to be subset from a larger dataset to a particular region, this is easy to do using `subset_data()` before passing it on to `calc_rate.bg`. 
+
+`calc_rate` does have region selection inputs, and also allows you to extract rates from multiple regions of a single oxygen~time dataset. This is not particularly useful in the context of background rates, unless you want to average rates from different regions of the same data for some reason. However, to extract a single background rate from a particular region of a larger dataset it is an option and does not require you to subset the data first. It also does not have `oxygen` and `time` column identifiers. Data should already have been put into the structure of time in column 1 and oxygen in column 2 via processing in `inspect()`, or if a `data.frame` is used already be in this structure. Any other columns are ignored. 
+
+Overall, we find it easier to mentally partition specimen and background rates by using `calc_rate` for one and `calc_rate.bg` for the other, but it comes down to personal preference and the specifics of an experiment and what you want to achieve. 
+
+To summarise the differences:
+
+`calc_rate.bg` - calculate rates from the *same* region of *single or multiple* oxygen columns. 
+
+`calc_rate`    - calculate rates from *single or multiple* regions of the *same* oxygen column.
 
 ### Pipes
 
@@ -394,11 +412,13 @@ To calculate a mean background rate across different datasets in one `calc_rate.
 However, there are easier approaches to accomplish the same thing. We have saved two background objects (`bg`, `bg2`), one with two rates, one with three. We could calculate the mean rate ourselves and enter it as a single adjustment value. We'll adjust one of the specimen rates we calculated above. 
 
 ```{r message = FALSE}
-adj <- sum(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832)/5
+adj <- mean(
+  c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832)
+)
 adjust_rate(urch1, by = adj, method = "value")
 ```
 
-Or, enter the five background rates directly as a numeric vector and let the default `method = "mean"` be applied.
+Or alternatively, enter the five background rates directly as a numeric vector and let the default `method = "mean"` be applied.
 
 ```{r message = FALSE}
 adjust_rate(urch1, by = c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832))
@@ -549,7 +569,7 @@ To repeat the note from the example above, estimating background rates over the 
 
 ### Explanation
 
-This method will not accept numeric inputs. The `"concurrent"` method is fairly straightforward. Given a `calc_rate` or `auto_rate` object as input, for each rate contained in it, `adjust_rate` uses the regression parameters from the `$summary` table to fit a regression over the same region in the background data entered as the `by` input, the slope of which is the background rate. The `by` input can be a `data.frame`, `inspect` or `calc_rate.bg` object. If one of the latter two, the function uses only the `$dataframe` element. If there is more than one column of oxygen in the background data, the function calculates the background rate across the same region in *all* columns, and the mean of these are applied as the adjustment. Therefore, concurrent rates from single or multiple controls can be used to adjust specimen rates. 
+This method will not accept numeric inputs. The `"concurrent"` method is fairly straightforward. Given a `calc_rate` or `auto_rate` object as input, for each rate contained in it, `adjust_rate` uses the regression parameters from the `$summary` table to fit a regression over the same region in the background data entered as the `by` input, the slope of which is the background rate. The `by` input can be a `data.frame`, `inspect`, `calc_rate.bg`, or `calc_rate` object. If one of the latter three, the function uses only the `$dataframe` element. If there is more than one column of oxygen in the background data, the function calculates the background rate across the same region in *all* columns, and the mean of these are applied as the adjustment. Therefore, concurrent rates from single or multiple controls can be used to adjust specimen rates. 
 
 ### Example 1 - Closed chamber respirometry {#case6eg1}
 
@@ -645,15 +665,15 @@ Starting at timepoint 120, the replicates follow a specific cycle of 9 minutes c
 
 ```{r message=FALSE, results='hide'}
 # replicate start times - seq(from, to, by)
-reps <- seq(120, 2100, 660) 
+starts <- seq(120, 2100, 660) 
 # three minute buffer of data to exclude at the start of each replicate
 buffer <- 180 
 # period to measure after buffer
 measure <- 360
 
 rates <- calc_rate(interm_insp,
-                   from = reps + buffer,
-                   to = reps + buffer + measure,
+                   from = starts + buffer,
+                   to = starts + buffer + measure,
                    by = "time")
 ```
 
@@ -1081,6 +1101,7 @@ sard <- inspect(sardine.rd) |>
 print(sard)
 ```
 
+If you just wnat to extract a single rate, using `calc_rate` and its region selection inputs to calculate a background rate from a specific region is also an option. See [here](#crbgvcr) for discussion about the main differences between `calc_rate.bg` and `calc_rate`.
 
 ### Inform how long experiments should be
 

@@ -1,11 +1,11 @@
 ---
-title: "What's new"
+title: "What's new & version notes"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{What's new}
+  %\VignetteIndexEntry{What's new & version notes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

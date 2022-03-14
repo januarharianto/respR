@@ -36,7 +36,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @param x numeric. The dissolved oxygen (DO) value(s) to be converted.
 #' @param from string. The DO unit to convert *from*. See [unit_args()] for

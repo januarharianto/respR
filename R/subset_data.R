@@ -55,7 +55,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @return **Output**: If the input is an `inspect`, or `inspect.ft` object, the
 #'   output is an object of the same class containing the subset data. For

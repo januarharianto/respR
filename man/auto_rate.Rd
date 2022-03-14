@@ -58,7 +58,8 @@ linear regions of the data, ranked by order of the KDE density analysis. This
 is present in the \verb{$summary} component of the output as \verb{$density}. Under
 this method, the \code{width} input is used as a starting seed value, but the
 resulting regressions may be of any width. See
-\href{https://github.com/januarharianto/respR}{here} for full details.
+\href{https://januarharianto.github.io/respR/articles/auto_rate}{here} for full
+details.
 \item \code{highest}: Every regression of the specified \code{width} across the entire
 timeseries is calculated, then ordered using \emph{\strong{absolute}} rate values from
 highest to lowest. Essentially, this option ignores the sign of the rate, and
@@ -196,7 +197,7 @@ by passing \code{export = TRUE}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
@@ -219,7 +220,23 @@ inspect(sardine.rd, time = 1, oxygen =2) \%>\%
 # period in intermittent-flow respirometry data?
 # NOTE: because uptake rates are negative, this would actually be
 # the HIGHEST uptake rate.
-auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") \%>\%
+auto_rate(intermittent.rd, method = "minimum", width = 300, by = "time") \%>\%
  summary()
+
+# What is the NUMERICAL maximum oxygen consumption rate over a 20 minute
+# (1200 rows) period in respirometry data in which oxygen is declining?
+# NOTE: because uptake rates are negative, this would actually be
+# the LOWEST uptake rate.
+sardine.rd |>
+  inspect() |>
+  auto_rate(method = "maximum", width = 1200, by = "row") |>
+  summary()
+
+# Perform a rolling regression of 10 minutes width across the entire dataset.
+# Results are not ordered under this method.
+sardine.rd |>
+  inspect() |>
+  auto_rate(method = "rolling", width = 600, by = "time") |>
+  summary()
  }
 }

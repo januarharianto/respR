@@ -111,7 +111,7 @@ navbar:
         href: articles/calc_rate.html
       - text: "auto_rate: Automatic detection of linear rates"
         href: articles/auto_rate.html
-      - text: "subset_rate: Filtering auto_rate results"
+      - text: "subset_rate: Exploring auto_rate results"
         href: articles/subset_rate.html
       - text: "adjust_rate: Adjusting rates for background"
         href: articles/adjust_rate.html
@@ -131,7 +131,7 @@ navbar:
       menu:
       - text: "Support Us"
         href: articles/support.html
-      - text: "What's new"
+      - text: "What's new & version notes"
         href: articles/whatsnew.html
       - text: "respR in use"
         href: articles/citations.html

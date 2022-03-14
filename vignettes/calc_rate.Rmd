@@ -32,7 +32,7 @@ sard[[1]] <- sard[[1]]/60
 
 ## Introduction
 
-`calc_rate()` is the general function in `respR` for manually determining rates across user-defined ranges of time, row or oxygen value. This contrasts with `auto_rate()` which uses a degree of automation to determine rates in the `"linear"` method, or allows a rolling rates of a fixed width to be calculated across an entire dataset and then ordered in various ways. 
+`calc_rate()` is the general function in `respR` for manually determining rates across user-defined ranges of time, row or oxygen value. This contrasts with `auto_rate()` which uses a degree of automation to determine rates in the `"linear"` method, or allows rolling rates of a fixed width to be calculated across an entire dataset and then ordered in various ways. 
 
 ## Defaults
 
@@ -132,7 +132,7 @@ cr_mean
 
 ### `plot`
 
-`calc_rate` objects can be plotted. `pos` can be used to select wwhich result to plot, and `panel` to plot individual panels. `legend` can be used to suppress labels and legend, and `quiet`to suppress console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. 
+`calc_rate` objects can be plotted. `pos` can be used to select which result to plot, and `panel` to plot individual panels. `legend` can be used to suppress labels and legend, and `quiet`to suppress console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. 
 
 Here we plot result 2, panel 2, hide the equation legend, rotate the axis labels, give the left axis more space, and increase the space from axis labels to axis ticks.
 

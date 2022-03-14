@@ -4,14 +4,14 @@
 \alias{validate_auto_rate}
 \title{Validation function for auto_rate}
 \usage{
-validate_auto_rate(df, by, method)
+validate_auto_rate(x, by, method)
 }
 \arguments{
-\item{df}{data.frame object.}
-
 \item{by}{string.}
 
 \item{method}{string.}
+
+\item{df}{data.frame object.}
 }
 \value{
 a data.frame object of the original data

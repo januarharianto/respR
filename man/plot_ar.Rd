@@ -4,17 +4,17 @@
 \alias{plot_ar}
 \title{Plot auto_rate summary tables}
 \usage{
-plot_ar(x, highlight = 1, pos = NULL, legend = TRUE, ...)
+plot_ar(x, highlight = NULL, pos = NULL, legend = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{auto_rate} or \code{auto_rate_subset} object}
 
-\item{highlight}{integer. Which summary table rank regression to highlight.
-Default is 1. If the input is an \code{auto_rate_subset} object this refers to
-the rank from the original, unsubset results. Should be within \code{pos} range.}
+\item{highlight}{integer. Which result in the summary table to highlight on
+the plots. Defaults to 1. If it is outside the range of the \code{pos} input it
+will be shown on the top plot, but will not be visible on the bottom plot.}
 
-\item{pos}{integer(s). Which summary table ranks to plot in lower plot.
-Defaults to all.}
+\item{pos}{integer(s). What range of original summary table rows to plot in
+lower plot. Defaults to all.}
 
 \item{legend}{logical. Suppress plot legends.}
 

@@ -26,6 +26,12 @@ sensor system raw output files where possible; files opened and re-saved in a
 different format will likely fail to import.
 }
 \details{
+Note that use of this function to import data is \emph{optional}. \code{respR} only
+requires data be put into a simple structure for further analyses, which is
+paired values of time and oxygen amount in any common units in a
+\code{data.frame}. If you are comfortable importing data into R via functions such
+as \code{read.csv()} you may find those more reliable and customisable.
+
 Currently tested and working for:
 \itemize{
 \item Firesting
@@ -51,15 +57,15 @@ We are always looking for sample files to improve the function. Please send
 them to us via \href{mailto:nicholascarey@gmail.com}{email}, or via a \href{https://github.com/januarharianto/respR/issues}{Github issue}.
 
 While the devices listed above are supported, the import functionality is
-experimental due to limited access to sample files. This should improve over
-time as users provide feedback and samples. Users should however be careful
-using this function, carefully check the imported data, and be prepared to
-import data by other functions such as \code{\link[=read.csv]{read.csv()}} since it is a
-fundamental basic in data analyses in R.
+experimental due to limited access to sample files. This should improve
+over time as users provide feedback and samples. Users should however be
+aware we have not been able to test very variation of file formats,
+carefully check the imported data, and be prepared to import data by other
+functions such as \code{read.csv()}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

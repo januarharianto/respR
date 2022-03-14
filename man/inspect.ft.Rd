@@ -295,7 +295,7 @@ are found, locations (row numbers) are printed (up to first 20 occurrences).
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
-website at \url{https://januarharianto.github.io/respR}
+website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{

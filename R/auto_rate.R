@@ -21,7 +21,8 @@
 #' is present in the `$summary` component of the output as `$density`. Under
 #' this method, the `width` input is used as a starting seed value, but the
 #' resulting regressions may be of any width. See
-#' \href{https://github.com/januarharianto/respR}{here} for full details.
+#' [here](https://januarharianto.github.io/respR/articles/auto_rate) for full
+#' details.
 #'
 #' - `highest`: Every regression of the specified `width` across the entire
 #' timeseries is calculated, then ordered using ***absolute*** rate values from
@@ -161,7 +162,7 @@
 #' ## More
 #'
 #' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#' website at <https://januarharianto.github.io/respR/>
 #'
 #' @return Output is a `list` object of class `auto_rate` containing input
 #'   parameters and data, various summary data, metadata, linear models, and the
@@ -209,8 +210,24 @@
 #' # period in intermittent-flow respirometry data?
 #' # NOTE: because uptake rates are negative, this would actually be
 #' # the HIGHEST uptake rate.
-#' auto_rate(intermittent.rd, method = "minimum", width = 600, by = "time") %>%
+#' auto_rate(intermittent.rd, method = "minimum", width = 300, by = "time") %>%
 #'  summary()
+#'
+#' # What is the NUMERICAL maximum oxygen consumption rate over a 20 minute
+#' # (1200 rows) period in respirometry data in which oxygen is declining?
+#' # NOTE: because uptake rates are negative, this would actually be
+#' # the LOWEST uptake rate.
+#' sardine.rd |>
+#'   inspect() |>
+#'   auto_rate(method = "maximum", width = 1200, by = "row") |>
+#'   summary()
+#'
+#' # Perform a rolling regression of 10 minutes width across the entire dataset.
+#' # Results are not ordered under this method.
+#' sardine.rd |>
+#'   inspect() |>
+#'   auto_rate(method = "rolling", width = 600, by = "time") |>
+#'   summary()
 #'  }
 
 auto_rate <- function(x, method = "linear", width = NULL,
@@ -244,16 +261,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -266,16 +288,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -287,16 +314,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -307,16 +339,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -327,16 +364,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -347,16 +389,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_rolling(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -367,16 +414,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_highest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -387,16 +439,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_lowest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
+                density = NULL,
+                peaks   = NULL,
+                bandwidth = NULL,
+                metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1,
-                metadata = metadata)
+                rate    = output$results$rate_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -409,19 +466,21 @@ auto_rate <- function(x, method = "linear", width = NULL,
                            total_regs = nrow(output$roll),
                            total_peaks = nrow(output$peaks),
                            kde_bw = output$density$bw)
-    out <- list(call = call,
+    out <- list(original = NULL,
+                subset_calls = NULL,
+                call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
                 by      = by,
                 method  = method,
                 roll    = output$roll,
-                summary = output$results,
-                rate    = output$results$rate_b1,
                 density = output$density,
                 peaks   = output$peaks,
                 bandwidth = output$density$bw,
-                metadata  = metadata)
+                metadata  = metadata,
+                summary = output$results,
+                rate    = output$results$rate_b1)
 
     ### Add density to summary table
     out$summary$density <- out$peaks$density
@@ -470,30 +529,40 @@ auto_rate <- function(x, method = "linear", width = NULL,
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
 
-  ## warning if empty
-  if(length(x$rate) == 0) stop("print.auto_rate: No rates found in 'auto_rate' object.")
-
   cat("\n# print.auto_rate # ---------------------\n")
 
+  ## warning if empty
+  if(length(x$rate) == 0) message("No rates found in auto_rate object.\n")
+
   if(is.null(pos)) pos <- 1
+  if(length(x$rate) == 0) pos <- 0
   if(length(pos) > 1)
     stop("print.auto_rate: 'pos' must be a single value. To examine multiple results use summary().")
   if(pos > length(x$rate))
     stop("print.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
 
   method <- x$method
-  cat("Data is subset by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
-  cat(sprintf("Rates were computed using '%s' method.\n", x$ method))
+  cat("Data extracted by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
+  cat(sprintf("Rates computed using '%s' method.\n", x$ method))
   if (method == "linear")
     cat(nrow(x$summary), "linear regions detected in the kernel density estimate.\n")
   cat("To see all results use summary().\n")
 
+  if(length(x$rate) == 0) rate <- NA else
+    rate <- x$summary$rate[pos]
+  if(length(x$rate) == 0) rsq <- NA else
+    rsq <- signif(x$summary$rsq[pos], 3)
+  if(length(x$rate) == 0) rows <- c(NA, NA) else
+    rows <- c(x$summary$row[pos], x$summary$endrow[pos])
+  if(length(x$rate) == 0) times <- c(NA, NA) else
+    times <- c(x$summary$time[pos], x$summary$endtime[pos])
+
   if (method %in% c("max", "min", "maximum", "minimum", "highest", "lowest", "linear", "rolling")) {
-    cat("\nRank", pos, "of", nrow(x$summary), ":\n")
-    cat("Rate:", x$summary$rate[pos], "\n")
-    cat("R.sq:", signif(x$summary$rsq[pos], 5), "\n")
-    cat("Rows:", x$summary$row[pos], "to", x$summary$endrow[pos], "\n")
-    cat("Time:", x$summary$time[pos], "to", x$summary$endtime[pos], "\n")
+    cat("\nPosition", pos, "of", nrow(x$summary), ":\n")
+    cat("Rate:", rate, "\n")
+    cat("R.sq:", rsq, "\n")
+    cat("Rows:", rows[1], "to", rows[2], "\n")
+    cat("Time:", times[1], "to", times[2], "\n")
   } else if (method == "interval") {
     cat("\n=== All", nrow(x$summary), "results of", nrow(x$summary), "===\n")
     print(x$summary)
@@ -521,8 +590,11 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   # how many rates
   nres <- length(x$rate)
 
-  ## warning if empty
-  if(nres == 0) stop("plot.auto_rate: Nothing to plot! No rates found in 'auto_rate' object.")
+  ## warning if empty - but return to allow piping
+  if(nres == 0) {
+    message("plot.auto_rate: Nothing to plot! No rates found in 'auto_rate' object.")
+    return(invisible(x))
+  }
 
   ## pos 1 by default
   if(is.null(pos)) pos <-1
@@ -656,10 +728,9 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
 #' @export
 summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
-  ## warning if empty
-  if(length(object$rate) == 0) stop("summary.auto_rate: No rates found in 'auto_rate' object.")
-
   cat("\n# summary.auto_rate # -------------------\n")
+  ## warning if empty
+  if(length(object$rate) == 0) message("No rates found in auto_rate object.")
 
   if(!is.null(pos) && pos > length(object$rate))
     stop("summary.auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
@@ -715,21 +786,22 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 #' @export
 mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){
 
-  ## warning if empty
-  if(length(x$rate) == 0) stop("mean.auto_rate: No rates found in 'auto_rate' object.")
-
   cat("\n# mean.auto_rate # ----------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
     stop("mean.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
   if(is.null(pos)) {
     pos <- 1:length(x$rate)
+    if(length(x$rate) == 0) pos <- 0
     cat("Mean of all rate results:")
     cat("\n")
   } else{
     cat("Mean of rate results from entered 'pos' ranks:")
     cat("\n")
   }
-  if(length(x$rate[pos]) == 1)
+
+  if(length(x$rate) == 0)
+    message("No rates found in auto_rate object.")
+  else if(length(x$rate[pos]) == 1)
     message("Only 1 rate found. Returning mean rate anyway...")
   cat("\n")
 

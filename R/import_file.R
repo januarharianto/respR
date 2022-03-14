@@ -9,52 +9,58 @@
 #' sensor system raw output files where possible; files opened and re-saved in a
 #' different format will likely fail to import.
 #'
-#' Currently tested and working for:
+#' Note that use of this function to import data is *optional*. `respR` only
+#' requires data be put into a simple structure for further analyses, which is
+#' paired values of time and oxygen amount in any common units in a
+#' `data.frame`. If you are comfortable importing data into R via functions such
+#' as `read.csv()` you may find those more reliable and customisable.
 #'
-#' - Firesting
+#' @details Currently tested and working for:
 #'
-#' - Pyro (another name for Firesting)
+#'   - Firesting
 #'
-#' - PreSens OXY10
+#'   - Pyro (another name for Firesting)
 #'
-#' - PreSens OXY4
+#'   - PreSens OXY10
 #'
-#' - PreSens (OxyView generic, including multiplate systems)
+#'   - PreSens OXY4
 #'
-#' - PreSens/Loligo 24-Well Multiplate System (output Excel files)
+#'   - PreSens (OxyView generic, including multiplate systems)
 #'
-#' - MiniDOT
+#'   - PreSens/Loligo 24-Well Multiplate System (output Excel files)
 #'
-#' - Loligo AutoResp ('_raw' files output, *not* metadata files)
+#'   - MiniDOT
 #'
-#' - Loligo Witrox (same as AutoResp, without metadata)
+#'   - Loligo AutoResp ('_raw' files output, *not* metadata files)
 #'
-#' - Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
+#'   - Loligo Witrox (same as AutoResp, without metadata)
 #'
-#' - NeoFox
+#'   - Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
 #'
-#' - Qbox Aqua
+#'   - NeoFox
 #'
-#' Files with European numeric formatting (i.e. commas instead of points to
-#' denote decimals) are supported, and will be converted to point decimals on
-#' import. This is new functionality, so please provide feedback for any files
-#' for which this might fail.
+#'   - Qbox Aqua
 #'
-#' We are always looking for sample files to improve the function. Please send
-#' them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
-#' issue](https://github.com/januarharianto/respR/issues).
+#'   Files with European numeric formatting (i.e. commas instead of points to
+#'   denote decimals) are supported, and will be converted to point decimals on
+#'   import. This is new functionality, so please provide feedback for any files
+#'   for which this might fail.
 #'
-#' While the devices listed above are supported, the import functionality is
-#' experimental due to limited access to sample files. This should improve over
-#' time as users provide feedback and samples. Users should however be careful
-#' using this function, carefully check the imported data, and be prepared to
-#' import data by other functions such as [`read.csv()`] since it is a
-#' fundamental basic in data analyses in R.
+#'   We are always looking for sample files to improve the function. Please send
+#'   them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
+#'   issue](https://github.com/januarharianto/respR/issues).
 #'
-#' ## More
+#'   While the devices listed above are supported, the import functionality is
+#'   experimental due to limited access to sample files. This should improve
+#'   over time as users provide feedback and samples. Users should however be
+#'   aware we have not been able to test very variation of file formats,
+#'   carefully check the imported data, and be prepared to import data by other
+#'   functions such as `read.csv()`.
 #'
-#' For additional help, documentation, vignettes, and more visit the `respR`
-#' website at <https://januarharianto.github.io/respR>
+#'   ## More
+#'
+#'   For additional help, documentation, vignettes, and more visit the `respR`
+#'   website at <https://januarharianto.github.io/respR/>
 #'
 #' @return A `data.frame` object of all columned data
 #'

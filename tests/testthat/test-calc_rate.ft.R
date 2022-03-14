@@ -1093,16 +1093,10 @@ test_that("calc_rate.ft objects work with summary()", {
   # crft.obj.multrate.delta.only
   expect_error(summary(crft.obj.value),
                regexp = NA)
-  expect_output(summary(crft.obj.value),
-                regexp = "out.oxy")
   expect_error(summary(crft.obj.vector),
                regexp = NA)
-  expect_output(summary(crft.obj.vector),
-                regexp = "out.oxy")
   expect_error(summary(crft.obj.df),
                regexp = NA)
-  expect_output(summary(crft.obj.df),
-                regexp = "out.oxy")
 
   expect_error(summary(crft.obj.1rate),
                regexp = NA)
