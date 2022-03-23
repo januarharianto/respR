@@ -218,14 +218,11 @@ oxy_crit(squid.rd)
 ## Try a lower 'thin' input to speed up analysis
 oxy_crit(squid.rd, thin = 1000)
 
-## Use the Segmented method instead
-oxy_crit(squid.rd, method = "segmented")
-
 ## Experiment with different 'width' input
 # Higher widths tend to oversmooth data
-oxy_crit(squid.rd, method = "segmented", width = 0.2)
+oxy_crit(squid.rd, width = 0.2)
 # Lower width in this case gives very similar result to default 0.1
-oxy_crit(squid.rd, method = "segmented", width = 0.05)
+oxy_crit(squid.rd, width = 0.05)
 
 ## Run on oxygen~time data in 'inspect' object
 insp <- inspect(squid.rd, time = 1, oxygen = 2)

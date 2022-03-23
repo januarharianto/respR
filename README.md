@@ -23,9 +23,10 @@ Use `respR` to:
 - Automatically **import** raw data from various oxygen probe equipment
 - Rapidly **inspect** data for common issues before analysis
 - **Explore** and **visualise** timeseries 
-- Perform **multiple regression analysis** on data to manually or automatically to calculate rates
+- Perform **multiple regression analysis** to manually or automatically calculate rates 
 - **Adjust** rates for background oxygen consumption or production
 - **Convert** rates to any common unit of oxygen consumption or production
+- Identify **critical oxygen values**, such as $P_{crit}$
 - **Export** results quickly for reporting
 
 A highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows metabolic rates to be extracted in an objective manner. See `vignette("auto_rate")` for more details.
