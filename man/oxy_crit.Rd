@@ -211,6 +211,7 @@ website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
+\donttest{
 ## Run on oxygen~time data.frame with default inputs
 oxy_crit(squid.rd)
 
@@ -244,6 +245,7 @@ oxy <- na.omit(roll::roll_mean(squid.rd[[2]],
 squid_rate_oxy <- data.frame(oxy, rate)
 ## Perform COV analysis
 oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
+}
 }
 \references{
 Yeager DP, Ultsch GR (1989) Physiological regulation and

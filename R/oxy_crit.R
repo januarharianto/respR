@@ -190,6 +190,7 @@
 #'   broken-line relationships. R News 8:20–25.
 #'
 #' @examples
+#' \donttest{
 #' ## Run on oxygen~time data.frame with default inputs
 #' oxy_crit(squid.rd)
 #'
@@ -223,6 +224,7 @@
 #' squid_rate_oxy <- data.frame(oxy, rate)
 #' ## Perform COV analysis
 #' oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
+#' }
 
 oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
                      width = 0.1, parallel = FALSE, thin = 5000, plot = TRUE, ...) {
