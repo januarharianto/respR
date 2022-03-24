@@ -194,24 +194,24 @@
 #' \donttest{
 #' # Most linear section of an entire dataset
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
-#'  auto_rate()
+#'   auto_rate()
 #'
 #' # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
-#'  auto_rate(method = "lowest", width = 600, by = "time") %>%
-#'  summary()
+#'   auto_rate(method = "lowest", width = 600, by = "time") %>%
+#'   summary()
 #'
 #' # What is the highest oxygen consumption rate over a 10 minute (600s) period?
 #' inspect(sardine.rd, time = 1, oxygen =2) %>%
-#'  auto_rate(method = "highest", width = 600, by = "time") %>%
-#'  summary()
+#'   auto_rate(method = "highest", width = 600, by = "time") %>%
+#'   summary()
 #'
 #' # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 #' # period in intermittent-flow respirometry data?
 #' # NOTE: because uptake rates are negative, this would actually be
 #' # the HIGHEST uptake rate.
 #' auto_rate(intermittent.rd, method = "minimum", width = 300, by = "time") %>%
-#'  summary()
+#'   summary()
 #'
 #' # What is the NUMERICAL maximum oxygen consumption rate over a 20 minute
 #' # (1200 rows) period in respirometry data in which oxygen is declining?
