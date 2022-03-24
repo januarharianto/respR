@@ -163,8 +163,6 @@ plot(squid.seg, quiet = TRUE)
 
 For these particular data, we get the exact same result as the BSR method: 2.61 mg L^-1^. This will not be the case with every dataset.
 
-Note that the segmented method sometimes returns a different value when the exact same code is run. The differences are almost always minor. See the documentation for the [`segmented`](https://cran.r-project.org/web/packages/segmented/) package and publications by @muggeoModelingTemperatureEffects2008 for the details of why this is, but briefly, it stems from randomising the starting point for the initial analysis.
-
 #### Summary results
 
 Full analysis results can be seen using `summary()`.
