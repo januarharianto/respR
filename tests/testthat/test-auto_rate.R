@@ -246,7 +246,10 @@ capture.output({  ## stops printing outputs on assigning
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_high$rate,
-                 rev(ar_obj_low$rate),
+                 rev(ar_obj_low$rate))
+    expect_equal(ar_obj_high$rate,
+                 ar_obj_min$rate)
+    expect_equal(rev(ar_obj_low$rate),
                  ar_obj_min$rate)
     ## should be 218 results
     expect_equal(length(ar_obj_high$rate),
