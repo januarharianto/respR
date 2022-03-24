@@ -217,16 +217,16 @@
 #' # (1200 rows) period in respirometry data in which oxygen is declining?
 #' # NOTE: because uptake rates are negative, this would actually be
 #' # the LOWEST uptake rate.
-#' sardine.rd |>
-#'   inspect() |>
-#'   auto_rate(method = "maximum", width = 1200, by = "row") |>
+#' sardine.rd %>%
+#'   inspect() %>%
+#'   auto_rate(method = "maximum", width = 1200, by = "row") %>%
 #'   summary()
 #'
 #' # Perform a rolling regression of 10 minutes width across the entire dataset.
 #' # Results are not ordered under this method.
-#' sardine.rd |>
-#'   inspect() |>
-#'   auto_rate(method = "rolling", width = 600, by = "time") |>
+#' sardine.rd %>%
+#'   inspect() %>%
+#'   auto_rate(method = "rolling", width = 600, by = "time") %>%
 #'   summary()
 #'  }
 
