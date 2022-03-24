@@ -1,3 +1,5 @@
+# respR 2.0.2
+
 
 <!---
 Each version should:
@@ -12,6 +14,11 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 
 All version changes go in here now when you make a commit! 
 --->
+
+## Version 2.0.2 -- 2022-03-23
+
+Minor changes to help documentation.
+
 
 ## Version 2.0.1 -- 2022-03-14
 
