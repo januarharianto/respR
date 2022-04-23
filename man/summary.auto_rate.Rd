@@ -4,7 +4,7 @@
 \alias{summary.auto_rate}
 \title{Summarise auto_rate objects}
 \usage{
-\method{summary}{auto_rate}(object, pos = NULL, export = FALSE, ...)
+\method{summary}{auto_rate}(object, pos = NULL, export = FALSE, print.kds = TRUE, ...)
 }
 \arguments{
 \item{object}{auto_rate object}
@@ -12,6 +12,9 @@
 \item{pos}{integer(s). Which summary row(s) to print.}
 
 \item{export}{logical. Export summary table as data frame.}
+
+\item{print.kds}{logical. Print summary of the kernel density analysis for
+'linear' method.}
 
 \item{...}{Pass additional inputs}
 }

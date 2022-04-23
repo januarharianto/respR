@@ -723,10 +723,12 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
 #' @param object auto_rate object
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
+#' @param print.kds logical. Print summary of the kernel density analysis for
+#'   'linear' method.
 #' @param ... Pass additional inputs
 #' @return Print to console. No returned value.
 #' @export
-summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
+summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = TRUE, ...) {
 
   cat("\n# summary.auto_rate # -------------------\n")
   ## warning if empty
@@ -765,7 +767,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
 
   ########### Kernel Density summary ##########
-  if (object$method == "linear") {
+  if (object$method == "linear" && print.kds == TRUE) {
     cat("\n=== Kernel Density Summary ===")
     print_dens(object$density)
   }
