@@ -148,7 +148,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
                  plot = plot)
 
   # Validate inputs
-  # Will migrate to assertive package when I get used to it..
   ## verify by input
   by <- verify_by(by, msg = "calc_rate:")
 

@@ -15,6 +15,12 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
+## Version 2.0.3 -- 2022-xx-xx
+
+- NEW: Tested with `R` version [4.2.0](https://www.r-bloggers.com/2022/04/new-features-in-r-4-2-0/) 
+- NEW: `auto_rate` - For the `linear` method, the kernel density analysis results printed to the console when using `summary()` can now be suppressed using the `print.kds = FALSE` input. In this case only the summary table will be printed, making for a cleaner print out. 
+
+
 ## Version 2.0.2 -- 2022-03-23
 
 Minor changes to help documentation.
