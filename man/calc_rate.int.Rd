@@ -274,7 +274,7 @@ mean(zeb_res, pos = 1:5)
 # There are three ways by which the results can be plotted.
 # 'pos' can be used to select replicates to be plotted.
 #
-# type = "replicate" - the default. Each replicate plotted on a grid with rate
+# type = "rep" - the default. Each replicate plotted on a grid with rate
 # region highlighted (up to a maximum of 20).
 plot(urch_res)
 
