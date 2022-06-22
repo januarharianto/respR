@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Average convert_rate.ft object rates
 }
+\keyword{internal}

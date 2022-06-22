@@ -4,7 +4,7 @@
 \alias{summary.auto_rate}
 \title{Summarise auto_rate objects}
 \usage{
-\method{summary}{auto_rate}(object, pos = NULL, export = FALSE, print.kds = TRUE, ...)
+\method{summary}{auto_rate}(object, pos = NULL, export = FALSE, print.kds = FALSE, ...)
 }
 \arguments{
 \item{object}{auto_rate object}
@@ -24,3 +24,4 @@ Print to console. No returned value.
 \description{
 Summarise auto_rate objects
 }
+\keyword{internal}

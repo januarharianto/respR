@@ -81,13 +81,15 @@ Saved output objects can be used in the generic S3 functions \code{print()},
 \code{summary()}, and \code{mean()}.
 \itemize{
 \item \code{print()}: prints a single result, by default the first adjusted rate.
-Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
+Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}.
+See \code{help("print.adjust_rate.ft")}.
 \item \code{summary()}: prints summary table of all results and metadata, or those
 specified by the \code{pos} input. e.g. \code{summary(x, pos = 1:5)}. The summary can
-be exported as a separate dataframe by passing \code{export = TRUE}.
+be exported as a separate dataframe by passing \code{export = TRUE}. See
+\code{help("summary.adjust_rate.ft")}.
 \item \code{mean()}: calculates the mean of all adjusted rates, or those specified by
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
-separate value by passing \code{export = TRUE}.
+separate value by passing \code{export = TRUE}. See \code{help("mean.adjust_rate.ft")}.
 }
 }
 

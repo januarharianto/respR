@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Print oxy_crit objects
 }
+\keyword{internal}

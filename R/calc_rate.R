@@ -93,9 +93,9 @@
 #' @param to numeric value or vector. Defaults to `NULL`. The end of the
 #'   region(s) over which you want to calculate the rate in the units specified
 #'   in `by`. If a vector, each value must have a paired value in `from`.
-#' @param by string. `"time"`, `"row"`, `"oxygen"` or `"proportion"` Defaults to
-#'   `"time"`.This is the method used to subset the data region between `from`
-#'   and `to`.
+#' @param by string. `"time"`, `"row"`, `"oxygen"` or `"proportion"`. Defaults
+#'   to `"time"`. This is the method used to subset the data region between
+#'   `from` and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`,
 #'   `panel`, and `quiet = TRUE`.
@@ -298,6 +298,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 #' @param x calc_rate object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate <- function(x, pos = 1, ...) {
@@ -321,6 +322,7 @@ print.calc_rate <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -351,12 +353,13 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Plot calc_rate objects
-#' @param x calc_rate.bg object
+#' @param x calc_rate object
 #' @param pos integer. Which result to plot.
 #' @param panel integer. Which panel to plot individually.
 #' @param quiet logical. Suppress console output.
 #' @param legend logical. Suppress labels and legends.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
@@ -433,6 +436,7 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){

@@ -166,11 +166,11 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("adjust_rate: method = 'value' - stops if 'x' is not numeric, calc_rate, or auto_rate", {
     expect_error(adjust_rate(NULL, by = -0.005, method = "value"),
-                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
     expect_error(adjust_rate("text", by = -0.005, method = "value"),
-                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
     expect_error(adjust_rate(bg_single, by = -0.005, method = "value"),
-                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
   })
 
   test_that("adjust_rate: method = 'value' - stops if 'by' is not a single numeric or calc_rate.bg", {
@@ -340,11 +340,11 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("adjust_rate: method = 'mean' - stops if 'x' is not numeric, calc_rate, or auto_rate", {
     expect_error(adjust_rate(NULL, by = -0.005),
-                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
     expect_error(adjust_rate("text", by = -0.005),
-                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
     expect_error(adjust_rate(bg_single, by = -0.005),
-                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
   })
 
   test_that("adjust_rate: method = 'mean' - stops if 'by' is not numeric or calc_rate.bg", {
@@ -575,9 +575,9 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("adjust_rate: method = 'paired' - stops if 'x' is not numeric, calc_rate, or auto_rate", {
     expect_error(adjust_rate("text", method = "paired", by = -0.005),
-                 "adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
     expect_error(adjust_rate(bg_single, method = "paired", by = -0.005),
-                 "adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', or 'auto_rate'.")
   })
 
   test_that("adjust_rate: method = 'paired' - stops if 'by' is not numeric or calc_rate.bg", {
@@ -700,17 +700,17 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("adjust_rate: method = 'concurrent' - stops if 'x' is not calc_rate or auto_rate", {
     expect_error(adjust_rate("text", method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
     expect_error(adjust_rate(bg_df2col, method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
     expect_error(adjust_rate(bg_df2col, method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
     expect_error(adjust_rate(bg_df7col, method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
     expect_error(adjust_rate(insp_bg_df2col, method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
     expect_error(adjust_rate(insp_bg_df7col, method = "concurrent", by = bg_df2col),
-                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate or auto_rate object.")
+                 "adjust_rate: For method = \"concurrent\" the 'x' input must be a calc_rate, 'calc_rate.int', or auto_rate object.")
   })
 
   test_that("adjust_rate: method = 'concurrent' - stops if 'by' is not data.frame, inspect or calc_rate.bg", {
@@ -1487,16 +1487,16 @@ capture.output({  ## stops printing outputs on assigning
   test_that("adjust_rate: method = 'linear' - stops if 'x' is not numeric, calc_rate, or auto_rate", {
     expect_error(adjust_rate(x = NULL, time_x = 20, method = "linear", by = -0.002, time_by = 0,
                              by2 = -0.003, time_by2 = 40),
-                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int' or 'auto_rate'.")
     expect_error(adjust_rate(x = "text", time_x = 20, method = "linear", by = -0.002, time_by = 0,
                              by2 = -0.003, time_by2 = 40),
-                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int' or 'auto_rate'.")
     expect_error(adjust_rate(x = crbg_df2col, time_x = 20, method = "linear", by = -0.002, time_by = 0,
                              by2 = -0.003, time_by2 = 40),
-                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int' or 'auto_rate'.")
     expect_error(adjust_rate(x = urchins.rd, time_x = 20, method = "linear", by = -0.002, time_by = 0,
                              by2 = -0.003, time_by2 = 40),
-                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate' or 'auto_rate'.")
+                 "adjust_rate: For method = \"linear\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int' or 'auto_rate'.")
   })
 
   test_that("adjust_rate: method = 'linear' - stops if 'x' is numeric, and 'time_x' not also numeric, not entered or is unequal length", {

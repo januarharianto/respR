@@ -15,6 +15,18 @@
 #'
 #' - Specimen ash-free dry mass (kg): `0.006955`
 #'
+#' Replicate structure (Rows - Experiment section):
+#'
+#' - `1:1900`      - Replicate 1
+#'
+#' - `1901:2100`   - Flush 1
+#'
+#' - `2101:3550`   - Replicate 2
+#'
+#' - `3551:3750`   - Flush 2
+#'
+#' - `3751:4831`   - Replicate 3
+#'
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 2 columns (time and dissolved
 #'   oxygen) and 4831 rows (approx 80 min of data).

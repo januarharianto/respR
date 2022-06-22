@@ -291,6 +291,11 @@ kernel_method <- function(dt, width, top_only = FALSE) {
   # extract bandwidth
   bw <- d$bw
   # identify peaks in kernel density:
+  # THIS CAN FAIL TO FIND PEAKS
+  # In which case auto_rate fails with obscure error:
+  # Error: object of type 'closure' is not subsettable
+  # BUT - apparently fixed/does not occur in R 4.2
+  # Seen with small datasets only so far, so not sure any point trying to debug
   peaks <- which(diff(sign(diff(d$y))) == -2) + 1
   # match peaks to rate values:
   index <- rbindlist(lapply(peaks, function(x)

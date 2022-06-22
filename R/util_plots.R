@@ -63,7 +63,7 @@ las_def <- 0
 
 # axes = which axes to draw
 # mgp_bt etc = separate mgp for axes if needed
-multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
+multi.p <- function(df, sdf, rsq, title = "Full Timeseries", xl = '', yl = '',
                     axes = c(1,2,3), legend = TRUE,
                     bt_mgp = NULL,
                     lf_mgp = NULL,
@@ -116,8 +116,7 @@ multi.p <- function(df, sdf, rsq, title = TRUE, xl = '', yl = '',
        axes = FALSE)
   if(3 %in% axes) axis(side = 3, col.axis = "red", mgp = tp_mgp)
 
-  if (title == T)
-    title(main = ("Full Timeseries"), line = 1.2, font = 2)
+  title(main = glue::glue("{title}"), line = 1.2, font = 2)
 }
 
 # a plot of the subset only
@@ -227,18 +226,21 @@ rollreg.p <- function(rolldf, ranked.b1, rownums, xlim, rate.rev = TRUE, ...) {
 #' x = auto_rate or auto_rate_subset object
 #'
 #' @keywords internal
-plot_ar_grid <- function(x, ...){
+plot_ar_grid <- function(x, pos = NULL, msg = "subset_rate",
+                         title = "Subset", max_msg = "", ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
   totres <- length(x$rate)
-  res <- length(x$rate)
+  if(is.null(pos)) pos <- 1:totres
+  if(any(pos > totres))
+    stop("{msg}: One or more 'pos' inputs are greater than the total number of results available.")
 
   par(oma = c(2, 2, 2, 0.5), mar = c(0.1, 0.1, 2, 0.1))
 
-  plot.sub.grid <- function(x, res, bt, lf, tp) {
-    for(i in 1:res) {
+  plot.sub.grid <- function(x, pos, bt, lf, tp) {
+    for(i in pos) {
       dt <- x$dataframe
       rate <- x$rate[i]
       start <- x$summary$row[i]
@@ -248,82 +250,82 @@ plot_ar_grid <- function(x, ...){
       if(i %in% bt) ax <- c(ax, 1)
       if(i %in% lf) ax <- c(ax, 2)
       if(i %in% tp) ax <- c(ax, 3)
-      multi.p(dt, sdt, legend = F, title = F, axes = ax,
+      multi.p(dt, sdt, legend = F, title = "", axes = ax,
               tck = -0.005,
               mgp = c(0, 0.2, 0),
               tp_mgp = c(0, 2, 0),
               las = 1)
       #title(glue::glue("tmp title"))
-      title(glue::glue("Subset {i} of {totres}:\nRate: {signif(rate, digits = 3)}"),
+      title(glue::glue("{title} {i} of {totres}:\nRate: {signif(rate, digits = 3)}"),
             cex.main = 0.9)
     }
   }
 
-  if(res == 0) message("subset_rate: No results to plot!")
-  if(res == 1)          {
+  if(length(x$rate) == 0) stop("{msg}: No results to plot!")
+  if(length(pos) == 1)          {
     par(mfrow = c(1,1))
     bt <- 1
     lf <- 1
     tp <- 1
-    plot.sub.grid(x, res, bt, lf, tp)
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res == 2)          {
+  if(length(pos) == 2)          {
     par(mfrow = c(1,2))
-    bt <- 1:2
-    lf <- 1
-    tp <- 1:2
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[1:2]
+    lf <- pos[1]
+    tp <- pos[1:2]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res %in% c(3,4))   {
+  if(length(pos) %in% c(3,4))   {
     par(mfrow = c(2,2))
-    bt <- 3:4
-    lf <- c(1,3)
-    tp <- 1:2
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[3:4]
+    lf <- pos[c(1,3)]
+    tp <- pos[1:2]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res %in% c(5,6))   {
+  if(length(pos) %in% c(5,6))   {
     par(mfrow = c(2,3))
-    bt <- 4:6
-    lf <- c(1,4)
-    tp <- 1:3
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[4:6]
+    lf <- pos[c(1,4)]
+    tp <- pos[1:3]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res %in% c(7,8,9)) {
+  if(length(pos) %in% c(7,8,9)) {
     par(mfrow = c(3,3))
-    bt <- 7:9
-    lf <- c(1,4,7)
-    tp <- 1:3
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[7:9]
+    lf <- pos[c(1,4,7)]
+    tp <- pos[1:3]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res %in% c(10:12)) {
+  if(length(pos) %in% c(10:12)) {
     par(mfrow = c(3,4))
-    bt <- 9:12
-    lf <- c(1,5,9)
-    tp <- 1:4
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[9:12]
+    lf <- pos[c(1,5,9)]
+    tp <- pos[1:4]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res %in% c(13:16)) {
+  if(length(pos) %in% c(13:16)) {
     par(mfrow = c(4,4))
-    bt <- 13:16
-    lf <- c(1,5,9,13)
-    tp <- 1:4
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[13:16]
+    lf <- pos[c(1,5,9,13)]
+    tp <- pos[1:4]
+    plot.sub.grid(x, pos, bt, lf, tp)
   } ## start to get margins too large errors
-  if(res %in% c(17:20)) {
+  if(length(pos) %in% c(17:20)) {
     par(mfrow = c(4,5))
-    bt <- 16:20
-    lf <- c(1,6,11,16)
-    tp <- 1:5
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[16:20]
+    lf <- pos[c(1,6,11,16)]
+    tp <- pos[1:5]
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
-  if(res > 20){
-    res <- 20
+  if(length(pos) > 20){
+    pos <- 1:20
     par(mfrow = c(4,5))
-    bt <- 16:20
-    lf <- c(1,6,11,16)
-    tp <- 1:5
-    message("subset_rate: Over 20 results remaining. Plotting first 20 only...")
-    plot.sub.grid(x, res, bt, lf, tp)
+    bt <- pos[16:20]
+    lf <- pos[c(1,6,11,16)]
+    tp <- pos[1:5]
+    message("{msg}: Plotting first 20 selected rates only. To plot others use 'pos' input.")
+    plot.sub.grid(x, pos, bt, lf, tp)
   }
 }
 

@@ -23,3 +23,4 @@ A plot. No returned value.
 \description{
 Plot calc_rate.bg objects
 }
+\keyword{internal}

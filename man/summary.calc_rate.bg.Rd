@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Summarise calc_rate.bg objects
 }
+\keyword{internal}

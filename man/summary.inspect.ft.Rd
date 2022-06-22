@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Summarise inspect.ft objects
 }
+\keyword{internal}

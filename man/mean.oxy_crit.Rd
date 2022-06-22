@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Average oxy_crit object rates
 }
+\keyword{internal}

@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Average adjust_rate object rates
 }
+\keyword{internal}

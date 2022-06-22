@@ -19,3 +19,4 @@ Print to console. No returned value.
 \description{
 Summarise oxy_crit objects
 }
+\keyword{internal}
