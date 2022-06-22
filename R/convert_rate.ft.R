@@ -371,6 +371,7 @@ convert_rate.ft <- function(x,
 #' @param x convert_rate.ft object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate.ft <- function(x, pos = NULL, ...) {
@@ -399,6 +400,7 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
@@ -433,6 +435,7 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -467,6 +470,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 #' Plot convert_rate.ft objects
 #' @param x convert_rate.ft object
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate.ft <- function(x, ...) {

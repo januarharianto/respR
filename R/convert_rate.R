@@ -1,16 +1,16 @@
 #' Convert a unitless oxygen rate value to absolute, mass-specific or
 #' area-specific rate
 #'
-#' Converts a unitless rate derived from [`calc_rate()`], [`auto_rate()`],
-#' [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute rate (i.e. whole
-#' chamber or whole specimen), or mass-specific rate (i.e. normalised by
-#' specimen mass), or area-specific rate (i.e. normalised by specimen surface
-#' area) in any common unit.
+#' Converts a unitless rate derived from [`calc_rate()`], [`calc_rate.int()`],
+#' [`auto_rate()`], [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute
+#' rate (i.e. whole chamber or whole specimen), or mass-specific rate (i.e.
+#' normalised by specimen mass), or area-specific rate (i.e. normalised by
+#' specimen surface area) in any common unit.
 #'
 #' By default, `convert_rate` converts the primary `$rate` element from
-#' `calc_rate` and `auto_rate` objects, the `$rate.adjusted` from `adjust_rate`
-#' objects, and the `$rate.bg` from `calc_rate.bg` objects. Additionally, any
-#' numeric value or vector of rates can be input as `x`.
+#' `calc_rate`, `calc_rate.int`, and `auto_rate` objects, the `$rate.adjusted`
+#' from `adjust_rate` objects, and the `$rate.bg` from `calc_rate.bg` objects.
+#' Additionally, any numeric value or vector of rates can be input as `x`.
 #'
 #' ## Respirometer volume
 #'
@@ -73,7 +73,17 @@
 #' input. e.g. `summary(x, pos = 1:5)`. This can be exported as a separate data
 #' frame by passing `export = TRUE`. This will be the *full* summary table, not
 #' the one printed to the console, including all rate regression parameters, and
-#' data locations, adjustments if applied, units, and more.
+#' data locations, adjustments if applied, units, and more. The `$rank` column
+#' requires special notice depending on the type of experiment you have analysed
+#' or the function you used to determine the rates. If `calc_rate` was used, it
+#' is the order of rates as entered using `from` and `to` (if multiple rates
+#' were determined). For `auto_rate` it relates to the `method` input, for
+#' example it indicates kernel density ranking if the `linear` method was used,
+#' or ordering by rate value if `lowest` or `highest` were used. For
+#' intermittent-flow experiments analysed via `calc_rate.int` it indicates the
+#' replicate number. Note that if `subset_rate` was used the rows in the summary
+#' table may have been reordered, including the `$rank` column. The *original*
+#' rank for each row is retained if reordering occurred.
 #'
 #' - `mean()`: calculates the mean of all converted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
@@ -90,11 +100,22 @@
 #'   is the *absolute* rate in the output unit minus the mass- or area-specific
 #'   component. The `$summary` table element contains all rate regression
 #'   parameters and data locations (depending on what class of object was
-#'   entered), adjustments (if applied), units, and more.
+#'   entered), adjustments (if applied), units, and more. The `$rank` column
+#'   requires special notice depending on the type of experiment you have
+#'   analysed or the function you used to determine the rates. If `calc_rate`
+#'   was used, it is the order of rates as entered using `from` and `to` (if
+#'   multiple rates were determined). For `auto_rate` it relates to the `method`
+#'   input, for example it indicates kernel density ranking if the `linear`
+#'   method was used, or ordering by rate value if `lowest` or `highest` were
+#'   used. For intermittent-flow experiments analysed via `calc_rate.int` it
+#'   indicates the replicate number. Note that if `subset_rate` was used the
+#'   rows in the summary table may have been reordered, including the `$rank`
+#'   column. The *original* rank for each row is retained if reordering
+#'   occurred.
 #'
 #' @param x numeric value or vector, or object of class `auto_rate`,
-#'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.` Contains the rate(s) to be
-#'   converted.
+#'   `calc_rate`, `calc_rate.int`, `adjust_rate`, or `calc_rate.bg.` Contains
+#'   the rate(s) to be converted.
 #' @param oxy.unit string. The dissolved oxygen unit of the original raw data
 #'   used to determine the rate in `x`.
 #' @param time.unit string. The time unit of the original raw data used to
@@ -216,6 +237,14 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:4, 14, 5:13))
     message("convert_rate: object of class `calc_rate` detected. Converting all rates in '$rate'.")
+  } else if (class(x) %in% c("calc_rate.int")) {
+    rate <- x$rate
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    message("convert_rate: object of class `calc_rate.int` detected. Converting all rates in '$rate'.")
   } else if (class(x) %in% c("auto_rate")) {
     rate <- x$rate
     summ.ext <- x$summary
@@ -231,6 +260,12 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext$rate.adjusted <- x$summary$rate.adjusted
     message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
   } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate") {
+    rate <- x$rate.adjusted
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate.int") {
     rate <- x$rate.adjusted
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$density <- NA
@@ -408,6 +443,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 #' @param x convert_rate object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate <- function(x, pos = 1, ...) {
@@ -438,6 +474,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -473,6 +510,7 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
@@ -507,6 +545,7 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 #' Plot convert_rate objects
 #' @param x convert_rate object
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate <- function(x, ...) {

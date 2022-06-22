@@ -18,9 +18,9 @@ in \code{by}. If a vector, each value must have a paired value in \code{to}.}
 region(s) over which you want to calculate the rate in the units specified
 in \code{by}. If a vector, each value must have a paired value in \code{from}.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"} Defaults to
-\code{"time"}.This is the method used to subset the data region between \code{from}
-and \code{to}.}
+\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"}. Defaults
+to \code{"time"}. This is the method used to subset the data region between
+\code{from} and \code{to}.}
 
 \item{plot}{logical. Defaults to \code{TRUE}. Plot the results.}
 

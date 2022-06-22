@@ -9,7 +9,8 @@ job::job({pkgdown::build_site(preview = TRUE)})
 
 ## Quicker
 ## Only builds what has changed
-pkgdown::build_site(lazy = TRUE, devel = TRUE)
+## Build pkg first
+pkgdown::build_site(lazy = TRUE, devel = TRUE, preview = TRUE)
 
 # ? not sure what this does
 #pkgdown::preview_site(pkg = ".", path = ".", preview = NA)

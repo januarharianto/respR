@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Average calc_rate.bg object rates
 }
+\keyword{internal}

@@ -25,3 +25,4 @@ A plot. No returned value.
 \description{
 Plot calc_rate.ft objects
 }
+\keyword{internal}

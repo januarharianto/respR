@@ -6,7 +6,14 @@
 using base plot
 x = auto_rate or auto_rate_subset object}
 \usage{
-plot_ar_grid(x, ...)
+plot_ar_grid(
+  x,
+  pos = NULL,
+  msg = "subset_rate",
+  title = "Subset",
+  max_msg = "",
+  ...
+)
 }
 \description{
 Plots multiple auto_rate results in a nice way

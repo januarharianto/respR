@@ -20,8 +20,8 @@ convert_rate(
 }
 \arguments{
 \item{x}{numeric value or vector, or object of class \code{auto_rate},
-\code{calc_rate}, \code{adjust_rate}, or \code{calc_rate.bg.} Contains the rate(s) to be
-converted.}
+\code{calc_rate}, \code{calc_rate.int}, \code{adjust_rate}, or \code{calc_rate.bg.} Contains
+the rate(s) to be converted.}
 
 \item{oxy.unit}{string. The dissolved oxygen unit of the original raw data
 used to determine the rate in \code{x}.}
@@ -58,20 +58,31 @@ Output is a \code{list} object of class \code{convert_rate} containing the
 is the \emph{absolute} rate in the output unit minus the mass- or area-specific
 component. The \verb{$summary} table element contains all rate regression
 parameters and data locations (depending on what class of object was
-entered), adjustments (if applied), units, and more.
+entered), adjustments (if applied), units, and more. The \verb{$rank} column
+requires special notice depending on the type of experiment you have
+analysed or the function you used to determine the rates. If \code{calc_rate}
+was used, it is the order of rates as entered using \code{from} and \code{to} (if
+multiple rates were determined). For \code{auto_rate} it relates to the \code{method}
+input, for example it indicates kernel density ranking if the \code{linear}
+method was used, or ordering by rate value if \code{lowest} or \code{highest} were
+used. For intermittent-flow experiments analysed via \code{calc_rate.int} it
+indicates the replicate number. Note that if \code{subset_rate} was used the
+rows in the summary table may have been reordered, including the \verb{$rank}
+column. The \emph{original} rank for each row is retained if reordering
+occurred.
 }
 \description{
-Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=auto_rate]{auto_rate()}},
-\code{\link[=adjust_rate]{adjust_rate()}}, or \code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute rate (i.e. whole
-chamber or whole specimen), or mass-specific rate (i.e. normalised by
-specimen mass), or area-specific rate (i.e. normalised by specimen surface
-area) in any common unit.
+Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.int]{calc_rate.int()}},
+\code{\link[=auto_rate]{auto_rate()}}, \code{\link[=adjust_rate]{adjust_rate()}}, or \code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute
+rate (i.e. whole chamber or whole specimen), or mass-specific rate (i.e.
+normalised by specimen mass), or area-specific rate (i.e. normalised by
+specimen surface area) in any common unit.
 }
 \details{
 By default, \code{convert_rate} converts the primary \verb{$rate} element from
-\code{calc_rate} and \code{auto_rate} objects, the \verb{$rate.adjusted} from \code{adjust_rate}
-objects, and the \verb{$rate.bg} from \code{calc_rate.bg} objects. Additionally, any
-numeric value or vector of rates can be input as \code{x}.
+\code{calc_rate}, \code{calc_rate.int}, and \code{auto_rate} objects, the \verb{$rate.adjusted}
+from \code{adjust_rate} objects, and the \verb{$rate.bg} from \code{calc_rate.bg} objects.
+Additionally, any numeric value or vector of rates can be input as \code{x}.
 \subsection{Respirometer volume}{
 
 The \code{volume} of the respirometer is required and should be in litres (\code{L}).
@@ -134,7 +145,17 @@ converted rates and metadata. Specific rows can be specified with the \code{pos}
 input. e.g. \code{summary(x, pos = 1:5)}. This can be exported as a separate data
 frame by passing \code{export = TRUE}. This will be the \emph{full} summary table, not
 the one printed to the console, including all rate regression parameters, and
-data locations, adjustments if applied, units, and more.
+data locations, adjustments if applied, units, and more. The \verb{$rank} column
+requires special notice depending on the type of experiment you have analysed
+or the function you used to determine the rates. If \code{calc_rate} was used, it
+is the order of rates as entered using \code{from} and \code{to} (if multiple rates
+were determined). For \code{auto_rate} it relates to the \code{method} input, for
+example it indicates kernel density ranking if the \code{linear} method was used,
+or ordering by rate value if \code{lowest} or \code{highest} were used. For
+intermittent-flow experiments analysed via \code{calc_rate.int} it indicates the
+replicate number. Note that if \code{subset_rate} was used the rows in the summary
+table may have been reordered, including the \verb{$rank} column. The \emph{original}
+rank for each row is retained if reordering occurred.
 \item \code{mean()}: calculates the mean of all converted rates, or those specified by
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
 separate value by passing \code{export = TRUE}.

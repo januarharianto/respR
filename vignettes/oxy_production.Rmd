@@ -128,7 +128,7 @@ Production rates are converted to units in exactly the same way as uptake rates.
 
 New in `respR` v2.0 is the ability to output rates as surface-area specific, which is often used to express oxygen production of algae and corals per unit area, so we'll add an `area` input and specify an area-specific `output.unit`. 
 
-The `area` input must be in units of $m^2$. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit for area conversions is m^2. Let's say our algae is 10 cm^2. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
+The `area` input must be in units of $m^2$. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit for area conversions is $m^2$. Let's say our algae is 10 $cm^2$. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
 
 ```{r tidy = FALSE}
 algae_rate_conv <- convert_rate(algae_rate_adj, 

@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Summarise convert_rate.ft objects
 }
+\keyword{internal}

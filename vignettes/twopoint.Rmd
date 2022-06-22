@@ -31,8 +31,8 @@ opts_chunk$set(collapse = TRUE,
 
 Best practice in respirometry is usually to use linear regression on timeseries recordings of oxygen concentrations to derive a slope and thus rate of oxygen use. 
 
-Technically, an overall rate between any two timepoints can be calculated using only two oxygen values if they are accurate recordings, and in the past "*closed-bottle*" respirometry was common, where only the initial and final oxygen concentrations were measured. In the modern day, there is little excuse for not using continuous data recordings, when it is relatively cheap and easy to do so. 
-Using only two values gives no information about how rates of use may have fluctuated, and are highly sensitive to error and inaccurate readings. 
+Technically, an overall rate between any two timepoints can be calculated using only two oxygen values as long as they are accurate recordings, and in the past "*closed-bottle*" respirometry was common, where only the initial and final oxygen concentrations were measured. In the modern day there is little excuse for not using continuous data recordings when it is relatively cheap and easy to do so. 
+Use of only initial and ending oxygen values gives no information about how rates of use may have fluctuated, and such rates are highly sensitive to error and inaccurate readings. 
 
 For some applications however, there may be valid reasons for using only two datapoints of oxygen concentration separated by a known time period to calculate a rate. 
 This could be in cases of periodic and irregular oxygen monitoring or sampling in the field, or alternatively where the investigator is not interested in oxygen uptake or productions rates *per se*, but rather in total oxygen flux over a time period. 

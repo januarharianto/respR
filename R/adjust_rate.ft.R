@@ -52,15 +52,17 @@
 #' `summary()`, and `mean()`.
 #'
 #' - `print()`: prints a single result, by default the first adjusted rate.
-#' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
+#' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`.
+#' See `help("print.adjust_rate.ft")`.
 #'
 #' - `summary()`: prints summary table of all results and metadata, or those
 #' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The summary can
-#' be exported as a separate dataframe by passing `export = TRUE`.
+#' be exported as a separate dataframe by passing `export = TRUE`. See
+#' `help("summary.adjust_rate.ft")`.
 #'
 #' - `mean()`: calculates the mean of all adjusted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
-#' separate value by passing `export = TRUE`.
+#' separate value by passing `export = TRUE`. See `help("mean.adjust_rate.ft")`.
 #'
 #' ## More
 #'
@@ -229,6 +231,7 @@ adjust_rate.ft <- function(x, by) {
 #' @param x adjust_rate.ft object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.adjust_rate.ft <- function(x, pos = 1, ...) {
@@ -254,6 +257,7 @@ print.adjust_rate.ft <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -288,6 +292,7 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -322,6 +327,7 @@ mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 #' Plot adjust_rate.ft objects
 #' @param x adjust_rate.ft object
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.adjust_rate.ft <- function(x, ...){

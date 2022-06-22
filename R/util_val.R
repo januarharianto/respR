@@ -4,6 +4,7 @@
 # req - indicates if a 'by' input is required
 # default - what should be the default if by is NULL?
 # which - which 'by' methods does the function support?
+# msg - start of message text, typically the function name
 verify_by <- function(by, req = TRUE, default = NULL,
                       which = c("t", "o", "r", "p"),
                       msg = ""){
@@ -102,7 +103,7 @@ column.val <- function(input, req = FALSE, min = 1, max = Inf,
 }
 
 
-## Validation of general inputs
+## Validation of general numeric type inputs
 ## - num = input is numeric?
 ## - req = input is required (i.e. can't be NULL)
 ## - int = should only be integers?
@@ -171,6 +172,9 @@ class.val <- function(x,
                       cr = FALSE,          # calc_rate any
                       cr.sing = FALSE,     # calc_rate w/ single rate
                       cr.mult = FALSE,     # calc_rate w/ multiple rates
+                      cr.int = FALSE,      # calc_rate.int any
+                      cr.int.sing = FALSE, # calc_rate.int w/ single rate
+                      cr.int.mult = FALSE, # calc_rate.int w/ multiple rates
                       ar = FALSE,          # auto_rate any
                       ar.sing = FALSE,     # auto_rate w/ single rate
                       ar.mult = FALSE,     # auto_rate w/ multiple rates
@@ -209,6 +213,15 @@ class.val <- function(x,
   # calc_rate multiple rate
   if(cr.mult) cr.mult.chk <- (any(class(x) %in% "calc_rate") && length(x$rate) > 1) else
     cr.mult.chk <- NULL
+  # calc_rate.int
+  if(cr.int) cr.int.chk <- any(class(x) %in% "calc_rate.int") else
+    cr.int.chk <- NULL
+  # calc_rate.int single rate
+  if(cr.int.sing) cr.int.sing.chk <- (any(class(x) %in% "calc_rate.int") && length(x$rate) == 1) else
+    cr.int.sing.chk <- NULL
+  # calc_rate.int multiple rate
+  if(cr.int.mult) cr.int.mult.chk <- (any(class(x) %in% "calc_rate.int") && length(x$rate) > 1) else
+    cr.int.mult.chk <- NULL
   # auto_rate
   if(ar) ar.chk <- any(class(x) %in% "auto_rate") else
     ar.chk <- NULL
@@ -243,6 +256,9 @@ class.val <- function(x,
            cr.chk,
            cr.sing.chk,
            cr.mult.chk,
+           cr.int.chk,
+           cr.int.sing.chk,
+           cr.int.mult.chk,
            ar.chk,
            ar.sing.chk,
            ar.mult.chk,

@@ -194,6 +194,7 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
 #' Print calc_rate.bg objects
 #' @param x calc_rate.bg object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate.bg <- function(x, ...) {
@@ -213,6 +214,7 @@ print.calc_rate.bg <- function(x, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
@@ -248,6 +250,7 @@ summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param quiet logical. Suppress console output.
 #' @param legend logical. Suppress labels and legends.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) {
@@ -321,6 +324,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate.bg <- function(x, pos = NULL, export = FALSE, ...){

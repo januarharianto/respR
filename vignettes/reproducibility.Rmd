@@ -39,7 +39,8 @@ In the era of cheap data storage, and easy sharing of code and files online, the
 
 The functions in `respR` have been designed to have clear, unambiguous inputs describing the parameters used in analysis. Therefore, given some familiarity with the package functions, the code is very human-readable, and it is usually clear under what parameters an analysis was conducted. We have minimised the number of function operators where possible, mainly to streamline and simplify analyses, but this also has the side benefit of making input code less verbose and more readable. 
 
-This readable code, along with the fact that an end-to-end workflow could potentially consist of processing raw data through as few as three functions, means a `respR` analysis for a single experiment could consist of only a few lines of code. For example (this example uses the native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/)):
+This readable code, along with the fact that an end-to-end workflow could potentially consist of processing raw data through as few as three functions, means a `respR` analysis for a single experiment could consist of only a few lines of code. Combine this with [piping](https://r4ds.had.co.nz/pipes.html) and code is even more concise. This example
+uses the native `|>` pipes introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/)):
 
 ```{r eval = FALSE, tidy = FALSE}
 urchins.rd |>                                            # Using the urchins data,
@@ -58,7 +59,7 @@ While there is commercial software which can analyse respirometry data (e.g. Aut
 
 Alternatively, many investigators have their own analysis workflows in Excel and R. These are perfectly fine and work well on an individual basis or within a lab, but even if the spreadsheet or code is shared, their custom nature means that reproducibility is difficult for an independent user or may require a significant time commitment. `respR` seeks to solve these problems. 
 
-We have designed respR to avoid it being a "black box", into which data is fed and a result spit out with the user having little understanding or oversight into what is happening. We feel it important a user understands their data, which is why we include exploratory functions to visualise the data, look for common errors, and prepare it for analysis. We designed the functions to allow straightforward natural-language querying of different parts of the data in terms the user can understand, so they should always be aware of what they are doing. All the analytical functions also provide visualisations of the analysis and results. All output objects support the base R `plot()`, `print()` and `summary()` commands, which allow quick assessment of the most important outputs. As with all R packages and functions, the code underlying the analysis is easily viewable, so advanced users can investigate how it works for themselves. 
+We have designed respR to avoid it being a black box, into which data is fed and a result spit out with the user having little understanding or oversight into what is happening. We feel it important a user understands their data, which is why we include exploratory functions to visualise the data, look for common errors, and prepare it for analysis. We designed the functions to allow straightforward natural-language querying of different parts of the data in terms the user can understand, so they should always be aware of what they are doing. All the analytical functions also provide visualisations of the analysis and results. All output objects support the base R `plot()`, `print()` and `summary()` commands, which allow quick assessment of the most important outputs. As with all R packages and functions, the code underlying the analysis is easily viewable, so advanced users can investigate how it works for themselves. Through hosting the code on [Github](https://github.com/januarharianto/respR) we encourage users to contribute to the code via Issues, Pull Requests, and Forking.
 
 
 ## Documenting reproducible workflows
@@ -138,7 +139,7 @@ all.equal(urch_data, urch_data_in)
 
 ```
 
-One example of using this method to document a reproducible workflow, would be to save the object created by `inpect_data` and include that along with the script for the rest of the analysis rather than including original data files. This object includes the raw data, but using it tells the next user the data has already been checked for common errors such as missing data, and if so these errors fixed, and so that step is unnecessary. 
+One example of using this method to document a reproducible workflow, would be to save the object created by `inpect` and include that along with the script for the rest of the analysis rather than including original data files. This object includes the raw data, but using it tells the next user the data has already been checked for common errors such as missing data, and if so these errors fixed, and so that step is unnecessary. 
 
 ### Saving all respR objects
 

@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Print inspect objects
 }
+\keyword{internal}

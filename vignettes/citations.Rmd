@@ -32,18 +32,34 @@ ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
 
 In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has picked up [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a very wide range of species, as well as oxygen production rates of algae and corals.
+We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
-If you use the package, please include a citation to the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) please [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+If you use the package please cite the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
 ## Studies using respR
 
-The following publications (most recent first) have used and cited `respR`. If we have missed one, please [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
+The following publications (most recent first) have used and cited `respR`. If we have missed one [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
 
+
+#### @paulaAccessCleaningServices2022
+
+José Ricardo Paula *et al*. looked at the interactions between  ocean acidification, access to cleaner species, and parasite infection and how they affect physiology (MMR, RMR and AS) in damselfish on beautiful Lizard Island on the GBR. Looks like increased parasite tolerance comes at the cost of responsiveness to other stressors such as OA. Nice work. Thanks for the citation!
+
+#### @joyceRegulationHeartRate2022
+
+This study by William Joyce *et al*. looked at heart rates in larval zebrafish and conducted respirometry trials to determine if altered heart rates were associated with changes in oxygen consumption or $P_{crit}$ (spoiler: they weren't). Great to see `respR` put to use on microrespirometry data on such small specimens - 0.16 mg 😱. 
+
+#### @schusterDistinctRealizedPhysiologies2022
+
+More sea urchin respirometry in this study looking at differences in physiology between green sea urchin populations from urchin barrens and kelp forests. `respR` was used to determine the metabolic rates of the urchins, and the authors found those from barrens to have lower oxygen consumption rates and also that these populations were more sensitive to temperature changes. 
+
+#### @morganReducedPhysiologicalPlasticity2022
+
+A really cool and extensive study by Rachael Morgan **et al**. Zebrafish were acclimated to 15 (🤯) temperatures and then a host of traits measured, including physiology, gene expression, and behaviour. They found that physiological plasticity was lost from fish adapted to stable temperatures. Incredible amount of work, and really clear results with important implications for anyone doing experimental work on animals and different temperatures. `respR` was used ot get SMR, MMR, and aerobic scope. 
 
 #### @rochePathsGreaterConsensus2022
 
-Dom Roche et al. review the status of open science and reproducibility in experimental biology and their role in consensus building and cross-discipline collaborations. Very interesting paper and essential reading for anyone doing collaborative experimental biology and sharing their results. They gave `respR` a quick shout-out as an example of open-source software aiding cross-disciplinary collaboration. Thanks for the citation! 
+Dom Roche *et al*. review the status of open science and reproducibility in experimental biology and their role in consensus building and cross-discipline collaborations. Very interesting paper and essential reading for anyone doing collaborative experimental biology and sharing their results. They gave `respR` a quick shout-out as an example of open-source software aiding cross-disciplinary collaboration. Thanks for the citation! 
 
 #### @garnerCanSeagrassModify2022
 
@@ -64,7 +80,7 @@ Joëlle Guitard and colleagues examined how parasite load affected metabolic rat
 
 #### @prokkolaGeneticCouplingLifehistory2022
 
-In this study Jenni Prokkola et al. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. After seeing it as a preprint we're delighted to see it published in a top journal. Nice work Jenni!  
+In this study Jenni Prokkola *et al*. examine the genetic basis of how energy metabolism and life history interact in Atlantic Salmon. This used the `respR` function `auto_rate()` to calculate rates across one and two-minute time windows to identify maximum metabolic rates. After seeing it as a preprint we're delighted to see it published in a top journal. Nice work Jenni!  
 
 #### @burfordRapidRangeExpansion2022a
 

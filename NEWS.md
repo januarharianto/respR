@@ -1,5 +1,3 @@
-# respR 2.0.2
-
 
 <!---
 Each version should:
@@ -15,11 +13,16 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.0.3 -- 2022-xx-xx
+## Version 2.1 -- 2022-xx-xx
 
+- NEW: `calc_rate.int` - This is a brand new function designed for intermittent-flow respirometry data. It allows you to easily extract rates from the same row, time, or oxygen range in every replicate. Vignettes have been updated to show how this function can be used on both irregular and regular intermittent-flow data.
+
+- NEW: `auto_rate` - For the `linear` method, the kernel density analysis results are now *not* printed to the console when using `summary()`. Only the summary table will be printed, making for a cleaner print out. This can be changed back to the old behaviour by passing `print.kds = TRUE` in `summary`. 
 - NEW: Tested with `R` version [4.2.0](https://www.r-bloggers.com/2022/04/new-features-in-r-4-2-0/) 
-- NEW: `auto_rate` - For the `linear` method, the kernel density analysis results printed to the console when using `summary()` can now be suppressed using the `print.kds = FALSE` input. In this case only the summary table will be printed, making for a cleaner print out. 
 
+- CHANGE: Internal S3 generic functions (e.g. `print.auto_rate` etc.) should no longer appear in the function index. 
+
+- FIX: `adjust_rate` - Fix for incorrect messages when a non-numeric object is entered as the `by` input.
 
 ## Version 2.0.2 -- 2022-03-23
 

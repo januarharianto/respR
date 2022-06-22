@@ -525,6 +525,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
 #' @param x auto_rate object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.auto_rate <- function(x, pos = 1, ...) {
@@ -579,6 +580,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
 #' @param legend logical. Suppress labels and legends.
 #' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
@@ -726,9 +728,10 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
 #' @param print.kds logical. Print summary of the kernel density analysis for
 #'   'linear' method.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
-summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = TRUE, ...) {
+summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FALSE, ...) {
 
   cat("\n# summary.auto_rate # -------------------\n")
   ## warning if empty
@@ -784,6 +787,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = TR
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){

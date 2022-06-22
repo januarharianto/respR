@@ -59,13 +59,13 @@ The package has also been [**peer reviewed and published**](https://besjournals.
 
 ## Contact, feedback and help
 
-`respR` has a [**Twitter account**](https://twitter.com/respR_pkg). Please follow for latest news and regular updates from the world of respirometry! 
+`respR` has a [**Twitter account**](https://twitter.com/respR_pkg). Follow for latest news and regular updates from the world of respirometry! 
 
-See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for even more ways of communicating with us, providing feedback and getting touch if you are having issues.
+See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for even more ways of providing feedback and getting in touch if you are having issues.
 
 ## Support package development
 
-See [**Support Us**](https://januarharianto.github.io/respR/articles/support.html) if you would like to help support the package development.
+If you would like to help support the package development or just buy us a beer in thanks go here: [**Support Us**](https://januarharianto.github.io/respR/articles/support.html) 
 
 ## Developers
 
@@ -79,11 +79,11 @@ For a quick evaluation of the package, try out the following code:
 ```r
 library(respR) # load the package
 
-# 1. check data for errors, select cols 1 and 15:
+# 1. Check data for errors, selecting cols 1 and 15:
 urch <- inspect(urchins.rd, time = 1, oxygen = 15) 
-# 2. automatically determine most linear segment:
+# 2. Automatically determine most linear regions:
 rate <- auto_rate(urch)
-# 3. convert
+# 3. Convert
 out <- convert_rate(rate, 
                     oxy.unit = "mg/L", 
                     time.unit = "min", 
