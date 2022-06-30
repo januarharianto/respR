@@ -41,6 +41,10 @@ If you use the package please cite the publication in [**Methods in Ecology and 
 The following publications (most recent first) have used and cited `respR`. If we have missed one [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
 
 
+#### @klementievDevelopmentVersatileLowCost2022
+
+We've always noted in our documentation that except for the final conversion step, `respR` treats data as unitless, and it could be used to identify and extract rates from other types of experimental data, and here is the proof. It was used in this study, specifically `auto_rate`,  to quantify $H_2O_2$ consumption rates as part of development of a system to study biofilm activity. Really great to see the package being used like this. 
+
 #### @paulaAccessCleaningServices2022
 
 José Ricardo Paula *et al*. looked at the interactions between  ocean acidification, access to cleaner species, and parasite infection and how they affect physiology (MMR, RMR and AS) in damselfish on beautiful Lizard Island on the GBR. Looks like increased parasite tolerance comes at the cost of responsiveness to other stressors such as OA. Nice work. Thanks for the citation!
@@ -55,7 +59,7 @@ More sea urchin respirometry in this study looking at differences in physiology 
 
 #### @morganReducedPhysiologicalPlasticity2022
 
-A really cool and extensive study by Rachael Morgan **et al**. Zebrafish were acclimated to 15 (🤯) temperatures and then a host of traits measured, including physiology, gene expression, and behaviour. They found that physiological plasticity was lost from fish adapted to stable temperatures. Incredible amount of work, and really clear results with important implications for anyone doing experimental work on animals and different temperatures. `respR` was used ot get SMR, MMR, and aerobic scope. 
+A really cool and extensive study by Rachael Morgan *et al*. Zebrafish were acclimated to 15 (🤯) temperatures and then a host of traits measured, including physiology, gene expression, and behaviour. They found that physiological plasticity was lost from fish adapted to stable temperatures. Incredible amount of work, and really clear results with important implications for anyone doing experimental work on animals in different temperatures. `respR` was used ot get SMR, MMR, and aerobic scope. 
 
 #### @rochePathsGreaterConsensus2022
 
