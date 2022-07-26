@@ -464,5 +464,5 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
                     bg = "gray90",
                     cex = 0.5)
 
-  invisible(return(x)) ## to allow it to be used within pipes - still prints though...
+  return(invisible(x)) ## to allow it to be used within pipes
 }
