@@ -122,13 +122,13 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
   ## check if an input required
   is_null <- is.null(input)
   ## check integer
-  if(is_num) are_int <- all(sapply(input, function(z) z %% 1 == 0))
+  if(is_num) are_int <- all(input %% 1 == 0)
   ## check length not greater than max allowed
   below_max <-  length(input) <= max
   ## check length not less than min allowed
   above_min <-  length(input) >= min
   ## check actual values within range
-  if(is_num) in_range <- all(sapply(input, function(z) dplyr::between(z, range[1], range[2])))
+  if(is_num) in_range <- all(dplyr::between(as.numeric(input), range[1], range[2]))
 
   if(req && is_null) stop(glue::glue("{msg} input is required."))
 
