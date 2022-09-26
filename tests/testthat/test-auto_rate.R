@@ -246,8 +246,11 @@ capture.output({  ## stops printing outputs on assigning
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_high$rate,
-                 rev(ar_obj_low$rate),
-                 ar_obj_min$rate)
+                 rev(ar_obj_low$rate))
+    expect_equal(ar_obj_high$rate,
+                 ar_obj_minimum$rate)
+    expect_equal(rev(ar_obj_low$rate),
+                 ar_obj_minimum$rate)
     ## should be 218 results
     expect_equal(length(ar_obj_high$rate),
                  218)
@@ -263,8 +266,11 @@ capture.output({  ## stops printing outputs on assigning
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_low$rate,
-                 rev(ar_obj_high$rate),
-                 ar_obj_max$rate)
+                 rev(ar_obj_high$rate))
+    expect_equal(ar_obj_low$rate,
+                 ar_obj_maximum$rate)
+    expect_equal(rev(ar_obj_high$rate),
+                 ar_obj_maximum$rate)
     ## should be 218 results
     expect_equal(length(ar_obj_low$rate),
                  218)
@@ -280,7 +286,10 @@ capture.output({  ## stops printing outputs on assigning
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_maximum$rate,
-                 rev(ar_obj_minimum$rate),
+                 rev(ar_obj_minimum$rate))
+    expect_equal(ar_obj_maximum$rate,
+                 ar_obj_min$rate)
+    expect_equal(rev(ar_obj_minimum$rate),
                  ar_obj_min$rate)
     ## should be 218 results
     expect_equal(length(ar_obj_maximum$rate),
@@ -297,7 +306,10 @@ capture.output({  ## stops printing outputs on assigning
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_minimum$rate,
-                 rev(ar_obj_maximum$rate),
+                 rev(ar_obj_maximum$rate))
+    expect_equal(ar_obj_minimum$rate,
+                 ar_obj_max$rate)
+    expect_equal(rev(ar_obj_maximum$rate),
                  ar_obj_max$rate)
     ## should be 218 results
     expect_equal(length(ar_obj_minimum$rate),
