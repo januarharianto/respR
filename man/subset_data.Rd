@@ -50,7 +50,7 @@ The function can subset \emph{any} data frame by \code{row}.
 When multiple columns are present, for example time in column 1, and multiple
 columns of oxygen data, the subset object will include \emph{all} columns. In the
 case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is
-based on the \emph{first} column of oxygen data (i.e. column 2), and all
+based on the \emph{first} column of oxygen data only (i.e. column 2), and all
 subsequent columns are subset between the same rows regardless of oxygen
 values.
 

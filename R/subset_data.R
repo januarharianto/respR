@@ -24,7 +24,7 @@
 #' When multiple columns are present, for example time in column 1, and multiple
 #' columns of oxygen data, the subset object will include *all* columns. In the
 #' case of subsetting `by = "oxygen"` or `by = "proportion"`, subsetting is
-#' based on the *first* column of oxygen data (i.e. column 2), and all
+#' based on the *first* column of oxygen data only (i.e. column 2), and all
 #' subsequent columns are subset between the same rows regardless of oxygen
 #' values.
 #'
@@ -105,14 +105,14 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
 
   ## replace NULL inputs
   if(is.null(from)){
-    if(by == "time") from <- min(dt[[1]])
+    if(by == "time") from <- min(nainf.omit(dt[[1]]))
     if(by == "row") from <- 1
     if(by == "oxygen") from <- dt[[2]][1] # first oxygen value
     if(by == "proportion")
       stop("subset_data: please enter a proportion 'from' input.")
   }
   if(is.null(to)){
-    if(by == "time") to <- max(dt[[1]])
+    if(by == "time") to <- max(nainf.omit(dt[[1]]))
     if(by == "row") to <- nrow(dt)
     if(by == "oxygen") to <- dt[[2]][nrow(dt)] # last oxygen value
     if(by == "proportion")
@@ -122,7 +122,7 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
   ## if time, 'from' required, single val, not bigger than max value in time
   if(by == "time") {
     input.val(from,  num = TRUE, int = FALSE, req = FALSE,
-              max = 1, min = 1, range = c(0, max(dt[[1]])),
+              max = 1, min = 1, range = c(0, max(nainf.omit(dt[[1]]))),
               msg = "subset_data: 'from' -")
     ## if time, 'to' required, single val, greater than from
     input.val(to,  num = TRUE, int = FALSE, req = FALSE,
