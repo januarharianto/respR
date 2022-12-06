@@ -69,17 +69,10 @@
 #' specified `width` are extracted from the rolling regressions, ordered by
 #' time.
 #'
-#' - NOTE: `max`, `min`: These methods were used in previous versions of `respR`
-#' but have been deprecated. They were intended to order oxygen uptake
-#' (negative) rates by magnitude, but this resulted in incorrect ordering of
-#' oxygen production (positive) rates. They have been retained for code
-#' compatibility, but will be removed in a future version of `respR`, and so
-#' *should not be used*.
-#'
 #' ## Further selection and filtering of results
 #'
 #' For further selection or subsetting of `auto_rate` results, see the dedicated
-#' [`subset_rate()`] function, which allows subsetting of rates by various
+#' [`select_rate()`] function, which allows subsetting of rates by various
 #' criteria, including r-squared, data region, percentiles, and more.
 #'
 #' ## Units
@@ -91,13 +84,13 @@
 #' ## The `width` and `by` inputs
 #'
 #' If `by = "time"`, the `width` input represents a time window in the units of
-#' the time data.
+#' the time data in `x`.
 #'
-#' If `by = "row"` and between 0 and 1, `width` represents a proportion of the
-#' total data length, as in the equation `floor(width * number of data rows)`.
-#' For example, 0.2 represents a rolling window of 20% of the data width.
-#' Otherwise, if entered as an integer of 2 or greater, the `width` represents
-#' the number of rows.
+#' If `by = "row"` and `width` is between 0 and 1 it represents a proportion of
+#' the total data length, as in the equation `floor(width * number of data
+#' rows)`. For example, 0.2 represents a rolling window of 20% of the data
+#' width. Otherwise, if entered as an integer of 2 or greater, the `width`
+#' represents the number of rows.
 #'
 #' For both `by` inputs, if left as `width = NULL` it defaults to 0.2 or a
 #' window of 20% of the data length.
@@ -230,8 +223,12 @@
 #'   summary()
 #'  }
 
-auto_rate <- function(x, method = "linear", width = NULL,
-                      by = "row", plot = TRUE, ...) {
+auto_rate <- function(x,
+                      method = "linear",
+                      width = NULL,
+                      by = "row",
+                      plot = TRUE,
+                      ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -245,6 +242,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
   # perform checks
   checks <- validate_auto_rate(x, by, method)
   dt <- checks$df  # extract df from validation check
+  if(nrow(dt) == 1)  stop("auto_rate: Input data contains only 1 row. Please check inputs.")
   by <- checks$by
 
   # prepare data
@@ -261,9 +259,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -288,9 +284,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -314,9 +308,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_max(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -339,9 +331,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_min(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -364,9 +354,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_interval(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -389,9 +377,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_rolling(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -414,9 +400,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_highest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -439,9 +423,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
     output <- auto_rate_lowest(dt, win, by)
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -466,9 +448,7 @@ auto_rate <- function(x, method = "linear", width = NULL,
                            total_regs = nrow(output$roll),
                            total_peaks = nrow(output$peaks),
                            kde_bw = output$density$bw)
-    out <- list(original = NULL,
-                subset_calls = NULL,
-                call = call,
+    out <- list(call = call,
                 inputs = inputs,
                 dataframe = dt,
                 width   = win,
@@ -501,7 +481,8 @@ auto_rate <- function(x, method = "linear", width = NULL,
   # Assemble final output object --------------------------------------------
 
   ## Reorder output summary table
-  out$summary <- data.table::data.table(rank = 1:nrow(out$summary),
+  out$summary <- data.table::data.table(rep = NA,
+                                        rank = 1:nrow(out$summary),
                                         intercept_b0 = out$summary$intercept_b0,
                                         rate_b1 = out$summary$rate_b1,
                                         rsq = out$summary$rsq,
@@ -513,6 +494,9 @@ auto_rate <- function(x, method = "linear", width = NULL,
                                         oxy = out$summary$oxy,
                                         endoxy = out$summary$endoxy,
                                         rate = out$summary$rate_b1)
+  # this here because of weird error in auto_rate.int (auto_rate.rep actually)
+  # when trying to add a number to this column - thinks it should be a logical.
+  out$summary$rep <- as.numeric(out$summary$rep)
 
   class(out) <- 'auto_rate'
 
@@ -532,7 +516,7 @@ print.auto_rate <- function(x, pos = 1, ...) {
 
   cat("\n# print.auto_rate # ---------------------\n")
 
-  ## warning if empty
+  ## message if empty
   if(length(x$rate) == 0) message("No rates found in auto_rate object.\n")
 
   if(is.null(pos)) pos <- 1
@@ -737,7 +721,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FA
   ## warning if empty
   if(length(object$rate) == 0) message("No rates found in auto_rate object.")
 
-  if(!is.null(pos) && pos > length(object$rate))
+  if(!is.null(pos) && any(pos > length(object$rate)))
     stop("summary.auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
 
   ########### Summary Table ###################

@@ -42,9 +42,9 @@ knitr::include_graphics("img/mee_cover.jpg")
 These packages may also help you analyse respirometry data:
 
 -   [FishResp](https://fishresp.org) - Sergey Morozov
+-   [respfun](https://github.com/nicholascarey/respfun) - Nicholas Carey
 -   [respirometry](https://cran.r-project.org/package=respirometry) - Matthew A. Birk
 -   [rMR](https://cran.r-project.org/package=rMR) - Tyler L. Moulton
--   [LoLinR](https://github.com/colin-olito/LoLinR) - Colin Olito and Diego Barneche
 -   [segmented](https://cran.r-project.org/package=segmented) - Vito M. R. Muggeo
 
 Be sure to check out the [**FishResp**](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.

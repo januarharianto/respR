@@ -24,12 +24,12 @@
 #'   Details.
 #'
 #'   When a rate result is omitted by the selection criteria, it is removed from
-#'   the `$rate.output` element of the `convert_rate` object, and all associated
-#'   data in `$summary` (i.e. the associated row) is removed. Some methods can
-#'   also be used with an `n = NULL` input to reorder the `$rate` and `$summary`
+#'   the `$rate.output` element of the `convert_rate` object, and the associated
+#'   data in `$summary` (i.e. that row) is removed. Some methods can also be
+#'   used with an `n = NULL` input to reorder the `$rate` and `$summary`
 #'   elements in various ways.
 #'
-#'   ## Rank
+#'   ## Replicate and Rank columns
 #'
 #'   The summary table `$rank` column is context-specific, and what it
 #'   represents depends on the type of experiment analysed or the function used
@@ -40,26 +40,37 @@
 #'   it indicates the kernel density ranking if the `linear` method was used,
 #'   the ascending or descending ordering by absolute rate value if `lowest` or
 #'   `highest` were used, or the numerical order if `minimum` or `maximum` were
-#'   used. For intermittent-flow experiments analysed via `calc_rate.int` it
-#'   indicates the replicate number. The `$rank` column can be used to keep
-#'   track of selection or reordering because the original rank value will be
+#'   used. For intermittent-flow experiments analysed via `calc_rate.int` and
+#'   `auto_rate.int` these will be ranked *within* each replicate as indicated
+#'   in the `$rep` column. The `$rep` and `$rank` columns can be used to keep
+#'   track of selection or reordering because the original values will be
 #'   retained unchanged through selection or reordering operations. The original
-#'   rank order can always be restored by using `method = "rank"` and `n =
-#'   NULL`.
+#'   order can always be restored by using `method = "rep"` or `method = "rank"`
+#'   with `n = NULL`. In both these cases the `$summary` table and
+#'   `$rate.output` will be reordered by `$rep` (if used) then `$rank` to
+#'   restore the original ordering.
+#'
+#'   Note that if you are analysing intermittent-flow data and used
+#'   `auto_rate.int` but changed the `n` input to output more than one rate
+#'   result per replicate, the selection or reordering operations will not take
+#'   any account of this. You should carefully consider if or why you need to
+#'   output multiple rates per replicate in the first place. If you have, you
+#'   can perform selection on individual replicates by using `method = "rep"` to
+#'   select individual replicates then apply additional selection criteria.
 #'
 #' @details These are the current methods by which rates in `convert_rate`
 #'   objects can be selected. Matching results are *retained* in the output.
 #'   Some methods can also be used to reorder the results. Note that the methods
 #'   selecting by rate value operate on the `$rate.output` element, that is the
-#'   converted rate value.
+#'   final converted rate value.
 #'
 #'   ## `positive`, `negative`
 #'
 #'   Selects all `positive` (>0) or `negative` (<0) rates. `n` is ignored.
-#'   Useful, for example, in intermittent-flow respirometry where `auto_rate`
-#'   may output rates from regions of oxygen increase during flushes. Note,
-#'   `respR` outputs oxygen consumption (i.e. respiration) rates as *negative*
-#'   values, production rates as *positive*.
+#'   Useful, for example, in respirometry on algae where both oxygen consumption
+#'   and production rates are recorded. Note, `respR` outputs oxygen consumption
+#'   (i.e. respiration) rates as *negative* values, production rates as
+#'   *positive*.
 #'
 #'   ## `nonzero`, `zero`
 #'
@@ -93,11 +104,10 @@
 #'   In contrast to `lowest` and `highest`, these are *strictly numerical*
 #'   options which take full account of the sign of the rate, and can be used
 #'   where rates are a mix of positive and negative. For example, `method =
-#'   'minimum'` will retain the minimum value numerical rates, which in the case
-#'   of negative rates will actually be the highest uptake rates. `n` is an
-#'   integer indicating how many of the min/max rates to retain. If `n = NULL`
-#'   the results will instead be reordered by minimum or maximum rate without
-#'   any removed.
+#'   'minimum'` will retain the minimum numerical value rates, which would
+#'   actually be the highest oxygen uptake rates. `n` is an integer indicating
+#'   how many of the min/max rates to retain. If `n = NULL` the results will
+#'   instead be reordered by minimum or maximum rate without any removed.
 #'
 #'   ## `minimum_percentile`, `maximum_percentile`
 #'
@@ -112,14 +122,37 @@
 #'
 #'   ## `rate`
 #'
-#'   Allows you to enter a simple value range of output rates to be retained.
-#'   Matching regressions in which the rate value falls within the `n` range
-#'   (inclusive) are retained. `n` should be a vector of two values. For
-#'   example, to retain only rates where the `rate` value is between 0.05 and
-#'   0.08: `method = 'rate', n = c(0.05, 0.08)`. Note this operates on the
-#'   `$rate.output` element, that is converted rate values.
+#'   Allows you to enter a value range of output rates to be retained. Matching
+#'   regressions in which the rate value falls within the `n` range (inclusive)
+#'   are retained. `n` should be a vector of two values. For example, to retain
+#'   only rates where the `rate` value is between 0.05 and 0.08: `method =
+#'   'rate', n = c(0.05, 0.08)`. Note this operates on the `$rate.output`
+#'   element, that is converted rate values.
 #'
-#'   ## `rank`, `rsq`, `row`, `time`, `density`
+#'   ## `rep`, `rank`
+#'
+#'   These refer to the respective columns of the `$summary` table. For these,
+#'   `n` should be a numeric vector of integers of `rep` or `rank` values to
+#'   retain. To retain a range use regular R syntax, e.g. `n = 1:10`. If `n =
+#'   NULL` no results will be removed, instead the results will be reordered
+#'   ascending by `rep` (if it contains values) then `rank`. Essentially this
+#'   restores the original ordering if other reordering operations have been
+#'   performed.
+#'
+#'   The values in these columns depend on the functions used to calculate
+#'   rates. If `calc_rate` was used, `rep` is `NA` and `rank` is the order of
+#'   rates as entered using `from` and `to` (if multiple rates were determined).
+#'   For `auto_rate`, `rep` is `NA` and `rank` relates to the `method` input.
+#'   For example it indicates the kernel density ranking if the `linear` method
+#'   was used, the ascending or descending ordering by absolute rate value if
+#'   `lowest` or `highest` were used, or by numerical order if `minimum` or
+#'   `maximum` were used. If `calc_rate.int` or `auto_rate.int` were used, `rep`
+#'   indicates the replicate number and the `rank` column represents rank
+#'   *within* the relevant replicate, and will generally be filled with the
+#'   value `1`. Therefore you need to adapt your selection criteria
+#'   appropriately towards which of these columns is relevant.
+#'
+#'   ## `rsq`, `row`, `time`, `density`
 #'
 #'   These methods refer to the respective columns of the `$summary` data frame.
 #'   For these, `n` should be a vector of two values. Matching regressions in
@@ -129,15 +162,12 @@
 #'   `$row`-`$endrow` or `$time`-`$endtime` columns and the original raw data
 #'   (`$dataframe` element of the `convert_rate` object), and can be used to
 #'   constrain results to rates from particular regions of the data (although
-#'   usually a better option is to \code{\link{subset_data}} prior to analysis).
-#'   `rank` refers to the first column of the summary table, which denotes the
-#'   original rank or ordering of the results. See **Rank** section above. Note,
+#'   usually a better option is to `subset_data()` prior to analysis). Note
 #'   `time` is not the same as `duration` - see later section - and `row` refers
 #'   to rows of the raw data, **not** rows of the summary table - see `manual`
 #'   method for this. For all of these methods, if `n = NULL` no results will be
 #'   removed, instead the results will be reordered by that respective column
-#'   (descending for `rsq` and `density`, ascending for `rank`, `row`, and
-#'   `time`).
+#'   (descending for `rsq` and `density`, ascending for `row`, and `time`).
 #'
 #'   ## `time_omit`, `row_omit`
 #'
@@ -156,8 +186,8 @@
 #'   vector, e.g. `row_omit = c(1000, 2000, 3000)`. Note this last option can be
 #'   extremely computationally intensive when the vector or dataset is large, so
 #'   should only be used when a range cannot be entered as two values, which is
-#'   much faster. For all methods, values must match exactly to a value present
-#'   in the dataset.
+#'   much faster. For both methods, input values must match exactly to values
+#'   present in the dataset.
 #'
 #'   ## `oxygen`
 #'
@@ -182,12 +212,11 @@
 #'   that value would occur, it is not necessarily excluded unless that *exact
 #'   value* occurs. You need to consider the precision of the data values
 #'   recorded. For example, if you wanted to exclude any rate using an oxygen
-#'   value of `7`, but your data are recorded to two decimals, any rates fit
-#'   across these data would be retained: `c(7.03, 7.02, 7.01, 6.99, 6.98,
-#'   ...)`. To get around this you can use regular R syntax to input vectors at
-#'   the correct precision, such as seq, e.g. `seq(from = 7.05, to = 6.96, by =
-#'   -0.01)`. Similarly, this can be used to input ranges of oxygen values to
-#'   exclude.
+#'   value of `7`, but your data are recorded to two decimals, a rate fit across
+#'   these data would *not* be excluded: `c(7.03, 7.02, 7.01, 6.99, 6.98, ...)`.
+#'   To get around this you can use regular R syntax to input vectors at the
+#'   correct precision, such as seq, e.g. `seq(from = 7.05, to = 6.96, by =
+#'   -0.01)`. This can be used to input ranges of oxygen values to exclude.
 #'
 #'   ## `duration`
 #'
@@ -205,9 +234,9 @@
 #'   be manually selected to be retained. For example, to keep only the top row
 #'   `method = 'manual', n = 1`. To keep multiple rows use regular `R` selection
 #'   syntax: `n = 1:3`, `n = c(1,2,3)`, `n = c(5,8,10)`, etc. No value of `n`
-#'   should exceed the number of rows in the `$summary` data frame. Note this
-#'   *not* necessarily the same as selecting by the `rank` method, as the table
-#'   could already have undergone selection or reordered.
+#'   should exceed the number of rows in the `$summary` data frame. Note this is
+#'   not necessarily the same as selecting by the `rank` method, as the table
+#'   could already have undergone selection or reordering.
 #'
 #'   ## `overlap`
 #'
@@ -260,47 +289,46 @@
 #'
 #'   ## Reordering results
 #'
-#'   Several methods can be used to *reorder* results rather than select them,
-#'   by not entering an `n` input (that is, letting the `n = NULL` default be
+#'   Several methods can be used to reorder results rather than select them, by
+#'   not entering an `n` input (that is, letting the `n = NULL` default be
 #'   applied). Several of these methods are named the same as those in
 #'   `auto_rate` for consistency and have equivalent outcomes, so this allows
 #'   results to be reordered to the equivalent of that method's results without
 #'   re-running the `auto_rate` analysis.
 #'
-#'   The `row` and `rolling` methods reorder sequentially by the starting row of
-#'   each regression (`$row` column).
+#'   The `"row"` and `"rolling"` methods reorder sequentially by the starting
+#'   row of each regression (`$row` column).
 #'
-#'   The `time` method reorders sequentially by the starting time of each
+#'   The `"time"` method reorders sequentially by the starting time of each
 #'   regression (`$time` column).
 #'
-#'   `linear` and `density` are essentially identical, reordering by the
+#'   `"linear"` and `"density"` are essentially identical, reordering by the
 #'   `$density` column. This metric is only produced by the `auto_rate` `linear`
 #'   method, so will not work with any other results.
 #'
-#'   `rank` reorders by `$rank`, the first column of the summary table, which
-#'   denotes the rank or position of each result. What this represents is
-#'   context dependent - see **Rank** section above. Each summary row `rank`
-#'   value is retained unchanged regardless of how the results are subsequently
-#'   selected or reordered, so this will restore the original ordering after
-#'   other reordering methods have been applied.
+#'   `"rep"` or `"rank"` both reorder by the `$rep` then `$rank` columns. What
+#'   these represents is context dependent - see **Replicate and Rank columns**
+#'   section above. Each summary row `rep` and `rank` value is retained
+#'   unchanged regardless of how the results are subsequently selected or
+#'   reordered, so this will restore the original ordering after other methods
+#'   have been applied.
 #'
 #'   `rsq` reorders by `$rsq` from highest value to lowest.
 #'
-#'   `highest` and `lowest` reorder by absolute values of the `$rate` column,
-#'   that is highest or lowest in magnitude regardless of the sign. They can
-#'   only be used when rates all have the same sign.
+#'   `highest` and `lowest` reorder by absolute values of the `$rate.output`
+#'   column, that is highest or lowest in magnitude regardless of the sign. They
+#'   can only be used when rates all have the same sign.
 #'
-#'   `maximum` and `minimum` reorder by numerical values of the `$rate` column,
-#'   that is maximum or minimum in numerical value taking account of the sign,
-#'   and can be used when rates are a mix of negative and positive.
+#'   `maximum` and `minimum` reorder by numerical values of the `$rate.output`
+#'   column, that is maximum or minimum in numerical value taking account of the
+#'   sign, and can be used when rates are a mix of negative and positive.
 #'
-#'   ## Numeric conversions
+#'   ## Numeric input conversions
 #'
 #'   For `convert_rate` objects which contain rates which have been converted
-#'   from numeric values, the summary table will only contain a limited amount
-#'   of information, so many of the selection or reordering methods will not
-#'   work. In this case a `warning` is given and the original input is returned.
-#'   This allows piping operations to continue.
+#'   from numeric values, the summary table will contain a limited amount of
+#'   information, so many of the selection or reordering methods will not work.
+#'   In this case a warning is given and the original input is returned.
 #'
 #'   ## Plot
 #'
@@ -327,21 +355,16 @@
 #'   multiple selection operations, that is even after processing through the
 #'   function multiple times. `$select_calls` contains the calls for every
 #'   selection operation that has been applied to the `$original` object, from
-#'   the first to the most recent. If using piping (`%>%` or `|>`), the `x`
-#'   input in these appears as `"x = ."` where it has been piped from the
-#'   previous call. These additional elements ensure the output contains the
-#'   complete, reproducible history of the `convert_rate` object having been
-#'   processed.
-#'
-#'   Note the `$summary` table contains a `$rank` column and the *original* rank
-#'   of each result is retained. See **Rank** section.
+#'   the first to the most recent. These additional elements ensure the output
+#'   contains the complete, reproducible history of the `convert_rate` object
+#'   having been processed.
 #'
 #' @param x list. An object of class `convert_rate` or `convert_rate_select`.
-#' @param method string. Method by which to select or reorder rate results.
-#'   Matching results are *retained* in the output. See Details.
-#' @param n numeric. Number, percentile, or range of results to return depending
-#'   on `method`. Default is `NULL`, in which case some methods will instead
-#'   reorder the results. See Details.
+#' @param method string. Method by which to select or reorder rate results. For
+#'   most methods matching results are *retained* in the output. See Details.
+#' @param n numeric. Number, percentile, or range of results to retain or omit
+#'   depending on `method`. Default is `NULL`, in which case some methods will
+#'   instead reorder the results. See Details.
 #'
 #' @export
 #'
@@ -351,14 +374,43 @@
 #' @importFrom dplyr arrange desc
 #'
 #' @examples
-#' ## Select only negative rates
-#'  ar_obj <- inspect(intermittent.rd, plot = FALSE) %>%
-#'    auto_rate(plot = FALSE) %>%
+#' \donttest{
+#' ## Object to filter
+#'  ar_obj <- inspect(intermittent.rd, plot = FALSE) |>
+#'    auto_rate(plot = FALSE) |>
 #'    convert_rate(oxy.unit = "mg/L",
 #'                 time.unit = "s",
 #'                 output.unit = "mg/h",
-#'                 volume = 2.379)
-#'  ar_subs_neg <- select_rate(ar_obj, method = "negative")
+#'                 volume = 2.379) |>
+#'    summary()
+#'
+#'  ## Select only negative rates
+#'  ar_subs_neg <- select_rate(ar_obj, method = "negative") |>
+#'    summary()
+#'
+#'  ## Select only rates over 1000 seconds duration
+#'  ar_subs_dur <- select_rate(ar_obj, method = "duration", n = c(1000, Inf)) |>
+#'    summary()
+#'
+#'  ## Reorder rates sequentially (i.e. by starting row)
+#'  ar_subs_dur <- select_rate(ar_obj, method = "row") |>
+#'    summary()
+#'
+#'  ## Select rates with r-squared higher than 0.99,
+#'  ## then select the lowest 10th percentile of the remaining rates,
+#'  ## then take the mean of those
+#'  inspect(squid.rd, plot = FALSE) |>
+#'    auto_rate(method = "linear",
+#'              plot = FALSE) |>
+#'    convert_rate(oxy.unit = "mg/L",
+#'                 time.unit = "s",
+#'                 output.unit = "mg/h",
+#'                 volume = 2.379) |>
+#'    summary() |>
+#'    select_rate(method = "rsq", n = c(0.99, 1)) |>
+#'    select_rate(method = "lowest_percentile", n = 0.1) |>
+#'    mean()
+#'    }
 
 select_rate <- function(x, method = NULL, n = NULL){
 
@@ -368,7 +420,6 @@ select_rate <- function(x, method = NULL, n = NULL){
   # Checks ------------------------------------------------------------------
 
   ## Check for valid convert_rate object
-  #if(!("convert_rate" %in% class(x))) stop("select_rate: Input is not a 'convert_rate' object")
   if(!(class.val(x, cnvr = TRUE)))
     stop("select_rate: Input is not a 'convert_rate' object")
 
@@ -387,6 +438,7 @@ select_rate <- function(x, method = NULL, n = NULL){
                                          "oxygen",
                                          "oxygen_omit",
                                          "rsq",
+                                         "rep",
                                          "rank",
                                          "rate",
                                          "rate.output",
@@ -423,14 +475,9 @@ select_rate <- function(x, method = NULL, n = NULL){
   ## Disallow `density` or `linear` methods for anything other than `auto_rate` linear objects
   # If x$dataframe is NOT null (i.e. it is an object input rather than numerics)
   if(!(is.null(x$dataframe))) {
-    # Does the "method" element exist as *either* an auto_rate object or adjust_rate object containing an auto_rate object?
-    # In other words, is it an auto_rate object input
-    is.ar.input <- (!(is.null(x$inputs$x$method)) || !(is.null(x$inputs$x$inputs$x$method)))
-    # If it is, is it "linear" method?
-    # This will return a single TRUE or FALSE, because only one of these will exist
-    if(is.ar.input) is.linear <- c(x$inputs$x$method == "linear", x$inputs$x$inputs$x$method == "linear") else
-      # else - it must be a different class of object (e.g. calc_rate) therefore can't be "linear" method, so FALSE
-      is.linear <- FALSE
+      # If summary$density is not all NA then it has to be "linear" ar object
+    # edge case for empty objects too
+      is.linear <- !(all(is.na(x$summary$density))) || nrow(x$summary) == 0
     # If it is NOT linear and method = "density" or "linear", stop
     if(method %in% c("density", "linear") && !is.linear)
       stop(glue::glue("select_rate: The '{method}' method is only accepted for rates determined in 'auto_rate' via the 'linear' method."))
@@ -499,12 +546,12 @@ select_rate <- function(x, method = NULL, n = NULL){
     reordered <- TRUE
   }
 
-  # Reorder by rank column - essentially restores to original order
+  # Reorder by rep and/or rank column - essentially restores to original order
   # should be identical to above if "linear" method
-  if(is.null(n) && method == "rank"){
-    message("select_rate: Reordering results by 'rank' method.")
+  if(is.null(n) && method %in% c("rep", "rank")){
+    message(glue::glue("select_rate: Reordering results by '{method}' method."))
     summ <- x$summary
-    summ <- arrange(summ, rank)
+    summ <- arrange(summ, rep, rank)
     keep <- 0:nrow(summ)
     reordered <- TRUE
   }
@@ -761,18 +808,34 @@ select_rate <- function(x, method = NULL, n = NULL){
   }
 
 
+  # rep --------------------------------------------------------------------
+  if(!is.null(n) && method == "rep"){
+
+    if(all(is.na(x$summary$rep)))
+      stop("select_rate: All 'rep' are NA so nothing to select!")
+    if(!(is.numeric(n)) || any(n %% 1 != 0))
+      stop("select_rate: For 'rep' method 'n' must only contain integer values.")
+    if(any(!(dplyr::between(n, min(x$summary$rep), max(x$summary$rep)))))
+      stop("select_rate: Input for 'n': One or more 'rep' inputs out of range of 'summary$rep' values.")
+    message(glue::glue("select_rate: Selecting rates from entered 'rep' replicates..."))
+
+    n_order <- sort(n)
+    keep <- sort(unique(unlist(lapply(n_order, function(z) which(z == x$summary$rep)))))
+    summ <- x$summary
+    reordered <- FALSE
+  }
+
   # rank --------------------------------------------------------------------
   if(!is.null(n) && method == "rank"){
-    if(length(n) != 2) stop("select_rate: For 'rank' method 'n' must be a vector of two values.")
-    #if(any(n > dim(x$summary$rank)[1])) stop("select_rate: Input for 'n': rank inputs out of data frame range.")
 
-    message(glue::glue("select_rate: Selecting rates with rank values between {n[1]} and {n[2]}..."))
+    if(!(is.numeric(n)) || any(n %% 1 != 0))
+      stop("select_rate: For 'rank' method 'n' must only contain integer values.")
+    if(any(!(dplyr::between(n, min(x$summary$rank), max(x$summary$rank)))))
+      stop("select_rate: Input for 'n': One or more 'rank' inputs out of range of 'summary$rank' values.")
+    message(glue::glue("select_rate: Selecting rates with entered 'rank' values..."))
 
-    n_order <- sort(n) # in case entered wrong way round
-    keep1 <- which(x$summary$rank >= n_order[1])
-    keep2 <- which(x$summary$rank <= n_order[2])
-    keep <- keep1[keep1 %in% keep2]
-    keep <- sort(keep)
+    n_order <- sort(n)
+    keep <- sort(unique(unlist(lapply(n_order, function(z) which(z == x$summary$rank)))))
     summ <- x$summary
     reordered <- FALSE
   }
@@ -815,7 +878,7 @@ select_rate <- function(x, method = NULL, n = NULL){
       # for each n, go through summary table by row
       # if it occurs between row and endrow then that row of summary gets removed
       for(i in n_order){
-        remove_i <- which(apply(x$summary, 1, function(z) any(i %in% z[6]:z[7])))
+        remove_i <- which(apply(x$summary, 1, function(z) any(i %in% z[7]:z[8])))
         remove <- sort(unique(c(remove, remove_i)))
         progress.bar(which(i == n_order), length(n_order), "select_rate: 'row_omit' progress")
       }
@@ -876,9 +939,9 @@ select_rate <- function(x, method = NULL, n = NULL){
 
       for(i in n_order){
         remove_i <- which(apply(x$summary, 1, function(z)
-          data.table::between(i, z[8], z[9], incbounds = TRUE)))
+          data.table::between(i, z[9], z[10], incbounds = TRUE)))
         remove <- sort(unique(c(remove, remove_i)))
-        progress.bar(which(i == n_order), length(n_order), "select_rate: 'row_omit' progress")
+        progress.bar(which(i == n_order), length(n_order), "select_rate: 'time_omit' progress")
       }
       cat("\n")
       # if nothing to remove, above outputs integer(0), so this is for that...

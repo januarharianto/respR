@@ -220,29 +220,67 @@ rollreg.p <- function(rolldf, ranked.b1, rownums, xlim, rate.rev = TRUE, ...) {
   title(main = ("Rolling Rate"), line = 1.2, font = 2)
 }
 
+# rolling regression 2
+# this is a version especially for inspect roll reg plot
+# Can't quite remember why i didn't use the above, but there was a reason...
+# Maybe just better control over appearance...
+rollreg2.p <- function(df, width) {
+  roll_width <- floor(width * nrow(df))
+  ## Calc all rates, even there is a min_obs of only 1 datapoint
+  ## This means rate is returned even if there are NA in data
+  ## Also replace Inf with NA of ylim in plot fails
+  df[[1]][which(is.infinite(df[[1]]))] <- NA
+  df[[2]][which(is.infinite(df[[2]]))] <- NA
+  rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
+                         roll_width, min_obs = 1)$coefficients[,2]
+  ## However this means rates are ALSO calculated at the start of the data
+  ## before the width is even reached, so we remove these.
+  rates <- rates[-(1:(roll_width-1))]
+  rates <- na.omit(rates)
+  return(rates)
+}
 
-#' Plots multiple auto_rate results in a nice way
-#' using base plot
-#' x = auto_rate or auto_rate_subset object
-#'
-#' @keywords internal
-plot_ar_grid <- function(x, pos = NULL, msg = "subset_rate",
-                         title = "Subset", max_msg = "", ...){
+# Plots multiple auto_rate or convert_rate results in a nice way
+# using base plot
+# x = auto_rate or convert_rate object
+grid.p <- function(x, pos = NULL, msg = "grid.p",
+                   title = "Rank", quiet = FALSE, ...){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  totres <- length(x$rate)
+  ## warning if empty - but return to allow piping
+  if(length(x$summary$rate.output) == 0){
+    message(glue::glue("{msg}: Nothing to plot! No rates found in object."))
+    return(invisible(x))
+  }
+
+  # total number of results
+  totres <- nrow(x$summary)
+  # set pos
   if(is.null(pos)) pos <- 1:totres
-  if(any(pos > totres))
-    stop("{msg}: One or more 'pos' inputs are greater than the total number of results available.")
+  if(any(pos > totres)){
+    message(glue::glue("{msg}: One or more 'pos' inputs higher than number of rows in '$summary'. Applying default of all rows."))
+    pos <- 1:nrow(x$summary)
+  }
+
+  if(!quiet){
+    if(length(pos) <= 20 && length(pos) == totres) message(glue::glue("{msg}: Plotting all rate(s)...")) else
+      if(length(pos) <= 20) message(glue::glue("{msg}: Plotting rate(s) from selected 'pos' rows...")) else
+        message(glue::glue("{msg}: Plotting first 20 selected rates only. To plot others use 'pos' input."))
+  }
 
   par(oma = c(2, 2, 2, 0.5), mar = c(0.1, 0.1, 2, 0.1))
+  # allows params overriding defaults to be passed
+  par(...)
 
   plot.sub.grid <- function(x, pos, bt, lf, tp) {
     for(i in pos) {
       dt <- x$dataframe
-      rate <- x$rate[i]
+      rate <- x$rate.output[i]
+      rank <- x$summary$rank[i]
+      res <- i
+      units <- x$summary$output.unit[1]
       start <- x$summary$row[i]
       end <- x$summary$endrow[i]
       sdt <- dt[start:end]
@@ -256,12 +294,11 @@ plot_ar_grid <- function(x, pos = NULL, msg = "subset_rate",
               tp_mgp = c(0, 2, 0),
               las = 1)
       #title(glue::glue("tmp title"))
-      title(glue::glue("{title} {i} of {totres}:\nRate: {signif(rate, digits = 3)}"),
+      title(glue::glue("{title} {res} of {totres} Rates:\n{signif(rate, digits = 3)} {units}"),
             cex.main = 0.9)
     }
   }
 
-  if(length(x$rate) == 0) stop("{msg}: No results to plot!")
   if(length(pos) == 1)          {
     par(mfrow = c(1,1))
     bt <- 1
@@ -324,44 +361,58 @@ plot_ar_grid <- function(x, pos = NULL, msg = "subset_rate",
     bt <- pos[16:20]
     lf <- pos[c(1,6,11,16)]
     tp <- pos[1:5]
-    message("{msg}: Plotting first 20 selected rates only. To plot others use 'pos' input.")
     plot.sub.grid(x, pos, bt, lf, tp)
   }
 }
 
 
 
-#' Plot auto_rate summary tables
+#' Plot convert_rate and auto_rate summary tables
 #'
-#' Plots `auto_rate` summary table regressions in a way that visualises how they
-#' are positioned within the data timeseries. If it is an `auto_rate_subset`
-#' object, it will plot the subset regressions using the ranks of the original
-#' results, so you can compare the subset and original.
+#' Plots `convert_rate` and `auto_rate` summary table regressions in a way that
+#' visualises how they are positioned within the data timeseries.
 #'
-#' @param x `auto_rate` or `auto_rate_subset` object
+#' @param x `convert_rate`, `convert_rate_select`, or `auto_rate` object
 #' @param highlight integer. Which result in the summary table to highlight on
-#'   the plots. Defaults to 1. If it is outside the range of the `pos` input it
-#'   will be shown on the top plot, but will not be visible on the bottom plot.
-#' @param pos integer(s). What range of original summary table rows to plot in
-#'   lower plot. Defaults to all.
+#'   the plots. Defaults to 1. If it is outside the range of the summary rows it
+#'   will default to 1.
 #' @param legend logical. Suppress plot legends.
+#' @param quiet logical. Suppress console output.
+#' @param msg string. For adding custom text to start of messages.
+#' @param pos integer(s). Choose which summary table rows to plot.
 #' @param ... Allows additional plotting controls to be passed.
 #'
 #' @return A plot of the auto_rate object results
 #'
-#' @export
-plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
+#' @keywords internal
+overlap.p <- function(x, highlight = NULL, pos = NULL, legend = TRUE, quiet = FALSE,
+                      msg = "overlap.p", ...){
+
+  # for now, not bothering with plotting against original column numbers
+  # Very complicated - can no longer use rank column as tracker because of possible reordering
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  if(!("auto_rate" %in% class(x)))
-    stop("plot_ar: 'x' should be an 'auto_rate' or 'auto_rate_subset' object.")
+  # Needs to be this way as class(x) might have two classes and %in% check fails others way around
+  if(!("convert_rate" %in% class(x) || "auto_rate" %in% class(x)))
+    stop(glue::glue("{msg}: 'x' should be an 'auto_rate' or 'convert_rate' object."))
+  if("convert_rate" %in% class(x) && inherits(x$inputs$x, "calc_rate.bg"))
+    stop(glue::glue("{msg}: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."))
+  if("convert_rate" %in% class(x) && is.null(x$dataframe))
+    stop(glue::glue("{msg}: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."))
 
   ## warning if empty - but return to allow piping
-  if(length(x$rate) == 0){
-    message("plot_ar: Nothing to plot! No rates found in 'auto_rate' object.")
+  if(length(x$summary$rate) == 0){
+    message(glue::glue("{msg}: Nothing to plot! No rates found in object."))
     return(invisible(x))
+  }
+
+  if(is.null(pos)) pos <- 1:length(x$summary$rate)
+
+  if(!quiet){
+    if(length(pos) == length(x$summary$rate)) message(glue::glue("{msg}: Plotting all rate(s)...")) else
+      if(length(pos) < length(x$summary$rate)) message(glue::glue("{msg}: Plotting rate(s) from selected 'pos' rows..."))
   }
 
   ## set layout
@@ -378,44 +429,34 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
       cex = 1,
       cex.main = 1,
       ps = 10)
+  # allows params overriding defaults to be passed
   par(...)
-
-  ## is it a subset object?
-  subset <- !is.null(x$original) # has it already been subset?
-
-  ## apply default pos
-  if(is.null(pos))
-    if(subset) pos <- 1:nrow(x$original$summary) else
-      pos <- 1:nrow(x$summary)
 
   ## Extract data
   dt <- x$dataframe
   summ <- x$summary
-  # if(subset){
-  #   indx <- which(x$summary$rank %in% pos)
-  #   summ <- x$original$summary[indx]
-  # }
 
-  # apply default of highlight being the highest rank pos
-  if(is.null(highlight)) highlight <- 1
+  # apply default pos
+  if(is.null(pos)) pos <- 1:nrow(summ)
 
-  # If highlight isn't in pos ranks set it to highest rank one
-  if(highlight > nrow(summ)) {
-    message("plot_ar: 'highlight' too high. Applying default of first row.")
-    highlight <- 1
+  # apply default if pos too high
+  if(any(pos > nrow(summ))) {
+    message(glue::glue("{msg}: One or more 'pos' inputs higher than number of rows in '$summary'. Applying default of all rows."))
+    pos <- 1:nrow(summ)
   }
 
-  # # # highlight row shouldn't be outside pos selection range
-  # if(!(hl %in% pos)) {
-  #   message("plot_ar: 'highlight' is not within 'pos' range. Applying default of highest ranking result within 'pos' range.")
-  #   hl <- pos[1]
-  # }
+  # apply default of highlight being the highest rank pos
+  if(is.null(highlight)) highlight <- pos[1]
 
+  # If highlight isn't in pos ranks set it to highest rank one
+  if(!(highlight %in% pos)) {
+    message(glue::glue("{msg}: 'highlight' not within 'pos' input. Applying default of first 'pos' entry."))
+    highlight <- pos[1]
+  }
 
   # highlight subset
   start <- summ$row[highlight]
   end <- summ$endrow[highlight]
-  rownums <- start:end
   sub_dt <- dt[start:end]
 
   multi.p(dt, sub_dt, axes = c(2,3), legend = legend)
@@ -425,11 +466,9 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
   # Overlap plot ------------------------------------------------------------
 
   # Axis limits
-  ## how many summary rows to plot. if already filtered, original
-  # if(subset) maxy <- nrow(o_summ) else
-  #    maxy <- nrow(summ)
-  miny <- min(pos)
-  maxy <- max(pos)
+  ## how many summary rows to plot.
+  miny <- 1
+  maxy <- nrow(summ)
   minx <- 0
   maxx <- nrow(dt)
 
@@ -442,19 +481,21 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
        axes = FALSE,
        panel.first = grid(lwd = .7))
   box()
-  for(i in 1:nrow(summ))
+  for(i in pos)
     segments(x0 = summ$row[i],
-             y0 = summ$rank[i],
+             y0 = i,
              x1 = summ$endrow[i],
-             y1 = summ$rank[i],
-             lwd=3, col = r1)
+             y1 = i,
+             lwd = 3,
+             col = r1)
   axis(side = 2, col.axis = "black")
   segments(x0 = summ$row[highlight],
-           y0 = summ$rank[highlight],
+           y0 = highlight,
            x1 = summ$endrow[highlight],
-           y1 = summ$rank[highlight],
-           lwd=3, col = r2)
-  mtext("Original Summary Table Rank (Descending)",
+           y1 = highlight,
+           lwd = 3,
+           col = r2)
+  mtext("Summary Table Row (Descending)",
         outer = FALSE, cex = 1.2, line = 0.8, font = 2)
   # invisible plot to get time axis
   par(new=TRUE)
@@ -466,5 +507,119 @@ plot_ar <- function(x, highlight = NULL, pos = NULL, legend = TRUE, ...){
                     bg = "gray90",
                     cex = 0.5)
 
-  invisible(return(x)) ## to allow it to be used within pipes - still prints though...
+  return(invisible(x))
+}
+
+# Plots convert_rate objects
+# Very similar to plot.inspect
+# top plot is same fill timeseries
+# But bottom plot is output rate values against middle of their time range
+outrate.p <- function(x, pos = NULL, quiet = FALSE, msg = "rate.p",
+                      legend = TRUE, rate.rev = TRUE, ...){
+
+  ## apply default pos
+  if(is.null(pos)) pos <- 1:length(x$summary$rate)
+
+  # extract data frame
+  dt <- as.data.frame(x$dataframe)
+  # extract rates
+  rt <- x$rate.output[pos]
+  # extract times of rates
+  tm <- (x$summary$time[pos] + x$summary$endtime[pos]) /2
+  # extract units
+  un <- x$summary$output.unit[1]
+
+  # messages
+  if(!quiet){
+    if(length(pos) == length(x$summary$rate)) message(glue::glue("{msg}: Plotting all rate(s)...")) else
+      if(length(pos) < length(x$summary$rate)) message(glue::glue("{msg}: Plotting rate(s) from selected 'pos' rows..."))
+  }
+
+  # Apply default plotting params
+  par(oma = oma_def,
+      # this one needs more space at top for two panel plot
+      mai = mai_def_top_ext,
+      las = las_def,
+      mgp = mgp_def,
+      tck = tck_def,
+      pch = pch_def,
+      cex = cex_def)
+
+  # plot timeseries ----------------------------------------------------------
+
+  par(mfrow = c(2, 1),
+      ps = 10,
+      cex = 1,
+      cex.main = 1)
+  # allows defaults to be changed
+  par(...)
+
+  plot(dt[[1]],
+       dt[[2]],
+       xlab = "",
+       ylab = "",
+       ylim = grDevices::extendrange(nainf.omit(dt[[2]]), f = 0.05),
+       cex = .5,
+       axes = FALSE,
+       col.lab = "blue",
+       col.axis = "blue",
+       panel.first = grid())
+
+  axis(side = 2)
+
+  ## add row index axis
+  par(new = TRUE, ...)
+  plot(seq(1, nrow(dt)),
+       dt[[2]],
+       xlab = "",
+       ylab = "",
+       pch = "",
+       cex = .5,
+       axes = FALSE)
+  axis(side = 3, col.axis = "red")
+
+  box()
+  if(legend) legend("topright",
+                    "Row Index",
+                    text.col = "red",
+                    bg = "gray90",
+                    cex = 0.7)
+  mtext("Full Timeseries",
+        outer = TRUE, cex = 1.2, line = 0.3, font = 2)
+
+
+  # plot rates --------------------------------------------------------------
+
+  xlim <- range(nainf.omit(dt[[1]]))
+  y_lim <- grDevices::extendrange(nainf.omit(x$rate.output), f = 0.05)
+  if(rate.rev) y_lim <- rev(y_lim) ## reverse y-axis
+
+  ## dynamically resize point size to between 0.5 and 1 based on how many there are
+  int <- lm(c(1,0.5) ~c(1,6000))$coefficients[[1]] # int
+  slp <- lm(c(1,0.5) ~c(1,6000))$coefficients[[2]] # slp
+
+  plot(rt ~ tm,
+       xlim = xlim,
+       ylim = y_lim,
+       xlab = "",
+       ylab = "",
+       cex = length(rt) * slp + int, # dynamic size of points
+       col = r2,
+       axes = FALSE,)
+  axis(side = 2, cex.axis = 0.9)
+  # to put yaxis label colour back to black
+  axis(side = 1, col.lab = "blue", col.axis = "blue")
+  ## Added dashed line at rate = 0 - for when rates are +ve and -ve
+  abline(h = 0, lty = 2)
+  grid()
+  box()
+  if(legend) legend("bottomleft",
+                    "Time",
+                    text.col = "blue",
+                    bg = "gray90",
+                    cex = 0.7)
+  mtext("Output Rate",
+        outer = FALSE, cex = 1.2, line = 1.2, font = 2)
+  mtext(glue::glue("(units: {un})"),
+        outer = FALSE, cex = 1, line = 0.3, font = 2)
 }

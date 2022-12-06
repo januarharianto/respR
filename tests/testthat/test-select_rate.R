@@ -599,6 +599,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = row_omit and n input of multiple random", {
+    skip_on_cran()
     # 10 random rows
     ran <- round(runif(10, 500, 4500))
 
@@ -608,11 +609,12 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = NA)
     ## check omitted times not within times for each regression
     for(i in ran) apply(conv_rt_ar_low_obj_subset_row_omit$summary, 1, function(x)
-      expect_false(i %in% x[6]:x[7]))
+      expect_false(i %in% x[7]:x[8]))
 
   })
 
   test_that("select_rate: works with method = row_omit and n input of range as both range and vector gives same result", {
+    skip_on_cran()
     expect_identical(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
                                                                n = c(2000,2200))$summary,
                      conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
@@ -711,6 +713,8 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = time_omit and n input of multiple random", {
+    skip_on_cran()
+
     # 10 random times
     ran <- runif(10, 500, 4500)
 
@@ -725,6 +729,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = time_omit and n input of range as both range and vector gives same result", {
+    skip_on_cran()
     expect_identical(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
                                                                n = c(1000,1500))$summary,
                      conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
@@ -752,11 +757,13 @@ capture.output({  ## stops printing outputs on assigning
     sapply(conv_rt_ar_subset_rank$summary$rank, function(x) expect_lte(x, 10))
   })
 
-  test_that("select_rate: method = rank   - check stops with n not length 2 vector", {
+  test_that("select_rate: method = rank   - accepts multiple length vectors", {
     expect_error(select_rate(conv_rt_ar_obj, method = "rank", n = 4),
-                 regexp = "For 'rank' method 'n' must be a vector of two values.")
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj, method = "rank", n = c(1,2)),
+                 NA)
     expect_error(select_rate(conv_rt_ar_obj, method = "rank", n = c(1,2,3)),
-                 regexp = "For 'rank' method 'n' must be a vector of two values.")
+                 NA)
   })
 
 
@@ -2268,9 +2275,9 @@ capture.output({  ## stops printing outputs on assigning
     cr.int_mult_adj <-
       intermittent.rd %>%
       inspect(plot = FALSE)%>%
-      calc_rate.int(starts = c(1, 2101, 3751),
-                    from = 500,
-                    to = 1000,
+      calc_rate.int(starts = c(1, 2101, 3901),
+                    wait = 500,
+                    measure = 500,
                     by = "row",
                     plot = FALSE) %>%
       adjust_rate(by = -0.00005) %>%
@@ -2294,7 +2301,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(select_rate(cr.int_mult_adj, method = "rate", n = c(-0.7, -0.8)),
                  NA)
     expect_length(select_rate(cr.int_mult_adj, method = "rate", n = c(-0.7, -0.8))$rate.output,
-                  2)
+                  1)
 
     # Works piped
     expect_error(
@@ -2349,6 +2356,114 @@ capture.output({  ## stops printing outputs on assigning
         plot())
     expect_message(
       cr.int_mult_adj %>%
+        select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
+        plot(),
+      "convert_rate: Nothing to plot! No rates found in object.")
+  })
+
+
+  # auto_rate.int checks ----------------------------------------------------
+
+  # Multiple adjusted rates
+  test_that("select_rate: auto_rate.int-to-adjust_rate-to-convert_rate object with multiple rates works", {
+
+    ar.int_mult_adj <-
+      intermittent.rd %>%
+      inspect(plot = FALSE)%>%
+      auto_rate.int(starts = c(1, 2101, 3901),
+                    measure = c(1900, 3550, 4831) - c(1, 2101, 3901),
+                    width = 500,
+                    plot = FALSE) %>%
+      adjust_rate(by = -0.00005) %>%
+      convert_rate(oxy.unit = "mg/l",
+                   time.unit = "s",
+                   output.unit = "mg/h/g",
+                   mass = 0.006955,
+                   volume = 2.379)
+    #summary(ar.int_mult_adj)
+    # should not remove any rates
+    expect_error(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.6, -0.8)),
+                 NA)
+    expect_length(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.6, -0.8))$rate.output,
+                  3)
+    # should remove all rates
+    expect_error(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.4, -0.5)),
+                 NA)
+    expect_length(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.4, -0.5))$rate.output,
+                  0)
+    # should remove some rates
+    expect_error(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.7, -0.8)),
+                 NA)
+    expect_length(select_rate(ar.int_mult_adj, method = "rate", n = c(-0.7, -0.8))$rate.output,
+                  1)
+
+    # Works piped
+    expect_error(
+      ar.int_mult_adj %>%
+        select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
+        select_rate(method = "rate", n = c(-0.3, -0.2)),
+      NA)
+    expect_length(
+      (ar.int_mult_adj %>%
+         select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
+         select_rate(method = "rate", n = c(-0.3, -0.2)))$rate.output,
+      0)
+
+    # Works with reordering
+    expect_error(
+      ar.int_mult_adj %>%
+        select_rate(method = "rsq", n = NULL) %>%
+        select_rate(method = "rank", n = NULL),
+      NA)
+    expect_message(
+      ar.int_mult_adj %>%
+        select_rate(method = "rsq", n = NULL) %>%
+        select_rate(method = "rank", n = NULL),
+      "select_rate: Reordering results by 'rank' method.")
+
+    # Works with a method that doesn't work on numerics
+    expect_error(
+      ar.int_mult_adj %>%
+        select_rate(method = "rsq", n = NULL),
+      NA)
+
+    ar.int_low_mult_adj <-
+      intermittent.rd %>%
+      inspect(plot = FALSE)%>%
+      auto_rate.int(starts = c(1, 2101, 3901),
+                    measure = c(1900, 3550, 4831) - c(1, 2101, 3901),
+                    width = 500,
+                    method = "lowest",
+                    plot = FALSE) %>%
+      adjust_rate(by = -0.00005) %>%
+      convert_rate(oxy.unit = "mg/l",
+                   time.unit = "s",
+                   output.unit = "mg/h/g",
+                   mass = 0.006955,
+                   volume = 2.379)
+    # should stop
+    expect_error(
+      ar.int_low_mult_adj %>%
+        select_rate(method = "density", n = c(8,7)),
+      "select_rate: The 'density' method is only accepted for rates determined in 'auto_rate' via the 'linear' method.")
+
+    # should plot
+    expect_error(
+      ar.int_mult_adj %>%
+        select_rate(method = "rsq", n = NULL) %>%
+        plot(),
+      NA)
+    expect_output(
+      ar.int_mult_adj %>%
+        select_rate(method = "rsq", n = NULL) %>%
+        plot())
+    # should NOT plot
+    expect_output(
+      ar.int_mult_adj %>%
+        select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
+        plot())
+    expect_message(
+      ar.int_mult_adj %>%
         select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
         plot(),
       "convert_rate: Nothing to plot! No rates found in object.")
@@ -3072,7 +3187,7 @@ capture.output({  ## stops printing outputs on assigning
     cr.int_mult_adj <-
       intermittent.rd %>%
       inspect(plot = FALSE)%>%
-      calc_rate.int(starts = c(1, 2101, 3751),
+      calc_rate.int(starts = c(1, 2101, 3901),
                     from = 500,
                     to = 1000,
                     by = "row",
@@ -3102,7 +3217,7 @@ capture.output({  ## stops printing outputs on assigning
     cr.int_mult_adj <-
       intermittent.rd %>%
       inspect(plot = FALSE)%>%
-      calc_rate.int(starts = c(1, 2101, 3751),
+      calc_rate.int(starts = c(1, 2101, 3901),
                     from = 500,
                     to = 1000,
                     by = "row",

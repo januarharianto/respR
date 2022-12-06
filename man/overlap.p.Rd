@@ -15,7 +15,7 @@ overlap.p(
 )
 }
 \arguments{
-\item{x}{\code{auto_rate} or \code{auto_rate_subset} object}
+\item{x}{\code{convert_rate}, \code{convert_rate_select}, or \code{auto_rate} object}
 
 \item{highlight}{integer. Which result in the summary table to highlight on
 the plots. Defaults to 1. If it is outside the range of the summary rows it
@@ -38,3 +38,4 @@ A plot of the auto_rate object results
 Plots \code{convert_rate} and \code{auto_rate} summary table regressions in a way that
 visualises how they are positioned within the data timeseries.
 }
+\keyword{internal}

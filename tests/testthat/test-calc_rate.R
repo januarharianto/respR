@@ -41,14 +41,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(as.numeric(cr$subsets[[1]][nrow(cr$subsets[[1]]),2]),
                  93)
 
-
-    cr <- calc_rate(sard_data, 0.8, 0.5, by = "proportion", plot = F)
-    expect_is(cr,
-              "calc_rate")
-    expect_equal(as.numeric(cr$subsets[[1]][1,2]),
-                 min(cr$dataframe[[2]]) + (diff((c(min(cr$dataframe[[2]]), max(cr$dataframe[[2]])))) * 0.8))
-    expect_equal(as.numeric(cr$subsets[[1]][nrow(cr$subsets[[1]]),2]),
-                 (min(cr$dataframe[[2]]) + max(cr$dataframe[[2]]))/2)
   })
 
   test_that("calc_rate - S3 generics work", {
@@ -104,10 +96,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(calc_rate(sard_data, plot = F, by = "oxygen"), regexp = NA)
     expect_error(calc_rate(sard_data, plot = F, by = "Row"), regexp = NA)
     expect_error(calc_rate(sard_data, plot = F, by = "r"), regexp = NA)
-    expect_error(calc_rate(sard_data, plot = F, by = "Proportion"),
-                 regexp = "calc_rate: please enter a proportion 'from' input.")
-    expect_error(calc_rate(sard_data, plot = F, by = "prop"),
-                 regexp = "calc_rate: please enter a proportion 'from' input.")
   })
 
   test_that("calc_rate - stops with wrong 'by' inputs", {
@@ -128,8 +116,8 @@ capture.output({  ## stops printing outputs on assigning
                  "calc_rate: Input must be a 'data.frame' or 'inspect' object.")
   })
 
-  test_that("calc_rate - warns with multi column input", {
-    expect_warning(calc_rate(urchins.rd, plot = F),
+  test_that("calc_rate - message with multi column input", {
+    expect_message(calc_rate(urchins.rd, plot = F),
                    "calc_rate: Multi-column dataset detected in input.")
   })
 
@@ -159,8 +147,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(calc_rate(urch, from = NULL, to = 7, by = "oxygen", plot = FALSE)$summary$oxy,
                  urch[[2]][1])
 
-    expect_error(calc_rate(urch, from = NULL, to = 0.8, by = "prop"),
-                 regexp = "calc_rate: please enter a proportion 'from' input.")
   })
 
   test_that("calc_rate - correctly handles 'to' NULL", {
@@ -180,8 +166,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(calc_rate(urch, from = 7.5, to = NULL, by = "oxygen", plot = FALSE)$summary$endoxy,
                  urch[[2]][181])
 
-    expect_error(calc_rate(urch, from = 0.2, to = NULL, by = "prop"),
-                 regexp = "calc_rate: please enter a proportion 'to' input.")
   })
 
 
@@ -231,8 +215,6 @@ capture.output({  ## stops printing outputs on assigning
                  "calc_rate: 'from' and 'to' have unequal lengths.")
     expect_error(calc_rate(sard_data[1000:2000,], from = c(5,10,15), to = c(100,105), plot = F, by = "row"),
                  "calc_rate: 'from' and 'to' have unequal lengths.")
-    expect_error(calc_rate(sard_data[1000:2000,], from = 5, to = c(100,105), plot = F, by = "prop"),
-                 "calc_rate: 'from' and 'to' have unequal lengths.")
   })
 
   test_that("calc_rate - stops if any paired 'from' and 'to' are of equal value", {
@@ -241,8 +223,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(calc_rate(sard_data[1000:2000,], from = c(5,6,7), to = c(4,6,8), plot = F, by = "oxy"),
                  "some 'from' values are equal to the paired values in 'to'.")
     expect_error(calc_rate(sard_data[1000:2000,], from = c(5,6,7), to = c(4,6,8), plot = F, by = "row"),
-                 "some 'from' values are equal to the paired values in 'to'.")
-    expect_error(calc_rate(sard_data[1000:2000,], from = c(5,6,7), to = c(4,6,8), plot = F, by = "prop"),
                  "some 'from' values are equal to the paired values in 'to'.")
     expect_error(calc_rate(sard_data[1000:2000,], from = c(4,4,6), to = c(6,6,6), plot = F, by = "oxy"),
                  "some 'from' values are equal to the paired values in 'to'.")
@@ -656,171 +636,8 @@ capture.output({  ## stops printing outputs on assigning
   })
 
 
-  # by = "proportion" checks ------------------------------------------------
 
-  test_that("calc_rate - by = 'proportion' errors with to or from not between 0 and 1", {
-    by <- "proportion"
-
-    expect_error(calc_rate(sard_data, from = 10, to = 0, plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
-    expect_error(calc_rate(sard_data, from = 0.9, to = 10, plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'to' values should be between 0 and 1.")
-    expect_error(calc_rate(sard_data, from = 10, to = 11, plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
-
-    expect_error(calc_rate(sard_data, from = c(10,0.6), to = c(0,0.3), plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
-    expect_error(calc_rate(sard_data, from = c(0.9,0.6), to = c(10,0.3), plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'to' values should be between 0 and 1.")
-    expect_error(calc_rate(sard_data, from = c(10,0.6), to = c(12,0.3), plot = F, by = by),
-                 "calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
-  })
-
-  test_that("calc_rate - by = 'proportion' outputs correct results", {
-    by <- "proportion"
-
-    from <- 0.8
-    to <- 0.2
-
-    mx <- max(sard_data[[2]])
-    mn <- min(sard_data[[2]])
-
-    lower <- sort(c(from, to))[1]
-    upper <- sort(c(from, to))[2]
-    min <- min(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-    max <- max(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-
-    sub <- sard_data[min:max,]
-    expect_equal(calc_rate(sard_data, from = from, to = to, plot = F, by = by)$rate,
-                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
-
-    ## try a bunch of values
-    #from <- (seq(95, 91, length.out = 20))
-    #to <- (seq(94, 90, length.out = 20))
-    from <- runif(100, max = 1, min = 0.5)
-    to <- runif(100, max = 0.5, min = 0)
-
-    for(i in 1:length(from)){
-      lower <- sort(c(from[i], to[i]))[1]
-      upper <- sort(c(from[i], to[i]))[2]
-      min <- min(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      max <- max(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      sub <- sard_data[min:max,]
-      expect_equal(calc_rate(sard_data, from = from[i], to = to[i], plot = F, by = by)$rate,
-                   as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
-    }
-
-    ## as a multiple from/to input
-    rates <- c()
-    for(i in 1:length(from)){
-      lower <- sort(c(from[i], to[i]))[1]
-      upper <- sort(c(from[i], to[i]))[2]
-      min <- min(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      max <- max(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      sub <- sard_data[min:max,]
-      rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
-    }
-
-    expect_equal(calc_rate(sard_data, from = from, to = to, plot = F, by = by)$rate,
-                 rates)
-
-  })
-
-  test_that("calc_rate - by = 'proportion' - check 'from' and 'to' are interchangeable", {
-    by <- "proportion"
-
-    from <- 0.8
-    to <- 0.2
-
-    mx <- max(sard_data[[2]])
-    mn <- min(sard_data[[2]])
-
-    lower <- sort(c(from, to))[1]
-    upper <- sort(c(from, to))[2]
-    min <- min(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-    max <- max(which(dplyr::between(sard_data[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-
-    sub <- sard_data[min:max,]
-    expect_equal(calc_rate(sard_data, from = from, to = to, plot = F, by = by)$rate,
-                 calc_rate(sard_data, from = to, to = from, plot = F, by = by)$rate)
-
-    ## try a bunch of values
-    #from <- (seq(95, 91, length.out = 20))
-    #to <- (seq(94, 90, length.out = 20))
-    from <- runif(100, max = 1, min = 0.5)
-    to <- runif(100, max = 0.5, min = 0)
-
-    for(i in 1:length(from)){
-      expect_equal(calc_rate(sard_data, from = from[i], to = to[i], plot = F, by = by)$rate,
-                   calc_rate(sard_data, from = to[i], to = from[i], plot = F, by = by)$rate)
-    }
-  })
-
-  test_that("calc_rate - by = 'proportion' outputs correct results", {
-    by <- "proportion"
-
-    sardine_rev <- sard_data
-    sardine_rev[[2]] <- rev(sardine_rev[[2]])
-
-    from <- 0.8
-    to <- 0.2
-
-    mx <- max(sardine_rev[[2]])
-    mn <- min(sardine_rev[[2]])
-
-    lower <- sort(c(from, to))[1]
-    upper <- sort(c(from, to))[2]
-    min <- min(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-    max <- max(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-
-    sub <- sardine_rev[min:max,]
-    expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-                 as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
-
-    ## try a bunch of values
-    #from <- (seq(95, 91, length.out = 20))
-    #to <- (seq(94, 90, length.out = 20))
-    from <- runif(100, max = 1, min = 0.5)
-    to <- runif(100, max = 0.5, min = 0)
-
-    for(i in 1:length(from)){
-      lower <- sort(c(from[i], to[i]))[1]
-      upper <- sort(c(from[i], to[i]))[2]
-      min <- min(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      max <- max(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      sub <- sardine_rev[min:max,]
-      expect_equal(calc_rate(sardine_rev, from = from[i], to = to[i], plot = F, by = by)$rate,
-                   as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2]))
-    }
-
-    ## as a multiple from/to input
-    rates <- c()
-    for(i in 1:length(from)){
-      lower <- sort(c(from[i], to[i]))[1]
-      upper <- sort(c(from[i], to[i]))[2]
-      min <- min(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      max <- max(which(dplyr::between(sardine_rev[[2]], (lower * (mx - mn) + mn), (upper * (mx - mn) + mn))))
-      sub <- sardine_rev[min:max,]
-      rates[i] <- as.numeric(lm(sub[[2]]~sub[[1]])$coefficients[2])
-    }
-
-    expect_equal(calc_rate(sardine_rev, from = from, to = to, plot = F, by = by)$rate,
-                 rates)
-
-    ## same region from reversed data outputs same rate
-    from <- runif(100, max = 1, min = 0.5)
-    to <- runif(100, max = 0.5, min = 0)
-    from_rev <- to
-    to_rev <- from
-
-    mapply(function(p,q,r,s) expect_equal(calc_rate(sard_data, from = p, to = q, plot = F, by = by)$rate,
-                                          calc_rate(sardine_rev, from = r, to = s, plot = F, by = by)$rate * -1),
-           p = from,
-           q = to,
-           r = from_rev,
-           s = to_rev)
-
-  })
+# Plot defaults -----------------------------------------------------------
 
   test_that("calc_rate - plot defaults are correctly restored", {
 

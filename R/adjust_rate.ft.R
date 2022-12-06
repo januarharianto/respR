@@ -142,14 +142,14 @@ adjust_rate.ft <- function(x, by) {
 
   # Validate inputs ---------------------------------------------------------
 
-  if(!is.numeric(x) && class(x) != "calc_rate.ft")
+  if(!is.numeric(x) && !inherits(x, "calc_rate.ft"))
     stop("adjust_rate.ft: 'x' must be numeric or 'calc_rate.ft' object.")
 
-  if(!is.numeric(by) && class(by) != "calc_rate.ft")
+  if(!is.numeric(by) && !inherits(by, "calc_rate.ft"))
     stop("adjust_rate.ft: 'by' must be numeric or 'calc_rate.ft' object.")
 
   # if both crft objs, check flowrate is equal
-  if(class(x) ==  "calc_rate.ft" && class(by) == "calc_rate.ft"){
+  if(inherits(x, "calc_rate.ft") && inherits(by, "calc_rate.ft")){
     flowrate_equal <- x$inputs$flowrate == by$inputs$flowrate
     if(!flowrate_equal)
       stop("adjust_rate.ft: 'x' and by' input rates have been calculated using different 'flowrates'! \nBackground adjustments should be determined at the same flowrate. \nIf you still want to proceed, you can enter the 'by' adjustment as a value.")

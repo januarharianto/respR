@@ -461,11 +461,11 @@ test_that("convert_rate.ft - objects work with summary().", {
   })
   sapply(objs, function(z) {
     expect_output(summary(eval(parse(text=z))),
-                  regexp = "rank rate.input")
+                  regexp = "rep rank intercept_b0")
   })
 
 })
-
+summary(conv.crft1)
 test_that("convert_rate.ft - objects work with summary() and 'pos' input", {
 
   expect_error(summary(conv.crftmany.ms, pos = 2),

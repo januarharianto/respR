@@ -261,8 +261,8 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
       plot = FALSE
     )$summary))
   # reorder
-  # remove rank, rate2pt columns
-  results <- output[,2:10]
+  # remove rep, rank, rate2pt columns
+  results <- output[,3:11]
 
   out <- list(results = results, roll = kde$rollreg,
               density = kde$density, peaks = kde$peaks)
@@ -390,6 +390,7 @@ rolling_reg_time <- function(df, width) {
   results <- results[time >= df[[1]][1]] # remove extra rows
   results[, row := seq_len(.N)]
   endrow <- sapply(results$endtime, function(i) df[, which(x == i)])
+  endrow <- sort(unique(unlist(endrow))) #for obscure cases where there are duplicate times
   results[, endrow := endrow]
   results[, oxy := df[results[, row], y]]
   results[, endoxy := df[results[, endrow], y]]

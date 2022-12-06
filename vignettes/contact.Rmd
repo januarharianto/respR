@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Developers
 
-`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. 
+`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. 
 
 ## Contact
 
@@ -31,23 +31,11 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 ## Twitter
 
-`respR` has a [**Twitter**](https://twitter.com/respR_pkg) account. Please follow for the latest news and updates. &nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
+`respR` has a [**Twitter**](https://twitter.com/respR_pkg) account. Follow for the latest news and updates. &nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
+## Mastodon
 
-## Discord
-
-We have set up a [**Discord**](https://discord.gg/JKkarCTW4N) channel to discuss `respR`. &nbsp; [![Discord](https://img.shields.io/discord/943124666573275146)](https://discord.gg/JKkarCTW4N)
-
-<!-- <iframe src="https://discord.com/widget?id=943124666573275146&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe> -->
-
-## Slack
-
-Alternatively, join our open [**Slack**](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ) workspace. &nbsp; [![](https://img.shields.io/badge/Slack-Join-orange)](https://join.slack.com/t/respr-open/shared_invite/zt-13gttchaf-eCxIlifhDr_Q7GbtMzYgxQ)
-
-
-## Note
-
-For now we are just trying out [**Discord**](https://discord.com) and [**Slack**](https://slack.com). Which of them we will use going forward will depend on if anyone uses them. It is very likely that we will abandon one or both if there isn't much interest or utility! 
+We also have a <a rel="me" href="https://mas.to/@respR">Mastodon</a> account. Like many        we have just started with this, so stay tuned to see how things develop!
 
 ## Tip Jar 
 

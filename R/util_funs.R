@@ -42,6 +42,48 @@ toc <- function() {
   return(elapsed)
 }
 
+# simple progress bar
+# x = numeric. Current iteration of the progress of the operation. This would be,
+# for example, the `i` in a `for` loop.
+# total = numeric. Total number of iterations until operation complete. This would be,
+# for example, the total `i` in a `for` loop.
+# message string. Optional text to add to right side of progress bar.
+# Should not be more than a few words.
+progress.bar <- function (x, total = NULL, message = NULL) {
+
+  ## if no message, just make it an empty character vector or causes errors later
+  if(is.null(message)) message <- ""
+
+  ## current width of console
+  wdth <- getOption("width")
+
+  msg_length <- nchar(message) # nchar in message
+  buf <- 8 # nchar of % msg (total), spaces and brackets
+  # general default character width of R console
+  # Don't want to go over this.
+  def_nchar <- 80
+  total_nchar <- wdth # total char of current console
+
+  # determine final nchar - either total available now, or R default
+  if (total_nchar >= def_nchar) final_nchar <- def_nchar else
+    if (total_nchar < 80) final_nchar <- total_nchar
+
+  ## number of equals signs required
+  n_eq <- final_nchar - msg_length - buf
+
+  ## proportion done in this loop
+  prop_done <- x / total
+
+  ## print message
+  cat(sprintf(c(glue::glue("\r[%-{n_eq}s] %3d%%"), message),
+              paste(rep("=", (n_eq * prop_done)), collapse = ""),
+              floor(prop_done*100)))
+
+  ## end
+  if (x == total)
+    cat("\n")
+}
+
 
 # checks for `inspect()` functions --------------------------------
 
@@ -208,15 +250,11 @@ truncate_data <- function(x, from, to, by) {
     if(by == "time") from <- min(dt[[1]], na.rm = TRUE)
     if(by == "row") from <- 1
     if(by == "oxygen") from <- dt[[2]][1] # first oxygen value
-    if(by == "proportion")
-      stop("Please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(dt[[1]], na.rm = TRUE)
     if(by == "row") to <- nrow(dt)
     if(by == "oxygen") to <- dt[[2]][nrow(dt)] # last oxygen value
-    if(by == "proportion")
-      stop("Please enter a proportion 'to' input.")
   }
 
   ## time is ok, since it is always increasing
@@ -256,25 +294,6 @@ truncate_data <- function(x, from, to, by) {
         end <- max(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
 
         out <- dt[start:end]
-  }
-  if (by == "proportion") {
-    ## has to handle by proportion produced as well as consumed!
-    mx <- max(dt[[2]], na.rm = TRUE)
-    mn <- min(dt[[2]], na.rm = TRUE)
-    ## dplyr::between needs them in low-high order
-    lower <- sort(c(from, to))[1]
-    upper <- sort(c(from, to))[2]
-    # indices of data between these
-    start <- min(which(dplyr::between(dt[[2]],
-                                      (lower * (mx - mn) + mn),
-                                      (upper * (mx - mn) + mn))),
-                 na.rm = TRUE)
-    end <- max(which(dplyr::between(dt[[2]],
-                                    (lower * (mx - mn) + mn),
-                                    (upper * (mx - mn) + mn))),
-               na.rm = TRUE)
-
-    out <- dt[start:end]
   }
   return(out)
 }
@@ -379,6 +398,6 @@ x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL
 rowlength = NULL; endrow = NULL; timelength = NULL; rate.2pt = NULL
 endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
 ..xcol = NULL; ..ycol = NULL; multicore = NULL; multisession = NULL
-rsq = NULL; rate = NULL
+rsq = NULL; rate = NULL; rate.output = NULL; start_row = NULL
 
 

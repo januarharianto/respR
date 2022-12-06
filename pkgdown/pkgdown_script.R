@@ -18,9 +18,9 @@ pkgdown::build_site(lazy = TRUE, devel = TRUE, preview = TRUE)
 pkgdown::build_home(preview = TRUE)
 
 pkgdown::build_article("closed")
-pkgdown::build_article("subset_rate")
+pkgdown::build_article("select_rate")
 
-usethis::use_vignette("support", "Support Us")
+usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alternative approaches")
 
 
 # sets up GH Actions workflow. Which isn't working.

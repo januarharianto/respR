@@ -1,8 +1,8 @@
 ---
-title: "Support Us"
+title: "Support Development"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Support Us}
+  %\VignetteIndexEntry{Support Development}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,7 +27,7 @@ opts_chunk$set(collapse = TRUE,
 
 ## Devs
 
-`respR` is designed, programmed, and maintained by [**Januar Harianto**](https://github.com/januarharianto) and [**Nicholas Carey**](https://github.com/nicholascarey). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. 
+`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. 
 
 ## Support 
 

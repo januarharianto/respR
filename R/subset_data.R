@@ -9,24 +9,21 @@
 #' passed to an analytical function such as `calc_rate` or `auto_rate`. See
 #' examples and vignettes.
 #'
-#' The function can subset data based on ranges of `"time"`, `"oxygen"`, `"row"`
-#' , or `"proportion"` of total oxygen used or produced (note, this last option
-#' works poorly with noisy or fluctuating data). For data frames, to subset by
-#' `"time"`, `"oxygen"`, or `"proportion"`, the time data is assumed to be in
-#' the first column, and oxygen data in the second column. For [`inspect()`] and
-#' [`inspect.ft()`] objects, the data will have been coerced to this structure
-#' already. In these cases the `$dataframe` element in the output is replaced by
-#' the subset, and in `inspect.ft` the `$data` element is also subset and
-#' replaced. Note for `inspect.ft` objects, the oxygen data in column 2 will be
-#' either `out.oxy` data or `delta.oxy` data depending on what was inspected.
-#' The function can subset *any* data frame by `row`.
+#' The function can subset data based on ranges of `"time"`, `"oxygen"`, or
+#' `"row"`. For data frames, to subset by `"time"` or `"oxygen"` the time data
+#' is assumed to be in the first column, and oxygen data in the second column.
+#' For [`inspect()`] and [`inspect.ft()`] objects, the data will have been
+#' coerced to this structure already. In these cases the `$dataframe` element in
+#' the output is replaced by the subset, and in `inspect.ft` the `$data` element
+#' is also subset and replaced. Note for `inspect.ft` objects, the oxygen data
+#' in column 2 will be either `out.oxy` data or `delta.oxy` data depending on
+#' what was inspected. The function can subset *any* data frame by `row`.
 #'
 #' When multiple columns are present, for example time in column 1, and multiple
 #' columns of oxygen data, the subset object will include *all* columns. In the
-#' case of subsetting `by = "oxygen"` or `by = "proportion"`, subsetting is
-#' based on the *first* column of oxygen data only (i.e. column 2), and all
-#' subsequent columns are subset between the same rows regardless of oxygen
-#' values.
+#' case of subsetting `by = "oxygen"`, subsetting is based on the *first* column
+#' of oxygen data only (i.e. column 2), and all subsequent columns are subset
+#' between the same rows regardless of oxygen values.
 #'
 #' For all methods, if exact matching values of `from` and `to` are not present
 #' in the data, the closest values are used. For `"time"` and `"row"`
@@ -36,11 +33,11 @@
 #' row (50) will be used instead. The same for `from` and `to` time values
 #' outside those in the data frame.
 #'
-#' For `"oxygen"` or `"proportion"` subsetting, `from` and `to` are generally
-#' interchangeable, and the function will subset data *between* the first and
-#' last occurrences (or closest occurrences) of these values. It works best with
-#' generally increasing or decreasing oxygen data, and results may vary with
-#' other data such as intermittent flow data or those in `inspect.ft` objects.
+#' For `"oxygen"` subsetting, `from` and `to` are generally interchangeable, and
+#' the function will subset data *between* the first and last occurrences (or
+#' closest occurrences) of these values. It works best with generally increasing
+#' or decreasing oxygen data, and results may vary with other data such as
+#' intermittent flow data or those in `inspect.ft` objects.
 #'
 #' **Note for `inspect` and `inspect.ft` object inputs:** after subsetting the
 #' locations of any data issues highlighted when the object was originally
@@ -48,9 +45,8 @@
 #' is to subset the original dataframe, and then process the subset through
 #' `inspect` or `inspect.ft`.
 #'
-#' A summary of the subset is printed to the console, to check it has subset the
-#' data as expected. To suppress this changing the default `quiet = FALSE` to
-#' `TRUE`.
+#' A summary of the subset can be printed to the console if the default `quiet =
+#' FALSE` is changed to `TRUE`.
 #'
 #' ## More
 #'
@@ -65,10 +61,10 @@
 #'   to produce a subset.
 #' @param from numeric. The lower bounds of the subset based on the `by` input.
 #' @param to numeric. The upper bounds of the subset based on the `by` input.
-#' @param by string. "time"`, `"row"`, `"oxygen"` or `"proportion"`. Method by
-#'   which to apply the `from` and `to` inputs.
+#' @param by string. `"time"`, `"row"`, or `"oxygen"`. Method by which to apply
+#'   the `from` and `to` inputs.
 #' @param quiet logical. Controls if a summary of the output is printed to the
-#'   console. Default is `FALSE`.
+#'   console. Default is `TRUE`.
 #'
 #' @export
 #'
@@ -91,7 +87,7 @@
 #'    inspect(time = 1, oxygen = 2) %>%
 #'    auto_rate()
 
-subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
+subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
 
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect")) {
@@ -108,15 +104,11 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
     if(by == "time") from <- min(nainf.omit(dt[[1]]))
     if(by == "row") from <- 1
     if(by == "oxygen") from <- dt[[2]][1] # first oxygen value
-    if(by == "proportion")
-      stop("subset_data: please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(nainf.omit(dt[[1]]))
     if(by == "row") to <- nrow(dt)
     if(by == "oxygen") to <- dt[[2]][nrow(dt)] # last oxygen value
-    if(by == "proportion")
-      stop("subset_data: please enter a proportion 'to' input.")
   }
 
   ## if time, 'from' required, single val, not bigger than max value in time
@@ -140,8 +132,8 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
               max = 1, min = 1, range = c(from+1, Inf),
               msg = "subset_data: 'to' -")}
 
-  ## if oxygen or prop, 'from' & 'to' required, single val, numeric
-  if(by == "oxygen" || by == "proportion") {
+  ## if oxygen, 'from' & 'to' required, single val, numeric
+  if(by == "oxygen") {
     input.val(from,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(-Inf, Inf),
               msg = "subset_data: 'from' -")
@@ -149,6 +141,7 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = FALSE) {
               max = 1, min = 1, range = c(-Inf, Inf),
               msg = "subset_data: 'to' -")}
 
+  # Perform subset
   out <- truncate_data(dt, from, to, by)
 
   # inspect.ft has an additional element that needs subset - $data

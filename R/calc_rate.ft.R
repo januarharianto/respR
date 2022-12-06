@@ -484,8 +484,11 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
               subsets = dfs,
               delta.oxy = delta,
               input_type = xtype,
-              summary = data.table(cbind(rank = 1:nrow(summary),
-                                         summary, flowrate = flowrate, rate = rate)),
+              summary = data.table(cbind(rep = NA,
+                                         rank = 1:nrow(summary),
+                                         summary,
+                                         flowrate = flowrate,
+                                         rate = rate)),
               rate = rate)
 
   class(out) <- "calc_rate.ft"

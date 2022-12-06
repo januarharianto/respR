@@ -99,19 +99,13 @@ across the entire timeseries. No reordering of results is performed.
 \item \code{interval}: multiple, successive, non-overlapping regressions of the
 specified \code{width} are extracted from the rolling regressions, ordered by
 time.
-\item NOTE: \code{max}, \code{min}: These methods were used in previous versions of \code{respR}
-but have been deprecated. They were intended to order oxygen uptake
-(negative) rates by magnitude, but this resulted in incorrect ordering of
-oxygen production (positive) rates. They have been retained for code
-compatibility, but will be removed in a future version of \code{respR}, and so
-\emph{should not be used}.
 }
 }
 
 \subsection{Further selection and filtering of results}{
 
 For further selection or subsetting of \code{auto_rate} results, see the dedicated
-\code{\link[=subset_rate]{subset_rate()}} function, which allows subsetting of rates by various
+\code{\link[=select_rate]{select_rate()}} function, which allows subsetting of rates by various
 criteria, including r-squared, data region, percentiles, and more.
 }
 
@@ -125,13 +119,12 @@ The units of oxygen concentration and time will be specified later in
 \subsection{The \code{width} and \code{by} inputs}{
 
 If \code{by = "time"}, the \code{width} input represents a time window in the units of
-the time data.
+the time data in \code{x}.
 
-If \code{by = "row"} and between 0 and 1, \code{width} represents a proportion of the
-total data length, as in the equation \verb{floor(width * number of data rows)}.
-For example, 0.2 represents a rolling window of 20\% of the data width.
-Otherwise, if entered as an integer of 2 or greater, the \code{width} represents
-the number of rows.
+If \code{by = "row"} and \code{width} is between 0 and 1 it represents a proportion of
+the total data length, as in the equation \verb{floor(width * number of data rows)}. For example, 0.2 represents a rolling window of 20\% of the data
+width. Otherwise, if entered as an integer of 2 or greater, the \code{width}
+represents the number of rows.
 
 For both \code{by} inputs, if left as \code{width = NULL} it defaults to 0.2 or a
 window of 20\% of the data length.

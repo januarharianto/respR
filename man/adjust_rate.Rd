@@ -16,8 +16,8 @@ adjust_rate(
 }
 \arguments{
 \item{x}{numeric. A single numeric value, numeric vector, or object of class
-\code{calc_rate}, \code{calc_rate.int},or \code{auto_rate}. This contains the experimental
-rate value(s) to be adjusted.}
+\code{calc_rate}, \code{calc_rate.int}, \code{auto_rate}, or \code{auto_rate.int}. This
+contains the experimental rate value(s) to be adjusted.}
 
 \item{by}{numeric. A single numeric value, numeric vector, or object of class
 \code{calc_rate.bg} or \code{calc_rate}. This is the background rate(s) used to
@@ -59,13 +59,13 @@ and the primary output of interest \verb{$rate.adjusted}.
 }
 \description{
 The \code{adjust_rate} function adjusts oxygen uptake or production rates (for
-example, as determined in \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.int]{calc_rate.int()}}, or
-\code{\link[=auto_rate]{auto_rate()}}) for background oxygen use by microbial organisms, or for
-other removal or input of oxygen during a respirometry experiment. The
-function accepts numeric values, as well as regular \code{respR} objects, and data
-frames. See \code{\link[=calc_rate.bg]{calc_rate.bg()}} for determining background rates, which is the
-recommended way of passing background rates to \code{adjust_rate}. Rates
-determined in \code{calc_rate} are also accepted as background rates.
+example, as determined in \code{\link[=calc_rate]{calc_rate()}} or \code{\link[=auto_rate]{auto_rate()}}) for background
+oxygen use by microbial organisms, or for other removal or input of oxygen
+during a respirometry experiment. The function accepts numeric values, as
+well as regular \code{respR} objects, and data frames. See \code{\link[=calc_rate.bg]{calc_rate.bg()}} for
+determining background rates, which is the recommended way of passing
+background rates to \code{adjust_rate}. Rates determined in \code{calc_rate} are also
+accepted as background rates.
 }
 \details{
 \code{adjust_rate} allows the rate, or multiple rates, in \code{x} to be adjusted in a
@@ -121,47 +121,48 @@ share the same time data or scale.
 experiment (or any single background value) is being used to adjust one or
 more specimen rates. Each rate in \code{x} is adjusted by the subtracting the
 single value in \code{by}. \code{x} can be a numeric value, numeric vector,
-\code{auto_rate}, \code{calc_rate.int}, or \code{calc_rate} object. \code{by} can be a single
-numeric value, a \code{calc_rate.bg} object containing a single \verb{$rate.bg} (i.e.
-calculated from a 2-column data frame of time~oxygen), or a \code{calc_rate}
-object containing a single \verb{$rate}. All other inputs should be \code{NULL}.
+\code{calc_rate}, \code{calc_rate.int}, \code{auto_rate}, or \code{auto_rate.int} object. \code{by}
+can be a single numeric value, a \code{calc_rate.bg} object containing a single
+\verb{$rate.bg} (i.e. calculated from a 2-column data frame of time~oxygen), or a
+\code{calc_rate} object containing a single \verb{$rate}. All other inputs should be
+\code{NULL}.
 
 \code{"mean"} - For experiments in which the mean rate from multiple background
 experiments is being used to adjust one or more specimen rates. Each rate in
 \code{x} is adjusted by subtracting the \emph{mean} of all background rates in \code{by}.
-\code{x} can be a numeric value, numeric vector, \code{auto_rate}, \code{calc_rate.int}, or
-\code{calc_rate} object. \code{by} can be a numeric value, numeric vector,
-\code{calc_rate.bg} object containing multiple \verb{$rate.bg}, or a \code{calc_rate} object
-containing multiple \verb{$rate}. All other inputs should be \code{NULL}. If \code{by} is a
-single value, this will obviously have the same output as the \code{"value"}
-method.
+\code{x} can be a numeric value, numeric vector, \code{calc_rate}, \code{calc_rate.int},
+\code{auto_rate}, or \code{auto_rate.int} object. \code{by} can be a numeric value, numeric
+vector, \code{calc_rate.bg} object containing multiple \verb{$rate.bg}, or a
+\code{calc_rate} object containing multiple \verb{$rate}. All other inputs should be
+\code{NULL}. If \code{by} is a single value, this will obviously have the same output
+as the \code{"value"} method.
 
 \code{"paired"} - For experiments where multiple specimen experiments are being
 adjusted by multiple different background rates. This is a vectorised
 adjustment operation: rates in \code{x} are adjusted by the background rates at
 the same position in \code{by}. That is, the first \code{x} adjusted by the first \code{by},
 second \code{x} by second \code{by}, etc. \code{x} can be a numeric value, numeric vector,
-\code{auto_rate}, \code{calc_rate.int}, or \code{calc_rate} object. \code{by} can be a numeric
-vector \emph{of the same length}, a \code{calc_rate.bg} or \code{calc_rate} object where the
-\verb{$rate.bg} or \verb{$rate} element is the \emph{same length} as the rates in \code{x} to be
-adjusted. All other inputs should be \code{NULL}.
+\code{calc_rate}, \code{calc_rate.int}, \code{auto_rate}, or \code{auto_rate.int} object. \code{by}
+can be a numeric vector \emph{of the same length}, a \code{calc_rate.bg} or \code{calc_rate}
+object where the \verb{$rate.bg} or \verb{$rate} element is the \emph{same length} as the
+rates in \code{x} to be adjusted. All other inputs should be \code{NULL}.
 
 \code{"concurrent"} - For experiments in which one or more concurrent "blanks" or
 background experiments are run alongside specimen experiments. Rates in \code{x}
 are adjusted by a background rate calculated over the same time window in the
 data in \code{by}. That is, the start and end time of each \code{x} rate is used to fit
 a linear regression and calculate a background rate in the \verb{$dataframe} in
-\code{by}. \code{x} must be an \code{auto_rate}, \code{calc_rate.int}, or \code{calc_rate} object.
-\code{by} must be a \code{data.frame}, \code{inspect}, \code{calc_rate.bg}, or \code{calc_rate} object
-containing time~oxygen data. If there are multiple columns of background
-oxygen the mean rate across the same time window in all columns is used. In
-\code{calc_rate.bg} and \code{calc_rate} objects the \verb{$rate.bg} or \verb{$rate} element is
-not used, only the \verb{$dataframe}. The \code{x} and \code{by} data must share (broadly)
-the \emph{same time data or scale in the same units}. If the \code{x} and \code{by} data
-differ in length by more than 5\% or some time values are not shared between
-the two datasets, a warning is given, but the adjustment is nevertheless
-performed using the available data, by using the closest matching time window
-in the background data.
+\code{by}. \code{x} must be an \code{calc_rate}, \code{calc_rate.int}, \code{auto_rate}, or
+\code{auto_rate.int} object. \code{by} must be a \code{data.frame}, \code{inspect},
+\code{calc_rate.bg}, or \code{calc_rate} object containing time~oxygen data. If there
+are multiple columns of background oxygen the mean rate across the same time
+window in all columns is used. In \code{calc_rate.bg} and \code{calc_rate} objects the
+\verb{$rate.bg} or \verb{$rate} element is not used, only the \verb{$dataframe}. The \code{x} and
+\code{by} data must share (broadly) the \emph{same time data or scale in the same
+units}. If the \code{x} and \code{by} data differ in length by more than 5\% or some
+time values are not shared between the two datasets, a warning is given, but
+the adjustment is nevertheless performed using the available data, by using
+the closest matching time window in the background data.
 
 \code{"linear"} - This is a dynamic adjustment, intended for experiments in which
 the background oxygen rate \emph{changes} over the course of the experiment
@@ -185,10 +186,10 @@ using the midpoint of the time range of the \code{by} and \code{by2} rate regres
 (or values plus timestamps). The adjustments to \code{x} rates are calculated by
 taking the midpoint of the time range over which it was determined and
 applying it to the \code{by~by2} linear relationship. The \code{x} input can be a
-numeric value, numeric vector, or a \code{calc_rate}, \code{calc_rate.int}, or
-\code{auto_rate} object containing single or multiple rates. The \code{by} input is the
-first background recording or rate value, and \code{by2} the second background
-recording or rate value.
+numeric value, numeric vector, or a \code{calc_rate}, \code{calc_rate.int},
+\code{auto_rate}, or \code{auto_rate.int} object containing single or multiple rates.
+The \code{by} input is the first background recording or rate value, and \code{by2} the
+second background recording or rate value.
 
 While it is typical, the \code{x} rates do not necessarily need to be at
 intermediate timepoints to the \code{by/by2} times. these are used only to

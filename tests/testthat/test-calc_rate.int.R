@@ -11,8 +11,8 @@ capture.output({  ## stops printing outputs on assigning
   dt <- intermittent.rd |>
     subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
   dt.insp <- inspect(dt, plot = F)
-  sts <- c(1,2100,3750) # different from help file because first row removed above
-  ens.actual <- c(2099,3749,4830) #actual ends including flush
+  sts <- c(1,2100,3899) # different from help file because first row removed above
+  ens.actual <- c(2099,3898,4830) #actual ends including flush
   ens.measure <- c(1899,3549,4830)  # ends excluding flush
 
   # regular reps - 10 reps from this dataset
@@ -28,7 +28,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - stops with wrong 'x' inputs", {
     expect_error(calc_rate.int(dt[[1]],
                                starts = sts,
-                               ends = ens.actual,
                                plot = F),
                  "calc_rate.int: Input must be a 'data.frame' or 'inspect' object.")
   })
@@ -36,7 +35,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - stops with wrong 'x' inputs", {
     expect_error(calc_rate.int(inspect.ft(dt, plot = F),
                                starts = sts,
-                               ends = ens.actual,
                                plot = F),
                  "calc_rate.int: Input must be a 'data.frame' or 'inspect' object.")
   })
@@ -44,7 +42,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - stops with wrong 'x' inputs", {
     expect_error(calc_rate.int(12,
                                starts = sts,
-                               ends = ens.actual,
                                plot = F),
                  "calc_rate.int: Input must be a 'data.frame' or 'inspect' object.")
   })
@@ -53,7 +50,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - accepts 'data.frame' 'x' inputs", {
     expect_error(calc_rate.int(dt,
                                starts = sts,
-                               ends = ens.actual,
                                plot = F),
                  NA)
   })
@@ -61,7 +57,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - accepts 'inspect' 'x' inputs", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = ens.actual,
                                plot = F),
                  NA)
   })
@@ -69,16 +64,14 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - correctly extracts dataframe from 'inspect' objects", {
     cr.int <- calc_rate.int(dt.insp,
                             starts = sts,
-                            ends = ens.actual,
                             plot = F)
     expect_identical(cr.int$dataframe,
                      dt.insp$dataframe)
   })
 
-  test_that("calc_rate.int - warns with multicolumn 'x' inputs", {
-    expect_warning(calc_rate.int(sardine.rd,
+  test_that("calc_rate.int - message with multicolumn 'x' inputs", {
+    expect_message(calc_rate.int(sardine.rd,
                                  starts = sts,
-                                 ends = ens.actual,
                                  plot = F),
                    "calc_rate.int: Multi-column dataset detected in input. Selecting first two columns by default.")
   })
@@ -91,24 +84,25 @@ capture.output({  ## stops printing outputs on assigning
     # NULL
     expect_error(calc_rate.int(dt.insp,
                                starts = NULL,
-                               ends = NULL,
                                plot = F),
                  "calc_rate.int: 'starts' - input is required.")
     # Non-integer(s)
     expect_error(calc_rate.int(dt.insp,
                                starts = c(1, 100.1, 500),
-                               ends = NULL,
                                plot = F),
                  "calc_rate.int: 'starts' - one or more inputs are not integers.")
     # Outside range
     expect_error(calc_rate.int(dt.insp,
                                starts = c(1, 100, 5000),
-                               ends = NULL,
                                plot = F),
                  "calc_rate.int: 'starts' - one or more inputs are outside the range of allowed values.")
     expect_error(calc_rate.int(dt.insp,
                                starts = c(0, 100, 5000),
-                               ends = NULL,
+                               plot = F),
+                 "calc_rate.int: 'starts' - one or more inputs are outside the range of allowed values.")
+    expect_error(calc_rate.int(dt.insp,
+                               starts = c(0, 100, 5000),
+                               by = "time",
                                plot = F),
                  "calc_rate.int: 'starts' - one or more inputs are outside the range of allowed values.")
   })
@@ -117,96 +111,95 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate.int - accepts correct 'starts' inputs", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = NULL,
                                plot = F),
                  NA)
     expect_error(calc_rate.int(dt.insp,
                                starts = 1000,
-                               ends = NULL,
                                plot = F),
                  NA)
   })
 
 
-  # ends input tests --------------------------------------------------------
+  # 'wait' tests ------------------------------------------------------------
 
-  # NOT required, numeric, integer, within df row range
-  # same lengths as starts
-  test_that("calc_rate.int - stops with wrong 'ends' inputs", {
-    # Non-integer(s)
+  test_that("calc_rate.int - stops if 'wait' input malformed", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = 100.1,
+                               wait = "text",
                                plot = F),
-                 "calc_rate.int: 'ends' - one or more inputs are not integers.")
-    # Outside range
+                 "calc_rate.int: 'wait' - input is not numeric.")
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = c(1,2000,5000),
+                               wait = 900000,
                                plot = F),
-                 "calc_rate.int: 'ends' - one or more inputs are outside the range of allowed values.")
+                 "calc_rate.int: 'wait' - one or more inputs are outside the range of allowed values.")
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = c(0,2000,5000),
+                               wait = 1:2,
                                plot = F),
-                 "calc_rate.int: 'ends' - one or more inputs are outside the range of allowed values.")
-    # Out of order
-    expect_error(calc_rate.int(dt.insp,
-                               starts = sts,
-                               ends = c(1000,2000,4000),
-                               plot = F),
-                 "calc_rate.int: One or more 'ends' inputs are before or equal to the corresponding 'starts' input!")
-    expect_error(calc_rate.int(dt.insp,
-                               starts = sts,
-                               ends = c(1000,2100,4000),
-                               plot = F),
-                 "calc_rate.int: One or more 'ends' inputs are before or equal to the corresponding 'starts' input!")
+                 "calc_rate.int: For a vector input 'wait' should be the same length as 'starts'.")
   })
 
-  # Accepts multiple and single inputs
-  test_that("calc_rate.int - accepts correct 'ends' inputs", {
+  test_that("calc_rate.int - 'wait' accepts single and multiple inputs", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = ens.actual,
+                               wait = 200,
                                plot = F),
                  NA)
     expect_error(calc_rate.int(dt.insp,
-                               starts = 1000,
-                               ends = 500,
+                               starts = sts,
+                               wait = 1:3,
                                plot = F),
                  NA)
   })
 
 
-  # from, to, by tests -------------------------------------------------------
 
-  # No need for many test here - should be handled by calc_rate tests
-  # Accepts multiple and single inputs
-  test_that("calc_rate.int - stops if 'from' or 'to' are more than one value", {
+
+  # 'measure' tests ---------------------------------------------------------
+
+  test_that("calc_rate.int - stops if 'measure' input malformed", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = ens.actual,
-                               from = 10:11,
+                               measure = "text",
                                plot = F),
-                 "calc_rate.int: The 'from' input should be a single value.")
+                 "calc_rate.int: 'measure' - input is not numeric.")
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = ens.actual,
-                               to = 10:11,
+                               measure = 900000,
                                plot = F),
-                 "calc_rate.int: The 'to' input should be a single value.")
+                 "calc_rate.int: 'measure' - one or more inputs are outside the range of allowed values.")
+    expect_error(calc_rate.int(dt.insp,
+                               starts = sts,
+                               measure = 1:2,
+                               plot = F),
+                 "calc_rate.int: For a vector input 'measure' should be the same length as 'starts'.")
   })
 
-  # Stops if you try to use "proportion"
-  test_that("calc_rate.int - stops with by = 'proportion'", {
+  test_that("calc_rate.int - 'measure' accepts single and multiple inputs", {
     expect_error(calc_rate.int(dt.insp,
                                starts = sts,
-                               ends = ens.actual,
-                               by = "proportion",
+                               measure = 200,
+                               plot = F),
+                 NA)
+    expect_error(calc_rate.int(dt.insp,
+                               starts = sts,
+                               measure = c(200, 400, 600),
+                               plot = F),
+                 NA)
+  })
+
+
+  # 'by' tests --------------------------------------------------------------
+
+  # Stops if you try to use "oxygen"
+  test_that("calc_rate.int - stops with by = 'oxygen'", {
+    expect_error(calc_rate.int(dt.insp,
+                               starts = sts,
+                               by = "oxygen",
                                plot = F),
                  "calc_rate.int: 'by' input not valid or not recognised.")
   })
-
 
 
   # Expected results ---------------------------------------
@@ -226,15 +219,14 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                ends = ens.actual,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'time' using 'from' and 'to'", {
+  test_that("calc_rate.int - expected results with by = 'time' using 'wait' and 'measure'", {
     # Part of replicate
     #calc_rate object
     cr.obj <- calc_rate(dt.insp,
@@ -245,17 +237,16 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                ends = ens.actual,
-                                from = 500,
-                                to = 1000,
+                                wait = 500,
+                                measure = 500,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'time' using 'from' only and 'ends' not specified", {
+  test_that("calc_rate.int - expected results with by = 'time' using 'wait' only", {
     # Part of replicate - with ends not specified
     #calc_rate object
     cr.obj <- calc_rate(dt.insp,
@@ -266,14 +257,12 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                #ends = ens.actual,
-                                from = 500,
-                                #to = 1000,
+                                wait = 500,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
   test_that("calc_rate.int - expected results with by = 'time' over whole replicates of regularly spaced reps", {
@@ -287,17 +276,14 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                #ends = ens.actual,
-                                #from = 500,
-                                #to = 1000,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'time' using 'from' and 'to' and regularly spaced reps", {
+  test_that("calc_rate.int - expected results with by = 'time' using 'wait' and 'measure' and regularly spaced reps", {
     # Regular replicates - part of
     #calc_rate object
     cr.obj <- calc_rate(dt.reg.insp,
@@ -308,37 +294,117 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                ends = 540,
-                                from = 120,
-                                to = 480,
+                                wait = 120,
+                                measure = 360,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'time' using 'from' and 'to' and regularly spaced reps with 'ends' not specified", {
+  test_that("calc_rate.int - expected results with by = 'time' and regularly spaced reps with 'measure' not specified", {
     # Regular replicates - part of
     # ends not specified
     #calc_rate object
     cr.obj <- calc_rate(dt.reg.insp,
                         from = 5839 + seq(1, 5941, 660) + 120,
+                        to = 5839 + seq(1, 5941, 660) + 659,
+                        by = "time",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.reg.insp,
+                                starts = 660,
+                                wait = 120,
+                                #to = 480,
+                                by = "time",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+  })
+
+  test_that("calc_rate.int - expected results with by = 'time' and regularly spaced reps with 'wait' not specified", {
+    # Regular replicates - part of
+    # ends not specified
+    #calc_rate object
+    cr.obj <- calc_rate(dt.reg.insp,
+                        from = 5839 + seq(1, 5941, 660),
                         to = 5839 + seq(1, 5941, 660) + 480,
                         by = "time",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                #ends = 540,
-                                from = 120,
-                                to = 480,
+                                #wait = 120,
+                                measure = 480,
                                 by = "time",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
+
+  test_that("calc_rate.int - expected results with by = 'time' using vectors for 'wait' and 'measure' and irregularly spaced reps", {
+    # IRREGULAR replicates
+    # Both vectors
+    #calc_rate object
+    cr.obj <- calc_rate(dt.insp,
+                        from = sts + c(200, 300, 400),
+                        to = ens.measure - c(450, 350, 250),
+                        by = "time",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                wait = c(200, 300, 400),
+                                measure = c(1248, 799, 281),
+                                by = "time",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+
+    #calc_rate object
+    #wait vector, measure not
+    cr.obj <- calc_rate(dt.insp,
+                        from = sts + c(200, 300, 400),
+                        to = sts + c(200, 300, 400) + 600,
+                        by = "time",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                wait = c(200, 300, 400),
+                                measure = 600,
+                                by = "time",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+
+    #calc_rate object
+    #measure vector, wait not
+    cr.obj <- calc_rate(dt.insp,
+                        from = sts,
+                        to = sts + c(600, 700, 800),
+                        by = "time",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                wait = NULL,
+                                measure = c(600, 700, 800),
+                                by = "time",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+  })
+
+
+
+
 
   # by = "row" tests -------------------------------------------------------
 
@@ -353,195 +419,186 @@ capture.output({  ## stops printing outputs on assigning
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                ends = ens.actual,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'row' using 'from' and 'to'", {
+  test_that("calc_rate.int - expected results with by = 'row' using 'wait' and 'measure'", {
     # Part of replicate
     #calc_rate object
     cr.obj <- calc_rate(dt.insp,
-                        from = sts + 499,
+                        from = sts + 500,
                         to = sts + 999,
                         by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                ends = ens.actual,
-                                from = 500,
-                                to = 1000,
+                                wait = 500,
+                                measure = 500,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'row' using 'from' only and 'ends' not specified", {
+  test_that("calc_rate.int - expected results with by = 'row' using 'wait' only", {
     # Part of replicate - with ends not specified
     #calc_rate object
     cr.obj <- calc_rate(dt.insp,
-                        from = sts + 499,
+                        from = sts + 500,
                         to = ens.actual,
                         by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                #ends = ens.actual,
-                                from = 500,
-                                #to = 1000,
+                                wait = 500,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
   test_that("calc_rate.int - expected results with by = 'row' over whole replicates of regularly spaced reps", {
     # Regular replicates - Whole replicate
     #calc_rate object
-    cr.obj <- calc_rate(dt.reg.insp,
-                        from = seq(1, 5941, 660),
+    cr.obj <- calc_rate(dt.reg.insp$da,
+                        from = seq(1, 6600, 660),
                         to = seq(660, 6600, 660),
                         by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                #ends = ens.actual,
-                                #from = 500,
-                                #to = 1000,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'row' using 'from' and 'to' and regularly spaced reps", {
+  test_that("calc_rate.int - expected results with by = 'row' using 'wait' and 'measure' and regularly spaced reps", {
     # Regular replicates - part of
     #calc_rate object
     cr.obj <- calc_rate(dt.reg.insp,
-                        from = seq(1, 5941, 660) + 119,
-                        to = seq(1, 5941, 660) + 479,
+                        from = seq(1, 6600, 660) + 120,
+                        to = seq(1, 6600, 660) + 120 + 359,
                         by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                ends = 540,
-                                from = 120,
-                                to = 480,
+                                wait = 120,
+                                measure = 360,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
-  test_that("calc_rate.int - expected results with by = 'row' using 'from' and 'to' and regularly spaced reps with 'ends' not specified", {
+  test_that("calc_rate.int - expected results with by = 'row' and regularly spaced reps with 'measure' not specified", {
     # Regular replicates - part of
     # ends not specified
     #calc_rate object
     cr.obj <- calc_rate(dt.reg.insp,
-                        from = seq(1, 5941, 660) + 119,
-                        to = seq(1, 5941, 660) + 479,
+                        from = seq(1, 6600, 660) + 120,
+                        to = seq(1, 6600, 660) + 120 + 539,
                         by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.reg.insp,
                                 starts = 660,
-                                #ends = 540,
-                                from = 120,
-                                to = 480,
+                                wait = 120,
                                 by = "row",
                                 plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
 
+  test_that("calc_rate.int - expected results with by = 'row' and regularly spaced reps with 'wait' not specified", {
+    # Regular replicates - part of
+    # ends not specified
+    #calc_rate object
+    cr.obj <- calc_rate(dt.reg.insp,
+                        from = seq(1, 6600, 660),
+                        to = seq(1, 6600, 660) + 479,
+                        by = "row",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.reg.insp,
+                                starts = 660,
+                                measure = 480,
+                                by = "row",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+  })
 
-  # by = "oxygen"
-  # test_that("calc_rate.int - works with by = 'oxygen'", {
-  #   #calc_rate object
-  #   cr.obj <- calc_rate(dt.insp,
-  #                       from = 7,
-  #                       to = 6.8,
-  #                       by = "oxygen",
-  #                       plot = F)
-  #   #calc_rate.int object
-  #   cr.int.obj <- calc_rate.int(dt.insp,
-  #                               starts = sts,
-  #                               ends = ens.actual,
-  #                               by = "oxygen",
-  #                               plot = F)
-  #
-  #   expect_equal(cr.obj$summary,
-  #                cr.int.obj$summary)
-  # })
-
-
-
-  # by = "oxygen" tests -------------------------------------------------------
-
-  test_that("calc_rate.int - expected results with by = 'oxygen'", {
-    # Whole replicate
+  test_that("calc_rate.int - expected results with by = 'row' using vectors for 'wait' and 'measure' and irregularly spaced reps", {
+    # IRREGULAR replicates
+    # Both vectors
     #calc_rate object
     cr.obj <- calc_rate(dt.insp,
-                        from = 7,
-                        to = 6.8,
-                        by = "oxygen",
+                        from = sts + c(200, 300, 400),
+                        to = ens.measure - c(450, 350, 250),
+                        by = "row",
                         plot = F)
     #calc_rate.int object
     cr.int.obj <- calc_rate.int(dt.insp,
                                 starts = sts,
-                                ends = ens.measure,
-                                by = "oxygen",
-                                from = 7,
-                                to = 6.8,
+                                wait = c(200, 300, 400),
+                                measure = c(1249, 800, 282),
+                                by = "row",
                                 plot = F)
     # test
-    # Just test first and last row values
-    # that is, first and last occurrences of 7 and 6.8
-    expect_equal(cr.obj$summary$row,
-                 cr.int.obj$summary$row[1])
-    expect_equal(cr.obj$summary$endrow,
-                 cr.int.obj$summary$endrow[3])
-  })
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
 
-
-  test_that("calc_rate.int - expected results with by = 'oxygen' with regularly spaced reps", {
-    # Regular replicates - part of
-    #calc_rate.int object
-    cr.int.obj <- calc_rate.int(dt.reg.insp,
-                                starts = 660,
-                                ends = 540,
-                                from = 7.5,
-                                to = 6.9,
-                                by = "oxygen",
-                                plot = T)
     #calc_rate object
-    #Use row numbers this time
-    cr.obj <- calc_rate(dt.reg.insp,
-                        from = cr.int.obj$summary$row,
-                        to = cr.int.obj$summary$endrow,
+    #wait vector, measure not
+    cr.obj <- calc_rate(dt.insp,
+                        from = sts + c(200, 300, 400),
+                        to = sts + c(200, 300, 400) + 600,
                         by = "row",
-                        plot = T)
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                wait = c(200, 300, 400),
+                                measure = 601,
+                                by = "row",
+                                plot = F)
     # test
-    expect_equal(cr.obj$summary,
-                 cr.int.obj$summary)
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
+
+    #calc_rate object
+    #measure vector, wait not
+    cr.obj <- calc_rate(dt.insp,
+                        from = sts,
+                        to = sts + c(600, 700, 800),
+                        by = "row",
+                        plot = F)
+    #calc_rate.int object
+    cr.int.obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                wait = NULL,
+                                measure = c(601, 701, 801),
+                                by = "row",
+                                plot = F)
+    # test
+    expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
+                 cr.int.obj$summary[,3:ncol(cr.obj$summary)])
   })
-
-
-
-
 
 
   # General tests -----------------------------------------------------------
@@ -691,7 +748,7 @@ capture.output({  ## stops printing outputs on assigning
     # cr.int.adj$summary
     # cr.int.adj$summary$adjustment
     # For now just test the known values in case they change in future
-    expect_equal(c(-0.00006356925, -0.00010199236, -0.00012998209),
+    expect_equal(c(-0.00006356925, -0.00010351944, -0.00013150917),
                  cr.int.adj$summary$adjustment)
   })
 
@@ -720,7 +777,7 @@ capture.output({  ## stops printing outputs on assigning
     # cr.int.adj$summary
     # cr.int.adj$summary$adjustment
     # For now just test the known values in case they change in future
-    expect_equal(c(-0.00005597288, -0.00007638667, -0.00009580514),
+    expect_equal(c(-0.00005597288, -0.00007733651, -0.00009699645),
                  cr.int.adj$summary$adjustment)
   })
 

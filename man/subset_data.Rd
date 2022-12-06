@@ -4,7 +4,7 @@
 \alias{subset_data}
 \title{Subset a \code{data.frame}, \code{inspect}, or \code{inspect.ft} object}
 \usage{
-subset_data(x, from = NULL, to = NULL, by = "time", quiet = FALSE)
+subset_data(x, from = NULL, to = NULL, by = "time", quiet = TRUE)
 }
 \arguments{
 \item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data from which
@@ -14,10 +14,11 @@ to produce a subset.}
 
 \item{to}{numeric. The upper bounds of the subset based on the \code{by} input.}
 
-\item{by}{string. "time"\verb{, }"row"\verb{, }"oxygen"\code{or}"proportion"\verb{. Method by which to apply the }from\code{and}to` inputs.}
+\item{by}{string. \code{"time"}, \code{"row"}, or \code{"oxygen"}. Method by which to apply
+the \code{from} and \code{to} inputs.}
 
 \item{quiet}{logical. Controls if a summary of the output is printed to the
-console. Default is \code{FALSE}.}
+console. Default is \code{TRUE}.}
 }
 \value{
 \strong{Output}: If the input is an \code{inspect}, or \code{inspect.ft} object, the
@@ -35,24 +36,21 @@ passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. S
 examples and vignettes.
 }
 \details{
-The function can subset data based on ranges of \code{"time"}, \code{"oxygen"}, \code{"row"}
-, or \code{"proportion"} of total oxygen used or produced (note, this last option
-works poorly with noisy or fluctuating data). For data frames, to subset by
-\code{"time"}, \code{"oxygen"}, or \code{"proportion"}, the time data is assumed to be in
-the first column, and oxygen data in the second column. For \code{\link[=inspect]{inspect()}} and
-\code{\link[=inspect.ft]{inspect.ft()}} objects, the data will have been coerced to this structure
-already. In these cases the \verb{$dataframe} element in the output is replaced by
-the subset, and in \code{inspect.ft} the \verb{$data} element is also subset and
-replaced. Note for \code{inspect.ft} objects, the oxygen data in column 2 will be
-either \code{out.oxy} data or \code{delta.oxy} data depending on what was inspected.
-The function can subset \emph{any} data frame by \code{row}.
+The function can subset data based on ranges of \code{"time"}, \code{"oxygen"}, or
+\code{"row"}. For data frames, to subset by \code{"time"} or \code{"oxygen"} the time data
+is assumed to be in the first column, and oxygen data in the second column.
+For \code{\link[=inspect]{inspect()}} and \code{\link[=inspect.ft]{inspect.ft()}} objects, the data will have been
+coerced to this structure already. In these cases the \verb{$dataframe} element in
+the output is replaced by the subset, and in \code{inspect.ft} the \verb{$data} element
+is also subset and replaced. Note for \code{inspect.ft} objects, the oxygen data
+in column 2 will be either \code{out.oxy} data or \code{delta.oxy} data depending on
+what was inspected. The function can subset \emph{any} data frame by \code{row}.
 
 When multiple columns are present, for example time in column 1, and multiple
 columns of oxygen data, the subset object will include \emph{all} columns. In the
-case of subsetting \code{by = "oxygen"} or \code{by = "proportion"}, subsetting is
-based on the \emph{first} column of oxygen data only (i.e. column 2), and all
-subsequent columns are subset between the same rows regardless of oxygen
-values.
+case of subsetting \code{by = "oxygen"}, subsetting is based on the \emph{first} column
+of oxygen data only (i.e. column 2), and all subsequent columns are subset
+between the same rows regardless of oxygen values.
 
 For all methods, if exact matching values of \code{from} and \code{to} are not present
 in the data, the closest values are used. For \code{"time"} and \code{"row"}
@@ -62,11 +60,11 @@ For instance, if \code{to = 100} and there are only 50 rows in the data, the las
 row (50) will be used instead. The same for \code{from} and \code{to} time values
 outside those in the data frame.
 
-For \code{"oxygen"} or \code{"proportion"} subsetting, \code{from} and \code{to} are generally
-interchangeable, and the function will subset data \emph{between} the first and
-last occurrences (or closest occurrences) of these values. It works best with
-generally increasing or decreasing oxygen data, and results may vary with
-other data such as intermittent flow data or those in \code{inspect.ft} objects.
+For \code{"oxygen"} subsetting, \code{from} and \code{to} are generally interchangeable, and
+the function will subset data \emph{between} the first and last occurrences (or
+closest occurrences) of these values. It works best with generally increasing
+or decreasing oxygen data, and results may vary with other data such as
+intermittent flow data or those in \code{inspect.ft} objects.
 
 \strong{Note for \code{inspect} and \code{inspect.ft} object inputs:} after subsetting the
 locations of any data issues highlighted when the object was originally
@@ -74,9 +72,7 @@ inspected will no longer be accurate. If these are important, best practice
 is to subset the original dataframe, and then process the subset through
 \code{inspect} or \code{inspect.ft}.
 
-A summary of the subset is printed to the console, to check it has subset the
-data as expected. To suppress this changing the default \code{quiet = FALSE} to
-\code{TRUE}.
+A summary of the subset can be printed to the console if the default \code{quiet = FALSE} is changed to \code{TRUE}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
