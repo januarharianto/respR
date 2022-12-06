@@ -1,6 +1,3 @@
-# respR 2.1.0
-
-
 <!---
 Each version should:
 List its release date in the above format.
@@ -15,7 +12,7 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.1 -- 2022-xx-xx
+## Version 2.1 -- 2022-12-06
 
 This is a huge update that finally introduces what many users have been asking for - full support for analysing intermittent-flow respirometry data. This was always possible but required use of more advanced `R` methods. Now - no more `for` loops!
 
