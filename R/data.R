@@ -220,17 +220,6 @@
 #'   inflow concentrations recorded from a shared header tank (col 4).
 "flowthrough_sim.rd"
 
-#' Output objects for the function `test_lin`
-#'
-#' This data contains the results of 9 separate performance checks
-#' on the [`auto_rate()`] linear detection algorithm (i.e. `method = "linear"`).
-#' These test results are used to assess and discuss the performance of
-#' `auto_rate` in the online vignette found here: .
-#'
-#' @author Januar Harianto
-#' @format List of multiple output objects of class `test_lin`.
-"test_lin_data"
-
 #' Respirometry data of a zebrafish, *Danio rerio*
 #'
 #' Multiple measurements (106 replicates, plus initial and end background
