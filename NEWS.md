@@ -18,7 +18,7 @@ This is a huge update that finally introduces what many users have been asking f
 
 This version introduces two new functions for easily extracting rates from every replicate in intermittent-flow data, `calc_rate.int` and `auto_rate.int`. 
 
-There is also a major focus on exploring and filtering results to help with outputting a final reportable rate for an experiment. There is a large update to `convert_rate` which adds new visualisation options, and the new function `select_rate` which is ideal for exploring and filtering the results of analyses using almost any criteria you can think of and outputting a final rate. It works with both intermittent-flow results and the outputs of other analyses. See the updated vignettes [here]() and [here]() for examples. 
+There is also a major focus on exploring and filtering results to help with outputting a final reportable rate for an experiment. There is a large update to `convert_rate` which adds new visualisation options, and the new function `select_rate` which is ideal for exploring and filtering the results of analyses using almost any criteria you can think of and outputting a final rate. It works with both intermittent-flow results and the outputs of other analyses. See the updated vignettes [here](https://januarharianto.github.io/respR/articles/intermittent_short.html) and [here](https://januarharianto.github.io/respR/articles/intermittent_long.html) for examples. 
 
 ================================ Highlights ====================================
 
