@@ -12,7 +12,7 @@ citEntry(
   volume   = 10,
   number   = 6,
   pages    = "912-920",
-  url      = "https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162",
+  url      = "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13162",
   doi      = "10.1111/2041-210X.13162",
   textVersion = paste(
 

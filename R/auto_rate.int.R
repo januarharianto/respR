@@ -49,9 +49,11 @@
 #' replicates cycle at regular intervals. This can be a regular row or time
 #' interval, as specified via the `by` input. If the first replicate does not
 #' start at row 1, the data should be subset so that it does (see
-#' `subset_data()`) and example [here](). For example, `starts = 600, by =
-#' "row"` means the first replicate starts at row 1 and ends at row 600, the
-#' second starts at row 601 ends at 1200, and so on.
+#' `subset_data()`) and example
+#' [here](https://januarharianto.github.io/respR/articles/intermittent_long.html).
+#' For example, `starts = 600, by = "row"` means the first replicate starts at
+#' row 1 and ends at row 600, the second starts at row 601 ends at 1200, and so
+#' on.
 #'
 #' - A numeric vector of row locations or times, as specified via the `by`
 #' input, of the start of each individual replicate. The first replicate does
@@ -185,9 +187,9 @@
 #'   regular interval in rows or time starting from row 1. If a vector, each
 #'   entry is the start row or time of an individual replicate. Use of rows or
 #'   time is controlled via `by`.
-#' @param wait Numeric. A row length or time duration to be applied at the
-#'   start of each replicate to *exclude* these data from any rate calculations.
-#'   Can be a single value to apply the same wait phase to each replicate, or a
+#' @param wait Numeric. A row length or time duration to be applied at the start
+#'   of each replicate to *exclude* these data from any rate calculations. Can
+#'   be a single value to apply the same wait phase to each replicate, or a
 #'   vector of the same length as `starts` of different wait phases for each
 #'   replicate. Optional.
 #' @param measure Numeric. A row length or time duration to be applied at the

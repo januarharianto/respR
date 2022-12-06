@@ -83,7 +83,7 @@ the data in the first row. This option should only be used when replicates
 cycle at regular intervals. This can be a regular row or time interval, as
 specified via the \code{by} input. If the first replicate does not start at row 1,
 the data should be subset so that it does (see \code{subset_data()}) and example
-\url{here}.
+\href{https://januarharianto.github.io/respR/articles/intermittent_long.html}{here}.
 \item A numeric vector of row locations or times, as specified via the \code{by}
 input, of the start of each individual replicate. The first replicate does
 not have to start at the first row of the data, and all data after the last
