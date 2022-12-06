@@ -157,7 +157,7 @@ This method returns all regressions of the specified `width` in sequential order
 
 #### When this method might be applied
 
-This method can be applied when you want to extract a rolling rate of a specified width for further analyses. Alternatively, if you don't want to rely on the `"linear"` selection or other methods but want to filter and select the results manually according to various criteria using `subset_rate()`. See `vignette("subset_rate")`. 
+This method can be applied when you want to extract a rolling rate of a specified width for further analyses. Alternatively, if you don't want to rely on the `"linear"` selection or other methods but want to filter and select the results according to various criteria using `select_rate()`. See `vignette("select_rate")`. 
 
 ### `method = "interval"`
 
@@ -379,13 +379,11 @@ mean(sard_ar, pos = 1:3)
 
 Any rate value determined after such selection can be saved as a variable, or entered manually as a value in later functions such as `adjust_rate` and `convert_rate`. It can also be exported as a value by using `export = TRUE` in the `mean` call. However, see next section.  
 
-### `subset_rate`
+### `select_rate`
 
 Alternative selection criteria might also be applied. This might include excluding all results below a certain r-squared, use only the top n'th percentile of results, or exclude those from the certain stages of the experiment. 
 
-New in `respR v2.0` is the `subset_rate()` function which can apply these criteria to `auto_rate` results, along with many others. 
-
-See `vignette("subset_rate")` for how to do advanced filtering of `auto_rate` results. 
+New in `respR v2.0` is the `select_rate()` function which can apply these criteria, along with many others, to `auto_rate` results after they have been converted in `convert_rate`. See `vignette("select_rate")` for how to do advanced filtering of these results. 
 
 ### Highest rates
 
@@ -405,7 +403,7 @@ high_rate <- auto_rate(sard_insp, width = 900, by = "row", method = "highest")
 summary(high_rate)
 ```
 
-In the `highest` and `lowest` methods the rates are ordered by the *absolute* rate value, regardless of the sign. The top results here have the same rate value as printed, but likely have small differences at higher precision (what you see printed depends on your own R `options()` settings). Again, a user may choose to report the top result or perform further selection and filtering using `subset_rate()`. This includes the option to remove rates which overlap, that is share the same rows of data; as we can see here the top results all come from the same region of the data.
+In the `highest` and `lowest` methods the rates are ordered by the *absolute* rate value, regardless of the sign. The top results here have the same rate value as printed, but likely have small differences at higher precision (what you see printed depends on your own R `options()` settings). Again, a user may choose to report the top result or perform further selection and filtering using `select_rate()` after conversion in `convert_rate`. This includes the option to remove rates which overlap, that is share the same rows of data; as we can see here the top results all come from the same region of the data.
 
 ### Lowest rates
 
@@ -437,7 +435,7 @@ roll_rate <- auto_rate(sard_insp, width = 900, method = "rolling")
 summary(roll_rate)
 ```
 
-This outputs every regression of the `width` in order. The main utility of this method is for passing to `subset_rate` where various criteria can be applied to filter the results manually. See `vignette("subset_rate")`.
+This outputs every regression of the `width` in order. The main utility of this method is for passing to `select_rate` after conversion in `convert_rate` where various criteria can be applied to filter the results manually. See `vignette("select_rate")`.
 
 ## Further processing
 

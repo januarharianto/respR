@@ -2,24 +2,26 @@
 #'
 #' Automatically import data from different respirometry hardware and software
 #' systems. The aim is to work with most commercial oxygen sensors available in
-#' the market with minimal input from the user. The function extracts data
-#' columns from the file, removes redundant rows of metadata, and generally
-#' cleans up column names (e.g. removes whitespace and characters which cause
-#' text encoding issues) to make the data easier to work with. Files should be
-#' sensor system raw output files where possible; files opened and re-saved in a
-#' different format will likely fail to import.
+#' the market with minimal input. The function extracts data columns from the
+#' file, removes redundant rows of metadata, and generally cleans up column
+#' names (e.g. removes whitespace and characters which cause text encoding
+#' issues) to make the data easier to work with. Files should be sensor system
+#' raw output files where possible; files opened and re-saved in a different
+#' format will likely fail to import.
 #'
 #' Note that use of this function to import data is *optional*. `respR` only
-#' requires data be put into a simple structure for further analyses, which is
+#' requires data be put into a very simple structure for analysis, which is
 #' paired values of time and oxygen amount in any common units in a
-#' `data.frame`. If you are comfortable importing data into R via functions such
-#' as `read.csv()` you may find those more reliable and customisable.
+#' `data.frame`. `import_file` is a convenience function and mainly intended for
+#' those new to `R`. It is *almost always* better to import files yourself using
+#' functions such as `read.csv()`, `read.table()` or `fread()` as it gives you
+#' much more control and the ability to troubleshoot issues.
 #'
-#' @details Currently tested and working for:
+#' @details Currently tested and working for these files:
 #'
-#'   - Firesting
+#'   - Pyro Firesting
 #'
-#'   - Pyro (another name for Firesting)
+#'   - Pyro Workbench (experimental)
 #'
 #'   - PreSens OXY10
 #'
@@ -35,7 +37,7 @@
 #'
 #'   - Loligo Witrox (same as AutoResp, without metadata)
 #'
-#'   - Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
+#'   - Vernier (raw qmbl, csv, or txt)
 #'
 #'   - NeoFox
 #'
@@ -43,19 +45,18 @@
 #'
 #'   Files with European numeric formatting (i.e. commas instead of points to
 #'   denote decimals) are supported, and will be converted to point decimals on
-#'   import. This is new functionality, so please provide feedback for any files
-#'   for which this might fail.
+#'   import. This is experimental functionality, so please provide feedback for
+#'   any files for which this might fail.
 #'
 #'   We are always looking for sample files to improve the function. Please send
 #'   them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
 #'   issue](https://github.com/januarharianto/respR/issues).
 #'
 #'   While the devices listed above are supported, the import functionality is
-#'   experimental due to limited access to sample files. This should improve
-#'   over time as users provide feedback and samples. Users should however be
-#'   aware we have not been able to test very variation of file formats,
-#'   carefully check the imported data, and be prepared to import data by other
-#'   functions such as `read.csv()`.
+#'   experimental due to limited access to sample files. Users should be aware
+#'   we have not been able to test every variation of file formats, and should
+#'   carefully check the imported data, and be prepared to import data using
+#'   other functions such as `read.csv()`.
 #'
 #'   ## More
 #'
@@ -72,16 +73,18 @@
 #' @importFrom readxl read_excel
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 read_html
+#' @importFrom tools file_path_sans_ext
 #'
+#' @md
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' # Import a file
-#' import_file("path/to/file)
+#' import_file("path/to/file")
 #'
 #' # Import a file and export it to same directory as a csv
-#' import_file("path/to/file, export = TRUE)
+#' import_file("path/to/file", export = TRUE)
 #' }
 
 import_file <- function(path, export = FALSE) {
@@ -90,7 +93,7 @@ import_file <- function(path, export = FALSE) {
 
   # Don't even start if file doesn't exist:
   if (!file.exists(path)) {
-    stop("File does not exist - please check file path.")
+    stop("import_file: File not found - please check file path.")
   }
 
   ## readLines doesn't work on xlsx files Have to do Excel import here - may not
@@ -113,7 +116,12 @@ import_file <- function(path, export = FALSE) {
   ext <- substr(path, nchar(path)-3, nchar(path))
 
   # Identify source of file
-  if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
+  if (suppressWarnings(any(grepl("Workbench", raw[1:20])))) {
+    cat("Pyro Workbench file detected.\n")
+    cat("NOTE: Support for these files is experimental due to lack of sample files for testing.\n")
+    cat("Please contact developers if your file does not work or you are able to supply some test files.\n")
+    out <- parse_workbench(path, dec = dec)
+  } else if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
     cat("Firesting-Pyro file detected\n")
     out <- parse_pyro(path, dec = dec)
   } else if (suppressWarnings(any(grepl("MiniDOT", raw[1:20])))) {
@@ -148,9 +156,9 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("OxyView", raw[1:100]))) && ext == ".csv") {
     cat("PreSens OxyView .csv file detected\n")
     out <- parse_oxyview_csv(path, dec = dec)
-  # } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
-  #   cat("PreSens OxyView file detected\n")
-  #   out <- parse_oxyview(path, dec = dec)
+    # } else if (suppressWarnings(any(grepl("OxyView", raw[1:100])))) {
+    #   cat("PreSens OxyView file detected\n")
+    #   out <- parse_oxyview(path, dec = dec)
   } else if (suppressWarnings(any(grepl("OXY4", raw[1:100])))) {
     cat("PreSens OXY4 file detected\n")
     out <- parse_oxy4(path, dec = dec)
@@ -183,8 +191,9 @@ import_file <- function(path, export = FALSE) {
               Import halted.")
 
   if (export) {
-    newpath <- paste(normalizePath(dirname(path)),"/", "parsed-",
-                     basename(path), sep = "")
+    newpath <- paste0(normalizePath(dirname(path)),"/", "parsed-",
+                     basename(path))
+    newpath <- paste0(file_path_sans_ext(newpath), ".csv") #replace extension
     write.csv(out, newpath)
   }
 
@@ -515,7 +524,7 @@ parse_oxy4 <- function(path, dec = dec) {
 }
 
 
-# Firesting Pyro ----------------------------------------------------------
+# Pyro ----------------------------------------------------------
 
 parse_pyro <- function(path, dec = dec) {
 
@@ -607,6 +616,24 @@ parse_pyro <- function(path, dec = dec) {
 
   out <- data.table(rdt)
 
+  return(out)
+}
+
+parse_workbench <- function(path, dec = dec){
+
+  # import data columns only
+  out <- data.table::fread(path, fill = TRUE, header = FALSE, showProgress = FALSE, skip = 72,
+                           dec = dec)
+
+  # import headers row
+  out_headers <- readLines(path, n = 72)
+  out_headers <- out_headers[72]
+  out_headers <- unlist(strsplit(out_headers, "\t"))
+
+  # names
+  names(out) <- out_headers
+
+  # return
   return(out)
 }
 
@@ -713,7 +740,6 @@ parse_oxyview_txt <- function(path, dec = dec) {
   out <- rdt
   return(out)
 }
-
 
 
 # Internal Functions ------------------------------------------------------

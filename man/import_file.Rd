@@ -18,24 +18,26 @@ A \code{data.frame} object of all columned data
 \description{
 Automatically import data from different respirometry hardware and software
 systems. The aim is to work with most commercial oxygen sensors available in
-the market with minimal input from the user. The function extracts data
-columns from the file, removes redundant rows of metadata, and generally
-cleans up column names (e.g. removes whitespace and characters which cause
-text encoding issues) to make the data easier to work with. Files should be
-sensor system raw output files where possible; files opened and re-saved in a
-different format will likely fail to import.
+the market with minimal input. The function extracts data columns from the
+file, removes redundant rows of metadata, and generally cleans up column
+names (e.g. removes whitespace and characters which cause text encoding
+issues) to make the data easier to work with. Files should be sensor system
+raw output files where possible; files opened and re-saved in a different
+format will likely fail to import.
 }
 \details{
 Note that use of this function to import data is \emph{optional}. \code{respR} only
-requires data be put into a simple structure for further analyses, which is
+requires data be put into a very simple structure for analysis, which is
 paired values of time and oxygen amount in any common units in a
-\code{data.frame}. If you are comfortable importing data into R via functions such
-as \code{read.csv()} you may find those more reliable and customisable.
+\code{data.frame}. \code{import_file} is a convenience function and mainly intended for
+those new to \code{R}. It is \emph{almost always} better to import files yourself using
+functions such as \code{read.csv()}, \code{read.table()} or \code{fread()} as it gives you
+much more control and the ability to troubleshoot issues.
 
-Currently tested and working for:
+Currently tested and working for these files:
 \itemize{
-\item Firesting
-\item Pyro (another name for Firesting)
+\item Pyro Firesting
+\item Pyro Workbench (experimental)
 \item PreSens OXY10
 \item PreSens OXY4
 \item PreSens (OxyView generic, including multiplate systems)
@@ -43,25 +45,24 @@ Currently tested and working for:
 \item MiniDOT
 \item Loligo AutoResp ('_raw' files output, \emph{not} metadata files)
 \item Loligo Witrox (same as AutoResp, without metadata)
-\item Vernier (raw qmbl, csv, or txt, (gmbl not yet supported))
+\item Vernier (raw qmbl, csv, or txt)
 \item NeoFox
 \item Qbox Aqua
 }
 
 Files with European numeric formatting (i.e. commas instead of points to
 denote decimals) are supported, and will be converted to point decimals on
-import. This is new functionality, so please provide feedback for any files
-for which this might fail.
+import. This is experimental functionality, so please provide feedback for
+any files for which this might fail.
 
 We are always looking for sample files to improve the function. Please send
 them to us via \href{mailto:nicholascarey@gmail.com}{email}, or via a \href{https://github.com/januarharianto/respR/issues}{Github issue}.
 
 While the devices listed above are supported, the import functionality is
-experimental due to limited access to sample files. This should improve
-over time as users provide feedback and samples. Users should however be
-aware we have not been able to test very variation of file formats,
-carefully check the imported data, and be prepared to import data by other
-functions such as \code{read.csv()}.
+experimental due to limited access to sample files. Users should be aware
+we have not been able to test every variation of file formats, and should
+carefully check the imported data, and be prepared to import data using
+other functions such as \code{read.csv()}.
 \subsection{More}{
 
 For additional help, documentation, vignettes, and more visit the \code{respR}
@@ -71,9 +72,9 @@ website at \url{https://januarharianto.github.io/respR/}
 \examples{
 \dontrun{
 # Import a file
-import_file("path/to/file)
+import_file("path/to/file")
 
 # Import a file and export it to same directory as a csv
-import_file("path/to/file, export = TRUE)
+import_file("path/to/file", export = TRUE)
 }
 }

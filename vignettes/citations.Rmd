@@ -32,14 +32,33 @@ ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
 
 In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has picked up [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially good to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
+We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
-If you use the package please cite the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+If you use the package please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
 ## Studies using respR
 
 The following publications (most recent first) have used and cited `respR`. If we have missed one [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
 
+#### @kuttiFishFarmEffluents2022
+
+This is an interesting study looking at the effects of effluents from fish farms on cold water corals in Norway. It used the `auto_rate` function to get the respiration rates of coral fragments to establish the negative effects of effluent on metabolic rates, and also showed it has negative effects on energy stores and growth. 
+
+#### @luceyCompoundExtremeEvents2022
+
+Another awesome sea urchin respirometry study! This looked at the combined effects of heatwaves and deoxygenation events on a tropical sea urchin, and used `respR` to determine both metabolic rates and $P_{crit}$ under these stressors. The authors show that the compound effects of marine heatwaves and hypoxic events, which usually occur together, are devastating to the populations of this species. 
+
+#### @guitardIncreasedParasiteLoad2022a
+
+Joëlle Guitard and colleagues examined how parasite load affected metabolic rates and escape responses in a freshwater fish. They discovered that parasites reduced metabolic rates and also adversely affected escape responsiveness. They used `respR` to calculate MO2 and the `auto_rate` function to do 60 second rolling regressions from which MMR were calculated. Really nice write-up of the methods. Lots of detail, just what we like to see! 👌
+
+#### @grigorSwimmingActivityIndicator2022
+
+Jordan Grigor and collaborators used `respR` to compare respiration and swimming activity from epi- and mesopelagic copepods and how they may be indicators of the onset of diapause. They found differences in size, activity and metabolism between epi- and mesopelagic groups. Nice work, and another example of how the package is being used to analyse micro-respirometry data.
+
+#### @klementievDevelopmentVersatileLowCost2022
+
+We've always noted in our documentation that except for the final conversion step, `respR` treats data as unitless, and it could be used to identify and extract rates from other types of experimental data, and here is the proof. It was used in this study, specifically `auto_rate`,  to quantify $H_2O_2$ consumption rates as part of development of a system to study biofilm activity. Really great to see the package being used like this. 
 
 #### @paulaAccessCleaningServices2022
 
@@ -55,7 +74,7 @@ More sea urchin respirometry in this study looking at differences in physiology 
 
 #### @morganReducedPhysiologicalPlasticity2022
 
-A really cool and extensive study by Rachael Morgan **et al**. Zebrafish were acclimated to 15 (🤯) temperatures and then a host of traits measured, including physiology, gene expression, and behaviour. They found that physiological plasticity was lost from fish adapted to stable temperatures. Incredible amount of work, and really clear results with important implications for anyone doing experimental work on animals and different temperatures. `respR` was used ot get SMR, MMR, and aerobic scope. 
+A really cool and extensive study by Rachael Morgan *et al*. Zebrafish were acclimated to 15 (🤯) temperatures and then a host of traits measured, including physiology, gene expression, and behaviour. They found that physiological plasticity was lost from fish adapted to stable temperatures. Incredible amount of work, and really clear results with important implications for anyone doing experimental work on animals in different temperatures. `respR` was used to get SMR, MMR, and aerobic scope. 
 
 #### @rochePathsGreaterConsensus2022
 
@@ -74,9 +93,6 @@ Halle Berger used `respR` in this MSc thesis, looking at the response of the Dun
 
 In this study Nicholas Wu examined how an endocrine disruptor in the environment exacerbated the effects of high temperatures on growth and metabolism in zebrafish. He used `respR` to calculate the resting MO2 of zebrafish under warming and exposure to plastic pollution. Nice work Nic!
 
-#### @guitardIncreasedParasiteLoad2022
-
-Joëlle Guitard and colleagues examined how parasite load affected metabolic rates and escape responses in a freshwater fish. They discovered that parasites reduced metabolic rates and also adversely affected escape responsiveness. They used `respR` to calculate MO2 and the `auto_rate` function to do 60 second rolling regressions from which MMR were calculated. Really nice write-up of the methods. Lots of detail, just what we like to see! 👌
 
 #### @prokkolaGeneticCouplingLifehistory2022
 
@@ -160,7 +176,7 @@ This is another study that used `respR` to determine the Pcrit, this time of an 
 
 #### @mullerEffectsExperimentalOcean2020
 
-This study looked at the effects of ocean acidification on a larval fish. The authors used `respR` to calculate SMR and MMR rates, then filtered the rates according to various criteria (above 80% oxygen, r2 above 0.85, etc.). This is a great idea, and exactly why we introduce the function `subset_rate()` in v2.0, which allows for exactly this kind of application of easily reported rate selection criteria.
+This study looked at the effects of ocean acidification on a larval fish. The authors used `respR` to calculate SMR and MMR rates, then filtered the rates according to various criteria (above 80% oxygen, r2 above 0.85, etc.). This is a great idea, and exactly why we introduce the function `select_rate()` in v2.0, which allows for exactly this kind of application of easily reported rate selection criteria.
 
 #### @kurchabaEffectsMPPolyethylene2020
 

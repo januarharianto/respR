@@ -32,8 +32,8 @@ Replicate structure (Rows - Experiment section):
 \item \code{1:1900}      - Replicate 1
 \item \code{1901:2100}   - Flush 1
 \item \code{2101:3550}   - Replicate 2
-\item \code{3551:3750}   - Flush 2
-\item \code{3751:4831}   - Replicate 3
+\item \code{3551:3900}   - Flush 2
+\item \code{3901:4831}   - Replicate 3
 }
 }
 \author{

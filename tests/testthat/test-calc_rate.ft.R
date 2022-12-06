@@ -260,9 +260,6 @@ test_that("calc_rate.ft - stops if 'by' input not 'time' or 'row'.", {
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 2, to = 10,
                             by = "oxygen", plot = F),
                regexp = "calc_rate.ft: 'by' input not valid or not recognised.")
-  expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 2, to = 10,
-                            by = "proportion", plot = F),
-               regexp = "calc_rate.ft: 'by' input not valid or not recognised.")
 })
 
 test_that("calc_rate.ft - accepts correct 'by' inputs", {
@@ -1101,23 +1098,23 @@ test_that("calc_rate.ft objects work with summary()", {
   expect_error(summary(crft.obj.1rate),
                regexp = NA)
   expect_output(summary(crft.obj.1rate),
-                regexp = "   rank")
+                regexp = "   rep")
   expect_error(summary(crft.obj.multrates),
                regexp = NA)
   expect_output(summary(crft.obj.multrates),
-                regexp = "   rank")
+                regexp = "   rep")
   expect_error(summary(crft.obj.multrates.many),
                regexp = NA)
   expect_output(summary(crft.obj.multrates.many),
-                regexp = "   rank")
+                regexp = "   rep")
   expect_error(summary(crft.obj.1rate.delta.only),
                regexp = NA)
   expect_output(summary(crft.obj.1rate.delta.only),
-                regexp = "   rank")
+                regexp = "   rep")
   expect_error(summary(crft.obj.multrate.delta.only),
                regexp = NA)
   expect_output(summary(crft.obj.multrate.delta.only),
-                regexp = "   rank")
+                regexp = "   rep")
 })
 
 test_that("calc_rate.ft objects work with summary() and 'pos' input", {

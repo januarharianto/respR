@@ -159,7 +159,8 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
   # Perform lm fit on each column:
   fit <- lapply(1:nres, function(x) lm(dt[[x + 1]] ~ dt[[1]]))
   # Extract coefficients:
-  summary <- data.table(rank = 1:nres,
+  summary <- data.table(rep = NA,
+                        rank = 1:nres,
                         t(sapply(1:length(fit), function(x) coef(fit[[x]]))),
                         (sapply(1:length(fit), function(x) summary(fit[[x]])$r.squared)),
                         rep(1,nres), #row
@@ -169,9 +170,9 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
                         unlist(dt[1,-1]), #oxy
                         unlist(dt[nrow(dt),-1]) #endoxy
   )
-  summary[[11]] <- summary[[3]] # rate
+  summary[[12]] <- summary[[4]] # rate
 
-  names(summary) <- c("rank", "intercept_b0", "rate_b1", "rsq",
+  names(summary) <- c("rep", "rank", "intercept_b0", "rate_b1", "rsq",
                       "row", "endrow", "time", "endtime",
                       "oxy", "endoxy", "rate.bg")
 

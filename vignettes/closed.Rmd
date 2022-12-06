@@ -50,12 +50,13 @@ A typical workflow involves some or all of the following functions:
 | `inspect()` | Visualise the data and check it for common issues|
 | `calc_rate()` & `auto_rate()` | Extract rates from the entire dataset or regions of it, manually or automatically |
 | `adjust_rate()` | Adjust the rate values for background oxygen consumption or production |
-| `convert_rate()` | Convert the final adjusted rate to any common units of oxygen consumption or production |
+| `convert_rate()` | Convert the adjusted rate(s) to any common units of oxygen consumption or production |
+| `select_rate()` | If there are multiple rates, select according to various criteria which to report or how to arrive at a final rate |
 
 
 ### Importing and preparing data
 
-`respR` has a very simple structural data requirement: data must be in the form of paired values of numeric time and oxygen amount. Most if not all oxygen sensing equipment or probe systems output to this format, or at least to a format that is easy to coerce to this structure. 
+`respR` has a very simple structural data requirement: data must be in the form of paired values of numeric time and oxygen amount. Most if not all oxygen sensing equipment or probe systems output to this format, or at least to a format that is easy to coerce to this structure. All that is required is to put these data in a dataframe.
 
 See `vignette("importing")` for an guide to importing and preparing data to this form.
 
@@ -308,7 +309,7 @@ The final rate can be seen above in these console outputs. It can be extracted f
 urch_rate_final$rate.output
 ```
 
-Alternatively, use the `summary` function with `export` to save the summary table as a separate data frame. The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
+Alternatively, use the `summary` function with `export` to save the summary table as a separate data frame which contains all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 ```{r eval = FALSE}
 urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
@@ -316,7 +317,7 @@ urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
 
 ### Check the result
 
-A final and important step in respirometry analyses, particularly after the first rate from a new set of experiments or specimens has been calculated, is to *check the result* against rates from the same or similar species of the same size in as close as possible to the same conditions. This could be from previous analyses by the same user or group, or rates from one or more published studies. 
+A final and important step in respirometry analyses, particularly after the first rate from a new set of experiments or specimens has been calculated, is to check the result against rates from the same or similar species of the same size in as close as possible to the same conditions. This could be from previous analyses by the same user or group, or rates from one or more published studies. 
 
 Dealing with so many different units and conversions it is incredibly easy to introduce a small conversion error that will have a massive effect on the final calculated rate. These types of error occasionally make it into published papers. This is why we would also recommend you check the result against more than one independent publication. 
 
@@ -386,6 +387,6 @@ urch_rate <- urchins.rd |>                                   # Using the urchins
   print() |>                                                 # print for another check,
   convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
     output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) |>  # then convert
-  summary(export = TRUE)                    # and finally save
+  summary(export = TRUE)                                     # and finally save
 ```
 

@@ -4,10 +4,31 @@
 \alias{plot.convert_rate}
 \title{Plot convert_rate objects}
 \usage{
-\method{plot}{convert_rate}(x, ...)
+\method{plot}{convert_rate}(
+  x,
+  type = "full",
+  pos = NULL,
+  quiet = FALSE,
+  highlight = NULL,
+  legend = TRUE,
+  rate.rev = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{convert_rate object}
+
+\item{type}{"full", "rate", "overlap"}
+
+\item{pos}{Which summary rows to plot?}
+
+\item{quiet}{logical. Suppress console output.}
+
+\item{highlight}{Which to highlight in overlap plots.}
+
+\item{legend}{logical. Suppress labels and legends.}
+
+\item{rate.rev}{logical. Control direction of y-axis in rate plot.}
 
 \item{...}{Pass additional plotting parameters}
 }

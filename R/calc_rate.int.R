@@ -1,82 +1,97 @@
-#' Run calc_rate on multiple replicates in intermittent-flow respirometry data
+#' Extract rates from multiple replicates in intermittent-flow respirometry data
 #'
-#' `calc_rate.int` allows you to run the `calc_rate()` function on multiple
-#' replicates in intermittent-flow respirometry. This allows you to use
-#' consistent selection parameters, for example a time range, row range, or
-#' oxygen range to extract a single rate from each replicate.
+#' `calc_rate.int` allows you to extract an oxygen uptake or production rate
+#' from multiple replicates in intermittent-flow respirometry. It allows you to
+#' easily use consistent selection parameters to extract a single rate from each
+#' replicate, for example a specific time range or row range.
 #'
-#' `calc_rate.int` uses the `starts` and optional `ends` inputs to subset each
-#' replicate, then run `calc_rate` on the subset, saving the result, and
-#' extracting the rate and other data to a summary table.
+#' `calc_rate.int` uses the `starts` input to subset each replicate. The `wait`
+#' and `measure` inputs control which parts of each replicate data are excluded
+#' and included from the rate calculation. It extracts a rate from each
+#' replicate using these, and saves it and other data to a summary table.
 #'
-#' The `x` Input should be an`inspect` object or two-column data frame
-#' containing paired values of time and oxygen from an intermittent-flow
-#' experiment in columns 1 and 2 respectively. If a multiple column dataset is
-#' entered as `x` the first two columns are selected by default. If these are
-#' not the intended data use `inspect` to select the correct time and oxygen
-#' columns.
+#' The `x` input should be an`inspect` object. Alternatively, it can be a
+#' two-column data frame containing paired values of time and oxygen from an
+#' intermittent-flow experiment in columns 1 and 2 respectively (though we
+#' always recommend processing such data in `inspect()` first). If a multiple
+#' column dataset is entered as `x` the first two columns are selected by
+#' default. If these are not the intended data use `inspect` to select the
+#' correct time and oxygen columns.
 #'
 #' ## Specifying replicate structure
 #'
 #' The `starts` input specifies the locations of the start of each replicate in
 #' the data in `x`. This can be in one of two ways:
 #'
-#' - A single numeric value representing a regular interval in rows starting at
-#' row 1 indicating how replicates are spaced. This option should only be used
-#' when replicates cycle at regular intervals of row numbers. If the first
-#' replicate does not start at row 1, the data should be subset so that it does
-#' (see `subset_data()`) and example [here]().
+#' - A single numeric value specifying how replicates are spaced starting from
+#' the data in the first row. This option should only be used when replicates
+#' cycle at regular intervals. This can be a regular row or time interval, as
+#' specified via the `by` input. If the first replicate does not start at row 1,
+#' the data should be subset so that it does (see `subset_data()`) and example
+#' [here]().
 #'
-#' - A numeric vector of row locations indicating the start row of each
-#' individual replicate. The first replicate does not have to start at row 1.
-#' This option can also be used to specify a regular replicate structure (as
-#' above) using regular `R` syntax such as `seq()` or `1:10`, etc.
+#' - A numeric vector of row locations or times, as specified via the `by`
+#' input, of the start of each individual replicate. The first replicate does
+#' not have to start at the first row of the data, and all data after the last
+#' entry is assumed to be part of the final replicate. Regular `R` syntax such
+#' as `seq()`, `1:10`, etc. is also accepted, so can be used to specify both
+#' regular and irregular replicate spacing.
 #'
-#' The `ends` input is optional and can be used to specify the end row of each
-#' replicate, for example to exclude flush periods. If `ends = NULL` (the
-#' default) it is assumed each replicate end row is the row preceding the start
-#' of the next replicate as specified in the `starts` input, or in the case of
-#' the last replicate the final row of the dataset. If you specify replicate
-#' `ends` you can do it in two ways which must match how `starts` has been
-#' entered:
+#' For both methods it is assumed each replicate ends at the row preceding the
+#' start of the next replicate, or in the case of the last replicate the final
+#' row of the dataset.
 #'
-#' - If `starts` is a single numeric value specifying the row interval of
-#' replicates, this is a numeric value specifying the *length* in rows of each
-#' replicate. This is added to each `starts` location internally to get the end
-#' locations of each replicate.
+#' ## Specifying rate region
 #'
-#' - If `starts` is a vector of row locations of the start of each replicate,
-#' this should be a vector of equal length of the end row locations of each
-#' individual replicate.
+#' The `wait` and `measure` inputs are used to specify the region from which to
+#' extract a rate and exclude flush periods. They can be entered as row
+#' intervals or time values in the units of the input data. The `wait` phase
+#' controls the amount of data at the start of each replicate to be ignored,
+#' that is not used in rate calculations. The `measure` phase determines the
+#' region after this over which a rate is calculated. There is no `flush` phase
+#' input since this is assumed to be from the end of the `measure` phase to the
+#' end of the replicate.
 #'
-#' ## Rate region selection within replicates
+#' Both `wait` and `measure` can be entered in one of two ways:
 #'
-#' Once the function subsets each replicate it calculates a rate within it using
-#' `calc_rate`. By default the rate is calculated over the whole replicate,
-#' however the `from`, `to`, and `by` inputs can be used to specify a region
-#' within each replicate in terms of row, time, or oxygen ranges.
+#' - Single numeric values specifying a row width or a time period, as specified
+#' via the `by` input. Use this if you want to use the *same* `wait` and
+#' `measure` phases in every replicate, that is extract a rate from the same
+#' region of each.
 #'
-#' For `by = "time"` and `by = "row"` the `from` and `to` inputs are *relative*
-#' to the start of the subset replicate, not the original input data values. For
-#' example, `from = 2, to = 10, by = "time"` will determine rate from the actual
-#' replicate `start time + 2` to `start time + 10` within every replicate,
-#' regardless of the actual time values. See Examples.
+#' - If `starts` is a vector of locations of the start of each replicate, these
+#' inputs can also be vectors of equal length of row lengths or time periods as
+#' specified via the `by` input. This is only useful if you want to use
+#' *different* `wait` and/or `measure` phases in different replicates.
 #'
-#' See `calc_rate()` for full details of how selection inputs are applied.
-#' Briefly, for all methods if any `from` or `to` values lie outside the range
-#' of the replicate data or do not match exactly to a value within it, the
-#' closest value is used instead (accounting for the fact that `from` and `to`
-#' inputs are treated as relative within each replicate).
+#' If `wait = NULL` no wait phase is applied. If `measure = NULL` the rate is
+#' extracted from the start of the replicate or end of the `wait` phase to the
+#' last row of the replicate. This will typically include the flush period, so
+#' is rarely what you would want. Similarly if any `measure` input is beyond the
+#' available values in the replicate the closest value (row or time) is used
+#' instead, which again would typically be the last row of the replicate.
+#'
+#' ## Example
+#'
+#' See examples below for actual code, but here is a simple example. An
+#' experiment comprises replicates which cycle at ten minute intervals with data
+#' recorded every second. Therefore each replicate will be 600 rows long.
+#' Flushes of the respirometer take 3 minutes at the end of each replicate. We
+#' want to exclude the first 2 minutes (120 rows) of data in each, and measure
+#' an oxygen uptake rate for five minutes (300 rows), leaving the three minutes
+#' of flushing (180 rows) excluded. The inputs for this would be:
+#'
+#' `starts = 600, wait = 120, measure = 300, by = "row"`
 #'
 #' ## More details
 #'
-#' Only a single rate can be extracted from each replicate. If you need to
-#' extract multiple rates from single replicates use `subset_data()` and
-#' `calc_rate()` which will accept multiple `from` and `to` inputs. Similarly,
-#' the rate is extracted from the same region of each replicate as determined
-#' via the `from` and `to` inputs. See vignettes on the website for examples of
-#' alternative ways of iterating `calc_rate` across multiple replicates if you
-#' need to get around these constraints.
+#' Only a single rate can be extracted from each replicate. If for some reason
+#' you need to extract multiple rates from single replicates use `subset_data()`
+#' and `calc_rate()` which accepts multiple `from` and `to` inputs. Similarly,
+#' the `calc_rate` method of `by = "oxygen"` is not supported in
+#' `calc_rate.int`. See vignettes on the website for examples of alternative
+#' ways of iterating `calc_rate` across multiple replicates if you need to get
+#' around these constraints.
 #'
 #' ## Plot
 #'
@@ -89,10 +104,13 @@
 #' `type` input:
 #'
 #' - `type = "rep"`: The default. Each individual replicate is plotted with the
-#' rate region highlighted.
+#' rate region (i.e. `measure` phase) highlighted in yellow. The `wait` and
+#' `measure` phases are also highlighted with red and green backgrounds
+#' respectively. These are also labelled if `legend = TRUE`.
 #'
-#' - `type = "full"`: Each replicate rate is highlighted in the context of the
-#' whole dataset. May be quite difficult to interpret if dataset is large.
+#' - `type = "full"`: Each replicate rate (i.e. `measure` phase) is highlighted
+#' in the context of the whole dataset. May be quite difficult to interpret if
+#' dataset is large.
 #'
 #' - `type = "cr"`: Plots individual replicate results as `calc_rate` objects.
 #'
@@ -108,13 +126,13 @@
 #' - `print()`: prints the result of a single replicate, by default the first.
 #' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' - `summary()`: prints summary table of all results and metadata, or those
-#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The `$rank`
-#' column numbers represent the replicate number. The summary table can be
-#' exported as a separate data frame by passing `export = TRUE`.
+#' - `summary()`: prints summary table of all results and metadata, or the rows
+#' specified by the `pos` input. e.g. `summary(x, pos = 1:5)`. The `$rep` column
+#' indicates the replicate number. The summary table can be exported as a
+#' separate data frame by passing `export = TRUE`.
 #'
-#' - `mean()`: calculates the mean of the rates from every replicate, or those
-#' specified by the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be
+#' - `mean()`: calculates the mean of the rates from every replicate, or the
+#' rows specified by the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be
 #' exported as a numeric value by passing `export = TRUE`.
 #'
 #' ## More
@@ -125,36 +143,31 @@
 #' @return Output is a `list` object of class `calc_rate.int` containing a
 #'   `calc_rate` object for each replicate in `$results`. The output also
 #'   contains a `$summary` table which includes the full rate regression results
-#'   from each replicate with replicate number indicated by the `$rank` column.
-#'   It also contains a `$rate` element which contains the rate values from each
-#'   replicate. The function call, inputs, and other metadata are also included.
-#'   Note, that if you have many replicates this object can be rather large
-#'   (several MB).
+#'   from each replicate with replicate number indicated by the `$rep` column.
+#'   Output also contains a `$rate` element which contains the rate values from
+#'   each replicate in order. The function call, inputs, and other metadata are
+#'   also included. Note, that if you have many replicates this object can be
+#'   rather large (several MB).
 #'
-#' @param x object of class `inspect` or `data.frame`. This is the timeseries of
+#' @param x Object of class `inspect` or `data.frame`. This is the timeseries of
 #'   paired values of oxygen against time containing multiple replicates from
 #'   which to calculate rates.
-#' @param starts Integer(s). Row locations of the start of each replicate, or if
-#'   a single value a regular interval in rows of how replicates are spaced
-#'   starting from row 1.
-#' @param ends Integer(s). Locations of the end of each replicate. Optional.
-#'   Should be same length as `starts`. If a vector, this is the row number of
-#'   the end of each replicate, if a single value it represents the length in
-#'   rows of the replicates. If not entered, the function assumes each replicate
-#'   ends at the row preceding the start of the next or for the final replicate
+#' @param starts Integer(s). Row locations or times of the start of each
+#'   replicate. A single value input indicates a regular interval in rows or
+#'   time units starting at the first row of the data in `x`. If replicates do
+#'   not cycle at a regular interval, a vector of the row or time of each
+#'   replicate can be entered. The function assumes each replicate ends at the
+#'   row preceding the start of the next replicate, or for the final replicate
 #'   the final row of the dataset.
-#' @param from numeric. Start time, row, or oxygen value within each replicate
-#'   over which to calculate rate. See `calc_rate()`. Time and row values are
-#'   relative to each replicate as subset using `starts` and `ends`. See
+#' @param wait Numeric. Rows or time period to exclude at the start of each
+#'   replicate. Default is `NULL` in which case no wait phase is applied. See
 #'   Details.
-#' @param to numeric. End time, row, or oxygen value within each replicate over
-#'   which to calculate rate. See `calc_rate()`. Time and row values are
-#'   relative to each replicate as subset using `starts` and `ends`. See
-#'   Details.
-#' @param by string. `"time"`, `"row"`, or `"oxygen"`. Defaults to `"time"`.
-#'   Method by which `from` and `to` are applied within each replicate. See
-#'   `calc_rate()`.
-#' @param plot logical. Default is `TRUE`. Plots the results. See 'Plotting'
+#' @param measure Numeric. Rows or time period over which to calculate rate in
+#'   each replicate. Applied directly after `wait` phase. Default is `NULL` in
+#'   which case the entire replicate is used. See Details.
+#' @param by String. `"row"` or `"time"`. Defaults to `"row"`. Method by which
+#'   `starts`, `wait` and `measure` are applied.
+#' @param plot Logical. Default is `TRUE`. Plots the results. See 'Plotting'
 #'   section for details.
 #' @param ... Allows additional plotting controls to be passed, such as `type`,
 #'   `pos`, `legend`, and `quiet`.
@@ -163,52 +176,48 @@
 #'
 #' @examples
 #' \donttest{
-#' # Irregular replicate structures ------------------------------------------
+#' # Irregular replicate structure ------------------------------------------
 #'
-#' # Inspect the data to use in examples
-#' urch_insp <- inspect(intermittent.rd)
+#' # Prepare the data to use in examples
+#' # Note in this dataset each replicate is a different length!
+#' data <- intermittent.rd
+#' # Convert time to minutes (to show different options below)
+#' data[[1]] <- round(data[[1]]/60, 2)
+#' # Inspect
+#' urch_insp <- inspect(data)
 #'
 #' # Calculate rate across each entire replicate
 #' # This leads to erroneous rates because the flush is included
 #' calc_rate.int(urch_insp,
-#'               starts = c(1, 2101, 3751))
+#'               starts = c(1, 2101, 3901))
 #'
-#' # So instead we also specify the replicate end rows
+#' # So instead we also specify a 'measure' phase
 #' calc_rate.int(urch_insp,
-#'               starts = c(1, 2101, 3751),
-#'               ends = c(1900, 3550, 4831))
+#'               starts = c(1, 2101, 3901),
+#'               measure = 1000)
 #'
-#' # However, we usually don't want to use the entire replicate.
-#' # So we can specify a rate region over which to extract a rate in every
-#' # replicate in one of three ways:
+#' # You can even specify different 'measure' phases in each rep
+#' calc_rate.int(urch_insp,
+#'               starts = c(1, 2101, 3901),
+#'               measure = c(1500, 1200, 200))
+#'
+#' # We usually don't want to use the start of a replicate just after the flush,
+#' # so we specify a 'wait' phase. We can also specify 'starts', 'wait' and
+#' # 'measure' in units of time instead of rows.
 #' #
 #' # By time
-#' calc_rate.int(urch_insp,
-#'               starts = c(1, 2101, 3751),
-#'               ends = c(1900, 3550, 4831),
-#'               from = 300,
-#'               to = 1200,
-#'               by = "time")
-#' # By row
-#' calc_rate.int(urch_insp,
-#'               starts = c(1, 2101, 3751),
-#'               ends = c(1900, 3550, 4831),
-#'               from = 100,
-#'               to = 500,
-#'               by = "row")
-#' # By oxygen
+#' # (this time we save the result)
 #' urch_res <- calc_rate.int(urch_insp,
-#'                           starts = c(1, 2101, 3751),
-#'                           ends = c(1900, 3550, 4831),
-#'                           from = 7.0,
-#'                           to = 6.7,
-#'                           by = "oxygen")
+#'                           starts = c(0, 35, 65), # start locations in minutes
+#'                           wait = 2,              # wait for 2 mins
+#'                           measure = 10,          # measure for 10 mins
+#'                           by = "time")
 #'
-#' # Regular replicate structures --------------------------------------------
+#' # Regular replicate structure --------------------------------------------
 #'
-#' # If replicates cycle at regular intervals, 'starts' can be used to specify the
-#' # spacing in rows, starting at row 1. Therefore data must be subset first so
-#' # that the first replicate starts at row 1.
+#' # If replicates cycle at regular intervals, 'starts' can be used to specify
+#' # the spacing in rows or time, starting at row 1. Therefore data must be
+#' # subset first so that the first replicate starts at row 1.
 #' #
 #' # Subset and inspect data
 #' zeb_insp <- zeb_intermittent.rd |>
@@ -218,24 +227,12 @@
 #'               quiet = TRUE) |>
 #'   inspect()
 #'
-#' # Calculate a rate from same 6-minute time region in every replicate.
-#' # Replicates start every 660 rows.
-#' # 'ends' is used to exclude the flush by specifying each is 540 rows long
-#' calc_rate.int(zeb_insp,
-#'               starts = 660,
-#'               ends = 540,
-#'               from = 120,
-#'               to = 480,
-#'               by = "time",
-#'               plot = TRUE)
-#'
-#' # We don't necessarily need to specify the 'ends', because in this case our
-#' # time region excludes the flush anyway.
+#' # Calculate a rate from same 6-minute region in every replicate.
+#' # Replicates cycle at every 660 rows.
 #' zeb_res <- calc_rate.int(zeb_insp,
 #'                          starts = 660,
-#'                          from = 120,
-#'                          to = 480,
-#'                          by = "time",
+#'                          wait = 120, # exclude first 2 mins
+#'                          measure = 360, # rate from 6 mins after 'wait'
 #'                          plot = TRUE)
 #'
 #' # S3 functions ------------------------------------------------------------
@@ -265,10 +262,9 @@
 
 calc_rate.int <- function(x,
                           starts = NULL,
-                          ends = NULL,
-                          from = NULL,
-                          to = NULL,
-                          by = "time",
+                          wait = NULL,
+                          measure = NULL,
+                          by = "row",
                           plot = TRUE,
                           ...)
 {
@@ -278,9 +274,8 @@ calc_rate.int <- function(x,
   ## Save inputs for output
   inputs <- list(x = x,
                  starts = starts,
-                 ends = ends,
-                 from = from,
-                 to = to,
+                 wait = wait,
+                 measure = measure,
                  by = by,
                  plot = plot)
 
@@ -297,89 +292,142 @@ calc_rate.int <- function(x,
   # Format as data.table
   df <- data.table::data.table(df)
   if (length(df) > 2) {
-    warning("calc_rate.int: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate.int()")
+    message("calc_rate.int: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate.int()")
     df <- df[, 1:2]
   }
 
   # starts
   #  - required, numeric, integer, within df row range
-  input.val(starts, num = TRUE, int = TRUE, req = TRUE,
-            range = c(1,nrow(df)),
-            msg = "calc_rate.int: 'starts' -")
+  if(by == "row") input.val(starts, num = TRUE, int = TRUE, req = TRUE,
+                            range = c(1,nrow(df)),
+                            msg = "calc_rate.int: 'starts' -")
+  #  - required, numeric, within df units time range
+  if(by == "time") input.val(starts, num = TRUE, req = TRUE,
+                            range = c(range(df)[[1]], range(df)[[2]]),
+                             msg = "calc_rate.int: 'starts' -")
 
-  # ends
-  #  - not required, but if entered numeric, integer, within df row range
-  # plus same length as 'starts'
-  input.val(ends, num = TRUE, int = TRUE, req = FALSE,
-            range = c(1,nrow(df)),
-            msg = "calc_rate.int: 'ends' -")
-  if(!is.null(ends) && length(ends) != length(starts))
-    stop("calc_rate.int: The 'ends' input should be the same length as the 'starts' input.")
-  # if length > 1 each 'ends' should be larger than the respective 'starts'
-  if(!is.null(ends) && length(ends) > 1 && any(mapply(function(p, q) p >= q,
-                                                      p = starts,
-                                                      q = ends)))
-    stop("calc_rate.int: One or more 'ends' inputs are before or equal to the corresponding 'starts' input!")
+  # wait
+  # - not required, but if entered numeric, integer
+  if(by == "row") input.val(wait, num = TRUE, int = TRUE, req = FALSE,
+                            range = c(1,nrow(df)),
+                            msg = "calc_rate.int: 'wait' -")
+  if(by == "time") input.val(wait, num = TRUE, req = FALSE,
+                             msg = "calc_rate.int: 'wait' -")
+  # plus if not null and not length == 1, must be same length as 'starts'
+  if(!is.null(wait) && length(wait) > 1 && length(wait) != length(starts))
+    stop("calc_rate.int: For a vector input 'wait' should be the same length as 'starts'.")
 
-  # from, to, by
-  # Handled by checks in calc_rate
-  # Only one needed here is 'from' and 'to' should be single values
-  if(length(from) > 1)
-    stop("calc_rate.int: The 'from' input should be a single value.")
-  if(length(to) > 1)
-    stop("calc_rate.int: The 'to' input should be a single value.")
+  # measure
+  # - not required, but if entered numeric, integer
+  if(by == "row") input.val(measure, num = TRUE, int = TRUE, req = FALSE,
+                            range = c(1,nrow(df)),
+                            msg = "calc_rate.int: 'measure' -")
+  if(by == "time") input.val(measure, num = TRUE, req = FALSE,
+                             msg = "calc_rate.int: 'measure' -")
+  # plus if not null and not length == 1, must be same length as 'starts'
+  if(!is.null(measure) && length(measure) > 1 && length(measure) != length(starts))
+    stop("calc_rate.int: For a vector input 'measure' should be the same length as 'starts'.")
 
   ## verify by input
-  ## - this is also done in calc_rate but we want to disallow "proportion"
-  by <- verify_by(by, req = FALSE, default = "time",
-                  which = c("t", "o", "r"),
+  ## - this is also done in calc_rate but we want to disallow "oxygen"
+  by <- verify_by(by, req = TRUE, default = "row",
+                  which = c("t", "r"),
                   msg = "calc_rate.int:")
 
   # Format starts -----------------------------------------------------------
-  if(length(starts) == 1) starts <- seq(1, nrow(df), starts)
+  if(length(starts) == 1 && by == "row") starts <- seq(1, nrow(df), starts)
+  if(length(starts) == 1 && by == "time") starts <- seq(df[[1]][1], tail(df[[1]], 1), starts)
+
 
   # Format ends -------------------------------------------------------------
-  if(is.null(ends)) ends <- c(starts[2:length(starts)]-1, nrow(df)) else
-    if(length(ends) == 1) ends <- starts + ends
+  # keep this, but internal - need it for subsetting
+  if(by == "row") ends <- c(starts[2:length(starts)]-1, nrow(df))
+  if(by == "time") {
+    # convert starts times to row locations since we will subset by row later to avoid data
+    # overlapping between reps
+    starts <- sapply(starts, function(z) which.min(abs(df[[1]] - z)))
+    ends <- c(starts[2:length(starts)]-1, nrow(df))
+  }
+
+  # Format wait and measure -------------------------------------------------
+
+  # If wait and measure NULL
+  if(is.null(wait)) wait <- 0
+  # Could make this an error and force input
+  # For now make it whole replicate
+  # These will cover any eventuality and make it max value
+  if(is.null(measure)) {
+    message("calc_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.")
+    if(by == "row") measure <- nrow(df)
+    if(by == "time") measure <- max(df[[1]])
+  }
+
+  # Convert to 'from' and 'to'
+  if(by == "row") {
+    from <- wait + 1
+    to <- wait + measure
+  }
+  if(by == "time") {
+    from <- wait
+    to <- wait + measure
+  }
 
   # Subset replicates -------------------------------------------------------
+
   # use starts and ends to subset each replicate into a list
-  reps <- mapply(function(p,q) subset_data(df, p, q, "row", quiet = TRUE),
+  reps <- mapply(function(p,q) subset_data(df, p, q, by = "row", quiet = TRUE),
                  p = starts,
                  q = ends,
                  SIMPLIFY = FALSE)
 
   # Run calc_rate on reps ---------------------------------------------------
 
-  if(by == "row" || by == "oxygen")
-    res <- lapply(reps, function(z) calc_rate(z,
-                                              from = from,
-                                              to = to,
-                                              by = by,
-                                              plot = FALSE))
+  if(by == "row")
+    res <- mapply(function(p,q,r,s) calc_rate.rep(p,
+                                                  from = r,
+                                                  to = s,
+                                                  by = by,
+                                                  plot = FALSE,
+                                                  rep = q),
+                  p = reps,
+                  q = 1:length(reps),
+                  r = from, # this in mapply call to handle vector inputs
+                  s = to,
+                  SIMPLIFY = FALSE)
 
   if(by == "time")
-    res <- lapply(reps, function(z) {
-      if(!is.null(from)) from_rel <- from + z[[1,1]] else # time relative to this rep
+    res <- mapply(function(p,q,r,s) {
+
+      if(!is.null(from)) from_rel <- r + p[[1,1]] else # time relative to this rep
         from_rel <- NULL
-      if(!is.null(to)) to_rel <- to + z[[1,1]] else
+      if(!is.null(to)) to_rel <- s + p[[1,1]] else
         to_rel <- NULL
 
-      calc_rate(z,
-                from = from_rel,
-                to = to_rel,
-                by = "time",
-                plot = FALSE)
-    })
+      calc_rate.rep(p,
+                    from = from_rel,
+                    to = to_rel,
+                    by = "time",
+                    plot = FALSE,
+                    rep = q)},
+      p = reps,
+      q = 1:length(reps),
+      r = from,
+      s = to,
+      SIMPLIFY = FALSE)
 
   # Extract summary tables --------------------------------------------------
 
   summ <- lapply(res, function(x) x$summary) # extract
   summ <- do.call(rbind.data.frame, summ) # bind
-  summ$rank <- 1:nrow(summ) # modify rank col
   row_width <- summ$endrow - summ$row # row width for amending row and endrow
-  summ$row <- starts + summ$row - 1 # amended cos these refer to subsets
-  summ$endrow <- summ$row + row_width
+  if(by == "row"){
+    summ$row <- starts + summ$row - 1 # amended cos these refer to subsets
+    summ$endrow <- summ$row + row_width
+  }
+  if(by == "time"){
+    summ$row <- c(0, cumsum(sapply(reps, nrow))[1:(length(reps)-1)]) + summ$row
+    summ$endrow <- summ$row + row_width
+  }
 
   # Construct output --------------------------------------------------------
   out <- list(
@@ -526,14 +574,45 @@ plot.calc_rate.int <- function(x, pos = NULL, quiet = FALSE,
     par(mfrow = c(4,5))
   }
 
-  if(type == "rep") sapply(pos, function(z)
+  if(type == "rep") sapply(pos, function(z) {
     multi.p(x$results[[z]]$dataframe,
             x$results[[z]]$subsets[[1]],
             legend = legend,
             title = glue::glue("Replicate {z} of {nreps}"),
             tck = -0.005,
             mgp = c(0, 0.1, 0),
-            las = 0, ...))
+            las = 0)
+    # wait region shaded
+    # only if not NULL
+    if(!is.null(x$inputs$wait)){
+      rect(xleft = 0,
+           ybottom = min(x$results[[z]]$dataframe[[2]]),
+           xright = x$results[[z]]$summary$row,
+           ytop = max(x$results[[z]]$dataframe[[2]]),
+           col = rgb(255/255,0/255,0/255,  alpha = 0.18),
+           lty = 0)
+      # wait region title
+      if(legend){
+        xpos <- mean(c(0, x$results[[z]]$summary$row))
+        ypos <- max(x$results[[z]]$dataframe[[2]])-(diff(range(x$results[[z]]$dataframe[[2]]))*0.02)
+        text(xpos, ypos, labels = 'wait', col = "red", font = 2)
+      }
+    }
+    # measure region shaded
+    rect(xleft = x$results[[z]]$summary$row,
+         ybottom = min(x$results[[z]]$dataframe[[2]]),
+         xright = x$results[[z]]$summary$endrow,
+         ytop = max(x$results[[z]]$dataframe[[2]]),
+         col = rgb(15/255,245/255,53/255,  alpha = 0.2),
+         lty = 0)
+    # measure region title
+    if(legend){
+      xpos <- mean(c(x$results[[z]]$summary$row, x$results[[z]]$summary$endrow))
+      ypos <- max(x$results[[z]]$dataframe[[2]])-(diff(range(x$results[[z]]$dataframe[[2]]))*0.02)
+      text(xpos, ypos, labels = 'measure', col = "darkgreen", font = 2)
+    }
+
+  })
   else if(type == "full") sapply(pos, function(z)
     multi.p(x$dataframe,
             x$results[[z]]$subsets[[1]],
@@ -587,3 +666,51 @@ mean.calc_rate.int <- function(x, pos = NULL, export = FALSE, ...){
       return(invisible(x))
 }
 
+
+
+
+# Util fns ----------------------------------------------------------------
+
+#' Function for calc_rate with replicate number in summary
+#'
+#' This is an internal function for `calc_rate.int()`. Runs `calc_rate`
+#' and replaces the `$rep` column in `$summary` with the `rep`
+#' input.
+#'
+#' @param x df or inspect obj
+#' @param from calc_rate from
+#' @param to calc_rate to
+#' @param by calc_rate by
+#' @param plot calc_rate plot
+#' @param rep The replicate
+#' @param supp.mess Suppress messages?
+#'
+#' @return a `calc_rate` object with `summary$rep` filled in with appropriate
+#'   replicate number
+#'
+#' @keywords internal
+calc_rate.rep <- function(x,
+                          from = NULL,
+                          to = NULL,
+                          by = "time",
+                          plot = TRUE,
+                          rep = 1,
+                          supp.mess = TRUE,
+                          ...){
+  if(supp.mess) out <- suppressMessages(calc_rate(x,
+                                                  from = from,
+                                                  to = to,
+                                                  by = by,
+                                                  plot = plot,
+                                                  ...))
+  else out <- calc_rate(x,
+                        from = from,
+                        to = to,
+                        by = by,
+                        plot = plot,
+                        ...)
+
+  out$summary$rep <- rep
+
+  return(out)
+}

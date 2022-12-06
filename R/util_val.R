@@ -6,7 +6,7 @@
 # which - which 'by' methods does the function support?
 # msg - start of message text, typically the function name
 verify_by <- function(by, req = TRUE, default = NULL,
-                      which = c("t", "o", "r", "p"),
+                      which = c("t", "o", "r"),
                       msg = ""){
   ## no doubt this is easier with regex
   time_variations <- c("time", "Time", "TIME",
@@ -21,12 +21,6 @@ verify_by <- function(by, req = TRUE, default = NULL,
   row_variations <- c("row", "Row", "ROW",
                       "rw", "Rw", "RW",
                       "r", "R")
-  prop_variations <- c("proportion", "Proportion", "PROPORTION",
-                       "proport", "Proport", "PROPORT",
-                       "prop", "Prop", "PROP",
-                       "prp", "Prp", "PRP",
-                       "pr", "Pr", "PR",
-                       "p", "P")
 
   # stop if required and not entered
   if (req && is.null(by)) stop(glue::glue("{msg} 'by' input is required."))
@@ -39,7 +33,6 @@ verify_by <- function(by, req = TRUE, default = NULL,
   if("t" %in% which && by %in% time_variations) by <- "time"
   else if("o" %in% which && by %in% ox_variations) by <- "oxygen"
   else if("r" %in% which && by %in% row_variations) by <- "row"
-  else if("p" %in% which && by %in% prop_variations) by <- "proportion"
   else stop(glue::glue("{msg} 'by' input not valid or not recognised."))
 
   return(by)
@@ -123,13 +116,13 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
   ## check if an input required
   is_null <- is.null(input)
   ## check integer
-  if(is_num) are_int <- all(sapply(input, function(z) z %% 1 == 0))
+  if(is_num) are_int <- all(input %% 1 == 0)
   ## check length not greater than max allowed
   below_max <-  length(input) <= max
   ## check length not less than min allowed
   above_min <-  length(input) >= min
   ## check actual values within range
-  if(is_num) in_range <- all(sapply(input, function(z) dplyr::between(z, range[1], range[2])))
+  if(is_num) in_range <- all(dplyr::between(as.numeric(input), range[1], range[2]))
 
   if(req && is_null) stop(glue::glue("{msg} input is required."))
 
@@ -158,8 +151,8 @@ val_meth <- function(method){
 
 
 #' Validates acceptable classes of inputs
-#' Set single or multiple inputs to TRUE. If x is any one of these a TRUE
-#' will be returned
+#' Set single or multiple inputs to TRUE. This is what the fn accepts.
+#' If x is *any* one of these a single TRUE will be returned
 #' @keywords internal
 class.val <- function(x,
                       int = FALSE,         # int of any length
@@ -178,9 +171,15 @@ class.val <- function(x,
                       ar = FALSE,          # auto_rate any
                       ar.sing = FALSE,     # auto_rate w/ single rate
                       ar.mult = FALSE,     # auto_rate w/ multiple rates
+                      ar.int = FALSE,      # auto_rate.int any
+                      ar.int.sing = FALSE, # auto_rate.int w/ single rate
+                      ar.int.mult = FALSE, # auto_rate.int w/ multiple rates
                       crbg = FALSE,        # calc_rate.bg any
                       crbg.sing = FALSE,   # calc_rate.bg w/ single rate
                       crbg.mult = FALSE,   # calc_rate.bg w/ multiple rates
+                      cnvr = FALSE,        # convert_rate any
+                      cnvr.sing = FALSE,   # convert_rate w/ single rate
+                      cnvr.mult = FALSE,   # convert_rate w/ multiple rates
                       insp = FALSE){       # inspect
 
   # any length integer
@@ -231,6 +230,15 @@ class.val <- function(x,
   # auto_rate multiple rate
   if(ar.mult) ar.mult.chk <- (any(class(x) %in% "auto_rate") && length(x$rate) > 1) else
     ar.mult.chk <- NULL
+  # auto_rate.int
+  if(ar.int) ar.int.chk <- any(class(x) %in% "auto_rate.int") else
+    ar.int.chk <- NULL
+  # auto_rate.int single rate
+  if(ar.int.sing) ar.int.sing.chk <- (any(class(x) %in% "auto_rate.int") && length(x$rate) == 1) else
+    ar.int.sing.chk <- NULL
+  # auto_rate.int multiple rate
+  if(ar.int.mult) ar.int.mult.chk <- (any(class(x) %in% "auto_rate.int") && length(x$rate) > 1) else
+    ar.int.mult.chk <- NULL
   # calc_rate.bg
   if(crbg) crbg.chk <- any(class(x) %in% "calc_rate.bg") else
     crbg.chk <- NULL
@@ -240,6 +248,15 @@ class.val <- function(x,
   # calc_rate.bg multiple rate
   if(crbg.mult) crbg.mult.chk <- (any(class(x) %in% "calc_rate.bg") && length(x$rate.bg) > 1) else
     crbg.mult.chk <- NULL
+  # convert_rate any
+  if(cnvr) cnvr.chk <- any(class(x) %in% "convert_rate") else
+    cnvr.chk <- NULL
+  # convert_rate single rate
+  if(cnvr.sing) cnvr.sing.chk <- (any(class(x) %in% "convert_rate") && length(x$rate.output) == 1) else
+    cnvr.sing.chk <- NULL
+  # convert_rate multiple rate
+  if(cnvr.mult) cnvr.mult.chk <- (any(class(x) %in% "convert_rate") && length(x$rate.output) > 1) else
+    cnvr.mult.chk <- NULL
   # inspect
   if(insp) insp.chk <- any(class(x) %in% "inspect") else
     insp.chk <- NULL
@@ -262,9 +279,15 @@ class.val <- function(x,
            ar.chk,
            ar.sing.chk,
            ar.mult.chk,
+           ar.int.chk,
+           ar.int.sing.chk,
+           ar.int.mult.chk,
            crbg.chk,
            crbg.sing.chk,
            crbg.mult.chk,
+           cnvr.chk,
+           cnvr.sing.chk,
+           cnvr.mult.chk,
            insp.chk)
 
   final_res <- any(res)

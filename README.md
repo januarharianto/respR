@@ -20,14 +20,15 @@ While the focus of the package is on aquatic respirometry, `respR` is largely un
 
 Use `respR` to:
 
-- Automatically **import** raw data from various oxygen probe equipment
-- Rapidly **inspect** data for common issues before analysis
-- **Explore** and **visualise** timeseries 
-- Perform **multiple regression analysis** to manually or automatically calculate rates 
+- **Import** raw data from various oxygen probe systems
+- **Inspect** data for common issues before analysis
+- **Explore** and **visualise** oxygen timeseries 
+- **Calculate** rates manually or automatically using **multiple regression analysis** 
 - **Adjust** rates for background oxygen consumption or production
 - **Convert** rates to any common unit of oxygen consumption or production
-- Identify **critical oxygen values**, such as $P_{crit}$
+- **Select** rates according to various criteria
 - **Export** results quickly for reporting
+- Identify **critical oxygen values**, such as $P_{crit}$
 
 A highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows metabolic rates to be extracted in an objective manner. See `vignette("auto_rate")` for more details.
 
@@ -65,12 +66,12 @@ See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for
 
 ## Support package development
 
-If you would like to help support the package development or just buy us a beer in thanks go here: [**Support Us**](https://januarharianto.github.io/respR/articles/support.html) 
+If you would like to help support the package development or just buy us a beer in thanks go here: [**Support Development**](https://januarharianto.github.io/respR/articles/support.html) 
 
 ## Developers
 
-- [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
 - [**Nicholas Carey**](https://github.com/nicholascarey), Marine Scotland Science
+- [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
 
 ## Usage
 

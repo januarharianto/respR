@@ -15,21 +15,23 @@ convert_rate(
   area = NULL,
   S = NULL,
   t = NULL,
-  P = 1.013253
+  P = 1.013253,
+  plot = FALSE,
+  ...
 )
 }
 \arguments{
-\item{x}{numeric value or vector, or object of class \code{auto_rate},
-\code{calc_rate}, \code{calc_rate.int}, \code{adjust_rate}, or \code{calc_rate.bg.} Contains
-the rate(s) to be converted.}
+\item{x}{numeric value or vector, or object of class \code{calc_rate},
+\code{calc_rate.int}, \code{auto_rate}, \code{auto_rate.int}, \code{adjust_rate}, or
+\code{calc_rate.bg.} Contains the rate(s) to be converted.}
 
 \item{oxy.unit}{string. The dissolved oxygen unit of the original raw data
-used to determine the rate in \code{x}.}
+used to determine the rates in \code{x}.}
 
 \item{time.unit}{string. The time unit of the original raw data used to
-determine the rate in \code{x}.}
+determine the rates in \code{x}.}
 
-\item{output.unit}{string. The output unit to convert the input rate to.
+\item{output.unit}{string. The output units to convert the input rates to.
 Should be in the correct order: "Oxygen/Time" or "Oxygen/Time/Mass" or
 "Oxygen/Time/Area".}
 
@@ -50,6 +52,12 @@ some oxygen units.}
 
 \item{P}{numeric. Pressure (bar). Used in conversion of some oxygen units.
 Defaults to a standard value of 1.013253 bar.}
+
+\item{plot}{logical. Default is \code{FALSE}. Controls if a plot is produced. See
+Plot section.}
+
+\item{...}{Allows additional plotting controls to be passed. See Plot
+section.}
 }
 \value{
 Output is a \code{list} object of class \code{convert_rate} containing the
@@ -58,31 +66,25 @@ Output is a \code{list} object of class \code{convert_rate} containing the
 is the \emph{absolute} rate in the output unit minus the mass- or area-specific
 component. The \verb{$summary} table element contains all rate regression
 parameters and data locations (depending on what class of object was
-entered), adjustments (if applied), units, and more. The \verb{$rank} column
-requires special notice depending on the type of experiment you have
-analysed or the function you used to determine the rates. If \code{calc_rate}
-was used, it is the order of rates as entered using \code{from} and \code{to} (if
-multiple rates were determined). For \code{auto_rate} it relates to the \code{method}
-input, for example it indicates kernel density ranking if the \code{linear}
-method was used, or ordering by rate value if \code{lowest} or \code{highest} were
-used. For intermittent-flow experiments analysed via \code{calc_rate.int} it
-indicates the replicate number. Note that if \code{subset_rate} was used the
-rows in the summary table may have been reordered, including the \verb{$rank}
-column. The \emph{original} rank for each row is retained if reordering
-occurred.
+entered), adjustments (if applied), units, and more. The \verb{$rep} and \verb{$rank}
+columns require special notice depending on the type of experiment you have
+analysed or the function you used to determine the rates. See the summary
+table description in \strong{S3 Generic Functions} section aboce.
 }
 \description{
 Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.int]{calc_rate.int()}},
-\code{\link[=auto_rate]{auto_rate()}}, \code{\link[=adjust_rate]{adjust_rate()}}, or \code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute
-rate (i.e. whole chamber or whole specimen), or mass-specific rate (i.e.
-normalised by specimen mass), or area-specific rate (i.e. normalised by
-specimen surface area) in any common unit.
+\code{\link[=auto_rate]{auto_rate()}}, \code{\link[=auto_rate.int]{auto_rate.int()}}, \code{\link[=adjust_rate]{adjust_rate()}}, or
+\code{\link[=calc_rate.bg]{calc_rate.bg()}} into an absolute rate (i.e. whole chamber or whole
+specimen), or mass-specific rate (i.e. normalised by specimen mass), or
+area-specific rate (i.e. normalised by specimen surface area) in any common
+unit.
 }
 \details{
 By default, \code{convert_rate} converts the primary \verb{$rate} element from
-\code{calc_rate}, \code{calc_rate.int}, and \code{auto_rate} objects, the \verb{$rate.adjusted}
-from \code{adjust_rate} objects, and the \verb{$rate.bg} from \code{calc_rate.bg} objects.
-Additionally, any numeric value or vector of rates can be input as \code{x}.
+\code{calc_rate}, \code{calc_rate.int}, \code{auto_rate} and , \code{auto_rate.int} objects, the
+\verb{$rate.adjusted} from \code{adjust_rate} objects, and the \verb{$rate.bg} from
+\code{calc_rate.bg} objects. Additionally, any numeric value or vector of rates
+can be input as \code{x}.
 \subsection{Respirometer volume}{
 
 The \code{volume} of the respirometer is required and should be in litres (\code{L}).
@@ -133,6 +135,44 @@ to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/
 \code{\link[=convert_val]{convert_val()}} for simple conversion between non-oxygen units.
 }
 
+\subsection{Plot}{
+
+Plotting provides three ways of visualising the rates (or a selection of them
+using \code{pos}), chosen using \code{type}. The default is \code{plot = FALSE} to prevent
+plots being produced for every single conversion.
+
+\code{type = "full"} (the default) plots a grid of up to 20 plots with each rate
+highlighted on the full dataset, with the rate value in the title. Values on
+the axes - time (bottom), row (top), and oxygen (left) - are in the units of
+the original raw data. Rates are plotted in order of how they appear in the
+summary table up to the first 20 rows, unless different rows have been
+specified via \code{pos}.
+
+\code{type = "rate"} plots the entire data timeseries on the upper plot, and on
+the lower plot the output rate values in the chosen output units. Each rate
+is plotted against the middle of the region used to determine it. \code{pos} can
+be used to select a range of rates (i.e. summary table rows) to show in the
+lower plot (default is all).
+
+\code{type = "overlap"} visualises where regression results in the summary table
+occur in relation to the original dataset to help understand how they are
+distributed or may overlap, and is particularly useful for results from the
+\code{auto_rate} \code{linear} method. The top plot is the entire data timeseries, the
+bottom plot the region of the data each rate regression has been fit over.
+The y-axis represents the position (i.e. row) of each in the summary table
+descending from top to bottom. If no reordering or subsetting has been
+performed, this will usually be equivalent to the \verb{$rank} column, but note as
+reordering or subsetting is performed rank and summary table position will
+not necessarily be equivalent. One result (summary table row) can be
+highlighted, the default being \code{highlight = 1}. \code{pos} can be used to select a
+range of summary rows to plot in the lower overlap plot.
+
+Other options:
+
+\code{legend = FALSE} will suppress plot labels, \code{pos} selects summary rates to
+plot, \code{quiet} suppresses console messages.
+}
+
 \subsection{S3 Generic Functions}{
 
 Saved output objects can be used in the generic S3 functions \code{print()},
@@ -140,22 +180,23 @@ Saved output objects can be used in the generic S3 functions \code{print()},
 \itemize{
 \item \code{print()}: prints a single result, by default the first converted rate.
 Others can be printed by passing the \code{pos} input. e.g. \code{print(x, pos = 2)}
-\item \code{summary()}: prints a condensed version of the output \verb{$summary} table of
-converted rates and metadata. Specific rows can be specified with the \code{pos}
-input. e.g. \code{summary(x, pos = 1:5)}. This can be exported as a separate data
-frame by passing \code{export = TRUE}. This will be the \emph{full} summary table, not
-the one printed to the console, including all rate regression parameters, and
-data locations, adjustments if applied, units, and more. The \verb{$rank} column
-requires special notice depending on the type of experiment you have analysed
-or the function you used to determine the rates. If \code{calc_rate} was used, it
-is the order of rates as entered using \code{from} and \code{to} (if multiple rates
-were determined). For \code{auto_rate} it relates to the \code{method} input, for
-example it indicates kernel density ranking if the \code{linear} method was used,
-or ordering by rate value if \code{lowest} or \code{highest} were used. For
-intermittent-flow experiments analysed via \code{calc_rate.int} it indicates the
-replicate number. Note that if \code{subset_rate} was used the rows in the summary
-table may have been reordered, including the \verb{$rank} column. The \emph{original}
-rank for each row is retained if reordering occurred.
+\item \code{summary()}: prints the output \verb{$summary} table of converted rates and
+metadata. Specific rows can be specified with the \code{pos} input. e.g.
+\code{summary(x, pos = 1:5)}. This can be exported as a separate data frame by
+passing \code{export = TRUE} and includes all rate regression parameters, and data
+locations, adjustments if applied, units, and more. The \verb{$rep} and \verb{$rank}
+columns requires special notice depending on the type of experiment you have
+analysed or the function you used to determine the rates. For the \verb{$rank}
+column if \code{calc_rate} was used, it is the order of rates as entered using
+\code{from} and \code{to} (if multiple rates were determined). For \code{auto_rate} it
+relates to the \code{method} input, for example it indicates kernel density
+ranking if the \code{linear} method was used, or ordering by rate value if
+\code{lowest} or \code{highest} were used. For intermittent-flow experiments analysed
+via \code{calc_rate.int} or \code{auto_rate.int} it indicates the ranking \emph{within} each
+replicate as seen in the \verb{$rep} column. Note that if \code{select_rate} has been
+used the rows in the summary table may have been reordered, including the
+\verb{$rep} and \verb{$rank} columns. The \emph{original} rep and rank for each row is
+retained if reordering occurred.
 \item \code{mean()}: calculates the mean of all converted rates, or those specified by
 the \code{pos} input. e.g. \code{mean(x, pos = 1:5)} The mean can be exported as a
 separate value by passing \code{export = TRUE}.

@@ -23,9 +23,9 @@
 #'
 #' - `2101:3550`   - Replicate 2
 #'
-#' - `3551:3750`   - Flush 2
+#' - `3551:3900`   - Flush 2
 #'
-#' - `3751:4831`   - Replicate 3
+#' - `3901:4831`   - Replicate 3
 #'
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 2 columns (time and dissolved
