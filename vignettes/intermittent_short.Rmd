@@ -92,7 +92,7 @@ Now we can see rate is much more consistent, although it decreases slightly over
 
 ## `calc_rate.int` {#calc_rate.int}
 
-Introduced in [`respR v2.1`](), `calc_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and extract a rate from the same data region of each replicate. This can be the same rows of each replicate or the same time window.
+Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `calc_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and extract a rate from the same data region of each replicate. This can be the same rows of each replicate or the same time window.
 
 `calc_rate.int` uses the `starts` locations to subset each replicate from the data in `x`. The function assumes each replicate ends at the row preceding the start of the next. It then extracts a rate using the `wait` and `measure` inputs. The `by` input (`"row"` or `"time"`) determines how these other inputs are applied to the data. 
 
@@ -241,7 +241,7 @@ See also `vignette("select_rate")` for more advanced rate selection.
 
 ## `auto_rate.int`
 
-Also introduced in [`respR v2.1`](), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data which allows you to run the `auto_rate()` function on every replicate. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. This vignette - `vignette("auto_rate.int")` - covers the basic functionality. 
+Also introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data which allows you to run the `auto_rate()` function on every replicate. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. This vignette - `vignette("auto_rate.int")` - covers the basic functionality. 
 
 Here we'll repeat the above analysis, but this time use `auto_rate.int` to extract the most linear (i.e. most consistently maintained) rate from each replicate, which could be considered a routine metabolic rate (RMR). 
 
@@ -251,7 +251,7 @@ Here we'll repeat the above analysis, but this time use `auto_rate.int` to extra
 
 A notable difference from `calc_rate.int` is that while you also specify a `measure` phase the `auto_rate.int` analysis occurs *within* this region, and the width of the rates (i.e. duration or rows over which they occur) may be of various lengths depending on the `method` and `width` inputs. 
 
-Here, we again want to exclude the first 5 minutes (300 rows) of each replicate to allow for the specimen to settle down after the flush. We then calculate rates from within a different `measure` period in each replicate to use as much of the data as possible. We specify the `"linear"` method, and use a `width` of `400`, which was arrived at after some testing of different values. See [here]() for discussion of appropriate widths to use with `auto_rate`.
+Here, we again want to exclude the first 5 minutes (300 rows) of each replicate to allow for the specimen to settle down after the flush. We then calculate rates from within a different `measure` period in each replicate to use as much of the data as possible. We specify the `"linear"` method, and use a `width` of `400`, which was arrived at after some testing of different values. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of appropriate widths to use with `auto_rate`.
 
 ```{r eval = FALSE, tidy=FALSE}
 urch_rates <- auto_rate.int(urchin_int,
@@ -288,7 +288,7 @@ urch_rates_adj <- adjust_rate(urch_rates,
                               method = "concurrent") |>
   summary()
 ```
-We can see there has been a very small, but different, adjustment made to each rate. See [here]() for a better example of this adjustment method in the context of intermittent-flow analyses. 
+We can see there has been a very small, but different, adjustment made to each rate. See [here](https://januarharianto.github.io/respR/articles/adjust_rate.html#example-2---intermittent-flow-respirometry) for a better example of this adjustment method in the context of intermittent-flow analyses. 
 
 ### Convert
 
@@ -307,5 +307,5 @@ This method could also be easily adapted to extract the lowest or highest rates 
 
 ## Alternative approaches
 
-Previous versions of this vignette demonstrated use of different methods, such as looping and subsetting of data, to extract individual replicates for processing through `calc_rate` or `auto_rate`. These approaches still work and are archived [here]() in case they are of use in some cases. However for most analyses use of `calc_rate.int` or `auto_rate.int` is the recommended approach.
+Previous versions of this vignette demonstrated use of different methods, such as looping and subsetting of data, to extract individual replicates for processing through `calc_rate` or `auto_rate`. These approaches still work and are archived [here](https://januarharianto.github.io/respR/articles/archive/intermittent_old.html) in case they are of use in some cases. However for most analyses use of `calc_rate.int` or `auto_rate.int` is the recommended approach.
 

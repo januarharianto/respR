@@ -35,8 +35,8 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 ## Mastodon
 
-We also have a <a rel="me" href="https://mas.to/@respR">Mastodon</a> account. Like many        we have just started with this, so stay tuned to see how things develop!
+We also have a **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop!
 
 ## Tip Jar 
 
-See [**here**](https://januarharianto.github.io/respR/articles/support.html) for how you can throw us a few bucks in thanks and to support further development.
+See [**here**](https://januarharianto.github.io/respR/articles/support.html) for how you can throw us a few bucks to say thanks and to support further development.

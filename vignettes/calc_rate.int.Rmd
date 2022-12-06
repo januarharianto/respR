@@ -226,7 +226,7 @@ The `pos` input here can also be of multiple replicates but this will produce mu
 
 ### Additional plotting options
 
-`legend` can be used to show axis labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](). 
+`legend` can be used to show axis labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](https://januarharianto.github.io/respR/articles/inspecting.html#additional-plotting-options). 
 
 ## S3 generic methods
 
@@ -276,10 +276,10 @@ This could be passed as a numeric value to later functions such as `convert_rate
   
 ## Notes and tips
 
-- Internally `calc_rate.int` uses `calc_rate()` to extract rates, which explains why each replicate result in `$results` is a `calc_rate` object. The `wait` and `measure` inputs are simply converted to the `from` and `to` inputs of `calc_rate`. Essentially `from` is equivalent to `wait`, and `to` equivalent to `wait + measure`. If you want to use the `by = "oxygen"` method of `calc_rate` you will have to look into looping the function. See [here]().
+- Internally `calc_rate.int` uses `calc_rate()` to extract rates, which explains why each replicate result in `$results` is a `calc_rate` object. The `wait` and `measure` inputs are simply converted to the `from` and `to` inputs of `calc_rate`. Essentially `from` is equivalent to `wait`, and `to` equivalent to `wait + measure`. If you want to use the `by = "oxygen"` method of `calc_rate` you will have to look into looping the function. See [here](https://januarharianto.github.io/respR/articles/archive/intermittent_old.html).
 
 - Note the default behaviour of `calc_rate` if values are outside the range present within each replicate is used. For example if the entered `measure` phase is longer than the actual replicate, the last row or time value in the replicate will be used instead. Similarly, if `wait` or `measure` inputs do not match exactly to a value within the data the closest matching value is used instead. See `calc_rate()` for full details.
 
-- The examples above assume flushes occur at the end of each replicate. If your data is subset or processed so that flushes are at the start instead this is easy to deal with. Simply use `wait` to exclude the flush at the start plus whatever subsequent wait phase you want to use before the `measure` phase.  
+- The examples above assume flushes occur at the end of each replicate. If your data is subset or processed so that flushes are at the start instead this is easy to deal with. Simply use `wait` to exclude the flush at the start plus whatever subsequent wait phase you want to use before the `measure` phase. See example [here](https://januarharianto.github.io/respR/articles/adjust_rate.html#example-2---intermittent-flow-respirometry).
 
 

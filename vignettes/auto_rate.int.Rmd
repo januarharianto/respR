@@ -33,7 +33,7 @@ opts_chunk$set(collapse = TRUE,
 `auto_rate.int()` is a function for automatically extracting rates from each replicate in
 intermittent-flow respirometry data using the `auto_rate()` function. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. 
 
-This page contains descriptions and simple examples of the functionality. You should familiarise yourself with how `auto_rate` works before using `auto_rate.int`. See `auto_rate()` and [here]() for a thorough overview. See `vignette("intermittent_short")` for how `auto_rate.int` can be used to analyse a relatively brief intermittent-flow respirometry experiment, and `vignette("intermittent_long")` for an example of analysing a longer experiment.
+This page contains descriptions and simple examples of the functionality. You should familiarise yourself with how `auto_rate` works before using `auto_rate.int`. See `auto_rate()` and [here](https://januarharianto.github.io/respR/articles/auto_rate.html) for a thorough overview. See `vignette("intermittent_short")` for how `auto_rate.int` can be used to analyse a relatively brief intermittent-flow respirometry experiment, and `vignette("intermittent_long")` for an example of analysing a longer experiment.
 
 ## Overview
 
@@ -53,7 +53,7 @@ There are three required inputs:
 - A single numeric value representing a regular row or time interval starting at row 1. This option should only be used when replicates cycle at regular intervals. If the first replicate does not start at row 1 of the data in `x`, it should be subset so that it does. See `subset_data()` and examples below for how to do this.  
 - A numeric vector of row numbers or times indicating each replicate start location. Useful if replicates do *not* cycle at regular intervals.
 
-- `width`: This is the width used in the `auto_rate` analysis in either rows or a time duration in the units of the raw data. It must be entered in the units of the `by` setting (`"row"` or `"time"`), which also sets the units of the `starts`, `wait` and `measure` inputs. See `auto_rate()` and [here]() for how widths are applied. Note that proportional `width` inputs accepted in `auto_rate` if `by = "row"` (e.g. `0.2` to represent 20% of the total data length) will apply to the length of the `measure` phase. 
+- `width`: This is the width used in the `auto_rate` analysis in either rows or a time duration in the units of the raw data. It must be entered in the units of the `by` setting (`"row"` or `"time"`), which also sets the units of the `starts`, `wait` and `measure` inputs. See `auto_rate()` and [here](https://januarharianto.github.io/respR/articles/auto_rate.html) for how widths are applied. Note that proportional `width` inputs accepted in `auto_rate` if `by = "row"` (e.g. `0.2` to represent 20% of the total data length) will apply to the length of the `measure` phase. 
 
 ### Other inputs 
 
@@ -61,7 +61,7 @@ There are three required inputs:
 
 - `measure`: This is the region within which the `auto_rate` analysis is conducted for each replicate. It is a row length or time duration to be applied at the end of the `wait` phase (if used, otherwise it applies from the start of the data), and should be the correct length to exclude the flush period. Can be a single value to apply the same measure phase to each replicate, or a vector of the same length as `starts` of different measure phases for each replicate. Default is `NULL` in which case the entire replicate is used (which is rarely what is wanted).
 
-- `by`: Controls how the `starts`, `wait`, `measure`, and `width` inputs are applied. The default is `"row"` with `by = "time"` being the other option. We would strongly advise you use `"row"` whenever possible as, while the function has been tested, the code for parsing inputs by row is much more robust and less likely to throw up obscure bugs. (Please [provide feedback]() for **any** issues you encounter using either method). 
+- `by`: Controls how the `starts`, `wait`, `measure`, and `width` inputs are applied. The default is `"row"` with `by = "time"` being the other option. We would strongly advise you use `"row"` whenever possible as, while the function has been tested, the code for parsing inputs by row is much more robust and less likely to throw up obscure bugs. (Please [provide feedback](https://januarharianto.github.io/respR/articles/contact.html) for **any** issues you encounter using either method). 
 
 - `method`: Selects the rate extraction method used in `auto_rate`. The default method is `"linear"`. See `auto_rate()`.
 
@@ -260,7 +260,7 @@ The `pos` input here can also be of multiple replicates but this will produce mu
 
 ### Additional plotting options
 
-`legend` can be used to show labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](). 
+`legend` can be used to show labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](https://januarharianto.github.io/respR/articles/inspecting.html#additional-plotting-options). 
 
 ## S3 generic methods
 

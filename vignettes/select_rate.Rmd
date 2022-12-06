@@ -36,7 +36,7 @@ Having multiple rates can be a result of several analyses. The `auto_rate()` fun
 
 ## Selection methods
 
-The function includes a wide array of criteria by which `convert_rate` results can be filtered. The full list can be seen in the [Details]() section of the help file. We will run through a few specific examples below. Multiple selection criteria can be applied by saving the output and processing it through the function multiple times with different criteria, or alternatively via piping (`%>%` or `|>`). See examples. 
+The function includes a wide array of criteria by which `convert_rate` results can be filtered. The full list can be seen in the [Details](https://januarharianto.github.io/respR/reference/select_rate.html#details-1) section of the help file. We will run through a few specific examples below. Multiple selection criteria can be applied by saving the output and processing it through the function multiple times with different criteria, or alternatively via piping (`%>%` or `|>`). See examples. 
 
 ## Rep and rank columns {#rankcol}
 
@@ -282,7 +282,7 @@ A full analysis of a long intermittent-flow experiment including results filteri
 
 ### Data
 
-Here we will subset a portion of the `zeb_intermittent.rd` dataset, use `calc_rate.int` to extract a rate from the same time period of each, in this case from 3 minutes (180s) to 7 minutes (420s) within each replicate. Then we convert the results, plot them in two different ways, and show the summary table.
+Here we will subset a portion of the `zeb_intermittent.rd` dataset, use `calc_rate.int` to extract a rate from the same time period of each. We'll specify the replicates cycle at every 660 rows using `starts`, use a `wait` phase of two minutes (120 rows), and a `measure` phase of six minutes (360 rows) within each replicate. Then we convert the results, plot them in two different ways, and show the summary table.
 
 ```{r results='hide', message=FALSE}
 zeb_sub <- subset_data(zeb_intermittent.rd,
@@ -292,10 +292,9 @@ zeb_sub <- subset_data(zeb_intermittent.rd,
                        quiet = TRUE) |>
   inspect(plot = FALSE) |> 
   calc_rate.int(starts = 660,
-                ends = 540,
-                from = 180,
-                to = 420,
-                by = "time", 
+                wait = 120,
+                measure = 360,
+                by = "row",  
                 plot = FALSE) |>
   convert_rate(oxy.unit = "mg/L", 
                time.unit = "secs",
@@ -305,10 +304,15 @@ zeb_sub <- subset_data(zeb_intermittent.rd,
   plot(type = "full") |> 
   plot(type = "rate") |>
   summary()
-
 ```
 
-The first `"full"` plot shows the rate extracted from each replicate, but the second `"rate"` plot is really useful in understanding how rates change over the course of these 20 replicates. 
+The first `type = "full"` plot shows each replicate rate in the context of the entire data series. The second `type = "rate"` plot is really useful in understanding how rates change over the course of these 20 replicates. 
+
+The summary, which is quite a large table, shows us how these rates change across the 20 replicates.
+
+```{r echo = TRUE}
+summary(zeb_sub)
+```
 
 ### Extract rates
 
@@ -324,7 +328,7 @@ mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
   summary(export = TRUE)
 ```
 
-That's it! We can print the data frame we saved to check the result. This contains the full results, from which replicate the rate came from, the data region it was calculated over, any adjustments (whcih we didn't apply here), experimental data such as respirometer volumen and specimen mass, and of course the output rate and its units. This is a great way of saving the results. 
+That's it! We can print the data frame we saved to check the result. This contains the full results, from which replicate the rate came from, the data region it was calculated over, any adjustments (which we didn't apply here), experimental data such as respirometer volume and specimen mass, and of course the output rate and its units. This is a great way of saving the results. 
 
 ```{r}
 mmr
@@ -332,7 +336,7 @@ mmr
 
 #### RMR
 
-Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates, so this time we pipe the result to `mean()`.
+Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates (quite common, but usually in studies where there are many more repliucates), so this time we pipe the result to `mean()`.
 
 ```{r message=FALSE, results='hold'}
 rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
@@ -351,6 +355,7 @@ summary(rmr, export = TRUE)
 See the following documentation and vignette for more examples of how `select_rate` can be used.
 
 - `help("select_rate")`
+- `vignette("intermittent_short")`
 - `vignette("intermittent_long")`
 
 ## Overlapping results {#overlap}

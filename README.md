@@ -3,9 +3,10 @@
 <!-- badges: start -->
 <!-- [![metacran downloads](https://cranlogs.r-pkg.org/badges/respR)](https://cran.r-project.org/package=respR) -->
 <!-- [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR) -->
+<!-- [![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions) -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
-[![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions)
+[![R-CMD-check](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
 [![License](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363)
@@ -44,7 +45,7 @@ install.packages("respR")
 
 Visit the `respR` [**website**](https://januarharianto.github.io/respR/) to get started. The site has a range of vignettes detailing the functionality, plus example workflows, documentation, and more. 
 
-We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](mailto:nicholascarey@gmail.com) with a sample of your data and we will help get you started. 
+We are also happy to help directly. If you have problems using the package or getting started with your analysis, [**get in touch**](https://januarharianto.github.io/respR/articles/contact.html) with a sample of your data and we will help get you started. 
 
 ## Publication 
 
