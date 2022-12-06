@@ -17,3 +17,4 @@ A plot. No returned value.
 \description{
 Plot convert_rate.ft objects
 }
+\keyword{internal}

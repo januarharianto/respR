@@ -99,19 +99,13 @@ across the entire timeseries. No reordering of results is performed.
 \item \code{interval}: multiple, successive, non-overlapping regressions of the
 specified \code{width} are extracted from the rolling regressions, ordered by
 time.
-\item NOTE: \code{max}, \code{min}: These methods were used in previous versions of \code{respR}
-but have been deprecated. They were intended to order oxygen uptake
-(negative) rates by magnitude, but this resulted in incorrect ordering of
-oxygen production (positive) rates. They have been retained for code
-compatibility, but will be removed in a future version of \code{respR}, and so
-\emph{should not be used}.
 }
 }
 
 \subsection{Further selection and filtering of results}{
 
 For further selection or subsetting of \code{auto_rate} results, see the dedicated
-\code{\link[=subset_rate]{subset_rate()}} function, which allows subsetting of rates by various
+\code{\link[=select_rate]{select_rate()}} function, which allows subsetting of rates by various
 criteria, including r-squared, data region, percentiles, and more.
 }
 
@@ -125,13 +119,12 @@ The units of oxygen concentration and time will be specified later in
 \subsection{The \code{width} and \code{by} inputs}{
 
 If \code{by = "time"}, the \code{width} input represents a time window in the units of
-the time data.
+the time data in \code{x}.
 
-If \code{by = "row"} and between 0 and 1, \code{width} represents a proportion of the
-total data length, as in the equation \verb{floor(width * number of data rows)}.
-For example, 0.2 represents a rolling window of 20\% of the data width.
-Otherwise, if entered as an integer of 2 or greater, the \code{width} represents
-the number of rows.
+If \code{by = "row"} and \code{width} is between 0 and 1 it represents a proportion of
+the total data length, as in the equation \verb{floor(width * number of data rows)}. For example, 0.2 represents a rolling window of 20\% of the data
+width. Otherwise, if entered as an integer of 2 or greater, the \code{width}
+represents the number of rows.
 
 For both \code{by} inputs, if left as \code{width = NULL} it defaults to 0.2 or a
 window of 20\% of the data length.
@@ -204,39 +197,39 @@ website at \url{https://januarharianto.github.io/respR/}
 \donttest{
 # Most linear section of an entire dataset
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
- auto_rate()
+  auto_rate()
 
 # What is the lowest oxygen consumption rate over a 10 minute (600s) period?
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
- auto_rate(method = "lowest", width = 600, by = "time") \%>\%
- summary()
+  auto_rate(method = "lowest", width = 600, by = "time") \%>\%
+  summary()
 
 # What is the highest oxygen consumption rate over a 10 minute (600s) period?
 inspect(sardine.rd, time = 1, oxygen =2) \%>\%
- auto_rate(method = "highest", width = 600, by = "time") \%>\%
- summary()
+  auto_rate(method = "highest", width = 600, by = "time") \%>\%
+  summary()
 
 # What is the NUMERICAL minimum oxygen consumption rate over a 5 minute (300s)
 # period in intermittent-flow respirometry data?
 # NOTE: because uptake rates are negative, this would actually be
 # the HIGHEST uptake rate.
 auto_rate(intermittent.rd, method = "minimum", width = 300, by = "time") \%>\%
- summary()
+  summary()
 
 # What is the NUMERICAL maximum oxygen consumption rate over a 20 minute
 # (1200 rows) period in respirometry data in which oxygen is declining?
 # NOTE: because uptake rates are negative, this would actually be
 # the LOWEST uptake rate.
-sardine.rd |>
-  inspect() |>
-  auto_rate(method = "maximum", width = 1200, by = "row") |>
+sardine.rd \%>\%
+  inspect() \%>\%
+  auto_rate(method = "maximum", width = 1200, by = "row") \%>\%
   summary()
 
 # Perform a rolling regression of 10 minutes width across the entire dataset.
 # Results are not ordered under this method.
-sardine.rd |>
-  inspect() |>
-  auto_rate(method = "rolling", width = 600, by = "time") |>
+sardine.rd \%>\%
+  inspect() \%>\%
+  auto_rate(method = "rolling", width = 600, by = "time") \%>\%
   summary()
  }
 }

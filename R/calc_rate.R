@@ -4,11 +4,9 @@
 #' Calculates rate of oxygen uptake or production from respirometry data. A rate
 #' can be determined over the whole dataset, or on subsets of the data using the
 #' `from` and `to` inputs to specify data regions in terms of `oxygen` or `time`
-#' units, `row` numbers of the input data, or over a `proportion` of the total
-#' oxygen used or produced (note, this last option works poorly with noisy or
-#' fluctuating data). Multiple rates can be extracted from the same dataset by
-#' using these inputs to enter vectors of paired values in the appropriate
-#' metric. See Examples.
+#' units or `row` numbers of the input data. Multiple rates can be extracted
+#' from the same dataset by using these inputs to enter vectors of paired values
+#' in the appropriate metric. See Examples.
 #'
 #' The function calculates rates by fitting a linear model of oxygen against
 #' time, with the slope of this regression being the rate. There are no units
@@ -26,9 +24,9 @@
 #' ## Specifying regions
 #'
 #' For calculating rates over specific regions of the data, the `from` and `to`
-#' inputs in the `by` units of `"time"` (the default), "`oxygen`", `"row"`, or
-#' `"proportion"` can be used. The `from` and `to` inputs do not need to be
-#' precise; the function will use the closest values found.
+#' inputs in the `by` units of `"time"` (the default), "`oxygen`", or `"row"`.
+#' The `from` and `to` inputs do not need to be precise; the function will use
+#' the closest values found.
 #'
 #' Multiple regions can be examined within the same dataset by entering `from`
 #' and `to` as vectors of paired values to specify different regions. In this
@@ -93,9 +91,8 @@
 #' @param to numeric value or vector. Defaults to `NULL`. The end of the
 #'   region(s) over which you want to calculate the rate in the units specified
 #'   in `by`. If a vector, each value must have a paired value in `from`.
-#' @param by string. `"time"`, `"row"`, `"oxygen"` or `"proportion"` Defaults to
-#'   `"time"`.This is the method used to subset the data region between `from`
-#'   and `to`.
+#' @param by string. `"time"`, `"row"`, or `"oxygen"`. Defaults to `"time"`.
+#'   This is the method used to subset the data region between `from` and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.
 #' @param ... Allows additional plotting controls to be passed, such as `pos`,
 #'   `panel`, and `quiet = TRUE`.
@@ -148,7 +145,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
                  plot = plot)
 
   # Validate inputs
-  # Will migrate to assertive package when I get used to it..
   ## verify by input
   by <- verify_by(by, msg = "calc_rate:")
 
@@ -158,11 +154,13 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   # By now, df input must be a data frame object - but check
   if(!is.data.frame(df)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.")
+  # In edge cases if a 1 row df is entered it gives an obscure message, so this is more clear
+  if(nrow(df) == 1)  stop("calc_rate: Input data contains only 1 row. Please check inputs.")
 
   # Format as data.table
   df <- data.table::data.table(df)
   if (length(df) > 2) {
-    warning("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate()")
+    message("calc_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running calc_rate()")
     df <- df[, 1:2]
   }
 
@@ -171,15 +169,11 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
     if(by == "time") from <- min(df[[1]])
     if(by == "row") from <- 1
     if(by == "oxygen") from <- df[[2]][1] # first oxygen value
-    if(by == "proportion")
-      stop("calc_rate: please enter a proportion 'from' input.")
   }
   if(is.null(to)){
     if(by == "time") to <- max(df[[1]])
     if(by == "row") to <- nrow(df)
     if(by == "oxygen") to <- df[[2]][nrow(df)] # last oxygen value
-    if(by == "proportion")
-      stop("calc_rate: please enter a proportion 'to' input.")
   }
 
   # from/to checks  ---------------------------------------------------------
@@ -245,14 +239,6 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
     }
   }
 
-  if(by == "proportion"){
-    if(any(!(sapply(from, function(z) data.table::between(z, 0, 1)))))
-      stop("calc_rate: for by = 'proportion' method, all 'from' values should be between 0 and 1.")
-    if(any(!(sapply(to, function(z) data.table::between(z, 0, 1)))))
-      stop("calc_rate: for by = 'proportion' method, all 'to' values should be between 0 and 1.")
-  }
-
-
   # Subset and run lm -------------------------------------------------------
   # Subset the data:
   dt <- lapply(1:length(from), function(z) truncate_data(df, from[z], to[z], by))
@@ -282,7 +268,9 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
     inputs = inputs,
     dataframe = df,
     subsets = dt,
-    summary = cbind(rank = 1:nrow(rdt), rdt),
+    summary = cbind(rep = NA,
+                    rank = 1:nrow(rdt),
+                    rdt),
     rate.2pt = rdt$rate.2pt,
     rate = rate
   )
@@ -299,6 +287,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 #' @param x calc_rate object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate <- function(x, pos = 1, ...) {
@@ -322,6 +311,7 @@ print.calc_rate <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -352,12 +342,13 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 }
 
 #' Plot calc_rate objects
-#' @param x calc_rate.bg object
+#' @param x calc_rate object
 #' @param pos integer. Which result to plot.
 #' @param panel integer. Which panel to plot individually.
 #' @param quiet logical. Suppress console output.
 #' @param legend logical. Suppress labels and legends.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
@@ -434,6 +425,7 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){

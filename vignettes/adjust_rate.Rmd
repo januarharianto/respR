@@ -132,7 +132,7 @@ plot.temp <- function(x, y, width = NULL, pos = NULL, message = TRUE,
 
 New in `respR` v2.0 is the ability for `adjust_rate()` to perform dynamic and other types of adjustments to calculated rates. 
 
-After calculating background rates from a control or "blank" experiment, the function can adjust rates from `calc_rate`, `auto_rate`, or numeric values in the following ways:
+After calculating background rates from a control or "blank" experiment, the function can adjust rates from `calc_rate`, `calc_rate.int`, `auto_rate`, `auto_rate.int`, or numeric values in the following ways:
 
 - By a single value
 
@@ -150,25 +150,25 @@ We use the interlinked `respR` functions of `inspect`, `calc_rate`, `calc_rate.b
 
 `respR` analyses are largely unitless; units are only required when the rates come to be converted in `convert_rate()`. However, note that the raw background data should be in the *same units* of time and oxygen as the raw data used to calculate the rate being adjusted. The background recording should also be conducted using the same equipment and under the same conditions as the experiment to be adjusted, or as close as is practically possible. This includes using the same or identical respirometry chambers; in our experience the vast majority of background oxygen use comes from bacterial growth on the internal surfaces of the respirometer, not from organisms in the water. 
 
-Note that in general the background recording does not have to be conducted at the same time as experiments, or even over the same duration as the experimental chambers to be adjusted. While this is ideal practice, it's not always practical. Their purpose it to establish the general relationship of background oxygen change per unit time to be applied to specimen experiments of any length. 
+Note that in general the background recording does not have to be conducted at the same time as experiments, or even over the same duration as the experimental chambers to be adjusted. While this is ideal practice, it's not always practical. Their purpose is to establish the general relationship of background oxygen change per unit time which can then be applied to specimen experiments of any length. 
 
 ### When should adjustments be applied?
 
-Adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates and so no adjustments are necessary (e.g. [Burford et al. 2019](https://januarharianto.github.io/respR/articles/refs.html#references)).
+In the `respR` workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate`, `calc_rate.int`, `auto_rate`, or `auto_rate.int` or rate values (change in oxygen units per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
 
-In the `respR` general workflow, `adjust_rate` should be used on rates which have been determined in `calc_rate` or `auto_rate` or rate values (change in oxygen units per unit time) otherwise determined from the raw data, but before they are converted in `convert_rate`. 
+However, adjustment of rates is an optional step. While it is extremely important to determine and quantify background oxygen use or production, many respirometry experiments find it to be negligible in comparison to specimen rates because equipment is kept clean and filtered or sterilised water is used, and adjustments are unnecessary (e.g. [Burford et al. 2019](https://januarharianto.github.io/respR/articles/refs.html#references)).
 
 ### Sign of the rates {#sign}
 
 If entering specimen or background rates as values, care should be taken to enter them with the correct *sign*. In `respR` oxygen uptake rates are negative, as they represent a negative slope of oxygen against time. Background rates will normally also be a negative value (though not always). For oxygen production rates, which are positive, the background rates may be negative or positive. And there are other cases where background rates may be positive, such as in open-tank or open-arena respirometry where oxygen may be added at the water surface.
 
-### Using `calc_rate.bg` or `calc_rate` for background rates {#crbgvcr}
+### Using `calc_rate.bg` vs. `calc_rate` for background rates {#crbgvcr}
 
-For the most part we use `calc_rate.bg` to determine background rates in the following examples, which are then passed to `adjust_rate` as the `by` input. However, `calc_rate()` can also be used to determine background rates for the `by` input. 
+For the most part we use `calc_rate.bg` to determine background rates in the following examples, which are then passed to `adjust_rate` as the `by` input. However, `calc_rate()` can also be used to determine background rates for use as the `by` input. 
 
 These two functions are similar in functionality but have a couple of key differences.
 
-`calc_rate.bg` does not have the region selection inputs that `calc_rate` does. It calculates the rate across the whole oxygen~time dataset as entered. But it allows background rates to be calculated from multiple columns, which is required for several adjustment methods, and is the default behaviour if a multiple column dataset is entered. However, it also has `oxygen` and `time` column identifiers to specify particular columns, which `calc_rate` does not. If the background data needs to be subset from a larger dataset to a particular region, this is easy to do using `subset_data()` before passing it on to `calc_rate.bg`. 
+`calc_rate.bg` does not have the region selection inputs that `calc_rate` does. It calculates the rate across the whole oxygen~time dataset as entered. However it allows background rates to be calculated from multiple columns, which is required for several adjustment methods, and is the default behaviour if a multiple column dataset is entered. For this reason it also has `oxygen` and `time` column identifiers to specify particular columns, which `calc_rate` does not. If the background data needs to be subset from a larger dataset to a particular region, this is easy to do using `subset_data()` before passing it on to `calc_rate.bg`. 
 
 `calc_rate` does have region selection inputs, and also allows you to extract rates from multiple regions of a single oxygen~time dataset. This is not particularly useful in the context of background rates, unless you want to average rates from different regions of the same data for some reason. However, to extract a single background rate from a particular region of a larger dataset it is an option and does not require you to subset the data first. It also does not have `oxygen` and `time` column identifiers. Data should already have been put into the structure of time in column 1 and oxygen in column 2 via processing in `inspect()`, or if a `data.frame` is used already be in this structure. Any other columns are ignored. 
 
@@ -569,7 +569,7 @@ To repeat the note from the example above, estimating background rates over the 
 
 ### Explanation
 
-This method will not accept numeric inputs. The `"concurrent"` method is fairly straightforward. Given a `calc_rate` or `auto_rate` object as input, for each rate contained in it, `adjust_rate` uses the regression parameters from the `$summary` table to fit a regression over the same region in the background data entered as the `by` input, the slope of which is the background rate. The `by` input can be a `data.frame`, `inspect`, `calc_rate.bg`, or `calc_rate` object. If one of the latter three, the function uses only the `$dataframe` element. If there is more than one column of oxygen in the background data, the function calculates the background rate across the same region in *all* columns, and the mean of these are applied as the adjustment. Therefore, concurrent rates from single or multiple controls can be used to adjust specimen rates. 
+This method will not accept numeric inputs. The `"concurrent"` method is fairly straightforward. Given a `calc_rate`, `calc_rate.int`, `auto_rate`, or `auto_rate.int` object as input, for each rate contained in it, `adjust_rate` uses the regression parameters from the `$summary` table to fit a regression over the same region in the background data entered as the `by` input, the slope of which is the background rate. The `by` input can be a `data.frame`, `inspect`, `calc_rate.bg`, or `calc_rate` object. If one of the latter three, the function uses only the `$dataframe` element. If there is more than one column of oxygen in the background data, the function calculates the background rate across the same region in *all* columns, and the mean of these are applied as the adjustment. Therefore, concurrent rates from single or multiple controls can be used to adjust specimen rates. 
 
 ### Example 1 - Closed chamber respirometry {#case6eg1}
 
@@ -589,7 +589,7 @@ sqd_insp <- inspect(sqd)
 
 #### Prepare background data
 
-The background data is in a separate data frame, `sqd_bg`. There is no need to calculate a rate; `adjust_rate` will do this when it identifies the relevant data regions (although it will accept `calc_rate.bg` objects). We could use the data frame as the `by` input. The only requirement is that the time is in column 1 and all other columns are the oxygen columns you want to use to calculate the concurrent background rate. However it's always a good idea to inspect the data for issues and visualise it using `inspect`, and this function also allows us to extract the columns we are interested in. 
+The background data is in a separate data frame, `sqd_bg`. There is no need to calculate a rate; `adjust_rate` will do this when it identifies the relevant data regions (although it will accept `calc_rate.bg` objects). We could also use a data frame as the `by` input. The only requirement is that the time is in column 1 and all other columns are the oxygen columns you want to use to calculate the concurrent background rate. However it's always a good idea to inspect the data for issues and visualise it using `inspect`, and this function also allows us to extract the columns we are interested in. 
 
 ```{r results='hide', message=FALSE}
 sqd_bg_insp <- inspect(sqd_bg, time = 1, oxygen = 2)
@@ -642,14 +642,14 @@ The `"concurrent"` method is ideal for this type of dynamic adjustment, however 
 In this example, a concurrent control has been run alongside an intermittent-flow experiment, and been flushed at the same time as the specimen chamber. In this plot the specimen data is in black, the control in orange. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.keep='last', results='hide'}
-interm <- zeb_intermittent.rd[16290:18950,]
+interm <- zeb_intermittent.rd[16290:18929,]
 interm[[1]] <- 1:nrow(interm)
 interm_insp <- inspect(interm)
 
 interm_bg <- interm
 interm_bg[[3]] <- interm_bg[[2]] + (apply(as.data.frame(interm_bg), 1, function(z) diff(c(z[2],8)))*0.8)
 interm_bg[[3]] <- interm_bg[[3]] + 0.5
-interm_bg[[3]] <- interm_bg[[3]] + runif(2661, -0.04, 0.04)
+interm_bg[[3]] <- interm_bg[[3]] + runif(2640, -0.04, 0.04)
 interm_bg <- interm_bg[,c(1,3)]
 
 interm_bg_insp <- inspect(interm_bg, 1, 2)
@@ -657,24 +657,25 @@ interm_bg_insp <- inspect(interm_bg, 1, 2)
 plot.temp(interm_insp, interm_bg_insp, message = FALSE)
 ```
 
-Clearly, fitting slopes to any part of the background data other than within each replicate will lead to questionable results. Since we will be subsetting each replicate to calculate a rate, these locations can also be used to calculate a background rate. 
+Clearly, fitting slopes to any part of the background data other than within each replicate will lead to questionable results. Since we will be calculating a specimen rate within each replicate, the concurrent method can also use these locations to calculate a background rate. 
 
 #### Extract rates
 
-Starting at timepoint 120, the replicates follow a specific cycle of 9 minutes closed, two minutes flushing. Knowing this, we can use `calc_rate` to extract the rates from the same time window within each. We apply a buffer of three minutes at the start of each, and extract the rate from the next six minutes to exclude the two minute flush at the end.
+The replicates follow a specific cycle of 9 minutes closed, two minutes flushing. Knowing this, we can use `calc_rate.int` to extract a rate from the same time window within each using the `wait` and `measure` inputs. We use a `wait` of five minutes (300 rows) at the start of each, which excludes the flush and start of the replicate data. We then use a `measure` phase of six minutes (360 rows) to extract a rate from the rest of the replicate.
 
 ```{r message=FALSE, results='hide'}
 # replicate start times - seq(from, to, by)
-starts <- seq(120, 2100, 660) 
-# three minute buffer of data to exclude at the start of each replicate
-buffer <- 180 
-# period to measure after buffer
-measure <- 360
+# starts <- seq(120, 2100, 660) 
+# # three minute buffer of data to exclude at the start of each replicate
+# buffer <- 180 
+# # period to measure after buffer
+# measure <- 360
 
-rates <- calc_rate(interm_insp,
-                   from = starts + buffer,
-                   to = starts + buffer + measure,
-                   by = "time")
+rates <- calc_rate.int(interm_insp,
+                       starts = 660,
+                       wait = 180,
+                       measure = 420,
+                       by = "row")
 ```
 
 ```{r message=FALSE}
@@ -693,6 +694,8 @@ summary(adj)
 ```
 
 A background adjustment has been calculated from the same time window in the background data for each replicate. We can see they are very consistent, as are the adjusted specimen rates, so all looks good. 
+
+If you want to check the adjustment is correct, and that the times used match those of each rate, these are found in the `$adjustment_model` element of the output object.
 
 ### Example 3 - Multiple concurrent controls
 
@@ -775,7 +778,7 @@ and then this used to adjust specimen rates using the `"linear"` or `"exponentia
 
 In the `"linear"` and `"exponential"` methods, the `by` input is the earlier background rate, `by2` is the later background rate. These should share the same numeric time units and scale, that is the numeric time values should represent the time difference between them; see the plots below in [Example 1](#lineareg1) of the two background rates and note the blue time x-axes (note that because the data are subsets of a larger dataset, the red row axes do not correspond). 
 
-The rate to be adjusted should also be on the same time scale. Ideally, as in this example, within in the same dataset, but they do not have to be. As long as the numeric time values represent the same relative time scale, they can be separate datasets. In fact, if after several experiments you find the background rate relationship to be highly consistent, the same values could be used to adjust future experiments. Care just needs to be taken to have the experimental data time scale be consistent with the controls. Typically that would mean having a consistent start time, that of the end time value of the first control dataset.
+The rate to be adjusted should also be on the same time scale. Ideally, as in this example, within the same dataset, but they do not have to be. As long as the numeric time values represent the same relative time scale, they can be separate datasets. In fact, if after several experiments you find the background rate relationship to be highly consistent, the same values could be used to adjust future experiments. Care just needs to be taken to have the experimental data time scale be consistent with the controls. Typically that would mean having a consistent start time, that of the end time value of the first control dataset.
 
 Note that the rates to be adjusted using the `"linear"` and `"exponential"` methods do not necessarily have to be at intermediate times to the background data. Once `adjust_rate` has calculated the formula describing the change in background rate against time, it can apply this to calculate an adjustment for rates at *any* time on the same scale, including before and after the times of the background rates. This is probably not ideal practice, but the function does make it possible. 
 
@@ -822,27 +825,27 @@ We can see the background rate increases by around 70% over the course of the ex
 
 #### Calculate specimen rate
 
-This replicate occurs roughly half way through the experiment. Like above, we'll subset out the replicate. We'll also apply a `buffer` of 2 minutes (120s) from the start that we don't want to use in the analysis, and `measure` for 7 minutes (420s) to exclude the 2 minutes of flushing at the end. 
+This replicate occurs roughly half way through the experiment. Like above, we'll subset out the replicate. We'll also apply a 'wait' phase of 2 minutes (120s) from the start that we don't want to use in the analysis, and a 'measure' phase of 7 minutes (420s) to exclude the 2 minutes of flushing at the end. 
 
 ```{r message=FALSE, warning=FALSE, results="hide", fig.keep='last'}
 # define rep start time, buffer and measure periods
 start <- 38180 # start time of replicate
-buffer <- 120   # 2 mins buffer
+wait <- 120   # 2 mins buffer
 measure <- 420  # 7 mins measure
 
 rate <- subset_data(zeb_intermittent.rd, 
-                    from = start + buffer, 
-                    to = start + buffer + measure, 
+                    from = start + wait, 
+                    to = start + wait + measure, 
                     by = "time") |>
   inspect() |>
   auto_rate()
 ```
 
-`auto_rate` has identified three linear regions, and we'll adjust the three rates in the next step.
+`auto_rate` has identified three linear regions.
 
 #### Adjust rates
 
-Now we'll adjust the specimen rates using both background rates and the `"linear"` method. 
+Now we'll adjust the specimen rates using the two background rates and the `"linear"` method. 
 
 ```{r message=FALSE}
 rate_adj <- adjust_rate(rate,
@@ -852,9 +855,9 @@ rate_adj <- adjust_rate(rate,
 summary(rate_adj)
 ```
 
-Note the adjustment values are very close (though not identical) in value, and they are roughly numerically midway between the pre- and post-experiment background rates of -0.0000742 and -0.0001217. This is what we would expect for a replicate in the middle of the dataset if the background rate was increasing linearly between these two values. 
+Note the adjustment values are very close though not identical in value, and they are roughly numerically midway between the pre- and post-experiment background rates of `-0.0000742` and `-0.0001217`. This is what we would expect for a replicate in the middle of the dataset if the background rate was increasing linearly between these two values. 
 
-In fact we can demonstrate this using the background times and rates by creating our own linear model, and using the coefficients to calculate the rate for a given time, that of the first result in the summary table above. 
+We can show this using the background times and rates by creating our own linear model, and using the coefficients to calculate the rate for a given time, that of the first result in the summary table above. 
 
 ```{r R.options = list(scipen = 999, digits = 3)}
 ## background rates and midpoint times
@@ -901,7 +904,9 @@ We get the same result as above (the small mismatch in the first is simply due t
 
 This is exactly the same as the [dynamic linear](#dynlinear) adjustment above, except the background rate is assumed to increase exponentially. The explanation and background to this is covered [above](#linnotes), so please read that first. 
 
-An exponential increase in background rate is quite common in experiments done at high temperatures, where the microbial population in a respirometer shows exponential growth and therefore exponential oxygen use. Typically this method would be applied only after this exponential relationship had been established using pilot experiments of empty control experiments of sufficient duration, which is a practice we would strongly recommend. For example, the `background_exp.rd` example dataset shows background data that has a rate that increases exponentially. 
+An exponential increase in background rate is quite common in experiments done at high temperatures, where the microbial population in a respirometer shows exponential growth and therefore exponential oxygen use. Typically this method would be applied only after this exponential relationship had been established using pilot experiments of empty control experiments of sufficient duration, which is a practice we would strongly recommend. 
+
+The `background_exp.rd` example dataset shows background data with a rate that increases exponentially. 
 
 ```{r results='hide', message=FALSE}
 inspect(background_exp.rd)
@@ -1101,7 +1106,7 @@ sard <- inspect(sardine.rd) |>
 print(sard)
 ```
 
-If you just wnat to extract a single rate, using `calc_rate` and its region selection inputs to calculate a background rate from a specific region is also an option. See [here](#crbgvcr) for discussion about the main differences between `calc_rate.bg` and `calc_rate`.
+If you just want to extract a single rate, using `calc_rate` and its region selection inputs to calculate a background rate from a specific region is also an option. See [here](#crbgvcr) for discussion about the main differences between `calc_rate.bg` and `calc_rate`.
 
 ### Inform how long experiments should be
 

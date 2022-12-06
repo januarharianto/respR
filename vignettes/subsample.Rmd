@@ -30,7 +30,7 @@ Another useful utility function in `respR` in `subsample()`. This is intended to
 
 `subsample` has two ways of selecting the degree of subsampling. The `n` input will cause every n'th element or row to be subsampled. The probably more useful `length.out` input uniformly subsamples the data to this total length or number of rows. 
 
-The function works with both vectors and data frames, and will output an object of the same class. A plot is produced to you can check the subsample is still representative of the original, or it can be suppressed with `plot = FALSE`.
+The function works with both vectors and data frames, and will output an object of the same class. A plot is produced so you can check the subsample is still representative of the original, or it can be suppressed with `plot = FALSE`.
  
 ## Subsample by every n'th element
  

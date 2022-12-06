@@ -3,7 +3,7 @@ title: "Intermittent-flow respirometry: Long experiment"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    toc_depth: 3
+    toc_depth: 4
 vignette: >
   %\VignetteIndexEntry{Intermittent-flow respirometry: Long experiment}
   %\VignetteEngine{knitr::rmarkdown}
@@ -17,69 +17,95 @@ library(respR) # load respR
 opts_chunk$set(collapse = TRUE, 
                comment = "#>", 
                cache = FALSE, 
-               tidy = TRUE, 
+               tidy = FALSE, 
                highlight = TRUE, 
                fig.width = 10, 
                fig.height = 5,
                fig.align = "center",
                R.options = list(
-                                scipen = 999, 
-                                digits = 3))
+                 scipen = 999, 
+                 digits = 3))
 ```
 
 This vignette shows a intermittent-flow analysis from a lengthy experiment, with over 100 replicates and a background rate that changes over the course of the experiment. This type of experiment is one many fish physiologists in particular will be familiar with. 
 
-The example data (`zeb_intermittent.rd`) was kindly provided by Dr. Davide Thambithurai (University of Glasgow), and is from an experiment on a zebrafish. It is comprised of one replicate of 14 minutes duration (12 minutes recording, 2 minutes flushing), followed by 105 replicates of 11 minutes duration (9 minutes recording, 2 minutes flushing). See `help(zeb_intermittent.rd)` for row locations of all stages. 
+The example data (`zeb_intermittent.rd`) was kindly provided by [Dr. Davide Thambithurai](https://twitter.com/thambithuraid), and is from an experiment on a zebrafish. It is comprised of one replicate of 14 minutes duration (12 minutes recording, 2 minutes flushing), followed by 105 replicates of 11 minutes duration (9 minutes recording, 2 minutes flushing). In addition there are pre- and post-experiment background recordings. See `help(zeb_intermittent.rd)` for row locations of all stages. 
 
-See `vignette("intermittent_short")` for an example with a smaller dataset, which covers in more detail the basics of analysing intermittent-flow data, and is a better starting point if you are new to `respR` or analysing these types of experiment. Even if not, we would recommend reading both before starting your analysis. 
+See `vignette("intermittent_short")` for an example with a smaller dataset, which covers in more detail the basics of analysing intermittent-flow data and is a better starting point if you are new to `respR` or analysing these types of experiment. Even if not, we would recommend reading both before starting your analysis. 
 
 ## Experiment overview
 
 From this experiment dataset we want to extract several metrics:
 
-1. *Pre- and post-experiment background rates*. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). Because this is a lengthy experiment in high temperatures, the microbial background rate increases over the course of the experiment. We will assume this increase is constant (i.e. linear), and each replicate rate will be adjusted with a background rate calculated according to where it occurs along the experiment. That is, later replicates will be adjusted by a greater amount. 
+1. *Pre- and post-experiment background rates*. Background rates were recorded at the start and end of the experiment (initial and end sections with shallow slopes). This was a lengthy experiment in high temperatures, and so the microbial background rate increases substantially over the course of the experiment. We will assume this increase is constant (i.e. linear), and each replicate rate will be adjusted with a background rate calculated according its time within the experiment. That is, later replicates will be adjusted by a greater amount. 
 
-2. *Maximum metabolic rate (MMR)*. Before this experiment, the fish had been exercised to exhaustion, then immediately placed in the respirometer. The first replicate during which it is recovering from the oxygen debt accrued from this exercise will represent MMR. 
+2. *Maximum metabolic rate (MMR)*. Before this experiment the fish had been exercised to exhaustion, then immediately placed in the respirometer. The first replicate during which it is recovering from the accrued oxygen debt will represent MMR. 
 
 3. *Routine metabolic rate (RMR)*. This will be calculated using the later replicates once the animal has recovered from the exercise. This is generally defined as the routine use of oxygen, which fuels basal metabolism and minor, spontaneous movements to maintain station or posture. 
 
 4. *Standard metabolic rate (SMR)*. Sometimes also known as basal or minimum metabolic rate. This is also calculated using the later replicates once the animal has recovered. This is generally defined as the lowest oxygen use rates observed, which are representative of the requirements of basal metabolism only. 
 
-Which of these last two metrics is valid or appropriate depends on the organism and the circumstances and aims of the experiments, and there is a huge literature on the differences between these physiological metrics. See [here]() for some papers discussing these. Here, we will show how to extract what may be regarded as both RMR and SMR from this dataset. 
+Which of these last two metrics is valid or appropriate to report depends on the organism and the circumstances and aims of the experiments. Their definitions are widely debated, and there is a huge literature on the differences between these physiological metrics. See [here](https://januarharianto.github.io/respR/articles/refs.html#references) for some papers discussing these. Here, we will show how to extract what may be regarded as both RMR and SMR from this dataset. 
 
-## Inspecting the data
+## Analysis methods {#analysis}
 
-We use `inspect()` to preview the data and save it to an object. This is a very large dataset (nearly 80,000 rows), so if running the code in this vignette note that operations may take some time. 
+Extracting the [background](#background) rates and [MMR](#mmr) are relatively straightforward and will be covered in their own sections. 
+
+After this, we will show two different approaches to extract RMR and SMR using `respR` functions. The [first](#crint) uses the dedicated `calc_rate.int()` function to run `calc_rate` on each replicate to extract a rate from the same data region of each, before filtering these to get the RMR. The [second](#arint) uses the dedicated `auto_rate.int()` function to run `auto_rate` on each replicate to extract the lowest rate from each of a specified width, before filtering these to get the SMR. 
+
+***Please note***: You should not simply copy and repeat the following code on your own data. They are examples to show how the `respR` functions are adaptable and flexible and how rates can be extracted, filtered and selected to arrive at a final reportable rate in a variety of ways. They are not recommendations that you should use these specific approaches for particular outputs. There is a [massive literature](https://januarharianto.github.io/respR/articles/refs.html#references) around respirometry, the different physiological metrics, and how to quantify them. Before analysis of your own data you should familiarise yourself with it, with similar experiments in the literature, and the current state of best practices in the field. Many factors such as appropriate regions or widths to extract rates from, method used to extract rates, and final selection criteria differ between experiments for very good reasons, in that every study is different. It is important to select appropriate analysis factors objectively and report them in your methods. See especially [Killen at al. (2021)](https://journals.biologists.com/jeb/article/224/18/jeb242522/272132/Guidelines-for-reporting-methods-to-estimate).
+
+Note we use the native pipe operator (`|>`) introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) for much of the following. These can be substituted for `dpylr` pipes (`%>%`) if you have not yet updated, or alternatively save output objects and enter them into the next function.
+
+## Inspecting the data {#inspecting}
+
+`inspect()` is the general `respR` function for visualising and inspecting data prior to analysis, and saving it to an object that can be used in subsequent functions. This is a very large dataset (nearly 80,000 rows), so if running the code in this vignette note that operations may take some time. 
+
+Before progressing, we'll inspect a portion of the data at the start without saving the result to show the structure. 
+
+```{r results="hide", message=FALSE, warning=FALSE} 
+zeb_intermittent.rd |>
+  subset_data(from = 1, to = 18000, by = "row") |>
+  inspect()
+```
+
+The top plot shows the initial background recording up to row 5000, the first replicate of 14 minutes duration to determine MMR, followed by replicates of 11 minutes duration. We can see in these oxygen decreasing, separated by regular flushes where it increases back to ambient levels. The bottom plot, a rolling rate across a window of 10% of the data, is not particularly useful as this window will include multiple replicates. 
+
+We can similarly have a quick look at the end of the dataset. 
+
+```{r results="hide", message=FALSE, warning=FALSE} 
+zeb_intermittent.rd |>
+  subset_data(from = 65000, by = "row") |>
+  inspect(width = 0.01)
+```
+
+We can see that by the end of the experiment the replicates are much more regular, suggesting rates have stabilised, and we can also see the end background recording. This time we passed a different `width` to `inspect`, so the rolling rate plot is across a 1% window. This makes it slightly more useful, and we can see within each replicate rates seem to be consistent at around -0.0025, while the background rate is much lower and closer to zero (dashed line). 
+
+Now that we are fairly satisfied the experiment looks as expected we can inspect the entire dataset and this time save the result to an object we will use for the rest of the analysis. 
 
 ```{r results="hide", message=FALSE, warning=FALSE} 
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
-Because this is a lengthy experiment, the data is a little dense to inspect easily from these plots. Here we'll inspect a portion at the start to show the structure. 
-
-```{r results="hide", message=FALSE, warning=FALSE} 
-inspect(zeb_intermittent.rd[1:18000,])
-```
-
-The top plot shows the initial background recording up to row 5000, then experimental replicates where oxygen decreases, separated by regular flushes where it increases back to ambient levels. The bottom plot, a rate over a rolling window of 10% of the entire data, is not very useful as this window will include multiple replicates, but it is clear rates are higher at the start of the data. 
-
+Here because the dataset is so large the plots are of limited use, but we can at least see that much more oxygen was used in the early replicates, as would be expected because the specimen was exercised prior to the experiment, after which they stabilise and are more regular.
 
 ## Background rates {#background}
 
-The initial and end sections of the data will be used to calculate background rates, and how they change over the course of the experiment. Timepoints of these will typically have been recorded as part of the experiment, so can be used to subset the relevant sections (see `?zeb_intermittent.rd` for row locations of all stages).
+The initial and end sections of the data will be used to calculate background rates and how they change over the course of the experiment. Timepoints of these will typically have been recorded as part of the experiment, so can be used to subset the relevant sections (see `?zeb_intermittent.rd` for row locations of all stages).
 
-We subset these regions, and save them as separate `calc_rate.bg` objects. Here we use the new native pipe operator (`|>`) introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/). These can be substituted for `dpylr` pipes (`%>%`) if you have not yet updated.
+We subset these regions from the `inspect` object we just saved above, and save them as separate `calc_rate.bg` objects. 
 
 ```{r fig.keep="last", message=FALSE, warning=FALSE, results="hide"} 
-bg_pre <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
+bg_pre <- zeb |>
+  subset_data(from = 1, to = 4999, by = "row") |>
   calc_rate.bg()
 
-bg_post <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
+bg_post <- zeb |>
+  subset_data(from = 75140, to = 79251, by = "row") |>
   calc_rate.bg()
 ```
 
-The two different background rates (only the second is plotted above) have been saved to these two objects.
-We can see the actual values by printing them
+The two different background rates (only the post-experiment plot is shown above) have been saved to these two objects. We can see the actual values by printing them:
 
 ```{r}
 bg_pre
@@ -89,196 +115,115 @@ bg_pre
 bg_post
 ```
 
-We can see the background rate increases by around 70% over the course of the experiment. We will use these later in [Adjusting rates](#adjust) to apply a dynamic background adjustment to specimen rates based on their time during the experiment.
+We can see the background rate increases by around 70% over the course of the experiment. We will use these later to apply a dynamic background adjustment to specimen rates based on their time during the experiment.
 
-## Calculating MMR {#mmr}
 
-Here we calculate MMR using the first replicate. This replicate is longer than the others; 14 mins (840 rows) vs. 11 mins (660 rows) for all others. For this, and the later analyses, we are going to apply a buffer value at the start of each rep. In this experiment, each replicate comprises a recording period (12 mins for first rep, 9 mins for all others), followed by 2 minutes of flushing. It is good practice to allow a period of settling after flushing, in case the animal was disturbed, or the oxygen probe has some lag in detecting the change in concentration. For this analysis we will use a 2 minute `buffer` (120s), that is we won't use the first 2 mins of data in the rep. We will then use the 10 minutes (600 rows) of data after this as our `measure` period to ensure the flush period (final 2 mins) is also excluded. 
+## MMR {#mmr}
 
-### Initial analysis
+Here we calculate maximum metabolic rate (MMR) from the first replicate. This replicate is longer than the others; 14 mins (840 rows) vs. 11 mins (660 rows) for all others. 
 
-Here, we subset the first replicate out to a separate object, and use `auto_rate` to find the most linear regions, that is the most consistent rates, in this replicate using the default inputs (see `auto_rate()`). 
+### Subset {#mmrsubset}
 
-```{r message=FALSE, warning=FALSE, results="hide", tidy = FALSE, fig.show='hide'}
-# define buffer and measure periods
-buffer <- 120   # 2 mins buffer
-measure <- 600  # 10 mins measure
+Here, we subset the first replicate which starts at row 5000 and is 14 minutes long (840 rows) to a separate `inspect` object, excluding the two minutes of flush (120 rows) at the end, and plot it to see how the rate changes over the replicate. 
 
+```{r message=FALSE, warning=FALSE, results="hide", fig.show='all'}
 # subset rep 1
 zeb_rep_1 <- subset_data(zeb, 
-                         from = 5000 + buffer, 
-                         to = 5000 + buffer + measure, 
-                         by = "time")
-# get rate
-zeb_mmr <- auto_rate(zeb_rep_1)
+                         from = 5000, 
+                         to = 5000 + 840 - 120, 
+                         by = "row") |>
+  plot(width = 0.2)
 ```
 
-We will look at the summary first.
+In this replicate, the rolling rate plot shows that calculated at this particular `width`, the rate declines rapidly from around -0.012 to around -0.008, then declines more slowly over the course of the replicate (note we pass a higher `width` than the default 0.1 to smooth the rolling rate a little more). This is as we would expect from an animal recovering from exercise. However the very initial stages of replicates are often unstable and excluded from rate analysis (usually known as the "wait" phase). Therefore we will probably want to extract our MMR rate after this initial stage but before it declines too much. 
+
+### Extract rates
+
+We will show three different ways of extracting what could be defined as an MMR. First, we will use `calc_rate()` to extract a rate from a single specific region. Secondly, we will use the `auto_rate` `"highest"` method to automatically extract the highest rate of a specific width. Lastly, we will use the `auto_rate` `"linear"` method with the default inputs to identify linear regions of the data and choose the highest from amongst these. In this last example we will also show how to adjust and convert rates, then filter them using `select_rate()` to arrive at a final reportable result. 
+
+### 1. `calc_rate` 
+
+This function (see `vignette("calc_rate")`) simply allows you to extract a rate (or multiple rates) from a specified row, time, or oxygen region. In the [later example]() for extracting rates from the other replicates using `calc_rate.int()` we use the same three minute `wait` phase and five minute `measure` phase in each replicate. We will use the same here to allow for comparison with those rates. This is fairly common practice in respirometry studies and perfectly acceptable, in that it is objective and consistent. 
 
 ```{r}
-summary(zeb_mmr)
+zeb_mmr <- calc_rate(zeb_rep_1,
+                     from = 180, # three minutes 'wait' after start
+                     to = 480,   # five minutes later = 'measure' phase
+                     by = "row") |>
+  summary()
 ```
 
-All of these rates are valid results, in that they have been found to be linear regions, and so of consistently sustained rates. In this case, since we are interested in the maximum rate, the second ranked result has the highest `rate` value and is probably the result we are most interested in. We can plot it using `pos`.
+We can see the rate as the final column in summary, and this would be perfectly acceptable to report as the MMR as long as the analysis criteria were also included. See [option 3]() for how to adjust and convert the rate. 
+
+### 2. `auto_rate` `method = "highest"`
+
+`auto_rate` also allows you to also extract rates of a specific time or row width, but in contrast to `calc_rate` it calculates *every* rate of this width across the dataset and then orders them in various ways. One method is to order by highest absolute value to get the highest uptake rate. 
+
+Here we run this method and choose a `width` of two minutes (120 rows), that is the function will calculate every rate of this width and order them from highest to lowest. We use the same three minute `wait` phase to exclude the initial part of the replicate, and for that we use `subset_data()` to remove the first 180 rows, then pipe the output to `auto_rate` (we could also have done this when we first subset and inspected the data [above](#mmrsubset)).  
+
+```{r}
+zeb_mmr <- zeb_rep_1 |>
+  subset_data(from = 180, by = "row") |>
+  auto_rate(method = "highest",
+            width = 120,
+            by = "row") |>
+  summary()
+```
+
+We have already seen that rates are high at the start and then decline across the replicate, so it's not a surprise that the highest rates are from early in the replicate. We can see our MMR under these criteria would be the first row of this summary table. See next section for how these multiple rates can be adjusted, converted, and filtered to get a final output rate. 
+
+### 3. `auto_rate` `method = "linear"`
+
+Here we simply run `auto_rate` and let the default inputs be applied to find the linear regions of the data. Be sure to read `help("auto_rate")` and `vignette("auto_rate")` to understand what this method does, appropriate inputs and how to modify the defaults. We again subset the data to remove the initial 3 minutes. 
+
+```{r message=FALSE, warning=FALSE, fig.keep='none'}
+zeb_mmr <- zeb_rep_1 |>
+  subset_data(from = 180, by = "row") |>
+  auto_rate() |>
+  summary()
+```
+
+The function has found seven linear regions. All of these rates are valid results depending on the question being asked, in that they have been found to be linear regions, and so of consistently sustained rates. In this case, since we are interested in the maximum rate, the fifth ranked result has the highest `rate` value, and comes from early in the replicate, so is probably the result we are most interested in. We can plot it using `pos`.
 
 ```{r results = "hide"}
-plot(zeb_mmr, pos = 2)
+plot(zeb_mmr, pos = 5)
 ```
 
-The rolling rate plot (note the reversed y-axis) also tells us rates decline across the replicate, as we would expect for an animal recovering from exercise, so we probably want to takes our rates from the initial stages of the data, and this result is from that region. 
+Many aspects will feed into rate selection criteria for a specific experiment or study, and it depends on these whether this in an acceptable, reportable result. Maybe at less than 2 minutes this is not a long enough duration for us to be comfortable that this was a sustained MMR. In which case perhaps one of the other results is better reported. Or maybe we could report an average of some of the rates, such as the top three. The important thing is to apply these selection criteria consistently and report them alongside results. 
 
-These are all aspects that may feed into rate selection criteria regarding a specific experiment or study, and it depends on these whether this in an acceptable, reportable result. Maybe at around 3 minutes, this is not a long enough duration for us to be comfortable that this was a sustained MMR. In which case perhaps the first result is better reported. Or maybe we could report an average of all the rates from this `auto_rate` analysis or a selection of them, such as the top three. The important thing is to apply these selection criteria consistently and report them alongside results. 
+##### Changing the `width` {#width}
 
-### Changing the `width` {#width}
-
-These are all valid options, as long as they are reported. However, we can also change the analysis parameters. The `width` input in `auto_rate` determines the width of the rolling regressions used to find linear regions. See `auto_rate()` and other vignettes for full details, but briefly in the case of the `"linear"` method this is the starting point for the analysis. Resulting regressions will vary in width, but in general the minimum width will be increased by increasing the `width`. The default value is 0.2, representing 20% of the data length. Here, with 10 minutes of data this would represent 2 minutes, which is quite a brief time window. So instead we will increase this to 0.4 (it can also be specified in the units of the `"by"` input).
+These are all valid options, as long as they are reported. However, we can also change the analysis parameters. The `width` input in `auto_rate` determines the width of the rolling regressions used to find linear regions. See `auto_rate()` and other vignettes for full details, but briefly in the case of the `"linear"` method this is the starting point for the analysis. Resulting regressions will vary in width, but in general the minimum width will be increased by increasing the `width`. The default value is 0.2, representing 20% of the data length. Here, with 10 minutes of data this would represent 2 minutes, which is quite a brief time window. So instead we will increase this to 0.5 (it can also be specified in the units of the `"by"` input).
 
 See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine MMR. 
 
-```{r message=FALSE, warning=FALSE, results="hide", tidy = FALSE, fig.show='hide'}
-# define buffer and measure periods
-buffer <- 120   # 2 mins buffer
-measure <- 600  # 10 mins measure
-
-# subset rep 1
-zeb_rep_1 <- subset_data(zeb, 
-                         from = 5000 + buffer, 
-                         to = 5000 + buffer + measure, 
-                         by = "time")
-# get rate
-zeb_mmr <- auto_rate(zeb_rep_1, width = 0.4)
+```{r message=FALSE, warning=FALSE, fig.show='hide'}
+zeb_mmr <- zeb_rep_1 |>
+  subset_data(from = 180, by = "row") |>
+  auto_rate(width = 0.5) |>
+  summary()
 ```
 
-```{r}
-summary(zeb_mmr)
-```
-
-Now, we have seven results varying in duration from around 4 minutes and longer, and they seem to be more consistent in value. In this case the sixth result has the highest rate, is early in the replicate, and so is likely a good estimation of MMR. Note how the rolling rate plot is smoother with this higher width.
+Now we have six results varying between 4 and 5 minutes duration, and they are much more consistent in rate value. In this case the fifth result has the highest rate, is early in the replicate, and so is likely a good estimation of MMR. Note how the rolling rate plot is smoother with this higher width.
 
 ```{r results = "hide"}
-plot(zeb_mmr, pos = 6)
+plot(zeb_mmr, pos = 5)
 ```
 
-With non-linear data like this, such as from an animal recovering from exercise, changing the width over which a rate is determined necessarily changes the rate value. The researcher needs to keep this in mind, and find a balance between a width that provides a good estimation of the specimen's physiological state, but also is not affected by other factors such as data noise or anomalies. Most importantly, these decisions and criteria need to be reported. 
+With non-linear data like this, such as from an animal recovering from exercise, increasing the width over which a rate is determined will necessarily decrease the rate values. The researcher needs to keep this in mind, and find a balance between a width that provides a good estimation of the specimen's physiological state, but also is not affected by other factors such as data noise or anomalies. Most importantly, these decisions and criteria should be reported. 
 
-High width values can lead to overfitting and mis-estimation of rates, while low widths underfitting and rate values which are too sensitive to data noise. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of this in the context of `auto_rate`, and how to choose an appropriate `width`. We recommend reading [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) to understand the nuances of determining MMR and regression widths. See also [Killen et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references). 
+High width values can lead to overfitting and mis-estimation of rates, and low widths underfitting and rate values which are too sensitive to data noise. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of this in the context of `auto_rate`, and how to choose an appropriate `width`. We recommend reading [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) to understand the nuances of determining MMR and regression widths. See also [Killen et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references). 
 
-### Other options
+### Adjust
 
-There are other options to determine MMR according to specific criteria. An advantage of using the `auto_rate` `"linear"` method is that it is objective. The function identifies linear regions automatically, and so reduces observer bias. Less objective methods can be appropriate if applied consistently and openly, and are used in many studies. 
+The `adjust_rate()` function allows rates to be background adjusted in a number of ways. See `vignette("adjust_rate")` for examples. Here we will use it to apply a dynamic linear correction using the start and end background rates we determined [earlier](#background). Essentially this calculates the appropriate background adjustment for a rate using the time at which it was determined, assuming the background rate increases linearly from the pre- to post-experiment values.
 
-One option is to decide upon a fixed duration regression you are interested in and use `auto_rate` with `method = "highest"` and the `width` input to find the highest rate across this duration from the whole replicate. See also `subset_rate()` and `vignette("subset_rate")` for how to apply even more selection criteria. Another option is to fit a regression over a specific time or oxygen decrease window using `calc_rate()`. 
-
-What is important is that analysis parameters and rate selection criteria are consistently applied and reported alongside the results. See [Reporting](#report) section for how analyses might be reported concisely.
-
-For now, the MMR has been calculated and saved. We will [adjust](#adjust) it for background in a later section, [convert](#convert) it to units at the end of the vignette, and finally [determine](#final) the output rate we will report. 
-
-## Calculating RMR {#rmr}
-
-Typically, routine metabolic rate (RMR) is defined as the routine use of oxygen to fuel basal metabolism and minor, spontaneous movements to maintain station or posture. The `auto_rate` `method = "linear"` is ideal to extract RMR, because it identifies the most linear regions of a dataset, that is those with the most stable and consistent rates, those which might be classed as "routine".
-
-Calculating RMR is a only a little more complex than we did above in [MMR](#mmr). Manually subsetting every replicate would be difficult, but since we know they cycle at 11 minutes (660s) and there are 105 further replicates after the first ends at row 5839, we can use straightforward R syntax to perform a loop.
-
-There are a number of approaches we could use, but here we will show a simple `for` loop to subset each replicate from the second one onwards, then run `auto_rate(method = "linear")` on it. We will use the same buffer period we used above in the [MMR](#mmr) section of 2 minutes (120s), but since all other replicates are 11 minutes duration a `measure` period of 7 minutes (420s), leaving 2 minutes of flushing excluded.
-
-Again, a number of approaches could be used to subset data or iterate the functions to analyse these types of experiment; this is merely an example to illustrate how `respR` can be easily iterated over multiple replicates. A slightly more succinct example is at the [end](#report) of this vignette. 
-
-For actual analyses it is highly recommended you examine the plot of each replicate, or at very least those used in determining a final rate. Here in the interests of speed we suppress it with `plot = FALSE`. Note also this code will create a `list` object containing an `auto_rate` object for every rep, which will be quite large (several MB).
-
-### Analysis loop
-
-```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
-# define buffer and measure periods
-buffer <- 120   # 2 mins buffer
-measure <- 420  # 7 mins measure
-
-## start rows for each rep using sequence function (from, to, by)
-reps <- seq(5840, 74480, 660)
-## data starts - apply buffer
-starts <- reps + buffer
-## data ends - apply buffer and measure period
-ends <- reps + buffer + measure
-
-## Empty list for saving results
-zeb_rmr <- list()
-
-## loop
-for(i in 1:105){
-  st <- starts[i] # start time
-  et <- ends[i] # end time
-  
-  ## subset replicate and pipe the result into auto_rate
-  zeb_rmr[[i]] <- subset_data(zeb, from = st, to = et, by = "time") |>
-    auto_rate(method = "linear", plot = FALSE)
-}
-```
-
-### View results
-
-We can extract and view the top-ranked result from each replicate using the `sapply` function.
-
-```{r}
-## extract rates
-rmr_rate <- sapply(zeb_rmr, function(z) z$rate[1])
-plot(rmr_rate, ylim = rev(range(rmr_rate)))
-```
-
-Note, we plot on a reverse axis so higher rates are higher on the plot. We can see that rates are higher in the initial stages of the experiment, then are quite consistent after they stabilise. We don't do any selection at this stage because we still need to adjust them for background. We will [do this](#adjust) and also [convert](#convert) them to units in later sections, before doing our final [selection](#final) of which ones to use and report. 
-
-## Calculating SMR
-
-Standard metabolic rate (SMR), also known as basal or minimum metabolic rate, is typically defined as the use of oxygen to fuel basal metabolism only. This is a very similar analysis to the [RMR analysis](#rmr), but this time we want the absolute minimum rate in each replicate. For this we will use the `auto_rate` `method = "lowest"`. This will run a rolling regression of a fixed width across each replicate, but we need to define this `width` appropriately. The actual width will depend on the experiment and data, and decided upon after experimenting with different values, but should be consistently applied and reported. Here, we will use three minutes (180 s). That is, a rolling regression of three minutes width will be performed across each replicate and ordered from lowest rate to highest. 
-
-### Analysis loop
-
-```{r fig.keep="none", message=FALSE, warning=FALSE, results="hide"}
-# define buffer and measure periods
-buffer <- 120   # 2 mins buffer
-measure <- 420  # 7 mins measure
-
-## start rows for each rep using sequence function (from, to, by)
-reps <- seq(5840, 74480, 660)
-## data starts - apply buffer
-starts <- reps + buffer
-## data ends - apply buffer and measure period
-ends <- reps + buffer + measure
-
-## Empty list for saving results
-zeb_smr <- list()
-
-## loop
-for(i in 1:105){
-  st <- starts[i] # start time
-  et <- ends[i] # end time
-  
-  ## subset replicate and pipe the result into auto_rate
-  zeb_smr[[i]] <- subset_data(zeb, from = st, to = et, by = "time") |>
-    auto_rate(method = "lowest", width = 180, by = "time", plot = FALSE)
-}
-```
-
-### View results
-
-```{r}
-## extract rates
-smr_rate <- sapply(zeb_smr, function(z) z$rate[1])
-plot(smr_rate, ylim = rev(range(smr_rate)))
-```
-
-Like with the [RMR](#rmr) above, we can see that rates are higher in the initial stages of the experiment, then are quite consistent after they stabilise. We don't do any selection at this stage because we still need to adjust them for background. We will [do this](#adjust) in the next section, and [convert](#convert) them to units in a later section, before doing our final [selection](#final) of which ones to use and report. 
-
-## Adjusting rates {#adjust}
-
-The `adjust_rate()` function allows rates to be background adjusted in a number of ways. See `vignette("adjust_rate")` for examples. Here we will use it to apply a dynamic linear correction using the start and end background rates we determined [earlier](#background). Essentially, this determines the appropriate background adjustment using the midpoint time of each rate regression, assuming the background rate increases linearly from the start to end background rates.
-
-### Adjust MMR
-
-For MMR, we only have one `auto_rate` object, so it's relatively easy to adjust. 
+For MMR, we will adjust the results from option 3 above, but this will work with the other options also. We have our saved `auto_rate` object, so it's relatively easy to adjust. We just need to enter the two background rate objects we saved earlier and specify the method.
 
 ```{r tidy = FALSE}
 zeb_mmr_adj <- adjust_rate(zeb_mmr, 
-                           by = bg_pre, 
-                           by2 = bg_post,
+                           by = bg_pre,     # first background rate
+                           by2 = bg_post,   # second background rate
                            method = "linear")
 ```
 
@@ -286,209 +231,330 @@ zeb_mmr_adj <- adjust_rate(zeb_mmr,
 summary(zeb_mmr_adj)
 ```
 
-We can see the ultimate `adjustment` value is quite small in comparison to the rate of the specimen, as it should be. Note the adjustment values differ slightly; they are lower for rates that come from the start of the replicate. This is what we would expect, because we are assuming the rate is increasing over time. `adjust_rate` uses the midpoint time of each rate regression to calculate the appropriate adjustment value, so earlier rates will have a lower background adjustment. 
+There are several things to note here. We can see the ultimate `adjustment` value is small in comparison to the rate of the specimen, as it should be in most experiments. Also, the adjustment values differ slightly; they are lower for rates that come from the start of the replicate. This is what we would expect because we are assuming the background rate is increasing over time. `adjust_rate` uses the midpoint time of each rate regression to calculate the appropriate adjustment value, so earlier rates will have a lower background adjustment. Lastly, the adjustments are very close in value to the pre-experiment background rate of `-0.0000742` we established [earlier](#background). Again, this is what we would expect because this is the first replicate and conducted just after the first background recording. If we are assuming there is a linear increase in background rate over time this would mean they should be very close in value. 
 
-Note, that in `respR` oxygen uptake rate values are negative because they represent a negative slope of oxygen against time, and background rates will also typically (though not always) be negative. Usually, when these are reported they are reported as positive values. 
+See later [section](#crintadj) for how adjustment values differ in other replicates. 
 
-### Adjust RMR
+### Convert
 
-Because we saved an `auto_rate` object for each replicate in a `list`, the process to adjust RMR rate results is slightly different than the above. Here we use `lapply` to apply the adjustment to each element of the list, and return a new list of `adjust_rate` objects.
+Now that the rates have been adjusted we can convert them to units. This will convert every rate in the object. 
 
-```{r results = "hide", message=FALSE, tidy = FALSE}
-zeb_rmr_adj <- lapply(zeb_rmr, function(z) adjust_rate(z, 
-                                                       by = bg_pre, 
-                                                       by2 = bg_post,
-                                                       method = "linear"))
+The `convert_rate` function can output rates as *absolute*, that is of the whole animal or chamber, *mass-specific* if a `mass` is entered, or *area-specific* if an `area` is entered. The `output.unit` should be correctly formatted for whichever of these are chosen, that is in the order Oxygen/Time, Oxygen/Time/Mass, or Oxygen/Time/Area.
+
+Note the `volume` input is volume of water in the respirometer, *not the volume of the respirometer*. That is, it represents the *effective volume*. A specimen will displace some of the water, therefore this is the volume of the respirometer minus the volume of the specimen. There are several approaches to calculate the effective volume or specimen volume: geometrically; through displacement in a separate vessel; or calculated from the mass and density. For example, fish are often assumed to have an equal density as water (~1000 kg/m^3), so their mass is measured, converted to volume and subtracted from the respirometer volume. Volume could also be determined directly by pouring out and measuring the water at the end of the experiment, or by weighing the respirometer. See the [`respfun`](https://github.com/nicholascarey/respfun) respirometry utilities package for functions to calculate the effective volume and convert water mass to volume.
+
+Here we use the `adjust_rate` object saved in the previous step, and we'll convert to a mass-specific rate. 
+
+```{r message = FALSE}
+zeb_mmr_adj_conv <- convert_rate(zeb_mmr_adj,
+                                 oxy.unit = "mg/L",       # oxygen units of the original raw data
+                                 time.unit = "secs",      # time units of the original raw data
+                                 output.unit = "mg/h/g",  # desired output unit
+                                 volume = 0.12,           # effective volume of the respirometer in L
+                                 mass = 0.0009)           # mass of the specimen in kg
+
+summary(zeb_mmr_adj_conv)
 ```
 
-Let's look at two results, one from early in the experiment (10th rep) and one from later (90th rep), and we will use the `pos` input to select only the top ranked result (i.e. lowest rate).
-```{r}
-summary(zeb_rmr_adj[[10]], pos = 1)
-summary(zeb_rmr_adj[[90]], pos = 1)
-```
+The `$summary` table contains all rate regression parameters and data locations, adjustments (if applied), units, and more. In fact it contains *all* relevant information about the analysis and is a great way of saving the results, especially using the `export = TRUE` input to save it as a data frame. Note the `row` and `endrow` columns will refer to rows of the most recent subset of the data, however the `time` and `endtime` will always refer back to the time values of original data. 
 
-Comparing these we can see as expected the adjustment value is greater in the later replicate. 
+### Select
 
-### Adjust SMR
-
-The process for adjusting the SMR rates is identical to the above.
-
-```{r results = "hide", message=FALSE, tidy = FALSE}
-zeb_smr_adj <- lapply(zeb_smr, function(z) adjust_rate(z, 
-                                                       by = bg_pre, 
-                                                       by2 = bg_post,
-                                                       method = "linear"))
-```
-
-Again, we'll look at two results, one from early in the experiment and one from later, and we will use the `pos` input to select only the top ranked result.
-```{r}
-summary(zeb_smr_adj[[10]], pos = 1)
-summary(zeb_smr_adj[[90]], pos = 1)
-```
-
-Again, we can see as expected the adjustment value is greater in the later replicate. 
-
-## Convert rates {#convert}
-
-The last step of our analysis is to convert all the rates we have calculated to output units. 
-The `convert_rate` function can output rates as *absolute*, that is of the whole animal or chamber, *mass-specific* if a `mass` is entered, or *area-specific* if an `area` is entered. The `output.unit` should be correctly formed for whichever of these are chosen, that is in the order Oxygen/Time, Oxygen/Time/Mass, or Oxygen/Time/Area. 
-
-Note the `volume` input is volume of water in the respirometer, *not the volume of the respirometer*. That is, it represents the *effective volume*. A specimen will displace some of the water, therefore this is the volume of the respirometer minus the volume of the specimen. There are several approaches to calculate the effective volume or specimen volume: geometrically; through displacement in a separate vessel; or calculated from the mass and density. For example, fish are often assumed to have an equal density as water (~1000 kg/m^3), so their mass is measured, converted to volume and subtracted from the respirometer volume. Volume could also be determined directly by pouring out and measuring the water at the end of the experiment, or by weighing the respirometer. See the [`respfun`](https://github.com/nicholascarey/respfun) respirometry utilities package for functions to calculate the effective volume and convert water mass to volume. 
-
-### Convert MMR
-
-Converting the MMR is relatively simple. This will convert every rate in the object. Note, we use the `adjust_rate` object, and we'll convert to a mass-specific rate. 
-
-```{r tidy = FALSE, message = FALSE}
-zeb_mmr_conv <- convert_rate(zeb_mmr_adj,
-                             oxy.unit = "mg/L",       # oxygen units of the original raw data
-                             time.unit = "secs",      # time units of the original raw data
-                             output.unit = "mg/h/g", 
-                             volume = 0.12,           # effective volume of the respirometer in L
-                             mass = 0.0009)           # mass of the specimen in kg
-summary(zeb_mmr_conv)
-```
-
-Note the summary table printed to the console via `summary()` is a condensed version. The object `$summary` element contains an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. 
-
-### Convert RMR
-
-Once again we will use `lapply` to loop through the SMR list of `adjust_rate` objects and convert the rates for each replicate. 
-
-```{r tidy = FALSE, message = FALSE}
-zeb_rmr_conv <- lapply(zeb_rmr_adj, function(z) convert_rate(z,
-                                                             oxy.unit = "mg/L", 
-                                                             time.unit = "secs",
-                                                             output.unit = "mg/h/g",
-                                                             volume = 0.12,         
-                                                             mass = 0.0009))
-```
-
-We'll look at the same two examples. 
+The last analysis step is to select our final reportable MMR from the multiple rates we determined using the `linear` method. We saw [earlier](#width) that after changing some analysis parameters one of the MMR rates, the 5th in the summary table, was higher than the others.
 
 ```{r}
-summary(zeb_rmr_conv[[10]], pos = 1)
-summary(zeb_rmr_conv[[90]], pos = 1)
+summary(zeb_mmr_adj_conv)
 ```
 
-### Convert SMR
-
-The process is the same for the SMR results. 
-
-```{r tidy = FALSE, message = FALSE}
-zeb_smr_conv <- lapply(zeb_smr_adj, function(z) convert_rate(z,
-                                                             oxy.unit = "mg/L", 
-                                                             time.unit = "secs",
-                                                             output.unit = "mg/h/g",
-                                                             volume = 0.12,         
-                                                             mass = 0.0009))
-```
+In this case, we could fairly confidently report this as our MMR of -3.05 mg/h/g. However, the `select_rate()` function allows you to filter rates by applying selection criteria. This example will select and extract the highest `n` rates to a new object, in this case the highest single rate. This is quite a simplistic example, but see later and `vignette("select_rate")` for more advanced examples including how to apply multiple criteria. 
 
 ```{r}
-summary(zeb_smr_conv[[10]], pos = 1)
-summary(zeb_smr_conv[[90]], pos = 1)
+MMR <- select_rate(zeb_mmr_adj_conv,
+                   method = "highest",
+                   n = 1)
 ```
 
-## Rate selection {#final}
-
-Every experiment is different, and there are many factors that will go into decisions regarding rate selection or filtering criteria. The most important aspect is that these are decided upon as objectively as possible, applied consistently, and reported alongside results.
-
-### Final MMR
-
-We saw [earlier](#width) that after changing some analysis parameters one of the MMR rates was higher than the others.
-
-```{r}
-summary(zeb_mmr_conv)
-```
-
-In this case, we can report this as our MMR of 3.30 mg/h/g. 
-
-If we need to save any of the other regression data for this rate, `summary` has additional inputs that are useful: `pos` allows specific rows of summary tables to be extracted, and `export` allows it to be saved as a separate data frame. Here, we'll use these on the original `adjust_rate` object to save the coefficients and other data for this rate.
+If we need to save any of the other regression data for this rate, `summary` has additional inputs that are useful: `pos` allows specific rows of summary tables to be extracted, and `export` allows it to be saved as a separate data frame. Here, we'll use this on the final object to export the coefficients and other data for this rate.
 
 ```{r results='hide'}
-mmr_data <- summary(zeb_mmr_conv, pos = 6, export = TRUE)
+mmr_results <- summary(MMR, export = TRUE)
 ```
 
 ```{r}
-mmr_data
+mmr_results
 ```
 
-### Final RMR
+### Complete MMR analysis
 
-This is similar to the other operations above, in that we use an `apply` function to extract the top ranked final converted rate from each replicate. 
+This is the complete analysis we have just conducted to get MMR. 
 
-```{r tidy = FALSE, message = FALSE}
-zeb_rmr_all <- sapply(zeb_rmr_conv, function(z) z$rate.output[1])
+```{r message=FALSE, warning=FALSE, fig.keep='none', results='hide'}
+mmr_results <- 
+  zeb_rep_1 |>                              # using the inspected replicate 1 data...
+  subset_data(from = 180, 
+              to = 480, 
+              by = "row") |>                # subset first replicate
+  subset_data(from = 180, 
+              by = "row") |>                # subset again to apply a 'wait' period
+  auto_rate(width = 0.5) |>                 # use auto_rate to get most linear regions
+  adjust_rate(by = bg_pre, 
+              by2 = bg_post, 
+              method = "linear") |>         # adjust
+  convert_rate(oxy.unit = "mg/L", 
+               time.unit = "secs", 
+               output.unit = "mg/h/g", 
+               volume = 0.12, 
+               mass = 0.0009) |>            # convert
+  select_rate(method = "highest", 
+              n = 1) |>                     # select highest rate 
+  summary(export = TRUE)                    # final reportable result
 ```
 
-Now we can plot them. Again, we reverse the y-axis.
-
-```{r tidy = FALSE, message = FALSE}
-plot(zeb_rmr_all, ylim = rev(range(zeb_rmr_all)))
+```{r echo = FALSE}
+mmr_results
 ```
 
-It depends on the experiment how we might want to define the final RMR. This is the routine metabolic rate, so we want a rate that represents routine behaviour. Here, rates are very consistent after number 20, apart from one obvious outlier in number 89.
+This allows you to document all analysis parameters and rate selection criteria so that they can be consistently applied and reported alongside the results. See [Reporting](#report) section for how analyses might be reported concisely in text.
 
-```{r tidy = FALSE, message = FALSE}
-zeb_rmr_all[88:90]
+## RMR
+
+### `calc_rate.int` {#crint}
+
+To extract a rate from every replicate and calculate a routine metabolic rate (RMR) from amongst the results we will use `calc_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an RMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
+
+`calc_rate.int` was introduced in [`respR v2.1`]() and allows you to specify a replicate structure and run `calc_rate` on each replicate to extract a rate from the same time or row region in each. See `vignette("calc_rate.int")` for details of the functionality.
+
+The difference between this and the approach [below](#arint) using `auto_rate.int()` is that you specify a region over which to calculate a rate, and this will be the same in each replicate. This takes away some of the objectivity in determining rates that `auto_rate` allows for, but as long as selection criteria are reported and applied consistently is a perfectly valid way of processing intermittent-flow data. 
+
+We've shown above how to get background rates and MMR, so we will use `calc_rate.int` to extract a rate from the same region of each replicate and filter these rates to report an RMR. In these data, after the first replicate of 14 minutes duration for [MMR](#mmr) there is a regular structure of 105 replicates of 11 minutes duration including the flush. 
+
+### Subset data
+
+In the examples [here](https://januarharianto.github.io/respR/articles/intermittent_short.html) we had to specify the start and end location of every replicate in `calc_rate.int`. However, if replicates cycle at a regular interval we can simply enter this as `starts`. This tells the function that starting from row 1 replicates cycle at this regular interval, and it can be entered as a row interval or a duration in time, as specified using the `by` input. We only need to subset the data so that the first replicate starts at row 1 before passing it to `calc_rate.int`. 
+
+We start by subsetting the data so that the 105 regularly-spaced replicates start at row 1, that is we exclude the starting background recording, the first replicate for MMR, and the end background recording. We then `inspect` it. 
+
+```{r results='hide', fig.keep='last'}
+zeb_insp <- zeb_intermittent.rd |>
+  subset_data(from = 5840, 
+              to = 75139,
+              by = "row") |>
+  inspect() 
 ```
 
-Therefore, we will not use this one, but take the mean of all others from 20 onwards. This is just one approach of many we could apply. A different approach is in the next example for SMR.
+### Extract rates
 
-```{r tidy = FALSE, message = FALSE}
-zeb_rmr_final <- mean(zeb_rmr_all[c(20:88,90:105)])
-zeb_rmr_final
+Now we run `calc_rate.int` and specify a 660 row interval between replicates using `starts`. We'll calculate a rate across the same five minute time period in each replicate, from three minutes to eight minutes. To do this we specify a 180 row `wait` phase and 300 row `measure` phase. 
+
+```{r results='hide'}
+zeb_cr.int <- calc_rate.int(zeb_insp,
+                            starts = 660,
+                            wait = 180,
+                            measure = 300,
+                            by = "row")
 ```
+By default the function plots the first 20 replicates (`pos` can be used to choose others up to a maximum of 20). Note how the lower time axis has the actual raw data time values, but the top row axis refers to the rows of each replicate subset. In these plots the rate data is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase.
 
-This is our final RMR: 0.96 mg/h/g.
-
-### Final SMR
-
-Again, selection criteria will differ depending on the experiment. However, a common approach is to take a mean of a certain percentile of the results. Here, since we are interested in the absolute lowest rates we will define our SMR as the mean of the lowest 10th percentile of the lowest rate from each replicate.
-
-Here we extract the lowest rate from each replicate. 
-```{r tidy = FALSE, message = FALSE}
-zeb_smr_all <- sapply(zeb_smr_conv, function(z) z$rate.output[1])
-```
-
-```{r tidy = FALSE, message = FALSE}
-plot(zeb_smr_all, ylim = rev(range(zeb_smr_all)))
-```
-
-Again, we see they are quite consistent after number 20. 
-
-The `quantile` function allows a quantile cut-off value to be determined. We have to be careful here. Because the rates are negative, what we actually want is the numerically *highest* 10th percentile, or least negative values. So we want the 90% numerical cut-off value, and all the rates numerically *above* that. These will be the lowest *absolute* rate values. 
+We can use `summary()` to view the results.
 
 ```{r}
- # 10% quantile cutoff value
- co <- quantile(zeb_smr_all, 0.9)
-
- # Mean of all rates above cutoff value
- zeb_smr_final <- mean(zeb_smr_all[zeb_smr_all > co])
- zeb_smr_final
+summary(zeb_cr.int)
 ```
 
-this is our final SMR: 0.75 mg/h/g
+As we saw from our inspection of the data [earlier](#inspecting), rates are higher at the start of the dataset because the specimen was exercised before being placed in the respirometer. We will filter these out shortly. For now we can see we have a rate from every replicate. Our entered time range has been applied *within* each replicate, and the replicate each rate originates from can be seen in the `$rep` column. 
 
-### Summary
+### Adjust {#crintadj}
+
+`calc_rate.int` objects also work with `adjust_rate`, including with dynamic adjustment methods. Here, we'll adjust using the pre- and post-experiment background recordings assuming the background rate increases linearly from the initial to ending background rates.
+
+```{r results='hide'}
+zeb_cr.int_adj <- adjust_rate(zeb_cr.int,
+                              by = bg_pre, 
+                              by2 = bg_post,
+                              method = "linear")
+```
+
+If the adjustments were correctly applied we would expect the adjustment value of the early replicates to be close to the value of the initial background rate (`-0.000074`), and those of the later ones close to that of the ending background rate (`-0.000120`). Let's look at the summary to check, and use `pos` to pick out one from the start, middle and end. 
+
+```{r}
+summary(zeb_cr.int_adj, pos = c(1, 50, 105))
+```
+
+As expected the `$adjustment` column values increase over the experiment between these values, so we can proceed to conversion.
+
+### Convert
+
+Now we will convert the rates, then plot the values to decide how to select a final RMR rate. 
+
+```{r message = FALSE}
+zeb_cr.int_conv <- convert_rate(zeb_cr.int_adj,
+                                oxy.unit = "mg/L",       # oxygen units of the original raw data
+                                time.unit = "secs",      # time units of the original raw data
+                                output.unit = "mg/h/g",  # desired output unit
+                                volume = 0.12,           # effective volume of the respirometer in L
+                                mass = 0.0009)           # mass of the specimen in kg
+```
+
+The converted rates can be seen in the summary table. 
+
+```{r}
+summary(zeb_cr.int_conv)
+```
+
+We can see the converted rates as the last column. The `$summary` table contains the all rate regression parameters and data locations, adjustments (if applied), units, and more. It can be exported as a separate data frame by using `export = TRUE` in `summary()`. This is a great way of exporting all the relevant data for your final results. 
+
+### Select {#crintselect}
+
+It will depend on the aims and circumstances of an experiment what rate results to extract, summarise, and report. For instance we might report RMR as a mean of a representative selection of rates after the specimens uptake rate has stabilised, or a mean of a number or percentile of lowest rates found. The important thing is to apply these selection criteria consistently and report them alongside results. 
+
+As of [`respR v2.1`]() `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
+
+```{r message = FALSE, results='hide'}
+plot(zeb_cr.int_conv, type = "rate")
+```
+
+This shows how the calculated rate values vary across the dataset. We can see from this plot they are high at the start, stabilise after around timepoint 20000, then are a little unstable again if not slightly elevated after timepoint 60000. Between these however they appear to be very stable. 
+
+The `select_rate()` function allows `convert_rate` results to be filtered or reordered in various ways. See `help("select_rate")` and `vignette("select_rate")` for more details. For this analysis, lets only use rates from replicates between timepoints 20000 and 60000. Then, simply to show an example of how rates can be further selected, let's only select those with r-squared of 0.97 and above, select the lowest 20, and finally take the mean of them.  
+
+```{r}
+RMR <- zeb_cr.int_conv |>
+  select_rate(method = "time", n = c(20000, 60000)) |>
+  select_rate(method = "rsq", n = c(0.97, 1)) |>
+  select_rate(method = "lowest", n = 20) |>
+  summary() |>
+  mean()
+```
+
+That's it; this is our final routine metabolic rate (at least, as we have chosen to define it). 
+
+
+## SMR
+
+### `auto_rate.int` {#arint}
+
+To extract a rate from every replicate and determine a standard metabolic rate (SMR) from amongst the results we will use `auto_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an SMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
+
+Introduced in [`respR v2.1`](), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and run `auto_rate()` on each replicate. This function extracts rates in a number of ways including the most linear or most consistently maintained rates, plus highest and lowest rates of a specified width. See `vignette("auto_rate")` for more details, and `vignette("auto_rate.int")` for an overview of this function.
+
+The difference between this and the approach [above](#crint) using `calc_rate.int()` is that the specified `measure` phase is not the same as the region over which a rate is calculated. Instead a `measure` phase is specified and the `auto_rate` analysis is done *within* this region using the `method` and `width` inputs. This can result in rates of different widths coming from within this region depending on the inputs. 
+
+### Subset data
+
+We again subset the data so that the 105 regularly-spaced replicates start at row 1.
+
+```{r results='hide', fig.keep='none'}
+zeb_insp <- zeb_intermittent.rd |>
+  subset_data(from = 5840, 
+              to = 75139,
+              by = "row") |>
+  inspect() 
+```
+
+### Extract rates {#arintextract}
+
+To get SMR we necessarily need to define it, in particular the duration over which rates are calculated within each replicate. These should be chosen appropriately and with reference to best practices and previous studies. Here, let's say we want to extract the lowest rate across 2 minutes within each replicate, and we will define our SMR for this specimen as the mean of the lowest 10th percentile of all 105 extracted rates. 
+
+We run `auto_rate.int` on the inspected data and use `method = "lowest"` and `width = 120`. This means the function calculates *every* rate of this width within each replicate, orders them according to the input `method`, and by default (`n = 1`) returns the top ranked result, in this case the lowest, for each replicate. 
+
+We again specify a 660 row interval between replicates using `starts`. Just to be different from the [above](#crint) example, this time we will specify a 2 minute (120 row) `wait` phase, and six minute (360 row) `measure` phase. 
+
+```{r results='hide'}
+zeb_ar.int <- auto_rate.int(zeb_insp,
+                            starts = 660,
+                            wait = 120,
+                            measure = 360,
+                            method = "lowest",
+                            width = 120,
+                            by = "row") |>
+  summary()
+```
+
+Note how the plots show the rates coming from different regions within each replicate measure phase. The summary contains all the results, that is the lowest 2-minute rate from each replicate. Before selecting from amongst these to get our final SMR we first need to adjust and convert them. This is exactly the same process we followed in the [example above](#crintadj). 
+
+### Adjust
+
+```{r results='hide'}
+zeb_ar.int_adj <- adjust_rate(zeb_ar.int,
+                              by = bg_pre, 
+                              by2 = bg_post,
+                              method = "linear")
+```
+
+### Convert
+
+```{r message = FALSE}
+zeb_ar.int_conv <- convert_rate(zeb_ar.int_adj,
+                                oxy.unit = "mg/L",       # oxygen units of the original raw data
+                                time.unit = "secs",      # time units of the original raw data
+                                output.unit = "mg/h/g",  # desired output unit
+                                volume = 0.12,           # effective volume of the respirometer in L
+                                mass = 0.0009)           # mass of the specimen in kg
+```
+
+```{r}
+summary(zeb_ar.int_conv)
+```
+
+### Quality control
+
+We can plot the `convert_rate` object for a quick look at how rates vary across the data. 
+
+```{r message = FALSE, results='hide'}
+plot(zeb_ar.int_conv, type = "rate")
+```
+
+These rates seem to be a bit lower than those we extracted for RMR [above](#crintselect), as we would expect for an SMR. 
+
+This is an opportunity to do some QC before we select our final rates to determine SMR. Looking at the plot above there is one result that seems to be uncharacteristically low compared to the others with a value just over 0.5. Looking at the summary table we can see this is from replicate 48. 
+
+If we go back to the `auto_rate.int` results object we can use `pos` to plot this replicate for a closer look. We'll do this in two different ways using `type`. Firstly the rate in the context of the whole replicate, secondly the `auto_rate` output plot for this replicate which has more diagnostic plots, but only shows the `measure` phase.
+
+```{r message = FALSE, results='hide'}
+plot(zeb_ar.int, type = "rep", pos = 48)
+plot(zeb_ar.int, type = "ar", pos = 48)
+```
+
+Looking at these plots this replicate result does seem to be anomalous, and in this replicate the rate extracted is not really representative. It also has a lower r-squared which otherwise varies from 0.72 to 0.98. 
+
+Therefore, it would be perfectly acceptable and justifiable to manually exclude this result (there are also 1 or 2 others we might want to investigate). To apply such selection criteria objectively and systematically would require examining multiple experiments. This is why definitions of metrics like SMR and analysis parameters should usually be decided upon after thoroughly exploring all your results.  After this you should be able to arrive at a set of objective and reasonable selection criteria. 
+
+### Select
+
+To get our final SMR we just need to use `select_rate` again with our chosen criteria, and pipe the result to `mean`. We decided [above](#arintextract) our definition of SMR would be the mean of the lowest 10th percentile of the rates extracted from each replicate. We also want to exclude the result from replicate 48. 
+
+Excluding this replicate could be achieved in a number of ways in `select_rate`. We could use `method = "rsq"` to select only results with r-squared above a certain value which excludes this one. We could use the `rate` method to select only rates with values above this one. Or we could use the `time_omit` method to exclude this rate based on its timepoint (found in the summary table). Here we'll use the `rep` method simply to select all replicates *except* this one.
+
+```{r}
+SMR <- zeb_ar.int_conv |>
+  select_rate(method = "rep", n = c(1:47,49:105)) |>
+  select_rate(method = "lowest_percentile", n = 0.1) |>
+  summary() |>
+  mean()
+```
+
+We can see the summary of the final 11 selected rates, and then the mean of these. This is our final SMR. 
+
+## Summary {#ratessumm}
 
 Now we have our final results for each metric.
 
 ```{r eval = FALSE}
-MMR: 3.30 mg/h/g
-RMR: 0.96 mg/h/g
-SMR: 0.75 mg/h/g
+MMR: -3.05 mg/h/g
+RMR: -0.94 mg/h/g
+SMR: -0.70 mg/h/g
 ```
+
+Typically these rates would now be reported as positive values.
 
 ## Reporting {#report}
 
-The above is a lengthy description of an analysis, so this vignette may not give a good impression of just how succinct a `respR` analysis of an experiment may be. This code block shows the entire analysis for SMR. We use a a slightly different approach, in that we use `apply` functions only instead of a `for` loop, but it is the same analysis with the same result. 
+The above is a lengthy description of an analysis, so this vignette may not give a good impression of just how succinct a `respR` analysis may be. This code block shows the entire analysis for SMR. 
 
 ### Complete analysis
 
 ```{r eval = F, tidy = F}
-# Import and inspect raw data ---------------------------------------------
-# Importing would normally be the first step, e.g. import_file("path/to/file")
+# Inspect data ------------------------------------------------------------
 zeb <- inspect(zeb_intermittent.rd)
 
 # Background --------------------------------------------------------------
@@ -497,55 +563,43 @@ bg_pre <- subset_data(zeb, from = 0, to = 4999, by = "time") |>
 bg_post <- subset_data(zeb, from = 75140, to = 79251, by = "time") |>
   calc_rate.bg()
 
-# Replicate structure -----------------------------------------------------
-buffer <- 120   # 2 mins buffer
-measure <- 420  # 7 mins measure
-reps <- seq(5840, 74480, 660) ## start rows 
-starts <- reps + buffer ## data starts
-ends <- reps + buffer + measure ## data ends
-
-# Subset each replicate ---------------------------------------------------
-zeb_smr_subsets <- apply(cbind(starts,ends), 1, function(z) subset_data(zeb,
-                                                                        from = z[1],
-                                                                        to = z[2],
-                                                                        by = "time"))
-
-# auto_rate on each replicate ---------------------------------------------
-zeb_smr <- lapply(zeb_smr_subsets, function(z) auto_rate(z,
-                                                         method = "lowest", 
-                                                         width = 180, 
-                                                         by = "time", 
-                                                         plot = FALSE))
-
-# Adjust ------------------------------------------------------------------
-zeb_smr_adj <- lapply(zeb_smr, function(z) adjust_rate(z, 
-                                                       by = bg_pre, 
-                                                       by2 = bg_post,
-                                                       method = "linear"))
-
-# Convert -----------------------------------------------------------------
-zeb_smr_conv <- lapply(zeb_smr_adj, function(z) convert_rate(z,
-                                                             oxy.unit = "mg/L", 
-                                                             time.unit = "secs",
-                                                             output.unit = "mg/h/g",
-                                                             volume = 0.12,         
-                                                             mass = 0.0009))
-
-# Extract rates -----------------------------------------------------------
-zeb_smr_all <- sapply(zeb_smr_conv, function(z) z$rate.output[1])
-
-# Calculate final SMR -----------------------------------------------------
-co <- quantile(zeb_smr_all, 0.9) # 10% quantile cutoff value
-zeb_smr_final <- mean(zeb_smr_all[zeb_smr_all > co]) # Mean of all rates above cutoff value
-```
-
-```{r echo = F}
-zeb_smr_final
+# SMR Analysis ------------------------------------------------------------
+  # Subset ------------------------------------------------------------------
+  zeb |> 
+  subset_data(from = 5840, 
+              to = 75139,
+              by = "row") |>
+  # Extract rates -----------------------------------------------------------
+  auto_rate.int(starts = 660,
+                wait = 120,
+                measure = 360,
+                method = "lowest",
+                width = 120,
+                by = "row")  |>
+  # Adjust ------------------------------------------------------------------
+  adjust_rate(by = bg_pre, 
+              by2 = bg_post,
+              method = "linear") |>
+  # Convert -----------------------------------------------------------------
+  convert_rate(oxy.unit = "mg/L",      
+               time.unit = "secs",     
+               output.unit = "mg/h/g", 
+               volume = 0.12,        
+               mass = 0.0009) |>
+  # Select -----------------------------------------------------------------
+  select_rate(method = "rep", n = c(1:47,49:105)) |>
+  select_rate(method = "lowest_percentile", n = 0.1) |>
+  summary() |>
+  mean()
 ```
 
 ### How to report analysis methods
 
-The ultimate aim of `respR` was to enable reproducible analyses and clear reporting of them. This is an example of how we might report the above analysis in a manuscript.
+The ultimate aim of `respR` was to enable clear reporting and reproducible analyses. This is an example of how we might report the above analysis in a manuscript.
 
-*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to extract the lowest rate across a three minute window from each replicate. Rates were adjusted for background using pre- and post-experiment blank recordings with no specimen, assuming a linear increase in background rate over time. SMR was defined as the mean of the lowest 10th percentile of adjusted rates."*
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate.int` function was used to extract the lowest rate across a two minute window from each replicate. Rates were adjusted for background using pre- and post-experiment blank recordings with no specimen, assuming a linear increase in background rate over time. Obviously anomalous rates were excluded, and SMR was defined as the mean of the lowest 10th percentile of remaining adjusted rates."*
 
+
+## Alternative approaches
+
+Previous versions of this vignette demonstrated use of different methods, such as looping and subsetting of data, to extract individual replicates for processing through `calc_rate` or `auto_rate`. These approaches still work and are archived [here]() in case they are of use in some cases. However for most analyses use of `calc_rate.int` or `auto_rate.int` is the recommended approach.

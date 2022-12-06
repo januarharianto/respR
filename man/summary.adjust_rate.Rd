@@ -21,3 +21,4 @@ Print to console. No returned value.
 \description{
 Summarise adjust_rate objects
 }
+\keyword{internal}

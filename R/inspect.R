@@ -347,6 +347,7 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 #' Print inspect objects
 #' @param x inspect object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.inspect <- function(x, ...) {
@@ -447,6 +448,7 @@ print.inspect <- function(x, ...) {
 #' Summarise inspect objects
 #' @param object inspect object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.inspect <- function(object, ...) {
@@ -456,6 +458,7 @@ summary.inspect <- function(object, ...) {
 #' Average inspect object rates
 #' @param x inspect object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.inspect <- function(x, ...){
@@ -472,6 +475,7 @@ mean.inspect <- function(x, ...){
 #' @param legend logical. Suppress labels and legends.
 #' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
@@ -569,36 +573,19 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     mtext("Full Timeseries",
           outer = TRUE, cex = 1.2, line = 0.3, font = 2)
 
-    ## Adding this fn here to avoid using static_roll
-    roll_reg_plot <- function(df, width) {
-      roll_width <- floor(width * nrow(df))
-      ## Calc all rates, even there is a min_obs of only 1 datapoint
-      ## This means rate is returned even if there are NA in data
-      ## Also replace Inf with NA of ylim in plot fails
-      df[[1]][which(is.infinite(df[[1]]))] <- NA
-      df[[2]][which(is.infinite(df[[2]]))] <- NA
-      rates <- roll::roll_lm(matrix(df[[1]]), matrix(df[[2]]),
-                             roll_width, min_obs = 1)$coefficients[,2]
-      ## However this means rates are ALSO calculated at the start of the data
-      ## before the width is even reached, so we remove these.
-      rates <- rates[-(1:(roll_width-1))]
-      rates <- na.omit(rates)
-      return(rates)
-    }
-
     ## Rolling reg plot
     ## Width needs to be half on each side
-    rates <- roll_reg_plot(dt, width)
+    rates <- rollreg2.p(dt, width)
     half_width <- width/2
     xdt <- dt[[1]]
     xlim <- range(nainf.omit(xdt))
 
-    ## now to get ylim, if width is higher than 0.1 we run roll_reg_plot with
+    ## now to get ylim, if width is higher than 0.1 we run rollreg2.p with
     ## 0.1 width to get y range of rates, and plot against these. This means if
     ## a higher width is used, and rates have very little variation the plots
     ## don't look weird - i.e. should get flatter with higher widths
     if(width > 0.1) {
-      rates01 <- roll_reg_plot(dt, 0.1)
+      rates01 <- rollreg2.p(dt, 0.1)
       y_lim <- range(nainf.omit(rates01))
       buffer <- diff(y_lim)*0.05
       y_lim <- c(y_lim[1] - buffer, y_lim[2] + buffer) ## add a little more space

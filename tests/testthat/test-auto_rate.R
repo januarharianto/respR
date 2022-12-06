@@ -242,7 +242,7 @@ capture.output({  ## stops printing outputs on assigning
   urch_data_rev <- urch_data
   urch_data_rev[[2]] <- rev(urch_data_rev[[2]])
 
-  test_that("auto_rate outputs expected results when method = 'highest'", {
+   test_that("auto_rate outputs expected results when method = 'highest'", {
     ## these should all be the same with negative rates
     skip_on_cran()
     expect_equal(ar_obj_high$rate,

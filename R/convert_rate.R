@@ -1,16 +1,18 @@
 #' Convert a unitless oxygen rate value to absolute, mass-specific or
 #' area-specific rate
 #'
-#' Converts a unitless rate derived from [`calc_rate()`], [`auto_rate()`],
-#' [`adjust_rate()`], or [`calc_rate.bg()`] into an absolute rate (i.e. whole
-#' chamber or whole specimen), or mass-specific rate (i.e. normalised by
-#' specimen mass), or area-specific rate (i.e. normalised by specimen surface
-#' area) in any common unit.
+#' Converts a unitless rate derived from [`calc_rate()`], [`calc_rate.int()`],
+#' [`auto_rate()`], [`auto_rate.int()`], [`adjust_rate()`], or
+#' [`calc_rate.bg()`] into an absolute rate (i.e. whole chamber or whole
+#' specimen), or mass-specific rate (i.e. normalised by specimen mass), or
+#' area-specific rate (i.e. normalised by specimen surface area) in any common
+#' unit.
 #'
 #' By default, `convert_rate` converts the primary `$rate` element from
-#' `calc_rate` and `auto_rate` objects, the `$rate.adjusted` from `adjust_rate`
-#' objects, and the `$rate.bg` from `calc_rate.bg` objects. Additionally, any
-#' numeric value or vector of rates can be input as `x`.
+#' `calc_rate`, `calc_rate.int`, `auto_rate` and , `auto_rate.int` objects, the
+#' `$rate.adjusted` from `adjust_rate` objects, and the `$rate.bg` from
+#' `calc_rate.bg` objects. Additionally, any numeric value or vector of rates
+#' can be input as `x`.
 #'
 #' ## Respirometer volume
 #'
@@ -60,6 +62,43 @@
 #' [`unit_args()`] for details of accepted units and their formatting. See also
 #' [`convert_val()`] for simple conversion between non-oxygen units.
 #'
+#' ## Plot
+#'
+#' Plotting provides three ways of visualising the rates (or a selection of them
+#' using `pos`), chosen using `type`. The default is `plot = FALSE` to prevent
+#' plots being produced for every single conversion.
+#'
+#' `type = "full"` (the default) plots a grid of up to 20 plots with each rate
+#' highlighted on the full dataset, with the rate value in the title. Values on
+#' the axes - time (bottom), row (top), and oxygen (left) - are in the units of
+#' the original raw data. Rates are plotted in order of how they appear in the
+#' summary table up to the first 20 rows, unless different rows have been
+#' specified via `pos`.
+#'
+#' `type = "rate"` plots the entire data timeseries on the upper plot, and on
+#' the lower plot the output rate values in the chosen output units. Each rate
+#' is plotted against the middle of the region used to determine it. `pos` can
+#' be used to select a range of rates (i.e. summary table rows) to show in the
+#' lower plot (default is all).
+#'
+#' `type = "overlap"` visualises where regression results in the summary table
+#' occur in relation to the original dataset to help understand how they are
+#' distributed or may overlap, and is particularly useful for results from the
+#' `auto_rate` `linear` method. The top plot is the entire data timeseries, the
+#' bottom plot the region of the data each rate regression has been fit over.
+#' The y-axis represents the position (i.e. row) of each in the summary table
+#' descending from top to bottom. If no reordering or subsetting has been
+#' performed, this will usually be equivalent to the `$rank` column, but note as
+#' reordering or subsetting is performed rank and summary table position will
+#' not necessarily be equivalent. One result (summary table row) can be
+#' highlighted, the default being `highlight = 1`. `pos` can be used to select a
+#' range of summary rows to plot in the lower overlap plot.
+#'
+#' Other options:
+#'
+#' `legend = FALSE` will suppress plot labels, `pos` selects summary rates to
+#' plot, `quiet` suppresses console messages.
+#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `print()`,
@@ -68,12 +107,23 @@
 #' - `print()`: prints a single result, by default the first converted rate.
 #' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' - `summary()`: prints a condensed version of the output `$summary` table of
-#' converted rates and metadata. Specific rows can be specified with the `pos`
-#' input. e.g. `summary(x, pos = 1:5)`. This can be exported as a separate data
-#' frame by passing `export = TRUE`. This will be the *full* summary table, not
-#' the one printed to the console, including all rate regression parameters, and
-#' data locations, adjustments if applied, units, and more.
+#' - `summary()`: prints the output `$summary` table of converted rates and
+#' metadata. Specific rows can be specified with the `pos` input. e.g.
+#' `summary(x, pos = 1:5)`. This can be exported as a separate data frame by
+#' passing `export = TRUE` and includes all rate regression parameters, and data
+#' locations, adjustments if applied, units, and more. The `$rep` and `$rank`
+#' columns requires special notice depending on the type of experiment you have
+#' analysed or the function you used to determine the rates. For the `$rank`
+#' column if `calc_rate` was used, it is the order of rates as entered using
+#' `from` and `to` (if multiple rates were determined). For `auto_rate` it
+#' relates to the `method` input, for example it indicates kernel density
+#' ranking if the `linear` method was used, or ordering by rate value if
+#' `lowest` or `highest` were used. For intermittent-flow experiments analysed
+#' via `calc_rate.int` or `auto_rate.int` it indicates the ranking *within* each
+#' replicate as seen in the `$rep` column. Note that if `select_rate` has been
+#' used the rows in the summary table may have been reordered, including the
+#' `$rep` and `$rank` columns. The *original* rep and rank for each row is
+#' retained if reordering occurred.
 #'
 #' - `mean()`: calculates the mean of all converted rates, or those specified by
 #' the `pos` input. e.g. `mean(x, pos = 1:5)` The mean can be exported as a
@@ -90,16 +140,19 @@
 #'   is the *absolute* rate in the output unit minus the mass- or area-specific
 #'   component. The `$summary` table element contains all rate regression
 #'   parameters and data locations (depending on what class of object was
-#'   entered), adjustments (if applied), units, and more.
+#'   entered), adjustments (if applied), units, and more. The `$rep` and `$rank`
+#'   columns require special notice depending on the type of experiment you have
+#'   analysed or the function you used to determine the rates. See the summary
+#'   table description in **S3 Generic Functions** section aboce.
 #'
-#' @param x numeric value or vector, or object of class `auto_rate`,
-#'   `calc_rate`, `adjust_rate`, or `calc_rate.bg.` Contains the rate(s) to be
-#'   converted.
+#' @param x numeric value or vector, or object of class `calc_rate`,
+#'   `calc_rate.int`, `auto_rate`, `auto_rate.int`, `adjust_rate`, or
+#'   `calc_rate.bg.` Contains the rate(s) to be converted.
 #' @param oxy.unit string. The dissolved oxygen unit of the original raw data
-#'   used to determine the rate in `x`.
+#'   used to determine the rates in `x`.
 #' @param time.unit string. The time unit of the original raw data used to
-#'   determine the rate in `x`.
-#' @param output.unit string. The output unit to convert the input rate to.
+#'   determine the rates in `x`.
+#' @param output.unit string. The output units to convert the input rates to.
 #'   Should be in the correct order: "Oxygen/Time" or "Oxygen/Time/Mass" or
 #'   "Oxygen/Time/Area".
 #' @param volume numeric. Volume of water in ***litres*** in the respirometer or
@@ -114,6 +167,10 @@
 #'   some oxygen units.
 #' @param P numeric. Pressure (bar). Used in conversion of some oxygen units.
 #'   Defaults to a standard value of 1.013253 bar.
+#' @param plot logical. Default is `FALSE`. Controls if a plot is produced. See
+#'   Plot section.
+#' @param ... Allows additional plotting controls to be passed. See Plot
+#'   section.
 #'
 #' @importFrom stringr str_replace
 #' @importFrom data.table data.table as.data.table
@@ -147,7 +204,8 @@
 
 convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NULL,
                          volume = NULL, mass = NULL, area = NULL,
-                         S = NULL, t = NULL, P = 1.013253) {
+                         S = NULL, t = NULL, P = 1.013253,
+                         plot = FALSE, ...) {
 
   ## Save function call for output
   call <- match.call()
@@ -187,7 +245,8 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   # Extract values ----------------------------------------------------------
 
   # Create extended summary table
-  summ.ext <- data.table(rank = NA,
+  summ.ext <- data.table(rep = NA,
+                         rank = NA,
                          intercept_b0 = NA,
                          rate_b1 = NA,
                          rsq = NA,
@@ -208,20 +267,34 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
     summ.ext$rank <- 1:length(rate)
     summ.ext$rate <- rate
-  } else if (class(x) %in% c("calc_rate")) {
+  } else if (inherits(x, "calc_rate")) {
     rate <- x$rate
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     summ.ext$density <- NA
-    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    setcolorder(summ.ext, c(1:5, 15, 6:14))
     message("convert_rate: object of class `calc_rate` detected. Converting all rates in '$rate'.")
+  } else if (class(x) %in% c("calc_rate.int")) {
+    rate <- x$rate
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:5, 15, 6:14))
+    message("convert_rate: object of class `calc_rate.int` detected. Converting all rates in '$rate'.")
   } else if (class(x) %in% c("auto_rate")) {
     rate <- x$rate
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     message("convert_rate: object of class `auto_rate` detected. Converting all rates in '$rate'.")
+  } else if (class(x) %in% c("auto_rate.int")) {
+    rate <- x$rate
+    summ.ext <- x$summary
+    summ.ext$adjustment <- NA
+    summ.ext$rate.adjusted <- NA
+    message("convert_rate: object of class `auto_rate.int` detected. Converting all rates in '$rate'.")
   } else if (class(x) %in% "adjust_rate" && is.numeric(x$inputs$x)) {
     rate <- x$rate.adjusted
     summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
@@ -234,20 +307,30 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     rate <- x$rate.adjusted
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$density <- NA
-    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    setcolorder(summ.ext, c(1:5, 15, 6:14))
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate.int") {
+    rate <- x$rate.adjusted
+    summ.ext <- x$summary[,-"rate.2pt"]
+    summ.ext$density <- NA
+    setcolorder(summ.ext, c(1:5, 15, 6:14))
     message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
   } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "auto_rate") {
     rate <- x$rate.adjusted
     summ.ext <- x$summary
     message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "calc_rate.bg") {
+  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "auto_rate.int") {
+    rate <- x$rate.adjusted
+    summ.ext <- x$summary
+    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (inherits(x, "calc_rate.bg")) {
     ## possible warning if mass entered - no reason to have mass with bg data
     rate <- x$rate.bg
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     summ.ext$density <- NA
-    setcolorder(summ.ext, c(1:4, 14, 5:13))
+    setcolorder(summ.ext, c(1:5, 15, 6:14))
     message("convert_rate: object of class `calc_rate.bg` detected. Converting all background rates in '$rate.bg'.")
     if(!is.null(mass) || !is.null(area))
       warning("convert_rate: A `calc_rate.bg` (i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?")
@@ -313,7 +396,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   output.unit <- paste(output.unit, collapse = "/")
 
   # Convert DO unit first
-  if (A %in% c("mmol.o2", "umol.o2", "mol.o2")) {
+  if (A %in% c("pmol.o2", "nmol.o2", "umol.o2", "mmol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
     RO2 <- adjust_scale(RO2, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {
@@ -392,15 +475,28 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   inputs <- list(x = x, oxy.unit = oxy.unit, time.unit = time.unit, output.unit = output.unit,
                  volume = volume, mass = mass, area = area,
                  S = S, t = t, P = P)
+  ## extract dataframe
+  if(any(class(x) %in% c("calc_rate",
+                         "calc_rate.bg",
+                         "calc_rate.int",
+                         "auto_rate",
+                         "auto_rate.int",
+                         "adjust_rate"))) df <- x$dataframe else
+                           df <- NULL
 
   out <- list(call = call,
               inputs = inputs,
+              dataframe = df,
               summary = summ.ext,
               rate.input = rate,
               output.unit = output.unit,
               rate.output = summ.ext$rate.output)
 
   class(out) <- "convert_rate"
+
+  # Plot if TRUE
+  if(plot == TRUE) plot(out, ...)
+
   return(out)
 }
 
@@ -408,10 +504,14 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 #' @param x convert_rate object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate <- function(x, pos = 1, ...) {
   cat("\n# print.convert_rate # ------------------\n")
+
+  ## message if empty
+  if(length(x$rate.output) == 0) message("No rates found in convert_rate object.\n")
 
   if(length(pos) > 1)
     stop("print.convert_rate: 'pos' must be a single value. To examine multiple results use summary().")
@@ -438,6 +538,7 @@ print.convert_rate <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
@@ -446,6 +547,8 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
     stop("summary.convert_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.")
 
   cat("\n# summary.convert_rate # ----------------\n")
+  ## message if empty
+  if(length(object$rate.output) == 0) message("No rates found in convert_rate object.\n")
   if(is.null(pos)) {
     pos <- 1:nrow(object$summary)
     cat("Summary of all converted rates:")
@@ -457,14 +560,13 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  out <- data.table(object$summary[pos, c(1,15:25), with=FALSE])
-  out_exp <- data.table(object$summary[pos,])
+  out <- data.table(object$summary[pos,])
 
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
-    return(invisible(out_exp)) else
+    return(invisible(out)) else
       return(invisible(object))
 }
 
@@ -473,6 +575,7 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
@@ -488,8 +591,11 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
     cat("Mean of rate results from entered 'pos' ranks:")
     cat("\n")
   }
+  if(length(x$rate.output) == 0)
+    message("No rates found in convert_rate object.\n")
   if(length(x$rate.output[pos]) == 1)
-    message("Only 1 rate found. Returning mean rate anyway...")
+    message("Only 1 rate found or selected. Returning mean rate anyway...")
+  ## message if empty
   cat("\n")
 
   n <- length(x$rate.output[pos])
@@ -506,11 +612,52 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 
 #' Plot convert_rate objects
 #' @param x convert_rate object
+#' @param type "full", "rate", "overlap"
+#' @param pos Which summary rows to plot?
+#' @param quiet logical. Suppress console output.
+#' @param highlight Which to highlight in overlap plots.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in rate plot.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
-plot.convert_rate <- function(x, ...) {
-  message("convert_rate: plot() is not available for 'convert_rate' objects.")
+plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
+                              highlight = NULL, legend = TRUE, rate.rev = TRUE, ...) {
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  # if numeric conversions, nothing to print
+  if(is.null(x$dataframe))
+    stop(glue::glue("plot.convert_rate: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."))
+  # Can't plot calc_rate.bg objects as multiple rates come from different df columns
+  # (much too complicated and who would want to...)
+  if(!(is.null(x$dataframe)) && inherits(x$inputs$x, "calc_rate.bg"))
+    stop(glue::glue("plot.convert_rate: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."))
+  # Validate type
+  if(!(type %in% c("full", "rate", "overlap")))
+    stop(glue::glue("plot.convert_rate: 'type' input not recognised."))
+
+  # number of rates
+  nrt <- length(x$rate.output)
+
+  #### if(!quiet) CONSOLE
+  if(!quiet) cat("\n# plot.convert_rate # -------------------\n")
+
+  # Plot based on type
+  if(type == "full") grid.p(x, pos = pos, msg = "plot.convert_rate",
+                            title = "", ...)
+
+  if(type == "overlap") overlap.p(x, highlight = highlight, pos = pos, legend = legend,
+                                  msg = "plot.convert_rate", ...)
+
+  if(type == "rate") outrate.p(x, pos = pos, quiet = quiet, msg = "plot.convert_rate",
+                               legend = legend, rate.rev = rate.rev, ...)
+
+
+  if(!quiet) cat("-----------------------------------------\n")
+
   return(invisible(x))
 }
 
@@ -531,10 +678,10 @@ plot.convert_rate <- function(x, ...) {
 #' @export
 adjust_scale <- function(x, input, output) {
   # Create database of terms for matching
-  prefix <- c("n", "u", "m", "", "k", "sec", "min", "hour", "day")
+  prefix <- c("p", "n", "u", "m", "", "k", "sec", "min", "hour", "day")
   suffix <- c("mol", "g", "L", "l", "")
-  multip <- c(1e-19, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
-  string <- "^(n|u|m||k|sec|min|hour|day)?(mol|g|L|l|)$"
+  multip <- c(1e-12, 1e-09, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
+  string <- "^(p|n|u|m||k|sec|min|hour|day)?(mol|g|L|l|)$"
   # Clean and extract input strings
   bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
   bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up

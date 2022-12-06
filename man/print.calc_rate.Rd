@@ -19,3 +19,4 @@ Print to console. No returned value.
 \description{
 Print calc_rate objects
 }
+\keyword{internal}

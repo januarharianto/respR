@@ -36,3 +36,4 @@ A plot. No returned value.
 \description{
 Plot inspect.ft objects
 }
+\keyword{internal}

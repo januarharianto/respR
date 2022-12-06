@@ -19,3 +19,4 @@ Print to console. No returned value.
 \description{
 Print convert_rate.ft objects
 }
+\keyword{internal}

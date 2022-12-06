@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Print calc_rate.bg objects
 }
+\keyword{internal}

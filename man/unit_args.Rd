@@ -35,13 +35,13 @@ denominator.
 
 Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 \itemize{
-\item \verb{"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L"}
+\item \verb{"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"}
 }
 
 Require \code{t}, \code{S} and \code{P} for conversions:
 \itemize{
-\item \verb{"mL/L", "cm3/L", "mg/kg", "ug/kg", "mol/kg", "mmol/kg", "umol/kg", "mL/kg", "\%Air"} (i.e. \% Air Saturation), \code{"\%Oxy"} (i.e. \% Oxygen
-Saturation), \verb{"Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
+\item \verb{"mL/L", "cm3/L", "mg/kg", "ug/kg", "mol/kg", "mmol/kg", "umol/kg", "nmol/kg", "pmol/kg", "mL/kg", "\%Air"} (i.e. \% Air Saturation), \code{"\%Oxy"}
+(i.e. \% Oxygen Saturation), \verb{"Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
 }
 }
 }
@@ -54,14 +54,13 @@ denominator.
 
 Do \emph{NOT} require \code{t}, \code{S} and \code{P} for conversions:
 \itemize{
-\item \verb{"mg/L", "ug/L", "mmol/L", "umol/L"}
+\item \verb{"mg/L", "ug/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"}
 }
 
 Require \code{t}, \code{S} and \code{P} for conversions:
 \itemize{
-\item \verb{"mL/L", "cm3/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",}
-\code{"\%Air"} (i.e. \% Air Saturation), \code{"\%Oxy"} (i.e. \% Oxygen Saturation),
-\verb{"Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
+\item \verb{"mL/L", "cm3/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "nmol/kg", "pmol/kg", "mL/kg",} \code{"\%Air"} (i.e. \% Air Saturation), \code{"\%Oxy"} (i.e. \%
+Oxygen Saturation), \verb{"Torr", "hPa", "kPa",} \verb{"mmHg", "inHg"}
 }
 }
 
@@ -93,7 +92,7 @@ separator:
 
 \strong{Oxygen amount units for use in \code{output.unit}:}
 \itemize{
-\item \verb{"ug", "mg", "umol", "mmol", "mol", "mL"}
+\item \verb{"ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "mL"}
 }
 
 \strong{Time units for use in \code{output.unit}:}

@@ -484,8 +484,11 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
               subsets = dfs,
               delta.oxy = delta,
               input_type = xtype,
-              summary = data.table(cbind(rank = 1:nrow(summary),
-                                         summary, flowrate = flowrate, rate = rate)),
+              summary = data.table(cbind(rep = NA,
+                                         rank = 1:nrow(summary),
+                                         summary,
+                                         flowrate = flowrate,
+                                         rate = rate)),
               rate = rate)
 
   class(out) <- "calc_rate.ft"
@@ -506,6 +509,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 #' @param x calc_rate.ft object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.calc_rate.ft <- function(x, pos = 1, ...) {
@@ -529,6 +533,7 @@ print.calc_rate.ft <- function(x, pos = 1, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 #' @importFrom data.table data.table
@@ -563,6 +568,7 @@ summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -600,6 +606,7 @@ mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 #' @param legend logical. Suppress labels and legends.
 #' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,

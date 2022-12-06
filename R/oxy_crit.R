@@ -197,11 +197,14 @@
 #' ## Try a lower 'thin' input to speed up analysis
 #' oxy_crit(squid.rd, thin = 1000)
 #'
+#' ## Use the Segmented method instead
+#' oxy_crit(squid.rd, method = "segmented")
+#'
 #' ## Experiment with different 'width' input
 #' # Higher widths tend to oversmooth data
-#' oxy_crit(squid.rd, width = 0.2)
+#' oxy_crit(squid.rd, method = "segmented", width = 0.2)
 #' # Lower width in this case gives very similar result to default 0.1
-#' oxy_crit(squid.rd, width = 0.05)
+#' oxy_crit(squid.rd, method = "segmented", width = 0.05)
 #'
 #' ## Run on oxygen~time data in 'inspect' object
 #' insp <- inspect(squid.rd, time = 1, oxygen = 2)
@@ -401,6 +404,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
 #' Print oxy_crit objects
 #' @param x oxy_crit object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.oxy_crit <- function(x, ...) {
@@ -430,6 +434,7 @@ print.oxy_crit <- function(x, ...) {
 #' @param object oxy_crit object
 #' @param export logical. Export result as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.oxy_crit <- function(object, export = FALSE, ...) {
@@ -463,6 +468,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
 #' @param legend logical. Suppress labels and legends.
 #' @param rate.rev logical. Control direction of y-axis in rolling rate plot.
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
@@ -646,6 +652,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
 #' Average oxy_crit object rates
 #' @param x oxy_crit object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.oxy_crit <- function(x, ...){

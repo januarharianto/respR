@@ -18,9 +18,8 @@ in \code{by}. If a vector, each value must have a paired value in \code{to}.}
 region(s) over which you want to calculate the rate in the units specified
 in \code{by}. If a vector, each value must have a paired value in \code{from}.}
 
-\item{by}{string. \code{"time"}, \code{"row"}, \code{"oxygen"} or \code{"proportion"} Defaults to
-\code{"time"}.This is the method used to subset the data region between \code{from}
-and \code{to}.}
+\item{by}{string. \code{"time"}, \code{"row"}, or \code{"oxygen"}. Defaults to \code{"time"}.
+This is the method used to subset the data region between \code{from} and \code{to}.}
 
 \item{plot}{logical. Defaults to \code{TRUE}. Plot the results.}
 
@@ -37,11 +36,9 @@ primary output of interest \verb{$rate}, which can be background adjusted in
 Calculates rate of oxygen uptake or production from respirometry data. A rate
 can be determined over the whole dataset, or on subsets of the data using the
 \code{from} and \code{to} inputs to specify data regions in terms of \code{oxygen} or \code{time}
-units, \code{row} numbers of the input data, or over a \code{proportion} of the total
-oxygen used or produced (note, this last option works poorly with noisy or
-fluctuating data). Multiple rates can be extracted from the same dataset by
-using these inputs to enter vectors of paired values in the appropriate
-metric. See Examples.
+units or \code{row} numbers of the input data. Multiple rates can be extracted
+from the same dataset by using these inputs to enter vectors of paired values
+in the appropriate metric. See Examples.
 }
 \details{
 The function calculates rates by fitting a linear model of oxygen against
@@ -59,9 +56,9 @@ are used.
 \subsection{Specifying regions}{
 
 For calculating rates over specific regions of the data, the \code{from} and \code{to}
-inputs in the \code{by} units of \code{"time"} (the default), "\code{oxygen}", \code{"row"}, or
-\code{"proportion"} can be used. The \code{from} and \code{to} inputs do not need to be
-precise; the function will use the closest values found.
+inputs in the \code{by} units of \code{"time"} (the default), "\code{oxygen}", or \code{"row"}.
+The \code{from} and \code{to} inputs do not need to be precise; the function will use
+the closest values found.
 
 Multiple regions can be examined within the same dataset by entering \code{from}
 and \code{to} as vectors of paired values to specify different regions. In this

@@ -86,7 +86,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
                "Torr.o2p", "hPa.o2p", "kPa.o2p",
                "inHg.o2p", "mmHg.o2p",
                "mg/kg.o2", "ug/kg.o2",
-               "mol/kg.o2", "mmol/kg.o2", "umol/kg.o2",
+               "mol/kg.o2", "mmol/kg.o2", "umol/kg.o2", "nmol/kg.o2", "pmol/kg.o2",
                "mL/kg.o2")
 
   # Check t, S and P needed for units
@@ -135,6 +135,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if (fru == verify_units('mol/L',  'o2')) {c <-  z * omWt * 1e3}
   if (fru == verify_units('mmol/L', 'o2')) {c <-  z * omWt}
   if (fru == verify_units('umol/L', 'o2')) {c <-  z * omWt / 1e3}
+  if (fru == verify_units('nmol/L', 'o2')) {c <-  z * omWt / 1e6}
+  if (fru == verify_units('pmol/L', 'o2')) {c <-  z * omWt / 1e9}
   if (fru == verify_units('mL/L',   'o2')) {c <-  z * omWt / omVl}
   if (fru == verify_units('cm3/L',  'o2')) {c <-  z * omWt / omVl}
   if (fru == verify_units('mg/kg',  'o2')) {c <-  z * swDn / 1e3}
@@ -142,6 +144,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if (fru == verify_units('mol/kg', 'o2')) {c <-  z * swDn * omWt}
   if (fru == verify_units('mmol/kg','o2')) {c <-  z * swDn * omWt / 1e3}
   if (fru == verify_units('umol/kg','o2')) {c <-  z * swDn * omWt / 1e6}
+  if (fru == verify_units('nmol/kg','o2')) {c <-  z * swDn * omWt / 1e9}
+  if (fru == verify_units('pmol/kg','o2')) {c <-  z * swDn * omWt / 1e12}
   #if (fru == verify_units('%',      'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
   if (fru == verify_units('%Air',   'o2')) {c <-  z * oGas * omWt / 1e3 / 100}
   if (fru == verify_units('%Oxy',    'o2')) {c <-  z * oGas * omWt / oAtm / 1e3 / 100}
@@ -158,6 +162,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if(tou == verify_units('mol/L',  'o2')) {out <- c / omWt / 1e3}
   if(tou == verify_units('mmol/L', 'o2')) {out <- c / omWt}
   if(tou == verify_units('umol/L', 'o2')) {out <- c / omWt * 1e3}
+  if(tou == verify_units('nmol/L', 'o2')) {out <- c / omWt * 1e6}
+  if(tou == verify_units('pmol/L', 'o2')) {out <- c / omWt * 1e9}
   if(tou == verify_units('mL/L',   'o2')) {out <- c / omWt * omVl}
   if(tou == verify_units('cm3/L',  'o2')) {out <- c / omWt * omVl}
   if(tou == verify_units('mg/kg',  'o2')) {out <- c / swDn * 1e3}
@@ -165,6 +171,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   if(tou == verify_units('mol/kg', 'o2')) {out <- c / omWt / swDn}
   if(tou == verify_units('mmol/kg','o2')) {out <- c / omWt / swDn * 1e3}
   if(tou == verify_units('umol/kg','o2')) {out <- c / omWt / swDn * 1e6}
+  if(tou == verify_units('nmol/kg','o2')) {out <- c / omWt / swDn * 1e9}
+  if(tou == verify_units('pmol/kg','o2')) {out <- c / omWt / swDn * 1e12}
   #if(tou == verify_units('%',      'o2')) {out <- c / omWt / oGas * 1e3 * 100}
   if(tou == verify_units('%Air',   'o2')) {out <- c / omWt / oGas * 1e3 * 100}
   if(tou == verify_units('%Oxy',    'o2')) {out <- c / omWt / oGas * oAtm * 1e3 * 100}
@@ -191,6 +199,7 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 #' Print convert_DO objects
 #' @param x convert_DO object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.convert_DO <- function(x, ...) {
@@ -216,6 +225,7 @@ print.convert_DO <- function(x, ...) {
 #' Summarise convert_DO objects
 #' @param object convert_DO object
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_DO <- function(object, ...) {
@@ -225,6 +235,7 @@ summary.convert_DO <- function(object, ...) {
 #' Plot convert_DO objects
 #' @param x convert_DO object
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.convert_DO <- function(x, ...) {
@@ -237,6 +248,7 @@ plot.convert_DO <- function(x, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_DO <- function(x, pos = NULL, export = FALSE, ...){
@@ -341,6 +353,22 @@ verify_units <- function(unit, is) {
                       'umolO2 / L','umolO2 / l','umolO2 L-1','umolO2 l-1',
                       'umolO2 per litre','umolO2 per liter'),
 
+      'nmol/L.o2' = c('nmol/L.o2',
+                      'nmol/L','nmol/l','nmolL-1','nmoll-1',
+                      'nmol / L','nmol / l','nmol L-1','nmol l-1',
+                      'nmol per litre','nmol per liter',
+                      'nmolO2/L','nmolO2/l','nmolO2L-1','nmolO2l-1',
+                      'nmolO2 / L','nmolO2 / l','nmolO2 L-1','nmolO2 l-1',
+                      'nmolO2 per litre','nmolO2 per liter'),
+
+      'pmol/L.o2' = c('pmol/L.o2',
+                      'pmol/L','pmol/l','pmolL-1','pmoll-1',
+                      'pmol / L','pmol / l','pmol L-1','pmol l-1',
+                      'pmol per litre','pmol per liter',
+                      'pmolO2/L','pmolO2/l','pmolO2L-1','pmolO2l-1',
+                      'pmolO2 / L','pmolO2 / l','pmolO2 L-1','pmolO2 l-1',
+                      'pmolO2 per litre','pmolO2 per liter'),
+
       'mL/L.o2' = c('mL/L.o2',
                     'ml/L','mL/L','mL/l','ml/l','mll-1','mLl-1',
                     'mLL-1','mlL-1','ml / L','mL / L','mL / l','ml / l',
@@ -410,6 +438,22 @@ verify_units <- function(unit, is) {
                        'umolO2 / kg','umolO2 / Kg','umolO2 kg-1,','umolO2 Kg-1',
                        'umolO2 per kg','umolO2 per Kg'),
 
+      'nmol/kg.o2' = c('nmol/kg.o2',
+                       'nmol/kg','nmol/Kg','nmolkg-1,','nmolKg-1',
+                       'nmol / kg','nmol / Kg','nmol kg-1,','nmol Kg-1',
+                       'nmol per kg','nmol per Kg',
+                       'nmolO2/kg','nmolO2/Kg','nmolO2kg-1,','nmolO2Kg-1',
+                       'nmolO2 / kg','nmolO2 / Kg','nmolO2 kg-1,','nmolO2 Kg-1',
+                       'nmolO2 per kg','nmolO2 per Kg'),
+
+      'pmol/kg.o2' = c('pmol/kg.o2',
+                       'pmol/kg','pmol/Kg','pmolkg-1,','pmolKg-1',
+                       'pmol / kg','pmol / Kg','pmol kg-1,','pmol Kg-1',
+                       'pmol per kg','pmol per Kg',
+                       'pmolO2/kg','pmolO2/Kg','pmolO2kg-1,','pmolO2Kg-1',
+                       'pmolO2 / kg','pmolO2 / Kg','pmolO2 kg-1,','pmolO2 Kg-1',
+                       'pmolO2 per kg','pmolO2 per Kg'),
+
       'Torr.o2p' = c('Torr.o2p',
                      'torr','TORR','Torr','Tor','tor',
                      'torrO2','TORRO2','TorrO2','TorO2','torO2'),
@@ -470,12 +514,17 @@ verify_units <- function(unit, is) {
   # o1 ----------------------------------------------------------------------
   if (is == 'o1') {
     all.units <-  list(
-      'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram'),
-      'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram'),
+      'ug.o2'   = c('ug.o2','ugo2','ugO2','ug','microgram',
+                    'microgramme','micrograms','microgrammes'),
+      'mg.o2'   = c('mg.o2','mgo2','mgO2','mg','milligram',
+                    'milligramme','milligrams','milligrammes'),
       'mol.o2' = c('mol.o2','molo2','molO2','mol','mole'),
-      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol'),
-      'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol'),
-      'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL','millil'))
+      'mmol.o2' = c('mmol.o2','mmolo2','mmolO2','mmol','millimol','millimole'),
+      'umol.o2' = c('umol.o2','umolo2','umolO2','umol','micromol','micromole'),
+      'nmol.o2' = c('nmol.o2','nmolo2','nmolO2','nmol','nanomol','nanomole'),
+      'pmol.o2' = c('pmol.o2','pmolo2','pmolO2','pmol','picomol','picomole'),
+      'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL',
+                    'millil','millilitre','milliliter','millilitres','milliliters'))
   }
 
   # flow --------------------------------------------------------------------

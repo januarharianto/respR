@@ -26,6 +26,15 @@ Data was collected using a Vernier Optical DO probe (ODO-BTA).
 \item Chamber volume (L): \code{2.379}
 \item Specimen ash-free dry mass (kg): \code{0.006955}
 }
+
+Replicate structure (Rows - Experiment section):
+\itemize{
+\item \code{1:1900}      - Replicate 1
+\item \code{1901:2100}   - Flush 1
+\item \code{2101:3550}   - Replicate 2
+\item \code{3551:3900}   - Flush 2
+\item \code{3901:4831}   - Replicate 3
+}
 }
 \author{
 Nicholas Carey

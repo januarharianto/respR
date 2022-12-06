@@ -25,3 +25,4 @@ A plot. No returned value.
 \description{
 Plot oxy_crit objects
 }
+\keyword{internal}

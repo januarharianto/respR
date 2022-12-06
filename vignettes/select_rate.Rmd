@@ -1,0 +1,435 @@
+---
+title: "select_rate: Exploring and filtering results"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{select_rate: Exploring and filtering results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = FALSE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(scipen = 999, 
+                                digits = 3))
+```
+
+## Introduction {#adjintro}
+
+Depending on the type of experiment or the functions used, `respR` analyses can return multiple rates from a single dataset. Once these are converted to final units in `convert_rate()`, this can result in an often large array of rates from different, or even the same, regions of the data. 
+
+Having multiple rates can be a result of several analyses. The `auto_rate()` function uses machine learning techniques to automatically detect the most linear regions of a dataset, as well as being able to fit a rolling regression of a specified width over the entire dataset and order the results in various ways. Both of these can return hundreds to thousands of rates. `calc_rate()` can also return multiple rates depending on the inputs. `calc_rate.int()` and `auto_rate.int()` return a single rate from every replicate in an intermittent-flow respirometry dataset, so there will be as many rates as there are replicates.
+
+`select_rate` helps explore and filter `convert_rate` results by selecting rates according to various criteria. For example, extracting only positive or negative rates, only the highest or lowest rates by number or percentile, those above a particular R-squared, only those from certain data regions, and numerous other methods that allow advanced filtering of rates. This allows for application of consistent rate selection criteria and reporting of results. Several methods also allow the results to be reordered by that metric, which can be useful in several situations. 
+
+## Selection methods
+
+The function includes a wide array of criteria by which `convert_rate` results can be filtered. The full list can be seen in the [Details]() section of the help file. We will run through a few specific examples below. Multiple selection criteria can be applied by saving the output and processing it through the function multiple times with different criteria, or alternatively via piping (`%>%` or `|>`). See examples. 
+
+## Rep and rank columns {#rankcol}
+
+For most selection operations, the summary table `$rank` column is important in keeping track of results. The `$rank` column is context-specific, and what it represents depends on the type of experiment analysed or the function used to determine the rates. If numeric values were converted, it is the order in which they were entered. Similarly, if `calc_rate` was used to determine multiple rates, it is the order as entered using `from` and `to`. For `auto_rate` it relates to the `method` input. For example it indicates the kernel density ranking if the `linear` method was used, the ascending or descending ordering by absolute rate value if `lowest` or `highest` were used, or numerical order if `minimum` or `maximum` were used. For intermittent-flow experiments analysed via `calc_rate.int` or `auto_rate.int` it indicates the ranking *within* each replicate in the `$rep` column (though since usually these only return a single rate per replicate it is usually filled with the value `1`). 
+
+Therefore the `$rep` and `$rank` columns can be used to keep track of selections or reordering because the original values will be retained unchanged through these operations. The original order can always be restored by using `method = "rep", n = NULL` or `method = "rank", n = NULL`, in which case the table will be reordered by `$rep` then `$rank`.
+
+## Plot {#plotconv}
+
+As of [v2.1](https://januarharianto.github.io/respR/articles/version_notes.html), `convert_rate` has new plotting functionality that helps explore the results and view the result of selection or reordering. Either pass `plot = TRUE` in the `convert_rate` call (default is `FALSE`), or alternatively the output object can be passed or piped to `plot()` after processing in `select_rate`. 
+
+There are three ways of plotting the results:
+
+### `type = "full"`
+
+The default is `type = "full"`, which plots each rate (summary table row) in order in the context of the entire data timeseries up to a maximum of 20. These can be selected using `pos`, which represents rows of the summary table with the default being `pos = 1:20`.
+
+```{r fig.keep='none', results='hide', message=FALSE, echo = FALSE}
+sard <- 
+  inspect(sardine.rd) |> 
+  auto_rate() |> 
+  adjust_rate(by = -0.00006) |> 
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) 
+```
+
+```{r results='hide', message = FALSE}
+plot(sard)
+```
+
+This lets you see where each rate occurs within the dataset, and the converted rate value is in the title. The values on the axes - time (bottom), row (top), and oxygen (left) - are in the units of the original raw data. 
+
+### `type = "rate"`
+
+This plots the entire data timeseries on the upper plot, and on the lower plot the output rate values in the chosen output units. Each rate is plotted against the middle of the region used to determine it. 
+
+```{r results='hide', message = FALSE}
+plot(sard, type = "rate")
+```
+
+This lets you see how the rate varies across the dataset and decide how to filter the results. Here for example, rates are higher at the start of the experiment, and stable low rates only occur after around timepoint 2000.
+
+### `type = "overlap"`
+
+This plot helps with understanding how rates are distributed across the dataset, particularly the data region each uses and how they may overlap. The top plot is the entire data timeseries. In the lower plot every rate regression in `$summary` is represented by a line showing its location within the timeseries. The y-axis represents the position (i.e. row) of the summary table descending from top to bottom. If no reordering or selection has been performed, this will be equivalent to the `$rep` or `$rank` column. See [above section](#rankcol) for what these may represent, but note as reordering or selection is performed rank and summary table position will not necessarily be equivalent. 
+
+```{r results='hide', message = FALSE}
+plot(sard, type = "overlap")
+```
+
+Here we have analysed the data using the `auto_rate` `"linear"` method, and we can see many of the results are from similar or essentially equivalent regions of the data. See below for how these may be reduced.
+
+### Additional options
+
+Additional inputs can be passed, such as `pos`, `quiet`, `legend`, and `highlight`. See `help("select_rate")`. 
+
+## Examples
+
+These are brief run-throughs of a few example selection or reordering operations. More practical examples can be seen in `vignette("intermittent_long")`. These are not recommendations for how you should conduct your own analyses, or for what selection criteria are appropriate for particular datasets, they are simply examples to demonstrate the functionality. 
+
+## 1. `auto_rate` `"linear"` results
+
+Generally speaking the `linear` method is very good at identifying linear regions, and typically the top result is the most appropriate to report. However, it depends on the aims of your experiment and there may be situations where we would want to further refine the returned results.
+
+We'll use the `sardine.rd` dataset, and let's say we are interested in extracting a standard metabolic rate (SMR), that is a basal or maintenance rate. Generally this is the lowest rate observed, and usually that requires defining the duration over which the rate is sustained when we extract it, and how to choose this duration is arguably not objective. The `linear` method has a benefit here, in that it will identify consistently maintained rates, including the lowest consistently maintained rates. However, it will also identify all consistently maintained rates in the dataset, so the lowest is not necessarily the top-ranked one. 
+
+We'll `inspect` the data, pipe the result to `auto_rate` using the default inputs of the `"linear"` method and `width = 0.2`, then adjust the rates for background (using an invented value as an example), then convert the rates to our final units.   
+
+```{r fig.keep='last', results='hide', message=FALSE}
+sard <- 
+  inspect(sardine.rd) |> 
+  auto_rate() |> 
+  adjust_rate(by = -0.00006) |> 
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) 
+```
+
+This is large dataset, from a relatively long experiment of over 2 hours. The `auto_rate` analysis has identified 39 linear regions, of which the above plot is the highest ranked one, or most linear according to the kernel density analysis. This does not mean it's the lowest rate, but is generally the most consistently maintained one. 
+
+Let's look at the `convert_rate` summary table, which contains all rate regression parameters and data locations, adjustments (if applied), units, and more. 
+
+```{r}
+summary(sard)
+```
+
+Obviously this is a lot of information. The `rate.output`, which is the primary output we are interested in, varies in value by quite a lot. The r-squared of the regressions is fairly variable. The linear regions also come from all over the dataset as can be seen by looking at the time or row columns. It might be difficult to know how to handle this many results and arrive at a final reportable rate. 
+
+If we are looking for the lowest linear rate, the top ranked result here is actually a very good one! It is amongst the lowest rates (only 2 in rows 8 and 9 are lower), has a high r-squared, and is sustained over a large region of the data. This would probably be completely appropriate to report as the SMR, however we'll proceed with selection to show how these criteria can be applied, and then these could be applied to other experiments. 
+
+### Plot
+
+We can use the `convert_rate` plotting functionality to get a better idea of rate values and how they are distributed. We'll look at both the rate value plot and the overlap plot.
+
+```{r results='hide'}
+plot(sard, type = "rate")
+plot(sard, type = "overlap")
+```
+
+We can see the rates are higher at the start of the dataset, after which they stabilise. From the overlap plot we can see many of the linear regions substantially overlap and are essentially from the same regions of the data. Some are even completely contained within others. We don't need to keep all of these different results.  
+
+### Selection of rates
+
+`select_rate` allows us to select out only the results that meet certain criteria. If we are interested in the lowest rates we can use this method to select any number of the lowest rates using `n`. Here is the lowest single rate. 
+
+```{r fig.keep='last', message=FALSE}
+sard |> 
+  select_rate(method = "lowest", n = 1) |>
+  plot(quiet = TRUE) |>
+  summary()
+```
+
+### Additional selection criteria
+
+Objectively, this is a perfectly acceptable result and would be fine to report, but let's apply a couple of additional criteria. The result above has a relatively low r-squared than others in the dataset, and also is around 23 minutes in duration. 
+
+Let's say we are only interested in rate results with an r-squared above 0.95, and also that we are only interested in rates which are sustained for at least 30 minutes (1800s). We can apply multiple selection criteria by using pipes (alternatively you can save the output and process it through `select_rate` multiple times). 
+
+```{r fig.keep='last', message=FALSE}
+sard |> 
+  select_rate(method = "rsq", n = c(0.95,1)) |>
+  select_rate(method = "duration", n = c(1800, Inf)) |>
+  select_rate(method = "lowest", n = 1) |>
+  plot(quiet = TRUE) |>
+  summary()
+```
+
+Now our rate is slightly higher than in the previous example, but it fulfils these additional criteria, so we could report this as our final rate if these criteria were what we decided upon. 
+
+Please note again however - this is not a recommendation as to what rates or criteria you should apply to your own data. This is just an example, and the important point to take is that the same selection criteria can be consistently applied and documented across multiple analyses. 
+
+### Reporting the result
+
+`select_rate` allows you to apply very specific selection criteria in a specific priority order. Because of this is it straightforward to report the analysis in clear language. We might report the above analysis in just a short passage in the methods like this:
+
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The auto_rate "linear" method was used to automatically identify linear regions of the data. SMR was defined as the lowest of these rates with r-squared above 0.95 sustained for at least 30 minutes."*
+
+
+## 2. `auto_rate` `"lowest"` results
+
+Let's use the `sardine.rd` dataset again, and let's say we again want to extract a standard metabolic rate (SMR), but we want to define a specific duration. 
+
+### `method = "lowest"`
+
+The SMR rates we extracted above occur over durations of 45 minutes to nearly an hour. But maybe we want to standardise our analyses and comparisons of different specimens by defining our SMR as the lowest rate across a specific duration, for example 20 minutes. We can use the `auto_rate` `method = "lowest"` to output all rates of this specific `width` and order them from lowest to highest value, adjust and convert these, then apply some additional selection criteria.
+
+Here we do a rolling regression of 20 minutes (`1200` seconds) `width` in the `"time"` metric. 
+
+```{r fig.keep='last', results='hide', message=FALSE}
+sard <- inspect(sardine.rd) |> 
+  auto_rate(method = "lowest", width = 1200, by = "time") |>
+  adjust_rate(by = -0.00006) |> 
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) |>
+  summary()
+```
+
+```{r echo=FALSE}
+summary(sard)
+```
+
+The function has fit every regression of 1200s width across the entire dataset and ranked them in order of absolute rate value from lowest to highest. The plot shows the top ranking result, in this case the very lowest rate. We may not necessarily want to use this result however. In this case it has a relatively low r-squared compared to others (we're not showing the full summary table but it ranges from around 0.88 to 0.95). 
+
+Let's look at the `"overlap"` plot output.
+
+```{r fig.keep='last', results='hide', message=FALSE}
+sard |> 
+  plot(type = "overlap") 
+```
+
+This plot is perhaps difficult to understand at first, but should become clear. The summary table is ordered from lowest to highest rates descending. The lower plot reflects this, and shows most of these lower rates, the ones at the top of both this plot and the summary table, are towards the end of the dataset. By contrast, high rates are at the start. This plot is essentially the rolling rate (panel 4) of the `auto_rate` plot just above flipped vertically. See how the lowest rates occur around timepoint 6000 in both. 
+
+We are looking for lowest rates, so we don't need to keep any rates before around timepoint 3000. We can remove those using `time_omit`. Let's also only keep those with r-squared above 0.9.
+
+```{r fig.keep='last', message=FALSE}
+sard |>
+  select_rate(method = "time_omit", n = c(0,3000)) |>
+  select_rate(method = "rsq", n = c(0.9, 1)) |>
+  plot(type = "overlap") |>
+  summary()
+```
+
+Now we are left with 1853 results. We'll refine our selection criteria further by only taking the 500 lowest of these rates, then removing those which overlap with another by 90% or more (see [Overlapping results](#overlap) section for explanation of this method). We are doing the `"overlap"` method last because it is *extremely* computationally intensive and the time it takes increases exponentially with the number of results remaining. 
+
+```{r fig.keep='last', message=FALSE}
+sard |>
+  select_rate(method = "rsq", n = c(0.9, 1)) |>
+  select_rate(method = "time_omit", n = c(0,3000)) |>
+  select_rate(method = "lowest", n = 500) |>
+  select_rate(method = "overlap", n = 0.9) |>
+  plot(type = "overlap") |>
+  summary() |>
+  mean()
+```
+
+Now we are left with only 3 results. We could take the top result as our SMR, but just to show a different option this time we have piped the results to the mean function to get a final mean rate.
+
+To repeat the note from above: this is not a recommendation as to what rates or criteria you should apply to your own data. This is just an example, and the important point to take is that the same selection criteria can be consistently applied and documented across multiple analyses. 
+
+### Selection criteria ordering
+
+Note that the order you apply selection criteria is *extremely important*. Applying the same criteria in a different order can give totally different results. What happens if we repeat the above but take the lowest 500 results first, *then* apply our r-squared range? 
+
+```{r error=TRUE}
+sard |>
+  select_rate(method = "lowest", n = 500) |>
+  select_rate(method = "rsq", n = c(0.9, 1)) 
+```
+
+Now we have no results! This is because in the original ordered results, none of the lowest 500 rates had an r-squared above 0.9. 
+
+This demonstrates how selection criteria should be consistently applied in the same priority order across different analyses. 
+
+### Reporting the result
+
+`select_rate` allows you to apply very specific selection criteria in a specific priority order. Because of this is it straightforward to report the analysis. We might report the above in just a short passage in the methods like this:
+
+*"Data was analysed using the R package `respR` (Harianto et al. 2019). The `auto_rate` function was used to calculate a rolling regression of 20 minutes across the dataset. SMR was defined as the mean of the lowest rates with r-squared above 0.9."*
+
+
+## 3. Intermittent-flow results
+
+`select_rate` becomes really useful when it comes to dealing with the results of intermittent-flow analyses, particularly the outputs of `calc_rate.int` and `auto_rate.int`. When you have tens to hundreds of replicates it can be difficult to both extract rates from them and filter the results consistently. These functions introduced in [respR v2.1](https://januarharianto.github.io/respR/articles/version_notes.html) combined with `select_rate` make this process really straightforward. 
+
+A full analysis of a long intermittent-flow experiment including results filtering using `select_rate` can be seen in `vignette("intermittent_long")`. Here we will show a brief example using part of the same dataset. 
+
+### Data
+
+Here we will subset a portion of the `zeb_intermittent.rd` dataset, use `calc_rate.int` to extract a rate from the same time period of each, in this case from 3 minutes (180s) to 7 minutes (420s) within each replicate. Then we convert the results, plot them in two different ways, and show the summary table.
+
+```{r results='hide', message=FALSE}
+zeb_sub <- subset_data(zeb_intermittent.rd,
+                       from = 5840,
+                       to = 19039,
+                       by = "row", 
+                       quiet = TRUE) |>
+  inspect(plot = FALSE) |> 
+  calc_rate.int(starts = 660,
+                ends = 540,
+                from = 180,
+                to = 420,
+                by = "time", 
+                plot = FALSE) |>
+  convert_rate(oxy.unit = "mg/L", 
+               time.unit = "secs",
+               output.unit = "mg/h/g",
+               volume = 0.12,         
+               mass = 0.0009) |>
+  plot(type = "full") |> 
+  plot(type = "rate") |>
+  summary()
+
+```
+
+The first `"full"` plot shows the rate extracted from each replicate, but the second `"rate"` plot is really useful in understanding how rates change over the course of these 20 replicates. 
+
+### Extract rates
+
+Let's say we are interested in two rates: a maximum metabolic rate (MMR), that is the highest rate, and a routine metabolic rate (RMR). 
+
+#### MMR
+
+In this example the rate from the first replicate is clearly the highest, and we can use `select_rate` to extract it. This tells the function we are interested in the highest rates (in absolute value, that is ignoring the sign - see `help("select_rate")` for full details) and to select the single highest one (`n = 1`). We also plot it to check which replicate it comes from, and use `summary` with the `export` option to save the full result as a `data.frame`. 
+
+```{r message=FALSE, results='hide'}
+mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
+  plot(type = "full") |>
+  summary(export = TRUE)
+```
+
+That's it! We can print the data frame we saved to check the result. This contains the full results, from which replicate the rate came from, the data region it was calculated over, any adjustments (whcih we didn't apply here), experimental data such as respirometer volumen and specimen mass, and of course the output rate and its units. This is a great way of saving the results. 
+
+```{r}
+mmr
+```
+
+#### RMR
+
+Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates, so this time we pipe the result to `mean()`.
+
+```{r message=FALSE, results='hold'}
+rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
+  plot(type = "full") |> 
+  mean() 
+```
+
+Again, we can export the full results using `summary`.
+
+```{r}
+summary(rmr, export = TRUE)
+```
+
+## More examples
+
+See the following documentation and vignette for more examples of how `select_rate` can be used.
+
+- `help("select_rate")`
+- `vignette("intermittent_long")`
+
+## Overlapping results {#overlap}
+
+A notable aspect of the `auto_rate` `linear` method is that due to the machine learning algorithm it can often return multiple linear regions from the same part of a dataset. There is a special selection method to remove some or all of these overlapping rates. 
+
+In the `overlap` method, the `n` input indicates the proportional degree of overlap to allow for a result to be retained. For `n = 0` only rates which do not overlap at all, that is share *no* data, are retained. For `n = 1` rates which are entirely contained with at least one other are removed. For values in between these, for example `n = 0.5`, any regression which shares at least 50% of its data with another are removed. This analysis is performed working from the bottom of the summary table upwards, so generally lower ranked results are removed first.
+It is recommended this method be used after other selection criteria have been applied, as it is quite aggressive about removing rates, and can be *very* computationally intensive when there are many results.
+
+Here we'll show examples of how it can be used to make `auto_rate` results more manageable. Let's first look at the results of the `auto_rate` `"linear"` method on the `sardine.rd` dataset using the `overlap` plot type in convert rate. 
+
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
+sardine.rd |> 
+  auto_rate() |>
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) |>
+  plot(type = "overlap")
+```
+
+
+
+Now let's remove all results that share 100% of their datapoints with at least one other. Here we pipe the result to `plot()`.
+
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
+sardine.rd |> 
+  auto_rate() |>
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) |>
+  select_rate(method = "overlap", n = 1) |>
+  plot(type = "overlap")
+```
+
+This greatly reduces the number of results, but there is still a substantial overlap between them. Therefore, let's adjust the overlap threshold to 0.9, that is regressions which share 90% or more of data with at least one other are removed. 
+
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
+sardine.rd |> 
+  auto_rate() |>
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) |>
+  select_rate(method = "overlap", n = 0.9) |>
+  plot(type = "overlap")
+```
+
+```{r echo = FALSE, fig.keep='none', message=FALSE, warning=FALSE}
+sardine.rd |> 
+  auto_rate() |>
+  convert_rate(oxy.unit = "%Air",
+               time.unit = "sec",
+               output.unit = "mg/h/kg",
+               volume = 12.3,
+               mass = 0.0477,
+               S = 35, 
+               t = 14.8,
+               p = 1.013) |>
+  select_rate(method = "overlap", n = 0.9) |>
+  summary()
+```
+
+This has greatly reduced the number of linear regions, and is a much more manageable set of results.  
+
+
+## Full documentation
+
+See `help("select_rate")` for full details of all the selection criteria that can be applied. 

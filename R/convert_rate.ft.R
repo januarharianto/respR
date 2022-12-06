@@ -62,19 +62,18 @@
 #' - `print()`: prints a single result, by default the first converted rate.
 #' Others can be printed by passing the `pos` input. e.g. `print(x, pos = 2)`
 #'
-#' - `summary()`: prints a condensed version of the output `$summary` table of
-#' converted rates and metadata. Specific rows can be specified with the `pos`
-#' input. e.g. `summary(x, pos = 1:5)`. This can be exported as a separate data
-#' frame by passing `export = TRUE`. This will be the *full* summary table, not
-#' the one printed to the console, including all rate parameters, data
-#' locations, adjustments if applied, units, and more. Note, the summary table
-#' contains linear regression coefficients alongside other metadata. These
-#' should not be confused with those in other functions such as `calc_rate`
-#' where slopes represent rates and coefficients such as a high r-squared are
-#' important. Here, slope represents the stability of the data region, in that
-#' the closer the slope is to zero, the less the delta oxygen values in that
-#' region vary, which is an indication of a region of stable rates. They are
-#' included to enable possible future functionality where stable regions may be
+#' - `summary()`: prints the output `$summary` table of converted rates and
+#' metadata. Specific rows can be specified with the `pos` input. e.g.
+#' `summary(x, pos = 1:5)`. This can be exported as a separate data frame by
+#' passing `export = TRUE`, and includes all rate parameters, data locations,
+#' adjustments if applied, units, and more. Note, the summary table contains
+#' linear regression coefficients alongside other metadata. These should not be
+#' confused with those in other functions such as `calc_rate` where slopes
+#' represent rates and coefficients such as a high r-squared are important.
+#' Here, slope represents the stability of the data region, in that the closer
+#' the slope is to zero, the less the delta oxygen values in that region vary,
+#' which is an indication of a region of stable rates. They are included to
+#' enable possible future functionality where stable regions may be
 #' automatically identified, and should generally be ignored. However, advanced
 #' users can use regular R syntax to explore and subset the results using these
 #' if they wish.
@@ -371,6 +370,7 @@ convert_rate.ft <- function(x,
 #' @param x convert_rate.ft object
 #' @param pos integer. Which result to print.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 print.convert_rate.ft <- function(x, pos = NULL, ...) {
@@ -399,6 +399,7 @@ print.convert_rate.ft <- function(x, pos = NULL, ...) {
 #' @param pos integer(s). Which summary row(s) to print.
 #' @param export logical. Export summary table as data frame.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
@@ -417,14 +418,13 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
     cat("\n")
   }
 
-  out <- data.table(object$summary[pos, c(1,16:25), with=FALSE])
-  out_exp <- data.table(object$summary[pos,])
+  out <- data.table(object$summary[pos,])
 
   print(out)
   cat("-----------------------------------------\n")
 
   if(export)
-    return(invisible(out_exp)) else
+    return(invisible(out)) else
       return(invisible(object))
 }
 
@@ -433,6 +433,7 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 #' @param pos integer(s). Which result(s) to average.
 #' @param export logical. Export averaged values as single value.
 #' @param ... Pass additional inputs
+#' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
 mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
@@ -467,6 +468,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 #' Plot convert_rate.ft objects
 #' @param x convert_rate.ft object
 #' @param ... Pass additional plotting parameters
+#' @keywords internal
 #' @return A plot. No returned value.
 #' @export
 plot.convert_rate.ft <- function(x, ...) {

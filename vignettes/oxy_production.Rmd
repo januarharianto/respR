@@ -77,7 +77,7 @@ plot(algae_rate, pos = 2, rate.rev = FALSE)
 
 Here we can see this rate is over a much narrower region towards the end of the data, the value of 0.05 is very much lower than we are expecting, and at the extremes of the range (panel 3). While this may be a linear region within the data, it is very much not representative of the data as a whole. 
 
-In this analysis, we can easily see that the top ranked result is the one we want, and we can exclude the other two. See `vignette("subset_rate")` for more advanced filtering of `auto_rate` results by many different criteria. 
+In this analysis, we can easily see that the top ranked result is the one we want, and we can exclude the other two. See `vignette("select_rate")` for more advanced filtering of `auto_rate` results by many different criteria. 
 
 ### Rolling rate widths in `auto_rate`
 
@@ -89,11 +89,11 @@ Here is the summary table of the results when we increase the width to 0.5. Note
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 ```
 
-This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they are largely redundant as they broadly use the same range of the data. We can visualise this using the `plot_ar()` function. 
+This doesn't really improve our analysis very much, and could be more confusing since there are more results. There is still one central peak in the KDE analysis, which uses more of the dataset, but it is largely the same as the top ranked result in the earlier analysis, differing in rate value by only 1-2%. The other results are more consistent in their rate values, but they are largely redundant as they broadly use the same range of the data. We can visualise this using the internal `overlap.p()` function. 
 
 ```{r results='hide'}
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE, plot = FALSE) |>
-  plot_ar()
+  respR:::overlap.p()
 ```
 
 So we could use the top ranked result here, but the ultimate rate value barely differs from our earlier analysis, and in this case the default `width` provided us with a valid result, so there is no real reason to exclude it. This does however serve as a good example of how users should experiment with different widths in `auto_rate` to get an idea of how it might affect analyses. Certain datasets will benefit from this more than others. 
@@ -128,7 +128,7 @@ Production rates are converted to units in exactly the same way as uptake rates.
 
 New in `respR` v2.0 is the ability to output rates as surface-area specific, which is often used to express oxygen production of algae and corals per unit area, so we'll add an `area` input and specify an area-specific `output.unit`. 
 
-The `area` input must be in units of $m^2$. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit for area conversions is m^2. Let's say our algae is 10 cm^2. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
+The `area` input must be in units of $m^2$. Here we can also use the new `convert_val()` function to enter the `area` input. This function converts between units of area, mass, etc. It is particularly handy in `convert_rate` because the default output unit for area conversions is $m^2$. Let's say our algae is 10 $cm^2$. We don't have to do this conversion ourselves, but can rely on `convert_val`. We don't even need to tell it this is an area conversion - it detects this automatically from the input units. 
 
 ```{r tidy = FALSE}
 algae_rate_conv <- convert_rate(algae_rate_adj, 
@@ -146,4 +146,4 @@ In this case, we were only interested in the top ranked rate result. We can extr
 summary(algae_rate_conv, pos = 1, export = TRUE)
 ```
 
-The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
+The exported data frame will contain all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 

@@ -15,6 +15,18 @@
 #'
 #' - Specimen ash-free dry mass (kg): `0.006955`
 #'
+#' Replicate structure (Rows - Experiment section):
+#'
+#' - `1:1900`      - Replicate 1
+#'
+#' - `1901:2100`   - Flush 1
+#'
+#' - `2101:3550`   - Replicate 2
+#'
+#' - `3551:3900`   - Flush 2
+#'
+#' - `3901:4831`   - Replicate 3
+#'
 #' @author Nicholas Carey
 #' @format A data frame object consisting of 2 columns (time and dissolved
 #'   oxygen) and 4831 rows (approx 80 min of data).
@@ -207,17 +219,6 @@
 #'   (col 2), control/blank chamber oxygen outflow concentrations (col 3), and
 #'   inflow concentrations recorded from a shared header tank (col 4).
 "flowthrough_sim.rd"
-
-#' Output objects for the function `test_lin`
-#'
-#' This data contains the results of 9 separate performance checks
-#' on the [`auto_rate()`] linear detection algorithm (i.e. `method = "linear"`).
-#' These test results are used to assess and discuss the performance of
-#' `auto_rate` in the online vignette found here: .
-#'
-#' @author Januar Harianto
-#' @format List of multiple output objects of class `test_lin`.
-"test_lin_data"
 
 #' Respirometry data of a zebrafish, *Danio rerio*
 #'

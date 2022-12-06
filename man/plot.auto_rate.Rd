@@ -35,3 +35,4 @@ A plot. No returned value.
 \description{
 Plot auto_rate objects
 }
+\keyword{internal}

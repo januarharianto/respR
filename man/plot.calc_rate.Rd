@@ -7,7 +7,7 @@
 \method{plot}{calc_rate}(x, pos = 1, quiet = FALSE, panel = NULL, legend = TRUE, ...)
 }
 \arguments{
-\item{x}{calc_rate.bg object}
+\item{x}{calc_rate object}
 
 \item{pos}{integer. Which result to plot.}
 
@@ -25,3 +25,4 @@ A plot. No returned value.
 \description{
 Plot calc_rate objects
 }
+\keyword{internal}

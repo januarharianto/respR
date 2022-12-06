@@ -261,8 +261,8 @@ auto_rate_linear <- function(dt, width, by, verify = TRUE) {
       plot = FALSE
     )$summary))
   # reorder
-  # remove rank, rate2pt columns
-  results <- output[,2:10]
+  # remove rep, rank, rate2pt columns
+  results <- output[,3:11]
 
   out <- list(results = results, roll = kde$rollreg,
               density = kde$density, peaks = kde$peaks)
@@ -291,6 +291,11 @@ kernel_method <- function(dt, width, top_only = FALSE) {
   # extract bandwidth
   bw <- d$bw
   # identify peaks in kernel density:
+  # THIS CAN FAIL TO FIND PEAKS
+  # In which case auto_rate fails with obscure error:
+  # Error: object of type 'closure' is not subsettable
+  # BUT - apparently fixed/does not occur in R 4.2
+  # Seen with small datasets only so far, so not sure any point trying to debug
   peaks <- which(diff(sign(diff(d$y))) == -2) + 1
   # match peaks to rate values:
   index <- rbindlist(lapply(peaks, function(x)
@@ -385,6 +390,7 @@ rolling_reg_time <- function(df, width) {
   results <- results[time >= df[[1]][1]] # remove extra rows
   results[, row := seq_len(.N)]
   endrow <- sapply(results$endtime, function(i) df[, which(x == i)])
+  endrow <- sort(unique(unlist(endrow))) #for obscure cases where there are duplicate times
   results[, endrow := endrow]
   results[, oxy := df[results[, row], y]]
   results[, endoxy := df[results[, endrow], y]]

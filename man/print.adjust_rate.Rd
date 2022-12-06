@@ -19,3 +19,4 @@ Print to console. No returned value.
 \description{
 Print adjust_rate objects
 }
+\keyword{internal}

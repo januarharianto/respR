@@ -9,7 +9,8 @@ job::job({pkgdown::build_site(preview = TRUE)})
 
 ## Quicker
 ## Only builds what has changed
-pkgdown::build_site(lazy = TRUE, devel = TRUE)
+## Build pkg first
+pkgdown::build_site(lazy = TRUE, devel = TRUE, preview = TRUE)
 
 # ? not sure what this does
 #pkgdown::preview_site(pkg = ".", path = ".", preview = NA)
@@ -17,9 +18,9 @@ pkgdown::build_site(lazy = TRUE, devel = TRUE)
 pkgdown::build_home(preview = TRUE)
 
 pkgdown::build_article("closed")
-pkgdown::build_article("subset_rate")
+pkgdown::build_article("select_rate")
 
-usethis::use_vignette("support", "Support Us")
+usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alternative approaches")
 
 
 # sets up GH Actions workflow. Which isn't working.

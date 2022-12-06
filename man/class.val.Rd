@@ -3,8 +3,8 @@
 \name{class.val}
 \alias{class.val}
 \title{Validates acceptable classes of inputs
-Set single or multiple inputs to TRUE. If x is any one of these a TRUE
-will be returned}
+Set single or multiple inputs to TRUE. This is what the fn accepts.
+If x is \emph{any} one of these a single TRUE will be returned}
 \usage{
 class.val(
   x,
@@ -18,18 +18,27 @@ class.val(
   cr = FALSE,
   cr.sing = FALSE,
   cr.mult = FALSE,
+  cr.int = FALSE,
+  cr.int.sing = FALSE,
+  cr.int.mult = FALSE,
   ar = FALSE,
   ar.sing = FALSE,
   ar.mult = FALSE,
+  ar.int = FALSE,
+  ar.int.sing = FALSE,
+  ar.int.mult = FALSE,
   crbg = FALSE,
   crbg.sing = FALSE,
   crbg.mult = FALSE,
+  cnvr = FALSE,
+  cnvr.sing = FALSE,
+  cnvr.mult = FALSE,
   insp = FALSE
 )
 }
 \description{
 Validates acceptable classes of inputs
-Set single or multiple inputs to TRUE. If x is any one of these a TRUE
-will be returned
+Set single or multiple inputs to TRUE. This is what the fn accepts.
+If x is \emph{any} one of these a single TRUE will be returned
 }
 \keyword{internal}

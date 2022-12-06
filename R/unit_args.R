@@ -26,13 +26,13 @@
 #'
 #' Do *NOT* require `t`, `S` and `P` for conversions:
 #'
-#' - `"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L"`
+#' - `"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"`
 #'
 #' Require `t`, `S` and `P` for conversions:
 #'
 #' - `"mL/L", "cm3/L", "mg/kg", "ug/kg", "mol/kg", "mmol/kg", "umol/kg",
-#' "mL/kg", "%Air"` (i.e. % Air Saturation), `"%Oxy"` (i.e. % Oxygen
-#' Saturation), `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' "nmol/kg", "pmol/kg", "mL/kg", "%Air"` (i.e. % Air Saturation), `"%Oxy"`
+#' (i.e. % Oxygen Saturation), `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
 #'
 #' # [convert_rate()] and [convert_rate.ft()]
 #'
@@ -43,13 +43,13 @@
 #'
 #' Do *NOT* require `t`, `S` and `P` for conversions:
 #'
-#' - `"mg/L", "ug/L", "mmol/L", "umol/L"`
+#' - `"mg/L", "ug/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"`
 #'
 #' Require `t`, `S` and `P` for conversions:
 #'
-#' - `"mL/L", "cm3/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "mL/kg",`
-#' `"%Air"` (i.e. % Air Saturation), `"%Oxy"` (i.e. % Oxygen Saturation),
-#' `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' - `"mL/L", "cm3/L", "mg/kg", "ug/kg", "mmol/kg", "umol/kg", "nmol/kg",
+#' "pmol/kg", "mL/kg",` `"%Air"` (i.e. % Air Saturation), `"%Oxy"` (i.e. %
+#' Oxygen Saturation), `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
 #'
 #' ## Time units for `time.unit` or as part of `flowrate.unit`:
 #'
@@ -76,7 +76,7 @@
 #'
 #' **Oxygen amount units for use in `output.unit`:**
 #'
-#' - `"ug", "mg", "umol", "mmol", "mol", "mL"`
+#' - `"ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "mL"`
 #'
 #' **Time units for use in `output.unit`:**
 #'
@@ -99,14 +99,14 @@
 
 unit_args <- function() {
 
-  oxyunit <- c("mg/L", "ug/L", "mol/L", "mmol/L", "umol/L")
+  oxyunit <- c("mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L")
   oxyunit_tsp <- c("mL/L", "cm3/L",
                    "mg/kg", "ug/kg",
-                   "mol/kg", "mmol/kg", "umol/kg",
+                   "mol/kg", "mmol/kg", "umol/kg", "nmol/kg", "pmol/kg",
                    "mL/kg",
                    "%Air", "%Oxy",
                    "Torr", "hPa", "kPa", "mmHg", "inHg")
-  oxyunit_out <- c("ug", "mg", "umol", "mmol", "mol", "mL")
+  oxyunit_out <- c("ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "mL")
   timeunit <- c("sec", "min", "hour", "day")
   massunit <- c("ug", "mg", "g", "kg")
   areaunit <- c("mm2", "cm2", "m2", "km2")

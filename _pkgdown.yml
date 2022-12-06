@@ -25,18 +25,19 @@ reference:
       Functions for calculating rates of oxygen consumption or production:
     contents:
     - '`auto_rate`'
+    - '`auto_rate.int`'
     - '`calc_rate`'
+    - '`calc_rate.int`'
     - '`calc_rate.bg`'
     - '`calc_rate.ft`'
     - '`oxy_crit`'
 
-  - title: "Filter & Adjust"
+  - title: "Adjust"
     desc: >
-      Functions for rate filtering and adjustment:
+      Functions for rate adjustments:
     contents:
     - '`adjust_rate`'
     - '`adjust_rate.ft`'
-    - '`subset_rate`'
 
   - title: "Convert"
     desc: >
@@ -47,6 +48,12 @@ reference:
     - '`convert_rate.ft`'
     - '`convert_val`'
     - '`unit_args`'
+
+  - title: "Summarise"
+    desc: >
+      Functions for rate filtering and summarising:
+    contents:
+    - '`select_rate`'
 
   - title: "Data"
     desc: >
@@ -62,15 +69,8 @@ reference:
     - '`intermittent.rd`'
     - '`sardine.rd`'
     - '`squid.rd`'
-    - '`test_lin_data`'
     - '`urchins.rd`'
     - '`zeb_intermittent.rd`'
-
-  # - title: "Deprecated"
-  #   desc: >
-  #     Functions that are no longer supported/updated.
-  #   contents:
-  #   - '`inspect_data`'
 
 navbar:
   type: inverse
@@ -82,7 +82,7 @@ navbar:
     - text: "Getting Started"
       href: articles/respR.html
 
-    - text: "List of Functions"
+    - text: "Documentation"
       href: reference/index.html
 
     - text: Vignettes
@@ -107,16 +107,20 @@ navbar:
         href: articles/convert_DO.html
       - text: "inspect: Inspecting data"
         href: articles/inspecting.html
-      - text: "calc_rate: Manually select and calculate rates"
-        href: articles/calc_rate.html
-      - text: "auto_rate: Automatic detection of linear rates"
-        href: articles/auto_rate.html
-      - text: "subset_rate: Exploring auto_rate results"
-        href: articles/subset_rate.html
-      - text: "adjust_rate: Adjusting rates for background"
-        href: articles/adjust_rate.html
       - text: "subset_data: Subset data by time, row, or oxygen ranges"
         href: articles/subset_data.html
+      - text: "calc_rate: Manually select and calculate rates"
+        href: articles/calc_rate.html
+      - text: "calc_rate.int: Manual extraction of rates in intermittent-flow respirometry"
+        href: articles/calc_rate.int.html
+      - text: "auto_rate: Automatic detection of linear rates"
+        href: articles/auto_rate.html
+      - text: "auto_rate.int: Automatic extraction of rates in intermittent-flow respirometry"
+        href: articles/auto_rate.int.html
+      - text: "adjust_rate: Adjusting rates for background"
+        href: articles/adjust_rate.html
+      - text: "select_rate: Exploring and filtering results"
+        href: articles/select_rate.html
       - text: "---- Miscellaneous ----"
       - text: "Two-point rate calculation"
         href: articles/twopoint.html
@@ -129,16 +133,12 @@ navbar:
 
     - text: More
       menu:
-      - text: "Support Us"
+      - text: "Support Development"
         href: articles/support.html
-      - text: "What's new & version notes"
-        href: articles/whatsnew.html
+      - text: "Version notes"
+        href: articles/version_notes.html
       - text: "respR in use"
         href: articles/citations.html
-      - text: "v2.0: Code changes"
-        href: articles/v2_code_change.html
-      - text: "v1.1: How to install and run older code"
-        href: articles/v1_code.html
       - text: "Future features"
         href: articles/future.html
       - text: "References"
@@ -147,6 +147,12 @@ navbar:
         href: articles/contact.html
       - text: Archived
         menu:
+        - text: "Intermittent-flow respirometry: Alternative approaches"
+          href: articles/archive/intermittent_old.html
+        - text: "v2.0: Code changes"
+          href: articles/archive/v2_code_change.html
+        - text: "v1.1: How to install and run older code"
+          href: articles/archive/v1_code.html
         - text: "auto_rate: Performance"
           href: articles/archive/auto_rate_performance.html
         - text: "auto_rate: Comparisons with LoLinR"

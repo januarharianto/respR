@@ -35,3 +35,4 @@ respR_package.Rproj
 misc
 docs
 inst/doc
+*RDataTmp

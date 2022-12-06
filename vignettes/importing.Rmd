@@ -26,16 +26,17 @@ opts_chunk$set(collapse = TRUE,
 
 # Introduction
 
-`respR` was designed to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments, regardless of the equipment used. 
-Therefore, it is system-agnostic; the data need only be put into a very simple structure (numeric time against oxygen in any common units) to allow a full analysis to be conducted. 
-In fact, the entire package, with the exception of the final conversion step in `convert_rate`, treats data as unitless, so non-aquatic respirometry data, or any time-series data can be explored and analysed. 
+`respR` was designed to be a universal, end-to-end solution for analysing data and reporting analyses from any and all aquatic respirometry experiments regardless of the equipment used. 
+Therefore, it is system-agnostic; the data need only be put into a very simple structure - numeric time against oxygen in any common units in a `data.frame` - to allow a full analysis to be conducted. 
+In fact the entire package, with the exception of the final conversion step in `convert_rate`, treats data as unitless so non-aquatic respirometry data or any time-series data can be explored and analysed. 
 
-Each function has been designed to output objects which can be entered into subsequent functions reducing the need for additional inputs. 
-However, generic `R` data objects, including values, vectors and objects of class `data.frame`, `data.table` and `tibble`, are also recognised by most functions.
-The only structural data requirement is that the initial time\~oxygen data be in a specific structure: paired values of numeric time-elapsed (in secs, mins, hours or days) and oxygen amount (in any commonly used unit). 
+The package follows an *[object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming)* approach. Each function has been designed to output objects which can be entered into subsequent functions reducing the need for additional inputs. 
+However, generic `R` data objects, including values, vectors, and objects of class `data.frame`, `data.table`, and `tibble` are also recognised by most functions.
+The only structural data requirement is that the initial time\~oxygen data be in a specific structure: a column of numeric time-elapsed (in secs, mins, hours or days) and a column of oxygen amount (in any commonly used unit). 
 Every respirometry system, to our knowledge, allows data to be exported in such a format, or at least in a structure from which it is easy to parse it to this format. 
 
-Two functions are provided to assist with bringing in and formatting your data correctly. 
+Two functions are provided to assist with bringing in and formatting your data correctly. Note use of these is ***optional***. They are convenience functions and mainly intended for
+those new to `R`. If you are even slightly experienced in `R` you will know how to import data and structure it to a simple dataframe of time against oxygen. It is *almost always* better to import files yourself using functions such as `read.csv()`, `read.table()` or `fread()` as it gives you much more control and the ability to troubleshoot issues.
 
 # `import_file()`
 
@@ -89,7 +90,7 @@ If you can't import the data via `import_file`, consider trying the following fu
 
 - `read_excel` & `read_xlsx` - in the `read_excel` package. 
 
-- `readLines` - a powerful, but crude, tool that dumps the entire text content of files. Requires a lot of processing afterwards to get any useful data. A last resort option. 
+- `readLines` - a powerful but crude tool that dumps the entire text content of files. Requires a lot of processing afterwards to get any useful data. A last resort option. 
 
 
 # `format_time()`

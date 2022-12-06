@@ -28,8 +28,8 @@ opts_chunk$set(collapse = TRUE,
 
 ## Introduction {#ftintro}
 
-Flowthrough respirometry differs from other methods in that rates of oxygen change are measured from a controlled, continuous flow of water through a respirometer, rather than a known volume, typically after the system has achieved equilibrium. 
-In this method, two oxygen concentrations are needed; 'downstream' and 'upstream' of the experimental chamber, or the outflow and inflow concentrations. 
+Flowthrough respirometry differs from other methods in that rates of oxygen change are measured from a controlled, continuous flow of water through a respirometer rather than a known volume, typically after the system has achieved equilibrium. 
+In this method, two oxygen concentrations are needed: 'downstream' and 'upstream' of the experimental chamber, or the outflow and inflow concentrations. 
 These are used to calculate an oxygen delta (outflow minus inflow values), and this is used with the flow rate to calculate oxygen consumption or production rates.
 
 An outflow recording or value, or already determined delta oxygen values are required to calculate the rate. 
@@ -184,7 +184,7 @@ rate1_final <- rate1_ms$rate.output
 print(rate1_final)
 ```
 
-Or you can use `summary` and `export = TRUE` to save the summary table as a new data frame. The version printed to the console is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
+Or you can use `summary` and `export = TRUE` to save the summary table as a new data frame which contains all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 ```{r results='hide'}
 rate1_final <- summary(rate1_ms, export = TRUE)
@@ -417,7 +417,9 @@ insp4 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time 
 plot(insp4, quiet = TRUE)
 ```
 
-When delta oxygen data are inspected, only one plot is produced of the entered delta oxygen values. Again we see the experiment has not reached equilibrium until after around 20 minutes, so we will not use any data before this. 
+When delta oxygen data are inspected, only one plot is produced of the entered delta oxygen values. Note how delta oxygen are plotted on a reverse y-axis, so that higher uptake rates are plotted higher even though they are lower numerically (more negative). This can be changed by passing `rate.rev = FALSE` in the main call or when plotting the output. 
+
+Again we see the experiment has not reached equilibrium until after around 20 minutes, so we will not use any data before this. 
 
 ### Calculate rate
 
@@ -492,7 +494,7 @@ insp5 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time 
 plot(insp5, quiet = TRUE)
 ```
 
-Note how delta oxygen are plotted on a reverse y-axis, so that higher uptake rates are plotted higher, even though they are lower numerically (more negative). If you are examining oxygen *production* rates, you can pass the `rate.rev = FALSE` input in the main call or when plotting the output to see higher production rates plotted higher. 
+Note how delta oxygen are plotted on a reverse y-axis, so that higher uptake rates are plotted higher even though they are lower numerically (more negative). If you are examining oxygen *production* rates, you can pass the `rate.rev = FALSE` input in the main call or when plotting the output to see higher production rates plotted higher. 
 
 Since we are only interested in this active region, we can use the `subset_data()` function and pipe (`%>%`) the result to `inspect.ft` for a closer look. 
 
@@ -870,7 +872,7 @@ roll_rate_ms <- suppressMessages(convert_rate.ft(roll_rate_adj,
 result <- suppressMessages(summary(roll_rate_ms, pos = 1044, export = TRUE))
 ```
 
-The version printed to the console via `summary()` is a condensed version, but the saved object will contain an extended summary table with all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
+The saved data frame will contain all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
 This is just an example. Other results and columns in `$summary` can be used in a similar way to filter results, for instance to extract maximum or minimum rate values, only those within a specific value range, or all those within a specific percentile of rates.
 
@@ -959,7 +961,7 @@ print(rate3_abs)
 
 ## Notes
 
-- Note, that while it is required (for `inspect.ft` at least), `time` data are never used in calculations, only for plotting and choosing regions. Higher resolution data will give more delta oxygen values to average, but in general the resolution or recording frequency of the data is less important than other factors such as ensuring equilibrium has been reached. 
+- Note, that while it is required (for `inspect.ft` at least), `time` data are never used in calculations, only for plotting and choosing regions. Higher resolution data will provide more delta oxygen values to average, but in general the resolution or recording frequency of the data is less important than other factors such as ensuring equilibrium has been reached. 
 
 - To repeat an important point, always keep in mind the sign of the rate. Oxygen consumption (respiration) rates are represented by negative values, production rates by positive values. 
 

@@ -17,3 +17,4 @@ Print to console. No returned value.
 \description{
 Average inspect.ft object rates
 }
+\keyword{internal}

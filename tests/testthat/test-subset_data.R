@@ -59,8 +59,6 @@ capture.output({  ## stops printing outputs on assigning
       expect_error(subset_data(sardine.rd, from = 2000, to = 3000, by = "r"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 95, to = 94, by = "Oxygen"), regexp = NA)
       expect_error(subset_data(sardine.rd, from = 95, to = 94, by = "oxygen"), regexp = NA)
-      expect_error(subset_data(sardine.rd, from = 0.8, to = 0.6, by = "Prop"), regexp = NA)
-      expect_error(subset_data(sardine.rd, from = 0.8, to = 0.6, by = "p"), regexp = NA)
     })
   })
 
@@ -82,8 +80,6 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = NA)
     expect_error(subset_data(urch, from = 70, to = 170, by = "row"),
                  regexp = NA)
-    expect_error(subset_data(urch, from = 0.8, to = 0.4, by = "prop"),
-                 regexp = NA)
   })
 
   test_that("subset_data - includes all columns when subsetting", {
@@ -94,8 +90,6 @@ capture.output({  ## stops printing outputs on assigning
                  7)
     expect_equal(ncol((subset_data(urch, from = 70, to = 170, by = "row"))$dataframe),
                  7)
-    expect_equal(ncol((subset_data(urch, from = 0.8, to = 0.4, by = "prop"))$dataframe),
-                 7)
   })
 
   test_that("subset_data - works with inspect.ft objects", {
@@ -104,28 +98,22 @@ capture.output({  ## stops printing outputs on assigning
 
     expect_error(subset_data(fthr, from = -3, to = -5, by = "oxygen"),
                  regexp = NA)
-    expect_output(subset_data(fthr, from = -3, to = -5, by = "oxygen"),
+    expect_output(subset_data(fthr, from = -3, to = -5, by = "oxygen", quiet = FALSE),
                   regexp = "Subset data:")
     expect_equal(nrow(subset_data(fthr, from = -3, to = -5, by = "oxygen")$dataframe),
                  553)
     expect_error(subset_data(fthr, from = 10, to = 20, by = "time"),
                  regexp = NA)
-    expect_output(subset_data(fthr, from = 10, to = 20, by = "time"),
+    expect_output(subset_data(fthr, from = 10, to = 20, by = "time", quiet = FALSE),
                   regexp = "Subset data:")
     expect_equal(nrow(subset_data(fthr, from = 10, to = 20, by = "time")$dataframe),
                  601)
     expect_error(subset_data(fthr, from = 70, to = 170, by = "row"),
                  regexp = NA)
-    expect_output(subset_data(fthr, from = 70, to = 170, by = "row"),
+    expect_output(subset_data(fthr, from = 70, to = 170, by = "row", quiet = FALSE),
                   regexp = "Subset data:")
     expect_equal(nrow(subset_data(fthr, from = 70, to = 170, by = "row")$dataframe),
                  101)
-    expect_error(subset_data(fthr, from = 0.8, to = 0.4, by = "prop"),
-                 regexp = NA)
-    expect_output(subset_data(fthr, from = 0.8, to = 0.4, by = "prop"),
-                  regexp = "Subset data:")
-    expect_equal(nrow(subset_data(fthr, from = 0.8, to = 0.4, by = "prop")$dataframe),
-                 673)
   })
 
   test_that("subset_data - class retained in output", {
@@ -271,8 +259,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(as.numeric(subset_data(urch, from = NULL, to = 20, by = "row")[1,2]),
                  7.75)
 
-    expect_error(subset_data(urch, from = NULL, to = 0.8, by = "prop"),
-                 regexp = "subset_data: please enter a proportion 'from' input.")
   })
 
   test_that("subset_data - correctly handles 'to' NULL", {
@@ -292,8 +278,6 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(tail(subset_data(urch, from = 5, to = NULL, by = "oxygen")[[2]], 1),
                  6.90)
 
-    expect_error(subset_data(urch, from = 0.7, to = NULL, by = "prop"),
-                 regexp = "subset_data: please enter a proportion 'to' input.")
   })
 
   test_that("subset_data - correctly handles 'from' and 'to' NULL", {
