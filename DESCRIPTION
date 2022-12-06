@@ -53,4 +53,3 @@ Suggests:
     respirometry,
     testthat,
     covr
-VignetteBuilder: knitr
