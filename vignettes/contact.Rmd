@@ -31,11 +31,15 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 ## Twitter
 
-`respR` has a [**Twitter**](https://twitter.com/respR_pkg) account. Follow for the latest news and updates. &nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
+`respR` has a [**Twitter**](https://twitter.com/respR_pkg) account. Follow for the latest news and updates. 
+
+&nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
 ## Mastodon
 
-We also have a **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop! &nbsp; &nbsp; [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
+We also have a **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop! 
+
+&nbsp; &nbsp; [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
 
 ## Tip Jar 
 
