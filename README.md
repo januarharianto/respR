@@ -4,12 +4,13 @@
 <!-- [![metacran downloads](https://cranlogs.r-pkg.org/badges/respR)](https://cran.r-project.org/package=respR) -->
 <!-- [![GitHub R package version](https://img.shields.io/github/r-package/v/januarharianto/respR)](https://github.com/januarharianto/respR) -->
 <!-- [![R-CMD-check](https://github.com/januarharianto/respR/workflows/R-CMD-check/badge.svg)](https://github.com/januarharianto/respR/actions) -->
+<!-- [![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363) -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
 [![R-CMD-check](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
 [![License](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363)
+[![DOI](https://img.shields.io/badge/DOI-10.1111%2F2041--210X.13162-blue)](http://doi.wiley.com/10.1111/2041-210X.13162)
 [![Github Star](https://img.shields.io/github/stars/januarharianto/respR?style=social)](https://GitHub.com/januarharianto/respR/stargazers/)
 [![Github watchers](https://img.shields.io/github/watchers/januarharianto/respR?label=Watch&style=social)](https://img.shields.io/github/watchers/januarharianto/respR?style=social)
 [![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
