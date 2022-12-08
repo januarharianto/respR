@@ -375,7 +375,7 @@ auto_rate.int <- function(x,
   # starts
   #  - required, numeric, integer, within df row range
   if(by == "row") input.val(starts, num = TRUE, int = TRUE, req = TRUE,
-                            #range = c(1,nrow(df)),
+                            range = c(1,nrow(df)),
                             msg = "auto_rate.int: 'starts' -")
   #  - required, numeric, within df units time range
   if(by == "time") input.val(starts, num = TRUE, req = TRUE,
@@ -385,7 +385,7 @@ auto_rate.int <- function(x,
   # wait
   # - not required, but if entered numeric, integer, same length as starts
   if(by == "row") input.val(wait, num = TRUE, int = TRUE, req = FALSE,
-                            range = c(1,nrow(df)),
+                            range = c(0,nrow(df)),
                             msg = "auto_rate.int: 'wait' -")
   if(by == "time") input.val(wait, num = TRUE, req = FALSE,
                              msg = "auto_rate.int: 'wait' -")

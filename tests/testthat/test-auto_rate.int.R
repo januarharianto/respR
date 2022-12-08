@@ -7,6 +7,7 @@
 # covr::report(covr::package_coverage())
 
 capture.output({  ## stops printing outputs on assigning
+  skip_on_cran()
 
   # create testing objects
   suppressWarnings({
@@ -128,6 +129,7 @@ capture.output({  ## stops printing outputs on assigning
 
   # Accepts multiple and single inputs
   test_that("auto_rate.int - accepts correct 'starts' inputs", {
+    skip_on_cran()
     expect_error(auto_rate.int(dt.sec.insp,
                                starts = sts,
                                width = 100,
@@ -457,6 +459,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses 'measure = NULL'", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -502,6 +505,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses single 'measure' values", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -547,6 +551,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses multiple 'measure' values", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -592,6 +597,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses multiple 'measure' values with multiple wait values", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -637,6 +643,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses 'measure = NULL' and by = 'time'", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -683,6 +690,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses single 'measure' values and by = 'time'", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -728,6 +736,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses multiple 'measure' values and by = 'time'", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -773,6 +782,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - properly parses multiple 'measure' values with multiple wait values and by = 'time'", {
+    skip_on_cran()
     # by row
     ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
@@ -1223,6 +1233,7 @@ capture.output({  ## stops printing outputs on assigning
   # by = "time" tests -------------------------------------------------------
 
   test_that("auto_rate.int - expected results with method = 'linear'", {
+    skip_on_cran()
     # Whole replicate
     #auto_rate object
     ar.obj.rep1 <- auto_rate(dt.sec[sts[1]:ens.actual[1],],
@@ -1256,6 +1267,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - expected results with method = 'lowest' and excluded flushes", {
+    skip_on_cran()
     # Whole replicate
     #auto_rate object
     ar.obj.rep1 <- auto_rate(dt.sec[sts[1]:ens.measure[1],],
@@ -1347,6 +1359,7 @@ capture.output({  ## stops printing outputs on assigning
   # General tests -----------------------------------------------------------
 
   test_that("auto_rate.int - outputs object of class auto_rate.int", {
+    skip_on_cran()
     ar.int <- auto_rate.int(dt.sec.insp,
                             starts = sts,
                             width = 400,
@@ -1357,6 +1370,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - S3 generics work", {
+    skip_on_cran()
     ar.int <- auto_rate.int(dt.sec.insp,
                             starts = sts,
                             width = 400,
@@ -1489,7 +1503,7 @@ capture.output({  ## stops printing outputs on assigning
 # Expected results with adjust_rate ---------------------------------------
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'value'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
@@ -1503,7 +1517,7 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'value'",
 })
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'mean'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
@@ -1517,7 +1531,7 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'mean'", 
 })
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'paired'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
@@ -1532,7 +1546,7 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'paired'"
 })
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'concurrent'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
@@ -1552,7 +1566,7 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'concurre
 })
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'linear'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
@@ -1581,7 +1595,7 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'linear'"
 })
 
 test_that("auto_rate.int - works as expected with adjust_rate method = 'exponential'", {
-
+  skip_on_cran()
   ar.int <- auto_rate.int(dt.sec,
                           starts = sts,
                           width = 100,
