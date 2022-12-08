@@ -30,4 +30,6 @@ usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alter
 ## This deploys to the gh-pages branch, and runs the deploy workflow on GH Actions
 ## Uses local changes - don't have to be pushed - IS THIS RIGHT?
 ## (not sure about commits v local changes tho)
+## Sometimes gets stuck on git command.
+## Stopping and building site then trying again seems to work.
 pkgdown::deploy_to_branch()

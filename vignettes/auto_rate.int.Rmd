@@ -33,7 +33,7 @@ opts_chunk$set(collapse = TRUE,
 `auto_rate.int()` is a function for automatically extracting rates from each replicate in
 intermittent-flow respirometry data using the `auto_rate()` function. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. 
 
-This page contains descriptions and simple examples of the functionality. You should familiarise yourself with how `auto_rate` works before using `auto_rate.int`. See `auto_rate()` and [here]() for a thorough overview. See `vignette("intermittent_short")` for how `auto_rate.int` can be used to analyse a relatively brief intermittent-flow respirometry experiment, and `vignette("intermittent_long")` for an example of analysing a longer experiment.
+This page contains descriptions and simple examples of the functionality. You should familiarise yourself with how `auto_rate` works before using `auto_rate.int`. See `auto_rate()` and [here](https://januarharianto.github.io/respR/articles/auto_rate.html) for a thorough overview. See `vignette("intermittent_short")` for how `auto_rate.int` can be used to analyse a relatively brief intermittent-flow respirometry experiment, and `vignette("intermittent_long")` for an example of analysing a longer experiment.
 
 ## Overview
 
@@ -50,10 +50,12 @@ There are three required inputs:
 - `x`: The time~oxygen data from a single intermittent-flow experiment as either a `data.frame` or `inspect` object
 
 - `starts`: The location of the start of each replicate. This can be either: 
-- A single numeric value representing a regular row or time interval starting at row 1. This option should only be used when replicates cycle at regular intervals. If the first replicate does not start at row 1 of the data in `x`, it should be subset so that it does. See `subset_data()` and examples below for how to do this.  
-- A numeric vector of row numbers or times indicating each replicate start location. Useful if replicates do *not* cycle at regular intervals.
 
-- `width`: This is the width used in the `auto_rate` analysis in either rows or a time duration in the units of the raw data. It must be entered in the units of the `by` setting (`"row"` or `"time"`), which also sets the units of the `starts`, `wait` and `measure` inputs. See `auto_rate()` and [here]() for how widths are applied. Note that proportional `width` inputs accepted in `auto_rate` if `by = "row"` (e.g. `0.2` to represent 20% of the total data length) will apply to the length of the `measure` phase. 
+  - A single numeric value representing a regular row or time interval starting at row 1. This option should only be used when replicates cycle at regular intervals. If the first replicate does not start at row 1 of the data in `x`, it should be subset so that it does. See `subset_data()` and examples below for how to do this.  
+
+  - A numeric vector of row numbers or times indicating each replicate start location. Useful if replicates do *not* cycle at regular intervals.
+
+- `width`: This is the width used in the `auto_rate` analysis in either rows or a time duration in the units of the raw data. It must be entered in the units of the `by` setting (`"row"` or `"time"`), which also sets the units of the `starts`, `wait` and `measure` inputs. See `auto_rate()` and [here](https://januarharianto.github.io/respR/articles/auto_rate.html) for how widths are applied. Note that proportional `width` inputs accepted in `auto_rate` if `by = "row"` (e.g. `0.2` to represent 20% of the total data length) will apply to the length of the `measure` phase. 
 
 ### Other inputs 
 
@@ -61,7 +63,7 @@ There are three required inputs:
 
 - `measure`: This is the region within which the `auto_rate` analysis is conducted for each replicate. It is a row length or time duration to be applied at the end of the `wait` phase (if used, otherwise it applies from the start of the data), and should be the correct length to exclude the flush period. Can be a single value to apply the same measure phase to each replicate, or a vector of the same length as `starts` of different measure phases for each replicate. Default is `NULL` in which case the entire replicate is used (which is rarely what is wanted).
 
-- `by`: Controls how the `starts`, `wait`, `measure`, and `width` inputs are applied. The default is `"row"` with `by = "time"` being the other option. We would strongly advise you use `"row"` whenever possible as, while the function has been tested, the code for parsing inputs by row is much more robust and less likely to throw up obscure bugs. (Please [provide feedback]() for **any** issues you encounter using either method). 
+- `by`: Controls how the `starts`, `wait`, `measure`, and `width` inputs are applied. The default is `"row"` with `by = "time"` being the other option. We would strongly advise you use `"row"` whenever possible as, while the function has been tested, the code for parsing inputs by row is much more robust and less likely to throw up obscure bugs. (Please [provide feedback](https://januarharianto.github.io/respR/articles/contact.html) for **any** issues you encounter using either method). 
 
 - `method`: Selects the rate extraction method used in `auto_rate`. The default method is `"linear"`. See `auto_rate()`.
 
@@ -86,7 +88,7 @@ urchin <- inspect(urchin)
 
 Therefore in the following examples we specify three locations in `starts`. See the later [example](#regspaced) for how the `starts` of regularly spaced replicates are specified. 
 
-## Defaults
+## Changing defaults
 
 By default, if no inputs other than `x`, `starts`, and `width` are entered, the `auto_rate` default of `method = "linear"` is applied to all the data in each replicate. This finds the most linear region of a dataset (see `vignette("auto_rate")`).
 
@@ -97,7 +99,11 @@ auto_rate.int(urchin,
   summary()
 ```
 
-Here it performs well in identifying linear regions. However, these inputs mean the flush data is included. It is usually a good idea to use the `measure` input to ensure flushes are excluded and that only relevant data is included in the analysis. We also typically want to exclude some data at the start of a replicate right after the flush, which we can do using `wait`. All of these are applied in the default units of `by = "row"`. (We also pass `legend = TRUE` so that the phases are labelled on the plots). 
+Here it performs well in identifying linear regions. However, these inputs mean the flush data is included. 
+
+### `wait` and `measure`
+
+It is usually a good idea to use the `measure` input to ensure flushes are excluded and that only relevant data is included in the analysis. We also typically want to exclude some data at the start of a replicate right after the flush, which we can do using `wait`. All of these are applied in the default units of `by = "row"`. (We also pass `legend = TRUE` so that the phases are labelled on the plots). 
 
 ```{r results='hold'}
 auto_rate.int(urchin,
@@ -108,9 +114,12 @@ auto_rate.int(urchin,
               legend = TRUE) |>
   summary()
 ```
+
 Note how the rates (yellow points) do not use the entire `measure` phase. This is because the `auto_rate` analysis occurs *within* the measure phase and the actual lengths of the rate results depends on the `method` and `width`. If you want to use the entire `measure` phase see `calc_rate.int()`. 
 
-These results show the single top-ranked linear region in each replicate and we can see the rates are fairly consistent. Note there is one result per replicate, with the replicate number in the `rep` column. The `rank` column shows ranking of rates *within* a replicate for the particular `method` used, and are all `1` here because only one rate has been extracted. You can modify the `n` input to output more than one rate per replicate. This is what the analysis looks like if you do that. 
+### `n` input
+
+These results show the single top-ranked linear region in each replicate and we can see the rates are fairly consistent. Note there is one result per replicate, with the replicate number in the `rep` column. The `rank` column shows ranking of rates *within* a replicate for the particular `method` used, and are all `1` here because only one rate has been extracted. You can modify the `n` input to output more than one rate per replicate. This is what the analysis looks like if it is changed. 
 
 ```{r results='hold'}
 auto_rate.int(urchin,
@@ -132,7 +141,7 @@ These results can be passed to `adjust_rate` and `convert_rate` for further proc
 
 Often in intermittent-flow respirometry we want to get the lowest or highest rates from each replicate, to identify, for example, standard or active metabolic rates. We can do that using the `method`, `width`, and `by` inputs which are passed to `auto_rate`. 
 
-In these examples we use `by = "time"` selection of regions. This is the **lowest** rate over a period of 8 minutes from each replicate:
+In these examples we use `by = "time"` selection of regions. This is the `lowest` rate over a period of 8 minutes from each replicate:
 
 ```{r results='hold'}
 auto_rate.int(urchin,
@@ -145,7 +154,7 @@ auto_rate.int(urchin,
   summary()
 ```
 
-This is the **highest** rate over a period of 8 minutes from each replicate:
+This is the `highest` rate over a period of 8 minutes from each replicate:
 
 ```{r results='hold'}
 auto_rate.int(urchin,
@@ -260,7 +269,7 @@ The `pos` input here can also be of multiple replicates but this will produce mu
 
 ### Additional plotting options
 
-`legend` can be used to show labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](). 
+`legend` can be used to show labels (default is `FALSE`). `quiet` suppresses console output. Additional plotting parameters can also be passed to adjust margins, axis label rotation, etc. See [here](https://januarharianto.github.io/respR/articles/inspecting.html#additional-plotting-options). 
 
 ## S3 generic methods
 

@@ -69,6 +69,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Subset by time:
 #' x <- subset_data(squid.rd, from = 2000, to = 4000, by = "time")
 #'
@@ -86,6 +87,7 @@
 #' subset_data(sardine.rd, from = 94, to = 91, by = "oxygen") %>%
 #'    inspect(time = 1, oxygen = 2) %>%
 #'    auto_rate()
+#'    }
 
 subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
 

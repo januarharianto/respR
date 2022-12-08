@@ -2,10 +2,11 @@
 ## testthat::test_file("tests/testthat/test-select_rate.R")
 
 capture.output({  ## stops printing outputs on assigning
-
+  skip_on_cran()
   ## objects for testing
   ## convert_rate-from-auto_rate object
   ## contains both negative and positive rates
+  {
   suppressWarnings(conv_rt_ar_obj <- inspect(intermittent.rd) %>%
                      auto_rate(plot = FALSE) %>%
                      convert_rate(oxy.unit = "mg/l",
@@ -53,6 +54,7 @@ capture.output({  ## stops printing outputs on assigning
                  output.unit = "mg/h/g",
                  volume = 2.379,
                  mass = 0.006955)
+  }
 
   # General checks ----------------------------------------------------------
 
@@ -575,6 +577,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = row_omit and n input of range of values", {
+    skip_on_cran()
     expect_error(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_obj, method = "row_omit",
                                                            n = c(1000:3000)),
                  regexp = NA)
@@ -588,6 +591,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = row_omit and n input of two values", {
+    skip_on_cran()
     expect_error(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_obj, method = "row_omit",
                                                            n = c(2000,3000)),
                  regexp = NA)
@@ -689,6 +693,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: works with method = time_omit and n input of range of values", {
+    skip_on_cran()
     expect_error(conv_rt_ar_subset_time_omit <- select_rate(conv_rt_ar_obj, method = "time_omit",
                                                             n = c(1000:3000)),
                  regexp = NA)
@@ -885,6 +890,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = density   - check stops with auto_rate objects not of 'linear' KDE method", {
+    skip_on_cran()
     obj <- inspect(intermittent.rd) %>%
       auto_rate(method = "maximum") %>%
       convert_rate(oxy.unit = "mg/l",
@@ -995,7 +1001,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = rolling - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "rolling", n = NULL),
                  NA)
@@ -1063,7 +1069,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = row - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "row", n = NULL),
                  NA)
@@ -1131,7 +1137,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = time - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "time", n = NULL),
                  NA)
@@ -1203,7 +1209,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = linear - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "linear", n = NULL),
                  NA)
@@ -1254,7 +1260,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = density - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "density", n = NULL),
                  NA)
@@ -1308,7 +1314,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = rank - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "rank", n = NULL),
                  NA)
@@ -1378,7 +1384,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = rsq - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "rsq", n = NULL),
                  NA)
@@ -1448,7 +1454,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = lowest - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_subset_pos, method = "lowest", n = NULL),
                  NA)
@@ -1518,7 +1524,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = highest - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_subset_pos, method = "highest", n = NULL),
                  NA)
@@ -1588,7 +1594,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = minimum - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "minimum", n = NULL),
                  NA)
@@ -1658,7 +1664,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("select_rate: method = maximum - works and correctly reorders results", {
-
+    skip_on_cran()
     # works
     expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "maximum", n = NULL),
                  NA)

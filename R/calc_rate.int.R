@@ -28,7 +28,7 @@
 #' cycle at regular intervals. This can be a regular row or time interval, as
 #' specified via the `by` input. If the first replicate does not start at row 1,
 #' the data should be subset so that it does (see `subset_data()`) and example
-#' [here]().
+#' [here](https://januarharianto.github.io/respR/articles/intermittent_long.html).
 #'
 #' - A numeric vector of row locations or times, as specified via the `by`
 #' input, of the start of each individual replicate. The first replicate does
