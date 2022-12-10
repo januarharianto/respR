@@ -792,7 +792,7 @@ summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   out <- object$summary[pos,]
 
-  print(out)
+  print(out, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)

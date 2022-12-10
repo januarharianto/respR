@@ -420,7 +420,7 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
   out <- data.table(object$summary[pos,])
 
-  print(out)
+  print(out, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)

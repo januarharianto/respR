@@ -453,7 +453,7 @@ summary.oxy_crit <- function(object, export = FALSE, ...) {
     cat("--Segmented Analysis Summary--\n")
   }
 
-  print(out)
+  print(out, class = FALSE)
 
   cat("\n-----------------------------------------\n")
 

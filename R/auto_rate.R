@@ -742,7 +742,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FA
     # otherwise, return row specified by `pos`
     cat("\n=== Summary of results from entered 'pos' rank(s)", "===\n\n")
     out <- data.table::data.table(object$summary)[pos]
-    print(out)
+    print(out, class = FALSE)
   }
 
   ########### Regressions summary line ########
