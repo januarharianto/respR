@@ -460,8 +460,7 @@ test_that("convert_rate.ft - objects work with summary().", {
                  regexp = NA)
   })
   sapply(objs, function(z) {
-    expect_output(summary(eval(parse(text=z))),
-                  regexp = "rep rank intercept_b0")
+    expect_output(summary(eval(parse(text=z))))
   })
 
 })
