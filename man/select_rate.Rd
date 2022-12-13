@@ -199,7 +199,7 @@ usually a better option is to \code{subset_data()} prior to analysis). Note
 to rows of the raw data, \strong{not} rows of the summary table - see \code{manual}
 method for this. For all of these methods, if \code{n = NULL} no results will be
 removed, instead the results will be reordered by that respective column
-(descending for \code{rsq} and \code{density}, ascending for \code{row}, and \code{time}).
+(descending for \code{rsq} and \code{density}, ascending for \code{row} and \code{time}).
 }
 
 \subsection{\code{time_omit}, \code{row_omit}}{

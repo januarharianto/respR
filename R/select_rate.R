@@ -167,7 +167,7 @@
 #'   to rows of the raw data, **not** rows of the summary table - see `manual`
 #'   method for this. For all of these methods, if `n = NULL` no results will be
 #'   removed, instead the results will be reordered by that respective column
-#'   (descending for `rsq` and `density`, ascending for `row`, and `time`).
+#'   (descending for `rsq` and `density`, ascending for `row` and `time`).
 #'
 #'   ## `time_omit`, `row_omit`
 #'

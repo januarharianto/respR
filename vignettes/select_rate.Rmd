@@ -352,7 +352,7 @@ summary(rmr, export = TRUE)
 
 ## More examples
 
-See the following documentation and vignette for more examples of how `select_rate` can be used.
+See the following documentation and vignettes for more examples of how `select_rate` can be used.
 
 - `help("select_rate")`
 - `vignette("intermittent_short")`

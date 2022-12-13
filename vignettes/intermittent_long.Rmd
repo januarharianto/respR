@@ -515,7 +515,7 @@ plot(zeb_ar.int, type = "rep", pos = 48)
 plot(zeb_ar.int, type = "ar", pos = 48)
 ```
 
-Looking at these plots this replicate result does seem to be anomalous, and in this replicate the rate extracted is not really representative. It also has a lower r-squared which otherwise varies from 0.72 to 0.98. 
+Looking at these plots this result does seem to be anomalous, and in this replicate the rate extracted is not really representative. It also has a lower r-squared which otherwise varies from 0.72 to 0.98. There does seems to be an anomaly in the oxygen trace. Perhaps there was a sensor glitch or temperature change. Issues like this causing glitches in the trace are very common. 
 
 Therefore, it would be perfectly acceptable and justifiable to manually exclude this result (there are also 1 or 2 others we might want to investigate). To apply such selection criteria objectively and systematically would require examining multiple experiments. This is why definitions of metrics like SMR and analysis parameters should usually be decided upon after thoroughly exploring all your results.  After this you should be able to arrive at a set of objective and reasonable selection criteria. 
 

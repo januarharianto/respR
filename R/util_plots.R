@@ -623,3 +623,58 @@ outrate.p <- function(x, pos = NULL, quiet = FALSE, msg = "rate.p",
   mtext(glue::glue("(units: {un})"),
         outer = FALSE, cex = 1, line = 0.3, font = 2)
 }
+
+
+# These are for possibly replacing use of 'legend' for time and row axis labels
+# Still can't get them looking nice, so unused and leaving for now
+#
+# adds "time" axis label to plots
+# xdata
+# ydata
+# rate.rev
+lab.time <- function(xdata,
+                     ydata,
+                     xlim = NULL,
+                     ylim = NULL,
+                     rate.rev = TRUE){
+
+  if(is.null(ylim)) yrange <- range(ydata) else
+    yrange <- sort(ylim)
+  ydiff <- diff(yrange)
+  if(rate.rev) ypos <- yrange[2]-(ydiff*0.04) else
+    ypos <- yrange[1]+(ydiff*0.04)
+
+  xrange <- range(xdata)
+  xdiff <- diff(xrange)
+  xpos <- xrange[1]+(xdiff*0.02)
+
+  text(x = xpos,
+       y = ypos,
+       labels = "Time",
+       col = "blue",
+       font = 2)
+}
+
+# adds "row" axis label to plots
+# xdata
+# ydata
+# rate.rev
+lab.row <- function(xdata,
+                    ydata){
+
+  yrange <- range(ydata)
+  ydiff <- diff(yrange)
+  ypos <- yrange[2]-(ydiff*0.02)
+
+  xrange <- range(xdata)
+  xdiff <- diff(xrange)
+  xpos <- xrange[2]-(xdiff*0.02)
+
+  text(x = xpos,
+       y = ypos,
+       "Row Index",
+       col = "red",
+       font = 2,
+       adj = c(1,1))
+}
+
