@@ -40,6 +40,10 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed one [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
 
+#### @thambithuraiFishVulnerabilityCapture2022
+
+Excellent work from Davide Thambithurai and collaborators. They found parasite density affected capture probability in zebrafish, with implications for vulnerability to capture in commercial fisheries. As for metabolic rate, they showed parasites increased SMR, but not MMR or AAS. Davide was one of our early beta testers. In fact the `zeb_intermittent.rd` example data comes from this very study. 
+
 #### @kuttiFishFarmEffluents2022
 
 This is an interesting study looking at the effects of effluents from fish farms on cold water corals in Norway. It used the `auto_rate` function to get the respiration rates of coral fragments to establish the negative effects of effluent on metabolic rates, and also showed it has negative effects on energy stores and growth. 
