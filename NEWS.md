@@ -12,7 +12,29 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.1 -- 2022-12-06
+## Version 2.2.0 -- 2023-xx-xx
+
+This update focuses on extending to the flowthrough respirometry workflow the functionality introduced in `v2.1` for exploring and selecting final rates. The online [vignette](https://januarharianto.github.io/respR/articles/flowthrough.html#case-8-rolling-rate) has been updated with some examples. 
+
+==================================== New =======================================
+
+NEW: `convert_rate.ft` - Objects containing multiple rates can now be plotted in three different ways to help explore the results and decide how to summarise them. This pairs particularly well with `select_rate.ft` for exploring and selecting a final reportable rate. 
+NEW: `select_rate.ft` - New function for selecting from amongst multiple rates in `convert_rate.ft` objects in flowthrough respirometry analyses. It is actually a simple wrapper for the `select_rate` function, so you can use either. 
+NEW: `select_rate` - has the additional methods `rep_omit`, `rank_omit`, and `manual_omit` for omitting rates.
+NEW: `select_rate` - has the additional methods `intercept` and `slope` for selecting based on the respective summary table columns. This is mostly useful for selecting from flowthrough rate results where these parameters can indicate the stability of the delta oxygen region rates are derived from (in other analyses slope is essentially equivalent to the rate). 
+
+=================================== Changes ====================================
+
+CHANGE: `convert_rate.ft` - Output objects have been restructured and new elements (e.g. `$dataframe`) brought forward from the input objects to enable plotting. 
+CHANGE: `convert_rate` - The y-axis range in the lower panel of `type = "rate"` plots now adapts to the range of rate values plotted if `pos` has been used. You can use this to get a better idea of range of rates in a particular region. 
+CHANGE: In summary tables the `rate_b1` column (the slope in the linear regression model used to calculate the rate) has been renamed to `slope_b1`.
+
+==================================== Fixes =====================================
+
+FIX: `convert_rate.ft` - Now correctly converts rates to output units using nanomoles (`nmol`) and picomoles (`pmol`) (e.g. `pmol/min`, `nmol/hr/ug`, etc.).
+
+
+## Version 2.1.0 -- 2022-12-06
 
 This is a huge update that finally introduces what many users have been asking for - full support for analysing intermittent-flow respirometry data. This was always possible but required use of more advanced `R` methods. Now - no more `for` loops!
 
@@ -103,7 +125,7 @@ Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a c
  ===============================================================================
 
 
-## Version 2.0 -- 2022-02-17
+## Version 2.0.0 -- 2022-02-17
 
 It's been a long time - over two and a half years (!) since the last update. We are happy to see `respR` being used by the respirometry community in that time. Amazingly we have picked up over 30 citations, so we are very grateful and happy that so many scientists are finding the package of use. 
 

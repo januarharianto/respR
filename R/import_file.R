@@ -179,9 +179,9 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("Fractional error", raw[1:20])))) {
     cat("Loligo AutoResp metadata file detected\n")
     stop("Currently these files are unsupported in respR.
-  This is an AutoResp metadata file, and contains no raw time~O2 data.
+  This is an AutoResp metadata file, and contains no raw time~oxygen data.
   It may contain other experimentally useful values (e.g. mass and volume).
-  Please import the associated file appended with \"_raw\" which contains time~O2 data." )
+  Please import the associated file appended with \"_raw\" which contains time~oxygen data." )
     ## PreSens Datamanager
   } else if (suppressWarnings(any(grepl("PreSens Datamanager", raw[1:20])))) {
     cat("PreSens Datamanager output file detected\n")

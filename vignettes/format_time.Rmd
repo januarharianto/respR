@@ -1,0 +1,155 @@
+---
+title: "format_time: Convert date-time data to numeric time"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{format_time: Convert date-time data to numeric time}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 6, 
+               fig.height = 5,
+               fig.align = "center")
+```
+
+
+To prepare data and extract rates the functions in `respR` require data be put into a very simple structure - numeric time against oxygen in any common units in a `data.frame`. In other words, the time data must be as numeric timestamps or time-elapsed values in seconds, minutes, hours or days, each with a paired oxygen value.
+
+If you have imported data (see `vignette("importing")`) but it does not contain a numeric time or timestamp column, the `format_time()` function can parse date-time columns to numeric time-elapsed values. Internally, it uses functionality in the package [`lubridate`](https://lubridate.tidyverse.org). 
+
+# `format_time()`
+
+The date-times can either be passed as a `vector` (for example, so it can be appended to the original data frame), or as a `data.frame`. If the input is a vector, the output is a vector of the same length. If it is a data frame, the `time` input indicates the column number (or numbers, if they is split across several) containing the date-times, the default being `time = 1`. The resulting data frame will be identical, with a new column named `time.num` containing the converted numeric time added as the *last* column. 
+
+We also need to specify the `format` of the date-times in the correct order. See `help(format_time)` for further info.
+
+**Note**: numeric time data will always output in *seconds* regardless of the input format. These can easily be converted to other units using simple arithmetic (e.g. to hours: `time.num/60/60`).
+
+## Example
+
+Here's an example of a 2-column data frame with date-time data and oxygen. 
+
+```{r  echo = F, message = F, results="hide"}
+data <- import_file("Witrox_eg.txt")
+data <- data[,c(1,6)]
+data_v <- data[[1]]
+names(data) <- c("Date_Time", "O2_mg/L")
+```
+
+```{r}
+head(data, n = 5)
+```
+
+We will convert these as both `vector` and `data.frame` inputs.
+
+```{r}
+## Pass as vector
+data_2 <- format_time(data[[1]], format = "dmyHMSp")
+head(data_2)
+
+## Pass as data frame
+data_3 <- format_time(data, time = 1, format = "dmyHMSp")
+head(data_3)
+```
+
+## Modifying start time
+
+By default, the numeric time data will start at 1, but we can override this. This could be useful if data are split into separate files, and you want to append the start of one onto the end of another, or you simply want to link a specific numeric time value to the start of the experiment. 
+
+```{r}
+## as data frame
+data_4 <- format_time(data, time = 1, format = "dmyHMSp", start = 1000)
+head(data_4)
+```
+
+
+## Split date-times
+
+In some oxygen probe system output files, the date and times are split across multiple columns. In these cases, formatting the time only data usually works, however the more careful and robust approach is to use both. This can be done by specifying multiple columns as the `time` input. Note, the `format` should reflect the correct order.
+
+These data have dates and times in different columns.
+
+```{r  echo = F, message = F, results="hide"}
+data <- data.frame(date = c("5/11/2017", "5/11/2017", "6/11/2017",
+                            "6/11/2017", "6/11/2017", "6/11/2017"),
+                   time = c("23:00", "23:30", "00:00", "00:30", "01:00", "01:30"),
+                   oxy = c(10.056, 10.015, 10.012, 10.027, 10.032, 10.073))
+```
+
+```{r}
+data
+```
+
+We use `time` to specify both columns, and have `format` in the same order.
+
+```{r}
+format_time(data, time = 1:2, format = "dmyHM")
+```
+
+
+## Time only data
+
+Some oxygen probe system files have time values, but no dates. These can also be parsed. This even works if the time values cross midnight. Note time data with AM/PM should have a `p` appended to the format.
+
+```{r  echo = F, message = F, results="hide"}
+data <- data.frame(time = c("11:00:00 PM", "11:30:00 PM", "00:00:00 AM", "00:30:00 AM", "01:00:00 AM", "01:30:00 AM"),
+                   oxy = c(10.056, 10.015, 10.012, 10.027, 10.032, 10.073))
+```
+
+```{r}
+format_time(data, time = 1, format = "HMSp")
+```
+
+
+## Dealing with timed events or notes
+
+What if there are important notes or events associated with specific times in your experiment? For example, flushing of chambers, imposing a treatment, changing the temperature, noting a response, etc. Resetting the times via formatting the time data may make these notes difficult to associate to certain stages of the analysis. This is easily dealt with by formatting the times of the events in the same way you formatted the data. You only need to make sure at least one event is associated with the *same start time* used for the experimental data. 
+
+Here's an example of some experimental notes (in some systems such notes can be entered in the software, and so may be included in output files, or they could be copied from a lab book into a csv file and imported). 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example data frame of Times and 'Events' or experimental notes
+times <- c("8/17/2016 9:42:02", "8/17/2016 9:52:02", "8/17/2016 9:54:34", "8/17/2016 10:19:02", "8/17/2016 12:04:54", "8/17/2016 14:31:22")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+exp_notes
+
+format_time(exp_notes, format = "mdyHMS")
+```
+
+These do not have to be in the same date-time format, or even at the same precision, depending on how accurately you need to know when events occurred. The important factors are associating at least one event with the *same start time* used to format the experimental time data, and using the correct `format` setting. 
+
+``` {r echo = F, message = F, results="hide"}
+## Creating example notes
+times <- c("9:42", "9:52", "9:54", "10:19", "12:04", "14:31")
+events <- c("Experiment start", "Flush period start", "Flush period end", "Specimen acting normally", "Went to lunch", "Swim speed set to 20 cm/s")
+
+exp_notes <- data.frame(times = times, events = events)
+```
+
+```{r}
+format_time(exp_notes, format = "HM")
+
+```
+
+# Checking output and next steps
+
+After your data is in a paired, numeric oxygen~time structure, it can be passed to `inspect()` to check the importing or time formatting has worked, look for common errors, and visualise the dataset. See `vignette("inspecting")`.
+
+

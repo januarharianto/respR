@@ -5,13 +5,14 @@
 #'   of results, for example the output of `auto_rate` on large datasets, or the
 #'   outputs of `calc_rate.int` from long intermittent-flow experiments.
 #'
-#'   The `select_rate` function helps explore, reorder, and filter
-#'   `convert_rate` results according to various criteria. For example,
-#'   extracting only positive or negative rates, only the highest or lowest
-#'   rates, only those from certain data regions, and numerous other methods
-#'   that allow advanced filtering of results so the final selection of rates is
-#'   well-defined towards the research question of interest. This also allows
-#'   for highly consistent reporting of results and rate selection criteria.
+#'   The `select_rate` and `select_rate.ft` functions help explore, reorder, and
+#'   filter `convert_rate` and `convert_rate.ft` results according to various
+#'   criteria. For example, extracting only positive or negative rates, only the
+#'   highest or lowest rates, only those from certain data regions, and numerous
+#'   other methods that allow advanced filtering of results so the final
+#'   selection of rates is well-defined towards the research question of
+#'   interest. This also allows for highly consistent reporting of results and
+#'   rate selection criteria.
 #'
 #'   Multiple selection criteria can be applied by saving the output and
 #'   processing it through the function multiple times using different methods,
@@ -152,6 +153,13 @@
 #'   value `1`. Therefore you need to adapt your selection criteria
 #'   appropriately towards which of these columns is relevant.
 #'
+#'   ## `rep_omit`, `rank_omit`
+#'
+#'   These refer to the `rep` and `rank` columns of the `$summary` table and
+#'   allow you to exclude rates from particular replicate or rank values. For
+#'   these, `n` should be a numeric vector of integers of `rep` or `rank` values
+#'   to OMIT. To omit a range use regular R syntax, e.g. `n = 1:10`.
+#'
 #'   ## `rsq`, `row`, `time`, `density`
 #'
 #'   These methods refer to the respective columns of the `$summary` data frame.
@@ -167,7 +175,23 @@
 #'   to rows of the raw data, **not** rows of the summary table - see `manual`
 #'   method for this. For all of these methods, if `n = NULL` no results will be
 #'   removed, instead the results will be reordered by that respective column
-#'   (descending for `rsq` and `density`, ascending for `row` and `time`).
+#'   (descending for `rsq` and `density`, ascending for `row`, and `time`).
+#'
+#'   ## `intercept`, `slope`
+#'
+#'   These methods are similar to the above and refer to the `intercept_b0` and
+#'   `slope_b1` summary table columns. Note these linear model coefficients
+#'   represent different things in flowthrough vs. other analyses. In
+#'   non-flowthrough analyses slopes represent rates and coefficients such as a
+#'   high r-squared are important. In flowthrough, slopes represent the
+#'   stability of the data region, in that the closer the slope is to zero, the
+#'   less the delta oxygen values in that region vary, which is an indication of
+#'   a region of stable rates. In addition, intercept values close to the
+#'   calculated mean delta of the region also indicate a region of stable rates.
+#'   Therefore these methods are chiefly useful in selection of flowthrough
+#'   results, for example slopes close to zero. If `n = NULL` no results will be
+#'   removed, instead the results will be reordered by ascending value by that
+#'   column.
 #'
 #'   ## `time_omit`, `row_omit`
 #'
@@ -235,8 +259,13 @@
 #'   `method = 'manual', n = 1`. To keep multiple rows use regular `R` selection
 #'   syntax: `n = 1:3`, `n = c(1,2,3)`, `n = c(5,8,10)`, etc. No value of `n`
 #'   should exceed the number of rows in the `$summary` data frame. Note this is
-#'   not necessarily the same as selecting by the `rank` method, as the table
-#'   could already have undergone selection or reordering.
+#'   not necessarily the same as selecting by the `rep` or `rank` methods, as
+#'   the table could already have undergone selection or reordering.
+#'
+#'   ## `manual_omit`
+#'
+#'   As above, but this allows particular rows of the `$summary` data frame to
+#'   be manually selected to be *omitted*.
 #'
 #'   ## `overlap`
 #'
@@ -314,6 +343,9 @@
 #'   have been applied.
 #'
 #'   `rsq` reorders by `$rsq` from highest value to lowest.
+#'
+#'   `intercept` and `slope` reorders by these columns from lowest value to
+#'   highest.
 #'
 #'   `highest` and `lowest` reorder by absolute values of the `$rate.output`
 #'   column, that is highest or lowest in magnitude regardless of the sign. They
@@ -419,9 +451,9 @@ select_rate <- function(x, method = NULL, n = NULL){
 
   # Checks ------------------------------------------------------------------
 
-  ## Check for valid convert_rate object
-  if(!(class.val(x, cnvr = TRUE)))
-    stop("select_rate: Input is not a 'convert_rate' object")
+  ## Check for valid convert_rate or convert_rate.ft object
+  if(!(class.val(x, cnvr = TRUE, cnvr.ft = TRUE)))
+    stop("select_rate: Input is not a 'convert_rate' or 'convert_rate.ft' object")
 
   ## Specify a method
   if(is.null(method)) stop("select_rate: Please specify a 'method'")
@@ -431,6 +463,7 @@ select_rate <- function(x, method = NULL, n = NULL){
                                          "duration",
                                          "density",
                                          "manual",
+                                         "manual_omit",
                                          "time",
                                          "time_omit",
                                          "row",
@@ -438,8 +471,12 @@ select_rate <- function(x, method = NULL, n = NULL){
                                          "oxygen",
                                          "oxygen_omit",
                                          "rsq",
+                                         "intercept",
+                                         "slope",
                                          "rep",
+                                         "rep_omit",
                                          "rank",
+                                         "rank_omit",
                                          "rate",
                                          "rate.output",
                                          "maximum_percentile",
@@ -469,15 +506,17 @@ select_rate <- function(x, method = NULL, n = NULL){
                                            "oxygen",
                                            "oxygen_omit",
                                            "rsq",
+                                           "intercept",
+                                           "slope",
                                            "rolling",
                                            "linear")) stop(glue::glue("select_rate: The '{method}' method is not accepted for 'convert_rate' objects which have been created using numeric inputs."))
 
   ## Disallow `density` or `linear` methods for anything other than `auto_rate` linear objects
   # If x$dataframe is NOT null (i.e. it is an object input rather than numerics)
   if(!(is.null(x$dataframe))) {
-      # If summary$density is not all NA then it has to be "linear" ar object
+    # If summary$density is not all NA then it has to be "linear" ar object
     # edge case for empty objects too
-      is.linear <- !(all(is.na(x$summary$density))) || nrow(x$summary) == 0
+    is.linear <- !(all(is.na(x$summary$density))) || nrow(x$summary) == 0
     # If it is NOT linear and method = "density" or "linear", stop
     if(method %in% c("density", "linear") && !is.linear)
       stop(glue::glue("select_rate: The '{method}' method is only accepted for rates determined in 'auto_rate' via the 'linear' method."))
@@ -521,7 +560,6 @@ select_rate <- function(x, method = NULL, n = NULL){
     keep <- 0:nrow(summ)
     reordered <- TRUE
   }
-
   if(is.null(n) && method == "time"){
     message("select_rate: Reordering results by 'time' method.")
     summ <- x$summary
@@ -529,7 +567,20 @@ select_rate <- function(x, method = NULL, n = NULL){
     keep <- 0:nrow(summ)
     reordered <- TRUE
   }
-
+  if(is.null(n) && method == "intercept"){
+    message("select_rate: Reordering results by 'intercept' method.")
+    summ <- x$summary
+    summ <- arrange(summ, intercept_b0)
+    keep <- 0:nrow(summ)
+    reordered <- TRUE
+  }
+  if(is.null(n) && method == "slope"){
+    message("select_rate: Reordering results by 'slope' method.")
+    summ <- x$summary
+    summ <- arrange(summ, slope_b1)
+    keep <- 0:nrow(summ)
+    reordered <- TRUE
+  }
   # by linear method - this is identical to density with n = NULL below
   if(method == "linear"){
     message("select_rate: Reordering results by 'linear' method. 'n' input ignored...")
@@ -652,7 +703,7 @@ select_rate <- function(x, method = NULL, n = NULL){
 
   if(!is.null(n) && method == "lowest"){
     if(any(x$rate.output > 0) && any(x$rate.output < 0)) stop(glue::glue("select_rate: Object contains both negative and positive rates. \n'{method}' method is intended to find {method} rate in absolute value amongst rates all having the same sign. \nSee 'positive' and 'negative' or 'maximum' and 'minimum' options."))
-    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'lowest' method 'n' must be a positive integer value.")
+    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'lowest' method 'n' must contain only positive integers.")
     if(n > length(x$rate.output)) message("select_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
     message(glue::glue("select_rate: Selecting lowest {n} *absolute* rate values..."))
@@ -672,7 +723,7 @@ select_rate <- function(x, method = NULL, n = NULL){
 
   if(!is.null(n) && method == "highest"){
     if(any(x$rate.output > 0) && any(x$rate.output < 0)) stop(glue::glue("select_rate: Object contains both negative and positive rates. \n'{method}' method is intended to find {method} rate in absolute value amongst rates all having the same sign. \nSee 'positive' and 'negative' or 'maximum' and 'minimum' options."))
-    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'highest' method 'n' must be a positive integer value.")
+    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'highest' method 'n' must contain only positive integers.")
     if(n > length(x$rate.output)) message("select_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
     message(glue::glue("select_rate: Selecting highest {n} *absolute* rate values..."))
@@ -739,7 +790,7 @@ select_rate <- function(x, method = NULL, n = NULL){
   ## i.e can mix -ve and +ve
   ## min = lowest/most negative
   if(!is.null(n) && method == "minimum") {
-    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'minimum' method 'n' must be a positive integer value.")
+    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'minimum' method 'n' must contain only positive integers.")
     if(n > length(x$rate.output)) message("select_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
     message(glue::glue("select_rate: Selecting minimum {n} *numerical* rate values..."))
@@ -751,7 +802,7 @@ select_rate <- function(x, method = NULL, n = NULL){
 
   # max n rates -------------------------------------------------------------
   if(!is.null(n) && method == "maximum") {
-    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'maximum' method 'n' must be a positive integer value.")
+    if(n %% 1 != 0 || n < 0) stop("select_rate: For 'maximum' method 'n' must contain only positive integers.")
     if(n > length(x$rate.output)) message("select_rate: 'n' input is greater than number of rates in $summary. Nothing to remove.")
 
     message(glue::glue("select_rate: Selecting maximum {n} *numerical* rate values..."))
@@ -807,6 +858,27 @@ select_rate <- function(x, method = NULL, n = NULL){
     reordered <- FALSE
   }
 
+  # intercept ---------------------------------------------------------------------
+  if(!is.null(n) && method == "intercept"){
+    if(length(n) != 2) stop("select_rate: For 'intercept' method 'n' must be a vector of two values.")
+    message(glue::glue("select_rate: Selecting rates with intercept values between {n[1]} and {n[2]}..."))
+    n_order <- sort(n)
+    keep <- sort(which(data.table::between(x$summary$intercept_b0, n_order[1], n_order[2])))
+    keep <- sort(keep)
+    summ <- x$summary
+    reordered <- FALSE
+  }
+
+  # slope ---------------------------------------------------------------------
+  if(!is.null(n) && method == "slope"){
+    if(length(n) != 2) stop("select_rate: For 'slope' method 'n' must be a vector of two values.")
+    message(glue::glue("select_rate: Selecting rates with slope values between {n[1]} and {n[2]}..."))
+    n_order <- sort(n)
+    keep <- sort(which(data.table::between(x$summary$slope_b1, n_order[1], n_order[2])))
+    keep <- sort(keep)
+    summ <- x$summary
+    reordered <- FALSE
+  }
 
   # rep --------------------------------------------------------------------
   if(!is.null(n) && method == "rep"){
@@ -814,7 +886,7 @@ select_rate <- function(x, method = NULL, n = NULL){
     if(all(is.na(x$summary$rep)))
       stop("select_rate: All 'rep' are NA so nothing to select!")
     if(!(is.numeric(n)) || any(n %% 1 != 0))
-      stop("select_rate: For 'rep' method 'n' must only contain integer values.")
+      stop("select_rate: For 'rep' method 'n' must contain only positive integers.")
     if(any(!(dplyr::between(n, min(x$summary$rep), max(x$summary$rep)))))
       stop("select_rate: Input for 'n': One or more 'rep' inputs out of range of 'summary$rep' values.")
     message(glue::glue("select_rate: Selecting rates from entered 'rep' replicates..."))
@@ -825,17 +897,55 @@ select_rate <- function(x, method = NULL, n = NULL){
     reordered <- FALSE
   }
 
+  # rep_omit --------------------------------------------------------------------
+  if(!is.null(n) && method == "rep_omit"){
+
+    if(all(is.na(x$summary$rep)))
+      stop("select_rate: All 'rep' are NA so nothing to select!")
+    if(!(is.numeric(n)) || any(n %% 1 != 0))
+      stop("select_rate: For 'rep_omit' method 'n' must contain only positive integers.")
+    if(any(!(dplyr::between(n, min(x$summary$rep), max(x$summary$rep)))))
+      stop("select_rate: Input for 'n': One or more 'rep_omit' inputs out of range of 'summary$rep' values.")
+    message(glue::glue("select_rate: Selecting rates which *ARE NOT* from 'rep_omit' replicates..."))
+
+    n_order <- sort(n)
+    remove <- sort(unique(unlist(lapply(n_order, function(z) which(z == x$summary$rep)))))
+    keep <- (1:nrow(x$summary))[-remove]
+    summ <- x$summary
+    reordered <- FALSE
+  }
+
   # rank --------------------------------------------------------------------
   if(!is.null(n) && method == "rank"){
 
+    if(!(all(is.na(x$summary$rep))))
+      message("select_rate: Note there are multiple replicates present in these results, which may have multiple ranks *within* them. \nEnsure the 'rank' method is the correct one for what you want to do.")
     if(!(is.numeric(n)) || any(n %% 1 != 0))
-      stop("select_rate: For 'rank' method 'n' must only contain integer values.")
+      stop("select_rate: For 'rank' method 'n' must contain only positive integers.")
     if(any(!(dplyr::between(n, min(x$summary$rank), max(x$summary$rank)))))
       stop("select_rate: Input for 'n': One or more 'rank' inputs out of range of 'summary$rank' values.")
     message(glue::glue("select_rate: Selecting rates with entered 'rank' values..."))
 
     n_order <- sort(n)
     keep <- sort(unique(unlist(lapply(n_order, function(z) which(z == x$summary$rank)))))
+    summ <- x$summary
+    reordered <- FALSE
+  }
+
+  # rank_omit --------------------------------------------------------------------
+  if(!is.null(n) && method == "rank_omit"){
+
+    if(!(all(is.na(x$summary$rep))))
+      message("select_rate: Note there are multiple replicates present in these results, which may have multiple ranks *within* them. \nEnsure the 'rank_omit' method is the correct one for what you want to do.")
+    if(!(is.numeric(n)) || any(n %% 1 != 0))
+      stop("select_rate: For 'rank_omit' method 'n' must contain only positive integers.")
+    if(any(!(dplyr::between(n, min(x$summary$rank), max(x$summary$rank)))))
+      stop("select_rate: Input for 'n': One or more 'rank_omit' inputs out of range of 'summary$rank' values.")
+    message(glue::glue("select_rate: Selecting rates with ranks which *ARE NOT* in 'rank_omit' input..."))
+
+    n_order <- sort(n)
+    remove <- sort(unique(unlist(lapply(n_order, function(z) which(z == x$summary$rank)))))
+    keep <- (1:nrow(x$summary))[-remove]
     summ <- x$summary
     reordered <- FALSE
   }
@@ -859,7 +969,7 @@ select_rate <- function(x, method = NULL, n = NULL){
   # row_omit ----------------------------------------------------------------
   if(method == "row_omit"){
     if(!(is.numeric(n)) || any(n %% 1 != 0))
-      stop("select_rate: For 'row_omit' method 'n' must only contain integer values of row.")
+      stop("select_rate: For 'row_omit' method 'n' must contain only positive integers.")
     message(glue::glue("select_rate: Selecting rates which *DO NOT* use original data row(s) in 'n' input..."))
     if(any(n > dim(raw_df)[1])) stop("select_rate: Input for 'n': row inputs out of data frame range.")
 
@@ -922,8 +1032,8 @@ select_rate <- function(x, method = NULL, n = NULL){
     n_order <- sort(n)
 
     if(length(n_order) == 1) n <- c(n_order, n_order) ## if single value make 2-vec for code simplicity
-    if(any(n_order < range(x$dataframe[[1]], na.rm = TRUE)[1]) || any(n_order > range(x$dataframe[[1]], na.rm = TRUE)[2]))
-      stop("select_rate: Input for 'n': time inputs out of time data range.")
+    # if(any(n_order < range(x$dataframe[[1]], na.rm = TRUE)[1]) || any(n_order > range(x$dataframe[[1]], na.rm = TRUE)[2]))
+    #   stop("select_rate: Input for 'n': time inputs out of time data range.")
 
     # if a range, single selection
     if(length(n_order) == 2){
@@ -1028,6 +1138,17 @@ select_rate <- function(x, method = NULL, n = NULL){
     reordered <- FALSE
   }
 
+  # manual_omit ------------------------------------------------------------------
+  if(method == "manual_omit"){
+    # check within range of summary length
+    if(!all(n %in% 1:nrow(x$summary))) stop("select_rate: For 'manual' method: 'n' values are out of range of $summary data.frame rows...")
+    message(glue::glue("select_rate: Selecting rows of the '$summary' table which are NOT in the 'manual_omit' input..."))
+    n_order <- sort(n)
+    keep <- (1:nrow(x$summary))[-n_order]
+    keep <- sort(keep)
+    summ <- x$summary
+    reordered <- FALSE
+  }
 
   # density ------------------------------------------------------------------
   if(!is.null(n) && method == "density"){
@@ -1212,7 +1333,8 @@ select_rate <- function(x, method = NULL, n = NULL){
   ## object that was manipulated, i.e. not original
   ## 2. can't replace class because generic S3 functions will stop working
   ## (unless we just duplicate these for new class)
-  if(!("convert_rate_select" %in% class(output))) class(output) <- c(class(output), "convert_rate_select")
+  if(inherits(output, "convert_rate") && !("convert_rate_select" %in% class(output))) class(output) <- c(class(output), "convert_rate_select")
+  if(inherits(output, "convert_rate.ft") && !("convert_rate.ft_select" %in% class(output))) class(output) <- c(class(output), "convert_rate.ft_select")
 
   ## Message
   if(reordered) message(glue::glue(

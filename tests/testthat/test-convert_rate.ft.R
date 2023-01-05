@@ -2,13 +2,13 @@
 # rm(list=ls())
 # testthat::test_file("tests/testthat/test-convert_rate.ft.R")
 # covr::file_coverage("R/convert_rate.ft.R", "tests/testthat/test-convert_rate.ft.R")
-# x <- covr::package_coverage()
-# covr::report(x)
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
 
 capture.output({  ## stops printing outputs on assigning
 
 # Create testing objects --------------------------------------------------
-
+{
 insp.ft_obj <- inspect.ft(flowthrough.rd, delta.oxy = 4, plot = FALSE)
 ## oxygen production data
 insp.ft_obj_prod <- inspect.ft(cbind(flowthrough.rd[,1], -1*(flowthrough.rd[,4])),
@@ -120,6 +120,7 @@ conv.adjft.width.as <- convert_rate.ft(adjft.width, oxy.unit = "mg/l", flowrate.
                                        output.unit = "mg/h/cm2",
                                        mass = NULL, area = 0.01,
                                        S=S, t=t, P=P)
+}
 
 # validate 'x' inputs -----------------------------------------------------
 
@@ -563,6 +564,80 @@ test_that("convert_rate.ft - objects work with mean() and 'pos' input", {
   expect_error(mean(conv.adjft.many.ms, pos = 150),
                  regexp = "mean.convert_rate.ft: Invalid 'pos' rank: only 101 rates found.")
 })
+
+test_that("convert_rate.ft - plot is produced with converted calc_rate.ft objects", {
+  expect_output(plot(conv.adjft.many.ms))
+  expect_output(plot(conv.adjft.many.ms, type = "full"))
+  expect_output(plot(conv.adjft.many.ms, type = "rate"))
+  expect_output(plot(conv.adjft.many.ms, type = "overlap"))
+})
+
+test_that("convert_rate.ft - plot pos and highlight correct messages", {
+  expect_message(plot(conv.adjft.many.ms, pos = 200),
+                 "convert_rate.ft: One or more 'pos' inputs higher than number of rows in '\\$summary'. Applying default of all rows.")
+  expect_message(plot(conv.adjft.many.ms, pos = 200, type = "overlap"),
+                 "convert_rate.ft: One or more 'pos' inputs higher than number of rows in '\\$summary'. Applying default of all rows.")
+  expect_message(plot(conv.adjft.many.ms, highlight = 200, type = "overlap"),
+                 "convert_rate.ft: 'highlight' not within 'pos' input. Applying default of first 'pos' entry.")
+})
+
+test_that("convert_rate.ft - plot errors with various disallowed inputs", {
+  num <-
+    c(1,2,3) %>%
+    convert_rate.ft(oxy.unit = "mg/l",
+                 time.unit = "min",
+                 flowrate.unit = "l/s",
+                 output.unit = "mg/h",
+                 volume = 1.09)
+  expect_error(plot(num),
+               "plot.convert_rate.ft: Plot is not available for 'convert_rate.ft' objects containing rates converted from numeric values.")
+})
+
+test_that("convert_rate.ft - correct message when plot is called on objects with zero rates", {
+
+  # message with zero rates for both methods
+  ar_mult_no_rts <-
+    suppressWarnings(
+      flowthrough.rd %>%
+        inspect.ft(1,2,3, plot = FALSE) %>%
+        calc_rate.ft(1, c(10, 300, 700), c(200, 500, 800), plot = FALSE) %>%
+        convert_rate.ft(oxy.unit = "mg/l",
+                     time.unit = "min",
+                     flowrate.unit = "l/h",
+                     output.unit = "mg/h/g",
+                     volume = 1.09,
+                     mass = 0.005))
+  # remove
+  ar_mult_no_rts$summary <- ar_mult_no_rts$summary[NULL,]
+  ar_mult_no_rts$rate.output <- NULL
+
+  expect_message(plot(ar_mult_no_rts),
+                 "convert_rate.ft: Nothing to plot! No rates found in object.")
+  expect_message(plot(ar_mult_no_rts, type = "rate"),
+                 "convert_rate.ft: Nothing to plot! No rates found in object.")
+  expect_message(plot(ar_mult_no_rts, type = "overlap"),
+                 "convert_rate.ft: Nothing to plot! No rates found in object.")
+
+})
+
+test_that("convert_rate.ft - plot defaults are correctly restored", {
+
+  # reset plotting first
+  dev.off()
+  # save par before
+  parb4 <- par(no.readonly = TRUE)
+  # now use a fn with plot
+  plot(conv.adjft.many.ms)
+  # save after
+  paraft <- par(no.readonly = TRUE)
+  # mai is something changed from the default,
+  # so if par settings not restored properly this should fail
+  expect_identical(parb4$mai,
+                   paraft$mai)
+
+})
+
+
 
 # Extensive output tests - skipped ----------------------------------------
 

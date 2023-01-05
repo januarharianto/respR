@@ -58,7 +58,7 @@ A typical workflow involves some or all of the following functions:
 
 `respR` has a very simple structural data requirement: data must be in the form of paired values of numeric time and oxygen amount. Most if not all oxygen sensing equipment or probe systems output to this format, or at least to a format that is easy to coerce to this structure. All that is required is to put these data in a dataframe.
 
-See `vignette("importing")` for an guide to importing and preparing data to this form.
+See `vignette("importing")` for a guide to importing and preparing data to this form.
 
 ### `inspect` - visualise and check for errors
 

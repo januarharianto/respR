@@ -103,7 +103,9 @@ is determined over the entire dataset.
 
 Alternatively a \code{width} input can be specified, in which case a rolling rate
 is calculated using this window size (in the relevant \code{by} units) across the
-entire dataset, and returned as a vector of rate values in \verb{$rate}.
+entire dataset, and returned as a vector of rate values in \verb{$rate}. See
+\href{https://januarharianto.github.io/respR/articles/flowthrough.html#case-8-rolling-rate}{here}
+for how this might be used.
 }
 
 \subsection{Flowrate}{

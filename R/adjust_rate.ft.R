@@ -208,6 +208,11 @@ adjust_rate.ft <- function(x, by) {
     out <- list(call = call,
                 inputs = list(x = x,
                               by = by),
+                dataframe = NULL,
+                data = NULL,
+                subsets = NULL,
+                delta.oxy = NULL,
+                input_type = NULL,
                 summary = data.table::data.table(rank = 1:length(rate.adjusted),
                                                  rate = rate,
                                                  adjustment = adjustment,
@@ -279,7 +284,7 @@ summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
   out <- object$summary[pos,]
 
-  print(out, class = FALSE)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)

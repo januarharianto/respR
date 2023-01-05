@@ -28,11 +28,15 @@ opts_chunk$set(collapse = TRUE,
 
 ## Introduction {#adjintro}
 
-Depending on the type of experiment or the functions used, `respR` analyses can return multiple rates from a single dataset. Once these are converted to final units in `convert_rate()`, this can result in an often large array of rates from different, or even the same, regions of the data. 
+Depending on the type of experiment or the functions used, `respR` analyses can return multiple rates from a single dataset. Once these are converted to final units in `convert_rate()` this can result in an often large array of rates from different or even overlapping regions of the data. 
 
-Having multiple rates can be a result of several analyses. The `auto_rate()` function uses machine learning techniques to automatically detect the most linear regions of a dataset, as well as being able to fit a rolling regression of a specified width over the entire dataset and order the results in various ways. Both of these can return hundreds to thousands of rates. `calc_rate()` can also return multiple rates depending on the inputs. `calc_rate.int()` and `auto_rate.int()` return a single rate from every replicate in an intermittent-flow respirometry dataset, so there will be as many rates as there are replicates.
+Multiple rates can be a result of several analyses. The `auto_rate()` function uses machine learning techniques to automatically detect the most linear regions of a dataset, as well as being able to fit a rolling regression of a specified width over the entire dataset and order the results in various ways. Both of these can return hundreds to thousands of rates. `calc_rate()` can also return multiple rates depending on the inputs. `calc_rate.int()` and `auto_rate.int()` return a single rate from every replicate in an intermittent-flow respirometry dataset, so there will be at least as many rates as there are replicates.
 
 `select_rate` helps explore and filter `convert_rate` results by selecting rates according to various criteria. For example, extracting only positive or negative rates, only the highest or lowest rates by number or percentile, those above a particular R-squared, only those from certain data regions, and numerous other methods that allow advanced filtering of rates. This allows for application of consistent rate selection criteria and reporting of results. Several methods also allow the results to be reordered by that metric, which can be useful in several situations. 
+
+### Flowthrough analyses
+
+`select_rate` can also select from multiple rates in `convert_rate.ft` objects from flowthrough analyses. There is also a `select_rate.ft` function but it is a simple wrapper for `select_rate`. Therefore the following examples also apply to filtering flowthrough results, but see `vignette("flowthrough")` for some specific examples.
 
 ## Selection methods
 

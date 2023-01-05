@@ -504,7 +504,7 @@ summary.calc_rate.int <- function(object, pos = NULL, export = FALSE, ...) {
   }
 
   out <- object$summary[pos,]
-  print(out, class = FALSE)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)

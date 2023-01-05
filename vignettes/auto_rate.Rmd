@@ -226,13 +226,13 @@ par(mfrow = c(1, 2),
     cex = 0.9)
 
 rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2, 
-                                      y = normx$roll$rate)
-rate_norm <- normx$summary$rate_b1[1]
+                                      y = normx$roll$slope_b1)
+rate_norm <- normx$summary$slope_b1[1]
 rollreg.plot(rolldt_norm, rate_norm, rate.rev = TRUE)
 
 rolldt_over <- data.table::data.table(x = (overx$roll$endtime + overx$roll$time)/2, 
-                                      y = overx$roll$rate)
-rate_over <- overx$summary$rate_b1[1]
+                                      y = overx$roll$slope_b1)
+rate_over <- overx$summary$slope_b1[1]
 rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE, 
              xlim = range(rolldt_norm[[1]]), 
              ylim = range(rolldt_norm[[2]]))
@@ -292,12 +292,12 @@ par(mfrow = c(1, 2),
     cex = 0.9)
 
 rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2, 
-                                      y = normx$roll$rate)
-rate_norm <- normx$summary$rate_b1[1]
+                                      y = normx$roll$slope_b1)
+rate_norm <- normx$summary$slope_b1[1]
 
 rolldt_over <- data.table::data.table(x = (underx$roll$endtime + underx$roll$time)/2, 
-                                      y = underx$roll$rate)
-rate_over <- underx$summary$rate_b1[1]
+                                      y = underx$roll$slope_b1)
+rate_over <- underx$summary$slope_b1[1]
 
 rollreg.plot(rolldt_norm, rate_norm, rate.rev = TRUE,
              xlim = range(rolldt_over[[1]]), 

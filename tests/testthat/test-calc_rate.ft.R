@@ -2,8 +2,8 @@
 # library(testthat)
 # test_file("tests/testthat/test-calc_rate.ft.R")
 # covr::file_coverage("R/calc_rate.ft.R", "tests/testthat/test-calc_rate.ft.R")
-# x <- covr::package_coverage()
-# covr::report(x)
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
 
 capture.output({  ## stops printing console outputs on assigning
 

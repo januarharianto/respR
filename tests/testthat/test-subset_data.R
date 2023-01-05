@@ -2,8 +2,8 @@
 # library(testthat)
 # test_file("tests/testthat/test-subset_data.R")
 # covr::file_coverage("R/subset_data.R", "tests/testthat/test-subset_data.R")
-# x <- covr::package_coverage()
-# covr::report(x)
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
 
 capture.output({  ## stops printing outputs on assigning
 

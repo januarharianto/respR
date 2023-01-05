@@ -18,7 +18,9 @@ pkgdown::build_site(lazy = TRUE, devel = TRUE, preview = TRUE)
 pkgdown::build_home(preview = TRUE)
 
 pkgdown::build_article("closed")
-pkgdown::build_article("select_rate")
+
+pkgdown::build_article("flowthrough")
+pkgdown::preview_page('articles/flowthrough.html')
 
 usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alternative approaches")
 

@@ -101,8 +101,10 @@ navbar:
       - text: "Oxygen production respirometry"
         href: articles/oxy_production.html
       - text: "---- Function Guides ----"
-      - text: "import_file & format_time: Import and prepare data"
+      - text: "import_file: Import files from oxygen probe systems"
         href: articles/importing.html
+      - text: "format_time: Convert date-time data to numeric time"
+        href: articles/format_time.html
       - text: "convert_DO: Convert between units of dissolved oxygen"
         href: articles/convert_DO.html
       - text: "inspect: Inspecting data"

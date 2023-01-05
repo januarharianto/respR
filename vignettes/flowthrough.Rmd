@@ -41,6 +41,7 @@ The inflow concentration is typically a simultaneous recording, but an alternati
 - `calc_rate.ft`            - calculate a rate from a region (or several) of the data 
 - `adjust_rate.ft`      - adjust the rate for background activity (optional)
 - `convert_rate.ft`   - convert the rate to specific units, including mass- or area-specific
+- `select_rate.ft`      - filter rate results according to various criteria 
 
 
 
@@ -775,17 +776,18 @@ summary(rates_abs)
 
 By default the first output is printed, but you can print others by using the `pos` input, e.g. `print(rates_abs, pos = 2)` or by using `summary()` to see all results. 
 
-## Case 8: Rolling rate
+## Case 8: Rolling rate {#rollrate}
 
-*"We want to calculate every rate of a fixed width across the entire dataset and then filter the results manually. We are interested in the routine metabolic rate from a particular region of the data."*
+*"We want to calculate every rate of a fixed width across the entire dataset and then filter the results. We are interested in the routine metabolic rate from a particular region of the data."*
 
-`calc_rate.ft` can calculate a rolling rate of fixed width (in rows) across the dataset. In this case there will be multiple rates in `output$rate` and the same number of rows in `output$summary`. The parameters in the summary table can be used to filter out only the results of interest using regular R syntax.
+`calc_rate.ft` can calculate a rolling rate of fixed width in rows across the dataset. In this case there will be multiple rates in `output$rate` and the same number of rows in `output$summary`. The `subset_rate.ft()` function can be used to filter the results according to various criteria. See `vignette("subset_rate")` for examples with non-flowthrough data, but which are essentially the same.
 
-Note, the `calc_rate.ft` summary table contains linear regression coefficients alongside other metadata. These *should not be confused* with those in other functions such as `calc_rate` where slopes represent rates and coefficients such as a high r-squared are important. Here, slope represents the stability of the data region, in that the closer the slope is to zero, the less the delta oxygen values in that region vary, which is an indication of a region of stable rates. They are included to enable possible future functionality where stable regions may be automatically identified, and should generally be ignored. However, advanced users can use regular R syntax to explore and subset the results using these if they wish. 
+Note the `calc_rate.ft` summary table contains linear regression coefficients alongside other metadata. These *should not be confused* with those returned by other functions such as `calc_rate` where slopes represent rates and coefficients such as a high r-squared are important. With flowthrough data the liner model is fit through the delta oxygen values averaged to provide a final rate. Therefore slope can represent the stability of the data region, in that the closer it is to zero, the less the delta oxygen values in that region vary, which is an indication of a region of stable rates. They are included to enable possible future functionality where stable regions may be automatically identified, and should generally be ignored. However, advanced users can use these and `subset_rate.ft()` to explore and subset the results if they wish. 
 
-In this example, we want to extract the most consistent rate sustained across a five minute window from a particular region of the data. 
+In this example, we want to extract a routine metabolic rate (RMR) which we will define as the most consistent rate sustained across a five minute window, and also a maximum metabolic rate (MMR) or the highest rate sustained across a five minute window.
 
 ### Inspect data
+
 ```{r eval = F}
 ## inspect
 insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
@@ -797,90 +799,120 @@ insp8 <- insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy 
 plot(insp8)
 ```
 
-Here, we see a region before the experiment has reached equilibrium, and a region of higher rates. To get a routine rate we therefore want to extract it from approximately the 10 to 30 minute time range.
+Here, we see it takes around 10 minutes for the the experiment to reach equilibrium, so we want to exclude rates before this time. We then see a region of consistent rates from which we will extract the RMR, then a region of higher activity and therefore higher rates from which we will get the MMR. 
 
 ### Calculate rate across rolling window
 
-In these data (per second, but in decimalised minutes) a five minute window would be 300 rows. 
+In these data (with oxygen recorded once per second, but the time values in decimalised minutes) a five minute window would be 300 rows. We will calculate a rolling rate across this window, adjust and convert the results, and in the following sections filter them to get a final RMR and MMR.
 
 ```{r eval = F}
-# calculate rate
+# calculate rolling 5-minute rate
 roll_rate <- calc_rate.ft(insp8, width = 300, by = "row", flowrate = 0.1)
-```
-
-```{r eval = T, echo = F}
-# calculate rate
-roll_rate <- calc_rate.ft(insp8, width = 300, by = "row", flowrate = 0.1, plot = F)
-summary(roll_rate)
-```
-
-### Filter results 
-
-We can see there are 3441 results, the slope is in the third column, and the start and end times of each regression are in columns 7 and 8. Here, we will subset regressions with start times after 10 minutes, end times before 30 minutes, and then identify the one with the slope closest to zero. Note, slopes will normally be a mix of positive and negative, so we want the one with the lowest *difference* from zero.
-
-```{r}
-## summary rows with start time > 10
-summ <- roll_rate$summary[which(roll_rate$summary$time > 10),]
-
-## summary rows with end time < 30
-summ <- summ[which(summ$endtime < 30),]
-
-## which has slope with lowest absolute difference from zero?
-summ <- summ[which(abs(summ$slope_b1 - 0) == min(abs(summ$slope_b1 - 0))),]
-
-print(summ)
-```
-
-We can see from the `$rank` column, the 1044th result is in the time range of 10 to 30 and has the slope closest to zero. Note also how the `intercept_b0` is equal to the `delta_mean` (mean of all oxygen delta values within the data region), which is another indication of the stability of rates within the region. We can plot this particular result using `pos`. 
-
-```{r eval = F}
-plot(roll_rate, pos = 1044)
-```
-
-```{r eval = T, echo = F, results = "hide"}
-plot(roll_rate, pos = 1044)
-```
-
-### Convert rate
-
-To get the final rate we just need to adjust and convert all rates, and extract the one we are interested in. The `summary` command along with `pos` and `export` options can extract an exact row (or range of rows) to a separate data frame. 
-
-```{r eval = F, tidy = FALSE}
+# adjust rates
 roll_rate_adj <- adjust_rate.ft(roll_rate, by = bgrate)
-
+# convert rates to mass-specific
 roll_rate_ms <- convert_rate.ft(roll_rate_adj,  
                                 oxy.unit = "%Air",  
                                 flowrate.unit = "L/min",  
                                 output.unit = "umol/h/g",
                                 mass = 0.020,
                                 t = 18, S = 0, P = 1.013)
-
-result <- summary(roll_rate_ms, pos = 1044, export = TRUE)
 ```
 
-```{r eval = T, echo = F}
-# mass-specific rate
+```{r eval = T, echo = F, fig.keep='none'}
+# calculate rolling 5-minute rate
+roll_rate <-  suppressMessages(calc_rate.ft(insp8, width = 300, by = "row", flowrate = 0.1))
+# adjust rates
 roll_rate_adj <- suppressMessages(adjust_rate.ft(roll_rate, by = bgrate))
-
+# convert rates to mass-specific
 roll_rate_ms <- suppressMessages(convert_rate.ft(roll_rate_adj,  
                                                  oxy.unit = "%Air",  
                                                  flowrate.unit = "L/min",  
                                                  output.unit = "umol/h/g",
                                                  mass = 0.020,
                                                  t = 18, S = 0, P = 1.013))
-
-result <- suppressMessages(summary(roll_rate_ms, pos = 1044, export = TRUE))
 ```
 
-The saved data frame will contain all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
 
-This is just an example. Other results and columns in `$summary` can be used in a similar way to filter results, for instance to extract maximum or minimum rate values, only those within a specific value range, or all those within a specific percentile of rates.
+```{r eval = T, echo = F}
+summary(roll_rate_ms)
+```
+
+
+
+We can see there are 3441 results, which is obviously a lot of information. As of [`respR v2.2`](https://januarharianto.github.io/respR/articles/version_notes.html) `convert_rate.ft` objects can be plotted to help explore the results in three different ways. See `help("convert_rate.ft")` for full details. Here we will use the `type = "rate"` option which plots output rates in a way that you can see how they vary across the dataset. 
+
+```{r eval = T, results='hide'}
+# plot rates
+plot(roll_rate_ms, type = "rate")
+```
+
+At a fixed width the rolling rate is obviously closely related to the delta oxygen values. We can use `pos` to more closely examine output rates from particular regions. 
+
+```{r eval = T, results='hide'}
+# plot rates
+plot(roll_rate_ms, type = "rate", pos = 500:1700)
+```
+
+This tells us our extracted RMR should be around 7.30 to 7.40 umol/hr/g. 
+
+### Select results for RMR
+
+The `select_rate.ft` function allows you to apply multiple selection criteria by either saving the result and processing it through the function multiple times or by using pipes (`|>` or `%>%`). Here, to get RMR we will only use rates from 10 to 30 minutes, then select the lowest tenth percentile of these rates, and then take the mean of these. Please note, this is not a recommendation that this is how you should extract an RMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. An alternative approach might be to select only the single lowest rate, for instance.
+
+```{r eval = FALSE}
+rmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(10,30)) |>
+  select_rate.ft(method = "lowest_percentile", n = 0.1) |>
+  summary() |>
+  mean()
+```
+
+```{r echo = FALSE}
+rmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(10,30)) |>
+  select_rate.ft(method = "lowest_percentile", n = 0.1) |>
+  summary() |>
+  mean()
+```
+
+Note how the `slope_b1` values are very close to zero, that is the linear regression fit through the delta mean values averaged to get each rate is close to a flat line. This is an indication that the region has stable delta oxygen values and therefore stable rates. `select_rate.ft` has a `slope` method so these could be used to select results based on stable values. 
+
+### Select results for MMR
+
+To get MMR we will simply extract the single highest 5-minute rate from the region of elevated rates at around 40 minutes.
+
+```{r eval = FALSE}
+mmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(30,50)) |>
+  select_rate.ft(method = "highest", n = 1) |>
+  summary(export = TRUE)
+```
+
+```{r echo = FALSE}
+mmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(30,50)) |>
+  select_rate.ft(method = "highest", n = 1) |>
+  summary(export = TRUE)
+```
+
+Here we have used the `export` option in `summary` which saves the summary table as a data frame. This is a great way of saving results for archiving or further analysis. 
+
+The `rank` column tells us which result this is and can be used to plot this result using `pos` for a closer look using the `type = "full"` option. 
+
+```{r results="hide"}
+plot(roll_rate_ms, pos = 2270, type = "full")
+```
 
 ## Case 9: Multiple rates from the same dataset
 
 *"We want to extract rates from several different time periods during an experiment."*
 
-As can be seen in the above example, where we used a rolling window, multiple rates can be extracted from different regions of the same dataset, even overlapping ones. This can be done by entering vectors of paired start and end values as the `from` and `to` inputs in the appropriate `by` units. 
+As can be seen in the above example, where we used a rolling window, multiple rates can be extracted from different regions of the same dataset, even overlapping ones. As well as using the `width` input, this can be done by entering vectors of paired start and end values as the `from` and `to` inputs in the appropriate `by` units. 
 
 ### Inspect and calculate rates
 ```{r eval = F, tidy = FALSE}
@@ -922,8 +954,7 @@ summary(rate9)
 
 ### Convert results
 
-The results can be adjusted and converted as in the above examples. Both `adjust_rate` and `convert_rate` accept objects containing multiple rates and can be plotted and explored in the same way. 
-
+The results can be adjusted and converted as in the above examples. Both `adjust_rate.ft` and `convert_rate.ft` accept objects containing multiple rates and can be plotted and explored in the same way. See [above](#rollrate) for how multiple rate results can be filtered using `select_rate.ft`.
 
 
 ## Case 10: Concise, reportable analysis using piping
