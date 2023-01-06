@@ -14,7 +14,7 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.2.0 -- 2023-xx-xx
+## Version 2.2.0 -- 2023-01-06
 
 This update focuses on extending to the flowthrough respirometry workflow the functionality introduced in `v2.1` for exploring and selecting final rates. The online [vignette](https://januarharianto.github.io/respR/articles/flowthrough.html#case-8-rolling-rate) has been updated with some examples. 
 
