@@ -33,6 +33,9 @@ class.val(
   cnvr = FALSE,
   cnvr.sing = FALSE,
   cnvr.mult = FALSE,
+  cnvr.ft = FALSE,
+  cnvr.ft.sing = FALSE,
+  cnvr.ft.mult = FALSE,
   insp = FALSE
 )
 }

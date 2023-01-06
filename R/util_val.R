@@ -155,32 +155,35 @@ val_meth <- function(method){
 #' If x is *any* one of these a single TRUE will be returned
 #' @keywords internal
 class.val <- function(x,
-                      int = FALSE,         # int of any length
-                      int.sing = FALSE,    # int single
-                      int.mult = FALSE,    # int multiple
-                      num = FALSE,         # numeric
-                      num.sing = FALSE,    # numeric single
-                      num.mult = FALSE,    # numeric multiple
-                      df = FALSE,          # data.frame
-                      cr = FALSE,          # calc_rate any
-                      cr.sing = FALSE,     # calc_rate w/ single rate
-                      cr.mult = FALSE,     # calc_rate w/ multiple rates
-                      cr.int = FALSE,      # calc_rate.int any
-                      cr.int.sing = FALSE, # calc_rate.int w/ single rate
-                      cr.int.mult = FALSE, # calc_rate.int w/ multiple rates
-                      ar = FALSE,          # auto_rate any
-                      ar.sing = FALSE,     # auto_rate w/ single rate
-                      ar.mult = FALSE,     # auto_rate w/ multiple rates
-                      ar.int = FALSE,      # auto_rate.int any
-                      ar.int.sing = FALSE, # auto_rate.int w/ single rate
-                      ar.int.mult = FALSE, # auto_rate.int w/ multiple rates
-                      crbg = FALSE,        # calc_rate.bg any
-                      crbg.sing = FALSE,   # calc_rate.bg w/ single rate
-                      crbg.mult = FALSE,   # calc_rate.bg w/ multiple rates
-                      cnvr = FALSE,        # convert_rate any
-                      cnvr.sing = FALSE,   # convert_rate w/ single rate
-                      cnvr.mult = FALSE,   # convert_rate w/ multiple rates
-                      insp = FALSE){       # inspect
+                      int = FALSE,            # int of any length
+                      int.sing = FALSE,       # int single
+                      int.mult = FALSE,       # int multiple
+                      num = FALSE,            # numeric
+                      num.sing = FALSE,       # numeric single
+                      num.mult = FALSE,       # numeric multiple
+                      df = FALSE,             # data.frame
+                      cr = FALSE,             # calc_rate any
+                      cr.sing = FALSE,        # calc_rate w/ single rate
+                      cr.mult = FALSE,        # calc_rate w/ multiple rates
+                      cr.int = FALSE,         # calc_rate.int any
+                      cr.int.sing = FALSE,    # calc_rate.int w/ single rate
+                      cr.int.mult = FALSE,    # calc_rate.int w/ multiple rates
+                      ar = FALSE,             # auto_rate any
+                      ar.sing = FALSE,        # auto_rate w/ single rate
+                      ar.mult = FALSE,        # auto_rate w/ multiple rates
+                      ar.int = FALSE,         # auto_rate.int any
+                      ar.int.sing = FALSE,    # auto_rate.int w/ single rate
+                      ar.int.mult = FALSE,    # auto_rate.int w/ multiple rates
+                      crbg = FALSE,           # calc_rate.bg any
+                      crbg.sing = FALSE,      # calc_rate.bg w/ single rate
+                      crbg.mult = FALSE,      # calc_rate.bg w/ multiple rates
+                      cnvr = FALSE,           # convert_rate any
+                      cnvr.sing = FALSE,      # convert_rate w/ single rate
+                      cnvr.mult = FALSE,      # convert_rate w/ multiple rates
+                      cnvr.ft = FALSE,        # convert_rate.ft any
+                      cnvr.ft.sing = FALSE,   # convert_rate.ft w/ single rate
+                      cnvr.ft.mult = FALSE,   # convert_rate.ft w/ multiple rates
+                      insp = FALSE){          # inspect
 
   # any length integer
   if(int) int.chk <- (x %% 1 == 0) else
@@ -257,6 +260,15 @@ class.val <- function(x,
   # convert_rate multiple rate
   if(cnvr.mult) cnvr.mult.chk <- (any(class(x) %in% "convert_rate") && length(x$rate.output) > 1) else
     cnvr.mult.chk <- NULL
+  # convert_rate.ft any
+  if(cnvr.ft) cnvr.ft.chk <- any(class(x) %in% "convert_rate.ft") else
+    cnvr.ft.chk <- NULL
+  # convert_rate.ft single rate
+  if(cnvr.ft.sing) cnvr.ft.sing.chk <- (any(class(x) %in% "convert_rate.ft") && length(x$rate.output) == 1) else
+    cnvr.ft.sing.chk <- NULL
+  # convert_rate.ft multiple rate
+  if(cnvr.ft.mult) cnvr.ft.mult.chk <- (any(class(x) %in% "convert_rate.ft") && length(x$rate.output) > 1) else
+    cnvr.ft.mult.chk <- NULL
   # inspect
   if(insp) insp.chk <- any(class(x) %in% "inspect") else
     insp.chk <- NULL
@@ -288,6 +300,9 @@ class.val <- function(x,
            cnvr.chk,
            cnvr.sing.chk,
            cnvr.mult.chk,
+           cnvr.ft.chk,
+           cnvr.ft.sing.chk,
+           cnvr.ft.mult.chk,
            insp.chk)
 
   final_res <- any(res)

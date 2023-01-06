@@ -128,7 +128,7 @@ summary(u_rate3)
 
 A number of approaches could be used to iterate `respR` functions to analyse these types of experiment; this is merely an example to illustrate how `respR` can be easily iterated over multiple replicates. For most purposes `calc_rate.int` or `auto_rate.int` are better options. 
 
-Here we will show a simple `for` loop to subset each replicate from the `zeb_intermittent.rd` data from the second replicate onwards. We then run `auto_rate(method = "linear")` on it. We use a 'wait' period of 2 minutes (120s), and a 'measure' period of 7 minutes (420s), leaving 2 minutes of flushing excluded.
+Here we will show a simple `for` loop to subset each replicate from the `zeb_intermittent.rd` data and run `auto_rate(method = "linear")` on it. We use a 'wait' period of 2 minutes (120s), and a 'measure' period of 7 minutes (420s), leaving 2 minutes of flushing excluded.
 
 For actual analyses it is highly recommended you examine the plot of each replicate, or at very least those used in determining a final rate. Here in the interests of speed we suppress it with `plot = FALSE`. Note also this code will create a `list` object containing an `auto_rate` object for every replicate, which will be quite large (several MB).
 

@@ -172,12 +172,12 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
   )
   summary[[12]] <- summary[[4]] # rate
 
-  names(summary) <- c("rep", "rank", "intercept_b0", "rate_b1", "rsq",
+  names(summary) <- c("rep", "rank", "intercept_b0", "slope_b1", "rsq",
                       "row", "endrow", "time", "endtime",
                       "oxy", "endoxy", "rate.bg")
 
   # Generate output:
-  bg <- summary$rate_b1
+  bg <- summary$slope_b1
   out <- list(call = call,
               inputs = inputs,
               dataframe = dt,
@@ -236,7 +236,7 @@ summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
   }
 
   out <- object$summary[pos,]
-  print(out)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)

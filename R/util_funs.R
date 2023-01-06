@@ -1,3 +1,13 @@
+# General global default settings ------------------------------------------------
+
+# Number of rows of summary tables to print before it prints a condensed version
+# i.e. nrows in print.data.table
+summ_rows <- 50
+
+
+# -------------------------------------------------------------------------
+
+
 #' Pipe graphics direct from tidyverse-related package
 #' @importFrom magrittr %>%
 #' @name %>%
@@ -366,7 +376,7 @@ generate_mrdf <- function(dt, width) {
   rolly <- static_roll(dt, width)
 
   # Then, combine into new data.table
-  rdt <- data.table::data.table(rollx, rolly$rate_b1)
+  rdt <- data.table::data.table(rollx, rolly$slope_b1)
   data.table::setnames(rdt, 1:2, c("x", "y"))
   return(rdt)
 }
@@ -394,10 +404,11 @@ nainf.omit <- function(x) {
 }
 
 # Deal with pesky "no visible binding for global variable.." checks
-x = NULL; endtime = NULL; rate_b1 = NULL; row.len = NULL; time.len = NULL
+x = NULL; endtime = NULL; row.len = NULL; time.len = NULL
 rowlength = NULL; endrow = NULL; timelength = NULL; rate.2pt = NULL
 endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
 ..xcol = NULL; ..ycol = NULL; multicore = NULL; multisession = NULL
-rsq = NULL; rate = NULL; rate.output = NULL; start_row = NULL
+rsq = NULL; rate = NULL; rate.output = NULL; start_row = NULL;
+intercept_b0 = NULL; slope_b1 = NULL
 
 

@@ -2,8 +2,8 @@
 # library(testthat)
 # test_file("tests/testthat/test-calc_rate.R")
 # covr::file_coverage("R/calc_rate.R", "tests/testthat/test-calc_rate.R")
-# x <- covr::package_coverage()
-# covr::report(x)
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
 # covr::report(covr::package_coverage())
 
 
@@ -85,7 +85,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("calc_rate - calling linear_fit (calc_rate) produces coefficients", {
 
-    expect_equal(c("intercept_b0", "rate_b1", "rsq"),
+    expect_equal(c("intercept_b0", "slope_b1", "rsq"),
                  names(linear_fit(sard_data)))
   })
 

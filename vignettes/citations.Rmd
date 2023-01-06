@@ -34,11 +34,19 @@ In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since 
 
 We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
-If you use the package please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+If you use the package please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**we'd love to hear about it**](https://januarharianto.github.io/respR/articles/contact.html).
 
-## Studies using respR
+## Studies using `respR`
 
-The following publications (most recent first) have used and cited `respR`. If we have missed one [**let us know**](https://januarharianto.github.io/respR/articles/contact.html) and we will include it in the list.
+The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+
+#### @somoIntegrativeAnalysisRespiratory2022
+
+Derek Somo's PhD project looked at a wide range of physiological functioning in an intertidal fish under warming and hypoxia. He used the `oxycrit` function to get the PCrit of his intertidal sculpins. Congrats on the PhD! 🥳
+
+#### @thambithuraiFishVulnerabilityCapture2022
+
+Excellent work from Davide Thambithurai and collaborators. They found parasite density affected capture probability in zebrafish, with implications for vulnerability to capture in commercial fisheries. As for metabolic rate, they showed parasites increased SMR, but not MMR or AAS. Davide was one of our early beta testers. In fact the `zeb_intermittent.rd` example data comes from this very study!
 
 #### @kuttiFishFarmEffluents2022
 

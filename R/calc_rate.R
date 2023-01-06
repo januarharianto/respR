@@ -256,10 +256,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   # Include twopoint method in table
   # And `rate` at end on its own in case people use 2pt by mistake
   rdt[, rate.2pt := ((endoxy - oxy) / (endtime - time))]
-  rdt[, rate := rate_b1]
+  rdt[, rate := slope_b1]
 
-  # Extract rate_b1
-  rate <- rdt[,rate_b1]
+  # Extract slope_b1
+  rate <- rdt[,slope_b1]
 
 
   # Generate output ---------------------------------------------------------
@@ -333,7 +333,7 @@ summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
   }
 
   out <- object$summary[pos,]
-  print(out)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)
@@ -473,7 +473,7 @@ linear_fit <- function(dt) {
   b0   <- coef(fit)[[1]]
   b1   <- coef(fit)[[2]]  # slope
   rsq  <- signif(summary(fit)$r.squared, 3) # r-square
-  out  <- data.frame(intercept_b0 = b0, rate_b1 = b1, rsq)
+  out  <- data.frame(intercept_b0 = b0, slope_b1 = b1, rsq)
   return(out)
 }
 

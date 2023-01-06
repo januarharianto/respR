@@ -14,7 +14,9 @@ convert_rate.ft(
   area = NULL,
   S = NULL,
   t = NULL,
-  P = 1.013253
+  P = 1.013253,
+  plot = FALSE,
+  ...
 )
 }
 \arguments{
@@ -45,6 +47,12 @@ some oxygen units.}
 
 \item{P}{numeric. Pressure (bar). Used in conversion of some oxygen units.
 Defaults to a standard value of 1.013253 bar.}
+
+\item{plot}{logical. Default is \code{FALSE}. Controls if a plot is produced. See
+Plot section.}
+
+\item{...}{Allows additional plotting controls to be passed. See Plot
+section.}
 }
 \value{
 Output is a \code{list} object containing the \verb{$rate.input}, and converted
@@ -107,6 +115,53 @@ to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/
 \code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
 \code{\link[=unit_args]{unit_args()}} for details of accepted units and their formatting. See also
 \code{\link[=convert_val]{convert_val()}} for simple conversion between non-oxygen units.
+}
+
+\subsection{Plot}{
+
+Plotting provides three ways of visualising converted rates (or a selection
+of them using \code{pos}), chosen using \code{type}. This is mostly useful only if you
+have extracted multiple rates (see \code{calc_rate.ft()}). The default is \code{plot = FALSE} to prevent plots being produced for every single conversion.
+\code{convert_rate.ft} objects can only be plotted if and \code{inspect.ft} object was
+used as the input in \code{calc_rate.ft}. In other words, converted rates from
+numeric inputs cannot be plotted.
+
+\code{type = "full"} (the default) plots a grid of up to 20 plots with each rate
+(i.e. region of averaged delta values) highlighted on a plot of delta oxygen
+values, with the converted rate value in the title. Values on the axes - time
+(bottom), row (top), and oxygen delta (left) - are in the units of the
+original raw data. Rates are plotted in order of how they appear in the
+summary table up to the first 20 rows, unless different rows have been
+specified via \code{pos}.
+
+\code{type = "rate"} plots the entire data timeseries, that is the outflow and
+inflow oxygen (if used) on the upper plot, with delta oxygen on the middle
+plot or as the upper plot if delta oxygen values have been entered in
+\code{inspect.ft}. The lower plot is the output rate values in the chosen output
+units. Each rate is plotted against the middle of the region used to
+determine it (i.e. region of averaged delta values). \code{pos} can be used to
+select a range of rates (i.e. summary table rows) to show in the lower plot
+(default is all).
+
+\code{type = "overlap"} visualises where regression results in the summary table
+occur in relation to the original dataset to help understand how they are
+distributed or may overlap. The top plot is the entire data timeseries, that
+is the outflow and inflow oxygen (if used) on the upper plot, with delta
+oxygen on the middle plot or as the upper plot if delta oxygen values have
+been entered in \code{inspect.ft}. The bottom plot is the region of the data each
+rate has been calculated over (i.e. region of averaged delta values). The
+y-axis represents the position (i.e. row) of each in the summary table
+descending from top to bottom. If no reordering or selection has been
+performed, this will usually be equivalent to the \verb{$rank} column, but note as
+reordering or selection is performed rank and summary table position will not
+necessarily be equivalent. One result (summary table row) can be highlighted,
+the default being \code{highlight = 1}. \code{pos} can be used to select a range of
+summary rows to plot in the lower overlap plot.
+
+Other options:
+
+\code{legend = FALSE} will suppress plot labels, \code{pos} selects summary rates to
+plot, \code{quiet} suppresses console messages.
 }
 
 \subsection{S3 Generic Functions}{
