@@ -270,7 +270,7 @@ Where times have crossed midnight, our code has failed to parse it correctly. Th
 
 If this particular issue is detected, it is usually an indication of a deeper problem, so the actual remedy will depend on the situation, from editing the original data file, to various solutions within R, such as reordering rows. 
 
-Here, we can simply use the `respR` function `format_time()` (see also `vignette("importing")`), which has been designed to detect and fix this specific problem of times which cross midnight but have no date attached. `format_time` parses and converts the times to numeric and adds them as a new column. 
+Here, we can simply use the `respR` function `format_time()` (see also `vignette("format_time")`), which has been designed to detect and fix this specific problem of times which cross midnight but have no date attached. `format_time` parses and converts the times to numeric and adds them as a new column. 
 
 ```{r echo = F, eval = T, results = "hide"}
 data <- import_file("zebrafish.csv")[,1:4]

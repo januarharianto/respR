@@ -1,5 +1,10 @@
-## library(testthat)
-## testthat::test_file("tests/testthat/test-select_rate.R")
+# library(testthat)
+# testthat::test_file("tests/testthat/test-select_rate.R")
+# covr::file_coverage("R/select_rate.R", "tests/testthat/test-select_rate.R")
+# Sys.setenv(NOT_CRAN = "true")
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
+# Sys.setenv(NOT_CRAN = "false")
 
 capture.output({  ## stops printing outputs on assigning
   skip_on_cran()
@@ -7,53 +12,87 @@ capture.output({  ## stops printing outputs on assigning
   ## convert_rate-from-auto_rate object
   ## contains both negative and positive rates
   {
-  suppressWarnings(conv_rt_ar_obj <- inspect(intermittent.rd) %>%
-                     auto_rate(plot = FALSE) %>%
-                     convert_rate(oxy.unit = "mg/l",
-                                  time.unit = "min",
-                                  output.unit = "mg/h/g",
-                                  volume = 2.379,
-                                  mass = 0.006955))
-  ## for testing with zero/non-zero change a couple to zero
-  conv_rt_ar_obj_w_0 <- conv_rt_ar_obj
-  conv_rt_ar_obj_w_0$rate[3] <- 0
-  conv_rt_ar_obj_w_0$summary$rate[3] <- 0
-  conv_rt_ar_obj_w_0$rate[9] <- 0
-  conv_rt_ar_obj_w_0$summary$rate[9] <- 0
+    suppressWarnings(conv_rt_ar_obj <- inspect(intermittent.rd) %>%
+                       auto_rate(plot = FALSE) %>%
+                       convert_rate(oxy.unit = "mg/l",
+                                    time.unit = "min",
+                                    output.unit = "mg/h/g",
+                                    volume = 2.379,
+                                    mass = 0.006955))
+    ## for testing with zero/non-zero change a couple to zero
+    conv_rt_ar_obj_w_0 <- conv_rt_ar_obj
+    conv_rt_ar_obj_w_0$rate[3] <- 0
+    conv_rt_ar_obj_w_0$summary$rate[3] <- 0
+    conv_rt_ar_obj_w_0$rate[9] <- 0
+    conv_rt_ar_obj_w_0$summary$rate[9] <- 0
 
-  ## make subset by method test objects
-  suppressWarnings(conv_rt_ar_subset_pos <- select_rate(conv_rt_ar_obj, method = "positive"))
-  suppressWarnings(conv_rt_ar_subset_neg <- select_rate(conv_rt_ar_obj, method = "negative"))
-  suppressWarnings(conv_rt_ar_subset_nonzero <- select_rate(conv_rt_ar_obj_w_0, method = "nonzero"))
-  suppressWarnings(conv_rt_ar_subset_zero <- select_rate(conv_rt_ar_obj_w_0, method = "zero"))
+    ## make subset by method test objects
+    suppressWarnings(conv_rt_ar_subset_pos <- select_rate(conv_rt_ar_obj, method = "positive"))
+    suppressWarnings(conv_rt_ar_subset_neg <- select_rate(conv_rt_ar_obj, method = "negative"))
+    suppressWarnings(conv_rt_ar_subset_nonzero <- select_rate(conv_rt_ar_obj_w_0, method = "nonzero"))
+    suppressWarnings(conv_rt_ar_subset_zero <- select_rate(conv_rt_ar_obj_w_0, method = "zero"))
 
 
-  ## objects to test subsetting of different auto_rate methods
-  conv_rt_ar_obj_high <- auto_rate(urchins.rd[,1:2], method = "highest") %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_low <- auto_rate(urchins.rd[,1:2], method = "lowest") %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_maximum <- auto_rate(urchins.rd[,1:2], method = "maximum") %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_minimum <- auto_rate(urchins.rd[,1:2], method = "minimum") %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_max <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "max")) %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_min <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "min")) %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
-  conv_rt_ar_obj_int <- auto_rate(urchins.rd[,1:2], method = "interval") %>%
-    convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    ## objects to test subsetting of different auto_rate methods
+    conv_rt_ar_obj_high <- auto_rate(urchins.rd[,1:2], method = "highest") %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_low <- auto_rate(urchins.rd[,1:2], method = "lowest") %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_maximum <- auto_rate(urchins.rd[,1:2], method = "maximum") %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_minimum <- auto_rate(urchins.rd[,1:2], method = "minimum") %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_max <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "max")) %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_min <- suppressWarnings(auto_rate(urchins.rd[,1:2], method = "min")) %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
+    conv_rt_ar_obj_int <- auto_rate(urchins.rd[,1:2], method = "interval") %>%
+      convert_rate(oxy.unit = "mg/l", time.unit = "min", output.unit = "mg/h/g", volume = 2.379, mass = 0.006955)
 
-  conv_rt_ar_obj_high_sub <- select_rate(conv_rt_ar_obj_high, method = "rsq", n = c(0.96,1))
+    conv_rt_ar_obj_high_sub <- select_rate(conv_rt_ar_obj_high, method = "rsq", n = c(0.96,1))
 
-  # large object
-  conv_rt_ar_low_obj <- inspect(sardine.rd) %>%
-    auto_rate(method = "lowest", plot = FALSE) %>%
-    convert_rate(oxy.unit = "mg/l",
-                 time.unit = "min",
-                 output.unit = "mg/h/g",
-                 volume = 2.379,
-                 mass = 0.006955)
+    # large object
+    conv_rt_ar_low_obj <- inspect(sardine.rd) %>%
+      auto_rate(method = "lowest", plot = FALSE) %>%
+      convert_rate(oxy.unit = "mg/l",
+                   time.unit = "min",
+                   output.unit = "mg/h/g",
+                   volume = 2.379,
+                   mass = 0.006955)
+
+    # intermittent-flow test data
+    # regular reps - 10 reps from this dataset
+    dt.reg.insp <- subset_data(zeb_intermittent.rd,
+                               from = 5840,
+                               to = 5840 + 6599,
+                               by = "row") |>
+      inspect(legend = F, plot = T)
+
+    # 10 reps, 1 rank in each
+    conv_rt_ar.int_obj <- dt.reg.insp |>
+      calc_rate.int(starts = 660,
+                    by = "time",
+                    plot = F) |>
+      convert_rate(oxy.unit = "mg/L",
+                   time.unit = "secs",
+                   output.unit = "mg/h/g",
+                   volume = 0.12,
+                   mass = 0.0009)
+
+    # 10 reps, multiple ranks in each
+    conv_rt_ar.int_obj_mult_ranks <- dt.reg.insp |>
+      auto_rate.int(starts = 660,
+                    wait = 120,
+                    measure = 360,
+                    by = "row",
+                    plot = F,
+                    n = 5,
+                    width = 0.4) |>
+      convert_rate(oxy.unit = "mg/L",
+                   time.unit = "secs",
+                   output.unit = "mg/h/g",
+                   volume = 0.12,
+                   mass = 0.0009)
   }
 
   # General checks ----------------------------------------------------------
@@ -71,14 +110,14 @@ capture.output({  ## stops printing outputs on assigning
   test_that("select_rate - stops if input is not a convert_rate object", {
     expect_error(select_rate(calc_rate(intermittent.rd, from = 0, to = 1000,
                                        by = "row")),
-                 regexp = "select_rate: Input is not a 'convert_rate' object")
+                 regexp = "select_rate: Input is not a 'convert_rate' or 'convert_rate.ft' object")
     expect_error(select_rate(545),
-                 regexp = "select_rate: Input is not a 'convert_rate' object")
+                 regexp = "select_rate: Input is not a 'convert_rate' or 'convert_rate.ft' object")
   })
 
   test_that("select_rate - stops if wrong method", {
     expect_error(select_rate(conv_rt_ar_subset_pos, method = "blah"),
-                 regexp = "'method' input not recognised")
+                 regexp = "select_rate: 'method' input not recognised")
   })
 
   test_that("select_rate - output inherits convert_rate and convert_rate_select class", {
@@ -298,9 +337,15 @@ capture.output({  ## stops printing outputs on assigning
 
   # Check "lowest" method ---------------------------------------------------
 
-  test_that("select_rate: method = lowest   - error if both neg and pos rates present", {
+  test_that("select_rate: method = lowest   - errors", {
     expect_error(select_rate(conv_rt_ar_obj, method = "lowest", n = 7),
                  regexp = "Object contains both negative and positive rates.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "lowest", n = 7.1),
+                 regexp = "select_rate: For 'lowest' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "lowest", n = -1),
+                 regexp = "select_rate: For 'lowest' method 'n' must contain only positive integers.")
+    expect_message(select_rate(conv_rt_ar_obj_min, method = "lowest", n = 1000),
+                   regexp = "select_rate: 'n' input is greater than number of rates in \\$summary. Nothing to remove.")
   })
 
   test_that("select_rate: method = lowest   - check n rates extracted for positive rates", {
@@ -335,9 +380,15 @@ capture.output({  ## stops printing outputs on assigning
 
   # Check "highest" method --------------------------------------------------
 
-  test_that("select_rate: method = highest   - error if both neg and pos rates present", {
+  test_that("select_rate: method = highest   - errors", {
     expect_error(select_rate(conv_rt_ar_obj, method = "highest", n = 7),
                  regexp = "Object contains both negative and positive rates.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "highest", n = 7.1),
+                 regexp = "select_rate: For 'highest' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "highest", n = -1),
+                 regexp = "select_rate: For 'highest' method 'n' must contain only positive integers.")
+    expect_message(select_rate(conv_rt_ar_obj_min, method = "highest", n = 1000),
+                   regexp = "select_rate: 'n' input is greater than number of rates in \\$summary. Nothing to remove.")
   })
 
   test_that("select_rate: method = highest   - check n rates extracted for positive rates", {
@@ -372,6 +423,15 @@ capture.output({  ## stops printing outputs on assigning
 
   # Check "lowest_percentile" method ----------------------------------------
 
+  test_that("select_rate: method = lowest_percentile   - errors", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "lowest_percentile", n = 7),
+                 regexp = "Object contains both negative and positive rates.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "lowest_percentile", n = 7.1),
+                 regexp = "select_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "lowest_percentile", n = -1),
+                 regexp = "select_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+  })
+
   test_that("select_rate: method = lowest_percentile   - these should match", {
     conv_rt_ar_subset_pos_flip <- conv_rt_ar_subset_pos
     conv_rt_ar_subset_pos_flip$rate.output <- conv_rt_ar_subset_pos_flip$rate.output * -1
@@ -382,6 +442,15 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   # Check "highest_percentile" method ---------------------------------------
+
+  test_that("select_rate: method = highest_percentile   - errors", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "highest_percentile", n = 7),
+                 regexp = "Object contains both negative and positive rates.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "highest_percentile", n = 7.1),
+                 regexp = "select_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+    expect_error(select_rate(conv_rt_ar_obj_min, method = "highest_percentile", n = -1),
+                 regexp = "select_rate: For 'percentile' methods 'n' must be between 0 and 1.")
+  })
 
   test_that("select_rate: method = highest_percentile   - these should match", {
     conv_rt_ar_subset_pos_flip <- conv_rt_ar_subset_pos
@@ -396,6 +465,15 @@ capture.output({  ## stops printing outputs on assigning
   # Check "minimum" method --------------------------------------------------
 
   conv_rt_ar_subset_min_n <- select_rate(conv_rt_ar_obj, method = "minimum", n = 4)
+
+  test_that("select_rate: method = minimum   - errors", {
+    expect_error(select_rate(conv_rt_ar_subset_min_n, method = "minimum", n = 7.1),
+                 regexp = "select_rate: For 'minimum' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar_subset_min_n, method = "minimum", n = -1),
+                 regexp = "select_rate: For 'minimum' method 'n' must contain only positive integers.")
+    expect_message(select_rate(conv_rt_ar_subset_min_n, method = "minimum", n = 7000),
+                   regexp = "select_rate: 'n' input is greater than number of rates in \\$summary. Nothing to remove.")
+  })
 
   test_that("select_rate: method = minimum   - check n rates extracted", {
     expect_length(conv_rt_ar_subset_min_n$rate.output,
@@ -424,6 +502,15 @@ capture.output({  ## stops printing outputs on assigning
 
   # Check "maximim" method --------------------------------------------------
   conv_rt_ar_subset_max_n <- select_rate(conv_rt_ar_obj, method = "maximum", n = 4)
+
+  test_that("select_rate: method = maximum   - errors", {
+    expect_error(select_rate(conv_rt_ar_subset_max_n, method = "maximum", n = 7.1),
+                 regexp = "select_rate: For 'maximum' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar_subset_max_n, method = "maximum", n = -1),
+                 regexp = "select_rate: For 'maximum' method 'n' must contain only positive integers.")
+    expect_message(select_rate(conv_rt_ar_subset_max_n, method = "maximum", n = 7000),
+                   regexp = "select_rate: 'n' input is greater than number of rates in \\$summary. Nothing to remove.")
+  })
 
   test_that("select_rate: method = maximum   - check n rates extracted", {
     expect_length(conv_rt_ar_subset_max_n$rate.output,
@@ -502,6 +589,57 @@ capture.output({  ## stops printing outputs on assigning
                              n = c(0.0015, 0.0010))$rate.output)
   })
 
+  # Check "slope" method -----------------------------------------------------
+
+  conv_rt_ar_select_slope <- select_rate(conv_rt_ar_obj, method = "slope",
+                                         n = c(-0.0006, 0.001))
+
+  test_that("select_slope: method = slope   - check all within n slope values", {
+    sapply(conv_rt_ar_select_slope$summary$slope_b1, function(x) expect_gte(x, -0.0006))
+    sapply(conv_rt_ar_select_slope$summary$slope_b1, function(x) expect_lte(x, 0.001))
+  })
+
+  test_that("select_slope: method = slope   - check stops with n not length 2 vector", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "slope", n = 4),
+                 regexp = "For 'slope' method 'n' must be a vector of two values.")
+    expect_error(select_rate(conv_rt_ar_obj, method = "slope", n = c(1,2,3)),
+                 regexp = "For 'slope' method 'n' must be a vector of two values.")
+  })
+
+  test_that("select_slope: method = slope   - works if n entered either way round", {
+    expect_equal(select_rate(conv_rt_ar_obj, method = "slope",
+                             n = c(-0.0006, 0.001))$rate.output,
+                 select_rate(conv_rt_ar_obj, method = "slope",
+                             n = c(-0.0006, 0.001))$rate.output)
+  })
+
+
+  # Check "intercept" method -----------------------------------------------------
+
+  conv_rt_ar_select_intercept <- select_rate(conv_rt_ar_obj, method = "intercept",
+                                             n = c(3, 7.2))
+
+  test_that("select_intercept: method = intercept   - check all within n intercept values", {
+    sapply(conv_rt_ar_select_intercept$summary$intercept_b0, function(x) expect_gte(x, 3))
+    sapply(conv_rt_ar_select_intercept$summary$intercept_b0, function(x) expect_lte(x, 7.2))
+  })
+
+  test_that("select_intercept: method = intercept   - check stops with n not length 2 vector", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "intercept", n = 4),
+                 regexp = "For 'intercept' method 'n' must be a vector of two values.")
+    expect_error(select_rate(conv_rt_ar_obj, method = "intercept", n = c(1,2,3)),
+                 regexp = "For 'intercept' method 'n' must be a vector of two values.")
+  })
+
+  test_that("select_intercept: method = intercept   - works if n entered either way round", {
+    expect_equal(select_rate(conv_rt_ar_obj, method = "intercept",
+                             n = c(3, 7.2))$rate.output,
+                 select_rate(conv_rt_ar_obj, method = "intercept",
+                             n = c(3, 7.2))$rate.output)
+  })
+
+
+
   # Check "rsq" method ------------------------------------------------------
 
   conv_rt_ar_subset_rsq <- select_rate(conv_rt_ar_obj, method = "rsq",
@@ -541,6 +679,12 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "For 'row' method 'n' must be a vector of two values.")
     expect_error(select_rate(conv_rt_ar_obj, method = "row", n = c(1,2,3)),
                  regexp = "For 'row' method 'n' must be a vector of two values.")
+  })
+
+  test_that("select_rate: method = row   - check stops with n out of range", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "row",
+                             n = c(1,5000)),
+                 regexp = "select_rate: Input for 'n': row inputs out of data frame range.")
   })
 
   # Check "row_omit" method -------------------------------------------------
@@ -625,17 +769,25 @@ capture.output({  ## stops printing outputs on assigning
                                                                n = 2000:2200)$summary)
   })
 
+  test_that("select_rate: works with method = row_omit and n input not used - i.e. does not remove any results", {
+    skip_on_cran()
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "row_omit", n = 100)$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "row_omit", n = 98:100)$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+  })
+
   test_that("select_rate: stops with method = row_omit and n input malformed", {
     ## check stops with n not numeric or integer
     expect_error(select_rate(conv_rt_ar_obj, method = "row_omit",
                              n = "string"),
-                 regexp = "select_rate: For 'row_omit' method 'n' must only contain integer values of row.")
+                 regexp = "select_rate: For 'row_omit' method 'n' must contain only positive integers.")
     expect_error(select_rate(conv_rt_ar_obj, method = "row_omit",
                              n = 1.2),
-                 regexp = "select_rate: For 'row_omit' method 'n' must only contain integer values of row.")
+                 regexp = "select_rate: For 'row_omit' method 'n' must contain only positive integers.")
     expect_error(select_rate(conv_rt_ar_obj, method = "row_omit",
                              n = c(1.2, 2.5)),
-                 regexp = "select_rate: For 'row_omit' method 'n' must only contain integer values of row.")
+                 regexp = "select_rate: For 'row_omit' method 'n' must contain only positive integers.")
     ## check stops when out of range
     expect_error(select_rate(conv_rt_ar_obj, method = "row_omit",
                              n = 5000),
@@ -657,6 +809,13 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "For 'time' method 'n' must be a vector of two values.")
     expect_error(select_rate(conv_rt_ar_obj, method = "time", n = c(1,2,3)),
                  regexp = "For 'time' method 'n' must be a vector of two values.")
+  })
+
+  test_that("select_rate: stops with method = time and n input malformed", {
+    ## check stops when out of range
+    expect_error(select_rate(conv_rt_ar_obj, method = "time",
+                             n = c(1,5000)),
+                 regexp = "select_rate: Input for 'n': time inputs out of time data range.")
   })
 
   # Check "time_omit" method -------------------------------------------------
@@ -741,6 +900,15 @@ capture.output({  ## stops printing outputs on assigning
                                                                n = 1000:1500)$summary)
   })
 
+
+  test_that("select_rate: works with method = time_omit and n input not used - i.e. does not remove any results", {
+    skip_on_cran()
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "time_omit", n = 6000)$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "time_omit", n = 5998:6000)$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+  })
+
   test_that("select_rate: stops with method = time_omit and n input malformed", {
     ## check stops with n not numeric
     expect_error(select_rate(conv_rt_ar_obj, method = "time_omit",
@@ -757,9 +925,33 @@ capture.output({  ## stops printing outputs on assigning
   conv_rt_ar_subset_rank <- select_rate(conv_rt_ar_obj, method = "rank",
                                         n = c(4, 10))
 
+  test_that("select_rate: method = rank   - messages", {
+    expect_message(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank", n = 4),
+                   "select_rate: Note there are multiple replicates present in these results, which may have multiple ranks \\*within\\* them.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank", n = 7.1),
+                 regexp = "select_rate: For 'rank' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank", n = 1000),
+                 regexp = "select_rate: Input for 'n': One or more 'rank' inputs out of range of 'summary\\$rank' values.")
+  })
+
   test_that("select_rate: method = rank   - check all within rank n range", {
-    sapply(conv_rt_ar_subset_rank$summary$rank, function(x) expect_gte(x, 4))
-    sapply(conv_rt_ar_subset_rank$summary$rank, function(x) expect_lte(x, 10))
+    expect_equal(unique(conv_rt_ar_subset_rank$summary$rank),
+                 c(4,10))
+  })
+
+  test_that("select_rate: method = rank   - correctly selects from intermittent-flow multiple ranks per rep ", {
+    #conv_rt_ar.int_obj
+    #conv_rt_ar.int_obj_mult_ranks
+
+    # should not remove any rates
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj, method = "rank", n = 1)$summary),
+                 10)
+    # should remove all ranks except 1
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank", n = 1)$summary),
+                 10)
+    # another check
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank", n = 1:2)$summary),
+                 20)
   })
 
   test_that("select_rate: method = rank   - accepts multiple length vectors", {
@@ -771,6 +963,143 @@ capture.output({  ## stops printing outputs on assigning
                  NA)
   })
 
+
+
+  # Check "rank_omit" method ------------------------------------------------------
+  conv_rt_ar_subset_rank <- select_rate(conv_rt_ar_obj, method = "rank_omit",
+                                        n = c(4, 10))
+
+  test_that("select_rate: method = rank   - messages", {
+    expect_message(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 4),
+                   "select_rate: Note there are multiple replicates present in these results, which may have multiple ranks \\*within\\* them.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 7.1),
+                 regexp = "select_rate: For 'rank_omit' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 1000),
+                 regexp = "select_rate: Input for 'n': One or more 'rank_omit' inputs out of range of 'summary\\$rank' values.")
+  })
+
+  test_that("select_rate: method = rank_omit   - check all within rank n range", {
+    expect_equal(unique(conv_rt_ar_subset_rank$summary$rank),
+                 c(1:3,5:9,11:16))
+  })
+
+  test_that("select_rate: method = rank_omit   - correctly selects from intermittent-flow multiple ranks per rep ", {
+    #conv_rt_ar.int_obj
+    #conv_rt_ar.int_obj_mult_ranks
+
+    # should remove all rates
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj, method = "rank_omit", n = 1)$summary),
+                 0)
+    #
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 1)$summary),
+                 31)
+    expect_equal(unique(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 1)$summary$rank),
+                 2:5)
+    expect_equal(unique(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rank_omit", n = 1:3)$summary$rank),
+                 4:5)
+  })
+
+  test_that("select_rate: method = rank   - accepts multiple length vectors", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "rank_omit", n = 4),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj, method = "rank_omit", n = c(1,2)),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj, method = "rank_omit", n = c(1,2,3)),
+                 NA)
+  })
+
+
+  # Check "rep" method ------------------------------------------------------
+
+  #conv_rt_ar.int_obj
+  #conv_rt_ar.int_obj_mult_ranks
+  #
+  conv_rt_ar_subset_rep <- select_rate(conv_rt_ar.int_obj, method = "rep",
+                                       n = c(4, 10))
+
+  test_that("select_rate: method = rep   - messages", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "rep", n = 1),
+                 regexp = "select_rate: All 'rep' are NA so nothing to select!")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = 7.1),
+                 regexp = "select_rate: For 'rep' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = 1000),
+                 regexp = "select_rate: Input for 'n': One or more 'rep' inputs out of range of 'summary\\$rep' values.")
+  })
+
+  test_that("select_rate: method = rep   - check all within rep n range", {
+    expect_equal(unique(conv_rt_ar_subset_rep$summary$rep),
+                 c(4,10))
+  })
+
+  test_that("select_rate: method = rep   - correctly selects from intermittent-flow multiple reps per rep ", {
+
+    #
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj, method = "rep", n = 1)$summary),
+                 1)
+    #
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = 1)$summary),
+                 4)
+    # another check
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = 1:2)$summary),
+                 9)
+  })
+
+  test_that("select_rate: method = rep   - accepts multiple length vectors", {
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = 1),
+                 NA)
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = c(1,2)),
+                 NA)
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep", n = c(1,2,3)),
+                 NA)
+  })
+
+
+
+  # Check "rep_omit" method ------------------------------------------------------
+  #conv_rt_ar.int_obj
+  #conv_rt_ar.int_obj_mult_ranks
+
+  conv_rt_ar_subset_rep <- select_rate(conv_rt_ar.int_obj, method = "rep_omit",
+                                       n = c(4, 10))
+
+  test_that("select_rate: method = rep   - messages", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "rep_omit", n = 1),
+                 regexp = "select_rate: All 'rep' are NA so nothing to select!")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 7.1),
+                 regexp = "select_rate: For 'rep_omit' method 'n' must contain only positive integers.")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 1000),
+                 regexp = "select_rate: Input for 'n': One or more 'rep_omit' inputs out of range of 'summary\\$rep' values.")
+  })
+
+  test_that("select_rate: method = rep_omit   - check all within rep n range", {
+    expect_equal(unique(conv_rt_ar_subset_rep$summary$rep),
+                 c(1:3,5:9))
+  })
+
+  test_that("select_rate: method = rep_omit   - correctly selects from intermittent-flow multiple reps per rep ", {
+    #conv_rt_ar.int_obj
+    #conv_rt_ar.int_obj_mult_ranks
+
+    # should remove all rates
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj, method = "rep_omit", n = 1)$summary),
+                 9)
+    #
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 1)$summary),
+                 37)
+    expect_equal(unique(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 1)$summary$rep),
+                 2:10)
+    expect_equal(unique(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 1:3)$summary$rep),
+                 4:10)
+  })
+
+  test_that("select_rate: method = rep   - accepts multiple length vectors", {
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = 4),
+                 NA)
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = c(1,2)),
+                 NA)
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "rep_omit", n = c(1,2,3)),
+                 NA)
+  })
 
 
   # Check "oxygen" method ----------------------------------------------------
@@ -791,6 +1120,11 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "For 'oxygen' method 'n' must be a vector of two values.")
   })
 
+  test_that("select_rate: works with method = oxygen_omit and n input not used - i.e. does not remove any results", {
+    skip_on_cran()
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "oxygen", n = c(3.5, 7.7))$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+  })
 
 
   # Check "oxygen_omit" method ----------------------------------------------------
@@ -823,6 +1157,15 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(conv_rt_ar_subset_oxygen_omit <- select_rate(conv_rt_ar_obj, method = "oxygen_omit",
                                                               n = c(7,6)),
                  regexp = NA)
+  })
+
+
+  test_that("select_rate: works with method = oxygen_omit and n input not used - i.e. does not remove any results", {
+    skip_on_cran()
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "oxygen_omit", n = 3.5)$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
+    expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "oxygen_omit", n = c(3.2, 3.3, 3.5))$summary),
+                 nrow(conv_rt_ar.int_obj_mult_ranks$summary))
   })
 
   test_that("select_rate: stops with method = oxygen_omit and n input malformed", {
@@ -871,6 +1214,31 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = "For 'manual' method: 'n' values are out of range of ")
   })
 
+  # Check "manual_omit" method ------------------------------------------------------
+  conv_rt_ar_subset_rank <- select_rate(conv_rt_ar_obj, method = "manual_omit",
+                                        n = c(4, 10))
+
+  test_that("select_rate: method = rank   - messages", {
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "manual_omit", n = 7.1),
+                 regexp = "select_rate: For 'manual' method: 'n' values are out of range of \\$summary data.frame rows...")
+    expect_error(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "manual_omit", n = 1000),
+                 regexp = "select_rate: For 'manual' method: 'n' values are out of range of \\$summary data.frame rows...")
+  })
+
+  test_that("select_rate: method = manual_omit   - check all within rank n range", {
+    expect_equal(unique(conv_rt_ar_subset_rank$summary$rank),
+                 c(1:3,5:9,11:16))
+  })
+
+  test_that("select_rate: method = rank   - accepts multiple length vectors", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "manual_omit", n = 4),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj, method = "manual_omit", n = c(1,2)),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj, method = "manual_omit", n = c(1,2,3)),
+                 NA)
+  })
+
 
   # Check "density" method --------------------------------------------------
 
@@ -916,6 +1284,13 @@ capture.output({  ## stops printing outputs on assigning
 
   # Check "duration" method -------------------------------------------------
 
+  test_that("select_rate: method = duration   - check stops with n not length 2 vector", {
+    expect_error(select_rate(conv_rt_ar_obj, method = "duration", n = 4),
+                 regexp = "For 'duration' method 'n' must be a vector of two values.")
+    expect_error(select_rate(conv_rt_ar_obj, method = "duration", n = c(1,2,3)),
+                 regexp = "For 'duration' method 'n' must be a vector of two values.")
+  })
+
   test_that("select_rate: method = duration   - subsets max duration (zero to something) correctly", {
     conv_rt_ar_subset_dur1 <- select_rate(conv_rt_ar_obj, method = "duration",
                                           n = c(0,1000))
@@ -942,6 +1317,12 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   # Check "overlap" method --------------------------------------------------
+
+  test_that("select_rate: method = overlap   - applies n = NULL default of 0", {
+    expect_message(select_rate(conv_rt_ar_obj, method = "overlap",
+                             n = NULL),
+                 "select_rate: 'overlap' method - applying default 'n = 0', no overlapping permitted.")
+  })
 
   test_that("select_rate: method = overlap   - stops when n is outside 0 to 1", {
     expect_error(select_rate(conv_rt_ar_obj, method = "overlap",
@@ -1367,9 +1748,6 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-
-
-
   # method = "rsq" -----------------------------------------------------
 
   # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
@@ -1437,8 +1815,139 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
+  # method = "slope" -----------------------------------------------------
 
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("select_rate: method = slope - correct message", {
+    # linear object
+    expect_message(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL),
+                   regexp = "select_rate: Reordering results by 'slope' method.")
+    # highest object
+    expect_message(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL),
+                   regexp = "select_rate: Reordering results by 'slope' method.")
+  })
 
+  test_that("select_rate: method = slope - works and correctly reorders results", {
+    skip_on_cran()
+    # works
+    expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(select_rate(empty_obj, method = "slope", n = NULL),
+                 NA)
+    expect_message(select_rate(empty_obj, method = "slope", n = NULL),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'slope' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)$summary$slope,
+                     (sort(conv_rt_ar_obj$summary$slope)))
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)$summary$slope,
+                     (sort(conv_rt_ar_obj_high$summary$slope)))
+
+    # $rate.output element correctly ordered
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)$rate.output,
+                     select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)$summary$rate.output)
+    # expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)$rate.output,
+    #                  conv_rt_ar_obj$rate.output[dplyr::arrange(conv_rt_ar_obj$summary, desc(slope))$rank])
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)$rate.output,
+                     select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)$summary$rate.output)
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)$rate.output,
+                     conv_rt_ar_obj_high$rate.output[dplyr::arrange(conv_rt_ar_obj_high$summary, (slope_b1))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(length(select_rate(conv_rt_ar_obj_mixed_lin, method = "slope", n = NULL)$rate.output),
+                     length(conv_rt_ar_obj$rate.output))
+    expect_identical(length(select_rate(conv_rt_ar_obj_mixed_high, method = "slope", n = NULL)$rate.output),
+                     length(conv_rt_ar_obj_high$rate.output))
+
+  })
+
+  # method = "intercept" -----------------------------------------------------
+
+  # "rolling" and "linear" methods ignore 'n', all others it must be NULL to reorder
+  # So for others only need top test here
+  test_that("select_rate: method = intercept - correct message", {
+    # linear object
+    expect_message(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL),
+                   regexp = "select_rate: Reordering results by 'intercept' method.")
+    # highest object
+    expect_message(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL),
+                   regexp = "select_rate: Reordering results by 'intercept' method.")
+  })
+
+  test_that("select_rate: method = intercept - works and correctly reorders results", {
+    skip_on_cran()
+    # works
+    expect_error(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL),
+                 NA)
+    expect_error(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL),
+                 NA)
+
+    # can be plotted
+    reorder_obj_lin <- select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)
+    expect_error(plot(reorder_obj_lin),
+                 regex = NA)
+    reorder_obj_high <- select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)
+    expect_error(plot(reorder_obj_high),
+                 regex = NA)
+
+    # no error with empty object
+    expect_error(select_rate(empty_obj, method = "intercept", n = NULL),
+                 NA)
+    expect_message(select_rate(empty_obj, method = "intercept", n = NULL),
+                   "----- Reordering complete. 0 rate\\(s) reordered by 'intercept' method -----")
+
+    # works with S3
+    expect_output(print(reorder_obj_lin))
+    expect_output(summary(reorder_obj_lin))
+    expect_output(mean(reorder_obj_lin))
+    expect_output(print(reorder_obj_high))
+    expect_output(summary(reorder_obj_high))
+    expect_output(mean(reorder_obj_high))
+
+    # summary table correctly ordered for this method
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)$summary$intercept,
+                     (sort(conv_rt_ar_obj$summary$intercept)))
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)$summary$intercept,
+                     (sort(conv_rt_ar_obj_high$summary$intercept)))
+
+    # $rate.output element correctly ordered
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)$rate.output,
+                     select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)$summary$rate.output)
+    # expect_identical(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)$rate.output,
+    #                  conv_rt_ar_obj$rate.output[dplyr::arrange(conv_rt_ar_obj$summary, desc(intercept))$rank])
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)$rate.output,
+                     select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)$summary$rate.output)
+    expect_identical(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)$rate.output,
+                     conv_rt_ar_obj_high$rate.output[dplyr::arrange(conv_rt_ar_obj_high$summary, (intercept_b0))$rank])
+
+    # $subset_regs element correct length
+    expect_identical(length(select_rate(conv_rt_ar_obj_mixed_lin, method = "intercept", n = NULL)$rate.output),
+                     length(conv_rt_ar_obj$rate.output))
+    expect_identical(length(select_rate(conv_rt_ar_obj_mixed_high, method = "intercept", n = NULL)$rate.output),
+                     length(conv_rt_ar_obj_high$rate.output))
+
+  })
 
   # method = "lowest" -----------------------------------------------------
 
@@ -1451,6 +1960,9 @@ capture.output({  ## stops printing outputs on assigning
     # highest object
     expect_message(select_rate(conv_rt_ar_obj_mixed_high, method = "lowest", n = NULL),
                    regexp = "select_rate: Reordering results by 'lowest' method.")
+    # mixed sign object
+    expect_error(select_rate(conv_rt_ar_obj, method = "lowest", n = NULL),
+                 regexp = "select_rate: Object contains both negative and positive rates.")
   })
 
   test_that("select_rate: method = lowest - works and correctly reorders results", {
@@ -1521,6 +2033,9 @@ capture.output({  ## stops printing outputs on assigning
     # highest object
     expect_message(select_rate(conv_rt_ar_obj_mixed_high, method = "highest", n = NULL),
                    regexp = "select_rate: Reordering results by 'highest' method.")
+    # mixed sign object
+    expect_error(select_rate(conv_rt_ar_obj, method = "highest", n = NULL),
+                 regexp = "select_rate: Object contains both negative and positive rates.")
   })
 
   test_that("select_rate: method = highest - works and correctly reorders results", {
@@ -2356,10 +2871,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      cr.int_mult_adj %>%
-        select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
-        plot())
     expect_message(
       cr.int_mult_adj %>%
         select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
@@ -2464,10 +2975,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar.int_mult_adj %>%
-        select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
-        plot())
     expect_message(
       ar.int_mult_adj %>%
         select_rate(method = "rate", n = c(-0.4, -0.3)) %>%
@@ -2553,10 +3060,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_sing %>%
-        select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
-        plot())
     expect_message(
       ar_sing %>%
         select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
@@ -2641,10 +3144,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_sing_adj %>%
-        select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
-        plot())
     expect_message(
       ar_sing_adj %>%
         select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
@@ -2728,10 +3227,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_mult %>%
-        select_rate(method = "rate", n = c(-0.9, -1)) %>%
-        plot())
     expect_message(
       ar_mult %>%
         select_rate(method = "rate", n = c(-0.9, -1)) %>%
@@ -2816,10 +3311,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_mult_adj %>%
-        select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
-        plot())
     expect_message(
       ar_mult_adj %>%
         select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
@@ -2902,10 +3393,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_mult_low %>%
-        select_rate(method = "rate", n = c(-0.9, -1)) %>%
-        plot())
     expect_message(
       ar_mult_low %>%
         select_rate(method = "rate", n = c(-0.9, -1)) %>%
@@ -2990,10 +3477,6 @@ capture.output({  ## stops printing outputs on assigning
         select_rate(method = "rsq", n = NULL) %>%
         plot())
     # should NOT plot
-    expect_output(
-      ar_mult_low_adj %>%
-        select_rate(method = "rate", n = c(-0.5, -0.4)) %>%
-        plot())
     expect_message(
       ar_mult_low_adj %>%
         select_rate(method = "rate", n = c(-0.5, -0.4)) %>%

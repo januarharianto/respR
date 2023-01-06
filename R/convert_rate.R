@@ -87,12 +87,12 @@
 #' `auto_rate` `linear` method. The top plot is the entire data timeseries, the
 #' bottom plot the region of the data each rate regression has been fit over.
 #' The y-axis represents the position (i.e. row) of each in the summary table
-#' descending from top to bottom. If no reordering or subsetting has been
+#' descending from top to bottom. If no reordering or selection has been
 #' performed, this will usually be equivalent to the `$rank` column, but note as
-#' reordering or subsetting is performed rank and summary table position will
-#' not necessarily be equivalent. One result (summary table row) can be
-#' highlighted, the default being `highlight = 1`. `pos` can be used to select a
-#' range of summary rows to plot in the lower overlap plot.
+#' reordering or selection is performed rank and summary table position will not
+#' necessarily be equivalent. One result (summary table row) can be highlighted,
+#' the default being `highlight = 1`. `pos` can be used to select a range of
+#' summary rows to plot in the lower overlap plot.
 #'
 #' Other options:
 #'
@@ -248,7 +248,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   summ.ext <- data.table(rep = NA,
                          rank = NA,
                          intercept_b0 = NA,
-                         rate_b1 = NA,
+                         slope_b1 = NA,
                          rsq = NA,
                          density = NA,
                          row = NA,
@@ -562,7 +562,7 @@ summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   out <- data.table(object$summary[pos,])
 
-  print(out, class = FALSE)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)
@@ -625,10 +625,16 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
                               highlight = NULL, legend = TRUE, rate.rev = TRUE, ...) {
 
+  ## warning if empty - but return to allow piping
+  if(length(x$summary$rate.output) == 0){
+    message("plot.convert_rate: Nothing to plot! No rates found in object.")
+    return(invisible(x))
+  }
+
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  # if numeric conversions, nothing to print
+  # if numeric conversions, nothing to plot
   if(is.null(x$dataframe))
     stop(glue::glue("plot.convert_rate: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."))
   # Can't plot calc_rate.bg objects as multiple rates come from different df columns
@@ -642,6 +648,13 @@ plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
   # number of rates
   nrt <- length(x$rate.output)
 
+  # pos checks
+  if(is.null(pos)) pos <- 1:nrt
+  if(any(pos > nrt)){
+    message(glue::glue("plot.convert_rate: One or more 'pos' inputs higher than number of rows in '$summary'. Applying default of all rows."))
+    pos <- 1:nrt
+  }
+
   #### if(!quiet) CONSOLE
   if(!quiet) cat("\n# plot.convert_rate # -------------------\n")
 
@@ -649,11 +662,12 @@ plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
   if(type == "full") grid.p(x, pos = pos, msg = "plot.convert_rate",
                             title = "", ...)
 
-  if(type == "overlap") overlap.p(x, highlight = highlight, pos = pos, legend = legend,
-                                  msg = "plot.convert_rate", ...)
-
   if(type == "rate") outrate.p(x, pos = pos, quiet = quiet, msg = "plot.convert_rate",
                                legend = legend, rate.rev = rate.rev, ...)
+
+  if(type == "overlap") overlap.p(x, highlight = highlight, pos = pos, legend = legend, quiet = quiet,
+                                  msg = "plot.convert_rate", ...)
+
 
 
   if(!quiet) cat("-----------------------------------------\n")

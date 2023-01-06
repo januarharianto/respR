@@ -2,8 +2,8 @@
 # library(testthat)
 # test_file("tests/testthat/test-oxy_crit.R")
 # covr::file_coverage("R/oxy_crit.ft.R", "tests/testthat/test-oxy_crit.ft.R")
-# x <- covr::package_coverage()
-# covr::report(x)
+# cvr <- covr::package_coverage()
+# covr::report(cvr)
 
 capture.output({  ## stops printing of outputs on assigning
 

@@ -42,7 +42,9 @@
 #'
 #' Alternatively a `width` input can be specified, in which case a rolling rate
 #' is calculated using this window size (in the relevant `by` units) across the
-#' entire dataset, and returned as a vector of rate values in `$rate`.
+#' entire dataset, and returned as a vector of rate values in `$rate`. See
+#' [here](https://januarharianto.github.io/respR/articles/flowthrough.html#case-8-rolling-rate)
+#' for how this might be used.
 #'
 #' ## Flowrate
 #'
@@ -426,7 +428,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       win <- calc_win(new_dt, width, by, "calc_rate.ft: ")
 
       summary <- rolling_reg_row(new_dt, width = win)
-      # rename rate_b1 to slope, since it's not the rate
+      # rename slope_b1 to slope, since it's not the rate
       # We might use these coefficients later to find regions of stable rates (i.e. slope ~ 0)
       # so may as well save them
       names(summary)[8] <- "slope_b1"
@@ -555,7 +557,7 @@ summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
   }
 
   out <- object$summary[pos,]
-  print(out, class = FALSE)
+  print(out, nrows = 50, class = FALSE)
   cat("-----------------------------------------\n")
 
   if(export)
@@ -618,21 +620,14 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   if(x$input_type != "insp")
     stop("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
 
-  if (!quiet)
-    cat("\n# plot.calc_rate.ft # -------------------\n")
-
-  # extract data
-  # only first columns
-  time <- unlist(x$data$time)
-  out.oxy <- x$data$out.oxy[[1]]
-  in.oxy <- x$data$in.oxy[[1]]
-  delta.oxy <- x$data$delta.oxy[[1]]
-  nres <- length(x$rate) # number of rates
   # is it delta only rates?
   delta_only <-
     is.null(x$data$out.oxy) && is.null(x$data$in.oxy)
-  if(!(delta_only)) y_range <- range(in.oxy, out.oxy, na.rm = TRUE) # for plotting rate region rectangle
-  rate_mean <- signif(x$rate, digits = 5) # rounded mean rate for inclusion in plot
+  # number of rates
+  nres <- length(x$rate)
+
+  if (!quiet)
+    cat("\n# plot.calc_rate.ft # -------------------\n")
 
   # validate pos input
   if(is.null(pos)) pos <- 1
@@ -640,15 +635,6 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
     stop("calc_rate: 'pos' should be a single value.")
   if(pos > nres || pos < 1)
     stop("calc_rate.ft: Invalid 'pos' input: only ", nres, " rates found.")
-
-  pos_rate <- signif(x$rate[pos], digits = 5) # rate for this pos
-  pos_from_row <- x$summary$row[pos] # for subsetting rate region
-  pos_to_row <- x$summary$endrow[pos] # for subsetting rate region
-  pos_from_time <- x$summary$row[pos] # # for plotting rate subset region
-  pos_to_time <- x$summary$endrow[pos] # # for plotting rate subset region
-
-  pos_x_data <- time[pos_from_row:pos_to_row]
-  pos_y_data_delta <- delta.oxy[pos_from_row:pos_to_row]
 
   if(!quiet && pos == 1 && nres == 1)
     cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ..."), sep="\n")
@@ -679,193 +665,16 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   par(...)
 
   # in.oxy - out.oxy plot -----------------------------------------------------
-  if (!delta_only) {
+  if(!delta_only)  in.out.p(x,
+                            pos = pos,
+                            legend = legend,
+                            ...)
 
-    ## ylim for outflow and inflow plots - plus 10%
-    ylim <- range(range(out.oxy), range(in.oxy), na.rm = TRUE) ## so all on same axes
-    buffer <- diff(ylim)*0.1
-    ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
-    plot(time,
-         out.oxy,
-         xlab = "",
-         ylab = "",
-         ylim = ylim,
-         cex = .5,
-         col = ftcol_out,
-         axes = FALSE,
-         col.lab = "blue",
-         col.axis = "blue",
-         panel.first = grid())
-
-    axis(side = 2)
-    points(time,
-           in.oxy,
-           xlab = "",
-           ylab = "",
-           ylim = ylim,
-           cex = .5,
-           col = ftcol_in)
-    # plot this invisibly - to add row index x-axis
-    par(new = TRUE)
-    plot(seq(1, length(time)),
-         out.oxy,
-         xlab = "",
-         ylab = "",
-         pch = "",
-         cex = .5,
-         axes = FALSE)
-
-    axis(side = 3, col.axis = "red")
-    box()
-
-    ## box for rate region
-    abline(v = pos_from_time,
-           col = ftcol_rate_ln,
-           lty = 1,
-           lwd = 3)
-
-    abline(v = pos_to_time,
-           col = ftcol_rate_ln,
-           lty = 1,
-           lwd = 3)
-
-    rect(xleft = pos_from_time,
-         ybottom = y_range[1],
-         xright = pos_to_time,
-         ytop = y_range[2],
-         col = ftcol_rate_bx,
-         lty = 0)
-
-    if(legend) legend("topright",
-                      "Row Index",
-                      text.col = "red",
-                      bg = "gray90",
-                      cex = 0.5)
-
-    if(legend) legend("right",
-                      legend = c("Inflow O2", "Outflow O2"),
-                      col = c(ftcol_in, ftcol_out),
-                      pch = pch_def,
-                      cex = 0.4)
-
-    mtext("Outflow - Inflow O2",
-          outer = TRUE, cex = 1, line = 0, font = 2)
-  }
-
-  # Delta plot --------------------------------------------------------------
-
-  ## ylim  - plus 10%
-  ylim <- range(na.omit(delta.oxy)) ## so all on same axes
-  buffer <- diff(ylim)*0.1
-  ylim <- c(ylim[1] - buffer, ylim[2] + buffer) ## add a little more space
-
-  if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
-
-  plot(time,
-       delta.oxy,
-       xlab = "",
-       ylab = "",
-       ylim = ylim,
-       cex = .5,
-       col = ftcol_del,
-       axes = FALSE,
-       panel.first = grid())
-
-  axis(side = 2) # simply to put yaxis lab colour back to black
-  axis(side = 1, col.lab = "blue", col.axis = "blue")
-
-  box()
-
-  ## Title
-  if(delta_only) mtext("Delta O2", outer = TRUE, cex = 1, line = 0, font = 2) else
-    title(main = glue::glue("Delta O2"), line = 0.3)
-
-  ## This will have bottom legend regardless
-  if(legend) legend("bottomright",
-                    "Time",
-                    text.col = "blue",
-                    bg = "gray90",
-                    cex = 0.5)
-
-  ## add coloured points of rate region
-  ## No need to do this if data are single points
-  ## Which happens when single delta value is converted
-  if(length(pos_y_data_delta) > 1){
-    points(pos_y_data_delta ~ pos_x_data,
-           col = ftcol_rate_pt,
-           cex = .5)
-    clip(min(na.omit(pos_x_data)),
-         max(na.omit(pos_x_data)),
-         min(na.omit(pos_y_data_delta)),
-         max(na.omit(pos_y_data_delta)))
-    abline(lm(pos_y_data_delta ~ pos_x_data), lwd = 1.2, lty = 3)
-  }
-  ## If delta only plot add legend and top axis here instead
-  if(delta_only){
-    # plot this invisibly - to add row index x-axis
-    par(new = TRUE)
-    plot(seq(1, length(time)),
-         delta.oxy,
-         xlab = "",
-         ylab = "",
-         pch = "",
-         cex = .5,
-         axes = FALSE)
-
-    axis(side = 3, col.axis = "red")
-
-    if(legend) legend("topright",
-                      "Row Index",
-                      text.col = "red",
-                      bg = "gray90",
-                      cex = 0.5)
-  }
+  # # Delta plot --------------------------------------------------------------
+  delta.p(x, delta_only = delta_only, legend = legend, rate.rev = rate.rev, pos = pos, ...)
 
   # Close up plot -----------------------------------------------------------
-
-  ## NOTE we switch y axis to rate values for each subset not delta values
-  all_rates <- x$dataframe$delta[pos_from_row:pos_to_row] * x$inputs$flowrate
-
-  ylim <- range(na.omit(all_rates))
-  buffer <- diff(ylim)*0.1
-  ylim <- c(ylim[1] - buffer, ylim[2] + buffer)
-
-  if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
-
-  plot(pos_x_data,
-       all_rates,
-       col = ftcol_rate_pt,
-       xlab = "",
-       ylab = "",
-       ylim = ylim,
-       cex = .5,
-       axes = FALSE,
-       panel.first = grid())
-
-  axis(side = 2)
-  axis(side = 1, col.lab = "blue", col.axis = "blue")
-
-  box()
-
-  if(legend) legend("bottomright",
-                    "Time",
-                    text.col = "blue",
-                    bg = "gray90",
-                    cex = 0.5)
-
-  title(main = glue::glue("Close-up of Position {pos} of {nres}: Rate =  {pos_rate}"), line = 0.3)
-
-  ## add lm trendline
-  ## ## No need to do this if data are single points
-  ## Which happens when single delta value is converted
-  if(length(pos_x_data) > 1){
-    clip(min(na.omit(pos_x_data)),
-         max(na.omit(pos_x_data)),
-         min(na.omit(all_rates)),
-         max(na.omit(all_rates)))
-    abline(lm(all_rates ~ pos_x_data), lwd = 1.2, lty = 3)
-  }
+  pos.ft.p(x, pos = pos, legend = legend, rate.rev = rate.rev, ...)
 
   if (!quiet){
     cat("-----------------------------------------\n")

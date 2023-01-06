@@ -54,6 +54,53 @@
 #' [`unit_args()`] for details of accepted units and their formatting. See also
 #' [`convert_val()`] for simple conversion between non-oxygen units.
 #'
+#' ## Plot
+#'
+#' Plotting provides three ways of visualising converted rates (or a selection
+#' of them using `pos`), chosen using `type`. This is mostly useful only if you
+#' have extracted multiple rates (see `calc_rate.ft()`). The default is `plot =
+#' FALSE` to prevent plots being produced for every single conversion.
+#' `convert_rate.ft` objects can only be plotted if and `inspect.ft` object was
+#' used as the input in `calc_rate.ft`. In other words, converted rates from
+#' numeric inputs cannot be plotted.
+#'
+#' `type = "full"` (the default) plots a grid of up to 20 plots with each rate
+#' (i.e. region of averaged delta values) highlighted on a plot of delta oxygen
+#' values, with the converted rate value in the title. Values on the axes - time
+#' (bottom), row (top), and oxygen delta (left) - are in the units of the
+#' original raw data. Rates are plotted in order of how they appear in the
+#' summary table up to the first 20 rows, unless different rows have been
+#' specified via `pos`.
+#'
+#' `type = "rate"` plots the entire data timeseries, that is the outflow and
+#' inflow oxygen (if used) on the upper plot, with delta oxygen on the middle
+#' plot or as the upper plot if delta oxygen values have been entered in
+#' `inspect.ft`. The lower plot is the output rate values in the chosen output
+#' units. Each rate is plotted against the middle of the region used to
+#' determine it (i.e. region of averaged delta values). `pos` can be used to
+#' select a range of rates (i.e. summary table rows) to show in the lower plot
+#' (default is all).
+#'
+#' `type = "overlap"` visualises where regression results in the summary table
+#' occur in relation to the original dataset to help understand how they are
+#' distributed or may overlap. The top plot is the entire data timeseries, that
+#' is the outflow and inflow oxygen (if used) on the upper plot, with delta
+#' oxygen on the middle plot or as the upper plot if delta oxygen values have
+#' been entered in `inspect.ft`. The bottom plot is the region of the data each
+#' rate has been calculated over (i.e. region of averaged delta values). The
+#' y-axis represents the position (i.e. row) of each in the summary table
+#' descending from top to bottom. If no reordering or selection has been
+#' performed, this will usually be equivalent to the `$rank` column, but note as
+#' reordering or selection is performed rank and summary table position will not
+#' necessarily be equivalent. One result (summary table row) can be highlighted,
+#' the default being `highlight = 1`. `pos` can be used to select a range of
+#' summary rows to plot in the lower overlap plot.
+#'
+#' Other options:
+#'
+#' `legend = FALSE` will suppress plot labels, `pos` selects summary rates to
+#' plot, `quiet` suppresses console messages.
+#'
 #' ## S3 Generic Functions
 #'
 #' Saved output objects can be used in the generic S3 functions `print()`,
@@ -113,6 +160,10 @@
 #'   some oxygen units.
 #' @param P numeric. Pressure (bar). Used in conversion of some oxygen units.
 #'   Defaults to a standard value of 1.013253 bar.
+#' @param plot logical. Default is `FALSE`. Controls if a plot is produced. See
+#'   Plot section.
+#' @param ... Allows additional plotting controls to be passed. See Plot
+#'   section.
 #'
 #' @importFrom stringr str_replace
 #' @export
@@ -154,7 +205,8 @@ convert_rate.ft <- function(x,
                             output.unit = NULL,
                             mass = NULL,
                             area = NULL,
-                            S = NULL, t = NULL, P = 1.013253) {
+                            S = NULL, t = NULL, P = 1.013253,
+                            plot = FALSE, ...) {
 
 
   ## Save function call for output
@@ -182,27 +234,32 @@ convert_rate.ft <- function(x,
   # Validate x
   if (is.numeric(x)) {
     rate <- x
+    # input type (needed to allow/disallow plotting and not necessarily found in x
+    # because x can be numerics)
+    input_type <- "vec"
     summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
     summ.ext$rank <- 1:length(rate)
     summ.ext$rate <- rate
     message("convert_rate.ft: numeric input detected. Converting...")
   } else if ("calc_rate.ft" %in% class(x)) {
     rate <- x$rate
+    input_type <- x$input_type
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     message("convert_rate.ft: object of class 'calc_rate.ft' detected. Converting '$rate' element.")
   } else if ("adjust_rate.ft" %in% class(x)) {
     rate <- x$rate.adjusted
+    input_type <- x$input_type
     summ.ext <- x$summary
     message("convert_rate.ft: object of class 'adjust_rate.ft' detected. Converting '$rate.adjusted' element.")
   } else stop("convert_rate.ft: 'x' must be an `calc_rate.ft` or `adjust_rate.ft` object, or a numeric value or vector.")
 
   # oxy.unit, flowrate.unit, required
   input.val(oxy.unit, num = FALSE, req = TRUE,
-                      msg = "convert_rate.ft: 'oxy.unit'")
+            msg = "convert_rate.ft: 'oxy.unit'")
   input.val(flowrate.unit, num = FALSE, req = TRUE,
-                      msg = "convert_rate.ft: 'flowrate.unit'")
+            msg = "convert_rate.ft: 'flowrate.unit'")
 
   ## Apply output unit defaults
   if (is.null(output.unit) && is.null(mass) && is.null(area)) {
@@ -282,7 +339,7 @@ convert_rate.ft <- function(x,
   output.unit <- paste(output.unit, collapse = "/")
 
   # Convert DO unit first
-  if (A %in% c("mmol.o2", "umol.o2", "mol.o2")) {
+  if (A %in% c("pmol.o2", "nmol.o2", "mmol.o2", "umol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
     RO2 <- adjust_scale(RO2, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {
@@ -330,6 +387,20 @@ convert_rate.ft <- function(x,
 
   # Generate output ---------------------------------------------------------
 
+  ## Save inputs for output
+  inputs = list(x = x,
+                oxy.unit = oxy.unit,
+                flowrate.unit = flowrate.unit,
+                output.unit = output.unit,
+                mass = mass,
+                area = area,
+                S = S, t = t, P = P)
+
+  ## extract dataframe
+  if(any(class(x) %in% c("calc_rate.ft",
+                         "adjust_rate.ft"))) df <- x$dataframe else
+                           df <- NULL
+
   ## so data.table will accept them
   if(is.null(mass)) mass <- NA
   if(is.null(area)) area <- NA
@@ -346,20 +417,38 @@ convert_rate.ft <- function(x,
                                     rate.output = VO2.out)
   summary <- cbind(summ.ext, summary)
 
-  out <- list(call = call,
-              inputs = list(x = x,
-                            oxy.unit = oxy.unit,
-                            flowrate.unit = flowrate.unit,
-                            output.unit = output.unit,
-                            mass = mass,
-                            area = area,
-                            S = S, t = t, P = P),
-              summary = summary,
-              rate.input = rate,
-              output.unit = summary$output.unit[1],
-              rate.output = summary$rate.output)
+  ## Assemble output based on input
+  ## (i.e. object or numerics)
+  if(class(x) %in% c("calc_rate.ft", "adjust_rate.ft"))
+    out <- list(call = call,
+                inputs = inputs,
+                dataframe = df,
+                data = x$data,
+                subsets = x$subsets,
+                delta.oxy = x$delta.oxy,
+                input_type = input_type,
+                summary = summary,
+                rate.input = rate,
+                output.unit = summary$output.unit[1],
+                rate.output = summary$rate.output)
+  else out <- list(call = call,
+                   inputs = inputs,
+                   dataframe = df,
+                   data = NULL,
+                   subsets = NULL,
+                   delta.oxy = NULL,
+                   input_type = input_type,
+                   summary = summary,
+                   rate.input = rate,
+                   output.unit = summary$output.unit[1],
+                   rate.output = summary$rate.output)
+
 
   class(out) <- "convert_rate.ft"
+
+  # Plot if TRUE
+  if(plot == TRUE) plot(out, ...)
+
   return(out)
 }
 
@@ -420,7 +509,8 @@ summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
   out <- data.table(object$summary[pos,])
 
-  print(out, class = FALSE)
+  print(out, nrows = 50, class = FALSE)
+
   cat("-----------------------------------------\n")
 
   if(export)
@@ -467,14 +557,69 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
 #' Plot convert_rate.ft objects
 #' @param x convert_rate.ft object
+#' @param type "full", "rate", or "overlap"
+#' @param pos Which summary rows to plot?
+#' @param quiet logical. Suppress console output.
+#' @param highlight Which summary row result to highlight in overlap plots.
+#' @param legend logical. Suppress labels and legends.
+#' @param rate.rev logical. Control direction of y-axis in rate plot.
 #' @param ... Pass additional plotting parameters
 #' @keywords internal
 #' @return A plot. No returned value.
 #' @export
-plot.convert_rate.ft <- function(x, ...) {
-  message("convert_rate.ft: plot() is not available for 'convert_rate.ft' objects.")
+plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
+                                 highlight = NULL, legend = TRUE, rate.rev = TRUE, ...) {
+
+  # if numeric conversions, nothing to plot
+  if(x$input_type != "insp")
+    stop("plot.convert_rate.ft: Plot is not available for 'convert_rate.ft' objects containing rates converted from numeric values.")
+
+  ## warning if empty - but return to allow piping
+  if(length(x$summary$rate.output) == 0){
+    message("plot.convert_rate.ft: Nothing to plot! No rates found in object.")
+    return(invisible(x))
+  }
+
+  parorig <- par(no.readonly = TRUE) # save original par settings
+  on.exit(par(parorig)) # revert par settings to original
+
+  # Validate type
+  if(!(type %in% c("full", "rate", "overlap")))
+    stop(glue::glue("plot.convert_rate.ft: 'type' input not recognised."))
+
+  # number of rates
+  nrt <- length(x$rate.output)
+
+  # pos checks
+  if(is.null(pos)) pos <- 1:nrt
+  if(any(pos > nrt)){
+    message(glue::glue("plot.convert_rate.ft: One or more 'pos' inputs higher than number of rows in '$summary'. Applying default of all rows."))
+    pos <- 1:nrt
+  }
+
+  #### if(!quiet) CONSOLE
+  if(!quiet) cat("\n# plot.convert_rate.ft # ----------------\n")
+
+  # Plot based on type
+  # grid of delta plots
+  if(type == "full") grid.p(x, pos = pos, quiet = quiet,
+                            rate.rev = rate.rev,
+                            msg = "plot.convert_rate.ft",
+                            title = "", ...)
+
+  # outflow/inflow
+  if(type == "rate") outrate.ft.p(x, pos = pos, quiet = quiet, msg = "plot.convert_rate.ft",
+                                  legend = legend, rate.rev = rate.rev, ...)
+
+  # as above but with overlap plot as bottom
+  if(type == "overlap") overlap.ft.p(x, highlight = highlight, pos = pos, legend = legend, quiet = quiet,
+                                     rate.rev = rate.rev, msg = "plot.convert_rate.ft", ...)
+
+  if(!quiet) cat("-----------------------------------------\n")
+
   return(invisible(x))
 }
+
 
 #' Extracts time and volume units from flowrate unit already parsed by verify_units
 #'

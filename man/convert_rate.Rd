@@ -160,12 +160,12 @@ distributed or may overlap, and is particularly useful for results from the
 \code{auto_rate} \code{linear} method. The top plot is the entire data timeseries, the
 bottom plot the region of the data each rate regression has been fit over.
 The y-axis represents the position (i.e. row) of each in the summary table
-descending from top to bottom. If no reordering or subsetting has been
+descending from top to bottom. If no reordering or selection has been
 performed, this will usually be equivalent to the \verb{$rank} column, but note as
-reordering or subsetting is performed rank and summary table position will
-not necessarily be equivalent. One result (summary table row) can be
-highlighted, the default being \code{highlight = 1}. \code{pos} can be used to select a
-range of summary rows to plot in the lower overlap plot.
+reordering or selection is performed rank and summary table position will not
+necessarily be equivalent. One result (summary table row) can be highlighted,
+the default being \code{highlight = 1}. \code{pos} can be used to select a range of
+summary rows to plot in the lower overlap plot.
 
 Other options:
 

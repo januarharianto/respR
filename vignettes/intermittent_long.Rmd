@@ -506,9 +506,13 @@ plot(zeb_ar.int_conv, type = "rate")
 
 These rates seem to be a bit lower than those we extracted for RMR [above](#crintselect), as we would expect for an SMR. 
 
-This is an opportunity to do some QC before we select our final rates to determine SMR. Looking at the plot above there is one result that seems to be uncharacteristically low compared to the others with a value just over 0.5. Looking at the summary table we can see this is from replicate 48. 
+This is an opportunity to do some quality control before we select our final rates to determine SMR. Looking at the plot above there is one result that seems to be uncharacteristically low compared to the others with a value just over 0.5. Looking at the summary table we can see this is from replicate 48. We can plot a selection of rates from this region using `pos` and the y-axis range will adapt to provide a more detailed view of the range of rates.
 
-If we go back to the `auto_rate.int` results object we can use `pos` to plot this replicate for a closer look. We'll do this in two different ways using `type`. Firstly the rate in the context of the whole replicate, secondly the `auto_rate` output plot for this replicate which has more diagnostic plots, but only shows the `measure` phase.
+```{r message = FALSE, results='hide'}
+plot(zeb_ar.int_conv, type = "rate", pos = 30:80)
+```
+
+Replicate 48 does seem to be anomalously low. If we go back to the `auto_rate.int` results object we can use `pos` to plot this replicate for a closer look. We'll do this in two different ways using `type`. Firstly the rate in the context of the whole replicate, secondly the `auto_rate` output plot for this replicate which has more diagnostic plots, but only shows the `measure` phase.
 
 ```{r message = FALSE, results='hide'}
 plot(zeb_ar.int, type = "rep", pos = 48)
@@ -523,11 +527,11 @@ Therefore, it would be perfectly acceptable and justifiable to manually exclude 
 
 To get our final SMR we just need to use `select_rate` again with our chosen criteria, and pipe the result to `mean`. We decided [above](#arintextract) our definition of SMR would be the mean of the lowest 10th percentile of the rates extracted from each replicate. We also want to exclude the result from replicate 48. 
 
-Excluding this replicate could be achieved in a number of ways in `select_rate`. We could use `method = "rsq"` to select only results with r-squared above a certain value which excludes this one. We could use the `rate` method to select only rates with values above this one. Or we could use the `time_omit` method to exclude this rate based on its timepoint (found in the summary table). Here we'll use the `rep` method simply to select all replicates *except* this one.
+Excluding this replicate could be achieved in a number of ways in `select_rate`. We could use `method = "rsq"` to select only results with r-squared above a certain value which excludes this one. We could use the `time_omit` method to exclude this rate based on its timepoint (found in the summary table), or use the `rep` method simply to select all replicates *except* this one. There is a specific `rep_omit` method however to remove particular replicates.
 
 ```{r}
 SMR <- zeb_ar.int_conv |>
-  select_rate(method = "rep", n = c(1:47,49:105)) |>
+  select_rate(method = "rep_omit", n = 48) |>
   select_rate(method = "lowest_percentile", n = 0.1) |>
   summary() |>
   mean()

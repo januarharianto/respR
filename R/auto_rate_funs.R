@@ -61,11 +61,11 @@ auto_rate_min <- function(dt, width, by = 'row') {
   }
 
   # message if mix of -ve and +ve
-  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+  if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
     message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
 
   # order data by size, from biggest
-  results <- rollreg[order(rank(rate_b1))]
+  results <- rollreg[order(rank(slope_b1))]
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_min")
   return(out)
@@ -91,11 +91,11 @@ auto_rate_max <- function(dt, width, by = 'row') {
   }
 
   # message if mix of -ve and +ve
-  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+  if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
     message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
 
   # order data by size, from biggest
-  results <- rollreg[order(-rank(rate_b1))]
+  results <- rollreg[order(-rank(slope_b1))]
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_max")
   return(out)
@@ -123,10 +123,10 @@ auto_rate_highest <- function(dt, width, by = 'row') {
   }
 
   # stop if mix of -ve and +ve
-  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+  if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
     stop("auto_rate: Analysis produces both negative and positive rates. \n The 'highest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
   # order data by absolute value, from highest
-  results <- rollreg[order(-rank(abs(rollreg$rate_b1)))] ## note abs() operation
+  results <- rollreg[order(-rank(abs(rollreg$slope_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_highest")
   return(out)
@@ -154,11 +154,11 @@ auto_rate_lowest <- function(dt, width, by = 'row') {
   }
 
   # stop if mix of -ve and +ve
-  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+  if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
     stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
 
   # order data by absolute value, from lowest
-  results <- rollreg[order(rank(abs(rollreg$rate_b1)))] ## note abs() operation
+  results <- rollreg[order(rank(abs(rollreg$slope_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
   class(out) <- append(class(out), "auto_rate_lowest")
   return(out)
@@ -184,7 +184,7 @@ auto_rate_rolling <- function(dt, width, by = 'row') {
   }
 
   # message if mix of -ve and +ve
-  if(any(rollreg$rate_b1 > 0) && any(rollreg$rate_b1 < 0))
+  if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
     message("auto_rate: Note dataset contains both negative and positive rates. Ensure ordering 'method' is appropriate.")
 
   # DO NOT reorder data
@@ -287,7 +287,7 @@ kernel_method <- function(dt, width, top_only = FALSE) {
   rollreg <- rolling_reg_row(dt, width)
 
   # perform kernel density estimate
-  d <- density(rollreg$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
+  d <- density(rollreg$slope_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
   # extract bandwidth
   bw <- d$bw
   # identify peaks in kernel density:
@@ -307,7 +307,7 @@ kernel_method <- function(dt, width, top_only = FALSE) {
 
   # identify data that match each peak rate:
   frags <- lapply(ranked_index$peak_b1, function(x)
-    rollreg[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)])
+    rollreg[slope_b1 <= (x + d$bw*.95)][slope_b1 >= (x - d$bw*.95)])
   # ensure that data segments that do not overlap are identified:
   frags <- lapply(1:length(frags), function(x)
     split(frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > width))))
@@ -352,7 +352,7 @@ rolling_reg_row <- function(df, width) {
   roll <- data.table(cbind(roll$coefficients, roll$r.squared))
   roll <- roll[-(1:(width-1)),]
   roll <- na.omit(roll)
-  setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
+  setnames(roll, 1:3, c("intercept_b0", "slope_b1", "rsq"))
 
   # add row indices
   roll[, row := seq_len(.N)]
@@ -386,7 +386,7 @@ rolling_reg_time <- function(df, width) {
   results <- setDT(df)[.(start = x - width, end = x),
                        on = .(x >= start, x <= end),
                        as.list(calc_coefs(x.x, y)), by = .EACHI]
-  setnames(results, 1:5, c('time', 'endtime', 'intercept_b0', 'rate_b1', 'rsq'))
+  setnames(results, 1:5, c('time', 'endtime', 'intercept_b0', 'slope_b1', 'rsq'))
   results <- results[time >= df[[1]][1]] # remove extra rows
   results[, row := seq_len(.N)]
   endrow <- sapply(results$endtime, function(i) df[, which(x == i)])
@@ -414,7 +414,7 @@ static_roll <- function(df, win) {
   roll <- data.table(cbind(roll$coefficients, roll$r.squared))
   roll <- roll[-(1:(win-1)),]
   roll <- na.omit(roll)
-  setnames(roll, 1:3, c("intercept_b0", "rate_b1", "rsq"))
+  setnames(roll, 1:3, c("intercept_b0", "slope_b1", "rsq"))
   return(roll)
 }
 
@@ -483,13 +483,13 @@ time_lm <- function(df, start, end) {
   fit <- .lm.fit(cbind(1, sdt[[1]]), sdt[[2]])  # perform lm
   coef <- coef(fit)
   intercept_b0 <- coef[1]
-  rate_b1 <- coef[2]
+  slope_b1 <- coef[2]
   # Calculate coef of determination (rsq) manually
   ybar <- sdt[, mean(y)]
   sst <- sum(sdt[, (y-ybar)*(y-ybar)])
   ssr <- sum((fit$residuals)*(fit$residuals))
   rsq <- 1-(ssr/sst)
-  out <- data.table::data.table(intercept_b0, rate_b1, rsq)
+  out <- data.table::data.table(intercept_b0, slope_b1, rsq)
   return(out)
 }
 
@@ -547,11 +547,11 @@ kde_fit <- function(dt, width, by, use = "all") {
   if (nrow(roll) == 1) {
     subsets <- list(truncate_data(dt, roll$row, roll$endrow, "row"))
     d <- NULL
-    peaks <- roll$rate_b1
+    peaks <- roll$slope_b1
     bw <- NULL
 
   } else {
-    d <- density(roll$rate_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
+    d <- density(roll$slope_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
     bw <- d$bw
     peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
     peaks <- lapply(peaks, function(x)
@@ -564,7 +564,7 @@ kde_fit <- function(dt, width, by, use = "all") {
     # match peaks to roll data
     frags <- lapply(
       peaks$peak_b1,
-      function(x) roll[rate_b1 <= (x + d$bw*.95)][rate_b1 >= (x - d$bw*.95)]
+      function(x) roll[slope_b1 <= (x + d$bw*.95)][slope_b1 >= (x - d$bw*.95)]
     )
     # split non-overlapping rolls by window size
     if (by == "row") {

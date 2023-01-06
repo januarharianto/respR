@@ -271,7 +271,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -296,7 +296,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -320,7 +320,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -343,7 +343,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -366,7 +366,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -389,7 +389,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -412,7 +412,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -435,7 +435,7 @@ auto_rate <- function(x,
                 bandwidth = NULL,
                 metadata = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
     ### Add density to summary table
     ### (empty, but keeps column refs right later)
     out$summary$density <- NA
@@ -460,7 +460,7 @@ auto_rate <- function(x,
                 bandwidth = output$density$bw,
                 metadata  = metadata,
                 summary = output$results,
-                rate    = output$results$rate_b1)
+                rate    = output$results$slope_b1)
 
     ### Add density to summary table
     out$summary$density <- out$peaks$density
@@ -484,7 +484,7 @@ auto_rate <- function(x,
   out$summary <- data.table::data.table(rep = NA,
                                         rank = 1:nrow(out$summary),
                                         intercept_b0 = out$summary$intercept_b0,
-                                        rate_b1 = out$summary$rate_b1,
+                                        slope_b1 = out$summary$slope_b1,
                                         rsq = out$summary$rsq,
                                         density = out$summary$density,
                                         row = out$summary$row,
@@ -493,7 +493,7 @@ auto_rate <- function(x,
                                         endtime = out$summary$endtime,
                                         oxy = out$summary$oxy,
                                         endoxy = out$summary$endoxy,
-                                        rate = out$summary$rate_b1)
+                                        rate = out$summary$slope_b1)
   # this here because of weird error in auto_rate.int (auto_rate.rep actually)
   # when trying to add a number to this column - thinks it should be a logical.
   out$summary$rep <- as.numeric(out$summary$rep)
@@ -606,10 +606,10 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   rownums <- 1:nrow(dt)
   sdt <- dt[start:end]
   rolldt <- data.table::data.table(x = (x$roll$endtime+x$roll$time)/2,
-                                   y = x$roll$rate)
+                                   y = x$roll$slope_b1)
   xlim <- range(nainf.omit(x$dataframe$x))
   # middle row of each regression for roll rate plot
-  rate <- x$summary$rate_b1[pos]
+  rate <- x$summary$slope_b1[pos]
   rsq <- signif(x$summary$rsq[pos],3)
   fit <- lm(sdt[[2]] ~ sdt[[1]], sdt) # lm of subset
   interval <- x$summary$endrow
@@ -742,7 +742,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FA
     # otherwise, return row specified by `pos`
     cat("\n=== Summary of results from entered 'pos' rank(s)", "===\n\n")
     out <- data.table::data.table(object$summary)[pos]
-    print(out, class = FALSE)
+    print(out, nrows = 50, class = FALSE)
   }
 
   ########### Regressions summary line ########
