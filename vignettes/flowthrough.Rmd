@@ -35,15 +35,15 @@ These are used to calculate an oxygen delta (outflow minus inflow values), and t
 An outflow recording or value, or already determined delta oxygen values are required to calculate the rate. 
 The inflow concentration is typically a simultaneous recording, but an alternative is to use a known value from a source of constant oxygen concentration such as fully air-saturated water, or water from a header tank of controlled oxygen concentration, and so often is not continuously monitored. `respR` will accept any combination of available data to allow rates to be calculated.
 
-`respR v2.0` contains an all new workflow to process flowthrough respirometry data, comprising four functions: 
+`respR` contains a workflow to process flowthrough respirometry data comprising five functions: 
 
 - `inspect.ft`                 - check and visualise the data and calculate the oxygen delta (if you haven't already)
 - `calc_rate.ft`            - calculate a rate from a region (or several) of the data 
-- `adjust_rate.ft`      - adjust the rate for background activity (optional)
+- `adjust_rate.ft`      - adjust the rate for background activity 
 - `convert_rate.ft`   - convert the rate to specific units, including mass- or area-specific
 - `select_rate.ft`      - filter rate results according to various criteria 
 
-
+Not all of these are necessary depending on the analysis. See examples below. 
 
 ## Exploring flowthrough respirometry data
 
