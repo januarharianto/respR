@@ -1,5 +1,3 @@
-# respR 2.2.0
-
 <!---
 Each version should:
 List its release date in the above format.
@@ -20,20 +18,20 @@ This update focuses on extending to the flowthrough respirometry workflow the fu
 
 ==================================== New =======================================
 
-NEW: `convert_rate.ft` - Objects containing multiple rates can now be plotted in three different ways to help explore the results and decide how to summarise them. This pairs particularly well with `select_rate.ft` for exploring and selecting a final reportable rate. 
-NEW: `select_rate.ft` - New function for selecting from amongst multiple rates in `convert_rate.ft` objects in flowthrough respirometry analyses. It is actually a simple wrapper for the `select_rate` function, so you can use either. 
-NEW: `select_rate` - has the additional methods `rep_omit`, `rank_omit`, and `manual_omit` for omitting rates.
-NEW: `select_rate` - has the additional methods `intercept` and `slope` for selecting based on the respective summary table columns. This is mostly useful for selecting from flowthrough rate results where these parameters can indicate the stability of the delta oxygen region rates are derived from (in other analyses slope is essentially equivalent to the rate). 
+- NEW: `convert_rate.ft` - Objects containing multiple rates can now be plotted in three different ways to help explore the results and decide how to summarise them. This pairs particularly well with `select_rate.ft` for exploring and selecting a final reportable rate. 
+- NEW: `select_rate.ft` - New function for selecting from amongst multiple rates in `convert_rate.ft` objects in flowthrough respirometry analyses. It is actually a simple wrapper for the `select_rate` function, so you can use either. 
+- NEW: `select_rate` - has the additional methods `rep_omit`, `rank_omit`, and `manual_omit` for omitting rates.
+- NEW: `select_rate` - has the additional methods `intercept` and `slope` for selecting based on the respective summary table columns. This is mostly useful for selecting from flowthrough rate results where these parameters can indicate the stability of the delta oxygen region rates are derived from (in other analyses slope is essentially equivalent to the rate). 
 
 =================================== Changes ====================================
 
-CHANGE: `convert_rate.ft` - Output objects have been restructured and new elements (e.g. `$dataframe`) brought forward from the input objects to enable plotting. 
-CHANGE: `convert_rate` - The y-axis range in the lower panel of `type = "rate"` plots now adapts to the range of rate values plotted if `pos` has been used. You can use this to get a better idea of range of rates in a particular region. 
-CHANGE: In summary tables the `rate_b1` column (the slope in the linear regression model used to calculate the rate) has been renamed to `slope_b1`.
+- CHANGE: `convert_rate.ft` - Output objects have been restructured and new elements (e.g. `$dataframe`) brought forward from the input objects to enable plotting. 
+- CHANGE: `convert_rate` - The y-axis range in the lower panel of `type = "rate"` plots now adapts to the range of rate values plotted if `pos` has been used. You can use this to get a better idea of range of rates in a particular region. 
+- CHANGE: In summary tables the `rate_b1` column (the slope in the linear regression model used to calculate the rate) has been renamed to `slope_b1`.
 
 ==================================== Fixes =====================================
 
-FIX: `convert_rate.ft` - Now correctly converts rates to output units using nanomoles (`nmol`) and picomoles (`pmol`) (e.g. `pmol/min`, `nmol/hr/ug`, etc.).
+- FIX: `convert_rate.ft` - Now correctly converts rates to output units using nanomoles (`nmol`) and picomoles (`pmol`) (e.g. `pmol/min`, `nmol/hr/ug`, etc.).
 
 
 ## Version 2.1.0 -- 2022-12-06

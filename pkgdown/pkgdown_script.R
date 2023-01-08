@@ -34,4 +34,5 @@ usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alter
 ## (not sure about commits v local changes tho)
 ## Sometimes gets stuck on git command.
 ## Stopping and building site then trying again seems to work.
+## Although last time took MANY attempts
 pkgdown::deploy_to_branch()
