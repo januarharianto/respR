@@ -28,7 +28,9 @@ opts_chunk$set(collapse = TRUE,
 ```
 
 
-The following are alternative methods of extracting rates from multiple replicates in intermittent-flow respirometry using `calc_rate` or `auto_rate`. They have been mostly superseded by `calc_rate.int` and `auto_rate.int` but we have left the details here in case they are of use in other cases. The main advantage to these are that they allow rates to be extracted from different data regions within each replicate or allow different methods to be used.
+The following are alternative methods of extracting rates from multiple replicates in intermittent-flow respirometry using `calc_rate` or `auto_rate`. They have been mostly superseded by `calc_rate.int` and `auto_rate.int`. See `vignette("intermittent_long")`.
+
+However we have left the details here in case they are of use in other cases. The main advantage to these are that they allow rates to be extracted from different data regions within each replicate or allow different methods to be used.
 
 ## `calc_rate` {#calc_rate}
 
