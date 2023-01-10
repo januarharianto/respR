@@ -38,13 +38,6 @@ These features are in development, planned or being considered. We are happy to 
 
 This is now implemented! As part of [v2.1](https://januarharianto.github.io/respR/articles/version_notes.html) the `calc_rate.int()`, `auto_rate.int()` and `select_rate()` functions allow you to extract rates from every replicate in intermittent-flow respirometry data and summarise them according to a huge array of criteria. It's not quite *automatic* identification of replicates, but the process of specifying them is very straightforward, and leaves open the option to have some sort of automatic identification included in the future. 
 
-
-### `subset_rate`
-
-- ~~This is a new function especially for `auto_rate` results, but it could be adapted for use with other functions.~~
-
-Also now released in [v2.1](https://januarharianto.github.io/respR/articles/version_notes.html), `subset_rate` has been renamed `select_rate` and revised to work on `convert_rate` objects, so it can filter and summarise rates from *any* type of experiment. 
-
 ### `oxy_crit`
 
 - Addition of further methods of determining critical oxygen values. 
