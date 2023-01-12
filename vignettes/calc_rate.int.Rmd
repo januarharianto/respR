@@ -147,7 +147,7 @@ zeb_all <- zeb_intermittent.rd |>
               by = "row",
               quiet = TRUE) |>
   
-  # calc rate in each one from row 100 to 500, plotting first 3 and last 3
+  # calc rate in each one from row 120 to 480, plotting first 3 and last 3
   calc_rate.int(
     starts = 660,
     wait = 120,
