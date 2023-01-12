@@ -39,7 +39,7 @@ If the data is not split into the separate replicates this results in a dataset 
 
 - **`select_rate()`** which works on `convert_rate()` objects and allows for advanced selection of a final rate using consistent criteria, including the results of intermittent-flow analyses
 
-This vignette shows how to use `calc_rate.int` to analyse a fairly short intermittent-flow respirometry experiment. In `vignette("intermittent_long")` we show how `auto_rate.int` and `select_rate` can be used to analyse a much longer intermittent-flow experiment with a regular structure and increasing background rate. However, we advise reading this one first as it better covers the basics. 
+This vignette shows how to use both `calc_rate.int` and `auto_rate.int` to analyse a fairly short intermittent-flow respirometry experiment. In `vignette("intermittent_long")` we show how they can be used along with `select_rate` to analyse a much longer intermittent-flow experiment with a regular structure and increasing background rate. However, we advise reading this one first as it better covers the basics. 
 
 ## Experiment overview
 
@@ -158,7 +158,7 @@ urch_rates <-  calc_rate.int(urchin_int,
                              legend = TRUE) 
 ```
 
-In this plot, the rate data is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase (we added `legend = TRUE` so we can see labels for this example).
+In this plot, the data used to calculate the rate is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase (we added `legend = TRUE` so we can see labels for this example).
 
 In these data of oxygen recorded once per second the time and row values are equivalent, so in the first replicate we can see the rate has been determined from timepoints 300 to 900 timepoints later (i.e. 1200). In the other replicates it is from the same equivalent time or row window. Note the third replicate is not long enough to *have* a timepoint of 1200. The default is to use the closest value which in this case is the final row of the dataset, and is acceptable here because there is no flush to worry about.
 

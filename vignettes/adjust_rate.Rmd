@@ -178,7 +178,7 @@ To summarise the differences:
 
 `calc_rate.bg` - calculate rates from the *same* region of *single or multiple* oxygen columns. 
 
-`calc_rate`    - calculate rates from *single or multiple* regions of the *same* oxygen column.
+`calc_rate`    - calculate rates from *single or multiple* regions of a *single* oxygen column.
 
 ### Pipes
 
@@ -912,7 +912,7 @@ The `background_exp.rd` example dataset shows background data with a rate that i
 inspect(background_exp.rd)
 ```
 
-We can see this is exponential from the rolling rate plot: the rate is not constant, because that would be indicated by a level line. It increases, but it is not a linear increase because it is not increasing monotonically. Instead the increase accelerates with time, that is increases exponentially. 
+We can see this is exponential from the rolling rate plot: the rate is not constant, because that would be indicated by a horizontal level line. It increases, however this is not a linear increase because it is not increasing monotonically. Instead the increase accelerates with time, that is increases exponentially. 
 
 ### Adjust rate
 
@@ -967,7 +967,7 @@ bg_rt <- calc_rate.bg(alg_bg)
 print(bg_rt)
 ```
 
-Note, this rate is negative. This suggests the production rate of the specimen might be being underestimated, because the microbial community in the respirometer is consuming some of the produced oxygen. We can adjust the rate to see. 
+Note, this rate is negative. This suggests the production rate of the specimen is being underestimated, because the microbial community in the respirometer is consuming some of the produced oxygen. We can adjust the rate to see. 
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 rt_adj <- adjust_rate(alg_rt, bg_rt)
