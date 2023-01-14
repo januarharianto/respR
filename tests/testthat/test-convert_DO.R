@@ -7,7 +7,7 @@
 
 capture.output({  ## stops printing outputs on assigning
 
-  test_that("convert_DO - stops if `x` not numeric", {
+  test_that("convert_DO stops if `x` not numeric", {
     expect_error(convert_DO("text", from = "%Air", to = "mg/l",
                             S = 35, t =10),
                  "convert_DO: input 'x' must be a numeric value or vector.")
@@ -225,6 +225,21 @@ capture.output({  ## stops printing outputs on assigning
                               t = 12, S = 30, P = 1),
                    regexp = NA)
   })
+
+
+# Unit variation tests ----------------------------------------------------
+
+# Added when switching from huge lists of units to regex matching
+  # test_that("convert_DO: %Air input variations pass regex", {
+  #
+  #   un.vars <- c("%A", "%a", "% A",
+  #                "%Air", "%air", "% air",
+  #                "percair", "perc Air", "perc.air",
+  #                "percentair", "percent Air", "percent.air",
+  #                "percentageair", "percentage Air", "percentage.air",
+  #                "wrong")
+  #
+  # })
 
 
 })
