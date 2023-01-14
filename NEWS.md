@@ -93,22 +93,22 @@ Minor changes to help documentation.
 
 ## Version 2.0.1 -- 2022-03-14
 
-Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a couple of enhancements, and has quite a large revision to the newest function `select_rate`. 
+Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a couple of enhancements, and has quite a large revision to the newest function `subset_rate`. 
 
 ==================================== New =======================================
 
 - NEW: The `calc_rate` function can now be used to calculate background rates for use in `adjust_rate` as the `by` adjustment input. In other words, the `by` input is no longer limited to using only `calc_rate.bg` objects (or numerics). While using a combination of `subset_data` and `calc_rate.bg` is the recommended way of determining background rates, there are circumstances when getting a rate via `calc_rate` might be easier (of course, these rates could always previously have been entered manually as a numeric value). See [here](https://januarharianto.github.io/respR/articles/adjust_rate.html#crbgvcr) for further information about this. 
 - NEW: The `convert_rate` and `convert_rate.ft` summary table elements in the output now contain all rate regression parameters, data locations, adjustments (if applied), units, and more. This makes it much easier to save and keep track of *all* relevant data regarding rate results. They can be saved by extracting `$summary` directly from the output, or using `summary(object, export = TRUE`). Note, `summary()` only prints a condensed version to the console as the full table is too large to print. 
 
-=============================== select_rate() ==================================
+=============================== subset_rate() ==================================
 
-- NEW: `select_rate` can now *reorder* `auto_rate` results in various ways. This can be useful in several situations. See help docs and vignette on website for more information and examples.
+- NEW: `subset_rate` can now *reorder* `auto_rate` results in various ways. This can be useful in several situations. See help docs and vignette on website for more information and examples.
 - NEW: There is a new `"rank"` method for subsetting based on the `$rank` column of the summary table. The rank always refers to the original rate ranking or ordering as determined in the original `auto_rate` call, which is retained unchanged regardless of how the results are subsequently subset or reordered.
-- NEW: There is a new `"oxygen"` method for subsetting based on oxygen values in the raw data. This can be used to constrain results to particular oxygen ranges. Conversely, to *exclude* particular oxygen values or ranges you can use the `oxygen_omit` method. See `help("select_rate")` for specific details. 
+- NEW: There is a new `"oxygen"` method for subsetting based on oxygen values in the raw data. This can be used to constrain results to particular oxygen ranges. Conversely, to *exclude* particular oxygen values or ranges you can use the `oxygen_omit` method. See `help("subset_rate")` for specific details. 
 - CHANGE: For the `"row_omit"` and `"time_omit"` methods, the `n` input can now be a numeric vector of any length. Regressions (i.e. rates) fit across any time or row value in `n` will be omitted. A continuous range of rows or time can still be entered by using regular R syntax for creating vectors such as `n = 10:20` or `seq()`.  
 - CHANGE: For the `rate`, `rsq`, `row`, `time`, and `density` methods the `n` input of two values can now be entered in any order.   
-- CHANGE: The `plot` input default has been changed to `FALSE`, and the internal plotting for this function has been revised to be much quicker and show more plots (up to a max of 20 from 9). See help file for more info but briefly, this plotting functionality is intended to provide a quick view of how many rates remain after subsetting and where they occur in the data. In many cases it does not need to be run in every `select_rate` call. 
-- CHANGE: `select_rate` and `auto_rate` now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `select_rate` will now *not* stop if an empty object is input as `x` or piped from a previous `select_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` and also will not stop any pipes, and will result in a console message but no plot. 
+- CHANGE: The `plot` input default has been changed to `FALSE`, and the internal plotting for this function has been revised to be much quicker and show more plots (up to a max of 20 from 9). See help file for more info but briefly, this plotting functionality is intended to provide a quick view of how many rates remain after subsetting and where they occur in the data. In many cases it does not need to be run in every `subset_rate` call. 
+- CHANGE: `subset_rate` and `auto_rate` now behave better with objects which contain zero results, and allow piping operations to continue even if an empty object is encountered somewhere in the pipe. This can occur if subsetting criteria excludes every rate. These `auto_rate_subset` objects with no results now work with `print`, `summary`, and `mean` giving a message that they contain no rates but still printing to the console. `subset_rate` will now *not* stop if an empty object is input as `x` or piped from a previous `subset_rate` operation. Trying to plot these empty objects in `plot` or `plot_ar` and also will not stop any pipes, and will result in a console message but no plot. 
 
 =============================== General Changes ================================
 
@@ -118,7 +118,7 @@ Only a month after 2.0.0, this is a quick update that fixes a few bugs, adds a c
 
 ==================================== Fixes =====================================
 
-- FIX: `adjust_rate` - Fix for warnings when using `auto_rate` objects which have been passed through `select_rate` with paired or dynamic adjustment methods. 
+- FIX: `adjust_rate` - Fix for warnings when using `auto_rate` objects which have been passed through `subset_rate` with paired or dynamic adjustment methods. 
 - FIX: `plot_ar` - Fix for incorrect subset number appearing in plot titles.
 - FIX: `plot_ar` - Fix for the `pos` and `highlight` inputs sometimes failing to produce expected behaviour.
 
@@ -145,13 +145,13 @@ We are happy to say the package has never been more stable and even easier to us
 ================================== HIGHLIGHTS ==================================
 
 - NEW: `respR` is now [available on CRAN](https://CRAN.R-project.org/package=respR). It can be installed just like any other package via the RStudio package manager tab or by running `install.packages("respR")`. If you want to be on the bleeding edge, for example test out the latest dev version, you can use `install.github()` and the `ref` input to select a different branch.
-- NEW: `select_rate` function. This allows `auto_rate` results to be explored and filtered according to various criteria.
-- NEW: `plot_ar` function. This plots `auto_rate` objects in a way that visualises how results are distributed within the dataset. Pairs very nicely with `select_rate` above. 
+- NEW: `subset_rate` function. This allows `auto_rate` results to be explored and filtered according to various criteria.
+- NEW: `plot_ar` function. This plots `auto_rate` objects in a way that visualises how results are distributed within the dataset. Pairs very nicely with `subset_rate` above. 
 - NEW: `adjust_rate` contains several new methods of adjusting for background respiration, including the ability to perform adjustments from paired or concurrent blank chambers, and to perform dynamic adjustments for background rates which change over the course of an experiment.
 - NEW: Completely new flowthrough respirometry workflow. There are four new flowthrough-specific functions and new functionality for exploring, calculating and adjusting rates from flowthrough respirometry data.
 - NEW: `inspect` and `inspect.ft` performs additional data checks: that columns contain numeric data and a check for infinite values
 - NEW: Rates can now be output as surface area-specific rates via the `area` input in `convert_rate` (accepts `"mm2"`, `"cm2"`, `"m2"`, `"km2"`). You can also use `day` as the time metric in output rates (e.g. `"mgO2/day/m2"`)
-- NEW: `auto_rate` `"rolling"` method. Performs fixed-width rolling regressions across the entire dataset with no ordering of results. This pairs nicely with the new `select_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
+- NEW: `auto_rate` `"rolling"` method. Performs fixed-width rolling regressions across the entire dataset with no ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
 - NEW: `auto_rate` `"highest"` and `"lowest"` methods for absolute minimum and maximum of rates regardless of sign
 - NEW: Several new dissolved oxygen units are now supported in `convert_DO` and `convert_rate` including percent oxygen saturation, moles of oxygen, and more.
 - NEW: `convert_val` function. A simple conversion function to help with inputting experimental parameters in the correct units.
@@ -220,7 +220,7 @@ We are happy to say the package has never been more stable and even easier to us
 
 ================================ auto_rate() ===================================
 
-- NEW - `"rolling"` method. Performs simple rolling regression of specified width, with *no* ordering of results. This pairs nicely with the new `select_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
+- NEW - `"rolling"` method. Performs simple rolling regression of specified width, with *no* ordering of results. This pairs nicely with the new `subset_rate` function to allows users full control of selection criteria (albeit with fixed width regressions)
 - NEW `"highest"` and `"lowest"` methods for *absolute* minimum and maximum rate values regardless of sign. These can only be used when rates all have the same sign.
 - NEW `"maximum"` and `"minimum"` methods. These work the *opposite* way to `"min"` and `"max"` from v1.1. These are strictly numerical, and order by value taking account of the sign.
 - NEW: Added the Kernel Density metric `$density` to the `$summary` table for the `"linear"` method. This allows you to see how the results are ranked in regards to KDE (also present for other methods, but as an `NA` column).
@@ -422,7 +422,7 @@ NEW: New example datasets
 - CHANGE: Consistently named inputs (for `summary()` the first input should be `object`, but in all others it is `x`)
 - CHANGE: All console output prints more consistently with nicer spacing, especially in pipes
 
-- FIX: In `auto_rate` S3 methods stop with a message if no rates found in object (this can happen with over-enthusiastic subsetting in the new `select_rate` function)
+- FIX: In `auto_rate` S3 methods stop with a message if no rates found in object (this can happen with over-enthusiastic subsetting in the new `subset_rate` function)
 - FIX: All revised to work correctly with `|>` or `%>%` pipes
 
 
