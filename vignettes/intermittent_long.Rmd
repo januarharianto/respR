@@ -292,7 +292,7 @@ This is the complete analysis we have just conducted to get MMR.
 mmr_results <- 
   zeb_rep_1 |>                              # using the inspected replicate 1 data...
   subset_data(from = 180, 
-              by = "row") |>                # subset first replicate
+              by = "row") |>                # subset to apply a 'wait' period
   auto_rate(width = 0.5) |>                 # use auto_rate to get most linear regions
   adjust_rate(by = bg_pre, 
               by2 = bg_post, 
