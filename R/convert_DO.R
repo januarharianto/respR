@@ -304,13 +304,18 @@ verify_units <- function(unit, is) {
                     'Seconds', 'Second', 'Sec', 'Secs', 'S'))
   }
 
+  # # matches these as:
+  # # case-insensitive (?i)
+  # # no partial matches \\b
+  # # and also as plurals (s?)
   # all.units <- list(
-  #   hour.time = "(hour|hr|h)(s?)",
-  #   day.time = "(day|dy|d)(s?)",
-  #   min.time = "(minute|min|m)(s?)",
-  #   sec.time = "(second|sec|s)(s?)"
+  #   hour.time = "(?i)\\b(hour|hr|h)(s?)\\b",
+  #   day.time = "(?i)\\b(day|dy|d)(s?)\\b",
+  #   min.time = "(?i)\\b(minute|min|m)(s?)\\b",
+  #   sec.time = "(?i)\\b(second|sec|s)(s?)\\b"
   # )
-  # for (i in un.vars) if(grepl(all.units$hour.time, i, ignore.case = TRUE) == FALSE) print(i)
+  # for (i in un.vars) if(grepl(all.units$hour.time, i) == FALSE) print(i)
+  # grepl(all.units$hour.time, "hours")
 
 
 
@@ -338,6 +343,10 @@ verify_units <- function(unit, is) {
                     'ugl-1','ug L-1','ug l -1','ug per liter','ug per litre',
                     'ugO2/L','ugO2/l','ugO2 / L','ugO2 / l','ugO2L-1',
                     'ugO2l-1','ugO2 L-1','ugO2 l -1','ugO2 per liter','ugO2 per litre'),
+      # ug_pattern <- "ug(O2)?( / L| / l| L-1| l -1| per (liter|litre))?"
+      # regex <- paste0("^", ug_pattern, "$")
+
+
 
       'mol/L.o2' = c('mol/L.o2',
                      'mol/L','mol/l','mol / L','mol / l',
@@ -408,6 +417,7 @@ verify_units <- function(unit, is) {
                      'cm^3O2L-1','cm^3O2L-1','cm^3O2 / L','cm^3O2 / L','cm^3O2 / l','cm^3O2 / l',
                      'cm^3O2 l-1','cm^3O2 l-1','cm^3O2 L-1','cm^3O2 L-1','cm^3O2 per l','cm^3O2 per L',
                      'cm^3O2 per L'),
+      # grep("(cc|cm3|cm\\^3|cubic cm)\\s*O2?\\s*(\\s|\\.|/|per)?(-1)?", my_string, ignore.case = TRUE)
 
       'mg/L.o2' = c('mg/L.o2',
                     'mg/L','mg/l','mg / l','mg / L','mgL-1','mgl-1',
