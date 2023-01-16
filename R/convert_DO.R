@@ -304,6 +304,16 @@ verify_units <- function(unit, is) {
                     'Seconds', 'Second', 'Sec', 'Secs', 'S'))
   }
 
+  # all.units <- list(
+  #   hour.time = "(hour|hr|h)(s?)",
+  #   day.time = "(day|dy|d)(s?)",
+  #   min.time = "(minute|min|m)(s?)",
+  #   sec.time = "(second|sec|s)(s?)"
+  # )
+  # for (i in un.vars) if(grepl(all.units$hour.time, i, ignore.case = TRUE) == FALSE) print(i)
+
+
+
   # o2 ----------------------------------------------------------------------
   # 2-dimensional o2 units, and pressure
   if (is == 'o2') {
@@ -315,7 +325,7 @@ verify_units <- function(unit, is) {
       '%Air.o2' = c('%Air.o2',
                     '%air','%Air','%A','%a',
                     "percair","percentair","percentageair"),
-
+      # for (i in un.vars) if(grepl("(%|perc|percent|percentage)[._ ]*(air|A)", i, ignore.case = TRUE) == FALSE) print(i)
       '%Oxy.o2' = c('%Oxy.o2',
                     '%oxy','%Oxy','%OX','%OXY','%o2','%Oxy','%o','%O',
                     "percoxygen","percentoxygen","percentageoxygen",
@@ -381,20 +391,30 @@ verify_units <- function(unit, is) {
 
       # this is identical to ml/L - only used in v old papers
       'cm3/L.o2' = c('cm3/L.o2',
-                    'cm3/L','cm3/L','cm3/l','cm3/l','cm3l-1','cm3l-1',
-                    'cm3L-1','cm3L-1','cm3 / L','cm3 / L','cm3 / l','cm3 / l',
-                    'cm3 l-1','cm3 l-1','cm3 L-1','cm3 L-1','cm3 per l','cm3 per L',
-                    'cm3 per L',
-                    'cm3O2/L','cm3O2/L','cm3O2/l','cm3O2/l','cm3O2l-1','cm3O2l-1',
-                    'cm3O2L-1','cm3O2L-1','cm3O2 / L','cm3O2 / L','cm3O2 / l','cm3O2 / l',
-                    'cm3O2 l-1','cm3O2 l-1','cm3O2 L-1','cm3O2 L-1','cm3O2 per l','cm3O2 per L',
-                    'cm3O2 per L'),
+                     'cm3/L','cm3/L','cm3/l','cm3/l','cm3l-1','cm3l-1',
+                     'cm3L-1','cm3L-1','cm3 / L','cm3 / L','cm3 / l','cm3 / l',
+                     'cm3 l-1','cm3 l-1','cm3 L-1','cm3 L-1','cm3 per l','cm3 per L',
+                     'cm3 per L',
+                     'cm3O2/L','cm3O2/L','cm3O2/l','cm3O2/l','cm3O2l-1','cm3O2l-1',
+                     'cm3O2L-1','cm3O2L-1','cm3O2 / L','cm3O2 / L','cm3O2 / l','cm3O2 / l',
+                     'cm3O2 l-1','cm3O2 l-1','cm3O2 L-1','cm3O2 L-1','cm3O2 per l','cm3O2 per L',
+                     'cm3O2 per L',
+                     'cm^3/L.o2',
+                     'cm^3/L','cm^3/L','cm^3/l','cm^3/l','cm^3l-1','cm^3l-1',
+                     'cm^3L-1','cm^3L-1','cm^3 / L','cm^3 / L','cm^3 / l','cm^3 / l',
+                     'cm^3 l-1','cm^3 l-1','cm^3 L-1','cm^3 L-1','cm^3 per l','cm^3 per L',
+                     'cm^3 per L',
+                     'cm^3O2/L','cm^3O2/L','cm^3O2/l','cm^3O2/l','cm^3O2l-1','cm^3O2l-1',
+                     'cm^3O2L-1','cm^3O2L-1','cm^3O2 / L','cm^3O2 / L','cm^3O2 / l','cm^3O2 / l',
+                     'cm^3O2 l-1','cm^3O2 l-1','cm^3O2 L-1','cm^3O2 L-1','cm^3O2 per l','cm^3O2 per L',
+                     'cm^3O2 per L'),
 
       'mg/L.o2' = c('mg/L.o2',
                     'mg/L','mg/l','mg / l','mg / L','mgL-1','mgl-1',
                     'mg L-1','mg l-1','mg per litre','mg per liter',
                     'mgO2/L','mgO2/l','mgO2 / l','mgO2 / L','mgO2L-1','mgO2l-1',
                     'mgO2 L-1','mgO2 l-1','mgO2 per litre','mgO2 per liter'),
+      # grepl("mg[O2]?[/ ]?[lL]-1|mg[O2]? per [lL]it(er|re)", "mg per litre")
 
       'mg/kg.o2' = c('mg/kg.o2',
                      'mg/kg','mg / kg','mgkg-1','mg kg-1',
@@ -524,7 +544,11 @@ verify_units <- function(unit, is) {
       'nmol.o2' = c('nmol.o2','nmolo2','nmolO2','nmol','nanomol','nanomole'),
       'pmol.o2' = c('pmol.o2','pmolo2','pmolO2','pmol','picomol','picomole'),
       'ml.o2'   = c('ml.o2','mlo2','mlO2','ml','mLo2','mLO2','mL',
-                    'millil','millilitre','milliliter','millilitres','milliliters'))
+                    'millil','millilitre','milliliter','millilitres','milliliters'),
+      'cm3.o2'   = c('cm3.o2','cm3o2','cm3.O2','cm3O2','cm3',
+                     'cm^3.o2','cm^3o2','cm^3.O2','cm^3O2','cm^3',
+                     'CM3.o2','CM3o2','CM3.O2','CM3O2','CM3',
+                     'CM^3.o2','CM^3o2','CM^3.O2','CM^3O2','CM^3'))
   }
 
   # flow --------------------------------------------------------------------
@@ -646,8 +670,9 @@ verify_units <- function(unit, is) {
   # Look for match ----------------------------------------------------------
   string <- paste0('^', unit, '$')  # for exact matching
   chk <- lapply(all.units, function(x) grep(string, x))
+  #chk <- lapply(all.units, function(x) grepl(x, string, ignore.case = TRUE))
   chk <- sapply(chk, function(x) length(x) > 0)
-  result <- any(chk == T)  # did a match occur?
+  result <- any(chk == TRUE)  # did a match occur?
   if (result == FALSE)
     stop("verify_units: unit '", unit, "' not recognised. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = F)
   out <- names(chk)[which(chk)]  # print unit name

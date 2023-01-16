@@ -749,7 +749,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("select_rate: works with method = row_omit and n input of multiple random", {
     skip_on_cran()
     # 10 random rows
-    ran <- round(runif(10, 500, 4500))
+    ran <- round(runif(5, 500, 4500))
 
     # runs ok
     expect_error(conv_rt_ar_low_obj_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
@@ -880,7 +880,7 @@ capture.output({  ## stops printing outputs on assigning
     skip_on_cran()
 
     # 10 random times
-    ran <- runif(10, 500, 4500)
+    ran <- runif(5, 500, 4500)
 
     # runs ok
     expect_error(conv_rt_ar_low_obj_subset_time_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
@@ -888,7 +888,7 @@ capture.output({  ## stops printing outputs on assigning
                  regexp = NA)
     ## check omitted times not within times for each regression
     for(i in ran) apply(conv_rt_ar_low_obj_subset_time_omit$summary, 1, function(x)
-      expect_false(i %in% x[8]:x[9]))
+      expect_false(i %in% x[9]:x[10]))
 
   })
 

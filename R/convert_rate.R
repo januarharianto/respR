@@ -689,7 +689,6 @@ plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
 #' @return A numeric.
 #'
 #' @importFrom stringr str_replace
-#' @export
 adjust_scale <- function(x, input, output) {
   # Create database of terms for matching
   prefix <- c("p", "n", "u", "m", "", "k", "sec", "min", "hour", "day")
