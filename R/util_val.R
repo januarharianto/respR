@@ -466,18 +466,18 @@ units.val <- function(unit, is, msg = "units.val") {
 #' @keywords internal
 units.clean <- function(unit, is) {
 
-  if (is == 'o2') out <- unit |>
-      gsub(".o2p", ".o2", x = _) |>
-      gsub(".o2", "", x = _)
+  if (is == 'o2') out <- unit %>%
+      gsub(".o2p", ".o2", x = .) %>%
+      gsub(".o2", "", x = .)
 
-  if (is == 'time')        out <- unit |> gsub(".time", "", x = _)
-  if (is == 'vol')         out <- unit |> gsub(".vol",  "", x = _)
-  if (is == 'mass')        out <- unit |> gsub(".mass", "", x = _)
-  if (is == 'area')        out <- unit |> gsub(".area", "", x = _)
-  if (is == 'o1')          out <- unit |> gsub(".o1",   "", x = _)
-  if (is == 'flow')        out <- unit |> gsub(".flow", "", x = _)
-  if (is == 'pressure')    out <- unit |> gsub(".p",    "", x = _)
-  if (is == 'temperature') out <- unit |> gsub(".temp", "", x = _)
+  if (is == 'time')        out <- unit %>% gsub(".time", "", x = .)
+  if (is == 'vol')         out <- unit %>% gsub(".vol",  "", x = .)
+  if (is == 'mass')        out <- unit %>% gsub(".mass", "", x = .)
+  if (is == 'area')        out <- unit %>% gsub(".area", "", x = .)
+  if (is == 'o1')          out <- unit %>% gsub(".o1",   "", x = .)
+  if (is == 'flow')        out <- unit %>% gsub(".flow", "", x = .)
+  if (is == 'pressure')    out <- unit %>% gsub(".p",    "", x = .)
+  if (is == 'temperature') out <- unit %>% gsub(".temp", "", x = .)
 
   return(out)
 }
