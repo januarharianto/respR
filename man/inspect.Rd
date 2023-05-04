@@ -16,24 +16,25 @@ inspect(
 }
 \arguments{
 \item{x}{data.frame. Any object of class \code{data.frame} (incl. \code{data.table},
-\code{tibble}, etc.).}
+\code{tibble}, etc.). Should contain paired numeric values of time and oxygen.}
 
-\item{time}{integer. Defaults to 1. Specifies the column number of the Time
-data.}
+\item{time}{integer or string. Defaults to \code{1}. Specifies the column of the
+Time data as either a column number or the name.}
 
-\item{oxygen}{integer or vector of integers. Defaults to 2. Specifies the
-column number(s) of the Oxygen data.}
+\item{oxygen}{integer or string, or vector of either. Defaults to \code{2}.
+Specifies the column(s) of the Oxygen data as either a vector of column
+numbers or names.}
 
-\item{width}{numeric, 0.01 to 1. Defaults to 0.1. Width used in the rolling
+\item{width}{numeric, 0.01 to 1. Defaults to \code{0.1}. Width used in the rolling
 regression plot as proportion of total length of data.}
 
 \item{plot}{logical. Defaults to \code{TRUE}. Plots the data. If \code{time} and single
 \code{oxygen} columns selected, plots timeseries data, plus plot of rolling
 rate. If multiple \code{oxygen} columns, plots all timeseries data only.}
 
-\item{add.data}{integer. Defaults to \code{NULL}. Specifies the column number of
-an optional additional data source that will be plotted in blue alongside
-the full oxygen timeseries.}
+\item{add.data}{integer or string. Defaults to \code{NULL}. Specifies the column
+number or name of an optional additional data source that will be plotted
+in blue alongside the full oxygen timeseries.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
 can also be passed in \code{plot()} commands on output objects.}
@@ -57,9 +58,11 @@ quality control and exploratory step to help users view and prepare their
 data prior to analysis.
 }
 \details{
-Given an input data frame, \code{x}, the function scans the \code{time} and \code{oxygen}
-columns. If these are left \code{NULL}, by default it is assumed column 1 is time
-data, and column 2 is oxygen data.
+Given an input data frame, \code{x}, the function scans the specified \code{time} and
+\code{oxygen} columns for the following issues. Columns are specified by using the
+column number (e.g. \code{time = 1}), or by name (e.g. \code{time = "Time.Hrs"}). If
+\code{time} and \code{oxygen} are left \code{NULL} the default of \verb{time = 1, oxygen = 2} is
+applied.
 \subsection{Check for numeric data}{
 
 \code{respR} requires data be in the form of paired values of numeric time and
@@ -73,27 +76,29 @@ resulting output object be saved and passed to other \code{respR} functions.
 
 \subsection{Other checks}{
 
-The \code{time} column is checked for missing (\code{NA/NaN}) values, infinite values
-both positive and negative (\code{Inf/-Inf}), that values are sequential, that
-there are no duplicate times, and that it is numerically evenly-spaced.
-Oxygen columns are checked for missing (\code{NA/NaN}) and infinite values
-(\code{Inf/-Inf}). See \strong{Failed Checks} section for what it means for analyses if
-these checks result in warnings. If the output is assigned, the specified
-columns are saved to a \code{list} object for use in later functions such as
-\code{\link[=calc_rate]{calc_rate()}} and \code{\link[=auto_rate]{auto_rate()}}. A plot is also produced.
+The \code{time} column is checked for missing (\code{NA/NaN}) values, positive and
+negative infinite values (\code{Inf/-Inf}), that values are sequential, that there
+are no duplicate times, and that it is numerically evenly-spaced. Oxygen
+columns are checked for missing (\code{NA/NaN}) and infinite values (\code{Inf/-Inf}).
+See \strong{Failed Checks} section for what it means for analyses if these checks
+result in warnings. If the output is assigned, the specified \code{time} and
+\code{oxygen} columns are extracted and saved to a \code{list} object for use in later
+functions such as \code{\link[=calc_rate]{calc_rate()}} and \code{\link[=auto_rate]{auto_rate()}}. A plot is also
+produced.
 }
 
 \subsection{Plot}{
 
-A plot of the data is produced (unless \code{plot = FALSE}), of the data
-timeseries, plus a rolling regression plot. This plot shows the rate of
-change in oxygen across a rolling window specified using the \code{width} operator
-(default is \code{width = 0.1}, or 10\% of the entire dataset). This plot provides
-a quick visual inspection of how the rate varies over the course of the
-experiment. Regions of stable and consistent rates can be identified on this
-plot as flat or level areas. This plot is for exploratory purposes only;
-later functions allow rate to be calculated over specific regions. Each rate
-value is plotted against the centre of the time window used to calculate it.
+If \code{plot = TRUE} (the default), a plot of the oxygen timeseries is produced
+in the upper panel. In addition, a rolling regression plot in the lower panel
+shows the rate of change in oxygen across a rolling window specified using
+the \code{width} operator (default is \code{width = 0.1}, or 10\% of the entire
+dataset). This plot provides a quick visual inspection of how the rate varies
+over the course of the experiment. Regions of stable and consistent rates can
+be identified on this plot as flat or level areas. This plot is for
+exploratory purposes only; later functions allow rate to be calculated over
+specific regions. Each individual rate value is plotted against the centre of
+the time window used to calculate it.
 
 \emph{\strong{Note:}} Since \code{respR} is primarily used to examine oxygen consumption,
 the oxygen rate plot is by default plotted on a reverse y-axis. In \code{respR}
@@ -110,12 +115,12 @@ the plot.
 \subsection{Plot an additional data source}{
 
 Using the \code{add.data} input an additional data source, for example
-temperature, can be plotted alongside the oxygen timeseries. This input
-should be an integer indicating a column in the input \code{x} data frame sharing
-the same time data. None of the data checks are performed on this column; it
-is simply to give a basic visual aid in the plot to, for example, help decide
-if regions of the data should be used or not used because this parameter was
-variable. It is saved in the output as a vector under \verb{$add.data}. It is
+temperature, can be plotted alongside the oxygen timeseries. This should be
+either a column number (e.g. \code{add.data = 3}) or name (e.g. \code{add.data = "Temperature"}) indicating a column in the input \code{x} data frame sharing the
+same time data. None of the data checks are performed on this column; it is
+simply to give a basic visual aid in the plot to, for example, help decide if
+regions of the data should be used or not used because this parameter was
+variable. Values are saved in the output as a vector under \verb{$add.data}. It is
 plotted in blue on a separate y-axis on the main timeseries plot. It is \emph{not}
 plotted if multiple oxygen columns are inspected. See examples.
 }
@@ -216,8 +221,9 @@ website at \url{https://januarharianto.github.io/respR/}
 ## By default, assumes time is col 1 and oxygen col2:
 inspect(sardine.rd)
 
-## Instead, specify time and oxygen columns
+## Instead, specify time and oxygen columns as either number or name
 inspect(sardine.rd, time = 1, oxygen = 2)
+inspect(urchins.rd, time = "time.min", oxygen = "a")
 
 ## Use add.data input to plot an additional data type
 ## (this column is not checked)

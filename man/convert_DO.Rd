@@ -51,10 +51,10 @@ This is a conversion function that performs conversions between concentration
 and pressure units of dissolved oxygen (DO).
 }
 \details{
-The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/L"},
-\code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
-\verb{[unit_args()]} for details of accepted units.
+The function uses a fuzzy string matching algorithm to accept various unit
+formatting styles. For example, \code{"mg/l"}, \code{"mg/L"}, \code{"mgL-1"}, \code{"mg l-1"},
+\code{"mg.l-1"} are all parsed the same. See \verb{[unit_args()]} for details of
+accepted units.
 
 Oxygen concentration units should use SI units (\code{L} or \code{kg}) for the
 denominator.
@@ -76,10 +76,10 @@ and output units.
 }
 }
 \examples{
-# Convert a numeric value from & to units which do not require t, S and P
+# Convert a numeric value to units which do not require t, S and P
 convert_DO(8.21, from = "mg/L", to = "umol/L")
 
-# Convert a numeric value from & to units which require t, S and P
+# Convert a numeric value to units which require t, S and P
 convert_DO(100, from = "\%Air", to = "mg L-1", S = 33, t = 18)
 convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 

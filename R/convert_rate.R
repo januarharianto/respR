@@ -49,8 +49,8 @@
 #'
 #' Strictly speaking, the atmospheric pressure (`P`) should also be entered. If
 #' not, the default value of 1.013253 bar (standard pressure at sea level) is
-#' used. In most locations which have a normal range (outside extreme weather
-#' events) of around 20 millibars, any variability in pressure will have a
+#' used. In most locations which have a normal range of around 20 millibars
+#' (outside of extreme weather events), any variability in pressure will have a
 #' relatively minor effect on dissolved oxygen, and even less on calculated
 #' rates. However, we would encourage users to enter the actual value if they
 #' know it, or use historical weather data to find out what it was on the day.
@@ -143,7 +143,7 @@
 #'   entered), adjustments (if applied), units, and more. The `$rep` and `$rank`
 #'   columns require special notice depending on the type of experiment you have
 #'   analysed or the function you used to determine the rates. See the summary
-#'   table description in **S3 Generic Functions** section aboce.
+#'   table description in **S3 Generic Functions** section above.
 #'
 #' @param x numeric value or vector, or object of class `calc_rate`,
 #'   `calc_rate.int`, `auto_rate`, `auto_rate.int`, `adjust_rate`, or
@@ -204,7 +204,7 @@
 
 convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NULL,
                          volume = NULL, mass = NULL, area = NULL,
-                         S = NULL, t = NULL, P = 1.013253,
+                         S = NULL, t = NULL, P = NULL,
                          plot = FALSE, ...) {
 
   ## Save function call for output
@@ -212,34 +212,34 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
 
   # Validate inputs If units are set to NULL, use default values.
   if (is.null(oxy.unit) || is.numeric(oxy.unit))
-    stop("convert_rate: the 'oxy.unit' of the original data is required.")
+    stop("convert_rate: The 'oxy.unit' of the original data is required.", call. = FALSE)
   if (is.null(time.unit) || is.numeric(time.unit))
-    stop("convert_rate: the 'time.unit' of the original data is required.")
+    stop("convert_rate: The 'time.unit' of the original data is required.", call. = FALSE)
 
   ## Apply output unit defaults
   if (is.null(output.unit) && is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h'",
-            call. = F)
+    warning("convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h'",
+            call. = FALSE)
     output.unit <- "mg/h"
   }
   if (is.null(output.unit) && !is.null(mass) && is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/kg'",
-            call. = F)
+    warning("convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h/kg'",
+            call. = FALSE)
     output.unit <- "mg/h/kg"
   }
   if (is.null(output.unit) && is.null(mass) && !is.null(area)) {
-    warning("convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/m2'",
-            call. = F)
+    warning("convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h/m2'",
+            call. = FALSE)
     output.unit <- "mg/h/m2"
   }
 
   # Volume must not be NULL
   if (is.null(volume) || !is.numeric(volume))
-    stop("convert_rate: the 'volume' input is required.")
+    stop("convert_rate: The 'volume' input is required.", call. = FALSE)
 
   # Can't have both 'mass' and 'area' inputs
   if (!is.null(mass) && !is.null(area))
-    stop("convert_rate: cannot have inputs for both 'mass' and 'area'.")
+    stop("convert_rate: Cannot have inputs for both 'mass' and 'area'.", call. = FALSE)
 
 
   # Extract values ----------------------------------------------------------
@@ -267,6 +267,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
     summ.ext$rank <- 1:length(rate)
     summ.ext$rate <- rate
+    message("convert_rate: Numeric input detected. Converting all numeric rates.")
   } else if (inherits(x, "calc_rate")) {
     rate <- x$rate
     summ.ext <- x$summary[,-"rate.2pt"]
@@ -274,55 +275,55 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext$rate.adjusted <- NA
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:5, 15, 6:14))
-    message("convert_rate: object of class `calc_rate` detected. Converting all rates in '$rate'.")
-  } else if (class(x) %in% c("calc_rate.int")) {
+    message("convert_rate: Object of class 'calc_rate' detected. Converting all rates in '$rate'.")
+  } else if (inherits(x, "calc_rate.int")) {
     rate <- x$rate
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:5, 15, 6:14))
-    message("convert_rate: object of class `calc_rate.int` detected. Converting all rates in '$rate'.")
-  } else if (class(x) %in% c("auto_rate")) {
+    message("convert_rate: Object of class 'calc_rate.int' detected. Converting all rates in '$rate'.")
+  } else if (inherits(x, "auto_rate")) {
     rate <- x$rate
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
-    message("convert_rate: object of class `auto_rate` detected. Converting all rates in '$rate'.")
-  } else if (class(x) %in% c("auto_rate.int")) {
+    message("convert_rate: Object of class 'auto_rate' detected. Converting all rates in '$rate'.")
+  } else if (inherits(x, "auto_rate.int")) {
     rate <- x$rate
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
-    message("convert_rate: object of class `auto_rate.int` detected. Converting all rates in '$rate'.")
-  } else if (class(x) %in% "adjust_rate" && is.numeric(x$inputs$x)) {
+    message("convert_rate: Object of class 'auto_rate.int' detected. Converting all rates in '$rate'.")
+  } else if (inherits(x, "adjust_rate") && is.numeric(x$inputs$x)) {
     rate <- x$rate.adjusted
     summ.ext <- as.data.table(lapply(summ.ext, rep, length(rate)))
     summ.ext$rank <- x$summary$rank
     summ.ext$rate <- x$summary$rate
     summ.ext$adjustment <- x$summary$adjustment
     summ.ext$rate.adjusted <- x$summary$rate.adjusted
-    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate") {
+    message("convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (inherits(x, "adjust_rate") && inherits(x$inputs$x, "calc_rate")) {
     rate <- x$rate.adjusted
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:5, 15, 6:14))
-    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "calc_rate.int") {
+    message("convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (inherits(x, "adjust_rate") && inherits(x$inputs$x, "calc_rate.int")) {
     rate <- x$rate.adjusted
     summ.ext <- x$summary[,-"rate.2pt"]
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:5, 15, 6:14))
-    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "auto_rate") {
+    message("convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (inherits(x, "adjust_rate") && inherits(x$inputs$x, "auto_rate")) {
     rate <- x$rate.adjusted
     summ.ext <- x$summary
-    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
-  } else if (class(x) %in% "adjust_rate" && class(x$inputs$x) %in% "auto_rate.int") {
+    message("convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.")
+  } else if (inherits(x, "adjust_rate") && inherits(x$inputs$x, "auto_rate.int")) {
     rate <- x$rate.adjusted
     summ.ext <- x$summary
-    message("convert_rate: object of class `adjust_rate` detected. Converting all adjusted rates in '$rate.adjusted'.")
+    message("convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.")
   } else if (inherits(x, "calc_rate.bg")) {
     ## possible warning if mass entered - no reason to have mass with bg data
     rate <- x$rate.bg
@@ -331,20 +332,22 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     summ.ext$rate.adjusted <- NA
     summ.ext$density <- NA
     setcolorder(summ.ext, c(1:5, 15, 6:14))
-    message("convert_rate: object of class `calc_rate.bg` detected. Converting all background rates in '$rate.bg'.")
+    message("convert_rate: Object of class 'calc_rate.bg' detected. Converting all background rates in '$rate.bg'.")
     if(!is.null(mass) || !is.null(area))
-      warning("convert_rate: A `calc_rate.bg` (i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?")
-  } else if (class(x) %in% "calc_rate.ft") {
-    stop("convert_rate: object of class `calc_rate.ft` detected. \nPlease use 'convert_rate.ft' to convert the rate.")
-  } else stop("convert_rate: 'x' input is not valid.")
+      warning("convert_rate: A 'calc_rate.bg' (i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?",
+              call. = FALSE)
+  } else if (inherits(x, "calc_rate.ft")) {
+    stop("convert_rate: Object of class 'calc_rate.ft' detected. \nPlease use 'convert_rate.ft' to convert the rate.",
+         call. = FALSE)
+  } else stop("convert_rate: 'x' is not an accepted input.", call. = FALSE)
 
 
   # Validate oxy.unit & time.unit
-  oxy <- verify_units(oxy.unit, "o2")
-  time <- verify_units(time.unit, "time")
+  oxy <- units.val(oxy.unit, "o2")
+  time <- units.val(time.unit, "time")
 
   # Validate output.unit
-  ou <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+",
+  ou <- as.matrix(read.table(text = gsub(unit.sep.rgx,
                                          " ", output.unit), header = FALSE))
 
   ## is it a specific rate (mass or area)?
@@ -359,52 +362,66 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
       is.mass.spec <- FALSE
       is.area.spec <- TRUE
     } else if(is.null(area) && is.null(mass)){
-      stop("convert_rate: 'output.unit' requires a value for 'mass' or 'area'")
+      stop("convert_rate: 'output.unit' requires a value for 'mass' or 'area'", call. = FALSE)
     }
   } else {
     is.mass.spec <- FALSE
     is.area.spec <- FALSE
   }
 
-  A <- verify_units(ou[1], "o1")
-  B <- verify_units(ou[2], "time")
+  A <- units.val(ou[1], "o1")
+  B <- units.val(ou[2], "time")
   if(is.spec){
     if (is.mass.spec) {
-      C <- verify_units(ou[3], "mass")
+      C <- units.val(ou[3], "mass")
       ou <- as.matrix(data.frame(A, B, C))
     } else if (is.area.spec) {
-      C <- verify_units(ou[3], "area")
+      C <- units.val(ou[3], "area")
       ou <- as.matrix(data.frame(A, B, C))
     }
   } else ou <- as.matrix(data.frame(A, B))
 
   # Verify 'mass' input
   if (!is.mass.spec && is.numeric(mass))
-    stop("convert_rate: a 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
+    stop("convert_rate: A 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.",
+         call. = FALSE)
 
   # Verify 'area' input
   if (!is.area.spec && is.numeric(area))
-    stop("convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
+    stop("convert_rate: An 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.",
+         call. = FALSE)
 
-  # Format unit strings to look nicer
-  oxy.unit <- stringr::str_replace(oxy, "\\..*", "")
-  time.unit <- stringr::str_replace(time, "\\..*", "")
+  # Format unit strings to clean format
+  oxy.unit <- units.clean(oxy, "o2")
+  time.unit <- units.clean(time, "time")
 
   ## Add "O2" to output O2 unit string for clarity
   output.unit <- stringr::str_replace(ou, "\\..*", "")
   output.unit[1] <- paste0(output.unit[1], "O2")
   output.unit <- paste(output.unit, collapse = "/")
 
+  # Check t, S and P needed for units, issue errors
+  # and apply default P
+  # This will apply it if either in or out unit requires it.
+  P <- StP.val(oxy.unit, "oxy", S, t, P, P.chk = FALSE, msg = "convert_rate")
+  P <- StP.val(output.unit, "mr", S, t, P, P.chk = TRUE, msg = "convert_rate")
+
+# Convert -----------------------------------------------------------------
+
   # Convert DO unit first
   if (A %in% c("pmol.o2", "nmol.o2", "umol.o2", "mmol.o2", "mol.o2")) {
-    RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
+    RO2 <- suppressMessages(suppressWarnings(convert_DO(rate, oxy, "mmol/L", S, t, P)))
     RO2 <- adjust_scale(RO2, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {
-    RO2 <- convert_DO(rate, oxy, "mg/L", S, t, P)
+    RO2 <- suppressMessages(suppressWarnings(convert_DO(rate, oxy, "mg/L", S, t, P)))
     RO2 <- adjust_scale(RO2, "mg.o2", A)
-  } else if (A == "ml.o2") {
-    RO2 <- convert_DO(rate, oxy, "mL/L", S, t, P)
-    RO2 <- adjust_scale(RO2, "ml.o2", A)
+  } else if (A %in% c("mL.o2", "uL.o2")) {
+    RO2 <- suppressMessages(suppressWarnings(convert_DO(rate, oxy, "mL/L", S, t, P)))
+    RO2 <- adjust_scale(RO2, "mL.o2", A)
+  } else if (A %in% c("cm3.o2")) {
+    RO2 <- suppressMessages(suppressWarnings(convert_DO(rate, oxy, "cm3/L", S, t, P)))
+  } else if (A %in% c("mm3.o2")) {
+    RO2 <- suppressMessages(suppressWarnings(convert_DO(rate, oxy, "cm3/L", S, t, P))) * 1000
   }
 
   # Then, convert time unit
@@ -472,9 +489,16 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   # Assemble output ---------------------------------------------------------
 
   ## Save inputs
-  inputs <- list(x = x, oxy.unit = oxy.unit, time.unit = time.unit, output.unit = output.unit,
-                 volume = volume, mass = mass, area = area,
-                 S = S, t = t, P = P)
+  inputs <- list(x = x,
+                 oxy.unit = oxy.unit,
+                 time.unit = time.unit,
+                 output.unit = output.unit,
+                 volume = volume,
+                 mass = mass,
+                 area = area,
+                 S = S,
+                 t = t,
+                 P = P)
   ## extract dataframe
   if(any(class(x) %in% c("calc_rate",
                          "calc_rate.bg",
@@ -514,9 +538,11 @@ print.convert_rate <- function(x, pos = 1, ...) {
   if(length(x$rate.output) == 0) message("No rates found in convert_rate object.\n")
 
   if(length(pos) > 1)
-    stop("print.convert_rate: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.convert_rate: 'pos' must be a single value. To examine multiple results use summary().",
+         call. = FALSE)
   if(pos > length(x$rate.input))
-    stop("print.convert_rate: Invalid 'pos' rank: only ", length(x$rate.input), " rates found.")
+    stop("print.convert_rate: Invalid 'pos' rank: only ", length(x$rate.input), " rates found.",
+         call. = FALSE)
 
   cat("Rank", pos, "of", length(x$rate.output), "rates:\n")
   cat("\n")
@@ -544,7 +570,8 @@ print.convert_rate <- function(x, pos = 1, ...) {
 summary.convert_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate.input)))
-    stop("summary.convert_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.")
+    stop("summary.convert_rate: Invalid 'pos' rank: only ", length(object$rate.input), " rates found.",
+         call. = FALSE)
 
   cat("\n# summary.convert_rate # ----------------\n")
   ## message if empty
@@ -582,7 +609,8 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.convert_rate # -------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate.output)))
-    stop("mean.convert_rate: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.")
+    stop("mean.convert_rate: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.",
+         call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate.output)
     cat("Mean of all rate results:")
@@ -592,9 +620,9 @@ mean.convert_rate <- function(x, pos = NULL, export = FALSE, ...){
     cat("\n")
   }
   if(length(x$rate.output) == 0)
-    message("No rates found in convert_rate object.\n")
+    message("mean.convert_rate: No rates found in convert_rate object.\n")
   if(length(x$rate.output[pos]) == 1)
-    message("Only 1 rate found or selected. Returning mean rate anyway...")
+    message("mean.convert_rate: Only 1 rate found or selected. Returning mean rate anyway...")
   ## message if empty
   cat("\n")
 
@@ -636,14 +664,16 @@ plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
 
   # if numeric conversions, nothing to plot
   if(is.null(x$dataframe))
-    stop(glue::glue("plot.convert_rate: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."))
+    stop(glue::glue("plot.convert_rate: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."),
+         call. = FALSE)
   # Can't plot calc_rate.bg objects as multiple rates come from different df columns
   # (much too complicated and who would want to...)
   if(!(is.null(x$dataframe)) && inherits(x$inputs$x, "calc_rate.bg"))
-    stop(glue::glue("plot.convert_rate: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."))
+    stop(glue::glue("plot.convert_rate: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."),
+         call. = FALSE)
   # Validate type
   if(!(type %in% c("full", "rate", "overlap")))
-    stop(glue::glue("plot.convert_rate: 'type' input not recognised."))
+    stop(glue::glue("plot.convert_rate: 'type' input not recognised."), call. = FALSE)
 
   # number of rates
   nrt <- length(x$rate.output)
@@ -675,76 +705,3 @@ plot.convert_rate <- function(x, type = "full", pos = NULL, quiet = FALSE,
   return(invisible(x))
 }
 
-#' Convert between multipliers of the same unit, e.g. mg to kg
-#'
-#' This is an internal function. Converts units of the same scale, e.g. mg to
-#' kg, or mL to L.
-#'
-#' @param x numeric.
-#' @param input string.
-#' @param output string.
-#'
-#' @keywords internal
-#'
-#' @return A numeric.
-#'
-#' @importFrom stringr str_replace
-adjust_scale <- function(x, input, output) {
-  # Create database of terms for matching
-  prefix <- c("p", "n", "u", "m", "", "k", "sec", "min", "hour", "day")
-  suffix <- c("mol", "g", "L", "l", "")
-  multip <- c(1e-12, 1e-09, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
-  string <- "^(p|n|u|m||k|sec|min|hour|day)?(mol|g|L|l|)$"
-  # Clean and extract input strings
-  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
-  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
-  # Clean and extract output strings
-  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
-  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
-  # Check that conversion is possible
-  if (bef[3] != aft[3])
-    stop("adjust_scale: Units do not match and cannot be converted.", call. = F)
-  # Convert!
-  a <- multip[match(bef[2], prefix)]  # get multiplier from input
-  b <- multip[match(aft[2], prefix)]  # get multiplier from output
-  out <- x * (a/b)  # convert
-  return(out)
-}
-
-
-#' Convert between multipliers of the same AREA unit, e.g. mm2 to km2
-#'
-#' This is an internal function. Converts units of area. Could be combined with
-#' adjust_scale, but didn't know how....
-#'
-#' @param x numeric.
-#' @param input string.
-#' @param output string.
-#'
-#' @keywords internal
-#'
-#' @return A numeric.
-#'
-#' @importFrom stringr str_replace
-#' @export
-adjust_scale_area <- function(x, input, output) {
-  # Create database of terms for matching
-  prefix <- c("m", "c", "", "k")
-  suffix <- c("m2")
-  multip <- c(1e-06, 0.0001, 1, 1e+06)
-  string <- "^(m|c||k)?(m2)$"
-  # Clean and extract input strings
-  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
-  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
-  # Clean and extract output strings
-  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
-  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
-  # Check that conversion is possible
-  if (bef[3] != aft[3])
-    stop("adjust_scale_area: Units do not match and cannot be converted.", call. = F)
-  # Convert!
-  a <- multip[match(bef[2], prefix)]  # get multiplier from input
-  b <- multip[match(aft[2], prefix)]  # get multiplier from output
-  out <- x * (a/b)  # convert
-  return(out)
-}

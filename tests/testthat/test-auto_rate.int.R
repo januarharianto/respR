@@ -1371,6 +1371,20 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate.int - S3 generics work", {
     skip_on_cran()
+
+    # plots from within function
+    expect_output(auto_rate.int(dt.sec.insp,
+                            starts = sts,
+                            width = 400,
+                            by = "row",
+                            plot = TRUE))
+    expect_error(auto_rate.int(dt.sec.insp,
+                            starts = sts,
+                            width = 400,
+                            by = "row",
+                            plot = TRUE),
+                 NA)
+
     ar.int <- auto_rate.int(dt.sec.insp,
                             starts = sts,
                             width = 400,
@@ -1394,6 +1408,9 @@ capture.output({  ## stops printing outputs on assigning
     expect_is(summary(ar.int, pos = 2:3, export = TRUE),
               "data.frame")
 
+    expect_output(mean(ar.int, pos = 1))
+    expect_message(mean(ar.int, pos = 1),
+                   "Only 1 rate found. Returning mean rate anyway...")
     expect_output(mean(ar.int, pos = 2:3))
     expect_error(mean(ar.int, pos = 40),
                  "mean.auto_rate.int: Invalid 'pos' input: only 3 rates found.")
@@ -1481,12 +1498,41 @@ capture.output({  ## stops printing outputs on assigning
   expect_equal(mean(ar.int, pos = 2:3, export = TRUE),
                mean(ar.int$rate[2:3]))
 
+  # works if legend used
+  expect_output(plot(ar.int, pos = 1, legend = TRUE))
+
   # pos default applied
   expect_output(plot(ar.int, pos = NULL))
   expect_output(plot(ar.int, pos = 1))
   expect_output(plot(ar.int, pos = 3))
   expect_error(plot(ar.int, pos = 50),
                "plot.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+  # works with multiple pos up to and past 20
+  dt.reg.insp.30 <- subset_data(zeb_intermittent.rd,
+                             from = 5840,
+                             to = 5840 + 19797,
+                             by = "row") |>
+    inspect(legend = F, plot = F)
+  # should be 30 reps
+  ar.int.obj.30reps <- auto_rate.int(dt.reg.insp.30,
+                                     starts = 660,
+                                     wait = 50,
+                                     measure = 300,
+                                     width = 100,
+                                     by = "row",
+                                     n = 1,
+                                     plot = F)
+  expect_output(plot(ar.int.obj.30reps, pos = 1))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:2))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:4))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:6))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:9))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:12))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:16))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:20))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:25))
+  expect_message(plot(ar.int.obj.30reps, pos = 1:25),
+                 "plot.auto_rate.int: Plotting first 20 selected rates only. To plot others modify 'pos' input.")
 
   # plot types produce output
   expect_output(plot(ar.int, type = "rep"))

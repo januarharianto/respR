@@ -983,15 +983,22 @@ select_rate <- function(x, method = NULL, n = NULL){
       keep <- c(keep1, keep2)
       # otherwise do this possibly very slow loop
     } else {
-      message("select_rate: For 'row_omit' method, selecting multiple 'n' inputs can be VERY SLOW. \nIf possible, specifying a range using lower and upper values is much faster.")
-      remove <- c() # empty obj for loop results
+      message("select_rate: For 'row_omit' method using multiple 'n' inputs can be VERY SLOW. A range of lower and upper values is MUCH faster.")
+        # progress bar object
+        progress <- txtProgressBar(min = 0,               # Minimum value of the progress bar
+                             max = length(n_order), # Maximum value of the progress bar
+                             style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                             width = NA,   # Progress bar width. Defaults to getOption("width")
+                             char = "=")
       # for each n, go through summary table by row
       # if it occurs between row and endrow then that row of summary gets removed
+      remove <- c() # empty obj for loop results
       for(i in n_order){
         remove_i <- which(apply(x$summary, 1, function(z) any(i %in% z[7]:z[8])))
         remove <- sort(unique(c(remove, remove_i)))
-        progress.bar(which(i == n_order), length(n_order), "select_rate: 'row_omit' progress")
+        setTxtProgressBar(progress, which(i == n_order))
       }
+      close(progress)
       cat("\n")
       # if nothing to remove, above outputs integer(0), so this is for that...
       if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else
@@ -1045,14 +1052,20 @@ select_rate <- function(x, method = NULL, n = NULL){
     } else {
       message("select_rate: For 'time_omit' method, selecting multiple 'n' inputs can be VERY SLOW. \nIf possible, specifying a range using lower and upper values is much faster.")
 
+      # progress bar object
+      progress <- txtProgressBar(min = 0,               # Minimum value of the progress bar
+                           max = length(n_order), # Maximum value of the progress bar
+                           style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                           width = NA,   # Progress bar width. Defaults to getOption("width")
+                           char = "=")
       remove <- c() # empty obj for loop results
-
       for(i in n_order){
         remove_i <- which(apply(x$summary, 1, function(z)
           data.table::between(i, z[9], z[10], incbounds = TRUE)))
         remove <- sort(unique(c(remove, remove_i)))
-        progress.bar(which(i == n_order), length(n_order), "select_rate: 'time_omit' progress")
+        setTxtProgressBar(progress, which(i == n_order))
       }
+      close(progress)
       cat("\n")
       # if nothing to remove, above outputs integer(0), so this is for that...
       if(length(remove) > 0) keep <- (1:nrow(x$summary))[-remove] else

@@ -14,8 +14,8 @@
 [![Github Star](https://img.shields.io/github/stars/januarharianto/respR?style=social)](https://GitHub.com/januarharianto/respR/stargazers/)
 [![Github watchers](https://img.shields.io/github/watchers/januarharianto/respR?label=Watch&style=social)](https://img.shields.io/github/watchers/januarharianto/respR?style=social)
 [![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
-[![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
+[![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
 <!-- badges: end -->
 
@@ -25,8 +25,7 @@ While the focus of the package is on aquatic respirometry, `respR` is largely un
 
 Use `respR` to:
 
-- **Import** raw data from various oxygen probe systems
-- **Inspect** data for common issues before analysis
+- **Inspect** respirometry data for common issues before analysis
 - **Explore** and **visualise** oxygen timeseries 
 - **Calculate** rates manually or automatically using **multiple regression analysis** 
 - **Adjust** rates for background oxygen consumption or production
@@ -65,11 +64,9 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 
 ## Contact, feedback and help
 
-`respR` has a [**Twitter account**](https://twitter.com/respR_pkg). Follow for latest news and regular updates from the world of respirometry! 
+For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** or [**Twitter**](https://twitter.com/respR_pkg). 
 
-There is also **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop!
-
-See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for even more ways of providing feedback and getting in touch if you are having issues.
+See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
 
 ## Support package development
 

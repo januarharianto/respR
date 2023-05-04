@@ -72,9 +72,6 @@ To get started check out one of these vignettes describing typical analysis work
 **[Closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)**  
 Even if you are not conducting this particular type of experiment, this is the best place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
 
-**[Importing and formatting data](https://januarharianto.github.io/respR/articles/importing.html)**
-`respR` has functions to make it easy to bring in and prepare your data, including from the raw data files output by various respirometry systems.
-
 **[auto_rate: Automatic detection of metabolic rates](https://januarharianto.github.io/respR/articles/auto_rate.html)**  
 Here we detail the function `auto_rate()` which automatically identifies the *highest*, *lowest* and *most linear* rates in a dataset.
 

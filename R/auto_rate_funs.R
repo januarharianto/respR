@@ -13,16 +13,13 @@ validate_auto_rate <- function(x, by, method) {
 
   # x validation
   if (!(any(class(x) %in% c("inspect", "data.frame"))))
-    stop("auto_rate: Input data must be of class 'data.frame' or 'inspect'")
+    stop("auto_rate: Input data must be of class 'data.frame' or 'inspect'", call. = FALSE)
 
   # validate by
-  by <- verify_by(by,  which = c("t", "r"), msg = "auto_rate:") # validate `by` input
+  by <- by.val(by,  which = c("t", "r"), msg = "auto_rate") # validate `by` input
 
   # validate method
-  if (!(method %in% c("linear", "max", "min", "interval",
-                      "rolling", "highest", "lowest", "maximum", "minimum")))
-    stop("auto_rate: The 'method' input is not recognised: it should be 'linear',
-    'highest', 'lowest', 'maximum', 'minimum', 'rolling', or 'interval'")
+  method.val(method, "auto_rate")
 
   # extract df
   if (any(class(x) %in% "inspect")) df <- x$dataframe else
@@ -30,7 +27,7 @@ validate_auto_rate <- function(x, by, method) {
 
   # select only first two columns by default if dataset is multi-column
   if (length(df) > 2) {
-    warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()")
+    warning("auto_rate: Multi-column dataset detected in input. Selecting first two columns by default.\n  If these are not the intended data, inspect() or subset the data frame columns appropriately before running auto_rate()", call. = FALSE)
     df <- df[, 1:2]
   }
 
@@ -124,7 +121,7 @@ auto_rate_highest <- function(dt, width, by = 'row') {
 
   # stop if mix of -ve and +ve
   if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
-    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'highest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
+    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'highest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.", call. = FALSE)
   # order data by absolute value, from highest
   results <- rollreg[order(-rank(abs(rollreg$slope_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
@@ -155,7 +152,7 @@ auto_rate_lowest <- function(dt, width, by = 'row') {
 
   # stop if mix of -ve and +ve
   if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
-    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.")
+    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.", call. = FALSE)
 
   # order data by absolute value, from lowest
   results <- rollreg[order(rank(abs(rollreg$slope_b1)))] ## note abs() operation
@@ -493,108 +490,6 @@ time_lm <- function(df, start, end) {
   return(out)
 }
 
-
-#' Rolling regression
-#'
-#' @param df data.frame object.
-#' @param width numeric. width in number of rows or time
-#' @param by string. time or row
-#'
-#' @return a data.table object
-#' @keywords internal
-rolling_reg <- function(dt, width, by) {
-  win <- width
-  # Rolling regression
-  if (by == "time") {
-    roll <- time_roll(dt, win, parallel = FALSE) # TODO: fix parallel here
-  } else if (by == "row") {
-    roll <- static_roll(dt, win)
-  }
-
-  # Attach row and time indices to the roll data
-  if (by == "time") {
-    roll[, row := seq_len(.N)]
-    endrow <- sapply(dt[roll[, row], x], function(z)
-      max(dt[, which(x <= z + win)]))
-    roll[, endrow := endrow]
-    roll[, time := dt[roll[, row], x]]
-    roll[, endtime := dt[roll[, endrow], x]]
-  } else if (by == "row") {
-    roll[, row := seq_len(.N)]
-    roll[, endrow := roll[, row] + win - 1]
-    roll[, time := dt[roll[, row], x]]
-    roll[, endtime := dt[roll[, endrow], x]]
-  }
-  out <- list(roll = data.table(roll), win = win)
-  return(out)
-}
-
-#' Kernel density estimation and fitting
-#'
-#' @param dt data.frame object.
-#' @param width numeric.
-#' @param by string. time or row
-#'
-#' @return A list object
-#' @keywords internal
-kde_fit <- function(dt, width, by, use = "all") {
-  # perform rolling regression
-  reg <- rolling_reg(dt, width, by)
-  roll <- reg$roll
-  win <- reg$win
-
-  # If entire width of data frame is selected, there's nothing to detect!
-  if (nrow(roll) == 1) {
-    subsets <- list(truncate_data(dt, roll$row, roll$endrow, "row"))
-    d <- NULL
-    peaks <- roll$slope_b1
-    bw <- NULL
-
-  } else {
-    d <- density(roll$slope_b1, na.rm = T, bw = "SJ-ste", adjust = .95) # KDE
-    bw <- d$bw
-    peaks <- which(diff(sign(diff(d$y))) == -2) + 1 # index modes
-    peaks <- lapply(peaks, function(x)
-      data.table(index = x, peak_b1 = d$x, density = d$y)[x, ]) # match to roll
-    if (use == "all") {
-      peaks <- rbindlist(peaks)[order(-rank(density))] # rank by size
-    } else {
-      peaks <- rbindlist(peaks)[order(-rank(density))][1]
-    }
-    # match peaks to roll data
-    frags <- lapply(
-      peaks$peak_b1,
-      function(x) roll[slope_b1 <= (x + d$bw*.95)][slope_b1 >= (x - d$bw*.95)]
-    )
-    # split non-overlapping rolls by window size
-    if (by == "row") {
-      frags <- lapply(1:length(frags), function(x) split(
-        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$row)) > win))
-      ))
-    } else {
-      frags <- lapply(1:length(frags), function(x) split(
-        frags[[x]], c(0, cumsum(abs(diff(frags[[x]]$time)) > win))
-      ))
-    }
-    # select longest fragments
-    i <- sapply(1:length(frags),
-                function(x) which.max(sapply(frags[[x]], nrow)))
-    frags <- unname(mapply(function(x, y) frags[[x]][y], 1:length(frags), i))
-    frags <- frags[sapply(frags, nrow) > 0] # remove zero-length data
-    # Convert fragments to subsets
-    subsets <- lapply(1:length(frags), function(x)
-      truncate_data(
-        dt, min(frags[[x]]$row),
-        max(frags[[x]]$endrow), "row"
-      ))
-  }
-  out <- list(
-    win = win, roll = roll, subsets = subsets, density = d,
-    peaks = peaks, bandwidth = bw
-  )
-  return(out)
-}
-
 #' Automatically calculate rolling window
 #'
 #' The calculated value is used to determine the rolling window for rolling
@@ -612,15 +507,15 @@ calc_win <- function(dt, width, by, msg) {
   if(by == "row"){
     if (is.null(width)) {
       width <- 0.2  # if no width is specified, set to 20 %
-      message(glue::glue("{msg} Applying default 'width' of 0.2"))}
+      message(glue::glue("{msg}: Applying default 'width' of 0.2"))}
     if(width > 1 && width > nrow(dt))
-      stop(glue::glue("{msg}'width' exceeds length of dataset"))
+      stop(glue::glue("{msg}: 'width' exceeds length of dataset"), call. = FALSE)
     if(width > 1 && !(width %% 1 == 0))
-      stop(glue::glue("{msg}'width' should be an integer of 2 or higher"))
+      stop(glue::glue("{msg}: 'width' should be an integer of 2 or higher"), call. = FALSE)
     if(width == 1)
-      stop(glue::glue("{msg}'width' cannot be 1 row"))
+      stop(glue::glue("{msg}: 'width' cannot be 1 row"), call. = FALSE)
     if(width == nrow(dt))
-      stop(glue::glue("{msg}'width' cannot be the total number of rows in the input data"))
+      stop(glue::glue("{msg}: 'width' cannot be the total number of rows in the input data"), call. = FALSE)
 
     if (width < 1) win <- floor(width * nrow(dt))  # set to proportion of length of data
     else win <- width
@@ -630,9 +525,9 @@ calc_win <- function(dt, width, by, msg) {
     if (is.null(width)) {
       # if no width is specified, set to 20 % of total time data range
       width <- 0.2 * diff(range(nainf.omit(dt[[1]])))
-      message(glue::glue("{msg} Applying default 'width' of 20% of time data range"))}
+      message(glue::glue("{msg}: Applying default 'width' of 20% of time data range"))}
     if(width >= diff(range(nainf.omit(dt[[1]]))))
-      stop(glue::glue("{msg} 'width' cannot exceed or equal total time data range"))
+      stop(glue::glue("{msg}: 'width' cannot exceed or equal total time data range"), call. = FALSE)
 
     win <- width
   }

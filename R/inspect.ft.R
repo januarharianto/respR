@@ -19,12 +19,19 @@
 #'
 #' ## Inputs
 #'
-#' `inspect.ft` requires at least two data inputs; a single column of numeric
-#' `time` data, with *either* a column of paired `out.oxy` concentrations (i.e.
-#' the exhalent or 'downstream' concentrations), *or* a column of already
-#' calculated `delta.oxy` values, that is the difference between outflow and
-#' inflow concentrations, or the outflow concentration corrected by a background
-#' recording from a 'blank' or empty chamber.
+#' Given an input data frame `x`, the function scans the columns specified via
+#' the `time`, `out.oxy`, `in.oxy` or `delta.oxy` inputs. Columns are specified
+#' by using the column number (e.g. `time = 1`), or by name (e.g. `time =
+#' "Time.Hrs"`). If no columns are specified, by default the function assumes
+#' the first column is `time`, and all others are `delta.oxy` oxygen data.
+#' However, best practice is to use the inputs to specify particular columns.
+#'
+#' The `x` input must contain at least two data types; a single column of
+#' numeric `time` data, with *either* a column of paired `out.oxy`
+#' concentrations (i.e. the exhalent or 'downstream' concentrations), *or* a
+#' column of already calculated `delta.oxy` values, that is the difference
+#' between outflow and inflow concentrations, or the outflow concentration
+#' corrected by a background recording from a 'blank' or empty chamber.
 #'
 #' **out.oxy input option**: If an `out.oxy` column has been specified, in order
 #' to calculate the oxygen delta (and therefore a rate in [`calc_rate.ft()`])
@@ -40,12 +47,6 @@
 #' **delta.oxy input option**: If delta oxygen values have already been
 #' calculated, these can be entered via the `delta.oxy` input, and these are
 #' prepared and saved for rate calculations in `calc_rate.ft`.
-#'
-#' Given an input data frame `x`, the function scans the columns specified via
-#' the `time`, `out.oxy`, `in.oxy` or `delta.oxy` inputs. If no columns are
-#' specified, by default the function assumes the first column is `time`, and
-#' all others are `delta.oxy` oxygen data.  However, best practice is to use the
-#' inputs to specify particular columns.
 #'
 #' ## Check for numeric data
 #'
@@ -111,12 +112,13 @@
 #' ## Plot an additional data source
 #'
 #' Using the `add.data` input an additional data source, for example
-#' temperature, can be plotted alongside the oxygen timeseries. This input
-#' should be an integer indicating a column in the input `x` data frame sharing
-#' the same time data. None of the data checks are performed on this column; it
-#' is simply to give a basic visual aid in the plot to, for example, help decide
-#' if regions of the data should be used or not used because this parameter was
-#' variable. It is saved in the output as a vector under `$add.data`. It is
+#' temperature, can be plotted alongside the oxygen timeseries. This should be
+#' either a column number (e.g. `add.data = 3`) or name (e.g. `add.data =
+#' "Temperature"`) indicating a column in the input `x` data frame sharing the
+#' same time data. None of the data checks are performed on this column; it is
+#' simply to give a basic visual aid in the plot to, for example, help decide if
+#' regions of the data should be used or not used because this parameter was
+#' variable. Values are saved in the output as a vector under `$add.data`. It is
 #' plotted in blue on a separate y-axis on the main timeseries plot. It is *not*
 #' plotted if multiple oxygen columns are inspected. See examples.
 #'
@@ -243,25 +245,25 @@
 #'
 #' @param x `data.frame` containing columns of `time` and `out.oxy` or
 #'   `delta.oxy` concentrations, and optionally `in.oxy`.
-#' @param time integer. Defaults to 1. Specifies the column number of the time
-#'   data.
-#' @param out.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
-#'   of outflow oxygen data.
-#' @param in.oxy integer(s). Defaults to `NULL`. Specifies the column number(s)
-#'   of inflow oxygen data.
+#' @param time integer or string. Defaults to `1`. Specifies the column of the
+#'   Time data as either a column number or the name.
+#' @param out.oxy integer(s) or string(s). Defaults to `NULL`. Specifies the
+#'   column(s) of the outflow oxygen data as either column numbers or names.
+#' @param in.oxy integer(s) or string(s). Defaults to `NULL`. Specifies the
+#'   column(s) of the inflow oxygen data as either column numbers or names.
 #' @param in.oxy.value numeric value. Defaults to `NULL`. If there is no
 #'   continuous `in.oxy` data, this specifies a fixed value of oxygen
 #'   concentration for inflowing water in same units as `out.oxy`, and is used
 #'   with `out.oxy` to calculate a `delta.oxy`.
-#' @param delta.oxy integer(s). Defaults to all non-time columns if no other
-#'   inputs given. Specifies the column number(s) of delta oxygen data, for when
-#'   the user has already calculated the difference between outflow and inflow
-#'   oxygen (should be negative values for oxygen uptake). If this is used,
-#'   `out.oxy` and `in.oxy` should be NULL.
+#' @param delta.oxy integer(s) or string(s). Defaults to all non-time columns if
+#'   no other inputs given. Specifies the column number(s) or name(s) of delta
+#'   oxygen data, for when the user has already calculated the difference
+#'   between outflow and inflow oxygen (should be negative values for oxygen
+#'   uptake). If this is used, `out.oxy` and `in.oxy` should be NULL.
 #' @param plot logical. Defaults to TRUE. Plots the data. See Details.
-#' @param add.data integer. Defaults to `NULL`. Specifies the column number of
-#'   an optional additional data source that will be plotted in blue alongside
-#'   the full oxygen timeseries.
+#' @param add.data integer or string. Defaults to `NULL`. Specifies the column
+#'   number or name of an optional additional data source that will be plotted
+#'   in blue alongside the full oxygen timeseries.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`.
 #'
@@ -301,9 +303,6 @@
 #' # when background is taken into account.
 #' inspect.ft(flowthrough_sim.rd, time = 1,
 #'            out.oxy = 2, in.oxy = 3)
-#'
-#' # Inspect and plot an additional data type
-#'
 
 inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
                        in.oxy.value = NULL, delta.oxy = NULL, plot = TRUE,
@@ -312,10 +311,13 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
   ## Save function call for output
   call <- match.call()
 
+  # Extract data ------------------------------------------------------------
+  df <- as.data.frame(x)
+
   # Input checks ------------------------------------------------------------
 
   ## stop if not df
-  if (!is.data.frame(x)) stop("inspect.ft: 'x' must be data.frame object.")
+  if (!is.data.frame(x)) stop("inspect.ft: 'x' must be data.frame object.", call. = FALSE)
 
   ## Apply time column default
   if(is.null(time)) {
@@ -325,27 +327,27 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
 
   ## only one of in.oxy or in.oxy.value should be entered
   if(!is.null(in.oxy) && !is.null(in.oxy.value))
-    stop("inspect.ft: Only one of 'in.oxy' or 'in.oxy.value' can be entered.")
+    stop("inspect.ft: Only one of 'in.oxy' or 'in.oxy.value' can be entered.", call. = FALSE)
 
   ## if in.oxy entered, out.oxy must be entered
   if(!is.null(in.oxy) && (is.null(out.oxy)))
-    stop("inspect.ft: An 'in.oxy' input requires paired 'out.oxy' column(s).")
+    stop("inspect.ft: An 'in.oxy' input requires paired 'out.oxy' column(s).", call. = FALSE)
 
   ## if out.oxy entered, one of in.oxy or in.oxy.value must be entered
   if(!is.null(out.oxy) && (is.null(in.oxy) && is.null(in.oxy.value)))
-    stop("inspect.ft: With 'out.oxy' data, paired 'in.oxy' columns or an 'in.oxy.value' is required.")
+    stop("inspect.ft: With 'out.oxy' data, paired 'in.oxy' columns or an 'in.oxy.value' is required.", call. = FALSE)
 
   ## if out.oxy entered, in.oxy must be either same no. of columns or a single column
   if(!is.null(out.oxy) && !(is.null(in.oxy))){
     ncol_o <- length(out.oxy)
     ncol_i <- length(in.oxy)
     if(ncol_o != ncol_i && ncol_i != 1)
-      stop("inspect.ft: With 'out.oxy' data, 'in.oxy' must be a single column or an equal number of paired columns.")
+      stop("inspect.ft: With 'out.oxy' data, 'in.oxy' must be a single column or an equal number of paired columns.", call. = FALSE)
   }
 
   # if delta.oxy entered, out.oxy, in.oxy & in.oxy.value should be NULL
   if(!is.null(delta.oxy) && (!is.null(out.oxy) || !is.null(in.oxy) || !is.null(in.oxy.value)))
-    stop("inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.")
+    stop("inspect.ft: With 'delta.oxy' data, 'out.oxy', 'in.oxy' and 'in.oxy.value' should be NULL.", call. = FALSE)
 
   # Apply input defaults ----------------------------------------------------
 
@@ -356,14 +358,19 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
     delta.oxy <- listcols[!listcols %in% time]
   }
 
-
   # Final input checks ------------------------------------------------------
+
+  # parse strings to column numbers
+  if(is.character(time)) time <- column.id(time, df, "inspect.ft: ")
+  if(is.character(out.oxy)) out.oxy <- column.id(out.oxy, df, "inspect.ft: ")
+  if(is.character(in.oxy)) in.oxy <- column.id(in.oxy, df, "inspect.ft: ")
+  if(is.character(delta.oxy)) delta.oxy <- column.id(delta.oxy, df, "inspect.ft: ")
 
   ## check for duplicate column numbers
   inputs <- list(time, out.oxy, in.oxy, delta.oxy)
   if(column.conflict(inputs)) {
     dupe_cols <- column.conflict(inputs, id = TRUE)
-    stop(glue::glue("inspect.ft: Input columns conflict. Column(s) {glue::glue_collapse(dupe_cols, \", \", last = \" and \")} are entered more than once."))
+    stop(glue::glue("inspect.ft: Input columns conflict. Column(s) {glue::glue_collapse(dupe_cols, \", \", last = \" and \")} are entered more than once."), call. = FALSE)
   }
   ## check column inputs are valid
   column.val(time, req = TRUE, max = 1, range = c(1, ncol(x)),
@@ -376,8 +383,6 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
              msg = "inspect.ft: 'delta.oxy' -")
 
   # Extract data ------------------------------------------------------------
-
-  df <- as.data.frame(x)
 
   ## time
   time.all <- lapply(1:length(df[time]), function(z) df[time][[z]])
@@ -421,6 +426,8 @@ inspect.ft <- function(x, time = NULL, out.oxy = NULL, in.oxy = NULL,
 
   ## Additional data
   if(!is.null(add.data)) {
+    # if column name, get number
+    if(is.character(add.data)) add.data <- column.id(add.data, df, "inspect.ft: ")
     input.val(add.data, num = TRUE, int = TRUE, req = FALSE,
               max = 1, min = 1, range = c(1, ncol(df)),
               msg = "inspect.ft: 'add.data' -")
@@ -706,14 +713,14 @@ plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
 
     if(!quiet && is.null(pos) && length(del.oxy) > 1)
       cat("plot.inspect.ft: Plotting all delta oxygen columns. To plot a specific dataset use 'pos'.\n")
-    if(!quiet && !is.null(x$add.data))
+    if(!is.null(x$add.data))
       message("plot.inspect.ft: Additional data source cannot be plotted for multiple columns.")
 
     if(is.null(pos))
       pos <- seq.int(1, length(del.oxy))
 
     if(any(pos > length(del.oxy)))
-      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(del.oxy), " data inputs found.")
+      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(del.oxy), " data inputs found.", call. = FALSE)
 
     if (!quiet && length(pos) == 1)
       cat('plot.inspect.ft: Plotting delta.oxy data from position', pos, 'of', length(del.oxy), '... \n')
@@ -775,7 +782,7 @@ plot.inspect.ft <- function(x, width = NULL, pos = NULL, quiet = FALSE,
 
     if(is.null(pos)) pos <- 1
     if(pos > length(x$data$delta.oxy))
-      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.oxy), " data inputs found.")
+      stop("plot.inspect.ft: Invalid 'pos' input: only ", length(x$data$out.oxy), " data inputs found.", call. = FALSE)
 
     if (!quiet)
       cat('plot.inspect.ft: Plotting inspect.ft dataset from position', pos, 'of', length(x$data$delta), '... \n')

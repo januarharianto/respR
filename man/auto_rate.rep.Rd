@@ -39,6 +39,8 @@ auto_rate.rep(
 
 \item{meas_row}{start row of the measure phase in \emph{this} rep}
 
+\item{meas_endrow}{end row of the measure phase in \emph{this} rep}
+
 \item{rep_data}{df of the entire replicate. Used in plotting.}
 
 \item{...}{pass plot stuff}

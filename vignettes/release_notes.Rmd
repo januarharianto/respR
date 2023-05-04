@@ -1,11 +1,11 @@
 ---
-title: "Version notes"
+title: "Release notes"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{Version notes}
+  %\VignetteIndexEntry{Release notes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```{r setup, echo = FALSE}
 ```
 
-This page contains the version changes for the latest updates to `respR`. 
+This page contains the release notes for the latest updates to `respR`. 
  \
  \
 

@@ -92,4 +92,4 @@ test_that("calc_rate.bg - plot defaults are correctly restored", {
 })
 
 
-}) ## turns printing back on
+}) ## end capture.output

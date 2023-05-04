@@ -104,11 +104,27 @@ capture.output({  ## stops printing of outputs on assigning
                  regexp = "cannot enter more than 1 column\\(s) with this input or this dataset.")
   })
 
-  test_that("oxy_crit - applies defualts of time=1, oxygen=2", {
+  test_that("oxy_crit - applies defaults of time=1, oxygen=2", {
     expect_is(oxy_crit(squid, plot=F),
               "oxy_crit")
     expect_equal(oxy_crit(squid, plot=F)$result.intercept,
                  oxy_crit(squid, time = 1, oxygen = 2, plot=F)$result.intercept)
+  })
+
+  test_that("oxy_crit - correctly identifies column name strings", {
+    # single time and oxygen columns work without error
+    expect_error(oxy_crit(squid, time = "Time", oxygen = "Oxygen", plot=F),
+                 NA)
+    # same as using numbers
+    # Everything except the $call and $inputs should be the same
+    expect_equal(oxy_crit(squid, time = "Time", oxygen = "Oxygen", plot=F)[3:10],
+                 oxy_crit(squid, time = 1, oxygen = 2, plot=F)[3:10])
+
+    # rate
+    expect_error(oxy_crit(squid_rate, oxygen = "x", rate = "y", plot = F),
+                 NA)
+    expect_equal(oxy_crit(squid_rate, oxygen = "x", rate = "y", plot = F)[3:10],
+                 oxy_crit(squid_rate, oxygen = 1, rate = 2, plot = F)[3:10])
   })
 
   test_that("oxy_crit - thin input correctly applied in Broken-Stick", {
@@ -156,57 +172,64 @@ capture.output({  ## stops printing of outputs on assigning
 
   test_that("oxy_crit - oxy_crit S3 generics work with both oxygen/time and rate/oxygen inputs,
             and both methods, export, and panel options", {
-    # oxygen
-    pcr <- oxy_crit(squid, plot = F)
-    expect_output(print(pcr))
-    expect_output(summary(pcr))
-    expect_is(summary(pcr, export = TRUE),
-              "data.frame")
-    expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, panel = 1), regexp = NA)
-    expect_error(plot(pcr, panel = 2), regexp = NA)
-    expect_error(plot(pcr, panel = 3),
-                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
-    # rate
-    pcr <- oxy_crit(squid_rate, oxygen = 1, rate = 2, plot = F)
-    expect_output(print(pcr))
-    expect_output(summary(pcr))
-    expect_is(summary(pcr, export = TRUE),
-              "data.frame")
-    expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, panel = 1), regexp = NA)
-    expect_error(plot(pcr, panel = 2), regexp = NA)
-    expect_error(plot(pcr, panel = 3),
-                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
-    # segmented method
-    # oxygen
-    pcr <- oxy_crit(squid, method = "segmented", plot = F)
-    expect_output(print(pcr))
-    expect_output(summary(pcr))
-    expect_is(summary(pcr, export = TRUE),
-              "data.frame")
-    expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, panel = 1), regexp = NA)
-    expect_error(plot(pcr, panel = 2), regexp = NA)
-    expect_error(plot(pcr, panel = 3),
-                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
-    # rate
-    pcr <- oxy_crit(squid_rate, method = "segmented", oxygen = 1, rate = 2, plot = F)
-    expect_output(print(pcr))
-    expect_output(summary(pcr))
-    expect_is(summary(pcr, export = TRUE),
-              "data.frame")
-    expect_error(plot(pcr), regexp = NA)
-    expect_error(plot(pcr, panel = 1), regexp = NA)
-    expect_error(plot(pcr, panel = 2), regexp = NA)
-    expect_error(plot(pcr, panel = 3),
-                 "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+              # oxygen
+              pcr <- oxy_crit(squid, plot = F)
+              expect_output(print(pcr))
+              expect_output(summary(pcr))
+              expect_is(summary(pcr, export = TRUE),
+                        "data.frame")
+              expect_error(plot(pcr), regexp = NA)
+              expect_error(plot(pcr, panel = 1), regexp = NA)
+              expect_error(plot(pcr, panel = 2), regexp = NA)
+              expect_error(plot(pcr, panel = 3),
+                           "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+              # rate
+              pcr <- oxy_crit(squid_rate, oxygen = 1, rate = 2, plot = F)
+              expect_output(print(pcr))
+              expect_output(summary(pcr))
+              expect_is(summary(pcr, export = TRUE),
+                        "data.frame")
+              expect_error(plot(pcr), regexp = NA)
+              expect_error(plot(pcr, panel = 1), regexp = NA)
+              expect_error(plot(pcr, panel = 2), regexp = NA)
+              expect_error(plot(pcr, panel = 3),
+                           "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+              # segmented method
+              # oxygen
+              pcr <- oxy_crit(squid, method = "segmented", plot = F)
+              expect_output(print(pcr))
+              expect_output(summary(pcr))
+              expect_is(summary(pcr, export = TRUE),
+                        "data.frame")
+              expect_error(plot(pcr), regexp = NA)
+              expect_error(plot(pcr, panel = 1), regexp = NA)
+              expect_error(plot(pcr, panel = 2), regexp = NA)
+              expect_error(plot(pcr, panel = 3),
+                           "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+              # rate
+              pcr <- oxy_crit(squid_rate, method = "segmented", oxygen = 1, rate = 2, plot = F)
+              expect_output(print(pcr))
+              expect_output(summary(pcr))
+              expect_is(summary(pcr, export = TRUE),
+                        "data.frame")
+              expect_error(plot(pcr), regexp = NA)
+              expect_error(plot(pcr, panel = 1), regexp = NA)
+              expect_error(plot(pcr, panel = 2), regexp = NA)
+              expect_error(plot(pcr, panel = 3),
+                           "plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+            })
+
+  test_that("oxy_crit - mean S3 returns message", {
+    expect_message(mean(oxy_crit(squid, plot = F)),
+                 "oxy_crit: mean\\() is not available for 'oxy_crit' objects.")
   })
 
-  # This is failing...
+  # This fails on R CMD CHK...
+  # Pretty sure not allowed on CRAN
+  # May also fail on Github
   # https://stackoverflow.com/questions/50571325/r-cran-check-fail-when-using-parallel-functions
   # test_that("oxy_crit - parallel code works", {
-  #
+  #   skip_on_cran()
   #   expect_error(oxy_crit(squid, parallel = T, plot=F),
   #                regexp = NA)
   # })

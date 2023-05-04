@@ -13,93 +13,157 @@ capture.output({  ## stops printing outputs on assigning
                  "convert_DO: input 'x' must be a numeric value or vector.")
   })
 
+  test_that("convert_DO stops if t, S, or P required but not entered", {
+    tsp_req <- c("uL/L.o2", "mm3/L.o2",
+                 "mL/L.o2", "cm3/L.o2",
+                 "uL/kg.o2", "mm3/kg.o2",
+                 "mL/kg.o2", "cm3/kg.o2",
+                 "%Air.o2", "%Oxy.o2",
+                 "Torr.o2p",
+                 "hPa.o2p", "kPa.o2p",
+                 "inHg.o2p", "mmHg.o2p",
+                 "mg/kg.o2", "ug/kg.o2",
+                 "ppm.o2",
+                 "mol/kg.o2", "mmol/kg.o2", "umol/kg.o2", "nmol/kg.o2", "pmol/kg.o2")
+    for(i in tsp_req) expect_error(convert_DO(-0.1, from = i, to = "mg/l",
+                                              S = 35, t = NULL),
+                                   "convert_DO: Input or output units require Temperature input")
+    for(i in tsp_req) expect_error(convert_DO(-0.1, from = i, to = "mg/l",
+                                              S = NULL, t = 20),
+                                   "convert_DO: Input or output units require Salinity input")
+    for(i in tsp_req) expect_message(convert_DO(-0.1, from = i, to = "mg/l",
+                                                S = 30, t = 20, P = NULL),
+                                     "convert_DO: Input or output units require Atmospheric Pressure input")
+  })
+
   test_that("convert_DO output conversions, using %Air, have expected results", {
-    expect_equal(round(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), 3), 0.675)
-    expect_equal(round(convert_DO(10, "%Air", "ug/l", S = 35, t = 25, P = 1.013253), 3), 675.11)
-    expect_equal(round(convert_DO(10, "%Air", "mol/l", S = 35, t = 25, P = 1.013253), 9), 0.000021098)
-    expect_equal(round(convert_DO(10, "%Air", "mmol/l", S = 35, t = 25, P = 1.013253), 3), 0.021)
-    expect_equal(round(convert_DO(10, "%Air", "umol/l", S = 35, t = 25, P = 1.013253), 3), 21.098)
-    expect_equal(round(convert_DO(10, "%Air", "nmol/l", S = 35, t = 25, P = 1.013253), 3), 21097.984)
-    expect_equal(round(convert_DO(10, "%Air", "pmol/l", S = 35, t = 25, P = 1.013253), 3), 21097984.479)
-    expect_equal(round(convert_DO(10, "%Air", "ml/l", S = 35, t = 25, P = 1.013253), 3), 0.516)
-    expect_equal(round(convert_DO(10, "%Air", "mg/kg", S = 35, t = 25, P = 1.013253), 3), 0.66)
-    expect_equal(round(convert_DO(10, "%Air", "ug/kg", S = 35, t = 25, P = 1.013253), 3), 659.79)
-    expect_equal(round(convert_DO(10, "%Air", "mol/kg", S = 35, t = 25, P = 1.013253), 9), 0.000020619)
+    expect_equal(round(convert_DO(10, "%Air", "mg/l",    S = 35, t = 25, P = 1.013253), 3), 0.675)
+    expect_equal(round(convert_DO(10, "%Air", "ug/l",    S = 35, t = 25, P = 1.013253), 3), 675.11)
+    expect_equal(round(convert_DO(10, "%Air", "mol/l",   S = 35, t = 25, P = 1.013253), 9), 0.000021098)
+    expect_equal(round(convert_DO(10, "%Air", "mmol/l",  S = 35, t = 25, P = 1.013253), 3), 0.021)
+    expect_equal(round(convert_DO(10, "%Air", "umol/l",  S = 35, t = 25, P = 1.013253), 3), 21.098)
+    expect_equal(round(convert_DO(10, "%Air", "nmol/l",  S = 35, t = 25, P = 1.013253), 3), 21097.984)
+    expect_equal(round(convert_DO(10, "%Air", "pmol/l",  S = 35, t = 25, P = 1.013253), 3), 21097984.479)
+    expect_equal(round(convert_DO(10, "%Air", "ml/l",    S = 35, t = 25, P = 1.013253), 3), 0.516)
+    expect_equal(round(convert_DO(10, "%Air", "ul/l",    S = 35, t = 25, P = 1.013253), 3), 515.669)
+    expect_equal(round(convert_DO(10, "%Air", "cm3/l",   S = 35, t = 25, P = 1.013253), 3), 0.516)
+    expect_equal(round(convert_DO(10, "%Air", "mm3/l",   S = 35, t = 25, P = 1.013253), 3), 515.669)
+    expect_equal(round(convert_DO(10, "%Air", "mg/kg",   S = 35, t = 25, P = 1.013253), 3), 0.66)
+    expect_equal(round(convert_DO(10, "%Air", "ppm",     S = 35, t = 25, P = 1.013253), 3), 0.66)
+    expect_equal(round(convert_DO(10, "%Air", "ug/kg",   S = 35, t = 25, P = 1.013253), 3), 659.79)
+    expect_equal(round(convert_DO(10, "%Air", "mol/kg",  S = 35, t = 25, P = 1.013253), 9), 0.000020619)
     expect_equal(round(convert_DO(10, "%Air", "mmol/kg", S = 35, t = 25, P = 1.013253), 3), 0.021)
     expect_equal(round(convert_DO(10, "%Air", "umol/kg", S = 35, t = 25, P = 1.013253), 3), 20.619)
     expect_equal(round(convert_DO(10, "%Air", "nmol/kg", S = 35, t = 25, P = 1.013253), 3), 20619.216)
     expect_equal(round(convert_DO(10, "%Air", "pmol/kg", S = 35, t = 25, P = 1.013253), 3), 20619215.552)
-    expect_equal(round(convert_DO(10, "%Air", "ml/kg", S = 35, t = 25, P = 1.013253), 3), 0.504)
-    expect_equal(round(convert_DO(10, "%Air", "%Air", S = 35, t = 25, P = 1.013253), 3), 10)
-    expect_equal(round(convert_DO(10, "%Air", "%Oxy", S = 35, t = 25, P = 1.013253), 3), 2.095)
-    expect_equal(round(convert_DO(10, "%Air", "hPa", S = 35, t = 25, P = 1.013253), 3), 20.854)
-    expect_equal(round(convert_DO(10, "%Air", "kPa", S = 35, t = 25, P = 1.013253), 3), 2.085)
-    expect_equal(round(convert_DO(10, "%Air", "mmHg", S = 35, t = 25, P = 1.013253), 3), 15.642)
-    expect_equal(round(convert_DO(10, "%Air", "inHg", S = 35, t = 25, P = 1.013253), 3), 0.616)
-    expect_equal(round(convert_DO(10, "%Air", "Torr", S = 35, t = 25, P = 1.013253), 3), 15.642)
+    expect_equal(round(convert_DO(10, "%Air", "ml/kg",   S = 35, t = 25, P = 1.013253), 3), 0.504)
+    expect_equal(round(convert_DO(10, "%Air", "ul/kg",   S = 35, t = 25, P = 1.013253), 3), 503.967)
+    expect_equal(round(convert_DO(10, "%Air", "cm3/kg",  S = 35, t = 25, P = 1.013253), 3), 0.504)
+    expect_equal(round(convert_DO(10, "%Air", "mm3/kg",  S = 35, t = 25, P = 1.013253), 3), 503.967)
+    expect_equal(round(convert_DO(10, "%Air", "%Air",    S = 35, t = 25, P = 1.013253), 3), 10)
+    expect_equal(round(convert_DO(10, "%Air", "%Oxy",    S = 35, t = 25, P = 1.013253), 3), 2.095)
+    expect_equal(round(convert_DO(10, "%Air", "hPa",     S = 35, t = 25, P = 1.013253), 3), 20.854)
+    expect_equal(round(convert_DO(10, "%Air", "kPa",     S = 35, t = 25, P = 1.013253), 3), 2.085)
+    expect_equal(round(convert_DO(10, "%Air", "mmHg",    S = 35, t = 25, P = 1.013253), 3), 15.642)
+    expect_equal(round(convert_DO(10, "%Air", "inHg",    S = 35, t = 25, P = 1.013253), 3), 0.616)
+    expect_equal(round(convert_DO(10, "%Air", "Torr",    S = 35, t = 25, P = 1.013253), 3), 15.642)
   })
-  ## check that `from` inputs do not produce error
 
-  ## regexp: regular expression to test against. If omitted, just asserts that
-  ## code produces some output, messsage, warning or error. Alternatively, you can
-  ## specify NA to indicate that there should be no output, messages, warnings or
-  ## errors.
+  test_that("convert_DO - various conversions to exact values", {
+    expect_equal(convert_DO(10, "mg/l", "mg/l",    S = 35, t = 25, P = 1.013253), 10)
+    expect_equal(convert_DO(10, "ug/l", "mg/l",    S = 35, t = 25, P = 1.013253), 10/1000)
+    expect_equal(convert_DO(10, "mmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), 319.988)
+    expect_equal(convert_DO(10, "umol/l", "mg/l",  S = 35, t = 25, P = 1.013253), 319.988/1000)
+    expect_equal(convert_DO(10, "nmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), 319.988/1000/1000)
+    expect_equal(convert_DO(10, "pmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), 319.988/1000/1000/1000)
+    expect_equal(convert_DO(10, "ml/l", "mg/l",    S = 35, t = 25, P = 1.013253), 13.091931)
+    expect_equal(convert_DO(10, "ul/l", "mg/l",    S = 35, t = 25, P = 1.013253), 13.091931/1000)
+    expect_equal(convert_DO(10, "cm3/l", "mg/l",   S = 35, t = 25, P = 1.013253), 13.091931)
+    expect_equal(convert_DO(10, "mm3/l", "mg/l",   S = 35, t = 25, P = 1.013253), 13.091931/1000)
+    expect_equal(convert_DO(10, "mg/kg", "mg/l",   S = 35, t = 25, P = 1.013253), 10.2321955)
+    expect_equal(convert_DO(10, "ppm", "mg/l",     S = 35, t = 25, P = 1.013253), 10.2321955)
+    expect_equal(convert_DO(10, "ug/kg", "mg/l",   S = 35, t = 25, P = 1.013253), 10.2321955/1000)
+    expect_equal(convert_DO(10, "mmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), 327.417977)
+    expect_equal(convert_DO(10, "umol/kg", "mg/l", S = 35, t = 25, P = 1.013253), 327.417977/1000)
+    expect_equal(convert_DO(10, "nmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), 327.417977/1000/1000)
+    expect_equal(convert_DO(10, "pmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), 327.417977/1000/1000/1000)
+    expect_equal(convert_DO(10, "ml/kg", "mg/l",   S = 35, t = 25, P = 1.013253), 13.3959197)
+    expect_equal(convert_DO(10, "ul/kg", "mg/l",   S = 35, t = 25, P = 1.013253), 13.3959197/1000)
+    expect_equal(convert_DO(10, "cm3/kg", "mg/l",  S = 35, t = 25, P = 1.013253), 13.3959197)
+    expect_equal(convert_DO(10, "mm3/kg", "mg/l",  S = 35, t = 25, P = 1.013253), 13.3959197/1000)
+    expect_equal(convert_DO(10, "%Air", "mg/l",    S = 35, t = 25, P = 1.013253), 0.6751102)
+    expect_equal(convert_DO(10, "%Oxy", "mg/l",    S = 35, t = 25, P = 1.013253), 3.2230983756)
+    expect_equal(convert_DO(10, "Torr", "mg/l",    S = 35, t = 25, P = 1.013253), 0.43160273)
+    expect_equal(convert_DO(10, "hPa", "mg/l",     S = 35, t = 25, P = 1.013253), 0.32373349425)
+    expect_equal(convert_DO(10, "kPa", "mg/l",     S = 35, t = 25, P = 1.013253), 0.32373349425*10)
+    expect_equal(convert_DO(10, "mmHg", "mg/l",    S = 35, t = 25, P = 1.013253), 0.4316028)
+    expect_equal(convert_DO(10, "inHg", "mg/l",    S = 35, t = 25, P = 1.013253), 10.96271098)
+  })
+
+  ## check that `from` inputs do not produce error
   test_that("convert_DO converts different units without error", {
-    expect_error(convert_DO(10, "mg/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "ug/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "mmol/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "umol/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "nmol/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "pmol/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "ml/l", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "mg/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "ug/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mg/l", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ug/l", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "umol/l", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "nmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "pmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ml/l", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ul/l", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "cm3/l", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mm3/l", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mg/kg", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ppm", "mg/l",     S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ug/kg", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "mmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "umol/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "nmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
     expect_error(convert_DO(10, "pmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "ml/kg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "%Oxy", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "Torr", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "hPa", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "kPa", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "mmHg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
-    expect_error(convert_DO(10, "inHg", "mg/l", S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ml/kg", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "ul/kg", "mg/l",   S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "cm3/kg", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mm3/kg", "mg/l",  S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "%Air", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "%Oxy", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "Torr", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "hPa", "mg/l",     S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "kPa", "mg/l",     S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "mmHg", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
+    expect_error(convert_DO(10, "inHg", "mg/l",    S = 35, t = 25, P = 1.013253), regexp = NA)
   })
 
   test_that("convert_DO produces the correct numeric output", {
-    expect_is(convert_DO(10, "mg/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "ug/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "mol/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "mmol/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "umol/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "nmol/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "pmol/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "ml/l", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "mg/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "ug/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "mol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mg/l", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "ug/l", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mol/l", "mg/l",   S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "umol/l", "mg/l",  S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "nmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "pmol/l", "mg/l",  S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "ml/l", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mg/kg", "mg/l",   S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "ug/kg", "mg/l",   S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mol/kg", "mg/l",  S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "mmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "umol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "nmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
     expect_is(convert_DO(10, "pmol/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "ml/kg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "%Oxy", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "Torr", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "hPa", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "kPa", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "mmHg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
-    expect_is(convert_DO(10, "inHg", "mg/l", S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "ml/kg", "mg/l",   S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "%Air", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "%Oxy", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "Torr", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "hPa", "mg/l",     S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "kPa", "mg/l",     S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "mmHg", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
+    expect_is(convert_DO(10, "inHg", "mg/l",    S = 35, t = 25, P = 1.013253), "numeric")
   })
 
   test_that("convert_DO conversion works with changing salinity value", {
     expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S = 35, t = 25, P = 1.013253), 3), 0.506)
     expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S = 25, t = 25, P = 1.013253), 3), 0.536)
     expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S = 15, t = 25, P = 1.013253), 3), 0.567)
-    expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S = 5, t = 25, P = 1.013253), 3), 0.601)
-    expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S = 0, t = 25, P = 1.013253), 3), 0.618)
+    expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S =  5, t = 25, P = 1.013253), 3), 0.601)
+    expect_equal(round(convert_DO(7.5, "%Air", "mg/l", S =  0, t = 25, P = 1.013253), 3), 0.618)
   })
 
   test_that("convert_DO conversion works with changing pressure value", {
@@ -110,13 +174,6 @@ capture.output({  ## stops printing outputs on assigning
   test_that("convert_DO conversion works with changing temperature", {
     expect_equal(round(convert_DO(100, "%Air", "mg/l", t = 25, P = 1.013253, S = 35), 3), 6.751)
     expect_equal(round(convert_DO(100, "%Air", "mg/l", t = 20, S = 35), 3), 7.377)
-  })
-
-  test_that("convert_DO verify_units internal functions works", {
-    expect_is(verify_units("mg/l", "o2"), "character")
-    expect_is(verify_units("ml", "vol"), "character")
-    expect_is(verify_units("mg", "mass"), "character")
-    expect_is(verify_units("mg", "o1"), "character")
   })
 
   test_that("convert_DO S3 generics work", {
@@ -141,25 +198,21 @@ capture.output({  ## stops printing outputs on assigning
                   "Input values:")
     expect_output(summary(ob_many),
                   "Showing only the first 20 conversions:")
-
-
-
   })
 
   test_that("convert_DO stops if % operator (old one) is used", {
     expect_error(convert_DO(10, "%", "mg/l", S = 35, t = 25, P = 1.013253),
-                 regexp = "verify_units: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args().")
+                 regexp = "convert_DO: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args().")
   })
 
   test_that("convert_DO - stops if unit not recognised", {
     expect_error(convert_DO(10, "text", "mg/l", S = 35, t = 25, P = 1.013253),
-                 regexp = "verify_units: unit 'text' not recognised. Check it is valid for the input or output type.")
+                 regexp = "convert_DO: unit 'text' not recognised. Check it is valid for the input or output type.")
   })
 
   ## checks against respirometry::conv_o2 results
 
   test_that("convert_DO: %Air and %Oxy return same results as respirometry::conv_o2", {
-
     ## variables
     PercAir_in <- c(seq(100,50,-10))
     PercO2_in <- c(seq(20,10,-2))
@@ -210,7 +263,6 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-
   test_that("convert_DO: warning if P is outside realistic range", {
     expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
                               t = 12, S = 30, P = 1.5),
@@ -226,20 +278,54 @@ capture.output({  ## stops printing outputs on assigning
                    regexp = NA)
   })
 
+  test_that("convert_DO: message if plot is used", {
+    obj <- convert_DO(x = 100, from = "%Air", to = "mg/L",
+                      t = 12, S = 30, P = 1, simplify = FALSE)
+    expect_message(plot(obj),
+                   regexp = "convert_DO: plot is not available for 'convert_DO' objects.")
+  })
 
-# Unit variation tests ----------------------------------------------------
+  test_that("convert_DO: 'mean' works", {
+    obj1<- convert_DO(x = 100, from = "%Air", to = "mg/L",
+                      t = 12, S = 30, P = 1, simplify = FALSE)
+    obj2<- convert_DO(x = c(100,95), from = "%Air", to = "mg/L",
+                      t = 12, S = 30, P = 1, simplify = FALSE)
+    obj4<- convert_DO(x = c(100,95,90,85), from = "%Air", to = "mg/L",
+                      t = 12, S = 30, P = 1, simplify = FALSE)
 
-# Added when switching from huge lists of units to regex matching
-  # test_that("convert_DO: %Air input variations pass regex", {
-  #
-  #   un.vars <- c("%A", "%a", "% A",
-  #                "%Air", "%air", "% air",
-  #                "percair", "perc Air", "perc.air",
-  #                "percentair", "percent Air", "percent.air",
-  #                "percentageair", "percentage Air", "percentage.air",
-  #                "wrong")
-  #
-  # })
+    expect_error(mean(obj1, pos = 2),
+                 regexp = "mean.convert_DO: Invalid 'pos' rank: only 1 rates found.")
+    expect_message(mean(obj1),
+                   regexp = "Only 1 converted oxygen value found. Returning mean rate anyway...")
+    expect_output(mean(obj4),
+                  regexp = "Averaging all converted oxygen values.")
+    expect_output(mean(obj4, pos = 1:2),
+                  regexp = "Averaging converted oxygen values from entered 'pos' ranks:")
+    expect_equal(mean(obj4, export = TRUE),
+                 8.14208432688129)
+    expect_is(mean(obj4),
+              "convert_DO")
+  })
+
+
+
+  # Unit variation tests ----------------------------------------------------
+
+  # Added when switching from huge lists of units to regex matching
+  test_that("convert_DO: %Air input variations pass regex", {
+
+    un.vars <- c("%A", "%a", "% A",
+                 "%Air", "%air", "% air",
+                 "percair", "perc Air", "perc.air",
+                 "percentair", "percent Air", "percent.air",
+                 "percentageair", "percentage Air", "percentage.air")
+    sapply(un.vars, function(z) {
+      expect_equal(convert_DO(x = 100, from = z, to = "mg/L",
+                              t = 12, S = 30, P = 1),
+                   8.80225332635)
+    })
+
+  })
 
 
 })

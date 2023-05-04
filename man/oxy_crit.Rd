@@ -24,13 +24,14 @@ oxygen~time values, or paired rate~oxygen values. See Details.}
 \item{method}{string. Defaults to \code{"bsr"}. Critical oxygen value analysis
 method. Either \code{"bsr"} or \code{"segmented"}. See Details.}
 
-\item{time}{integer. Defaults to 1. Specifies column number of the time data.}
+\item{time}{integer or string. Defaults to 1. Specifies column number or
+column name of the time data.}
 
-\item{oxygen}{integer. Defaults to 2. Specifies column number of the oxygen
-data.}
+\item{oxygen}{integer or string. Defaults to 2. Specifies column number or
+column name of the oxygen data.}
 
-\item{rate}{integer. Defaults to NULL. Specifies column number of the rate
-data.}
+\item{rate}{integer or string. Defaults to NULL. Specifies column number or
+column name of the rate data.}
 
 \item{width}{numeric value between 0 and 1 representing proportion of the
 total data length. Determines the width of the rolling regression used to
@@ -61,9 +62,9 @@ has been used, \verb{$crit} will contain two results; \verb{$crit.intercept} and
 Yeager & Ultsch (1989), however they are generally very close in value.
 }
 \description{
-A function to calculate critical oxygen values, the oxygen tension or
-concentration below which an uptake rate transitions from independent to
-dependent on the oxygen supply, typically known as \emph{PCrit}.
+Identifies critical oxygen values, the oxygen tension or concentration below
+which an uptake rate transitions from independent to dependent on the oxygen
+supply, typically known as \emph{PCrit}.
 }
 \details{
 In earlier versions of \code{respR}, this function was known as \code{pcrit} or
@@ -119,11 +120,12 @@ This is the typical input, where a timeseries of oxygen concentrations or
 partial pressures against time has been recorded, generally down to a very
 low value of oxygen. A column of \code{time} and a column of \code{oxygen} should be
 specified. The function defaults to \code{time = 1} and \code{oxygen = 2} if no other
-inputs are entered. If an \code{inspect} object is entered as the \code{x} input, the
-data frame is extracted automatically and column identifiers are not required
-since these were already entered in \code{inspect}. Note, if multiple \code{oxygen}
-columns were entered in \code{inspect} only the first entered one will be used in
-\code{oxy_crit}.
+inputs are entered. These can also be specified using the column names.
+
+If an \code{inspect} object is entered as the \code{x} input, the data frame is
+extracted automatically and column identifiers are not required since these
+were already entered in \code{inspect}. Note, if multiple \code{oxygen} columns were
+entered in \code{inspect} only the first entered one will be used in \code{oxy_crit}.
 
 To calculate the \emph{COV}, the function requires data in the form of oxygen
 uptake rate against oxygen value. Therefore, the function performs a rolling
@@ -143,9 +145,10 @@ parameters.
 Alternatively, if existing rolling oxygen uptake rates have been calculated,
 and have appropriate paired oxygen concentration or partial pressure values,
 these can be entered with the \code{rate} and \code{oxygen} inputs specifying the
-respective columns. In this case the function performs the selected analysis
-\code{method} on these data directly without any processing. The \code{width} input in
-this case is not relevant and is ignored.
+respective columns as either numbers or the column names. In this case the
+function performs the selected analysis \code{method} on these data directly
+without any processing. The \code{width} input in this case is not relevant and is
+ignored.
 
 This option can only be used with data frame \code{x} inputs. Note, other columns
 such as time data may be present in the input, but are not required so need

@@ -91,7 +91,7 @@ test_that("calc_rate.ft - accepts single numeric 'x' input", {
   expect_error(calc_rate.ft(0.8, flowrate = 1.5, plot = F),
                regexp = NA)
   expect_message(calc_rate.ft(0.8, flowrate = 1.5, plot = F),
-                 regexp = "calc_rate.ft: calculating rate from delta oxygen.")
+                 regexp = "calc_rate.ft: Calculating rate from delta oxygen.")
 })
 
 test_that("calc_rate.ft - expected output with single numeric 'x' input", {
@@ -111,25 +111,25 @@ test_that("calc_rate.ft - delta output is correct with single numeric 'x' input"
 test_that("calc_rate.ft - single numeric 'x' input, message that other inputs ignored.", {
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, from = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, to = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, by = "row",
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, width = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, width = 10, by = "row", from = 2,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
 })
 
 test_that("calc_rate.ft - single numeric 'x' input, message that 'plot = TRUE' input ignored and does not produce output.", {
   expect_message(calc_rate.ft(-0.8, flowrate = 1.5, from = 10,
                               plot = TRUE),
-                 regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+                 regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
   expect_output(calc_rate.ft(-0.8, flowrate = 1.5, from = 10,
                              plot = TRUE),
                 NA)
@@ -160,25 +160,25 @@ test_that("calc_rate.ft - expected output with dual numeric 'x' input", {
 test_that("calc_rate.ft - dual numeric 'x' input, message that other inputs ignored.", {
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, from = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, to = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, by = "row",
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, width = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, width = 10, by = "row", from = 2,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
 })
 
 test_that("calc_rate.ft - dual numeric 'x' input, message that 'plot = TRUE' input ignored and does not produce output.", {
   expect_message(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, from = 10,
                               plot = TRUE),
-                 regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+                 regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
   expect_output(calc_rate.ft(c(7.5, 8.0), flowrate = 1.5, from = 10,
                              plot = TRUE),
                 NA)
@@ -200,25 +200,25 @@ test_that("calc_rate.ft - expected output with data.frame 'x' input", {
 test_that("calc_rate.ft - data.frame 'x' input, message that other inputs ignored.", {
   expect_message(calc_rate.ft(df, flowrate = 1.5, from = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(df, flowrate = 1.5, to = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(df, flowrate = 1.5, by = "row",
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(df, flowrate = 1.5, width = 10,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
   expect_message(calc_rate.ft(df, flowrate = 1.5, width = 10, by = "row", from = 2,
                               plot = F),
-                 regexp = "calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+                 regexp = "calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
 })
 
 test_that("calc_rate.ft - data.frame 'x' input, message that 'plot = TRUE' input ignored and does not produce output.", {
   expect_message(calc_rate.ft(df, flowrate = 1.5, from = 10,
                               plot = TRUE),
-                 regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+                 regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
   expect_output(calc_rate.ft(df, flowrate = 1.5, from = 10,
                              plot = TRUE),
                 NA)
@@ -232,7 +232,7 @@ test_that("calc_rate.ft - data.frame 'x' input, message that 'plot = TRUE' input
 test_that("calc_rate.ft - stops with `inspect` 'x' input", {
   expect_error(calc_rate.ft(
     suppressWarnings(suppressMessages(inspect(flowthrough.rd, plot = F))), flowrate = 1.5, plot = F),
-    "calc_rate.ft: function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
+    "calc_rate.ft: Function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
 })
 
 test_that("calc_rate.ft - stops with any other disallowed 'x' input", {
@@ -301,43 +301,43 @@ test_that("calc_rate.ft - stops if 'from' and 'to' are unequal lengths", {
 test_that("calc_rate.ft - stops if 'from' or 'to' values out of data ranges", {
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 1000, to = 10,
                             by = "time", plot = F),
-               regexp = "calc_rate.ft: some 'from' time values are higher than the values present in 'x'.")
+               regexp = "calc_rate.ft: Some 'from' time values are higher than the values present in 'x'.")
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 2, to = 0,
                             by = "time", plot = F),
-               regexp = "calc_rate.ft: some 'to' time values are lower than the values present in 'x'.")
+               regexp = "calc_rate.ft: Some 'to' time values are lower than the values present in 'x'.")
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 4000, to = 5000,
                             by = "row", plot = F),
-               regexp = "calc_rate.ft: some 'from' row numbers are beyond the number of rows present in 'x'.")
+               regexp = "calc_rate.ft: Some 'from' row numbers are beyond the number of rows present in 'x'.")
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 200:210, to = 100:110,
                             by = "row", plot = F),
-               regexp = "calc_rate.ft: some 'from' values are greater than the paired values in 'to'.")
+               regexp = "calc_rate.ft: Some 'from' values are greater than the paired values in 'to'.")
 })
 
 test_that("calc_rate.ft - if 'from' or 'to' values below or above data bounds, use lowest/highest vsalues instead", {
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0.01, to = 10,
                             by = "time", plot = F),
-               regexp = "calc_rate.ft: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
+               regexp = "calc_rate.ft: Some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0.01, to = 10,
                             by = "time", plot = F)$summary$time,
                0.02)
 
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0, to = 10,
                             by = "row", plot = F),
-               regexp = "calc_rate.ft: some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
+               regexp = "calc_rate.ft: Some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0, to = 10,
                             by = "row", plot = F)$summary$row,
                1)
 
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0.02, to = 70,
                             by = "time", plot = F),
-               regexp = "calc_rate.ft: some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
+               regexp = "calc_rate.ft: Some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 0.02, to = 70,
                             by = "time", plot = F)$summary$endtime,
                62.33)
 
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 2, to = 4000,
                             by = "row", plot = F),
-               regexp = "calc_rate.ft: some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
+               regexp = "calc_rate.ft: Some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
   expect_equal(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, from = 2, to = 4000,
                             by = "row", plot = F)$summary$endrow,
                3740)
@@ -351,12 +351,12 @@ test_that("calc_rate.ft - with 'width' input, correct message.", {
                               width = 2,
                               by = "time",
                               plot = F),
-                 regexp = "calc_rate.ft: `width` can only be used with 'by = \"row\"'.")
+                 regexp = "calc_rate.ft: 'width' can only be used with 'by = \"row\"'.")
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5,
                               width = 2,
                               by = "row",
                               plot = F),
-                 regexp = "calc_rate.ft: rates determined using a rolling 'width' of 2 row values.")
+                 regexp = "calc_rate.ft: Rates determined using a rolling 'width' of 2 row values.")
 })
 
 test_that("calc_rate.ft - with 'width' input and from/to inputs, correct message that they are ignored.", {
@@ -365,13 +365,13 @@ test_that("calc_rate.ft - with 'width' input and from/to inputs, correct message
                               from = 2, to = 10,
                               by = "time",
                               plot = F),
-                 regexp = "calc_rate.ft: `width` can only be used with 'by = \"row\"'.")
+                 regexp = "calc_rate.ft: 'width' can only be used with 'by = \"row\"'.")
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5,
                               width = 2,
                               from = 2:5, to = 10:13,
                               by = "row",
                               plot = F),
-                 regexp = "calc_rate.ft: a rolling 'width' has been specified, therefore 'from' and 'to' inputs will be ignored.")
+                 regexp = "calc_rate.ft: A rolling 'width' has been specified, therefore 'from' and 'to' inputs will be ignored.")
 })
 
 test_that("calc_rate.ft - 'width' input correctly verified.", {
@@ -380,13 +380,13 @@ test_that("calc_rate.ft - 'width' input correctly verified.", {
                             width = "string",
                             by = "row",
                             plot = F),
-               regexp = "calc_rate.ft: 'width' input is not numeric.")
+               regexp = "calc_rate.ft: 'width' - input is not numeric.")
   # single value
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5,
                             width = 1:2,
                             by = "row",
                             plot = F),
-               regexp = "calc_rate.ft: 'width' only 1 inputs allowed.")
+               regexp = "calc_rate.ft: 'width' - only 1 inputs allowed.")
 })
 
 
@@ -421,12 +421,12 @@ test_that("calc_rate.ft - accepts 'inspect.ft' input, gives correct messages and
   expect_error(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F),
                NA)
   expect_message(calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col, flowrate = 1.5, plot = F),
-                 "calc_rate.ft: calculating rate from 'inspect.ft' object.")
+                 "calc_rate.ft: Calculating rate from 'inspect.ft' object.")
   # multiple columns in inspect.ft object
   expect_error(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F)),
                NA)
   expect_message(suppressWarnings(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F)),
-                 "calc_rate.ft: calculating rate from 'inspect.ft' object.")
+                 "calc_rate.ft: Calculating rate from 'inspect.ft' object.")
   expect_warning(calc_rate.ft(insp.ft.obj.outO2.multcols.inO2.multcols, flowrate = 1.5, plot = F),
                  "calc_rate.ft: Multiple columns of delta oxygen data found in input.")
 })
@@ -863,11 +863,11 @@ test_that("calc_rate.ft output plot stops if input is not an inspect.ft object",
   # crft.obj.vector
   # crft.obj.df
   expect_error(plot(crft.obj.value),
-               regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+               regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
   expect_error(plot(crft.obj.vector),
-               regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+               regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
   expect_error(plot(crft.obj.df),
-               regexp = "calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+               regexp = "calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
 
 })
 

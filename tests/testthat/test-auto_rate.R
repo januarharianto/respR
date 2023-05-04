@@ -34,7 +34,12 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate stops with malformed method", {
     expect_error(auto_rate(urch_data, method = "wrong"),
-                 regexp = "auto_rate: The 'method' input is not recognised: ")
+                 regexp = "auto_rate: 'method' input not recognised.")
+  })
+
+  test_that("calc_rate - stops when 'x' input has only 1 row of data", {
+    expect_error(auto_rate(sardine.rd[1,1:2], plot = F),
+                 "auto_rate: Input data contains only 1 row. Please check inputs.")
   })
 
   test_that("auto_rate works using default inputs", {
@@ -141,6 +146,13 @@ capture.output({  ## stops printing outputs on assigning
     ar <- auto_rate(urch_data, method = "interval", plot = F, width = 0.1)
     expect_output(print(ar))
     expect_output(summary(ar))
+  })
+
+  test_that("auto_rate summary works with print.kds", {
+    ar <- auto_rate(urch_data, method = "linear", plot = F, width = 0.1)
+    expect_output(summary(ar, print.kds = TRUE))
+    expect_output(summary(ar, print.kds = TRUE),
+                  "=== Kernel Density Summary ===")
   })
 
   test_that("auto_rate summary export = TRUE works", {
@@ -337,7 +349,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_message(suppressWarnings(auto_rate(intermittent.rd, method = "max", plot = FALSE)),
                    regexp = "auto_rate: Note dataset contains both negative and positive rates.")
     expect_warning(auto_rate(intermittent.rd, method = "max", plot = FALSE),
-                   regexp = "auto_rate: the 'min' and 'max' methods have been deprecated")
+                   regexp = "auto_rate: The 'min' and 'max' methods have been deprecated")
     ## INCORRECTLY orders by numerical max rate
     ## this was the original behaviour
     expect_equal(suppressWarnings(auto_rate(intermittent.rd, method = "max", plot = FALSE)$rate),
@@ -357,7 +369,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_message(suppressWarnings(auto_rate(intermittent.rd, method = "min", plot = FALSE)),
                    regexp = "auto_rate: Note dataset contains both negative and positive rates.")
     expect_warning(auto_rate(intermittent.rd, method = "min", plot = FALSE),
-                   regexp = "auto_rate: the 'min' and 'max' methods have been deprecated")
+                   regexp = "auto_rate: The 'min' and 'max' methods have been deprecated")
     ## INCORRECTLY orders by numerical min rate
     ## this was the original behaviour
     expect_equal(suppressWarnings(auto_rate(intermittent.rd, method = "min", plot = FALSE)$rate),
@@ -409,4 +421,4 @@ capture.output({  ## stops printing outputs on assigning
 
 
 
-}) ## turns printing back on
+}) ## end capture.output

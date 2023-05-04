@@ -125,12 +125,10 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
                  oxygen = oxygen,
                  plot = plot)
 
-  # Import x from inspect function. We convert to data.frame object here as
+  # Import x from inspect function. We convert to data.frame here as
   # data.table doesn't like subsetting columns by variable names.
-  if(any(class(x) %in% "inspect")) {
-    x <- data.frame(x$dataframe)
-  } else {
-    x <- data.frame(x)}
+  if(any(class(x) %in% "inspect")) df <- data.frame(x$dataframe) else
+    df <- data.frame(x)
 
   ## if NULL use col1 for time, all other cols for oxygen
   if(is.null(time)) {
@@ -138,17 +136,20 @@ calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
     message("calc_rate.bg: Applying column default of 'time = 1'")
   }
   if(is.null(oxygen)) {
-    listcols <- seq.int(1, ncol(x))
+    listcols <- seq.int(1, ncol(df))
     oxygen <- listcols[!listcols %in% time]
     message("calc_rate.bg: Applying column default of all non-time column(s) as 'oxygen'")
   }
-  if (any(time %in% oxygen)) stop("calc_rate.bg: 'time' and 'oxygen' columns conflict.")
+
+  # validate inputs
+  column.val(input=time, req = TRUE, min = 1, max = 1,
+             range = c(1,ncol(df)), conflicts = oxygen, msg = "calc_rate.bg: 'time' input -")
+  column.val(oxygen, req = TRUE, min = 1, max = ncol(df)-1,
+             range = c(1,ncol(df)), conflicts = time, msg = "calc_rate.bg: 'oxygen' input -")
 
   # Extract data:
-  if(any(time > length(x))) stop("calc_rate.bg: Selected 'time' column not present in the input.") else
-    xval <- x[time]
-  if(any(oxygen > length(x))) stop("calc_rate.bg: Selected 'oxygen' column(s) not present in the input.") else
-    yval <- x[oxygen]
+  xval <- df[time]
+  yval <- df[oxygen]
 
   # Ok, convert back to data.table object
   dt <- data.table(xval, yval)
@@ -221,7 +222,7 @@ print.calc_rate.bg <- function(x, ...) {
 summary.calc_rate.bg <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate.bg)))
-    stop("summary.calc_rate.bg: Invalid 'pos' rank: only ", length(object$rate.bg), " background rates found.")
+    stop("summary.calc_rate.bg: Invalid 'pos' rank: only ", length(object$rate.bg), " background rates found.", call. = FALSE)
 
   cat("\n# summary.calc_rate.bg # ----------------\n")
   if(is.null(pos)) {
@@ -262,9 +263,9 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
   nres <- length(x$rate.bg)
   rownums <- 1:nrow(x$dataframe)
   if(!is.null(pos) && length(pos) > 1)
-    stop("plot.calc_rate.bg: 'pos' should be a single value.")
+    stop("plot.calc_rate.bg: 'pos' should be a single value.", call. = FALSE)
   if(!is.null(pos) && pos > nres)
-    stop("plot.calc_rate.bg: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.calc_rate.bg: Invalid 'pos' rank: only ", nres, " rates found.", call. = FALSE)
   if(!is.null(pos)) nplot <- 1 else
     nplot <- nres
 
@@ -332,7 +333,7 @@ mean.calc_rate.bg <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.bg # -------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate.bg)))
-    stop("mean.calc_rate.bg: Invalid 'pos' rank: only ", length(x$rate.bg), " background rates found.")
+    stop("mean.calc_rate.bg: Invalid 'pos' rank: only ", length(x$rate.bg), " background rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate.bg)
     cat("Mean of all background rate results:")

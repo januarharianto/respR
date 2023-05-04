@@ -18,7 +18,7 @@ test_that("convert_val - stops if units not recognised, or not of accepted type"
   expect_error(convert_val(-273.15, "kg", "hr"),
                "convert_val: 'to' unit is not one of the accepted unit types.")
   expect_error(convert_val(-273.15, "F", "blah"),
-               "convert_val: \"blah\" unit not recognised")
+               "convert_val: 'blah' unit not recognised")
 })
 
 test_that("convert_val - stops if 'from' input malformed", {
@@ -88,8 +88,8 @@ test_that("convert_val - Mass conversions have expected results", {
 
 
 test_that("convert_val - Area conversions have expected results", {
-  uns_in <- c("mm2", "cm2", "msq", "sqkm")
-  uns_out <- c("mm2", "cm2", "msq", "sqkm")
+  uns_in <- c("mm2", "cm2", "msq", "kmsq")
+  uns_out <- c("mm2", "cm2", "msq", "kmsq")
   vals <- c(2,5, 0.1, 0.0045, 747, 26, 0.00003829, 90000) # random values
   mult <- c(1/1000000, 1/10000, 1, 1000000)
 
@@ -364,4 +364,4 @@ test_that("convert_val - works with vectors", {
   expect_equal(convert_val(10:20, "C", "K"),
                10:20 + 273.15)
 })
-}) ## turns printing back on
+}) ## end capture.output

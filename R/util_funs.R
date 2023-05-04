@@ -1,12 +1,123 @@
-# General global default settings ------------------------------------------------
+# General package default settings ------------------------------------------------
 
 # Number of rows of summary tables to print before it prints a condensed version
 # i.e. nrows in print.data.table
 summ_rows <- 50
 
+# Regex -------------------------------------------------------------------
+
+# Regex patterns for units
+# Put here so don't have to update them in multiple places
+# Used in units.val and unit_type and unit_type_o1 etc.
+
+# Allowed unit separators - used in splitting units up
+unit.sep.rgx  <- "(?:-1|[_/.[:space:]]|per)+"
+# time
+min.time.rgx  <- "^(?i)\\b(minute|min|m)(s)?(.time)?\\b$"
+sec.time.rgx  <- "^(?i)\\b(second|sec|s)(s)?(.time)?\\b$"
+hr.time.rgx   <- "^(?i)\\b(hour|hr|h)(s)?(.time)?\\b$"
+day.time.rgx  <- "^(?i)\\b(day|dy|d)(s)?(.time)?\\b$"
+# o2
+# DO NOT require S,t,P
+mgperL.o2.rgx    <- "^(?i)\\b(mg|milligram|milligramme)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+ugperL.o2.rgx    <- "^(?i)\\b(ug|microgram|microgramme)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+molperL.o2.rgx   <- "^(?i)\\b(mol|mole)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+mmolperL.o2.rgx  <- "^(?i)\\b(mmol|mmole|millimol|millimole)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+umolperL.o2.rgx  <- "^(?i)\\b(umol|umole|micromol|micromole)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+nmolperL.o2.rgx  <- "^(?i)\\b(nmol|nmole|nanomol|nanomole)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+pmolperL.o2.rgx  <- "^(?i)\\b(pmol|pmole|picomol|picomole)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+# require S,t,P
+molperkg.o2.rgx  <- "^(?i)\\b(mol|mole)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+mmolperkg.o2.rgx <- "^(?i)\\b(mmol|mmole|millimol|millimole)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+umolperkg.o2.rgx <- "^(?i)\\b(umol|umole|micromol|micromole)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+nmolperkg.o2.rgx <- "^(?i)\\b(nmol|nmole|nanomol|nanomole)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+pmolperkg.o2.rgx <- "^(?i)\\b(pmol|pmole|picomol|picomole)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+ugperkg.o2.rgx   <- "^(?i)\\b(ug|microgram|microgramme)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+mgperkg.o2.rgx   <- "^(?i)\\b(mg|milligram|milligramme)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+ppm.o2.rgx       <- "^(?i)\\b(p|parts)(.o2|O2)?(/|per|p|.|_)?(m|million)(.o2)?\\b$"
+PercAir.o2.rgx   <- "^(?i)\\b(%|perc|percent|percentage)[._]*(air|a)(.o2)?\\b$"
+PercOxy.o2.rgx   <- "^(?i)\\b(%|perc|percent|percentage)[._]*(oxygen|oxy|ox|o|o2)(.o2)?\\b$"
+cm3perL.o2.rgx   <- "^(?i)\\b(cm3|cm[\\^]3|cc|ccm|cubiccm)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+mm3perL.o2.rgx   <- "^(?i)\\b(mm3|mm[\\^]3|cmm|cubicmm)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+cm3perkg.o2.rgx  <- "^(?i)\\b(cm3|cm[\\^]3|cc|ccm|cubiccm)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+mm3perkg.o2.rgx  <- "^(?i)\\b(mm3|mm[\\^]3|cmm|cubicmm)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+mLperL.o2.rgx    <- "^(?i)\\b(ml|millilitre|milliliter)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+uLperL.o2.rgx    <- "^(?i)\\b(ul|microlitre|microliter)(.o2|O2)?(/|per|.|_)?(l|liter|litre)(-1)?(.o2)?\\b$"
+mLperkg.o2.rgx   <- "^(?i)\\b(ml|millilitre|milliliter)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+uLperkg.o2.rgx   <- "^(?i)\\b(ul|microlitre|microliter)(.o2|O2)?(/|per|.|_)?(kg|kilogram|kilogramme)(-1)?(.o2)?\\b$"
+Torr.o2p.rgx     <- "^(?i)\\b(tor|torr)(.o2|O2)?(.o2p)?\\b$"
+hPa.o2p.rgx      <- "^(?i)\\b(hpa|hectopascal|hpascal)(.o2|O2)?(.o2p)?\\b$"
+kPa.o2p.rgx      <- "^(?i)\\b(kpa|kilopascal|kpascal)(.o2|O2)?(.o2p)?\\b$"
+mmHg.o2p.rgx     <- "^(?i)\\b(mm|millimeter|millimetre)(of|.|_)?(hg|mercury)(.o2|O2)?(.o2p)?\\b$"
+inHg.o2p.rgx     <- "^(?i)\\b(in|inch|inches)(of|.|_)?(hg|mercury)(.o2|O2)?(.o2p)?\\b$"
+
+# all the above in one object
+# Used in StP.check internal fn
+oxy.StP.req.rgx <- c(molperkg.o2.rgx, mmolperkg.o2.rgx, umolperkg.o2.rgx, nmolperkg.o2.rgx, pmolperkg.o2.rgx,
+                     ugperkg.o2.rgx, mgperkg.o2.rgx, ppm.o2.rgx, PercAir.o2.rgx, PercOxy.o2.rgx, cm3perL.o2.rgx,
+                     mm3perL.o2.rgx, cm3perkg.o2.rgx, mm3perkg.o2.rgx, mLperL.o2.rgx, uLperL.o2.rgx,
+                     mLperkg.o2.rgx, uLperkg.o2.rgx, Torr.o2p.rgx, hPa.o2p.rgx, kPa.o2p.rgx, mmHg.o2p.rgx,
+                     inHg.o2p.rgx)
+# Metabolic rate units which require StP
+# Only "mL/time" "uL/time", "cm3/time", "mm3/time" and per mass
+mr.StP.req.rgx <- c("^(?i)\\b(ml|millilitre|milliliter|ul|microlitre|microliter|cm3|cm[\\^]3|cc|ccm|cubiccm|mm3|mm[\\^]3|cmm|cubicmm)(.o2|O2)?(/|per|.|_)?(second|sec|s|minute|min|m|hour|hr|h|day|dy|d)(-1)?(/|per|.|_)?(ug|ugm|ugram|microgram|microgramme|mg|mgm|mgram|milligram|milligramme|g|gm|gram|gramme|kg|kgm|kgram|kilogram|kilogramme)?(-1)?\\b$")
+
+# volume
+L.vol.rgx  <- "^(?i)\\b(l|litre|liter)(s?)(.vol)?\\b$"
+mL.vol.rgx <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(.vol)?\\b$"
+uL.vol.rgx <- "^(?i)\\b(ul|microlitre|microliter)(s?)(.vol)?\\b$"
+# mass
+kg.mass.rgx <- "^(?i)\\b(kg|kgm|kgram|kilogram|kilogramme)(s?)(.mass)?\\b$"
+g.mass.rgx  <- "^(?i)\\b(g|gm|gram|gramme)(s?)(.mass)?\\b$"
+mg.mass.rgx <- "^(?i)\\b(mg|mgm|mgram|milligram|milligramme)(s?)(.mass)?\\b$"
+ug.mass.rgx <- "^(?i)\\b(ug|ugm|ugram|microgram|microgramme)(s?)(.mass)?\\b$"
+# area
+km2.area.rgx  <- "^(?i)\\b(km|kilometre|kilometer|km[\\^]|kilometre[\\^]|kilometer[\\^])(-2|2|sq)(.area)?\\b$"
+m2.area.rgx   <- "^(?i)\\b(m|metre|meter|m[\\^]|metre[\\^]|meter[\\^])(-2|2|sq)(.area)?\\b$"
+cm2.area.rgx  <- "^(?i)\\b(cm|centimetre|centimeter|cm[\\^]|centimetre[\\^]|centimeter[\\^])(-2|2|sq)(.area)?\\b$"
+mm2.area.rgx  <- "^(?i)\\b(mm|millimetre|millimeter|mm[\\^]|millimetre[\\^]|millimeter[\\^])(-2|2|sq)(.area)?\\b$"
+# o1
+mg.o2.rgx   <- "^(?i)\\b(mg|milligram|milligramme)(s?)(O2)?(.o2)?\\b$"
+ug.o2.rgx   <- "^(?i)\\b(ug|microgram|microgramme)(s?)(O2)?(.o2)?\\b$"
+mol.o2.rgx  <- "^(?i)\\b(mol|mole)(s?)(O2)?(.o2)?\\b$"
+mmol.o2.rgx <- "^(?i)\\b(mmol|mmole|millimol|millimole)(s?)(O2)?(.o2)?\\b$"
+umol.o2.rgx <- "^(?i)\\b(umol|umole|micromol|micromole)(s?)(O2)?(.o2)?\\b$"
+nmol.o2.rgx <- "^(?i)\\b(nmol|nmole|nanomol|nanomole)(s?)(O2)?(.o2)?\\b$"
+pmol.o2.rgx <- "^(?i)\\b(pmol|pmole|picomol|picomole)(s?)(O2)?(.o2)?\\b$"
+mL.o2.rgx   <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(O2)?(.o2)?\\b$"
+uL.o2.rgx   <- "^(?i)\\b(ul|microlitre|microliter)(s?)(O2)?(.o2)?\\b$"
+cm3.o2.rgx  <- "^(?i)\\b(cm3|cm[\\^]3|cc|ccm|cubiccm)(s?)(O2)?(.o2)?\\b$"
+mm3.o2.rgx  <- "^(?i)\\b(mm3|mm[\\^]3|cmm|cubicmm)(s?)(O2)?(.o2)?\\b$"
+# flow
+uLpersec.flow.rgx <- "^(?i)\\b(ul|microlitre|microliter)(s?)(/|per|.|_)?(second|sec|s)(s)?(-1)?(.flow)?\\b$"
+mLpersec.flow.rgx <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(/|per|.|_)?(second|sec|s)(s)?(-1)?(.flow)?\\b$"
+Lpersec.flow.rgx  <- "^(?i)\\b(l|litre|liter)(s?)(/|per|.|_)?(second|sec|s)(s)?(-1)?(.flow)?\\b$"
+uLpermin.flow.rgx <- "^(?i)\\b(ul|microlitre|microliter)(s?)(/|per|.|_)?(minute|min|m)(s)?(-1)?(.flow)?\\b$"
+mLpermin.flow.rgx <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(/|per|.|_)?(minute|min|m)(s)?(-1)?(.flow)?\\b$"
+Lpermin.flow.rgx  <- "^(?i)\\b(l|litre|liter)(s?)(/|per|.|_)?(minute|min|m)(s)?(-1)?(.flow)?\\b$"
+uLperhr.flow.rgx <- "^(?i)\\b(ul|microlitre|microliter)(s?)(/|per|.|_)?(hour|hr|h)(s)?(-1)?(.flow)?\\b$"
+mLperhr.flow.rgx <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(/|per|.|_)?(hour|hr|h)(s)?(-1)?(.flow)?\\b$"
+Lperhr.flow.rgx  <- "^(?i)\\b(l|litre|liter)(s?)(/|per|.|_)?(hour|hr|h)(s)?(-1)?(.flow)?\\b$"
+uLperday.flow.rgx <- "^(?i)\\b(ul|microlitre|microliter)(s?)(/|per|.|_)?(day|dy|d)(s)?(-1)?(.flow)?\\b$"
+mLperday.flow.rgx <- "^(?i)\\b(ml|millilitre|milliliter)(s?)(/|per|.|_)?(day|dy|d)(s)?(-1)?(.flow)?\\b$"
+Lperday.flow.rgx  <- "^(?i)\\b(l|litre|liter)(s?)(/|per|.|_)?(day|dy|d)(s)?(-1)?(.flow)?\\b$"
+# pressure
+kPa.p.rgx  <- "^(?i)\\b(kpa)(.p)?\\b$"
+hPa.p.rgx  <- "^(?i)\\b(hpa)(.p)?\\b$"
+Pa.p.rgx   <- "^(?i)\\b(pa)(.p)?\\b$"
+uBar.p.rgx <- "^(?i)\\b(ub|ubar|ubr)(.p)?\\b$"
+mBar.p.rgx <- "^(?i)\\b(mb|mbar|mbr)(.p)?\\b$"
+Bar.p.rgx  <- "^(?i)\\b(bar|br)(.p)?\\b$"
+atm.p.rgx  <- "^(?i)\\b(atm|atmos|atmosphere|atmospheres)(.p)?\\b$"
+Torr.p.rgx <- "^(?i)\\b(tor|torr)(.p)?\\b$"
+mmHg.p.rgx <- "^(?i)\\b(mmhg|millimetrehg|millimeterhg|millimetreshg|millimetershg)(.p)?\\b$"
+inHg.p.rgx <- "^(?i)\\b(inhg|inchhg|incheshg)(.p)?\\b$"
+# temperature
+C.temp.rgx <- "^(?i)\\b(dgr|degree|degrees)?(c|cel|celcius|celsius|centigrade)(.temp)?\\b$"
+K.temp.rgx <- "^(?i)\\b(dgr|degree|degrees)?(k|kelvin|kel)(.temp)?\\b$"
+F.temp.rgx <- "^(?i)\\b(dgr|degree|degrees)?(f|fahrenheit)(.temp)?\\b$"
 
 # -------------------------------------------------------------------------
-
 
 #' Pipe graphics direct from tidyverse-related package
 #' @importFrom magrittr %>%
@@ -32,68 +143,77 @@ os <- function() {
         "unix" else stop("Unknown OS")
 }
 
-# tic - for time elapsed
-tic <- function(gcFirst = TRUE, type = c("elapsed", "user.self", "sys.self")) {
-  type <- match.arg(type)
-  assign(".type", type, envir = baseenv())
-  if (gcFirst)
-    gc(FALSE)
-  tic <- proc.time()[type]
-  assign(".tic", tic, envir = baseenv())
-  invisible(tic)
+#' Convert between multipliers of the same unit, e.g. mg to kg
+#'
+#' Converts units of the same scale, e.g. mg to kg, or mL to L.
+#'
+#' @param x numeric.
+#' @param input string.
+#' @param output string.
+#'
+#' @keywords internal
+#'
+#' @return A numeric.
+#'
+#' @importFrom stringr str_replace
+adjust_scale <- function(x, input, output) {
+  # Create database of terms for matching
+  prefix <- c("p", "n", "u", "m", "", "k", "sec", "min", "hr", "day")
+  suffix <- c("mol", "g", "L", "l", "")
+  multip <- c(1e-12, 1e-09, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
+  string <- "^(p|n|u|m||k|sec|min|hr|day)?(mol|g|L|l|)$"
+  # Clean and extract input strings
+  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
+  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
+  # Clean and extract output strings
+  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
+  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
+  # Check that conversion is possible
+  if (bef[3] != aft[3])
+    stop("adjust_scale: Units do not match and cannot be converted.", call. = F)
+  # Convert!
+  a <- multip[match(bef[2], prefix)]  # get multiplier from input
+  b <- multip[match(aft[2], prefix)]  # get multiplier from output
+  out <- x * (a/b)  # convert
+  return(out)
 }
 
-# toc - for time elapsed
-toc <- function() {
-  type <- get(".type", envir = baseenv())
-  toc <- proc.time()[type]
-  tic <- get(".tic", envir = baseenv())
-  elapsed <- (toc - tic)[[1]]
-  return(elapsed)
+
+#' Convert between multipliers of the same AREA unit, e.g. mm2 to km2
+#'
+#' This is an internal function. Converts units of area. Could be combined with
+#' adjust_scale, but didn't know how....
+#'
+#' @param x numeric.
+#' @param input string.
+#' @param output string.
+#'
+#' @keywords internal
+#'
+#' @return A numeric.
+#'
+#' @importFrom stringr str_replace
+adjust_scale_area <- function(x, input, output) {
+  # Create database of terms for matching
+  prefix <- c("m", "c", "", "k")
+  suffix <- c("m2")
+  multip <- c(1e-06, 0.0001, 1, 1e+06)
+  string <- "^(m|c||k)?(m2)$"
+  # Clean and extract input strings
+  bef <- stringr::str_replace(input, "\\..*", "")  # remove .suffix
+  bef <- unlist(regmatches(bef, regexec(string, bef)))  # split up
+  # Clean and extract output strings
+  aft <- stringr::str_replace(output, "\\..*", "")  # remove .suffix
+  aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
+  # Check that conversion is possible
+  if (bef[3] != aft[3])
+    stop("adjust_scale_area: Units do not match and cannot be converted.", call. = F)
+  # Convert!
+  a <- multip[match(bef[2], prefix)]  # get multiplier from input
+  b <- multip[match(aft[2], prefix)]  # get multiplier from output
+  out <- x * (a/b)  # convert
+  return(out)
 }
-
-# simple progress bar
-# x = numeric. Current iteration of the progress of the operation. This would be,
-# for example, the `i` in a `for` loop.
-# total = numeric. Total number of iterations until operation complete. This would be,
-# for example, the total `i` in a `for` loop.
-# message string. Optional text to add to right side of progress bar.
-# Should not be more than a few words.
-progress.bar <- function (x, total = NULL, message = NULL) {
-
-  ## if no message, just make it an empty character vector or causes errors later
-  if(is.null(message)) message <- ""
-
-  ## current width of console
-  wdth <- getOption("width")
-
-  msg_length <- nchar(message) # nchar in message
-  buf <- 8 # nchar of % msg (total), spaces and brackets
-  # general default character width of R console
-  # Don't want to go over this.
-  def_nchar <- 80
-  total_nchar <- wdth # total char of current console
-
-  # determine final nchar - either total available now, or R default
-  if (total_nchar >= def_nchar) final_nchar <- def_nchar else
-    if (total_nchar < 80) final_nchar <- total_nchar
-
-  ## number of equals signs required
-  n_eq <- final_nchar - msg_length - buf
-
-  ## proportion done in this loop
-  prop_done <- x / total
-
-  ## print message
-  cat(sprintf(c(glue::glue("\r[%-{n_eq}s] %3d%%"), message),
-              paste(rep("=", (n_eq * prop_done)), collapse = ""),
-              floor(prop_done*100)))
-
-  ## end
-  if (x == total)
-    cat("\n")
-}
-
 
 # checks for `inspect()` functions --------------------------------
 
@@ -137,12 +257,12 @@ check_timeseries <- function(x, type = "time") {
     # check inf
     inf <- sapply(1:length(x), function(y) {
       if(!num[,y][[1]]) check_inf(x[[y]]) else
-      return(list(check = "skip", which = integer(0)))
+        return(list(check = "skip", which = integer(0)))
     })
     # check nan
     nan <- sapply(1:length(x), function(y) {
       if(!num[,y][[1]]) check_na(x[[y]]) else
-      return(list(check = "skip", which = integer(0)))
+        return(list(check = "skip", which = integer(0)))
     })
 
     seq <- NA
@@ -164,7 +284,7 @@ check_timeseries <- function(x, type = "time") {
       evn[1])
   }
 
-  # rename rows - I'm sure I can make this more efficient... later..
+  # rename rows
   rnames <- c("numeric", "Inf/-Inf", "NA/NaN", "sequential", "duplicated", "evenly-spaced  ")
   rownames(checks) <- rnames
   rownames(locs) <- rnames
@@ -253,7 +373,7 @@ truncate_data <- function(x, from, to, by) {
   if (is.null(by)) by <- "time"
 
   ## verify by just in case
-  by <- verify_by(by)
+  by <- by.val(by)
 
   ## replace NULL inputs with defaults
   if(is.null(from)){

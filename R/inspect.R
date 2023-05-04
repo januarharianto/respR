@@ -10,9 +10,11 @@
 #' quality control and exploratory step to help users view and prepare their
 #' data prior to analysis.
 #'
-#' Given an input data frame, `x`, the function scans the `time` and `oxygen`
-#' columns. If these are left `NULL`, by default it is assumed column 1 is time
-#' data, and column 2 is oxygen data.
+#' Given an input data frame, `x`, the function scans the specified `time` and
+#' `oxygen` columns for the following issues. Columns are specified by using the
+#' column number (e.g. `time = 1`), or by name (e.g. `time = "Time.Hrs"`). If
+#' `time` and `oxygen` are left `NULL` the default of `time = 1, oxygen = 2` is
+#' applied.
 #'
 #' ## Check for numeric data
 #'
@@ -26,26 +28,28 @@
 #'
 #' ## Other checks
 #'
-#' The `time` column is checked for missing (`NA/NaN`) values, infinite values
-#' both positive and negative (`Inf/-Inf`), that values are sequential, that
-#' there are no duplicate times, and that it is numerically evenly-spaced.
-#' Oxygen columns are checked for missing (`NA/NaN`) and infinite values
-#' (`Inf/-Inf`). See **Failed Checks** section for what it means for analyses if
-#' these checks result in warnings. If the output is assigned, the specified
-#' columns are saved to a `list` object for use in later functions such as
-#' [`calc_rate()`] and [`auto_rate()`]. A plot is also produced.
+#' The `time` column is checked for missing (`NA/NaN`) values, positive and
+#' negative infinite values (`Inf/-Inf`), that values are sequential, that there
+#' are no duplicate times, and that it is numerically evenly-spaced. Oxygen
+#' columns are checked for missing (`NA/NaN`) and infinite values (`Inf/-Inf`).
+#' See **Failed Checks** section for what it means for analyses if these checks
+#' result in warnings. If the output is assigned, the specified `time` and
+#' `oxygen` columns are extracted and saved to a `list` object for use in later
+#' functions such as [`calc_rate()`] and [`auto_rate()`]. A plot is also
+#' produced.
 #'
 #' ## Plot
 #'
-#' A plot of the data is produced (unless `plot = FALSE`), of the data
-#' timeseries, plus a rolling regression plot. This plot shows the rate of
-#' change in oxygen across a rolling window specified using the `width` operator
-#' (default is `width = 0.1`, or 10% of the entire dataset). This plot provides
-#' a quick visual inspection of how the rate varies over the course of the
-#' experiment. Regions of stable and consistent rates can be identified on this
-#' plot as flat or level areas. This plot is for exploratory purposes only;
-#' later functions allow rate to be calculated over specific regions. Each rate
-#' value is plotted against the centre of the time window used to calculate it.
+#' If `plot = TRUE` (the default), a plot of the oxygen timeseries is produced
+#' in the upper panel. In addition, a rolling regression plot in the lower panel
+#' shows the rate of change in oxygen across a rolling window specified using
+#' the `width` operator (default is `width = 0.1`, or 10% of the entire
+#' dataset). This plot provides a quick visual inspection of how the rate varies
+#' over the course of the experiment. Regions of stable and consistent rates can
+#' be identified on this plot as flat or level areas. This plot is for
+#' exploratory purposes only; later functions allow rate to be calculated over
+#' specific regions. Each individual rate value is plotted against the centre of
+#' the time window used to calculate it.
 #'
 #' ***Note:*** Since `respR` is primarily used to examine oxygen consumption,
 #' the oxygen rate plot is by default plotted on a reverse y-axis. In `respR`
@@ -61,12 +65,13 @@
 #' ## Plot an additional data source
 #'
 #' Using the `add.data` input an additional data source, for example
-#' temperature, can be plotted alongside the oxygen timeseries. This input
-#' should be an integer indicating a column in the input `x` data frame sharing
-#' the same time data. None of the data checks are performed on this column; it
-#' is simply to give a basic visual aid in the plot to, for example, help decide
-#' if regions of the data should be used or not used because this parameter was
-#' variable. It is saved in the output as a vector under `$add.data`. It is
+#' temperature, can be plotted alongside the oxygen timeseries. This should be
+#' either a column number (e.g. `add.data = 3`) or name (e.g. `add.data =
+#' "Temperature"`) indicating a column in the input `x` data frame sharing the
+#' same time data. None of the data checks are performed on this column; it is
+#' simply to give a basic visual aid in the plot to, for example, help decide if
+#' regions of the data should be used or not used because this parameter was
+#' variable. Values are saved in the output as a vector under `$add.data`. It is
 #' plotted in blue on a separate y-axis on the main timeseries plot. It is *not*
 #' plotted if multiple oxygen columns are inspected. See examples.
 #'
@@ -164,19 +169,20 @@
 #'   potentially problematic data can be found in `$locs`.
 #'
 #' @param x data.frame. Any object of class `data.frame` (incl. `data.table`,
-#'   `tibble`, etc.).
-#' @param time integer. Defaults to 1. Specifies the column number of the Time
-#'   data.
-#' @param oxygen integer or vector of integers. Defaults to 2. Specifies the
-#'   column number(s) of the Oxygen data.
-#' @param width numeric, 0.01 to 1. Defaults to 0.1. Width used in the rolling
+#'   `tibble`, etc.). Should contain paired numeric values of time and oxygen.
+#' @param time integer or string. Defaults to `1`. Specifies the column of the
+#'   Time data as either a column number or the name.
+#' @param oxygen integer or string, or vector of either. Defaults to `2`.
+#'   Specifies the column(s) of the Oxygen data as either a vector of column
+#'   numbers or names.
+#' @param width numeric, 0.01 to 1. Defaults to `0.1`. Width used in the rolling
 #'   regression plot as proportion of total length of data.
 #' @param plot logical. Defaults to `TRUE`. Plots the data. If `time` and single
 #'   `oxygen` columns selected, plots timeseries data, plus plot of rolling
 #'   rate. If multiple `oxygen` columns, plots all timeseries data only.
-#' @param add.data integer. Defaults to `NULL`. Specifies the column number of
-#'   an optional additional data source that will be plotted in blue alongside
-#'   the full oxygen timeseries.
+#' @param add.data integer or string. Defaults to `NULL`. Specifies the column
+#'   number or name of an optional additional data source that will be plotted
+#'   in blue alongside the full oxygen timeseries.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
 #'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different `width`
 #'   can also be passed in `plot()` commands on output objects.
@@ -188,8 +194,9 @@
 #' ## By default, assumes time is col 1 and oxygen col2:
 #' inspect(sardine.rd)
 #'
-#' ## Instead, specify time and oxygen columns
+#' ## Instead, specify time and oxygen columns as either number or name
 #' inspect(sardine.rd, time = 1, oxygen = 2)
+#' inspect(urchins.rd, time = "time.min", oxygen = "a")
 #'
 #' ## Use add.data input to plot an additional data type
 #' ## (this column is not checked)
@@ -227,54 +234,71 @@ inspect <- function(x, time = NULL, oxygen = NULL,
   ## make sure df is df not dt
   df <- as.data.frame(x)
 
-  ## time: apply default and validate
+  # time column -------------------------------------------------------------
+
+  ## apply default
   if(is.null(time)) {
     message("inspect: Applying column default of 'time = 1'")
     time <- 1
   }
+  # if column name, get number
+  if(is.character(time)) time <- column.id(time, df, "inspect: ")
+  # validate
   column.val(time, req = TRUE, max = 1, min = 1,
              range = c(1,ncol(x)), conflicts = NULL,
              msg = "inspect: 'time' -")
 
-  ## oxygen: Apply default
+  # oxygen column -----------------------------------------------------------
+
+  ## Apply default
   if (is.null(oxygen)) {
     message("inspect: Applying column default of 'oxygen = 2'")
     oxygen <- 2
-    #message("inspect: Applying column default of all non-time column(s) as 'oxygen'")
-    #listcols <- seq.int(1, ncol(x))
-    #oxygen <- listcols[!listcols %in% time]
   }
+  # if column name, get number
+  if(is.character(oxygen)) oxygen <- column.id(oxygen, df, "inspect: ")
+  # validate
   column.val(oxygen, req = TRUE, min = 1, max = Inf,
              range = c(1,ncol(x)), conflicts = time,
              msg = "inspect: 'oxygen' -")
-
   ## Multiple column message/warning
   if (length(oxygen) > 1)
     message("inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.")
 
-  ## width: apply default and validate
+  # width -------------------------------------------------------------------
+
+  ## Apply default
   if(is.null(width)) {
-    width <- 0.1
     message("inspect: Applying default of 'width = 0.1'")
+    width <- 0.1
   }
+  # Validate
   input.val(width, num = TRUE, int = FALSE, req = TRUE,
             max = 1, min = 1, range = c(0.01,1),
             msg = "inspect: 'width' -")
 
-  # extract data
+  # Extract data ------------------------------------------------------------
+
   xval <- lapply(1:length(df[time]), function(z) df[time][[z]])
   yval <- lapply(1:length(df[oxygen]), function(z) df[oxygen][[z]])
+
   if(!is.null(add.data)) {
+    # if column name, get number
+    if(is.character(add.data)) add.data <- column.id(add.data, df, "inspect: ")
     input.val(add.data, num = TRUE, int = TRUE, req = FALSE,
               max = 1, min = 1, range = c(1, ncol(df)),
               msg = "inspect: 'add.data' -")
     add.data <- df[[add.data]]
   }
 
+  # Do checks ---------------------------------------------------------------
+
   x_results <- check_timeseries(xval, "time")
   y_results <- check_timeseries(yval, "oxygen")
 
-  # issue warnings
+  # Issue warnings ----------------------------------------------------------
+
+  # Time
   if (any(unlist(x_results[[1]][1,])))
     warning("inspect: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(x_results[[1]][2,]) == "TRUE"))
@@ -287,13 +311,16 @@ inspect <- function(x, time = NULL, oxygen = NULL,
     warning("inspect: Duplicate Time values found.", call. = F)
   if (any(unlist(x_results[[1]][6,]) == "TRUE"))
     warning("inspect: Time values are not evenly-spaced (numerically).", call. = F)
-
+  # Oxygen
   if (any(unlist(y_results[[1]][1,])))
     warning("inspect: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
   if (any(unlist(y_results[[1]][2,]) == "TRUE"))
     warning("inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
   if (any(unlist(y_results[[1]][3,]) == "TRUE"))
     warning("inspect: NA/NaN values detected in Oxygen column(s).", call. = F)
+
+
+  # Assemble output ---------------------------------------------------------
 
   # combine results
   checks <- cbind(x_results[[1]], y_results[[1]])
@@ -629,7 +656,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
     ## plot every column anyway - without rate plot
     if(!quiet)
       message("plot.inspect: Rolling Regression plot is only avalilable for a 2-column dataframe output.")
-    if(!quiet && !is.null(x$add.data))
+    if(!is.null(x$add.data))
       message("plot.inspect: Additional data source cannot be plotted for multiple columns.")
 
     par(mfrow = n2mfrow(length(dt) - 1),

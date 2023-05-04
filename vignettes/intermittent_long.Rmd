@@ -322,7 +322,7 @@ This allows you to document all analysis parameters and rate selection criteria 
 
 To extract a rate from every replicate and calculate a routine metabolic rate (RMR) from amongst the results we will use `calc_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an RMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
 
-`calc_rate.int` was introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06) and allows you to specify a replicate structure and run `calc_rate` on each replicate to extract a rate from the same time or row region in each. See `vignette("calc_rate.int")` for details of the functionality.
+`calc_rate.int` was introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06) and allows you to specify a replicate structure and run `calc_rate` on each replicate to extract a rate from the same time or row region in each. See `vignette("calc_rate.int")` for details of the functionality.
 
 The difference between this and the approach [below](#arint) using `auto_rate.int()` is that you specify a region over which to calculate a rate, and this will be the same in each replicate. This takes away some of the objectivity in determining rates that `auto_rate` allows for, but as long as selection criteria are reported and applied consistently is a perfectly valid way of processing intermittent-flow data. 
 
@@ -407,7 +407,7 @@ We can see the converted rates as the last column. The `$summary` table contains
 
 It will depend on the aims and circumstances of an experiment what rate results to extract, summarise, and report. For instance we might report RMR as a mean of a representative selection of rates after the specimens uptake rate has stabilised, or a mean of a number or percentile of lowest rates found. The important thing is to apply these selection criteria consistently and report them alongside results. 
 
-As of [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06) `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
+As of [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06) `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
 
 ```{r message = FALSE, results='hide'}
 plot(zeb_cr.int_conv, type = "rate")
@@ -435,7 +435,7 @@ That's it; this is our final routine metabolic rate (at least, as we have chosen
 
 To extract a rate from every replicate and determine a standard metabolic rate (SMR) from amongst the results we will use `auto_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an SMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
 
-Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and run `auto_rate()` on each replicate. This function extracts rates in a number of ways including the most linear or most consistently maintained rates, plus highest and lowest rates of a specified width. See `vignette("auto_rate")` for more details, and `vignette("auto_rate.int")` for an overview of this function.
+Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and run `auto_rate()` on each replicate. This function extracts rates in a number of ways including the most linear or most consistently maintained rates, plus highest and lowest rates of a specified width. See `vignette("auto_rate")` for more details, and `vignette("auto_rate.int")` for an overview of this function.
 
 The difference between this and the approach [above](#crint) using `calc_rate.int()` is that the specified `measure` phase is not the same as the region over which a rate is calculated. Instead a `measure` phase is specified and the `auto_rate` analysis is done *within* this region using the `method` and `width` inputs. This can result in rates of different widths coming from within this region depending on the inputs. 
 
