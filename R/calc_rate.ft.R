@@ -226,7 +226,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
   } else if(any(class(x) == "inspect.ft")){
     xtype <- "insp"
   } else if(any(class(x) == "inspect")){
-    stop("calc_rate.ft: function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
+    stop("calc_rate.ft: Function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
   } else {
     stop("calc_rate.ft: 'x' must be an `inspect.ft` object, a numeric value or vector, or 2-column data.frame. See Help.")
   }
@@ -234,11 +234,11 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
   # vector calculation ------------------------------------------------
   if(xtype == "vec") {
-    message("calc_rate.ft: calculating rate from delta oxygen value(s).")
+    message("calc_rate.ft: Calculating rate from delta oxygen value(s).")
 
     # other inputs should be NULL
     if(any(sapply(c(from, to, by, width), function(z) !is.null(z))))
-      message("calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+      message("calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
 
     # rate calc
     delta <- x
@@ -256,16 +256,16 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 
     # no need to plot
     if(plot) {
-      message("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+      message("calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
       plot <- FALSE
     }
 
     # dataframe calculation ------------------------------------------------
   } else if(xtype == "df") {
-    message("calc_rate.ft: calculating rate from outflow (col 1) and inflow (col 2) oxygen values.")
+    message("calc_rate.ft: Calculating rate from outflow (col 1) and inflow (col 2) oxygen values.")
 
     if(any(sapply(c(from, to, by, width), function(z) !is.null(z))))
-      message("calc_rate.ft: requires only 'x' and 'flowrate'. Additional inputs ignored.")
+      message("calc_rate.ft: Requires only 'x' and 'flowrate'. Additional inputs ignored.")
 
     delta <- x[[1]] - x[[2]]
 
@@ -282,14 +282,14 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
                           oxy = NA, endoxy = NA, delta_mean = delta)
 
     if(plot) {
-      message("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+      message("calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
       plot <- FALSE
     }
 
 
     # inspect.ft input --------------------------------------------------------
   } else if(xtype == "insp") {
-    message("calc_rate.ft: calculating rate from 'inspect.ft' object.")
+    message("calc_rate.ft: Calculating rate from 'inspect.ft' object.")
 
     data <- x$data
 
@@ -309,8 +309,8 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     # Validate 'by' -----------------------------------------------------------
     # Apply default
     if(is.null(by)) by <- "time"
-    # verify_by
-    by <- verify_by(by, which = c("t", "r"), msg = "calc_rate.ft:")
+    # by.val
+    by <- by.val(by, which = c("t", "r"), msg = "calc_rate.ft")
 
 
     # if 'from' and 'to' NULL assume all data ---------------------------------
@@ -350,22 +350,22 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     # from should not be higher than highest time
     # to (time) should not be lower than lowest time
     if(by == "time") if(any(sapply(from, function(z) z > t_range[2])))
-      stop("calc_rate.ft: some 'from' time values are higher than the values present in 'x'.")
+      stop("calc_rate.ft: Some 'from' time values are higher than the values present in 'x'.")
     if(by == "time") if(any(sapply(to, function(z) z < t_range[1])))
-      stop("calc_rate.ft: some 'to' time values are lower than the values present in 'x'.")
+      stop("calc_rate.ft: Some 'to' time values are lower than the values present in 'x'.")
     # from (row) should not be higher than last row
     if(by == "row") if(any(sapply(from, function(z) z > r_range[2])))
-      stop("calc_rate.ft: some 'from' row numbers are beyond the number of rows present in 'x'.")
+      stop("calc_rate.ft: Some 'from' row numbers are beyond the number of rows present in 'x'.")
 
     # if any are beyond start/end of data assume first/last value
     if(by == "time") if(any(sapply(from, function(z) z < t_range[1])))
-      message("calc_rate.ft: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
+      message("calc_rate.ft: Some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
     if(by == "row") if(any(sapply(from, function(z) z < r_range[1])))
-      message("calc_rate.ft: some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
+      message("calc_rate.ft: Some 'from' rows are lower than the values present in 'x'. The first row will be used instead.")
     if(by == "time") if(any(sapply(to, function(z) z > t_range[2])))
-      message("calc_rate.ft: some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
+      message("calc_rate.ft: Some 'to' time values are higher than the values present in 'x'. The highest time value will be used instead.")
     if(by == "row") if(any(sapply(to, function(z) z > r_range[2])))
-      message("calc_rate.ft: some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
+      message("calc_rate.ft: Some 'to' rows are higher than the values present in 'x'. The last row will be used instead.")
 
     # - numeric, within correct range of data (integer if by = row)
     # from
@@ -397,24 +397,24 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     ## all 'from' should be less than its paired 'to'
     if(any(mapply(function(p,q) p > q,
                   p = from,
-                  q = to))) stop("calc_rate.ft: some 'from' values are greater than the paired values in 'to'.")
+                  q = to))) stop("calc_rate.ft: Some 'from' values are greater than the paired values in 'to'.")
 
 
     # Rolling width -----------------------------------------------------------
     if(!is.null(width)){
       # width should only be used with by = "row"
       if(by == "time")
-        stop("calc_rate.ft: `width` can only be used with 'by = \"row\"'.")
+        stop("calc_rate.ft: 'width' can only be used with 'by = \"row\"'.")
 
       # width should be single numeric
       input.val(width, num = TRUE, int = TRUE, req = TRUE,
                 max = 1, min = 1, range = c(1, length(unlist(time))),
-                msg =  "calc_rate.ft: 'width'")
+                msg =  "calc_rate.ft: 'width' -")
 
       # if width is not null, by and from should be NULL
       if(!is.null(from) || !is.null(to))
-        message("calc_rate.ft: a rolling 'width' has been specified, therefore 'from' and 'to' inputs will be ignored.")
-      message(glue::glue("calc_rate.ft: rates determined using a rolling 'width' of {width} {by} values."))
+        message("calc_rate.ft: A rolling 'width' has been specified, therefore 'from' and 'to' inputs will be ignored.")
+      message(glue::glue("calc_rate.ft: Rates determined using a rolling 'width' of {width} {by} values."))
 
       # ## empty elements for output
       # - too much to save every subset in output for rolling width
@@ -425,7 +425,7 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
       names(new_dt) <- c("x", "y")
 
       ## determine window size from width
-      win <- calc_win(new_dt, width, by, "calc_rate.ft: ")
+      win <- calc_win(new_dt, width, by, "calc_rate.ft")
 
       summary <- rolling_reg_row(new_dt, width = win)
       # rename slope_b1 to slope, since it's not the rate
@@ -618,7 +618,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   on.exit(par(parorig)) # revert par settings to original
 
   if(x$input_type != "insp")
-    stop("calc_rate.ft: plot only available for 'inspect.ft' inputs.")
+    stop("calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
 
   # is it delta only rates?
   delta_only <-

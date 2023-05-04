@@ -330,9 +330,9 @@ calc_rate.int <- function(x,
 
   ## verify by input
   ## - this is also done in calc_rate but we want to disallow "oxygen"
-  by <- verify_by(by, req = TRUE, default = "row",
+  by <- by.val(by, req = TRUE, default = "row",
                   which = c("t", "r"),
-                  msg = "calc_rate.int:")
+                  msg = "calc_rate.int")
 
   # Format starts -----------------------------------------------------------
   if(length(starts) == 1 && by == "row") starts <- seq(1, nrow(df), starts)
@@ -375,7 +375,7 @@ calc_rate.int <- function(x,
   # Subset replicates -------------------------------------------------------
 
   # use starts and ends to subset each replicate into a list
-  reps <- mapply(function(p,q) subset_data(df, p, q, by = "row", quiet = TRUE),
+  reps <- mapply(function(p,q) truncate_data(df, p, q, by = "row"),
                  p = starts,
                  q = ends,
                  SIMPLIFY = FALSE)

@@ -31,7 +31,7 @@ Intermittent-flow respirometry allows multiple replicates to be conducted in an 
 Typically, probes are left recording during flushes, with the resulting trace showing the oxygen returning to ambient levels. 
 If the data is not split into the separate replicates this results in a dataset with oscillating levels of oxygen, and generally we want to extract a rate from each descending section. This can prove tricky especially when experiments are lengthy and have many replicates.
 
-[`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html) introduced new functions to analyse intermittent-flow data: 
+[`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html) introduced new functions to analyse intermittent-flow data: 
 
 - **`calc_rate.int()`** which runs `calc_rate()` on every replicate in an intermittent-flow dataset to extract a rate from the same time or row region of each
 
@@ -92,7 +92,7 @@ Now we can see rate is much more consistent, although it decreases slightly over
 
 ## `calc_rate.int` {#calc_rate.int}
 
-Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `calc_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and extract a rate from the same data region of each replicate. This can be the same rows of each replicate or the same time window.
+Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06), `calc_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and extract a rate from the same data region of each replicate. This can be the same rows of each replicate or the same time window.
 
 `calc_rate.int` uses the `starts` locations to subset each replicate from the data in `x`. The function assumes each replicate ends at the row preceding the start of the next. It then extracts a rate using the `wait` and `measure` inputs. The `by` input (`"row"` or `"time"`) determines how these other inputs are applied to the data. 
 
@@ -241,7 +241,7 @@ See also `vignette("select_rate")` for more advanced rate selection.
 
 ## `auto_rate.int`
 
-Also introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data which allows you to run the `auto_rate()` function on every replicate. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. This vignette - `vignette("auto_rate.int")` - covers the basic functionality. 
+Also introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data which allows you to run the `auto_rate()` function on every replicate. You can use it to extract from each replicate the most linear (i.e. most consistently sustained) rates, the lowest or highest rates of a specific duration, or any of the other methods supported by `auto_rate`. This vignette - `vignette("auto_rate.int")` - covers the basic functionality. 
 
 Here we'll repeat the above analysis, but this time use `auto_rate.int` to extract the most linear (i.e. most consistently maintained) rate from each replicate, which could be considered a routine metabolic rate (RMR). 
 

@@ -6,63 +6,169 @@
 
 capture.output({  ## stops printing outputs on assigning
 
-  test_that("convert_rate works with default values",
-            expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")$rate.output),
-                         36000))
+  test_that("convert_rate - works with default values", {
+    expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")$rate.output),
+                 36000)
+  })
+
+  test_that("convert_rate - accepts all allowed classes of 'x' input", {
+    # numeric
+    expect_error(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Numeric input detected. Converting all numeric rates.")
+
+    # calc_rate
+    cr_obj <- suppressWarnings(calc_rate(urchins.rd[,1:2], plot = F)) ## whole dataset
+    expect_error(suppressWarnings(convert_rate(cr_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(cr_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'calc_rate' detected. Converting all rates in '\\$rate'.")
+
+    # calc_rate.int
+    dt <- intermittent.rd |>
+      subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
+    dt.insp <- inspect(dt, plot = F)
+    sts <- c(1,2100,3899) # different from help file because first row removed above
+    cr.int_obj <- calc_rate.int(dt.insp,
+                                starts = sts,
+                                plot = F)
+    expect_error(suppressWarnings(convert_rate(cr.int_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(cr.int_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'calc_rate.int' detected. Converting all rates in '\\$rate'.")
+
+    # auto_rate
+    ar_obj <- suppressWarnings(calc_rate(urchins.rd[,1:2], plot = F)) ## whole dataset
+    expect_error(suppressWarnings(convert_rate(ar_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(ar_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'calc_rate' detected. Converting all rates in '\\$rate'.")
+
+    # auto_rate.int
+    ar.int_obj <- auto_rate.int(dt.insp,
+                                starts = sts,
+                                width = 100,
+                                measure = 600,
+                                plot = F)
+    expect_error(suppressWarnings(convert_rate(ar.int_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(ar.int_obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'auto_rate.int' detected. Converting all rates in '\\$rate'.")
+
+    # adjust_rate - with numeric input
+    adj_rt_num <- adjust_rate(-0.01, -0.001)
+    expect_error(suppressWarnings(convert_rate(adj_rt_num, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(adj_rt_num, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '\\$rate.adjusted'.")
+
+    # adjust_rate - with calc_rate input
+    adj_rt_cr <- adjust_rate(cr_obj, -0.005)
+    expect_error(suppressWarnings(convert_rate(adj_rt_cr, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(adj_rt_cr, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '\\$rate.adjusted'.")
+
+    # adjust_rate - with calc_rate.int input
+    adj_rt_cr.int <- adjust_rate(cr.int_obj, -0.0001)
+    expect_error(suppressWarnings(convert_rate(adj_rt_cr.int, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(adj_rt_cr.int, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '\\$rate.adjusted'.")
+
+    # adjust_rate - with auto_rate input
+    adj_rt_ar <- adjust_rate(ar_obj, -0.005)
+    expect_error(suppressWarnings(convert_rate(adj_rt_ar, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(adj_rt_ar, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '\\$rate.adjusted'.")
+
+    # adjust_rate - with auto_rate.int input
+    adj_rt_ar.int <- adjust_rate(ar.int_obj, -0.0001)
+    expect_error(suppressWarnings(convert_rate(adj_rt_ar.int, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(adj_rt_ar.int, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '\\$rate.adjusted'.")
+
+    # calc_rate.bg (incl with mass/area even tho wrong)
+    cr.bg.obj <- calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19)
+    expect_error(suppressWarnings(convert_rate(cr.bg.obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 NA)
+    expect_message(suppressWarnings(convert_rate(cr.bg.obj, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                   "convert_rate: Object of class 'calc_rate.bg' detected. Converting all background rates in '\\$rate.bg'.")
+    expect_warning(convert_rate(cr.bg.obj, volume = 1, time.unit = "s", oxy.unit = "mg/l", mass = 1),
+                   "convert_rate: A 'calc_rate.bg' \\(i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?")
+    expect_warning(convert_rate(cr.bg.obj, volume = 1, time.unit = "s", oxy.unit = "mg/l", area = 1),
+                   "convert_rate: A 'calc_rate.bg' \\(i.e. background) object is being converted, and a 'mass' or 'area' has been entered. Are you sure you want to do this?")
+
+    # calc_rate.ft - invalid input
+    insp.ft.obj.outO2.1col.inO2.1col<- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1,
+                                                                                    out.oxy = 2, in.oxy = 6, plot = F)))
+    crft.obj.1rate <- calc_rate.ft(insp.ft.obj.outO2.1col.inO2.1col,
+                                   from = 5, to = 900, by = "row",
+                                   flowrate = 2, plot = F)
+    expect_error(suppressWarnings(convert_rate(crft.obj.1rate, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 "convert_rate: Object of class 'calc_rate.ft' detected. \nPlease use 'convert_rate.ft' to convert the rate.")
+    # none of the above - invalid input
+    expect_error(suppressWarnings(convert_rate(urchins.rd, volume = 1, time.unit = "s", oxy.unit = "mg/l")),
+                 "convert_rate: 'x' is not an accepted input.")
+
+  })
 
   # use known warnings to do these checks
   # maybe make this more specific later
-  test_that("convert_rate falls back to default inputs properly", {
+  test_that("convert_rate - falls back to default inputs properly", {
     expect_warning(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l"),
-                   "convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h'")
+                   "convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h'")
     expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l")$output.unit),
-                 "mgO2/hour")
+                 "mgO2/hr")
 
     expect_warning(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l", mass = 1),
-                   "convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/kg'")
+                   "convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h/kg'")
     expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l", mass = 1)$output.unit),
-                 "mgO2/hour/kg")
+                 "mgO2/hr/kg")
 
     expect_warning(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l", area = 1),
-                   "convert_rate: the 'output.unit' is not provided. Applying default: 'mg/h/m2'")
+                   "convert_rate: The 'output.unit' is not provided. Applying default: 'mg/h/m2'")
     expect_equal(suppressWarnings(convert_rate(10, volume = 1,  time.unit = "s", oxy.unit = "mg/l", area = 1)$output.unit),
-                 "mgO2/hour/m2")
+                 "mgO2/hr/m2")
   })
 
   #
-  test_that("convert_rate (adjust_scale) produces valid output", {
+  test_that("convert_rate - (adjust_scale) produces valid output", {
     expect_is(adjust_scale(10, "mg", "kg"), "numeric")
     expect_is(adjust_scale(10, "ml", "l"), "numeric")
   })
 
   ##
-  test_that("convert_rate stops if 'oxy.unit' or 'time.unit' are NULL or numeric", {
+  test_that("convert_rate - stops if 'oxy.unit' or 'time.unit' are NULL or numeric", {
     expect_error(convert_rate(10, volume = 1, oxy.unit = "umol/l", time.unit = NULL),
-                 "convert_rate: the 'time.unit' of the original data is required.")
+                 "convert_rate: The 'time.unit' of the original data is required.")
     expect_error(convert_rate(10, volume = 1, oxy.unit = "umol/l", time.unit = 1.1),
-                 "convert_rate: the 'time.unit' of the original data is required.")
+                 "convert_rate: The 'time.unit' of the original data is required.")
 
     expect_error(convert_rate(10, volume = 1, oxy.unit = NULL, time.unit = "s"),
-                 "convert_rate: the 'oxy.unit' of the original data is required.")
+                 "convert_rate: The 'oxy.unit' of the original data is required.")
     expect_error(convert_rate(10, volume = 1, oxy.unit = 1.1, time.unit = "s"),
-                 "convert_rate: the 'oxy.unit' of the original data is required.")
+                 "convert_rate: The 'oxy.unit' of the original data is required.")
   })
 
-  test_that("convert_rate stops if 'volume' is NULL or NOT numeric", {
+  test_that("convert_rate - stops if 'volume' is NULL or NOT numeric", {
     expect_error(convert_rate(10, volume = NULL, oxy.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g"),
-                 "convert_rate: the 'volume' input is required.")
+                 "convert_rate: The 'volume' input is required.")
     expect_error(convert_rate(10, volume = "text", oxy.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g"),
-                 "convert_rate: the 'volume' input is required.")
+                 "convert_rate: The 'volume' input is required.")
   })
 
-  test_that("convert_rate stops if both 'mass' and 'area' inputs are entered", {
+  test_that("convert_rate - stops if both 'mass' and 'area' inputs are entered", {
     expect_error(convert_rate(10, volume = 1, oxy.unit = "umol/l", time.unit = "s", output.unit = "mg/h/g",
                               mass = 1,
                               area = 1),
-                 "convert_rate: cannot have inputs for both 'mass' and 'area'.")
+                 "convert_rate: Cannot have inputs for both 'mass' and 'area'.")
   })
 
-  test_that("convert_rate stops if 'output.unit' requires a 'mass' or 'area' input and neither is provided", {
+  test_that("convert_rate - stops if 'output.unit' requires a 'mass' or 'area' input and neither is provided", {
     expect_error(convert_rate(10, volume = 1, oxy.unit = "mg/l", time.unit = "s", output.unit = "mg/h/g",
                               mass = NULL, area = NULL),
                  "convert_rate: 'output.unit' requires a value for 'mass' or 'area'")
@@ -71,18 +177,20 @@ capture.output({  ## stops printing outputs on assigning
                  "convert_rate: 'output.unit' requires a value for 'mass' or 'area'")
   })
 
-  test_that("convert_rate stops if a 'mass' or 'area' input entered but output.unit is not mass- or area-specific", {
+  test_that("convert_rate - stops if a 'mass' or 'area' input entered but output.unit is not mass- or area-specific", {
     expect_error(convert_rate(10, volume = 1, oxy.unit = "mg/l", time.unit = "s", output.unit = "mg/h",
                               mass = 1, area = NULL),
-                 "convert_rate: a 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
+                 "convert_rate: A 'mass' has been entered, but a mass-specific unit has not been specified in 'output.unit'.")
     expect_error(convert_rate(10, volume = 1, oxy.unit = "mg/l", time.unit = "s", output.unit = "mg/h",
                               mass = NULL, area = 1),
-                 "convert_rate: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
+                 "convert_rate: An 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
   })
 
-  test_that("convert_rate S3 generics work as expected", {
+  test_that("convert_rate - S3 generics work as expected", {
     res_abs <- convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h",
                             volume = 0.0032245)
+    res_abs_mult <- convert_rate(c(-0.0001534657, -0.00015, -0.00016, -0.00017), oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h",
+                                 volume = 0.0032245)
     res_ms <- convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/g",
                            volume = 0.0032245, mass = 0.00534)
     res_as <- convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
@@ -93,8 +201,24 @@ capture.output({  ## stops printing outputs on assigning
     expect_output(summary(res_ms))
     expect_output(summary(res_as))
 
+    expect_error(summary(res_abs, pos = 2),
+                 "summary.convert_rate: Invalid 'pos' rank: only 1 rates found.")
+    expect_error(summary(res_abs, pos = 2:3),
+                 "summary.convert_rate: Invalid 'pos' rank: only 1 rates found.")
+    expect_output(summary(res_abs_mult))
+    expect_output(summary(res_abs_mult, pos = 2:3))
+    expect_output(summary(res_abs_mult, pos = 2:3),
+                  "Summary of converted rates from entered 'pos' rank\\(s)")
+
+    expect_is(summary(res_abs_mult, export = TRUE),
+              "data.table")
+
     ## print
     expect_output(print(res_abs))
+    expect_error(print(res_abs, pos = 2),
+                 "print.convert_rate: Invalid 'pos' rank: only 1 rates found.")
+    expect_error(print(res_abs, pos = 2:3),
+                 "print.convert_rate: 'pos' must be a single value. To examine multiple results use summary().")
     expect_output(print(res_ms))
     expect_output(print(res_as))
 
@@ -102,19 +226,19 @@ capture.output({  ## stops printing outputs on assigning
     ## absolute
     expect_output(suppressWarnings(mean(res_abs)))
     expect_message(mean(res_abs),
-                   "Only 1 rate found or selected. Returning mean rate anyway...")
+                   "mean.convert_rate: Only 1 rate found or selected. Returning mean rate anyway...")
     expect_equal(suppressWarnings(mean(res_abs, export = TRUE)),
                  mean(res_abs$rate.output))
     ## mass-spec
     expect_output(suppressWarnings(mean(res_ms)))
     expect_message(mean(res_ms),
-                   "Only 1 rate found or selected. Returning mean rate anyway...")
+                   "mean.convert_rate: Only 1 rate found or selected. Returning mean rate anyway...")
     expect_equal(suppressWarnings(mean(res_ms, export = TRUE)),
                  mean(res_ms$rate.output))
     ## area-spec
     expect_output(suppressWarnings(mean(res_as)))
     expect_message(mean(res_as),
-                   "Only 1 rate found or selected. Returning mean rate anyway...")
+                   "mean.convert_rate: Only 1 rate found or selected. Returning mean rate anyway...")
     expect_equal(suppressWarnings(mean(res_as, export = TRUE)),
                  mean(res_as$rate.output))
 
@@ -127,33 +251,39 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(mean(rate, export = TRUE),
                  mean(rate$rate.output))
 
+    # mean and pos
+    expect_output(mean(rate, pos = 1:3),
+                  "Mean of rate results from entered 'pos' ranks:")
+    expect_error(mean(rate, pos = 5:6),
+                 "mean.convert_rate: Invalid 'pos' rank: only 4 rates found.")
+
   })
 
-  test_that("convert_rate stops if units require t, S and P", {
+  test_that("convert_rate - stops if units require t, S and P", {
 
     expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
                               volume = 0.0032245,
                               area = 0.000001429),
-                 "Input or output units require Salinity input")
+                 "convert_rate: Input or output units require Salinity input")
 
     expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
                               volume = 0.0032245,
                               S = 35,
                               area = 0.000001429),
-                 "Input or output units require Temperature input")
+                 "convert_rate: Input or output units require Temperature input")
 
     expect_message(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
                                 volume = 0.0032245,
                                 S = 35, t = 31, P = NULL,
                                 area = 0.000001429),
-                   "Input or output units require Atmospheric Pressure input")
+                   "convert_rate: Input or output units require Atmospheric Pressure input")
 
   })
 
 
   ## Possibly update these in future with exact values we know are correct.
   ## For now, these just flag up if code changes cause output changes
-  test_that("convert_rate outputs correct conversion values - absolute rates", {
+  test_that("convert_rate - outputs correct conversion values - absolute rates", {
 
     res <- convert_rate(93.1, oxy.unit = "%Air", time.unit = "s", output.unit = "mg/h", volume = 1, S = 35, t = 25, P = 1.013253)
     expect_equal(res$rate.output, 22626.99, tolerance = 0.01) # exact value
@@ -161,7 +291,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(res$rate.input, 93.1)
     expect_equal(res$inputs$oxy.unit, "%Air")
     expect_equal(res$inputs$time.unit, "sec")
-    expect_equal(res$output.unit, "mgO2/hour")
+    expect_equal(res$output.unit, "mgO2/hr")
     expect_equal(res$summary$rate.input, 93.1)
     expect_equal(res$summary$rate.output, 22626.99, tolerance = 0.01)
     expect_equal(res$summary$rate.abs, 22626.99, tolerance = 0.01)
@@ -171,8 +301,8 @@ capture.output({  ## stops printing outputs on assigning
     ## inputs and outputs are saved in object correctly
     expect_equal(res$rate.input, 4303)
     expect_equal(res$inputs$oxy.unit, "ug/L")
-    expect_equal(res$inputs$time.unit, "hour")
-    expect_equal(res$output.unit, "mlO2/min")
+    expect_equal(res$inputs$time.unit, "hr")
+    expect_equal(res$output.unit, "mLO2/min")
     expect_equal(res$summary$rate.input, 4303)
     expect_equal(res$summary$rate.output, 0.05477929, tolerance = 0.00001)
     expect_equal(res$summary$rate.abs, 0.05477929, tolerance = 0.00001)
@@ -223,7 +353,7 @@ capture.output({  ## stops printing outputs on assigning
   })
 
 
-  test_that("convert_rate outputs correct conversion values - mass-specific rates", {
+  test_that("convert_rate - outputs correct conversion values - mass-specific rates", {
 
     res <- convert_rate(93.1, oxy.unit = "%Air", time.unit = "s", output.unit = "mg/h/g", volume = 1, S = 35, t = 25, P = 1.013253,
                         mass = 0.012)
@@ -232,7 +362,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(res$rate.input, 93.1)
     expect_equal(res$inputs$oxy.unit, "%Air")
     expect_equal(res$inputs$time.unit, "sec")
-    expect_equal(res$output.unit, "mgO2/hour/g")
+    expect_equal(res$output.unit, "mgO2/hr/g")
     expect_equal(res$summary$rate.input, 93.1)
     expect_equal(res$summary$rate.output, 1885.583, tolerance = 0.01)
     expect_equal(res$summary$rate.abs, 22626.99, tolerance = 0.01)
@@ -244,8 +374,8 @@ capture.output({  ## stops printing outputs on assigning
     ## inputs and outputs are saved in object correctly
     expect_equal(res$rate.input, 4303)
     expect_equal(res$inputs$oxy.unit, "ug/L")
-    expect_equal(res$inputs$time.unit, "hour")
-    expect_equal(res$output.unit, "mlO2/min/kg")
+    expect_equal(res$inputs$time.unit, "hr")
+    expect_equal(res$output.unit, "mLO2/min/kg")
     expect_equal(res$summary$rate.input, 4303)
     expect_equal(res$summary$rate.output, 4.564941, tolerance = 0.00001)
     expect_equal(res$summary$rate.abs, 0.05477929, tolerance = 0.00001)
@@ -333,7 +463,7 @@ capture.output({  ## stops printing outputs on assigning
   ## Kate Quigley data
   ## These values checked in Excel - first one is right
 
-  test_that("convert_rate outputs correct conversion values - area-specific rates", {
+  test_that("convert_rate - outputs correct conversion values - area-specific rates", {
 
     res <- convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
                         volume = 0.0032245,
@@ -345,7 +475,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(res$rate.input, -0.0001534657)
     expect_equal(res$inputs$oxy.unit, "mg/L")
     expect_equal(res$inputs$time.unit, "sec")
-    expect_equal(res$output.unit, "mgO2/hour/mm2")
+    expect_equal(res$output.unit, "mgO2/hr/mm2")
     expect_equal(res$summary$rate.input, -0.0001534657)
     expect_equal(res$summary$rate.output, -0.001246648)
     expect_equal(res$summary$rate.abs, -0.001781461)
@@ -359,8 +489,8 @@ capture.output({  ## stops printing outputs on assigning
     ## inputs and outputs are saved in object correctly
     expect_equal(res$rate.input, 4303)
     expect_equal(res$inputs$oxy.unit, "ug/L")
-    expect_equal(res$inputs$time.unit, "hour")
-    expect_equal(res$output.unit, "mlO2/min/m2")
+    expect_equal(res$inputs$time.unit, "hr")
+    expect_equal(res$output.unit, "mLO2/min/m2")
     expect_equal(res$summary$rate.input, 4303)
     expect_equal(res$summary$rate.output, 4.564941, tolerance = 0.00001)
     expect_equal(res$summary$rate.abs, 0.05477929, tolerance = 0.00001)
@@ -439,7 +569,7 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-  test_that("convert_rate: changing 'time' inputs changes rates by correct magnitude multiplier", {
+  test_that("convert_rate - changing 'time' inputs changes rates by correct magnitude multiplier", {
     # Outputs
     # s to m
     expect_equal(
@@ -481,7 +611,7 @@ capture.output({  ## stops printing outputs on assigning
                    volume = 1.2, mass = 0.5)$rate.output)
   })
 
-  test_that("convert_rate: different magnitudes of umol/mmol/mol changes rates by correct magnitude multiplier", {
+  test_that("convert_rate - different magnitudes of umol/mmol/mol changes rates by correct magnitude multiplier", {
 
     expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'mol/s/kg',
                               volume = 1.2, mass = 0.5)$rate.output,
@@ -525,7 +655,45 @@ capture.output({  ## stops printing outputs on assigning
                  rep(6.750253e-05, 5))
   })
 
-  test_that("convert_rate: plot is produced with converted auto_rate objects", {
+  test_that("convert_rate - ml & ul oxygen output unit correct values ", {
+    # should be ml times 1000
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ml/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output * 1000,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ul/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+  })
+
+  test_that("convert_rate - mg & ug oxygen output unit correct values ", {
+    # should be mg times 1000
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'mg/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output * 1000,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ug/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+  })
+
+  test_that("convert_rate - mm3 & cm3 (cc) oxygen output unit correct values ", {
+    # these are equivalent to ul and ml
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'cm3/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output * 1000,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'mm3/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'cm3/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ml/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'cc/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ml/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+    expect_equal(convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'mm3/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output,
+                 convert_rate(0.9, oxy.unit = 'mg/l', time.unit = 's', output.unit = 'ul/h/kg',
+                              volume = 1.2, mass = 0.5, S = 35, t = 12, P = 1)$rate.output)
+  })
+
+  # Plotting ----------------------------------------------------------------
+
+  test_that("convert_rate - plot is produced with converted auto_rate objects", {
 
     ar_mult <-
       suppressWarnings(
@@ -543,7 +711,10 @@ capture.output({  ## stops printing outputs on assigning
     expect_output(plot(ar_mult, pos = 1:2))
     expect_output(plot(ar_mult, pos = 1:2, type = "full"))
     expect_output(plot(ar_mult, pos = 1:2, type = "full", highlight = 2))
+    expect_output(plot(ar_mult, pos = 1:2, type = "overlap"))
     expect_output(plot(ar_mult, pos = 1:2, type = "overlap", highlight = 2))
+    expect_output(plot(ar_mult, pos = 1:2, type = "rate"))
+    expect_output(plot(ar_mult, pos = 1:2, type = "rate", highlight = 2))
     expect_output(plot(ar_mult, type = "overlap", highlight = 2))
 
     # adjusted
@@ -562,7 +733,7 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-  test_that("convert_rate: plot is produced with converted calc_rate objects", {
+  test_that("convert_rate - plot is produced with converted calc_rate objects", {
     cr <-
       suppressWarnings(
         urchins.rd %>%
@@ -575,7 +746,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_output(plot(cr))
   })
 
-  test_that("convert_rate: plot pos and highlight correct messages", {
+  test_that("convert_rate - plot pos and highlight correct messages", {
     cr <-
       suppressWarnings(
         urchins.rd %>%
@@ -593,9 +764,8 @@ capture.output({  ## stops printing outputs on assigning
                    "convert_rate: 'highlight' not within 'pos' input. Applying default of first 'pos' entry.")
   })
 
-  test_that("convert_rate: plot errors with various disallowed inputs", {
-    num <-
-      c(1,2,3) %>%
+  test_that("convert_rate - plot errors with various disallowed inputs", {
+    num <- c(1,2,3) %>%
       convert_rate(oxy.unit = "mg/l",
                    time.unit = "min",
                    output.unit = "mg/h",
@@ -603,31 +773,39 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(plot(num),
                  "plot.convert_rate: Plot is not available for 'convert_rate' objects containing rates converted from numeric values.")
 
-    crbg <-
-      suppressWarnings(
-        urchins.rd %>%
-          inspect(1,2, plot = FALSE) %>%
-          calc_rate.bg(plot = FALSE) %>%
-          convert_rate(oxy.unit = "mg/l",
-                       time.unit = "min",
-                       output.unit = "mg/h",
-                       volume = 1.09))
+    crbg <- suppressWarnings(urchins.rd %>%
+                               inspect(1,2, plot = FALSE) %>%
+                               calc_rate.bg(plot = FALSE) %>%
+                               convert_rate(oxy.unit = "mg/l",
+                                            time.unit = "min",
+                                            output.unit = "mg/h",
+                                            volume = 1.09))
     expect_error(plot(crbg),
                  "plot.convert_rate: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe.")
+
+    cr <- suppressWarnings(urchins.rd %>%
+                             inspect(1,2, plot = FALSE) %>%
+                             calc_rate(plot = FALSE) %>%
+                             convert_rate(oxy.unit = "mg/l",
+                                          time.unit = "min",
+                                          output.unit = "mg/h",
+                                          volume = 1.09))
+    expect_error(plot(cr, type = "text"),
+                 "plot.convert_rate: 'type' input not recognised.")
   })
 
-  test_that("overlap.p: errors with various disallowed inputs", {
+  test_that("overlap.p - errors with various disallowed inputs", {
     crbg <-
       calc_rate.bg(urchins.rd[,1:2]) %>%
       convert_rate(oxy.unit = "mg/l",
                    time.unit = "min",
                    output.unit = "mg/h",
                    volume = 1.09)
-    expect_error(respR:::overlap.p(crbg),
+    expect_error(overlap.p(crbg),
                  "overlap.p: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe.")
     crbg <-
       calc_rate.bg(urchins.rd[,1:2])
-    expect_error(respR:::overlap.p(crbg),
+    expect_error(overlap.p(crbg),
                  "overlap.p: 'x' should be an 'auto_rate' or 'convert_rate' object.")
     num <-
       c(1,2,3) %>%
@@ -635,11 +813,11 @@ capture.output({  ## stops printing outputs on assigning
                    time.unit = "min",
                    output.unit = "mg/h",
                    volume = 1.09)
-    expect_error(respR:::overlap.p(num),
+    expect_error(overlap.p(num),
                  "overlap.p: Plot is not available for 'convert_rate' objects containing rates converted from numeric values.")
   })
 
-  test_that("convert_rate: correct message when plot is called on objects with zero rates", {
+  test_that("convert_rate - correct message when plot is called on objects with zero rates", {
 
     # message with zero rates for both methods
     ar_mult_no_rts <-
@@ -657,7 +835,6 @@ capture.output({  ## stops printing outputs on assigning
                    "convert_rate: Nothing to plot! No rates found in object.")
     expect_message(plot(ar_mult_no_rts, type = "overlap"),
                    "convert_rate: Nothing to plot! No rates found in object.")
-
   })
 
 
@@ -687,4 +864,4 @@ capture.output({  ## stops printing outputs on assigning
   })
 
 
-}) ## turns printing back on
+}) ## end capture.output

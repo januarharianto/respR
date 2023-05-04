@@ -128,9 +128,9 @@ convert_val <- function(x, from = NULL, to = NULL) {
             msg = "convert_val: 'to'")
 
   ## check from unit type
-  fr_unit <- unit_type(from, msg = "convert_val: ")
+  fr_unit <- unit_type(from, msg = "convert_val")
   if(!(fr_unit %in% c("vol", "temperature", "mass", "area", "pressure")))
-    stop("convert_val: 'from' unit is not one of the accepted unit types.")
+    stop("convert_val: 'from' unit is not one of the accepted unit types.", call. = FALSE)
 
   ## apply defaults
   if(is.null(to)) {
@@ -141,35 +141,35 @@ convert_val <- function(x, from = NULL, to = NULL) {
     else if(fr_unit == "pressure") to <- "bar"
   }
   ## check to unit type
-  to_unit <- unit_type(to, msg = "convert_val: ")
+  to_unit <- unit_type(to, msg = "convert_val")
   if(!(to_unit %in% c("vol", "temperature", "mass", "area", "pressure")))
-    stop("convert_val: 'to' unit is not one of the accepted unit types.")
+    stop("convert_val: 'to' unit is not one of the accepted unit types.", call. = FALSE)
 
   ## warn if different
   if(fr_unit != to_unit)
-    stop("convert_val: 'from' and 'to' appear to be different unit types.")
+    stop("convert_val: 'from' and 'to' appear to be different unit types.", call. = FALSE)
 
   # Perform conversion ------------------------------------------------------
   if(to_unit == "vol"){
-    unit.fr <- verify_units(from, fr_unit)
-    unit.to <- verify_units(to, to_unit)
+    unit.fr <- units.val(from, fr_unit)
+    unit.to <- units.val(to, to_unit)
     out <- adjust_scale(x, unit.fr, unit.to)
   }
   if(to_unit == "mass"){
-    unit.fr <- verify_units(from, fr_unit)
-    unit.to <- verify_units(to, to_unit)
+    unit.fr <- units.val(from, fr_unit)
+    unit.to <- units.val(to, to_unit)
     out <- adjust_scale(x, unit.fr, unit.to)
   }
   if(to_unit == "area"){
-    unit.fr <- verify_units(from, fr_unit)
-    unit.to <- verify_units(to, to_unit)
+    unit.fr <- units.val(from, fr_unit)
+    unit.to <- units.val(to, to_unit)
     out <- adjust_scale_area(x, unit.fr, unit.to)
   }
   if(to_unit == "pressure"){
-    unit.fr <- verify_units(from, fr_unit)
-    unit.to <- verify_units(to, to_unit)
-    uns <- c("kpa.p", "hpa.p", "pa.p", "ubar.p", "mbar.p",
-             "bar.p", "atm.p", "torr.p")
+    unit.fr <- units.val(from, fr_unit)
+    unit.to <- units.val(to, to_unit)
+    uns <- c("kPa.p", "hPa.p", "Pa.p", "uBar.p", "mBar.p",
+             "Bar.p", "atm.p", "Torr.p")
     # from 1 bar
     multiplier <- c(100, 1000, 100000, 1000000, 1000,
                     1, 0.98692, 750.06)
@@ -178,24 +178,24 @@ convert_val <- function(x, from = NULL, to = NULL) {
     out <- x * (mult.to/mult.fr)
   }
   if(to_unit == "temperature"){
-    unit.fr <- verify_units(from, fr_unit)
-    unit.to <- verify_units(to, to_unit)
+    unit.fr <- units.val(from, fr_unit)
+    unit.to <- units.val(to, to_unit)
 
-    if(unit.fr == "c.temp"){
-      if(unit.to == "k.temp") out <- x + 273.15
-      else if(unit.to == "f.temp") out <- x * 9/5 + 32
+    if(unit.fr == "C.temp"){
+      if(unit.to == "K.temp") out <- x + 273.15
+      else if(unit.to == "F.temp") out <- x * 9/5 + 32
       else out <- x
     }
 
-    if(unit.fr == "k.temp"){
-      if(unit.to == "c.temp") out <- x - 273.15
-      else if(unit.to == "f.temp") out <- x * 9/5 - 459.67
+    if(unit.fr == "K.temp"){
+      if(unit.to == "C.temp") out <- x - 273.15
+      else if(unit.to == "F.temp") out <- x * 9/5 - 459.67
       else out <- x
     }
 
-    if(unit.fr == "f.temp"){
-      if(unit.to == "c.temp") out <- (x - 32) * 5/9
-      else if(unit.to == "k.temp") out <- (x + 459.67) * 5/9
+    if(unit.fr == "F.temp"){
+      if(unit.to == "C.temp") out <- (x - 32) * 5/9
+      else if(unit.to == "K.temp") out <- (x + 459.67) * 5/9
       else out <- x
     }
   }
@@ -212,62 +212,76 @@ convert_val <- function(x, from = NULL, to = NULL) {
 unit_type <- function(unit, msg = ""){
 
   all.units <- list(
-    time = c(
-      c('days', 'day', 'dy', 'dys', 'd',
-        'Days', 'Day', 'Dy', 'Dys', 'D'),
-      c('hours', 'hour', 'hr', 'hrs', 'h',
-        'Hours', 'Hour', 'Hr', 'Hrs', 'H'),
-      c('minutes', 'minute', 'min', 'mins', 'm',
-        'Minutes', 'Minute', 'Min', 'Mins', 'M'),
-      c('seconds', 'second', 'sec', 'secs', 's',
-        'Seconds', 'Second', 'Sec', 'Secs', 'S')),
-    vol = c(
-      c('ul.vol','ul','uL','microlitre','microliter',
-        'micro litre','micro liter'),
-      c('mL.vol','ml','mL','millilitre','milli litre','milliliter',
-        'milli liter'),
-      c('L.vol','l','L','liter','litre','Litre','Liter')),
-    mass = c(
-      c('ug.mass','ug','UG','ugram','microgram'),
-      c('mg.mass','mg','MG','mgram','milligram'),
-      c('g.mass','g','G','gram'),
-      c('kg.mass','kg','KG','kilogram','kgram')),
-    area = c(
-      c('mm2.area','mmsq','mm2','sqmm'),
-      c('cm2.area','cmsq','cm2','sqcm'),
-      c('m2.area','msq','m2','sqm'),
-      c('km2.area','kmsq','km2','sqkm')),
-    pressure = c(
-      c('kPa','kpa', 'KPA'),
-      c('hPa','hpa', 'HPA'),
-      c('Pa','pa', 'PA'),
-      c('ub', 'ubar', 'Ubar', 'UBAR', 'uBar', 'ubr', 'UBR'),
-      c('mb', 'mbar', 'Mbar', 'MBAR', 'mBar', 'mbr', 'MBR'),
-      c('b', 'bar', 'bar', 'BAR', 'Bar', 'br', 'BR'),
-      c('atm', 'Atm', 'ATM', 'Atmos', 'ATMOS'),
-      c('torr','TORR','Torr','Tor','tor'),
-      c('mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG'),
-      c('inHg','in Hg','inhg','in hg','INHG','IN HG')),
-    temperature = c(
-      c('C','c', 'dgrc', 'DGRC', 'dgr c', 'DGR C',
-        'degrees c', 'DEGREES C',
-        'celsius', 'Celsius', 'CELSIUS',
-        'centigrade', 'Centigrade'),
-      c('K','k', 'dgrk', 'DGRK', 'dgr k', 'DGR K',
-        'degrees k', 'DEGREES K',
-        'kelvin', 'Kelvin', 'KELVIN'),
-      c('F','f', 'dgrf', 'DGRF', 'dgr f', 'DGR F',
-        'degrees f', 'DEGREES F',
-        'fahrenheit', 'Fahrenheit', 'FAHRENHEIT'))
+    time = min.time.rgx,
+    time = sec.time.rgx,
+    time = hr.time.rgx,
+    time = day.time.rgx,
+    vol = L.vol.rgx,
+    vol = mL.vol.rgx,
+    vol = uL.vol.rgx,
+    mass = kg.mass.rgx,
+    mass = g.mass.rgx,
+    mass = mg.mass.rgx,
+    mass = ug.mass.rgx,
+    area = km2.area.rgx,
+    area = m2.area.rgx,
+    area = cm2.area.rgx,
+    area = mm2.area.rgx,
+    pressure = kPa.p.rgx,
+    pressure = hPa.p.rgx,
+    pressure = Pa.p.rgx,
+    pressure = uBar.p.rgx,
+    pressure = mBar.p.rgx,
+    pressure = Bar.p.rgx,
+    pressure = atm.p.rgx,
+    pressure = Torr.p.rgx,
+    pressure = mmHg.p.rgx,
+    pressure = inHg.p.rgx,
+    temperature = C.temp.rgx,
+    temperature = K.temp.rgx,
+    temperature = F.temp.rgx
   )
 
   #  look for match ---------------------------------------------------------
-  string <- paste0('^', unit, '$')  # for exact matching
-  chk <- lapply(all.units, function(y) grep(string, y))
-  chk <- sapply(chk, function(y) length(y) > 0)
+  string <- gsub(" ", "", stringr::str_squish(unit))
+  chk <- lapply(all.units, function(x) grepl(x, string))
+  chk <- sapply(chk, function(x) isTRUE(any(x)))
+
   result <- any(chk == T)  # did a match occur?
   if(!result)
-    stop(glue::glue("{msg}\"{unit}\" unit not recognised."))
+    stop(glue::glue("{msg}: '{unit}' unit not recognised."), call. = FALSE)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }
+
+#' Search for and classify oxygen units as used in concentration or rates
+#'
+#' @keywords internal
+unit_type_o1 <- function(unit, msg = ""){
+
+  all.units <- list(
+    o1 = mg.o2.rgx,
+    o1 = ug.o2.rgx,
+    o1 = mol.o2.rgx,
+    o1 = mmol.o2.rgx,
+    o1 = umol.o2.rgx,
+    o1 = nmol.o2.rgx,
+    o1 = pmol.o2.rgx,
+    o1 = mL.o2.rgx,
+    o1 = uL.o2.rgx,
+    o1 = cm3.o2.rgx,
+    o1 = mm3.o2.rgx
+    )
+
+  #  look for match ---------------------------------------------------------
+  string <- gsub(" ", "", stringr::str_squish(unit))
+  chk <- lapply(all.units, function(x) grepl(x, string))
+  chk <- sapply(chk, function(x) isTRUE(any(x)))
+
+  result <- any(chk == T)  # did a match occur?
+  if(!result)
+    stop(glue::glue("{msg}: '{unit}' unit not recognised as an oxygen unit that can be used for rates or concentrations.", call. = FALSE))
+  out <- names(chk)[which(chk)]  # print unit name
+  return(out)
+}
+

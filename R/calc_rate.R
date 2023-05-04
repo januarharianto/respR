@@ -146,16 +146,16 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   # Validate inputs
   ## verify by input
-  by <- verify_by(by, msg = "calc_rate:")
+  by <- by.val(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect")) df <- x$dataframe else
     df <- x
 
   # By now, df input must be a data frame object - but check
-  if(!is.data.frame(df)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.")
+  if(!is.data.frame(df)) stop("calc_rate: Input must be a 'data.frame' or 'inspect' object.", call. = FALSE)
   # In edge cases if a 1 row df is entered it gives an obscure message, so this is more clear
-  if(nrow(df) == 1)  stop("calc_rate: Input data contains only 1 row. Please check inputs.")
+  if(nrow(df) == 1)  stop("calc_rate: Input data contains only 1 row. Please check inputs.", call. = FALSE)
 
   # Format as data.table
   df <- data.table::data.table(df)
@@ -179,23 +179,23 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   # from/to checks  ---------------------------------------------------------
 
   # Ensure "from" and "to" are same length:
-  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.")
+  if (length(from) != length(to)) stop("calc_rate: 'from' and 'to' have unequal lengths.", call. = FALSE)
   # values of "from" and "to" can't be equal (for any metric):
   if(any(mapply(function(p,q) p == q,
                 p = from,
-                q = to))) stop("calc_rate: some 'from' values are equal to the paired values in 'to'.")
+                q = to))) stop("calc_rate: some 'from' values are equal to the paired values in 'to'.", call. = FALSE)
 
   if(by == "time"){
     ## all 'from' should be less than its paired 'to'
     if(any(mapply(function(p,q) p > q,
                   p = from,
-                  q = to))) stop("calc_rate: some 'from' time values are later than the paired values in 'to'.")
+                  q = to))) stop("calc_rate: some 'from' time values are later than the paired values in 'to'.", call. = FALSE)
 
     t_range <- range(df[[1]], na.rm = TRUE)
     if(any(sapply(from, function(z) z > t_range[2])))
-      stop("calc_rate: some 'from' time values are higher than the values present in 'x'.")
+      stop("calc_rate: some 'from' time values are higher than the values present in 'x'.", call. = FALSE)
     if(any(sapply(to, function(z) z < t_range[1])))
-      stop("calc_rate: some 'to' time values are lower than the values present in 'x'.")
+      stop("calc_rate: some 'to' time values are lower than the values present in 'x'.", call. = FALSE)
     if(any(sapply(from, function(z) z < t_range[1])))
       message("calc_rate: some 'from' time values are lower than the values present in 'x'. The lowest time value will be used instead.")
     if(any(sapply(to, function(z) z > t_range[2])))
@@ -205,11 +205,11 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   if(by == "row"){
     if(any(mapply(function(p,q) p > q,
                   p = from,
-                  q = to))) stop("calc_rate: some 'from' row numbers are higher than the paired values in 'to'.")
+                  q = to))) stop("calc_rate: some 'from' row numbers are higher than the paired values in 'to'.", call. = FALSE)
 
     r_range <- range(1:nrow(df))
     if(any(sapply(from, function(z) z > r_range[2])))
-      stop("calc_rate: some 'from' row numbers are beyond the number of rows present in 'x'.")
+      stop("calc_rate: some 'from' row numbers are beyond the number of rows present in 'x'.", call. = FALSE)
     if(any(sapply(to, function(z) z > r_range[2])))
       message("calc_rate: some 'to' row numbers are higher than the number of rows present in 'x'. The final row number will be used instead.")
   }
@@ -220,10 +220,10 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
     ## can't have 'from' and 'to' both below or both above oxygen range
     if(any(mapply(function(p,q) p < o_range[1] && q < o_range[1],
                   p = from,
-                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both below the range of oxygen data in 'x'.")
+                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both below the range of oxygen data in 'x'.", call. = FALSE)
     if(any(mapply(function(p,q) p > o_range[2] && q > o_range[2],
                   p = from,
-                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both above the range of oxygen data in 'x'.")
+                  q = to))) stop("calc_rate: some paired 'from' and 'to' values are both above the range of oxygen data in 'x'.", call. = FALSE)
 
     ## if any 'from' or 'to' are above or below oxygen range
     if(any(sapply(from, function(z) z > o_range[2]))) {
@@ -293,9 +293,9 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 print.calc_rate <- function(x, pos = 1, ...) {
   cat("\n# print.calc_rate # ---------------------")
   if(length(pos) > 1)
-    stop("print.calc_rate: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.calc_rate: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate))
-    stop("print.calc_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("print.calc_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
   cat("\nRank", pos, "of", length(x$rate), "rates:")
   cat("\nRate:", x$rate[pos], "\n")
   cat("\n")
@@ -318,7 +318,7 @@ print.calc_rate <- function(x, pos = 1, ...) {
 summary.calc_rate <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.calc_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("summary.calc_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.", call. = FALSE)
 
   cat("\n# summary.calc_rate # -------------------\n")
   if(is.null(pos)) {
@@ -361,9 +361,9 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
 
   if(is.null(pos)) pos <- 1
   if(length(pos) > 1)
-    stop("plot.calc_rate: 'pos' should be a single value.")
+    stop("plot.calc_rate: 'pos' should be a single value.", call. = FALSE)
   if(pos > nres || pos < 1)
-    stop("plot.calc_rate: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.calc_rate: Invalid 'pos' rank: only ", nres, " rates found.", call. = FALSE)
 
   # set plot layout based on 'panel'
   if(is.null(panel)) {
@@ -373,7 +373,7 @@ plot.calc_rate <- function(x, pos = 1, quiet = FALSE, panel = NULL,
     mfrow = c(1,1)
   }
   if(any(panel > 4))
-    stop("plot.calc_rate: 'panel' input should be 1 to 4 or 'NULL' for all.")
+    stop("plot.calc_rate: 'panel' input should be 1 to 4 or 'NULL' for all.", call. = FALSE)
 
   if(!quiet) {
     cat("\n# plot.calc_rate # ----------------------\n")
@@ -432,7 +432,7 @@ mean.calc_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.calc_rate # ----------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
-    stop("mean.calc_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("mean.calc_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate)
     cat("Mean of all rate results:")

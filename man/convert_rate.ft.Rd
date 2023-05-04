@@ -110,11 +110,11 @@ the volume component does \emph{NOT} represent the volume of the respirometer, a
 the time component does \emph{NOT} represent the units or recording interval of
 the original raw data.
 
-The function uses an internal database and a fuzzy string matching algorithm
-to accept various unit formatting styles. For example, \code{"mg/l"}, \code{"mg/L"},
-\code{"mgL-1"}, \code{"mg l-1"}, \code{"mg.l-1"} are all parsed the same. See
-\code{\link[=unit_args]{unit_args()}} for details of accepted units and their formatting. See also
-\code{\link[=convert_val]{convert_val()}} for simple conversion between non-oxygen units.
+The function uses a fuzzy string matching algorithm to accept various unit
+formatting styles. For example, \code{"mg/l"}, \code{"mg/L"}, \code{"mgL-1"}, \code{"mg l-1"},
+\code{"mg.l-1"} are all parsed the same. See \code{\link[=unit_args]{unit_args()}} for details of
+accepted units and their formatting. See also \code{\link[=convert_val]{convert_val()}} for simple
+conversion between non-oxygen units.
 }
 
 \subsection{Plot}{

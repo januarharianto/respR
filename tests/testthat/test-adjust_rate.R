@@ -4,14 +4,10 @@
 
 capture.output({  ## stops printing outputs on assigning
 
-  # test_that("adjust_rate: All tests pass",
-  #   {
-
   test_that("adjust_rate stops with wrong method", {
     expect_error(adjust_rate(100, 10, method = "text"),
                  regexp = "adjust_rate: 'method' input not recognised")
   })
-
 
   # make objects for running tests ------------------------------------------
 
@@ -146,7 +142,6 @@ capture.output({  ## stops printing outputs on assigning
     ar_obj_pos <- auto_rate(
       data.frame(urchins.rd[[1]], rev(urchins.rd[[2]])), plot = FALSE)
     ar_obj_mixed_sign <- auto_rate(intermittent.rd, plot = FALSE)
-
 
     ## auto_rate objects of different methods with lots of rates
     ar_obj_highest <- auto_rate(urchins.rd[,1:2], method = "highest", plot = F)
@@ -1476,8 +1471,8 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("adjust_rate: method = 'linear' - accepts calc_rate objects as 'by'", {
     expect_error(suppressWarnings(adjust_rate(x = -0.03, time_x = 20, method = "linear", by = cr_obj_single, time_by = NULL,
-                by2 = -0.003, time_by2 = 40)),
-                NA)
+                                              by2 = -0.003, time_by2 = 40)),
+                 NA)
   })
 
   test_that("adjust_rate: method = 'linear' - correct message", {
@@ -1754,139 +1749,8 @@ capture.output({  ## stops printing outputs on assigning
                    NA)
   })
 
-  ## These tests basically run EVERY combination of EVERY acceptable input for 'x', 'by' and 'by2'
-  ## and check they output the correct adjusted rate
 
-  ## names of inputs - for creating assertion and therefore reporting which combinations fail
-  x_in <- c("c(-0.030)", "c(0.030)", "c(0)",
-            "c(-0.030, -0.029, -0.028, -0.027, -0.026)", "c(0.030, 0.029, 0.028, 0.027, 0.026)",
-            "c(-0.030, -0.029, 0.028, 0.027, 0.026)",
-            "cr_obj_single", "cr_obj_three", "cr_obj_eight", "cr_obj_pos", "cr_obj_mixed_sign",
-            "ar_obj", "ar_obj_single", "ar_obj_pos", "ar_obj_mixed_sign",
-            "ar_obj_highest", "ar_obj_lowest", "ar_obj_interval")
-
-  by_in <- c("c(-0.001)", "c(0.001)", "c(-0.003)", "c(0.003)",
-             "bgdf_pre_2col", "bgdf_pre_3col",
-             "insp_pre_2col", "insp_pre_3col",
-             "crbg_pre_2col", "crbg_pre_3col")
-
-  by2_in <- c("c(-0.001)", "c(0.001)", "c(-0.003)", "c(0.003)",
-              "bgdf_post_2col", "bgdf_post_3col",
-              "insp_post_2col", "insp_post_3col",
-              "crbg_post_2col", "crbg_post_3col")
-
-  ## matrix of all combinations of above
-  name_mat <- expand.grid(x_in,
-                          by_in,
-                          by2_in, stringsAsFactors = FALSE)
-
-  ## list of lists of ALL POSSIBLE inputs
-  all_objs <- list(x_in = list(c(-0.030), c(0.030), c(0),
-                               c(-0.030, -0.029, -0.028, -0.027, -0.026), c(0.030, 0.029, 0.028, 0.027, 0.026),
-                               c(-0.030, -0.029, 0.028, 0.027, 0.026),
-                               cr_obj_single, cr_obj_three, cr_obj_eight, cr_obj_pos, cr_obj_mixed_sign,
-                               ar_obj, ar_obj_single, ar_obj_pos, ar_obj_mixed_sign,
-                               ar_obj_highest, ar_obj_lowest, ar_obj_interval),
-                   time_x_in = list(c(20), c(20), c(20), # time inputs need to be paired with above appropriately
-                                    c(20,25,30,35,40), c(20,25,30,35,40),
-                                    c(20,25,30,35,40),
-                                    NULL, NULL, NULL, NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
-                                    NULL, NULL, NULL),
-                   by_in = list(c(-0.001), c(0.001), c(-0.003), c(0.003),
-                                bgdf_pre_2col, bgdf_pre_3col,
-                                insp_pre_2col, insp_pre_3col,
-                                crbg_pre_2col, crbg_pre_3col),
-                   time_by_in = list(c(5), c(5), c(0), c(1),
-                                     NULL, NULL,
-                                     NULL, NULL,
-                                     NULL, NULL),
-                   by2_in = list(c(-0.001), c(0.001), c(-0.003), c(0.003),
-                                 bgdf_post_2col, bgdf_post_3col,
-                                 insp_post_2col, insp_post_3col,
-                                 crbg_post_2col, crbg_post_3col),
-                   time_by2_in = list(c(40), c(40), c(45), c(40),
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      NULL, NULL))
-
-  ## numeric matrix of inputs for choosing inputs on each loop
-  num_mat <- expand.grid(1:length(x_in),
-                         1:length(by_in),
-                         1:length(by2_in))
-  ## column of row/iteration numbers - used to build assertion
-  num_mat[[4]] <- 1:nrow(num_mat)
-
-
-  ## test every combination
-  apply(num_mat, 1, function(z) {
-
-    method <- "linear"
-
-    ## select x, by, by2 inputs
-    x <- all_objs$x_in[[z[[1]]]]
-    by <- all_objs$by_in[[z[[2]]]]
-    by2 <- all_objs$by2_in[[z[[3]]]]
-
-    ## associated timestamps
-    time_x <- all_objs$time_x_in[[z[[1]]]]
-    time_by <- all_objs$time_by_in[[z[[2]]]]
-    time_by2 <- all_objs$time_by2_in[[z[[3]]]]
-
-    ## Calculate what the adjusted rates SHOULD be.
-    ## We calculate these the same way, but outside the adjust_rate function
-    ## as much as possible.
-
-    # x rate should be this
-    # extract based on input type
-    if(is.numeric(x)) o_x <- x else
-      o_x <- x$rate
-    if(is.numeric(time_x)) o_time_x <- time_x else
-      o_time_x <- (x$summary$endtime + x$summary$time)/2 ## CHANGE
-
-    # adjustment should be this
-    # extract rate and timestamp based on input type
-    if(is.numeric(by)) {
-      o_by <- by
-      o_time_by <- time_by
-    } else if(is.data.frame(by)) {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
-      o_time_by <- sum(range(by[[1]]))/2
-    } else {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
-      o_time_by <- sum(range(by$dataframe[[1]]))/2
-    }
-    if(is.numeric(by2)) {
-      o_by2 <- by2
-      o_time_by2 <- time_by2
-    } else if(is.data.frame(by2)) {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2[[1]]))/2
-    } else {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
-    }
-
-    ## calc adjustment
-    lm <- lm(c(o_by, o_by2) ~ c(o_time_by, o_time_by2)) # adjustment model
-    o_adj <- as.numeric(o_time_x * lm$coef[2] + lm$coef[1]) # actual adjustment value for each x rate timestamp
-
-    ## build assertion so we know which test fails
-    assertion <- glue::glue("adjust_rate: method = 'linear' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
-
-    skip("skip - until I figure out how to skip these on R CMD CHECK")
-    test_that(assertion,{
-      skip_on_cran()
-      expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                by = by, time_by = time_by,
-                                                by2 = by2, time_by2 = time_by2))$rate.adjusted,
-                   o_x - o_adj)
-    })
-
-  })
-
-  ## Just to absolutely double check - these are tests of exact values we KNOW are correct
-
+  ## These are tests of exact values we KNOW are correct - see various tests file for originals
   test_that("adjust_rate: method = 'linear' - outputs KNOWN correct results.", {
     ## all negative
     method <- "linear"
@@ -2318,292 +2182,6 @@ capture.output({  ## stops printing outputs on assigning
                  "adjust_rate: method = \"exponential\" cannot be used when a 'by' or 'by2' background rate is zero.")
   })
 
-  ## These tests basically run EVERY combination of EVERY acceptable input for 'x', 'by' and 'by2'
-  ## and check they output the correct adjusted rate
-
-  ## for exponential - can't mix signs of by and by2 so we run it twice = all neg, all pos
-
-  #  Negative bg rates ------------------------------------------------------
-
-  ## names of inputs - for creating assertion and therefore reporting which combinations fail
-  x_in <- c("c(-0.030)", "c(0.030)", "c(0)",
-            "c(-0.030, -0.029, -0.028, -0.027, -0.026)", "c(0.030, 0.029, 0.028, 0.027, 0.026)",
-            "c(-0.030, -0.029, 0.028, 0.027, 0.026)",
-            "cr_obj_single", "cr_obj_three", "cr_obj_eight", "cr_obj_pos", "cr_obj_mixed_sign",
-            "ar_obj", "ar_obj_single", "ar_obj_pos", "ar_obj_mixed_sign",
-            "ar_obj_highest", "ar_obj_lowest", "ar_obj_interval")
-
-  by_in <- c("c(-0.001)", "c(-0.001)", "c(-0.003)", "c(-0.003)",
-             "bgdf_pre_2col", "bgdf_pre_3col",
-             "insp_pre_2col", "insp_pre_3col",
-             "crbg_pre_2col", "crbg_pre_3col")
-
-  by2_in <- c("c(-0.001)", "c(-0.001)", "c(-0.003)", "c(-0.003)",
-              "bgdf_post_2col", "bgdf_post_3col",
-              "insp_post_2col", "insp_post_3col",
-              "crbg_post_2col", "crbg_post_3col")
-
-  ## matrix of all combinations of above
-  name_mat <- expand.grid(x_in,
-                          by_in,
-                          by2_in, stringsAsFactors = FALSE)
-
-  ## list of lists of ALL POSSIBLE inputs
-  all_objs <- list(x_in = list(c(-0.030), c(0.030), c(0),
-                               c(-0.030, -0.029, -0.028, -0.027, -0.026), c(0.030, 0.029, 0.028, 0.027, 0.026),
-                               c(-0.030, -0.029, 0.028, 0.027, 0.026),
-                               cr_obj_single, cr_obj_three, cr_obj_eight, cr_obj_pos, cr_obj_mixed_sign,
-                               ar_obj, ar_obj_single, ar_obj_pos, ar_obj_mixed_sign,
-                               ar_obj_highest, ar_obj_lowest, ar_obj_interval),
-                   time_x_in = list(c(20), c(20), c(20), # time inputs need to be paired with above appropriately
-                                    c(20,25,30,35,40), c(20,25,30,35,40),
-                                    c(20,25,30,35,40),
-                                    NULL, NULL, NULL, NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
-                                    NULL, NULL, NULL),
-                   by_in = list(c(-0.001), c(-0.001), c(-0.003), c(-0.003),
-                                bgdf_pre_2col, bgdf_pre_3col,
-                                insp_pre_2col, insp_pre_3col,
-                                crbg_pre_2col, crbg_pre_3col),
-                   time_by_in = list(c(5), c(5), c(0), c(1),
-                                     NULL, NULL,
-                                     NULL, NULL,
-                                     NULL, NULL),
-                   by2_in = list(c(-0.001), c(-0.001), c(-0.003), c(-0.003),
-                                 bgdf_post_2col, bgdf_post_3col,
-                                 insp_post_2col, insp_post_3col,
-                                 crbg_post_2col, crbg_post_3col),
-                   time_by2_in = list(c(40), c(40), c(45), c(40),
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      NULL, NULL))
-
-  ## numeric matrix of inputs for choosing inputs on each loop
-  num_mat <- expand.grid(1:length(x_in),
-                         1:length(by_in),
-                         1:length(by2_in))
-  ## column of row/iteration numbers - used to build assertion
-  num_mat[[4]] <- 1:nrow(num_mat)
-
-  # z<-num_mat[1,]
-  ## test every combination
-  apply(num_mat, 1, function(z) {
-
-    method <- "exponential"
-
-    ## select x, by, by2 inputs
-    x <- all_objs$x_in[[z[[1]]]]
-    by <- all_objs$by_in[[z[[2]]]]
-    by2 <- all_objs$by2_in[[z[[3]]]]
-
-    ## associated timestamps
-    time_x <- all_objs$time_x_in[[z[[1]]]]
-    time_by <- all_objs$time_by_in[[z[[2]]]]
-    time_by2 <- all_objs$time_by2_in[[z[[3]]]]
-
-    ## Calculate what the adjusted rates SHOULD be.
-    ## We calculate these the same way, but outside the adjust_rate function
-    ## as much as possible.
-
-    # x rate should be this
-    # extract based on input type
-    if(is.numeric(x)) o_x <- x else
-      o_x <- x$rate
-    if(is.numeric(time_x)) o_time_x <- time_x else
-      o_time_x <- (x$summary$endtime + x$summary$time)/2 ## CHANGE
-
-    # adjustment should be this
-    # extract rate and timestamp based on input type
-    if(is.numeric(by)) {
-      o_by <- by
-      o_time_by <- time_by
-    } else if(is.data.frame(by)) {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
-      o_time_by <- sum(range(by[[1]]))/2
-    } else {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
-      o_time_by <- sum(range(by$dataframe[[1]]))/2
-    }
-    if(is.numeric(by2)) {
-      o_by2 <- by2
-      o_time_by2 <- time_by2
-    } else if(is.data.frame(by2)) {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2[[1]]))/2
-    } else {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
-    }
-
-    ## convert to positive (ONLY FOR NEGATIVE BG RATES)
-    ## can't fit exponential to negatives
-    o_by <- o_by * -1
-    o_by2 <- o_by2 * -1
-
-    ## calc adjustment - EXPONENTIAL
-    expm <- lm(log(c(o_by, o_by2)) ~ c(o_time_by, o_time_by2)) # adjustment model
-
-    ## extract slope and intercept
-    ## needs to convert back from log
-    expm_int <- exp(coef(expm)[1])
-    expm_slp <- exp(coef(expm)[2])
-
-    o_adj <- as.numeric(unname(expm_int * expm_slp ^ o_time_x))
-
-    ## convert back to negative (ONLY FOR NEGATIVE BG RATES)
-    o_adj <- o_adj * -1
-
-    ## build assertion so we know which test fails
-    assertion <- glue::glue("adjust_rate: method = 'exponential' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
-
-    skip("skip - until I figure out how to skip these on R CMD CHECK")
-    test_that(assertion, {
-      skip_on_cran()
-      expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                by = by, time_by = time_by,
-                                                by2 = by2, time_by2 = time_by2))$rate.adjusted,
-                   o_x - o_adj)
-    })
-
-  })
-
-
-
-
-  #  Positive bg rates ------------------------------------------------------
-
-  ## names of inputs - for creating assertion and therefore reporting which combinations fail
-  x_in <- c("c(-0.030)", "c(0.030)", "c(0)",
-            "c(-0.030, -0.029, -0.028, -0.027, -0.026)", "c(0.030, 0.029, 0.028, 0.027, 0.026)",
-            "c(-0.030, -0.029, 0.028, 0.027, 0.026)",
-            "cr_obj_single", "cr_obj_three", "cr_obj_eight", "cr_obj_pos", "cr_obj_mixed_sign",
-            "ar_obj", "ar_obj_single", "ar_obj_pos", "ar_obj_mixed_sign")
-
-  by_in <- c("c(0.001)", "c(0.001)", "c(0.003)", "c(0.003)",
-             "bgdf_pre_2col_pos", "bgdf_pre_3col_pos",
-             "insp_pre_2col_pos", "insp_pre_3col_pos",
-             "crbg_pre_2col_pos", "crbg_pre_3col_pos")
-
-  by2_in <- c("c(0.001)", "c(0.001)", "c(0.003)", "c(0.003)",
-              "bgdf_post_2col_pos", "bgdf_post_3col_pos",
-              "insp_post_2col_pos", "insp_post_3col_pos",
-              "crbg_post_2col_pos", "crbg_post_3col_pos")
-
-  ## matrix of all combinations of above
-  name_mat <- expand.grid(x_in,
-                          by_in,
-                          by2_in, stringsAsFactors = FALSE)
-
-  ## list of lists of ALL POSSIBLE inputs
-  all_objs <- list(x_in = list(c(-0.030), c(0.030), c(0),
-                               c(-0.030, -0.029, -0.028, -0.027, -0.026), c(0.030, 0.029, 0.028, 0.027, 0.026),
-                               c(-0.030, -0.029, 0.028, 0.027, 0.026),
-                               cr_obj_single, cr_obj_three, cr_obj_eight, cr_obj_pos, cr_obj_mixed_sign,
-                               ar_obj, ar_obj_single, ar_obj_pos, ar_obj_mixed_sign),
-                   time_x_in = list(c(20), c(20), c(20), # time inputs need to be paired with above appropriately
-                                    c(20,25,30,35,40), c(20,25,30,35,40),
-                                    c(20,25,30,35,40),
-                                    NULL, NULL, NULL, NULL, NULL,
-                                    NULL, NULL, NULL, NULL),
-                   by_in = list(c(0.001), c(0.001), c(0.003), c(0.003),
-                                bgdf_pre_2col_pos, bgdf_pre_3col_pos,
-                                insp_pre_2col_pos, insp_pre_3col_pos,
-                                crbg_pre_2col_pos, crbg_pre_3col_pos),
-                   time_by_in = list(c(5), c(5), c(0), c(1),
-                                     NULL, NULL,
-                                     NULL, NULL,
-                                     NULL, NULL),
-                   by2_in = list(c(0.001), c(0.001), c(0.003), c(0.003),
-                                 bgdf_post_2col_pos, bgdf_post_3col_pos,
-                                 insp_post_2col_pos, insp_post_3col_pos,
-                                 crbg_post_2col_pos, crbg_post_3col_pos),
-                   time_by2_in = list(c(40), c(40), c(45), c(40),
-                                      NULL, NULL,
-                                      NULL, NULL,
-                                      NULL, NULL))
-
-  ## numeric matrix of inputs for choosing inputs on each loop
-  num_mat <- expand.grid(1:length(x_in),
-                         1:length(by_in),
-                         1:length(by2_in))
-  ## column of row/iteration numbers - used to build assertion
-  num_mat[[4]] <- 1:nrow(num_mat)
-
-  # z<-num_mat[1,]
-  ## test every combination
-  apply(num_mat, 1, function(z) {
-
-    method <- "exponential"
-
-    ## select x, by, by2 inputs
-    x <- all_objs$x_in[[z[[1]]]]
-    by <- all_objs$by_in[[z[[2]]]]
-    by2 <- all_objs$by2_in[[z[[3]]]]
-
-    ## associated timestamps
-    time_x <- all_objs$time_x_in[[z[[1]]]]
-    time_by <- all_objs$time_by_in[[z[[2]]]]
-    time_by2 <- all_objs$time_by2_in[[z[[3]]]]
-
-    ## Calculate what the adjusted rates SHOULD be.
-    ## We calculate these the same way, but outside the adjust_rate function
-    ## as much as possible.
-
-    # x rate should be this
-    # extract based on input type
-    if(is.numeric(x)) o_x <- x else
-      o_x <- x$rate
-    if(is.numeric(time_x)) o_time_x <- time_x else
-      o_time_x <- (x$summary$endtime + x$summary$time)/2 ## CHANGE
-
-    # adjustment should be this
-    # extract rate and timestamp based on input type
-    if(is.numeric(by)) {
-      o_by <- by
-      o_time_by <- time_by
-    } else if(is.data.frame(by)) {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by), plot = F))$rate.bg)
-      o_time_by <- sum(range(by[[1]]))/2
-    } else {
-      o_by <- mean(suppressMessages(calc_rate.bg(as.data.frame(by$dataframe), plot = F))$rate.bg)
-      o_time_by <- sum(range(by$dataframe[[1]]))/2
-    }
-    if(is.numeric(by2)) {
-      o_by2 <- by2
-      o_time_by2 <- time_by2
-    } else if(is.data.frame(by2)) {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2[[1]]))/2
-    } else {
-      o_by2 <- mean(suppressMessages(calc_rate.bg(as.data.frame(by2$dataframe), plot = F))$rate.bg)
-      o_time_by2 <- sum(range(by2$dataframe[[1]]))/2
-    }
-
-
-    ## calc adjustment - EXPONENTIAL
-    expm <- lm(log(c(o_by, o_by2)) ~ c(o_time_by, o_time_by2)) # adjustment model
-
-    ## extract slope and intercept
-    ## needs to convert back from log
-    expm_int <- exp(coef(expm)[1])
-    expm_slp <- exp(coef(expm)[2])
-
-    o_adj <- as.numeric(unname(expm_int * expm_slp ^ o_time_x))
-
-
-    ## build assertion so we know which test fails
-    assertion <- glue::glue("adjust_rate: method = 'exponential' outputs correct results - combination x = {name_mat[z[[4]],][[1]]}, by = {name_mat[z[[4]],][[2]]}, by2 = {name_mat[z[[4]],][[3]]}}")
-
-    skip("skip - until I figure out how to skip these on R CMD CHECK")
-    test_that(assertion, {
-      skip_on_cran()
-      expect_equal(suppressWarnings(adjust_rate(x = x, time_x = time_x, method = method,
-                                                by = by, time_by = time_by,
-                                                by2 = by2, time_by2 = time_by2))$rate.adjusted,
-                   o_x - o_adj)
-    })
-
-  })
 
   test_that("adjust_rate: method = 'exponential' - outputs KNOWN correct results.", {
     ## These values checked in Excel ¯\_(ツ)_/¯
@@ -2640,9 +2218,6 @@ capture.output({  ## stops printing outputs on assigning
 
 
 
-
-
-
   # S3 tests ----------------------------------------------------------------
 
   test_that("adjust_rate can be printed - if adjustment done to calc_rate or auto_rate object", {
@@ -2664,12 +2239,34 @@ capture.output({  ## stops printing outputs on assigning
     expect_output(summary(cr))
     expect_output(summary(ar))
     expect_output(summary(nr))
+    expect_is(summary(cr, export = TRUE),
+              "data.table")
     expect_output(print(cr))
     expect_output(print(ar))
     expect_output(print(nr))
     expect_output(suppressWarnings(mean(cr)))
     expect_output(suppressWarnings(mean(ar)))
     expect_output(suppressWarnings(mean(nr)))
+    expect_is(suppressWarnings(mean(cr, export = TRUE)),
+              "numeric")
+
+    # errors
+    expect_error(print(cr, pos = 2:3),
+                 "print.adjust_rate: 'pos' must be a single value. To examine multiple results use summary().")
+    expect_error(print(cr, pos = 2),
+                 "print.adjust_rate: Invalid 'pos' rank: only 1 adjusted rates found.")
+    expect_output(summary(cr, pos = 1),
+                 "Summary of rate results from entered 'pos' rank\\(s):")
+    expect_output(summary(cr, pos = 1),
+                 "Adjustment was applied using 'mean' method.")
+    expect_error(summary(cr, pos = 2),
+                 "summary.adjust_rate: Invalid 'pos' rank: only 1 adjusted rates found.")
+    expect_error(mean(cr, pos = 2),
+                 "mean.adjust_rate: Invalid 'pos' rank: only 1 adjusted rates found.")
+    expect_output(mean(cr, pos = 1),
+                  "Mean of adjusted rate results from entered 'pos' ranks:")
+    expect_message(mean(cr, pos = 1),
+                  "Only 1 rate found. Returning mean rate anyway...")
   })
 
   test_that("adjust_rate applies mean method by default", {
@@ -2687,4 +2284,4 @@ capture.output({  ## stops printing outputs on assigning
 
   # })
 
-}) ## turns printing back on
+}) ## end capture.output

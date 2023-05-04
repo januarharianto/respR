@@ -467,5 +467,5 @@ capture.output({  ## stops printing outputs on assigning
                    regexp = "adjust_rate.ft: plot\\(\\) is not available for 'adjust_rate.ft' objects.")
   })
 
-}) ## turns printing back on
+}) ## end capture.output
 

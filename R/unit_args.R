@@ -1,9 +1,8 @@
-#' Print examples of unit inputs for use in convert_DO, convert_rate, and
-#' convert_rate.ft
+#' Print examples of unit inputs
 #'
 #' This is a basic function with no inputs. It prints to the console the units
-#' that can be used in the functions [convert_DO()], [convert_rate()], and
-#' [convert_rate.ft()].
+#' that can be used in the functions [convert_DO()], [convert_MR()],
+#' [convert_rate()], and [convert_rate.ft()].
 #'
 #' Note that some oxygen unit conversions require temperature (`t`), salinity
 #' (`S`), and atmospheric pressure (`P`) to be specified.
@@ -21,35 +20,33 @@
 #'
 #' ## Oxygen concentration or pressure units for `from` and `to`:
 #'
-#' Oxygen concentration units should use SI units (`L` or `kg`) for the
+#' Oxygen concentration units. Should use SI units (`L` or `kg`) for the
 #' denominator.
 #'
 #' Do *NOT* require `t`, `S` and `P` for conversions:
 #'
-#' - `"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"`
+#' - `"mg/L"`, `"ug/L"`, `"mol/L"`, `"mmol/L"`, `"umol/L"`, `"nmol/L"`, `"pmol/L"`
 #'
 #' Require `t`, `S` and `P` for conversions:
 #'
-#' - `"mL/L", "cm3/L", "mg/kg", "ug/kg", "mol/kg", "mmol/kg", "umol/kg",
-#' "nmol/kg", "pmol/kg", "mL/kg", "%Air"` (i.e. % Air Saturation), `"%Oxy"`
-#' (i.e. % Oxygen Saturation), `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' - `"uL/L"`, `"mL/L"`, `"mm3/L"`, `"cm3/L"`, `"mg/kg"`, `"ug/kg"`, `"mol/kg"`, `"mmol/kg"`, `"umol/kg"`,
+#' `"nmol/kg"`, `"pmol/kg"`, `"uL/kg"`, `"mL/kg"`, `"ppm"` (i.e. parts per
+#' million, equivalent to `mg/kg`).
+#'
+#' Percentage saturations (require `t`, `S` and `P`):
+#'
+#' `"%Air"` (i.e. % Air Saturation), `"%Oxy"` (i.e. % Oxygen Saturation)
+#'
+#' Pressure units (require `t`, `S` and `P`):
+#'
+#' `"Torr"`, `"hPa"`, `"kPa"`, `"mmHg"`, `"inHg"`
+#'
 #'
 #' # [convert_rate()] and [convert_rate.ft()]
 #'
 #' ## Oxygen concentration or pressure units for `oxy.unit`:
 #'
-#' Oxygen concentration units should use SI units (`L` or `kg`) for the
-#' denominator.
-#'
-#' Do *NOT* require `t`, `S` and `P` for conversions:
-#'
-#' - `"mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L"`
-#'
-#' Require `t`, `S` and `P` for conversions:
-#'
-#' - `"mL/L", "cm3/L", "mg/kg", "ug/kg", "mol/kg", "mmol/kg", "umol/kg",
-#' "nmol/kg", "pmol/kg", "mL/kg",` `"%Air"` (i.e. % Air Saturation),
-#' `"%Oxy"` (i.e. % Oxygen Saturation), `"Torr", "hPa", "kPa",` `"mmHg", "inHg"`
+#' See above.
 #'
 #' ## Time units for `time.unit` or as part of `flowrate.unit`:
 #'
@@ -59,12 +56,14 @@
 #'
 #' For example, in `'ml/min'`, `'L/s'`, etc.
 #'
-#' - `"uL", "mL", "L"`
+#' - `"uL"`, `"mL"`, `"L"`
 #'
-#' ## Combining units for `output.unit`:
+#' # Metabolic rate units
 #'
-#' Must be in correct order, with no special characters other than the
-#' separator:
+#' ## Combining units for `output.unit` in [convert_rate()] and
+#' [convert_rate.ft()], or for use in [`convert_MR()`]:
+#'
+#' Must be in correct order:
 #'
 #' - Absolute rates: `Oxygen/Time` e.g. `"mg/s"`, `"umol/min"`, `"mL/h"`
 #'
@@ -74,39 +73,46 @@
 #' - Area-specific rates: `Oxygen/Time/Area` e.g. `"mg/s/mm2"`,
 #' `"umol/min/cm2"`, `"mL/h/m2"`
 #'
-#' **Oxygen amount units for use in `output.unit`:**
+#' **Oxygen amount units:**
 #'
-#' - `"ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "mL"`
+#' - `"ug"`, `"mg"`, `"pmol"`, `"nmol"`, `"umol"`, `"mmol"`, `"mol"`, `"uL"`, `"mL"`, `"mm3"`, `"cm3"`
 #'
-#' **Time units for use in `output.unit`:**
+#' Note `"mm3"` and `"cm3"` (i.e. `cc`) are used in some older publications.
+#' These are equivalent to `"uL"` and `"mL"` respectively.
 #'
-#' - `"sec", "min", "hour", "day"`
+#' **Time units:**
 #'
-#' **Mass units for use in `output.unit` in mass-specific rates:**
+#' - `"sec"`, `"min"`, `"hour"`, `"day"`
 #'
-#' - `"ug", "mg", "g", "kg"`
+#' **Mass units for mass-specific rates:**
 #'
-#' **Area units for use in `output.unit` in area-specific rates:**
+#' - `"ug"`, `"mg"`, `"g"`, `"kg"`
 #'
-#' - `"mm2", "cm2", "m2", "km2"`
+#' **Area units for area-specific rates:**
+#'
+#' - `"mm2"`, `"cm2"`, `"m2"`, `"km2"`
 #'
 #' @return A print out to the console of accepted units
 #'
 #' @export
 #'
 #' @examples
+#'
+#' # Run the function:
 #' unit_args()
 
 unit_args <- function() {
 
   oxyunit <- c("mg/L", "ug/L", "mol/L", "mmol/L", "umol/L", "nmol/L", "pmol/L")
-  oxyunit_tsp <- c("mL/L", "cm3/L",
+  oxyunit_tsp <- c("uL/L", "mL/L",
+                   "mm3/L", "cm3/L", "cc/L",
                    "mg/kg", "ug/kg",
+                   "ppm",
                    "mol/kg", "mmol/kg", "umol/kg", "nmol/kg", "pmol/kg",
-                   "mL/kg",
+                   "uL/kg", "mL/kg",
                    "%Air", "%Oxy",
                    "Torr", "hPa", "kPa", "mmHg", "inHg")
-  oxyunit_out <- c("ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "mL")
+  oxyunit_out <- c("ug", "mg", "pmol", "nmol", "umol", "mmol", "mol", "uL", "mL", "mm3", "cm3")
   timeunit <- c("sec", "min", "hour", "day")
   massunit <- c("ug", "mg", "g", "kg")
   areaunit <- c("mm2", "cm2", "m2", "km2")
@@ -114,7 +120,7 @@ unit_args <- function() {
 
   cat("Note: A string-matching algorithm is used to identify units. \n")
   cat("Example 1: These are recognised as the same: 'mg/L', 'mg/l', 'mg L-1', 'mg per litre', 'mg.L-1'\n")
-  cat("Example 2: These are recognised as the same: 'hour', 'hr', 'h'\n")
+  cat("Example 2: These are recognised as the same: 'Hour', 'hr', 'h'\n")
 
   cat("\n# Input Units # --------------------------------------\n")
   cat("Oxygen concentration units should use SI units (`L` or `kg`) for the denominator.\n\n")
@@ -132,8 +138,9 @@ unit_args <- function() {
   cat("\nArea units\n")
   print(areaunit)
 
-  cat("\n# Output Units in 'convert_rate' & 'convert_rate.ft' #\n")
-  cat("Must be in correct order, with no special characters other than the separator:\n\n")
+  cat("\n# Metabolic Rate Units # -----------------------------")
+  cat("\nFor use in 'convert_rate', 'convert_rate.ft', 'convert_MR'\n")
+  cat("\nMust be in correct order:\n")
   cat("Absolute rates:        Oxygen/Time       e.g. 'mg/sec',     'umol/min',     'mL/h'\n")
   cat("Mass-specific rates:   Oxygen/Time/Mass  e.g. 'mg/sec/ug',  'umol/min/g',   'mL/h/kg'\n")
   cat("Area-specific rates:   Oxygen/Time/Area  e.g. 'mg/sec/mm2', 'umol/min/cm2', 'mL/h/m2'\n")

@@ -304,7 +304,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   # Validate inputs ---------------------------------------------------------
 
   ## Validate and classify method
-  dynamic <- val_meth(method)
+  dynamic <- method.val(method)
 
 
   # "value" checks ---------------------------------------------------------
@@ -314,15 +314,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "value"){
 
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE)))
-      stop("adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.")
+      stop("adjust_rate: for method = 'value' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.", call. = FALSE)
 
     if(!(class.val(by, num.sing = TRUE, crbg.sing = TRUE, cr.sing = TRUE)))
-      stop("adjust_rate: for method = 'value' the 'by' input must be a single numeric value, 'calc_rate.bg' object with one value in '$rate.bg', or `calc_rate` object with one value in '$rate'")
+      stop("adjust_rate: for method = 'value' the 'by' input must be a single numeric value, 'calc_rate.bg' object with one value in '$rate.bg', or `calc_rate` object with one value in '$rate'", call. = FALSE)
 
-    if(!is.null(by2)) stop("adjust_rate: for method = 'value' the 'by2' input should be NULL.")
-    if(!is.null(time_x)) stop("adjust_rate: for method = 'value' the 'time_x' input should be NULL.")
-    if(!is.null(time_by)) stop("adjust_rate: for method = 'value' the 'time_by' input should be NULL.")
-    if(!is.null(time_by2)) stop("adjust_rate: for method = 'value' the 'time_by2' input should be NULL.")
+    if(!is.null(by2)) stop("adjust_rate: for method = 'value' the 'by2' input should be NULL.", call. = FALSE)
+    if(!is.null(time_x)) stop("adjust_rate: for method = 'value' the 'time_x' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by)) stop("adjust_rate: for method = 'value' the 'time_by' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by2)) stop("adjust_rate: for method = 'value' the 'time_by2' input should be NULL.", call. = FALSE)
   }
 
   # "mean" checks -----------------------------------------------------------
@@ -332,15 +332,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "mean"){
 
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE)))
-      stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.")
+      stop("adjust_rate: for method = 'mean' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.", call. = FALSE)
 
     if(!(class.val(by, num = TRUE, crbg = TRUE, cr = TRUE)))
-      stop("adjust_rate: for method = 'mean' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.")
+      stop("adjust_rate: for method = 'mean' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.", call. = FALSE)
 
-    if(!is.null(by2)) stop("adjust_rate: for method = 'mean' the 'by2' input should be NULL.")
-    if(!is.null(time_x)) stop("adjust_rate: for method = 'mean' the 'time_x' input should be NULL.")
-    if(!is.null(time_by)) stop("adjust_rate: for method = 'mean' the 'time_by' input should be NULL.")
-    if(!is.null(time_by2)) stop("adjust_rate: for method = 'mean' the 'time_by2' input should be NULL.")
+    if(!is.null(by2)) stop("adjust_rate: for method = 'mean' the 'by2' input should be NULL.", call. = FALSE)
+    if(!is.null(time_x)) stop("adjust_rate: for method = 'mean' the 'time_x' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by)) stop("adjust_rate: for method = 'mean' the 'time_by' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by2)) stop("adjust_rate: for method = 'mean' the 'time_by2' input should be NULL.", call. = FALSE)
   }
 
 
@@ -352,15 +352,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "paired"){
 
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE)))
-      stop("adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.")
+      stop("adjust_rate: for method = 'paired' the 'x' input must be numeric or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'.", call. = FALSE)
 
     if(!(class.val(by, num = TRUE, crbg = TRUE, cr = TRUE)))
-      stop("adjust_rate: for method = 'paired' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.")
+      stop("adjust_rate: for method = 'paired' the 'by' input must be numeric, object of class 'calc_rate.bg', or object of class 'calc_rate'.", call. = FALSE)
 
-    if(!is.null(by2)) stop("adjust_rate: for method = 'paired' the 'by2' input should be NULL.")
-    if(!is.null(time_x)) stop("adjust_rate: for method = 'paired' the 'time_x' input should be NULL.")
-    if(!is.null(time_by)) stop("adjust_rate: for method = 'paired' the 'time_by' input should be NULL.")
-    if(!is.null(time_by2)) stop("adjust_rate: for method = 'paired' the 'time_by2' input should be NULL.")
+    if(!is.null(by2)) stop("adjust_rate: for method = 'paired' the 'by2' input should be NULL.", call. = FALSE)
+    if(!is.null(time_x)) stop("adjust_rate: for method = 'paired' the 'time_x' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by)) stop("adjust_rate: for method = 'paired' the 'time_by' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by2)) stop("adjust_rate: for method = 'paired' the 'time_by2' input should be NULL.", call. = FALSE)
   }
 
 
@@ -372,15 +372,15 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "concurrent") {
 
     if(!(class.val(x, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE)))
-      stop("adjust_rate: For method = \"concurrent\" the 'x' input must be a 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int' object.")
+      stop("adjust_rate: For method = \"concurrent\" the 'x' input must be a 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int' object.", call. = FALSE)
 
     if(!(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE)))
-      stop("adjust_rate: For method = \"concurrent\" the 'by' input must be a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object.")
+      stop("adjust_rate: For method = \"concurrent\" the 'by' input must be a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object.", call. = FALSE)
 
-    if(!is.null(by2)) stop("adjust_rate: for method = 'concurrent' the 'by2' input should be NULL.")
-    if(!is.null(time_x)) stop("adjust_rate: for method = 'concurrent' the 'time_x' input should be NULL.")
-    if(!is.null(time_by)) stop("adjust_rate: for method = 'concurrent' the 'time_by' input should be NULL.")
-    if(!is.null(time_by2)) stop("adjust_rate: for method = 'concurrent' the 'time_by2' input should be NULL.")
+    if(!is.null(by2)) stop("adjust_rate: for method = 'concurrent' the 'by2' input should be NULL.", call. = FALSE)
+    if(!is.null(time_x)) stop("adjust_rate: for method = 'concurrent' the 'time_x' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by)) stop("adjust_rate: for method = 'concurrent' the 'time_by' input should be NULL.", call. = FALSE)
+    if(!is.null(time_by2)) stop("adjust_rate: for method = 'concurrent' the 'time_by2' input should be NULL.", call. = FALSE)
 
   }
 
@@ -393,42 +393,42 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
 
     ## 'x'  - cannot be NULL - can be anything
     if(!(class.val(x, num = TRUE, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE)))
-      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'."))
+      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'x' input must be a numeric value or vector, or an object of class 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int'."), call. = FALSE)
     ## 'time_x' - if 'x' is value or vector, 'time_x' must be numeric of same length
     if(is.numeric(x))
       if(!is.numeric(time_x) || length(x) != length(time_x))
-        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'x' input, the 'time_x' must be a numeric input of the same length (i.e. timestamp(s) for all rates in 'x')."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'x' input, the 'time_x' must be a numeric input of the same length (i.e. timestamp(s) for all rates in 'x')."), call. = FALSE)
     ## 'time_x' - if 'x' is calc_rate or auto_rate, 'time_x' must be NULL
     if(class.val(x, cr = TRUE, ar = TRUE, cr.int = TRUE, ar.int = TRUE))
       if(!is.null(time_x))
-        stop(glue::glue("adjust_rate: For method = \"{method}\" and a 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int' 'x' input, the 'time_x' input must be NULL."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\" and a 'calc_rate', 'calc_rate.int', 'auto_rate', or 'auto_rate.int' 'x' input, the 'time_x' input must be NULL."), call. = FALSE)
 
     ## by & by2 do not necessarily have to match in terms of class...
     ## no reason why you can't have value for one, calc_rate.bg for other....?
 
     ## 'by' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg or calc_rate
     if(!(class.val(by, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE)))
-      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object containing background time~oxygen data."))
+      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' object containing background time~oxygen data."), call. = FALSE)
     ## if by is sn, then time_by must be sn
     if(class.val(by, num.sing = TRUE))
       if(!class.val(time_by, num.sing = TRUE))
-        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by' input, the 'time_by' input also requires a single numeric value (i.e. a timestamp for 'by' background rate)."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by' input, the 'time_by' input also requires a single numeric value (i.e. a timestamp for 'by' background rate)."), call. = FALSE)
     ## if by is anything else acceptable, time_by must be NULL
     if(class.val(by, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
       if(!is.null(time_by))
-        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by' input, the 'time_by' must be NULL."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by' input, the 'time_by' must be NULL."), call. = FALSE)
 
     ## 'by2' - cannot be NULL or VECTOR - can be single value or df, inspect or calc_rate.bg or calc_rate
     if(!class.val(by2, num.sing = TRUE, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
-      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by2' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or `calc_rate` object containing background time~oxygen data."))
+      stop(glue::glue("adjust_rate: For method = \"{method}\", the 'by2' input must be a single numeric value, or a 'data.frame', 'inspect', 'calc_rate.bg', or `calc_rate` object containing background time~oxygen data."), call. = FALSE)
     ## if by2 is sn, then time_by2 must be sn
     if(class.val(by2, num.sing = TRUE))
       if(!class.val(time_by2, num.sing = TRUE))
-        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by2' input, the 'time_by2' input also requires a single numeric value (i.e. a timestamp for 'by2' background rate)."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\" and a numeric 'by2' input, the 'time_by2' input also requires a single numeric value (i.e. a timestamp for 'by2' background rate)."), call. = FALSE)
     ## if by2 is anything else acceptable, time_by2 must be NULL
     if(class.val(by2, df = TRUE, insp = TRUE, crbg = TRUE, cr = TRUE))
       if(!is.null(time_by2))
-        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by2' input, the 'time_by2' must be NULL."))
+        stop(glue::glue("adjust_rate: For method = \"{method}\", and a 'data.frame', 'inspect', 'calc_rate.bg', or 'calc_rate' 'by2' input, the 'time_by2' must be NULL."), call. = FALSE)
   }
 
 
@@ -495,7 +495,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
       } else rate <- x
 
       if(length(rate) != length(bg1))
-        stop("adjust_rate: for method = 'paired' the 'x' and 'by' inputs should have the same number of rates.")
+        stop("adjust_rate: for method = 'paired' the 'x' and 'by' inputs should have the same number of rates.", call. = FALSE)
 
       # Use paired values of rate.bg for correction
       adjustment <- unname(unlist(bg1))
@@ -525,12 +525,12 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
     lx <- nrow(x$dataframe)
     lby <- nrow(bg_df)
     if(abs(diff(c(lx, lby)))/lx > 0.05)
-      warning("adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. \nmethod = \"concurrent\" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. \nAdjustments have been attempted anyway, using shared or closest time values in the 'x' and 'by' inputs.")
+      warning("adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. \nmethod = \"concurrent\" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. \nAdjustments have been attempted anyway, using shared or closest time values in the 'x' and 'by' inputs.", call. = FALSE)
 
     ## Check all bg regression time values within range of those in x rates
     if(any(!(data.table::between(starts, min(bg_df[[1]]), max(bg_df[[1]])))) ||
        any(!(data.table::between(ends, min(bg_df[[1]]), max(bg_df[[1]])))))
-      warning("adjust_rate: Some time values used in 'x' rate calculations not present in 'by' background data.\n This probably comes from using datasets of different length for 'x' and 'by'.\n Background adjustments have been applied using available data, but this may have unintended consequences.\n Check results carefully.")
+      warning("adjust_rate: Some time values used in 'x' rate calculations not present in 'by' background data.\n This probably comes from using datasets of different length for 'x' and 'by'.\n Background adjustments have been applied using available data, but this may have unintended consequences.\n Check results carefully.", call. = FALSE)
 
     ## Calc background over same region in each O2 column in bg data
     ## Use calc_rate.bg as by default it uses all columns, and will also fall back to closest matching behaviour
@@ -553,7 +553,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
     ## check rate and adjustment are equal lengths
     ## (should not happen now, after lots of debugging, but you never know)
     if(length(rate) != length(adjustment))
-      stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.")
+      stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.", call. = FALSE)
 
     rate.adjusted <- unname(unlist(rate - adjustment))
 
@@ -606,23 +606,23 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
 
     ## time_by2 should be greater than time_by1
     if(t_bg2 < t_bg1)
-      stop("adjust_rate: Error in inputs. Timestamp for 'by2' is before timestamp for 'by' suggesting they are in the wrong order or come from different datasets.")
+      stop("adjust_rate: Error in inputs. Timestamp for 'by2' is before timestamp for 'by' suggesting they are in the wrong order or come from different datasets.", call. = FALSE)
 
     ## t_rate - should not HAVE to be within range of t_bg and t_bg2, but maybe warn if outside
     if(any(!(data.table::between(t_rate, t_bg1, t_bg2))))
-      warning("adjust_rate: One or more of the timestamps for the rate(s) in 'x' do not lie between the timestamps for the 'by' and 'by2' background rates. \nEnsure this is correct. The adjustment value has been calculated regardless by extrapolating outside the background rates time window.")
+      warning("adjust_rate: One or more of the timestamps for the rate(s) in 'x' do not lie between the timestamps for the 'by' and 'by2' background rates. \nEnsure this is correct. The adjustment value has been calculated regardless by extrapolating outside the background rates time window.", call. = FALSE)
 
     ## sign(0) is different, so need exception. If either is zero it doesn't matter
     if(method == "linear" && sign(bg1) != 0 && sign(bg2) != 0 && sign(bg1) != sign(bg2))
-      warning("adjust_rate: background rates in 'by' and 'by2' differ in sign (i.e. one is +ve, one is -ve). \nEnsure this is correct. The 'linear' adjustment has been performed regardless.")
+      warning("adjust_rate: background rates in 'by' and 'by2' differ in sign (i.e. one is +ve, one is -ve). \nEnsure this is correct. The 'linear' adjustment has been performed regardless.", call. = FALSE)
 
     ## can't fit exponential if a bg rate is zero
     if(method == "exponential" && (bg1 == 0 || bg2 == 0))
-      stop("adjust_rate: method = \"exponential\" cannot be used when a 'by' or 'by2' background rate is zero.")
+      stop("adjust_rate: method = \"exponential\" cannot be used when a 'by' or 'by2' background rate is zero.", call. = FALSE)
 
     ## can't fit exponential if bg rates are different signs
     if(method == "exponential" && sign(bg1) != sign(bg2))
-      stop("adjust_rate: method = \"exponential\" cannot be used when 'by' and 'by2' background rates are not the same sign (i.e. one is +ve, one is -ve).")
+      stop("adjust_rate: method = \"exponential\" cannot be used when 'by' and 'by2' background rates are not the same sign (i.e. one is +ve, one is -ve).", call. = FALSE)
 
     # method = "linear" -------------------------------------------------------
 
@@ -645,7 +645,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
       ## check rate and adjustment are equal lengths
       ## (should not happen now, after lots of debugging, but you never know)
       if(length(rate) != length(adjustment))
-        stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.")
+        stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.", call. = FALSE)
 
       rate.adjusted <- unname(unlist(rate - adjustment))
 
@@ -685,7 +685,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
       ## check rate and adjustment are equal lengths
       ## (should not happen now, after lots of debugging, but you never know)
       if(length(rate) != length(adjustment))
-        stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.")
+        stop("adjust_rate: Error applying adjustment. Input rates and adjustment are different lengths. Please report to developers.", call. = FALSE)
 
       rate.adjusted <- unname(unlist(rate - adjustment))
     }
@@ -747,9 +747,9 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
 print.adjust_rate <- function(x, pos = 1, ...) {
   cat("\n# print.adjust_rate # -------------------\n")
   if(length(pos) > 1)
-    stop("print.adjust_rate: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.adjust_rate: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   cat("NOTE: Consider the sign of the adjustment value when adjusting the rate.\n")
-  if(pos > length(x$rate.adjusted)) stop("print.adjust_rate: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
+  if(pos > length(x$rate.adjusted)) stop("print.adjust_rate: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.", call. = FALSE)
   cat("\nAdjustment was applied using the '", x$adjustment.method, "' method.", sep = "")
   cat("\n")
   cat("\nRank", pos, "of", length(x$rate.adjusted), "adjusted rate(s):")
@@ -775,7 +775,7 @@ print.adjust_rate <- function(x, pos = 1, ...) {
 #' @importFrom data.table data.table
 summary.adjust_rate <- function(object, pos = NULL, export = FALSE, ...) {
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.adjust_rate: Invalid 'pos' rank: only ", length(object$rate.adjusted), " rates found.")
+    stop("summary.adjust_rate: Invalid 'pos' rank: only ", length(object$rate.adjusted), " adjusted rates found.", call. = FALSE)
 
   cat("\n# summary.adjust_rate # -----------------\n")
   cat("\nAdjustment was applied using '", object$adjustment.method, "' method.\n", sep = "")
@@ -812,7 +812,7 @@ mean.adjust_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.adjust_rate # --------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate.adjusted)))
-    stop("mean.adjust_rate: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
+    stop("mean.adjust_rate: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate.adjusted)
     cat("Mean of all adjusted rate results:")

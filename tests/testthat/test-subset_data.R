@@ -318,5 +318,5 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-}) ## turns printing back on
+}) ## end capture.output
 

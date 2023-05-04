@@ -1,27 +1,37 @@
-#' Import respirometry system raw data files
+#' Import respirometry system raw data files (DEPRECATED)
 #'
 #' Automatically import data from different respirometry hardware and software
-#' systems. The aim is to work with most commercial oxygen sensors available in
-#' the market with minimal input. The function extracts data columns from the
-#' file, removes redundant rows of metadata, and generally cleans up column
-#' names (e.g. removes whitespace and characters which cause text encoding
-#' issues) to make the data easier to work with. Files should be sensor system
-#' raw output files where possible; files opened and re-saved in a different
-#' format will likely fail to import.
+#' systems. *WARNING*: This function is now deprecated and will not be updated.
+#' See below.
 #'
-#' Note that use of this function to import data is *optional*. `respR` only
-#' requires data be put into a very simple structure for analysis, which is
-#' paired values of time and oxygen amount in any common units in a
-#' `data.frame`. `import_file` is a convenience function and mainly intended for
-#' those new to `R`. It is *almost always* better to import files yourself using
-#' functions such as `read.csv()`, `read.table()` or `fread()` as it gives you
-#' much more control and the ability to troubleshoot issues.
+#' This function has been deprecated, will not be updated, and will be removed
+#' entirely in the next major version of `respR` (i.e. `v3.0`, which is not
+#' planned for any time soon, so may still be years away).
+#'
+#' Note that use of this function to import data is *OPTIONAL* and in fact *NOT
+#' RECOMMENDED*. `respR` has an extremely simple input data structure
+#' requirement: paired numeric values of time and oxygen amount in any common
+#' units in a `data.frame`. To our knowledge, every oxygen sensor system allows
+#' you to export data in a format (e.g. `.csv`, `.txt`, `.xlsx`) which are easy
+#' to import into `R`, and this is a basic skill anyone using `R` should be
+#' comfortable with. `import_file` was only ever a convenience function intended
+#' for those completely new to `R`. It is *ALWAYS* better to import files
+#' yourself using generic functions such as `read.csv()`, `read.table()` or
+#' `fread()` as it gives you much more control and the ability to troubleshoot
+#' issues.
+#'
+#' For files currently supported, the function extracts data columns, removes
+#' redundant rows of metadata, and generally cleans up column names (e.g.
+#' removes whitespace and characters which cause text encoding issues) to make
+#' the data easier to work with. Files should be sensor system raw output files
+#' where possible; files opened and re-saved in a different format will likely
+#' fail to import.
 #'
 #' @details Currently tested and working for these files:
 #'
 #'   - Pyro Firesting
 #'
-#'   - Pyro Workbench (experimental)
+#'   - Pyro Workbench (very experimental - likely to fail and will not be updated further)
 #'
 #'   - PreSens OXY10
 #'
@@ -47,10 +57,6 @@
 #'   denote decimals) are supported, and will be converted to point decimals on
 #'   import. This is experimental functionality, so please provide feedback for
 #'   any files for which this might fail.
-#'
-#'   We are always looking for sample files to improve the function. Please send
-#'   them to us via [email](mailto:nicholascarey@gmail.com), or via a [Github
-#'   issue](https://github.com/januarharianto/respR/issues).
 #'
 #'   While the devices listed above are supported, the import functionality is
 #'   experimental due to limited access to sample files. Users should be aware
@@ -89,6 +95,8 @@
 
 import_file <- function(path, export = FALSE) {
 
+  warning("NOTE: 'import_file' function has been deprecated, will not be updated, and will be removed in a future version of 'respR'.")
+
   cat("\n# import_file # -------------------------\n")
 
   # Don't even start if file doesn't exist:
@@ -118,8 +126,7 @@ import_file <- function(path, export = FALSE) {
   # Identify source of file
   if (suppressWarnings(any(grepl("Workbench", raw[1:20])))) {
     cat("Pyro Workbench file detected.\n")
-    cat("NOTE: Support for these files is experimental due to lack of sample files for testing.\n")
-    cat("Please contact developers if your file does not work or you are able to supply some test files.\n")
+    cat("NOTE: Support for these files is very experimental. It is a much better idea to import them yourself using 'read.csv', etc.\n")
     out <- parse_workbench(path, dec = dec)
   } else if (suppressWarnings(any(grepl("Pyro", raw[1:20])))) {
     cat("Firesting-Pyro file detected\n")
@@ -186,9 +193,7 @@ import_file <- function(path, export = FALSE) {
   } else if (suppressWarnings(any(grepl("PreSens Datamanager", raw[1:20])))) {
     cat("PreSens Datamanager output file detected\n")
     out <- parse_datamanager(path, dec = dec)
-  } else stop("Source file cannot be identified.
-              Please contact the developers with a sample of your file.
-              Import halted.")
+  } else stop("Source file cannot be identified.")
 
   if (export) {
     newpath <- paste0(normalizePath(dirname(path)),"/", "parsed-",

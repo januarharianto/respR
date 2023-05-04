@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_file.R
 \name{import_file}
 \alias{import_file}
-\title{Import respirometry system raw data files}
+\title{Import respirometry system raw data files (DEPRECATED)}
 \usage{
 import_file(path, export = FALSE)
 }
@@ -17,27 +17,37 @@ A \code{data.frame} object of all columned data
 }
 \description{
 Automatically import data from different respirometry hardware and software
-systems. The aim is to work with most commercial oxygen sensors available in
-the market with minimal input. The function extracts data columns from the
-file, removes redundant rows of metadata, and generally cleans up column
-names (e.g. removes whitespace and characters which cause text encoding
-issues) to make the data easier to work with. Files should be sensor system
-raw output files where possible; files opened and re-saved in a different
-format will likely fail to import.
+systems. \emph{WARNING}: This function is now deprecated and will not be updated.
+See below.
 }
 \details{
-Note that use of this function to import data is \emph{optional}. \code{respR} only
-requires data be put into a very simple structure for analysis, which is
-paired values of time and oxygen amount in any common units in a
-\code{data.frame}. \code{import_file} is a convenience function and mainly intended for
-those new to \code{R}. It is \emph{almost always} better to import files yourself using
-functions such as \code{read.csv()}, \code{read.table()} or \code{fread()} as it gives you
-much more control and the ability to troubleshoot issues.
+This function has been deprecated, will not be updated, and will be removed
+entirely in the next major version of \code{respR} (i.e. \code{v3.0}, which is not
+planned for any time soon, so may still be years away).
+
+Note that use of this function to import data is \emph{OPTIONAL} and in fact \emph{NOT
+RECOMMENDED}. \code{respR} has an extremely simple input data structure
+requirement: paired numeric values of time and oxygen amount in any common
+units in a \code{data.frame}. To our knowledge, every oxygen sensor system allows
+you to export data in a format (e.g. \code{.csv}, \code{.txt}, \code{.xlsx}) which are easy
+to import into \code{R}, and this is a basic skill anyone using \code{R} should be
+comfortable with. \code{import_file} was only ever a convenience function intended
+for those completely new to \code{R}. It is \emph{ALWAYS} better to import files
+yourself using generic functions such as \code{read.csv()}, \code{read.table()} or
+\code{fread()} as it gives you much more control and the ability to troubleshoot
+issues.
+
+For files currently supported, the function extracts data columns, removes
+redundant rows of metadata, and generally cleans up column names (e.g.
+removes whitespace and characters which cause text encoding issues) to make
+the data easier to work with. Files should be sensor system raw output files
+where possible; files opened and re-saved in a different format will likely
+fail to import.
 
 Currently tested and working for these files:
 \itemize{
 \item Pyro Firesting
-\item Pyro Workbench (experimental)
+\item Pyro Workbench (very experimental - likely to fail and will not be updated further)
 \item PreSens OXY10
 \item PreSens OXY4
 \item PreSens (OxyView generic, including multiplate systems)
@@ -54,9 +64,6 @@ Files with European numeric formatting (i.e. commas instead of points to
 denote decimals) are supported, and will be converted to point decimals on
 import. This is experimental functionality, so please provide feedback for
 any files for which this might fail.
-
-We are always looking for sample files to improve the function. Please send
-them to us via \href{mailto:nicholascarey@gmail.com}{email}, or via a \href{https://github.com/januarharianto/respR/issues}{Github issue}.
 
 While the devices listed above are supported, the import functionality is
 experimental due to limited access to sample files. Users should be aware

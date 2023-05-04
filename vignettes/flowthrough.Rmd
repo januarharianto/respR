@@ -840,7 +840,7 @@ summary(roll_rate_ms)
 
 
 
-We can see there are 3441 results, which is obviously a lot of information. As of [`respR v2.2`](https://januarharianto.github.io/respR/articles/version_notes.html) `convert_rate.ft` objects can be plotted to help explore the results in three different ways. See `help("convert_rate.ft")` for full details. Here we will use the `type = "rate"` option which plots output rates in a way that you can see how they vary across the dataset. 
+We can see there are 3441 results, which is obviously a lot of information. As of [`respR v2.2`](https://januarharianto.github.io/respR/articles/release_notes.html) `convert_rate.ft` objects can be plotted to help explore the results in three different ways. See `help("convert_rate.ft")` for full details. Here we will use the `type = "rate"` option which plots output rates in a way that you can see how they vary across the dataset. 
 
 ```{r eval = T, results='hide'}
 # plot rates

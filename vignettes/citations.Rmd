@@ -40,6 +40,38 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
+#### @zhangLossBehavioralStress2023
+
+Cavefish - uses plot
+
+#### @quigleyPhysiologicalCharacterizationCoral2023
+
+mine
+
+#### @holmes-hackerdNaupliarExposureAcute2023a
+
+tmp
+
+#### @luceyClimateWarmingErodes2023
+
+tmp
+
+#### @hawadleEffectsMultipleEnvironmental2023
+
+Student research
+
+#### @lowesCopperExposureDoes2023
+
+tmp
+
+#### @castrillon-cifuentesSpatiotemporalVariabilityOxygen2023
+
+This study looked at the effects of hypoxic conditions on corals from the eastern Pacific and used `respR` to get MO2 and PCrit. What's really interesting about this study is that it also determined the same metrics using the [`respirometry`](https://cran.r-project.org/web/packages/respirometry/index.html) package, and we were happy to see that results between the two packages are largely the same. It is also good to see the authors varying the width used in the PCrit analysis to see how it affects the results. The width over which a rolling rate is determined from the oxygen timeseries is a really important parameter that is frequently not reported for PCrit results, so good to see the authors taking account of it. Of course `respR` makes this easy!
+
+#### @hawkePetroleumderivedBiopolymerMicroplastic2022
+
+tmp
+
 #### @somoIntegrativeAnalysisRespiratory2022
 
 Derek Somo's PhD project looked at a wide range of physiological functioning in an intertidal fish under warming and hypoxia. He used the `oxycrit` function to get the PCrit of his intertidal sculpins. Congrats on the PhD! 🥳

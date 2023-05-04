@@ -12,6 +12,35 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
+## Version 2.3.0 -- 2023-xx-xx
+
+Ever been reading a paper and wanted to compare metabolic rates to your own results but they were in a different unit? This update introduces `convert_MR()`. This function converts between different units of oxygen uptake or production rate. These can be absolute, mass-specific, or area-specific rates. See [here]() for examples. It also works on `convert_rate` or `convert_rate.ft` objects so you can change the output units of a `respR` analysis without having to re-run the whole thing. 
+
+To help with this new functionality, this version has undergone a major update around unit handling. If you didn't know, `respR` accepts different variations in unit formatting. E.g. `"mg per h"`, `"mg H"`, `"mg hr-1"`, etc. are all recognised as `mg/h`. There has been a massive internal update to unit recognition to use [regex](https://en.wikipedia.org/wiki/Regular_expression) instead of a brute force approach. This system is more robust and accepts even more variations in style; units can be formed from abbreviated versions or words (e.g. `mg` or `milligram`), separated by a space, forward slash, dot, or underscore, are case-insensitive, and accept other variations (e.g `km2`, `km -2`, `km^2`, `kmsq`, etc). In addition a few new units of dissolved oxygen (DO) and metabolic rate are now accepted. See below. 
+
+There's also a handy change to `inspect()`, `inspect.ft()`, and `oxy_crit()` which means you can now specify columns by *name* as well as column *number*. 
+
+A last major change is that the `import_file()` function has been deprecated. It is still fully functional, but will not be updated and will be removed in the next major release version (i.e. `v3.0`, which is not planned for any time soon and may be years away). This was only ever intended to be a convenience function for those completely new to `R`, and was always experimental as there is no way we could have access to or test against every variation of oxygen sensor system output files. We found some users were overly reliant on it and expecting us to update the function rather than try to import data files themselves using generic functions such as `read.csv`. To our knowledge, every oxygen sensor system exports data in formats (e.g. `.csv`, `.txt`, `.xlsx`) which can be imported into `R` using generic functions. This is a basic skill anyone using `R` should be comfortable with, and also allows for much more control and the ability to troubleshoot issues.
+
+==================================== New =======================================
+
+- NEW: `convert_MR()`- A new function for converting metabolic rates between different units of oxygen uptake or production. See examples [here](https://januarharianto.github.io/respR/reference/convert_MR.html) and [here](https://januarharianto.github.io/respR/articles/closed.html#check-the-result).
+- NEW: `inspect()`, `inspect.ft()`, `oxy_crit()` - Column names can now be used to specify columns, not just column number. See example [here](https://januarharianto.github.io/respR/reference/inspect.html#examples).
+- NEW: The following units of dissolved oxygen (DO) can now be used for conversions in `convert_DO` or in `convert_rate` as the `oxy.unit` of the original data: `ul/l`, `ul/kg`, `mm3/kg` (equivalent to `ul/kg`), `cm3/kg` (equivalent to `ml/kg`), `ppm` (i.e. parts per million, equivalent to `mg/kg`). In addition, `"cc"` (abbreviation for cubic centimetres, as sometimes used in older publications) is recognised as `cm3` (e.g. `cc/L` as DO, `cc/h` as a metabolic rate). 
+- NEW: The following units of oxygen can now be used in `convert_rate` or `convert_rate.ft` as part of the output unit, or in `convert_MR` to convert between units of oxygen uptake: `mm3`, `cm3`, `ul`. e.g. `ul/h` or `cm3/day/kg`, etc.
+- NEW: Tested with `R` version [4.3.0](https://www.r-bloggers.com/2023/04/whats-new-in-r-4-3-0/) 
+
+=================================== Changes ====================================
+
+- CHANGE: `import_file()` has been deprecated. It is still fully functional but will not be updated and will be removed in a future version.
+- CHANGE: Units are now parsed to a standardised format in output objects. For example, in `convert_rate` if you specify `"MG per h"` or `"mg h-1"` as the output unit this will appear as `"mgO2/hr"` in the output object; `"ml min-1 kg-1"` becomes `"mLO2/min/kg"`, etc. This change means you can certain the unit is being recognised as what you expect. See `unit_args()` for details.
+- CHANGE: `unit_args()` updated for new units.
+- CHANGE: Errors and warnings have been revised to be more concise and informative, especially about what function they originate from. 
+
+==================================== Fixes =====================================
+
+
+
 ## Version 2.2.0 -- 2023-01-06
 
 This update focuses on extending to the flowthrough respirometry workflow the functionality introduced in `v2.1` for exploring and selecting final rates. The online [vignette](https://januarharianto.github.io/respR/articles/flowthrough.html#case-8-rolling-rate) has been updated with some examples. 
@@ -69,7 +98,7 @@ There is also a major focus on exploring and filtering results to help with outp
 - CHANGE: All summary tables now have the additional column `$rep` as the first column. This contains the replicate number that the rate came from when using `calc_rate.int` and `auto_rate.int` on intermittent-flow data. For other cases it is filled with `NA`.
 - CHANGE: `adjust_rate` and `convert_rate` now have the additional element `$dataframe` in the output. This is the raw data carried forward from whatever object was initially entered. It was always present in the `$inputs`, but is now also placed at the top level for convenience. If numeric values were entered it will be present as `NULL`. 
 - CHANGE: `auto_rate` - For the `linear` method, the kernel density analysis results are now *not* printed to the console when using `summary()`. Only the summary table will be printed, making for a cleaner print out. This can be changed back to the old behaviour by passing `print.kds = TRUE` in `summary`. 
-- CHANGE: The `plot_ar` function for plotting `auto_rate` results has been removed, but the plotting functionality has been added to `convert_rate` as the `type = "overlap"` option. Therefore you will need to convert `auto_rate` results before plotting them. (If you really need to you can actually still plot `auto_rate` objects by calling the internal function `overlap.p` using three colons, i.e. `respR:::overlap.p()`)
+- CHANGE: The `plot_ar` function for plotting `auto_rate` results has been removed, but the plotting functionality has been added to `convert_rate` as the `type = "overlap"` option. Therefore you will need to convert `auto_rate` results before plotting them. (If you really need to you can actually still plot `auto_rate` objects by calling the internal function `overlap.p` using three colons, i.e. `overlap.p()`)
 - CHANGE: `convert_rate`, `convert_rate.ft` - The behaviour introduced in `v2.0.1` where `summary()` would print only a condensed version of the summary table has been reversed. This is because it made it difficult to view the results of selection operations in `select_rate` on columns not printed to the console. The full table is now printed, even though it is quite large. You can still use `export = TRUE` to export the table as a data frame for easier viewing.
 - CHANGE: `subset_data` - No longer prints a subset summary to the console (i.e. `quiet = TRUE` is the default).  
 - CHANGE: `select_rate` - The `"time_omit"` and `"row_omit"` methods have a progress bar when `n` is a vector of three or more values. This is because these methods are extremely computationally intensive when this is the case and may take some time. If possible you should always use a time or row range of lower and upper values instead (e.g. `n = c(10, 20)` instead of `10:20`).   
@@ -448,7 +477,7 @@ Lots of updates! First, we have a new function, `calc_pcrit()`, which we will us
 - NEW: `calc_pcrit()` is a **new function** that will be developed in parallel to the current `pcrit()` function. In the future we intend to use `calc_pcrit()` to incorporate new methods. 
 - NEW: `import_file()` supports even more files! Added more parsers for Vernier, PRESENS and Loligo systems.
 - NEW: `format_time()` can now calculate time elapsed even if date information is not provided (e.g. "HMS"-only data). 
-- NEW: The `by` input in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `verify_by()` which uses brute force matching to recognise different ways of writing the same text.
+- NEW: The `by` input in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `by.val()` which uses brute force matching to recognise different ways of writing the same text.
 
 ### Fixes
 

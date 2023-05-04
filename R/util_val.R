@@ -1,41 +1,17 @@
-## For storing functions which validate inputs
+# Contains functions which validate inputs
 
-# Verify the 'by' input for calc_rate etc.
-# req - indicates if a 'by' input is required
-# default - what should be the default if by is NULL?
-# which - which 'by' methods does the function support?
-# msg - start of message text, typically the function name
-verify_by <- function(by, req = TRUE, default = NULL,
-                      which = c("t", "o", "r"),
-                      msg = ""){
-  ## no doubt this is easier with regex
-  time_variations <- c("time", "Time", "TIME",
-                       "tim", "Tim", "TIM",
-                       "tm", "Tm", "TM",
-                       "t", "T")
-  ox_variations <- c("o2", "O2",
-                     "oxygen", "Oxygen", "OXYGEN",
-                     "oxy", "Oxy", "OXY",
-                     "ox", "Ox", "OX",
-                     "o", "O")
-  row_variations <- c("row", "Row", "ROW",
-                      "rw", "Rw", "RW",
-                      "r", "R")
+# Looks for column name and returns column number
+# strings = column name(s) to search for
+# df = the df
+# msg = fn name to report failure from
+column.id <- function(strings, df, msg){
+  names <- names(df)
 
-  # stop if required and not entered
-  if (req && is.null(by)) stop(glue::glue("{msg} 'by' input is required."))
+  if(any(!(strings %in% names)))
+    stop(glue::glue("{msg}: One or more column names not found in data frame."))
+  index <- as.vector(sapply(strings, function(z) which(z == names)))
 
-  # if not required, and entered as NULL, apply default
-  if (!req && is.null(by) && !is.null(default)) {
-    by <- default
-    message(glue::glue("{msg} applying default 'by' input of {default}."))}
-
-  if("t" %in% which && by %in% time_variations) by <- "time"
-  else if("o" %in% which && by %in% ox_variations) by <- "oxygen"
-  else if("r" %in% which && by %in% row_variations) by <- "row"
-  else stop(glue::glue("{msg} 'by' input not valid or not recognised."))
-
-  return(by)
+  return(index)
 }
 
 # Checks that inputs which accept column numbers have no conflicts.
@@ -53,6 +29,35 @@ column.conflict <- function(inputs, id = FALSE){
         if(!dupe && id) return(NULL)
 }
 
+# Verify the 'by' input for calc_rate etc.
+# req - indicates if a 'by' input is required
+# default - what should be the default if by is NULL?
+# which - which 'by' methods does the function support?
+# msg - start of message text, typically the function name
+by.val <- function(by, req = TRUE, default = NULL,
+                   which = c("t", "o", "r"),
+                   msg = ""){
+
+  # stop if required and not entered
+  if (req && is.null(by)) stop(glue::glue("{msg}: 'by' input is required."))
+  # if not required, and entered as NULL, apply default
+  if (!req && is.null(by) && !is.null(default)) {
+    by <- default
+    message(glue::glue("{msg}: Applying default 'by' input of {default}."))}
+
+  # acceptable variations
+  time_variations <- "^(?i)\\b(time|t)\\b$"
+  ox_variations   <- "^(?i)(o|o2|ox|oxy|oxygen)$"
+  row_variations  <- "^(?i)\\b(row|r)\\b$"
+
+  if("t" %in% which && grepl(time_variations, by)) by <- "time" else
+    if("o" %in% which && grepl(ox_variations, by)) by <- "oxygen" else
+      if("r" %in% which && grepl(row_variations, by)) by <- "row" else
+        stop(glue::glue("{msg}: 'by' input not valid or not recognised."))
+
+  return(by)
+}
+
 ## Column input validation
 ## - req = input is required (i.e. can't be NULL)
 ## - min = for min total number of column inputs allowed
@@ -62,17 +67,16 @@ column.conflict <- function(inputs, id = FALSE){
 ## - conflicts = does it conflict with these other column inputs?
 ##      (e.g. for time and oxygen should never be same column)
 ## - msg = string to add custom message
-
 column.val <- function(input, req = FALSE, min = 1, max = Inf,
                        range = c(-Inf,Inf), conflicts = NULL, msg = ""){
 
   ## check if NULL
   is_null <- is.null(input)
-  if(req && is_null) stop(glue::glue("{msg} column input is required."))
+  if(req && is_null) stop(glue::glue("{msg} column input is required."), call. = FALSE)
 
   ## check if numeric
   is_num <- is.numeric(input)
-  if(req && !is_num) stop(glue::glue("{msg} column input is not numeric."))
+  if(req && !is_num) stop(glue::glue("{msg} column input is not numeric."), call. = FALSE)
 
   ## check all integers
   if(is_num) are_int <- all(sapply(input, function(z) z %% 1 == 0))
@@ -87,11 +91,11 @@ column.val <- function(input, req = FALSE, min = 1, max = Inf,
 
   # Check and messages
   if(!is_null){
-    if(is_num && !are_int) stop(glue::glue("{msg} some column inputs are not integers."))
-    if(!below_max) stop(glue::glue("{msg} cannot enter more than {max} column(s) with this input or this dataset."))
-    if(!above_min) stop(glue::glue("{msg} at least {min} column inputs required."))
-    if(is_num && !in_range) stop(glue::glue("{msg} one or more column inputs are out of range of allowed data columns."))
-    if(conflicts) stop(glue::glue("{msg} one or more column inputs conflicts with other inputs."))
+    if(is_num && !are_int) stop(glue::glue("{msg} some column inputs are not integers."), call. = FALSE)
+    if(!below_max) stop(glue::glue("{msg} cannot enter more than {max} column(s) with this input or this dataset."), call. = FALSE)
+    if(!above_min) stop(glue::glue("{msg} at least {min} column inputs required."), call. = FALSE)
+    if(is_num && !in_range) stop(glue::glue("{msg} one or more column inputs are out of range of allowed data columns."), call. = FALSE)
+    if(conflicts) stop(glue::glue("{msg} one or more column inputs conflicts with other inputs."), call. = FALSE)
   }
 }
 
@@ -104,7 +108,6 @@ column.val <- function(input, req = FALSE, min = 1, max = Inf,
 ## - min = for min total number of inputs allowed
 ## - range = for specific range of values allowed (e.g. c(0,1))
 ## - msg = string to prepend failure message
-
 input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
                       max = Inf, min = 1, range = c(-Inf,Inf), msg = ""){
 
@@ -135,20 +138,30 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
   }
 }
 
-
-
-
-#' Validate adjust_rate method input
+#' Validate adjust_rate or auto_rate or oxy_crit method input
 #' @keywords internal
-val_meth <- function(method){
-  if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
-    stop("adjust_rate: 'method' input not recognised")
-  #' create logical for linear/exp methods
-  if(method == "linear" | method == "exponential") dynamic <- TRUE else
-    dynamic <- FALSE
-  return(dynamic)
-}
+method.val <- function(method, source = "adjust_rate"){
 
+  if(source == "adjust_rate") {
+    if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
+      stop("adjust_rate: 'method' input not recognised.", call. = F)
+    #' create logical for linear/exp methods
+    if(method == "linear" | method == "exponential") dynamic <- TRUE else
+      dynamic <- FALSE
+    return(dynamic)
+  }
+
+  if(source == "auto_rate") {
+    if (!(method %in% c("linear", "max", "min", "interval",
+                        "rolling", "highest", "lowest", "maximum", "minimum")))
+      stop("auto_rate: 'method' input not recognised.", call. = F)
+  }
+
+  if(source == "oxy_crit") {
+    if(!(method %in% c("bsr", "segmented")))
+      stop("oxy_crit: 'method' input not recognised.", call. = F)
+  }
+}
 
 #' Validates acceptable classes of inputs
 #' Set single or multiple inputs to TRUE. This is what the fn accepts.
@@ -309,3 +322,213 @@ class.val <- function(x,
 
   return(final_res)
 }
+
+
+#' Check unit string against allowed values. See util_fns.R file for regex
+#' patterns
+#'
+#' These names (before the .o2, .vol, etc.) are the 'clean' or parsed names we
+#' want to use in outputs. All inputs units get parsed to these in units.clean
+#'
+#' @keywords internal
+units.val <- function(unit, is, msg = "units.val") {
+
+  # time --------------------------------------------------------------------
+  if (is == 'time') all.units <- list(min.time = min.time.rgx,
+                                      sec.time = sec.time.rgx,
+                                      hr.time = hr.time.rgx,
+                                      day.time = day.time.rgx)
+
+  # o2 ----------------------------------------------------------------------
+  # 2-dimensional o2 units, and pressure
+  if (is == 'o2') {
+
+    if(unit %in% c("%", "perc", "percent","percentage"))
+      stop(glue::glue("{msg}: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args()."), call. = FALSE)
+
+    all.units <- list('%Air.o2'    = PercAir.o2.rgx,
+                      '%Oxy.o2'    = PercOxy.o2.rgx,
+                      'mg/L.o2'    = mgperL.o2.rgx,
+                      'ug/L.o2'    = ugperL.o2.rgx,
+                      'mol/L.o2'   = molperL.o2.rgx,
+                      'mmol/L.o2'  = mmolperL.o2.rgx,
+                      'umol/L.o2'  = umolperL.o2.rgx,
+                      'nmol/L.o2'  = nmolperL.o2.rgx,
+                      'pmol/L.o2'  = pmolperL.o2.rgx,
+                      'mL/L.o2'    = mLperL.o2.rgx,
+                      'uL/L.o2'    = uLperL.o2.rgx,
+                      'cm3/L.o2'   = cm3perL.o2.rgx,
+                      'mm3/L.o2'   = mm3perL.o2.rgx,
+                      'mg/kg.o2'   = mgperkg.o2.rgx,
+                      'mg/kg.o2'   = ppm.o2.rgx,
+                      'ug/kg.o2'   = ugperkg.o2.rgx,
+                      'mL/kg.o2'   = mLperkg.o2.rgx,
+                      'uL/kg.o2'   = uLperkg.o2.rgx,
+                      'mol/kg.o2'  = molperkg.o2.rgx,
+                      'mmol/kg.o2' = mmolperkg.o2.rgx,
+                      'umol/kg.o2' = umolperkg.o2.rgx,
+                      'nmol/kg.o2' = nmolperkg.o2.rgx,
+                      'pmol/kg.o2' = pmolperkg.o2.rgx,
+                      'cm3/kg.o2'  = cm3perkg.o2.rgx,
+                      'mm3/kg.o2'  = mm3perkg.o2.rgx,
+                      'Torr.o2p'   = Torr.o2p.rgx,
+                      'hPa.o2p'    = hPa.o2p.rgx,
+                      'kPa.o2p'    = kPa.o2p.rgx,
+                      'mmHg.o2p'   = mmHg.o2p.rgx,
+                      'inHg.o2p'   = inHg.o2p.rgx)
+  }
+
+  # vol ---------------------------------------------------------------------
+  if (is == 'vol') all.units <- list(L.vol  = L.vol.rgx,
+                                     mL.vol = mL.vol.rgx,
+                                     uL.vol = uL.vol.rgx)
+
+  # mass --------------------------------------------------------------------
+  if (is == 'mass') all.units <- list(kg.mass  = kg.mass.rgx,
+                                      g.mass   = g.mass.rgx,
+                                      mg.mass  = mg.mass.rgx,
+                                      ug.mass  = ug.mass.rgx)
+
+  # area --------------------------------------------------------------------
+  if (is == 'area') all.units <- list(km2.area  = km2.area.rgx,
+                                      m2.area   = m2.area.rgx,
+                                      cm2.area  = cm2.area.rgx,
+                                      mm2.area  = mm2.area.rgx)
+
+  # o1 ----------------------------------------------------------------------
+  if (is == 'o1') all.units <-  list(mg.o2   = mg.o2.rgx,
+                                     ug.o2   = ug.o2.rgx,
+                                     mol.o2  = mol.o2.rgx,
+                                     mmol.o2 = mmol.o2.rgx,
+                                     umol.o2 = umol.o2.rgx,
+                                     nmol.o2 = nmol.o2.rgx,
+                                     pmol.o2 = pmol.o2.rgx,
+                                     mL.o2   = mL.o2.rgx,
+                                     uL.o2   = uL.o2.rgx,
+                                     cm3.o2  = cm3.o2.rgx,
+                                     mm3.o2  = mm3.o2.rgx)
+
+  # flow --------------------------------------------------------------------
+  if (is == 'flow') all.units <- list('uL/sec.flow' = uLpersec.flow.rgx,
+                                      'mL/sec.flow' = mLpersec.flow.rgx,
+                                      'L/sec.flow'  = Lpersec.flow.rgx,
+                                      'uL/min.flow' = uLpermin.flow.rgx,
+                                      'mL/min.flow' = mLpermin.flow.rgx,
+                                      'L/min.flow'  = Lpermin.flow.rgx,
+                                      'uL/hr.flow'  = uLperhr.flow.rgx,
+                                      'mL/hr.flow'  = mLperhr.flow.rgx,
+                                      'L/hr.flow'   = Lperhr.flow.rgx,
+                                      'uL/day.flow' = uLperday.flow.rgx,
+                                      'mL/day.flow' = mLperday.flow.rgx,
+                                      'L/day.flow'  = Lperday.flow.rgx)
+
+  # pressure ----------------------------------------------------------------
+  if (is == 'pressure') all.units <- list(kPa.p  = kPa.p.rgx,
+                                          hPa.p  = hPa.p.rgx,
+                                          Pa.p   = Pa.p.rgx,
+                                          uBar.p = uBar.p.rgx,
+                                          mBar.p = mBar.p.rgx,
+                                          Bar.p  = Bar.p.rgx,
+                                          atm.p  = atm.p.rgx,
+                                          Torr.p = Torr.p.rgx,
+                                          mmHg.p = mmHg.p.rgx,
+                                          inHg.p = inHg.p.rgx)
+
+  # temperature -------------------------------------------------------------
+  if (is == 'temperature') all.units <- list(C.temp = C.temp.rgx,
+                                             K.temp = K.temp.rgx,
+                                             F.temp = F.temp.rgx)
+
+  # Look for match ----------------------------------------------------------
+  # remove all whitespace
+  string <- gsub(" ", "", stringr::str_squish(unit))
+  chk <- lapply(all.units, function(x) grepl(x, string))
+  chk <- sapply(chk, function(x) isTRUE(any(x)))
+
+  ## Message if no match found
+  result <- any(chk == TRUE)  # did a match occur?
+  if (result == FALSE)
+    stop(glue::glue("{msg}: unit '{unit}' not recognised. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = F))
+
+  # print unit name
+  out <- names(chk)[which(chk)]
+  return(out)
+}
+
+#' Cleans units from units.val to remove the suffix (.o2, .flow, etc)
+#'
+#' These are the 'clean' or parsed names we want to use in outputs. All input
+#' units get parsed to these.
+#'
+#' Could make code much simpler with a regex for everything after the "." but i
+#' like the specificity of this.
+#'
+#' @keywords internal
+units.clean <- function(unit, is) {
+
+  if (is == 'o2') out <- unit |>
+      gsub(".o2p", ".o2", x = _) |>
+      gsub(".o2", "", x = _)
+
+  if (is == 'time')        out <- unit |> gsub(".time", "", x = _)
+  if (is == 'vol')         out <- unit |> gsub(".vol",  "", x = _)
+  if (is == 'mass')        out <- unit |> gsub(".mass", "", x = _)
+  if (is == 'area')        out <- unit |> gsub(".area", "", x = _)
+  if (is == 'o1')          out <- unit |> gsub(".o1",   "", x = _)
+  if (is == 'flow')        out <- unit |> gsub(".flow", "", x = _)
+  if (is == 'pressure')    out <- unit |> gsub(".p",    "", x = _)
+  if (is == 'temperature') out <- unit |> gsub(".temp", "", x = _)
+
+  return(out)
+}
+
+
+#' Checks if an oxygen concentration/pressure unit or metabolic rate unit
+#' requires temperature, salinity, and pressure to convert to another unit.
+#'
+#' `type` should be `"oxy"` or `"mr"`.
+#'
+#' Returns `TRUE` if it requires t,S,P or `FALSE` if not.
+#'
+#' @keywords internal
+StP.check <- function(unit, type) {
+  if(type == "oxy") check <- any(sapply(oxy.StP.req.rgx, function(z) grepl(z, unit)))
+  if(type == "mr") check <- any(sapply(mr.StP.req.rgx, function(z) grepl(z, unit)))
+  return(check)
+}
+
+#' Returns an error message if an oxygen concentration/pressure unit or
+#' metabolic rate unit requires S or t and either is NULL, or a message if it
+#' requires P and it is NULL.
+#'
+#' `type` should be `"oxy"` or `"mr"`.
+#' `P.chk` - perform P out of normal range check. Only want to do this once per function.
+#'
+#' Also returns default value of P = 1.013253 if it is NULL.
+#'
+#' @keywords internal
+StP.val <- function(unit, type, S, t, P, P.chk = TRUE, msg) {
+
+  if(P.chk && !is.null(P) && !dplyr::between(P, 0.9, 1.08))
+    warning(glue::glue("{msg}: The Atmospheric Pressure input 'P' is outside the normal realistic range. \nIt should not be outside the typical natural range of 0.9 to 1.1 except for special applications. \nPlease make sure it is entered in 'bar' units. Conversion performed regardless."),
+            call. = FALSE)
+
+  if(is.null(S)) {
+    check.S <- StP.check(unit, type)
+    if(check.S) stop(glue::glue("{msg}: Input or output units require Salinity input (i.e. S = ??)"), call. = FALSE)
+  } else if(is.null(t)) {
+    check.t <- StP.check(unit, type)
+    if(check.t) stop(glue::glue("{msg}: Input or output units require Temperature input (i.e. t = ??)"), call. = FALSE)
+  } else if(is.null(P)) {
+    check.P <- StP.check(unit, type)
+    if(check.P){
+      message(glue::glue("{msg}: Input or output units require Atmospheric Pressure input (i.e. P = ??). \n Default value of P = 1.013253 bar has been used."))
+      P <- 1.013253
+    }
+  }
+
+  return(P)
+}
+
+
+

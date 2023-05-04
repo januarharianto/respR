@@ -36,7 +36,13 @@ These features are in development, planned or being considered. We are happy to 
 
 - ~~A function or workflow to automatically identify replicates, run `calc_rate` or `auto_rate` on each one, then summarise the result. See [here](https://github.com/januarharianto/respR/issues/131) and feel free to make suggestions.~~
 
-This is now implemented! As part of [v2.1](https://januarharianto.github.io/respR/articles/version_notes.html) the `calc_rate.int()`, `auto_rate.int()` and `select_rate()` functions allow you to extract rates from every replicate in intermittent-flow respirometry data and summarise them according to a huge array of criteria. It's not quite *automatic* identification of replicates, but the process of specifying them is very straightforward, and leaves open the option to have some sort of automatic identification included in the future. 
+This is now implemented! As part of [v2.1](https://januarharianto.github.io/respR/articles/release_notes.html) the `calc_rate.int()`, `auto_rate.int()` and `select_rate()` functions allow you to extract rates from every replicate in intermittent-flow respirometry data and summarise them according to a huge array of criteria. It's not quite *automatic* identification of replicates, but the process of specifying them is very straightforward, and leaves open the option to have some sort of automatic identification included in the future. 
+
+### `convert_MR`
+
+- ~~A function for converting between units of oxygen uptake or production rate. Could be useful for comparing outputs to results from the literature.~~
+
+This is now added! As part of [v2.3](https://januarharianto.github.io/respR/articles/release_notes.html) the `convert_MR()` function allows you to convert between metabolic rates, including those from older publications. See `vignette("convert_MR")` for details. 
 
 ### `oxy_crit`
 
@@ -53,13 +59,10 @@ This is now implemented! As part of [v2.1](https://januarharianto.github.io/resp
 
 - Flowthrough analysis workflow currently has no equivalent of `auto_rate`, that is some way of automatically and objectively identifying stable rates. 
 
-### `convert_mr`
-
-- A function for converting between units of oxygen uptake or production rate. Could be useful for comparing outputs to results from the literature.
 
 
-### Aerobic respirometry
+### Air respirometry
 
-We are still desperate to [hear](https://januarharianto.github.io/respR/articles/contact.html) from users who have used (or tried to use) `respR` with data from air respirometry experiments so that we can get an idea of how we can update the package to directly support aerobic respirometry. 
+We are still desperate to [hear](https://januarharianto.github.io/respR/articles/contact.html) from users who have used (or tried to use) `respR` with data from air respirometry experiments so that we can get an idea of how we can update the package to directly support it. 
 
 
