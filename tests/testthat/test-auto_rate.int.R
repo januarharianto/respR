@@ -12,24 +12,24 @@ capture.output({  ## stops printing outputs on assigning
   # create testing objects
   suppressWarnings({
     # in secs
-    dt.sec <- intermittent.rd |>
+    dt.sec <- intermittent.rd %>%
       subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
     dt.sec.insp <- inspect(dt.sec, plot = F)
 
     # in mins - 2 dec places
-    dt.min.2 <- intermittent.rd |>
+    dt.min.2 <- intermittent.rd %>%
       subset_data(from = 1)
     dt.min.2[[1]] <- round(dt.min.2[[1]]/60, 2)
     dt.min.2.insp <- inspect(dt.min.2, plot = F)
 
     # in mins - 1 dec places
-    dt.min.1 <- intermittent.rd |>
+    dt.min.1 <- intermittent.rd %>%
       subset_data(from = 1)
     dt.min.1[[1]] <- round(dt.min.1[[1]]/60, 1)
     dt.min.1.insp <- inspect(dt.min.1, plot = F)
 
     # in hrs - 2 dec places
-    dt.hr <- intermittent.rd |>
+    dt.hr <- intermittent.rd %>%
       subset_data(from = 1)
     dt.hr[[1]] <- round(dt.hr[[1]]/60/60, 3)
     dt.hr.insp <- inspect(dt.hr, plot = F)
@@ -45,7 +45,7 @@ capture.output({  ## stops printing outputs on assigning
     dt.reg.insp <- subset_data(zeb_intermittent.rd,
                                from = 5840,
                                to = 5840 + 6599,
-                               by = "row") |>
+                               by = "row") %>%
       inspect(legend = F, plot = F)
   })
 
@@ -1449,7 +1449,7 @@ capture.output({  ## stops printing outputs on assigning
                                 n = 2,
                                 measure = c(500,500,400),
                                 plot = F,
-                                type = "rep") |>
+                                type = "rep") %>%
       summary()
     ar.int.obj$dataframe[ar.int.obj$summary$row,]
     # test - if we use row numbers in calc_rate results should match
@@ -1458,7 +1458,7 @@ capture.output({  ## stops printing outputs on assigning
                         from = ar.int.obj$summary$row,
                         to = ar.int.obj$summary$endrow,
                         by = "row",
-                        plot = F) |>
+                        plot = F) %>%
       summary()
 
     expect_equal(ar.int.obj$rate,
@@ -1511,7 +1511,7 @@ capture.output({  ## stops printing outputs on assigning
   dt.reg.insp.30 <- subset_data(zeb_intermittent.rd,
                              from = 5840,
                              to = 5840 + 19797,
-                             by = "row") |>
+                             by = "row") %>%
     inspect(legend = F, plot = F)
   # should be 30 reps
   ar.int.obj.30reps <- auto_rate.int(dt.reg.insp.30,
@@ -1599,8 +1599,8 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'concurre
                           plot = F)
   # "concurrent" method
   # subset these data to the same length
-  by <- background_con.rd |>
-    subset_data(1, 4830, "time", quiet = TRUE) |>
+  by <- background_con.rd %>%
+    subset_data(1, 4830, "time", quiet = TRUE) %>%
     calc_rate.bg(plot = F)
 
   ar.int.adj <- adjust_rate(ar.int, by = by, method = "concurrent")
@@ -1620,11 +1620,11 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'linear'"
   #summary(ar.int)
   # "linear" method
   # subset these data to the same length
-  by1 <- background_con.rd |>
-    subset_data(1, 800, "time") |>
+  by1 <- background_con.rd %>%
+    subset_data(1, 800, "time") %>%
     calc_rate.bg()
-  by2 <- background_exp.rd |>
-    subset_data(5000, 15000, "time") |>
+  by2 <- background_exp.rd %>%
+    subset_data(5000, 15000, "time") %>%
     calc_rate.bg()
 
   ar.int.adj <- adjust_rate(ar.int, by = by1, by2 = by2, method = "linear")
@@ -1648,11 +1648,11 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'exponent
                           plot = F)
   # "exponential" method
   # subset these data to the same length
-  by1 <- background_con.rd |>
-    subset_data(1, 800, "time") |>
+  by1 <- background_con.rd %>%
+    subset_data(1, 800, "time") %>%
     calc_rate.bg()
-  by2 <- background_exp.rd |>
-    subset_data(5000, 15000, "time") |>
+  by2 <- background_exp.rd %>%
+    subset_data(5000, 15000, "time") %>%
     calc_rate.bg()
 
   ar.int.adj <- adjust_rate(ar.int, by = by1, by2 = by2, method = "exponential")

@@ -529,6 +529,6 @@ rowlength = NULL; endrow = NULL; timelength = NULL; rate.2pt = NULL
 endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
 ..xcol = NULL; ..ycol = NULL; multicore = NULL; multisession = NULL
 rsq = NULL; rate = NULL; rate.output = NULL; start_row = NULL;
-intercept_b0 = NULL; slope_b1 = NULL
+intercept_b0 = NULL; slope_b1 = NULL; . = NULL
 
 

@@ -65,14 +65,14 @@ capture.output({  ## stops printing outputs on assigning
     dt.reg.insp <- subset_data(zeb_intermittent.rd,
                                from = 5840,
                                to = 5840 + 6599,
-                               by = "row") |>
+                               by = "row") %>%
       inspect(legend = F, plot = T)
 
     # 10 reps, 1 rank in each
-    conv_rt_ar.int_obj <- dt.reg.insp |>
+    conv_rt_ar.int_obj <- dt.reg.insp %>%
       calc_rate.int(starts = 660,
                     by = "time",
-                    plot = F) |>
+                    plot = F) %>%
       convert_rate(oxy.unit = "mg/L",
                    time.unit = "secs",
                    output.unit = "mg/h/g",
@@ -80,14 +80,14 @@ capture.output({  ## stops printing outputs on assigning
                    mass = 0.0009)
 
     # 10 reps, multiple ranks in each
-    conv_rt_ar.int_obj_mult_ranks <- dt.reg.insp |>
+    conv_rt_ar.int_obj_mult_ranks <- dt.reg.insp %>%
       auto_rate.int(starts = 660,
                     wait = 120,
                     measure = 360,
                     by = "row",
                     plot = F,
                     n = 5,
-                    width = 0.4) |>
+                    width = 0.4) %>%
       convert_rate(oxy.unit = "mg/L",
                    time.unit = "secs",
                    output.unit = "mg/h/g",
@@ -2666,9 +2666,9 @@ capture.output({  ## stops printing outputs on assigning
   test_that("select_rate: calc_rate-to-adjust_rate-to-convert_rate object with multiple rates works", {
 
     cr_mult_adj <-
-      urchins.rd[,1:2] |>
-      calc_rate(seq(10, 100, 10), seq(110, 200, 10), "row", plot = FALSE) |>
-      adjust_rate(by = -0.005) |>
+      urchins.rd[,1:2] %>%
+      calc_rate(seq(10, 100, 10), seq(110, 200, 10), "row", plot = FALSE) %>%
+      adjust_rate(by = -0.005) %>%
       convert_rate(oxy.unit = "mg/l",
                    time.unit = "min",
                    output.unit = "mg/h/g",

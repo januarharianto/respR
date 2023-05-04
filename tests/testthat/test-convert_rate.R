@@ -26,7 +26,7 @@ capture.output({  ## stops printing outputs on assigning
                    "convert_rate: Object of class 'calc_rate' detected. Converting all rates in '\\$rate'.")
 
     # calc_rate.int
-    dt <- intermittent.rd |>
+    dt <- intermittent.rd %>%
       subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
     dt.insp <- inspect(dt, plot = F)
     sts <- c(1,2100,3899) # different from help file because first row removed above

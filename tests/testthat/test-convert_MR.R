@@ -60,14 +60,14 @@ capture.output({  ## stops printing outputs on assigning
                                          S = NULL, t = NULL, P = NULL)
 
     # EMPTY convert_rate object
-    cnv_rt_empty <- calc_rate(sardine.rd[,1:2], 10:20, 1030:1040, plot = FALSE) |>
-      convert_rate("%Air", "s", "mg/h", 1, S = 30, t=10, P =1, plot = FALSE) |>
+    cnv_rt_empty <- calc_rate(sardine.rd[,1:2], 10:20, 1030:1040, plot = FALSE) %>%
+      convert_rate("%Air", "s", "mg/h", 1, S = 30, t=10, P =1, plot = FALSE) %>%
       select_rate("duration", c(2000, 3000))
 
     # EMPTY convert_rate.ft object
-    cnv_rt.ft_empty <- inspect.ft(flowthrough.rd, 1, 2, 3, plot = FALSE) |>
-      calc_rate.ft(1, 500:510, 900:910, plot = FALSE) |>
-      convert_rate.ft("mg/l", "l/m", "mg/h", S = 30, t=10, P =1, plot = FALSE) |>
+    cnv_rt.ft_empty <- inspect.ft(flowthrough.rd, 1, 2, 3, plot = FALSE) %>%
+      calc_rate.ft(1, 500:510, 900:910, plot = FALSE) %>%
+      convert_rate.ft("mg/l", "l/m", "mg/h", S = 30, t=10, P =1, plot = FALSE) %>%
       select_rate.ft("duration", c(2000, 3000))
   }
 

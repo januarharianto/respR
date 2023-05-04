@@ -48,7 +48,6 @@ Suggests:
     knitr,
     rmarkdown,
     rMR,
-    DiagrammeR,
     FishResp,
     respirometry,
     testthat,

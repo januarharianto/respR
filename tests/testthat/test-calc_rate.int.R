@@ -8,7 +8,7 @@
 
 capture.output({  ## stops printing outputs on assigning
 
-  dt <- intermittent.rd |>
+  dt <- intermittent.rd %>%
     subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
   dt.insp <- inspect(dt, plot = F)
   sts <- c(1,2100,3899) # different from help file because first row removed above
@@ -19,7 +19,7 @@ capture.output({  ## stops printing outputs on assigning
   dt.reg.insp <- subset_data(zeb_intermittent.rd,
                              from = 5840,
                              to = 5840 + 6599,
-                             by = "row") |>
+                             by = "row") %>%
     inspect(legend = F, plot = F)
 
   # x input tests --------------------------------------------------
@@ -712,8 +712,8 @@ capture.output({  ## stops printing outputs on assigning
                             plot = F)
     # "concurrent" method
     # subset these data to the same length
-    by <- background_con.rd |>
-      subset_data(1, 4830, "time", quiet = TRUE) |>
+    by <- background_con.rd %>%
+      subset_data(1, 4830, "time", quiet = TRUE) %>%
       calc_rate.bg(plot = F)
 
     cr.int.adj <- adjust_rate(cr.int, by = by, method = "concurrent")
@@ -732,11 +732,11 @@ capture.output({  ## stops printing outputs on assigning
                             plot = F)
     # "linear" method
     # subset these data to the same length
-    by1 <- background_con.rd |>
-      subset_data(1, 800, "time") |>
+    by1 <- background_con.rd %>%
+      subset_data(1, 800, "time") %>%
       calc_rate.bg()
-    by2 <- background_exp.rd |>
-      subset_data(5000, 15000, "time") |>
+    by2 <- background_exp.rd %>%
+      subset_data(5000, 15000, "time") %>%
       calc_rate.bg()
 
     cr.int.adj <- adjust_rate(cr.int, by = by1, by2 = by2, method = "linear")
@@ -761,11 +761,11 @@ capture.output({  ## stops printing outputs on assigning
                             plot = F)
     # "exponential" method
     # subset these data to the same length
-    by1 <- background_con.rd |>
-      subset_data(1, 800, "time") |>
+    by1 <- background_con.rd %>%
+      subset_data(1, 800, "time") %>%
       calc_rate.bg()
-    by2 <- background_exp.rd |>
-      subset_data(5000, 15000, "time") |>
+    by2 <- background_exp.rd %>%
+      subset_data(5000, 15000, "time") %>%
       calc_rate.bg()
 
     cr.int.adj <- adjust_rate(cr.int, by = by1, by2 = by2, method = "exponential")
