@@ -220,11 +220,11 @@
 #' # subset first so that the first replicate starts at row 1.
 #' #
 #' # Subset and inspect data
-#' zeb_insp <- zeb_intermittent.rd |>
+#' zeb_insp <- zeb_intermittent.rd %>%
 #'   subset_data(from = 5840,
 #'               to = 75139,
 #'               by = "row",
-#'               quiet = TRUE) |>
+#'               quiet = TRUE) %>%
 #'   inspect()
 #'
 #' # Calculate a rate from same 6-minute region in every replicate.

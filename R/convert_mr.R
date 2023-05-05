@@ -124,8 +124,8 @@
 #' # an entire analysis to see the output in different units.
 #'
 #' # Make a convert_rate object
-#' cnv_rt.obj <- urchins.rd |>
-#'   auto_rate() |>
+#' cnv_rt.obj <- urchins.rd %>%
+#'   auto_rate() %>%
 #'   convert_rate(oxy.unit = "mg/L",
 #'                time.unit = "min",
 #'                output.unit = "mg/hr/kg",

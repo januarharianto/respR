@@ -50,7 +50,7 @@ rate selection criteria.
 
 Multiple selection criteria can be applied by saving the output and
 processing it through the function multiple times using different methods,
-or alternatively via piping (\verb{|>} or \verb{\%>\%}). See Examples.
+or alternatively via piping (\verb{\%>\%} or \verb{\%>\%}). See Examples.
 
 \emph{Note:} when choosing a \code{method}, keep in mind that to remain
 mathematically consistent, \code{respR} outputs oxygen consumption (i.e.
@@ -429,39 +429,39 @@ website at \url{https://januarharianto.github.io/respR/}
 \examples{
 \donttest{
 ## Object to filter
- ar_obj <- inspect(intermittent.rd, plot = FALSE) |>
-   auto_rate(plot = FALSE) |>
+ ar_obj <- inspect(intermittent.rd, plot = FALSE) \%>\%
+   auto_rate(plot = FALSE) \%>\%
    convert_rate(oxy.unit = "mg/L",
                 time.unit = "s",
                 output.unit = "mg/h",
-                volume = 2.379) |>
+                volume = 2.379) \%>\%
    summary()
 
  ## Select only negative rates
- ar_subs_neg <- select_rate(ar_obj, method = "negative") |>
+ ar_subs_neg <- select_rate(ar_obj, method = "negative") \%>\%
    summary()
 
  ## Select only rates over 1000 seconds duration
- ar_subs_dur <- select_rate(ar_obj, method = "duration", n = c(1000, Inf)) |>
+ ar_subs_dur <- select_rate(ar_obj, method = "duration", n = c(1000, Inf)) \%>\%
    summary()
 
  ## Reorder rates sequentially (i.e. by starting row)
- ar_subs_dur <- select_rate(ar_obj, method = "row") |>
+ ar_subs_dur <- select_rate(ar_obj, method = "row") \%>\%
    summary()
 
  ## Select rates with r-squared higher than 0.99,
  ## then select the lowest 10th percentile of the remaining rates,
  ## then take the mean of those
- inspect(squid.rd, plot = FALSE) |>
+ inspect(squid.rd, plot = FALSE) \%>\%
    auto_rate(method = "linear",
-             plot = FALSE) |>
+             plot = FALSE) \%>\%
    convert_rate(oxy.unit = "mg/L",
                 time.unit = "s",
                 output.unit = "mg/h",
-                volume = 2.379) |>
-   summary() |>
-   select_rate(method = "rsq", n = c(0.99, 1)) |>
-   select_rate(method = "lowest_percentile", n = 0.1) |>
+                volume = 2.379) \%>\%
+   summary() \%>\%
+   select_rate(method = "rsq", n = c(0.99, 1)) \%>\%
+   select_rate(method = "lowest_percentile", n = 0.1) \%>\%
    mean()
    }
 }

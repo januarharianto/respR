@@ -235,7 +235,7 @@
 #'               starts = c(1, 2101, 3901),
 #'               by = "row",
 #'               method = "linear",
-#'               width = 400) |>
+#'               width = 400) %>%
 #'   summary()
 #'
 #' # Calculate the lowest rate within each replicate across
@@ -246,7 +246,7 @@
 #'               measure = 1000,
 #'               by = "row",
 #'               method = "lowest",
-#'               width = 300) |>
+#'               width = 300) %>%
 #'   summary()
 #'
 #' # You can even specify different 'measure' phases in each rep
@@ -255,7 +255,7 @@
 #'               measure = c(1000, 800, 600),
 #'               by = "row",
 #'               method = "lowest",
-#'               width = 300) |>
+#'               width = 300) %>%
 #'   summary()
 #'
 #' # We usually don't want to use the start of a replicate just after the flush,
@@ -270,7 +270,7 @@
 #'                           measure = 10,          # measure phase of 10 mins
 #'                           by = "time",           # apply inputs by time values
 #'                           method = "lowest",     # get the 'lowest' rate...
-#'                           width = 5) |>          #  ... of 5 minutes width
+#'                           width = 5) %>%          #  ... of 5 minutes width
 #'   summary()
 #'
 #' # Regular replicate structure --------------------------------------------
@@ -280,11 +280,11 @@
 #' # subset first so that the first replicate starts at row 1.
 #' #
 #' # Subset and inspect data
-#' zeb_insp <- zeb_intermittent.rd |>
+#' zeb_insp <- zeb_intermittent.rd %>%
 #'   subset_data(from = 5840,
 #'               to = 75139,
 #'               by = "row",
-#'               quiet = TRUE) |>
+#'               quiet = TRUE) %>%
 #'   inspect()
 #'
 #' # Calculate the most linear rate from the same 6-minute region in every
@@ -295,7 +295,7 @@
 #'                          measure = 360, # measure period of 6 mins after 'wait'
 #'                          method = "linear",
 #'                          width = 200, # starting value for linear analysis
-#'                          plot = TRUE) |>
+#'                          plot = TRUE) %>%
 #'   summary()
 #'
 #' # S3 functions ------------------------------------------------------------

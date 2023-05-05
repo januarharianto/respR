@@ -4,7 +4,7 @@
 #' on a given set of criteria. The function is ideal for passing only selected
 #' regions of data to other functions such as [`calc_rate()`] and
 #' [`auto_rate()`], either by saving the output as a new object or via the use
-#' of pipes (`%>%` or `|>`). It is also very useful in analysis of
+#' of pipes (`%>%` or `%>%`). It is also very useful in analysis of
 #' intermittent-flow data, where in a loop each replicate can be extracted and
 #' passed to an analytical function such as `calc_rate` or `auto_rate`. See
 #' examples and vignettes.
