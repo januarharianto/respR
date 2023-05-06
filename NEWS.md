@@ -20,7 +20,7 @@ To help with this new functionality, this version has undergone a major update a
 
 There's also a handy change to `inspect()`, `inspect.ft()`, and `oxy_crit()` which means you can now specify columns by *name* as well as column *number*. 
 
-A last major change is that the `import_file()` function has been deprecated. It is still fully functional, but will not be updated and will be removed in the next major release version (i.e. `v3.0`, which is not planned for any time soon and may be years away). This was only ever intended to be a convenience function for those completely new to `R`, and was always experimental as there is no way we could have access to or test against every variation of oxygen sensor system output files. We found some users were overly reliant on it and expecting us to update the function rather than try to import data files themselves using generic functions such as `read.csv`. To our knowledge, every oxygen sensor system exports data in formats (e.g. `.csv`, `.txt`, `.xlsx`) which can be imported into `R` using generic functions. This is a basic skill anyone using `R` should be comfortable with, and also allows for much more control and the ability to troubleshoot issues.
+A last major change is that the `import_file()` function has been deprecated. It is still fully functional, but will not be updated and will be removed in the next major release version (i.e. `v3.0`, which is not planned for any time soon). This was only ever intended to be a convenience function for those completely new to `R`, and was always experimental as there is no way we could have access to or test against every variation of oxygen sensor system output files. We found some users were overly reliant on it and expecting us to update the function rather than try to import data files themselves using generic functions such as `read.csv`. To our knowledge, every oxygen sensor system exports data in formats (e.g. `.csv`, `.txt`, `.xlsx`) which can be imported into `R` using generic functions. This is a basic skill anyone using `R` should be comfortable with, and also allows for much more control and the ability to troubleshoot issues.
 
 ==================================== New =======================================
 
@@ -33,7 +33,7 @@ A last major change is that the `import_file()` function has been deprecated. It
 =================================== Changes ====================================
 
 - CHANGE: `import_file()` has been deprecated. It is still fully functional but will not be updated and will be removed in a future version.
-- CHANGE: Units are now parsed to a standardised format in output objects. For example, in `convert_rate` if you specify `"MG per h"` or `"mg h-1"` as the output unit this will appear as `"mgO2/hr"` in the output object; `"ml min-1 kg-1"` becomes `"mLO2/min/kg"`, etc. This change means you can certain the unit is being recognised as what you expect. See `unit_args()` for details.
+- CHANGE: Units are now parsed to a standardised format in output objects. For example, in `convert_rate` if you specify `"MG per h"` or `"mg h-1"` as the output unit this will appear as `"mgO2/hr"` in the output object; `"ml min-1 kg-1"` becomes `"mLO2/min/kg"`, etc. This means you can be sure the unit is being recognised correctly. 
 - CHANGE: `unit_args()` updated for new units.
 - CHANGE: Errors and warnings have been revised to be more concise and informative, especially about what function they originate from. 
 
