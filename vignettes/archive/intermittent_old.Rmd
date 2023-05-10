@@ -261,7 +261,7 @@ Thius is the same analysis as above but using exclusively the `apply` family of 
 
 ```{r eval = F, tidy = F}
 # Import and inspect raw data ---------------------------------------------
-# Importing would normally be the first step, e.g. import_file("path/to/file")
+# Importing would normally be the first step, e.g. read.csv("path/to/file")
 zeb <- inspect(zeb_intermittent.rd)
 
 # Background --------------------------------------------------------------

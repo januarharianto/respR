@@ -46,7 +46,6 @@ A typical workflow involves some or all of the following functions:
 
 |  |  |
 | -- | -- |
-| `import_file()` & `format_time()` | Import data and prepare it for use in `respR` |
 | `inspect()` | Visualise the data and check it for common issues|
 | `calc_rate()` & `auto_rate()` | Extract rates from the entire dataset or regions of it, manually or automatically |
 | `adjust_rate()` | Adjust the rate values for background oxygen consumption or production |
@@ -56,7 +55,7 @@ A typical workflow involves some or all of the following functions:
 
 ### Importing and preparing data
 
-`respR` has a very simple structural data requirement: data must be in the form of paired values of numeric time and oxygen amount. Most if not all oxygen sensing equipment or probe systems output to this format, or at least to a format that is easy to coerce to this structure. All that is required is to put these data in a dataframe.
+`respR` has a very simple structural data requirement: data must be in the form of paired values of numeric time and oxygen amount in a `data.frame`. To our knowledge, all oxygen sensing equipment or probe systems output to formats (e.g. `.csv`, `.txt`) that can be imported into this structure in `R` using generic functions such as `read.csv()`.
 
 See `vignette("importing")` for a guide to importing and preparing data to this form.
 
