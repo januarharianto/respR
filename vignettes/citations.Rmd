@@ -40,6 +40,10 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
+#### @gomesImpactsAcuteHypoxia2023
+
+Preprint
+
 #### @zhangLossBehavioralStress2023
 
 Cavefish - uses plot

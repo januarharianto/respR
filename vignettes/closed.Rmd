@@ -280,7 +280,9 @@ Note how we have changed the format of the time and oxygen units. A "fuzzy" stri
 unit_args()
 ```
 
-Note that some units of oxygen require temperature, salinity and atmospheric pressure to perform the conversion. This time we will save the result as an object.
+Note that some units of oxygen require temperature, salinity and atmospheric pressure to perform the conversion. One handy tip: you may want to enter these even if they are not required for conversions because they are saved in the `$summary` table, and this can help in keeping track of results across different experiments. 
+
+This time we will save (i.e. assign) the result to an object.
 
 ```{r tidy = FALSE, eval = T}
 urch_rate_final <- convert_rate(urch_rate_adj, 
@@ -308,7 +310,8 @@ The final rate can be seen above in these console outputs. It can be extracted f
 urch_rate_final$rate.output
 ```
 
-x
+Alternatively, use the `summary` function with `export = TRUE` to save the summary table as a separate data frame which contains all rate regression parameters and data locations, adjustments (if applied), units, and more. This is a great way of exporting all the relevant data for your final results. 
+
 ```{r eval = FALSE}
 urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
 ```
