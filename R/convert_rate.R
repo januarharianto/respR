@@ -406,7 +406,7 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   P <- StP.val(oxy.unit, "oxy", S, t, P, P.chk = FALSE, msg = "convert_rate")
   P <- StP.val(output.unit, "mr", S, t, P, P.chk = TRUE, msg = "convert_rate")
 
-# Convert -----------------------------------------------------------------
+  # Convert -----------------------------------------------------------------
 
   # Convert DO unit first
   if (A %in% c("pmol.o2", "nmol.o2", "umol.o2", "mmol.o2", "mol.o2")) {
@@ -442,7 +442,8 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     VO2.area.spec <- VO2/multm # ok
   }
 
-  # Generate output
+  # Generate summary table --------------------------------------------------
+
   if (is.mass.spec) {
     summary <- data.table(rate.input = rate,
                           oxy.unit = oxy.unit,
@@ -450,6 +451,9 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           volume = volume,
                           mass = mass,
                           area = NA,
+                          S = ifelse(is.null(S), NA, S),
+                          t = ifelse(is.null(t), NA, t),
+                          P = ifelse(is.null(P), NA, P),
                           rate.abs = VO2,
                           rate.m.spec = VO2.mass.spec,
                           rate.a.spec = NA,
@@ -464,6 +468,9 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           volume = volume,
                           mass = NA,
                           area = area,
+                          S = ifelse(is.null(S), NA, S),
+                          t = ifelse(is.null(t), NA, t),
+                          P = ifelse(is.null(P), NA, P),
                           rate.abs = VO2,
                           rate.m.spec = NA,
                           rate.a.spec = VO2.area.spec,
@@ -477,6 +484,9 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                           volume = volume,
                           mass = NA,
                           area = NA,
+                          S = ifelse(is.null(S), NA, S),
+                          t = ifelse(is.null(t), NA, t),
+                          P = ifelse(is.null(P), NA, P),
                           rate.abs = VO2,
                           rate.m.spec = NA,
                           rate.a.spec = NA,
