@@ -42,7 +42,8 @@ We also need to specify the `format` of the date-times in the correct order. See
 Here's an example of a 2-column data frame with date-time data and oxygen. 
 
 ```{r  echo = F, message = F, results="hide"}
-data <- import_file("Witrox_eg.txt")
+data <- data.table::fread("Witrox_eg.txt", fill = TRUE, skip = 10, colClasses = c(V2 = "character"),
+              dec = ".", showProgress = FALSE)
 data <- data[,c(1,6)]
 data_v <- data[[1]]
 names(data) <- c("Date_Time", "O2_mg/L")

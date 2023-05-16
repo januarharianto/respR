@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Developers
 
-`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are biologists and wrote the `respR` code to assist with our own work, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. 
+`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are working biologists and originally wrote the `respR` code to assist with our own respirometry analyses, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. You can help support ongoing development of the package [**here**](https://januarharianto.github.io/respR/articles/support.html).
 
 ## Contact
 
@@ -29,17 +29,11 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 - Want to dive into the code and fix or add something? - fork the [**Github repo**](https://github.com/januarharianto/respR/) and do a [**Pull Request**](https://github.com/januarharianto/respR/pulls)
 
-## Twitter
+## Socials
 
-`respR` has a [**Twitter**](https://twitter.com/respR_pkg) account. Follow for the latest news and updates. 
+`respR` has [**Twitter**](https://twitter.com/respR_pkg) and **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** accounts. Follow these for the latest news and updates. Feel free to nudge us to tweet or retweet news about your published research using `respR`!
 
-&nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
-
-## Mastodon
-
-We also have a **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop! 
-
-&nbsp; &nbsp; [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
+&nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw) &nbsp; &nbsp; [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
 
 ## Tip Jar 
 

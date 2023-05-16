@@ -1,11 +1,11 @@
 ---
-title: "Release notes"
+title: "Release Notes"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{Release notes}
+  %\VignetteIndexEntry{Release Notes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

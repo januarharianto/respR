@@ -1,12 +1,12 @@
 ---
-title: Future features
+title: Future Features
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 resource_files:
 vignette: >
-  %\VignetteIndexEntry{Future features}
+  %\VignetteIndexEntry{Future Features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

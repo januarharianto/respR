@@ -341,8 +341,8 @@ to be regarded as overlapping.
 The \code{overlap} method performs two operations:
 
 First, regardless of the \code{n} value, any rate regressions which are
-completely contained within another are removed (this is also the only
-operation if \code{n = 1}).
+completely contained within another are removed. This is also the only
+operation if \code{n = 1}.
 
 Secondly, for each regression in \verb{$summary} starting from the bottom of the
 summary table (usually the lowest ranked result, but this depends on the

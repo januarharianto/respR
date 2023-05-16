@@ -138,11 +138,11 @@ navbar:
       menu:
       - text: "Support Development"
         href: articles/support.html
-      - text: "Release notes"
+      - text: "Release Notes"
         href: articles/release_notes.html
-      - text: "respR in use"
+      - text: "respR in Use"
         href: articles/citations.html
-      - text: "Future features"
+      - text: "Future Features"
         href: articles/future.html
       - text: "References"
         href: articles/refs.html

@@ -58,37 +58,11 @@ The following functions may help with importing your data:
 
 # `import_file`
 
-Note as of `respR` [v2.3.0]() this function has been DEPRECATED. The following is still fully functional, but `import_file` will not be updated and will be removed in a future release. Users should move their importing data workflows to using more generic functions such as those detailed above. This gives you much more control and the ability to troubleshoot issues if a problem occurs, rather than waiting for this function to be updated.
+Note as of `respR` [v2.3.0]() this function has been DEPRECATED. It is still fully functional, but `import_file` will not be updated and will be removed in a future release. Users should move their importing data workflows to use more generic functions such as those detailed above. This gives you much more control and the ability to troubleshoot issues if a problem occurs, rather than waiting for this function to be updated.
 
-`import_file()` uses pattern recognition to identify the originating system of the file, imports it, formats columns and column names, and outputs a data frame that can be passed to `respR` functions.
+For files currently supported, `import_file()` uses pattern recognition to identify the originating system of the file, imports it, formats columns and column names, and outputs a data frame that can be passed to `respR` functions.
 
-Use of this function to prepare the data for use in `respR` is ***OPTIONAL*** and in fact ***NOT RECOMMENDED***. It is a convenience function and mainly intended for those completely new to `R`. If you are even slightly experienced in `R` you should know how to import data and structure it to a simple dataframe of time against oxygen. It is *always* better to import files yourself using generic functions. See above. 
-
-## Example
-
-This is a screenshot of what the file we want to import looks like in Excel.
-
-```{r, out.width = "700px", eval = T, echo = FALSE}
-knitr::include_graphics("img/witrox.png")
-```
-
-We can see there are several rows of redundant information. There are also spaces and odd characters in the column names that often cause text encoding errors when imported into R, such as ` & ` and square brackets. 
-
-`import_file` can bring in this file (situated in the current working directory, otherwise any external file can be specified with a filepath):
-
-```{r eval = T}
-data <- import_file("Witrox_eg.txt")
-```
-
-There are six columns, but we will print only the relevant date, numeric timestamp, and oxygen columns
-
-```{r eval = T}
-data[,c(1,2,6)]
-```
-
-As we can see, the function automatically recognises that this is a Witrox file, removes redundant rows, and renames the columns, removing spaces and problem characters while keeping unique identifiers. 
-
-This function requires only a single input, the path to the file. Everything else is handled automatically. The function will even automatically recognise data formatted in the European style using commas for decimals.
+To repeat: use of this function to prepare the data for use in `respR` is ***OPTIONAL*** and in fact ***NOT RECOMMENDED***. It is a convenience function and mainly intended for those completely new to `R`. If you are even slightly experienced in `R` you should know how to import data and structure it to a simple dataframe of time against oxygen. It is *ALWAYS* better to import files yourself using generic functions. See above. 
 
 ## Supported systems
 
