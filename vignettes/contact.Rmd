@@ -11,13 +11,68 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, echo = F, warning = F, message = F}
+library(knitr) # load knitr to enable options
+library(respR) # load respR
+
+opts_chunk$set(collapse = TRUE, 
+               comment = "#>", 
+               cache = FALSE, 
+               tidy = TRUE, 
+               highlight = TRUE, 
+               fig.width = 10, 
+               fig.height = 5,
+               fig.align = "center",
+               R.options = list(
+                 scipen = 999, 
+                 digits = 3))
 ```
+
+<!-- avoid border around images -->
+<style>
+    img {
+        border: 10;
+    }
+</style>
+
+```{css echo=FALSE}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left {
+  width: 45%;
+  margin:15px; 
+  border-style: solid;
+  border-color: grey;
+  border-radius: 12px;
+  padding: 10px; 
+}
+
+.right {
+  width: 45%;
+  margin:15px; 
+  border-style: solid;
+  border-color: grey;
+  border-radius: 12px;
+  padding: 10px; 
+}
+```
+
+<div class="wrapper">
+<div class="left">
+![](https://metrics.lecoq.io/nicholascarey?template=classic&base.community=0&isocalendar=1&introduction=1&base=header%2C%20activity%2C%20community%2C%20repositories%2C%20metadata&base.indepth=false&base.hireable=false&base.skip=false&isocalendar=false&isocalendar.duration=half-year&introduction=false&introduction.title=true&config.timezone=Europe%2FLondon)
+</div>
+<div class="right">
+![](https://metrics.lecoq.io/januarharianto?template=classic&base.community=0&isocalendar=1&introduction=1&base=header%2C%20activity%2C%20community%2C%20repositories%2C%20metadata&base.indepth=false&base.hireable=false&base.skip=false&isocalendar=false&isocalendar.duration=half-year&introduction=false&introduction.title=true&config.timezone=Europe%2FLondon)
+</div>
+</div>
 
 ## Developers
 
-`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are working biologists and originally wrote the `respR` code to assist with our own respirometry analyses, before realising it would be useful to the scientific community and developing it as an `R` package. We have done this almost entirely in our spare time, spending many hundreds of hours working on it. You can help support ongoing development of the package [**here**](https://januarharianto.github.io/respR/articles/support.html).
+`respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are working biologists and originally wrote the `respR` code to assist with our own respirometry analyses, before realising it would be useful to the scientific community and developing it as an `R` package. 
 
 ## Contact
 
@@ -27,7 +82,17 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 - Bugs, problems, or feature requests - open a [**Github Issue**](https://github.com/januarharianto/respR/issues)
 
-- Want to dive into the code and fix or add something? - fork the [**Github repo**](https://github.com/januarharianto/respR/) and do a [**Pull Request**](https://github.com/januarharianto/respR/pulls)
+## Support Future Development
+
+`respR` is free to use and always will be. We have spent literally hundreds of hours of our spare time developing the package, writing code and documentation, and even on one-to-one help getting users started with their analyses. This help will always be available.
+
+Like to buy us a beer to say thanks? You can now support us directly via [**Github Sponsors**](https://github.com/sponsors/nicholascarey):
+
+[![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
+
+You can also use [**Paypal**](https://www.paypal.me/njcarey) or [**Starling**](https://settleup.starlingbank.com/nicholascarey). 
+
+Any support will be very much appreciated and shared equally between us. This could be anything from a one-off tip to buy us a beer, an ongoing few bucks a month for as long as you want, or if you have a big fat research grant you are struggling to spend as the end date approaches we are happy to help out as data analysis consultants (seriously - if you need an official invoice [**get in touch**](mailto:nicholascarey@gmail.com)).
 
 ## Socials
 
@@ -35,6 +100,11 @@ If you have any feedback about using `respR` feel free to get in touch:
 
 &nbsp; &nbsp; [![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw) &nbsp; &nbsp; [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
 
-## Tip Jar 
+## Respirometry Analysis Training 
 
-See [**here**](https://januarharianto.github.io/respR/articles/support.html) for how you can throw us a few bucks to say thanks and to support further development.
+We are also available for conducting online courses or training in analysis of respirometry data, or potentially in person as travel allows. [**Get in touch**](mailto:nicholascarey@gmail.com) to discuss dates, costs and logistics. 
+
+## Consulting
+
+Do you have a huge experiment or respirometry data load you want to analyse but just don't have the time to learn `R` or the `respR` package? Or just want to be sure it is being analysed correctly and rigorously? Having built this package and worked with respirometry data for over a decade, we are extremely skilled in analysing these data. For that reason, we are open to taking on short-term data analysis work. In return you get the confidence that your respirometry data are being analysed rigorously and correctly, and that the analysis is written up to publication quality. If you are interested in contracting us for short-term work please [**get in touch**](mailto:nicholascarey@gmail.com).
+

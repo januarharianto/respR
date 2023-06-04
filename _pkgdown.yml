@@ -136,8 +136,8 @@ navbar:
 
     - text: More
       menu:
-      - text: "Support Development"
-        href: articles/support.html
+      - text: "Contact"
+        href: articles/contact.html
       - text: "Release Notes"
         href: articles/release_notes.html
       - text: "respR in Use"
@@ -146,8 +146,6 @@ navbar:
         href: articles/future.html
       - text: "References"
         href: articles/refs.html
-      - text: "Contact"
-        href: articles/contact.html
       - text: Archived
         menu:
         - text: "Intermittent-flow respirometry: Alternative approaches"

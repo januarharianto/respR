@@ -65,7 +65,7 @@ Help files for the functions in `respR` can be viewed in the [**Documentation**]
 
 In addition, this site contains multiple vignettes (i.e. user guides) describing typical analysis workflows, and looking at several functions in more depth. These can be found under [**Vignettes**]().
 
-Under [**More**]() you can find more information about the package, version information, how to support development, contact details, how to get help or provide feedback, how `respR` is being used by the scientific community, and more.
+Under [**More**]() you can find release notes, contact details, how to support development, how to get help or provide feedback, how `respR` is being used by the scientific community, and more.
 
 To get started check out one of these vignettes describing typical analysis workflows:
 

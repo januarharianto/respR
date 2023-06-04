@@ -64,13 +64,13 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 
 ## Contact, feedback and help
 
-For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** or [**Twitter**](https://twitter.com/respR_pkg). 
-
 See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
+
+For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** or [**Twitter**](https://twitter.com/respR_pkg). 
 
 ## Support package development
 
-If you would like to help support the package development or just buy us a beer in thanks go here: [**Support Development**](https://januarharianto.github.io/respR/articles/support.html) 
+If you would like to help support the package development or just buy us a beer to say thanks see [here](https://januarharianto.github.io/respR/articles/contact.html#support-future-development) 
 
 ## Developers
 
