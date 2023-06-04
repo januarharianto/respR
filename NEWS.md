@@ -14,7 +14,7 @@ Security:     to invite users to upgrade in case of vulnerabilities.
 All version changes go in here now when you make a commit! 
 --->
 
-## Version 2.3.0 -- 2023-xx-xx
+## Version 2.3.0 -- 2023-06-05
 
 Ever read a paper and wanted to compare metabolic rates to your own results but they were in a different unit? New in this release is `convert_MR()`, a function for converting between different units of oxygen uptake or production rate. These can be absolute, mass-specific, or area-specific rates. See [here](https://januarharianto.github.io/respR/reference/convert_MR.html) for examples. It also works on `convert_rate` or `convert_rate.ft` objects so you can change the output units of a `respR` analysis without having to re-run the whole thing. 
 
