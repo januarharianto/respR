@@ -184,7 +184,7 @@ qq.p <- function(fit, ...) {
 }
 
 # kernel density plot
-density.p <- function(dens, peaks, rank = 1, ...) {
+density_p <- function(dens, peaks, rank = 1, ...) {
   par(...)
   plot(dens, main = "", xlab = "", ylab = "", panel.first = grid(lwd = .7))
   polygon(dens, col = r2, border = r2)
@@ -324,7 +324,7 @@ grid.p <- function(x, pos = NULL, msg = "grid.p",
         message(glue::glue("{msg}: Plotting first 20 selected rates only. To plot others use 'pos' input."))
   }
 
-  plot.sub.grid <- function(x, pos, bt, lf, tp) {
+  plot_sub.grid <- function(x, pos, bt, lf, tp) {
     for(i in pos) {
       dt <- x$dataframe
       rate <- x$rate.output[i]
@@ -348,7 +348,7 @@ grid.p <- function(x, pos = NULL, msg = "grid.p",
             cex.main = 0.9)
     }
   }
-  plot.sub.grid.delta <- function(x, pos, bt, lf, tp, rate.rev = TRUE, ...) {
+  plot_sub.grid.delta <- function(x, pos, bt, lf, tp, rate.rev = TRUE, ...) {
     for(i in pos) {
       dt <- data.table::as.data.table(x$dataframe)
       rate <- x$rate.output[i]
@@ -382,64 +382,64 @@ grid.p <- function(x, pos = NULL, msg = "grid.p",
     bt <- 1
     lf <- 1
     tp <- 1
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) == 2)          {
     par(mfrow = c(1,2))
     bt <- pos[1:2]
     lf <- pos[1]
     tp <- pos[1:2]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) %in% c(3,4))   {
     par(mfrow = c(2,2))
     bt <- pos[3:4]
     lf <- pos[c(1,3)]
     tp <- pos[1:2]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) %in% c(5,6))   {
     par(mfrow = c(2,3))
     bt <- pos[4:6]
     lf <- pos[c(1,4)]
     tp <- pos[1:3]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) %in% c(7,8,9)) {
     par(mfrow = c(3,3))
     bt <- pos[7:9]
     lf <- pos[c(1,4,7)]
     tp <- pos[1:3]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) %in% c(10:12)) {
     par(mfrow = c(3,4))
     bt <- pos[9:12]
     lf <- pos[c(1,5,9)]
     tp <- pos[1:4]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) %in% c(13:16)) {
     par(mfrow = c(4,4))
     bt <- pos[13:16]
     lf <- pos[c(1,5,9,13)]
     tp <- pos[1:4]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   } ## start to get margins too large errors
   if(length(pos) %in% c(17:20)) {
     par(mfrow = c(4,5))
     bt <- pos[16:20]
     lf <- pos[c(1,6,11,16)]
     tp <- pos[1:5]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
   if(length(pos) > 20){
     pos <- 1:20
@@ -447,8 +447,8 @@ grid.p <- function(x, pos = NULL, msg = "grid.p",
     bt <- pos[16:20]
     lf <- pos[c(1,6,11,16)]
     tp <- pos[1:5]
-    if(inherits(x, "convert_rate.ft")) plot.sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
-      plot.sub.grid(x, pos, bt, lf, tp)
+    if(inherits(x, "convert_rate.ft")) plot_sub.grid.delta(x, pos, bt, lf, tp, rate.rev = rate.rev, ...) else
+      plot_sub.grid(x, pos, bt, lf, tp)
   }
 }
 

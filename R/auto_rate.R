@@ -662,7 +662,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
       rollreg.p(rolldt, rate, rownums = rownums, xlim = xlim, rate.rev) # rolling regression series with markline
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
-      density.p(dens, peaks, pos) # density plot
+      density_p(dens, peaks, pos) # density plot
     }
   }
 
@@ -692,7 +692,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
     if (x$method != 'linear') {
       stop('plot.auto_rate: Density plot only available for "linear" method.', call. = FALSE)
     } else {
-      density.p(dens, peaks, pos)  # density
+      density_p(dens, peaks, pos)  # density
     }
   }
 
