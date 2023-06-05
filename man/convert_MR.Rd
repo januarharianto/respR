@@ -142,7 +142,7 @@ convert_MR(400, from = 'ul/hr', to = 'mg/hr',
 convert_MR(0.5, from = 'ul/hr/mg', to = 'mg/hr/g',
            S = 0, t = 20, P = 1.01)
 # mm3 (e.g. Newell & Roy 1973)
-convert_MR(2.7, from = 'mm3/hr', to = 'mg/hr',
+convert_MR(1.5, from = 'mm3/hr', to = 'mg/hr',
            S = 30, t = 15, P = 1.01)
 
 # Convert rates in a 'convert_rate' object. This avoids having to repeat

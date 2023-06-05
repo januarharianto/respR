@@ -295,7 +295,7 @@
 #'   have to overlap with at least one other by at least 20% of its total length
 #'   to be regarded as overlapping.
 #'
-#'   The `overlap` method performs two operations:
+#'   The `"overlap"` method performs two operations:
 #'
 #'   First, regardless of the `n` value, any rate regressions which are
 #'   completely contained within another are removed. This is also the only
@@ -342,18 +342,19 @@
 #'   reordered, so this will restore the original ordering after other methods
 #'   have been applied.
 #'
-#'   `rsq` reorders by `$rsq` from highest value to lowest.
+#'   `"rsq"` reorders by `$rsq` from highest value to lowest.
 #'
-#'   `intercept` and `slope` reorders by these columns from lowest value to
-#'   highest.
+#'   `"intercept"` and `"slope"` reorder by the `$intercept_b0` and `$slope_b1`
+#'   columns from lowest value to highest.
 #'
-#'   `highest` and `lowest` reorder by absolute values of the `$rate.output`
+#'   `"highest"` and `"lowest"` reorder by absolute values of the `$rate.output`
 #'   column, that is highest or lowest in magnitude regardless of the sign. They
 #'   can only be used when rates all have the same sign.
 #'
-#'   `maximum` and `minimum` reorder by numerical values of the `$rate.output`
-#'   column, that is maximum or minimum in numerical value taking account of the
-#'   sign, and can be used when rates are a mix of negative and positive.
+#'   `"maximum"` and `"minimum"` reorder by numerical values of the
+#'   `$rate.output` column, that is maximum or minimum in numerical value taking
+#'   account of the sign, and can be used when rates are a mix of negative and
+#'   positive.
 #'
 #'   ## Numeric input conversions
 #'

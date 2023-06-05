@@ -338,7 +338,7 @@ regarded as overlapping. For example, \code{n = 0.2} means a regression would
 have to overlap with at least one other by at least 20\% of its total length
 to be regarded as overlapping.
 
-The \code{overlap} method performs two operations:
+The \code{"overlap"} method performs two operations:
 
 First, regardless of the \code{n} value, any rate regressions which are
 completely contained within another are removed. This is also the only
@@ -386,18 +386,19 @@ unchanged regardless of how the results are subsequently selected or
 reordered, so this will restore the original ordering after other methods
 have been applied.
 
-\code{rsq} reorders by \verb{$rsq} from highest value to lowest.
+\code{"rsq"} reorders by \verb{$rsq} from highest value to lowest.
 
-\code{intercept} and \code{slope} reorders by these columns from lowest value to
-highest.
+\code{"intercept"} and \code{"slope"} reorder by the \verb{$intercept_b0} and \verb{$slope_b1}
+columns from lowest value to highest.
 
-\code{highest} and \code{lowest} reorder by absolute values of the \verb{$rate.output}
+\code{"highest"} and \code{"lowest"} reorder by absolute values of the \verb{$rate.output}
 column, that is highest or lowest in magnitude regardless of the sign. They
 can only be used when rates all have the same sign.
 
-\code{maximum} and \code{minimum} reorder by numerical values of the \verb{$rate.output}
-column, that is maximum or minimum in numerical value taking account of the
-sign, and can be used when rates are a mix of negative and positive.
+\code{"maximum"} and \code{"minimum"} reorder by numerical values of the
+\verb{$rate.output} column, that is maximum or minimum in numerical value taking
+account of the sign, and can be used when rates are a mix of negative and
+positive.
 }
 
 \subsection{Numeric input conversions}{

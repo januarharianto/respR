@@ -16,9 +16,9 @@
 #' formatting styles. For example, `"mg/l"`, `"mg/L"`, `"mgL-1"`, `"mg l-1"`,
 #' `"mg.l-1"` are all parsed the same.
 #'
-#' # [convert_DO()]
+#' ## [convert_DO()]
 #'
-#' ## Oxygen concentration or pressure units for `from` and `to`:
+#' ### Oxygen concentration or pressure units for `from` and `to`:
 #'
 #' Oxygen concentration units. Should use SI units (`L` or `kg`) for the
 #' denominator.
@@ -42,28 +42,27 @@
 #' `"Torr"`, `"hPa"`, `"kPa"`, `"mmHg"`, `"inHg"`
 #'
 #'
-#' # [convert_rate()] and [convert_rate.ft()]
+#' ## [convert_rate()] and [convert_rate.ft()]
 #'
-#' ## Oxygen concentration or pressure units for `oxy.unit`:
+#' ### Oxygen concentration or pressure units for `oxy.unit`:
 #'
 #' See above.
 #'
-#' ## Time units for `time.unit` or as part of `flowrate.unit`:
+#' ### Time units for `time.unit` or as part of `flowrate.unit`:
 #'
 #' - `"sec", "min", "hour", "day"`
 #'
-#' ## Volume units for use as part of `flowrate.unit` (`convert_rate.ft` only):
+#' ### Volume units for use as part of `flowrate.unit` (`convert_rate.ft` only):
 #'
 #' For example, in `'ml/min'`, `'L/s'`, etc.
 #'
 #' - `"uL"`, `"mL"`, `"L"`
 #'
-#' # Metabolic rate units
+#' ## Metabolic rate units
 #'
-#' ## Combining units for `output.unit` in [convert_rate()] and
-#' [convert_rate.ft()], or for use in [`convert_MR()`]:
-#'
-#' Must be in correct order:
+#' Combining units for `output.unit` in [convert_rate()] and
+#' [convert_rate.ft()], or for use in [`convert_MR()`], must follow these
+#' orders:
 #'
 #' - Absolute rates: `Oxygen/Time` e.g. `"mg/s"`, `"umol/min"`, `"mL/h"`
 #'

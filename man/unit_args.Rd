@@ -25,8 +25,7 @@ saturated water is ~20.946\% \emph{oxygen} saturated. In other words, \verb{\%Ox
 For most units a fuzzy string matching algorithm is used to accept different
 formatting styles. For example, \code{"mg/l"}, \code{"mg/L"}, \code{"mgL-1"}, \code{"mg l-1"},
 \code{"mg.l-1"} are all parsed the same.
-}
-\section{\code{\link[=convert_DO]{convert_DO()}}}{
+\subsection{\code{\link[=convert_DO]{convert_DO()}}}{
 \subsection{Oxygen concentration or pressure units for \code{from} and \code{to}:}{
 
 Oxygen concentration units. Should use SI units (\code{L} or \code{kg}) for the
@@ -52,9 +51,10 @@ Pressure units (require \code{t}, \code{S} and \code{P}):
 
 \code{"Torr"}, \code{"hPa"}, \code{"kPa"}, \code{"mmHg"}, \code{"inHg"}
 }
+
 }
 
-\section{\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}{
+\subsection{\code{\link[=convert_rate]{convert_rate()}} and \code{\link[=convert_rate.ft]{convert_rate.ft()}}}{
 \subsection{Oxygen concentration or pressure units for \code{oxy.unit}:}{
 
 See above.
@@ -73,14 +73,14 @@ For example, in \code{'ml/min'}, \code{'L/s'}, etc.
 \item \code{"uL"}, \code{"mL"}, \code{"L"}
 }
 }
+
 }
 
-\section{Metabolic rate units}{
-\subsection{Combining units for \code{output.unit} in \code{\link[=convert_rate]{convert_rate()}} and}{
+\subsection{Metabolic rate units}{
 
-\code{\link[=convert_rate.ft]{convert_rate.ft()}}, or for use in \code{\link[=convert_MR]{convert_MR()}}:
-
-Must be in correct order:
+Combining units for \code{output.unit} in \code{\link[=convert_rate]{convert_rate()}} and
+\code{\link[=convert_rate.ft]{convert_rate.ft()}}, or for use in \code{\link[=convert_MR]{convert_MR()}}, must follow these
+orders:
 \itemize{
 \item Absolute rates: \code{Oxygen/Time} e.g. \code{"mg/s"}, \code{"umol/min"}, \code{"mL/h"}
 \item Mass-specific rates: \code{Oxygen/Time/Mass} e.g. \code{"mg/s/ug"}, \code{"umol/min/g"},
@@ -113,7 +113,6 @@ These are equivalent to \code{"uL"} and \code{"mL"} respectively.
 }
 }
 }
-
 \examples{
 
 # Run the function:
