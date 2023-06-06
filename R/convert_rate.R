@@ -177,6 +177,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Convert a single numeric rate to an absolute rate
 #' convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
 #'   output.unit = 'mg/min', volume = 1.2)
@@ -201,6 +202,7 @@
 #'   output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
 #'   S =35, t = 15, P = 1.013)
 #' summary(rates)
+#' }
 
 convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NULL,
                          volume = NULL, mass = NULL, area = NULL,
