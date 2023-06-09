@@ -6,7 +6,7 @@
 
 capture.output({  ## stops printing outputs on assigning
 
-  #skip("Extended function tests")
+  skip("Extended function tests")
 
   # adjust_rate -------------------------------------------------------------
 

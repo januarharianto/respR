@@ -25,7 +25,7 @@ Lastly, a major change is that `import_file()` has been deprecated. It is still 
 
 ==================================== New =======================================
 
-- NEW: `convert_MR()`- A new function for converting metabolic rates between different units of oxygen uptake or production. See examples [here](https://januarharianto.github.io/respR/reference/convert_MR.html) and [here](https://januarharianto.github.io/respR/articles/closed.html#check-the-result).
+- NEW: `convert_MR()`- A new function for converting metabolic rates between different units of oxygen uptake or production. See examples in `help("convert_MR")` and [here](https://januarharianto.github.io/respR/articles/closed.html#check-the-result).
 - NEW: `convert_rate()`, `convert_rate.ft()` - Salinity (`S`), temperature (`t`), and pressure (`P`) inputs are now saved as columns in the final `$summary` table. These can be entered even if they are not required for conversions to the output rate unit, which may help with keeping track of results across different experiments. 
 - NEW: `inspect()`, `inspect.ft()`, `oxy_crit()` - Column names can now be used to specify columns, not just column number. See example [here](https://januarharianto.github.io/respR/reference/inspect.html#examples).
 - NEW: Raw data can now be in these units of dissolved oxygen (DO), and can be used for conversions in `convert_DO` or in `convert_rate` as the `oxy.unit` of the original data: `ul/l`, `ul/kg`, `mm3/kg` (equivalent to `ul/kg`), `cm3/kg` (equivalent to `ml/kg`), `ppm` (i.e. parts per million, equivalent to `mg/kg`). In addition, `"cc"` (abbreviation for cubic centimetres, as sometimes used in older publications) is recognised as `cm3` (e.g. `cc/L` as DO, `cc/h` as a metabolic rate). 
