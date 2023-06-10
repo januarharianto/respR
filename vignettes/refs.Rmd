@@ -28,7 +28,8 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::include_graphics("img/mee_cover.jpg")
 ```
 
-`respR` has been peer reviewed and published. Please cite this paper if you use it in your work:\
+<br>
+`respR` has been peer reviewed and published. Please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) this paper if you use it in your work:\
  
 
 **Harianto, J., Carey, N., & Byrne, M.** respR - An R Package for the Manipulation and Analysis of Respirometry Data. *Methods in Ecology and Evolution*, 10(6), 912--920. [doi: 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
@@ -51,5 +52,5 @@ Be sure to check out the [**FishResp**](https://fishresp.org) site, where the de
 
 ## References
 
-The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [here](https://januarharianto.github.io/respR/articles/oxycrit.html#refs) for references specific to critical oxygen analyses.  \
+The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [**here**](https://januarharianto.github.io/respR/articles/oxycrit.html#refs) for references specific to critical oxygen analyses (i.e. $P_{crit}$).  \
  \

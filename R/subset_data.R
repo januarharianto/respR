@@ -4,7 +4,7 @@
 #' on a given set of criteria. The function is ideal for passing only selected
 #' regions of data to other functions such as [`calc_rate()`] and
 #' [`auto_rate()`], either by saving the output as a new object or via the use
-#' of pipes (`%>%` or `|>`). It is also very useful in analysis of
+#' of pipes (`%>%` or `%>%`). It is also very useful in analysis of
 #' intermittent-flow data, where in a loop each replicate can be extracted and
 #' passed to an analytical function such as `calc_rate` or `auto_rate`. See
 #' examples and vignettes.
@@ -94,12 +94,18 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
   # Check if object is from respR function(s)
   if (any(class(x) %in% "inspect")) {
     dt <- data.table(x$dataframe)
+    if (length(dt) > 2)
+      message("subset_data: Multi-column dataset detected in input! \nsubset_data is intended to subset datasets containing single time and oxygen columns. \nSubsetting will proceed anyway using columns 1 and 2 as time and oxygen respectively. All other columns will be ignored.")
   } else if (any(class(x) %in% "inspect.ft")) {
     dt <- data.table(x$dataframe)
-  } else dt <- data.table(x)
+  } else {
+    dt <- data.table(x)
+    if (length(dt) > 2)
+      message("subset_data: Multi-column dataset detected in input! \nsubset_data is generally intended to subset data already passed through inspect(), or 2-column data frames where time and oxygen are in columns 1 and 2 respectively. \nSubsetting will proceed anyway based on this assumption, but please ensure you understand what you are doing.")
+  }
 
   ## verify by input
-  by <- verify_by(by, msg = "subset_data:")
+  by <- by.val(by, msg = "subset_data")
 
   ## replace NULL inputs
   if(is.null(from)){
@@ -122,7 +128,7 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
     input.val(to,  num = TRUE, int = FALSE, req = FALSE,
               max = 1, min = 1, range = c(from, Inf),
               msg = "subset_data: 'to' -")
-    }
+  }
 
   ## if row, 'from' required, single val, integer
   if(by == "row") {

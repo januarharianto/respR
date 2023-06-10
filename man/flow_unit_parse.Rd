@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_rate.ft.R
 \name{flow_unit_parse}
 \alias{flow_unit_parse}
-\title{Extracts time and volume units from flowrate unit already parsed by verify_units}
+\title{Extracts time and volume units from flowrate unit already parsed by units.val}
 \usage{
 flow_unit_parse(unit, which)
 }
@@ -12,6 +12,6 @@ flow_unit_parse(unit, which)
 \item{which}{parse which component of unit? "time" or "vol"}
 }
 \description{
-Extracts time and volume units from flowrate unit already parsed by verify_units
+Extracts time and volume units from flowrate unit already parsed by units.val
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{print.convert_rate.ft}
 \title{Print convert_rate.ft objects}
 \usage{
-\method{print}{convert_rate.ft}(x, pos = NULL, ...)
+\method{print}{convert_rate.ft}(x, pos = 1, ...)
 }
 \arguments{
 \item{x}{convert_rate.ft object}

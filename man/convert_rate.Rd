@@ -15,7 +15,7 @@ convert_rate(
   area = NULL,
   S = NULL,
   t = NULL,
-  P = 1.013253,
+  P = NULL,
   plot = FALSE,
   ...
 )
@@ -69,7 +69,7 @@ parameters and data locations (depending on what class of object was
 entered), adjustments (if applied), units, and more. The \verb{$rep} and \verb{$rank}
 columns require special notice depending on the type of experiment you have
 analysed or the function you used to determine the rates. See the summary
-table description in \strong{S3 Generic Functions} section aboce.
+table description in \strong{S3 Generic Functions} section above.
 }
 \description{
 Converts a unitless rate derived from \code{\link[=calc_rate]{calc_rate()}}, \code{\link[=calc_rate.int]{calc_rate.int()}},
@@ -121,8 +121,8 @@ should be entered as zero (i.e. \code{S = 0}).
 
 Strictly speaking, the atmospheric pressure (\code{P}) should also be entered. If
 not, the default value of 1.013253 bar (standard pressure at sea level) is
-used. In most locations which have a normal range (outside extreme weather
-events) of around 20 millibars, any variability in pressure will have a
+used. In most locations which have a normal range of around 20 millibars
+(outside of extreme weather events), any variability in pressure will have a
 relatively minor effect on dissolved oxygen, and even less on calculated
 rates. However, we would encourage users to enter the actual value if they
 know it, or use historical weather data to find out what it was on the day.
@@ -210,6 +210,7 @@ website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
+\donttest{
 # Convert a single numeric rate to an absolute rate
 convert_rate(0.09, oxy.unit = 'mg/l', time.unit = 's',
   output.unit = 'mg/min', volume = 1.2)
@@ -234,4 +235,5 @@ rates <- convert_rate(x, oxy.unit = '\%Air', time.unit = 's',
   output.unit = 'mg/h/cm2', volume = 12.3, area = 0.00005,
   S =35, t = 15, P = 1.013)
 summary(rates)
+}
 }

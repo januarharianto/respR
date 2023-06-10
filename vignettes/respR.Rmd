@@ -65,15 +65,12 @@ Help files for the functions in `respR` can be viewed in the [**Documentation**]
 
 In addition, this site contains multiple vignettes (i.e. user guides) describing typical analysis workflows, and looking at several functions in more depth. These can be found under [**Vignettes**]().
 
-Under [**More**]() you can find more information about the package, version information, how to support development, contact details, how to get help or provide feedback, how `respR` is being used by the scientific community, and more.
+Under [**More**]() you can find release notes, contact details, how to support development, how to get help or provide feedback, how `respR` is being used by the scientific community, and more.
 
 To get started check out one of these vignettes describing typical analysis workflows:
 
 **[Closed-chamber respirometry](https://januarharianto.github.io/respR/articles/closed.html)**  
 Even if you are not conducting this particular type of experiment, this is the best place to start to understand the full functionality of `respR`. It describes an entire workflow to process and analyse a closed-chamber respirometry dataset.
-
-**[Importing and formatting data](https://januarharianto.github.io/respR/articles/importing.html)**
-`respR` has functions to make it easy to bring in and prepare your data, including from the raw data files output by various respirometry systems.
 
 **[auto_rate: Automatic detection of metabolic rates](https://januarharianto.github.io/respR/articles/auto_rate.html)**  
 Here we detail the function `auto_rate()` which automatically identifies the *highest*, *lowest* and *most linear* rates in a dataset.

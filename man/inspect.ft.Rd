@@ -20,31 +20,31 @@ inspect.ft(
 \item{x}{\code{data.frame} containing columns of \code{time} and \code{out.oxy} or
 \code{delta.oxy} concentrations, and optionally \code{in.oxy}.}
 
-\item{time}{integer. Defaults to 1. Specifies the column number of the time
-data.}
+\item{time}{integer or string. Defaults to \code{1}. Specifies the column of the
+Time data as either a column number or the name.}
 
-\item{out.oxy}{integer(s). Defaults to \code{NULL}. Specifies the column number(s)
-of outflow oxygen data.}
+\item{out.oxy}{integer(s) or string(s). Defaults to \code{NULL}. Specifies the
+column(s) of the outflow oxygen data as either column numbers or names.}
 
-\item{in.oxy}{integer(s). Defaults to \code{NULL}. Specifies the column number(s)
-of inflow oxygen data.}
+\item{in.oxy}{integer(s) or string(s). Defaults to \code{NULL}. Specifies the
+column(s) of the inflow oxygen data as either column numbers or names.}
 
 \item{in.oxy.value}{numeric value. Defaults to \code{NULL}. If there is no
 continuous \code{in.oxy} data, this specifies a fixed value of oxygen
 concentration for inflowing water in same units as \code{out.oxy}, and is used
 with \code{out.oxy} to calculate a \code{delta.oxy}.}
 
-\item{delta.oxy}{integer(s). Defaults to all non-time columns if no other
-inputs given. Specifies the column number(s) of delta oxygen data, for when
-the user has already calculated the difference between outflow and inflow
-oxygen (should be negative values for oxygen uptake). If this is used,
-\code{out.oxy} and \code{in.oxy} should be NULL.}
+\item{delta.oxy}{integer(s) or string(s). Defaults to all non-time columns if
+no other inputs given. Specifies the column number(s) or name(s) of delta
+oxygen data, for when the user has already calculated the difference
+between outflow and inflow oxygen (should be negative values for oxygen
+uptake). If this is used, \code{out.oxy} and \code{in.oxy} should be NULL.}
 
 \item{plot}{logical. Defaults to TRUE. Plots the data. See Details.}
 
-\item{add.data}{integer. Defaults to \code{NULL}. Specifies the column number of
-an optional additional data source that will be plotted in blue alongside
-the full oxygen timeseries.}
+\item{add.data}{integer or string. Defaults to \code{NULL}. Specifies the column
+number or name of an optional additional data source that will be plotted
+in blue alongside the full oxygen timeseries.}
 
 \item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}.}
 }
@@ -75,12 +75,18 @@ data types in this function and saving the output, they do not need to be
 specified in later functions.
 \subsection{Inputs}{
 
-\code{inspect.ft} requires at least two data inputs; a single column of numeric
-\code{time} data, with \emph{either} a column of paired \code{out.oxy} concentrations (i.e.
-the exhalent or 'downstream' concentrations), \emph{or} a column of already
-calculated \code{delta.oxy} values, that is the difference between outflow and
-inflow concentrations, or the outflow concentration corrected by a background
-recording from a 'blank' or empty chamber.
+Given an input data frame \code{x}, the function scans the columns specified via
+the \code{time}, \code{out.oxy}, \code{in.oxy} or \code{delta.oxy} inputs. Columns are specified
+by using the column number (e.g. \code{time = 1}), or by name (e.g. \code{time = "Time.Hrs"}). If no columns are specified, by default the function assumes
+the first column is \code{time}, and all others are \code{delta.oxy} oxygen data.
+However, best practice is to use the inputs to specify particular columns.
+
+The \code{x} input must contain at least two data types; a single column of
+numeric \code{time} data, with \emph{either} a column of paired \code{out.oxy}
+concentrations (i.e. the exhalent or 'downstream' concentrations), \emph{or} a
+column of already calculated \code{delta.oxy} values, that is the difference
+between outflow and inflow concentrations, or the outflow concentration
+corrected by a background recording from a 'blank' or empty chamber.
 
 \strong{out.oxy input option}: If an \code{out.oxy} column has been specified, in order
 to calculate the oxygen delta (and therefore a rate in \code{\link[=calc_rate.ft]{calc_rate.ft()}})
@@ -96,12 +102,6 @@ via \code{in.oxy.value} and this is used to calculate the \code{delta.oxy}.
 \strong{delta.oxy input option}: If delta oxygen values have already been
 calculated, these can be entered via the \code{delta.oxy} input, and these are
 prepared and saved for rate calculations in \code{calc_rate.ft}.
-
-Given an input data frame \code{x}, the function scans the columns specified via
-the \code{time}, \code{out.oxy}, \code{in.oxy} or \code{delta.oxy} inputs. If no columns are
-specified, by default the function assumes the first column is \code{time}, and
-all others are \code{delta.oxy} oxygen data.  However, best practice is to use the
-inputs to specify particular columns.
 }
 
 \subsection{Check for numeric data}{
@@ -169,12 +169,12 @@ be higher on the plot.
 \subsection{Plot an additional data source}{
 
 Using the \code{add.data} input an additional data source, for example
-temperature, can be plotted alongside the oxygen timeseries. This input
-should be an integer indicating a column in the input \code{x} data frame sharing
-the same time data. None of the data checks are performed on this column; it
-is simply to give a basic visual aid in the plot to, for example, help decide
-if regions of the data should be used or not used because this parameter was
-variable. It is saved in the output as a vector under \verb{$add.data}. It is
+temperature, can be plotted alongside the oxygen timeseries. This should be
+either a column number (e.g. \code{add.data = 3}) or name (e.g. \code{add.data = "Temperature"}) indicating a column in the input \code{x} data frame sharing the
+same time data. None of the data checks are performed on this column; it is
+simply to give a basic visual aid in the plot to, for example, help decide if
+regions of the data should be used or not used because this parameter was
+variable. Values are saved in the output as a vector under \verb{$add.data}. It is
 plotted in blue on a separate y-axis on the main timeseries plot. It is \emph{not}
 plotted if multiple oxygen columns are inspected. See examples.
 }
@@ -331,7 +331,4 @@ inspect.ft(flowthrough_sim.rd, time = 1,
 # when background is taken into account.
 inspect.ft(flowthrough_sim.rd, time = 1,
            out.oxy = 2, in.oxy = 3)
-
-# Inspect and plot an additional data type
-
 }

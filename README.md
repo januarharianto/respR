@@ -10,12 +10,12 @@
 [![R-CMD-check](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
 [![License](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![DOI](https://img.shields.io/badge/DOI-10.1111%2F2041--210X.13162-blue)](http://doi.wiley.com/10.1111/2041-210X.13162)
+[![DOI](https://img.shields.io/badge/DOI-10.1111%2F2041--210X.13162-blue)](https://doi.org/10.1111/2041-210X.13162)
 [![Github Star](https://img.shields.io/github/stars/januarharianto/respR?style=social)](https://GitHub.com/januarharianto/respR/stargazers/)
 [![Github watchers](https://img.shields.io/github/watchers/januarharianto/respR?label=Watch&style=social)](https://img.shields.io/github/watchers/januarharianto/respR?style=social)
 [![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
-[![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
+[![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
 <!-- badges: end -->
 
@@ -25,8 +25,7 @@ While the focus of the package is on aquatic respirometry, `respR` is largely un
 
 Use `respR` to:
 
-- **Import** raw data from various oxygen probe systems
-- **Inspect** data for common issues before analysis
+- **Inspect** respirometry data for common issues before analysis
 - **Explore** and **visualise** oxygen timeseries 
 - **Calculate** rates manually or automatically using **multiple regression analysis** 
 - **Adjust** rates for background oxygen consumption or production
@@ -65,15 +64,13 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 
 ## Contact, feedback and help
 
-`respR` has a [**Twitter account**](https://twitter.com/respR_pkg). Follow for latest news and regular updates from the world of respirometry! 
+See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
 
-There is also **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** account. Like many we have just started with this, so stay tuned to see how things develop!
-
-See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for even more ways of providing feedback and getting in touch if you are having issues.
+For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** or [**Twitter**](https://twitter.com/respR_pkg). 
 
 ## Support package development
 
-If you would like to help support the package development or just buy us a beer in thanks go here: [**Support Development**](https://januarharianto.github.io/respR/articles/support.html) 
+If you would like to help support the package development or just buy us a beer to say thanks see [here](https://januarharianto.github.io/respR/articles/contact.html#support-future-development) 
 
 ## Developers
 

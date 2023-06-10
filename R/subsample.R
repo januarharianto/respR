@@ -65,14 +65,14 @@ subsample <- function(x, n = NULL, length.out = NULL, random_start = FALSE, plot
     subset <- x[index]
 
   # Create the plots
-  if (plot) plot.sub(x, subset)
+  if (plot) plot_sub(x, subset)
 
   # Return
   return(invisible(subset))
 }
 
 #o_data <- x
-plot.sub <- function(o_data, subset){
+plot_sub <- function(o_data, subset){
 
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original

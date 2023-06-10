@@ -5,7 +5,7 @@ output:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{respR in use by the scientific community}
+  %\VignetteIndexEntry{respR in Use}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references_citations.bib
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # This is ridiculously over the top to get this number, but good to learn :D
 # Quite slow tho...
 # Dump GScholar page
-dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en"))
+dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732", encoding = "latin1"))
 # Find location of n citations line
 loc <- grep("About [0-9]+ results \\(", dump)
 # Extract it
@@ -39,6 +39,46 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 ## Studies using `respR`
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+
+#### @perryMicroclimatesHoldfastsBull2023
+
+This MSc project looked at thermal microclimates amongst kelp holdfasts, and used `respR` in getting metabolic rates of a snail and an amphipod. These microclimates seem to provide some buffering against external warming and may be something of a refuge for invertebrates, which is really interesting. Congrats on the MSc Frances! 🥳
+
+#### @gomesImpactsAcuteHypoxia2023
+
+This pre-print study looks at the effects of extreme hypoxia on metabolic rate and behaviour in a seahorse. Perhaps unsurprisingly, extreme hypoxia led to a signicant reduction in metabolic rate and also signs of movement lethargy. Looking forward to seeing this officially published.
+
+#### @zhangLossBehavioralStress2023
+
+We love seeing `respR` used on species we were never even aware of. This study looked at the physiology and escape behaviour of blind cavefish and their closely related sighted species. We were also really happy to see the `respR` output plots are good enough to be publication quality (Fig. 2). 
+
+#### @quigleyPhysiologicalCharacterizationCoral2023
+
+Really happy to be involved in this publication detailing a new low-cost and relatively simple method for conducting micro-respirometry on corals. Respirometry on very small organisms has until now been costly and difficult and this makes it much more practical, and this should help extend our knowledge of the functioning of reefs. Thanks to [Kate](https://katemariequigley.wixsite.com/mysite/home) for inviting me to be a part of this exciting project. 
+
+#### @holmes-hackerdNaupliarExposureAcute2023a
+
+Another nice study showing how `respR` can be used with micro-respirometry data, this time on copepod nauplii. Here the authors looked at if heatwaves have ongoing effects on metabolism and development. Turns out they don't! So these copepods might be quite resilient to warming events. 
+
+#### @luceyClimateWarmingErodes2023
+
+Another interesting study by Noelle M. Lucey. This looked at the effects of heatwaves and hypoxic events on tropical species in a reef habitat, and how they can combine to reduce available habitat. Like her earlier [study](https://januarharianto.github.io/respR/articles/citations.html#luceycompoundextremeevents2022) this used `respR` to determine $P_{crit}$ of two species of brittle stars under these stressors. 
+
+#### @hawadleEffectsMultipleEnvironmental2023
+
+Abdisalan Hawadle's summer undergrad project conducted at Friday Harbor Labs (beautiful place, did lots of respirometry there!) examines how temperature and water flow speed affect metabolic rate in two mussel species. Thermal performance curves differed between the two species in response to both temperature and water speed. Nice project, hope you publish it Abdisalan!
+
+#### @lowesCopperExposureDoes2023
+
+A study looking at the effects of copper exposure on how sea cucumbers tolerate emersion during low tides. It used `respR` to get RMR upon re-immersion after copper exposure, but found no difference with specimens which had not been exposed. Looks like sea cucumbers can tolerate emersion just fine, even after copper exposure. Nice study! 
+
+#### @castrillon-cifuentesSpatiotemporalVariabilityOxygen2023
+
+This study looked at the effects of hypoxic conditions on corals from the eastern Pacific and used `respR` to get MO2 and PCrit. What's really interesting about this study is that it also determined the same metrics using the [`respirometry`](https://cran.r-project.org/web/packages/respirometry/index.html) package, and we were happy to see that results between the two packages are largely equivalent. It is also good to see the authors varying the width used in the PCrit analysis to see how it affects the results. The [width](https://januarharianto.github.io/respR/articles/oxycrit.html#changing-the-width) over which a rolling rate is determined from the oxygen timeseries is a really important parameter that is often unreported for PCrit results, so good to see the authors taking account of it. Of course `respR` makes this easy!
+
+#### @hawkePetroleumderivedBiopolymerMicroplastic2022
+
+Ashleigh Hawke's MSc project examines how polymers from microplastics affect the behaviour and physiology of marine fish, in the form of escape responses and metabolic rate. Interesting results in that both polymers examained affected escape performance, but only one affecting standard metabolic rate. Congrats on the MSc! 🥳
 
 #### @somoIntegrativeAnalysisRespiratory2022
 
@@ -118,7 +158,7 @@ Jennifer Mallon is another researcher who took advantage of our open offer to he
  
 Alexandra Burns used `respR` in this MSc project, looking at oxygen supply capacity under different temperatures in a species of shrimp. Congrats on the Masters! 🥳
 
-#### @killenGuidelinesReportingMethods2021a
+#### @killenGuidelinesReportingMethods2021
 
 Excellent summary and guide to best practices in conducting, analysing and reporting intermittent-flow respirometry studies. Essential reading!
 

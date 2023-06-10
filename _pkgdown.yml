@@ -43,9 +43,10 @@ reference:
     desc: >
       Functions for rate and unit conversions:
     contents:
-    - '`convert_DO`'
     - '`convert_rate`'
     - '`convert_rate.ft`'
+    - '`convert_DO`'
+    - '`convert_MR`'
     - '`convert_val`'
     - '`unit_args`'
 
@@ -101,12 +102,6 @@ navbar:
       - text: "Oxygen production respirometry"
         href: articles/oxy_production.html
       - text: "---- Function Guides ----"
-      - text: "import_file: Import files from oxygen probe systems"
-        href: articles/importing.html
-      - text: "format_time: Convert date-time data to numeric time"
-        href: articles/format_time.html
-      - text: "convert_DO: Convert between units of dissolved oxygen"
-        href: articles/convert_DO.html
       - text: "inspect: Inspecting data"
         href: articles/inspecting.html
       - text: "subset_data: Subset data by time, row, or oxygen ranges"
@@ -123,30 +118,34 @@ navbar:
         href: articles/adjust_rate.html
       - text: "select_rate: Exploring and filtering results"
         href: articles/select_rate.html
+      - text: "format_time: Convert date-time data to numeric time"
+        href: articles/format_time.html
+      - text: "convert_DO: Convert between units of dissolved oxygen"
+        href: articles/convert_DO.html
       - text: "---- Miscellaneous ----"
+      - text: "Importing files from oxygen probe systems"
+        href: articles/importing.html
       - text: "Two-point rate calculation"
         href: articles/twopoint.html
       - text: "Thin larger datasets"
         href: articles/subsample.html
       - text: "Integration with the tidyverse"
         href: articles/tidyverse.html
-      - text: "Open science and reproducibility"
+      - text: "Reporting reproducibile analyses"
         href: articles/reproducibility.html
 
     - text: More
       menu:
-      - text: "Support Development"
-        href: articles/support.html
-      - text: "Version notes"
-        href: articles/version_notes.html
-      - text: "respR in use"
+      - text: "Contact"
+        href: articles/contact.html
+      - text: "Release Notes"
+        href: articles/release_notes.html
+      - text: "respR in Use"
         href: articles/citations.html
-      - text: "Future features"
+      - text: "Future Features"
         href: articles/future.html
       - text: "References"
         href: articles/refs.html
-      - text: "Contact"
-        href: articles/contact.html
       - text: Archived
         menu:
         - text: "Intermittent-flow respirometry: Alternative approaches"

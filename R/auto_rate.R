@@ -242,12 +242,12 @@ auto_rate <- function(x,
   # perform checks
   checks <- validate_auto_rate(x, by, method)
   dt <- checks$df  # extract df from validation check
-  if(nrow(dt) == 1)  stop("auto_rate: Input data contains only 1 row. Please check inputs.")
+  if(nrow(dt) == 1)  stop("auto_rate: Input data contains only 1 row. Please check inputs.", call. = FALSE)
   by <- checks$by
 
   # prepare data
   data.table::setnames(dt, 1:2, c("x", "y")) # rename data columns
-  win <- calc_win(dt, width, by, "auto_rate: ")  # determine width
+  win <- calc_win(dt, width, by, "auto_rate")  # determine width
 
   # verify & apply methods
 
@@ -255,7 +255,7 @@ auto_rate <- function(x,
   ## OLD METHOD
   ## WE WILL DEPRECATE THIS IN LATER VERSION
   if (method == 'max') {
-    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    warning("auto_rate: The 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates.", call. = FALSE)
     output <- auto_rate_min(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
@@ -280,7 +280,7 @@ auto_rate <- function(x,
     ## OLD METHOD
     ## WE WILL DEPRECATE THIS IN LATER VERSION
   } else if (method == 'min') {
-    warning("auto_rate: the 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates. ")
+    warning("auto_rate: The 'min' and 'max' methods have been deprecated, as they resulted in incorrect ordering of oxygen production rates. \n They have been retained for code compatibility, but will be removed in a future version of respR. \n Please use 'highest/lowest' for ordering by absolute rate value, or 'maximum/minimum' for strict numerical ordering of rates.", call. = FALSE)
     output <- auto_rate_max(dt, win, by) ## note "wrong" method - but matches old behaviour
     metadata <- data.table(width = win, by = by, method = method,
                            total_regs = nrow(output$roll))
@@ -476,7 +476,7 @@ auto_rate <- function(x,
     out$metadata$subset_regs <- length(index_unique)
     out$peaks <- out$peaks[index_unique,]
 
-  } else stop("auto_rate: 'method' input not recognised")
+  } else stop("auto_rate: 'method' input not recognised", call. = FALSE)
 
   # Assemble final output object --------------------------------------------
 
@@ -522,13 +522,13 @@ print.auto_rate <- function(x, pos = 1, ...) {
   if(is.null(pos)) pos <- 1
   if(length(x$rate) == 0) pos <- 0
   if(length(pos) > 1)
-    stop("print.auto_rate: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.auto_rate: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate))
-    stop("print.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("print.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
 
   method <- x$method
   cat("Data extracted by '", x$by, "' using 'width' of ", x$width, ".\n", sep = "")
-  cat(sprintf("Rates computed using '%s' method.\n", x$ method))
+  cat(glue::glue("Rates computed using '{x$method}' method.\n"))
   if (method == "linear")
     cat(nrow(x$summary), "linear regions detected in the kernel density estimate.\n")
   cat("To see all results use summary().\n")
@@ -586,7 +586,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   if(is.null(pos)) pos <-1
   ## warning if pos too low
   if(pos > nres)
-    stop("plot.auto_rate: Invalid 'pos' rank: only ", nres, " rates found.")
+    stop("plot.auto_rate: Invalid 'pos' rank: only ", nres, " rates found.", call. = FALSE)
 
   if(!quiet) {
     cat("\n# plot.auto_rate # ----------------------\n")
@@ -662,7 +662,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
       rollreg.p(rolldt, rate, rownums = rownums, xlim = xlim, rate.rev) # rolling regression series with markline
       residual.p(fit) # residual plot
       qq.p(fit) # qq plot
-      density.p(dens, peaks, pos) # density plot
+      density_p(dens, peaks, pos) # density plot
     }
   }
 
@@ -690,9 +690,9 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
     qq.p(fit)  #qq plot
   if (panel == 6) {
     if (x$method != 'linear') {
-      stop('plot.auto_rate: density plot only available for "linear" method.')
+      stop('plot.auto_rate: Density plot only available for "linear" method.', call. = FALSE)
     } else {
-      density.p(dens, peaks, pos)  # density
+      density_p(dens, peaks, pos)  # density
     }
   }
 
@@ -722,7 +722,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FA
   if(length(object$rate) == 0) message("No rates found in auto_rate object.")
 
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("summary.auto_rate: Invalid 'pos' rank: only ", length(object$rate), " rates found.", call. = FALSE)
 
   ########### Summary Table ###################
   if (is.null(pos)) {
@@ -778,7 +778,7 @@ mean.auto_rate <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.auto_rate # ----------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
-    stop("mean.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("mean.auto_rate: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate)
     if(length(x$rate) == 0) pos <- 0

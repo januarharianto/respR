@@ -48,11 +48,11 @@
 #' the time component does *NOT* represent the units or recording interval of
 #' the original raw data.
 #'
-#' The function uses an internal database and a fuzzy string matching algorithm
-#' to accept various unit formatting styles. For example, `"mg/l"`, `"mg/L"`,
-#' `"mgL-1"`, `"mg l-1"`, `"mg.l-1"` are all parsed the same. See
-#' [`unit_args()`] for details of accepted units and their formatting. See also
-#' [`convert_val()`] for simple conversion between non-oxygen units.
+#' The function uses a fuzzy string matching algorithm to accept various unit
+#' formatting styles. For example, `"mg/l"`, `"mg/L"`, `"mgL-1"`, `"mg l-1"`,
+#' `"mg.l-1"` are all parsed the same. See [`unit_args()`] for details of
+#' accepted units and their formatting. See also [`convert_val()`] for simple
+#' conversion between non-oxygen units.
 #'
 #' ## Plot
 #'
@@ -283,11 +283,11 @@ convert_rate.ft <- function(x,
     stop("convert_rate.ft: Cannot have inputs for both 'mass' and 'area'.")
 
   # Validate oxy.unit & flowrate.unit
-  oxy <- verify_units(oxy.unit, "o2")
-  flow <- verify_units(flowrate.unit, "flow")
+  oxy <- units.val(oxy.unit, "o2")
+  flow <- units.val(flowrate.unit, "flow")
 
   # Validate output.unit
-  out.unit <- as.matrix(read.table(text = gsub("(?:-1|[/.[:space:]])+",
+  out.unit <- as.matrix(read.table(text = gsub(unit.sep.rgx,
                                                " ", output.unit), header = FALSE))
 
   ## is it a specific rate (mass or area)?
@@ -309,14 +309,14 @@ convert_rate.ft <- function(x,
     is.area.spec <- FALSE
   }
 
-  A <- verify_units(out.unit[1], "o1")
-  B <- verify_units(out.unit[2], "time")
+  A <- units.val(out.unit[1], "o1")
+  B <- units.val(out.unit[2], "time")
   if(is.spec){
     if (is.mass.spec) {
-      C <- verify_units(out.unit[3], "mass")
+      C <- units.val(out.unit[3], "mass")
       out.unit <- as.matrix(data.frame(A, B, C))
     } else if (is.area.spec) {
-      C <- verify_units(out.unit[3], "area")
+      C <- units.val(out.unit[3], "area")
       out.unit <- as.matrix(data.frame(A, B, C))
     }
   } else out.unit <- as.matrix(data.frame(A, B))
@@ -329,9 +329,9 @@ convert_rate.ft <- function(x,
   if (!is.area.spec && is.numeric(area))
     stop("convert_rate.ft: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 
-  # Format unit strings to look nicer
-  oxy.unit <- stringr::str_replace(oxy, "\\..*", "")
-  flow.unit <- stringr::str_replace(flow, "\\..*", "")
+  # Format unit strings to clean format
+  oxy.unit <- units.clean(oxy, "o2")
+  flowrate.unit <- units.clean(flow, "flow")
 
   ## Add "O2" to output O2 unit string for clarity
   output.unit <- stringr::str_replace(out.unit, "\\..*", "")
@@ -339,15 +339,19 @@ convert_rate.ft <- function(x,
   output.unit <- paste(output.unit, collapse = "/")
 
   # Convert DO unit first
-  if (A %in% c("pmol.o2", "nmol.o2", "mmol.o2", "umol.o2", "mol.o2")) {
+  if (A %in% c("pmol.o2", "nmol.o2", "umol.o2", "mmol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)
     RO2 <- adjust_scale(RO2, "mmol.o2", A)
   } else if (A %in% c("mg.o2", "ug.o2")) {
     RO2 <- convert_DO(rate, oxy, "mg/L", S, t, P)
     RO2 <- adjust_scale(RO2, "mg.o2", A)
-  } else if (A == "ml.o2") {
+  } else if (A %in% c("mL.o2", "uL.o2")) {
     RO2 <- convert_DO(rate, oxy, "mL/L", S, t, P)
-    RO2 <- adjust_scale(RO2, "ml.o2", A)
+    RO2 <- adjust_scale(RO2, "mL.o2", A)
+  } else if (A %in% c("cm3.o2")) {
+    RO2 <- convert_DO(rate, oxy, "cm3/L", S, t, P)
+  } else if (A %in% c("mm3.o2")) {
+    RO2 <- convert_DO(rate, oxy, "cm3/L", S, t, P) * 1000
   }
 
   ## Approach here -
@@ -357,13 +361,13 @@ convert_rate.ft <- function(x,
   ##
   # Then, convert time unit
   # time of flow rate to time
-  time_component <- flow_unit_parse(flow.unit, "time")
+  time_component <- flow_unit_parse(flowrate.unit, "time")
   RO2 <- adjust_scale(RO2, time_component, B)
 
   # Then, scale to volume
   # vol of flow rate to volume in L
-  vol.component <- flow_unit_parse(flow.unit, "vol") # what is the flow vol unit?
-  volume <- adjust_scale(1, vol.component, "l.vol") # adjust to 1 litres
+  vol.component <- flow_unit_parse(flowrate.unit, "vol") # what is the flow vol unit?
+  volume <- adjust_scale(1, vol.component, "L.vol") # adjust to 1 litres
   VO2 <- RO2 * volume
 
   # Then, scale to mass or area
@@ -410,6 +414,9 @@ convert_rate.ft <- function(x,
                                     flowrate.unit = flowrate.unit,
                                     mass = mass,
                                     area = area,
+                                    S = ifelse(is.null(S), NA, S),
+                                    t = ifelse(is.null(t), NA, t),
+                                    P = ifelse(is.null(P), NA, P),
                                     rate.abs = VO2,
                                     rate.m.spec = rate.m.spec,
                                     rate.a.spec = rate.a.spec,
@@ -462,17 +469,16 @@ convert_rate.ft <- function(x,
 #' @keywords internal
 #' @return Print to console. No returned value.
 #' @export
-print.convert_rate.ft <- function(x, pos = NULL, ...) {
+print.convert_rate.ft <- function(x, pos = 1, ...) {
   cat("\n# print.convert_rate.ft # ---------------\n")
-  if(is.null(pos)) pos <- 1
   if(length(pos) > 1)
     stop("print.convert_rate.ft: 'pos' must be a single value. To examine multiple results use summary().")
-  if(pos > length(x$rate.output))
+  if(pos > length(x$rate.input))
     stop("print.convert_rate.ft: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.")
   cat("Rank", pos, "of", length(x$rate.output), "result(s)\n")
   cat("Input:\n")
-  print(x$summary$rate.input[pos])
-  print(c(x$summary$oxy.unit[1], x$summary$flowrate.unit[1]))
+  print(x$rate.input[pos])
+  print(c(x$inputs$oxy.unit, x$inputs$flowrate.unit))
   cat("Converted:\n")
   print(x$rate.output[pos])
   print(x$output.unit[1])
@@ -621,7 +627,7 @@ plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
 }
 
 
-#' Extracts time and volume units from flowrate unit already parsed by verify_units
+#' Extracts time and volume units from flowrate unit already parsed by units.val
 #'
 #' @param unit flowrate unit input to be parsed
 #' @param which parse which component of unit? "time" or "vol"
@@ -629,16 +635,16 @@ plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
 flow_unit_parse <- function(unit, which){
 
   if(which == "vol"){
-    if(unit %in% c("ul/s", "ul/m", "ul/h", "ul/d")) out <- "ul.vol" else
-      if(unit %in% c("ml/s", "ml/m", "ml/h", "ml/d")) out <- "ml.vol" else
-        if(unit %in% c("l/s", "l/m", "l/h", "l/d")) out <- "l.vol"
+    if(unit %in% c("uL/sec", "uL/min", "uL/hr", "uL/day")) out <- "uL.vol" else
+      if(unit %in% c("mL/sec", "mL/min", "mL/hr", "mL/day")) out <- "mL.vol" else
+        if(unit %in% c("L/sec", "L/min", "L/hr", "L/day")) out <- "L.vol"
   }
 
   if(which == "time"){
-    if(unit %in% c("ul/s", "ml/s", "l/s")) out <- "sec.time" else
-      if(unit %in% c("ul/m", "ml/m", "l/m")) out <- "min.time" else
-        if(unit %in% c("ul/h", "ml/h", "l/h")) out <- "hour.time" else
-          if(unit %in% c("ul/d", "ml/d", "l/d")) out <- "day.time"
+    if(unit %in% c("uL/sec", "mL/sec", "L/sec")) out <- "sec.time" else
+      if(unit %in% c("uL/min", "mL/min", "L/min")) out <- "min.time" else
+        if(unit %in% c("uL/hr", "mL/hr", "L/hr")) out <- "hr.time" else
+          if(unit %in% c("uL/day", "mL/day", "L/day")) out <- "day.time"
   }
   return(out)
 }

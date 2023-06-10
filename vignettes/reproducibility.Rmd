@@ -1,11 +1,11 @@
 ---
-title: "Open science and reproducibility using respR"
+title: "Reporting reproducibile analyses"
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 4
 vignette: >
-  %\VignetteIndexEntry{Open science and reproducibility using respR}
+  %\VignetteIndexEntry{Reporting reproducibile analyses}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

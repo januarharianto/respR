@@ -1,8 +1,8 @@
 #' Calculate critical oxygen values, such as PCrit
 #'
-#' A function to calculate critical oxygen values, the oxygen tension or
-#' concentration below which an uptake rate transitions from independent to
-#' dependent on the oxygen supply, typically known as *PCrit*.
+#' Identifies critical oxygen values, the oxygen tension or concentration below
+#' which an uptake rate transitions from independent to dependent on the oxygen
+#' supply, typically known as *PCrit*.
 #'
 #' In earlier versions of `respR`, this function was known as `pcrit` or
 #' `calc_pcrit`. It was renamed to avoid conflicts with functions of the same
@@ -57,11 +57,12 @@
 #' partial pressures against time has been recorded, generally down to a very
 #' low value of oxygen. A column of `time` and a column of `oxygen` should be
 #' specified. The function defaults to `time = 1` and `oxygen = 2` if no other
-#' inputs are entered. If an `inspect` object is entered as the `x` input, the
-#' data frame is extracted automatically and column identifiers are not required
-#' since these were already entered in `inspect`. Note, if multiple `oxygen`
-#' columns were entered in `inspect` only the first entered one will be used in
-#' `oxy_crit`.
+#' inputs are entered. These can also be specified using the column names.
+#'
+#' If an `inspect` object is entered as the `x` input, the data frame is
+#' extracted automatically and column identifiers are not required since these
+#' were already entered in `inspect`. Note, if multiple `oxygen` columns were
+#' entered in `inspect` only the first entered one will be used in `oxy_crit`.
 #'
 #' To calculate the *COV*, the function requires data in the form of oxygen
 #' uptake rate against oxygen value. Therefore, the function performs a rolling
@@ -80,9 +81,10 @@
 #' Alternatively, if existing rolling oxygen uptake rates have been calculated,
 #' and have appropriate paired oxygen concentration or partial pressure values,
 #' these can be entered with the `rate` and `oxygen` inputs specifying the
-#' respective columns. In this case the function performs the selected analysis
-#' `method` on these data directly without any processing. The `width` input in
-#' this case is not relevant and is ignored.
+#' respective columns as either numbers or the column names. In this case the
+#' function performs the selected analysis `method` on these data directly
+#' without any processing. The `width` input in this case is not relevant and is
+#' ignored.
 #'
 #' This option can only be used with data frame `x` inputs. Note, other columns
 #' such as time data may be present in the input, but are not required so need
@@ -156,11 +158,12 @@
 #'   oxygen~time values, or paired rate~oxygen values. See Details.
 #' @param method string. Defaults to `"bsr"`. Critical oxygen value analysis
 #'   method. Either `"bsr"` or `"segmented"`. See Details.
-#' @param time integer. Defaults to 1. Specifies column number of the time data.
-#' @param oxygen integer. Defaults to 2. Specifies column number of the oxygen
-#'   data.
-#' @param rate integer. Defaults to NULL. Specifies column number of the rate
-#'   data.
+#' @param time integer or string. Defaults to 1. Specifies column number or
+#'   column name of the time data.
+#' @param oxygen integer or string. Defaults to 2. Specifies column number or
+#'   column name of the oxygen data.
+#' @param rate integer or string. Defaults to NULL. Specifies column number or
+#'   column name of the rate data.
 #' @param width numeric value between 0 and 1 representing proportion of the
 #'   total data length. Determines the width of the rolling regression used to
 #'   determine the rolling rate and the rolling mean of oxygen values the rate
@@ -240,12 +243,18 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
     stop("oxy_crit: 'width' input should be between 0.001 to 0.999, representing a proportion of the total data length.")
 
   ## validate method
-  if(!(method %in% c("bsr", "segmented")))
-    stop("oxy_crit: 'method' input not recognised.")
+  method.val(method, "oxy_crit")
+
   ## validate thin
   input.val(thin, num = TRUE, int = TRUE, req = FALSE,
             max = 1, min = 1, range = c(1,Inf), msg = "oxy_crit: 'thin' -")
+
   ## validate column inputs
+  # parse names to numbers
+  if(is.character(time)) time <- column.id(time, df, "oxy_crit: ")
+  if(is.character(oxygen)) oxygen <- column.id(oxygen, df, "oxy_crit: ")
+  if(is.character(rate)) rate <- column.id(rate, df, "oxy_crit: ")
+
   column.val(time, req = FALSE, min = 1, max = 1,
              range = c(1,ncol(df)), conflicts = c(oxygen, rate), msg = "oxy_crit: 'time' -")
   column.val(oxygen, req = FALSE, min = 1, max = 1,
@@ -626,7 +635,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
     if(rate.rev) ylim <- rev(ylim) ## reverse y-axis
     plot(x$df_rate_oxygen, col = c1, xlab = "", ylab = "", lwd = 2, cex = ptcex,
          panel.first = grid(lwd = .7), ylim=ylim)
-    # subsample fit model otherwise dahsed line type is too dense to see
+    # subsample fit model otherwise dashed line type is too dense to see
     if (nrow(x$results$seg) > 1000)
       fitsub <- subsample(x$results$seg, length.out = 1000, plot = F)
     else fitsub <- x$results$seg

@@ -53,7 +53,7 @@ Extracting the [background](#background) rates and [MMR](#mmr) are relatively st
 
 After this, we will show two different approaches to extract RMR and SMR using `respR` functions. The [first](#crint) uses the dedicated `calc_rate.int()` function to run `calc_rate` on each replicate to extract a rate from the same data region of each, before filtering these to get the RMR. The [second](#arint) uses the dedicated `auto_rate.int()` function to run `auto_rate` on each replicate to extract the lowest rate from each of a specified width, before filtering these to get the SMR. 
 
-***Please note***: You should not simply copy and repeat the following code on your own data. They are examples to show how the `respR` functions are adaptable and flexible and how rates can be extracted, filtered and selected to arrive at a final reportable rate in a variety of ways. They are not recommendations that you should use these specific approaches for particular outputs. There is a [massive literature](https://januarharianto.github.io/respR/articles/refs.html#references) around respirometry, the different physiological metrics, and how to quantify them. Before analysis of your own data you should familiarise yourself with it, with similar experiments in the literature, and the current state of best practices in the field. Many factors such as appropriate regions or widths to extract rates from, method used to extract rates, and final selection criteria differ between experiments for very good reasons, in that every study is different. It is important to select appropriate analysis factors objectively and report them in your methods. See especially [Killen at al. (2021)](https://journals.biologists.com/jeb/article/224/18/jeb242522/272132/Guidelines-for-reporting-methods-to-estimate).
+***Please note***: You should not simply copy and repeat the following code on your own data. They are examples to show how the `respR` functions are adaptable and flexible and how rates can be extracted, filtered and selected to arrive at a final reportable rate in a variety of ways. They are not recommendations that you should use these specific approaches for particular outputs. There is a [massive literature](https://januarharianto.github.io/respR/articles/refs.html#references) around respirometry, the different physiological metrics, and how to quantify them. Before analysis of your own data you should familiarise yourself with it, with similar experiments in the literature, and the current state of best practices in the field. Many factors such as appropriate regions or widths to extract rates from, method used to extract rates, and final selection criteria differ between experiments for very good reasons, in that every study is different. It is important to select appropriate analysis factors objectively and report them in your methods. See especially [Killen et al. (2021)](https://journals.biologists.com/jeb/article/224/18/jeb242522/272132/Guidelines-for-reporting-methods-to-estimate) and [Prinzing et al. (2021)](https://januarharianto.github.io/respR/articles/refs.html#references).
 
 Note we use the native pipe operator (`|>`) introduced in [R v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) for much of the following. These can be substituted for `dpylr` pipes (`%>%`) if you have not yet updated, or alternatively save output objects and enter them into the next function.
 
@@ -195,7 +195,7 @@ Many aspects will feed into rate selection criteria for a specific experiment or
 
 These are all valid options, as long as they are reported. However, we can also change the analysis parameters. The `width` input in `auto_rate` determines the width of the rolling regressions used to find linear regions. See `auto_rate()` and other vignettes for full details, but briefly in the case of the `"linear"` method this is the starting point for the analysis. Resulting regressions will vary in width, but in general the minimum width will be increased by increasing the `width`. The default value is 0.2, representing 20% of the data length. Here, with 10 minutes of data this would represent 2 minutes, which is quite a brief time window. So instead we will increase this to 0.5 (it can also be specified in the units of the `"by"` input).
 
-See [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine MMR. 
+See [Prinzing et al. (2021)](https://januarharianto.github.io/respR/articles/refs.html#references) for an excellent discussion of appropriate widths in rolling regressions to determine MMR. 
 
 ```{r message=FALSE, warning=FALSE, fig.show='hide'}
 zeb_mmr <- zeb_rep_1 |>
@@ -212,7 +212,7 @@ plot(zeb_mmr, pos = 5)
 
 With non-linear data like this, such as from an animal recovering from exercise, increasing the width over which a rate is determined will necessarily decrease the rate values. The researcher needs to keep this in mind, and find a balance between a width that provides a good estimation of the specimen's physiological state, but also is not affected by other factors such as data noise or anomalies. Most importantly, these decisions and criteria should be reported. 
 
-High width values can lead to overfitting and mis-estimation of rates, and low widths underfitting and rate values which are too sensitive to data noise. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of this in the context of `auto_rate`, and how to choose an appropriate `width`. We recommend reading [Prinzing et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references) to understand the nuances of determining MMR and regression widths. See also [Killen et al. 2021](https://januarharianto.github.io/respR/articles/refs.html#references). 
+High width values can lead to overfitting and mis-estimation of rates, and low widths underfitting and rate values which are too sensitive to data noise. See [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width) for discussion of this in the context of `auto_rate`, and how to choose an appropriate `width`. We recommend reading [Prinzing et al. (2021)](https://januarharianto.github.io/respR/articles/refs.html#references) to understand the nuances of determining MMR and regression widths. See also [Killen et al. (2021)](https://januarharianto.github.io/respR/articles/refs.html#references). 
 
 ### Adjust
 
@@ -256,7 +256,7 @@ zeb_mmr_adj_conv <- convert_rate(zeb_mmr_adj,
 summary(zeb_mmr_adj_conv)
 ```
 
-The `$summary` table contains all rate regression parameters and data locations, adjustments (if applied), units, and more. In fact it contains *all* relevant information about the analysis and is a great way of saving the results, especially using the `export = TRUE` input to save it as a data frame. Note the `row` and `endrow` columns will refer to rows of the most recent subset of the data, however the `time` and `endtime` will always refer back to the time values of original data. 
+The `$summary` table contains all rate regression parameters and data locations, adjustments (if applied), units, and more. In fact it contains *all* relevant information about the analysis and is a great way of saving the results, especially using the `export = TRUE` input to save it as a data frame. One handy tip: you may want to enter `S`, `t`, and `P` even if they are not required for conversions to the output rate unit because they are saved in the `$summary` table, and this can help in keeping track of results across different experiments. Note the `row` and `endrow` columns will refer to rows of the most recent subset of the data, however the `time` and `endtime` will always refer back to the time values of original raw data. 
 
 ### Select
 
@@ -318,8 +318,7 @@ This allows you to document all analysis parameters and rate selection criteria 
 ### `calc_rate.int` {#crint}
 
 To extract a rate from every replicate and calculate a routine metabolic rate (RMR) from amongst the results we will use `calc_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an RMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
-
-`calc_rate.int` was introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06) and allows you to specify a replicate structure and run `calc_rate` on each replicate to extract a rate from the same time or row region in each. See `vignette("calc_rate.int")` for details of the functionality.
+`calc_rate.int` was introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06) and allows you to specify a replicate structure and run `calc_rate` on each replicate to extract a rate from the same time or row region in each. See `vignette("calc_rate.int")` for details of the functionality. 
 
 The difference between this and the approach [below](#arint) using `auto_rate.int()` is that you specify a region over which to calculate a rate, and this will be the same in each replicate. This takes away some of the objectivity in determining rates that `auto_rate` allows for, but as long as selection criteria are reported and applied consistently is a perfectly valid way of processing intermittent-flow data. 
 
@@ -404,7 +403,7 @@ We can see the converted rates as the last column. The `$summary` table contains
 
 It will depend on the aims and circumstances of an experiment what rate results to extract, summarise, and report. For instance we might report RMR as a mean of a representative selection of rates after the specimens uptake rate has stabilised, or a mean of a number or percentile of lowest rates found. The important thing is to apply these selection criteria consistently and report them alongside results. 
 
-As of [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06) `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
+As of [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06) `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
 
 ```{r message = FALSE, results='hide'}
 plot(zeb_cr.int_conv, type = "rate")
@@ -432,7 +431,7 @@ That's it; this is our final routine metabolic rate (at least, as we have chosen
 
 To extract a rate from every replicate and determine a standard metabolic rate (SMR) from amongst the results we will use `auto_rate.int()`. To repeat the note from [above](#analysis), this is not a recommendation that this is how you should extract an SMR from your own data; it is simply an example of one approach and how the `respR` functions are flexible and adaptable. 
 
-Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/version_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and run `auto_rate()` on each replicate. This function extracts rates in a number of ways including the most linear or most consistently maintained rates, plus highest and lowest rates of a specified width. See `vignette("auto_rate")` for more details, and `vignette("auto_rate.int")` for an overview of this function.
+Introduced in [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06), `auto_rate.int()` is a dedicated function for intermittent-flow respirometry data, in which you specify a replicate structure and run `auto_rate()` on each replicate. This function extracts rates in a number of ways including the most linear or most consistently maintained rates, plus highest and lowest rates of a specified width. See `vignette("auto_rate")` for more details, and `vignette("auto_rate.int")` for an overview of this function.
 
 The difference between this and the approach [above](#crint) using `calc_rate.int()` is that the specified `measure` phase is not the same as the region over which a rate is calculated. Instead a `measure` phase is specified and the `auto_rate` analysis is done *within* this region using the `method` and `width` inputs. This can result in rates of different widths coming from within this region depending on the inputs. 
 
@@ -603,4 +602,4 @@ The ultimate aim of `respR` was to enable clear reporting and reproducible analy
 
 ## Alternative approaches
 
-Previous versions of this vignette demonstrated use of different methods, such as looping and subsetting of data, to extract individual replicates for processing through `calc_rate` or `auto_rate`. These approaches still work and are archived [here](https://januarharianto.github.io/respR/articles/archive/intermittent_old.html) in case they are of use in some cases. However for most analyses use of `calc_rate.int` or `auto_rate.int` is the recommended approach.
+Previous versions of this vignette demonstrated use of different methods, such as looping and subsetting of data, to extract individual replicates for processing through `calc_rate` or `auto_rate`. These approaches still work and are archived [here](https://januarharianto.github.io/respR/articles/archive/intermittent_old.html) in case they are of use in some cases, for example if you want to extract rates from the same oxygen range in each replicate. However for most analyses use of `calc_rate.int` or `auto_rate.int` is the recommended approach.

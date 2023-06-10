@@ -12,6 +12,7 @@
 ^index\.Rmd$
 ^data-raw$
 ^.DS_Store$
+^t5.rda$
 
 # Insurance
 vignettes

@@ -36,14 +36,12 @@ opts_chunk$set(collapse = TRUE,
 
 ## Introduction
 
-Some species are *oxyconformers*, with their routine oxygen uptake rate directly proportional to the oxygen supply available from the environment. So, for example, at 50% oxygen their uptake rate will be half that at 100% oxygen. Many species however are *oxyregulators*, and are able to regulate uptake and maintain routine rates as oxygen supply declines until a value is reached below which  uptake precipitously declines. 
+Some species are *oxyconformers*, with their routine oxygen uptake rate directly proportional to the oxygen supply available from the environment. So, for example, at 50% oxygen their uptake rate will be half that at 100% oxygen. Many species however are *oxyregulators*, and are able to regulate uptake and maintain routine rates as oxygen supply declines until a value is reached below which  uptake precipitously declines. Note however that the classification of species into strict oxyconformers and oxyregulators is somewhat simplistic; there can be a continuum of responses between these extremes, and many intermediate cases [@muellerRegulationIndexNew2011].
 
-
-The oxygen value below which routine uptake becomes unsustainable is termed the critical oxygen value (COV), or more commonly $P_{crit}$. Historically, this was expressed in units of partial pressure of oxygen (e.g. kPa), hence $P_{crit}$ as in the critical *pressure* of oxygen, but it is also commonly expressed in units of concentration. Here we will use the term COV to describe the value regardless of units. 
+The oxygen value below which routine uptake becomes unsustainable is termed the critical oxygen value (COV) or $P_{crit}$. Historically, this was expressed in units of partial pressure of oxygen (e.g. kPa), hence $P_{crit}$ as in the critical *pressure* of oxygen, but it is also commonly expressed in units of oxygen concentration. Here we will use the term COV to describe the value regardless of units. 
 
 COV is typically determined in long duration, closed-chamber respirometry experiments in which the specimen is allowed to deplete the oxygen in the chamber, with the resulting oxygen trace used to identify the breakpoint in the relationship of uptake rate to oxygen concentration.
 
-Note that the classification of species into strict oxyconformers and oxyregulators is somewhat simplistic; there can be a continuum of responses between these extremes, and many intermediate cases [@muellerRegulationIndexNew2011].
 
 ## `oxy_crit`
 
@@ -51,7 +49,7 @@ Note that the classification of species into strict oxyconformers and oxyregulat
 
 The first is the general structure that all other `respR` functions accept, a `data.frame` or `inspect` object containing paired values of time and oxygen pressure or concentration. For data frame inputs, if time and oxygen are not the first and second columns respectively, the columns can be specified with the `time` and `oxygen` inputs. For `inspect` objects, these will have been specified already. These `oxygen~time` data are used to calculate a rolling rate of the specified `width`, the default being 0.1 or 10% of the width of the entire dataset. This rolling rate, similar to the lower panel in the `inspect` plot in the example [below](#inspect), is the data upon which the critical value analysis is conducted.
 
-The second data input option is to enter a `data.frame` containing already calculated rates, paired with relevant oxygen values. Typically these would be the mean or central oxygen value of the range over which the rate was determined. These columns can be specified using the `rate` and `oxygen` inputs. In this case, the function does not calculate a rolling rate internally, and the critical point analysis is performed on the input data directly.
+The second data input option is to input a `data.frame` containing already calculated rates, paired with relevant oxygen values. Typically these would be the mean or central oxygen value of the range over which the rate was determined. These columns can be specified using the `rate` and `oxygen` inputs. In this case, the function does not calculate a rolling rate internally, and the critical point analysis is performed on the input data directly. The rates can be absolute (i.e. whole chamber or whole specimen) or mass-specific rates; either will give identical results.
 
 ### Methods
 
@@ -79,11 +77,11 @@ For data entered as `time` and `oxygen` values, this controls the width of the i
 
 #### `thin`
 
-This affects the `"bsr"` method only, which is computationally intensive, and thins large datasets which take a prohibitively long time to process to more manageable lengths. This is entered as an integer value, with the default being `thin = 5000`, and the data frame will be uniformly subsampled to this number of rows before analysis. The default value of 5000 has in testing provided a good balance between speed and results accuracy and repeatability. However, results may vary with different datasets, so users should experiment with varying the value. To perform no subsampling and use the entire dataset enter `thin = NULL`. As an example of the time difference, processing the `squid.rd` data with the default `thin = 5000` decreases the processing time from \~60s to \~6s, but outputs an identical result. It has no effect on datasets shorter than the `thin` input, or on the `"segmented"` method. 
+This affects the `"bsr"` method only, which is computationally intensive, and thins large datasets which take a prohibitively long time to process to more manageable lengths. This is entered as an integer value, with the default being `thin = 5000`, and the data frame will be uniformly subsampled to this number of rows before analysis. The default value of 5000 has in testing provided a good balance between speed and results accuracy and repeatability. However, results may vary with different datasets, so users should experiment with varying the value. To perform no subsampling and use the entire dataset enter `thin = NULL`. As an example of the time difference, processing the `squid.rd` data (around 34000 rows long) with the default `thin = 5000` decreases the processing time from \~60s to \~6s, but outputs an identical result. It has no effect on datasets shorter than the `thin` input, or on the `"segmented"` method. 
 
 #### `parallel`
 
-Default is `FALSE`. This controls the use of parallel processing in running the analysis. If your dataset is particularly large or high resolution and analyses are taking a prohibitively long time to process try changing this to `TRUE`. Note, this option sometimes causes errors depending on the system or platform, so should only be used if it is really needed.
+Default is `FALSE`. This controls the use of parallel processing in running the analysis. If your dataset is particularly large or high resolution and analyses are taking a prohibitively long time to process you can try changing this to `TRUE`. Note, this option sometimes causes errors depending on the system or platform, so should only be used if it is really needed.
 
 #### `plot`
 
@@ -189,9 +187,9 @@ We can see again we get the same values with these different widths as in the BS
 
 The example above used raw `oxygen~time` data, and so the function calculated a rolling rate internally, then performed the breakpoint analysis on these data. However, the function can accept already calculated `rate~oxygen` data, and the function will perform the analysis using these data directly. These rates can be either absolute rates (i.e. whole specimen or whole chamber), or mass-specific rates; both will give identical critical value results. The rates can also be unitless rates, that is the rate values output by `respR` functions such as `calc_rate` and `auto_rate` before conversion to proper oxygen rate units, as well as rates already converted to units. As long as all rates are dimensionally equivalent the critical oxygen analysis will output identical results.
 
-Here, we'll use the `"rolling"` method in `auto_rate()` to perform a rolling regression on the squid data to get a rolling rate, and we'll convert these to a mass-specific rate in `mlO2/h/g`. We'll pair these values in a data frame with a rolling mean of the oxygen value from the same window using the [`roll`](https://cran.r-project.org/web/packages/roll/index.html) package.
+Here, we'll use the `"rolling"` method in `auto_rate()` to perform a rolling regression on the squid data to get a rolling rate, and we'll convert these to a mass-specific rate in `ml/h/g`. We'll pair these values in a data frame with a rolling mean of the oxygen value from the same window using the [`roll`](https://cran.r-project.org/web/packages/roll/index.html) package.
 
-This new dataset will be shorter by the input `width` setting, because the rolling methods start at row `width/2` and run to `width/2` before the final row (these functions can output results of the same length, but it necessarily involves using partial windows at the start and end of the data, which can result in questionable outputs).
+This new dataset will be shorter by the input `width` setting, because the rolling methods start at row `width/2` and run to `width/2` before the final row (`roll` has options to output results of the same length, but it necessarily involves using partial windows at the start and end of the data, which can result in questionable outputs and is not really necessary here).
 
 ```{r}
 ## Perform rolling rate analysis 
@@ -259,13 +257,13 @@ seg_res
 
 ## Which method to use
 
-With high resolution, non-noisy data the BSR and Segmented methods identify very similar, if not identical, critical oxygen values (COVs). This will vary with other data, and one of the methods might work better than the other depending on the characteristics of the data. Which to report should be informed after familiarisation with how they work and testing with the data. Most importantly results should be reported alongside analysis parameters which affect the outputs, such as the width of the rolling regression.
+With high resolution, non-noisy data the BSR and Segmented methods identify very similar, if not identical, critical oxygen values (COVs). This will vary with other data, and one of the methods might work better than the other depending on the characteristics of the data. Which to use and report should be informed after familiarisation with how they work and testing with the data. Most importantly, results should be reported alongside analysis parameters which affect the outputs, such as the width of the rolling regression.
 
 There are additional methods to identify critical breakpoints in oxygen\~time data, such as the non-linear regression method of @marshallEstimatingPhysiologicalTolerances2013, and the α-method of @seibelOxygenSupplyCapacity2021. It is our plans to support these and others in updates to `oxy_crit`, as well as metrics which describe the degree of oxyregulation of a specimen in intermediate cases e.g. [@tangRateOxygenConsumption1933; @muellerRegulationIndexNew2011].
 
-There is a huge literature (see [below](#refs)) and healthy debate about the use and application of $P_{crit}$, much of it very recent. Before running any COV analysis you should familiarise yourself with the literature, particularly critiques of the different methods, and their utility.
+There is a huge literature (see [below](#refs)) and healthy debate about the use and application of $P_{crit}$, much of it recent. Before running any COV analysis you should familiarise yourself with the literature, particularly critiques of the different methods, and their utility.
 
-We particularly recommend the recent debate by @woodFallacyCritAre2018 and @reganDonThrowFish2019, and also @ultschUtilityDeterminationCrit2019. Also be sure to check out the latest developments by @seibelOxygenSupplyCapacity2021.
+We particularly recommend the debate by @woodFallacyCritAre2018 and @reganDonThrowFish2019, and also @ultschUtilityDeterminationCrit2019. Also be sure to check out the latest developments by @seibelOxygenSupplyCapacity2021.
 
 An important point to note is that $P_{crit}$ and COVs are most frequently used as a *comparative* metric. Since analytical options chosen by the investigator such as regression width inherently affect the result, it is arguably more important that these are kept the same amongst analyses that will be the basis of comparisons, rather than consideration of the ultimate values *per se*. Therefore, it is important that investigators fully report the parameters under which these analyses have been conducted. This allows editors and reviewers to reproduce and assess analyses, and subsequent investigators to judge if comparisons to their own results are appropriate. `respR` has been designed to make the process of reporting these analyses straightforward - see `vignette("reproducibility")`.
 

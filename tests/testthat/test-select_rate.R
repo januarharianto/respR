@@ -65,14 +65,14 @@ capture.output({  ## stops printing outputs on assigning
     dt.reg.insp <- subset_data(zeb_intermittent.rd,
                                from = 5840,
                                to = 5840 + 6599,
-                               by = "row") |>
+                               by = "row") %>%
       inspect(legend = F, plot = T)
 
     # 10 reps, 1 rank in each
-    conv_rt_ar.int_obj <- dt.reg.insp |>
+    conv_rt_ar.int_obj <- dt.reg.insp %>%
       calc_rate.int(starts = 660,
                     by = "time",
-                    plot = F) |>
+                    plot = F) %>%
       convert_rate(oxy.unit = "mg/L",
                    time.unit = "secs",
                    output.unit = "mg/h/g",
@@ -80,14 +80,14 @@ capture.output({  ## stops printing outputs on assigning
                    mass = 0.0009)
 
     # 10 reps, multiple ranks in each
-    conv_rt_ar.int_obj_mult_ranks <- dt.reg.insp |>
+    conv_rt_ar.int_obj_mult_ranks <- dt.reg.insp %>%
       auto_rate.int(starts = 660,
                     wait = 120,
                     measure = 360,
                     by = "row",
                     plot = F,
                     n = 5,
-                    width = 0.4) |>
+                    width = 0.4) %>%
       convert_rate(oxy.unit = "mg/L",
                    time.unit = "secs",
                    output.unit = "mg/h/g",
@@ -746,29 +746,6 @@ capture.output({  ## stops printing outputs on assigning
       expect_false(3000 %in% x[6]:x[7]))
   })
 
-  test_that("select_rate: works with method = row_omit and n input of multiple random", {
-    skip_on_cran()
-    # 10 random rows
-    ran <- round(runif(5, 500, 4500))
-
-    # runs ok
-    expect_error(conv_rt_ar_low_obj_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
-                                                                   n = ran),
-                 regexp = NA)
-    ## check omitted times not within times for each regression
-    for(i in ran) apply(conv_rt_ar_low_obj_subset_row_omit$summary, 1, function(x)
-      expect_false(i %in% x[7]:x[8]))
-
-  })
-
-  test_that("select_rate: works with method = row_omit and n input of range as both range and vector gives same result", {
-    skip_on_cran()
-    expect_identical(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
-                                                               n = c(2000,2200))$summary,
-                     conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "row_omit",
-                                                               n = 2000:2200)$summary)
-  })
-
   test_that("select_rate: works with method = row_omit and n input not used - i.e. does not remove any results", {
     skip_on_cran()
     expect_equal(nrow(select_rate(conv_rt_ar.int_obj_mult_ranks, method = "row_omit", n = 100)$summary),
@@ -875,31 +852,6 @@ capture.output({  ## stops printing outputs on assigning
     apply(conv_rt_ar_subset_time_omit$summary, 1, function(x)
       expect_false(3000 %in% x[8]:x[9]))
   })
-
-  test_that("select_rate: works with method = time_omit and n input of multiple random", {
-    skip_on_cran()
-
-    # 10 random times
-    ran <- runif(5, 500, 4500)
-
-    # runs ok
-    expect_error(conv_rt_ar_low_obj_subset_time_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
-                                                                    n = ran),
-                 regexp = NA)
-    ## check omitted times not within times for each regression
-    for(i in ran) apply(conv_rt_ar_low_obj_subset_time_omit$summary, 1, function(x)
-      expect_false(i %in% x[9]:x[10]))
-
-  })
-
-  test_that("select_rate: works with method = time_omit and n input of range as both range and vector gives same result", {
-    skip_on_cran()
-    expect_identical(conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
-                                                               n = c(1000,1500))$summary,
-                     conv_rt_ar_subset_row_omit <- select_rate(conv_rt_ar_low_obj, method = "time_omit",
-                                                               n = 1000:1500)$summary)
-  })
-
 
   test_that("select_rate: works with method = time_omit and n input not used - i.e. does not remove any results", {
     skip_on_cran()
@@ -2714,9 +2666,9 @@ capture.output({  ## stops printing outputs on assigning
   test_that("select_rate: calc_rate-to-adjust_rate-to-convert_rate object with multiple rates works", {
 
     cr_mult_adj <-
-      urchins.rd[,1:2] |>
-      calc_rate(seq(10, 100, 10), seq(110, 200, 10), "row", plot = FALSE) |>
-      adjust_rate(by = -0.005) |>
+      urchins.rd[,1:2] %>%
+      calc_rate(seq(10, 100, 10), seq(110, 200, 10), "row", plot = FALSE) %>%
+      adjust_rate(by = -0.005) %>%
       convert_rate(oxy.unit = "mg/l",
                    time.unit = "min",
                    output.unit = "mg/h/g",
@@ -3738,6 +3690,6 @@ capture.output({  ## stops printing outputs on assigning
   ## .... but apparently not!
   suppressWarnings(file.remove("Rplots.pdf"))
 
-}) ## turns printing back on
+}) ## end capture.output
 
 

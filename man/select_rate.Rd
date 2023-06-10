@@ -50,7 +50,7 @@ rate selection criteria.
 
 Multiple selection criteria can be applied by saving the output and
 processing it through the function multiple times using different methods,
-or alternatively via piping (\verb{|>} or \verb{\%>\%}). See Examples.
+or alternatively via piping (\verb{\%>\%} or \verb{\%>\%}). See Examples.
 
 \emph{Note:} when choosing a \code{method}, keep in mind that to remain
 mathematically consistent, \code{respR} outputs oxygen consumption (i.e.
@@ -338,11 +338,11 @@ regarded as overlapping. For example, \code{n = 0.2} means a regression would
 have to overlap with at least one other by at least 20\% of its total length
 to be regarded as overlapping.
 
-The \code{overlap} method performs two operations:
+The \code{"overlap"} method performs two operations:
 
 First, regardless of the \code{n} value, any rate regressions which are
-completely contained within another are removed (this is also the only
-operation if \code{n = 1}).
+completely contained within another are removed. This is also the only
+operation if \code{n = 1}.
 
 Secondly, for each regression in \verb{$summary} starting from the bottom of the
 summary table (usually the lowest ranked result, but this depends on the
@@ -386,18 +386,19 @@ unchanged regardless of how the results are subsequently selected or
 reordered, so this will restore the original ordering after other methods
 have been applied.
 
-\code{rsq} reorders by \verb{$rsq} from highest value to lowest.
+\code{"rsq"} reorders by \verb{$rsq} from highest value to lowest.
 
-\code{intercept} and \code{slope} reorders by these columns from lowest value to
-highest.
+\code{"intercept"} and \code{"slope"} reorder by the \verb{$intercept_b0} and \verb{$slope_b1}
+columns from lowest value to highest.
 
-\code{highest} and \code{lowest} reorder by absolute values of the \verb{$rate.output}
+\code{"highest"} and \code{"lowest"} reorder by absolute values of the \verb{$rate.output}
 column, that is highest or lowest in magnitude regardless of the sign. They
 can only be used when rates all have the same sign.
 
-\code{maximum} and \code{minimum} reorder by numerical values of the \verb{$rate.output}
-column, that is maximum or minimum in numerical value taking account of the
-sign, and can be used when rates are a mix of negative and positive.
+\code{"maximum"} and \code{"minimum"} reorder by numerical values of the
+\verb{$rate.output} column, that is maximum or minimum in numerical value taking
+account of the sign, and can be used when rates are a mix of negative and
+positive.
 }
 
 \subsection{Numeric input conversions}{
@@ -429,39 +430,39 @@ website at \url{https://januarharianto.github.io/respR/}
 \examples{
 \donttest{
 ## Object to filter
- ar_obj <- inspect(intermittent.rd, plot = FALSE) |>
-   auto_rate(plot = FALSE) |>
+ ar_obj <- inspect(intermittent.rd, plot = FALSE) \%>\%
+   auto_rate(plot = FALSE) \%>\%
    convert_rate(oxy.unit = "mg/L",
                 time.unit = "s",
                 output.unit = "mg/h",
-                volume = 2.379) |>
+                volume = 2.379) \%>\%
    summary()
 
  ## Select only negative rates
- ar_subs_neg <- select_rate(ar_obj, method = "negative") |>
+ ar_subs_neg <- select_rate(ar_obj, method = "negative") \%>\%
    summary()
 
  ## Select only rates over 1000 seconds duration
- ar_subs_dur <- select_rate(ar_obj, method = "duration", n = c(1000, Inf)) |>
+ ar_subs_dur <- select_rate(ar_obj, method = "duration", n = c(1000, Inf)) \%>\%
    summary()
 
  ## Reorder rates sequentially (i.e. by starting row)
- ar_subs_dur <- select_rate(ar_obj, method = "row") |>
+ ar_subs_dur <- select_rate(ar_obj, method = "row") \%>\%
    summary()
 
  ## Select rates with r-squared higher than 0.99,
  ## then select the lowest 10th percentile of the remaining rates,
  ## then take the mean of those
- inspect(squid.rd, plot = FALSE) |>
+ inspect(squid.rd, plot = FALSE) \%>\%
    auto_rate(method = "linear",
-             plot = FALSE) |>
+             plot = FALSE) \%>\%
    convert_rate(oxy.unit = "mg/L",
                 time.unit = "s",
                 output.unit = "mg/h",
-                volume = 2.379) |>
-   summary() |>
-   select_rate(method = "rsq", n = c(0.99, 1)) |>
-   select_rate(method = "lowest_percentile", n = 0.1) |>
+                volume = 2.379) \%>\%
+   summary() \%>\%
+   select_rate(method = "rsq", n = c(0.99, 1)) \%>\%
+   select_rate(method = "lowest_percentile", n = 0.1) \%>\%
    mean()
    }
 }

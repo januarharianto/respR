@@ -12,24 +12,24 @@ capture.output({  ## stops printing outputs on assigning
   # create testing objects
   suppressWarnings({
     # in secs
-    dt.sec <- intermittent.rd |>
+    dt.sec <- intermittent.rd %>%
       subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
     dt.sec.insp <- inspect(dt.sec, plot = F)
 
     # in mins - 2 dec places
-    dt.min.2 <- intermittent.rd |>
+    dt.min.2 <- intermittent.rd %>%
       subset_data(from = 1)
     dt.min.2[[1]] <- round(dt.min.2[[1]]/60, 2)
     dt.min.2.insp <- inspect(dt.min.2, plot = F)
 
     # in mins - 1 dec places
-    dt.min.1 <- intermittent.rd |>
+    dt.min.1 <- intermittent.rd %>%
       subset_data(from = 1)
     dt.min.1[[1]] <- round(dt.min.1[[1]]/60, 1)
     dt.min.1.insp <- inspect(dt.min.1, plot = F)
 
     # in hrs - 2 dec places
-    dt.hr <- intermittent.rd |>
+    dt.hr <- intermittent.rd %>%
       subset_data(from = 1)
     dt.hr[[1]] <- round(dt.hr[[1]]/60/60, 3)
     dt.hr.insp <- inspect(dt.hr, plot = F)
@@ -45,7 +45,7 @@ capture.output({  ## stops printing outputs on assigning
     dt.reg.insp <- subset_data(zeb_intermittent.rd,
                                from = 5840,
                                to = 5840 + 6599,
-                               by = "row") |>
+                               by = "row") %>%
       inspect(legend = F, plot = F)
   })
 
@@ -1371,6 +1371,20 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate.int - S3 generics work", {
     skip_on_cran()
+
+    # plots from within function
+    expect_output(auto_rate.int(dt.sec.insp,
+                            starts = sts,
+                            width = 400,
+                            by = "row",
+                            plot = TRUE))
+    expect_error(auto_rate.int(dt.sec.insp,
+                            starts = sts,
+                            width = 400,
+                            by = "row",
+                            plot = TRUE),
+                 NA)
+
     ar.int <- auto_rate.int(dt.sec.insp,
                             starts = sts,
                             width = 400,
@@ -1394,6 +1408,9 @@ capture.output({  ## stops printing outputs on assigning
     expect_is(summary(ar.int, pos = 2:3, export = TRUE),
               "data.frame")
 
+    expect_output(mean(ar.int, pos = 1))
+    expect_message(mean(ar.int, pos = 1),
+                   "Only 1 rate found. Returning mean rate anyway...")
     expect_output(mean(ar.int, pos = 2:3))
     expect_error(mean(ar.int, pos = 40),
                  "mean.auto_rate.int: Invalid 'pos' input: only 3 rates found.")
@@ -1432,7 +1449,7 @@ capture.output({  ## stops printing outputs on assigning
                                 n = 2,
                                 measure = c(500,500,400),
                                 plot = F,
-                                type = "rep") |>
+                                type = "rep") %>%
       summary()
     ar.int.obj$dataframe[ar.int.obj$summary$row,]
     # test - if we use row numbers in calc_rate results should match
@@ -1441,7 +1458,7 @@ capture.output({  ## stops printing outputs on assigning
                         from = ar.int.obj$summary$row,
                         to = ar.int.obj$summary$endrow,
                         by = "row",
-                        plot = F) |>
+                        plot = F) %>%
       summary()
 
     expect_equal(ar.int.obj$rate,
@@ -1481,12 +1498,41 @@ capture.output({  ## stops printing outputs on assigning
   expect_equal(mean(ar.int, pos = 2:3, export = TRUE),
                mean(ar.int$rate[2:3]))
 
+  # works if legend used
+  expect_output(plot(ar.int, pos = 1, legend = TRUE))
+
   # pos default applied
   expect_output(plot(ar.int, pos = NULL))
   expect_output(plot(ar.int, pos = 1))
   expect_output(plot(ar.int, pos = 3))
   expect_error(plot(ar.int, pos = 50),
                "plot.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+  # works with multiple pos up to and past 20
+  dt.reg.insp.30 <- subset_data(zeb_intermittent.rd,
+                             from = 5840,
+                             to = 5840 + 19797,
+                             by = "row") %>%
+    inspect(legend = F, plot = F)
+  # should be 30 reps
+  ar.int.obj.30reps <- auto_rate.int(dt.reg.insp.30,
+                                     starts = 660,
+                                     wait = 50,
+                                     measure = 300,
+                                     width = 100,
+                                     by = "row",
+                                     n = 1,
+                                     plot = F)
+  expect_output(plot(ar.int.obj.30reps, pos = 1))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:2))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:4))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:6))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:9))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:12))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:16))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:20))
+  expect_output(plot(ar.int.obj.30reps, pos = 1:25))
+  expect_message(plot(ar.int.obj.30reps, pos = 1:25),
+                 "plot.auto_rate.int: Plotting first 20 selected rates only. To plot others modify 'pos' input.")
 
   # plot types produce output
   expect_output(plot(ar.int, type = "rep"))
@@ -1553,8 +1599,8 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'concurre
                           plot = F)
   # "concurrent" method
   # subset these data to the same length
-  by <- background_con.rd |>
-    subset_data(1, 4830, "time", quiet = TRUE) |>
+  by <- background_con.rd %>%
+    subset_data(1, 4830, "time", quiet = TRUE) %>%
     calc_rate.bg(plot = F)
 
   ar.int.adj <- adjust_rate(ar.int, by = by, method = "concurrent")
@@ -1574,11 +1620,11 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'linear'"
   #summary(ar.int)
   # "linear" method
   # subset these data to the same length
-  by1 <- background_con.rd |>
-    subset_data(1, 800, "time") |>
+  by1 <- background_con.rd %>%
+    subset_data(1, 800, "time") %>%
     calc_rate.bg()
-  by2 <- background_exp.rd |>
-    subset_data(5000, 15000, "time") |>
+  by2 <- background_exp.rd %>%
+    subset_data(5000, 15000, "time") %>%
     calc_rate.bg()
 
   ar.int.adj <- adjust_rate(ar.int, by = by1, by2 = by2, method = "linear")
@@ -1602,11 +1648,11 @@ test_that("auto_rate.int - works as expected with adjust_rate method = 'exponent
                           plot = F)
   # "exponential" method
   # subset these data to the same length
-  by1 <- background_con.rd |>
-    subset_data(1, 800, "time") |>
+  by1 <- background_con.rd %>%
+    subset_data(1, 800, "time") %>%
     calc_rate.bg()
-  by2 <- background_exp.rd |>
-    subset_data(5000, 15000, "time") |>
+  by2 <- background_exp.rd %>%
+    subset_data(5000, 15000, "time") %>%
     calc_rate.bg()
 
   ar.int.adj <- adjust_rate(ar.int, by = by1, by2 = by2, method = "exponential")

@@ -81,6 +81,10 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(plot(cr, pos = 1:2),
                  "calc_rate: 'pos' should be a single value.")
 
+    # panel
+    expect_output(plot(cr, panel = 1))
+    expect_error(plot(cr, panel = 5),
+                 "plot.calc_rate: 'panel' input should be 1 to 4 or 'NULL' for all.")
   })
 
   test_that("calc_rate - calling linear_fit (calc_rate) produces coefficients", {
@@ -114,6 +118,11 @@ capture.output({  ## stops printing outputs on assigning
   test_that("calc_rate - stops with non data.frame 'x' input", {
     expect_error(calc_rate(as.matrix(sard_data), plot = F),
                  "calc_rate: Input must be a 'data.frame' or 'inspect' object.")
+  })
+
+  test_that("calc_rate - stops when 'x' input has only 1 row of data", {
+    expect_error(calc_rate(sardine.rd[1,], plot = F),
+                 "calc_rate: Input data contains only 1 row. Please check inputs.")
   })
 
   test_that("calc_rate - message with multi column input", {
@@ -656,4 +665,4 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-}) ## turns printing back on
+}) ## end capture.output

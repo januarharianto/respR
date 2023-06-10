@@ -50,7 +50,7 @@ Therefore the `$rep` and `$rank` columns can be used to keep track of selections
 
 ## Plot {#plotconv}
 
-As of [v2.1](https://januarharianto.github.io/respR/articles/version_notes.html), `convert_rate` has new plotting functionality that helps explore the results and view the result of selection or reordering. Either pass `plot = TRUE` in the `convert_rate` call (default is `FALSE`), or alternatively the output object can be passed or piped to `plot()` after processing in `select_rate`. 
+As of [v2.1](https://januarharianto.github.io/respR/articles/release_notes.html), `convert_rate` has new plotting functionality that helps explore the results and view the result of selection or reordering. Either pass `plot = TRUE` in the `convert_rate` call (default is `FALSE`), or alternatively the output object can be passed or piped to `plot()` after processing in `select_rate`. 
 
 There are three ways of plotting the results:
 
@@ -280,7 +280,7 @@ This demonstrates how selection criteria should be consistently applied in the s
 
 ## 3. Intermittent-flow results
 
-`select_rate` becomes really useful when it comes to dealing with the results of intermittent-flow analyses, particularly the outputs of `calc_rate.int` and `auto_rate.int`. When you have tens to hundreds of replicates it can be difficult to both extract rates from them and filter the results consistently. These functions introduced in [respR v2.1](https://januarharianto.github.io/respR/articles/version_notes.html) combined with `select_rate` make this process really straightforward. 
+`select_rate` becomes really useful when it comes to dealing with the results of intermittent-flow analyses, particularly the outputs of `calc_rate.int` and `auto_rate.int`. When you have tens to hundreds of replicates it can be difficult to both extract rates from them and filter the results consistently. These functions introduced in [respR v2.1](https://januarharianto.github.io/respR/articles/release_notes.html) combined with `select_rate` make this process really straightforward. 
 
 A full analysis of a long intermittent-flow experiment including results filtering using `select_rate` can be seen in `vignette("intermittent_long")`. Here we will show a brief example using part of the same dataset. 
 
@@ -324,7 +324,7 @@ Let's say we are interested in two rates: a maximum metabolic rate (MMR), that i
 
 #### MMR
 
-In this example the rate from the first replicate is clearly the highest, and we can use `select_rate` to extract it. This tells the function we are interested in the highest rates (in absolute value, that is ignoring the sign - see `help("select_rate")` for full details) and to select the single highest one (`n = 1`). We also plot it to check which replicate it comes from, and use `summary` with the `export` option to save the full result as a `data.frame`. 
+In this example the rate from the first replicate is clearly the highest, but we can use `select_rate` to extract it. This tells the function we are interested in the highest rates (in absolute value, that is ignoring the sign - see `help("select_rate")` for full details) and to select the single highest one (`n = 1`). We also plot it to check which replicate it comes from, and use `summary` with the `export` option to save the full result as a `data.frame`. 
 
 ```{r message=FALSE, results='hide'}
 mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
@@ -340,7 +340,7 @@ mmr
 
 #### RMR
 
-Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates (quite common, but usually in studies where there are many more repliucates), so this time we pipe the result to `mean()`.
+Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates (quite common, but usually in studies where there are many more replicates), so this time we pipe the result to `mean()`.
 
 ```{r message=FALSE, results='hold'}
 rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>

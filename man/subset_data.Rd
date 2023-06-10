@@ -30,7 +30,7 @@ output is an object of the same class containing the subset data. For
 on a given set of criteria. The function is ideal for passing only selected
 regions of data to other functions such as \code{\link[=calc_rate]{calc_rate()}} and
 \code{\link[=auto_rate]{auto_rate()}}, either by saving the output as a new object or via the use
-of pipes (\verb{\%>\%} or \verb{|>}). It is also very useful in analysis of
+of pipes (\verb{\%>\%} or \verb{\%>\%}). It is also very useful in analysis of
 intermittent-flow data, where in a loop each replicate can be extracted and
 passed to an analytical function such as \code{calc_rate} or \code{auto_rate}. See
 examples and vignettes.

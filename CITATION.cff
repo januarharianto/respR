@@ -8,9 +8,9 @@ authors:
   given-names: "Nicholas"
   orcid: ""
 title: "respR — An R package for the manipulation and analysis of respirometry data"
-version: 2.0.0
-doi: 10.5281/zenodo.2548601
-date-released: 2022-02-17
+version: 2.3.0
+doi: 10.1111/2041-210X.13162
+date-released: 2022-06-05
 url: "https://github.com/januarharianto/respR"
 preferred-citation:
   type: article

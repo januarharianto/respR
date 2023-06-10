@@ -235,7 +235,7 @@
 #'               starts = c(1, 2101, 3901),
 #'               by = "row",
 #'               method = "linear",
-#'               width = 400) |>
+#'               width = 400) %>%
 #'   summary()
 #'
 #' # Calculate the lowest rate within each replicate across
@@ -246,7 +246,7 @@
 #'               measure = 1000,
 #'               by = "row",
 #'               method = "lowest",
-#'               width = 300) |>
+#'               width = 300) %>%
 #'   summary()
 #'
 #' # You can even specify different 'measure' phases in each rep
@@ -255,7 +255,7 @@
 #'               measure = c(1000, 800, 600),
 #'               by = "row",
 #'               method = "lowest",
-#'               width = 300) |>
+#'               width = 300) %>%
 #'   summary()
 #'
 #' # We usually don't want to use the start of a replicate just after the flush,
@@ -270,7 +270,7 @@
 #'                           measure = 10,          # measure phase of 10 mins
 #'                           by = "time",           # apply inputs by time values
 #'                           method = "lowest",     # get the 'lowest' rate...
-#'                           width = 5) |>          #  ... of 5 minutes width
+#'                           width = 5) %>%          #  ... of 5 minutes width
 #'   summary()
 #'
 #' # Regular replicate structure --------------------------------------------
@@ -280,11 +280,11 @@
 #' # subset first so that the first replicate starts at row 1.
 #' #
 #' # Subset and inspect data
-#' zeb_insp <- zeb_intermittent.rd |>
+#' zeb_insp <- zeb_intermittent.rd %>%
 #'   subset_data(from = 5840,
 #'               to = 75139,
 #'               by = "row",
-#'               quiet = TRUE) |>
+#'               quiet = TRUE) %>%
 #'   inspect()
 #'
 #' # Calculate the most linear rate from the same 6-minute region in every
@@ -295,7 +295,7 @@
 #'                          measure = 360, # measure period of 6 mins after 'wait'
 #'                          method = "linear",
 #'                          width = 200, # starting value for linear analysis
-#'                          plot = TRUE) |>
+#'                          plot = TRUE) %>%
 #'   summary()
 #'
 #' # S3 functions ------------------------------------------------------------
@@ -353,7 +353,7 @@ auto_rate.int <- function(x,
 
   # x
   if(!(class.val(x, df = TRUE, insp = TRUE)))
-    stop("auto_rate.int: Input must be a 'data.frame' or 'inspect' object.")
+    stop("auto_rate.int: Input must be a 'data.frame' or 'inspect' object.", call. = FALSE)
 
   # Extract data
   if(any(class(x) %in% "inspect")) df <- x$dataframe else
@@ -368,9 +368,9 @@ auto_rate.int <- function(x,
 
   ## verify by input
   ## - this is also done in auto_rate
-  by <- verify_by(by, req = TRUE, default = "row",
+  by <- by.val(by, req = TRUE, default = "row",
                   which = c("t", "r"),
-                  msg = "auto_rate.int:")
+                  msg = "auto_rate.int")
 
   # starts
   #  - required, numeric, integer, within df row range
@@ -391,7 +391,7 @@ auto_rate.int <- function(x,
                              msg = "auto_rate.int: 'wait' -")
   # plus if not null and not length == 1, must be same length as 'starts'
   if(!is.null(wait) && length(wait) > 1 && length(wait) != length(starts))
-    stop("auto_rate.int: For a vector input 'wait' should be the same length as 'starts'.")
+    stop("auto_rate.int: For a vector input 'wait' should be the same length as 'starts'.", call. = FALSE)
 
   # measure
   # - not required, but if entered numeric, integer
@@ -402,15 +402,15 @@ auto_rate.int <- function(x,
                              msg = "auto_rate.int: 'measure' -")
   # plus if not null and not length == 1, must be same length as 'starts'
   if(!is.null(measure) && length(measure) > 1 && length(measure) != length(starts))
-    stop("auto_rate.int: For a vector input 'measure' should be the same length as 'starts'.")
+    stop("auto_rate.int: For a vector input 'measure' should be the same length as 'starts'.", call. = FALSE)
 
 
   # width
   # Force a width input. This is to stop the auto_rate default 0.2 being applied since it's rarely
   # appropriate for intermittent-flow reps
   if(is.null(width)){
-    if(by == "row") stop("auto_rate.int: Please enter a 'width'. This should be in the 'by' input of number of rows.")
-    if(by == "time") stop("auto_rate.int: Please enter a 'width'. This should be in the 'by' input of a time duration in the correct units.")
+    if(by == "row") stop("auto_rate.int: Please enter a 'width'. This should be in the 'by' input of number of rows.", call. = FALSE)
+    if(by == "time") stop("auto_rate.int: Please enter a 'width'. This should be in the 'by' input of a time duration in the correct units.", call. = FALSE)
   }
   if(by == "row" && width < 1) input.val(width, num = TRUE, int = FALSE, req = TRUE,
                                          max = 1, min = 1, range = c(0.001, 0.999),
@@ -443,6 +443,9 @@ auto_rate.int <- function(x,
     ends <- c(starts[2:length(starts)]-1, nrow(df))
   }
 
+  diff(starts)
+  diff(ends)
+
   # Format wait and measure -------------------------------------------------
 
   # If wait and measure NULL
@@ -469,10 +472,13 @@ auto_rate.int <- function(x,
 
   # Subset replicates -------------------------------------------------------
   # use starts and ends to subset each replicate into a list
-  reps <- mapply(function(p,q) subset_data(df, p, q, by = "row", quiet = TRUE),
+  reps <- mapply(function(p,q) truncate_data(df, p, q, by = "row"),
                  p = starts,
                  q = ends,
                  SIMPLIFY = FALSE)
+
+  # last one too short
+
   # if by = "time", remove last row of each (except last rep) since this "belongs" to
   # the next replicate - this is because of how we constructed 'ends' above
   #if(by == "time") reps[1:(length(reps)-1)] <-
@@ -482,11 +488,10 @@ auto_rate.int <- function(x,
 
   if(by == "row")
     res <- mapply(function(p,q,r,s,t) {
-      sub <- subset_data(p,
+      sub <- truncate_data(p,
                          from = r,
                          to = s,
-                         by = by,
-                         quiet = TRUE)
+                         by = by)
 
       out <- auto_rate.rep(sub,
                            method = method,
@@ -513,26 +518,22 @@ auto_rate.int <- function(x,
     t = sort(c(0, cumsum(sapply(reps, nrow))[1:(length(reps)-1)])),
     SIMPLIFY = FALSE)
 
-  #p=reps
-  #p=p[[1]]
-  #q=q[1]
-  #r=r[1]
-  #s=s[1]
-  #t=t[1]
-
   if(by == "time")
     res <- mapply(function(p,q,r,s,t) {
 
-      if(!is.null(from)) from_rel <- r + p[[1,1]] else # time relative to this rep
-        from_rel <- NULL
-      if(!is.null(to)) to_rel <- s + p[[1,1]] else
-        to_rel <- NULL
+      # from/to shouldn't be NULL by this stage
+      from_rel <- r + p[[1,1]] # time relative to this rep
+      to_rel <- s + p[[1,1]]
 
-      sub <- subset_data(p,
+      # above from is start of rep plus wait
+      # to is to plus wait
+      # both of these are past last value in last rep as it's only 19 rows
+      # so truncate data matches to last row as it's closest value
+
+      sub <- truncate_data(p,
                          from = from_rel,
                          to = to_rel,
-                         by = by,
-                         quiet = TRUE)
+                         by = by)
 
       # need offset of sub start row from replicate start row
       # this is to correct summary row/endrow columns later
@@ -549,6 +550,12 @@ auto_rate.int <- function(x,
       # out <- dt[dt[[1]] >= dt[[1]][which.min(abs(p[[1]] - from))]
       #           & dt[[1]] <= dt[[1]][which.min(abs(dt[[1]] - to))]]
 
+
+      # Check - wait is not longer than rep
+      # Check - measure is not longer than rep
+      # Check - wait + measure is not longer than rep
+      # Any rep 50% or so of length others
+
       out <- auto_rate.rep(sub,
                            method = method,
                            width = width,
@@ -563,11 +570,14 @@ auto_rate.int <- function(x,
 
       return(out)
     },
+    #p = reps[[71]],
     p = reps,
+    #q = 71,
     q = 1:length(reps),
     r = from,
     s = to,
     # this is the row number of reps in the orig data (using n)
+    #t = sort(c(0, cumsum(sapply(reps, nrow))[1:(length(reps)-1)]))[71],
     t = sort(c(0, cumsum(sapply(reps, nrow))[1:(length(reps)-1)])),
     SIMPLIFY = FALSE)
 
@@ -641,9 +651,9 @@ print.auto_rate.int <- function(x, pos = NULL, ...) {
 
   if(is.null(pos)) pos <- 1
   if(length(pos) > 1)
-    stop("print.auto_rate.int: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.auto_rate.int: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > nrow(summ))
-    stop("print.auto_rate.int: Invalid 'pos' input: only ", nrow(summ), " rates found.")
+    stop("print.auto_rate.int: Invalid 'pos' input: only ", nrow(summ), " rates found.", call. = FALSE)
 
 
   reps <- unique(summ$rep) # all reps
@@ -676,7 +686,7 @@ print.auto_rate.int <- function(x, pos = NULL, ...) {
 summary.auto_rate.int <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.auto_rate.int: Invalid 'pos' input: only ", length(object$rate), " rates found.")
+    stop("summary.auto_rate.int: Invalid 'pos' input: only ", length(object$rate), " rates found.", call. = FALSE)
 
   cat("\n# summary.auto_rate.int # ---------------\n")
   if(is.null(pos)) {
@@ -719,13 +729,13 @@ plot.auto_rate.int <- function(x, pos = NULL, quiet = FALSE,
   on.exit(par(parorig)) # revert par settings to original
 
   if(!(type %in% c("rep", "full", "ar")))
-    stop("plot.auto_rate.int: 'type' input not recognised.")
+    stop("plot.auto_rate.int: 'type' input not recognised.", call. = FALSE)
 
   nrates <- length(x$rate) # number of reps
 
   if(is.null(pos)) pos <- 1:nrates
   if(any(pos > nrates))
-    stop("plot.auto_rate.int: Invalid 'pos' input: only ", nrates, " rates found.")
+    stop("plot.auto_rate.int: Invalid 'pos' input: only ", nrates, " rates found.", call. = FALSE)
 
   if(!quiet) {
     cat("\n# plot.auto_rate.int # ------------------\n")
@@ -855,7 +865,7 @@ mean.auto_rate.int <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.auto_rate.int # ------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
-    stop("mean.auto_rate.int: Invalid 'pos' input: only ", length(x$rate), " rates found.")
+    stop("mean.auto_rate.int: Invalid 'pos' input: only ", length(x$rate), " rates found.", call. = FALSE)
 
   if(is.null(pos)) {
     pos <- 1:length(x$rate)
@@ -901,6 +911,7 @@ mean.auto_rate.int <- function(x, pos = NULL, export = FALSE, ...){
 #' @param n number of results to return
 #' @param rep_row start row of this rep in the larger dataset
 #' @param meas_row start row of the measure phase in *this* rep
+#' @param meas_endrow end row of the measure phase in *this* rep
 #' @param rep_data df of the entire replicate. Used in plotting.
 #' @param ... pass plot stuff
 #'
