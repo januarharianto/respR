@@ -40,6 +40,10 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
+#### @connellyAntibioticsReducePocillopora2023
+
+This study used `respR` to get metabolic rates of microfragments of corals to examine the effects of antibiotics on the holobiont community. Great to see the package being used to analyse micro-respirometry data like this. 
+
 #### @perryMicroclimatesHoldfastsBull2023
 
 This MSc project looked at thermal microclimates amongst kelp holdfasts, and used `respR` in getting metabolic rates of a snail and an amphipod. These microclimates seem to provide some buffering against external warming and may be something of a refuge for invertebrates, which is really interesting. Congrats on the MSc Frances! 🥳
