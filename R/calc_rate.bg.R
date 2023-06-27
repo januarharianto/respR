@@ -97,6 +97,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Inspect and calculate background rate from two columns
 #' inspect(urchins.rd, time = 1, oxygen = 18:19) %>%
 #'   calc_rate.bg()
@@ -115,6 +116,7 @@
 #' # Subset single column data first before calculating background rate
 #' subset_data(background_con.rd, from = 5000, to = 20000, by = "time") %>%
 #'   calc_rate.bg()
+#'   }
 
 calc_rate.bg <- function(x, time = NULL, oxygen = NULL, plot = TRUE, ...) {
 
