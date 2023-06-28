@@ -216,6 +216,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Note that oxygen uptake rates are negative in respR since they represent a
 #' # decrease in dissolved oxygen and negative slope. Typically both
 #' # specimen rate and background rate values are negative.
@@ -291,6 +292,7 @@
 #'
 #' # Note the adjustment values applied are somewhere between the
 #' # start and end background rate values
+#' }
 
 adjust_rate <- function(x, by, method = NULL, by2 = NULL,
                         time_x = NULL, time_by = NULL, time_by2 = NULL) {

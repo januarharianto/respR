@@ -238,6 +238,7 @@ website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
+\donttest{
 # Note that oxygen uptake rates are negative in respR since they represent a
 # decrease in dissolved oxygen and negative slope. Typically both
 # specimen rate and background rate values are negative.
@@ -313,4 +314,5 @@ adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
 
 # Note the adjustment values applied are somewhere between the
 # start and end background rate values
+}
 }

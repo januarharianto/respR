@@ -111,6 +111,7 @@ website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
+\donttest{
 # Inspect and calculate background rate from two columns
 inspect(urchins.rd, time = 1, oxygen = 18:19) \%>\%
   calc_rate.bg()
@@ -129,4 +130,5 @@ inspect(urchins.rd, 1, 2, plot = FALSE) \%>\%
 # Subset single column data first before calculating background rate
 subset_data(background_con.rd, from = 5000, to = 20000, by = "time") \%>\%
   calc_rate.bg()
+  }
 }

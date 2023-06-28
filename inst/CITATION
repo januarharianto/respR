@@ -1,7 +1,7 @@
 citHeader("Please cite respR using the following journal article:
 
 Harianto, J., Carey, N. and Byrne, M. (2019). respR - An R package for the manipulation and analysis of respirometry data. Methods in Ecology and Evolution, 10(6), 912–920. doi: 10.1111/2041-210X.13162.
-url: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13162")
+url: https://doi.org/10.1111/2041-210X.13162")
 
 bibentry(
   bibtype  = "Article",
@@ -12,7 +12,7 @@ bibentry(
   volume   = 10,
   number   = 6,
   pages    = "912-920",
-  url      = "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13162",
+  url      = "https://doi.org/10.1111/2041-210X.13162",
   doi      = "10.1111/2041-210X.13162",
   textVersion = paste(
 
