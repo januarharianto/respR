@@ -322,7 +322,8 @@ website at <a href="https://januarharianto.github.io/respR/">https://januarharia
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Inspect and calculate background rate from two columns</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Inspect and calculate background rate from two columns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span> <span class="op"><a href="grapes-greater-than-grapes.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">calc_rate.bg</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.</span>
@@ -419,6 +420,7 @@ website at <a href="https://januarharianto.github.io/respR/">https://januarharia
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mean background rate:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.0001143112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------</span>
+<span class="r-in"><span>  <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
