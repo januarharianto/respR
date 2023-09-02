@@ -44,6 +44,12 @@ A highlight of the package is the `auto_rate()` function. This uses machine lear
 install.packages("respR")
 ```
 
+You can also install the latest version direct from [**Github**](https://github.com/januarharianto/respr/):
+
+```r
+devtools::install_github("januarharianto/respR")
+```
+
 ## Getting started
 
 Visit the `respR` [**website**](https://januarharianto.github.io/respR/) to get started. The site has a range of vignettes detailing the functionality, plus example workflows, documentation, and more. 
@@ -70,7 +76,7 @@ For the latest news and regular updates from the world of respirometry follow `r
 
 ## Support package development
 
-If you would like to help support the package development or just buy us a beer to say thanks see [here](https://januarharianto.github.io/respR/articles/contact.html#support-future-development) 
+If you would like to help support the package development or just buy us a beer to say thanks see [**here**](https://januarharianto.github.io/respR/articles/contact.html#support-future-development) 
 
 ## Developers
 
