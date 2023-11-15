@@ -1,18 +1,4 @@
 
-<!---
-Each version should:
-List its release date in the above format.
-Group changes to describe their impact on the project, as follows:
-Added:        for new features.
-Changed:      for changes in existing functionality.
-Deprecated:   for once-stable features removed in upcoming releases.
-Removed:      for deprecated features removed in this release.
-Fixed:        for any bug fixes.
-Security:     to invite users to upgrade in case of vulnerabilities. 
-
-All version changes go in here now when you make a commit! 
---->
-
 ## Version 2.3.2 -- 2023-11-15
 
 Minor changes to unit tests and documentation. 
