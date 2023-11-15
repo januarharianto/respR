@@ -40,6 +40,54 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
+#### @rubinFeedingFrequencyDoes2023
+
+This study examined if BPA exposure affects metabolic rates and behaviour in zebrafish. Turns out lots of disruption to regular behaviour, less so to physiological functioning. 
+
+#### @espinel-velascoInteractiveEffectsOcean2023
+
+Another study showing that `respR` can help anaylyse respirometry data from really tiny organisms, in this case not just a copepod, but its larvae. Here, they found metabolic rates increase in response to ocean warming and acidification combined, but not separately. Interesting! 
+
+#### @schusterRoleKelpAvailability2023
+
+Another nice urchin study, with some bonus gastropods thrown in. This study shows the links between food availability and heat resistance, and the role of metabolic depression. 
+
+#### @dimosLocalThermalAdaptation2023
+
+The preprint on [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.09.28.560008v1) examines how Chinook salmon thermal adaptation occurs, and the role of mitochondrial function. The authors used `respR` to analyses intermittent-flow respirometry experiments. Looking forward to seeing it officially in print.
+
+#### @hawkeExposurePetroleumderivedBiopolymer2024
+
+Having done a lot of both, I love seeing studies that combine metabolism and escape responses! This looked at how exposure to petroleum products affects these parameters in a marine fish. Great example of how `auto_rate` can be used to extract a rolling rate, which can then be filtered to identify a maximum rate for a fixed period. Great study that ticks all our boxes. 
+
+#### @stellUsingElectronTransport2023
+
+This study used intermittent-flow respirometry to examine thermal tolerance in largemouth bass. They show that enzyme activity associated with the electron transport system could be another tool to determine thermal tolerances in a way that is a non-lethal, rapid, and efficient alternative to traditional techniques. Nice!
+
+#### @jourdain-bonneauMetabolicTranscriptomicResponse2023
+
+This study looks at the responses of brook charr to thermal stress, with negative effects to aerobic scope and MMR. Nice example of using the package to extract metabolic rates using specific criteria (high r2, 10th percentile etc) to arrive at a final SMR. 
+
+#### @pettersenIntergenerationalPlasticityAligns2023
+
+The preprint on [EcoEvoRxiv](https://ecoevorxiv.org/repository/view/5705/) examines how metabolic rates (or 'pace of life') may be passed on to zebrafish by their parents. Looking forward to seeing it officially in print.
+
+#### @evensenRolesHeatingRate2023
+
+This follows up on Nicolas Evensen's [2021 study](https://januarharianto.github.io/respR/articles/citations.html#evensenremarkablyhighconsistent2021) paper looking at physiological responses of Red Sea corals to thermal stress. Once again, it's gratifying to see the package being used to extract not just respiration rates, but also photosynthesis rates. 
+
+#### @marquezborrasEffectsOceanChange2023
+
+Francisco Márquez Borrás's PhD project used long-term mesocosm experiments to examine how a New Zealand brittlestar species adapts or acclimates to ocean warming and acidification. He examined a wide range of responses, including physiological and behavioural, and used `respR` for analysing respirometry data. Hope to see these as papers soon and congrats on the PhD! 🥳
+
+#### @duncanOxygenAvailabilityBody2023
+
+A timely and prominent paper examining how oxygen and body size modulate responses to warming in marine invertebrates. Very nicely done study. 
+
+#### @lowesImpactsCombinedNatural2023
+
+Hannah Lowes has already published a chapter of her MSc thesis (see below) on sea cucumber responses to copper exposure, so massive congrats on the MSC! 🥳  Hopefully we see the rest published soon. 
+
 #### @connellyAntibioticsReducePocillopora2023
 
 This study used `respR` to get metabolic rates of microfragments of corals to examine the effects of antibiotics on the holobiont community. Great to see the package being used to analyse micro-respirometry data like this. 
@@ -50,7 +98,7 @@ This MSc project looked at thermal microclimates amongst kelp holdfasts, and use
 
 #### @gomesImpactsAcuteHypoxia2023
 
-This pre-print study looks at the effects of extreme hypoxia on metabolic rate and behaviour in a seahorse. Perhaps unsurprisingly, extreme hypoxia led to a signicant reduction in metabolic rate and also signs of movement lethargy. Looking forward to seeing this officially published.
+This study used `respR` to anaylse data from experiments looking at the effects of extreme hypoxia on metabolic rate and behaviour in a seahorse. Perhaps unsurprisingly, extreme hypoxia led to a signicant reduction in metabolic rate and also signs of movement lethargy. 
 
 #### @zhangLossBehavioralStress2023
 
