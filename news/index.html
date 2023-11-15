@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
       </span>
     </div>
 
@@ -179,7 +179,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.3.1" id="version-231--2023-06-05">Version 2.3.1 – 2023-06-05<a class="anchor" aria-label="anchor" href="#version-231--2023-06-05"></a></h2>
+<h2 class="page-header" data-toc-text="2.3.2" id="version-232--2023-11-15">Version 2.3.2 – 2023-11-15<a class="anchor" aria-label="anchor" href="#version-232--2023-11-15"></a></h2>
+<p>Minor changes to unit tests and documentation.</p>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.3.1" id="version-231--2023-06-05">Version 2.3.1 – 2023-06-05<small>2023-06-29</small><a class="anchor" aria-label="anchor" href="#version-231--2023-06-05"></a></h2>
 <p>Ever been reading a paper and wanted to compare metabolic rates to your own results but they were in a different unit? New in this release is <code><a href="../reference/convert_MR.html">convert_MR()</a></code>, a function for converting between different units of oxygen uptake or production rate. These can be absolute, mass-specific, or area-specific rates. See <code><a href="../reference/convert_MR.html">help("convert_MR")</a></code> for examples. It also works on <code>convert_rate</code> or <code>convert_rate.ft</code> objects so you can change the output units of a <code>respR</code> analysis without having to re-run the whole thing.</p>
 <p>To help with this new functionality, this version has undergone a major update around unit handling. In case you didn’t know, <code>respR</code> accepts different variations in unit formatting. E.g. <code>"mg per h"</code>, <code>"mg H"</code>, <code>"mg hr-1"</code>, etc. are all recognised as <code>mgO2/h</code>. There’s been a substantial internal update to unit recognition to use <a href="https://en.wikipedia.org/wiki/Regular_expression" class="external-link">regex</a> instead of a brute force approach. This system is more robust and accepts even more variations in style; units can be formed from abbreviated versions or words (e.g. <code>mg</code> or <code>milligram</code>), separated by a space, forward slash, dot, or underscore, are case-insensitive, and accept other variations (e.g <code>km2</code>, <code>km -2</code>, <code>km^2</code>, <code>kmsq</code>, etc). In addition a few new units of dissolved oxygen (DO) and metabolic rate are now accepted. See below.</p>
 <p>A couple of minor but handy changes: salinity, temperature, and atmospheric pressure are now saved to summary tables in <code><a href="../reference/convert_rate.html">convert_rate()</a></code> and <code><a href="../reference/convert_rate.ft.html">convert_rate.ft()</a></code> outputs to help with keeping track of results from different experiments; and in <code><a href="../reference/inspect.html">inspect()</a></code>, <code><a href="../reference/inspect.ft.html">inspect.ft()</a></code>, and <code><a href="../reference/oxy_crit.html">oxy_crit()</a></code> you can now specify columns by <em>name</em> as well as column <em>number</em>.</p>
