@@ -40,6 +40,10 @@ If you use the package please [**cite**](https://januarharianto.github.io/respR/
 
 The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
 
+#### @hawkeExposurePetroleumderivedBiopolymer2024
+
+Having done a lot of both, I love seeing studies that combine metabolism and escape responses! This looked at how exposure to petroleum products affects these parameters in a marine fish. Great example of how `auto_rate` can be used to extract a rolling rate, which can then be filtered to identify a maximum rate for a fixed period. Great study that ticks all our boxes. 
+
 #### @rubinFeedingFrequencyDoes2023
 
 This study examined if BPA exposure affects metabolic rates and behaviour in zebrafish. Turns out lots of disruption to regular behaviour, less so to physiological functioning. 
@@ -55,10 +59,6 @@ Another nice urchin study, with some bonus gastropods thrown in. This study show
 #### @dimosLocalThermalAdaptation2023
 
 The preprint on [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.09.28.560008v1) examines how Chinook salmon thermal adaptation occurs, and the role of mitochondrial function. The authors used `respR` to analyses intermittent-flow respirometry experiments. Looking forward to seeing it officially in print.
-
-#### @hawkeExposurePetroleumderivedBiopolymer2024
-
-Having done a lot of both, I love seeing studies that combine metabolism and escape responses! This looked at how exposure to petroleum products affects these parameters in a marine fish. Great example of how `auto_rate` can be used to extract a rolling rate, which can then be filtered to identify a maximum rate for a fixed period. Great study that ticks all our boxes. 
 
 #### @stellUsingElectronTransport2023
 
