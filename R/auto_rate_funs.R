@@ -2,7 +2,7 @@
 #'
 #' This is an internal function for `auto_rate()`. Used to validate inputs
 #'
-#' @param df data.frame object.
+#' @param x data.frame object.
 #' @param by string.
 #' @param method string.
 #'
@@ -424,14 +424,14 @@ static_roll <- function(df, win) {
 #' @return a data.table object
 #' @keywords internal
 #' @import parallel
-time_roll <- function(dt, width, parallel = FALSE) {
+time_roll <- function(df, width, parallel = FALSE) {
   future_lapply <- plan <- NULL # global variables hack (unfortunate)
-  dt <- data.table::data.table(dt)
-  data.table::setnames(dt, 1:2, c("V1", "V2"))
+  df <- data.table::data.table(df)
+  data.table::setnames(df, 1:2, c("V1", "V2"))
 
   # The cutoff specifies where to stop the rolling regression, based on width
-  time_cutoff <- max(dt[,1]) - width
-  row_cutoff <- max(dt[, which(V1 <= time_cutoff)])
+  time_cutoff <- max(df[,1]) - width
+  row_cutoff <- max(df[, which(V1 <= time_cutoff)])
 
   # if(parallel) {
   #   oplan <- plan()
@@ -439,11 +439,11 @@ time_roll <- function(dt, width, parallel = FALSE) {
   #   if (os() == 'win') {
   #     plan(multicore)
   #   } else plan(multisession)
-  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(dt,
-  #     dt[[1]][x], dt[[1]][x] + width))
+  #   out <- future_lapply(1:row_cutoff, function(x) time_lm(df,
+  #     df[[1]][x], df[[1]][x] + width))
   # } else {
-  #   out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-  #     dt[[1]][x], dt[[1]][x] + width))
+  #   out <- lapply(1:row_cutoff, function(x) time_lm(df,
+  #     df[[1]][x], df[[1]][x] + width))
   # }
 
   # parallelisation
@@ -453,11 +453,11 @@ time_roll <- function(dt, width, parallel = FALSE) {
       cl <- parallel::makeCluster(no_cores)
     } else cl <- parallel::makeCluster(no_cores, type = "FORK")
     parallel::clusterExport(cl, "time_lm")
-    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(dt,
-                                                                     dt[[1]][x], dt[[1]][x] + width))
+    out <- parallel::parLapply(cl, 1:row_cutoff, function(x) time_lm(df,
+                                                                     df[[1]][x], df[[1]][x] + width))
     parallel::stopCluster(cl)  # stop cluster (release cores)
-  } else out <- lapply(1:row_cutoff, function(x) time_lm(dt,
-                                                         dt[[1]][x], dt[[1]][x] + width))
+  } else out <- lapply(1:row_cutoff, function(x) time_lm(df,
+                                                         df[[1]][x], df[[1]][x] + width))
 
   out <- data.table::rbindlist(out)
   return(out)
