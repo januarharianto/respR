@@ -41,7 +41,7 @@ From this experiment dataset we want to extract several metrics:
 
 2. *Maximum metabolic rate (MMR)*. Before this experiment the fish had been exercised to exhaustion, then immediately placed in the respirometer. The first replicate during which it is recovering from the accrued oxygen debt will represent MMR. 
 
-3. *Routine metabolic rate (RMR)*. This will be calculated using the later replicates once the animal has recovered from the exercise. This is generally defined as the routine use of oxygen, which fuels basal metabolism and minor, spontaneous movements to maintain station or posture. 
+3. *Routine metabolic rate (RMR)*. This will be calculated using the later replicates once the animal has recovered from the exercise. This is generally defined as the routine use of oxygen to fuel basal metabolism and minor spontaneous movements for maintaining station or posture. 
 
 4. *Standard metabolic rate (SMR)*. Sometimes also known as basal or minimum metabolic rate. This is also calculated using the later replicates once the animal has recovered. This is generally defined as the lowest oxygen use rates observed, which are representative of the requirements of basal metabolism only. 
 

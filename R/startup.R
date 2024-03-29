@@ -19,10 +19,6 @@ Visit this site for help documentation and vignettes:
 
     http://bit.ly/respr_pkg
 
-And follow respR on Twitter for latest news:
-
-    http://twitter.com/respr_pkg
-
 ======================================================================")
 
     packageStartupMessage(start_msg)

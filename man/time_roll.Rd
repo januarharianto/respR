@@ -4,12 +4,12 @@
 \alias{time_roll}
 \title{Perform time-width rolling regression}
 \usage{
-time_roll(dt, width, parallel = FALSE)
+time_roll(df, width, parallel = FALSE)
 }
 \arguments{
-\item{width}{numeric. width in time}
-
 \item{df}{data.frame object.}
+
+\item{width}{numeric. width in time}
 }
 \value{
 a data.table object

@@ -76,7 +76,6 @@
 #'   directory, as determined by the `path` parameter.
 #'
 #' @importFrom data.table data.table fread
-#' @importFrom readxl read_excel
 #' @importFrom xml2 xml_text
 #' @importFrom xml2 read_html
 #' @importFrom tools file_path_sans_ext

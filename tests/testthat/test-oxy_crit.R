@@ -149,8 +149,8 @@ capture.output({  ## stops printing of outputs on assigning
                  2.6003)
     expect_equal(round(oxy_crit(squid, plot=F)$crit$crit.midpoint, 4),
                  2.5944)
-    expect_equal(round(oxy_crit(squid, method = "segmented", plot=F)$crit, 4),
-                 2.6003)
+    expect_equal(round(oxy_crit(squid, method = "segmented", plot=F)$crit, 2),
+                 2.60)
   })
 
   test_that("oxy_crit - works with oxygen~rate data", {

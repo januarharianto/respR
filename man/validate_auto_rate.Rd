@@ -7,11 +7,11 @@
 validate_auto_rate(x, by, method)
 }
 \arguments{
+\item{x}{data.frame object.}
+
 \item{by}{string.}
 
 \item{method}{string.}
-
-\item{df}{data.frame object.}
 }
 \value{
 a data.frame object of the original data

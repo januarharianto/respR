@@ -3,7 +3,6 @@
 ^\.Rproj\.user$     # used for temporary files.
 ^README\.Rmd$       # An Rmarkdown file used to generate README.md
 ^cran-comments\.md$ # Comments for CRAN submission
-^NEWS\.md$          # A news file written in Markdown
 ^manuscript$        # Folder that contains the files for the manuscript
 ^docs$              # Folder that stores HTML vignettes
 ^doc$               # Folder that stores HTML vignettes
@@ -13,6 +12,7 @@
 ^data-raw$
 ^.DS_Store$
 ^t5.rda$
+cran-comments.md
 
 # Insurance
 vignettes
@@ -24,3 +24,4 @@ vignettes
 Changelog
 ^CITATION\.cff$
 ^codecov\.yml$
+^CRAN-SUBMISSION$

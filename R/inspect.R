@@ -191,6 +191,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' ## By default, assumes time is col 1 and oxygen col2:
 #' inspect(sardine.rd)
 #'
@@ -222,6 +223,7 @@
 #' ## allow better y-axis label visibility
 #' inspect(sardine.rd, time = 1, oxygen = 2,
 #'         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
+#' }
 
 inspect <- function(x, time = NULL, oxygen = NULL,
                     width = 0.1, plot = TRUE, add.data = NULL, ...) {

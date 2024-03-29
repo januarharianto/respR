@@ -218,6 +218,7 @@ website at \url{https://januarharianto.github.io/respR/}
 }
 }
 \examples{
+\donttest{
 ## By default, assumes time is col 1 and oxygen col2:
 inspect(sardine.rd)
 
@@ -249,4 +250,5 @@ inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
 ## allow better y-axis label visibility
 inspect(sardine.rd, time = 1, oxygen = 2,
         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
+}
 }
