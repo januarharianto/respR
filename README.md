@@ -15,7 +15,6 @@
 [![Github watchers](https://img.shields.io/github/watchers/januarharianto/respR?label=Watch&style=social)](https://img.shields.io/github/watchers/januarharianto/respR?style=social)
 [![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
 [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
-[![Twitter](https://img.shields.io/twitter/follow/respR_pkg.svg?label=Follow&style=social)](https://twitter.com/respR_pkg?ref_src=twsrc%5Etfw)
 
 <!-- badges: end -->
 
