@@ -1,11 +1,11 @@
 ---
-title: respR in use by the scientific community
+title: respR Citations
 output: 
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{respR in Use}
+  %\VignetteIndexEntry{respR Citations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references_citations.bib

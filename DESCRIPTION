@@ -37,7 +37,6 @@ Imports:
     magrittr,
     marelac,
     purrr,
-    readxl,
     roll,
     segmented,
     stats,
@@ -51,4 +50,5 @@ Suggests:
     FishResp,
     respirometry,
     testthat,
+    readxl,
     covr
