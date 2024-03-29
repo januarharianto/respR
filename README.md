@@ -71,7 +71,7 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 
 See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
 
-For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>** or [**Twitter**](https://twitter.com/respR_pkg). 
+For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>**. 
 
 ## Support package development
 
