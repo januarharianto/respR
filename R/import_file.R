@@ -109,7 +109,7 @@ import_file <- function(path, export = FALSE) {
 
   if (grepl(".xls", path)) {
     message("Excel file detected. Only Loligo/Presens Multiplate Excel files currently supported. \nImport will fail for others saved as Excel format. Use raw output files only.")
-    raw <- suppressMessages(readxl::read_excel(path, n_max = 20))
+    raw <- suppressMessages(read_excel(path, n_max = 20))
     raw <- as.character(raw)
   } else if (grepl("gmbl", path)) {
     raw <- suppressWarnings(readLines(path))
@@ -212,11 +212,11 @@ import_file <- function(path, export = FALSE) {
 # Loligo/Presens multiplate system ----------------------------------------
 
 parse_multiplate_excel <- function(path, dec = dec){
-  raw <- suppressMessages(readxl::read_excel(path, col_names = TRUE))
+  raw <- suppressMessages(read_excel(path, col_names = TRUE))
   ## which row has "Date/Time"
   start_row <- which(grepl("^Date/Time$", raw[[1]]))
   ## inport from that row on
-  raw <- suppressMessages(readxl::read_excel(path, skip = start_row - 1))
+  raw <- suppressMessages(read_excel(path, skip = start_row - 1))
   ## remove column 27 - empty
   raw <- raw[,-27]
   out <- data.table(raw)

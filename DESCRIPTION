@@ -50,5 +50,4 @@ Suggests:
     FishResp,
     respirometry,
     testthat,
-    readxl,
     covr
