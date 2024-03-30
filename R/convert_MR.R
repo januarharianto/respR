@@ -197,6 +197,15 @@ convert_MR <- function(x, from = NULL, to = NULL,
   P <- StP.val(from, "mr", S, t, P, P.chk = FALSE, msg = "convert_MR")
   P <- StP.val(to, "mr", S, t, P, P.chk = TRUE, msg = "convert_MR")
 
+  # S, t, P vector inputs should be a single value
+  # Should add this to StP.val above
+  if (!is.null(S) && length(S) > 1)
+    stop("convert_MR: The 'S' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(t) && length(t) > 1)
+    stop("convert_MR: The 't' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(P) && length(P) > 1)
+    stop("convert_MR: The 'P' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+
   # Extract and validate units ----------------------------------------------
 
   # Separate the units

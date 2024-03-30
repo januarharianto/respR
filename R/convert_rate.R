@@ -243,7 +243,6 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   if (!is.null(mass) && !is.null(area))
     stop("convert_rate: Cannot have inputs for both 'mass' and 'area'.", call. = FALSE)
 
-
   # Extract values ----------------------------------------------------------
 
   # Create extended summary table
@@ -343,7 +342,6 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
          call. = FALSE)
   } else stop("convert_rate: 'x' is not an accepted input.", call. = FALSE)
 
-
   # Validate oxy.unit & time.unit
   oxy <- units.val(oxy.unit, "o2")
   time <- units.val(time.unit, "time")
@@ -407,6 +405,15 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   # This will apply it if either in or out unit requires it.
   P <- StP.val(oxy.unit, "oxy", S, t, P, P.chk = FALSE, msg = "convert_rate")
   P <- StP.val(output.unit, "mr", S, t, P, P.chk = TRUE, msg = "convert_rate")
+
+  # S, t, P vector inputs should be a single value
+  # Should add this to StP.val above
+  if (!is.null(S) && length(S) > 1)
+    stop("convert_rate: The 'S' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(t) && length(t) > 1)
+    stop("convert_rate: The 't' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(P) && length(P) > 1)
+    stop("convert_rate: The 'P' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
 
   # Convert -----------------------------------------------------------------
 

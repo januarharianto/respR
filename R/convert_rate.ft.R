@@ -338,6 +338,23 @@ convert_rate.ft <- function(x,
   output.unit[1] <- paste0(output.unit[1], "O2")
   output.unit <- paste(output.unit, collapse = "/")
 
+  # Check t, S and P needed for units, issue errors
+  # and apply default P
+  # This will apply it if either in or out unit requires it.
+  P <- StP.val(oxy.unit, "oxy", S, t, P, P.chk = FALSE, msg = "convert_rate.ft")
+  P <- StP.val(output.unit, "mr", S, t, P, P.chk = TRUE, msg = "convert_rate.ft")
+
+  # S, t, P vector inputs should be a single value
+  # Should add this to StP.val above
+  if (!is.null(S) && length(S) > 1)
+    stop("convert_rate.ft: The 'S' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(t) && length(t) > 1)
+    stop("convert_rate.ft: The 't' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+  if (!is.null(P) && length(P) > 1)
+    stop("convert_rate.ft: The 'P' input should be a single value. Rates determined in different physical conditions should be analysed and converted separately.")
+
+  # Perform conversion ------------------------------------------------------
+
   # Convert DO unit first
   if (A %in% c("pmol.o2", "nmol.o2", "umol.o2", "mmol.o2", "mol.o2")) {
     RO2 <- convert_DO(rate, oxy, "mmol/L", S, t, P)

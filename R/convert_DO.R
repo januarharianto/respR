@@ -85,6 +85,15 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   # This will apply it if either in or out unit requires it.
   P <- StP.val(fru, "oxy", S, t, P, P.chk = FALSE, msg = "convert_DO")
   P <- StP.val(tou, "oxy", S, t, P, P.chk = TRUE, msg = "convert_DO")
+  # Should be either single value or same length as rate
+  # S, t, P vector inputs should be same length as rate or single value
+  if (length(S) > 1 && length(S) != length(x))
+    stop("convert_DO: The 'S' input must be a single value or the same length as the rates to be converted.")
+  if (length(t) > 1 && length(t) != length(x))
+    stop("convert_DO: The 't' input must be a single value or the same length as the rates to be converted.")
+  if (length(P) > 1 && length(P) != length(x))
+    stop("convert_DO: The 'P' input must be a single value or the same length as the rates to be converted.")
+
   # Do either on of input or output units require StP?
   StPreq <- any(StP.check(fru, "oxy"), StP.check(tou, "oxy"))
 

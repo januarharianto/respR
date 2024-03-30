@@ -251,11 +251,11 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("convert_MR - warning if P out of range", {
     expect_warning(convert_MR(rate, from = "mg/h", to = "ml/min", S = 30, t = 12, P = 10),
-                   "convert_MR: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   "convert_MR: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
     expect_warning(convert_MR(cnvrt_obj_noStP, from = "mg/h", to = "ml/min", S = 30, t = 12, P = 10),
-                   "convert_MR: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   "convert_MR: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
     expect_warning(convert_MR(cnvrtft_obj_noStP, from = "mg/h", to = "ml/min", S = 30, t = 12, P = 10),
-                   "convert_MR: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   "convert_MR: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
   })
 
   test_that("convert_MR - default P is used and added to output for 'convert_rate' and 'convert_rate.ft' inputs if they don't contain it", {

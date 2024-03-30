@@ -1,4 +1,10 @@
 
+## Version 2.x -- 2023-11-15
+
+- Fix for `convert_DO` not accepting vectors for the `P` input. 
+- `convert_rate`, `convert_rate.ft`, and `convert_MR` now stop with an error if vectors have been entered for `S`, `t`, or `P` (instead of silently accepting them, but only using the first value in actual conversions).
+- To maintain compatibility with older versions of R, support for Excel files has been removed from `import_file` and as a result `readxl` has been removed as a dependency. The `import_file` function has already been deprecated in a previous update, and we strongly encourage users to move to importing their files using common packages. See [here](https://januarharianto.github.io/respR/articles/importing.html).
+
 ## Version 2.3.2 -- 2023-11-15
 
 Minor changes to unit tests and documentation. 

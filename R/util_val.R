@@ -509,8 +509,8 @@ StP.check <- function(unit, type) {
 #' @keywords internal
 StP.val <- function(unit, type, S, t, P, P.chk = TRUE, msg) {
 
-  if(P.chk && !is.null(P) && !dplyr::between(P, 0.9, 1.08))
-    warning(glue::glue("{msg}: The Atmospheric Pressure input 'P' is outside the normal realistic range. \nIt should not be outside the typical natural range of 0.9 to 1.1 except for special applications. \nPlease make sure it is entered in 'bar' units. Conversion performed regardless."),
+  if(P.chk && all(!is.null(P)) && any(!dplyr::between(P, 0.9, 1.08)))
+    warning(glue::glue("{msg}: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range. \nP values should not be outside the typical natural range of 0.9 to 1.1 except for special applications. \nPlease make sure it is entered in 'bar' units. Conversion performed regardless."),
             call. = FALSE)
 
   if(is.null(S)) {
