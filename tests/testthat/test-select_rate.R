@@ -7,7 +7,10 @@
 # Sys.setenv(NOT_CRAN = "false")
 
 capture.output({  ## stops printing outputs on assigning
+
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
+
   ## objects for testing
   ## convert_rate-from-auto_rate object
   ## contains both negative and positive rates

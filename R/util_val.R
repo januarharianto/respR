@@ -34,7 +34,7 @@ column.conflict <- function(inputs, id = FALSE){
 # default - what should be the default if by is NULL?
 # which - which 'by' methods does the function support?
 # msg - start of message text, typically the function name
-by.val <- function(by, req = TRUE, default = NULL,
+by_val <- function(by, req = TRUE, default = NULL,
                    which = c("t", "o", "r"),
                    msg = ""){
 

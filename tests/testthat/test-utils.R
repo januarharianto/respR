@@ -2,6 +2,8 @@
 # library(testthat)
 # test_file("tests/testthat/test-utils.R")
 
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+skip_on_cran()
 
 # units.val ------------------------------------------------------------
 

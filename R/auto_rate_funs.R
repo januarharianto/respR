@@ -16,7 +16,7 @@ validate_auto_rate <- function(x, by, method) {
     stop("auto_rate: Input data must be of class 'data.frame' or 'inspect'", call. = FALSE)
 
   # validate by
-  by <- by.val(by,  which = c("t", "r"), msg = "auto_rate") # validate `by` input
+  by <- by_val(by,  which = c("t", "r"), msg = "auto_rate") # validate `by` input
 
   # validate method
   method.val(method, "auto_rate")

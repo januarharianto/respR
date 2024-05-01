@@ -105,7 +105,7 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
   }
 
   ## verify by input
-  by <- by.val(by, msg = "subset_data")
+  by <- by_val(by, msg = "subset_data")
 
   ## replace NULL inputs
   if(is.null(from)){

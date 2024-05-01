@@ -6,6 +6,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   # create testing objects
   {
     S <- 35

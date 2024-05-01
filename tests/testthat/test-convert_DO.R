@@ -7,6 +7,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   test_that("convert_DO stops if `x` not numeric", {
     expect_error(convert_DO("text", from = "%Air", to = "mg/l",
                             S = 35, t =10),

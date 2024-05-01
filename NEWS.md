@@ -1,9 +1,5 @@
-# respR 2.3.3
 
-# respR 2.4.0
-
-
-## Version 2.x -- 2023-11-15
+## Version 2.3.3 -- 2023-11-15
 
 - Fix for `convert_DO` not accepting vectors for the `P` input. 
 - `convert_rate`, `convert_rate.ft`, and `convert_MR` now stop with an error if vectors have been entered for `S`, `t`, or `P` (instead of silently accepting them, but only using the first value in actual conversions).

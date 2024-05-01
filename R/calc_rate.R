@@ -146,7 +146,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
 
   # Validate inputs
   ## verify by input
-  by <- by.val(by, msg = "calc_rate:")
+  by <- by_val(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
   if(any(class(x) %in% "inspect")) df <- x$dataframe else

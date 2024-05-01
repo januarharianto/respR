@@ -373,7 +373,7 @@ truncate_data <- function(x, from, to, by) {
   if (is.null(by)) by <- "time"
 
   ## verify by just in case
-  by <- by.val(by)
+  by <- by_val(by)
 
   ## replace NULL inputs with defaults
   if(is.null(from)){

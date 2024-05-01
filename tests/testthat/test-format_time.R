@@ -2,6 +2,9 @@
 ## testthat::test_file("tests/testthat/test-format_time.R")
 ## covr::file_coverage("R/format_time.R", "tests/testthat/test-format_time.R")
 
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+skip_on_cran()
+
 test_that("format_time works with default inputs", {
 
   x <- c("09-02-03 01:11:11", "09-02-03 02:11:11","09-02-03 02:25:11")

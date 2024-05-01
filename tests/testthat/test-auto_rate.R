@@ -7,6 +7,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   ## 2 col data from urchins.rd so it's fast, but does not output constant
   ## multi column warnings
   urch_data <- urchins.rd[,1:2]

@@ -6,6 +6,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   test_that("convert_rate - works with default values", {
     expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")$rate.output),
                  36000)
