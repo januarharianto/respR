@@ -368,7 +368,7 @@ auto_rate.int <- function(x,
 
   ## verify by input
   ## - this is also done in auto_rate
-  by <- by.val(by, req = TRUE, default = "row",
+  by <- by_val(by, req = TRUE, default = "row",
                   which = c("t", "r"),
                   msg = "auto_rate.int")
 

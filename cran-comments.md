@@ -1,1 +1,1 @@
-No code changes, so should be no issues. Literally the only change is slight alteration to a value in one unit test. This is done in response to a package author contacting me because a pending update was rejected by CRAN due to this test failing in my package, which is a reverse dependency.
+No major changes.

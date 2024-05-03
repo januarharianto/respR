@@ -309,8 +309,8 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     # Validate 'by' -----------------------------------------------------------
     # Apply default
     if(is.null(by)) by <- "time"
-    # by.val
-    by <- by.val(by, which = c("t", "r"), msg = "calc_rate.ft")
+    # by_val
+    by <- by_val(by, which = c("t", "r"), msg = "calc_rate.ft")
 
 
     # if 'from' and 'to' NULL assume all data ---------------------------------

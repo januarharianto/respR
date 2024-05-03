@@ -7,6 +7,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   test_that("convert_DO stops if `x` not numeric", {
     expect_error(convert_DO("text", from = "%Air", to = "mg/l",
                             S = 35, t =10),
@@ -34,6 +37,73 @@ capture.output({  ## stops printing outputs on assigning
     for(i in tsp_req) expect_message(convert_DO(-0.1, from = i, to = "mg/l",
                                                 S = 30, t = 20, P = NULL),
                                      "convert_DO: Input or output units require Atmospheric Pressure input")
+  })
+
+  test_that("convert_DO stops if t, S, or P not same length as x or single values", {
+
+    expect_error(convert_DO(-0.1, from = "uL/L.o2", to = "mg/l",
+                            S = 35:36, t = 12, P = 1),
+                 "convert_DO: The 'S' input must be a single value or the same length as the rates to be converted.")
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = 35:36, t = 12, P = 1),
+                 "convert_DO: The 'S' input must be a single value or the same length as the rates to be converted.")
+    expect_error(convert_DO(-0.1, from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = 12:13, P = 1),
+                 "convert_DO: The 't' input must be a single value or the same length as the rates to be converted.")
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = 12:13, P = 1),
+                 "convert_DO: The 't' input must be a single value or the same length as the rates to be converted.")
+    expect_error(convert_DO(-0.1, from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = 12, P = c(1,1.01)),
+                 "convert_DO: The 'P' input must be a single value or the same length as the rates to be converted.")
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = 12, P = c(1,1.01)),
+                 "convert_DO: The 'P' input must be a single value or the same length as the rates to be converted.")
+
+  })
+
+  test_that("convert_DO accepts vectors of t, S, or P and produces correct values", {
+
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = c(35,36,37), t = 12, P = 1),
+                 NA)
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = c(12,13,14), P = 1),
+                 NA)
+    expect_error(convert_DO(c(-0.1,-0.2,-0.3), from = "uL/L.o2", to = "mg/l",
+                            S = 35, t = 12, P = c(0.99, 1, 1.01)),
+                 NA)
+
+    # These should produce exact same results
+    # fake data
+    O <- 240:249
+    S <- seq(30, 30.9, 0.1)
+    t <- seq(10, 10.9, 0.1)
+    P <- seq(0.9, 0.99, 0.01)
+
+    df <- data.frame(O = O,
+                     S = S,
+                     t = t,
+                     P = P)
+
+    # empty vector for results
+    conv <- c()
+    # loop
+    for(i in 1:nrow(df)) conv[i] <- convert_DO(x = df$O[i],
+                                               from = "umol/kg",
+                                               to = "mg/l",
+                                               S = df$S[i],
+                                               t = df$t[i],
+                                               P = df$P[i])
+
+    expect_equal(convert_DO(x = O,
+                            from = "umol/kg",
+                            to = "mg/l",
+                            S = S,
+                            t = t,
+                            P = P),
+                 conv)
+
   })
 
   test_that("convert_DO output conversions, using %Air, have expected results", {
@@ -266,13 +336,13 @@ capture.output({  ## stops printing outputs on assigning
   test_that("convert_DO: warning if P is outside realistic range", {
     expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
                               t = 12, S = 30, P = 1.5),
-                   regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   regexp = "convert_DO: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
     expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
                               t = 12, S = 30, P = 1000),
-                   regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   regexp = "convert_DO: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
     expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
                               t = 12, S = 30, P = 0.01),
-                   regexp = "convert_DO: The Atmospheric Pressure input 'P' is outside the normal realistic range.")
+                   regexp = "convert_DO: One or more of the Atmospheric Pressure inputs 'P' are outside the normal realistic range.")
     expect_warning(convert_DO(x = 100, from = "%Air", to = "mg/L",
                               t = 12, S = 30, P = 1),
                    regexp = NA)

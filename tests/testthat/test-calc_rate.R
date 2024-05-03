@@ -9,6 +9,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   # this avoids hundreds of "multi column detected" warnings
   sard_data <- sardine.rd[,1:2]
 

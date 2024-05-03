@@ -1,4 +1,11 @@
 
+## Version 2.3.3 -- 2023-11-15
+
+- Fix for `convert_DO` not accepting vectors for the `P` input. 
+- `convert_rate`, `convert_rate.ft`, and `convert_MR` now stop with an error if vectors have been entered for `S`, `t`, or `P` (instead of silently accepting them, but only using the first value in actual conversions).
+- To maintain compatibility with older versions of R, support for Excel files has been removed from `import_file` and as a result `readxl` has been removed as a dependency. The `import_file` function has already been deprecated in a previous update, and we strongly encourage users to move to importing their files using common packages. See [here](https://januarharianto.github.io/respR/articles/importing.html).
+- NEW: Tested with `R` version [4.4.0](https://www.r-bloggers.com/2023/04/whats-new-in-r-4-4-0/) 
+
 ## Version 2.3.2 -- 2023-11-15
 
 Minor changes to unit tests and documentation. 
@@ -467,7 +474,7 @@ Lots of updates! First, we have a new function, `calc_pcrit()`, which we will us
 - NEW: `calc_pcrit()` is a **new function** that will be developed in parallel to the current `pcrit()` function. In the future we intend to use `calc_pcrit()` to incorporate new methods. 
 - NEW: `import_file()` supports even more files! Added more parsers for Vernier, PRESENS and Loligo systems.
 - NEW: `format_time()` can now calculate time elapsed even if date information is not provided (e.g. "HMS"-only data). 
-- NEW: The `by` input in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `by.val()` which uses brute force matching to recognise different ways of writing the same text.
+- NEW: The `by` input in `auto_rate()`, `calc_rate()`, `calc_rate.bg()` and `subset_data()` is now more forgiving with string input values (e.g. `"oxygen"`, `"Oxygen"`, `"o2"`, `"O2"`, etc. are recognised). To achieve this we created a string matching function, `by_val()` which uses brute force matching to recognise different ways of writing the same text.
 
 ### Fixes
 

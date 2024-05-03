@@ -330,7 +330,7 @@ calc_rate.int <- function(x,
 
   ## verify by input
   ## - this is also done in calc_rate but we want to disallow "oxygen"
-  by <- by.val(by, req = TRUE, default = "row",
+  by <- by_val(by, req = TRUE, default = "row",
                   which = c("t", "r"),
                   msg = "calc_rate.int")
 

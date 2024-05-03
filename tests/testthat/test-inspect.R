@@ -7,6 +7,9 @@
 
 capture.output({  ## stops printing console outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   { # Testing objects
     base <- select(intermittent.rd, 1,2)
     base[[3]] <- intermittent.rd[[2]]

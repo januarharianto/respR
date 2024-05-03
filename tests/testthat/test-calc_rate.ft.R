@@ -7,6 +7,8 @@
 
 capture.output({  ## stops printing console outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
 
 # Create testing objects --------------------------------------------------
 #

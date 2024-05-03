@@ -6,6 +6,9 @@
 
 capture.output({  ## stops printing outputs on assigning
 
+  if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
+  skip_on_cran()
+
   test_that("convert_rate - works with default values", {
     expect_equal(suppressWarnings(convert_rate(10, volume = 1, time.unit = "s", oxy.unit = "mg/l")$rate.output),
                  36000)
@@ -259,7 +262,7 @@ capture.output({  ## stops printing outputs on assigning
 
   })
 
-  test_that("convert_rate - stops if units require t, S and P", {
+  test_that("convert_rate - stops if units require S, t, and P", {
 
     expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
                               volume = 0.0032245,
@@ -278,6 +281,102 @@ capture.output({  ## stops printing outputs on assigning
                                 area = 0.000001429),
                    "convert_rate: Input or output units require Atmospheric Pressure input")
 
+  })
+
+  test_that("convert_rate - stops if S, t, and P are vectors", {
+
+    expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35:36,
+                              t= 12,
+                              P = 1.01),
+                 "convert_rate: The 'S' input should be a single value.")
+    expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12:13,
+                              P = 1.01),
+                 "convert_rate: The 't' input should be a single value.")
+    expect_error(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = c(1,1.01)),
+                 "convert_rate: The 'P' input should be a single value.")
+
+  })
+
+  test_that("convert_rate - correct S, t, and P values saved to summary", {
+
+    # single rate value
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$S,
+                 35)
+    # multiple rate values
+    expect_equal(convert_rate(c(-0.001, -0.002), oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$S,
+                 c(35,35))
+    # single rate value
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$t,
+                 12)
+    # multiple rate values
+    expect_equal(convert_rate(c(-0.001, -0.002), oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$t,
+                 c(12,12))
+    # single rate value
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$P,
+                 1.01)
+    # multiple rate values
+    expect_equal(convert_rate(c(-0.001, -0.002), oxy.unit = "mL/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429,
+                              S = 35,
+                              t= 12,
+                              P = 1.01)$summary$P,
+                 c(1.01,1.01))
+    # NA when NULL
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429)$summary$S,
+                 NA)
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429)$summary$t,
+                 NA)
+    expect_equal(convert_rate(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429)$summary$P,
+                 NA)
+    # multiple rate values
+    expect_equal(convert_rate(c(-0.001, -0.002), oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
+                              volume = 0.0032245,
+                              area = 0.000001429)$summary$S,
+                 c(NA,NA))
   })
 
 
