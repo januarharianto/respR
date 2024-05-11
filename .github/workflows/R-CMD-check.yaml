@@ -18,12 +18,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
-          - {os: macOS-latest,   r: 'devel'}
-          - {os: macOS-latest,   r: 'oldrel-1'}
-          - {os: macOS-latest,   r: '3.6.3'}
-          - {os: macOS-latest,   r: '4.1.1'}
-          - {os: macOS-latest,   r: '4.2.2'}
+          - {os: macos-13,   r: 'release'}
+          - {os: macos-13,   r: 'devel'}
+          - {os: macos-13,   r: 'oldrel-1'}
+          - {os: macos-13,   r: '3.6.3'}
+          - {os: macos-13,   r: '4.1.1'}
+          - {os: macos-13,   r: '4.2.2'}
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
           - {os: windows-latest, r: 'oldrel-1'}
