@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
       </span>
     </div>
 
@@ -549,8 +549,8 @@ results. We won’t show the plots this time</p>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy    rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:  NA    1         7.84  -0.0293 0.992   240.6  25    165  4.0    27.3 7.71   7.03 -0.0293  -0.000765       -0.0285</span></span>
-<span><span class="co">#&gt; 2:  NA    2         7.74  -0.0253 0.990   184.5 135    268 22.3    44.5 7.18   6.64 -0.0253  -0.000765       -0.0246</span></span>
+<span><span class="co">#&gt; 1:  NA    1         7.84  -0.0293 0.992   240.4  25    165  4.0    27.3 7.71   7.03 -0.0293  -0.000765       -0.0285</span></span>
+<span><span class="co">#&gt; 2:  NA    2         7.74  -0.0253 0.990   184.4 135    268 22.3    44.5 7.18   6.64 -0.0253  -0.000765       -0.0246</span></span>
 <span><span class="co">#&gt; 3:  NA    3         7.86  -0.0324 0.952    15.6   6     54  0.8     8.8 7.82   7.55 -0.0324  -0.000765       -0.0316</span></span>
 <span><span class="co">#&gt; 4:  NA    4         7.86  -0.0319 0.958    14.5   8     60  1.2     9.8 7.84   7.56 -0.0319  -0.000765       -0.0312</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -969,14 +969,17 @@ twenty minute regions.</p>
 the same respective regions. We’ll print for a quick look.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg1</span><span class="op">$</span><span class="va">summary</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1    rsq row endrow time endtime oxy endoxy  rate.bg</span></span>
-<span><span class="co">#&gt; 1:  NA    1          7.9 -0.00031 0.0108   1    121    0      20 7.9   7.89 -0.00031</span></span>
+<span><span class="co">#&gt;       rep  rank intercept_b0 slope_b1    rsq   row endrow  time endtime   oxy endoxy  rate.bg</span></span>
+<span><span class="co">#&gt;    &lt;lgcl&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt;  &lt;num&gt; &lt;num&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     NA     1          7.9 -0.00031 0.0108     1    121     0      20   7.9   7.89 -0.00031</span></span>
 <span><span class="va">bg2</span><span class="op">$</span><span class="va">summary</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0  slope_b1    rsq row endrow time endtime oxy endoxy   rate.bg</span></span>
-<span><span class="co">#&gt; 1:  NA    1         7.91 -0.000912 0.0817   1    121   10      30 7.9   7.84 -0.000912</span></span>
+<span><span class="co">#&gt;       rep  rank intercept_b0  slope_b1    rsq   row endrow  time endtime   oxy endoxy   rate.bg</span></span>
+<span><span class="co">#&gt;    &lt;lgcl&gt; &lt;int&gt;        &lt;num&gt;     &lt;num&gt;  &lt;num&gt; &lt;num&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     NA     1         7.91 -0.000912 0.0817     1    121    10      30   7.9   7.84 -0.000912</span></span>
 <span><span class="va">bg3</span><span class="op">$</span><span class="va">summary</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq row endrow time endtime  oxy endoxy  rate.bg</span></span>
-<span><span class="co">#&gt; 1:  NA    1         7.92 -0.00117 0.139   1    121   20      40 7.89   7.89 -0.00117</span></span>
+<span><span class="co">#&gt;       rep  rank intercept_b0 slope_b1   rsq   row endrow  time endtime   oxy endoxy  rate.bg</span></span>
+<span><span class="co">#&gt;    &lt;lgcl&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     NA     1         7.92 -0.00117 0.139     1    121    20      40  7.89   7.89 -0.00117</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">urch</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.calc_rate # -------------------</span></span>
@@ -1132,11 +1135,11 @@ as the <code>by</code> input and specify the method.</p>
 <span><span class="co">#&gt; Summary of rate results from entered 'pos' rank(s):</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:  NA    1         7.77 -0.000322 0.999  128161 2425   4800 2424    4799 6.97   6.23 -0.000322 -0.0000296     -0.000293</span></span>
-<span><span class="co">#&gt; 2:  NA    2         7.75 -0.000316 0.999   68103  274   3058  273    3057 7.67   6.80 -0.000316 -0.0000156     -0.000300</span></span>
-<span><span class="co">#&gt; 3:  NA    3         7.76 -0.000322 0.998   64343 3111   4466 3110    4465 6.76   6.33 -0.000322 -0.0000310     -0.000291</span></span>
-<span><span class="co">#&gt; 4:  NA    4         7.77 -0.000322 0.999   56371 2424   4810 2423    4809 6.97   6.21 -0.000322 -0.0000296     -0.000293</span></span>
-<span><span class="co">#&gt; 5:  NA    5         7.74 -0.000312 0.998   43275 1556   3060 1555    3059 7.26   6.78 -0.000312 -0.0000189     -0.000293</span></span>
+<span><span class="co">#&gt; 1:  NA    1         7.77 -0.000322 0.999  128042 2425   4800 2424    4799 6.97   6.23 -0.000322 -0.0000296     -0.000293</span></span>
+<span><span class="co">#&gt; 2:  NA    2         7.75 -0.000316 0.999   68047  274   3058  273    3057 7.67   6.80 -0.000316 -0.0000156     -0.000300</span></span>
+<span><span class="co">#&gt; 3:  NA    3         7.76 -0.000322 0.998   64297 3111   4466 3110    4465 6.76   6.33 -0.000322 -0.0000310     -0.000291</span></span>
+<span><span class="co">#&gt; 4:  NA    4         7.77 -0.000322 0.999   56331 2424   4810 2423    4809 6.97   6.21 -0.000322 -0.0000296     -0.000293</span></span>
+<span><span class="co">#&gt; 5:  NA    5         7.74 -0.000312 0.998   43240 1556   3060 1555    3059 7.26   6.78 -0.000312 -0.0000189     -0.000293</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>Note how the adjustment value differs. The top two adjustments are a
 good example of what we would expect concurrently calculated background
@@ -1233,10 +1236,10 @@ from the rest of the replicate.</p>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt     rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:   1    1         8.27 -0.00223 0.983  181    600  181     600 7.88   6.96 -0.00221 -0.00223  -0.000447      -0.00179</span></span>
-<span><span class="co">#&gt; 2:   2    1         9.80 -0.00228 0.979  841   1260  841    1260 7.89   7.02 -0.00208 -0.00228  -0.000455      -0.00182</span></span>
-<span><span class="co">#&gt; 3:   3    1        11.25 -0.00224 0.981 1501   1920 1501    1920 8.00   6.96 -0.00248 -0.00224  -0.000440      -0.00180</span></span>
-<span><span class="co">#&gt; 4:   4    1        12.81 -0.00227 0.979 2161   2580 2161    2580 7.91   6.97 -0.00225 -0.00227  -0.000455      -0.00182</span></span>
+<span><span class="co">#&gt; 1:   1    1         8.27 -0.00223 0.983  181    600  181     600 7.88   6.96 -0.00221 -0.00223  -0.000452      -0.00178</span></span>
+<span><span class="co">#&gt; 2:   2    1         9.80 -0.00228 0.979  841   1260  841    1260 7.89   7.02 -0.00208 -0.00228  -0.000456      -0.00182</span></span>
+<span><span class="co">#&gt; 3:   3    1        11.25 -0.00224 0.981 1501   1920 1501    1920 8.00   6.96 -0.00248 -0.00224  -0.000444      -0.00180</span></span>
+<span><span class="co">#&gt; 4:   4    1        12.81 -0.00227 0.979 2161   2580 2161    2580 7.91   6.97 -0.00225 -0.00227  -0.000453      -0.00182</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>A background adjustment has been calculated from the same time window
 in the background data for each replicate. We can see they are very
@@ -1533,9 +1536,9 @@ and the <code>"linear"</code> method.</p>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:  NA    1         81.0 -0.00191 0.909    1264 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000971      -0.00182</span></span>
-<span><span class="co">#&gt; 2:  NA    2         90.8 -0.00217 0.978     967   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000971      -0.00207</span></span>
-<span><span class="co">#&gt; 3:  NA    3        119.6 -0.00292 0.823     421  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000970      -0.00282</span></span>
+<span><span class="co">#&gt; 1:  NA    1         81.0 -0.00191 0.909    1263 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000971      -0.00182</span></span>
+<span><span class="co">#&gt; 2:  NA    2         90.8 -0.00217 0.978     966   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000971      -0.00207</span></span>
+<span><span class="co">#&gt; 3:  NA    3        119.6 -0.00292 0.823     420  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000970      -0.00282</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>Note the adjustment values are very close though not identical in
 value, and they are roughly numerically midway between the pre- and
@@ -1649,9 +1652,9 @@ this time assume an exponential increase in background rate.</p>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:  NA    1         81.0 -0.00191 0.909    1264 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000942      -0.00182</span></span>
-<span><span class="co">#&gt; 2:  NA    2         90.8 -0.00217 0.978     967   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000941      -0.00207</span></span>
-<span><span class="co">#&gt; 3:  NA    3        119.6 -0.00292 0.823     421  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000941      -0.00282</span></span>
+<span><span class="co">#&gt; 1:  NA    1         81.0 -0.00191 0.909    1263 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000942      -0.00182</span></span>
+<span><span class="co">#&gt; 2:  NA    2         90.8 -0.00217 0.978     966   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000941      -0.00207</span></span>
+<span><span class="co">#&gt; 3:  NA    3        119.6 -0.00292 0.823     420  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000941      -0.00282</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>Under an exponential vs. a linear background relationship we would
 expect the background rate to be lower at all stages of an experiment
@@ -2023,7 +2026,7 @@ multiple rates they return the mean value of the primary output
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

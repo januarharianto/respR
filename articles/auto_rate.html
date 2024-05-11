@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
       </span>
     </div>
 
@@ -208,8 +208,8 @@
 
       
 
-      </header><script src="auto_rate_files/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="auto_rate_files/viz-1.8.2/viz.js"></script><link href="auto_rate_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
-<script src="auto_rate_files/grViz-binding-1.0.10/grViz.js"></script><div class="row">
+      </header><script src="auto_rate_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="auto_rate_files/viz-1.8.2/viz.js"></script><link href="auto_rate_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="auto_rate_files/grViz-binding-1.0.11/grViz.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>auto_rate: Automatic detection of metabolic
@@ -267,8 +267,8 @@ seconds.</p>
 </h2>
 <p>This illustrates the main processes involved in
 <code>auto_rate</code>:</p>
-<div id="htmlwidget-ce6148a407648c601d88" style="width:400px;height:576px;" class="grViz html-widget "></div>
-<script type="application/json" data-for="htmlwidget-ce6148a407648c601d88">{"x":{"diagram":"\ndigraph a_nice_graph {\n\n# node definitions with substituted label text\n\nnode [fontname = Helvetica, shape = circle]\nrd [label = \"Raw Data\"]\n\nnode [fontname = Helvetica, shape = rectangle]\nrr [label = \"Rolling linear regression\"]\nkd [label = \"Kernel density\nestimates\"]\nre [label = \"Bandwidth\nresampling\"]\nlr [label = \"Localised linear\nregression\"]\nar [label = \"Rank\"]\nfi [label = \"Filter\"]\nun [label = \"Unorder\"]\nor [label = \"Order\"]\n\nnode [fontname = Menlo, shape = none]\nau [label = \"auto_rate()\"]\nli [label = \"linear\"]\nmm [label = \" highest\nlowest\nmaximum\nminimum\"]\nin [label = \"interval\"]\nro [label = \"rolling\"]\n\n# edge definitions with the node IDs\n\nrr -> kd -> re -> lr -> ar -> li\nrd -> au -> rr -> or -> mm\nrr -> fi -> in\nrr -> un -> ro\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><code>auto_rate</code> works by performing an optimised rolling
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:400px;height:576px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"\ndigraph a_nice_graph {\n\n# node definitions with substituted label text\n\nnode [fontname = Helvetica, shape = circle]\nrd [label = \"Raw Data\"]\n\nnode [fontname = Helvetica, shape = rectangle]\nrr [label = \"Rolling linear regression\"]\nkd [label = \"Kernel density\nestimates\"]\nre [label = \"Bandwidth\nresampling\"]\nlr [label = \"Localised linear\nregression\"]\nar [label = \"Rank\"]\nfi [label = \"Filter\"]\nun [label = \"Unorder\"]\nor [label = \"Order\"]\n\nnode [fontname = Menlo, shape = none]\nau [label = \"auto_rate()\"]\nli [label = \"linear\"]\nmm [label = \" highest\nlowest\nmaximum\nminimum\"]\nin [label = \"interval\"]\nro [label = \"rolling\"]\n\n# edge definitions with the node IDs\n\nrr -> kd -> re -> lr -> ar -> li\nrd -> au -> rr -> or -> mm\nrr -> fi -> in\nrr -> un -> ro\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script><p><code>auto_rate</code> works by performing an optimised rolling
 regression on the dataset of a specified width. For the
 <code>linear</code> method, a kernel density estimate is performed on
 the rolling regression output, and the kernel bandwidth used to
@@ -658,18 +658,19 @@ identified a total of 46 linear regions. They can be viewed by calling
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Kernel Density Rank ===</span></span>
-<span><span class="co">#&gt;     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate</span></span>
-<span><span class="co">#&gt;  1:  NA    1         94.9 -0.000661 0.982   19082 3659   6736 3658    6735 92.6   90.4 -0.000661</span></span>
-<span><span class="co">#&gt;  2:  NA    2         95.1 -0.000688 0.986   17476 2242   5543 2241    5542 93.7   91.2 -0.000688</span></span>
-<span><span class="co">#&gt;  3:  NA    3         94.9 -0.000662 0.987   15982 3628   7164 3627    7163 92.5   90.2 -0.000662</span></span>
-<span><span class="co">#&gt;  4:  NA    4         95.1 -0.000708 0.979    9211 1578   4236 1577    4235 94.2   92.2 -0.000708</span></span>
-<span><span class="co">#&gt;  5:  NA    5         95.1 -0.000706 0.971    7562 1947   4236 1946    4235 93.8   92.2 -0.000706</span></span>
-<span><span class="co">#&gt; ---                                                                                             </span></span>
-<span><span class="co">#&gt; 35:  NA   35         95.5 -0.000894 0.938     421 1063   2394 1062    2393 94.5   93.5 -0.000894</span></span>
-<span><span class="co">#&gt; 36:  NA   36         95.5 -0.000894 0.937     388 1066   2393 1065    2392 94.7   93.4 -0.000894</span></span>
-<span><span class="co">#&gt; 37:  NA   37         95.3 -0.000803 0.929     376 1315   2641 1314    2640 94.3   93.3 -0.000803</span></span>
-<span><span class="co">#&gt; 38:  NA   38         95.3 -0.000803 0.929     369 1317   2641 1316    2640 94.3   93.3 -0.000803</span></span>
-<span><span class="co">#&gt; 39:  NA   39         95.3 -0.000803 0.928     322 1325   2635 1324    2634 94.2   93.3 -0.000803</span></span>
+<span><span class="co">#&gt;       rep  rank intercept_b0  slope_b1   rsq density   row endrow  time endtime   oxy endoxy      rate</span></span>
+<span><span class="co">#&gt;     &lt;num&gt; &lt;int&gt;        &lt;num&gt;     &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;num&gt;  &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt;  1:    NA     1         94.9 -0.000661 0.982   19069  3659   6736  3658    6735  92.6   90.4 -0.000661</span></span>
+<span><span class="co">#&gt;  2:    NA     2         95.1 -0.000688 0.986   17461  2242   5543  2241    5542  93.7   91.2 -0.000688</span></span>
+<span><span class="co">#&gt;  3:    NA     3         94.9 -0.000662 0.987   15969  3628   7164  3627    7163  92.5   90.2 -0.000662</span></span>
+<span><span class="co">#&gt;  4:    NA     4         95.1 -0.000708 0.979    9204  1578   4236  1577    4235  94.2   92.2 -0.000708</span></span>
+<span><span class="co">#&gt;  5:    NA     5         95.1 -0.000706 0.971    7555  1947   4236  1946    4235  93.8   92.2 -0.000706</span></span>
+<span><span class="co">#&gt; ---                                                                                                   </span></span>
+<span><span class="co">#&gt; 35:    NA    35         95.5 -0.000894 0.938     421  1063   2394  1062    2393  94.5   93.5 -0.000894</span></span>
+<span><span class="co">#&gt; 36:    NA    36         95.5 -0.000894 0.937     388  1066   2393  1065    2392  94.7   93.4 -0.000894</span></span>
+<span><span class="co">#&gt; 37:    NA    37         95.3 -0.000803 0.929     375  1315   2641  1314    2640  94.3   93.3 -0.000803</span></span>
+<span><span class="co">#&gt; 38:    NA    38         95.3 -0.000803 0.929     369  1317   2641  1316    2640  94.3   93.3 -0.000803</span></span>
+<span><span class="co">#&gt; 39:    NA    39         95.3 -0.000803 0.928     322  1325   2635  1324    2634  94.2   93.3 -0.000803</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -702,16 +703,16 @@ to view particular row ranges. We’ll look at the first 10.</p>
 <span><span class="co">#&gt; === Summary of results from entered 'pos' rank(s) ===</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate</span></span>
-<span><span class="co">#&gt;  1:  NA    1         94.9 -0.000661 0.982   19082 3659   6736 3658    6735 92.6   90.4 -0.000661</span></span>
-<span><span class="co">#&gt;  2:  NA    2         95.1 -0.000688 0.986   17476 2242   5543 2241    5542 93.7   91.2 -0.000688</span></span>
-<span><span class="co">#&gt;  3:  NA    3         94.9 -0.000662 0.987   15982 3628   7164 3627    7163 92.5   90.2 -0.000662</span></span>
-<span><span class="co">#&gt;  4:  NA    4         95.1 -0.000708 0.979    9211 1578   4236 1577    4235 94.2   92.2 -0.000708</span></span>
-<span><span class="co">#&gt;  5:  NA    5         95.1 -0.000706 0.971    7562 1947   4236 1946    4235 93.8   92.2 -0.000706</span></span>
-<span><span class="co">#&gt;  6:  NA    6         95.7 -0.001047 0.961    6865  601   1969  600    1968 95.1   93.7 -0.001047</span></span>
-<span><span class="co">#&gt;  7:  NA    7         95.1 -0.000709 0.978    6399 1578   4196 1577    4195 94.2   92.2 -0.000709</span></span>
-<span><span class="co">#&gt;  8:  NA    8         94.8 -0.000628 0.929    6288 5050   6613 5049    6612 91.4   90.5 -0.000628</span></span>
-<span><span class="co">#&gt;  9:  NA    9         94.7 -0.000619 0.912    2611 5123   6507 5122    6506 91.5   90.6 -0.000619</span></span>
-<span><span class="co">#&gt; 10:  NA   10         95.7 -0.001043 0.961    1918  596   1981  595    1980 95.0   93.6 -0.001043</span></span>
+<span><span class="co">#&gt;  1:  NA    1         94.9 -0.000661 0.982   19069 3659   6736 3658    6735 92.6   90.4 -0.000661</span></span>
+<span><span class="co">#&gt;  2:  NA    2         95.1 -0.000688 0.986   17461 2242   5543 2241    5542 93.7   91.2 -0.000688</span></span>
+<span><span class="co">#&gt;  3:  NA    3         94.9 -0.000662 0.987   15969 3628   7164 3627    7163 92.5   90.2 -0.000662</span></span>
+<span><span class="co">#&gt;  4:  NA    4         95.1 -0.000708 0.979    9204 1578   4236 1577    4235 94.2   92.2 -0.000708</span></span>
+<span><span class="co">#&gt;  5:  NA    5         95.1 -0.000706 0.971    7555 1947   4236 1946    4235 93.8   92.2 -0.000706</span></span>
+<span><span class="co">#&gt;  6:  NA    6         95.7 -0.001047 0.961    6862  601   1969  600    1968 95.1   93.7 -0.001047</span></span>
+<span><span class="co">#&gt;  7:  NA    7         95.1 -0.000709 0.978    6395 1578   4196 1577    4195 94.2   92.2 -0.000709</span></span>
+<span><span class="co">#&gt;  8:  NA    8         94.8 -0.000628 0.929    6285 5050   6613 5049    6612 91.4   90.5 -0.000628</span></span>
+<span><span class="co">#&gt;  9:  NA    9         94.7 -0.000619 0.912    2609 5123   6507 5122    6506 91.5   90.6 -0.000619</span></span>
+<span><span class="co">#&gt; 10:  NA   10         95.7 -0.001043 0.961    1917  596   1981  595    1980 95.0   93.6 -0.001043</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -797,18 +798,19 @@ same number of rows.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Highest Rate ===</span></span>
-<span><span class="co">#&gt;       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate</span></span>
-<span><span class="co">#&gt;    1:  NA    1         95.8 -0.001138 0.924      NA  791   1690  790    1689 95.0   93.9 -0.001138</span></span>
-<span><span class="co">#&gt;    2:  NA    2         95.8 -0.001138 0.924      NA  798   1697  797    1696 95.0   93.8 -0.001138</span></span>
-<span><span class="co">#&gt;    3:  NA    3         95.8 -0.001138 0.924      NA  792   1691  791    1690 95.0   93.9 -0.001138</span></span>
-<span><span class="co">#&gt;    4:  NA    4         95.8 -0.001138 0.924      NA  793   1692  792    1691 95.0   93.9 -0.001138</span></span>
-<span><span class="co">#&gt;    5:  NA    5         95.8 -0.001138 0.924      NA  797   1696  796    1695 95.0   93.8 -0.001138</span></span>
-<span><span class="co">#&gt;   ---                                                                                             </span></span>
-<span><span class="co">#&gt; 6610:  NA 6610         94.7 -0.000615 0.793      NA 5717   6616 5716    6615 91.3   90.6 -0.000615</span></span>
-<span><span class="co">#&gt; 6611:  NA 6611         94.7 -0.000615 0.792      NA 5723   6622 5722    6621 91.1   90.7 -0.000615</span></span>
-<span><span class="co">#&gt; 6612:  NA 6612         94.7 -0.000615 0.793      NA 5715   6614 5714    6613 91.1   90.5 -0.000615</span></span>
-<span><span class="co">#&gt; 6613:  NA 6613         94.7 -0.000614 0.792      NA 5720   6619 5719    6618 91.1   90.5 -0.000614</span></span>
-<span><span class="co">#&gt; 6614:  NA 6614         94.7 -0.000613 0.792      NA 5719   6618 5718    6617 91.2   90.7 -0.000613</span></span>
+<span><span class="co">#&gt;         rep  rank intercept_b0  slope_b1   rsq density   row endrow  time endtime   oxy endoxy      rate</span></span>
+<span><span class="co">#&gt;       &lt;num&gt; &lt;int&gt;        &lt;num&gt;     &lt;num&gt; &lt;num&gt;  &lt;lgcl&gt; &lt;int&gt;  &lt;num&gt; &lt;int&gt;   &lt;int&gt; &lt;num&gt;  &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt;    1:    NA     1         95.8 -0.001138 0.924      NA   791   1690   790    1689  95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt;    2:    NA     2         95.8 -0.001138 0.924      NA   798   1697   797    1696  95.0   93.8 -0.001138</span></span>
+<span><span class="co">#&gt;    3:    NA     3         95.8 -0.001138 0.924      NA   792   1691   791    1690  95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt;    4:    NA     4         95.8 -0.001138 0.924      NA   793   1692   792    1691  95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt;    5:    NA     5         95.8 -0.001138 0.924      NA   797   1696   796    1695  95.0   93.8 -0.001138</span></span>
+<span><span class="co">#&gt;   ---                                                                                                   </span></span>
+<span><span class="co">#&gt; 6610:    NA  6610         94.7 -0.000615 0.793      NA  5717   6616  5716    6615  91.3   90.6 -0.000615</span></span>
+<span><span class="co">#&gt; 6611:    NA  6611         94.7 -0.000615 0.792      NA  5723   6622  5722    6621  91.1   90.7 -0.000615</span></span>
+<span><span class="co">#&gt; 6612:    NA  6612         94.7 -0.000615 0.793      NA  5715   6614  5714    6613  91.1   90.5 -0.000615</span></span>
+<span><span class="co">#&gt; 6613:    NA  6613         94.7 -0.000614 0.792      NA  5720   6619  5719    6618  91.1   90.5 -0.000614</span></span>
+<span><span class="co">#&gt; 6614:    NA  6614         94.7 -0.000613 0.792      NA  5719   6618  5718    6617  91.2   90.7 -0.000613</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 6614 | Results : 6614 | Method : highest | Roll width : 900 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -850,18 +852,19 @@ minutes.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Lowest Rate ===</span></span>
-<span><span class="co">#&gt;       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate</span></span>
-<span><span class="co">#&gt;    1:  NA    1         94.7 -0.000613 0.792      NA 5719   6618 5718    6617 91.2   90.7 -0.000613</span></span>
-<span><span class="co">#&gt;    2:  NA    2         94.7 -0.000614 0.792      NA 5720   6619 5719    6618 91.1   90.5 -0.000614</span></span>
-<span><span class="co">#&gt;    3:  NA    3         94.7 -0.000615 0.793      NA 5715   6614 5714    6613 91.1   90.5 -0.000615</span></span>
-<span><span class="co">#&gt;    4:  NA    4         94.7 -0.000615 0.792      NA 5723   6622 5722    6621 91.1   90.7 -0.000615</span></span>
-<span><span class="co">#&gt;    5:  NA    5         94.7 -0.000615 0.793      NA 5717   6616 5716    6615 91.3   90.6 -0.000615</span></span>
-<span><span class="co">#&gt;   ---                                                                                             </span></span>
-<span><span class="co">#&gt; 6610:  NA 6610         95.8 -0.001138 0.924      NA  797   1696  796    1695 95.0   93.8 -0.001138</span></span>
-<span><span class="co">#&gt; 6611:  NA 6611         95.8 -0.001138 0.924      NA  793   1692  792    1691 95.0   93.9 -0.001138</span></span>
-<span><span class="co">#&gt; 6612:  NA 6612         95.8 -0.001138 0.924      NA  792   1691  791    1690 95.0   93.9 -0.001138</span></span>
-<span><span class="co">#&gt; 6613:  NA 6613         95.8 -0.001138 0.924      NA  798   1697  797    1696 95.0   93.8 -0.001138</span></span>
-<span><span class="co">#&gt; 6614:  NA 6614         95.8 -0.001138 0.924      NA  791   1690  790    1689 95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt;         rep  rank intercept_b0  slope_b1   rsq density   row endrow  time endtime   oxy endoxy      rate</span></span>
+<span><span class="co">#&gt;       &lt;num&gt; &lt;int&gt;        &lt;num&gt;     &lt;num&gt; &lt;num&gt;  &lt;lgcl&gt; &lt;int&gt;  &lt;num&gt; &lt;int&gt;   &lt;int&gt; &lt;num&gt;  &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt;    1:    NA     1         94.7 -0.000613 0.792      NA  5719   6618  5718    6617  91.2   90.7 -0.000613</span></span>
+<span><span class="co">#&gt;    2:    NA     2         94.7 -0.000614 0.792      NA  5720   6619  5719    6618  91.1   90.5 -0.000614</span></span>
+<span><span class="co">#&gt;    3:    NA     3         94.7 -0.000615 0.793      NA  5715   6614  5714    6613  91.1   90.5 -0.000615</span></span>
+<span><span class="co">#&gt;    4:    NA     4         94.7 -0.000615 0.792      NA  5723   6622  5722    6621  91.1   90.7 -0.000615</span></span>
+<span><span class="co">#&gt;    5:    NA     5         94.7 -0.000615 0.793      NA  5717   6616  5716    6615  91.3   90.6 -0.000615</span></span>
+<span><span class="co">#&gt;   ---                                                                                                   </span></span>
+<span><span class="co">#&gt; 6610:    NA  6610         95.8 -0.001138 0.924      NA   797   1696   796    1695  95.0   93.8 -0.001138</span></span>
+<span><span class="co">#&gt; 6611:    NA  6611         95.8 -0.001138 0.924      NA   793   1692   792    1691  95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt; 6612:    NA  6612         95.8 -0.001138 0.924      NA   792   1691   791    1690  95.0   93.9 -0.001138</span></span>
+<span><span class="co">#&gt; 6613:    NA  6613         95.8 -0.001138 0.924      NA   798   1697   797    1696  95.0   93.8 -0.001138</span></span>
+<span><span class="co">#&gt; 6614:    NA  6614         95.8 -0.001138 0.924      NA   791   1690   790    1689  95.0   93.9 -0.001138</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 6614 | Results : 6614 | Method : lowest | Roll width : 900 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -884,18 +887,19 @@ specified <code>width</code> to be returned in sequential order.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Rolling Order ===</span></span>
-<span><span class="co">#&gt;       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate</span></span>
-<span><span class="co">#&gt;    1:  NA    1         95.6 -0.000817 0.871      NA    1    900    0     899 95.6   94.9 -0.000817</span></span>
-<span><span class="co">#&gt;    2:  NA    2         95.6 -0.000818 0.871      NA    2    901    1     900 95.6   94.7 -0.000818</span></span>
-<span><span class="co">#&gt;    3:  NA    3         95.6 -0.000817 0.871      NA    3    902    2     901 95.6   94.9 -0.000817</span></span>
-<span><span class="co">#&gt;    4:  NA    4         95.6 -0.000817 0.871      NA    4    903    3     902 95.6   94.7 -0.000817</span></span>
-<span><span class="co">#&gt;    5:  NA    5         95.6 -0.000817 0.871      NA    5    904    4     903 95.6   94.8 -0.000817</span></span>
-<span><span class="co">#&gt;   ---                                                                                             </span></span>
-<span><span class="co">#&gt; 6610:  NA 6610         95.0 -0.000666 0.845      NA 6610   7509 6609    7508 90.6   90.0 -0.000666</span></span>
-<span><span class="co">#&gt; 6611:  NA 6611         95.0 -0.000665 0.844      NA 6611   7510 6610    7509 90.7   90.1 -0.000665</span></span>
-<span><span class="co">#&gt; 6612:  NA 6612         94.9 -0.000663 0.843      NA 6612   7511 6611    7510 90.7   90.1 -0.000663</span></span>
-<span><span class="co">#&gt; 6613:  NA 6613         94.9 -0.000660 0.841      NA 6613   7512 6612    7511 90.5   90.2 -0.000660</span></span>
-<span><span class="co">#&gt; 6614:  NA 6614         94.9 -0.000658 0.837      NA 6614   7513 6613    7512 90.5   90.3 -0.000658</span></span>
+<span><span class="co">#&gt;         rep  rank intercept_b0  slope_b1   rsq density   row endrow  time endtime   oxy endoxy      rate</span></span>
+<span><span class="co">#&gt;       &lt;num&gt; &lt;int&gt;        &lt;num&gt;     &lt;num&gt; &lt;num&gt;  &lt;lgcl&gt; &lt;int&gt;  &lt;num&gt; &lt;int&gt;   &lt;int&gt; &lt;num&gt;  &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt;    1:    NA     1         95.6 -0.000817 0.871      NA     1    900     0     899  95.6   94.9 -0.000817</span></span>
+<span><span class="co">#&gt;    2:    NA     2         95.6 -0.000818 0.871      NA     2    901     1     900  95.6   94.7 -0.000818</span></span>
+<span><span class="co">#&gt;    3:    NA     3         95.6 -0.000817 0.871      NA     3    902     2     901  95.6   94.9 -0.000817</span></span>
+<span><span class="co">#&gt;    4:    NA     4         95.6 -0.000817 0.871      NA     4    903     3     902  95.6   94.7 -0.000817</span></span>
+<span><span class="co">#&gt;    5:    NA     5         95.6 -0.000817 0.871      NA     5    904     4     903  95.6   94.8 -0.000817</span></span>
+<span><span class="co">#&gt;   ---                                                                                                   </span></span>
+<span><span class="co">#&gt; 6610:    NA  6610         95.0 -0.000666 0.845      NA  6610   7509  6609    7508  90.6   90.0 -0.000666</span></span>
+<span><span class="co">#&gt; 6611:    NA  6611         95.0 -0.000665 0.844      NA  6611   7510  6610    7509  90.7   90.1 -0.000665</span></span>
+<span><span class="co">#&gt; 6612:    NA  6612         94.9 -0.000663 0.843      NA  6612   7511  6611    7510  90.7   90.1 -0.000663</span></span>
+<span><span class="co">#&gt; 6613:    NA  6613         94.9 -0.000660 0.841      NA  6613   7512  6612    7511  90.5   90.2 -0.000660</span></span>
+<span><span class="co">#&gt; 6614:    NA  6614         94.9 -0.000658 0.837      NA  6614   7513  6613    7512  90.5   90.3 -0.000658</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 6614 | Results : 6614 | Method : rolling | Roll width : 900 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -977,7 +981,7 @@ subsetting and passing data regions of interest to other functions. See
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
       </span>
     </div>
 
@@ -513,18 +513,19 @@ also have done this when we first subset and inspected the data <a href="#mmrsub
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Highest Rate ===</span></span>
-<span><span class="co">#&gt;      rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
-<span><span class="co">#&gt;   1:  NA    1         43.3 -0.00719 0.984      NA  10    129 5188    5307 5.96   5.14 -0.00719</span></span>
-<span><span class="co">#&gt;   2:  NA    2         43.2 -0.00718 0.984      NA   9    128 5187    5306 5.98   5.11 -0.00718</span></span>
-<span><span class="co">#&gt;   3:  NA    3         43.2 -0.00718 0.984      NA  11    130 5189    5308 6.04   5.17 -0.00718</span></span>
-<span><span class="co">#&gt;   4:  NA    4         43.2 -0.00717 0.984      NA  14    133 5192    5311 5.93   5.07 -0.00717</span></span>
-<span><span class="co">#&gt;   5:  NA    5         43.2 -0.00717 0.984      NA  15    134 5193    5312 5.94   5.14 -0.00717</span></span>
-<span><span class="co">#&gt;  ---                                                                                          </span></span>
-<span><span class="co">#&gt; 419:  NA  419         31.7 -0.00505 0.971      NA 420    539 5598    5717 3.41   2.84 -0.00505</span></span>
-<span><span class="co">#&gt; 420:  NA  420         31.7 -0.00505 0.971      NA 419    538 5597    5716 3.37   2.79 -0.00505</span></span>
-<span><span class="co">#&gt; 421:  NA  421         31.6 -0.00503 0.971      NA 423    542 5601    5720 3.37   2.79 -0.00503</span></span>
-<span><span class="co">#&gt; 422:  NA  422         31.6 -0.00503 0.971      NA 421    540 5599    5718 3.44   2.84 -0.00503</span></span>
-<span><span class="co">#&gt; 423:  NA  423         31.6 -0.00503 0.971      NA 422    541 5600    5719 3.39   2.77 -0.00503</span></span>
+<span><span class="co">#&gt;        rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
+<span><span class="co">#&gt;      &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;  &lt;lgcl&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1:    NA     1         43.3 -0.00719 0.984      NA    10    129  5188    5307  5.96   5.14 -0.00719</span></span>
+<span><span class="co">#&gt;   2:    NA     2         43.2 -0.00718 0.984      NA     9    128  5187    5306  5.98   5.11 -0.00718</span></span>
+<span><span class="co">#&gt;   3:    NA     3         43.2 -0.00718 0.984      NA    11    130  5189    5308  6.04   5.17 -0.00718</span></span>
+<span><span class="co">#&gt;   4:    NA     4         43.2 -0.00717 0.984      NA    14    133  5192    5311  5.93   5.07 -0.00717</span></span>
+<span><span class="co">#&gt;   5:    NA     5         43.2 -0.00717 0.984      NA    15    134  5193    5312  5.94   5.14 -0.00717</span></span>
+<span><span class="co">#&gt;  ---                                                                                                 </span></span>
+<span><span class="co">#&gt; 419:    NA   419         31.7 -0.00505 0.971      NA   420    539  5598    5717  3.41   2.84 -0.00505</span></span>
+<span><span class="co">#&gt; 420:    NA   420         31.7 -0.00505 0.971      NA   419    538  5597    5716  3.37   2.79 -0.00505</span></span>
+<span><span class="co">#&gt; 421:    NA   421         31.6 -0.00503 0.971      NA   423    542  5601    5720  3.37   2.79 -0.00503</span></span>
+<span><span class="co">#&gt; 422:    NA   422         31.6 -0.00503 0.971      NA   421    540  5599    5718  3.44   2.84 -0.00503</span></span>
+<span><span class="co">#&gt; 423:    NA   423         31.6 -0.00503 0.971      NA   422    541  5600    5719  3.39   2.77 -0.00503</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 423 | Results : 423 | Method : highest | Roll width : 120 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
@@ -553,14 +554,15 @@ minutes.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Kernel Density Rank ===</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
-<span><span class="co">#&gt; 1:  NA    1         36.3 -0.00588 0.996    1200 122    450 5300    5628 5.20   3.27 -0.00588</span></span>
-<span><span class="co">#&gt; 2:  NA    2         32.0 -0.00511 0.981     644 394    541 5572    5719 3.56   2.77 -0.00511</span></span>
-<span><span class="co">#&gt; 3:  NA    3         37.6 -0.00612 0.991     425 102    304 5280    5482 5.35   4.10 -0.00612</span></span>
-<span><span class="co">#&gt; 4:  NA    4         37.6 -0.00612 0.991     420 101    304 5279    5482 5.31   4.10 -0.00612</span></span>
-<span><span class="co">#&gt; 5:  NA    5         42.9 -0.00711 0.979     417   4    111 5182    5289 6.04   5.22 -0.00711</span></span>
-<span><span class="co">#&gt; 6:  NA    6         41.1 -0.00678 0.985     412  52    184 5230    5362 5.63   4.84 -0.00678</span></span>
-<span><span class="co">#&gt; 7:  NA    7         36.7 -0.00595 0.986     406 305    451 5483    5629 4.15   3.19 -0.00595</span></span>
+<span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA     1         36.3 -0.00588 0.996    1199   122    450  5300    5628  5.20   3.27 -0.00588</span></span>
+<span><span class="co">#&gt; 2:    NA     2         32.0 -0.00511 0.981     644   394    541  5572    5719  3.56   2.77 -0.00511</span></span>
+<span><span class="co">#&gt; 3:    NA     3         37.6 -0.00612 0.991     425   102    304  5280    5482  5.35   4.10 -0.00612</span></span>
+<span><span class="co">#&gt; 4:    NA     4         37.6 -0.00612 0.991     420   101    304  5279    5482  5.31   4.10 -0.00612</span></span>
+<span><span class="co">#&gt; 5:    NA     5         42.9 -0.00711 0.979     417     4    111  5182    5289  6.04   5.22 -0.00711</span></span>
+<span><span class="co">#&gt; 6:    NA     6         41.1 -0.00678 0.985     412    52    184  5230    5362  5.63   4.84 -0.00678</span></span>
+<span><span class="co">#&gt; 7:    NA     7         36.7 -0.00595 0.986     405   305    451  5483    5629  4.15   3.19 -0.00595</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 435 | Results : 7 | Method : linear | Roll width : 108 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -609,13 +611,14 @@ rolling regressions to determine MMR.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Kernel Density Rank ===</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
-<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4260 146    447 5324    5625 5.03   3.30 -0.00586</span></span>
-<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1232 260    517 5438    5695 4.33   2.93 -0.00556</span></span>
-<span><span class="co">#&gt; 3:  NA    3         36.6 -0.00592 0.993     963 119    363 5297    5541 5.21   3.75 -0.00592</span></span>
-<span><span class="co">#&gt; 4:  NA    4         34.6 -0.00557 0.993     900 259    514 5437    5692 4.36   2.96 -0.00557</span></span>
-<span><span class="co">#&gt; 5:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642</span></span>
-<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     732  55    296 5233    5474 5.65   4.10 -0.00629</span></span>
+<span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA     1         36.2 -0.00586 0.996    4258   146    447  5324    5625  5.03   3.30 -0.00586</span></span>
+<span><span class="co">#&gt; 2:    NA     2         34.6 -0.00556 0.993    1231   260    517  5438    5695  4.33   2.93 -0.00556</span></span>
+<span><span class="co">#&gt; 3:    NA     3         36.6 -0.00592 0.993     963   119    363  5297    5541  5.21   3.75 -0.00592</span></span>
+<span><span class="co">#&gt; 4:    NA     4         34.6 -0.00557 0.993     900   259    514  5437    5692  4.36   2.96 -0.00557</span></span>
+<span><span class="co">#&gt; 5:    NA     5         39.3 -0.00642 0.994     738    31    277  5209    5455  5.86   4.21 -0.00642</span></span>
+<span><span class="co">#&gt; 6:    NA     6         38.5 -0.00629 0.993     731    55    296  5233    5474  5.65   4.10 -0.00629</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 272 | Results : 6 | Method : linear | Roll width : 271 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -674,12 +677,12 @@ specify the method.</p>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate adjustment rate.adjusted</span></span>
-<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4260 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578</span></span>
-<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1232 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549</span></span>
+<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4258 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578</span></span>
+<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1231 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549</span></span>
 <span><span class="co">#&gt; 3:  NA    3         36.6 -0.00592 0.993     963 119    363 5297    5541 5.21   3.75 -0.00592 -0.0000760      -0.00585</span></span>
 <span><span class="co">#&gt; 4:  NA    4         34.6 -0.00557 0.993     900 259    514 5437    5692 4.36   2.96 -0.00557 -0.0000761      -0.00550</span></span>
 <span><span class="co">#&gt; 5:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642 -0.0000760      -0.00635</span></span>
-<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     732  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622</span></span>
+<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     731  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>There are several things to note here. We can see the ultimate
 <code>adjustment</code> value is small in comparison to the rate of the
@@ -741,12 +744,12 @@ step, and we’ll convert to a mass-specific rate.</p>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
-<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4260 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578   -0.00578     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.50       -2.78          NA   mgO2/hr/g       -2.78</span></span>
-<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1232 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549   -0.00549     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.63          NA   mgO2/hr/g       -2.63</span></span>
+<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4258 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578   -0.00578     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.50       -2.78          NA   mgO2/hr/g       -2.78</span></span>
+<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1231 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549   -0.00549     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.63          NA   mgO2/hr/g       -2.63</span></span>
 <span><span class="co">#&gt; 3:  NA    3         36.6 -0.00592 0.993     963 119    363 5297    5541 5.21   3.75 -0.00592 -0.0000760      -0.00585   -0.00585     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.53       -2.81          NA   mgO2/hr/g       -2.81</span></span>
 <span><span class="co">#&gt; 4:  NA    4         34.6 -0.00557 0.993     900 259    514 5437    5692 4.36   2.96 -0.00557 -0.0000761      -0.00550   -0.00550     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.64          NA   mgO2/hr/g       -2.64</span></span>
 <span><span class="co">#&gt; 5:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642 -0.0000760      -0.00635   -0.00635     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span>
-<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     732  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622   -0.00622     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.69       -2.98          NA   mgO2/hr/g       -2.98</span></span>
+<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     731  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622   -0.00622     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.69       -2.98          NA   mgO2/hr/g       -2.98</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>The <code>$summary</code> table contains all rate regression
 parameters and data locations, adjustments (if applied), units, and
@@ -777,12 +780,12 @@ higher than the others.</p>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
-<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4260 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578   -0.00578     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.50       -2.78          NA   mgO2/hr/g       -2.78</span></span>
-<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1232 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549   -0.00549     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.63          NA   mgO2/hr/g       -2.63</span></span>
+<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4258 146    447 5324    5625 5.03   3.30 -0.00586 -0.0000761      -0.00578   -0.00578     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.50       -2.78          NA   mgO2/hr/g       -2.78</span></span>
+<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1231 260    517 5438    5695 4.33   2.93 -0.00556 -0.0000761      -0.00549   -0.00549     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.63          NA   mgO2/hr/g       -2.63</span></span>
 <span><span class="co">#&gt; 3:  NA    3         36.6 -0.00592 0.993     963 119    363 5297    5541 5.21   3.75 -0.00592 -0.0000760      -0.00585   -0.00585     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.53       -2.81          NA   mgO2/hr/g       -2.81</span></span>
 <span><span class="co">#&gt; 4:  NA    4         34.6 -0.00557 0.993     900 259    514 5437    5692 4.36   2.96 -0.00557 -0.0000761      -0.00550   -0.00550     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.37       -2.64          NA   mgO2/hr/g       -2.64</span></span>
 <span><span class="co">#&gt; 5:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642 -0.0000760      -0.00635   -0.00635     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span>
-<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     732  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622   -0.00622     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.69       -2.98          NA   mgO2/hr/g       -2.98</span></span>
+<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     731  55    296 5233    5474 5.65   4.10 -0.00629 -0.0000760      -0.00622   -0.00622     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.69       -2.98          NA   mgO2/hr/g       -2.98</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <p>In this case, we could fairly confidently report this as our MMR of
 -3.05 mg/h/g. However, the <code><a href="../reference/select_rate.html">select_rate()</a></code> function allows
@@ -807,8 +810,9 @@ other data for this rate.</p>
 <code class="sourceCode R"><span><span class="va">mmr_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">MMR</span>, export <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mmr_results</span></span>
-<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
-<span><span class="co">#&gt; 1:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642  -0.000076      -0.00635   -0.00635     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span></code></pre></div>
+<span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;      &lt;num&gt;         &lt;num&gt;      &lt;num&gt;   &lt;char&gt;    &lt;char&gt;  &lt;num&gt;  &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt; &lt;lgcl&gt; &lt;lgcl&gt;    &lt;num&gt;       &lt;num&gt;      &lt;lgcl&gt;      &lt;char&gt;       &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA     5         39.3 -0.00642 0.994     738    31    277  5209    5455  5.86   4.21 -0.00642  -0.000076      -0.00635   -0.00635     mg/L       sec   0.12 0.0009     NA     NA     NA     NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="complete-mmr-analysis">Complete MMR analysis<a class="anchor" aria-label="anchor" href="#complete-mmr-analysis"></a>
@@ -831,8 +835,9 @@ other data for this rate.</p>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"highest"</span>, </span>
 <span>              n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span>                     <span class="co"># select highest rate </span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>export <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>                    <span class="co"># final reportable result</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
-<span><span class="co">#&gt; 1:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642  -0.000076      -0.00635   -0.00635     mg/L       sec   0.12 0.0009   NA NA NA NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;      &lt;num&gt;         &lt;num&gt;      &lt;num&gt;   &lt;char&gt;    &lt;char&gt;  &lt;num&gt;  &lt;num&gt; &lt;lgcl&gt; &lt;lgcl&gt; &lt;lgcl&gt; &lt;lgcl&gt;    &lt;num&gt;       &lt;num&gt;      &lt;lgcl&gt;      &lt;char&gt;       &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA     5         39.3 -0.00642 0.994     738    31    277  5209    5455  5.86   4.21 -0.00642  -0.000076      -0.00635   -0.00635     mg/L       sec   0.12 0.0009     NA     NA     NA     NA    -2.74       -3.05          NA   mgO2/hr/g       -3.05</span></span></code></pre>
 <p>This allows you to document all analysis parameters and rate
 selection criteria so that they can be consistently applied and reported
 alongside the results. See <a href="#report">Reporting</a> section for
@@ -1431,7 +1436,7 @@ most analyses use of <code>calc_rate.int</code> or
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

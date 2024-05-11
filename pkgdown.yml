@@ -1,17 +1,10 @@
-pandoc: 3.1.1
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   adjust_rate: adjust_rate.html
   auto_rate_comp: archive/auto_rate_comp.html
   auto_rate_performance: archive/auto_rate_performance.html
-  intermittent_old: archive/intermittent_old.html
-  oxy_crit_comp: archive/oxy_crit_comp.html
-  oxy_crit_disc: archive/oxy_crit_disc.html
-  packages_comp: archive/packages_comp.html
-  usage: archive/usage.html
-  v1_code: archive/v1_code.html
-  v2_code_change: archive/v2_code_change.html
   auto_rate: auto_rate.html
   auto_rate.int: auto_rate.int.html
   calc_rate: calc_rate.html
@@ -26,9 +19,13 @@ articles:
   importing: importing.html
   inspecting: inspecting.html
   intermittent_long: intermittent_long.html
+  intermittent_old: archive/intermittent_old.html
   intermittent_short: intermittent_short.html
+  oxy_crit_comp: archive/oxy_crit_comp.html
+  oxy_crit_disc: archive/oxy_crit_disc.html
   oxy_production: oxy_production.html
   oxycrit: oxycrit.html
+  packages_comp: archive/packages_comp.html
   refs: refs.html
   release_notes: release_notes.html
   reproducibility: reproducibility.html
@@ -38,7 +35,10 @@ articles:
   subset_data: subset_data.html
   tidyverse: tidyverse.html
   twopoint: twopoint.html
-last_built: 2024-03-29T16:12Z
+  usage: archive/usage.html
+  v1_code: archive/v1_code.html
+  v2_code_change: archive/v2_code_change.html
+last_built: 2024-05-11T09:19Z
 urls:
   reference: https://januarharianto.github.io/respR/reference
   article: https://januarharianto.github.io/respR/articles

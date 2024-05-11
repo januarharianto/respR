@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../../bootstrap-toc.css">
 <script src="../../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
       </span>
     </div>
 
@@ -306,7 +306,7 @@ linear segment with a randomly-generated slope computed using
 mimic common respirometry data whereby the initial sections of the data
 are often non-linear. Here we show 25 randomly-generated plots created
 by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf01.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf01.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data"></a>
@@ -326,7 +326,7 @@ need to omit the initial non-linear segment, ignore the dip, and then
 pick the longer of the 2 remaining linear segments that are separated by
 the dip. Here we show 25 randomly-generated plots created by the
 <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf02.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf02.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="segmented-data">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data"></a>
@@ -342,7 +342,7 @@ linear segment).</p>
 would need to correctly omit the initial non-linear segment, and also,
 ignore the end segment of the data as it has a different slope. Here we
 show 25 randomly-generated plots created by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf03.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf03.png" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -455,7 +455,7 @@ of <span class="math inline">\(\pm 0.06\)</span>, even for values close
 to zero:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf04.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf04.png" style="display: block; margin: auto;"></p>
 <p>Tests on larger sample data sizes of 200 and 500 revealed that
 <code>auto_rate</code> performed better when provided with bigger data.
 When used on data with 500 samples, <code>auto_rate</code> generally
@@ -466,7 +466,7 @@ deviation was 10<span class="math inline">\(\times\)</span> smaller than
 when sample size was at 100:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf05.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf05.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data-1">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data-1"></a>
@@ -486,7 +486,7 @@ compared to its performance with “default”-type data.
 genrally poorer at values close to zero.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf06.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf06.png" style="display: block; margin: auto;"></p>
 <p>Again, <code>auto_rate</code> performed better when provided with
 bigger data. At 500 samples the same issue where the shorter linear
 segment was incorrectly selected still persisted <strong>(A)</strong>,
@@ -496,7 +496,7 @@ and <strong>(D)</strong> deviation values from <span class="math inline">\(\beta
 with seemingly fewer poor estimates when slope values approach zero.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf07.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf07.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="segmented-data-1">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data-1"></a>
@@ -516,7 +516,7 @@ performed surprisingly well most of the time, despite the errors, and
 poorer when slope values are closer to zero.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf08.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf08.png" style="display: block; margin: auto;"></p>
 <p>Again, with a larger dataset, <code>auto_rate</code>’s performance
 was substantially better. With a 500-sample dataset, many of the issues
 that occured in the previous test were better resolved. The function
@@ -527,7 +527,7 @@ deviations from <span class="math inline">\(\beta_{true}\)</span> were
 much smaller in magnitude.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf09.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="img/auto_rate_perf/arperf09.png" style="display: block; margin: auto;"></p>
 <p>We did not report any of the results for 200-sample size datasets,
 but users are free to call the data object <code>test_lin_data</code>
 and plot the results, or run their own analyses using the functions we
@@ -586,7 +586,7 @@ jeb.148775-jeb.148775. <a href="http://doi.org/10.1242/jeb.148775" class="extern
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
       </span>
     </div>
 
@@ -224,6 +224,27 @@
 <p>This page contains the release notes for the latest updates to
 <code>respR</code>.  <br>
  <br></p>
+<div class="section level2">
+<h2 id="version-2-3-3-2024-05-11">Version 2.3.3 – 2024-05-11<a class="anchor" aria-label="anchor" href="#version-2-3-3-2024-05-11"></a>
+</h2>
+<ul>
+<li>FIX: Fix for <code>convert_DO</code> not accepting vectors for the
+<code>P</code> input.</li>
+<li>FIX: <code>convert_rate</code>, <code>convert_rate.ft</code>, and
+<code>convert_MR</code> now stop with an error if vectors have been
+entered for <code>S</code>, <code>t</code>, or <code>P</code> (instead
+of silently accepting them, but only using the first value in actual
+conversions).</li>
+<li>CHANGE: To maintain compatibility with older versions of R, support
+for Excel files has been removed from <code>import_file</code> and as a
+result <code>readxl</code> has been removed as a dependency. The
+<code>import_file</code> function has already been deprecated in a
+previous update, and we strongly encourage users to move to importing
+their files using common packages. See <a href="https://januarharianto.github.io/respR/articles/importing.html">here</a>.</li>
+<li>NEW: Tested with <code>R</code> version <a href="https://www.r-bloggers.com/2024/04/whats-new-in-r-4-4-0/" class="external-link">4.4.0</a>
+</li>
+</ul>
+</div>
 <div class="section level2">
 <h2 id="version-2-3-2-2023-11-15">Version 2.3.2 – 2023-11-15<a class="anchor" aria-label="anchor" href="#version-2-3-2-2023-11-15"></a>
 </h2>
@@ -1324,7 +1345,7 @@ if date information is not provided (e.g. “HMS”-only data).</li>
 <code><a href="../reference/subset_data.html">subset_data()</a></code> is now more forgiving with string input
 values (e.g. <code>"oxygen"</code>, <code>"Oxygen"</code>,
 <code>"o2"</code>, <code>"O2"</code>, etc. are recognised). To achieve
-this we created a string matching function, <code>by.val()</code> which
+this we created a string matching function, <code>by_val()</code> which
 uses brute force matching to recognise different ways of writing the
 same text.</li>
 </ul>
@@ -1604,7 +1625,7 @@ inputs.</li>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
