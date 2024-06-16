@@ -41,7 +41,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
       R_CHECK_ARGS: '--no-tests --no-manual --as-cran'
-      #R_CHECK_FORCE_SUGGESTS: FALSE
+      R_CHECK_FORCE_SUGGESTS: FALSE
 
     steps:
       - uses: actions/checkout@v4

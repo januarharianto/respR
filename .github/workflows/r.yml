@@ -33,5 +33,7 @@ jobs:
           remotes::install_deps(dependencies = c("Depends", "Imports", "LinkingTo"))
         shell: Rscript {0}
       - name: Check
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--no-tests"), error_on = "error")
         shell: Rscript {0}
