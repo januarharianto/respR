@@ -44,8 +44,6 @@ Imports:
     utils,
     xml2
 Suggests:
-    knitr,
-    rmarkdown,
     rMR,
     FishResp,
     respirometry,

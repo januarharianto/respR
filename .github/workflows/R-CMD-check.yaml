@@ -40,7 +40,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      R_CHECK_FORCE_SUGGESTS: FALSE
+      #R_CHECK_FORCE_SUGGESTS: FALSE
 
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          dependencies: '"hard"'
+          #dependencies: '"hard"'
           extra-packages: any::rcmdcheck
           needs: check
 
