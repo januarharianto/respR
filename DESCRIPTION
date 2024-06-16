@@ -48,5 +48,4 @@ Suggests:
     FishResp,
     respirometry,
     testthat,
-    evaluate (<= 0.23),
     covr
