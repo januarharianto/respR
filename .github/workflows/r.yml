@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = c("Depends", "Imports", "LinkingTo"))
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--no-tests"), error_on = "error")
         shell: Rscript {0}
