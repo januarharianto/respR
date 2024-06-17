@@ -40,8 +40,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      R_CHECK_ARGS: '--no-tests --no-manual'
-      R_CHECK_FORCE_SUGGESTS: FALSE
+      _R_CHECK_ARGS_: '--no-tests --no-manual'
+      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v4
