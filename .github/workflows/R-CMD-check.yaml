@@ -42,7 +42,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
       CI: true
       #_R_CHECK_ARGS_: '--no-tests --no-manual'
-      #_R_CHECK_FORCE_SUGGESTS_: false
+      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v4
