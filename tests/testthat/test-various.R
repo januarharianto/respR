@@ -8,7 +8,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   skip("Extended function tests")
 
   # adjust_rate -------------------------------------------------------------

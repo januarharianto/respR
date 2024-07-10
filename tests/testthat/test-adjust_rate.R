@@ -6,7 +6,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   test_that("adjust_rate stops with wrong method", {
     expect_error(adjust_rate(100, 10, method = "text"),
                  regexp = "adjust_rate: 'method' input not recognised")

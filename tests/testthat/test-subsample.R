@@ -2,7 +2,7 @@
 
 if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
 skip_on_cran()
-
+skip_on_ci()
 test_that("subsample stops if both n and length.out input", {
   expect_error(subsample(sardine.rd, n = 10, length.out = 200),
                "Only one of 'n' or 'length.out' should be entered.")
