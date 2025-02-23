@@ -6,7 +6,7 @@ performed within the measure region."><meta property="og:image" content="https:/
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -28,7 +28,7 @@ performed within the measure region."><meta property="og:image" content="https:/
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -40,7 +40,7 @@ performed within the measure region."><meta property="og:image" content="https:/
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">---- Complete Workflows ----</li>
@@ -113,7 +113,7 @@ performed within the measure region."><meta property="og:image" content="https:/
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -124,9 +124,6 @@ performed within the measure region."><meta property="og:image" content="https:/
     </li>
     <li>
       <a href="../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../articles/refs.html">References</a>
@@ -165,14 +162,14 @@ performed within the measure region."><meta property="og:image" content="https:/
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -206,13 +203,15 @@ performed within the <code>measure</code> region.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>object of class <code>inspect</code> or <code>data.frame</code>. This is the timeseries of
 paired values of oxygen against time containing multiple replicates from
 which to calculate rates.</p></dd>
 
 
-<dt>starts</dt>
+<dt id="arg-starts">starts<a class="anchor" aria-label="anchor" href="#arg-starts"></a></dt>
 <dd><p>Numeric. Row locations or times (in the units of the data in
 <code>x</code>) of the start of each replicate. If a single value it indicates a
 regular interval in rows or time starting from row 1. If a vector, each
@@ -220,7 +219,7 @@ entry is the start row or time of an individual replicate. Use of rows or
 time is controlled via <code>by</code>.</p></dd>
 
 
-<dt>wait</dt>
+<dt id="arg-wait">wait<a class="anchor" aria-label="anchor" href="#arg-wait"></a></dt>
 <dd><p>Numeric. A row length or time duration to be applied at the start
 of each replicate to <em>exclude</em> these data from any rate calculations. Can
 be a single value to apply the same wait phase to each replicate, or a
@@ -228,7 +227,7 @@ vector of the same length as <code>starts</code> of different wait phases for ea
 replicate. Optional.</p></dd>
 
 
-<dt>measure</dt>
+<dt id="arg-measure">measure<a class="anchor" aria-label="anchor" href="#arg-measure"></a></dt>
 <dd><p>Numeric. A row length or time duration to be applied at the
 end of the <code>wait</code> phase (if used), and used to exclude the flush period.
 This is the region within which the <code>auto_rate</code> analysis is conducted for
@@ -238,45 +237,43 @@ measure phases for each replicate. Default is <code>NULL</code> in which case th
 entire replicate is used (which is rarely what is wanted).</p></dd>
 
 
-<dt>by</dt>
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>String. <code>"row"</code> or <code>"time"</code>. Controls how <code>starts</code>, <code>wait</code> and
 <code>measure</code> are applied. It also controls how the <code>width</code> is applied in the
 <code>auto_rate</code> analysis - see <code><a href="auto_rate.html">help("auto_rate")</a></code>. Default is <code>"row"</code>.</p></dd>
 
 
-<dt>method</dt>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>string. The <code>auto_rate</code> <code>method</code> to use. Default is <code>"linear"</code>.
 Others include <code>"lowest"</code> and <code>"highest"</code>. See <code><a href="auto_rate.html">help("auto_rate")</a></code> for
 descriptions and other methods.</p></dd>
 
 
-<dt>width</dt>
+<dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
 <dd><p>numeric. The <code>width</code> to use in the <code>auto_rate</code> analysis.
 Mandatory and should be entered in the correct units of the <code>by</code> input. See
 <code><a href="auto_rate.html">help("auto_rate")</a></code> and vignettes on website for how width affects
 analyses.</p></dd>
 
 
-<dt>n</dt>
+<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>integer. How many <code>auto_rate</code> results to return for each replicate.
 Default is <code>1</code>.</p></dd>
 
 
-<dt>plot</dt>
+<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
 <dd><p>logical. Default is <code>TRUE</code>. Plots the results. See 'Plotting'
 section for details.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Allows additional plotting controls to be passed, such as <code>type</code>,
 <code>pos</code>, <code>legend</code>, and <code>quiet</code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Output is a <code>list</code> object of class <code>auto_rate.int</code> containing a
+    <p>Output is a <code>list</code> object of class <code>auto_rate.int</code> containing a
 <code>auto_rate</code> object for each replicate in <code>$results</code>. The output also
 contains a <code>$summary</code> table which includes the full rate regression results
 from each replicate with replicate number indicated by the <code>$rep</code> column.
@@ -728,15 +725,15 @@ website at <a href="https://januarharianto.github.io/respR/">https://januarharia
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

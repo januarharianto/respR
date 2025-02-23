@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
 <script src="../../pkgdown.js"></script><link href="../../extra.css" rel="stylesheet">
 <meta property="og:title" content="Comparison of respR with other R packages">
-<meta property="og:description" content="respR">
-<meta property="og:image" content="https://januarharianto.github.io/respR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -50,7 +48,7 @@
 <li>
   <a href="../../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -62,7 +60,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -137,7 +135,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -149,9 +147,6 @@
     </li>
     <li>
       <a href="../../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../../articles/refs.html">References</a>
@@ -195,7 +190,7 @@
 <li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -206,7 +201,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -292,7 +287,7 @@ the same units, and because both functions rely on the unit standards
 package <code>marelac</code> they give identical or very similar
 results. Minor differences are probably dues to the precision with which
 variables are handled internally:</p>
-<p><img src="img/pkg_comp/pkg_comp01.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp01.png" width="700px" style="display: block; margin: auto;"></p>
 <p><code>respR</code> has a couple of minor advantages; the
 <code>respR</code> output is more informative, clearly stating the input
 and output units; and a “fuzzy” string matching algorithm is used to
@@ -324,8 +319,8 @@ several other systems. Here is typical code from each to do this. The
 example file and import code (slightly adapted) are taken from the
 <code>rMR</code> <a href="https://github.com/tyler-l-moulton/rMR" class="external-link">Github</a> repo and README
 file found there.</p>
-<p><img src="img/pkg_comp/pkg_comp02.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp03.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp02.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp03.png" width="700px" style="display: block; margin: auto;"></p>
 <p>These both appear to perform well, on this file at least. The
 resulting data frames are similar, containing all the relevant data,
 although <code>respR</code> adds a numeric <code>time</code> column,
@@ -377,11 +372,11 @@ manually specifying one or more regions over which to fit regressions.
 function, so here we will compare the results of each on the same data.
 Again, we use data included in <code>rMR</code> and code adapted from
 the documentation.</p>
-<p><img src="img/pkg_comp/pkg_comp04.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp05.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp06.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp07.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp08.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp04.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp05.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp06.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp07.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp08.png" width="700px" style="display: block; margin: auto;"></p>
 <p>As we can see the results are identical (in <code>respR</code> we
 chose to express rates as negatives because they represent a negative
 slope and depletion of O2). This is exactly what we would expect with
@@ -463,8 +458,8 @@ imported alongside them, and processed through several functions. The
 AutoResp file (from a 1-channel, intermittent-flow, swim tunnel
 experiment on an anchovy) did however import successfully and plot the
 data:</p>
-<p><img src="img/pkg_comp/pkg_comp09.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp10.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp09.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp10.png" width="700px" style="display: block; margin: auto;"></p>
 <p>We can’t compare the importing functionality of <code>FishResp</code>
 with <code>respR</code>, as we do not yet support direct importing of
 AutoResp files (this is planned, and currently they can easily be
@@ -496,15 +491,15 @@ clear way that we can see to accommodate these data in
 has already been imported and prepared in various ways, and the code is
 mostly taken from the documentation. We will use these data to compare
 the outputs of <code>FishResp</code> to <code>respR</code>.</p>
-<p><img src="img/pkg_comp/pkg_comp11.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp11.png" width="700px" style="display: block; margin: auto;"></p>
 <p>Now the <code>respR</code> analysis of the same data (though only a
 single channel), using the same inputs. We use regular R data selection
 syntax to extract rates from multiple even-spaced data regions (here
 spaced at every 1200 rows).</p>
-<p><img src="img/pkg_comp/pkg_comp12.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp13.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp14.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp15.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp12.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp13.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp14.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fpkg_comp%2Fpkg_comp15.png" width="700px" style="display: block; margin: auto;"></p>
 <p>As we can see the rates calculated by both packages are identical. As
 with <code>rMR</code>, this is exactly what we would expect as we are
 manually selecting the same data regions and user underlying R code to
@@ -647,9 +642,7 @@ package which has a similar purpose <a href="https://januarharianto.github.io/re
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -662,16 +655,16 @@ package which has a similar purpose <a href="https://januarharianto.github.io/re
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
 <script src="../../pkgdown.js"></script><link href="../../extra.css" rel="stylesheet">
 <meta property="og:title" content="auto_rate: Performance in detecting linear regions">
-<meta property="og:description" content="respR">
-<meta property="og:image" content="https://januarharianto.github.io/respR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -50,7 +48,7 @@
 <li>
   <a href="../../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -62,7 +60,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -137,7 +135,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -149,9 +147,6 @@
     </li>
     <li>
       <a href="../../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../../articles/refs.html">References</a>
@@ -195,7 +190,7 @@
 <li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -206,7 +201,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -306,7 +301,7 @@ linear segment with a randomly-generated slope computed using
 mimic common respirometry data whereby the initial sections of the data
 are often non-linear. Here we show 25 randomly-generated plots created
 by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf01.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf01.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data"></a>
@@ -326,7 +321,7 @@ need to omit the initial non-linear segment, ignore the dip, and then
 pick the longer of the 2 remaining linear segments that are separated by
 the dip. Here we show 25 randomly-generated plots created by the
 <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf02.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf02.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="segmented-data">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data"></a>
@@ -334,15 +329,17 @@ the dip. Here we show 25 randomly-generated plots created by the
 <p><code>sim_data(type = "segmented")</code></p>
 <p>Same as <code>"default"</code>, but the data is modified to contain
 two linear segments. The slope of the second linear segment is randomly
-chosen at approximately 0.5<span class="math inline">\(\times\)</span>
-to 0.6<span class="math inline">\(\times\)</span> of the first linear
-segment (i.e the slope is always a magnitude smaller than the first
-linear segment).</p>
+chosen at approximately
+0.5<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+to
+0.6<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+of the first linear segment (i.e the slope is always a magnitude smaller
+than the first linear segment).</p>
 <p>Thus, to detect the correct linear segment, <code>auto_rate</code>
 would need to correctly omit the initial non-linear segment, and also,
 ignore the end segment of the data as it has a different slope. Here we
 show 25 randomly-generated plots created by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf03.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf03.png" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -354,28 +351,42 @@ the linear detection technique (<code>method = "linear"</code>)
 iteratively and extracts specific output parameter for analysis. The
 parameters include:</p>
 <ol style="list-style-type: decimal">
-<li>The length of the true segment (<span class="math inline">\(len_t\)</span>);</li>
-<li>The length of the detected segment that is correctly sampled (<span class="math inline">\(len_c\)</span>). Here, we also call such data
-“true”;</li>
+<li>The length of the true segment
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">len_t</annotation></semantics></math>);</li>
+<li>The length of the detected segment that is correctly sampled
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">len_c</annotation></semantics></math>).
+Here, we also call such data “true”;</li>
 <li>The length of the detected segment that is <em>incorrectly</em>
-sampled (<span class="math inline">\(len_i\)</span>). Here, we also call
-such data “other”;</li>
-<li>The slope of the true segment (<span class="math inline">\(\beta_{true}\)</span>, or true rate); and</li>
-<li>The slope of the detected segment (<span class="math inline">\(\beta_{detected}\)</span>, or detected rate).</li>
+sampled
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">len_i</annotation></semantics></math>).
+Here, we also call such data “other”;</li>
+<li>The slope of the true segment
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>,
+or true rate); and</li>
+<li>The slope of the detected segment
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>,
+or detected rate).</li>
 </ol>
 <p>From the above data, we can generate four kinds of performance
 metrics for visualisation:</p>
 <ol style="list-style-type: decimal">
 <li>A density plot of the proportion of the linear segment correctly
-identified. Each data point is a measure of <span class="math inline">\({len_c}\div{len_t}\)</span>.</li>
+identified. Each data point is a measure of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>c</mi></msub></mrow><mo>÷</mo><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>t</mi></msub></mrow></mrow><annotation encoding="application/x-tex">{len_c}\div{len_t}</annotation></semantics></math>.</li>
 <li>A density plot of the proportion of incorrectly-sampled data. Each
-data point is a measure of <span class="math inline">\({len_i}\div{len_c}\)</span>.</li>
+data point is a measure of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub></mrow><mo>÷</mo><mrow><mi>l</mi><mi>e</mi><msub><mi>n</mi><mi>c</mi></msub></mrow></mrow><annotation encoding="application/x-tex">{len_i}\div{len_c}</annotation></semantics></math>.</li>
 <li>A linear regression plot, where each data point is a measure of of
-<span class="math inline">\(\beta_{detected}\)</span> (y) as a function
-of <span class="math inline">\(\beta_{true}\)</span> (x);</li>
-<li>An x-y plot of the deviation between <span class="math inline">\(\beta_{detected}\)</span> and <span class="math inline">\(\beta_{true}\)</span>. Each data point is a
-measure of <span class="math inline">\(\beta_{true} -
-\beta_{detected}\)</span>.</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+(y) as a function of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+(x);</li>
+<li>An x-y plot of the deviation between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>.
+Each data point is a measure of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><mo>−</mo><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\beta_{true} - \beta_{detected}</annotation></semantics></math>.</li>
 </ol>
 <p>We performed <code><a href="../../reference/test_lin.html">test_lin()</a></code> with 1,000 iterations, for all
 of the three kinds of data produced by <code><a href="../../reference/sim_data.html">sim_data()</a></code>
@@ -448,25 +459,37 @@ it!</p>
 <strong>(A)</strong> <code>auto_rate</code> correctly detected a large
 proportion of the true segment in general, and <strong>(B)</strong>
 incorrectly sampled only a small amount of other data.
-<strong>(C)</strong> Comparison of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> showed very stable detection
-across all slopes, even when slope values approached zero. This was
-evident in <strong>(D)</strong> where roughly, the maximum <span class="math inline">\(\beta_{detected}\)</span> values had <span class="math inline">\(\pm 0.004\)</span> deviation from the <span class="math inline">\(\beta_{detected}\)</span> values across all values
-of <span class="math inline">\(\pm 0.06\)</span>, even for values close
-to zero:</p>
+<strong>(C)</strong> Comparison of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+showed very stable detection across all slopes, even when slope values
+approached zero. This was evident in <strong>(D)</strong> where roughly,
+the maximum
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+values had
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>0.004</mn></mrow><annotation encoding="application/x-tex">\pm 0.004</annotation></semantics></math>
+deviation from the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+values across all values of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>±</mi><mn>0.06</mn></mrow><annotation encoding="application/x-tex">\pm 0.06</annotation></semantics></math>,
+even for values close to zero:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf04.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf04.png" style="display: block; margin: auto;"></p>
 <p>Tests on larger sample data sizes of 200 and 500 revealed that
 <code>auto_rate</code> performed better when provided with bigger data.
 When used on data with 500 samples, <code>auto_rate</code> generally
 <strong>(A)</strong> detected a larger proportion of the true data and
 <strong>(B)</strong> was less prone to sampling incorrect portions of
-the data. <strong>(C)</strong> Linear regression had a <span class="math inline">\(R^2\)</span> of 0.999, and <strong>(D)</strong>
-deviation was 10<span class="math inline">\(\times\)</span> smaller than
-when sample size was at 100:</p>
+the data. <strong>(C)</strong> Linear regression had a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+of 0.999, and <strong>(D)</strong> deviation was
+10<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>×</mi><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+smaller than when sample size was at 100:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf05.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf05.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data-1">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data-1"></a>
@@ -475,28 +498,39 @@ when sample size was at 100:</p>
 tendency to under-sample the linear segment. As this particular type of
 data consisted of two linear segments separated by a “dip”, the function
 also sometimes <strong>(A)</strong> detected the shorter segment as the
-top-ranked result, resulting in the correct estimate of <span class="math inline">\(\beta_{true}\)</span>, but the wrong linear
-segment detected. Thus, the function may incorrectly sample none of the
-linear segment <strong>(B)</strong>, but only rarely; in most cases, it
-still identified the right segment, and incorrectly sampled only a small
-amount of data. <strong>(C)</strong> Comparison of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> showed stable, but
-relatively noisy detection of the true rate across all slopes when
-compared to its performance with “default”-type data.
+top-ranked result, resulting in the correct estimate of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>,
+but the wrong linear segment detected. Thus, the function may
+incorrectly sample none of the linear segment <strong>(B)</strong>, but
+only rarely; in most cases, it still identified the right segment, and
+incorrectly sampled only a small amount of data. <strong>(C)</strong>
+Comparison of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+showed stable, but relatively noisy detection of the true rate across
+all slopes when compared to its performance with “default”-type data.
 <strong>(D)</strong> The deviation plot showed that performance was
 genrally poorer at values close to zero.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf06.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf06.png" style="display: block; margin: auto;"></p>
 <p>Again, <code>auto_rate</code> performed better when provided with
 bigger data. At 500 samples the same issue where the shorter linear
 segment was incorrectly selected still persisted <strong>(A)</strong>,
 but <strong>(B)</strong> the function sampled incorrect segments less
-often, <strong>(C)</strong> linear regression of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> had a better goodness of fit
-and <strong>(D)</strong> deviation values from <span class="math inline">\(\beta_{true}\)</span> were substantially smaller
-with seemingly fewer poor estimates when slope values approach zero.</p>
+often, <strong>(C)</strong> linear regression of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+had a better goodness of fit and <strong>(D)</strong> deviation values
+from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+were substantially smaller with seemingly fewer poor estimates when
+slope values approach zero.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf07.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf07.png" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="segmented-data-1">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data-1"></a>
@@ -510,24 +544,33 @@ others. In the majority of cases, <strong>(A)</strong> when it managed
 to sample the linear segment, it did so for a very large fraction of the
 data. <strong>(B)</strong> It performed less well at avoiding incorrect
 sampling, since it sometimes selected the other linear segment. However,
-<strong>(C)</strong> the plot of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> showed that it still
-performed surprisingly well most of the time, despite the errors, and
-<strong>(D)</strong> the deviance from the true rate appeared to be
-poorer when slope values are closer to zero.</p>
+<strong>(C)</strong> the plot of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+showed that it still performed surprisingly well most of the time,
+despite the errors, and <strong>(D)</strong> the deviance from the true
+rate appeared to be poorer when slope values are closer to zero.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf08.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf08.png" style="display: block; margin: auto;"></p>
 <p>Again, with a larger dataset, <code>auto_rate</code>’s performance
 was substantially better. With a 500-sample dataset, many of the issues
 that occured in the previous test were better resolved. The function
 <strong>(A)</strong> correctly sampled the right segment most of the
 time, and rarely sampled other data or the other linear segment
-<strong>(B)</strong>. <strong>(C)</strong> Linear regression of <span class="math inline">\(\beta_{detected}\)</span> against <span class="math inline">\(\beta_{true}\)</span> had a <span class="math inline">\(R^2\)</span> of 0.999, and <strong>(D)</strong>
-deviations from <span class="math inline">\(\beta_{true}\)</span> were
-much smaller in magnitude.</p>
+<strong>(B)</strong>. <strong>(C)</strong> Linear regression of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>d</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{detected}</annotation></semantics></math>
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+had a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+of 0.999, and <strong>(D)</strong> deviations from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{true}</annotation></semantics></math>
+were much smaller in magnitude.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf09.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_perf%2Farperf09.png" style="display: block; margin: auto;"></p>
 <p>We did not report any of the results for 200-sample size datasets,
 but users are free to call the data object <code>test_lin_data</code>
 and plot the results, or run their own analyses using the functions we
@@ -571,9 +614,7 @@ jeb.148775-jeb.148775. <a href="http://doi.org/10.1242/jeb.148775" class="extern
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -586,16 +627,16 @@ jeb.148775-jeb.148775. <a href="http://doi.org/10.1242/jeb.148775" class="extern
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

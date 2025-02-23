@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Intermittent-flow respirometry: Long experiment">
-<meta property="og:description" content="respR">
-<meta property="og:image" content="https://januarharianto.github.io/respR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -50,7 +48,7 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -62,7 +60,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -137,7 +135,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -149,9 +147,6 @@
     </li>
     <li>
       <a href="../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../articles/refs.html">References</a>
@@ -195,7 +190,7 @@
 <li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -206,7 +201,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -513,19 +508,18 @@ also have done this when we first subset and inspected the data <a href="#mmrsub
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Highest Rate ===</span></span>
-<span><span class="co">#&gt;        rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
-<span><span class="co">#&gt;      &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;  &lt;lgcl&gt; &lt;int&gt;  &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt;   1:    NA     1         43.3 -0.00719 0.984      NA    10    129  5188    5307  5.96   5.14 -0.00719</span></span>
-<span><span class="co">#&gt;   2:    NA     2         43.2 -0.00718 0.984      NA     9    128  5187    5306  5.98   5.11 -0.00718</span></span>
-<span><span class="co">#&gt;   3:    NA     3         43.2 -0.00718 0.984      NA    11    130  5189    5308  6.04   5.17 -0.00718</span></span>
-<span><span class="co">#&gt;   4:    NA     4         43.2 -0.00717 0.984      NA    14    133  5192    5311  5.93   5.07 -0.00717</span></span>
-<span><span class="co">#&gt;   5:    NA     5         43.2 -0.00717 0.984      NA    15    134  5193    5312  5.94   5.14 -0.00717</span></span>
-<span><span class="co">#&gt;  ---                                                                                                 </span></span>
-<span><span class="co">#&gt; 419:    NA   419         31.7 -0.00505 0.971      NA   420    539  5598    5717  3.41   2.84 -0.00505</span></span>
-<span><span class="co">#&gt; 420:    NA   420         31.7 -0.00505 0.971      NA   419    538  5597    5716  3.37   2.79 -0.00505</span></span>
-<span><span class="co">#&gt; 421:    NA   421         31.6 -0.00503 0.971      NA   423    542  5601    5720  3.37   2.79 -0.00503</span></span>
-<span><span class="co">#&gt; 422:    NA   422         31.6 -0.00503 0.971      NA   421    540  5599    5718  3.44   2.84 -0.00503</span></span>
-<span><span class="co">#&gt; 423:    NA   423         31.6 -0.00503 0.971      NA   422    541  5600    5719  3.39   2.77 -0.00503</span></span>
+<span><span class="co">#&gt;      rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
+<span><span class="co">#&gt;   1:  NA    1         43.3 -0.00719 0.984      NA  10    129 5188    5307 5.96   5.14 -0.00719</span></span>
+<span><span class="co">#&gt;   2:  NA    2         43.2 -0.00718 0.984      NA   9    128 5187    5306 5.98   5.11 -0.00718</span></span>
+<span><span class="co">#&gt;   3:  NA    3         43.2 -0.00718 0.984      NA  11    130 5189    5308 6.04   5.17 -0.00718</span></span>
+<span><span class="co">#&gt;   4:  NA    4         43.2 -0.00717 0.984      NA  14    133 5192    5311 5.93   5.07 -0.00717</span></span>
+<span><span class="co">#&gt;   5:  NA    5         43.2 -0.00717 0.984      NA  15    134 5193    5312 5.94   5.14 -0.00717</span></span>
+<span><span class="co">#&gt;  ---                                                                                          </span></span>
+<span><span class="co">#&gt; 419:  NA  419         31.7 -0.00505 0.971      NA 420    539 5598    5717 3.41   2.84 -0.00505</span></span>
+<span><span class="co">#&gt; 420:  NA  420         31.7 -0.00505 0.971      NA 419    538 5597    5716 3.37   2.79 -0.00505</span></span>
+<span><span class="co">#&gt; 421:  NA  421         31.6 -0.00503 0.971      NA 423    542 5601    5720 3.37   2.79 -0.00503</span></span>
+<span><span class="co">#&gt; 422:  NA  422         31.6 -0.00503 0.971      NA 421    540 5599    5718 3.44   2.84 -0.00503</span></span>
+<span><span class="co">#&gt; 423:  NA  423         31.6 -0.00503 0.971      NA 422    541 5600    5719 3.39   2.77 -0.00503</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 423 | Results : 423 | Method : highest | Roll width : 120 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
@@ -554,15 +548,14 @@ minutes.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Kernel Density Rank ===</span></span>
-<span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA     1         36.3 -0.00588 0.996    1199   122    450  5300    5628  5.20   3.27 -0.00588</span></span>
-<span><span class="co">#&gt; 2:    NA     2         32.0 -0.00511 0.981     644   394    541  5572    5719  3.56   2.77 -0.00511</span></span>
-<span><span class="co">#&gt; 3:    NA     3         37.6 -0.00612 0.991     425   102    304  5280    5482  5.35   4.10 -0.00612</span></span>
-<span><span class="co">#&gt; 4:    NA     4         37.6 -0.00612 0.991     420   101    304  5279    5482  5.31   4.10 -0.00612</span></span>
-<span><span class="co">#&gt; 5:    NA     5         42.9 -0.00711 0.979     417     4    111  5182    5289  6.04   5.22 -0.00711</span></span>
-<span><span class="co">#&gt; 6:    NA     6         41.1 -0.00678 0.985     412    52    184  5230    5362  5.63   4.84 -0.00678</span></span>
-<span><span class="co">#&gt; 7:    NA     7         36.7 -0.00595 0.986     405   305    451  5483    5629  4.15   3.19 -0.00595</span></span>
+<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
+<span><span class="co">#&gt; 1:  NA    1         36.3 -0.00588 0.996    1199 122    450 5300    5628 5.20   3.27 -0.00588</span></span>
+<span><span class="co">#&gt; 2:  NA    2         32.0 -0.00511 0.981     644 394    541 5572    5719 3.56   2.77 -0.00511</span></span>
+<span><span class="co">#&gt; 3:  NA    3         37.6 -0.00612 0.991     425 102    304 5280    5482 5.35   4.10 -0.00612</span></span>
+<span><span class="co">#&gt; 4:  NA    4         37.6 -0.00612 0.991     420 101    304 5279    5482 5.31   4.10 -0.00612</span></span>
+<span><span class="co">#&gt; 5:  NA    5         42.9 -0.00711 0.979     417   4    111 5182    5289 6.04   5.22 -0.00711</span></span>
+<span><span class="co">#&gt; 6:  NA    6         41.1 -0.00678 0.985     412  52    184 5230    5362 5.63   4.84 -0.00678</span></span>
+<span><span class="co">#&gt; 7:  NA    7         36.7 -0.00595 0.986     405 305    451 5483    5629 4.15   3.19 -0.00595</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 435 | Results : 7 | Method : linear | Roll width : 108 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -584,9 +577,9 @@ sustained MMR. In which case perhaps one of the other results is better
 reported. Or maybe we could report an average of some of the rates, such
 as the top three. The important thing is to apply these selection
 criteria consistently and report them alongside results.</p>
-<div class="section level5">
-<h5 id="width">Changing the <code>width</code><a class="anchor" aria-label="anchor" href="#width"></a>
-</h5>
+<div class="section level4">
+<h4 id="width">Changing the <code>width</code><a class="anchor" aria-label="anchor" href="#width"></a>
+</h4>
 <p>These are all valid options, as long as they are reported. However,
 we can also change the analysis parameters. The <code>width</code> input
 in <code>auto_rate</code> determines the width of the rolling
@@ -611,14 +604,13 @@ rolling regressions to determine MMR.</p>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; === Summary of Results by Kernel Density Rank ===</span></span>
-<span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA     1         36.2 -0.00586 0.996    4258   146    447  5324    5625  5.03   3.30 -0.00586</span></span>
-<span><span class="co">#&gt; 2:    NA     2         34.6 -0.00556 0.993    1231   260    517  5438    5695  4.33   2.93 -0.00556</span></span>
-<span><span class="co">#&gt; 3:    NA     3         36.6 -0.00592 0.993     963   119    363  5297    5541  5.21   3.75 -0.00592</span></span>
-<span><span class="co">#&gt; 4:    NA     4         34.6 -0.00557 0.993     900   259    514  5437    5692  4.36   2.96 -0.00557</span></span>
-<span><span class="co">#&gt; 5:    NA     5         39.3 -0.00642 0.994     738    31    277  5209    5455  5.86   4.21 -0.00642</span></span>
-<span><span class="co">#&gt; 6:    NA     6         38.5 -0.00629 0.993     731    55    296  5233    5474  5.65   4.10 -0.00629</span></span>
+<span><span class="co">#&gt;    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy     rate</span></span>
+<span><span class="co">#&gt; 1:  NA    1         36.2 -0.00586 0.996    4258 146    447 5324    5625 5.03   3.30 -0.00586</span></span>
+<span><span class="co">#&gt; 2:  NA    2         34.6 -0.00556 0.993    1231 260    517 5438    5695 4.33   2.93 -0.00556</span></span>
+<span><span class="co">#&gt; 3:  NA    3         36.6 -0.00592 0.993     963 119    363 5297    5541 5.21   3.75 -0.00592</span></span>
+<span><span class="co">#&gt; 4:  NA    4         34.6 -0.00557 0.993     900 259    514 5437    5692 4.36   2.96 -0.00557</span></span>
+<span><span class="co">#&gt; 5:  NA    5         39.3 -0.00642 0.994     738  31    277 5209    5455 5.86   4.21 -0.00642</span></span>
+<span><span class="co">#&gt; 6:  NA    6         38.5 -0.00629 0.993     731  55    296 5233    5474 5.65   4.10 -0.00629</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions : 272 | Results : 6 | Method : linear | Roll width : 271 | Roll type : row </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
@@ -1421,9 +1413,7 @@ most analyses use of <code>calc_rate.int</code> or
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -1436,16 +1426,16 @@ most analyses use of <code>calc_rate.int</code> or
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

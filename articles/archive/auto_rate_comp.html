@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
 <script src="../../pkgdown.js"></script><link href="../../extra.css" rel="stylesheet">
 <meta property="og:title" content="auto_rate: Comparisons with LoLinR">
-<meta property="og:description" content="respR">
-<meta property="og:image" content="https://januarharianto.github.io/respR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -50,7 +48,7 @@
 <li>
   <a href="../../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -62,7 +60,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -137,7 +135,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -149,9 +147,6 @@
     </li>
     <li>
       <a href="../../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../../articles/refs.html">References</a>
@@ -195,7 +190,7 @@
 <li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -206,7 +201,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -280,7 +275,7 @@ section below).</p>
 <code>rankLocReg()</code>. The time it takes this function to process
 data follows an exponential relationship with its length, illustrated
 below:</p>
-<p><img src="img/auto_rate_comp/lolinr_times.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Flolinr_times.png" width="700px" style="display: block; margin: auto;"></p>
 <p><code>rankLocReg()</code> was run on different sized datasets (blue
 dots) and the time to completion recorded. These analyses were run in
 RStudio on the same dataset subset to the appropriate length, on a 2017
@@ -339,19 +334,19 @@ linear region.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">769</span><span class="op">)</span></span>
 <span><span class="va">sim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sim_data.html">sim_data</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_comp/arcomp01.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp01.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## respR:</span></span>
 <span><span class="va">rspr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sim1</span><span class="op">$</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 7 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp02.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp02.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lir1</span> <span class="op">&lt;-</span> <span class="fu">rankLocReg</span><span class="op">(</span>xall <span class="op">=</span> <span class="va">sim1</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">x</span>, yall <span class="op">=</span> <span class="va">sim1</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">y</span>, <span class="fl">0.2</span>, method <span class="op">=</span> <span class="st">'pc'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lir1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; rankLocReg fitted 7260 local regressions.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp03.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp03.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: -0.0162</span></span>
@@ -368,19 +363,19 @@ linear region.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">112</span><span class="op">)</span></span>
 <span><span class="va">sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sim_data.html">sim_data</a></span><span class="op">(</span><span class="fl">150</span>, type <span class="op">=</span> <span class="st">"corrupted"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_comp/arcomp04.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp04.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## respR:</span></span>
 <span><span class="va">rspr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sim2</span><span class="op">$</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 31 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp05.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp05.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lir2</span> <span class="op">&lt;-</span> <span class="fu">rankLocReg</span><span class="op">(</span>xall <span class="op">=</span> <span class="va">sim2</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">x</span>, yall <span class="op">=</span> <span class="va">sim2</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">y</span>, <span class="fl">0.2</span>, <span class="st">"pc"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lir2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; rankLocReg fitted 7260 local regressions.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp06.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp06.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: -0.0227</span></span>
@@ -397,19 +392,19 @@ linear region.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">546</span><span class="op">)</span></span>
 <span><span class="va">sim3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sim_data.html">sim_data</a></span><span class="op">(</span><span class="fl">150</span>, type <span class="op">=</span> <span class="st">"segmented"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_comp/arcomp07.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp07.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## respR:</span></span>
 <span><span class="va">rspr3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sim3</span><span class="op">$</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 6 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp08.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp08.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lir3</span> <span class="op">&lt;-</span> <span class="fu">rankLocReg</span><span class="op">(</span>xall <span class="op">=</span> <span class="va">sim3</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">x</span>, yall <span class="op">=</span> <span class="va">sim3</span><span class="op">$</span><span class="va">df</span><span class="op">$</span><span class="va">y</span>, <span class="fl">0.2</span>, <span class="st">"pc"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lir3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; rankLocReg fitted 7260 local regressions.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp09.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp09.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: -0.0402</span></span>
@@ -430,13 +425,13 @@ linear region.</p>
 <span><span class="va">respr_urchindata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">Urch1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 4 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp10.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp10.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lolinr_urchindata</span>  <span class="op">&lt;-</span>  <span class="fu">rankLocReg</span><span class="op">(</span>xall<span class="op">=</span><span class="va">UrchinData</span><span class="op">$</span><span class="va">time</span>, yall<span class="op">=</span><span class="va">UrchinData</span><span class="op">$</span><span class="va">C</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, method<span class="op">=</span><span class="st">"z"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lolinr_urchindata</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; rankLocReg fitted 8911 local regressions.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp11.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp11.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: -0.1363</span></span>
@@ -455,7 +450,7 @@ linear region.</p>
 <span><span class="va">rcor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">CormorantData</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 43 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp12.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp12.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lcor</span>  <span class="op">&lt;-</span>  <span class="fu">thinData</span><span class="op">(</span><span class="va">CormorantData</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">CormorantData</span><span class="op">)</span><span class="op">/</span><span class="fl">150</span><span class="op">)</span><span class="op">$</span><span class="va">newData1</span> <span class="co"># thin data</span></span>
@@ -463,7 +458,7 @@ linear region.</p>
 <span>  method<span class="op">=</span><span class="st">"eq"</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">lcoregs</span>  <span class="op">&lt;-</span>  <span class="fu">reRank</span><span class="op">(</span><span class="va">lcoregs</span>, newMethod<span class="op">=</span><span class="st">'pc'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lcoregs</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_comp/arcomp13.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp13.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: 1.16313</span></span>
@@ -482,7 +477,7 @@ linear region.</p>
 <span><span class="va">rsquid</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">squid.rd</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 32 kernel density peaks detected and ranked.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp14.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp14.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## LoLinR:</span></span>
 <span><span class="va">lsquid</span> <span class="op">&lt;-</span> <span class="fu">thinData</span><span class="op">(</span><span class="va">squid.rd</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">squid.rd</span><span class="op">)</span><span class="op">/</span><span class="fl">150</span><span class="op">)</span><span class="op">$</span><span class="va">newData1</span></span>
@@ -490,7 +485,7 @@ linear region.</p>
 <span>  method<span class="op">=</span><span class="st">"eq"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lsquidregs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; rankLocReg fitted 7260 local regressions.</span></span></code></pre>
-<p><img src="img/auto_rate_comp/arcomp15.png" style="display: block; margin: auto;"></p>
+<p><img src="img%2Fauto_rate_comp%2Farcomp15.png" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; Compare top ranked outputs</span></span></code></pre>
 <pre><code><span><span class="co">#&gt; respR</span></span>
 <span><span class="co">#&gt; Rate: -0.00030151</span></span>
@@ -557,9 +552,7 @@ jeb.148775-jeb.148775. <a href="doi:10.1242/jeb.148775" class="uri">doi:10.1242/
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -572,16 +565,16 @@ jeb.148775-jeb.148775. <a href="doi:10.1242/jeb.148775" class="uri">doi:10.1242/
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

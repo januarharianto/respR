@@ -6,7 +6,7 @@ replicate, for example a specific time range or row range."><meta property="og:i
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -28,7 +28,7 @@ replicate, for example a specific time range or row range."><meta property="og:i
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -40,7 +40,7 @@ replicate, for example a specific time range or row range."><meta property="og:i
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">---- Complete Workflows ----</li>
@@ -113,7 +113,7 @@ replicate, for example a specific time range or row range."><meta property="og:i
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -124,9 +124,6 @@ replicate, for example a specific time range or row range."><meta property="og:i
     </li>
     <li>
       <a href="../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../articles/refs.html">References</a>
@@ -165,14 +162,14 @@ replicate, for example a specific time range or row range."><meta property="og:i
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -203,13 +200,15 @@ replicate, for example a specific time range or row range.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Object of class <code>inspect</code> or <code>data.frame</code>. This is the timeseries of
 paired values of oxygen against time containing multiple replicates from
 which to calculate rates.</p></dd>
 
 
-<dt>starts</dt>
+<dt id="arg-starts">starts<a class="anchor" aria-label="anchor" href="#arg-starts"></a></dt>
 <dd><p>Integer(s). Row locations or times of the start of each
 replicate. A single value input indicates a regular interval in rows or
 time units starting at the first row of the data in <code>x</code>. If replicates do
@@ -219,38 +218,36 @@ row preceding the start of the next replicate, or for the final replicate
 the final row of the dataset.</p></dd>
 
 
-<dt>wait</dt>
+<dt id="arg-wait">wait<a class="anchor" aria-label="anchor" href="#arg-wait"></a></dt>
 <dd><p>Numeric. Rows or time period to exclude at the start of each
 replicate. Default is <code>NULL</code> in which case no wait phase is applied. See
 Details.</p></dd>
 
 
-<dt>measure</dt>
+<dt id="arg-measure">measure<a class="anchor" aria-label="anchor" href="#arg-measure"></a></dt>
 <dd><p>Numeric. Rows or time period over which to calculate rate in
 each replicate. Applied directly after <code>wait</code> phase. Default is <code>NULL</code> in
 which case the entire replicate is used. See Details.</p></dd>
 
 
-<dt>by</dt>
+<dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
 <dd><p>String. <code>"row"</code> or <code>"time"</code>. Defaults to <code>"row"</code>. Method by which
 <code>starts</code>, <code>wait</code> and <code>measure</code> are applied.</p></dd>
 
 
-<dt>plot</dt>
+<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
 <dd><p>Logical. Default is <code>TRUE</code>. Plots the results. See 'Plotting'
 section for details.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Allows additional plotting controls to be passed, such as <code>type</code>,
 <code>pos</code>, <code>legend</code>, and <code>quiet</code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>Output is a <code>list</code> object of class <code>calc_rate.int</code> containing a
+    <p>Output is a <code>list</code> object of class <code>calc_rate.int</code> containing a
 <code>calc_rate</code> object for each replicate in <code>$results</code>. The output also
 contains a <code>$summary</code> table which includes the full rate regression results
 from each replicate with replicate number indicated by the <code>$rep</code> column.
@@ -628,15 +625,15 @@ website at <a href="https://januarharianto.github.io/respR/">https://januarharia
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

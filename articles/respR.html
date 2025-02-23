@@ -19,15 +19,13 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Getting Started">
-<meta property="og:description" content="respR">
-<meta property="og:image" content="https://januarharianto.github.io/respR/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -50,7 +48,7 @@
 <li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
   </a>
 </li>
 <li>
@@ -62,7 +60,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -137,7 +135,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     More
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -149,9 +147,6 @@
     </li>
     <li>
       <a href="../articles/citations.html">respR Citations</a>
-    </li>
-    <li>
-      <a href="../articles/future.html">Future Features</a>
     </li>
     <li>
       <a href="../articles/refs.html">References</a>
@@ -195,7 +190,7 @@
 <li>
   <a href="https://github.com/januarharianto/respr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -206,7 +201,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -240,12 +235,15 @@ intervals, or a two-point measurement consisting of the initial and
 final concentrations. Metabolic rates are estimated from the oxygen
 timeseries by fitting a linear regression of oxygen against time to all
 or part of the data. Estimates of metabolic rate are made using the
-equation: <span class="math display">\[VO_2 = \dot O_2V\]</span> where
-<span class="math inline">\(\dot O_2\)</span> is the slope of the
-regression that describes the rate of change in oxygen against time, or
-in the case of a two-point measurement the difference in oxygen divided
-by the time elapsed, and <span class="math inline">\(V\)</span> is the
-volume of fluid in the container (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Lighton
+equation:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><msub><mi>O</mi><mn>2</mn></msub><mo>=</mo><msub><mover><mi>O</mi><mo accent="true">̇</mo></mover><mn>2</mn></msub><mi>V</mi></mrow><annotation encoding="application/x-tex">VO_2 = \dot O_2V</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>O</mi><mo accent="true">̇</mo></mover><mn>2</mn></msub><annotation encoding="application/x-tex">\dot O_2</annotation></semantics></math>
+is the slope of the regression that describes the rate of change in
+oxygen against time, or in the case of a two-point measurement the
+difference in oxygen divided by the time elapsed, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math>
+is the volume of fluid in the container (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Lighton
 2008</a>).</p>
 <p>In <strong>intermittent flow</strong> respirometry, oxygen is
 measured as described above, but the chamber is periodically flushed
@@ -266,12 +264,17 @@ regulated flow of air or water through it at a precisely determined
 flowrate. After equilibrium has been reached, the oxygen concentration
 differential (or ‘oxygen delta’) between the inflowing and outflowing
 water, along with the flowrate, allows calculation of the oxygen
-extracted from the flow volume per unit time: <span class="math display">\[\dot{V}O_2 = (C_iO_2 - C_eO_2)FR\]</span> where
-<span class="math inline">\(\dot{V}O_2\)</span> is the rate of oxygen
-consumption over time, <span class="math inline">\(C_iO_2\)</span> and
-<span class="math inline">\(C_eO_2\)</span> are the inflow and outflow
-oxygen concentrations, and <span class="math inline">\(FR\)</span> is
-the flow rate through the system (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Lighton
+extracted from the flow volume per unit time:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">̇</mo></mover><msub><mi>O</mi><mn>2</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>C</mi><mi>i</mi></msub><msub><mi>O</mi><mn>2</mn></msub><mo>−</mo><msub><mi>C</mi><mi>e</mi></msub><msub><mi>O</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>F</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\dot{V}O_2 = (C_iO_2 - C_eO_2)FR</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">̇</mo></mover><msub><mi>O</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\dot{V}O_2</annotation></semantics></math>
+is the rate of oxygen consumption over time,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub><msub><mi>O</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">C_iO_2</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>e</mi></msub><msub><mi>O</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">C_eO_2</annotation></semantics></math>
+are the inflow and outflow oxygen concentrations, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">FR</annotation></semantics></math>
+is the flow rate through the system (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Lighton
 2008</a>).</p>
 <p>A final method is <strong>open tank</strong> or <strong>open
 arena</strong> respirometry, in which a tank or semi-enclosed area open
@@ -281,10 +284,14 @@ to oxygen consumption of the specimens (<a href="https://januarharianto.github.i
 et al. 1999</a>). It is seldom used, but for some applications it is a
 sufficient and practical methodology (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Gamble
 et al. 2014</a>). The common equation used for open respirometry is:
-<span class="math display">\[\dot{V}O_2 = \dot O_2V + \phi_d\]</span>
-where <span class="math inline">\(\dot O_2V\)</span> is the slope of the
-regression of oxygen against time, <span class="math inline">\(V\)</span> is the volume of the arena, and <span class="math inline">\(\phi_d\)</span> is the oxygen flux at the surface
-as determined by Fick’s Law (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Leclercq
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">̇</mo></mover><msub><mi>O</mi><mn>2</mn></msub><mo>=</mo><msub><mover><mi>O</mi><mo accent="true">̇</mo></mover><mn>2</mn></msub><mi>V</mi><mo>+</mo><msub><mi>ϕ</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">\dot{V}O_2 = \dot O_2V + \phi_d</annotation></semantics></math>
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>O</mi><mo accent="true">̇</mo></mover><mn>2</mn></msub><mi>V</mi></mrow><annotation encoding="application/x-tex">\dot O_2V</annotation></semantics></math>
+is the slope of the regression of oxygen against time,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math>
+is the volume of the arena, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ϕ</mi><mi>d</mi></msub><annotation encoding="application/x-tex">\phi_d</annotation></semantics></math>
+is the oxygen flux at the surface as determined by Fick’s Law (<a href="https://januarharianto.github.io/respR/articles/refs.html#references">Leclercq
 et al. 1999</a>).</p>
 </div>
 <div class="section level2">
@@ -370,7 +377,8 @@ Several complete analyses of different types of flowthrough respirometry
 experiments.</p>
 <p><strong><a href="https://januarharianto.github.io/respR/articles/oxycrit.html">Critical
 oxygen values</a></strong><br>
-Determine critical oxygen values, for example <span class="math inline">\(P_{crit}\)</span>.</p>
+Determine critical oxygen values, for example
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>P</mi><mrow><mi>c</mi><mi>r</mi><mi>i</mi><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">P_{crit}</annotation></semantics></math>.</p>
 <p><strong><a href="https://januarharianto.github.io/respR/articles/adjust_rate.html">Adjusting
 rates for background</a></strong><br>
 How <code>adjust_rate</code> allows you to perform all sorts of
@@ -381,9 +389,7 @@ microbial organisms.</p>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -396,16 +402,16 @@ microbial organisms.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
