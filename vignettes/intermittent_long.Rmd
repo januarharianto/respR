@@ -191,7 +191,7 @@ plot(zeb_mmr, pos = 5)
 
 Many aspects will feed into rate selection criteria for a specific experiment or study, and it depends on these whether this in an acceptable, reportable result. Maybe at less than 2 minutes this is not a long enough duration for us to be comfortable that this was a sustained MMR. In which case perhaps one of the other results is better reported. Or maybe we could report an average of some of the rates, such as the top three. The important thing is to apply these selection criteria consistently and report them alongside results. 
 
-##### Changing the `width` {#width}
+#### Changing the `width` {#width}
 
 These are all valid options, as long as they are reported. However, we can also change the analysis parameters. The `width` input in `auto_rate` determines the width of the rolling regressions used to find linear regions. See `auto_rate()` and other vignettes for full details, but briefly in the case of the `"linear"` method this is the starting point for the analysis. Resulting regressions will vary in width, but in general the minimum width will be increased by increasing the `width`. The default value is 0.2, representing 20% of the data length. Here, with 10 minutes of data this would represent 2 minutes, which is quite a brief time window. So instead we will increase this to 0.5 (it can also be specified in the units of the `"by"` input).
 

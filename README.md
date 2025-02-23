@@ -61,7 +61,7 @@ We are also happy to help directly. If you have problems using the package or ge
 
 The package has also been [**peer reviewed and published**](https://doi.org/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. 
 
-`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR Citations**](https://januarharianto.github.io/respR/articles/citations.html) page to see a list of published studies which have used the package to analyse their data.
+`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR Citations**](https://januarharianto.github.io/respR/articles/citations.html) page to see a list of published studies which have used the package.
 
  \
  \

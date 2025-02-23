@@ -42,3 +42,8 @@ usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alter
 ## BUT - even if it seems to freeze - check GHub and site - it might have successfully
 ## triggered the 'pages build and deployment' GH action anyway...
 pkgdown::deploy_to_branch()
+
+
+
+pkgdown::build_home_index()
+pkgdown::init_site()

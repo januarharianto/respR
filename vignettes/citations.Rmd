@@ -10,6 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 bibliography: references_citations.bib
 csl: resprcsl.csl
+nocite: "@*"
 link-citations: true
 ---
 
@@ -30,15 +31,110 @@ strng <- stringr::str_extract(dump[loc], "About [0-9]+ results \\(")
 ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
 ```
 
-In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has picked up [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has been cited [**`r ncites` times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
-We are very happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
+We are  happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
 If you use the package please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**we'd love to hear about it**](https://januarharianto.github.io/respR/articles/contact.html).
 
 ## Studies using `respR`
 
-The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).
+The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).  
+\
+   
+<!-- 
+#### @yangEnergeticConsequencesSingle2025
+
+preprint
+
+#### @spindelConsumerResilienceSuppresses2025
+
+preprint
+
+#### @mallonSublethalChangesCoral2025
+
+safasf
+
+#### @sandersIntraspecificVariabilitySeasons2025
+
+sdsd
+
+#### @luceyLocallyAdaptedCoral2025
+
+dsdf
+
+#### @levetAcclimationTemperatureParasite2024
+
+sds
+
+#### @koeckConservationBenefitsMarine2024
+
+lskfnklasn
+
+#### @vermandeleWhenGoingGets2024
+
+dasfsa
+
+#### @ordAbioticFactorsThat2024
+
+pcrit
+
+#### @jaeggeWidespreadLowConcentration2024
+
+sakhjdfg
+
+#### @marquez-borrasLongtermStudyCombined2024a
+
+sakjfb
+
+#### @menezesRevealingHiddenThreats2024
+
+dsjfbn
+
+#### @millerEffectThermalStress2024
+
+thesis
+
+#### @schmidtRegionalThermalVariation2024
+
+sajlfkdn
+
+#### @karapli-petritsopoulouPhenotypicDivergenceAssociated2024
+
+preprint
+
+#### @terryInteractiveEffectsTemperature2024
+
+kfjn
+
+#### @simonsonComparisonCiscoCoregonus2024
+
+sakjfn
+
+#### @bihunThermalPerformanceCurves2024
+
+sljkfn
+
+#### @scharfensteinPushingLimitsExpanding2024
+
+dksjbf
+
+#### @duncanTemperaturedependentHypoxiaTolerance2024
+
+asfff
+
+#### @missionarioShallowWaterFish2024
+
+sbdjbsdj
+
+
+#### @hejlesenAssessingMetabolicRates2024
+
+hss
+
+#### @wuReportingGuidelinesTerrestrial2024
+
+Reporting and experimental best practice guidelines for aerobic respirometry in terrestrial animals. Thanks Niky for putting this together. Still keen to hear from anyone using `respR` for these experiments! 
 
 #### @collettiPharmaceuticalsStreamEcosystems2024
 
@@ -52,9 +148,9 @@ A publication from Frances Perry's [MSc project](https://januarharianto.github.i
 
 Santiago Jarquin-Corro's MSc thesis conducted at Université du Québec à Rimouski examined the American eel *Anguilla rostrata*, and looks at the use carbon in otoliths as a proxy for metabolic rate. Respirometry was used to validate the results.  Congrats on the MSc! 🥳
 
-#### @kellyInvestigatingMetabolicOxidative2024
+#### @kellyInvestigatingMetabolicOxidative2024a
 
-This preprint examines how biofouling on microplastics effects on fish physiology using intermittent-flow respirometry. The authors used `auto_rate` to obstain MMR and SMR from a kingfish. Looking forward to seeing it officially in print.
+This study examines how biofouling on microplastics effects on fish physiology using intermittent-flow respirometry. The authors used `auto_rate` to obstain MMR and SMR from a kingfish. 
 
 #### @scharfensteinPushingLimitsExpanding2024
 
@@ -373,5 +469,4 @@ This study examined how diatoms dominate food webs under ocean acidification con
 #### @burfordGroupingReducesMetabolic2019a
 
 This paper looked for the first time at the effects of grouping on metabolic rate in a social squid. The package was used here to calculate metabolic rates of both individual and groups of squid in a swim tunnel, and also their Pcrit. The very first paper to cite `respR` - a co-author may have had some influence on that... 🤔
-
-## Full references
+-->
