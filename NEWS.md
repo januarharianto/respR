@@ -1,4 +1,8 @@
 
+## Version 2.x -- 2024-xx-xx
+
+- FIX: `summary()` on `auto_rate` objects no longer prints column classes.
+
 ## Version 2.3.3 -- 2024-05-11
 
 - FIX: Fix for `convert_DO` not accepting vectors for the `P` input. 
