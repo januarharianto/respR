@@ -44,9 +44,11 @@ jobs:
       _R_CHECK_ARGS_: '--no-tests --no-manual'
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_TESTS_: false
-      # Added to prefer binary packages
+      # Force R to use binary packages
       PKGTYPE: binary
+      PKG_TYPE: binary
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      R_REMOTES_UPGRADE: never
       INSTALL_OPTS: "--no-build-vignettes --no-manual --as-cran --no-multiarch"
 
     steps:
@@ -63,8 +65,22 @@ jobs:
       # Added step to configure R to use binary packages
       - name: Configure R package repository
         run: |
+          # Set binary package type
           options(repos = c(CRAN = "https://cloud.r-project.org"))
           options(pkgType = "binary")
+
+          # Create a .Rprofile to force binary packages
+          cat('options(pkgType="binary")\n', file = "~/.Rprofile", append = TRUE)
+          cat('options(install.packages.compile.from.source="never")\n', file = "~/.Rprofile", append = TRUE)
+          cat('Sys.setenv(PKG_TYPE="binary")\n', file = "~/.Rprofile", append = TRUE)
+          cat('Sys.setenv(PKGTYPE="binary")\n', file = "~/.Rprofile", append = TRUE)
+        shell: Rscript {0}
+
+      # Pre-install data.table as binary
+      - name: Pre-install data.table binary
+        if: runner.os != 'Linux'
+        run: |
+          install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
