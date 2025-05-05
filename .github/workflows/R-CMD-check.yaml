@@ -44,6 +44,10 @@ jobs:
       _R_CHECK_ARGS_: '--no-tests --no-manual'
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_TESTS_: false
+      # Added to prefer binary packages
+      PKGTYPE: binary
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      INSTALL_OPTS: "--no-build-vignettes --no-manual --as-cran --no-multiarch"
 
     steps:
       - uses: actions/checkout@v4
@@ -56,11 +60,21 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      # Added step to configure R to use binary packages
+      - name: Configure R package repository
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          options(pkgType = "binary")
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           dependencies: '"hard"'
           extra-packages: any::rcmdcheck
           needs: check
+          # Added to use binary packages
+          options: '"--no-build-vignettes" "--no-manual" "--as-cran" "--no-multiarch"'
+          pak-version: devel
 
       - uses: r-lib/actions/check-r-package@v2
         with:
