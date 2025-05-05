@@ -1,9 +1,4 @@
-# Pre-install data.table as binary for non-devel macOS and Windows
-      - name: Pre-install data.table binary
-        if: (runner.os == 'Windows' || (runner.os == 'macOS' && matrix.config.r != 'devel'))
-        run: |
-          install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
-        shell: Rscript {0}# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
@@ -31,12 +26,17 @@ jobs:
           - {os: macos-13,       r: '4.1.3'} # fails with macos-latest because it is ARM only?
           - {os: macos-latest,   r: '4.2.3'}
           - {os: macos-latest,   r: '4.3.3'}
-          - {os: macos-latest,   r: '4.4.0'}
+          - {os: macos-latest,   r: '4.4.3'}
+          - {os: macos-latest,   r: '4.5.0'}
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
           - {os: windows-latest, r: 'oldrel-1'}
-          - {os: windows-latest, r: '4.1.3'} # failing
-          - {os: windows-latest, r: '4.0.5'} # failing
+          - {os: windows-latest, r: '4.0.5'}
+          - {os: windows-latest, r: '4.1.3'}
+          - {os: windows-latest, r: '4.2.3'}
+          - {os: windows-latest, r: '4.3.3'}
+          - {os: windows-latest, r: '4.4.3'}
+          - {os: windows-latest, r: '4.5.0'}
           # - {os: windows-latest, r: '3.6.3'} # failing
           - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
@@ -49,7 +49,6 @@ jobs:
       _R_CHECK_ARGS_: '--no-tests --no-manual'
       _R_CHECK_FORCE_SUGGESTS_: false
       _R_CHECK_TESTS_: false
-      # Force R to use binary packages on macOS/Windows only
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       R_REMOTES_UPGRADE: never
       INSTALL_OPTS: "--no-build-vignettes --no-manual --as-cran --no-multiarch"
@@ -65,8 +64,9 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      # Added step to configure R to use binary packages
-      - name: Configure R package repository
+      # Configure R package repository for macOS/Windows
+      - name: Configure R package repository for macOS/Windows
+        if: runner.os != 'Linux'
         run: |
           # Set binary package type
           options(repos = c(CRAN = "https://cloud.r-project.org"))
@@ -77,6 +77,13 @@ jobs:
           cat('options(install.packages.compile.from.source="never")\n', file = "~/.Rprofile", append = TRUE)
           cat('Sys.setenv(PKG_TYPE="binary")\n', file = "~/.Rprofile", append = TRUE)
           cat('Sys.setenv(PKGTYPE="binary")\n', file = "~/.Rprofile", append = TRUE)
+        shell: Rscript {0}
+
+      # Configure repositories for Linux
+      - name: Configure R package repository for Linux
+        if: runner.os == 'Linux'
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
         shell: Rscript {0}
 
       # Special handling for data.table on macOS devel
@@ -97,14 +104,20 @@ jobs:
 
           # Install the wrapper package which will install data.table as a dependency
           install.packages("dt_wrapper", repos = NULL, type = "source")
-        shell: bash {0}
+        shell: bash
+
+      # Pre-install data.table as binary for non-devel macOS and Windows
+      - name: Pre-install data.table binary
+        if: (runner.os == 'Windows' || (runner.os == 'macOS' && matrix.config.r != 'devel'))
+        run: |
+          install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           dependencies: '"hard"'
           extra-packages: any::rcmdcheck
           needs: check
-          # Added to use binary packages
           options: '"--no-build-vignettes" "--no-manual" "--as-cran" "--no-multiarch"'
           pak-version: devel
 
