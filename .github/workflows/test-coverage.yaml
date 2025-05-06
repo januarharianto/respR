@@ -40,3 +40,4 @@ jobs:
       - name: Test coverage
         run: |
           Rscript -e 'library(covr); codecov(quiet = FALSE)'
+
