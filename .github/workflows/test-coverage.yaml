@@ -23,7 +23,7 @@ jobs:
 
       - name: Install required packages
         run: |
-          Rscript -e 'install.packages("covr")'
+          Rscript -e 'install.packages(c("covr", "lubridate", "marelac", "purrr", "roll", "segmented", "xml2"))'
 
       - name: Install archived dependencies
         run: |
@@ -33,6 +33,10 @@ jobs:
           Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/rMR/rMR_1.0.5.tar.gz", repos = NULL, type = "source")'
           Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/FishResp/FishResp_1.1.0.tar.gz", repos = NULL, type = "source")'
 
+      - name: Install package
+        run: |
+          Rscript -e 'install.packages(".", repos = NULL, type = "source")'
+
       - name: Test coverage
-        run: covr::codecov(quiet = FALSE)
-        shell: Rscript {0}
+        run: |
+          Rscript -e 'library(covr); codecov(quiet = FALSE)'
