@@ -25,6 +25,9 @@ jobs:
         with:
           extra-packages: any::covr
           needs: coverage
+          packages: |
+            any::!rMR
+            any::!FishResp
 
       - name: Install archived dependencies
         run: |
