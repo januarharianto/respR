@@ -23,7 +23,7 @@ jobs:
 
       - name: Install required packages
         run: |
-          Rscript -e 'install.packages(c("covr", "lubridate", "marelac", "purrr", "roll", "segmented", "xml2"))'
+          Rscript -e 'install.packages(c("covr", "testthat", "lubridate", "marelac", "purrr", "roll", "segmented", "xml2"))'
 
       - name: Install archived dependencies
         run: |
