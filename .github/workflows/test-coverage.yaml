@@ -21,22 +21,11 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install required packages
-        run: |
-          Rscript -e 'install.packages(c("covr", "testthat", "lubridate", "marelac", "purrr", "roll", "segmented", "xml2", "respirometry"))'
-
-      - name: Install archived dependencies
-        run: |
-          # Install any dependencies these packages might need first
-          Rscript -e 'install.packages(c("tcltk2", "signal", "XML", "chron", "data.table", "dplyr", "ggplot2", "gridExtra", "RCurl", "reshape2", "stringr"))'
-          # Install archived packages
-          Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/rMR/rMR_1.0.5.tar.gz", repos = NULL, type = "source")'
-          Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/FishResp/FishResp_1.1.0.tar.gz", repos = NULL, type = "source")'
-
-      - name: Install package
-        run: |
-          Rscript -e 'install.packages(".", repos = NULL, type = "source")'
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::covr
+          needs: coverage
 
       - name: Test coverage
-        run: |
-          Rscript -e 'library(covr); codecov(quiet = FALSE)'
+        run: covr::codecov(quiet = FALSE)
+        shell: Rscript {0}
