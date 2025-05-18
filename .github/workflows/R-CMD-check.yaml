@@ -86,25 +86,25 @@ jobs:
           options(repos = c(CRAN = "https://cloud.r-project.org"))
         shell: Rscript {0}
 
-      # Special handling for data.table on macOS devel
-      - name: Special handling for data.table on macOS devel
-        if: runner.os == 'macOS' && matrix.config.r == 'devel'
-        run: |
-          # Install dependencies needed for data.table on macOS
-          brew install gettext
-          brew link gettext --force
-
-          # Create a simple package that depends on data.table to force binary installation
-          dir.create("dt_wrapper")
-          cat('Package: dt_wrapper\nVersion: 0.1\nDepends: R (>= 3.0.0)\nImports: data.table\nDescription: Wrapper for data.table\nLicense: GPL-3\n',
-              file = "dt_wrapper/DESCRIPTION")
-          dir.create("dt_wrapper/R")
-          cat('# Dummy function\ndummy <- function() { data.table::data.table() }\n',
-              file = "dt_wrapper/R/dummy.R")
-
-          # Install the wrapper package which will install data.table as a dependency
-          install.packages("dt_wrapper", repos = NULL, type = "source")
-        shell: bash
+      # # Special handling for data.table on macOS devel
+      # - name: Special handling for data.table on macOS devel
+      #   if: runner.os == 'macOS' && matrix.config.r == 'devel'
+      #   run: |
+      #     # Install dependencies needed for data.table on macOS
+      #     brew install gettext
+      #     brew link gettext --force
+      #
+      #     # Create a simple package that depends on data.table to force binary installation
+      #     dir.create("dt_wrapper")
+      #     cat('Package: dt_wrapper\nVersion: 0.1\nDepends: R (>= 3.0.0)\nImports: data.table\nDescription: Wrapper for data.table\nLicense: GPL-3\n',
+      #         file = "dt_wrapper/DESCRIPTION")
+      #     dir.create("dt_wrapper/R")
+      #     cat('# Dummy function\ndummy <- function() { data.table::data.table() }\n',
+      #         file = "dt_wrapper/R/dummy.R")
+      #
+      #     # Install the wrapper package which will install data.table as a dependency
+      #     install.packages("dt_wrapper", repos = NULL, type = "source")
+      #   shell: bash
 
       # Pre-install data.table as binary for non-devel macOS and Windows
       - name: Pre-install data.table binary
