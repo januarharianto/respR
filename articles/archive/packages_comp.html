@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comparison of respR with other R packages • respR</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../../favicon-48x48.png">
+<link rel="icon" type="”image/svg+xml”" href="../../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../../favicon.ico">
+<link rel="manifest" href="../../site.webmanifest">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../../bootstrap-toc.css">
 <script src="../../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -287,7 +286,7 @@ the same units, and because both functions rely on the unit standards
 package <code>marelac</code> they give identical or very similar
 results. Minor differences are probably dues to the precision with which
 variables are handled internally:</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp01.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp01.png" width="700px" style="display: block; margin: auto;"></p>
 <p><code>respR</code> has a couple of minor advantages; the
 <code>respR</code> output is more informative, clearly stating the input
 and output units; and a “fuzzy” string matching algorithm is used to
@@ -319,8 +318,8 @@ several other systems. Here is typical code from each to do this. The
 example file and import code (slightly adapted) are taken from the
 <code>rMR</code> <a href="https://github.com/tyler-l-moulton/rMR" class="external-link">Github</a> repo and README
 file found there.</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp02.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp03.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp02.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp03.png" width="700px" style="display: block; margin: auto;"></p>
 <p>These both appear to perform well, on this file at least. The
 resulting data frames are similar, containing all the relevant data,
 although <code>respR</code> adds a numeric <code>time</code> column,
@@ -372,11 +371,11 @@ manually specifying one or more regions over which to fit regressions.
 function, so here we will compare the results of each on the same data.
 Again, we use data included in <code>rMR</code> and code adapted from
 the documentation.</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp04.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp05.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp06.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp07.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp08.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp04.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp05.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp06.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp07.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp08.png" width="700px" style="display: block; margin: auto;"></p>
 <p>As we can see the results are identical (in <code>respR</code> we
 chose to express rates as negatives because they represent a negative
 slope and depletion of O2). This is exactly what we would expect with
@@ -458,8 +457,8 @@ imported alongside them, and processed through several functions. The
 AutoResp file (from a 1-channel, intermittent-flow, swim tunnel
 experiment on an anchovy) did however import successfully and plot the
 data:</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp09.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp10.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp09.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp10.png" width="700px" style="display: block; margin: auto;"></p>
 <p>We can’t compare the importing functionality of <code>FishResp</code>
 with <code>respR</code>, as we do not yet support direct importing of
 AutoResp files (this is planned, and currently they can easily be
@@ -491,15 +490,15 @@ clear way that we can see to accommodate these data in
 has already been imported and prepared in various ways, and the code is
 mostly taken from the documentation. We will use these data to compare
 the outputs of <code>FishResp</code> to <code>respR</code>.</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp11.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp11.png" width="700px" style="display: block; margin: auto;"></p>
 <p>Now the <code>respR</code> analysis of the same data (though only a
 single channel), using the same inputs. We use regular R data selection
 syntax to extract rates from multiple even-spaced data regions (here
 spaced at every 1200 rows).</p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp12.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp13.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp14.png" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img%2Fpkg_comp%2Fpkg_comp15.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp12.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp13.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp14.png" width="700px" style="display: block; margin: auto;"></p>
+<p><img src="img/pkg_comp/pkg_comp15.png" width="700px" style="display: block; margin: auto;"></p>
 <p>As we can see the rates calculated by both packages are identical. As
 with <code>rMR</code>, this is exactly what we would expect as we are
 manually selecting the same data regions and user underlying R code to
@@ -655,7 +654,7 @@ package which has a similar purpose <a href="https://januarharianto.github.io/re
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
       </footer>
