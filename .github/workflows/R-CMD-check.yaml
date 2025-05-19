@@ -64,6 +64,27 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      # --- BEGIN: Additions by Copilot for Bioconductor and data.table/macOS build fix ---
+      # Install gettext for macOS to provide libintl.h (needed by data.table)
+      - name: Install gettext (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          brew link --force gettext
+
+      # Set CFLAGS and LDFLAGS for compiler/linker to find gettext
+      - name: Set compiler flags for macOS (libintl)
+        if: runner.os == 'macOS'
+        run: |
+          echo "CFLAGS+=-I/usr/local/include" >> $GITHUB_ENV
+          echo "LDFLAGS+=-L/usr/local/lib" >> $GITHUB_ENV
+
+      # Explicitly set Bioconductor repositories before installing dependencies
+      - name: Configure Bioconductor repos
+        run: |
+          echo "options(repos = BiocManager::repositories())" >> .Rprofile
+      # --- END: Additions by Copilot ---
+
       # Configure R package repository for macOS/Windows
       - name: Configure R package repository for macOS/Windows
         if: runner.os != 'Linux'
