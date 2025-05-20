@@ -64,27 +64,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      # --- BEGIN: Additions by Copilot for Bioconductor and data.table/macOS build fix ---
-      # Install gettext for macOS to provide libintl.h (needed by data.table)
-      - name: Install gettext (macOS only)
-        if: runner.os == 'macOS'
-        run: |
-          brew install gettext
-          brew link --force gettext
-
-      # Set CFLAGS and LDFLAGS for compiler/linker to find gettext
-      - name: Set compiler flags for macOS (libintl)
-        if: runner.os == 'macOS'
-        run: |
-          echo "CFLAGS+=-I/usr/local/include" >> $GITHUB_ENV
-          echo "LDFLAGS+=-L/usr/local/lib" >> $GITHUB_ENV
-
-      # Explicitly set Bioconductor repositories before installing dependencies
-      - name: Configure Bioconductor repos
-        run: |
-          echo "options(repos = BiocManager::repositories())" >> .Rprofile
-      # --- END: Additions by Copilot ---
-
       # Configure R package repository for macOS/Windows
       - name: Configure R package repository for macOS/Windows
         if: runner.os != 'Linux'
@@ -107,25 +86,21 @@ jobs:
           options(repos = c(CRAN = "https://cloud.r-project.org"))
         shell: Rscript {0}
 
-      # # Special handling for data.table on macOS devel
-      # - name: Special handling for data.table on macOS devel
-      #   if: runner.os == 'macOS' && matrix.config.r == 'devel'
-      #   run: |
-      #     # Install dependencies needed for data.table on macOS
-      #     brew install gettext
-      #     brew link gettext --force
-      #
-      #     # Create a simple package that depends on data.table to force binary installation
-      #     dir.create("dt_wrapper")
-      #     cat('Package: dt_wrapper\nVersion: 0.1\nDepends: R (>= 3.0.0)\nImports: data.table\nDescription: Wrapper for data.table\nLicense: GPL-3\n',
-      #         file = "dt_wrapper/DESCRIPTION")
-      #     dir.create("dt_wrapper/R")
-      #     cat('# Dummy function\ndummy <- function() { data.table::data.table() }\n',
-      #         file = "dt_wrapper/R/dummy.R")
-      #
-      #     # Install the wrapper package which will install data.table as a dependency
-      #     install.packages("dt_wrapper", repos = NULL, type = "source")
-      #   shell: bash
+      # Special handling for data.table on macOS devel
+      - name: Special handling for data.table on macOS devel
+        if: runner.os == 'macOS' && matrix.config.r == 'devel'
+        run: |
+          # Install system dependencies
+          brew install gettext
+          brew link gettext --force
+
+          # Configure R to find the libraries
+          echo 'PKG_CPPFLAGS=-I/usr/local/opt/gettext/include' > ~/.R/Makevars
+          echo 'PKG_LIBS=-L/usr/local/opt/gettext/lib -lintl' >> ~/.R/Makevars
+
+          # Install data.table with required environment setup
+          Rscript -e 'install.packages("data.table", type = "source", repos = "https://cloud.r-project.org")'
+        shell: bash
 
       # Pre-install data.table as binary for non-devel macOS and Windows
       - name: Pre-install data.table binary
