@@ -90,19 +90,14 @@ jobs:
       - name: Special handling for data.table on macOS devel
         if: runner.os == 'macOS' && matrix.config.r == 'devel'
         run: |
-          # Install system dependencies
-          brew install gettext
-          brew link gettext --force
+          # Create a temporary custom repository file
+          mkdir -p ~/custom_repo
 
-          # Create .R directory if it doesn't exist
-          mkdir -p ~/.R
+          # Download the latest binary for the most recent R release and install it directly
+          Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.2.tgz", "~/custom_repo/data.table_1.17.2.tgz")'
 
-          # Configure R to find the libraries
-          echo 'PKG_CPPFLAGS=-I/usr/local/opt/gettext/include' > ~/.R/Makevars
-          echo 'PKG_LIBS=-L/usr/local/opt/gettext/lib -lintl' >> ~/.R/Makevars
-
-          # Install data.table with required environment setup
-          Rscript -e 'install.packages("data.table", type = "source", repos = "https://cloud.r-project.org")'
+          # Install the downloaded binary package
+          Rscript -e 'install.packages("~/custom_repo/data.table_1.17.2.tgz", repos = NULL, type = "binary")'
         shell: bash
 
       # Pre-install data.table as binary for non-devel macOS and Windows
