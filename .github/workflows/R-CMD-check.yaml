@@ -94,6 +94,9 @@ jobs:
           brew install gettext
           brew link gettext --force
 
+          # Create .R directory if it doesn't exist
+          mkdir -p ~/.R
+
           # Configure R to find the libraries
           echo 'PKG_CPPFLAGS=-I/usr/local/opt/gettext/include' > ~/.R/Makevars
           echo 'PKG_LIBS=-L/usr/local/opt/gettext/lib -lintl' >> ~/.R/Makevars
