@@ -94,7 +94,7 @@ jobs:
           mkdir -p ~/custom_repo
 
           # Download the latest binary for the most recent R release and install it directly
-          Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.2.tgz", "~/custom_repo/data.table_1.17.2.tgz")'
+          Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.4.tgz", "~/custom_repo/data.table_1.17.4.tgz")'
 
           # Install the downloaded binary package
           Rscript -e 'install.packages("~/custom_repo/data.table_1.17.4.tgz", repos = NULL, type = "binary")'
