@@ -86,26 +86,26 @@ jobs:
           options(repos = c(CRAN = "https://cloud.r-project.org"))
         shell: Rscript {0}
 
-      # Special handling for data.table on macOS devel
-      - name: Special handling for data.table on macOS devel
-        if: runner.os == 'macOS' && matrix.config.r == 'devel'
-        run: |
-          # Create a temporary custom repository file
-          mkdir -p ~/custom_repo
-
-          # Download the latest binary for the most recent R release and install it directly
-          Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.2.tgz", "~/custom_repo/data.table_1.17.2.tgz")'
-
-          # Install the downloaded binary package
-          Rscript -e 'install.packages("~/custom_repo/data.table_1.17.2.tgz", repos = NULL, type = "binary")'
-        shell: bash
-
-      # Pre-install data.table as binary for non-devel macOS and Windows
-      - name: Pre-install data.table binary
-        if: (runner.os == 'Windows' || (runner.os == 'macOS' && matrix.config.r != 'devel'))
-        run: |
-          install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
+      # # Special handling for data.table on macOS devel
+      # - name: Special handling for data.table on macOS devel
+      #   if: runner.os == 'macOS' && matrix.config.r == 'devel'
+      #   run: |
+      #     # Create a temporary custom repository file
+      #     mkdir -p ~/custom_repo
+      #
+      #     # Download the latest binary for the most recent R release and install it directly
+      #     Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.2.tgz", "~/custom_repo/data.table_1.17.2.tgz")'
+      #
+      #     # Install the downloaded binary package
+      #     Rscript -e 'install.packages("~/custom_repo/data.table_1.17.2.tgz", repos = NULL, type = "binary")'
+      #   shell: bash
+      #
+      # # Pre-install data.table as binary for non-devel macOS and Windows
+      # - name: Pre-install data.table binary
+      #   if: (runner.os == 'Windows' || (runner.os == 'macOS' && matrix.config.r != 'devel'))
+      #   run: |
+      #     install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
+      #   shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
