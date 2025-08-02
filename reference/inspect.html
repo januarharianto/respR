@@ -246,7 +246,7 @@ in blue alongside the full oxygen timeseries.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Allows additional plotting controls to be passed, such as <code>legend = FALSE</code>, <code>quiet = TRUE</code>, <code>rate.rev = FALSE</code> and <code>pos</code>. A different <code>width</code>
+<dd><p>Allows additional plotting controls to be passed, such as <code>legend = FALSE</code>, <code>rate.rev = FALSE</code> and <code>pos</code>. A different <code>width</code>
 can also be passed in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> commands on output objects.</p></dd>
 
 </dl></div>
@@ -339,13 +339,10 @@ plotted if multiple oxygen columns are inspected. See examples.</p>
 
 <p>A different <code>width</code> value can be passed to see how it affects estimation of
 the rolling rate. If axis labels obscure parts of the plot they can be
-suppressed using <code>legend = FALSE</code>. Suppress console output messages with
-<code>quiet = TRUE</code>. If multiple columns have been inspected, the <code>pos</code> input can
-be used to examine each time~oxygen dataset. If axis labels (particularly
-y-axis) are difficult to read, <code>las = 2</code> can be passed to make axis labels
-horizontal, and  <code>oma</code> (outer margins, default <code>oma = c(0.4, 1, 1.5, 0.4)</code>)
-or <code>mai</code> (inner margins, default <code>mai = c(0.3, 0.15, 0.35, 0.15)</code>) can be
-used to adjust plot margins. See examples.</p>
+suppressed using <code>legend = FALSE</code>. If multiple columns have been inspected,
+the <code>pos</code> input can be used to examine each time~oxygen dataset. If axis
+labels (particularly y-axis) are difficult to read, <code>las = 2</code> can be passed
+to make axis labels horizontal, and  <code>oma</code> (outer margins, default <code>oma = c(0.4, 1, 1.5, 0.4)</code>) or <code>mai</code> (inner margins, default <code>mai = c(0.3, 0.15, 0.35, 0.15)</code>) can be used to adjust plot margins. See examples.</p>
 </div>
 
 <div class="section">
