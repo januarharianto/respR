@@ -79,13 +79,12 @@
 #'
 #' A different `width` value can be passed to see how it affects estimation of
 #' the rolling rate. If axis labels obscure parts of the plot they can be
-#' suppressed using `legend = FALSE`. Suppress console output messages with
-#' `quiet = TRUE`. If multiple columns have been inspected, the `pos` input can
-#' be used to examine each time~oxygen dataset. If axis labels (particularly
-#' y-axis) are difficult to read, `las = 2` can be passed to make axis labels
-#' horizontal, and  `oma` (outer margins, default `oma = c(0.4, 1, 1.5, 0.4)`)
-#' or `mai` (inner margins, default `mai = c(0.3, 0.15, 0.35, 0.15)`) can be
-#' used to adjust plot margins. See examples.
+#' suppressed using `legend = FALSE`. If multiple columns have been inspected,
+#' the `pos` input can be used to examine each time~oxygen dataset. If axis
+#' labels (particularly y-axis) are difficult to read, `las = 2` can be passed
+#' to make axis labels horizontal, and  `oma` (outer margins, default `oma =
+#' c(0.4, 1, 1.5, 0.4)`) or `mai` (inner margins, default `mai = c(0.3, 0.15,
+#' 0.35, 0.15)`) can be used to adjust plot margins. See examples.
 #'
 #' ## Multiple Columns of Oxygen Data
 #'
@@ -184,7 +183,7 @@
 #'   number or name of an optional additional data source that will be plotted
 #'   in blue alongside the full oxygen timeseries.
 #' @param ... Allows additional plotting controls to be passed, such as `legend
-#'   = FALSE`, `quiet = TRUE`, `rate.rev = FALSE` and `pos`. A different `width`
+#'   = FALSE`, `rate.rev = FALSE` and `pos`. A different `width`
 #'   can also be passed in `plot()` commands on output objects.
 #'
 #' @importFrom data.table data.table

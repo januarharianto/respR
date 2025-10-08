@@ -36,7 +36,7 @@ rate. If multiple \code{oxygen} columns, plots all timeseries data only.}
 number or name of an optional additional data source that will be plotted
 in blue alongside the full oxygen timeseries.}
 
-\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{quiet = TRUE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
+\item{...}{Allows additional plotting controls to be passed, such as \code{legend = FALSE}, \code{rate.rev = FALSE} and \code{pos}. A different \code{width}
 can also be passed in \code{plot()} commands on output objects.}
 }
 \value{
@@ -129,13 +129,10 @@ plotted if multiple oxygen columns are inspected. See examples.
 
 A different \code{width} value can be passed to see how it affects estimation of
 the rolling rate. If axis labels obscure parts of the plot they can be
-suppressed using \code{legend = FALSE}. Suppress console output messages with
-\code{quiet = TRUE}. If multiple columns have been inspected, the \code{pos} input can
-be used to examine each time~oxygen dataset. If axis labels (particularly
-y-axis) are difficult to read, \code{las = 2} can be passed to make axis labels
-horizontal, and  \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)})
-or \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be
-used to adjust plot margins. See examples.
+suppressed using \code{legend = FALSE}. If multiple columns have been inspected,
+the \code{pos} input can be used to examine each time~oxygen dataset. If axis
+labels (particularly y-axis) are difficult to read, \code{las = 2} can be passed
+to make axis labels horizontal, and  \code{oma} (outer margins, default \code{oma = c(0.4, 1, 1.5, 0.4)}) or \code{mai} (inner margins, default \code{mai = c(0.3, 0.15, 0.35, 0.15)}) can be used to adjust plot margins. See examples.
 }
 
 \subsection{Multiple Columns of Oxygen Data}{
