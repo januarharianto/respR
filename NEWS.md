@@ -2,7 +2,7 @@
 ## Version 2.3.4 -- 2025-10-08
 
 - FIX: `summary()` on `auto_rate` objects no longer prints column classes.
-- CHANGE: One single link to lubridate in a help file has been removed, because CRAN has some new way of linking to packages ("package anchors") and rather than apply this new policy on package updates as they are submitted, apparently this is important enough to apply retroactively to the entirety of the CRAN repository and if not done warrants removal of the package entirely. 
+- CHANGE: One single link to lubridate in a help file has been removed. All because CRAN has some new way of linking packages ("package anchors") and rather than apply this new policy as packages are updated and submitted, apparently this is important enough to apply retroactively to the entirety of the CRAN repository and if not done warrants removal of the package entirely.  
 - NEW: Tested with `R` version [4.5](https://www.r-bloggers.com/2024/04/whats-new-in-r-4-5-0/) 
 
 ## Version 2.3.3 -- 2024-05-11
