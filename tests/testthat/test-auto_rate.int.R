@@ -1484,17 +1484,17 @@ capture.output({  ## stops printing outputs on assigning
   expect_error(print(ar.int, pos = 2:3),
                "print.auto_rate.int: 'pos' must be a single value. To examine multiple results use summary().")
   expect_error(print(ar.int, pos = 30),
-               "print.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+               "print.auto_rate.int: Invalid 'pos' input: only 6 rates found.")
 
   expect_output(summary(ar.int, pos = 2:3))
   expect_error(summary(ar.int, pos = 40),
-               "summary.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+               "summary.auto_rate.int: Invalid 'pos' input: only 6 rates found.")
   expect_is(summary(ar.int, pos = 2:3, export = TRUE),
             "data.frame")
 
   expect_output(mean(ar.int, pos = 2:3))
   expect_error(mean(ar.int, pos = 40),
-               "mean.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+               "mean.auto_rate.int: Invalid 'pos' input: only 6 rates found.")
   expect_is(mean(ar.int, pos = 2:3, export = TRUE),
             "numeric")
   expect_equal(mean(ar.int, pos = 2:3, export = TRUE),
@@ -1508,7 +1508,7 @@ capture.output({  ## stops printing outputs on assigning
   expect_output(plot(ar.int, pos = 1))
   expect_output(plot(ar.int, pos = 3))
   expect_error(plot(ar.int, pos = 50),
-               "plot.auto_rate.int: Invalid 'pos' input: only 5 rates found.")
+               "plot.auto_rate.int: Invalid 'pos' input: only 6 rates found.")
   # works with multiple pos up to and past 20
   dt.reg.insp.30 <- subset_data(zeb_intermittent.rd,
                              from = 5840,
