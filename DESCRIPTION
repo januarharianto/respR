@@ -44,8 +44,6 @@ Imports:
     utils,
     xml2
 Suggests:
-    rMR,
-    FishResp,
     respirometry,
     testthat,
     covr
