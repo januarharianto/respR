@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">respR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.3.4</span>
       </span>
     </div>
 
@@ -219,11 +219,19 @@
 <code>respR</code>.  <br>
  <br></p>
 <div class="section level2">
-<h2 id="version-2-x-2024-xx-xx">Version 2.x – 2024-xx-xx<a class="anchor" aria-label="anchor" href="#version-2-x-2024-xx-xx"></a>
+<h2 id="version-2-3-4-2025-10-08">Version 2.3.4 – 2025-10-08<a class="anchor" aria-label="anchor" href="#version-2-3-4-2025-10-08"></a>
 </h2>
 <ul>
 <li>FIX: <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> on <code>auto_rate</code> objects no
 longer prints column classes.</li>
+<li>CHANGE: One single link to lubridate in a help file has been
+removed. All because CRAN has some new way of linking packages (“package
+anchors”) and rather than apply this new policy as packages are updated
+and submitted, apparently this is important enough to apply
+retroactively to the entirety of the CRAN repository and if not done
+warrants removal of the package entirely.<br>
+</li>
+<li>NEW: Tested with <code>R</code> 4.5.</li>
 </ul>
 </div>
 <div class="section level2">
