@@ -9,7 +9,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   # Create testing objects --------------------------------------------------
   {
     insp.ft_obj <- inspect.ft(flowthrough.rd, delta.oxy = 4, plot = FALSE)

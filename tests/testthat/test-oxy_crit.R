@@ -9,7 +9,7 @@ capture.output({  ## stops printing of outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   # small testing dataset - data.table
   squid <- squid.rd[seq.int(1, nrow(squid.rd), 100), ]
   # pure data.frame

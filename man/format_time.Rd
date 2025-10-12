@@ -57,8 +57,7 @@ when this occurs and parse the data correctly.
 
 \subsection{Formatting}{
 
-See the \code{\link{lubridate}} package for more detail on acceptable
-formatting.
+See the \code{lubridate} package for more detail on acceptable formatting.
 
 Date-time data can be unspaced or separated by any combination of spaces,
 forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -160,7 +159,4 @@ x <- data.frame(
   y = c(23, 34, 45),
   z = c(56, 67, 78))
 format_time(x, time = 1:4, format = "dmyHMS")
-}
-\seealso{
-\code{\link{lubridate}}
 }

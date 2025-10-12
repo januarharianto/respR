@@ -1,6 +1,7 @@
 url: https://januarharianto.github.io/respR
 
 template:
+  #light-switch: true
   params:
     bootstrap: 5
     bootswatch: cosmo
@@ -142,8 +143,6 @@ navbar:
         href: articles/release_notes.html
       - text: "respR Citations"
         href: articles/citations.html
-      - text: "Future Features"
-        href: articles/future.html
       - text: "References"
         href: articles/refs.html
       - text: Archived

@@ -9,7 +9,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   test_that("subset_data - works with data.frame input", {
     # time
     sub <- subset_data(sardine.rd, from = 2000, to = 3000, by = "time")

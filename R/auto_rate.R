@@ -737,7 +737,7 @@ summary.auto_rate <- function(object, pos = NULL, export = FALSE, print.kds = FA
     if (object$method == "max") cat("\n=== Summary of Results by Maximum NEGATIVE Rate ===\n")
     if (object$method == "min") cat("\n=== Summary of Results by Minimum NEGATIVE Rate ===\n")
     out <- data.table(object$summary)
-    print(out, nrows = 20)
+    print(out, nrows = 20, class = FALSE)
   } else {
     # otherwise, return row specified by `pos`
     cat("\n=== Summary of results from entered 'pos' rank(s)", "===\n\n")

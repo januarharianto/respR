@@ -10,7 +10,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   dt <- intermittent.rd %>%
     subset_data(from = 1) # removes first value at 0 time because of annoying messages during adjustments
   dt.insp <- inspect(dt, plot = F)

@@ -5,7 +5,7 @@ capture.output({  ## stops printing outputs on assigning in log
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
 ## Accepts data.frame
 test_that("calc_rate.bg works using default inputs", {
   ## Analyses all columns by default

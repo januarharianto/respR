@@ -47,7 +47,7 @@ A typical workflow involves some or all of the following functions:
 |  |  |
 | -- | -- |
 | `inspect()` | Visualise the data and check it for common issues|
-| `calc_rate()` & `auto_rate()` | Extract rates from the entire dataset or regions of it, manually or automatically |
+| `calc_rate()` or `auto_rate()` | Extract rates from the entire dataset or regions of it, manually or automatically |
 | `adjust_rate()` | Adjust the rate values for background oxygen consumption or production |
 | `convert_rate()` | Convert the adjusted rate(s) to any common units of oxygen consumption or production |
 | `select_rate()` | If there are multiple rates, select according to various criteria which to report or how to arrive at a final rate |
@@ -124,14 +124,14 @@ In many cases, we want to select the region over which the rate is determined. F
 Using the `from`, `to`, and `by` inputs, a user may use `calc_rate()` to specify data ranges in several ways:
 
 - **Time:** 
-- *"What is the rate over a specific 25 minute period?"*
-- `from = 4, to = 29, by = "time"`
+  - *"What is the rate over a specific 25 minute period?"*
+  - `from = 4, to = 29, by = "time"`
 - **Oxygen:** 
-- *"What is the rate between oxygen concentrations of 7.5 to 7.0 mg/L?"*
-- `from = 7.5, to = 7.0, by = "oxygen"`
+  - *"What is the rate between oxygen concentrations of 7.5 to 7.0 mg/L?"*
+  - `from = 7.5, to = 7.0, by = "oxygen"`
 - **Row:** 
-- *"What is the rate between  rows 11 and 273."*
-- `from = 11, to = 273, by = "row"`
+  - *"What is the rate between  rows 11 and 273."*
+  - `from = 11, to = 273, by = "row"`
 
 These inputs do not need to be overly precise; for `oxygen` and `time` if input values do not match exactly to a value in the data, the function will identify the closest matching values and use these for calculations. Similarly, if `from` or `to` values are beyond the maximum or minimum values in the data, the function will use the maximum or minimum value instead. For example, the above experiment is 45 minutes long. If we used `to = 60` as the upper time range, the function would simply apply a `to` value of 45 instead.
 
@@ -224,11 +224,11 @@ Note, that until this point `respR` has *not required units of time or oxygen to
 `convert_rate()` can be used to convert the unitless rate values we have dealt with up to now to these reportable metrics:
 
 - **Absolute metabolic rate** 
-- Oxygen consumption or production per unit time. This is the whole specimen, whole chamber or whole group metabolic rate
+  - Oxygen consumption or production per unit time. This is the whole specimen, whole chamber or whole group metabolic rate
 - **Mass-specific metabolic rate** 
-- Oxygen consumption or production per unit time per unit *mass* of the specimen
+  - Oxygen consumption or production per unit time per unit *mass* of the specimen
 - **Area-specific metabolic rate** 
-- Oxygen consumption or production per unit time per unit *area* of the specimen
+  - Oxygen consumption or production per unit time per unit *area* of the specimen
 
 Conversion requires the units of the original raw data (`time.unit`, `oxy.unit`), and the `volume` of fluid in the respirometer in Litres ($L$). Mass-specific rates require the `mass` of the specimen in kilograms ($kg$), and area-specific rates require the `area` of the specimen in metres squared ($m^2$). Lastly, an `output.unit` appropriate to the inputs should be specified. This should be in the correct order: "oxygen/time" or "oxygen/time/mass" or "oxygen/time/area".
 
@@ -342,7 +342,7 @@ convert_MR(urch_rate_final,
            P = 1.01)
 ```
 
-Generally speaking, if there is a order of magnitude difference or more it is a good indication that there may be a problem. Here, we can see our rate value of `-0.225 umol/hr/g` is broadly consistent with these others from the literature. Any difference is easily within what would be expected given variation between species and difference in temperature. Therefore, we can be fairly confident that our urchin rate is in the right ballpark and we have not made a conversion error.
+Generally speaking, if there is a order of magnitude difference or more it is a good indication that there may be a problem. Here, we can see our rate value of `-0.225 umol/hr/g` is broadly consistent with these reported rates from the literature of *0.2 to 0.5* at 25°C, and *0.6* at 22°C. The difference is within what might be expected given natural variation between species and difference in temperatures. Therefore, we can be fairly confident that our urchin rate is in the right ballpark and we have not made a conversion error.
 
 ## Summary
 
@@ -383,11 +383,12 @@ urch_rate <- urchins.rd |>                                   # Using the urchins
   calc_rate(from = 4, to = 29, by = "time") |>               # calculate rate, then
   print() |>                                                 # print for quick look,
   adjust_rate(  
-    calc_rate.bg(urchins.rd, time = 1,                       # calculate the background and
+    calc_rate.bg(urchins.rd, time = 1,                       # calculate the background,
                  oxygen = 18:19)) |>                         # adjust the rate, then
   print() |>                                                 # print for another check,
   convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
-               output.unit = "mg/s/kg", volume = 1.09, mass = 0.19) |>  # then convert
+               output.unit = "mg/s/kg", volume = 1.09, 
+               mass = 0.19) |>                               # then convert,
   summary(export = TRUE)                                     # and finally save
 ```
 

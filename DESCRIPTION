@@ -1,8 +1,8 @@
 Package: respR
 Type: Package
 Title: Import, Process, Analyse, and Calculate Rates from Respirometry Data
-Date: 2024-05-01
-Version: 2.3.3
+Date: 2025-10-09
+Version: 2.3.4
 Maintainer: Nicholas Carey <nicholascarey@gmail.com>
 Authors@R: c(
     person(given = "Nicholas", 
@@ -44,10 +44,6 @@ Imports:
     utils,
     xml2
 Suggests:
-    knitr,
-    rmarkdown,
-    rMR,
-    FishResp,
     respirometry,
     testthat,
     covr

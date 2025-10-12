@@ -29,8 +29,7 @@
 #'
 #' ## Formatting
 #'
-#' See the \code{\link{lubridate}} package for more detail on acceptable
-#' formatting.
+#' See the \code{lubridate} package for more detail on acceptable formatting.
 #'
 #' Date-time data can be unspaced or separated by any combination of spaces,
 #' forward slashes, hyphens, dots, commas, colons, semicolons, or underscores.
@@ -99,8 +98,6 @@
 #' @importFrom purrr reduce
 #'
 #' @export
-#'
-#' @seealso \code{\link{lubridate}}
 #'
 #' @examples
 #' # Convert year-month-day hour-min-sec

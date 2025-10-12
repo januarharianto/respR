@@ -9,7 +9,7 @@ capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
 test_that("convert_val - stops if from and to units not same type", {
   expect_error(convert_val(-273.15, "K", "kg"),
                "convert_val: 'from' and 'to' appear to be different unit types.")

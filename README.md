@@ -7,14 +7,14 @@
 <!-- [![DOI](https://zenodo.org/badge/66126363.svg)](https://zenodo.org/badge/latestdoi/66126363) -->
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/respR)](https://cran.r-project.org/package=respR)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/respR)](https://cran.r-project.org/package=respR) 
-[![R-CMD-check](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml/badge.svg?branch=develop)](https://github.com/januarharianto/respR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/januarharianto/respR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/januarharianto/respR?branch=master)
 [![License](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![DOI](https://img.shields.io/badge/DOI-10.1111%2F2041--210X.13162-blue)](https://doi.org/10.1111/2041-210X.13162)
 [![Github Star](https://img.shields.io/github/stars/januarharianto/respR?style=social)](https://GitHub.com/januarharianto/respR/stargazers/)
 [![Github watchers](https://img.shields.io/github/watchers/januarharianto/respR?label=Watch&style=social)](https://img.shields.io/github/watchers/januarharianto/respR?style=social)
 [![Github sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
-[![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR)
+<!-- [![Mastodon](https://img.shields.io/badge/dynamic/json?label=Mastodon&query=totalItems&url=https%3A%2F%2Fmas.to%2Fusers%2FrespR%2Ffollowers.json&logo=mastodon&style=social)](https://mas.to/@respR) -->
 
 <!-- badges: end -->
 
@@ -61,7 +61,7 @@ We are also happy to help directly. If you have problems using the package or ge
 
 The package has also been [**peer reviewed and published**](https://doi.org/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. 
 
-`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR Citations**](https://januarharianto.github.io/respR/articles/citations.html) page to see a list of published studies which have used the package to analyse their data.
+`respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR Citations**](https://januarharianto.github.io/respR/articles/citations.html) page to see a list of published studies which have used the package.
 
  \
  \
@@ -70,8 +70,6 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 ## Contact, feedback and help
 
 See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
-
-For the latest news and regular updates from the world of respirometry follow `respR` on **<a rel="me" href="https://mas.to/@respR">Mastodon</a>**. 
 
 ## Support package development
 

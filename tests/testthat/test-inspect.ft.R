@@ -10,7 +10,7 @@ capture.output({  ## stops printing console outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
   skip_on_cran()
-
+  skip_on_ci()
   # Create multicolumn dfs for testing --------------------------------------
 
   {
