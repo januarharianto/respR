@@ -86,14 +86,9 @@ jobs:
       - name: Special handling for data.table on macOS devel
         if: runner.os == 'macOS' && matrix.config.r == 'devel'
         run: |
-          # Create a temporary custom repository file
-          mkdir -p ~/custom_repo
-
-          # Download the latest binary for the most recent R release and install it directly
-          Rscript -e 'download.file("https://mac.r-project.org/bin/macosx/big-sur-arm64/contrib/4.5/data.table_1.17.4.tgz", "~/custom_repo/data.table_1.17.4.tgz")'
-
-          # Install the downloaded binary package
-          Rscript -e 'install.packages("~/custom_repo/data.table_1.17.4.tgz", repos = NULL, type = "binary")'
+          # Try to install data.table binary from mac.r-project.org for R-devel
+          # If that fails, fall back to installing from source
+          Rscript -e 'tryCatch(install.packages("data.table", type = "binary", repos = "https://mac.r-project.org"), error = function(e) { message("Binary install failed, installing from source..."); install.packages("data.table", type = "source", repos = "https://cloud.r-project.org") })'
         shell: bash
 
       # Pre-install data.table as binary for non-devel macOS and Windows
