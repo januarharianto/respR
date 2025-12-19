@@ -4,7 +4,6 @@
 
 if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
 skip_on_cran()
-skip_on_ci()
 # units.val ------------------------------------------------------------
 
 test_that("units.val - works", {
