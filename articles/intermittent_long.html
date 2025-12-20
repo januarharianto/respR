@@ -323,7 +323,7 @@ without saving the result to show the structure.</p>
 <code class="sourceCode R"><span><span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">18000</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The top plot shows the initial background recording up to row 5000,
 the first replicate of 14 minutes duration to determine MMR, followed by
 replicates of 11 minutes duration. We can see in these oxygen
@@ -336,7 +336,7 @@ multiple replicates.</p>
 <code class="sourceCode R"><span><span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">65000</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can see that by the end of the experiment the replicates are much
 more regular, suggesting rates have stabilised, and we can also see the
 end background recording. This time we passed a different
@@ -350,7 +350,7 @@ can inspect the entire dataset and this time save the result to an
 object we will use for the rest of the analysis.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zeb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Here because the dataset is so large the plots are of limited use,
 but we can at least see that much more oxygen was used in the early
 replicates, as would be expected because the specimen was exercised
@@ -376,7 +376,7 @@ objects.</p>
 <span><span class="va">bg_post</span> <span class="op">&lt;-</span> <span class="va">zeb</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">75140</span>, to <span class="op">=</span> <span class="fl">79251</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The two different background rates (only the post-experiment plot is
 shown above) have been saved to these two objects. We can see the actual
 values by printing them:</p>
@@ -423,7 +423,7 @@ see how the rate changes over the replicate.</p>
 <span>                         to <span class="op">=</span> <span class="fl">5000</span> <span class="op">+</span> <span class="fl">840</span> <span class="op">-</span> <span class="fl">120</span>, </span>
 <span>                         by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>In this replicate, the rolling rate plot shows that calculated at
 this particular <code>width</code>, the rate declines rapidly from
 around -0.012 to around -0.008, then declines more slowly over the
@@ -467,7 +467,7 @@ objective and consistent.</p>
 <span>                     to <span class="op">=</span> <span class="fl">480</span>,   <span class="co"># five minutes later = 'measure' phase</span></span>
 <span>                     by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.calc_rate # -------------------</span></span>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
@@ -502,7 +502,7 @@ also have done this when we first subset and inspected the data <a href="#mmrsub
 <span>            width <span class="op">=</span> <span class="fl">120</span>,</span>
 <span>            by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.auto_rate # -------------------</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -567,7 +567,7 @@ early in the replicate, so is probably the result we are most interested
 in. We can plot it using <code>pos</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_mmr</span>, pos <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Many aspects will feed into rate selection criteria for a specific
 experiment or study, and it depends on these whether this in an
 acceptable, reportable result. Maybe at less than 2 minutes this is not
@@ -620,7 +620,7 @@ a good estimation of MMR. Note how the rolling rate plot is smoother
 with this higher width.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_mmr</span>, pos <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>With non-linear data like this, such as from an animal recovering
 from exercise, increasing the width over which a rate is determined will
 necessarily decrease the rate values. The researcher needs to keep this
@@ -889,7 +889,7 @@ recording. We then <code>inspect</code> it.</p>
 <span><span class="co">#&gt; inspect: Applying column default of 'time = 1'</span></span>
 <span><span class="co">#&gt; inspect: Applying column default of 'oxygen = 2'</span></span>
 <span><span class="co">#&gt; inspect: No issues detected while inspecting data frame.</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-24-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="extract-rates-1">Extract rates<a class="anchor" aria-label="anchor" href="#extract-rates-1"></a>
@@ -906,7 +906,7 @@ minutes to eight minutes. To do this we specify a 180 row
 <span>                            measure <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>                            by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.calc_rate.int: Plotting first 20 selected reps only. To plot others modify 'pos' input.</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-25-1.png" width="960" style="display: block; margin: auto;">
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="960" style="display: block; margin: auto;">
 By default the function plots the first 20 replicates (<code>pos</code>
 can be used to choose others up to a maximum of 20). Note how the lower
 time axis has the actual raw data time values, but the top row axis
@@ -1032,7 +1032,7 @@ visualise and explore rate results. For intermittent-flow results the
 most useful of these is <code>type = "rate"</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_cr.int_conv</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-31-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-31-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This shows how the calculated rate values vary across the dataset. We
 can see from this plot they are high at the start, stabilise after
 around timepoint 20000, then are a little unstable again if not slightly
@@ -1172,7 +1172,7 @@ case the lowest, for each replicate.</p>
 <span>                            by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting first 20 selected rates only. To plot others modify 'pos' input.</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-34-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Note how the plots show the rates coming from different regions
 within each replicate measure phase. The summary contains all the
 results, that is the lowest 2-minute rate from each replicate. Before
@@ -1227,7 +1227,7 @@ the <a href="#crintadj">example above</a>.</p>
 how rates vary across the data.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_ar.int_conv</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-38-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>These rates seem to be a bit lower than those we extracted for RMR <a href="#crintselect">above</a>, as we would expect for an SMR.</p>
 <p>This is an opportunity to do some quality control before we select
 our final rates to determine SMR. Looking at the plot above there is one
@@ -1238,7 +1238,7 @@ using <code>pos</code> and the y-axis range will adapt to provide a more
 detailed view of the range of rates.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_ar.int_conv</span>, type <span class="op">=</span> <span class="st">"rate"</span>, pos <span class="op">=</span> <span class="fl">30</span><span class="op">:</span><span class="fl">80</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-39-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Replicate 48 does seem to be anomalously low. If we go back to the
 <code>auto_rate.int</code> results object we can use <code>pos</code> to
 plot this replicate for a closer look. We’ll do this in two different
@@ -1248,10 +1248,10 @@ this replicate which has more diagnostic plots, but only shows the
 <code>measure</code> phase.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_ar.int</span>, type <span class="op">=</span> <span class="st">"rep"</span>, pos <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-40-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_ar.int</span>, type <span class="op">=</span> <span class="st">"ar"</span>, pos <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_long_files/figure-html/unnamed-chunk-40-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_long_files/figure-html/unnamed-chunk-40-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Looking at these plots this result does seem to be anomalous, and in
 this replicate the rate extracted is not really representative. It also
 has a lower r-squared which otherwise varies from 0.72 to 0.98. There
@@ -1425,7 +1425,7 @@ most analyses use of <code>calc_rate.int</code> or
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

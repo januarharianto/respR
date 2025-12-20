@@ -529,7 +529,7 @@ value of <code>0.6</code> with the dataset <code>sardine.rd</code>:</p>
 <span></span>
 <span><span class="co"># Perform linear detection using manual width of 0.6:</span></span>
 <span><span class="va">overx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sardine.rd</span>, width <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>For the <code>linear</code> method, since KDE automatically
 aggregates stable values, a poor selection of the <code>width</code> may
 result in a badly-characterised rolling rate estimate output. Under
@@ -561,7 +561,7 @@ value of 5% of the data, <code>width = 0.05</code>.</p>
 <span></span>
 <span><span class="co"># Perform linear detection using manual width of 0.05:</span></span>
 <span><span class="va">underx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sardine.rd</span>, width <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>A lower width leads to much more variable rolling rate estimates.
 Note how we have had to adjust the y-axis limits to fit the results (the
 left plot is the same data as in the previous section with different
@@ -599,7 +599,7 @@ linear</em> regions of the data
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sard_ar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sardine.rd</span><span class="op">)</span></span>
 <span><span class="co">#&gt; auto_rate: Applying default 'width' of 0.2</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This method detects the <em>most consistently linear</em> regions of
 the data, that is the most consistent rates observed during the
 experiment. It does this in a rigorous, unsupervised manner, with the
@@ -659,7 +659,7 @@ functions.</p>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard_ar</span>, pos <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p><strong>Users should take special note</strong> that as an automated,
 unsupervised machine learning method of identifying linear data
 <code>auto_rate</code> is fallible, and the results should
@@ -804,7 +804,7 @@ same number of rows.</p>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">high_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sard_insp</span>, width <span class="op">=</span> <span class="fl">900</span>, by <span class="op">=</span> <span class="st">"row"</span>, method <span class="op">=</span> <span class="st">"highest"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">high_rate</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -844,7 +844,7 @@ the top results all come from the same region of the data.</p>
 minutes.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">low_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sard_insp</span>, width <span class="op">=</span> <span class="fl">900</span>, method <span class="op">=</span> <span class="st">"lowest"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">low_rate</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -891,7 +891,7 @@ absolute rate value.</p>
 specified <code>width</code> to be returned in sequential order.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roll_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sard_insp</span>, width <span class="op">=</span> <span class="fl">900</span>, method <span class="op">=</span> <span class="st">"rolling"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate_files/figure-html/unnamed-chunk-16-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">roll_rate</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -989,7 +989,7 @@ subsetting and passing data regions of interest to other functions. See
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

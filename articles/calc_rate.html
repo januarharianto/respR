@@ -236,7 +236,7 @@ here is the <code>sardine.rd</code> dataset, but the time data has been
 converted to minutes to demonstrate the different x-axis values.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="time-range">Time range<a class="anchor" aria-label="anchor" href="#time-range"></a>
@@ -251,7 +251,7 @@ last value instead.</p>
 <span>                from <span class="op">=</span> <span class="fl">20</span>, </span>
 <span>                to <span class="op">=</span> <span class="fl">80</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="row-range">Row range<a class="anchor" aria-label="anchor" href="#row-range"></a>
@@ -263,7 +263,7 @@ last value instead.</p>
 <span>                from <span class="op">=</span> <span class="fl">2000</span>, </span>
 <span>                to <span class="op">=</span> <span class="fl">6000</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="oxygen-range">Oxygen range<a class="anchor" aria-label="anchor" href="#oxygen-range"></a>
@@ -277,7 +277,7 @@ This option finds the first occurrence of the <code>from</code> value
 <span>                from <span class="op">=</span> <span class="fl">94</span>, </span>
 <span>                to <span class="op">=</span> <span class="fl">92</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="multiple-rates">Multiple rates<a class="anchor" aria-label="anchor" href="#multiple-rates"></a>
@@ -290,7 +290,7 @@ entering vectors of paired values as <code>from</code> and
 <span>                from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span><span class="op">)</span>, </span>
 <span>                to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cr</span><span class="op">)</span></span>
@@ -423,7 +423,7 @@ axis labels to axis ticks.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cr</span>, pos <span class="op">=</span> <span class="fl">2</span>, panel <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>     las <span class="op">=</span> <span class="fl">1</span>, mai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.35</span>, <span class="fl">0.15</span><span class="op">)</span>, mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -451,7 +451,7 @@ an explanation of this output and when it might be useful.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

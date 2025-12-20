@@ -224,35 +224,60 @@
 <style type="text/css">
 .wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   border-color: white;
 }
 
 .left {
   width: 50%;
-  margin: 5px; 
+  margin: 5px;
   border-style: solid;
   border-color: white;
   border-radius: 12px;
-  padding: 1px; 
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .right {
   width: 50%;
-  margin: 5px; 
+  margin: 5px;
   border-style: solid;
   border-color: white;
   border-radius: 12px;
-  padding: 1px; 
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
 }
 </style>
 <div class="wrapper">
 <div class="left">
-<p><a href="https://github.com/nicholascarey" class="external-link"><img src="https://kasroudra-stats-card.onrender.com/user?user=nicholascarey&amp;layout=compact&amp;theme=buefy" alt="github-stats-card"></a></p>
+<div class="profile-header">
+<a href="https://github.com/nicholascarey" class="external-link"><img src="https://github.com/nicholascarey.png" width="80" style="border-radius: 50%;"></a>
+<div>
+<p><strong>Nicholas Carey</strong><br><a href="https://github.com/nicholascarey" class="external-link"><span class="citation">@nicholascarey</span></a></p>
+</div>
+</div>
+<p><a href="https://github.com/nicholascarey" class="external-link"><img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=nicholascarey&amp;theme=vue" alt="Nicholas’s Stats"></a></p>
 </div>
 <div class="right">
-<p><a href="https://github.com/januarharianto" class="external-link"><img src="https://kasroudra-stats-card.onrender.com/user?user=januarharianto&amp;layout=compact&amp;theme=buefy" alt="github-stats-card"></a></p>
+<div class="profile-header">
+<a href="https://github.com/januarharianto" class="external-link"><img src="https://github.com/januarharianto.png" width="80" style="border-radius: 50%;"></a>
+<div>
+<p><strong>Januar Harianto</strong><br><a href="https://github.com/januarharianto" class="external-link"><span class="citation">@januarharianto</span></a></p>
+</div>
+</div>
+<p><a href="https://github.com/januarharianto" class="external-link"><img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=januarharianto&amp;theme=vue" alt="Januar’s Stats"></a></p>
 </div>
 </div>
 <div class="section level2">
@@ -337,7 +362,7 @@ touch</strong></a>.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

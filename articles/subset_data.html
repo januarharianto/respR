@@ -255,12 +255,12 @@ way.</p>
 <span><span class="co">#&gt; inspect: Applying column default of 'time = 1'</span></span>
 <span><span class="co">#&gt; inspect: Applying column default of 'oxygen = 2'</span></span>
 <span><span class="co">#&gt; inspect: No issues detected while inspecting data frame.</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Let’s say we are only interested in the initial stages.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">10000</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Now we can pass this object to further functions.</p>
 </div>
 <div class="section level2">
@@ -271,7 +271,7 @@ per-second happen to be the same values.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">10000</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="subset-by-oxygen">Subset by oxygen<a class="anchor" aria-label="anchor" href="#subset-by-oxygen"></a>
@@ -282,7 +282,7 @@ so let’s only select the higher values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">8</span>, to <span class="op">=</span> <span class="fl">6.5</span>, by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        Time Oxygen</span></span>
@@ -311,7 +311,7 @@ want to subset a single replicate from an intermittent flow experiment
 to calculate a rate.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">intermittent.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We have already inspected the dataset. Now we just subset out one
 replicate, pipe the data to <code>calc_rate</code> and other functions
 and output our final rate, all without having to create a new
@@ -327,7 +327,7 @@ object.</p>
 <span>               volume <span class="op">=</span> <span class="fl">2.379</span>,         </span>
 <span>               mass <span class="op">=</span> <span class="fl">0.006955</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of converted rates from entered 'pos' rank(s):</span></span>
@@ -344,7 +344,7 @@ anything.</p>
 <code class="sourceCode R"><span><span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">10000</span>, to <span class="op">=</span> <span class="fl">13000</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="subset-multiple-columns">Subset multiple columns:<a class="anchor" aria-label="anchor" href="#subset-multiple-columns"></a>
@@ -388,7 +388,7 @@ same rows).</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

@@ -383,7 +383,7 @@ chambers.</p>
 <code class="sourceCode R"><span><span class="co">## inspect and calculate background rate using calc_rate.bg</span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.inspect # -----------------------</span></span>
 <span><span class="co">#&gt;                 time.min   b1</span></span>
@@ -441,7 +441,7 @@ inputs. This code will perform exactly the same rate calculation.</p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.calc_rate # ----------------------</span></span>
 <span><span class="co">#&gt; plot.calc_rate: Plotting rate from position 1 of 1 ...</span></span></code></pre>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate # ---------------------</span></span>
@@ -687,7 +687,7 @@ background columns via regular R syntax.</p>
 <code class="sourceCode R"><span><span class="co">## inspect and calculate background rate from two chambers</span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-15-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>By default, <code>calc_rate.bg</code> will plot all the calculated
 background columns (though you can use the <code>pos</code> input to
 select which). If we print the result we can see both calculated
@@ -733,7 +733,7 @@ two above. We want to use them with the two above to apply a mean
 adjustment value based on all five controls.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">bg_exp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-19-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate.bg # ------------------</span></span>
 <span><span class="co">#&gt; Background rate(s):</span></span>
@@ -1079,7 +1079,7 @@ rates.</p>
 data) is a closed chamber respirometry experiment on a squid.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sqd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-34-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="prepare-background-data">Prepare background data<a class="anchor" aria-label="anchor" href="#prepare-background-data"></a>
 </h4>
@@ -1095,7 +1095,7 @@ always a good idea to inspect the data for issues and visualise it using
 columns we are interested in.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_bg_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sqd_bg</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-35-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The rolling rate plot makes clear that the background rate increases
 over the duration of the experiment. Estimating the background rate
 using the whole dataset would therefore likely lead to a wrong
@@ -1108,7 +1108,7 @@ More localised estimations would therefore be more representative.</p>
 <p>We’ll use <code>auto_rate</code> on the squid data.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_ar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sqd_insp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-36-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>There are 22 linear regions found in these data, so we have 22 rates
 to be adjusted.</p>
 </div>
@@ -1148,12 +1148,12 @@ correctly.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">sqd_bg</span>, from <span class="op">=</span> <span class="fl">2425</span>, to <span class="op">=</span> <span class="fl">4800</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">sqd_bg</span>, from <span class="op">=</span> <span class="fl">273</span>, to <span class="op">=</span> <span class="fl">3057</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can see the slopes in the equations are identical to the
 adjustment values in the summary.</p>
 <p>The <code>"concurrent"</code> method is ideal for this type of
@@ -1170,7 +1170,7 @@ recording is not available.</p>
 intermittent-flow experiment, and been flushed at the same time as the
 specimen chamber. In this plot the specimen data is in black, the
 control in orange.</p>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-40-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Clearly, fitting slopes to any part of the background data other than
 within each replicate will lead to questionable results. Since we will
 be calculating a specimen rate within each replicate, the concurrent
@@ -1199,7 +1199,7 @@ from the rest of the replicate.</p>
 <span>                       wait <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>                       measure <span class="op">=</span> <span class="fl">420</span>,</span>
 <span>                       by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-41-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-41-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1263,7 +1263,7 @@ background rate from the same window.</p>
 <span>  <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">10</span>, </span>
 <span>            to <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>            by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-44-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-44-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="inspect-background-data">Inspect background data<a class="anchor" aria-label="anchor" href="#inspect-background-data"></a>
@@ -1273,7 +1273,7 @@ background rate from the same window.</p>
 <span><span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, </span>
 <span>                   time <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                   oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-45-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-45-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="adjust-rate-1">Adjust rate<a class="anchor" aria-label="anchor" href="#adjust-rate-1"></a>
@@ -1459,14 +1459,14 @@ post-experiment background rates.</p>
 <span><span class="va">bg_pre</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>, <span class="fl">1</span>, <span class="fl">4999</span>, <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># post</span></span>
 <span><span class="va">bg_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>, <span class="fl">75140</span>, <span class="fl">79251</span>, <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_pre</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1509,7 +1509,7 @@ minutes of flushing at the end.</p>
 <span>                    by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-53-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-53-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p><code>auto_rate</code> has identified three linear regions.</p>
 </div>
 <div class="section level4">
@@ -1622,7 +1622,7 @@ strongly recommend.</p>
 data with a rate that increases exponentially.</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">background_exp.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-57-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-57-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can see this is exponential from the rolling rate plot: the rate
 is not constant, because that would be indicated by a horizontal level
 line. It increases, however this is not a linear increase because it is
@@ -1685,7 +1685,7 @@ oxygen via photosynthesis. We’ll calculate a production rate from these
 data.</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alg_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">algae.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-59-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-59-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alg_rt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1701,7 +1701,7 @@ now.</p>
 period, so we’ll calculate a background rate.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">alg_bg</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-62-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-62-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bg_rt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1807,10 +1807,10 @@ typical adjustment methods we show above. We’ll use the
 <p>We’ll inspect both to see the structure.</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, <span class="fl">1</span>, <span class="fl">18</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="subtraction-method">Subtraction method<a class="anchor" aria-label="anchor" href="#subtraction-method"></a>
@@ -1901,7 +1901,7 @@ until the researcher was ready to start the experiment proper at around
 timepoint 5000, so the initial stages are not useful.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-74-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-74-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Using this complete dataset would give an incorrect background rate
 estimation. Instead we use <code>subset_data</code> to subset only the
 data region we are interested in and pass it to
@@ -1911,7 +1911,7 @@ ranges.</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">bg_data</span>, from <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-75-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-75-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can use the fact that the default is <code>method = "time"</code>
 to subset from timepoint 5000. If we don’t specify a <code>to</code>
 input the default behaviour is to subset to the end of the dataset.</p>
@@ -2018,7 +2018,7 @@ multiple rates they return the mean value of the primary output
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

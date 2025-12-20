@@ -318,7 +318,7 @@ timeseries up to a maximum of 20. These can be selected using
 default being <code>pos = 1:20</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This lets you see where each rate occurs within the dataset, and the
 converted rate value is in the title. The values on the axes - time
 (bottom), row (top), and oxygen (left) - are in the units of the
@@ -333,7 +333,7 @@ lower plot the output rate values in the chosen output units. Each rate
 is plotted against the middle of the region used to determine it.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This lets you see how the rate varies across the dataset and decide
 how to filter the results. Here for example, rates are higher at the
 start of the experiment, and stable low rates only occur after around
@@ -355,7 +355,7 @@ as reordering or selection is performed rank and summary table position
 will not necessarily be equivalent.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Here we have analysed the data using the <code>auto_rate</code>
 <code>"linear"</code> method, and we can see many of the results are
 from similar or essentially equivalent regions of the data. See below
@@ -415,7 +415,7 @@ convert the rates to our final units.</p>
 <span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This is large dataset, from a relatively long experiment of over 2
 hours. The <code>auto_rate</code> analysis has identified 39 linear
 regions, of which the above plot is the highest ranked one, or most
@@ -495,11 +495,11 @@ look at both the rate value plot and the overlap plot.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-7-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can see the rates are higher at the start of the dataset, after
 which they stabilise. From the overlap plot we can see many of the
 linear regions substantially overlap and are essentially from the same
@@ -518,7 +518,7 @@ can use this method to select any number of the lowest rates using
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lowest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -546,7 +546,7 @@ and process it through <code>select_rate</code> multiple times).</p>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lowest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -611,7 +611,7 @@ seconds) <code>width</code> in the <code>"time"</code> metric.</p>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -640,7 +640,7 @@ around 0.88 to 0.95).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This plot is perhaps difficult to understand at first, but should
 become clear. The summary table is ordered from lowest to highest rates
 descending. The lower plot reflects this, and shows most of these lower
@@ -661,7 +661,7 @@ before around timepoint 3000. We can remove those using
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
@@ -697,7 +697,7 @@ increases exponentially with the number of results remaining.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
@@ -805,7 +805,7 @@ two different ways, and show the summary table.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-16-1.png" width="960" style="display: block; margin: auto;"><img src="select_rate_files/figure-html/unnamed-chunk-16-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960" style="display: block; margin: auto;"><img src="select_rate_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The first <code>type = "full"</code> plot shows each replicate rate
 in the context of the entire data series. The second
 <code>type = "rate"</code> plot is really useful in understanding how
@@ -861,7 +861,7 @@ to save the full result as a <code>data.frame</code>.</p>
 <code class="sourceCode R"><span><span class="va">mmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span><span class="va">zeb_sub</span>, method <span class="op">=</span> <span class="st">"highest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>export <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-18-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>That’s it! We can print the data frame we saved to check the result.
 This contains the full results, from which replicate the rate came from,
 the data region it was calculated over, any adjustments (which we didn’t
@@ -885,7 +885,7 @@ the result to <code><a href="https://rdrr.io/r/base/mean.html" class="external-l
 <code class="sourceCode R"><span><span class="va">rmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span><span class="va">zeb_sub</span>, method <span class="op">=</span> <span class="st">"lowest_percentile"</span>, n <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-20-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span>
@@ -960,7 +960,7 @@ type in convert rate.</p>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-22-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Now let’s remove all results that share 100% of their datapoints with
 at least one other. Here we pipe the result to <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -976,7 +976,7 @@ at least one other. Here we pipe the result to <code><a href="https://rdrr.io/r/
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"overlap"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-23-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This greatly reduces the number of results, but there is still a
 substantial overlap between them. Therefore, let’s adjust the overlap
 threshold to 0.9, that is regressions which share 90% or more of data
@@ -994,7 +994,7 @@ with at least one other are removed.</p>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"overlap"</span>, n <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-24-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -1033,7 +1033,7 @@ selection criteria that can be applied.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

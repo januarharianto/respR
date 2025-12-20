@@ -1,5 +1,5 @@
 pandoc: 3.6.3
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   adjust_rate: adjust_rate.html
@@ -38,7 +38,7 @@ articles:
   archive/usage: archive/usage.html
   archive/v1_code: archive/v1_code.html
   archive/v2_code_change: archive/v2_code_change.html
-last_built: 2025-12-19T10:39Z
+last_built: 2025-12-20T11:52Z
 urls:
   reference: https://januarharianto.github.io/respR/reference
   article: https://januarharianto.github.io/respR/articles

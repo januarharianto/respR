@@ -303,7 +303,7 @@ replicates, flushes etc. can be found in the data help file:
 and note they are of different duration.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">urchin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="rate-from-row-range-in-each-replicate">Rate from <code>row</code> range in each replicate<a class="anchor" aria-label="anchor" href="#rate-from-row-range-in-each-replicate"></a>
@@ -316,7 +316,7 @@ replicate.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_rate.int.html">calc_rate.int</a></span><span class="op">(</span><span class="va">urchin</span>,</span>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; calc_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>This is obviously not going to produce an appropriate rate. To
 exclude flush periods use the <code>measure</code> input. Here, using a
 vector of the same length as <code>starts</code> we can specify a
@@ -326,7 +326,7 @@ to specify this in row widths, that is <code>by = "row"</code>.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_rate.int.html">calc_rate.int</a></span><span class="op">(</span><span class="va">urchin</span>,</span>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="fl">1200</span>, <span class="fl">800</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>However, we usually want to use the same region within each replicate
 to get a rate, and also exclude the first few minutes to allow a period
 of settling or acclimation after the flush. We can enter the
@@ -337,7 +337,7 @@ acheive this.</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              wait <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">600</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="rate-from-time-range-in-each-replicate">Rate from <code>time</code> range in each replicate<a class="anchor" aria-label="anchor" href="#rate-from-time-range-in-each-replicate"></a>
@@ -351,7 +351,7 @@ also be specified in the time units of the original data by using
 <span>              wait <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The function uses the closest matching values if the exact values do
 not occur in the time data.</p>
 </div>
@@ -402,7 +402,7 @@ flush excluded.</p>
 <span>    by <span class="op">=</span> <span class="st">"row"</span>,</span>
 <span>    plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">103</span><span class="op">:</span><span class="fl">105</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We use the <code>pos</code> input which is passed to
 <code>plot</code> to select the first and last three replicates for
 plotting to check everything looks okay. In a full analysis however we
@@ -453,7 +453,7 @@ the <code>pos</code> input, either in the main function call or when
 calling <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on output objects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">:</span><span class="fl">69</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>For all plots, the bottom blue time axis shows the time values of the
 original larger dataset, whilst the upper red row axis shows the rows of
 the replicate subset.</p>
@@ -473,7 +473,7 @@ plotted individually with the rate region highlighted.</p>
 <span>              wait <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-full">
@@ -488,11 +488,11 @@ highlighted in the context of the entire dataset.</p>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>              type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Note this may be of limited use when the dataset is large.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"full"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-cr">
@@ -504,7 +504,7 @@ can be plotted using <code>type = "cr"</code> and the <code>pos</code>
 input. Note these are results from subsets of the initial data.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"cr"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>The <code>pos</code> input here can also be of multiple replicates
 but this will produce multiple individual plots that you will need to
 scroll through.</p>
@@ -674,7 +674,7 @@ phase. See example <a href="https://januarharianto.github.io/respR/articles/adju
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

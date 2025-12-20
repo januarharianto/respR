@@ -288,7 +288,7 @@ depending on the data. See <code><a href="../articles/inspecting.html">vignette(
 <span><span class="co">#&gt; evenly-spaced   pass    -</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>We can see from the top plot that this dataset has three replicates,
 separated by two flushes where new water was added. The bottom plot
 shows rate of change (positive or negative) in oxygen over a rolling
@@ -312,7 +312,7 @@ data, which can help us decide how we are going to proceed.</p>
 <code class="sourceCode R"><span><span class="va">intermittent.rd</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">1800</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Inspecting the first replicate shows us rate is indeed fairly
 consistent within the replicate, but fluctuates from around -0.0004 to
 -0.0008. However, bear in mind these rate values are determined over the
@@ -325,7 +325,7 @@ Let’s try a wider window of 50% of the data.</p>
 <code class="sourceCode R"><span><span class="va">intermittent.rd</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">1800</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Now we can see rate is much more consistent, although it decreases
 slightly over the course of the replicate. But we can tell that we would
 expect our extracted rates to be around -0.0006. Note the values in the
@@ -369,7 +369,7 @@ happens if we only specify the starting location of each using
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_rate.int.html">calc_rate.int</a></span><span class="op">(</span><span class="va">urchin_int</span>,</span>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.calc_rate.int # ---------------</span></span>
 <span><span class="co">#&gt; Summary of all replicate results:</span></span>
@@ -390,7 +390,7 @@ the flush.</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="fl">1400</span>, <span class="fl">900</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.calc_rate.int # ---------------</span></span>
 <span><span class="co">#&gt; Summary of all replicate results:</span></span>
@@ -428,7 +428,7 @@ method is <code>by = "row"</code> so we do not need to specify this.</p>
 <span>                            wait <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>                            measure <span class="op">=</span> <span class="fl">900</span>,</span>
 <span>                            legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>In this plot, the data used to calculate the rate is the yellow
 points, the red shaded region is the <code>wait</code> phase, and the
 green shaded region the <code>measure</code> phase (we added
@@ -469,7 +469,7 @@ dataset. For larger datasets this may be of limited utility.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urch_rates</span>,</span>
 <span>     type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>See <code><a href="../articles/calc_rate.int.html">vignette("calc_rate.int")</a></code> for additional plotting
 options.</p>
 </div>
@@ -491,7 +491,7 @@ convert it to the same units as our urchin data.</p>
 <p>Now we calculate a background rate.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-16-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bg_rate</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -619,7 +619,7 @@ for discussion of appropriate widths to use with
 <span>                            width <span class="op">=</span> <span class="fl">400</span>, </span>
 <span>                            legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_short_files/figure-html/unnamed-chunk-22-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_short_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.auto_rate.int # ---------------</span></span>
 <span><span class="co">#&gt; Summary of all rate results:</span></span>
@@ -720,7 +720,7 @@ recommended approach.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

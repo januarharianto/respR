@@ -254,7 +254,7 @@ to extract a rate from each complete replicate.</p>
 <span><span class="co">#&gt; inspect: Applying column default of 'time = 1'</span></span>
 <span><span class="co">#&gt; inspect: Applying column default of 'oxygen = 2'</span></span>
 <span><span class="co">#&gt; inspect: No issues detected while inspecting data frame.</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># calc rates</span></span>
@@ -262,7 +262,7 @@ to extract a rate from each complete replicate.</p>
 <span>                              from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>                              to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">3550</span>, <span class="fl">4831</span><span class="op">)</span>,</span>
 <span>                              by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-2-2.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-2-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">urchin_int_rates</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -291,13 +291,13 @@ different time window within each replicate.</p>
 <span>                              from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">2300</span>, <span class="fl">4100</span><span class="op">)</span>, </span>
 <span>                              to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="fl">3000</span>, <span class="fl">4400</span><span class="op">)</span>, </span>
 <span>                              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>By default, the first is shown in <code>print</code> and
 <code>plot</code>, but the <code>pos</code> input can be used to view
 others.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">urchin_int_rates</span>, pos <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Calling <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> will show the coefficients, locations
 and values of all rates:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -349,7 +349,7 @@ within each replicate. In addition, this approach allows you to use the
 <code class="sourceCode R"><span><span class="va">u_rate1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">u_rep1</span>, from <span class="op">=</span> <span class="fl">7.1</span>, to <span class="op">=</span> <span class="fl">6.7</span>, by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span>
 <span><span class="va">u_rate2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">u_rep2</span>, from <span class="op">=</span> <span class="fl">7.1</span>, to <span class="op">=</span> <span class="fl">6.8</span>, by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span>
 <span><span class="va">u_rate3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">u_rep3</span>, from <span class="op">=</span> <span class="fl">7.0</span>, to <span class="op">=</span> <span class="fl">6.8</span>, by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="piping">Piping<a class="anchor" aria-label="anchor" href="#piping"></a>
@@ -396,7 +396,7 @@ every replicate, which will be quite large (several MB).</p>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zeb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="analysis-loop">Analysis loop<a class="anchor" aria-label="anchor" href="#analysis-loop"></a>
@@ -435,7 +435,7 @@ replicate using the <code>sapply</code> function.</p>
 <code class="sourceCode R"><span><span class="co">## extract rates</span></span>
 <span><span class="va">rmr_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">zeb_rmr</span>, <span class="kw">function</span><span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="va">z</span><span class="op">$</span><span class="va">rate</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rmr_rate</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rmr_rate</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>Note, we plot on a reverse axis so higher rates are higher on the
 plot. We can see that rates are higher in the initial stages of the
 experiment, then are quite consistent after they stabilise.</p>
@@ -510,7 +510,7 @@ rate from each replicate.</p>
 <p>Now we can plot them. Again, we reverse the y-axis.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_rmr_all</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">zeb_rmr_all</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intermittent_old_files/figure-html/unnamed-chunk-20-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="intermittent_old_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
 <p>It depends on the experiment how we might want to define the final
 RMR. This is the routine metabolic rate, so we want a rate that
 represents routine behaviour. Here, rates are very consistent after
@@ -600,7 +600,7 @@ from 20 onwards. This is just one approach of many we could apply. See
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
