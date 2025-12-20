@@ -1,0 +1,344 @@
+# respR : Processing and analysis of respirometry data
+
+`respR` is a package for `R` that provides a structural, reproducible
+workflow for the processing and analysis of respirometry data. While the
+focus of the package is on aquatic respirometry, `respR` is largely
+unitless and so can process, explore, and determine rates from any
+respirometry data, and indeed linear relationships in any time-series
+data.
+
+Use `respR` to:
+
+- **Inspect** respirometry data for common issues before analysis
+- **Explore** and **visualise** oxygen timeseries
+- **Calculate** rates manually or automatically using **multiple
+  regression analysis**
+- **Adjust** rates for background oxygen consumption or production
+- **Convert** rates to any common unit of oxygen consumption or
+  production
+- **Select** rates according to various criteria
+- **Export** results quickly for reporting
+- Identify **critical oxygen values**, such as $`P_{crit}`$
+
+A highlight of the package is the
+[`auto_rate()`](https://januarharianto.github.io/respR/reference/auto_rate.md)
+function. This uses machine learning (kernel density estimation) to
+*automatically* identify linear regions of data, that is regions where
+oxygen uptake or production rates are stable and consistent. This allows
+metabolic rates to be extracted in an objective manner. See
+[`vignette("auto_rate")`](https://januarharianto.github.io/respR/articles/auto_rate.md)
+for more details.
+
+## Installation
+
+`respR` is now available on
+[**CRAN**](https://CRAN.R-project.org/package=respR), and can be
+installed via the ‘Packages’ tab in RStudio or by running this command:
+
+``` r
+install.packages("respR")
+```
+
+You can also install the latest version direct from
+[**Github**](https://github.com/januarharianto/respr/):
+
+``` r
+devtools::install_github("januarharianto/respR")
+```
+
+## Getting started
+
+Visit the `respR` [**website**](https://januarharianto.github.io/respR/)
+to get started. The site has a range of vignettes detailing the
+functionality, plus example workflows, documentation, and more.
+
+We are also happy to help directly. If you have problems using the
+package or getting started with your analysis, [**get in
+touch**](https://januarharianto.github.io/respR/articles/contact.html)
+with a sample of your data and we will help get you started.
+
+## Publication
+
+[![](reference/figures/mee_cover.jpg)](https://doi.org/10.1111/2041-210X.13162)
+
+The package has also been [**peer reviewed and
+published**](https://doi.org/10.1111/2041-210X.13162) in *Methods in
+Ecology and Evolution*. Please cite this publication if you use `respR`
+in your published work.
+
+`respR` has been used to examine metabolic rates and photosynthesis in
+corals, plankton, micro- and macro-algae, fish, crustaceans,
+echinoderms, cephalopods, bivalves and more, in both lab and field
+studies. Check the [**respR
+Citations**](https://januarharianto.github.io/respR/articles/citations.html)
+page to see a list of published studies which have used the package.
+
+   
+   
+ 
+
+## Contact, feedback and help
+
+See
+[**here**](https://januarharianto.github.io/respR/articles/contact.html)
+for more ways of providing feedback and getting in touch if you are
+having issues.
+
+## Support package development
+
+If you would like to help support the package development or just buy us
+a beer to say thanks see
+[**here**](https://januarharianto.github.io/respR/articles/contact.html#support-future-development)
+
+## Developers
+
+- [**Nicholas Carey**](https://github.com/nicholascarey), Marine
+  Scotland Science
+- [**Januar Harianto**](https://github.com/januarharianto), University
+  of Sydney
+
+## Usage
+
+For a quick evaluation of the package, try out the following code:
+
+``` r
+library(respR) # load the package
+
+# 1. Check data for errors, selecting cols 1 and 15:
+urch <- inspect(urchins.rd, time = 1, oxygen = 15) 
+# 2. Automatically determine most linear regions:
+rate <- auto_rate(urch)
+# 3. Convert
+out <- convert_rate(rate, 
+                    oxy.unit = "mg/L", 
+                    time.unit = "min", 
+                    output.unit = "mg/h/kg", 
+                    volume = 0.6, 
+                    mass = 0.4)
+print(out)
+
+## Alternatively, use pipes:
+urchins.rd %>%        # using the urchins dataset,
+  select(1, 15) %>%   # select columns 1 and 15
+  inspect()     %>%   # inspect the data, then
+  auto_rate()   %>%   # automatically determine most linear segment
+  print()       %>%   # a quick preview
+  convert_rate("mg/L", "min", "mg/h/kg", 0.6, 0.4) # convert to units
+```
+
+# Package index
+
+## Pre-processing
+
+Functions for importing, processing, visualising and inspecting data:
+
+- [`import_file()`](https://januarharianto.github.io/respR/reference/import_file.md)
+  : Import respirometry system raw data files (DEPRECATED)
+
+- [`format_time()`](https://januarharianto.github.io/respR/reference/format_time.md)
+  : Parse date-time data to numeric time for use in respR functions
+
+- [`inspect()`](https://januarharianto.github.io/respR/reference/inspect.md)
+  : Explore and visualise respirometry data and check for common errors
+
+- [`inspect.ft()`](https://januarharianto.github.io/respR/reference/inspect.ft.md)
+  : Explore and visualise flowthrough respirometry data and check for
+  errors
+
+- [`subsample()`](https://januarharianto.github.io/respR/reference/subsample.md)
+  : Subsample a data frame object
+
+- [`subset_data()`](https://januarharianto.github.io/respR/reference/subset_data.md)
+  :
+
+  Subset a `data.frame`, `inspect`, or `inspect.ft` object
+
+## Analytical
+
+Functions for calculating rates of oxygen consumption or production:
+
+- [`auto_rate()`](https://januarharianto.github.io/respR/reference/auto_rate.md)
+  : Automatically determine most linear, highest, lowest and rolling
+  oxygen uptake or production rates
+- [`auto_rate.int()`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)
+  : Run auto_rate on multiple replicates in intermittent-flow
+  respirometry data
+- [`calc_rate()`](https://januarharianto.github.io/respR/reference/calc_rate.md)
+  : Calculate rate of change in oxygen over time
+- [`calc_rate.int()`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)
+  : Extract rates from multiple replicates in intermittent-flow
+  respirometry data
+- [`calc_rate.bg()`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)
+  : Calculate background oxygen uptake or input rates
+- [`calc_rate.ft()`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)
+  : Calculate rate of change in oxygen from flowthrough respirometry
+  data
+- [`oxy_crit()`](https://januarharianto.github.io/respR/reference/oxy_crit.md)
+  : Calculate critical oxygen values, such as PCrit
+
+## Adjust
+
+Functions for rate adjustments:
+
+- [`adjust_rate()`](https://januarharianto.github.io/respR/reference/adjust_rate.md)
+  : Adjust rates to account for background respiration or oxygen flux.
+- [`adjust_rate.ft()`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)
+  : Adjust rates in flowthrough respirometry to account for background
+  respiration or oxygen flux.
+
+## Convert
+
+Functions for rate and unit conversions:
+
+- [`convert_rate()`](https://januarharianto.github.io/respR/reference/convert_rate.md)
+  : Convert a unitless oxygen rate value to absolute, mass-specific or
+  area-specific rate
+- [`convert_rate.ft()`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)
+  : Convert a unitless oxygen rate value from flowthrough respirometry
+  to absolute, mass-specific or area-specific rates
+- [`convert_DO()`](https://januarharianto.github.io/respR/reference/convert_DO.md)
+  : Convert between units of dissolved oxygen
+- [`convert_MR()`](https://januarharianto.github.io/respR/reference/convert_MR.md)
+  : Convert between units of absolute, mass-specific, or area-specific
+  metabolic rates
+- [`convert_val()`](https://januarharianto.github.io/respR/reference/convert_val.md)
+  : Convert values of temperature, volume, mass, area, and atmospheric
+  pressure to different units
+- [`unit_args()`](https://januarharianto.github.io/respR/reference/unit_args.md)
+  : Print examples of unit inputs
+
+## Summarise
+
+Functions for rate filtering and summarising:
+
+- [`select_rate()`](https://januarharianto.github.io/respR/reference/select_rate.md)
+  [`select_rate.ft()`](https://januarharianto.github.io/respR/reference/select_rate.md)
+  : Select rate results based on a range of criteria
+
+## Data
+
+Example data files:
+
+- [`algae.rd`](https://januarharianto.github.io/respR/reference/algae.rd.md)
+  : Oxygen production respirometry data
+
+- [`background_con.rd`](https://januarharianto.github.io/respR/reference/background_con.rd.md)
+  : Background respirometry data (constant)
+
+- [`background_exp.rd`](https://januarharianto.github.io/respR/reference/background_exp.rd.md)
+  : Background respirometry data (exponential)
+
+- [`background_lin.rd`](https://januarharianto.github.io/respR/reference/background_lin.rd.md)
+  : Background respirometry data (linear)
+
+- [`flowthrough.rd`](https://januarharianto.github.io/respR/reference/flowthrough.rd.md)
+  :
+
+  Flowthrough respirometry data on the chiton, *Mopalia lignosa*
+
+- [`flowthrough_mult.rd`](https://januarharianto.github.io/respR/reference/flowthrough_mult.rd.md)
+  : Multi-column flowthrough respirometry data
+
+- [`flowthrough_sim.rd`](https://januarharianto.github.io/respR/reference/flowthrough_sim.rd.md)
+  : Flowthrough respirometry data with increasing background rate
+
+- [`intermittent.rd`](https://januarharianto.github.io/respR/reference/intermittent.rd.md)
+  :
+
+  Respirometry data of the sea urchin, *Heliocidaris Erythrogramma*
+
+- [`sardine.rd`](https://januarharianto.github.io/respR/reference/sardine.rd.md)
+  :
+
+  Respirometry data of the sardine, *Sardinops sagax*
+
+- [`squid.rd`](https://januarharianto.github.io/respR/reference/squid.rd.md)
+  :
+
+  Respirometry data of the squid, *Doryteuthis opalescens*
+
+- [`urchins.rd`](https://januarharianto.github.io/respR/reference/urchins.rd.md)
+  :
+
+  Multi-column respirometry data of the sea urchin, *Heliocidaris
+  Erythrogramma*, including background respiration
+
+- [`zeb_intermittent.rd`](https://januarharianto.github.io/respR/reference/zeb_intermittent.rd.md)
+  :
+
+  Respirometry data of a zebrafish, *Danio rerio*
+
+# Articles
+
+### All vignettes
+
+- [adjust_rate: Adjusting rates for
+  background](https://januarharianto.github.io/respR/articles/adjust_rate.md):
+- [auto_rate: Comparisons with
+  LoLinR](https://januarharianto.github.io/respR/articles/archive/auto_rate_comp.md):
+- [auto_rate: Performance in detecting linear
+  regions](https://januarharianto.github.io/respR/articles/archive/auto_rate_performance.md):
+- [auto_rate: Automatic detection of metabolic
+  rates](https://januarharianto.github.io/respR/articles/auto_rate.md):
+- [auto_rate.int: Automatic extraction of rates in intermittent-flow
+  respirometry](https://januarharianto.github.io/respR/articles/auto_rate.int.md):
+- [calc_rate: Manually select and calculate
+  rates](https://januarharianto.github.io/respR/articles/calc_rate.md):
+- [calc_rate.int: Manual extraction of rates in intermittent-flow
+  respirometry](https://januarharianto.github.io/respR/articles/calc_rate.int.md):
+- [respR
+  Citations](https://januarharianto.github.io/respR/articles/citations.md):
+- [Closed-chamber
+  respirometry](https://januarharianto.github.io/respR/articles/closed.md):
+- [Contact](https://januarharianto.github.io/respR/articles/contact.md):
+- [convert_DO: Convert between units of dissolved
+  oxygen](https://januarharianto.github.io/respR/articles/convert_DO.md):
+- [Flowthrough
+  respirometry](https://januarharianto.github.io/respR/articles/flowthrough.md):
+- [format_time: Convert date-time data to numeric
+  time](https://januarharianto.github.io/respR/articles/format_time.md):
+- [Future
+  Features](https://januarharianto.github.io/respR/articles/future.md):
+- [Importing files from oxygen probe
+  systems](https://januarharianto.github.io/respR/articles/importing.md):
+- [inspect: Inspecting
+  data](https://januarharianto.github.io/respR/articles/inspecting.md):
+- [Intermittent-flow respirometry: Long
+  experiment](https://januarharianto.github.io/respR/articles/intermittent_long.md):
+- [Intermittent-flow respirometry: Alternative
+  approaches](https://januarharianto.github.io/respR/articles/archive/intermittent_old.md):
+- [Intermittent-flow respirometry: Short
+  experiment](https://januarharianto.github.io/respR/articles/intermittent_short.md):
+- [oxy_crit: Comparisons with other
+  packages](https://januarharianto.github.io/respR/articles/archive/oxy_crit_comp.md):
+- [oxy_crit: Discussion of Pcrit estimation
+  methods](https://januarharianto.github.io/respR/articles/archive/oxy_crit_disc.md):
+- [Oxygen production
+  respirometry](https://januarharianto.github.io/respR/articles/oxy_production.md):
+- [Critical oxygen values
+  (PCrit)](https://januarharianto.github.io/respR/articles/oxycrit.md):
+- [Comparison of respR with other R
+  packages](https://januarharianto.github.io/respR/articles/archive/packages_comp.md):
+- [References](https://januarharianto.github.io/respR/articles/refs.md):
+- [Release
+  Notes](https://januarharianto.github.io/respR/articles/release_notes.md):
+- [Reporting reproducibile
+  analyses](https://januarharianto.github.io/respR/articles/reproducibility.md):
+- [Getting
+  Started](https://januarharianto.github.io/respR/articles/respR.md):
+- [select_rate: Exploring and filtering
+  results](https://januarharianto.github.io/respR/articles/select_rate.md):
+- [Thin larger
+  datasets](https://januarharianto.github.io/respR/articles/subsample.md):
+- [subset_data: Subset data by time, row, or oxygen
+  ranges](https://januarharianto.github.io/respR/articles/subset_data.md):
+- [respR and the
+  Tidyverse](https://januarharianto.github.io/respR/articles/tidyverse.md):
+- [Two-point rate
+  calculation](https://januarharianto.github.io/respR/articles/twopoint.md):
+- [When to use
+  respR](https://januarharianto.github.io/respR/articles/archive/usage.md):
+- [v1.1: How to install and run older
+  code](https://januarharianto.github.io/respR/articles/archive/v1_code.md):
+- [v2.0 Code
+  changes](https://januarharianto.github.io/respR/articles/archive/v2_code_change.md):
