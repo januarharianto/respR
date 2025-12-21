@@ -52,51 +52,52 @@ form[role="search"],
   margin-left: 5px !important;
 }
 
-/* Match Bootstrap 3 container width */
+/* Use Bootstrap 3 exact container widths */
 .container {
+  width: auto !important;
   max-width: 1170px !important;
   padding-left: 15px !important;
   padding-right: 15px !important;
 }
 
-/* For smaller screens */
-@media (max-width: 1199px) {
+@media (min-width: 768px) {
   .container {
-    max-width: 970px !important;
+    width: 750px !important;
   }
 }
 
-@media (max-width: 991px) {
+@media (min-width: 992px) {
   .container {
-    max-width: 750px !important;
+    width: 970px !important;
   }
 }
 
-/* Reduce Bootstrap 5 gutter spacing to match Bootstrap 3 */
-.row {
-  --bs-gutter-x: 30px !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px !important;
+  }
 }
 
-/* Remove padding from columns to use full width */
-.col-md-9,
-.col-md-3 {
-  padding-left: 15px !important;
-  padding-right: 15px !important;
+/* More horizontal spacing between navbar menu items */
+.navbar-nav .nav-item {
+  margin-left: 1em !important;
+  margin-right: 1em !important;
 }
 
-/* Make main content use more of available width */
-.col-md-9 {
-  width: 75% !important;
-  flex: 0 0 75% !important;
-  max-width: 75% !important;
+/* Make navbar menu items bold */
+.navbar-nav .nav-link {
+  font-weight: bold !important;
 }
 
-.col-md-3 {
-  width: 25% !important;
-  flex: 0 0 25% !important;
-  max-width: 25% !important;
+/* More vertical space between homepage badges (CRAN, downloads, DOI, etc) */
+.page-header .list-unstyled li {
+  margin-bottom: 1.5em !important;
+}
+
+/* Reset links spacing - they were fine */
+.links li {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 /* */
