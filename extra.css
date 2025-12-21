@@ -5,6 +5,15 @@ pre, pre code {
   word-wrap: normal;
 }
 
+/* Reduce overall font size to match Bootstrap 3 */
+html {
+  font-size: 14px !important;
+}
+
+body {
+  font-size: 15px !important;
+}
+
 /* Navbar fixes for Bootstrap 5 */
 /* White text on blue background for navbar */
 .navbar {
@@ -27,9 +36,67 @@ pre, pre code {
   overflow-y: visible !important;
 }
 
-/* Hide search box if not functional */
-.navbar .search {
-  display: none;
+/* Hide search box */
+form[role="search"],
+#search-input {
+  display: none !important;
+}
+
+/* Version badge styling - black box with white text like Bootstrap 3 */
+.navbar small.nav-text {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  margin-left: 5px !important;
+}
+
+/* Match Bootstrap 3 container width */
+.container {
+  max-width: 1170px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+/* For smaller screens */
+@media (max-width: 1199px) {
+  .container {
+    max-width: 970px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .container {
+    max-width: 750px !important;
+  }
+}
+
+/* Reduce Bootstrap 5 gutter spacing to match Bootstrap 3 */
+.row {
+  --bs-gutter-x: 30px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Remove padding from columns to use full width */
+.col-md-9,
+.col-md-3 {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+/* Make main content use more of available width */
+.col-md-9 {
+  width: 75% !important;
+  flex: 0 0 75% !important;
+  max-width: 75% !important;
+}
+
+.col-md-3 {
+  width: 25% !important;
+  flex: 0 0 25% !important;
+  max-width: 25% !important;
 }
 
 /* */
