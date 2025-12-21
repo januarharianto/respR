@@ -38,36 +38,67 @@ opts_chunk$set(collapse = TRUE,
 ```{css echo=FALSE}
 .wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   border-color: white;
 }
 
 .left {
   width: 50%;
-  margin: 5px; 
+  margin: 5px;
   border-style: solid;
   border-color: white;
   border-radius: 12px;
-  padding: 1px; 
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .right {
   width: 50%;
-  margin: 5px; 
+  margin: 5px;
   border-style: solid;
   border-color: white;
   border-radius: 12px;
-  padding: 1px; 
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
 }
 ```
 
 <div class="wrapper">
 <div class="left">
-[![github-stats-card](https://kasroudra-stats-card.onrender.com/user?user=nicholascarey&layout=compact&theme=buefy)](https://github.com/nicholascarey)
+<div class="profile-header">
+<a href="https://github.com/nicholascarey"><img src="https://github.com/nicholascarey.png" width="80" style="border-radius: 50%;"></a>
+<div>
+
+**Nicholas Carey**<br>
+[@nicholascarey](https://github.com/nicholascarey)
+
+</div>
+</div>
+[![Nicholas's Stats](https://github-profile-summary-cards.vercel.app/api/cards/stats?username=nicholascarey&theme=vue)](https://github.com/nicholascarey)
 </div>
 <div class="right">
-[![github-stats-card](https://kasroudra-stats-card.onrender.com/user?user=januarharianto&layout=compact&theme=buefy)](https://github.com/januarharianto)
+<div class="profile-header">
+<a href="https://github.com/januarharianto"><img src="https://github.com/januarharianto.png" width="80" style="border-radius: 50%;"></a>
+<div>
+
+**Januar Harianto**<br>
+[@januarharianto](https://github.com/januarharianto)
+
+</div>
+</div>
+[![Januar's Stats](https://github-profile-summary-cards.vercel.app/api/cards/stats?username=januarharianto&theme=vue)](https://github.com/januarharianto)
 </div>
 </div>
 
