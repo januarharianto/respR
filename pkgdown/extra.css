@@ -5,6 +5,101 @@ pre, pre code {
   word-wrap: normal;
 }
 
+/* Reduce overall font size to match Bootstrap 3 */
+html {
+  font-size: 14px !important;
+}
+
+body {
+  font-size: 15px !important;
+}
+
+/* Navbar fixes for Bootstrap 5 */
+/* White text on blue background for navbar */
+.navbar {
+  background-color: #2780E3 !important;
+}
+
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-brand {
+  color: #FFFFFF !important;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link:focus {
+  color: #E8F1FA !important;
+}
+
+/* Remove scrollbars from dropdown menus */
+.navbar .dropdown-menu {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* Hide search box */
+form[role="search"],
+#search-input {
+  display: none !important;
+}
+
+/* Version badge styling - black box with white text like Bootstrap 3 */
+.navbar small.nav-text {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  margin-left: 5px !important;
+}
+
+/* Use Bootstrap 3 exact container widths */
+.container {
+  width: auto !important;
+  max-width: 1170px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px !important;
+  }
+}
+
+/* More horizontal spacing between navbar menu items */
+.navbar-nav .nav-item {
+  margin-left: 1em !important;
+  margin-right: 1em !important;
+}
+
+/* Make navbar menu items bold */
+.navbar-nav .nav-link {
+  font-weight: bold !important;
+}
+
+/* More vertical space between homepage badges (CRAN, downloads, DOI, etc) */
+.page-header .list-unstyled li {
+  margin-bottom: 1.5em !important;
+}
+
+/* Reset links spacing - they were fine */
+.links li {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 /* */
 /* .fl      {color: blue;}
 /* .fu      {color: blue;} /* function */

@@ -2,9 +2,12 @@ url: https://januarharianto.github.io/respR
 
 template:
   #light-switch: true
-  params:
-    bootstrap: 5
+  bootstrap: 5
+  bslib:
     bootswatch: cosmo
+    bg: "#FFFFFF"
+    fg: "#212529"
+    primary: "#2780E3"
 
 code:
   width: 999
@@ -145,24 +148,23 @@ navbar:
         href: articles/citations.html
       - text: "References"
         href: articles/refs.html
-      - text: Archived
-        menu:
-        - text: "Intermittent-flow respirometry: Alternative approaches"
-          href: articles/archive/intermittent_old.html
-        - text: "v2.0: Code changes"
-          href: articles/archive/v2_code_change.html
-        - text: "v1.1: How to install and run older code"
-          href: articles/archive/v1_code.html
-        - text: "auto_rate: Performance"
-          href: articles/archive/auto_rate_performance.html
-        - text: "auto_rate: Comparisons with LoLinR"
-          href: articles/archive/auto_rate_comp.html
-        - text: "oxy_crit: Comparisons with other packages"
-          href: articles/archive/oxy_crit_comp.html
-        - text: "oxy_crit: Discussion of Pcrit estimation methods"
-          href: articles/archive/oxy_crit_disc.html
-        - text: "respR: Comparisons with other R packages"
-          href: articles/archive/packages_comp.html
-        - text: "respR: When to use respR"
-          href: articles/archive/usage.html
+      - text: "---- Archived ----"
+      - text: "Intermittent-flow respirometry: Alternative approaches"
+        href: articles/archive/intermittent_old.html
+      - text: "v2.0: Code changes"
+        href: articles/archive/v2_code_change.html
+      - text: "v1.1: How to install and run older code"
+        href: articles/archive/v1_code.html
+      - text: "auto_rate: Performance"
+        href: articles/archive/auto_rate_performance.html
+      - text: "auto_rate: Comparisons with LoLinR"
+        href: articles/archive/auto_rate_comp.html
+      - text: "oxy_crit: Comparisons with other packages"
+        href: articles/archive/oxy_crit_comp.html
+      - text: "oxy_crit: Discussion of Pcrit estimation methods"
+        href: articles/archive/oxy_crit_disc.html
+      - text: "respR: Comparisons with other R packages"
+        href: articles/archive/packages_comp.html
+      - text: "respR: When to use respR"
+        href: articles/archive/usage.html
 
