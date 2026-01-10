@@ -1,6 +1,6 @@
 # respR Citations
 
-In the six years since publication, `respR` has been cited [**153
+In the seven years since publication, `respR` has been cited [**155
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -42,6 +42,12 @@ T**, & **Brennan, RS****. **2026**. Local Adaptation and Osmoregulatory
 Mechanisms of the Copepod Acartia tonsa Under Low Salinity Stress.
 *Molecular Ecology*, n/a(n/a), e70208.
 <https://doi.org/10.1111/mec.70208>
+
+****Hejlesen, R**, **Bakkeren, C**, **Damsgaard, C**, **Laursen, LS**,
+**Kjær-Sørensen, K**, **Corti, P**, **Malte, H**, **Oxvig, C**, &
+**Fago, A****. **2026**. Myoglobin Affects Tissue-Specific
+Transcriptome, Heart Regeneration and Whole Animal Metabolic Rates. *The
+FASEB Journal*, 40(1), e71424. <https://doi.org/10.1096/fj.202503482RR>
 
 ****Belfor, AHR**, & **Schaack, S****. **2025**. The effects of
 fluoxetine and metformin pollution on phenotypic traits and gene

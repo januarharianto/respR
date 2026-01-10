@@ -225,7 +225,7 @@ applied.
 squid.bsr <- oxy_crit(squid)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.4 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 4.3 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 ```
 
