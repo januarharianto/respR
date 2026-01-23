@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**155
+In the seven years since publication, `respR` has been cited [**157
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -23,6 +23,18 @@ The following publications (most recent first) have used and cited
 `respR`. If we have missed any [**let us
 know**](https://januarharianto.github.io/respR/articles/contact.html).  
   
+
+****Ahnert, M**, **Schalk, T**, & **Krebs, P****. **2026**.
+Respiration-based development of an activated sludge model for
+degradation of an organic solvent. *Water Resources and Industry*, 35,
+100344. <https://doi.org/10.1016/j.wri.2026.100344>
+
+****Dellisanti, W**, **Zhang, Q**, **Bollati, E**, **Seveso, D**,
+**Ferrier-Pagès, C**, **Younis, C**, **Camp, EF**, & **Kühl, M****.
+**2026**. Interactive effects of warming and iron supplementation on O2
+dynamics, trace metal content, and microbial diversity within different
+compartments of two Mediterranean corals. *Biology Open*, 15(1),
+bio062357. <https://doi.org/10.1242/bio.062357>
 
 ****García-Bernal, A**, **Vargas-Abúndez, JA**, **Llera-Herrera, R**,
 **Racotta, IS**, & **Rosas, C****. **2026**. Metabolic rate and
@@ -80,6 +92,15 @@ diminishes swimming and disturbs the metabolism of yellow perch larvae.
 NG**, **Storlazzi, CD**, & **Bahr, KD****. **2025**. Impact of warming
 and suspended terrigenous sediment on the Hawaiian reef coral Montipora
 capitata. *Coral Reefs*. <https://doi.org/10.1007/s00338-025-02752-4>
+
+****Grein, S**, **Elschner, T**, **Kardinal, R**, **Bruder, J**,
+**Strohmeyer, A**, **Gunasekaran, K**, **Witt, J**, **Hermannsdóttir,
+H**, **Behrens, J**, **U-Din, M**, **Yu, J**, **Heldmaier, G**,
+**Schreiber, R**, **Rozman, J**, **Heine, M**, **Scheja, L**,
+**Worthmann, A**, **Heeren, J**, **Wachten, D**, … **Klingenspor, M****.
+**2025**. Shiny-Calorie: A context-aware application for indirect
+calorimetry data analysis and visualization using R. *Bioinformatics
+Advances*, vbaf270. <https://doi.org/10.1093/bioadv/vbaf270>
 
 ****Norrie, CR**, **Busch, DS**, **Davis, J**, **McElhany, P**, &
 **Padilla Gamiño, JL****. **2025**. Differential performance of diploid,
