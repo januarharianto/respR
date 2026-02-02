@@ -1,7 +1,7 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**157
-times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+In the seven years since publication, `respR` has been cited [\*\*
+times\*\*](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
 reproducible science, and excited to see what experiments and data users
@@ -48,6 +48,12 @@ the edge: Temperature and salinity performance curves across levels of
 biological organization in a shallow water shrimp. *Marine Environmental
 Research*, 214, 107749.
 <https://doi.org/10.1016/j.marenvres.2025.107749>
+
+****Share, BA**, **Hasenei, AM**, **Hoch, JM**, **Arena, P**, &
+**Kerstetter, DW****. **2026**. Similarities in metabolism and hypoxia
+tolerance of native and non-native florida freshwater fishes remain
+consistent in climate change scenarios. *Biological Invasions*, 28(2),
+42. <https://doi.org/10.1007/s10530-026-03761-2>
 
 ****Hahn, A**, **Nascimento-Schulze, JC**, **Avgerinou, G**, **Bayer,
 T**, & **Brennan, RS****. **2026**. Local Adaptation and Osmoregulatory
@@ -749,7 +755,8 @@ flounder (*Rhombosolea* *Leporina*) in a coastal, New Zealand lake*
 ****Muller, C****. **2021**. *An eco-physiological investigation of
 fisheries-induced evolution: Comparing the resilience of larvae from
 exploited and unexploited commercial reef fish populations to projected
-ocean acidification* \[PhD thesis\]. Rhodes University.
+ocean acidification* \[PhD thesis\]. Rhodes University; Faculty of
+Science, Ichthyology; Fisheries Science.
 
 ****Petreikytė, G****. **2021**. *Efficiency of Nile tilapia
 (Oreochromis niloticus) recirculating aquaculture technology under
