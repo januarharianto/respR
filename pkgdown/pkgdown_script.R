@@ -24,7 +24,7 @@ pkgdown::build_article("closed")
 pkgdown::build_article("flowthrough")
 pkgdown::preview_page('articles/flowthrough.html')
 
-# add a new vignetter
+# add a new vignette
 usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alternative approaches")
 
 
@@ -41,7 +41,7 @@ usethis::use_vignette("intermittent_old", "Intermittent-flow respirometry: Alter
 ##
 ## BUT - even if it seems to freeze - check GHub and site - it might have successfully
 ## triggered the 'pages build and deployment' GH action anyway...
-  pkgdown::deploy_to_branch()
+pkgdown::deploy_to_branch()
 
 
 
