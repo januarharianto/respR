@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**158
+In the seven years since publication, `respR` has been cited [**160
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -28,6 +28,13 @@ know**](https://januarharianto.github.io/respR/articles/contact.html).
 Respiration-based development of an activated sludge model for
 degradation of an organic solvent. *Water Resources and Industry*, 35,
 100344. <https://doi.org/10.1016/j.wri.2026.100344>
+
+****Vellani, V**, **Dellisanti, W**, **Zhang, Q**, **Montalbetti, E**,
+**Motta, G**, **Seveso, D**, **Renzi, M**, & **Kühl, M****. **2026**.
+Heat stress alters the microenvironment of corals: Oxygen depletion and
+oxidative damage in the gastrovascular cavity of two tropical species.
+*Marine Biology*, 173(2), 38.
+<https://doi.org/10.1007/s00227-025-04775-5>
 
 ****Dellisanti, W**, **Zhang, Q**, **Bollati, E**, **Seveso, D**,
 **Ferrier-Pagès, C**, **Younis, C**, **Camp, EF**, & **Kühl, M****.
