@@ -22,7 +22,7 @@ convert_rate.ft(
   area = NULL,
   S = NULL,
   t = NULL,
-  P = 1.013253,
+  P = NULL,
   plot = FALSE,
   ...
 )

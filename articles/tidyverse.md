@@ -4,8 +4,7 @@
 
 `respR` integrates nicely with the
 [tidyverse](https://www.tidyverse.org/), specifically with `dplyr`
-functions
-e.g. [`select()`](https://januarharianto.github.io/respR/reference/select.md),
+functions e.g. `select()`,
 [`filter()`](https://rdrr.io/r/stats/filter.html) and `mutate()`, and
 `magrittr` pipe operators (“`%>%`”) to clearly express workflows in an
 organised sequence.

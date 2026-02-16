@@ -119,7 +119,7 @@ convert_DO(100, from = "%Air", to = "mg L-1", S = 33, t = 18)
 convert_DO(214, from = "hPa", to = "mL/kg", S = 33, t = 18)
 #> convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). 
 #> Default value of P = 1.013253 bar has been used.
-#> [1] 5.733996
+#> [1] 5.733894
 
 # Convert a vector of values
 convert_DO(urchins.rd[[5]], from = "mg/L", to = "umol/L")

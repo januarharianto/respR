@@ -117,7 +117,7 @@
 <h2 id="working-in-the-tidyverse">Working in the Tidyverse<a class="anchor" aria-label="anchor" href="#working-in-the-tidyverse"></a>
 </h2>
 <p><code>respR</code> integrates nicely with the <a href="https://www.tidyverse.org/" class="external-link">tidyverse</a>, specifically with
-<code>dplyr</code> functions e.g. <code><a href="../reference/select.html">select()</a></code>,
+<code>dplyr</code> functions e.g. <code>select()</code>,
 <code><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter()</a></code> and <code>mutate()</code>, and
 <code>magrittr</code> pipe operators (“<code>%&gt;%</code>”) to clearly
 express workflows in an organised sequence.</p>
@@ -143,7 +143,7 @@ analysis worklows simpler for the user.</p>
 <p>Alternatively, use <code>tidyverse</code> pipes:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">urchins.rd</span> <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span>        <span class="co"># using the urchins dataset,</span></span>
-<span>  <span class="fu"><a href="../reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span>   <span class="co"># select columns 1 and 15</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">15</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span>   <span class="co"># select columns 1 and 15</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span>     <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span>   <span class="co"># inspect the data, then</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span>   <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span>   <span class="co"># automatically determine most linear segment</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span><span class="st">"mg/l"</span>, <span class="st">"s"</span>, <span class="st">"mg/h/kg"</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span><span class="op">)</span> <span class="co"># convert units</span></span></code></pre></div>

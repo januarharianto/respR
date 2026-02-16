@@ -318,9 +318,9 @@ rate1_final <- summary(rate1_ms, export = TRUE)
 
 ``` r
 rate1_final
-#>       rep  rank intercept_b0   slope_b1   rsq   row endrow  time endtime   oxy endoxy delta_mean flowrate  rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit    mass   area      S      t     P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#>    <lgcl> <int>        <num>      <num> <num> <int>  <int> <int>   <int> <num>  <num>      <num>    <num> <num>     <lgcl>        <lgcl>      <num>   <char>        <char>   <num> <lgcl> <lgcl> <lgcl> <num>    <num>       <num>      <lgcl>      <char>       <num>
-#> 1:     NA     1       -0.742 -0.0000123 0.079     1    400     0     399 -0.75 -0.741     -0.745     2.34 -1.74         NA            NA      -1.74     mg/L        mL/min 0.00007     NA     NA     NA  1.01   -0.105       -1.49          NA   mgO2/hr/g       -1.49
+#>       rep  rank intercept_b0   slope_b1   rsq   row endrow  time endtime   oxy endoxy delta_mean flowrate  rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit    mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
+#>    <lgcl> <int>        <num>      <num> <num> <int>  <int> <int>   <int> <num>  <num>      <num>    <num> <num>     <lgcl>        <lgcl>      <num>   <char>        <char>   <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
+#> 1:     NA     1       -0.742 -0.0000123 0.079     1    400     0     399 -0.75 -0.741     -0.745     2.34 -1.74         NA            NA      -1.74     mg/L        mL/min 0.00007     NA     NA     NA     NA   -0.105       -1.49          NA   mgO2/hr/g       -1.49
 ```
 
 ## Case 2: Outflow and inflow oxygen
@@ -1082,11 +1082,11 @@ rates_abs <- convert_rate.ft(rates,
     #> # summary.convert_rate.ft # -------------
     #> Summary of all rate results:
     #> 
-    #>    rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy delta_mean flowrate   rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit mass area  S  t    P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-    #> 1:  NA    1           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.72     0.25 -0.180         NA            NA     -0.180     mg/L         L/min   NA   NA NA NA 1.01   -10.80          NA          NA     mgO2/hr      -10.80
-    #> 2:  NA    2           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.59     0.25 -0.147         NA            NA     -0.147     mg/L         L/min   NA   NA NA NA 1.01    -8.85          NA          NA     mgO2/hr       -8.85
-    #> 3:  NA    3           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.85     0.25 -0.212         NA            NA     -0.212     mg/L         L/min   NA   NA NA NA 1.01   -12.75          NA          NA     mgO2/hr      -12.75
-    #> 4:  NA    4           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.77     0.25 -0.192         NA            NA     -0.192     mg/L         L/min   NA   NA NA NA 1.01   -11.55          NA          NA     mgO2/hr      -11.55
+    #>    rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy delta_mean flowrate   rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output
+    #> 1:  NA    1           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.72     0.25 -0.180         NA            NA     -0.180     mg/L         L/min   NA   NA NA NA NA   -10.80          NA          NA     mgO2/hr      -10.80
+    #> 2:  NA    2           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.59     0.25 -0.147         NA            NA     -0.147     mg/L         L/min   NA   NA NA NA NA    -8.85          NA          NA     mgO2/hr       -8.85
+    #> 3:  NA    3           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.85     0.25 -0.212         NA            NA     -0.212     mg/L         L/min   NA   NA NA NA NA   -12.75          NA          NA     mgO2/hr      -12.75
+    #> 4:  NA    4           NA       NA  NA  NA     NA   NA      NA  NA     NA      -0.77     0.25 -0.192         NA            NA     -0.192     mg/L         L/min   NA   NA NA NA NA   -11.55          NA          NA     mgO2/hr      -11.55
     #> -----------------------------------------
 
 By default the first output is printed, but you can print others by

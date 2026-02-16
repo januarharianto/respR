@@ -4,6 +4,14 @@ This page contains the release notes for the latest updates to `respR`.
    
    
 
+## Version 2.x.x – 2026-xx-xx
+
+- FIX:
+  [`convert_DO()`](https://januarharianto.github.io/respR/reference/convert_DO.md)
+  fixed typo in conversion calculation values which would have caused
+  very minor error converting from `hPa` values.
+- CHANGE: Updated URL in Startup message.
+
 ## Version 2.3.4 – 2025-10-08
 
 - FIX: [`summary()`](https://rdrr.io/r/base/summary.html) on `auto_rate`

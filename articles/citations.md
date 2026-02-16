@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**160
+In the seven years since publication, `respR` has been cited [**161
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -28,6 +28,11 @@ know**](https://januarharianto.github.io/respR/articles/contact.html).
 Respiration-based development of an activated sludge model for
 degradation of an organic solvent. *Water Resources and Industry*, 35,
 100344. <https://doi.org/10.1016/j.wri.2026.100344>
+
+****Ahnert, M**, & **Schalk, T****. **2026**. A simple respirometer
+based on standard lab equipment for practical use in operation of
+wastewater treatment plants. *Measurement Science and Technology*,
+37(6), 065104. <https://doi.org/10.1088/1361-6501/ae411e>
 
 ****Vellani, V**, **Dellisanti, W**, **Zhang, Q**, **Montalbetti, E**,
 **Motta, G**, **Seveso, D**, **Renzi, M**, & **Kühl, M****. **2026**.
