@@ -36,6 +36,7 @@ Imports:
     lubridate,
     magrittr,
     marelac,
+    parallel,
     purrr,
     roll,
     segmented,

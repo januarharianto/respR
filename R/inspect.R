@@ -518,7 +518,7 @@ plot.inspect <- function(x, width = NULL, pos = NULL, quiet = FALSE,
   ## if pos = NULL, plot all oxygen columns
   if(is.null(pos)) pos <- 1:nres
   if(any(pos > nres))
-    stop("plot.inspect: Invalid 'pos' rank: only ", nres, " oxygen columns found.")
+    stop("plot.inspect: Invalid 'pos' rank: only ", nres, " oxygen columns found.", call. = FALSE)
 
   if (!quiet){
     cat("\n# plot.inspect # ------------------------\n")

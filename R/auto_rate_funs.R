@@ -12,7 +12,7 @@
 validate_auto_rate <- function(x, by, method) {
 
   # x validation
-  if (!(any(class(x) %in% c("inspect", "data.frame"))))
+  if (!(inherits(x, c("inspect", "data.frame"))))
     stop("auto_rate: Input data must be of class 'data.frame' or 'inspect'", call. = FALSE)
 
   # validate by
@@ -22,7 +22,7 @@ validate_auto_rate <- function(x, by, method) {
   method.val(method, "auto_rate")
 
   # extract df
-  if (any(class(x) %in% "inspect")) df <- x$dataframe else
+  if (inherits(x, "inspect")) df <- x$dataframe else
     df <- x
 
   # select only first two columns by default if dataset is multi-column

@@ -481,13 +481,12 @@ overlap.p <- function(x, highlight = NULL, pos = NULL, legend = TRUE, quiet = FA
   parorig <- par(no.readonly = TRUE) # save original par settings
   on.exit(par(parorig)) # revert par settings to original
 
-  # Needs to be this way as class(x) might have two classes and %in% check fails others way around
-  if(!("convert_rate" %in% class(x) || "auto_rate" %in% class(x)))
-    stop(glue::glue("{msg}: 'x' should be an 'auto_rate' or 'convert_rate' object."))
-  if("convert_rate" %in% class(x) && inherits(x$inputs$x, "calc_rate.bg"))
-    stop(glue::glue("{msg}: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."))
-  if("convert_rate" %in% class(x) && is.null(x$dataframe))
-    stop(glue::glue("{msg}: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."))
+  if(!(inherits(x, "convert_rate") || inherits(x, "auto_rate")))
+    stop(glue::glue("{msg}: 'x' should be an 'auto_rate' or 'convert_rate' object."), call. = FALSE)
+  if(inherits(x, "convert_rate") && inherits(x$inputs$x, "calc_rate.bg"))
+    stop(glue::glue("{msg}: Plot is not available for converted 'calc_rate.bg' objects because rates may come from different columns of the dataframe."), call. = FALSE)
+  if(inherits(x, "convert_rate") && is.null(x$dataframe))
+    stop(glue::glue("{msg}: Plot is not available for 'convert_rate' objects containing rates converted from numeric values."), call. = FALSE)
 
   ## warning if empty - but return to allow piping
   if(length(x$summary$rate) == 0){

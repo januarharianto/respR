@@ -92,11 +92,11 @@
 subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
 
   # Check if object is from respR function(s)
-  if (any(class(x) %in% "inspect")) {
+  if (inherits(x, "inspect")) {
     dt <- data.table(x$dataframe)
     if (length(dt) > 2)
       message("subset_data: Multi-column dataset detected in input! \nsubset_data is intended to subset datasets containing single time and oxygen columns. \nSubsetting will proceed anyway using columns 1 and 2 as time and oxygen respectively. All other columns will be ignored.")
-  } else if (any(class(x) %in% "inspect.ft")) {
+  } else if (inherits(x, "inspect.ft")) {
     dt <- data.table(x$dataframe)
   } else {
     dt <- data.table(x)
@@ -153,7 +153,7 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
   out <- truncate_data(dt, from, to, by)
 
   # inspect.ft has an additional element that needs subset - $data
-  if (any(class(x) %in% "inspect.ft")) {
+  if (inherits(x, "inspect.ft")) {
 
     # get indices of start and end of subset
     # Must be a better way of doing this...
@@ -197,10 +197,10 @@ subset_data <- function(x, from = NULL, to = NULL, by = "time", quiet = TRUE) {
   if(nrow(out) == 0)
     warning("subset_data: subsetting criteria result in empty dataset!")
 
-  if (any(class(x) %in% "inspect")) {
+  if (inherits(x, "inspect")) {
     x$dataframe <- out
     return(invisible(x))
-  } else if (any(class(x) %in% "inspect.ft")) {
+  } else if (inherits(x, "inspect.ft")) {
     x$dataframe <- out
     return(invisible(x))
   } else return(invisible(out))

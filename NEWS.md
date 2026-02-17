@@ -1,4 +1,10 @@
 
+## Version 2.x.x -- 2026-xx-xx
+
+- FIX: `convert_DO()` fixed typo in calculation values which would cause very minor error converting from `hPa` values.
+- CHANGE: Updated URL in startup message.
+
+
 ## Version 2.3.4 -- 2025-10-08
 
 - FIX: `summary()` on `auto_rate` objects no longer prints column classes.

@@ -163,7 +163,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(convert_DO(10, "%Air", "mg/l",    S = 35, t = 25, P = 1.013253), 0.6751102)
     expect_equal(convert_DO(10, "%Oxy", "mg/l",    S = 35, t = 25, P = 1.013253), 3.2230983756)
     expect_equal(convert_DO(10, "Torr", "mg/l",    S = 35, t = 25, P = 1.013253), 0.43160273)
-    expect_equal(convert_DO(10, "hPa", "mg/l",     S = 35, t = 25, P = 1.013253), 0.32373349425)
+    expect_equal(convert_DO(10, "hPa", "mg/l",     S = 35, t = 25, P = 1.013253), 0.323727743272699)
     expect_equal(convert_DO(10, "kPa", "mg/l",     S = 35, t = 25, P = 1.013253), 0.32373349425*10)
     expect_equal(convert_DO(10, "mmHg", "mg/l",    S = 35, t = 25, P = 1.013253), 0.4316028)
     expect_equal(convert_DO(10, "inHg", "mg/l",    S = 35, t = 25, P = 1.013253), 10.96271098)

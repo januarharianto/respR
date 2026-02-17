@@ -223,9 +223,9 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
     xtype <- "vec"
   } else if(is.data.frame(x) && ncol(x) == 2){
     xtype <- "df"
-  } else if(any(class(x) == "inspect.ft")){
+  } else if(inherits(x, "inspect.ft")){
     xtype <- "insp"
-  } else if(any(class(x) == "inspect")){
+  } else if(inherits(x, "inspect")){
     stop("calc_rate.ft: Function does not accept 'inspect' objects. Please process the data via 'inspect.ft' instead.")
   } else {
     stop("calc_rate.ft: 'x' must be an `inspect.ft` object, a numeric value or vector, or 2-column data.frame. See Help.")
@@ -517,9 +517,9 @@ calc_rate.ft <- function(x = NULL, flowrate = NULL, from = NULL, to = NULL,
 print.calc_rate.ft <- function(x, pos = 1, ...) {
   cat("\n# print.calc_rate.ft # ------------------")
   if(length(pos) > 1)
-    stop("print.calc_rate.ft: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.calc_rate.ft: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate))
-    stop("print.calc_rate.ft: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("print.calc_rate.ft: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
   cat("\nRank", pos, "of", length(x$rate), "rates:")
   cat("\nRate:", x$rate[pos], "\n")
   cat("\n")
@@ -542,7 +542,7 @@ print.calc_rate.ft <- function(x, pos = 1, ...) {
 summary.calc_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.calc_rate.ft: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("summary.calc_rate.ft: Invalid 'pos' rank: only ", length(object$rate), " rates found.", call. = FALSE)
 
   cat("\n# summary.calc_rate.ft # ----------------\n")
   if(is.null(pos)) {
@@ -577,7 +577,7 @@ mean.calc_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.ft # -------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
-    stop("mean.calc_rate.ft: Invalid 'pos' rank: only ", length(x$rate), " rates found.")
+    stop("mean.calc_rate.ft: Invalid 'pos' rank: only ", length(x$rate), " rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate)
     cat("Mean of all rate results:")
@@ -618,7 +618,7 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   on.exit(par(parorig)) # revert par settings to original
 
   if(x$input_type != "insp")
-    stop("calc_rate.ft: Plot only available for 'inspect.ft' inputs.")
+    stop("calc_rate.ft: Plot only available for 'inspect.ft' inputs.", call. = FALSE)
 
   # is it delta only rates?
   delta_only <-
@@ -632,9 +632,9 @@ plot.calc_rate.ft <- function(x, pos = NULL, quiet = FALSE,
   # validate pos input
   if(is.null(pos)) pos <- 1
   if(length(pos) > 1)
-    stop("calc_rate: 'pos' should be a single value.")
+    stop("calc_rate: 'pos' should be a single value.", call. = FALSE)
   if(pos > nres || pos < 1)
-    stop("calc_rate.ft: Invalid 'pos' input: only ", nres, " rates found.")
+    stop("calc_rate.ft: Invalid 'pos' input: only ", nres, " rates found.", call. = FALSE)
 
   if(!quiet && pos == 1 && nres == 1)
     cat(glue::glue("calc_rate.ft: Plotting rate from position {pos} of {nres} ..."), sep="\n")

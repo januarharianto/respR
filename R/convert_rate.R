@@ -519,12 +519,12 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
                  t = t,
                  P = P)
   ## extract dataframe
-  if(any(class(x) %in% c("calc_rate",
-                         "calc_rate.bg",
-                         "calc_rate.int",
-                         "auto_rate",
-                         "auto_rate.int",
-                         "adjust_rate"))) df <- x$dataframe else
+  if(inherits(x, c("calc_rate",
+                    "calc_rate.bg",
+                    "calc_rate.int",
+                    "auto_rate",
+                    "auto_rate.int",
+                    "adjust_rate"))) df <- x$dataframe else
                            df <- NULL
 
   out <- list(call = call,

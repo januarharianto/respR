@@ -317,7 +317,7 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(convert_rate.ft(-0.0001534657, oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
                                  flowrate.unit = "l/m",
                                  area = 0.000001429)$summary$P,
-                 1.013253)
+                 NA)
     # multiple rate values
     expect_equal(convert_rate.ft(c(-0.001, -0.002), oxy.unit = "mg/L", time.unit = "s", output.unit = "mg/h/mm2",
                                  flowrate.unit = "l/m",

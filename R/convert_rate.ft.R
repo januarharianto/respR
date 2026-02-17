@@ -205,7 +205,7 @@ convert_rate.ft <- function(x,
                             output.unit = NULL,
                             mass = NULL,
                             area = NULL,
-                            S = NULL, t = NULL, P = 1.013253,
+                            S = NULL, t = NULL, P = NULL,
                             plot = FALSE, ...) {
 
 
@@ -241,14 +241,14 @@ convert_rate.ft <- function(x,
     summ.ext$rank <- 1:length(rate)
     summ.ext$rate <- rate
     message("convert_rate.ft: numeric input detected. Converting...")
-  } else if ("calc_rate.ft" %in% class(x)) {
+  } else if (inherits(x, "calc_rate.ft")) {
     rate <- x$rate
     input_type <- x$input_type
     summ.ext <- x$summary
     summ.ext$adjustment <- NA
     summ.ext$rate.adjusted <- NA
     message("convert_rate.ft: object of class 'calc_rate.ft' detected. Converting '$rate' element.")
-  } else if ("adjust_rate.ft" %in% class(x)) {
+  } else if (inherits(x, "adjust_rate.ft")) {
     rate <- x$rate.adjusted
     input_type <- x$input_type
     summ.ext <- x$summary
@@ -418,8 +418,8 @@ convert_rate.ft <- function(x,
                 S = S, t = t, P = P)
 
   ## extract dataframe
-  if(any(class(x) %in% c("calc_rate.ft",
-                         "adjust_rate.ft"))) df <- x$dataframe else
+  if(inherits(x, c("calc_rate.ft",
+                    "adjust_rate.ft"))) df <- x$dataframe else
                            df <- NULL
 
   ## so data.table will accept them
@@ -443,7 +443,7 @@ convert_rate.ft <- function(x,
 
   ## Assemble output based on input
   ## (i.e. object or numerics)
-  if(class(x) %in% c("calc_rate.ft", "adjust_rate.ft"))
+  if(inherits(x, c("calc_rate.ft", "adjust_rate.ft")))
     out <- list(call = call,
                 inputs = inputs,
                 dataframe = df,
@@ -489,9 +489,9 @@ convert_rate.ft <- function(x,
 print.convert_rate.ft <- function(x, pos = 1, ...) {
   cat("\n# print.convert_rate.ft # ---------------\n")
   if(length(pos) > 1)
-    stop("print.convert_rate.ft: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.convert_rate.ft: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate.input))
-    stop("print.convert_rate.ft: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.")
+    stop("print.convert_rate.ft: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.", call. = FALSE)
   cat("Rank", pos, "of", length(x$rate.output), "result(s)\n")
   cat("Input:\n")
   print(x$rate.input[pos])
@@ -517,7 +517,7 @@ print.convert_rate.ft <- function(x, pos = 1, ...) {
 summary.convert_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate.output)))
-    stop("summary.convert_rate.ft: Invalid 'pos' rank: only ", length(object$rate.output), " rates found.")
+    stop("summary.convert_rate.ft: Invalid 'pos' rank: only ", length(object$rate.output), " rates found.", call. = FALSE)
   cat("\n# summary.convert_rate.ft # -------------\n")
   if(is.null(pos)) {
     pos <- 1:nrow(object$summary)
@@ -553,7 +553,7 @@ mean.convert_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.convert_rate.ft # ----------------\n")
   if(!is.null(pos) && any(pos > length(x$rate.output)))
-    stop("mean.convert_rate.ft: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.")
+    stop("mean.convert_rate.ft: Invalid 'pos' rank: only ", length(x$rate.output), " rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate.output)
     cat("Mean of all rate results:")
@@ -595,7 +595,7 @@ plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
 
   # if numeric conversions, nothing to plot
   if(x$input_type != "insp")
-    stop("plot.convert_rate.ft: Plot is not available for 'convert_rate.ft' objects containing rates converted from numeric values.")
+    stop("plot.convert_rate.ft: Plot is not available for 'convert_rate.ft' objects containing rates converted from numeric values.", call. = FALSE)
 
   ## warning if empty - but return to allow piping
   if(length(x$summary$rate.output) == 0){
@@ -608,7 +608,7 @@ plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
 
   # Validate type
   if(!(type %in% c("full", "rate", "overlap")))
-    stop(glue::glue("plot.convert_rate.ft: 'type' input not recognised."))
+    stop(glue::glue("plot.convert_rate.ft: 'type' input not recognised."), call. = FALSE)
 
   # number of rates
   nrt <- length(x$rate.output)

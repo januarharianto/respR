@@ -439,12 +439,12 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "value"){
 
     ## Extract bg rate
-    if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+    if (inherits(by, "calc_rate.bg")) bg1 <-  by$rate.bg else
+      if (inherits(by, "calc_rate")) bg1 <-  by$rate else
         bg1 <- by
 
       # Extract x rate
-      if (any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+      if (inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
         rate <- x$rate
       } else rate <- x
 
@@ -461,8 +461,8 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "mean"){
 
     ## Extract bg rate
-    if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+    if (inherits(by, "calc_rate.bg")) bg1 <-  by$rate.bg else
+      if (inherits(by, "calc_rate")) bg1 <-  by$rate else
         bg1 <- by
 
       if(length(bg1) > 1)
@@ -470,7 +470,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
 
 
       # Extract x rate
-      if (any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+      if (inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
         rate <- x$rate
       } else rate <- x
 
@@ -487,12 +487,12 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(method == "paired"){
 
     ## Extract bg rate
-    if (any(class(by) %in% "calc_rate.bg")) bg1 <-  by$rate.bg else
-      if (any(class(by) %in% "calc_rate")) bg1 <-  by$rate else
+    if (inherits(by, "calc_rate.bg")) bg1 <-  by$rate.bg else
+      if (inherits(by, "calc_rate")) bg1 <-  by$rate else
         bg1 <- by
 
       # Extract x rate
-      if (any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+      if (inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
         rate <- x$rate
       } else rate <- x
 
@@ -521,7 +521,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
 
     ## background df
     if(is.data.frame(by)) bg_df <- by else
-      if(any(class(by) %in% c("inspect", "calc_rate.bg", "calc_rate"))) bg_df <- as.data.frame(by$dataframe)
+      if(inherits(by, c("inspect", "calc_rate.bg", "calc_rate"))) bg_df <- as.data.frame(by$dataframe)
 
     ## If data lengths differ by more than 5% warn
     lx <- nrow(x$dataframe)
@@ -566,14 +566,14 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
   if(dynamic) {
 
     ## Extract rate input
-    if (any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+    if (inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
       rate <- x$rate
     } else {
       rate <- x
     }
 
     # Extract rate timestamp(s)
-    if (any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+    if (inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
       t_rate <- (x$summary$time + x$summary$endtime)/2
     } else {
       t_rate <- time_x
@@ -582,7 +582,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
     ## Extract bg rates and timestamps
     # bg1
     ## as.data.frame() because of bug/failure of calc_rate.bg with data.tables. Can possibly remove when fixed.
-    if (any(class(by) %in% c("calc_rate.bg", "inspect", "calc_rate"))){
+    if (inherits(by, c("calc_rate.bg", "inspect", "calc_rate"))){
       bg1 <-  mean(calc_rate.bg(as.data.frame(by$dataframe), time = 1, oxygen = 2:length(by$dataframe), plot = FALSE)$rate.bg)
       t_bg1 <- midpt(by$dataframe[[1]])
     } else if (is.data.frame(by)) {
@@ -593,7 +593,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
       t_bg1 <- time_by
     }
     # bg2
-    if (any(class(by2) %in% c("calc_rate.bg", "inspect", "calc_rate"))){
+    if (inherits(by2, c("calc_rate.bg", "inspect", "calc_rate"))){
       bg2 <-  mean(calc_rate.bg(as.data.frame(by2$dataframe), time = 1, oxygen = 2:length(by2$dataframe), plot = FALSE)$rate.bg)
       t_bg2 <- midpt(by2$dataframe[[1]])
     } else if (is.data.frame(by2)) {
@@ -707,7 +707,7 @@ adjust_rate <- function(x, by, method = NULL, by2 = NULL,
                  time_by = time_by,
                  time_by2 = time_by2)
 
-  if(any(class(x) %in% c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
+  if(inherits(x, c("calc_rate", "calc_rate.int", "auto_rate", "auto_rate.int"))) {
     summary <- cbind(x$summary,
                      adjustment = adjustment,
                      rate.adjusted = rate.adjusted)

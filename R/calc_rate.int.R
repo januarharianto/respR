@@ -286,7 +286,7 @@ calc_rate.int <- function(x,
     stop("calc_rate.int: Input must be a 'data.frame' or 'inspect' object.")
 
   # Extract data
-  if(any(class(x) %in% "inspect")) df <- x$dataframe else
+  if(inherits(x, "inspect")) df <- x$dataframe else
     df <- x
 
   # Format as data.table
@@ -463,9 +463,9 @@ print.calc_rate.int <- function(x, pos = NULL, ...) {
   if(is.null(pos)) pos <- 1
 
   if(length(pos) > 1)
-    stop("print.calc_rate.int: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.calc_rate.int: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate))
-    stop("print.calc_rate.int: Invalid 'pos' input: only ", length(x$rate), " replicates found.")
+    stop("print.calc_rate.int: Invalid 'pos' input: only ", length(x$rate), " replicates found.", call. = FALSE)
 
   cat("\nReplicate", pos, "of", length(x$rate), ":")
   cat("\nRate:", x$rate[pos], "\n")
@@ -489,7 +489,7 @@ print.calc_rate.int <- function(x, pos = NULL, ...) {
 summary.calc_rate.int <- function(object, pos = NULL, export = FALSE, ...) {
 
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.calc_rate.int: Invalid 'pos' input: only ", length(object$rate), " replicates found.")
+    stop("summary.calc_rate.int: Invalid 'pos' input: only ", length(object$rate), " replicates found.", call. = FALSE)
 
   cat("\n# summary.calc_rate.int # ---------------\n")
   if(is.null(pos)) {
@@ -532,13 +532,13 @@ plot.calc_rate.int <- function(x, pos = NULL, quiet = FALSE,
   on.exit(par(parorig)) # revert par settings to original
 
   if(!(type %in% c("rep", "full", "cr")))
-    stop("plot.calc_rate.int: 'type' input not recognised.")
+    stop("plot.calc_rate.int: 'type' input not recognised.", call. = FALSE)
 
   nreps <- length(x$rate) # number of reps
 
   if(is.null(pos)) pos <- 1:nreps
   if(any(pos > nreps))
-    stop("plot.calc_rate.int: Invalid 'pos' input: only ", nreps, " replicates found.")
+    stop("plot.calc_rate.int: Invalid 'pos' input: only ", nreps, " replicates found.", call. = FALSE)
 
   if(!quiet) {
     cat("\n# plot.calc_rate.int # ------------------\n")
@@ -641,7 +641,7 @@ mean.calc_rate.int <- function(x, pos = NULL, export = FALSE, ...){
 
   cat("\n# mean.calc_rate.int # ------------------\n")
   if(!is.null(pos) && any(pos > length(x$rate)))
-    stop("mean.calc_rate.int: Invalid 'pos' input: only ", length(x$rate), " replicates found.")
+    stop("mean.calc_rate.int: Invalid 'pos' input: only ", length(x$rate), " replicates found.", call. = FALSE)
 
   if(is.null(pos)) {
     pos <- 1:length(x$rate)

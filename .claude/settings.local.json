@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(git -C /Users/nicholascarey/Github_repos/respR log --oneline -5 --all -- vignettes/references_citations.bib)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}

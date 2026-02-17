@@ -628,7 +628,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
   # PLOT BASED ON METHOD
   if (x$method %in% c("max", "min", "maximum", "minimum",
                       "highest", "lowest", "rolling", "interval")) {
-    if (panel == FALSE) {
+    if (isFALSE(panel)) {
 
       mat <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5),
                     nrow = 2, byrow = TRUE)
@@ -649,7 +649,7 @@ plot.auto_rate <- function(x, pos = 1, panel = FALSE, quiet = FALSE,
       layout(1)
     }
   } else if (x$method == "linear") {
-    if (panel == FALSE) {
+    if (isFALSE(panel)) {
 
       par(mfrow = c(2, 3),
           ps = 10,

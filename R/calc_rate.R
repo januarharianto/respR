@@ -149,7 +149,7 @@ calc_rate <- function(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...) 
   by <- by_val(by, msg = "calc_rate:")
 
   # Extract data.frame from inspect functions
-  if(any(class(x) %in% "inspect")) df <- x$dataframe else
+  if(inherits(x, "inspect")) df <- x$dataframe else
     df <- x
 
   # By now, df input must be a data frame object - but check

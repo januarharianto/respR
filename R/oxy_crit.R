@@ -236,7 +236,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
   call <- match.call()
 
   # data validation
-  if (any(class(x) %in% "inspect")) df <- x$dataframe else
+  if (inherits(x, "inspect")) df <- x$dataframe else
     df <- x
   if (!is.data.frame(df)) stop("oxy_crit: Input must be an 'inspect' or data.frame object.")
   if (!(dplyr::between(width, 0.001, 0.999)))
@@ -263,11 +263,11 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
              range = c(1,ncol(df)), conflicts = c(time, oxygen), msg = "oxy_crit: 'rate' -")
 
   ## Rate~Oxygen analysis can only be done with dfs not inspect
-  if("inspect" %in% class(x) && !is.null(oxygen) && !is.null(rate))
+  if(inherits(x, "inspect") && !is.null(oxygen) && !is.null(rate))
     stop("oxy_crit: 'inspect' input detected. Rate~Oxygen analyses cannot be conducted with 'inspect' objects!")
 
   ## if inspect - any other inputs ignored - should be NULL
-  if("inspect" %in% class(x) && (!is.null(time) | !is.null(oxygen) | !is.null(rate))) {
+  if(inherits(x, "inspect") && (!is.null(time) | !is.null(oxygen) | !is.null(rate))) {
     warning("oxy_crit: 'inspect' input detected. Column inputs ignored. These will have been specified in 'inspect'.")
     time <- NULL
     oxygen <- NULL
@@ -275,7 +275,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
   }
 
   ## if inspect - multiple columns warning
-  if("inspect" %in% class(x) && ncol(x$dataframe) > 2)
+  if(inherits(x, "inspect") && ncol(x$dataframe) > 2)
     warning("oxy_crit: Multiple columns of oxygen data found in 'inspect' input.\n  Analysis will use first column only!\n  To analyse other oxygen columns, use 'inspect()' to save them as separate objects.")
 
   ## if inputs NULL, apply defaults
@@ -303,7 +303,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
 
   # begin analysis -----
   # extract data first:
-  if (any(class(df) %in% "data.table")) {
+  if (inherits(df, "data.table")) {
     dt <- subset(df, select = c(col1, col2))
   } else {
     dt <- data.table(df[, c(col1, col2)])
@@ -536,7 +536,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
     mfrow = c(1,1)
   }
   if(any(panel > 2))
-    stop("plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.")
+    stop("plot.oxy_crit: 'panel' input should be 1 to 2 or 'NULL' for both.", call. = FALSE)
 
   ## general plot settings
   par(mfrow = mfrow,

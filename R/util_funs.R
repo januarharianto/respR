@@ -127,20 +127,12 @@ F.temp.rgx <- "^(?i)\\b(dgr|degree|degrees)?(f|fahrenheit)(.temp)?\\b$"
 #' @export
 NULL
 
-#' Select columns
-#' @importFrom dplyr select
-#' @name select
-#' @return No value returned
-#' @keywords internal
-#' @export
-NULL
-
 # check os - useful for parallel functions
 os <- function() {
   if (.Platform$OS.type == "windows")
     "win" else if (Sys.info()["sysname"] == "Darwin")
       "mac" else if (.Platform$OS.type == "unix")
-        "unix" else stop("Unknown OS")
+        "unix" else stop("Unknown OS", call. = FALSE)
 }
 
 #' Convert between multipliers of the same unit, e.g. mg to kg
@@ -158,6 +150,10 @@ os <- function() {
 #' @importFrom stringr str_replace
 adjust_scale <- function(x, input, output) {
   # Create database of terms for matching
+  # Note: mass/amount prefixes (p to k) use absolute multipliers.
+  # Time prefixes (sec to day) use inverse convention (seconds-per-unit),
+  # but this is internally consistent: the a/b ratio gives correct conversions
+  # for both types. The suffix check prevents cross-type mismatches.
   prefix <- c("p", "n", "u", "m", "", "k", "sec", "min", "hr", "day")
   suffix <- c("mol", "g", "L", "l", "")
   multip <- c(1e-12, 1e-09, 1e-06, 0.001, 1, 1000, 3600, 60, 1, 1/24)
@@ -354,7 +350,7 @@ check_evn <- function(x) {
   # If spacing is even, there should only be 1 interval detected:
   check <- length(unique(spacing)) > 1
 
-  test <- ifelse(is.na(test), TRUE, test)  # convert NA values to FALSE
+  test <- ifelse(is.na(test), TRUE, test)  # convert NA values to TRUE
   highlight <- which(test)
   out <- list(check = check, which = highlight)
   return(out)
@@ -364,8 +360,8 @@ check_evn <- function(x) {
 truncate_data <- function(x, from, to, by) {
 
   # import from other respR functions
-  if (any(class(x) %in% "inspect")) x <- x$dataframe
-  if (any(class(x) %in% "inspect.ft")) x <- x$dataframe
+  if (inherits(x, "inspect")) x <- x$dataframe
+  if (inherits(x, "inspect.ft")) x <- x$dataframe
 
   dt <- data.table::as.data.table(x)
 
@@ -413,17 +409,18 @@ truncate_data <- function(x, from, to, by) {
     # use highest/lowest values if out of range
     if(from > o_range[2]) from <- o_range[2] else
       if(from < o_range[1]) from <- o_range[1]
-      if(to > o_range[2]) to <- o_range[2] else
-        if(to < o_range[1]) to <- o_range[1]
 
-        ## dplyr::between needs them in low-high order
-        lower <- sort(c(from, to))[1]
-        upper <- sort(c(from, to))[2]
-        # indices of data between these
-        start <- min(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
-        end <- max(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
+    if(to > o_range[2]) to <- o_range[2] else
+      if(to < o_range[1]) to <- o_range[1]
 
-        out <- dt[start:end]
+    ## dplyr::between needs them in low-high order
+    lower <- sort(c(from, to))[1]
+    upper <- sort(c(from, to))[2]
+    # indices of data between these
+    start <- min(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
+    end <- max(which(dplyr::between(dt[[2]], lower, upper)), na.rm = TRUE)
+
+    out <- dt[start:end]
   }
   return(out)
 }
@@ -454,7 +451,7 @@ broken_stick <- function(dt, n) {
   # Also, calculate intersect
   cm <- rbind(coefa, coefb)
   # https://stackoverflow.com/a/7114961
-  intersect <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1])[1]
+  intersect_value <- c(-solve(cbind(cm[,2],-1)) %*% cm[,1])[1]
 
   # Calculate midpoint
   midpoint <-  (dta[,x][nrow(dta)] + dtb[,x][1]) / 2
@@ -469,7 +466,7 @@ broken_stick <- function(dt, n) {
   out <- data.table::data.table(
     splitpoint = dta[,x][nrow(dta)],
     sumRSS = trss,
-    pcrit.intercept = intersect,
+    pcrit.intercept = intersect_value,
     pcrit.midpoint = midpoint,
     l1_coef = line1,
     l2_coef = line2
@@ -523,12 +520,15 @@ nainf.omit <- function(x) {
   return(z)
 }
 
-# Deal with pesky "no visible binding for global variable.." checks
-x = NULL; endtime = NULL; row.len = NULL; time.len = NULL
-rowlength = NULL; endrow = NULL; timelength = NULL; rate.2pt = NULL
-endoxy = NULL; oxy = NULL; sumRSS = NULL; do = NULL; y = NULL; V1 = NULL
-..xcol = NULL; ..ycol = NULL; multicore = NULL; multisession = NULL
-rsq = NULL; rate = NULL; rate.output = NULL; start_row = NULL;
-intercept_b0 = NULL; slope_b1 = NULL; . = NULL
+# Suppress "no visible binding for global variable" R CMD check NOTEs.
+# These arise from data.table/ggplot2 non-standard evaluation usage.
+utils::globalVariables(c(
+  "x", "endtime", "row.len", "time.len",
+  "rowlength", "endrow", "timelength", "rate.2pt",
+  "endoxy", "oxy", "sumRSS", "do", "y", "V1",
+  "..xcol", "..ycol", "multicore", "multisession",
+  "rsq", "rate", "rate.output", "start_row",
+  "intercept_b0", "slope_b1", "."
+))
 
 

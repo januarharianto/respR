@@ -156,7 +156,7 @@ adjust_rate.ft <- function(x, by) {
   }
 
   # Extract adjustment ------------------------------------------------------
-  if (any(class(by) %in% "calc_rate.ft")) adjustment <-  by$rate else
+  if (inherits(by, "calc_rate.ft")) adjustment <-  by$rate else
     adjustment <- by
 
   # Make single mean value
@@ -166,7 +166,7 @@ adjust_rate.ft <- function(x, by) {
   }
 
   # Extract rates to be adjusted --------------------------------------------
-  if (any(class(x) %in% "calc_rate.ft")) rate <- x$rate else
+  if (inherits(x, "calc_rate.ft")) rate <- x$rate else
     rate <- x
 
   # if multiple rates in x - message that all will be adjusted by same amount in by
@@ -183,7 +183,7 @@ adjust_rate.ft <- function(x, by) {
   if(length(adjustment) == 1) adjustment <- rep(adjustment, length(rate.adjusted))
 
   # Append results to input object
-  if(class(x) %in% "calc_rate.ft") {
+  if(inherits(x, "calc_rate.ft")) {
     out <- list(call = call,
                 inputs = list(x = x,
                               by = by,
@@ -241,9 +241,9 @@ adjust_rate.ft <- function(x, by) {
 #' @export
 print.adjust_rate.ft <- function(x, pos = 1, ...) {
   if(length(pos) > 1)
-    stop("print.adjust_rate.ft: 'pos' must be a single value. To examine multiple results use summary().")
+    stop("print.adjust_rate.ft: 'pos' must be a single value. To examine multiple results use summary().", call. = FALSE)
   if(pos > length(x$rate.adjusted))
-    stop("print.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
+    stop("print.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.", call. = FALSE)
   cat("\n# print.adjust_rate.ft # ----------------\n")
   cat("NOTE: Consider the sign of the adjustment value when adjusting the rate.\n")
   cat("\nRank", pos, "of", length(x$rate.adjusted), "adjusted rate(s):")
@@ -268,7 +268,7 @@ print.adjust_rate.ft <- function(x, pos = 1, ...) {
 #' @importFrom data.table data.table
 summary.adjust_rate.ft <- function(object, pos = NULL, export = FALSE, ...) {
   if(!is.null(pos) && any(pos > length(object$rate)))
-    stop("summary.adjust_rate.ft: Invalid 'pos' rank: only ", length(object$rate), " rates found.")
+    stop("summary.adjust_rate.ft: Invalid 'pos' rank: only ", length(object$rate), " rates found.", call. = FALSE)
 
   cat("\n# summary.adjust_rate.ft # --------------\n")
   if(is.null(pos)) {
@@ -305,7 +305,7 @@ mean.adjust_rate.ft <- function(x, pos = NULL, export = FALSE, ...){
   cat("\n# mean.adjust_rate.ft # -----------------\n")
 
   if(!is.null(pos) && any(pos > length(x$rate.adjusted)))
-    stop("mean.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.")
+    stop("mean.adjust_rate.ft: Invalid 'pos' rank: only ", length(x$rate.adjusted), " adjusted rates found.", call. = FALSE)
   if(is.null(pos)) {
     pos <- 1:length(x$rate.adjusted)
     cat("Mean of all adjusted rate results:")

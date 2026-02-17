@@ -158,7 +158,7 @@ convert_MR <- function(x, from = NULL, to = NULL,
 
   # Extract rates ------------------------------------------------------------
 
-  if(any(class(x) %in% c("convert_rate", "convert_rate.ft"))) {
+  if(inherits(x, c("convert_rate", "convert_rate.ft"))) {
 
     # stop if empty
     if(length(x$rate.output) == 0) stop("convert_MR: No rates found in input object.", call. = FALSE)

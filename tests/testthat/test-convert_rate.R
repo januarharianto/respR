@@ -597,16 +597,16 @@ capture.output({  ## stops printing outputs on assigning
     res <- convert_rate(234, oxy.unit = "hPa", time.unit = "min", output.unit = "umol/min/cm2",
                         volume = 1, S = 35, t = 25, P = 1.013253,
                         area = 0.012)
-    expect_equal(res$rate.output, 1.972825, tolerance = 0.000001) # exact value
+    expect_equal(res$rate.output, 1.97279, tolerance = 0.000001) # exact value
     ## inputs and outputs are saved in object correctly
     expect_equal(res$rate.input, 234)
     expect_equal(res$inputs$oxy.unit, "hPa")
     expect_equal(res$inputs$time.unit, "min")
     expect_equal(res$output.unit, "umolO2/min/cm2")
     expect_equal(res$summary$rate.input, 234)
-    expect_equal(res$summary$rate.output, 1.972825, tolerance = 0.000001)
+    expect_equal(res$summary$rate.output, 1.97279, tolerance = 0.000001)
     expect_equal(res$summary$rate.abs, 236.739, tolerance = 0.001)
-    expect_equal(res$summary$rate.a.spec, 1.972825, tolerance = 0.000001)
+    expect_equal(res$summary$rate.a.spec, 1.97279, tolerance = 0.000001)
 
     # changing magnitude of inputs and outputs changes rate by right amount
     rate <- suppressWarnings(auto_rate(sardine.rd, plot = F))

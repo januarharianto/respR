@@ -17,7 +17,7 @@ Evolution, 10(6), 912-920. https://doi.org/10.1111/2041-210X.13162
 
 Visit this site for help documentation and vignettes:
 
-    http://bit.ly/respr_pkg
+    https://januarharianto.github.io/respR/index.html
 
 ======================================================================")
 

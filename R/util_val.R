@@ -8,7 +8,7 @@ column.id <- function(strings, df, msg){
   names <- names(df)
 
   if(any(!(strings %in% names)))
-    stop(glue::glue("{msg}: One or more column names not found in data frame."))
+    stop(glue::glue("{msg}: One or more column names not found in data frame."), call. = FALSE)
   index <- as.vector(sapply(strings, function(z) which(z == names)))
 
   return(index)
@@ -39,7 +39,7 @@ by_val <- function(by, req = TRUE, default = NULL,
                    msg = ""){
 
   # stop if required and not entered
-  if (req && is.null(by)) stop(glue::glue("{msg}: 'by' input is required."))
+  if (req && is.null(by)) stop(glue::glue("{msg}: 'by' input is required."), call. = FALSE)
   # if not required, and entered as NULL, apply default
   if (!req && is.null(by) && !is.null(default)) {
     by <- default
@@ -53,7 +53,7 @@ by_val <- function(by, req = TRUE, default = NULL,
   if("t" %in% which && grepl(time_variations, by)) by <- "time" else
     if("o" %in% which && grepl(ox_variations, by)) by <- "oxygen" else
       if("r" %in% which && grepl(row_variations, by)) by <- "row" else
-        stop(glue::glue("{msg}: 'by' input not valid or not recognised."))
+        stop(glue::glue("{msg}: 'by' input not valid or not recognised."), call. = FALSE)
 
   return(by)
 }
@@ -114,7 +114,7 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
   ## check if numeric
   is_num <- is.numeric(input)
   ## if is numeric, but should not be - stop
-  if(is_num && !num) stop(glue::glue("{msg} input is numeric and should not be."))
+  if(is_num && !num) stop(glue::glue("{msg} input is numeric and should not be."), call. = FALSE)
 
   ## check if an input required
   is_null <- is.null(input)
@@ -127,14 +127,14 @@ input.val <- function(input, num = TRUE, int = FALSE, req = FALSE,
   ## check actual values within range
   if(is_num) in_range <- all(dplyr::between(as.numeric(input), range[1], range[2]))
 
-  if(req && is_null) stop(glue::glue("{msg} input is required."))
+  if(req && is_null) stop(glue::glue("{msg} input is required."), call. = FALSE)
 
   if(!is_null){
-    if(num && !is_num) stop(glue::glue("{msg} input is not numeric."))
-    if(num && int && !are_int) stop(glue::glue("{msg} one or more inputs are not integers."))
-    if(num && !below_max) stop(glue::glue("{msg} only {max} inputs allowed."))
-    if(num && !above_min) stop(glue::glue("{msg} at least {min} inputs required."))
-    if(num && !in_range) stop(glue::glue("{msg} one or more inputs are outside the range of allowed values."))
+    if(num && !is_num) stop(glue::glue("{msg} input is not numeric."), call. = FALSE)
+    if(num && int && !are_int) stop(glue::glue("{msg} one or more inputs are not integers."), call. = FALSE)
+    if(num && !below_max) stop(glue::glue("{msg} only {max} inputs allowed."), call. = FALSE)
+    if(num && !above_min) stop(glue::glue("{msg} at least {min} inputs required."), call. = FALSE)
+    if(num && !in_range) stop(glue::glue("{msg} one or more inputs are outside the range of allowed values."), call. = FALSE)
   }
 }
 
@@ -220,70 +220,70 @@ class.val <- function(x,
   if(df) df.chk <- is.data.frame(x) else
     df.chk <- NULL
   # calc_rate
-  if(cr) cr.chk <- any(class(x) %in% "calc_rate") else
+  if(cr) cr.chk <- inherits(x, "calc_rate") else
     cr.chk <- NULL
   # calc_rate single rate
-  if(cr.sing) cr.sing.chk <- (any(class(x) %in% "calc_rate") && length(x$rate) == 1) else
+  if(cr.sing) cr.sing.chk <- (inherits(x, "calc_rate") && length(x$rate) == 1) else
     cr.sing.chk <- NULL
   # calc_rate multiple rate
-  if(cr.mult) cr.mult.chk <- (any(class(x) %in% "calc_rate") && length(x$rate) > 1) else
+  if(cr.mult) cr.mult.chk <- (inherits(x, "calc_rate") && length(x$rate) > 1) else
     cr.mult.chk <- NULL
   # calc_rate.int
-  if(cr.int) cr.int.chk <- any(class(x) %in% "calc_rate.int") else
+  if(cr.int) cr.int.chk <- inherits(x, "calc_rate.int") else
     cr.int.chk <- NULL
   # calc_rate.int single rate
-  if(cr.int.sing) cr.int.sing.chk <- (any(class(x) %in% "calc_rate.int") && length(x$rate) == 1) else
+  if(cr.int.sing) cr.int.sing.chk <- (inherits(x, "calc_rate.int") && length(x$rate) == 1) else
     cr.int.sing.chk <- NULL
   # calc_rate.int multiple rate
-  if(cr.int.mult) cr.int.mult.chk <- (any(class(x) %in% "calc_rate.int") && length(x$rate) > 1) else
+  if(cr.int.mult) cr.int.mult.chk <- (inherits(x, "calc_rate.int") && length(x$rate) > 1) else
     cr.int.mult.chk <- NULL
   # auto_rate
-  if(ar) ar.chk <- any(class(x) %in% "auto_rate") else
+  if(ar) ar.chk <- inherits(x, "auto_rate") else
     ar.chk <- NULL
   # auto_rate single rate
-  if(ar.sing) ar.sing.chk <- (any(class(x) %in% "auto_rate") && length(x$rate) == 1) else
+  if(ar.sing) ar.sing.chk <- (inherits(x, "auto_rate") && length(x$rate) == 1) else
     ar.sing.chk <- NULL
   # auto_rate multiple rate
-  if(ar.mult) ar.mult.chk <- (any(class(x) %in% "auto_rate") && length(x$rate) > 1) else
+  if(ar.mult) ar.mult.chk <- (inherits(x, "auto_rate") && length(x$rate) > 1) else
     ar.mult.chk <- NULL
   # auto_rate.int
-  if(ar.int) ar.int.chk <- any(class(x) %in% "auto_rate.int") else
+  if(ar.int) ar.int.chk <- inherits(x, "auto_rate.int") else
     ar.int.chk <- NULL
   # auto_rate.int single rate
-  if(ar.int.sing) ar.int.sing.chk <- (any(class(x) %in% "auto_rate.int") && length(x$rate) == 1) else
+  if(ar.int.sing) ar.int.sing.chk <- (inherits(x, "auto_rate.int") && length(x$rate) == 1) else
     ar.int.sing.chk <- NULL
   # auto_rate.int multiple rate
-  if(ar.int.mult) ar.int.mult.chk <- (any(class(x) %in% "auto_rate.int") && length(x$rate) > 1) else
+  if(ar.int.mult) ar.int.mult.chk <- (inherits(x, "auto_rate.int") && length(x$rate) > 1) else
     ar.int.mult.chk <- NULL
   # calc_rate.bg
-  if(crbg) crbg.chk <- any(class(x) %in% "calc_rate.bg") else
+  if(crbg) crbg.chk <- inherits(x, "calc_rate.bg") else
     crbg.chk <- NULL
   # calc_rate.bg single rate
-  if(crbg.sing) crbg.sing.chk <- (any(class(x) %in% "calc_rate.bg") && length(x$rate.bg) == 1) else
+  if(crbg.sing) crbg.sing.chk <- (inherits(x, "calc_rate.bg") && length(x$rate.bg) == 1) else
     crbg.sing.chk <- NULL
   # calc_rate.bg multiple rate
-  if(crbg.mult) crbg.mult.chk <- (any(class(x) %in% "calc_rate.bg") && length(x$rate.bg) > 1) else
+  if(crbg.mult) crbg.mult.chk <- (inherits(x, "calc_rate.bg") && length(x$rate.bg) > 1) else
     crbg.mult.chk <- NULL
   # convert_rate any
-  if(cnvr) cnvr.chk <- any(class(x) %in% "convert_rate") else
+  if(cnvr) cnvr.chk <- inherits(x, "convert_rate") else
     cnvr.chk <- NULL
   # convert_rate single rate
-  if(cnvr.sing) cnvr.sing.chk <- (any(class(x) %in% "convert_rate") && length(x$rate.output) == 1) else
+  if(cnvr.sing) cnvr.sing.chk <- (inherits(x, "convert_rate") && length(x$rate.output) == 1) else
     cnvr.sing.chk <- NULL
   # convert_rate multiple rate
-  if(cnvr.mult) cnvr.mult.chk <- (any(class(x) %in% "convert_rate") && length(x$rate.output) > 1) else
+  if(cnvr.mult) cnvr.mult.chk <- (inherits(x, "convert_rate") && length(x$rate.output) > 1) else
     cnvr.mult.chk <- NULL
   # convert_rate.ft any
-  if(cnvr.ft) cnvr.ft.chk <- any(class(x) %in% "convert_rate.ft") else
+  if(cnvr.ft) cnvr.ft.chk <- inherits(x, "convert_rate.ft") else
     cnvr.ft.chk <- NULL
   # convert_rate.ft single rate
-  if(cnvr.ft.sing) cnvr.ft.sing.chk <- (any(class(x) %in% "convert_rate.ft") && length(x$rate.output) == 1) else
+  if(cnvr.ft.sing) cnvr.ft.sing.chk <- (inherits(x, "convert_rate.ft") && length(x$rate.output) == 1) else
     cnvr.ft.sing.chk <- NULL
   # convert_rate.ft multiple rate
-  if(cnvr.ft.mult) cnvr.ft.mult.chk <- (any(class(x) %in% "convert_rate.ft") && length(x$rate.output) > 1) else
+  if(cnvr.ft.mult) cnvr.ft.mult.chk <- (inherits(x, "convert_rate.ft") && length(x$rate.output) > 1) else
     cnvr.ft.mult.chk <- NULL
   # inspect
-  if(insp) insp.chk <- any(class(x) %in% "inspect") else
+  if(insp) insp.chk <- inherits(x, "inspect") else
     insp.chk <- NULL
 
   # Assemble test results
@@ -448,7 +448,7 @@ units.val <- function(unit, is, msg = "units.val") {
   ## Message if no match found
   result <- any(chk == TRUE)  # did a match occur?
   if (result == FALSE)
-    stop(glue::glue("{msg}: unit '{unit}' not recognised. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = F))
+    stop(glue::glue("{msg}: unit '{unit}' not recognised. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details."), call. = FALSE)
 
   # print unit name
   out <- names(chk)[which(chk)]

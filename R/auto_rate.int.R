@@ -356,7 +356,7 @@ auto_rate.int <- function(x,
     stop("auto_rate.int: Input must be a 'data.frame' or 'inspect' object.", call. = FALSE)
 
   # Extract data
-  if(any(class(x) %in% "inspect")) df <- x$dataframe else
+  if(inherits(x, "inspect")) df <- x$dataframe else
     df <- x
 
   # Format as data.table

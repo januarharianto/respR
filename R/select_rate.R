@@ -1347,8 +1347,8 @@ select_rate <- function(x, method = NULL, n = NULL){
   ## object that was manipulated, i.e. not original
   ## 2. can't replace class because generic S3 functions will stop working
   ## (unless we just duplicate these for new class)
-  if(inherits(output, "convert_rate") && !("convert_rate_select" %in% class(output))) class(output) <- c(class(output), "convert_rate_select")
-  if(inherits(output, "convert_rate.ft") && !("convert_rate.ft_select" %in% class(output))) class(output) <- c(class(output), "convert_rate.ft_select")
+  if(inherits(output, "convert_rate") && !inherits(output, "convert_rate_select")) class(output) <- c(class(output), "convert_rate_select")
+  if(inherits(output, "convert_rate.ft") && !inherits(output, "convert_rate.ft_select")) class(output) <- c(class(output), "convert_rate.ft_select")
 
   ## Message
   if(reordered) message(glue::glue(
