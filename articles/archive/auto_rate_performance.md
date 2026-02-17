@@ -83,7 +83,10 @@ designed to mimic common respirometry data whereby the initial sections
 of the data are often non-linear. Here we show 25 randomly-generated
 plots created by the `type`:
 
-![](img/auto_rate_perf/arperf01.png)
+![25 randomly generated default-type simulated
+datasets](img/auto_rate_perf/arperf01.png)
+
+25 randomly generated default-type simulated datasets
 
 ### “Corrupted” data
 
@@ -103,7 +106,10 @@ the initial non-linear segment, ignore the dip, and then pick the longer
 of the 2 remaining linear segments that are separated by the dip. Here
 we show 25 randomly-generated plots created by the `type`:
 
-![](img/auto_rate_perf/arperf02.png)
+![25 randomly generated corrupted-type simulated
+datasets](img/auto_rate_perf/arperf02.png)
+
+25 randomly generated corrupted-type simulated datasets
 
 ### “Segmented” data
 
@@ -120,7 +126,10 @@ correctly omit the initial non-linear segment, and also, ignore the end
 segment of the data as it has a different slope. Here we show 25
 randomly-generated plots created by the `type`:
 
-![](img/auto_rate_perf/arperf03.png)
+![25 randomly generated segmented-type simulated
+datasets](img/auto_rate_perf/arperf03.png)
+
+25 randomly generated segmented-type simulated datasets
 
 ## Test conditions
 
@@ -235,7 +244,10 @@ $`\pm 0.06`$, even for values close to zero:
 plot(test_lin_data$default100)
 ```
 
-![](img/auto_rate_perf/arperf04.png)
+![Performance metrics for auto_rate on default-type data with 100
+samples](img/auto_rate_perf/arperf04.png)
+
+Performance metrics for auto_rate on default-type data with 100 samples
 
 Tests on larger sample data sizes of 200 and 500 revealed that
 `auto_rate` performed better when provided with bigger data. When used
@@ -249,7 +261,10 @@ when sample size was at 100:
 plot(test_lin_data$default500)
 ```
 
-![](img/auto_rate_perf/arperf05.png)
+![Performance metrics for auto_rate on default-type data with 500
+samples](img/auto_rate_perf/arperf05.png)
+
+Performance metrics for auto_rate on default-type data with 500 samples
 
 ### “Corrupted” data
 
@@ -271,7 +286,11 @@ was genrally poorer at values close to zero.
 plot(test_lin_data$corrupted100)
 ```
 
-![](img/auto_rate_perf/arperf06.png)
+![Performance metrics for auto_rate on corrupted-type data with 100
+samples](img/auto_rate_perf/arperf06.png)
+
+Performance metrics for auto_rate on corrupted-type data with 100
+samples
 
 Again, `auto_rate` performed better when provided with bigger data. At
 500 samples the same issue where the shorter linear segment was
@@ -286,7 +305,11 @@ values approach zero.
 plot(test_lin_data$corrupted500)
 ```
 
-![](img/auto_rate_perf/arperf07.png)
+![Performance metrics for auto_rate on corrupted-type data with 500
+samples](img/auto_rate_perf/arperf07.png)
+
+Performance metrics for auto_rate on corrupted-type data with 500
+samples
 
 ### “Segmented” data
 
@@ -307,7 +330,11 @@ slope values are closer to zero.
 plot(test_lin_data$segmented100)
 ```
 
-![](img/auto_rate_perf/arperf08.png)
+![Performance metrics for auto_rate on segmented-type data with 100
+samples](img/auto_rate_perf/arperf08.png)
+
+Performance metrics for auto_rate on segmented-type data with 100
+samples
 
 Again, with a larger dataset, `auto_rate`’s performance was
 substantially better. With a 500-sample dataset, many of the issues that
@@ -322,7 +349,11 @@ smaller in magnitude.
 plot(test_lin_data$segmented500)
 ```
 
-![](img/auto_rate_perf/arperf09.png)
+![Performance metrics for auto_rate on segmented-type data with 500
+samples](img/auto_rate_perf/arperf09.png)
+
+Performance metrics for auto_rate on segmented-type data with 500
+samples
 
 We did not report any of the results for 200-sample size datasets, but
 users are free to call the data object `test_lin_data` and plot the

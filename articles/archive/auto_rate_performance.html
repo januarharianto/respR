@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../../articles/respR.html">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../../reference/index.html">Documentation</a></li>
 <li class="nav-item dropdown">
@@ -197,7 +197,11 @@ linear segment with a randomly-generated slope computed using
 mimic common respirometry data whereby the initial sections of the data
 are often non-linear. Here we show 25 randomly-generated plots created
 by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf01.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf01.png" class="r-plt" alt="25 randomly generated default-type simulated datasets"><p class="caption">
+25 randomly generated default-type simulated datasets
+</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data"></a>
@@ -217,7 +221,11 @@ need to omit the initial non-linear segment, ignore the dip, and then
 pick the longer of the 2 remaining linear segments that are separated by
 the dip. Here we show 25 randomly-generated plots created by the
 <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf02.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf02.png" class="r-plt" alt="25 randomly generated corrupted-type simulated datasets"><p class="caption">
+25 randomly generated corrupted-type simulated datasets
+</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="segmented-data">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data"></a>
@@ -235,7 +243,11 @@ than the first linear segment).</p>
 would need to correctly omit the initial non-linear segment, and also,
 ignore the end segment of the data as it has a different slope. Here we
 show 25 randomly-generated plots created by the <code>type</code>:</p>
-<p><img src="img/auto_rate_perf/arperf03.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf03.png" class="r-plt" alt="25 randomly generated segmented-type simulated datasets"><p class="caption">
+25 randomly generated segmented-type simulated datasets
+</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -372,7 +384,11 @@ values across all values of
 even for values close to zero:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf04.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf04.png" class="r-plt" alt="Performance metrics for auto_rate on default-type data with 100 samples"><p class="caption">
+Performance metrics for auto_rate on default-type data with 100 samples
+</p>
+</div>
 <p>Tests on larger sample data sizes of 200 and 500 revealed that
 <code>auto_rate</code> performed better when provided with bigger data.
 When used on data with 500 samples, <code>auto_rate</code> generally
@@ -385,7 +401,11 @@ of 0.999, and <strong>(D)</strong> deviation was
 smaller than when sample size was at 100:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">default500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf05.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf05.png" class="r-plt" alt="Performance metrics for auto_rate on default-type data with 500 samples"><p class="caption">
+Performance metrics for auto_rate on default-type data with 500 samples
+</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="corrupted-data-1">“Corrupted” data<a class="anchor" aria-label="anchor" href="#corrupted-data-1"></a>
@@ -410,7 +430,12 @@ all slopes when compared to its performance with “default”-type data.
 genrally poorer at values close to zero.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf06.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf06.png" class="r-plt" alt="Performance metrics for auto_rate on corrupted-type data with 100 samples"><p class="caption">
+Performance metrics for auto_rate on corrupted-type data with 100
+samples
+</p>
+</div>
 <p>Again, <code>auto_rate</code> performed better when provided with
 bigger data. At 500 samples the same issue where the shorter linear
 segment was incorrectly selected still persisted <strong>(A)</strong>,
@@ -426,7 +451,12 @@ were substantially smaller with seemingly fewer poor estimates when
 slope values approach zero.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">corrupted500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf07.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf07.png" class="r-plt" alt="Performance metrics for auto_rate on corrupted-type data with 500 samples"><p class="caption">
+Performance metrics for auto_rate on corrupted-type data with 500
+samples
+</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="segmented-data-1">“Segmented” data<a class="anchor" aria-label="anchor" href="#segmented-data-1"></a>
@@ -449,7 +479,12 @@ despite the errors, and <strong>(D)</strong> the deviance from the true
 rate appeared to be poorer when slope values are closer to zero.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented100</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf08.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf08.png" class="r-plt" alt="Performance metrics for auto_rate on segmented-type data with 100 samples"><p class="caption">
+Performance metrics for auto_rate on segmented-type data with 100
+samples
+</p>
+</div>
 <p>Again, with a larger dataset, <code>auto_rate</code>’s performance
 was substantially better. With a 500-sample dataset, many of the issues
 that occured in the previous test were better resolved. The function
@@ -466,7 +501,12 @@ of 0.999, and <strong>(D)</strong> deviations from
 were much smaller in magnitude.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">test_lin_data</span><span class="op">$</span><span class="va">segmented500</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/auto_rate_perf/arperf09.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/auto_rate_perf/arperf09.png" class="r-plt" alt="Performance metrics for auto_rate on segmented-type data with 500 samples"><p class="caption">
+Performance metrics for auto_rate on segmented-type data with 500
+samples
+</p>
+</div>
 <p>We did not report any of the results for 200-sample size datasets,
 but users are free to call the data object <code>test_lin_data</code>
 and plot the results, or run their own analyses using the functions we

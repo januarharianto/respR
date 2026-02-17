@@ -59,7 +59,8 @@ with a sample of your data and we will help get you started.
 
 ## Publication
 
-[![](reference/figures/mee_cover.jpg)](https://doi.org/10.1111/2041-210X.13162)
+[![Methods in Ecology and Evolution journal
+cover](reference/figures/mee_cover.jpg)](https://doi.org/10.1111/2041-210X.13162)
 
 The package has also been [**peer reviewed and
 published**](https://doi.org/10.1111/2041-210X.13162) in *Methods in

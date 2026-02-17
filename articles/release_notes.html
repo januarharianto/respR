@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/respR.html">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Documentation</a></li>
 <li class="nav-item dropdown">
@@ -120,10 +120,13 @@
 <h2 id="version-2-x-x-2026-xx-xx">Version 2.x.x – 2026-xx-xx<a class="anchor" aria-label="anchor" href="#version-2-x-x-2026-xx-xx"></a>
 </h2>
 <ul>
-<li>FIX: <code><a href="../reference/convert_DO.html">convert_DO()</a></code> fixed typo in conversion calculation
-values which would have caused very minor error converting from
-<code>hPa</code> values.</li>
-<li>CHANGE: Updated URL in Startup message.</li>
+<li>FIX: <code><a href="../reference/convert_val.html">convert_val()</a></code> now supports <code>mmHg</code> and
+<code>inHg</code> pressure unit conversions (previously accepted by the
+parser but silently returned <code>NA</code>).</li>
+<li>FIX: <code><a href="../reference/convert_DO.html">convert_DO()</a></code> fixed typo in calculation values
+which would cause very minor error converting from <code>hPa</code>
+values.</li>
+<li>CHANGE: Updated URL in startup message.</li>
 </ul>
 </div>
 <div class="section level2">

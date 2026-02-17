@@ -49,9 +49,15 @@ pcrit_rMR$SummaryCrit$Pcrit.lm
 pcrit_rMR$SummaryCrit$Pcrit.midpoint
 ```
 
-![](img/oxy_crit_comp/oxy_crit_comp_01.png)
+![rMR PCrit analysis code
+output](img/oxy_crit_comp/oxy_crit_comp_01.png)
 
-![](img/oxy_crit_comp/oxy_crit_comp_02.png)
+rMR PCrit analysis code output
+
+![rMR PCrit analysis plot
+output](img/oxy_crit_comp/oxy_crit_comp_02.png)
+
+rMR PCrit analysis plot output
 
 ``` r
 ## respR PCrit Analysis
@@ -64,9 +70,15 @@ fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
 oxy_crit(fishMR_respR)
 ```
 
-![](img/oxy_crit_comp/oxy_crit_comp_03.png)
+![respR oxy_crit analysis console
+output](img/oxy_crit_comp/oxy_crit_comp_03.png)
 
-![](img/oxy_crit_comp/oxy_crit_comp_04.png)
+respR oxy_crit analysis console output
+
+![respR oxy_crit analysis plot
+output](img/oxy_crit_comp/oxy_crit_comp_04.png)
+
+respR oxy_crit analysis plot output
 
 Note that the `rMR` results (0.80 and 0.87) are different to those from
 `respR` (0.83 and 0.83). This is likely due to an improved

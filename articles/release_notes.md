@@ -7,10 +7,14 @@ This page contains the release notes for the latest updates to `respR`.
 ## Version 2.x.x – 2026-xx-xx
 
 - FIX:
+  [`convert_val()`](https://januarharianto.github.io/respR/reference/convert_val.md)
+  now supports `mmHg` and `inHg` pressure unit conversions (previously
+  accepted by the parser but silently returned `NA`).
+- FIX:
   [`convert_DO()`](https://januarharianto.github.io/respR/reference/convert_DO.md)
-  fixed typo in conversion calculation values which would have caused
-  very minor error converting from `hPa` values.
-- CHANGE: Updated URL in Startup message.
+  fixed typo in calculation values which would cause very minor error
+  converting from `hPa` values.
+- CHANGE: Updated URL in startup message.
 
 ## Version 2.3.4 – 2025-10-08
 

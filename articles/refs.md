@@ -2,7 +2,9 @@
 
 ## respR publication
 
-![](img/mee_cover.jpg)
+![Methods in Ecology and Evolution journal cover](img/mee_cover.jpg)
+
+Methods in Ecology and Evolution journal cover
 
   
 `respR` has been peer reviewed and published. Please

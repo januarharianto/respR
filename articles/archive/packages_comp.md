@@ -75,7 +75,10 @@ functions rely on the unit standards package `marelac` they give
 identical or very similar results. Minor differences are probably dues
 to the precision with which variables are handled internally:
 
-![](img/pkg_comp/pkg_comp01.png)
+![Comparison of convert_DO (respR) and conv_o2 (respirometry)
+outputs](img/pkg_comp/pkg_comp01.png)
+
+Comparison of convert_DO (respR) and conv_o2 (respirometry) outputs
 
 `respR` has a couple of minor advantages; the `respR` output is more
 informative, clearly stating the input and output units; and a “fuzzy”
@@ -107,9 +110,15 @@ this. The example file and import code (slightly adapted) are taken from
 the `rMR` [Github](https://github.com/tyler-l-moulton/rMR) repo and
 README file found there.
 
-![](img/pkg_comp/pkg_comp02.png)
+![Comparison of rMR and respR data import
+code](img/pkg_comp/pkg_comp02.png)
 
-![](img/pkg_comp/pkg_comp03.png)
+Comparison of rMR and respR data import code
+
+![Comparison of rMR and respR imported data
+frames](img/pkg_comp/pkg_comp03.png)
+
+Comparison of rMR and respR imported data frames
 
 These both appear to perform well, on this file at least. The resulting
 data frames are similar, containing all the relevant data, although
@@ -162,15 +171,28 @@ function, so here we will compare the results of each on the same data.
 Again, we use data included in `rMR` and code adapted from the
 documentation.
 
-![](img/pkg_comp/pkg_comp04.png)
+![rMR MR.loops rate calculation code](img/pkg_comp/pkg_comp04.png)
 
-![](img/pkg_comp/pkg_comp05.png)
+rMR MR.loops rate calculation code
 
-![](img/pkg_comp/pkg_comp06.png)
+![rMR MR.loops plot output showing regression
+fits](img/pkg_comp/pkg_comp05.png)
 
-![](img/pkg_comp/pkg_comp07.png)
+rMR MR.loops plot output showing regression fits
 
-![](img/pkg_comp/pkg_comp08.png)
+![respR calc_rate code and output for same data
+regions](img/pkg_comp/pkg_comp06.png)
+
+respR calc_rate code and output for same data regions
+
+![Comparison of rMR and respR rate results](img/pkg_comp/pkg_comp07.png)
+
+Comparison of rMR and respR rate results
+
+![respR calc_rate plot output showing regression
+fits](img/pkg_comp/pkg_comp08.png)
+
+respR calc_rate plot output showing regression fits
 
 As we can see the results are identical (in `respR` we chose to express
 rates as negatives because they represent a negative slope and depletion
@@ -254,9 +276,15 @@ through several functions. The AutoResp file (from a 1-channel,
 intermittent-flow, swim tunnel experiment on an anchovy) did however
 import successfully and plot the data:
 
-![](img/pkg_comp/pkg_comp09.png)
+![FishResp import.meas code for importing AutoResp
+data](img/pkg_comp/pkg_comp09.png)
 
-![](img/pkg_comp/pkg_comp10.png)
+FishResp import.meas code for importing AutoResp data
+
+![FishResp imported data plot showing oxygen over
+time](img/pkg_comp/pkg_comp10.png)
+
+FishResp imported data plot showing oxygen over time
 
 We can’t compare the importing functionality of `FishResp` with `respR`,
 as we do not yet support direct importing of AutoResp files (this is
@@ -289,20 +317,35 @@ imported and prepared in various ways, and the code is mostly taken from
 the documentation. We will use these data to compare the outputs of
 `FishResp` to `respR`.
 
-![](img/pkg_comp/pkg_comp11.png)
+![FishResp analysis workflow code and
+output](img/pkg_comp/pkg_comp11.png)
+
+FishResp analysis workflow code and output
 
 Now the `respR` analysis of the same data (though only a single
 channel), using the same inputs. We use regular R data selection syntax
 to extract rates from multiple even-spaced data regions (here spaced at
 every 1200 rows).
 
-![](img/pkg_comp/pkg_comp12.png)
+![respR analysis workflow code for same FishResp
+data](img/pkg_comp/pkg_comp12.png)
 
-![](img/pkg_comp/pkg_comp13.png)
+respR analysis workflow code for same FishResp data
 
-![](img/pkg_comp/pkg_comp14.png)
+![respR calc_rate plot output for FishResp comparison
+data](img/pkg_comp/pkg_comp13.png)
 
-![](img/pkg_comp/pkg_comp15.png)
+respR calc_rate plot output for FishResp comparison data
+
+![Comparison of FishResp and respR rate
+results](img/pkg_comp/pkg_comp14.png)
+
+Comparison of FishResp and respR rate results
+
+![respR convert_rate output for FishResp comparison
+data](img/pkg_comp/pkg_comp15.png)
+
+respR convert_rate output for FishResp comparison data
 
 As we can see the rates calculated by both packages are identical. As
 with `rMR`, this is exactly what we would expect as we are manually

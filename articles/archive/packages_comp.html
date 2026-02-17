@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../../articles/respR.html">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../../reference/index.html">Documentation</a></li>
 <li class="nav-item dropdown">
@@ -184,7 +184,11 @@ the same units, and because both functions rely on the unit standards
 package <code>marelac</code> they give identical or very similar
 results. Minor differences are probably dues to the precision with which
 variables are handled internally:</p>
-<p><img src="img/pkg_comp/pkg_comp01.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp01.png" class="r-plt" alt="Comparison of convert_DO (respR) and conv_o2 (respirometry) outputs" width="700px"><p class="caption">
+Comparison of convert_DO (respR) and conv_o2 (respirometry) outputs
+</p>
+</div>
 <p><code>respR</code> has a couple of minor advantages; the
 <code>respR</code> output is more informative, clearly stating the input
 and output units; and a “fuzzy” string matching algorithm is used to
@@ -216,8 +220,16 @@ several other systems. Here is typical code from each to do this. The
 example file and import code (slightly adapted) are taken from the
 <code>rMR</code> <a href="https://github.com/tyler-l-moulton/rMR" class="external-link">Github</a> repo and README
 file found there.</p>
-<p><img src="img/pkg_comp/pkg_comp02.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp03.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp02.png" class="r-plt" alt="Comparison of rMR and respR data import code" width="700px"><p class="caption">
+Comparison of rMR and respR data import code
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp03.png" class="r-plt" alt="Comparison of rMR and respR imported data frames" width="700px"><p class="caption">
+Comparison of rMR and respR imported data frames
+</p>
+</div>
 <p>These both appear to perform well, on this file at least. The
 resulting data frames are similar, containing all the relevant data,
 although <code>respR</code> adds a numeric <code>time</code> column,
@@ -269,11 +281,31 @@ manually specifying one or more regions over which to fit regressions.
 function, so here we will compare the results of each on the same data.
 Again, we use data included in <code>rMR</code> and code adapted from
 the documentation.</p>
-<p><img src="img/pkg_comp/pkg_comp04.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp05.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp06.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp07.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp08.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp04.png" class="r-plt" alt="rMR MR.loops rate calculation code" width="700px"><p class="caption">
+rMR MR.loops rate calculation code
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp05.png" class="r-plt" alt="rMR MR.loops plot output showing regression fits" width="700px"><p class="caption">
+rMR MR.loops plot output showing regression fits
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp06.png" class="r-plt" alt="respR calc_rate code and output for same data regions" width="700px"><p class="caption">
+respR calc_rate code and output for same data regions
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp07.png" class="r-plt" alt="Comparison of rMR and respR rate results" width="700px"><p class="caption">
+Comparison of rMR and respR rate results
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp08.png" class="r-plt" alt="respR calc_rate plot output showing regression fits" width="700px"><p class="caption">
+respR calc_rate plot output showing regression fits
+</p>
+</div>
 <p>As we can see the results are identical (in <code>respR</code> we
 chose to express rates as negatives because they represent a negative
 slope and depletion of O2). This is exactly what we would expect with
@@ -355,8 +387,16 @@ imported alongside them, and processed through several functions. The
 AutoResp file (from a 1-channel, intermittent-flow, swim tunnel
 experiment on an anchovy) did however import successfully and plot the
 data:</p>
-<p><img src="img/pkg_comp/pkg_comp09.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp10.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp09.png" class="r-plt" alt="FishResp import.meas code for importing AutoResp data" width="700px"><p class="caption">
+FishResp import.meas code for importing AutoResp data
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp10.png" class="r-plt" alt="FishResp imported data plot showing oxygen over time" width="700px"><p class="caption">
+FishResp imported data plot showing oxygen over time
+</p>
+</div>
 <p>We can’t compare the importing functionality of <code>FishResp</code>
 with <code>respR</code>, as we do not yet support direct importing of
 AutoResp files (this is planned, and currently they can easily be
@@ -388,15 +428,35 @@ clear way that we can see to accommodate these data in
 has already been imported and prepared in various ways, and the code is
 mostly taken from the documentation. We will use these data to compare
 the outputs of <code>FishResp</code> to <code>respR</code>.</p>
-<p><img src="img/pkg_comp/pkg_comp11.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp11.png" class="r-plt" alt="FishResp analysis workflow code and output" width="700px"><p class="caption">
+FishResp analysis workflow code and output
+</p>
+</div>
 <p>Now the <code>respR</code> analysis of the same data (though only a
 single channel), using the same inputs. We use regular R data selection
 syntax to extract rates from multiple even-spaced data regions (here
 spaced at every 1200 rows).</p>
-<p><img src="img/pkg_comp/pkg_comp12.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp13.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp14.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
-<p><img src="img/pkg_comp/pkg_comp15.png" class="r-plt" width="700px" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp12.png" class="r-plt" alt="respR analysis workflow code for same FishResp data" width="700px"><p class="caption">
+respR analysis workflow code for same FishResp data
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp13.png" class="r-plt" alt="respR calc_rate plot output for FishResp comparison data" width="700px"><p class="caption">
+respR calc_rate plot output for FishResp comparison data
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp14.png" class="r-plt" alt="Comparison of FishResp and respR rate results" width="700px"><p class="caption">
+Comparison of FishResp and respR rate results
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/pkg_comp/pkg_comp15.png" class="r-plt" alt="respR convert_rate output for FishResp comparison data" width="700px"><p class="caption">
+respR convert_rate output for FishResp comparison data
+</p>
+</div>
 <p>As we can see the rates calculated by both packages are identical. As
 with <code>rMR</code>, this is exactly what we would expect as we are
 manually selecting the same data regions and user underlying R code to

@@ -63,7 +63,9 @@ The main function in `LoLinR` is called `rankLocReg()`. The time it
 takes this function to process data follows an exponential relationship
 with its length, illustrated below:
 
-![](img/auto_rate_comp/lolinr_times.png)
+![LoLinR processing times](img/auto_rate_comp/lolinr_times.png)
+
+LoLinR processing times
 
 `rankLocReg()` was run on different sized datasets (blue dots) and the
 time to completion recorded. These analyses were run in RStudio on the
@@ -125,7 +127,9 @@ set.seed(769)
 sim1 <- sim_data(150)
 ```
 
-![](img/auto_rate_comp/arcomp01.png)
+![auto_rate comparison: simulated data](img/auto_rate_comp/arcomp01.png)
+
+auto_rate comparison: simulated data
 
 ``` r
 ## respR:
@@ -135,7 +139,9 @@ rspr1 <- auto_rate(sim1$df)
     #> 
     #> 7 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp02.png)
+![auto_rate results](img/auto_rate_comp/arcomp02.png)
+
+auto_rate results
 
 ``` r
 ## LoLinR:
@@ -145,7 +151,9 @@ plot(lir1)
 
     #> rankLocReg fitted 7260 local regressions.
 
-![](img/auto_rate_comp/arcomp03.png)
+![LoLinR results](img/auto_rate_comp/arcomp03.png)
+
+LoLinR results
 
     #> Compare top ranked outputs
 
@@ -166,7 +174,9 @@ set.seed(112)
 sim2 <- sim_data(150, type = "corrupted")
 ```
 
-![](img/auto_rate_comp/arcomp04.png)
+![auto_rate comparison: sardine data](img/auto_rate_comp/arcomp04.png)
+
+auto_rate comparison: sardine data
 
 ``` r
 ## respR:
@@ -176,7 +186,9 @@ rspr2 <- auto_rate(sim2$df)
     #> 
     #> 31 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp05.png)
+![auto_rate sardine results](img/auto_rate_comp/arcomp05.png)
+
+auto_rate sardine results
 
 ``` r
 ## LoLinR:
@@ -186,7 +198,9 @@ plot(lir2)
 
     #> rankLocReg fitted 7260 local regressions.
 
-![](img/auto_rate_comp/arcomp06.png)
+![LoLinR sardine results](img/auto_rate_comp/arcomp06.png)
+
+LoLinR sardine results
 
     #> Compare top ranked outputs
 
@@ -207,7 +221,9 @@ set.seed(546)
 sim3 <- sim_data(150, type = "segmented")
 ```
 
-![](img/auto_rate_comp/arcomp07.png)
+![auto_rate comparison: urchin data](img/auto_rate_comp/arcomp07.png)
+
+auto_rate comparison: urchin data
 
 ``` r
 ## respR:
@@ -217,7 +233,9 @@ rspr3 <- auto_rate(sim3$df)
     #> 
     #> 6 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp08.png)
+![auto_rate urchin results](img/auto_rate_comp/arcomp08.png)
+
+auto_rate urchin results
 
 ``` r
 ## LoLinR:
@@ -227,7 +245,9 @@ plot(lir3)
 
     #> rankLocReg fitted 7260 local regressions.
 
-![](img/auto_rate_comp/arcomp09.png)
+![LoLinR urchin results](img/auto_rate_comp/arcomp09.png)
+
+LoLinR urchin results
 
     #> Compare top ranked outputs
 
@@ -253,7 +273,9 @@ respr_urchindata <- auto_rate(Urch1)
     #> 
     #> 4 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp10.png)
+![auto_rate comparison: squid data](img/auto_rate_comp/arcomp10.png)
+
+auto_rate comparison: squid data
 
 ``` r
 ## LoLinR:
@@ -263,7 +285,9 @@ plot(lolinr_urchindata)
 
     #> rankLocReg fitted 8911 local regressions.
 
-![](img/auto_rate_comp/arcomp11.png)
+![auto_rate squid results](img/auto_rate_comp/arcomp11.png)
+
+auto_rate squid results
 
     #> Compare top ranked outputs
 
@@ -287,7 +311,10 @@ rcor <- auto_rate(CormorantData)
     #> 
     #> 43 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp12.png)
+![auto_rate comparison: intermittent
+data](img/auto_rate_comp/arcomp12.png)
+
+auto_rate comparison: intermittent data
 
 ``` r
 ## LoLinR:
@@ -298,7 +325,9 @@ lcoregs  <-  reRank(lcoregs, newMethod='pc')
 plot(lcoregs)
 ```
 
-![](img/auto_rate_comp/arcomp13.png)
+![auto_rate intermittent results](img/auto_rate_comp/arcomp13.png)
+
+auto_rate intermittent results
 
     #> Compare top ranked outputs
 
@@ -322,7 +351,9 @@ rsquid <- auto_rate(squid.rd)
     #> 
     #> 32 kernel density peaks detected and ranked.
 
-![](img/auto_rate_comp/arcomp14.png)
+![LoLinR intermittent results](img/auto_rate_comp/arcomp14.png)
+
+LoLinR intermittent results
 
 ``` r
 ## LoLinR:
@@ -334,7 +365,9 @@ plot(lsquidregs)
 
     #> rankLocReg fitted 7260 local regressions.
 
-![](img/auto_rate_comp/arcomp15.png)
+![LoLinR intermittent rate extraction](img/auto_rate_comp/arcomp15.png)
+
+LoLinR intermittent rate extraction
 
     #> Compare top ranked outputs
 

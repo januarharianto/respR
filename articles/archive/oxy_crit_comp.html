@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../../index.html"><span class="fa fa-home"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../../index.html" aria-label="Home"><span class="fa fa-home"></span></a></li>
 <li class="nav-item"><a class="nav-link" href="../../articles/respR.html">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link" href="../../reference/index.html">Documentation</a></li>
 <li class="nav-item dropdown">
@@ -162,8 +162,16 @@ results from <code>respR</code> using the same data.</p>
 <span><span class="co"># print results</span></span>
 <span><span class="va">pcrit_rMR</span><span class="op">$</span><span class="va">SummaryCrit</span><span class="op">$</span><span class="va">Pcrit.lm</span></span>
 <span><span class="va">pcrit_rMR</span><span class="op">$</span><span class="va">SummaryCrit</span><span class="op">$</span><span class="va">Pcrit.midpoint</span></span></code></pre></div>
-<p><img src="img/oxy_crit_comp/oxy_crit_comp_01.png" class="r-plt" style="display: block; margin: auto;"></p>
-<p><img src="img/oxy_crit_comp/oxy_crit_comp_02.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/oxy_crit_comp/oxy_crit_comp_01.png" class="r-plt" alt="rMR PCrit analysis code output"><p class="caption">
+rMR PCrit analysis code output
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/oxy_crit_comp/oxy_crit_comp_02.png" class="r-plt" alt="rMR PCrit analysis plot output"><p class="caption">
+rMR PCrit analysis plot output
+</p>
+</div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## respR PCrit Analysis</span></span>
 <span></span>
@@ -173,8 +181,16 @@ results from <code>respR</code> using the same data.</p>
 <span></span>
 <span><span class="co"># perform respR pcrit analysis</span></span>
 <span><span class="fu"><a href="../../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">fishMR_respR</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/oxy_crit_comp/oxy_crit_comp_03.png" class="r-plt" style="display: block; margin: auto;"></p>
-<p><img src="img/oxy_crit_comp/oxy_crit_comp_04.png" class="r-plt" style="display: block; margin: auto;"></p>
+<div class="figure" style="text-align: center">
+<img src="img/oxy_crit_comp/oxy_crit_comp_03.png" class="r-plt" alt="respR oxy_crit analysis console output"><p class="caption">
+respR oxy_crit analysis console output
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<img src="img/oxy_crit_comp/oxy_crit_comp_04.png" class="r-plt" alt="respR oxy_crit analysis plot output"><p class="caption">
+respR oxy_crit analysis plot output
+</p>
+</div>
 <p>Note that the <code>rMR</code> results (0.80 and 0.87) are different
 to those from <code>respR</code> (0.83 and 0.83). This is likely due to
 an improved implementation of the BMR method in <code>respR</code>. The
