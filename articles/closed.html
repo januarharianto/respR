@@ -233,7 +233,7 @@ assigning (i.e. saving) the result.</p>
 <span><span class="co">#&gt; inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.</span></span>
 <span><span class="co">#&gt; Warning: inspect: Time values are not evenly-spaced (numerically).</span></span>
 <span><span class="co">#&gt; inspect: Data issues detected. For more information use print().</span></span></code></pre></div>
-<p><img src="closed_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="closed_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="inspect() output showing all 18 oxygen columns of the urchins dataset" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.inspect # -----------------------</span></span>
 <span><span class="co">#&gt;                 time.min    a    b    c    d    e    f    g    h    i    j    k    l    m    n    o    p   b1   b2</span></span>
@@ -277,7 +277,7 @@ particular columns either by the column number or, as shown here, by
 name.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">urchin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span>  <span class="st">"time.min"</span>, oxygen <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="closed_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="closed_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="inspect() output for a single urchin showing oxygen timeseries and rolling rate" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.inspect # -----------------------</span></span>
 <span><span class="co">#&gt;                 time.min    n</span></span>
@@ -330,7 +330,7 @@ just created in <code><a href="../reference/calc_rate.html">calc_rate()</a></cod
 prompt the function to perform a linear regression on the entire data
 series.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">urchin</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">urchin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate # ---------------------</span></span>
 <span><span class="co">#&gt; Rank 1 of 1 rates:</span></span>
@@ -338,7 +338,7 @@ series.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
-<p><img src="closed_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="closed_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="calc_rate() output showing linear regression across entire urchin dataset" width="960" style="display: block; margin: auto;"></p>
 <p>Note how the function recognises the <code><a href="../reference/inspect.html">inspect()</a></code> object,
 with no other inputs necessary. Alternatively, you can input a
 <code>data.frame</code> object containing raw data, in which case the
@@ -409,7 +409,7 @@ subset that was analysed.</p>
 <span><span class="co">#&gt; # plot.calc_rate # ----------------------</span></span>
 <span><span class="co">#&gt; plot.calc_rate: Plotting rate from position 1 of 1 ...</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
-<p><img src="closed_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="closed_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="calc_rate() diagnostic plots for urchin rate from 4 to 29 minutes" width="960" style="display: block; margin: auto;"></p>
 <p>The saved object can also be explored using generic <code>S3</code> R
 methods.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -494,7 +494,7 @@ object.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span>
 <span><span class="va">bg_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">bg_insp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="closed_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="closed_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="calc_rate.bg() plot of background respiration rates from two blank controls" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate.bg # ------------------</span></span>
 <span><span class="co">#&gt; Background rate(s):</span></span>

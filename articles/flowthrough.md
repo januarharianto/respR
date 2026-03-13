@@ -75,7 +75,10 @@ inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
 #> -----------------------------------------
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-1-1.png)
+![Multi-panel plot showing inspect.ft output for all columns of the
+flowthrough_mult.rd dataset, displaying time series of outflow oxygen,
+inflow oxygen, delta oxygen, header tank oxygen, and temperature
+data.](flowthrough_files/figure-html/unnamed-chunk-1-1.png)
 
 The result does not have to be saved. This functionality can be used
 simply to get a quick overview of a dataset, check there are no common
@@ -184,7 +187,10 @@ insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92)
     #> 
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-5-1.png)
+![Two-panel plot from inspect.ft showing outflow and constant inflow
+oxygen concentrations over time in the top panel, and calculated delta
+oxygen values in the bottom panel for flowthrough.rd
+data.](flowthrough_files/figure-html/unnamed-chunk-5-1.png)
 
 The data checks show us there are no structural issues with the data,
 such as missing values or gaps. The top plot shows outflow and the
@@ -207,7 +213,9 @@ delta oxygen values by performing a rolling mean.
 plot(insp1, width = 0.05)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-7-1.png)
+![Two-panel plot from inspect.ft with rolling mean smoothing applied to
+delta oxygen values, showing stabilised rate regions more
+clearly.](flowthrough_files/figure-html/unnamed-chunk-7-1.png)
 
 This is a visual aid and only affects plotted values. It does not alter
 the delta oxygen values in the output.
@@ -238,7 +246,11 @@ rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
     #> To see full results use summary().
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-9-1.png)
+![Two-panel plot from calc_rate.ft showing the full outflow and inflow
+oxygen timeseries with the selected data region highlighted in the top
+panel, and a close-up of the selected delta oxygen region with a dashed
+trend line in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-9-1.png)
 
 `calc_rate.ft` calculates the rate by averaging all delta oxygen values
 within the chosen data region, and multiplying this by the flowrate. The
@@ -352,7 +364,11 @@ insp2 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3)
     #> 
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-16-1.png)
+![Two-panel plot from inspect.ft showing outflow and inflow oxygen
+recordings over time in the top panel, and calculated delta oxygen
+values in the bottom panel, with less variability than when using a
+constant inflow
+value.](flowthrough_files/figure-html/unnamed-chunk-16-1.png)
 
 Compared to the `inspect.ft` plot in [Case 1](#case1plot) the delta
 oxygen values are less variable, which suggests that at least some of
@@ -380,7 +396,10 @@ rate2 <- calc_rate.ft(insp2, flowrate = 2.34)
     #> To see full results use summary().
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-18-1.png)
+![Two-panel plot from calc_rate.ft showing the full oxygen timeseries
+with the entire dataset selected in the top panel, and a close-up of the
+delta oxygen values with a dashed trend line in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-18-1.png)
 
 The slightly lower rate value we get here than in Case 1 (1.65 vs 1.74)
 suggests the header tank supply is not quite at the theoretical maximum
@@ -444,7 +463,11 @@ insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6)
     #> Warning: inspect.ft: Time values are not evenly-spaced (numerically).
     #> inspect.ft: Data issues detected. For more information use print().
 
-![](flowthrough_files/figure-html/unnamed-chunk-22-1.png)
+![Two-panel plot from inspect.ft showing outflow and inflow oxygen in
+percent air saturation over time in the top panel, and delta oxygen
+values in the bottom panel, with an initial equilibration period visible
+before rates stabilise after about 25
+minutes.](flowthrough_files/figure-html/unnamed-chunk-22-1.png)
 
 Here we see a warning about not evenly-spaced time values. This comes
 from this dataset using decimalised minutes as the time values and can
@@ -477,7 +500,11 @@ rate3 <- calc_rate.ft(insp3, from = 30, flowrate = 0.1)
     #> To see full results use summary().
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-24-1.png)
+![Two-panel plot from calc_rate.ft showing the full oxygen timeseries
+with the selected region from 30 minutes onward highlighted in the top
+panel, and a close-up of the delta oxygen values in the selected region
+in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-24-1.png)
 
 ### Calculate background rate
 
@@ -496,7 +523,11 @@ multiple different experiments.
 bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-26-1.png)
+![Two-panel plot from inspect.ft showing outflow and inflow oxygen from
+a blank control chamber over time in the top panel, and the resulting
+delta oxygen values in the bottom panel, showing a slight but constant
+difference due to microbial background
+respiration.](flowthrough_files/figure-html/unnamed-chunk-26-1.png)
 
 Here we see there is a slight but noticeable difference in outflow and
 inflow oxygen due to microbial action. Moreover, it appears to be
@@ -519,7 +550,10 @@ bgrate <- calc_rate.ft(bg, flowrate = 0.1)
     #> To see full results use summary().
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-28-1.png)
+![Two-panel plot from calc_rate.ft showing the full background control
+oxygen timeseries with the entire dataset selected in the top panel, and
+a close-up of the background delta oxygen values in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-28-1.png)
 
 ### Adjust rate
 
@@ -650,7 +684,10 @@ these.
 insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-38-1.png)
+![Single-panel plot from inspect.ft showing pre-calculated delta oxygen
+values over time on a reverse y-axis, with an initial equilibration
+period before rates stabilise after about 20
+minutes.](flowthrough_files/figure-html/unnamed-chunk-38-1.png)
 
 When delta oxygen data are inspected, only one plot is produced of the
 entered delta oxygen values. Note how delta oxygen are plotted on a
@@ -680,7 +717,10 @@ rate4 <- calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1)
     #> To see full results use summary().
     #> -----------------------------------------
 
-![](flowthrough_files/figure-html/unnamed-chunk-40-1.png)
+![Two-panel plot from calc_rate.ft showing the full delta oxygen
+timeseries with the selected row range 2000 to 3000 highlighted in the
+top panel, and a close-up of the selected delta oxygen region in the
+bottom panel.](flowthrough_files/figure-html/unnamed-chunk-40-1.png)
 
 ### Adjust rate
 
@@ -747,7 +787,11 @@ recovering to routine levels.
 insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-46-1.png)
+![Two-panel plot from inspect.ft showing outflow and inflow oxygen over
+time in the top panel, and delta oxygen values on a reverse y-axis in
+the bottom panel, with a prominent region of elevated oxygen uptake
+visible around 35 to 45 minutes indicating increased specimen
+activity.](flowthrough_files/figure-html/unnamed-chunk-46-1.png)
 
 Note how delta oxygen are plotted on a reverse y-axis, so that higher
 uptake rates are plotted higher even though they are lower numerically
@@ -765,7 +809,11 @@ insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
   inspect.ft(time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-48-1.png)
+![Two-panel plot from inspect.ft showing a subset of data from 30 to 50
+minutes focusing on the active rate period, with outflow and inflow
+oxygen in the top panel and delta oxygen values in the bottom panel
+showing the peak activity region around 38 to 42
+minutes.](flowthrough_files/figure-html/unnamed-chunk-48-1.png)
 
 Note, the row index x-axis now refers to the subset not the original
 data. We can see the highest active rate occurs between around 38 and 42
@@ -778,7 +826,11 @@ minutes, so we will use this region to calculate the active rate.
 rate5 <- calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-50-1.png)
+![Two-panel plot from calc_rate.ft showing the subsetted oxygen
+timeseries with the 38 to 42 minute active rate region highlighted in
+the top panel, and a close-up of the delta oxygen values in this peak
+activity region in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-50-1.png)
 
 ### Adjust rate
 
@@ -858,7 +910,11 @@ header tank as the inflow recording.
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-56-1.png)
+![Two-panel plot from inspect.ft showing specimen outflow and header
+tank inflow oxygen over time in the top panel, and delta oxygen values
+in the bottom panel, where the rate appears to continuously increase
+after equilibration suggesting non-constant background
+respiration.](flowthrough_files/figure-html/unnamed-chunk-56-1.png)
 
 Here we see, after the initial period before the experiment has reached
 equilibrium, the specimen rate apparently continues to increase. This
@@ -873,7 +929,11 @@ If we examine the background data in the same way:
 bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-58-1.png)
+![Two-panel plot from inspect.ft showing blank control chamber outflow
+and header tank inflow oxygen over time in the top panel, and delta
+oxygen values in the bottom panel, revealing a linearly increasing
+background respiration rate over the course of the
+experiment.](flowthrough_files/figure-html/unnamed-chunk-58-1.png)
 
 We can see the background rate increases as the experiment progresses,
 in what looks like a constant manner. With the presumption that this is
@@ -888,7 +948,11 @@ this.
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-60-1.png)
+![Two-panel plot from inspect.ft showing specimen outflow oxygen and
+blank control outflow oxygen used as the inflow reference in the top
+panel, and the resulting delta oxygen values in the bottom panel, which
+now show consistent rates after accounting for the non-constant
+background.](flowthrough_files/figure-html/unnamed-chunk-60-1.png)
 
 Now we see that when the background is accounted for, the specimen rates
 are consistent, and we can go ahead and calculate a rate.
@@ -900,7 +964,11 @@ are consistent, and we can go ahead and calculate a rate.
 rate6 <- calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-62-1.png)
+![Two-panel plot from calc_rate.ft showing the full background-corrected
+oxygen timeseries with the selected row range 2000 to 3000 highlighted
+in the top panel, and a close-up of the consistent delta oxygen values
+in the selected region in the bottom
+panel.](flowthrough_files/figure-html/unnamed-chunk-62-1.png)
 
 The rate can now be converted as in the above examples.
 
@@ -1137,7 +1205,11 @@ rate sustained across a five minute window.
 insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-72-1.png)
+![Two-panel plot from inspect.ft showing outflow and inflow oxygen over
+time in the top panel, and delta oxygen values on a reverse y-axis in
+the bottom panel, with an initial equilibration period, a region of
+consistent routine rates, and a region of elevated active rates around
+35 to 45 minutes.](flowthrough_files/figure-html/unnamed-chunk-72-1.png)
 
 Here, we see it takes around 10 minutes for the the experiment to reach
 equilibrium, so we want to exclude rates before this time. We then see a
@@ -1201,7 +1273,10 @@ plot(roll_rate_ms, type = "rate")
 #> plot.convert_rate.ft: Plotting all rate(s)...
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-76-1.png)
+![Plot of all rolling 5-minute converted mass-specific rates across the
+entire dataset, showing how rate values vary over time with lower
+routine rates and a peak of elevated active
+rates.](flowthrough_files/figure-html/unnamed-chunk-76-1.png)
 
 At a fixed width the rolling rate is obviously closely related to the
 delta oxygen values. We can use `pos` to more closely examine output
@@ -1213,7 +1288,10 @@ plot(roll_rate_ms, type = "rate", pos = 500:1700)
 #> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-77-1.png)
+![Plot of a subset of rolling rate results from positions 500 to 1700,
+showing the routine metabolic rate region with rates around 7.30 to 7.40
+umol per hour per
+gram.](flowthrough_files/figure-html/unnamed-chunk-77-1.png)
 
 This tells us our extracted RMR should be around 7.30 to 7.40 umol/hr/g.
 
@@ -1313,7 +1391,11 @@ plot(roll_rate_ms, pos = 2270, type = "full")
 #> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-82-1.png)
+![Full detail plot of the single highest rolling rate result at position
+2270, showing the oxygen timeseries with the selected 5-minute window
+highlighted and the corresponding delta oxygen close-up, representing
+the maximum metabolic
+rate.](flowthrough_files/figure-html/unnamed-chunk-82-1.png)
 
 ## Case 9: Multiple rates from the same dataset
 
@@ -1350,7 +1432,10 @@ plot(rate9, pos = 2)
 #> calc_rate.ft: Plotting rate from position 2 of 3 ...
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-85-1.png)
+![Two-panel plot from calc_rate.ft showing the full oxygen timeseries
+with the second of three selected time regions highlighted in the top
+panel, and a close-up of the delta oxygen values in that region in the
+bottom panel.](flowthrough_files/figure-html/unnamed-chunk-85-1.png)
 
     #> -----------------------------------------
 
@@ -1449,11 +1534,16 @@ print(rate3_abs)
 
 ``` r
 ## Plot column 15 (temperature) alongside oxygen timeseries
-inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5, 
+inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5,
            add.data = 15)
 ```
 
-![](flowthrough_files/figure-html/unnamed-chunk-89-1.png)
+![Three-panel plot from inspect.ft showing outflow and inflow oxygen
+over time in the top panel, delta oxygen values in the middle panel, and
+an additional panel displaying temperature data from column 15 alongside
+the oxygen timeseries to help identify possible rate fluctuations
+related to temperature
+changes.](flowthrough_files/figure-html/unnamed-chunk-89-1.png)
 
 - The functions in the flowthrough workflow, where appropriate, support
   the generic S3 functions `plot`, `print`, `summary`, and `mean`. These

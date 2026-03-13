@@ -196,7 +196,8 @@ squid <- inspect(squid.rd)
 #> -----------------------------------------
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output for squid respirometry data showing oxygen timeseries
+and rolling rate](oxycrit_files/figure-html/unnamed-chunk-2-1.png)
 
 Note how the date are plotted against both time (bottom blue axis) and
 row index (top red axis), which in these data, recordings of oxygen once
@@ -225,7 +226,7 @@ applied.
 squid.bsr <- oxy_crit(squid)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.3 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 3.7 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 ```
 
@@ -240,7 +241,9 @@ squid.bsr <- oxy_crit(squid)
     #> 
     #> -----------------------------------------
 
-![](oxycrit_files/figure-html/unnamed-chunk-4-1.png)
+![oxy_crit broken-stick regression result showing critical oxygen value
+on timeseries and rate vs oxygen
+plots](oxycrit_files/figure-html/unnamed-chunk-4-1.png)
 
 The output figure shows the two different BSR results, the *intercept*
 and *midpoint* critical oxygen values, indicated by horizontal lines
@@ -281,13 +284,15 @@ only the rolling rate plot.
 oxy_crit(squid, width = 0.05, panel = 2)
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-6-1.png)
+![Broken-stick result with width 0.05 showing rate vs
+oxygen](oxycrit_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
 oxy_crit(squid, width = 0.2, panel = 2)
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-6-2.png)
+![Broken-stick result with width 0.2 showing rate vs
+oxygen](oxycrit_files/figure-html/unnamed-chunk-6-2.png)
 
 Note how the rolling rate plot with the higher width is much smoother,
 with a less pronounced breakpoint. Increasing the width by too much can
@@ -325,7 +330,9 @@ squid.seg <- oxy_crit(squid, method = "segmented")
     #> 
     #> -----------------------------------------
 
-![](oxycrit_files/figure-html/unnamed-chunk-8-1.png)
+![oxy_crit segmented regression result showing critical oxygen value on
+timeseries and rate vs oxygen
+plots](oxycrit_files/figure-html/unnamed-chunk-8-1.png)
 
 For these particular data, we get the exact same result as the BSR
 method: 2.61 mg L⁻¹. This will not be the case with every dataset.
@@ -355,13 +362,15 @@ Again, let’s try different `width` inputs.
 oxy_crit(squid, width = 0.05, method = "segmented", panel = 2)
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-10-1.png)
+![Segmented result with width 0.05 showing rate vs
+oxygen](oxycrit_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
 oxy_crit(squid, width = 0.2, method = "segmented", panel = 2)
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-10-2.png)
+![Segmented result with width 0.2 showing rate vs
+oxygen](oxycrit_files/figure-html/unnamed-chunk-10-2.png)
 
 We can see again we get the same values with these different widths as
 in the BSR method above, though this won’t necessarily be the case with
@@ -431,11 +440,12 @@ inputs to specify the columns.
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 #> oxy_crit: Performing analysis using Rate ~ Oxygen data.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.1 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 3.6 seconds.
 #> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.
 ```
 
-![](oxycrit_files/figure-html/unnamed-chunk-12-1.png)
+![oxy_crit result from pre-calculated rate vs oxygen data showing
+critical oxygen value](oxycrit_files/figure-html/unnamed-chunk-12-1.png)
 
     #> 
     #> # print.oxy_crit # ----------------------

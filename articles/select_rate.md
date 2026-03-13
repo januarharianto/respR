@@ -103,7 +103,9 @@ of the summary table with the default being `pos = 1:20`.
 plot(sard)
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-2-1.png)
+![Plot of the top-ranked converted rate shown in the context of the full
+oxygen timeseries, with rate value displayed in the
+title.](select_rate_files/figure-html/unnamed-chunk-2-1.png)
 
 This lets you see where each rate occurs within the dataset, and the
 converted rate value is in the title. The values on the axes - time
@@ -120,7 +122,9 @@ is plotted against the middle of the region used to determine it.
 plot(sard, type = "rate")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-3-1.png)
+![Rate plot showing the oxygen timeseries in the upper panel and
+converted rate values plotted against their position in the dataset in
+the lower panel.](select_rate_files/figure-html/unnamed-chunk-3-1.png)
 
 This lets you see how the rate varies across the dataset and decide how
 to filter the results. Here for example, rates are higher at the start
@@ -144,7 +148,10 @@ rank and summary table position will not necessarily be equivalent.
 plot(sard, type = "overlap")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-4-1.png)
+![Overlap plot showing the oxygen timeseries in the upper panel and
+horizontal lines indicating the data region of each rate regression in
+the lower panel, illustrating overlap among detected linear
+regions.](select_rate_files/figure-html/unnamed-chunk-4-1.png)
 
 Here we have analysed the data using the `auto_rate` `"linear"` method,
 and we can see many of the results are from similar or essentially
@@ -190,21 +197,23 @@ the rates for background (using an invented value as an example), then
 convert the rates to our final units.
 
 ``` r
-sard <- 
-  inspect(sardine.rd) |> 
-  auto_rate() |> 
-  adjust_rate(by = -0.00006) |> 
+sard <-
+  inspect(sardine.rd) |>
+  auto_rate() |>
+  adjust_rate(by = -0.00006) |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
-               p = 1.013) 
+               p = 1.013)
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-5-1.png)
+![Plot of the top-ranked auto_rate linear result for the sardine
+dataset, showing the detected linear region in the context of the full
+oxygen timeseries.](select_rate_files/figure-html/unnamed-chunk-5-1.png)
 
 This is large dataset, from a relatively long experiment of over 2
 hours. The `auto_rate` analysis has identified 39 linear regions, of
@@ -292,14 +301,18 @@ plot(sard, type = "rate")
 #> plot.convert_rate: Plotting all rate(s)...
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-7-1.png)
+![Rate plot showing higher rates at the start of the sardine dataset and
+stable lower rates after approximately timepoint
+2000.](select_rate_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
 plot(sard, type = "overlap")
 #> plot.convert_rate: Plotting all rate(s)...
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-7-2.png)
+![Overlap plot showing substantial overlap among the detected linear
+regions, with many regressions covering similar data
+regions.](select_rate_files/figure-html/unnamed-chunk-7-2.png)
 
 We can see the rates are higher at the start of the dataset, after which
 they stabilise. From the overlap plot we can see many of the linear
@@ -315,13 +328,15 @@ method to select any number of the lowest rates using `n`. Here is the
 lowest single rate.
 
 ``` r
-sard |> 
+sard |>
   select_rate(method = "lowest", n = 1) |>
   plot(quiet = TRUE) |>
   summary()
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-8-1.png)
+![Plot of the single lowest rate selected from the sardine auto_rate
+results, shown in the context of the full oxygen
+timeseries.](select_rate_files/figure-html/unnamed-chunk-8-1.png)
 
     #> 
     #> # summary.convert_rate # ----------------
@@ -345,7 +360,7 @@ criteria by using pipes (alternatively you can save the output and
 process it through `select_rate` multiple times).
 
 ``` r
-sard |> 
+sard |>
   select_rate(method = "rsq", n = c(0.95,1)) |>
   select_rate(method = "duration", n = c(1800, Inf)) |>
   select_rate(method = "lowest", n = 1) |>
@@ -353,7 +368,9 @@ sard |>
   summary()
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-9-1.png)
+![Plot of the lowest rate after filtering by r-squared above 0.95 and
+duration of at least 30 minutes, shown in the context of the full oxygen
+timeseries.](select_rate_files/figure-html/unnamed-chunk-9-1.png)
 
     #> 
     #> # summary.convert_rate # ----------------
@@ -405,21 +422,24 @@ Here we do a rolling regression of 20 minutes (`1200` seconds) `width`
 in the `"time"` metric.
 
 ``` r
-sard <- inspect(sardine.rd) |> 
+sard <- inspect(sardine.rd) |>
   auto_rate(method = "lowest", width = 1200, by = "time") |>
-  adjust_rate(by = -0.00006) |> 
+  adjust_rate(by = -0.00006) |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   summary()
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-10-1.png)
+![Plot of the sardine dataset analysed using auto_rate lowest method
+with a 20-minute rolling regression, showing the top-ranked lowest rate
+in the context of the full
+timeseries.](select_rate_files/figure-html/unnamed-chunk-10-1.png)
 
     #> 
     #> # summary.convert_rate # ----------------
@@ -450,11 +470,14 @@ not showing the full summary table but it ranges from around 0.88 to
 Let’s look at the `"overlap"` plot output.
 
 ``` r
-sard |> 
-  plot(type = "overlap") 
+sard |>
+  plot(type = "overlap")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-12-1.png)
+![Overlap plot of auto_rate lowest method results showing rate
+regressions ordered from lowest to highest, with lower rates
+concentrated towards the end of the
+dataset.](select_rate_files/figure-html/unnamed-chunk-12-1.png)
 
 This plot is perhaps difficult to understand at first, but should become
 clear. The summary table is ordered from lowest to highest rates
@@ -479,7 +502,10 @@ sard |>
 #> # plot.convert_rate # -------------------
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-13-1.png)
+![Overlap plot after removing rates before timepoint 3000 and filtering
+for r-squared above 0.9, showing remaining rate regressions concentrated
+in the latter portion of the
+dataset.](select_rate_files/figure-html/unnamed-chunk-13-1.png)
 
     #> -----------------------------------------
     #> 
@@ -521,7 +547,9 @@ sard |>
 #> # plot.convert_rate # -------------------
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-14-1.png)
+![Overlap plot after applying r-squared, time, lowest, and overlap
+filters, showing the three remaining non-overlapping rate
+regressions.](select_rate_files/figure-html/unnamed-chunk-14-1.png)
 
     #> -----------------------------------------
     #> 
@@ -615,25 +643,30 @@ plot them in two different ways, and show the summary table.
 zeb_sub <- subset_data(zeb_intermittent.rd,
                        from = 5840,
                        to = 19039,
-                       by = "row", 
+                       by = "row",
                        quiet = TRUE) |>
-  inspect(plot = FALSE) |> 
+  inspect(plot = FALSE) |>
   calc_rate.int(starts = 660,
                 wait = 120,
                 measure = 360,
-                by = "row",  
+                by = "row",
                 plot = FALSE) |>
-  convert_rate(oxy.unit = "mg/L", 
+  convert_rate(oxy.unit = "mg/L",
                time.unit = "secs",
                output.unit = "mg/h/g",
-               volume = 0.12,         
+               volume = 0.12,
                mass = 0.0009) |>
-  plot(type = "full") |> 
+  plot(type = "full") |>
   plot(type = "rate") |>
   summary()
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-16-1.png)![](select_rate_files/figure-html/unnamed-chunk-16-2.png)
+![Full plot showing each of the 20 intermittent-flow replicate rates in
+the context of the entire zebrafish oxygen
+timeseries.](select_rate_files/figure-html/unnamed-chunk-16-1.png)![Rate
+plot showing how the converted metabolic rate values change across the
+20 intermittent-flow
+replicates.](select_rate_files/figure-html/unnamed-chunk-16-2.png)
 
 The first `type = "full"` plot shows each replicate rate in the context
 of the entire data series. The second `type = "rate"` plot is really
@@ -695,7 +728,10 @@ mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
   summary(export = TRUE)
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-18-1.png)
+![Plot of the single highest rate selected as maximum metabolic rate
+from the intermittent-flow replicates, shown in the context of the full
+oxygen
+timeseries.](select_rate_files/figure-html/unnamed-chunk-18-1.png)
 
 That’s it! We can print the data frame we saved to check the result.
 This contains the full results, from which replicate the rate came from,
@@ -720,11 +756,14 @@ result to [`mean()`](https://rdrr.io/r/base/mean.html).
 
 ``` r
 rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
-  plot(type = "full") |> 
-  mean() 
+  plot(type = "full") |>
+  mean()
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-20-1.png)
+![Plot of the lowest 10th percentile of rates selected as routine
+metabolic rate from the intermittent-flow replicates, shown in the
+context of the full oxygen
+timeseries.](select_rate_files/figure-html/unnamed-chunk-20-1.png)
 
     #> 
     #> # plot.convert_rate # -------------------
@@ -787,41 +826,45 @@ results more manageable. Let’s first look at the results of the
 `overlap` plot type in convert rate.
 
 ``` r
-sardine.rd |> 
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   plot(type = "overlap")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-22-1.png)
+![Overlap plot of all auto_rate linear results for the sardine dataset,
+showing extensive overlap among the detected linear
+regions.](select_rate_files/figure-html/unnamed-chunk-22-1.png)
 
 Now let’s remove all results that share 100% of their datapoints with at
 least one other. Here we pipe the result to
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
 ``` r
-sardine.rd |> 
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   select_rate(method = "overlap", n = 1) |>
   plot(type = "overlap")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-23-1.png)
+![Overlap plot after removing results that are completely contained
+within another, showing reduced but still partially overlapping rate
+regressions.](select_rate_files/figure-html/unnamed-chunk-23-1.png)
 
 This greatly reduces the number of results, but there is still a
 substantial overlap between them. Therefore, let’s adjust the overlap
@@ -829,21 +872,24 @@ threshold to 0.9, that is regressions which share 90% or more of data
 with at least one other are removed.
 
 ``` r
-sardine.rd |> 
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   select_rate(method = "overlap", n = 0.9) |>
   plot(type = "overlap")
 ```
 
-![](select_rate_files/figure-html/unnamed-chunk-24-1.png)
+![Overlap plot after removing results sharing 90 percent or more of
+their data with another, showing a small number of distinct
+non-overlapping rate
+regressions.](select_rate_files/figure-html/unnamed-chunk-24-1.png)
 
     #> 
     #> # summary.convert_rate # ----------------

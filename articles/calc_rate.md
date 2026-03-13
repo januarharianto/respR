@@ -21,7 +21,10 @@ demonstrate the different x-axis values.
 cr <- calc_rate(sard)
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-1-1.png)
+![Four-panel plot of calc_rate results across the entire sardine dataset
+showing the time series with fitted region highlighted, the close-up of
+the fitted region with the linear regression, and the residual and Q-Q
+diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-1-1.png)
 
 ## Time range
 
@@ -33,12 +36,15 @@ instead.
 
 ``` r
 cr <- calc_rate(sard,
-                from = 20, 
+                from = 20,
                 to = 80,
                 by = "time")
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-2-1.png)
+![Four-panel plot of calc_rate results for the time range 20 to 80
+minutes showing the full time series with the selected region
+highlighted, the close-up with linear regression, and residual and Q-Q
+diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-2-1.png)
 
 ## Row range
 
@@ -46,12 +52,15 @@ Similarly the rate region can be specified `by = "row"`.
 
 ``` r
 cr <- calc_rate(sard,
-                from = 2000, 
+                from = 2000,
                 to = 6000,
                 by = "row")
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-3-1.png)
+![Four-panel plot of calc_rate results for the row range 2000 to 6000
+showing the full time series with the selected region highlighted, the
+close-up with linear regression, and residual and Q-Q diagnostic
+plots.](calc_rate_files/figure-html/unnamed-chunk-3-1.png)
 
 ## Oxygen range
 
@@ -61,12 +70,16 @@ value), and the last occurrence of the `to` value.
 
 ``` r
 cr <- calc_rate(sard,
-                from = 94, 
+                from = 94,
                 to = 92,
                 by = "oxygen")
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-4-1.png)
+![Four-panel plot of calc_rate results for the oxygen range 94 to 92
+percent air saturation showing the full time series with the selected
+region highlighted, the close-up with linear regression, and residual
+and Q-Q diagnostic
+plots.](calc_rate_files/figure-html/unnamed-chunk-4-1.png)
 
 ## Multiple rates
 
@@ -75,12 +88,15 @@ paired values as `from` and `to` in any of these metrics.
 
 ``` r
 cr <- calc_rate(sard,
-                from = c(10, 20, 30, 40, 50, 60, 70), 
+                from = c(10, 20, 30, 40, 50, 60, 70),
                 to = c(20, 30, 40, 50, 60, 70, 80),
                 by = "time")
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-5-1.png)
+![Four-panel plot of calc_rate results showing the first of seven
+sequential time-window rates with the full time series, the close-up of
+the fitted region with linear regression, and residual and Q-Q
+diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
 
@@ -214,11 +230,14 @@ axis labels, give the left axis more space, and increase the space from
 axis labels to axis ticks.
 
 ``` r
-plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE, 
+plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE,
      las = 1, mai = c(0.3, 0.4, 0.35, 0.15), mgp = c(0, 0.5, 0))
 ```
 
-![](calc_rate_files/figure-html/unnamed-chunk-11-1.png)
+![Single-panel close-up plot of calc_rate result 2 showing the oxygen
+time series subset with the linear regression fit, with rotated axis
+labels and no
+legend.](calc_rate_files/figure-html/unnamed-chunk-11-1.png)
 
 ## Two-point rate
 

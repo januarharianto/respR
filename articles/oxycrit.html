@@ -317,7 +317,7 @@ obtained with <code><a href="../reference/squid.rd.html">?squid.rd</a></code>.</
 <span><span class="co">#&gt; evenly-spaced   pass      -</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="inspect() output for squid respirometry data showing oxygen timeseries and rolling rate" width="960" style="display: block; margin: auto;"></p>
 <p>Note how the date are plotted against both time (bottom blue axis)
 and row index (top red axis), which in these data, recordings of oxygen
 once per second, happen to be equivalent. We can see from the bottom
@@ -344,7 +344,7 @@ default <code>width = 0.1</code> be applied.</p>
 <code class="sourceCode R"><span><span class="va">squid.bsr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid</span><span class="op">)</span></span>
 <span><span class="co">#&gt; oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.</span></span>
 <span><span class="co">#&gt; oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...</span></span>
-<span><span class="co">#&gt; oxy_crit: Broken-Stick analysis completed in 4.3 seconds.</span></span>
+<span><span class="co">#&gt; oxy_crit: Broken-Stick analysis completed in 3.7 seconds.</span></span>
 <span><span class="co">#&gt; plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.oxy_crit # ----------------------</span></span>
@@ -356,7 +356,7 @@ default <code>width = 0.1</code> be applied.</p>
 <span><span class="co">#&gt; Midpoint     2.6097 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="oxy_crit broken-stick regression result showing critical oxygen value on timeseries and rate vs oxygen plots" width="960" style="display: block; margin: auto;"></p>
 <p>The output figure shows the two different BSR results, the
 <em>intercept</em> and <em>midpoint</em> critical oxygen values,
 indicated by horizontal lines against the original timeseries data and
@@ -391,10 +391,10 @@ results. We’ll try smaller and larger <code>width</code> values. We can
 also use <code>panel</code> to output only the rolling rate plot.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid</span>, width <span class="op">=</span> <span class="fl">0.05</span>, panel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Broken-stick result with width 0.05 showing rate vs oxygen" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid</span>, width <span class="op">=</span> <span class="fl">0.2</span>, panel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="Broken-stick result with width 0.2 showing rate vs oxygen" width="960" style="display: block; margin: auto;"></p>
 <p>Note how the rolling rate plot with the higher width is much
 smoother, with a less pronounced breakpoint. Increasing the width by too
 much can smooth out critical breakpoints, which is the very thing that
@@ -429,7 +429,7 @@ again with the default <code>width = 0.1</code>.</p>
 <span><span class="co">#&gt; Breakpoint   2.6099 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="oxy_crit segmented regression result showing critical oxygen value on timeseries and rate vs oxygen plots" width="960" style="display: block; margin: auto;"></p>
 <p>For these particular data, we get the exact same result as the BSR
 method: 2.61 mg L<sup>-1</sup>. This will not be the case with every
 dataset.</p>
@@ -454,10 +454,10 @@ dataset.</p>
 <p>Again, let’s try different <code>width</code> inputs.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid</span>, width <span class="op">=</span> <span class="fl">0.05</span>, method <span class="op">=</span> <span class="st">"segmented"</span>, panel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="Segmented result with width 0.05 showing rate vs oxygen" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid</span>, width <span class="op">=</span> <span class="fl">0.2</span>, method <span class="op">=</span> <span class="st">"segmented"</span>, panel <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" alt="Segmented result with width 0.2 showing rate vs oxygen" width="960" style="display: block; margin: auto;"></p>
 <p>We can see again we get the same values with these different widths
 as in the BSR method above, though this won’t necessarily be the case
 with every dataset. The higher width tends to oversmooth the rolling
@@ -525,9 +525,9 @@ columns.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/oxy_crit.html">oxy_crit</a></span><span class="op">(</span><span class="va">squid_oxy_rate</span>, oxygen <span class="op">=</span> <span class="fl">1</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; oxy_crit: Performing analysis using Rate ~ Oxygen data.</span></span>
 <span><span class="co">#&gt; oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...</span></span>
-<span><span class="co">#&gt; oxy_crit: Broken-Stick analysis completed in 4.1 seconds.</span></span>
+<span><span class="co">#&gt; oxy_crit: Broken-Stick analysis completed in 3.6 seconds.</span></span>
 <span><span class="co">#&gt; plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.</span></span></code></pre></div>
-<p><img src="oxycrit_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxycrit_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="oxy_crit result from pre-calculated rate vs oxygen data showing critical oxygen value" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.oxy_crit # ----------------------</span></span>
 <span><span class="co">#&gt; </span></span>

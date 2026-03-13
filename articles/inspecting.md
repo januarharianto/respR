@@ -58,7 +58,8 @@ inspect(sardine.rd)
 #> -----------------------------------------
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output for sardine data showing a successful check with no
+issues](inspecting_files/figure-html/unnamed-chunk-2-1.png)
 
 This dataset is therefore ready to be passed to further `respR`
 functions. While we have in general designed `respR` to be robust to
@@ -213,7 +214,8 @@ insp <- inspect(df)
     #> 
     #> -----------------------------------------
 
-![](inspecting_files/figure-html/unnamed-chunk-12-1.png)
+![inspect() output after fixing non-numeric time
+values](inspecting_files/figure-html/unnamed-chunk-12-1.png)
 
 Now the saved object `insp` can be passed to functions such as
 [`calc_rate()`](https://januarharianto.github.io/respR/reference/calc_rate.md).
@@ -786,7 +788,8 @@ insp <- inspect(data)
     #> [1]  1 47
     #> -----------------------------------------
 
-![](inspecting_files/figure-html/unnamed-chunk-42-1.png)
+![inspect() output showing large time gap in
+data](inspecting_files/figure-html/unnamed-chunk-42-1.png)
 
 While there is only one time gap location at row 341, we can see this is
 a large gap of 47 seconds.
@@ -935,7 +938,8 @@ an appropriate time or row window to use when extracting rates.
 inspect(sardine.rd)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-48-1.png)
+![inspect() output for sardine data with default 10 percent rolling rate
+width](inspecting_files/figure-html/unnamed-chunk-48-1.png)
 
 In these data, after an initial unstable period rates seem to stabilise,
 but there is still a lot of variability, with rates fluctuating between
@@ -946,7 +950,9 @@ around -0.0006 and -0.0008.
 inspect(sardine.rd, width = 0.2)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-49-1.png)
+![inspect() output for sardine data with 20 percent rolling rate width
+showing smoother
+rates](inspecting_files/figure-html/unnamed-chunk-49-1.png)
 
 With a higher `width` rates after the initial period are much more
 stable. This tells us (presuming we are interested in routine rates)
@@ -969,7 +975,8 @@ interpret.
 inspect(intermittent.rd)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-50-1.png)
+![inspect() output for intermittent-flow data showing rate fluctuations
+at flush periods](inspecting_files/figure-html/unnamed-chunk-50-1.png)
 
 Here the flushes skew the rolling rates, but within each replicate rates
 seem to be a consistent value of around -0.0005.
@@ -982,7 +989,8 @@ apply to the subset, not the original data length.
 inspect(intermittent.rd[1:1800,])
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-51-1.png)
+![inspect() output for a subset of intermittent-flow data showing a
+single replicate](inspecting_files/figure-html/unnamed-chunk-51-1.png)
 
 ### Inspect portions of long experiments
 
@@ -994,7 +1002,8 @@ long and nearly 80000 rows.
 inspect(zeb_intermittent.rd)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-52-1.png)
+![inspect() output for a 22-hour zebrafish intermittent-flow
+experiment](inspecting_files/figure-html/unnamed-chunk-52-1.png)
 
 `inspect` can be used without saving the result for a closer look at
 smaller regions of the data, to better see what is going on.
@@ -1003,7 +1012,9 @@ smaller regions of the data, to better see what is going on.
 inspect(zeb_intermittent.rd[20000:24000,])
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-53-1.png)
+![inspect() output for a subset of the zebrafish experiment showing
+individual
+replicates](inspecting_files/figure-html/unnamed-chunk-53-1.png)
 
 This better shows us the structure of this intermittent-flow experiment.
 Within these replicates specimen rates appear to be consistent at around
@@ -1034,7 +1045,8 @@ separate `inspect` objects.
 inspect(urchins.rd, time = 1, oxygen = 8:19)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-54-1.png)
+![inspect() output for multiple oxygen columns of urchin data showing
+all timeseries](inspecting_files/figure-html/unnamed-chunk-54-1.png)
 
 This gives us a quick visual overview of the dataset, allowing us to,
 for example, see the experiments which have some sort of issues, and
@@ -1055,7 +1067,8 @@ extract rates.
 inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-55-1.png)
+![inspect() output for sardine data with temperature plotted alongside
+oxygen](inspecting_files/figure-html/unnamed-chunk-55-1.png)
 
 ### Additional plotting options
 
@@ -1088,8 +1101,9 @@ options.
 
 ``` r
 inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
-        legend = FALSE, rate.rev = FALSE, 
+        legend = FALSE, rate.rev = FALSE,
         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-56-1.png)
+![inspect() output for algae oxygen production data with non-reversed
+rate axis](inspecting_files/figure-html/unnamed-chunk-56-1.png)

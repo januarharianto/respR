@@ -171,7 +171,10 @@ bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg() 
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-2-1.png)
+![Inspect plot of background oxygen data from urchins column 18 showing
+oxygen timeseries and rolling rate, followed by background rate
+regression fitted across the full
+timeseries.](adjust_rate_files/figure-html/unnamed-chunk-2-1.png)
 
     #> 
     #> # print.inspect # -----------------------
@@ -238,7 +241,9 @@ urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
     #> # plot.calc_rate # ----------------------
     #> plot.calc_rate: Plotting rate from position 1 of 1 ...
 
-![](adjust_rate_files/figure-html/unnamed-chunk-5-1.png)
+![Plot of calc_rate result showing the fitted linear regression over the
+selected time region of urchin oxygen data between 10 and 30
+minutes.](adjust_rate_files/figure-html/unnamed-chunk-5-1.png)
 
     #> -----------------------------------------
     #> 
@@ -499,7 +504,9 @@ bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-15-1.png)
+![Inspect plot of two background oxygen columns 18 and 19 from the
+urchins dataset showing oxygen timeseries and rolling rates for both
+columns.](adjust_rate_files/figure-html/unnamed-chunk-15-1.png)
 
 By default, `calc_rate.bg` will plot all the calculated background
 columns (though you can use the `pos` input to select which). If we
@@ -554,7 +561,9 @@ value based on all five controls.
 bg2 <- calc_rate.bg(bg_exp)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-19-1.png)
+![Plot of calc_rate.bg results showing background rate regressions
+fitted to three oxygen columns from a separate background
+experiment.](adjust_rate_files/figure-html/unnamed-chunk-19-1.png)
 
     #> 
     #> # print.calc_rate.bg # ------------------
@@ -927,7 +936,9 @@ chamber respirometry experiment on a squid.
 sqd_insp <- inspect(sqd)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-34-1.png)
+![Inspect plot of squid respirometry data showing oxygen timeseries and
+rolling rate over
+time.](adjust_rate_files/figure-html/unnamed-chunk-34-1.png)
 
 #### Prepare background data
 
@@ -945,7 +956,10 @@ us to extract the columns we are interested in.
 sqd_bg_insp <- inspect(sqd_bg, time = 1, oxygen = 2)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-35-1.png)
+![Inspect plot of squid background data showing oxygen timeseries and
+rolling rate, with the rolling rate plot revealing an increasing
+background rate over
+time.](adjust_rate_files/figure-html/unnamed-chunk-35-1.png)
 
 The rolling rate plot makes clear that the background rate increases
 over the duration of the experiment. Estimating the background rate
@@ -961,7 +975,9 @@ We’ll use `auto_rate` on the squid data.
 sqd_ar <- auto_rate(sqd_insp)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-36-1.png)
+![Plot of auto_rate results on squid data showing detected linear
+regions highlighted on the full timeseries and individual rate
+regressions.](adjust_rate_files/figure-html/unnamed-chunk-36-1.png)
 
 There are 22 linear regions found in these data, so we have 22 rates to
 be adjusted.
@@ -1010,7 +1026,9 @@ subset_data(sqd_bg, from = 2425, to = 4800, by = "row") |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-39-1.png)
+![Plot of calc_rate.bg result showing background rate regression fitted
+to the subset of background data from rows 2425 to
+4800.](adjust_rate_files/figure-html/unnamed-chunk-39-1.png)
 
 ``` r
 
@@ -1018,7 +1036,9 @@ subset_data(sqd_bg, from = 273, to = 3057, by = "row") |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-39-2.png)
+![Plot of calc_rate.bg result showing background rate regression fitted
+to the subset of background data from rows 273 to
+3057.](adjust_rate_files/figure-html/unnamed-chunk-39-2.png)
 
 We can see the slopes in the equations are identical to the adjustment
 values in the summary.
@@ -1036,7 +1056,10 @@ intermittent-flow experiment, and been flushed at the same time as the
 specimen chamber. In this plot the specimen data is in black, the
 control in orange.
 
-![](adjust_rate_files/figure-html/unnamed-chunk-40-1.png)
+![Plot showing intermittent-flow respirometry data with specimen data in
+black and concurrent control data in orange, displaying repeated
+flush-measure
+cycles.](adjust_rate_files/figure-html/unnamed-chunk-40-1.png)
 
 Clearly, fitting slopes to any part of the background data other than
 within each replicate will lead to questionable results. Since we will
@@ -1055,9 +1078,9 @@ rest of the replicate.
 
 ``` r
 # replicate start times - seq(from, to, by)
-# starts <- seq(120, 2100, 660) 
+# starts <- seq(120, 2100, 660)
 # # three minute buffer of data to exclude at the start of each replicate
-# buffer <- 180 
+# buffer <- 180
 # # period to measure after buffer
 # measure <- 360
 
@@ -1068,7 +1091,9 @@ rates <- calc_rate.int(interm_insp,
                        by = "row")
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-41-1.png)
+![Plot of calc_rate.int results showing extracted rates from each
+replicate of the intermittent-flow experiment with wait and measure
+phases indicated.](adjust_rate_files/figure-html/unnamed-chunk-41-1.png)
 
 ``` r
 summary(rates)
@@ -1133,23 +1158,27 @@ the same window.
 ``` r
 # Calculate specimen rate between 10 and 30 mins
 rate <- inspect(urchins.rd, 1, 2) |>
-  calc_rate(from = 10, 
+  calc_rate(from = 10,
             to = 30,
             by = "time")
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-44-1.png)
+![Inspect plot of urchin oxygen data from column 2 showing full
+timeseries with rolling
+rate.](adjust_rate_files/figure-html/unnamed-chunk-44-1.png)
 
 #### Inspect background data
 
 ``` r
 ## Inspect background columns
-bg_data <- inspect(urchins.rd, 
-                   time = 1, 
+bg_data <- inspect(urchins.rd,
+                   time = 1,
                    oxygen = 18:19)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-45-1.png)
+![Inspect plot of two background oxygen columns 18 and 19 from the
+urchins dataset showing oxygen timeseries for both
+columns.](adjust_rate_files/figure-html/unnamed-chunk-45-1.png)
 
 #### Adjust rate
 
@@ -1332,21 +1361,25 @@ post-experiment background rates.
 ``` r
 # pre
 bg_pre <- subset_data(zeb_intermittent.rd, 1, 4999, "time") |>
-  inspect() |> 
+  inspect() |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-50-1.png)
+![Plot of calc_rate.bg result showing the background rate regression
+fitted to pre-experiment control data from 1 to 4999
+seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-1.png)
 
 ``` r
 
 # post
 bg_post <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") |>
-  inspect() |> 
+  inspect() |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-50-2.png)
+![Plot of calc_rate.bg result showing the background rate regression
+fitted to post-experiment control data from 75140 to 79251
+seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-2.png)
 
 ``` r
 bg_pre
@@ -1388,15 +1421,17 @@ start <- 38180 # start time of replicate
 wait <- 120   # 2 mins buffer
 measure <- 420  # 7 mins measure
 
-rate <- subset_data(zeb_intermittent.rd, 
-                    from = start + wait, 
-                    to = start + wait + measure, 
+rate <- subset_data(zeb_intermittent.rd,
+                    from = start + wait,
+                    to = start + wait + measure,
                     by = "time") |>
   inspect() |>
   auto_rate()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-53-1.png)
+![Plot of auto_rate results on a single zebrafish replicate showing
+detected linear regions and their fitted
+regressions.](adjust_rate_files/figure-html/unnamed-chunk-53-1.png)
 
 `auto_rate` has identified three linear regions.
 
@@ -1519,7 +1554,10 @@ rate that increases exponentially.
 inspect(background_exp.rd)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-57-1.png)
+![Inspect plot of exponential background data showing oxygen timeseries
+and rolling rate, with the rolling rate plot revealing an exponentially
+increasing background rate over
+time.](adjust_rate_files/figure-html/unnamed-chunk-57-1.png)
 
 We can see this is exponential from the rolling rate plot: the rate is
 not constant, because that would be indicated by a horizontal level
@@ -1585,7 +1623,9 @@ photosynthesis. We’ll calculate a production rate from these data.
 alg_rt <- calc_rate(algae.rd)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-59-1.png)
+![Plot of calc_rate result on algae data showing a positive slope
+indicating oxygen production via
+photosynthesis.](adjust_rate_files/figure-html/unnamed-chunk-59-1.png)
 
 ``` r
 print(alg_rt)
@@ -1607,7 +1647,10 @@ period, so we’ll calculate a background rate.
 bg_rt <- calc_rate.bg(alg_bg)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-62-1.png)
+![Plot of calc_rate.bg result showing the background rate regression
+fitted to the algae control experiment data with a negative slope
+indicating oxygen
+consumption.](adjust_rate_files/figure-html/unnamed-chunk-62-1.png)
 
 ``` r
 print(bg_rt)

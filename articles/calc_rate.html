@@ -133,7 +133,7 @@ here is the <code>sardine.rd</code> dataset, but the time data has been
 converted to minutes to demonstrate the different x-axis values.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="Four-panel plot of calc_rate results across the entire sardine dataset showing the time series with fitted region highlighted, the close-up of the fitted region with the linear regression, and the residual and Q-Q diagnostic plots." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="time-range">Time range<a class="anchor" aria-label="anchor" href="#time-range"></a>
@@ -145,10 +145,10 @@ values lie outside the actual time data range it will use the first or
 last value instead.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span>,</span>
-<span>                from <span class="op">=</span> <span class="fl">20</span>, </span>
+<span>                from <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>                to <span class="op">=</span> <span class="fl">80</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="Four-panel plot of calc_rate results for the time range 20 to 80 minutes showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="row-range">Row range<a class="anchor" aria-label="anchor" href="#row-range"></a>
@@ -157,10 +157,10 @@ last value instead.</p>
 <code>by = "row"</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span>,</span>
-<span>                from <span class="op">=</span> <span class="fl">2000</span>, </span>
+<span>                from <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>                to <span class="op">=</span> <span class="fl">6000</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="Four-panel plot of calc_rate results for the row range 2000 to 6000 showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="oxygen-range">Oxygen range<a class="anchor" aria-label="anchor" href="#oxygen-range"></a>
@@ -171,10 +171,10 @@ This option finds the first occurrence of the <code>from</code> value
 <code>to</code> value.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span>,</span>
-<span>                from <span class="op">=</span> <span class="fl">94</span>, </span>
+<span>                from <span class="op">=</span> <span class="fl">94</span>,</span>
 <span>                to <span class="op">=</span> <span class="fl">92</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="Four-panel plot of calc_rate results for the oxygen range 94 to 92 percent air saturation showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="multiple-rates">Multiple rates<a class="anchor" aria-label="anchor" href="#multiple-rates"></a>
@@ -184,10 +184,10 @@ entering vectors of paired values as <code>from</code> and
 <code>to</code> in any of these metrics.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">sard</span>,</span>
-<span>                from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span><span class="op">)</span>, </span>
+<span>                from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span><span class="op">)</span>,</span>
 <span>                to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span>,</span>
 <span>                by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Four-panel plot of calc_rate results showing the first of seven sequential time-window rates with the full time series, the close-up of the fitted region with linear regression, and residual and Q-Q diagnostic plots." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cr</span><span class="op">)</span></span>
@@ -318,9 +318,9 @@ rotation, etc.</p>
 axis labels, give the left axis more space, and increase the space from
 axis labels to axis ticks.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cr</span>, pos <span class="op">=</span> <span class="fl">2</span>, panel <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cr</span>, pos <span class="op">=</span> <span class="fl">2</span>, panel <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>     las <span class="op">=</span> <span class="fl">1</span>, mai <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.35</span>, <span class="fl">0.15</span><span class="op">)</span>, mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Single-panel close-up plot of calc_rate result 2 showing the oxygen time series subset with the linear regression fit, with rotated axis labels and no legend." width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">

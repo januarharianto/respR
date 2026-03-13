@@ -268,7 +268,11 @@ normx <- auto_rate(sardine.rd)
 overx <- auto_rate(sardine.rd, width = 0.6)
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-2-1.png)
+![Side-by-side comparison of rolling rate plots showing overfitting.
+Left panel uses default width of 0.2 showing a clear pattern of rate
+stabilisation. Right panel uses width of 0.6 where rate detail is lost
+due to
+oversmoothing.](auto_rate_files/figure-html/unnamed-chunk-2-1.png)
 
 For the `linear` method, since KDE automatically aggregates stable
 values, a poor selection of the `width` may result in a
@@ -304,7 +308,10 @@ normx <- auto_rate(sardine.rd)
 underx <- auto_rate(sardine.rd, width = 0.05)
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-3-1.png)
+![Side-by-side comparison of rolling rate plots showing underfitting.
+Left panel uses default width of 0.2 with moderate variability. Right
+panel uses width of 0.05 showing highly unstable and noisy rolling rate
+estimates.](auto_rate_files/figure-html/unnamed-chunk-3-1.png)
 
 A lower width leads to much more variable rolling rate estimates. Note
 how we have had to adjust the y-axis limits to fit the results (the left
@@ -344,7 +351,12 @@ sard_ar <- auto_rate(sardine.rd)
 #> auto_rate: Applying default 'width' of 0.2
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-4-1.png)
+![Six-panel auto_rate output for sardine data using the linear method.
+Panels show the full timeseries with the detected linear region
+highlighted, a close-up of that region, the rolling rate across the
+dataset, residual diagnostic plots, and the kernel density estimate
+identifying linear
+regions.](auto_rate_files/figure-html/unnamed-chunk-4-1.png)
 
 This method detects the *most consistently linear* regions of the data,
 that is the most consistent rates observed during the experiment. It
@@ -406,7 +418,10 @@ print(sard_ar, pos = 2)
 plot(sard_ar, pos = 2)
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-6-1.png)
+![Six-panel auto_rate plot for the second-ranked linear region detected
+in the sardine data, showing the timeseries with the highlighted rate
+region, close-up, rolling rate, residual diagnostics, and kernel density
+estimate.](auto_rate_files/figure-html/unnamed-chunk-6-1.png)
 
 **Users should take special note** that as an automated, unsupervised
 machine learning method of identifying linear data `auto_rate` is
@@ -569,7 +584,11 @@ sard_insp <- inspect(sardine.rd)
 high_rate <- auto_rate(sard_insp, width = 900, by = "row", method = "highest")
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-11-1.png)
+![Five-panel auto_rate output for the highest rate method on sardine
+data with a 900-row width. Panels show the full timeseries with the
+highest rate region highlighted, a close-up of that region, the rolling
+rate ordered by absolute value, and residual diagnostic
+plots.](auto_rate_files/figure-html/unnamed-chunk-11-1.png)
 
 ``` r
 summary(high_rate)
@@ -614,7 +633,11 @@ We can similarly find the `lowest` rate over 15 minutes.
 low_rate <- auto_rate(sard_insp, width = 900, method = "lowest")
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-13-1.png)
+![Five-panel auto_rate output for the lowest rate method on sardine data
+with a 900-row width. Panels show the full timeseries with the lowest
+rate region highlighted, a close-up of that region, the rolling rate
+ordered by absolute value, and residual diagnostic
+plots.](auto_rate_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
 print(low_rate)
@@ -667,7 +690,11 @@ The `rolling` method allows a rolling regression of the specified
 roll_rate <- auto_rate(sard_insp, width = 900, method = "rolling")
 ```
 
-![](auto_rate_files/figure-html/unnamed-chunk-16-1.png)
+![Five-panel auto_rate output for the rolling rate method on sardine
+data with a 900-row width. Panels show the full timeseries with the
+first sequential rate region highlighted, a close-up of that region, the
+sequential rolling rate, and residual diagnostic
+plots.](auto_rate_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 summary(roll_rate)

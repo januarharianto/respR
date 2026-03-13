@@ -281,7 +281,7 @@ chambers.</p>
 <code class="sourceCode R"><span><span class="co">## inspect and calculate background rate using calc_rate.bg</span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="Inspect plot of background oxygen data from urchins column 18 showing oxygen timeseries and rolling rate, followed by background rate regression fitted across the full timeseries." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.inspect # -----------------------</span></span>
 <span><span class="co">#&gt;                 time.min   b1</span></span>
@@ -339,7 +339,7 @@ inputs. This code will perform exactly the same rate calculation.</p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.calc_rate # ----------------------</span></span>
 <span><span class="co">#&gt; plot.calc_rate: Plotting rate from position 1 of 1 ...</span></span></code></pre>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Plot of calc_rate result showing the fitted linear regression over the selected time region of urchin oxygen data between 10 and 30 minutes." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate # ---------------------</span></span>
@@ -585,7 +585,7 @@ background columns via regular R syntax.</p>
 <code class="sourceCode R"><span><span class="co">## inspect and calculate background rate from two chambers</span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="Inspect plot of two background oxygen columns 18 and 19 from the urchins dataset showing oxygen timeseries and rolling rates for both columns." width="960" style="display: block; margin: auto;"></p>
 <p>By default, <code>calc_rate.bg</code> will plot all the calculated
 background columns (though you can use the <code>pos</code> input to
 select which). If we print the result we can see both calculated
@@ -631,7 +631,7 @@ two above. We want to use them with the two above to apply a mean
 adjustment value based on all five controls.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">bg_exp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="Plot of calc_rate.bg results showing background rate regressions fitted to three oxygen columns from a separate background experiment." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # print.calc_rate.bg # ------------------</span></span>
 <span><span class="co">#&gt; Background rate(s):</span></span>
@@ -977,7 +977,7 @@ rates.</p>
 data) is a closed chamber respirometry experiment on a squid.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sqd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-34-1.png" class="r-plt" alt="Inspect plot of squid respirometry data showing oxygen timeseries and rolling rate over time." width="960" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="prepare-background-data">Prepare background data<a class="anchor" aria-label="anchor" href="#prepare-background-data"></a>
 </h4>
@@ -993,7 +993,7 @@ always a good idea to inspect the data for issues and visualise it using
 columns we are interested in.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_bg_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sqd_bg</span>, time <span class="op">=</span> <span class="fl">1</span>, oxygen <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-35-1.png" class="r-plt" alt="Inspect plot of squid background data showing oxygen timeseries and rolling rate, with the rolling rate plot revealing an increasing background rate over time." width="960" style="display: block; margin: auto;"></p>
 <p>The rolling rate plot makes clear that the background rate increases
 over the duration of the experiment. Estimating the background rate
 using the whole dataset would therefore likely lead to a wrong
@@ -1006,7 +1006,7 @@ More localised estimations would therefore be more representative.</p>
 <p>We’ll use <code>auto_rate</code> on the squid data.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sqd_ar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">sqd_insp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-36-1.png" class="r-plt" alt="Plot of auto_rate results on squid data showing detected linear regions highlighted on the full timeseries and individual rate regressions." width="960" style="display: block; margin: auto;"></p>
 <p>There are 22 linear regions found in these data, so we have 22 rates
 to be adjusted.</p>
 </div>
@@ -1046,12 +1046,12 @@ correctly.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">sqd_bg</span>, from <span class="op">=</span> <span class="fl">2425</span>, to <span class="op">=</span> <span class="fl">4800</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-1.png" class="r-plt" alt="Plot of calc_rate.bg result showing background rate regression fitted to the subset of background data from rows 2425 to 4800." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">sqd_bg</span>, from <span class="op">=</span> <span class="fl">273</span>, to <span class="op">=</span> <span class="fl">3057</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-39-2.png" class="r-plt" alt="Plot of calc_rate.bg result showing background rate regression fitted to the subset of background data from rows 273 to 3057." width="960" style="display: block; margin: auto;"></p>
 <p>We can see the slopes in the equations are identical to the
 adjustment values in the summary.</p>
 <p>The <code>"concurrent"</code> method is ideal for this type of
@@ -1068,7 +1068,7 @@ recording is not available.</p>
 intermittent-flow experiment, and been flushed at the same time as the
 specimen chamber. In this plot the specimen data is in black, the
 control in orange.</p>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" alt="Plot showing intermittent-flow respirometry data with specimen data in black and concurrent control data in orange, displaying repeated flush-measure cycles." width="960" style="display: block; margin: auto;"></p>
 <p>Clearly, fitting slopes to any part of the background data other than
 within each replicate will lead to questionable results. Since we will
 be calculating a specimen rate within each replicate, the concurrent
@@ -1086,9 +1086,9 @@ excludes the flush and start of the replicate data. We then use a
 from the rest of the replicate.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># replicate start times - seq(from, to, by)</span></span>
-<span><span class="co"># starts &lt;- seq(120, 2100, 660) </span></span>
+<span><span class="co"># starts &lt;- seq(120, 2100, 660)</span></span>
 <span><span class="co"># # three minute buffer of data to exclude at the start of each replicate</span></span>
-<span><span class="co"># buffer &lt;- 180 </span></span>
+<span><span class="co"># buffer &lt;- 180</span></span>
 <span><span class="co"># # period to measure after buffer</span></span>
 <span><span class="co"># measure &lt;- 360</span></span>
 <span></span>
@@ -1097,7 +1097,7 @@ from the rest of the replicate.</p>
 <span>                       wait <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>                       measure <span class="op">=</span> <span class="fl">420</span>,</span>
 <span>                       by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-41-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-41-1.png" class="r-plt" alt="Plot of calc_rate.int results showing extracted rates from each replicate of the intermittent-flow experiment with wait and measure phases indicated." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1158,20 +1158,20 @@ background rate from the same window.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate specimen rate between 10 and 30 mins</span></span>
 <span><span class="va">rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">10</span>, </span>
+<span>  <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>            to <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>            by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-44-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-44-1.png" class="r-plt" alt="Inspect plot of urchin oxygen data from column 2 showing full timeseries with rolling rate." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="inspect-background-data">Inspect background data<a class="anchor" aria-label="anchor" href="#inspect-background-data"></a>
 </h4>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Inspect background columns</span></span>
-<span><span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, </span>
-<span>                   time <span class="op">=</span> <span class="fl">1</span>, </span>
+<span><span class="va">bg_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>,</span>
+<span>                   time <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                   oxygen <span class="op">=</span> <span class="fl">18</span><span class="op">:</span><span class="fl">19</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-45-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-45-1.png" class="r-plt" alt="Inspect plot of two background oxygen columns 18 and 19 from the urchins dataset showing oxygen timeseries for both columns." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="adjust-rate-1">Adjust rate<a class="anchor" aria-label="anchor" href="#adjust-rate-1"></a>
@@ -1355,16 +1355,16 @@ post-experiment background rates.</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pre</span></span>
 <span><span class="va">bg_pre</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>, <span class="fl">1</span>, <span class="fl">4999</span>, <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-1.png" class="r-plt" alt="Plot of calc_rate.bg result showing the background rate regression fitted to pre-experiment control data from 1 to 4999 seconds." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># post</span></span>
 <span><span class="va">bg_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>, <span class="fl">75140</span>, <span class="fl">79251</span>, <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-50-2.png" class="r-plt" alt="Plot of calc_rate.bg result showing the background rate regression fitted to post-experiment control data from 75140 to 79251 seconds." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_pre</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1401,13 +1401,13 @@ minutes of flushing at the end.</p>
 <span><span class="va">wait</span> <span class="op">&lt;-</span> <span class="fl">120</span>   <span class="co"># 2 mins buffer</span></span>
 <span><span class="va">measure</span> <span class="op">&lt;-</span> <span class="fl">420</span>  <span class="co"># 7 mins measure</span></span>
 <span></span>
-<span><span class="va">rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>, </span>
-<span>                    from <span class="op">=</span> <span class="va">start</span> <span class="op">+</span> <span class="va">wait</span>, </span>
-<span>                    to <span class="op">=</span> <span class="va">start</span> <span class="op">+</span> <span class="va">wait</span> <span class="op">+</span> <span class="va">measure</span>, </span>
+<span><span class="va">rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>,</span>
+<span>                    from <span class="op">=</span> <span class="va">start</span> <span class="op">+</span> <span class="va">wait</span>,</span>
+<span>                    to <span class="op">=</span> <span class="va">start</span> <span class="op">+</span> <span class="va">wait</span> <span class="op">+</span> <span class="va">measure</span>,</span>
 <span>                    by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-53-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-53-1.png" class="r-plt" alt="Plot of auto_rate results on a single zebrafish replicate showing detected linear regions and their fitted regressions." width="960" style="display: block; margin: auto;"></p>
 <p><code>auto_rate</code> has identified three linear regions.</p>
 </div>
 <div class="section level4">
@@ -1520,7 +1520,7 @@ strongly recommend.</p>
 data with a rate that increases exponentially.</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">background_exp.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-57-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-57-1.png" class="r-plt" alt="Inspect plot of exponential background data showing oxygen timeseries and rolling rate, with the rolling rate plot revealing an exponentially increasing background rate over time." width="960" style="display: block; margin: auto;"></p>
 <p>We can see this is exponential from the rolling rate plot: the rate
 is not constant, because that would be indicated by a horizontal level
 line. It increases, however this is not a linear increase because it is
@@ -1583,7 +1583,7 @@ oxygen via photosynthesis. We’ll calculate a production rate from these
 data.</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alg_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">algae.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-59-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-59-1.png" class="r-plt" alt="Plot of calc_rate result on algae data showing a positive slope indicating oxygen production via photosynthesis." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">alg_rt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -1599,7 +1599,7 @@ now.</p>
 period, so we’ll calculate a background rate.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="va">alg_bg</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-62-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-62-1.png" class="r-plt" alt="Plot of calc_rate.bg result showing the background rate regression fitted to the algae control experiment data with a negative slope indicating oxygen consumption." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bg_rt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>

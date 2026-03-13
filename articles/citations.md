@@ -79,6 +79,12 @@ Mechanisms of the Copepod Acartia tonsa Under Low Salinity Stress.
 Transcriptome, Heart Regeneration and Whole Animal Metabolic Rates. *The
 FASEB Journal*, 40(1), e71424. <https://doi.org/10.1096/fj.202503482RR>
 
+****Spindel, NB**, **Galloway, AWE**, **Schram, JB**, **McNeill, GD**,
+**Bellis, SgKV**, **Guujaaw, N**, **Yakgujanaas, J**, **Pontier, O**,
+**Thompson, M**, **Lee, LC**, & **Okamoto, DK****. **2026**. Consumer
+resilience suppresses the recovery of overgrazed ecosystems. *Ecological
+Applications*, 36(2), e70196. <https://doi.org/10.1002/eap.70196>
+
 ****Belfor, AHR**, & **Schaack, S****. **2025**. The effects of
 fluoxetine and metformin pollution on phenotypic traits and gene
 expression in *Daphnia* *Magna*. *Aquatic Toxicology*, 107664.
@@ -226,13 +232,6 @@ American Fisheries Society*, vnaf016.
 **Collin, R****. **2025**. Locally Adapted Coral Species Withstand a
 2-Week Hypoxic Event. *Oceans*, 6(1), 5.
 <https://doi.org/10.3390/oceans6010005>
-
-****Spindel, NB**, **Galloway, AWE**, **Schram, JB**, **Mcneill, GD**,
-**Vanessa&lt, SK**, **&gt**, **Bellis**, **Guujaaw, N**, **Yakgujanaas,
-J**, **Pontier, O**, **Thompson, M**, **Lee, LC**, & **Okamoto, D****.
-**2025**. *Consumer resilience suppresses the recovery of overgrazed
-ecosystems* (p. 2025.02.04.636488). bioRxiv.
-<https://doi.org/10.1101/2025.02.04.636488>
 
 ****Yang, JCC**, & **Marshall, KE****. **2025**. *Energetic consequences
 of single and repeated freezing in the intertidal mussel, Mytilus

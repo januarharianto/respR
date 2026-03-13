@@ -150,7 +150,10 @@ different duration.
 urchin <- inspect(urchin)
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-2-1.png)
+![inspect output plot showing the complete intermittent-flow
+respirometry dataset with three replicates of oxygen over time and a
+rolling rate plot
+below](auto_rate.int_files/figure-html/unnamed-chunk-2-1.png)
 
 Therefore in the following examples we specify three locations in
 `starts`. See the later [example](#regspaced) for how the `starts` of
@@ -172,7 +175,9 @@ auto_rate.int(urchin,
 #> auto_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-3-1.png)
+![auto_rate.int plot showing the most linear rate extracted from each of
+three replicates using default settings with flush data
+included](auto_rate.int_files/figure-html/unnamed-chunk-3-1.png)
 
     #> 
     #> # plot.auto_rate.int # ------------------
@@ -205,12 +210,14 @@ auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               legend = TRUE) |>
   summary()
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-4-1.png)
+![auto_rate.int plot showing the most linear rate in each replicate with
+wait and measure phases highlighted and labelled, excluding flush
+data](auto_rate.int_files/figure-html/unnamed-chunk-4-1.png)
 
     #> 
     #> # plot.auto_rate.int # ------------------
@@ -247,14 +254,16 @@ auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               n = 3,
               plot = TRUE,
               legend = TRUE) |>
   summary()
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-5-1.png)
+![auto_rate.int plot showing the top three ranked linear rates extracted
+from each replicate with wait and measure phases
+labelled](auto_rate.int_files/figure-html/unnamed-chunk-5-1.png)
 
     #> 
     #> # plot.auto_rate.int # ------------------
@@ -305,7 +314,9 @@ auto_rate.int(urchin,
   summary()
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-6-1.png)
+![auto_rate.int plot showing the lowest rate over an 8-minute window
+extracted from each of three replicates using time-based
+selection](auto_rate.int_files/figure-html/unnamed-chunk-6-1.png)
 
     #> 
     #> # plot.auto_rate.int # ------------------
@@ -335,7 +346,9 @@ auto_rate.int(urchin,
   summary()
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-7-1.png)
+![auto_rate.int plot showing the highest rate over an 8-minute window
+extracted from each of three replicates using time-based
+selection](auto_rate.int_files/figure-html/unnamed-chunk-7-1.png)
 
     #> 
     #> # plot.auto_rate.int # ------------------
@@ -383,17 +396,17 @@ the other inputs to extract the lowest rate of 3 minutes duration.
 
 ``` r
 zeb_all <- zeb_intermittent.rd |>
-  
+
   # Inspect the data
   inspect() |>
-  
+
   # Subset regular replicates from larger dataset
   subset_data(from = 5840,
               to = 75139,
               by = "row",
               quiet = TRUE) |>
-  
-  # Use auto_rate.int to get lowest 3 minute rate from each replicate, 
+
+  # Use auto_rate.int to get lowest 3 minute rate from each replicate,
   # plotting first 3 and last 3 (using 'pos')
   auto_rate.int(starts = 660,
                 wait = 120,
@@ -401,10 +414,13 @@ zeb_all <- zeb_intermittent.rd |>
                 width = 180,
                 method = "lowest",
                 plot = TRUE,
-                pos = c(1:3, 103:105)) 
+                pos = c(1:3, 103:105))
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-8-1.png)
+![auto_rate.int plot showing the lowest 3-minute rate from the first
+three and last three replicates of a zebrafish intermittent-flow
+experiment with 105 regularly spaced
+replicates](auto_rate.int_files/figure-html/unnamed-chunk-8-1.png)
 
 Here we use the `pos` input which is passed to `plot` to select the
 first and last three replicates for plotting to check everything looks
@@ -464,7 +480,9 @@ objects.
 plot(zeb_all, pos = 50:69)
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-10-1.png)
+![auto_rate.int plot showing rate results for replicates 50 to 69 of the
+zebrafish intermittent-flow
+experiment](auto_rate.int_files/figure-html/unnamed-chunk-10-1.png)
 
 There are three ways in which these `auto_rate.int` results can be
 plotted, selected using the `type` input in either the main function
@@ -486,13 +504,15 @@ urch <- auto_rate.int(urchin,
                       starts = c(1, 2101, 3901),
                       wait = 300,
                       measure = c(1500, 1100, 600),
-                      width = 400, 
+                      width = 400,
                       plot = TRUE,
                       type = "rep",
                       legend = TRUE)
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-11-1.png)
+![auto_rate.int replicate-level plot showing each replicate individually
+with rate region highlighted and wait and measure phases shaded and
+labelled](auto_rate.int_files/figure-html/unnamed-chunk-11-1.png)
 
 ### `type = "full"`
 
@@ -504,12 +524,14 @@ auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               plot = TRUE,
               type = "full")
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-12-1.png)
+![auto_rate.int full dataset plot showing each replicate rate
+highlighted in the context of the entire urchin oxygen
+timeseries](auto_rate.int_files/figure-html/unnamed-chunk-12-1.png)
 
 Note this may be of limited use when the dataset is large.
 
@@ -517,7 +539,9 @@ Note this may be of limited use when the dataset is large.
 plot(zeb_all, type = "full", pos = 50)
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-13-1.png)
+![auto_rate.int full dataset plot showing replicate 50 rate result
+highlighted in the context of the entire zebrafish
+dataset](auto_rate.int_files/figure-html/unnamed-chunk-13-1.png)
 
 ### `type = "ar"`
 
@@ -530,7 +554,9 @@ using `type = "ar"` and the `pos` input. Note these plots show only the
 plot(zeb_all, type = "ar", pos = 50)
 ```
 
-![](auto_rate.int_files/figure-html/unnamed-chunk-14-1.png)
+![auto_rate diagnostic plot for replicate 50 showing the auto_rate
+result with rolling rate, residuals, and fitted rate within the measure
+phase](auto_rate.int_files/figure-html/unnamed-chunk-14-1.png)
 
 The `pos` input here can also be of multiple replicates but this will
 produce multiple individual plots.

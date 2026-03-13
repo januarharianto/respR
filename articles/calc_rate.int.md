@@ -86,7 +86,9 @@ and note they are of different duration.
 urchin <- inspect(urchin)
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-2-1.png)
+![inspect output plot showing the complete intermittent-flow urchin
+dataset with three replicates of oxygen over time and a rolling rate
+plot below](calc_rate.int_files/figure-html/unnamed-chunk-2-1.png)
 
 ### Rate from `row` range in each replicate
 
@@ -96,11 +98,13 @@ across all the data in each replicate.
 
 ``` r
 calc_rate.int(urchin,
-              starts = c(1, 2101, 3901)) 
+              starts = c(1, 2101, 3901))
 #> calc_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-3-1.png)
+![calc_rate.int plot showing rates calculated across entire replicates
+including flush
+periods](calc_rate.int_files/figure-html/unnamed-chunk-3-1.png)
 
 This is obviously not going to produce an appropriate rate. To exclude
 flush periods use the `measure` input. Here, using a vector of the same
@@ -111,10 +115,12 @@ replicate. The default is to specify this in row widths, that is
 ``` r
 calc_rate.int(urchin,
               starts = c(1, 2101, 3901),
-              measure = c(1800, 1200, 800)) 
+              measure = c(1800, 1200, 800))
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-4-1.png)
+![calc_rate.int plot showing rates from each replicate with different
+measure phases excluding flush
+periods](calc_rate.int_files/figure-html/unnamed-chunk-4-1.png)
 
 However, we usually want to use the same region within each replicate to
 get a rate, and also exclude the first few minutes to allow a period of
@@ -125,10 +131,12 @@ settling or acclimation after the flush. We can enter the `wait` and
 calc_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 180,
-              measure = 600) 
+              measure = 600)
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-5-1.png)
+![calc_rate.int plot showing rates from a standardised region within
+each replicate using wait and measure phases to exclude flush and
+settling periods](calc_rate.int_files/figure-html/unnamed-chunk-5-1.png)
 
 ### Rate from `time` range in each replicate
 
@@ -143,7 +151,9 @@ calc_rate.int(urchin,
               by = "time")
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-6-1.png)
+![calc_rate.int plot showing rates from each replicate using time-based
+selection of wait and measure
+phases](calc_rate.int_files/figure-html/unnamed-chunk-6-1.png)
 
 The function uses the closest matching values if the exact values do not
 occur in the time data.
@@ -177,27 +187,30 @@ excluded.
 
 ``` r
 zeb_all <- zeb_intermittent.rd |>
-  
+
   # inspect the data
   inspect() |>
-  
+
   # subset regular replicates from larger dataset
   subset_data(from = 5840,
               to = 75139,
               by = "row",
               quiet = TRUE) |>
-  
+
   # calc rate in each one from row 120 to 480, plotting first 3 and last 3
   calc_rate.int(
     starts = 660,
     wait = 120,
-    measure = 360, 
+    measure = 360,
     by = "row",
     plot = TRUE,
     pos = c(1:3, 103:105))
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-7-1.png)
+![calc_rate.int plot showing rates from the first three and last three
+replicates of a zebrafish intermittent-flow experiment with regularly
+spaced
+replicates](calc_rate.int_files/figure-html/unnamed-chunk-7-1.png)
 
 We use the `pos` input which is passed to `plot` to select the first and
 last three replicates for plotting to check everything looks okay. In a

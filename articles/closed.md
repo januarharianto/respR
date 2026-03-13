@@ -102,7 +102,8 @@ inspect(urchins.rd, time = 1, oxygen = 2:19)
 #> inspect: Data issues detected. For more information use print().
 ```
 
-![](closed_files/figure-html/unnamed-chunk-3-1.png)
+![inspect() output showing all 18 oxygen columns of the urchins
+dataset](closed_files/figure-html/unnamed-chunk-3-1.png)
 
     #> 
     #> # print.inspect # -----------------------
@@ -151,7 +152,8 @@ number or, as shown here, by name.
 urchin <- inspect(urchins.rd, time =  "time.min", oxygen = "n")
 ```
 
-![](closed_files/figure-html/unnamed-chunk-4-1.png)
+![inspect() output for a single urchin showing oxygen timeseries and
+rolling rate](closed_files/figure-html/unnamed-chunk-4-1.png)
 
     #> 
     #> # print.inspect # -----------------------
@@ -206,7 +208,7 @@ with no additional inputs, will prompt the function to perform a linear
 regression on the entire data series.
 
 ``` r
-calc_rate(urchin) 
+calc_rate(urchin)
 #> 
 #> # print.calc_rate # ---------------------
 #> Rank 1 of 1 rates:
@@ -216,7 +218,8 @@ calc_rate(urchin)
 #> -----------------------------------------
 ```
 
-![](closed_files/figure-html/unnamed-chunk-5-1.png)
+![calc_rate() output showing linear regression across entire urchin
+dataset](closed_files/figure-html/unnamed-chunk-5-1.png)
 
 Note how the function recognises the
 [`inspect()`](https://januarharianto.github.io/respR/reference/inspect.md)
@@ -282,7 +285,8 @@ plot(urch_rate)
 #> -----------------------------------------
 ```
 
-![](closed_files/figure-html/unnamed-chunk-7-1.png)
+![calc_rate() diagnostic plots for urchin rate from 4 to 29
+minutes](closed_files/figure-html/unnamed-chunk-7-1.png)
 
 The saved object can also be explored using generic `S3` R methods.
 
@@ -376,7 +380,8 @@ bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
 bg_rate <- calc_rate.bg(bg_insp)
 ```
 
-![](closed_files/figure-html/unnamed-chunk-9-1.png)
+![calc_rate.bg() plot of background respiration rates from two blank
+controls](closed_files/figure-html/unnamed-chunk-9-1.png)
 
     #> 
     #> # print.calc_rate.bg # ------------------

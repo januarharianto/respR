@@ -255,7 +255,7 @@ replicates, flushes etc. can be found in the data help file:
 of different duration.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">urchin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchin</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="inspect output plot showing the complete intermittent-flow respirometry dataset with three replicates of oxygen over time and a rolling rate plot below" width="960" style="display: block; margin: auto;"></p>
 <p>Therefore in the following examples we specify three locations in
 <code>starts</code>. See the later <a href="#regspaced">example</a> for
 how the <code>starts</code> of regularly spaced replicates are
@@ -275,7 +275,7 @@ region of a dataset (see <code><a href="../articles/auto_rate.html">vignette("au
 <span>              width <span class="op">=</span> <span class="fl">400</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; auto_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="auto_rate.int plot showing the most linear rate extracted from each of three replicates using default settings with flush data included" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.auto_rate.int # ------------------</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting all rates ...</span></span>
@@ -307,10 +307,10 @@ that the phases are labelled on the plots).</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              wait <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1500</span>, <span class="fl">1100</span>, <span class="fl">600</span><span class="op">)</span>,</span>
-<span>              width <span class="op">=</span> <span class="fl">400</span>, </span>
+<span>              width <span class="op">=</span> <span class="fl">400</span>,</span>
 <span>              legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="auto_rate.int plot showing the most linear rate in each replicate with wait and measure phases highlighted and labelled, excluding flush data" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.auto_rate.int # ------------------</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting all rates ...</span></span>
@@ -349,12 +349,12 @@ changed.</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              wait <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1500</span>, <span class="fl">1100</span>, <span class="fl">600</span><span class="op">)</span>,</span>
-<span>              width <span class="op">=</span> <span class="fl">400</span>, </span>
+<span>              width <span class="op">=</span> <span class="fl">400</span>,</span>
 <span>              n <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>              plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>              legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="auto_rate.int plot showing the top three ranked linear rates extracted from each replicate with wait and measure phases labelled" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.auto_rate.int # ------------------</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting all rates ...</span></span>
@@ -403,7 +403,7 @@ from each replicate:</p>
 <span>              width <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="auto_rate.int plot showing the lowest rate over an 8-minute window extracted from each of three replicates using time-based selection" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.auto_rate.int # ------------------</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting all rates ...</span></span>
@@ -428,7 +428,7 @@ each replicate:</p>
 <span>              width <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="auto_rate.int plot showing the highest rate over an 8-minute window extracted from each of three replicates using time-based selection" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.auto_rate.int # ------------------</span></span>
 <span><span class="co">#&gt; plot.auto_rate.int: Plotting all rates ...</span></span>
@@ -473,17 +473,17 @@ and use the other inputs to extract the lowest rate of 3 minutes
 duration.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zeb_all</span> <span class="op">&lt;-</span> <span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Inspect the data</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="co"># Subset regular replicates from larger dataset</span></span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">5840</span>,</span>
 <span>              to <span class="op">=</span> <span class="fl">75139</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"row"</span>,</span>
 <span>              quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  </span>
-<span>  <span class="co"># Use auto_rate.int to get lowest 3 minute rate from each replicate, </span></span>
+<span></span>
+<span>  <span class="co"># Use auto_rate.int to get lowest 3 minute rate from each replicate,</span></span>
 <span>  <span class="co"># plotting first 3 and last 3 (using 'pos')</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.int.html">auto_rate.int</a></span><span class="op">(</span>starts <span class="op">=</span> <span class="fl">660</span>,</span>
 <span>                wait <span class="op">=</span> <span class="fl">120</span>,</span>
@@ -491,8 +491,8 @@ duration.</p>
 <span>                width <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>                method <span class="op">=</span> <span class="st">"lowest"</span>,</span>
 <span>                plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">103</span><span class="op">:</span><span class="fl">105</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<span>                pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">103</span><span class="op">:</span><span class="fl">105</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="auto_rate.int plot showing the lowest 3-minute rate from the first three and last three replicates of a zebrafish intermittent-flow experiment with 105 regularly spaced replicates" width="960" style="display: block; margin: auto;"></p>
 <p>Here we use the <code>pos</code> input which is passed to
 <code>plot</code> to select the first and last three replicates for
 plotting to check everything looks okay. This is only for illustration
@@ -541,7 +541,7 @@ the <code>pos</code> input, either in the main function call or when
 calling <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on output objects.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">:</span><span class="fl">69</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="auto_rate.int plot showing rate results for replicates 50 to 69 of the zebrafish intermittent-flow experiment" width="960" style="display: block; margin: auto;"></p>
 <p>There are three ways in which these <code>auto_rate.int</code>
 results can be plotted, selected using the <code>type</code> input in
 either the main function call or when calling <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on
@@ -561,11 +561,11 @@ and the green shaded region the <code>measure</code> phase.</p>
 <span>                      starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>                      wait <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>                      measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1500</span>, <span class="fl">1100</span>, <span class="fl">600</span><span class="op">)</span>,</span>
-<span>                      width <span class="op">=</span> <span class="fl">400</span>, </span>
+<span>                      width <span class="op">=</span> <span class="fl">400</span>,</span>
 <span>                      plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                      type <span class="op">=</span> <span class="st">"rep"</span>,</span>
 <span>                      legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="auto_rate.int replicate-level plot showing each replicate individually with rate region highlighted and wait and measure phases shaded and labelled" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-full">
@@ -578,14 +578,14 @@ highlighted in the context of the entire dataset.</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2101</span>, <span class="fl">3901</span><span class="op">)</span>,</span>
 <span>              wait <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1500</span>, <span class="fl">1100</span>, <span class="fl">600</span><span class="op">)</span>,</span>
-<span>              width <span class="op">=</span> <span class="fl">400</span>, </span>
+<span>              width <span class="op">=</span> <span class="fl">400</span>,</span>
 <span>              plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>              type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="auto_rate.int full dataset plot showing each replicate rate highlighted in the context of the entire urchin oxygen timeseries" width="960" style="display: block; margin: auto;"></p>
 <p>Note this may be of limited use when the dataset is large.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"full"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="auto_rate.int full dataset plot showing replicate 50 rate result highlighted in the context of the entire zebrafish dataset" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-ar">
@@ -599,7 +599,7 @@ the summary table can be plotted using <code>type = "ar"</code> and the
 it.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"ar"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="auto_rate.int_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="auto_rate diagnostic plot for replicate 50 showing the auto_rate result with rolling rate, residuals, and fitted rate within the measure phase" width="960" style="display: block; margin: auto;"></p>
 <p>The <code>pos</code> input here can also be of multiple replicates
 but this will produce multiple individual plots.</p>
 </div>

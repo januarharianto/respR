@@ -215,7 +215,7 @@ timeseries up to a maximum of 20. These can be selected using
 default being <code>pos = 1:20</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="Plot of the top-ranked converted rate shown in the context of the full oxygen timeseries, with rate value displayed in the title." width="960" style="display: block; margin: auto;"></p>
 <p>This lets you see where each rate occurs within the dataset, and the
 converted rate value is in the title. The values on the axes - time
 (bottom), row (top), and oxygen (left) - are in the units of the
@@ -230,7 +230,7 @@ lower plot the output rate values in the chosen output units. Each rate
 is plotted against the middle of the region used to determine it.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="Rate plot showing the oxygen timeseries in the upper panel and converted rate values plotted against their position in the dataset in the lower panel." width="960" style="display: block; margin: auto;"></p>
 <p>This lets you see how the rate varies across the dataset and decide
 how to filter the results. Here for example, rates are higher at the
 start of the experiment, and stable low rates only occur after around
@@ -252,7 +252,7 @@ as reordering or selection is performed rank and summary table position
 will not necessarily be equivalent.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="Overlap plot showing the oxygen timeseries in the upper panel and horizontal lines indicating the data region of each rate regression in the lower panel, illustrating overlap among detected linear regions." width="960" style="display: block; margin: auto;"></p>
 <p>Here we have analysed the data using the <code>auto_rate</code>
 <code>"linear"</code> method, and we can see many of the results are
 from similar or essentially equivalent regions of the data. See below
@@ -300,19 +300,19 @@ necessarily the top-ranked one.</p>
 the rates for background (using an invented value as an example), then
 convert the rates to our final units.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sardine.rd</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/adjust_rate.html">adjust_rate</a></span><span class="op">(</span>by <span class="op">=</span> <span class="op">-</span><span class="fl">0.00006</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sardine.rd</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/adjust_rate.html">adjust_rate</a></span><span class="op">(</span>by <span class="op">=</span> <span class="op">-</span><span class="fl">0.00006</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"%Air"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"sec"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/kg"</span>,</span>
 <span>               volume <span class="op">=</span> <span class="fl">12.3</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0477</span>,</span>
-<span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>               S <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
-<span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span></span></code></pre></div>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Plot of the top-ranked auto_rate linear result for the sardine dataset, showing the detected linear region in the context of the full oxygen timeseries." width="960" style="display: block; margin: auto;"></p>
 <p>This is large dataset, from a relatively long experiment of over 2
 hours. The <code>auto_rate</code> analysis has identified 39 linear
 regions, of which the above plot is the highest ranked one, or most
@@ -392,11 +392,11 @@ look at both the rate value plot and the overlap plot.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="Rate plot showing higher rates at the start of the sardine dataset and stable lower rates after approximately timepoint 2000." width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sard</span>, type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" alt="Overlap plot showing substantial overlap among the detected linear regions, with many regressions covering similar data regions." width="960" style="display: block; margin: auto;"></p>
 <p>We can see the rates are higher at the start of the dataset, after
 which they stabilise. From the overlap plot we can see many of the
 linear regions substantially overlap and are essentially from the same
@@ -411,11 +411,11 @@ that meet certain criteria. If we are interested in the lowest rates we
 can use this method to select any number of the lowest rates using
 <code>n</code>. Here is the lowest single rate.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lowest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="Plot of the single lowest rate selected from the sardine auto_rate results, shown in the context of the full oxygen timeseries." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -437,13 +437,13 @@ sustained for at least 30 minutes (1800s). We can apply multiple
 selection criteria by using pipes (alternatively you can save the output
 and process it through <code>select_rate</code> multiple times).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"rsq"</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.95</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"duration"</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1800</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lowest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="Plot of the lowest rate after filtering by r-squared above 0.95 and duration of at least 30 minutes, shown in the context of the full oxygen timeseries." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -496,19 +496,19 @@ selection criteria.</p>
 <p>Here we do a rolling regression of 20 minutes (<code>1200</code>
 seconds) <code>width</code> in the <code>"time"</code> metric.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sardine.rd</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">sardine.rd</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lowest"</span>, width <span class="op">=</span> <span class="fl">1200</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/adjust_rate.html">adjust_rate</a></span><span class="op">(</span>by <span class="op">=</span> <span class="op">-</span><span class="fl">0.00006</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/adjust_rate.html">adjust_rate</a></span><span class="op">(</span>by <span class="op">=</span> <span class="op">-</span><span class="fl">0.00006</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"%Air"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"sec"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/kg"</span>,</span>
 <span>               volume <span class="op">=</span> <span class="fl">12.3</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0477</span>,</span>
-<span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>               S <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="Plot of the sardine dataset analysed using auto_rate lowest method with a 20-minute rolling regression, showing the top-ranked lowest rate in the context of the full timeseries." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>
@@ -535,9 +535,9 @@ others (we’re not showing the full summary table but it ranges from
 around 0.88 to 0.95).</p>
 <p>Let’s look at the <code>"overlap"</code> plot output.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">sard</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="Overlap plot of auto_rate lowest method results showing rate regressions ordered from lowest to highest, with lower rates concentrated towards the end of the dataset." width="960" style="display: block; margin: auto;"></p>
 <p>This plot is perhaps difficult to understand at first, but should
 become clear. The summary table is ordered from lowest to highest rates
 descending. The lower plot reflects this, and shows most of these lower
@@ -558,7 +558,7 @@ before around timepoint 3000. We can remove those using
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="Overlap plot after removing rates before timepoint 3000 and filtering for r-squared above 0.9, showing remaining rate regressions concentrated in the latter portion of the dataset." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
@@ -594,7 +594,7 @@ increases exponentially with the number of results remaining.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="Overlap plot after applying r-squared, time, lowest, and overlap filters, showing the three remaining non-overlapping rate regressions." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
@@ -686,23 +686,23 @@ two different ways, and show the summary table.</p>
 <code class="sourceCode R"><span><span class="va">zeb_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">zeb_intermittent.rd</span>,</span>
 <span>                       from <span class="op">=</span> <span class="fl">5840</span>,</span>
 <span>                       to <span class="op">=</span> <span class="fl">19039</span>,</span>
-<span>                       by <span class="op">=</span> <span class="st">"row"</span>, </span>
+<span>                       by <span class="op">=</span> <span class="st">"row"</span>,</span>
 <span>                       quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.int.html">calc_rate.int</a></span><span class="op">(</span>starts <span class="op">=</span> <span class="fl">660</span>,</span>
 <span>                wait <span class="op">=</span> <span class="fl">120</span>,</span>
 <span>                measure <span class="op">=</span> <span class="fl">360</span>,</span>
-<span>                by <span class="op">=</span> <span class="st">"row"</span>,  </span>
+<span>                by <span class="op">=</span> <span class="st">"row"</span>,</span>
 <span>                plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"mg/L"</span>, </span>
+<span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"mg/L"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"secs"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/g"</span>,</span>
-<span>               volume <span class="op">=</span> <span class="fl">0.12</span>,         </span>
+<span>               volume <span class="op">=</span> <span class="fl">0.12</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0009</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960" style="display: block; margin: auto;"><img src="select_rate_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="Full plot showing each of the 20 intermittent-flow replicate rates in the context of the entire zebrafish oxygen timeseries." width="960" style="display: block; margin: auto;"><img src="select_rate_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" alt="Rate plot showing how the converted metabolic rate values change across the 20 intermittent-flow replicates." width="960" style="display: block; margin: auto;"></p>
 <p>The first <code>type = "full"</code> plot shows each replicate rate
 in the context of the entire data series. The second
 <code>type = "rate"</code> plot is really useful in understanding how
@@ -758,7 +758,7 @@ to save the full result as a <code>data.frame</code>.</p>
 <code class="sourceCode R"><span><span class="va">mmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span><span class="va">zeb_sub</span>, method <span class="op">=</span> <span class="st">"highest"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>export <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="Plot of the single highest rate selected as maximum metabolic rate from the intermittent-flow replicates, shown in the context of the full oxygen timeseries." width="960" style="display: block; margin: auto;"></p>
 <p>That’s it! We can print the data frame we saved to check the result.
 This contains the full results, from which replicate the rate came from,
 the data region it was calculated over, any adjustments (which we didn’t
@@ -780,9 +780,9 @@ in studies where there are many more replicates), so this time we pipe
 the result to <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rmr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span><span class="va">zeb_sub</span>, method <span class="op">=</span> <span class="st">"lowest_percentile"</span>, n <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="Plot of the lowest 10th percentile of rates selected as routine metabolic rate from the intermittent-flow replicates, shown in the context of the full oxygen timeseries." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.convert_rate # -------------------</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span>
@@ -846,52 +846,52 @@ results of the <code>auto_rate</code> <code>"linear"</code> method on
 the <code>sardine.rd</code> dataset using the <code>overlap</code> plot
 type in convert rate.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"%Air"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"sec"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/kg"</span>,</span>
 <span>               volume <span class="op">=</span> <span class="fl">12.3</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0477</span>,</span>
-<span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>               S <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="Overlap plot of all auto_rate linear results for the sardine dataset, showing extensive overlap among the detected linear regions." width="960" style="display: block; margin: auto;"></p>
 <p>Now let’s remove all results that share 100% of their datapoints with
 at least one other. Here we pipe the result to <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"%Air"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"sec"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/kg"</span>,</span>
 <span>               volume <span class="op">=</span> <span class="fl">12.3</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0477</span>,</span>
-<span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>               S <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"overlap"</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" alt="Overlap plot after removing results that are completely contained within another, showing reduced but still partially overlapping rate regressions." width="960" style="display: block; margin: auto;"></p>
 <p>This greatly reduces the number of results, but there is still a
 substantial overlap between them. Therefore, let’s adjust the overlap
 threshold to 0.9, that is regressions which share 90% or more of data
 with at least one other are removed.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">sardine.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"%Air"</span>,</span>
 <span>               time.unit <span class="op">=</span> <span class="st">"sec"</span>,</span>
 <span>               output.unit <span class="op">=</span> <span class="st">"mg/h/kg"</span>,</span>
 <span>               volume <span class="op">=</span> <span class="fl">12.3</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.0477</span>,</span>
-<span>               S <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>               S <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>               t <span class="op">=</span> <span class="fl">14.8</span>,</span>
 <span>               p <span class="op">=</span> <span class="fl">1.013</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/select_rate.html">select_rate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"overlap"</span>, n <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"overlap"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="select_rate_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="select_rate_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="Overlap plot after removing results sharing 90 percent or more of their data with another, showing a small number of distinct non-overlapping rate regressions." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of all converted rates:</span></span>

@@ -4,7 +4,7 @@ This page contains the release notes for the latest updates to `respR`.
    
    
 
-## Version 2.x.x – 2026-xx-xx
+## Version 2.x.x – 2026-xx-xx - In preparation.
 
 - FIX:
   [`convert_val()`](https://januarharianto.github.io/respR/reference/convert_val.md)

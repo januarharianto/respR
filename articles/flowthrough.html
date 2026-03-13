@@ -191,7 +191,7 @@ this</p>
 <span><span class="co">#&gt; Minimum and Maximum intervals in uneven Time data: </span></span>
 <span><span class="co">#&gt; [1] 0.01 0.02</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="Multi-panel plot showing inspect.ft output for all columns of the flowthrough_mult.rd dataset, displaying time series of outflow oxygen, inflow oxygen, delta oxygen, header tank oxygen, and temperature data." width="960" style="display: block; margin: auto;"></p>
 <p>The result does not have to be saved. This functionality can be used
 simply to get a quick overview of a dataset, check there are no common
 issues, and make sure the columns contain the data we expect. Column 1
@@ -290,7 +290,7 @@ it to calculate an oxygen delta. We use <code>time</code> and
 <span><span class="co">#&gt; evenly-spaced   pass       -</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and constant inflow oxygen concentrations over time in the top panel, and calculated delta oxygen values in the bottom panel for flowthrough.rd data." width="960" style="display: block; margin: auto;"></p>
 <p>The data checks show us there are no structural issues with the data,
 such as missing values or gaps. The top plot shows outflow and the
 entered, constant inflow oxygen against both time (bottom axis) and row
@@ -308,7 +308,7 @@ the delta oxygen values by performing a rolling mean.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">insp1</span>, width <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="Two-panel plot from inspect.ft with rolling mean smoothing applied to delta oxygen values, showing stabilised rate regions more clearly." width="960" style="display: block; margin: auto;"></p>
 <p>This is a visual aid and only affects plotted values. It does not
 alter the delta oxygen values in the output.</p>
 </div>
@@ -335,7 +335,7 @@ flowthrough respirometry from a small coldwater mollusc!).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full outflow and inflow oxygen timeseries with the selected data region highlighted in the top panel, and a close-up of the selected delta oxygen region with a dashed trend line in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 <p><code>calc_rate.ft</code> calculates the rate by averaging all delta
 oxygen values within the chosen data region, and multiplying this by the
 flowrate. The bottom plot shows this region in close-up. Note, the
@@ -438,7 +438,7 @@ input. The process is otherwise the same: <code>inspect.ft</code>,
 <span><span class="co">#&gt; evenly-spaced   pass       -      -</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and inflow oxygen recordings over time in the top panel, and calculated delta oxygen values in the bottom panel, with less variability than when using a constant inflow value." width="960" style="display: block; margin: auto;"></p>
 <p>Compared to the <code>inspect.ft</code> plot in <a href="#case1plot">Case 1</a> the delta oxygen values are less variable,
 which suggests that at least some of the variation observed in the
 previous example is explained by variation in inflowing oxygen levels.
@@ -462,7 +462,7 @@ the flowrate.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the entire dataset selected in the top panel, and a close-up of the delta oxygen values with a dashed trend line in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 <p>The slightly lower rate value we get here than in Case 1 (1.65 vs
 1.74) suggests the header tank supply is not quite at the theoretical
 maximum air saturation that we calculated in <a href="#case1oxy">Case
@@ -521,7 +521,7 @@ column pair of outflow and inflow oxygen.</p>
 <span><span class="va">insp3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">2</span>, in.oxy <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Warning: inspect.ft: Time values are not evenly-spaced (numerically).</span></span>
 <span><span class="co">#&gt; inspect.ft: Data issues detected. For more information use print().</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and inflow oxygen in percent air saturation over time in the top panel, and delta oxygen values in the bottom panel, with an initial equilibration period visible before rates stabilise after about 25 minutes." width="960" style="display: block; margin: auto;"></p>
 <p>Here we see a warning about not evenly-spaced time values. This comes
 from this dataset using decimalised minutes as the time values and can
 be safely ignored (the full <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> command provides more
@@ -548,7 +548,7 @@ the dataset in the default units of <code>"time"</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the selected region from 30 minutes onward highlighted in the top panel, and a close-up of the delta oxygen values in the selected region in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="case3bg">Calculate background rate<a class="anchor" aria-label="anchor" href="#case3bg"></a>
@@ -565,7 +565,7 @@ adjust multiple different experiments.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect</span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">5</span>, in.oxy <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-26-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and inflow oxygen from a blank control chamber over time in the top panel, and the resulting delta oxygen values in the bottom panel, showing a slight but constant difference due to microbial background respiration." width="960" style="display: block; margin: auto;"></p>
 <p>Here we see there is a slight but noticeable difference in outflow
 and inflow oxygen due to microbial action. Moreover, it appears to be
 constant, so we can use the entire dataset to calculate a background
@@ -582,7 +582,7 @@ save background rates.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full background control oxygen timeseries with the entire dataset selected in the top panel, and a close-up of the background delta oxygen values in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="adjust-rate">Adjust rate<a class="anchor" aria-label="anchor" href="#adjust-rate"></a>
@@ -697,7 +697,7 @@ will use the second column of these.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect</span></span>
 <span><span class="va">insp4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, delta.oxy <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-38-1.png" class="r-plt" alt="Single-panel plot from inspect.ft showing pre-calculated delta oxygen values over time on a reverse y-axis, with an initial equilibration period before rates stabilise after about 20 minutes." width="960" style="display: block; margin: auto;"></p>
 <p>When delta oxygen data are inspected, only one plot is produced of
 the entered delta oxygen values. Note how delta oxygen are plotted on a
 reverse y-axis, so that higher uptake rates are plotted higher even
@@ -722,7 +722,7 @@ around 20 minutes, so we will not use any data before this.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see full results use summary().</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-40-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full delta oxygen timeseries with the selected row range 2000 to 3000 highlighted in the top panel, and a close-up of the selected delta oxygen region in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="adjust-rate-1">Adjust rate<a class="anchor" aria-label="anchor" href="#adjust-rate-1"></a>
@@ -784,7 +784,7 @@ slowly recovering to routine levels.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect </span></span>
 <span><span class="va">insp5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">4</span>, in.oxy <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-46-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-46-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, and delta oxygen values on a reverse y-axis in the bottom panel, with a prominent region of elevated oxygen uptake visible around 35 to 45 minutes indicating increased specimen activity." width="960" style="display: block; margin: auto;"></p>
 <p>Note how delta oxygen are plotted on a reverse y-axis, so that higher
 uptake rates are plotted higher even though they are lower numerically
 (more negative). If you are examining oxygen <em>production</em> rates,
@@ -798,7 +798,7 @@ result to <code>inspect.ft</code> for a closer look.</p>
 <code class="sourceCode R"><span><span class="co"># subset and inspect</span></span>
 <span><span class="va">insp5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, from <span class="op">=</span> <span class="fl">30</span>, to <span class="op">=</span> <span class="fl">50</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op"><a href="../reference/grapes-greater-than-grapes.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">4</span>, in.oxy <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-48-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-48-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing a subset of data from 30 to 50 minutes focusing on the active rate period, with outflow and inflow oxygen in the top panel and delta oxygen values in the bottom panel showing the peak activity region around 38 to 42 minutes." width="960" style="display: block; margin: auto;"></p>
 <p>Note, the row index x-axis now refers to the subset not the original
 data. We can see the highest active rate occurs between around 38 and 42
 minutes, so we will use this region to calculate the active rate.</p>
@@ -809,7 +809,7 @@ minutes, so we will use this region to calculate the active rate.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate rate</span></span>
 <span><span class="va">rate5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span><span class="op">(</span><span class="va">insp5</span>, from <span class="op">=</span> <span class="fl">38</span>, to <span class="op">=</span> <span class="fl">42</span>, by <span class="op">=</span> <span class="st">"time"</span>, flowrate <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-50-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-50-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the subsetted oxygen timeseries with the 38 to 42 minute active rate region highlighted in the top panel, and a close-up of the delta oxygen values in this peak activity region in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="adjust-rate-2">Adjust rate<a class="anchor" aria-label="anchor" href="#adjust-rate-2"></a>
@@ -885,7 +885,7 @@ header tank as the inflow recording.</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect </span></span>
 <span><span class="va">insp6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_sim.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">2</span>, in.oxy <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-56-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-56-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing specimen outflow and header tank inflow oxygen over time in the top panel, and delta oxygen values in the bottom panel, where the rate appears to continuously increase after equilibration suggesting non-constant background respiration." width="960" style="display: block; margin: auto;"></p>
 <p>Here we see, after the initial period before the experiment has
 reached equilibrium, the specimen rate apparently continues to increase.
 This suggests that the background rate may not be constant.</p>
@@ -897,7 +897,7 @@ This suggests that the background rate may not be constant.</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect </span></span>
 <span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_sim.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">3</span>, in.oxy <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-58-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-58-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing blank control chamber outflow and header tank inflow oxygen over time in the top panel, and delta oxygen values in the bottom panel, revealing a linearly increasing background respiration rate over the course of the experiment." width="960" style="display: block; margin: auto;"></p>
 <p>We can see the background rate increases as the experiment
 progresses, in what looks like a constant manner. With the presumption
 that this is also occurring in the specimen chamber, we only need to use
@@ -910,7 +910,7 @@ the outflow recording from the control chamber as the
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect </span></span>
 <span><span class="va">insp6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_sim.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">2</span>, in.oxy <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-60-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-60-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing specimen outflow oxygen and blank control outflow oxygen used as the inflow reference in the top panel, and the resulting delta oxygen values in the bottom panel, which now show consistent rates after accounting for the non-constant background." width="960" style="display: block; margin: auto;"></p>
 <p>Now we see that when the background is accounted for, the specimen
 rates are consistent, and we can go ahead and calculate a rate.</p>
 </div>
@@ -920,7 +920,7 @@ rates are consistent, and we can go ahead and calculate a rate.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate rate</span></span>
 <span><span class="va">rate6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.ft.html">calc_rate.ft</a></span><span class="op">(</span><span class="va">insp6</span>, from <span class="op">=</span> <span class="fl">2000</span>, to <span class="op">=</span> <span class="fl">3000</span>, by <span class="op">=</span> <span class="st">"row"</span>, flowrate <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-62-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-62-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full background-corrected oxygen timeseries with the selected row range 2000 to 3000 highlighted in the top panel, and a close-up of the consistent delta oxygen values in the selected region in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 <p>The rate can now be converted as in the above examples.</p>
 <p>Note, that in this case the background rate increased in a constant,
 linear manner. Under other conditions, the background may vary in other
@@ -1144,7 +1144,7 @@ rate sustained across a five minute window.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## inspect</span></span>
 <span><span class="va">insp8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">4</span>, in.oxy <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-72-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-72-1.png" class="r-plt" alt="Two-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, and delta oxygen values on a reverse y-axis in the bottom panel, with an initial equilibration period, a region of consistent routine rates, and a region of elevated active rates around 35 to 45 minutes." width="960" style="display: block; margin: auto;"></p>
 <p>Here, we see it takes around 10 minutes for the the experiment to
 reach equilibrium, so we want to exclude rates before this time. We then
 see a region of consistent rates from which we will extract the RMR,
@@ -1199,7 +1199,7 @@ that you can see how they vary across the dataset.</p>
 <code class="sourceCode R"><span><span class="co"># plot rates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">roll_rate_ms</span>, type <span class="op">=</span> <span class="st">"rate"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate.ft: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-76-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-76-1.png" class="r-plt" alt="Plot of all rolling 5-minute converted mass-specific rates across the entire dataset, showing how rate values vary over time with lower routine rates and a peak of elevated active rates." width="960" style="display: block; margin: auto;"></p>
 <p>At a fixed width the rolling rate is obviously closely related to the
 delta oxygen values. We can use <code>pos</code> to more closely examine
 output rates from particular regions.</p>
@@ -1207,7 +1207,7 @@ output rates from particular regions.</p>
 <code class="sourceCode R"><span><span class="co"># plot rates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">roll_rate_ms</span>, type <span class="op">=</span> <span class="st">"rate"</span>, pos <span class="op">=</span> <span class="fl">500</span><span class="op">:</span><span class="fl">1700</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-77-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-77-1.png" class="r-plt" alt="Plot of a subset of rolling rate results from positions 500 to 1700, showing the routine metabolic rate region with rates around 7.30 to 7.40 umol per hour per gram." width="960" style="display: block; margin: auto;"></p>
 <p>This tells us our extracted RMR should be around 7.30 to 7.40
 umol/hr/g.</p>
 </div>
@@ -1298,7 +1298,7 @@ the <code>type = "full"</code> option.</p>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">roll_rate_ms</span>, pos <span class="op">=</span> <span class="fl">2270</span>, type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-82-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-82-1.png" class="r-plt" alt="Full detail plot of the single highest rolling rate result at position 2270, showing the oxygen timeseries with the selected 5-minute window highlighted and the corresponding delta oxygen close-up, representing the maximum metabolic rate." width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -1335,7 +1335,7 @@ input.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # plot.calc_rate.ft # -------------------</span></span>
 <span><span class="co">#&gt; calc_rate.ft: Plotting rate from position 2 of 3 ...</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-85-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-85-1.png" class="r-plt" alt="Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the second of three selected time regions highlighted in the top panel, and a close-up of the delta oxygen values in that region in the bottom panel." width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; -----------------------------------------</span></span></code></pre>
 <p>And they can all be viewed using <code>summary</code>.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
@@ -1428,9 +1428,9 @@ with selection of regions from which to extract rates.</p></li>
 </ul>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot column 15 (temperature) alongside oxygen timeseries</span></span>
-<span><span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">2</span>, in.oxy <span class="op">=</span> <span class="fl">5</span>, </span>
+<span><span class="fu"><a href="../reference/inspect.ft.html">inspect.ft</a></span><span class="op">(</span><span class="va">flowthrough_mult.rd</span>, time <span class="op">=</span> <span class="fl">1</span>, out.oxy <span class="op">=</span> <span class="fl">2</span>, in.oxy <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>           add.data <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
-<p><img src="flowthrough_files/figure-html/unnamed-chunk-89-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="flowthrough_files/figure-html/unnamed-chunk-89-1.png" class="r-plt" alt="Three-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, delta oxygen values in the middle panel, and an additional panel displaying temperature data from column 15 alongside the oxygen timeseries to help identify possible rate fluctuations related to temperature changes." width="960" style="display: block; margin: auto;"></p>
 <ul>
 <li>The functions in the flowthrough workflow, where appropriate,
 support the generic S3 functions <code>plot</code>, <code>print</code>,
