@@ -451,7 +451,7 @@ summary(cr_time)
 
 This will not be the case across the gap, or *after* it where row numbers will now *not* be equivalent to the time values. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate() plots showing rates extracted from the same dataset by row range and by time range producing equivalent results"}
 cr_row <- calc_rate(data, 200, 400, "row")
 cr_time <- calc_rate(data, 200, 400, "time")
 ```

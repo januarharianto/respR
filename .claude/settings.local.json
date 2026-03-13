@@ -8,7 +8,9 @@
       "Bash(cat:*)",
       "Bash(Rscript -e \":*)",
       "Bash(NOT_CRAN=true Rscript -e \":*)",
-      "Bash(Rscript -e \"available.packages\\(repos=''https://cran.r-project.org''\\)[''roll'',c\\(''Version'',''Repository''\\)]\")"
+      "Bash(Rscript -e \"available.packages\\(repos=''https://cran.r-project.org''\\)[''roll'',c\\(''Version'',''Repository''\\)]\")",
+      "Bash(python3:*)",
+      "Bash(Rscript -e \"packageVersion\\(''pkgdown''\\); packageVersion\\(''bslib''\\)\")"
     ]
   }
 }

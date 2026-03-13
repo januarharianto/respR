@@ -41,13 +41,13 @@ subsample(squid.rd, n = 200, plot = FALSE)
 
 ## Subsample to a specific length
 
-```{r}
+```{r, fig.alt = "Plot of sardine.rd respirometry data subsampled to 100 evenly-spaced rows"}
 #' # Subsample to 100 rows:
 subsample(sardine.rd, length.out = 100)
 ```
 
 ## Subsample a vector
 
-```{r}
+```{r, fig.alt = "Plot of sardine.rd oxygen vector subsampled to 500 evenly-spaced data points"}
 subsample(sardine.rd[[2]], length.out = 500)
 ```

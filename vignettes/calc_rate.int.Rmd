@@ -175,7 +175,7 @@ The replicate number is indicated by the `$rep` column. The `$rank` column indic
 
 If `plot = TRUE`, a plot is produced of each replicate rate result on a grid up to a total of 20. By default this is the first 20 (i.e. `pos = 1:20`). Others can be selected by modifying the `pos` input, either in the main function call or when calling `plot()` on output objects. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate.int() plot showing replicates 50 to 69 of zebrafish intermittent-flow experiment on a grid"}
 plot(zeb_all, pos = 50:69)
 ```
 
@@ -187,7 +187,7 @@ There are three ways in which these `calc_rate.int` results can be plotted, sele
 
 The default is `type = "rep"` in which each replicate is plotted individually with the rate region highlighted. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate.int() plot type rep showing three urchin replicates individually with time-based rate regions highlighted"}
 calc_rate.int(urchin,
               starts = c(0,35,64),
               wait = 5,
@@ -199,7 +199,7 @@ calc_rate.int(urchin,
 
 Entering `type = "full"` will show each replicate rate highlighted in the context of the entire dataset.
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate.int() plot type full showing three urchin replicate rates highlighted in context of the complete dataset"}
 calc_rate.int(urchin,
               starts = c(0,35,64),
               wait = 5,
@@ -210,7 +210,7 @@ calc_rate.int(urchin,
 
 Note this may be of limited use when the dataset is large. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate.int() plot showing zebrafish replicate 50 rate highlighted in context of the full dataset"}
 plot(zeb_all, type = "full", pos = 50)
 ```
 
@@ -218,7 +218,7 @@ plot(zeb_all, type = "full", pos = 50)
 
 Lastly, the `calc_rate` result for each individual replicate (as found in the `$results` element of the output) can be plotted using `type = "cr"` and the `pos` input. Note these are results from subsets of the initial data. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate() plot for zebrafish replicate 50 showing the individual rate regression within the replicate subset"}
 plot(zeb_all, type = "cr", pos = 50)
 ```
 

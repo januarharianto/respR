@@ -1009,7 +1009,7 @@ Here we'll demonstrate this returns an equivalent result as the more typical adj
 
 We'll inspect both to see the structure. 
 
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE, results='hide', fig.alt = "inspect() output for urchin data showing specimen oxygen uptake channel and background channel timeseries"}
 inspect(urchins.rd, 1, 2)
 inspect(urchins.rd, 1, 18)
 ```
@@ -1081,13 +1081,13 @@ bg_data[1:5000,2] <- bg_data[1:5000,2] - (bg_data[2:5001,2] - 94.9)
 bg_data[1:5000,2][which(bg_data[1:5000,2]>95)] <- bg_data[1:5000,2][which(bg_data[1:5000,2]>95)]-0.2
 ```
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for background data showing oxygen timeseries with initial spike before stable background measurement region"}
 inspect(bg_data)
 ```
 
 Using this complete dataset would give an incorrect background rate estimation. Instead we use `subset_data` to subset only the data region we are interested in and pass it to `calc_rate.bg`. This subsetting can be performed using `"time"`, `"row"`, or `"oxygen"` ranges. 
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', fig.alt = "calc_rate.bg() output showing background oxygen consumption rate calculated from stable region of background data after row 5000"}
 bg <- subset_data(bg_data, from = 5000) |>
   calc_rate.bg()
 ```

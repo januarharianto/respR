@@ -52,29 +52,17 @@ form[role="search"],
   margin-left: 5px !important;
 }
 
-/* Use Bootstrap 3 exact container widths */
-.container {
-  width: auto !important;
-  max-width: 1170px !important;
-  padding-left: 15px !important;
-  padding-right: 15px !important;
+/* pkgdown 2.2.0 added main{max-width:50rem} for "reading width" — remove it */
+main {
+  max-width: none !important;
 }
 
-@media (min-width: 768px) {
-  .container {
-    width: 750px !important;
-  }
-}
-
-@media (min-width: 992px) {
-  .container {
-    width: 970px !important;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    width: 1170px !important;
+/* pkgdown 2.2.0 also adds margin-left:5rem to .col-md-3 at ≥1400px, designed
+   to work with the 50rem main constraint. Without that constraint the sidebar
+   overflows and wraps to the bottom — remove the extra margin. */
+@media (min-width: 1400px) {
+  .col-md-3 {
+    margin-left: 0 !important;
   }
 }
 

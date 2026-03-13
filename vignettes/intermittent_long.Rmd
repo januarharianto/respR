@@ -63,7 +63,7 @@ Note we use the native pipe operator (`|>`) introduced in [R v4.1](https://www.r
 
 Before progressing, we'll inspect a portion of the data at the start without saving the result to show the structure. 
 
-```{r results="hide", message=FALSE, warning=FALSE} 
+```{r results="hide", message=FALSE, warning=FALSE, fig.alt = "inspect() output for initial 18000 rows of zebrafish intermittent-flow data showing start of experiment"}
 zeb_intermittent.rd |>
   subset_data(from = 1, to = 18000, by = "row") |>
   inspect()
@@ -73,7 +73,7 @@ The top plot shows the initial background recording up to row 5000, the first re
 
 We can similarly have a quick look at the end of the dataset. 
 
-```{r results="hide", message=FALSE, warning=FALSE} 
+```{r results="hide", message=FALSE, warning=FALSE, fig.alt = "inspect() output for end section of zebrafish intermittent-flow data showing post-experiment state"}
 zeb_intermittent.rd |>
   subset_data(from = 65000, by = "row") |>
   inspect(width = 0.01)
@@ -83,7 +83,7 @@ We can see that by the end of the experiment the replicates are much more regula
 
 Now that we are fairly satisfied the experiment looks as expected we can inspect the entire dataset and this time save the result to an object we will use for the rest of the analysis. 
 
-```{r results="hide", message=FALSE, warning=FALSE} 
+```{r results="hide", message=FALSE, warning=FALSE, fig.alt = "inspect() output for complete zebrafish intermittent-flow dataset showing full oxygen timeseries"}
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
@@ -95,7 +95,7 @@ The initial and end sections of the data will be used to calculate background ra
 
 We subset these regions from the `inspect` object we just saved above, and save them as separate `calc_rate.bg` objects. 
 
-```{r fig.keep="last", message=FALSE, warning=FALSE, results="hide"} 
+```{r fig.keep="last", message=FALSE, warning=FALSE, results="hide", fig.alt = "calc_rate.bg() output showing post-experiment background oxygen consumption rate from zebrafish data"}
 bg_pre <- zeb |>
   subset_data(from = 1, to = 4999, by = "row") |>
   calc_rate.bg()
@@ -126,11 +126,11 @@ Here we calculate maximum metabolic rate (MMR) from the first replicate. This re
 
 Here, we subset the first replicate which starts at row 5000 and is 14 minutes long (840 rows) to a separate `inspect` object, excluding the two minutes of flush (120 rows) at the end, and plot it to see how the rate changes over the replicate. 
 
-```{r message=FALSE, warning=FALSE, results="hide", fig.show='all'}
+```{r message=FALSE, warning=FALSE, results="hide", fig.show='all', fig.alt = "inspect() plot of first zebrafish replicate showing declining oxygen uptake rate over the measurement period"}
 # subset rep 1
-zeb_rep_1 <- subset_data(zeb, 
-                         from = 5000, 
-                         to = 5000 + 840 - 120, 
+zeb_rep_1 <- subset_data(zeb,
+                         from = 5000,
+                         to = 5000 + 840 - 120,
                          by = "row") |>
   plot(width = 0.2)
 ```
@@ -145,7 +145,7 @@ We will show three different ways of extracting what could be defined as an MMR.
 
 This function (see `vignette("calc_rate")`) simply allows you to extract a rate (or multiple rates) from a specified row, time, or oxygen region. In the [later example](#crint) for extracting rates from the other replicates using `calc_rate.int()` we use the same three minute `wait` phase and five minute `measure` phase in each replicate. We will use the same here to allow for comparison with those rates. This is fairly common practice in respirometry studies and perfectly acceptable, in that it is objective and consistent. 
 
-```{r}
+```{r fig.alt = "calc_rate() plot showing five-minute measure phase rate from zebrafish MMR replicate after three-minute wait"}
 zeb_mmr <- calc_rate(zeb_rep_1,
                      from = 180, # three minutes 'wait' after start
                      to = 480,   # five minutes later = 'measure' phase
@@ -161,7 +161,7 @@ We can see the rate as the final column in summary, and this would be perfectly 
 
 Here we run this method and choose a `width` of two minutes (120 rows), that is the function will calculate every rate of this width and order them from highest to lowest. We use the same three minute `wait` phase to exclude the initial part of the replicate, and for that we use `subset_data()` to remove the first 180 rows, then pipe the output to `auto_rate` (we could also have done this when we first subset and inspected the data [above](#mmrsubset)).  
 
-```{r}
+```{r fig.alt = "auto_rate() highest method output showing highest two-minute oxygen uptake rates from zebrafish MMR replicate"}
 zeb_mmr <- zeb_rep_1 |>
   subset_data(from = 180, by = "row") |>
   auto_rate(method = "highest",
@@ -185,7 +185,7 @@ zeb_mmr <- zeb_rep_1 |>
 
 The function has found seven linear regions. All of these rates are valid results depending on the question being asked, in that they have been found to be linear regions, and so of consistently sustained rates. In this case, since we are interested in the maximum rate, the fifth ranked result has the highest `rate` value, and comes from early in the replicate, so is probably the result we are most interested in. We can plot it using `pos`.
 
-```{r results = "hide"}
+```{r results = "hide", fig.alt = "auto_rate() linear method plot of fifth ranked result showing highest rate region in zebrafish MMR replicate"}
 plot(zeb_mmr, pos = 5)
 ```
 
@@ -206,7 +206,7 @@ zeb_mmr <- zeb_rep_1 |>
 
 Now we have six results varying between 4 and 5 minutes duration, and they are much more consistent in rate value. In this case the fifth result has the highest rate, is early in the replicate, and so is likely a good estimation of MMR. Note how the rolling rate plot is smoother with this higher width.
 
-```{r results = "hide"}
+```{r results = "hide", fig.alt = "auto_rate() linear method plot of fifth ranked result with increased width showing smoother rolling rate for zebrafish MMR"}
 plot(zeb_mmr, pos = 5)
 ```
 
@@ -330,19 +330,19 @@ In the examples [here](https://januarharianto.github.io/respR/articles/intermitt
 
 We start by subsetting the data so that the 105 regularly-spaced replicates start at row 1, that is we exclude the starting background recording, the first replicate for MMR, and the end background recording. We then `inspect` it. 
 
-```{r results='hide', fig.keep='last'}
+```{r results='hide', fig.keep='last', fig.alt = "inspect() output for subsetted zebrafish intermittent-flow data showing 105 replicates and rolling oxygen uptake rate"}
 zeb_insp <- zeb_intermittent.rd |>
-  subset_data(from = 5840, 
+  subset_data(from = 5840,
               to = 75139,
               by = "row") |>
-  inspect() 
+  inspect()
 ```
 
 ### Extract rates
 
 Now we run `calc_rate.int` and specify a 660 row interval between replicates using `starts`. We'll calculate a rate across the same five minute time period in each replicate, from three minutes to eight minutes. To do this we specify a 180 row `wait` phase and 300 row `measure` phase. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate.int() output showing first 20 zebrafish replicates with wait and measure phases highlighted and extracted rates"}
 zeb_cr.int <- calc_rate.int(zeb_insp,
                             starts = 660,
                             wait = 180,
@@ -405,7 +405,7 @@ It will depend on the aims and circumstances of an experiment what rate results 
 
 As of [`respR v2.1`](https://januarharianto.github.io/respR/articles/release_notes.html#version-2-1-2022-12-06) `convert_rate` has new plotting functionality to help visualise and explore rate results. For intermittent-flow results the most useful of these is `type = "rate"`. 
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt = "Rate plot of calc_rate.int converted results showing zebrafish oxygen uptake rates across all replicates over time"}
 plot(zeb_cr.int_conv, type = "rate")
 ```
 
@@ -455,7 +455,7 @@ We run `auto_rate.int` on the inspected data and use `method = "lowest"` and `wi
 
 We again specify a 660 row interval between replicates using `starts`. Just to be different from the [above](#crint) example, this time we will specify a 2 minute (120 row) `wait` phase, and six minute (360 row) `measure` phase. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "auto_rate.int() output showing lowest two-minute rate extracted from each zebrafish replicate with measure phase highlighted"}
 zeb_ar.int <- auto_rate.int(zeb_insp,
                             starts = 660,
                             wait = 120,
@@ -496,7 +496,7 @@ summary(zeb_ar.int_conv)
 
 We can plot the `convert_rate` object for a quick look at how rates vary across the data. 
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt = "Rate plot of auto_rate.int converted results showing zebrafish SMR-candidate oxygen uptake rates across all replicates"}
 plot(zeb_ar.int_conv, type = "rate")
 ```
 
@@ -504,13 +504,13 @@ These rates seem to be a bit lower than those we extracted for RMR [above](#crin
 
 This is an opportunity to do some quality control before we select our final rates to determine SMR. Looking at the plot above there is one result that seems to be uncharacteristically low compared to the others with a value just over 0.5. Looking at the summary table we can see this is from replicate 48. We can plot a selection of rates from this region using `pos` and the y-axis range will adapt to provide a more detailed view of the range of rates.
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt = "Rate plot of zebrafish auto_rate.int results for replicates 30-80 showing anomalously low rate in replicate 48"}
 plot(zeb_ar.int_conv, type = "rate", pos = 30:80)
 ```
 
 Replicate 48 does seem to be anomalously low. If we go back to the `auto_rate.int` results object we can use `pos` to plot this replicate for a closer look. We'll do this in two different ways using `type`. Firstly the rate in the context of the whole replicate, secondly the `auto_rate` output plot for this replicate which has more diagnostic plots, but only shows the `measure` phase.
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt = "Diagnostic plots for zebrafish replicate 48 showing anomalous oxygen trace and auto_rate analysis output for that replicate"}
 plot(zeb_ar.int, type = "rep", pos = 48)
 plot(zeb_ar.int, type = "ar", pos = 48)
 ```

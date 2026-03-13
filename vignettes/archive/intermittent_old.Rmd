@@ -42,12 +42,12 @@ However we have left the details here in case they are of use in other cases. Th
 
 We can use the same replicate start and end locations as in the example [here](https://januarharianto.github.io/respR/articles/intermittent_short.html) to extract a rate from each complete replicate. 
 
-```{r tidy = FALSE, results = "hide"}
+```{r tidy = FALSE, results = "hide", fig.alt = "inspect() output and calc_rate() plots for urchin intermittent-flow data showing three replicate rate regions"}
 # inspect data
 urchin_int <- inspect(intermittent.rd)
 
 # calc rates
-urchin_int_rates <- calc_rate(urchin_int, 
+urchin_int_rates <- calc_rate(urchin_int,
                               from = c(1, 2101, 3901),
                               to = c(1900, 3550, 4831),
                               by = "row")
@@ -63,16 +63,16 @@ We can see this produces exactly the same result as in the example [here](https:
 
 We can also extract by time values, and here we will also apply a different time window within each replicate.
 
-```{r tidy = FALSE, results = "hide"}
-urchin_int_rates <- calc_rate(urchin_int, 
-                              from = c(200, 2300, 4100), 
-                              to = c(1800, 3000, 4400), 
+```{r tidy = FALSE, results = "hide", fig.alt = "calc_rate() plots for urchin data showing rates extracted from different time windows in each of three replicates"}
+urchin_int_rates <- calc_rate(urchin_int,
+                              from = c(200, 2300, 4100),
+                              to = c(1800, 3000, 4400),
                               by = "time")
 ```
 
 By default, the first is shown in `print` and `plot`, but the `pos` input can be used to view others. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "calc_rate() plot for third urchin replicate showing rate extracted from specified time region"}
 plot(urchin_int_rates, pos = 3)
 ```
 
@@ -107,7 +107,7 @@ u_rate2 <- calc_rate(u_rep2, from = 7.1, to = 6.8, by = "oxygen")
 u_rate3 <- calc_rate(u_rep3, from = 7.0, to = 6.8, by = "oxygen")
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "calc_rate() plot for third urchin replicate showing rate calculated from oxygen values 7.0 to 6.8"}
 u_rate3 <- calc_rate(u_rep3, from = 7.0, to = 6.8, by = "oxygen")
 ```
 
@@ -136,7 +136,7 @@ For actual analyses it is highly recommended you examine the plot of each replic
 
 ### Inspect data
 
-```{r results="hide", message=FALSE, warning=FALSE} 
+```{r results="hide", message=FALSE, warning=FALSE, fig.alt = "inspect() output for zebrafish intermittent-flow data showing full timeseries and rolling oxygen uptake rate"}
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
@@ -172,7 +172,7 @@ for(i in 1:105){
 
 We can extract and view the top-ranked rate result from each replicate using the `sapply` function.
 
-```{r}
+```{r fig.alt = "Scatter plot of top-ranked zebrafish RMR rates from each replicate plotted on a reversed y-axis showing higher rates at experiment start"}
 ## extract rates
 rmr_rate <- sapply(zeb_rmr, function(z) z$rate[1])
 plot(rmr_rate, ylim = rev(range(rmr_rate)))
@@ -236,7 +236,7 @@ zeb_rmr_all <- sapply(zeb_rmr_conv, function(z) z$rate.output[1])
 
 Now we can plot them. Again, we reverse the y-axis.
 
-```{r message = FALSE}
+```{r message = FALSE, fig.alt = "Scatter plot of final converted zebrafish RMR rates across all replicates on reversed y-axis showing rate stabilisation after replicate 20"}
 plot(zeb_rmr_all, ylim = rev(range(zeb_rmr_all)))
 ```
 

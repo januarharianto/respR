@@ -41,13 +41,13 @@ R makes it fairly easy to subset data objects, but this function has several adv
 
 The `squid.rd` dataset is extremely long. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "inspect() output for squid.rd dataset showing full long-duration oxygen timeseries"}
 inspect(squid.rd)
 ```
 
 Let's say we are only interested in the initial stages. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for squid.rd data subset to first 10000 time units showing initial oxygen decline"}
 x <- subset_data(squid.rd, from = 1, to = 10000, by = "time")
 inspect(x)
 ```
@@ -58,7 +58,7 @@ Now we can pass this object to further functions.
 
 We can do the same thing using rows, which in this dataset which is per-second happen to be the same values. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for squid.rd data subset to first 10000 rows"}
 x <- subset_data(squid.rd, from = 1, to = 10000, by = "row")
 inspect(x)
 ```
@@ -68,7 +68,7 @@ inspect(x)
 
 Let's say we are only interested in routine metabolic rates in normal conditions. In this long experiment oxygen declines to very low levels, so let's only select the higher values.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for squid.rd data subset to oxygen values between 8 and 6.5 mg/L showing higher-oxygen portion"}
 x <- subset_data(squid.rd, from = 8, to = 6.5, by = "oxygen")
 inspect(x)
 ```
@@ -84,29 +84,29 @@ Note how even though we use a value well above what is in the dataset (8.0) the 
 
 This is perhaps where `subset_data` comes into its own. We want to subset a single replicate from an intermittent flow experiment to calculate a rate. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for intermittent.rd dataset showing multi-replicate urchin oxygen timeseries"}
 x <- inspect(intermittent.rd)
 ```
 
 We have already inspected the dataset. Now we just subset out one replicate, pipe the data to `calc_rate` and other functions and output our final rate, all without having to create a new object.
 
-```{r message=FALSE}
+```{r message=FALSE, fig.alt = "auto_rate() output for a single replicate subset from intermittent.rd showing rate calculation via piped workflow"}
 x |>
   subset_data(from = 2100, to = 3500, by = "time") |>
   auto_rate() |>
   adjust_rate(by = -0.00071) |>
-  convert_rate(oxy.unit = "mg/L",       
-               time.unit = "s",        
-               output.unit = "mg/h/g", 
-               volume = 2.379,         
+  convert_rate(oxy.unit = "mg/L",
+               time.unit = "s",
+               output.unit = "mg/h/g",
+               volume = 2.379,
                mass = 0.006955) |>
   summary(pos = 1:3)
 ```
 
 We can also use `subset_data` and pipes just to have a quick look at portions of big datasets without having to save anything.
 
-```{r message=FALSE, results='hide'}
-zeb_intermittent.rd |> 
+```{r message=FALSE, results='hide', fig.alt = "inspect() output for zeb_intermittent.rd data subset to time 10000 to 13000 for a quick visual check"}
+zeb_intermittent.rd |>
   subset_data(from = 10000, to = 13000, by = "time") |>
   inspect()
 ```

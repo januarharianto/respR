@@ -59,7 +59,7 @@ print(data.table::as.data.table(lake), nrows = 10)
 
 Time is in hours, and oxygen in `mg/L`. Let's `inspect()` the data.
 
-```{r warning=FALSE, message=FALSE, results='hide'}
+```{r warning=FALSE, message=FALSE, results='hide', fig.alt = "inspect() output for eutrophic lake oxygen data showing diurnal fluctuation over 40 hours and corresponding rolling rate"}
 lake_insp <- inspect(lake, rate.rev = FALSE)
 ```
 
@@ -69,8 +69,8 @@ We can see the oxygen in the lake fluctuates with a diurnal rhythm, increasing o
 
 The researcher wants to know the overall rate of oxygen flux between 12 noon on the first day (hour 12) and 12 noon on the next (hour 36). We will use `calc_rate` as we normally would to get the rate between these two timepoints. 
 
-```{r tidy = F, warning=FALSE, message=FALSE, results='hide'}
-lake_rate <- calc_rate(lake_insp, 
+```{r tidy = F, warning=FALSE, message=FALSE, results='hide', fig.alt = "calc_rate() plot showing linear regression fit to lake oxygen data between hours 12 and 36 misrepresenting net oxygen flux"}
+lake_rate <- calc_rate(lake_insp,
                        from = 12,
                        to = 36,
                        by = "time")

@@ -55,7 +55,7 @@ The first step in any data analysis task should be to visualise and inspect the 
 urchin_int <- inspect(intermittent.rd)
 ```
 
-```{r echo = F, warning=FALSE}
+```{r echo = F, warning=FALSE, fig.alt = "inspect() output for intermittent-flow urchin data showing three replicates of oxygen over time with flush periods"}
 inspect(intermittent.rd)
 ```
 
@@ -72,8 +72,8 @@ allow rate to be calculated over specific regions. Here, despite the flushes ske
 
 For a closer look, we can use `subset_data()` and `inspect()` without saving the result to check regions of the data, which can help us decide how we are going to proceed.
 
-```{r results='hide', message=FALSE}
-intermittent.rd |> 
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for first 1800 rows of intermittent-flow urchin data showing stable oxygen decline within first replicate"}
+intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect()
 ```
@@ -82,8 +82,8 @@ Inspecting the first replicate shows us rate is indeed fairly consistent within 
 
 `inspect` however lets us pass a different `width` input for the purposes of the rolling rate plot. Let's try a wider window of 50% of the data.
 
-```{r results='hide', message=FALSE}
-intermittent.rd |> 
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for first urchin replicate with 50% rolling rate window showing consistently stable rate around -0.0006"}
+intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect(width = 0.5)
 ```
@@ -109,7 +109,7 @@ calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901)) 
 ```
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, fig.alt = "calc_rate.int() plot showing rates calculated across all three complete urchin replicates including flush periods"}
 calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901), quiet = TRUE) |>
   summary()
@@ -124,7 +124,7 @@ calc_rate.int(urchin_int,
   summary()
 ```
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, fig.alt = "calc_rate.int() plot showing rates from specified measure phases of each urchin replicate excluding flush periods"}
 calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901), measure = c(1800, 1400, 900), quiet = TRUE) |>
   summary()
@@ -149,13 +149,13 @@ urch_rates <- calc_rate.int(urchin_int,
                             legend = TRUE) 
 ```
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, fig.alt = "calc_rate.int() plot showing rates from wait and measure phases of each urchin replicate with legend indicating data regions"}
 urch_rates <-  calc_rate.int(urchin_int,
                              starts = c(1, 2101, 3901),
                              wait = 300,
                              measure = 900,
                              quiet = TRUE,
-                             legend = TRUE) 
+                             legend = TRUE)
 ```
 
 In this plot, the data used to calculate the rate is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase (we added `legend = TRUE` so we can see labels for this example).
@@ -174,7 +174,7 @@ The replicate number is indicated by the `$rep` column. The `$rank` column indic
 
 The output object can also be plotted, and if we change the `type` input we can see each rate in context of the whole dataset. For larger datasets this may be of limited utility. 
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', fig.alt = "calc_rate.int() plot showing three urchin replicate rates in context of the full intermittent-flow dataset"}
 plot(urch_rates,
      type = "full")
 ```
@@ -197,7 +197,7 @@ bg_data[[2]] <- convert_DO(bg_data[[2]],
 
 Now we calculate a background rate. 
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', fig.alt = "calc_rate.bg() output showing background oxygen consumption rate from control data"}
 bg_rate <- calc_rate.bg(bg_data)
 ```
 
@@ -264,13 +264,13 @@ urch_rates <- auto_rate.int(urchin_int,
   summary()
 ```
 
-```{r echo=FALSE, message=FALSE}
+```{r echo=FALSE, message=FALSE, fig.alt = "auto_rate.int() output showing most linear rates extracted from each urchin replicate using linear method"}
 urch_rates <-  auto_rate.int(urchin_int,
                              starts = c(1, 2101, 3901),
                              wait = 300,
                              measure = c(1500, 1100, 600),
                              method = "linear",
-                             width = 400, 
+                             width = 400,
                              quiet = TRUE,
                              legend = TRUE) |>
   summary()
