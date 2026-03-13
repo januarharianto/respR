@@ -5,7 +5,10 @@
       "Bash(git -C /Users/nicholascarey/Github_repos/respR log --oneline -5 --all -- vignettes/references_citations.bib)",
       "Bash(wc:*)",
       "Bash(grep:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(Rscript -e \":*)",
+      "Bash(NOT_CRAN=true Rscript -e \":*)",
+      "Bash(Rscript -e \"available.packages\\(repos=''https://cran.r-project.org''\\)[''roll'',c\\(''Version'',''Repository''\\)]\")"
     ]
   }
 }

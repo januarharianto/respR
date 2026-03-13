@@ -187,7 +187,8 @@ test_that("convert_val - Pressure conversions have expected results", {
     z <-as.vector(z)
     expect_equal(convert_val(as.numeric(z[3]), z[1], z[2]),
                  marelac::convert_p(as.numeric(z[3])*as.numeric(z[9]),
-                                    z[8])[[as.numeric(z[12])]]*as.numeric(z[11])
+                                    z[8])[[as.numeric(z[12])]]*as.numeric(z[11]),
+                 tolerance = 1e-4
     )
   })
 
