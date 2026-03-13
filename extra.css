@@ -52,22 +52,9 @@ form[role="search"],
   margin-left: 5px !important;
 }
 
-/* DIAGNOSTIC: red background to see actual container extent */
-.container.template-home {
-  background-color: red !important;
-}
-
-/* Wider, fluid-up-to-max container for all Bootstrap 5 container variants */
-.container,
-.container-sm,
-.container-md,
-.container-lg,
-.container-xl,
-.container-xxl {
-  width: 100% !important;
-  max-width: 1400px !important;
-  padding-left: 15px !important;
-  padding-right: 15px !important;
+/* pkgdown 2.2.0 added main{max-width:50rem} for "reading width" — remove it */
+main {
+  max-width: none !important;
 }
 
 /* More horizontal spacing between navbar menu items */
