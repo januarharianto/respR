@@ -156,7 +156,7 @@ the data for common issues.</p>
 <span><span class="co">#&gt; Minimum and Maximum intervals in uneven Time data: </span></span>
 <span><span class="co">#&gt; [1] 0.01 0.02</span></span>
 <span><span class="co">#&gt; -----------------------------------------</span></span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="inspect() output for algae oxygen production data showing raw timeseries and variable rolling rate over 20 hours" width="960" style="display: block; margin: auto;"></p>
 <p>In <code>respR</code> oxygen uptake rates are represented by negative
 values since they represent a negative slope of oxygen against time.
 Since the focus of the package is on uptake rates, by default the
@@ -181,7 +181,7 @@ better idea of the true rate.</p>
 <span><span class="co">#&gt; inspect: Applying column default of 'oxygen = 2'</span></span>
 <span><span class="co">#&gt; Warning: inspect: Time values are not evenly-spaced (numerically).</span></span>
 <span><span class="co">#&gt; inspect: Data issues detected. For more information use print().</span></span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="inspect() output for algae data with 50% rolling rate window showing highly stable production rate" width="960" style="display: block; margin: auto;"></p>
 <p>We can see now that rate is actually highly stable across the
 dataset, and this tells us when we come to calculate rates we should
 probably use rates determined over this width or higher, and the value
@@ -193,9 +193,9 @@ will be around 0.09 to 0.10.</p>
 <p>Since the rate appears to be fairly stable across the dataset we will
 use <code><a href="../reference/auto_rate.html">auto_rate()</a></code> to identify the most linear region.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">algae_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">algae_insp</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="va">algae_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">algae_insp</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; auto_rate: Applying default 'width' of 0.2</span></span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="auto_rate() output for algae data showing most linear region and KDE analysis identifying stable production rate" width="960" style="display: block; margin: auto;"></p>
 <p>This is a good opportunity to explain how the <code>auto_rate</code>
 <code>"linear"</code> method works and how to interpret the outputs.
 Briefly (see <code><a href="../articles/auto_rate.html">vignette("auto_rate")</a></code> for more detail), the
@@ -232,8 +232,8 @@ the region. We can see three peaks in the KDE (panel 6). However, the
 other two are very much lower and narrower. Let’s look at the second
 ranked result using <code>pos</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">algae_rate</span>, pos <span class="op">=</span> <span class="fl">2</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">algae_rate</span>, pos <span class="op">=</span> <span class="fl">2</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="auto_rate() plot of second ranked result showing narrow low-rate region near end of algae dataset" width="960" style="display: block; margin: auto;"></p>
 <p>Here we can see this rate is over a much narrower region towards the
 end of the data, the value of 0.05 is very much lower than we are
 expecting, and at the extremes of the range (panel 3). While this may be
@@ -258,7 +258,7 @@ looks highly variable is now on a much narrower y-axis range. In fact,
 it is identical to the one in the <code>inspect</code> plot <a href="#inspect">above</a> but on different axes ranges.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">algae_insp</span>, width <span class="op">=</span> <span class="fl">0.5</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="auto_rate() output for algae data with 50% width showing rate results and KDE analysis panels" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt;      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy   rate</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;        &lt;num&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;int&gt;  &lt;int&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;  &lt;num&gt;  &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:    NA     1         95.8   0.0900 0.881   179.4    11   1086  0.18    18.1  95.7   97.2 0.0900</span></span>
@@ -281,7 +281,7 @@ range of the data. We can visualise this using the internal
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="va">algae_insp</span>, width <span class="op">=</span> <span class="fl">0.5</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">respR</span><span class="fu">:::</span><span class="fu"><a href="../reference/overlap.p.html">overlap.p</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; overlap.p: Plotting all rate(s)...</span></span></code></pre></div>
-<p><img src="oxy_production_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="oxy_production_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="Overlap plot showing rate regions identified by auto_rate() with increased width across algae oxygen production dataset" width="960" style="display: block; margin: auto;"></p>
 <p>So we could use the top ranked result here, but the ultimate rate
 value barely differs from our earlier analysis, and in this case the
 default <code>width</code> provided us with a valid result, so there is

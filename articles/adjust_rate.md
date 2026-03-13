@@ -1772,13 +1772,17 @@ We’ll inspect both to see the structure.
 inspect(urchins.rd, 1, 2)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-68-1.png)
+![inspect() output for urchin data showing specimen oxygen uptake
+channel and background channel
+timeseries](adjust_rate_files/figure-html/unnamed-chunk-68-1.png)
 
 ``` r
 inspect(urchins.rd, 1, 18)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-68-2.png)
+![inspect() output for urchin data showing specimen oxygen uptake
+channel and background channel
+timeseries](adjust_rate_files/figure-html/unnamed-chunk-68-2.png)
 
 ### Subtraction method
 
@@ -1876,7 +1880,9 @@ timepoint 5000, so the initial stages are not useful.
 inspect(bg_data)
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-74-1.png)
+![inspect() output for background data showing oxygen timeseries with
+initial spike before stable background measurement
+region](adjust_rate_files/figure-html/unnamed-chunk-74-1.png)
 
 Using this complete dataset would give an incorrect background rate
 estimation. Instead we use `subset_data` to subset only the data region
@@ -1888,7 +1894,9 @@ bg <- subset_data(bg_data, from = 5000) |>
   calc_rate.bg()
 ```
 
-![](adjust_rate_files/figure-html/unnamed-chunk-75-1.png)
+![calc_rate.bg() output showing background oxygen consumption rate
+calculated from stable region of background data after row
+5000](adjust_rate_files/figure-html/unnamed-chunk-75-1.png)
 
 We can use the fact that the default is `method = "time"` to subset from
 timepoint 5000. If we don’t specify a `to` input the default behaviour

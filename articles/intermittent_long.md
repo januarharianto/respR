@@ -121,7 +121,9 @@ zeb_intermittent.rd |>
   inspect()
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output for initial 18000 rows of zebrafish intermittent-flow
+data showing start of
+experiment](intermittent_long_files/figure-html/unnamed-chunk-2-1.png)
 
 The top plot shows the initial background recording up to row 5000, the
 first replicate of 14 minutes duration to determine MMR, followed by
@@ -139,7 +141,9 @@ zeb_intermittent.rd |>
   inspect(width = 0.01)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-3-1.png)
+![inspect() output for end section of zebrafish intermittent-flow data
+showing post-experiment
+state](intermittent_long_files/figure-html/unnamed-chunk-3-1.png)
 
 We can see that by the end of the experiment the replicates are much
 more regular, suggesting rates have stabilised, and we can also see the
@@ -157,7 +161,9 @@ will use for the rest of the analysis.
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-4-1.png)
+![inspect() output for complete zebrafish intermittent-flow dataset
+showing full oxygen
+timeseries](intermittent_long_files/figure-html/unnamed-chunk-4-1.png)
 
 Here because the dataset is so large the plots are of limited use, but
 we can at least see that much more oxygen was used in the early
@@ -187,7 +193,9 @@ bg_post <- zeb |>
   calc_rate.bg()
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-5-1.png)
+![calc_rate.bg() output showing post-experiment background oxygen
+consumption rate from zebrafish
+data](intermittent_long_files/figure-html/unnamed-chunk-5-1.png)
 
 The two different background rates (only the post-experiment plot is
 shown above) have been saved to these two objects. We can see the actual
@@ -234,14 +242,16 @@ rate changes over the replicate.
 
 ``` r
 # subset rep 1
-zeb_rep_1 <- subset_data(zeb, 
-                         from = 5000, 
-                         to = 5000 + 840 - 120, 
+zeb_rep_1 <- subset_data(zeb,
+                         from = 5000,
+                         to = 5000 + 840 - 120,
                          by = "row") |>
   plot(width = 0.2)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-8-1.png)
+![inspect() plot of first zebrafish replicate showing declining oxygen
+uptake rate over the measurement
+period](intermittent_long_files/figure-html/unnamed-chunk-8-1.png)
 
 In this replicate, the rolling rate plot shows that calculated at this
 particular `width`, the rate declines rapidly from around -0.012 to
@@ -289,7 +299,9 @@ zeb_mmr <- calc_rate(zeb_rep_1,
   summary()
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-9-1.png)
+![calc_rate() plot showing five-minute measure phase rate from zebrafish
+MMR replicate after three-minute
+wait](intermittent_long_files/figure-html/unnamed-chunk-9-1.png)
 
     #> 
     #> # summary.calc_rate # -------------------
@@ -330,7 +342,9 @@ zeb_mmr <- zeb_rep_1 |>
   summary()
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-10-1.png)
+![auto_rate() highest method output showing highest two-minute oxygen
+uptake rates from zebrafish MMR
+replicate](intermittent_long_files/figure-html/unnamed-chunk-10-1.png)
 
     #> 
     #> # summary.auto_rate # -------------------
@@ -404,7 +418,9 @@ plot it using `pos`.
 plot(zeb_mmr, pos = 5)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-12-1.png)
+![auto_rate() linear method plot of fifth ranked result showing highest
+rate region in zebrafish MMR
+replicate](intermittent_long_files/figure-html/unnamed-chunk-12-1.png)
 
 Many aspects will feed into rate selection criteria for a specific
 experiment or study, and it depends on these whether this in an
@@ -467,7 +483,9 @@ with this higher width.
 plot(zeb_mmr, pos = 5)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-14-1.png)
+![auto_rate() linear method plot of fifth ranked result with increased
+width showing smoother rolling rate for zebrafish
+MMR](intermittent_long_files/figure-html/unnamed-chunk-14-1.png)
 
 With non-linear data like this, such as from an animal recovering from
 exercise, increasing the width over which a rate is determined will
@@ -756,16 +774,18 @@ recording. We then `inspect` it.
 
 ``` r
 zeb_insp <- zeb_intermittent.rd |>
-  subset_data(from = 5840, 
+  subset_data(from = 5840,
               to = 75139,
               by = "row") |>
-  inspect() 
+  inspect()
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
 #> inspect: No issues detected while inspecting data frame.
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-24-1.png)
+![inspect() output for subsetted zebrafish intermittent-flow data
+showing 105 replicates and rolling oxygen uptake
+rate](intermittent_long_files/figure-html/unnamed-chunk-24-1.png)
 
 ### Extract rates
 
@@ -784,7 +804,9 @@ zeb_cr.int <- calc_rate.int(zeb_insp,
 #> plot.calc_rate.int: Plotting first 20 selected reps only. To plot others modify 'pos' input.
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-25-1.png) By
+![calc_rate.int() output showing first 20 zebrafish replicates with wait
+and measure phases highlighted and extracted
+rates](intermittent_long_files/figure-html/unnamed-chunk-25-1.png) By
 default the function plots the first 20 replicates (`pos` can be used to
 choose others up to a maximum of 20). Note how the lower time axis has
 the actual raw data time values, but the top row axis refers to the rows
@@ -925,7 +947,9 @@ these is `type = "rate"`.
 plot(zeb_cr.int_conv, type = "rate")
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-31-1.png)
+![Rate plot of calc_rate.int converted results showing zebrafish oxygen
+uptake rates across all replicates over
+time](intermittent_long_files/figure-html/unnamed-chunk-31-1.png)
 
 This shows how the calculated rate values vary across the dataset. We
 can see from this plot they are high at the start, stabilise after
@@ -1081,7 +1105,9 @@ zeb_ar.int <- auto_rate.int(zeb_insp,
 #> plot.auto_rate.int: Plotting first 20 selected rates only. To plot others modify 'pos' input.
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-34-1.png)
+![auto_rate.int() output showing lowest two-minute rate extracted from
+each zebrafish replicate with measure phase
+highlighted](intermittent_long_files/figure-html/unnamed-chunk-34-1.png)
 
 Note how the plots show the rates coming from different regions within
 each replicate measure phase. The summary contains all the results, that
@@ -1141,7 +1167,9 @@ across the data.
 plot(zeb_ar.int_conv, type = "rate")
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-38-1.png)
+![Rate plot of auto_rate.int converted results showing zebrafish
+SMR-candidate oxygen uptake rates across all
+replicates](intermittent_long_files/figure-html/unnamed-chunk-38-1.png)
 
 These rates seem to be a bit lower than those we extracted for RMR
 [above](#crintselect), as we would expect for an SMR.
@@ -1158,7 +1186,9 @@ view of the range of rates.
 plot(zeb_ar.int_conv, type = "rate", pos = 30:80)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-39-1.png)
+![Rate plot of zebrafish auto_rate.int results for replicates 30-80
+showing anomalously low rate in replicate
+48](intermittent_long_files/figure-html/unnamed-chunk-39-1.png)
 
 Replicate 48 does seem to be anomalously low. If we go back to the
 `auto_rate.int` results object we can use `pos` to plot this replicate
@@ -1171,13 +1201,17 @@ plots, but only shows the `measure` phase.
 plot(zeb_ar.int, type = "rep", pos = 48)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-40-1.png)
+![Diagnostic plots for zebrafish replicate 48 showing anomalous oxygen
+trace and auto_rate analysis output for that
+replicate](intermittent_long_files/figure-html/unnamed-chunk-40-1.png)
 
 ``` r
 plot(zeb_ar.int, type = "ar", pos = 48)
 ```
 
-![](intermittent_long_files/figure-html/unnamed-chunk-40-2.png)
+![Diagnostic plots for zebrafish replicate 48 showing anomalous oxygen
+trace and auto_rate analysis output for that
+replicate](intermittent_long_files/figure-html/unnamed-chunk-40-2.png)
 
 Looking at these plots this result does seem to be anomalous, and in
 this replicate the rate extracted is not really representative. It also

@@ -47,7 +47,8 @@ inspect(squid.rd)
 #> inspect: No issues detected while inspecting data frame.
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-1-1.png)
+![inspect() output for squid.rd dataset showing full long-duration
+oxygen timeseries](subset_data_files/figure-html/unnamed-chunk-1-1.png)
 
 Let’s say we are only interested in the initial stages.
 
@@ -56,7 +57,9 @@ x <- subset_data(squid.rd, from = 1, to = 10000, by = "time")
 inspect(x)
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output for squid.rd data subset to first 10000 time units
+showing initial oxygen
+decline](subset_data_files/figure-html/unnamed-chunk-2-1.png)
 
 Now we can pass this object to further functions.
 
@@ -70,7 +73,8 @@ x <- subset_data(squid.rd, from = 1, to = 10000, by = "row")
 inspect(x)
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-3-1.png)
+![inspect() output for squid.rd data subset to first 10000
+rows](subset_data_files/figure-html/unnamed-chunk-3-1.png)
 
 ## Subset by oxygen
 
@@ -83,7 +87,9 @@ x <- subset_data(squid.rd, from = 8, to = 6.5, by = "oxygen")
 inspect(x)
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-4-1.png)
+![inspect() output for squid.rd data subset to oxygen values between 8
+and 6.5 mg/L showing higher-oxygen
+portion](subset_data_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
 print(x)
@@ -117,7 +123,9 @@ calculate a rate.
 x <- inspect(intermittent.rd)
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-6-1.png)
+![inspect() output for intermittent.rd dataset showing multi-replicate
+urchin oxygen
+timeseries](subset_data_files/figure-html/unnamed-chunk-6-1.png)
 
 We have already inspected the dataset. Now we just subset out one
 replicate, pipe the data to `calc_rate` and other functions and output
@@ -128,15 +136,17 @@ x |>
   subset_data(from = 2100, to = 3500, by = "time") |>
   auto_rate() |>
   adjust_rate(by = -0.00071) |>
-  convert_rate(oxy.unit = "mg/L",       
-               time.unit = "s",        
-               output.unit = "mg/h/g", 
-               volume = 2.379,         
+  convert_rate(oxy.unit = "mg/L",
+               time.unit = "s",
+               output.unit = "mg/h/g",
+               volume = 2.379,
                mass = 0.006955) |>
   summary(pos = 1:3)
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-7-1.png)
+![auto_rate() output for a single replicate subset from intermittent.rd
+showing rate calculation via piped
+workflow](subset_data_files/figure-html/unnamed-chunk-7-1.png)
 
     #> 
     #> # summary.convert_rate # ----------------
@@ -152,12 +162,14 @@ We can also use `subset_data` and pipes just to have a quick look at
 portions of big datasets without having to save anything.
 
 ``` r
-zeb_intermittent.rd |> 
+zeb_intermittent.rd |>
   subset_data(from = 10000, to = 13000, by = "time") |>
   inspect()
 ```
 
-![](subset_data_files/figure-html/unnamed-chunk-8-1.png)
+![inspect() output for zeb_intermittent.rd data subset to time 10000 to
+13000 for a quick visual
+check](subset_data_files/figure-html/unnamed-chunk-8-1.png)
 
 ## Subset multiple columns:
 

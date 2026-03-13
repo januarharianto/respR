@@ -47,7 +47,9 @@ inspect(algae.rd, rate.rev = FALSE)
 #> -----------------------------------------
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-1-1.png)
+![inspect() output for algae oxygen production data showing raw
+timeseries and variable rolling rate over 20
+hours](oxy_production_files/figure-html/unnamed-chunk-1-1.png)
 
 In `respR` oxygen uptake rates are represented by negative values since
 they represent a negative slope of oxygen against time. Since the focus
@@ -78,7 +80,9 @@ algae_insp <- inspect(algae.rd, width = 0.5, rate.rev = FALSE)
 #> inspect: Data issues detected. For more information use print().
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output for algae data with 50% rolling rate window showing
+highly stable production
+rate](oxy_production_files/figure-html/unnamed-chunk-2-1.png)
 
 We can see now that rate is actually highly stable across the dataset,
 and this tells us when we come to calculate rates we should probably use
@@ -93,11 +97,13 @@ use
 to identify the most linear region.
 
 ``` r
-algae_rate <- auto_rate(algae_insp, rate.rev = FALSE) 
+algae_rate <- auto_rate(algae_insp, rate.rev = FALSE)
 #> auto_rate: Applying default 'width' of 0.2
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-3-1.png)
+![auto_rate() output for algae data showing most linear region and KDE
+analysis identifying stable production
+rate](oxy_production_files/figure-html/unnamed-chunk-3-1.png)
 
 This is a good opportunity to explain how the `auto_rate` `"linear"`
 method works and how to interpret the outputs. Briefly (see
@@ -140,10 +146,12 @@ two are very much lower and narrower. Let’s look at the second ranked
 result using `pos`.
 
 ``` r
-plot(algae_rate, pos = 2, rate.rev = FALSE) 
+plot(algae_rate, pos = 2, rate.rev = FALSE)
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-5-1.png)
+![auto_rate() plot of second ranked result showing narrow low-rate
+region near end of algae
+dataset](oxy_production_files/figure-html/unnamed-chunk-5-1.png)
 
 Here we can see this rate is over a much narrower region towards the end
 of the data, the value of 0.05 is very much lower than we are expecting,
@@ -175,7 +183,9 @@ different axes ranges.
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-6-1.png)
+![auto_rate() output for algae data with 50% width showing rate results
+and KDE analysis
+panels](oxy_production_files/figure-html/unnamed-chunk-6-1.png)
 
     #>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy   rate
     #>    <num> <int>        <num>    <num> <num>   <num> <int>  <int> <num>   <num> <num>  <num>  <num>
@@ -204,7 +214,9 @@ auto_rate(algae_insp, width = 0.5, rate.rev = FALSE, plot = FALSE) |>
 #> overlap.p: Plotting all rate(s)...
 ```
 
-![](oxy_production_files/figure-html/unnamed-chunk-7-1.png)
+![Overlap plot showing rate regions identified by auto_rate() with
+increased width across algae oxygen production
+dataset](oxy_production_files/figure-html/unnamed-chunk-7-1.png)
 
 So we could use the top ranked result here, but the ultimate rate value
 barely differs from our earlier analysis, and in this case the default

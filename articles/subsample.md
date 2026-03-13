@@ -43,7 +43,8 @@ subsample(sardine.rd, length.out = 100)
 #> subsample: plotting first column of data only.
 ```
 
-![](subsample_files/figure-html/unnamed-chunk-2-1.png)
+![Plot of sardine.rd respirometry data subsampled to 100 evenly-spaced
+rows](subsample_files/figure-html/unnamed-chunk-2-1.png)
 
 ## Subsample a vector
 
@@ -51,4 +52,5 @@ subsample(sardine.rd, length.out = 100)
 subsample(sardine.rd[[2]], length.out = 500)
 ```
 
-![](subsample_files/figure-html/unnamed-chunk-3-1.png)
+![Plot of sardine.rd oxygen vector subsampled to 500 evenly-spaced data
+points](subsample_files/figure-html/unnamed-chunk-3-1.png)

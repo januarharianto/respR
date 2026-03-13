@@ -1705,10 +1705,10 @@ typical adjustment methods we show above. We’ll use the
 <p>We’ll inspect both to see the structure.</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-1.png" class="r-plt" alt="inspect() output for urchin data showing specimen oxygen uptake channel and background channel timeseries" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">urchins.rd</span>, <span class="fl">1</span>, <span class="fl">18</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-2.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-68-2.png" class="r-plt" alt="inspect() output for urchin data showing specimen oxygen uptake channel and background channel timeseries" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="subtraction-method">Subtraction method<a class="anchor" aria-label="anchor" href="#subtraction-method"></a>
@@ -1799,7 +1799,7 @@ until the researcher was ready to start the experiment proper at around
 timepoint 5000, so the initial stages are not useful.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">bg_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-74-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-74-1.png" class="r-plt" alt="inspect() output for background data showing oxygen timeseries with initial spike before stable background measurement region" width="960" style="display: block; margin: auto;"></p>
 <p>Using this complete dataset would give an incorrect background rate
 estimation. Instead we use <code>subset_data</code> to subset only the
 data region we are interested in and pass it to
@@ -1809,7 +1809,7 @@ ranges.</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">bg_data</span>, from <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/calc_rate.bg.html">calc_rate.bg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adjust_rate_files/figure-html/unnamed-chunk-75-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="adjust_rate_files/figure-html/unnamed-chunk-75-1.png" class="r-plt" alt="calc_rate.bg() output showing background oxygen consumption rate calculated from stable region of background data after row 5000" width="960" style="display: block; margin: auto;"></p>
 <p>We can use the fact that the default is <code>method = "time"</code>
 to subset from timepoint 5000. If we don’t specify a <code>to</code>
 input the default behaviour is to subset to the end of the dataset.</p>

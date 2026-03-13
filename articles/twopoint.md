@@ -68,7 +68,9 @@ the data.
 lake_insp <- inspect(lake, rate.rev = FALSE)
 ```
 
-![](twopoint_files/figure-html/unnamed-chunk-4-1.png)
+![inspect() output for eutrophic lake oxygen data showing diurnal
+fluctuation over 40 hours and corresponding rolling
+rate](twopoint_files/figure-html/unnamed-chunk-4-1.png)
 
 We can see the oxygen in the lake fluctuates with a diurnal rhythm,
 increasing over the day and decreasing at night, and the rolling rate
@@ -84,13 +86,15 @@ will use `calc_rate` as we normally would to get the rate between these
 two timepoints.
 
 ``` r
-lake_rate <- calc_rate(lake_insp, 
+lake_rate <- calc_rate(lake_insp,
                        from = 12,
                        to = 36,
                        by = "time")
 ```
 
-![](twopoint_files/figure-html/unnamed-chunk-5-1.png)
+![calc_rate() plot showing linear regression fit to lake oxygen data
+between hours 12 and 36 misrepresenting net oxygen
+flux](twopoint_files/figure-html/unnamed-chunk-5-1.png)
 
 It is immediately clear the linear regression based rate completely
 misrepresents the overall oxygen flux and instead of a small net oxygen

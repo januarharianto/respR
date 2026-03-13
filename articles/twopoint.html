@@ -174,7 +174,7 @@ a period of 40 hours starting at midnight.</p>
 <code><a href="../reference/inspect.html">inspect()</a></code> the data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lake_insp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">lake</span>, rate.rev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="twopoint_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="twopoint_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="inspect() output for eutrophic lake oxygen data showing diurnal fluctuation over 40 hours and corresponding rolling rate" width="960" style="display: block; margin: auto;"></p>
 <p>We can see the oxygen in the lake fluctuates with a diurnal rhythm,
 increasing over the day and decreasing at night, and the rolling rate
 similarly fluctuates. We use <code>rate.rev = FALSE</code> here to force
@@ -189,11 +189,11 @@ uptake rates as negative.</p>
 will use <code>calc_rate</code> as we normally would to get the rate
 between these two timepoints.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lake_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">lake_insp</span>, </span>
+<code class="sourceCode R"><span><span class="va">lake_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_rate.html">calc_rate</a></span><span class="op">(</span><span class="va">lake_insp</span>,</span>
 <span>                       from <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>                       to <span class="op">=</span> <span class="fl">36</span>,</span>
 <span>                       by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="twopoint_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="twopoint_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="calc_rate() plot showing linear regression fit to lake oxygen data between hours 12 and 36 misrepresenting net oxygen flux" width="960" style="display: block; margin: auto;"></p>
 <p>It is immediately clear the linear regression based rate completely
 misrepresents the overall oxygen flux and instead of a small net oxygen
 flux, suggests there is a large net oxygen consumption.</p>

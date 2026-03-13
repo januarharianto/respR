@@ -265,7 +265,9 @@ objects.
 plot(zeb_all, pos = 50:69)
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-9-1.png)
+![calc_rate.int() plot showing replicates 50 to 69 of zebrafish
+intermittent-flow experiment on a
+grid](calc_rate.int_files/figure-html/unnamed-chunk-9-1.png)
 
 For all plots, the bottom blue time axis shows the time values of the
 original larger dataset, whilst the upper red row axis shows the rows of
@@ -290,7 +292,9 @@ calc_rate.int(urchin,
               by = "time")
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-10-1.png)
+![calc_rate.int() plot type rep showing three urchin replicates
+individually with time-based rate regions
+highlighted](calc_rate.int_files/figure-html/unnamed-chunk-10-1.png)
 
 ### `type = "full"`
 
@@ -306,7 +310,9 @@ calc_rate.int(urchin,
               type = "full")
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-11-1.png)
+![calc_rate.int() plot type full showing three urchin replicate rates
+highlighted in context of the complete
+dataset](calc_rate.int_files/figure-html/unnamed-chunk-11-1.png)
 
 Note this may be of limited use when the dataset is large.
 
@@ -314,7 +320,9 @@ Note this may be of limited use when the dataset is large.
 plot(zeb_all, type = "full", pos = 50)
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-12-1.png)
+![calc_rate.int() plot showing zebrafish replicate 50 rate highlighted
+in context of the full
+dataset](calc_rate.int_files/figure-html/unnamed-chunk-12-1.png)
 
 ### `type = "cr"`
 
@@ -327,7 +335,9 @@ of the initial data.
 plot(zeb_all, type = "cr", pos = 50)
 ```
 
-![](calc_rate.int_files/figure-html/unnamed-chunk-13-1.png)
+![calc_rate() plot for zebrafish replicate 50 showing the individual
+rate regression within the replicate
+subset](calc_rate.int_files/figure-html/unnamed-chunk-13-1.png)
 
 The `pos` input here can also be of multiple replicates but this will
 produce multiple individual plots that you will need to scroll through.

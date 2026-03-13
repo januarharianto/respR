@@ -86,7 +86,9 @@ urchin_int <- inspect(intermittent.rd)
     #> 
     #> -----------------------------------------
 
-![](intermittent_short_files/figure-html/unnamed-chunk-3-1.png)
+![inspect() output for intermittent-flow urchin data showing three
+replicates of oxygen over time with flush
+periods](intermittent_short_files/figure-html/unnamed-chunk-3-1.png)
 
 We can see from the top plot that this dataset has three replicates,
 separated by two flushes where new water was added. The bottom plot
@@ -114,12 +116,14 @@ without saving the result to check regions of the data, which can help
 us decide how we are going to proceed.
 
 ``` r
-intermittent.rd |> 
+intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect()
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-5-1.png)
+![inspect() output for first 1800 rows of intermittent-flow urchin data
+showing stable oxygen decline within first
+replicate](intermittent_short_files/figure-html/unnamed-chunk-5-1.png)
 
 Inspecting the first replicate shows us rate is indeed fairly consistent
 within the replicate, but fluctuates from around -0.0004 to -0.0008.
@@ -131,12 +135,14 @@ purposes of the rolling rate plot. Let’s try a wider window of 50% of
 the data.
 
 ``` r
-intermittent.rd |> 
+intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect(width = 0.5)
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-6-1.png)
+![inspect() output for first urchin replicate with 50% rolling rate
+window showing consistently stable rate around
+-0.0006](intermittent_short_files/figure-html/unnamed-chunk-6-1.png)
 
 Now we can see rate is much more consistent, although it decreases
 slightly over the course of the replicate. But we can tell that we would
@@ -184,7 +190,9 @@ calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901)) 
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-8-1.png)
+![calc_rate.int() plot showing rates calculated across all three
+complete urchin replicates including flush
+periods](intermittent_short_files/figure-html/unnamed-chunk-8-1.png)
 
     #> 
     #> # summary.calc_rate.int # ---------------
@@ -209,7 +217,9 @@ calc_rate.int(urchin_int,
   summary()
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-10-1.png)
+![calc_rate.int() plot showing rates from specified measure phases of
+each urchin replicate excluding flush
+periods](intermittent_short_files/figure-html/unnamed-chunk-10-1.png)
 
     #> 
     #> # summary.calc_rate.int # ---------------
@@ -252,7 +262,9 @@ urch_rates <- calc_rate.int(urchin_int,
                             legend = TRUE) 
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-12-1.png)
+![calc_rate.int() plot showing rates from wait and measure phases of
+each urchin replicate with legend indicating data
+regions](intermittent_short_files/figure-html/unnamed-chunk-12-1.png)
 
 In this plot, the data used to calculate the rate is the yellow points,
 the red shaded region is the `wait` phase, and the green shaded region
@@ -301,7 +313,9 @@ plot(urch_rates,
      type = "full")
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-14-1.png)
+![calc_rate.int() plot showing three urchin replicate rates in context
+of the full intermittent-flow
+dataset](intermittent_short_files/figure-html/unnamed-chunk-14-1.png)
 
 See
 [`vignette("calc_rate.int")`](https://januarharianto.github.io/respR/articles/calc_rate.int.md)
@@ -331,7 +345,9 @@ Now we calculate a background rate.
 bg_rate <- calc_rate.bg(bg_data)
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-16-1.png)
+![calc_rate.bg() output showing background oxygen consumption rate from
+control
+data](intermittent_short_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 print(bg_rate)
@@ -480,7 +496,9 @@ urch_rates <- auto_rate.int(urchin_int,
   summary()
 ```
 
-![](intermittent_short_files/figure-html/unnamed-chunk-22-1.png)
+![auto_rate.int() output showing most linear rates extracted from each
+urchin replicate using linear
+method](intermittent_short_files/figure-html/unnamed-chunk-22-1.png)
 
     #> 
     #> # summary.auto_rate.int # ---------------

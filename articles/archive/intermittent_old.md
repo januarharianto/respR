@@ -40,18 +40,22 @@ urchin_int <- inspect(intermittent.rd)
 #> inspect: No issues detected while inspecting data frame.
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-2-1.png)
+![inspect() output and calc_rate() plots for urchin intermittent-flow
+data showing three replicate rate
+regions](intermittent_old_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
 
 # calc rates
-urchin_int_rates <- calc_rate(urchin_int, 
+urchin_int_rates <- calc_rate(urchin_int,
                               from = c(1, 2101, 3901),
                               to = c(1900, 3550, 4831),
                               by = "row")
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-2-2.png)
+![inspect() output and calc_rate() plots for urchin intermittent-flow
+data showing three replicate rate
+regions](intermittent_old_files/figure-html/unnamed-chunk-2-2.png)
 
 ``` r
 summary(urchin_int_rates)
@@ -79,13 +83,15 @@ We can also extract by time values, and here we will also apply a
 different time window within each replicate.
 
 ``` r
-urchin_int_rates <- calc_rate(urchin_int, 
-                              from = c(200, 2300, 4100), 
-                              to = c(1800, 3000, 4400), 
+urchin_int_rates <- calc_rate(urchin_int,
+                              from = c(200, 2300, 4100),
+                              to = c(1800, 3000, 4400),
                               by = "time")
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-4-1.png)
+![calc_rate() plots for urchin data showing rates extracted from
+different time windows in each of three
+replicates](intermittent_old_files/figure-html/unnamed-chunk-4-1.png)
 
 By default, the first is shown in `print` and `plot`, but the `pos`
 input can be used to view others.
@@ -94,7 +100,9 @@ input can be used to view others.
 plot(urchin_int_rates, pos = 3)
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-5-1.png)
+![calc_rate() plot for third urchin replicate showing rate extracted
+from specified time
+region](intermittent_old_files/figure-html/unnamed-chunk-5-1.png)
 
 Calling [`summary()`](https://rdrr.io/r/base/summary.html) will show the
 coefficients, locations and values of all rates:
@@ -150,7 +158,9 @@ u_rate2 <- calc_rate(u_rep2, from = 7.1, to = 6.8, by = "oxygen")
 u_rate3 <- calc_rate(u_rep3, from = 7.0, to = 6.8, by = "oxygen")
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-9-1.png)
+![calc_rate() plot for third urchin replicate showing rate calculated
+from oxygen values 7.0 to
+6.8](intermittent_old_files/figure-html/unnamed-chunk-9-1.png)
 
 ### Piping
 
@@ -199,7 +209,9 @@ object for every replicate, which will be quite large (several MB).
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-12-1.png)
+![inspect() output for zebrafish intermittent-flow data showing full
+timeseries and rolling oxygen uptake
+rate](intermittent_old_files/figure-html/unnamed-chunk-12-1.png)
 
 ### Analysis loop
 
@@ -240,7 +252,9 @@ rmr_rate <- sapply(zeb_rmr, function(z) z$rate[1])
 plot(rmr_rate, ylim = rev(range(rmr_rate)))
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-14-1.png)
+![Scatter plot of top-ranked zebrafish RMR rates from each replicate
+plotted on a reversed y-axis showing higher rates at experiment
+start](intermittent_old_files/figure-html/unnamed-chunk-14-1.png)
 
 Note, we plot on a reverse axis so higher rates are higher on the plot.
 We can see that rates are higher in the initial stages of the
@@ -326,7 +340,9 @@ Now we can plot them. Again, we reverse the y-axis.
 plot(zeb_rmr_all, ylim = rev(range(zeb_rmr_all)))
 ```
 
-![](intermittent_old_files/figure-html/unnamed-chunk-20-1.png)
+![Scatter plot of final converted zebrafish RMR rates across all
+replicates on reversed y-axis showing rate stabilisation after replicate
+20](intermittent_old_files/figure-html/unnamed-chunk-20-1.png)
 
 It depends on the experiment how we might want to define the final RMR.
 This is the routine metabolic rate, so we want a rate that represents

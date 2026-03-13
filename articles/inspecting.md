@@ -853,13 +853,17 @@ numbers will now *not* be equivalent to the time values.
 cr_row <- calc_rate(data, 200, 400, "row")
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-46-1.png)
+![calc_rate() plots showing rates extracted from the same dataset by row
+range and by time range producing equivalent
+results](inspecting_files/figure-html/unnamed-chunk-46-1.png)
 
 ``` r
 cr_time <- calc_rate(data, 200, 400, "time")
 ```
 
-![](inspecting_files/figure-html/unnamed-chunk-46-2.png)
+![calc_rate() plots showing rates extracted from the same dataset by row
+range and by time range producing equivalent
+results](inspecting_files/figure-html/unnamed-chunk-46-2.png)
 
 ``` r
 summary(cr_row)

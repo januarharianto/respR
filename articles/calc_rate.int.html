@@ -350,7 +350,7 @@ the <code>pos</code> input, either in the main function call or when
 calling <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> on output objects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">:</span><span class="fl">69</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="calc_rate.int() plot showing replicates 50 to 69 of zebrafish intermittent-flow experiment on a grid" width="960" style="display: block; margin: auto;"></p>
 <p>For all plots, the bottom blue time axis shows the time values of the
 original larger dataset, whilst the upper red row axis shows the rows of
 the replicate subset.</p>
@@ -370,7 +370,7 @@ plotted individually with the rate region highlighted.</p>
 <span>              wait <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="calc_rate.int() plot type rep showing three urchin replicates individually with time-based rate regions highlighted" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-full">
@@ -385,11 +385,11 @@ highlighted in the context of the entire dataset.</p>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>              type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="calc_rate.int() plot type full showing three urchin replicate rates highlighted in context of the complete dataset" width="960" style="display: block; margin: auto;"></p>
 <p>Note this may be of limited use when the dataset is large.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"full"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="calc_rate.int() plot showing zebrafish replicate 50 rate highlighted in context of the full dataset" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="type-cr">
@@ -401,7 +401,7 @@ can be plotted using <code>type = "cr"</code> and the <code>pos</code>
 input. Note these are results from subsets of the initial data.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">zeb_all</span>, type <span class="op">=</span> <span class="st">"cr"</span>, pos <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="calc_rate.int_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="calc_rate() plot for zebrafish replicate 50 showing the individual rate regression within the replicate subset" width="960" style="display: block; margin: auto;"></p>
 <p>The <code>pos</code> input here can also be of multiple replicates
 but this will produce multiple individual plots that you will need to
 scroll through.</p>

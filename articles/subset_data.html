@@ -152,12 +152,12 @@ way.</p>
 <span><span class="co">#&gt; inspect: Applying column default of 'time = 1'</span></span>
 <span><span class="co">#&gt; inspect: Applying column default of 'oxygen = 2'</span></span>
 <span><span class="co">#&gt; inspect: No issues detected while inspecting data frame.</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="inspect() output for squid.rd dataset showing full long-duration oxygen timeseries" width="960" style="display: block; margin: auto;"></p>
 <p>Let’s say we are only interested in the initial stages.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">10000</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="inspect() output for squid.rd data subset to first 10000 time units showing initial oxygen decline" width="960" style="display: block; margin: auto;"></p>
 <p>Now we can pass this object to further functions.</p>
 </div>
 <div class="section level2">
@@ -168,7 +168,7 @@ per-second happen to be the same values.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">1</span>, to <span class="op">=</span> <span class="fl">10000</span>, by <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="inspect() output for squid.rd data subset to first 10000 rows" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="subset-by-oxygen">Subset by oxygen<a class="anchor" aria-label="anchor" href="#subset-by-oxygen"></a>
@@ -179,7 +179,7 @@ so let’s only select the higher values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span><span class="va">squid.rd</span>, from <span class="op">=</span> <span class="fl">8</span>, to <span class="op">=</span> <span class="fl">6.5</span>, by <span class="op">=</span> <span class="st">"oxygen"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="inspect() output for squid.rd data subset to oxygen values between 8 and 6.5 mg/L showing higher-oxygen portion" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        Time Oxygen</span></span>
@@ -208,7 +208,7 @@ want to subset a single replicate from an intermittent flow experiment
 to calculate a rate.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="va">intermittent.rd</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="inspect() output for intermittent.rd dataset showing multi-replicate urchin oxygen timeseries" width="960" style="display: block; margin: auto;"></p>
 <p>We have already inspected the dataset. Now we just subset out one
 replicate, pipe the data to <code>calc_rate</code> and other functions
 and output our final rate, all without having to create a new
@@ -218,13 +218,13 @@ object.</p>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">2100</span>, to <span class="op">=</span> <span class="fl">3500</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/auto_rate.html">auto_rate</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/adjust_rate.html">adjust_rate</a></span><span class="op">(</span>by <span class="op">=</span> <span class="op">-</span><span class="fl">0.00071</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"mg/L"</span>,       </span>
-<span>               time.unit <span class="op">=</span> <span class="st">"s"</span>,        </span>
-<span>               output.unit <span class="op">=</span> <span class="st">"mg/h/g"</span>, </span>
-<span>               volume <span class="op">=</span> <span class="fl">2.379</span>,         </span>
+<span>  <span class="fu"><a href="../reference/convert_rate.html">convert_rate</a></span><span class="op">(</span>oxy.unit <span class="op">=</span> <span class="st">"mg/L"</span>,</span>
+<span>               time.unit <span class="op">=</span> <span class="st">"s"</span>,</span>
+<span>               output.unit <span class="op">=</span> <span class="st">"mg/h/g"</span>,</span>
+<span>               volume <span class="op">=</span> <span class="fl">2.379</span>,</span>
 <span>               mass <span class="op">=</span> <span class="fl">0.006955</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="auto_rate() output for a single replicate subset from intermittent.rd showing rate calculation via piped workflow" width="960" style="display: block; margin: auto;"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; # summary.convert_rate # ----------------</span></span>
 <span><span class="co">#&gt; Summary of converted rates from entered 'pos' rank(s):</span></span>
@@ -238,10 +238,10 @@ object.</p>
 quick look at portions of big datasets without having to save
 anything.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">zeb_intermittent.rd</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/subset_data.html">subset_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">10000</span>, to <span class="op">=</span> <span class="fl">13000</span>, by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/inspect.html">inspect</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="subset_data_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="960" style="display: block; margin: auto;"></p>
+<p><img src="subset_data_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="inspect() output for zeb_intermittent.rd data subset to time 10000 to 13000 for a quick visual check" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="subset-multiple-columns">Subset multiple columns:<a class="anchor" aria-label="anchor" href="#subset-multiple-columns"></a>
