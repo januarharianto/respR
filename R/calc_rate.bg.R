@@ -292,7 +292,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
                      x$dataframe[[pos + 1]]),
           rsq = NULL,
           rownums = rownums,
-          title = F,
+          title = FALSE,
           legend = legend)
     title(main = glue::glue("Column: {names(x$dataframe)[pos+1]}"), line = 1.2,
           adj = 0)
@@ -302,7 +302,7 @@ plot.calc_rate.bg <- function(x, pos = NULL, quiet = FALSE, legend = TRUE, ...) 
                      x$dataframe[[z + 1]]),
           rsq = NULL,
           rownums = rownums,
-          title = F,
+          title = FALSE,
           legend = legend)
     title(main = glue::glue("Column: {names(x$dataframe)[z+1]}"), line = 1.2,
           adj = 0)

@@ -81,7 +81,7 @@ See `vignette("inspecting")` for a full description and examples of what these c
 
 By default, `inspect` assumes the first column of the data frame is `time`, while the second column is `oxygen`. However, we can use the `time` and `oxygen` inputs to select different columns, including multiple columns. You can use either numbers or the names of the columns. Here, we inspect all columns without `<-` assigning (i.e. saving) the result.
 
-```{r results='hold', fig.height = 6}
+```{r results='hold', fig.height = 6, fig.alt = "inspect() output showing all 18 oxygen columns of the urchins dataset"}
 inspect(urchins.rd, time = 1, oxygen = 2:19)
 ```
 
@@ -95,7 +95,7 @@ Rather than make assumptions that rows represent evenly spaced datapoints, the f
 
 To extract rates, it is best to assign each time-oxygen column pair individually as a separate `inspect` object. Using the `time` and `oxygen` inputs we can select particular columns either by the column number or, as shown here, by name.
 
-```{r results='hold', warning=FALSE, message=FALSE}
+```{r results='hold', warning=FALSE, message=FALSE, fig.alt = "inspect() output for a single urchin showing oxygen timeseries and rolling rate"}
 urchin <- inspect(urchins.rd, time =  "time.min", oxygen = "n")
 ```
 
@@ -111,8 +111,8 @@ Again, note that using `inspect()` is optional. Functions in `respR` will genera
 
 Using the `inspect` object `urchin` that we just created in `calc_rate()` with no additional inputs, will prompt the function to perform a linear regression on the entire data series. 
 
-```{r fig.show='hold'}
-calc_rate(urchin) 
+```{r fig.show='hold', fig.alt = "calc_rate() output showing linear regression across entire urchin dataset"}
+calc_rate(urchin)
 ```
 
 Note how the function recognises the `inspect()` object, with no other inputs necessary. Alternatively, you can input a `data.frame` object containing raw data, in which case the function will automatically consider the first column as time data, and the second column as oxygen data (if they are not in the first two columns, they should be processed via `inspect()` or otherwise put into this structure).
@@ -145,7 +145,7 @@ urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
 
 Plotting the output provides a series of diagnostic plots of the data subset that was analysed. 
 
-```{r fig.show='hold'}
+```{r fig.show='hold', fig.alt = "calc_rate() diagnostic plots for urchin rate from 4 to 29 minutes"}
 plot(urch_rate)
 ```
 
@@ -178,7 +178,7 @@ We will determine background rates using `calc_rate.bg()`. Unlike `calc_rate`, w
 
 Here, we `inspect` the two data columns, and because they have no anomalies use the entire data to calculate a background rate (if we wanted to only use part of it we could pass it through `subset_data()` first). We save the output as a separate object. 
 
-```{r results='hide', message=FALSE, warning=FALSE, fig.keep='last'}
+```{r results='hide', message=FALSE, warning=FALSE, fig.keep='last', fig.alt = "calc_rate.bg() plot of background respiration rates from two blank controls"}
 bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
 bg_rate <- calc_rate.bg(bg_insp)
 ```

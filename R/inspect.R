@@ -301,24 +301,24 @@ inspect <- function(x, time = NULL, oxygen = NULL,
 
   # Time
   if (any(unlist(x_results[[1]][1,])))
-    warning("inspect: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
+    warning("inspect: Time column not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = FALSE)
   if (any(unlist(x_results[[1]][2,]) == "TRUE"))
-    warning("inspect: Inf/-Inf values detected in Time column. Remove or replace before proceeding.", call. = F)
+    warning("inspect: Inf/-Inf values detected in Time column. Remove or replace before proceeding.", call. = FALSE)
   if (any(unlist(x_results[[1]][3,]) == "TRUE"))
-    warning("inspect: NA/NaN values detected in Time column.", call. = F)
+    warning("inspect: NA/NaN values detected in Time column.", call. = FALSE)
   if (any(unlist(x_results[[1]][4,]) == "TRUE"))
-    warning("inspect: Non-sequential Time values found.", call. = F)
+    warning("inspect: Non-sequential Time values found.", call. = FALSE)
   if (any(unlist(x_results[[1]][5,]) == "TRUE"))
-    warning("inspect: Duplicate Time values found.", call. = F)
+    warning("inspect: Duplicate Time values found.", call. = FALSE)
   if (any(unlist(x_results[[1]][6,]) == "TRUE"))
-    warning("inspect: Time values are not evenly-spaced (numerically).", call. = F)
+    warning("inspect: Time values are not evenly-spaced (numerically).", call. = FALSE)
   # Oxygen
   if (any(unlist(y_results[[1]][1,])))
-    warning("inspect: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = F)
+    warning("inspect: Oxygen column(s) not numeric. Other column checks skipped. \nData cannot be analysed by respR functions if not numeric. \nNo output returned.", call. = FALSE)
   if (any(unlist(y_results[[1]][2,]) == "TRUE"))
-    warning("inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = F)
+    warning("inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.", call. = FALSE)
   if (any(unlist(y_results[[1]][3,]) == "TRUE"))
-    warning("inspect: NA/NaN values detected in Oxygen column(s).", call. = F)
+    warning("inspect: NA/NaN values detected in Oxygen column(s).", call. = FALSE)
 
 
   # Assemble output ---------------------------------------------------------

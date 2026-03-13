@@ -113,10 +113,95 @@ Without it, error messages show confusing internal function names (e.g.,
 These show the correct user-facing function name. The user may have
 intentionally left them to show call context.
 
+### #21: `convert_val` pressure conversion missing `mmHg` and `inHg`
+
+`unit_type()` recognised `mmHg.p` and `inHg.p` as valid pressure units but the
+conversion lookup table in `convert_val()` (lines 171–175) didn't include them.
+Passing `"mmHg"` or `"inHg"` silently returned `NA`. Added both units with
+multipliers derived from standard definitions: `mmHg → 750.06158`, `inHg → 29.52998`.
+Also added to NEWS.md.
+
+### #22: `call. = FALSE` inside `glue()` in `convert_val.R`
+
+Same bug pattern as #20's `units.val()` fix. Line 283 had `call. = FALSE` as a
+named argument to `glue::glue()` instead of `stop()`. Moved the closing
+parenthesis so `call. = FALSE` is passed to `stop()`.
+
+### #23: `T` instead of `TRUE`
+
+`convert_val.R:250,281` used `== T` and `auto_rate_funs.R:287` used `na.rm = T`.
+`T` can be overwritten by users (`T <- 0`), `TRUE` cannot. Changed all three to
+`TRUE`.
+
+### #24: `atm` multiplier precision in `convert_val.R`
+
+The `atm` multiplier was `0.98692` (5 dp). Standard value is `1/1.01325 = 0.986923...`.
+Bumped to `0.986923` (6 dp) for consistency with the newly added mmHg/inHg values.
+
+### #25: `T`/`F` instead of `TRUE`/`FALSE` — widespread
+
+`T` and `F` are not reserved in R and can be overwritten by users (e.g.
+`T <- 0`), while `TRUE`/`FALSE` cannot. Replaced all boolean `T`/`F` usage
+across the R source:
+
+- **`call. = F` → `call. = FALSE`**: 33 fixes across `inspect.R` (9),
+  `inspect.ft.R` (15), `convert_rate.ft.R` (3), `convert_MR.R` (1),
+  `util_funs.R` (2), `util_val.R` (3)
+- **`drop = F` → `drop = FALSE`**: 16 fixes in `util_funs.R`
+- **`= F` function args** → `= FALSE`: `calc_rate.bg.R` (2 `title`),
+  `util_plots.R` (1 `legend`), `oxy_crit.R` (3 `horiz`, 2 `plot`),
+  `import_file.R` (1 `header`, 1 `== F`)
+- **`byrow = T` → `byrow = TRUE`**: 1 fix in `import_file.R`
+
+**Total: ~60 replacements across 9 files.**
+
 ## Other Fixes
 
 - **`.Rbuildignore`**: Added `^\.claude` to suppress R CMD check NOTE about
   hidden `.claude` directory.
+
+## pkgdown Deployment Fixes
+
+### P1: `_pkgdown.yml` fa-home missing aria-label
+
+Added `aria-label: Home` to the `fa-home` icon-only navbar item. Bootstrap 5
+requires aria-label for accessibility on icon-only links.
+
+### P2: Duplicate HTML identifiers from YAML title + body headings
+
+When a vignette's `title:` YAML field produces the same slug as a `##` heading,
+Pandoc generates duplicate HTML `id` attributes. Fixed by adding explicit
+`{#unique-id}` suffixes to the body headings:
+
+- `contact.Rmd`: `## Contact` → `## Contact {#contact-info}`
+- `future.Rmd`: `## Future features` → `## Future features {#planned-features}`
+- `refs.Rmd`: `## References` → `## References {#refs-list}`
+
+### P3: Missing alt text on static images
+
+Added alt text / `fig.cap` across all static images that lacked it:
+
+- `README.md`: 2 images — added `alt=` attributes to inline HTML `<img>` tags
+- `contact.Rmd`: 2 profile images — added `alt=` attributes
+- `refs.Rmd`: 1 image — added `fig.alt` (not `fig.cap` to avoid layout issues;
+  also fixed duplicate `out.width` in same chunk)
+- `archive/auto_rate_comp.Rmd`: 15 images — added `fig.cap` to all chunks
+- `archive/auto_rate_performance.Rmd`: 9 images — added `fig.cap` to all chunks
+- `archive/packages_comp.Rmd`: 15 images — added `fig.cap` to all chunks
+- `archive/oxy_crit_comp.Rmd`: 4 images — added `fig.cap` to all chunks
+
+**Total: 48 static images fixed across 7 files.**
+
+### P4: Missing alt text on dynamically generated plots
+
+pkgdown flags `fig.alt` warnings for R code chunks that generate plots without
+alt text (e.g. `unnamed-chunk-2-1.png`). Added `fig.alt` (invisible alt text,
+no visible caption) to all plot-producing chunks across all main vignettes:
+
+- `oxycrit.Rmd`, `closed.Rmd`, `inspecting.Rmd`, `calc_rate.Rmd`,
+  `auto_rate.Rmd`, `flowthrough.Rmd`, `select_rate.Rmd`, `adjust_rate.Rmd`,
+  `auto_rate.int.Rmd`, `calc_rate.int.Rmd`, `oxy_production.Rmd`,
+  `intermittent_short.Rmd`
 
 ## Remaining Notes
 

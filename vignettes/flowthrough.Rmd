@@ -51,7 +51,7 @@ Typically the first step in data analysis is inspecting and visualising the data
 
 The `inspect.ft` function can be used to quickly examine and visualise outflow and inflow data from a single chamber, but also a large multi-column dataset. Using it with no inputs will inspect and plot every column, assuming `time` is in column 1 and all others are delta oxygen data (`delta.oxy`). Even if your data is not delta oxygen values, you can use this without saving the result for a quick look at the data. Note, if you do not tell it otherwise, the function assumes data are delta oxygen and plots them on a reverse y-axis. However, we can use the `rate.rev` input to override this
 
-```{r}
+```{r fig.alt = "Multi-panel plot showing inspect.ft output for all columns of the flowthrough_mult.rd dataset, displaying time series of outflow oxygen, inflow oxygen, delta oxygen, header tank oxygen, and temperature data."}
 inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
 ```
 
@@ -99,7 +99,7 @@ The concentration of the header tank can be entered as the `in.oxy.value` in `in
 insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from inspect.ft showing outflow and constant inflow oxygen concentrations over time in the top panel, and calculated delta oxygen values in the bottom panel for flowthrough.rd data."}
 # inspect
 insp1 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92, plot = F)))
 plot(insp1, quiet = TRUE)
@@ -114,7 +114,7 @@ To help with choosing regions of the data from which to calculate rates, you can
 plot(insp1, width = 0.05)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from inspect.ft with rolling mean smoothing applied to delta oxygen values, showing stabilised rate regions more clearly."}
 # inspect
 plot(insp1, width = 0.05, quiet = TRUE)
 ```
@@ -129,7 +129,7 @@ Calculating a rate requires the `flowrate` of water through the respirometer in 
 rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full outflow and inflow oxygen timeseries with the selected data region highlighted in the top panel, and a close-up of the selected delta oxygen region with a dashed trend line in the bottom panel."}
 # calculate rate
 rate1 <- suppressMessages(calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34, plot = FALSE))
 print(rate1)
@@ -207,7 +207,7 @@ This is a very similar analysis to [Case 1](#case1) above, but we will use the i
 insp2 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from inspect.ft showing outflow and inflow oxygen recordings over time in the top panel, and calculated delta oxygen values in the bottom panel, with less variability than when using a constant inflow value."}
 # inspect
 insp2 <- (suppressMessages(inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3, plot = F)))
 plot(insp2, quiet = TRUE)
@@ -223,7 +223,7 @@ Since we are happy the rate is consistent across the whole datatset, running `ca
 rate2 <- calc_rate.ft(insp2, flowrate = 2.34)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the entire dataset selected in the top panel, and a close-up of the delta oxygen values with a dashed trend line in the bottom panel."}
 # calculate rate
 rate2 <- suppressMessages(calc_rate.ft(insp2, flowrate = 2.34, plot = FALSE))
 print(rate2)
@@ -271,7 +271,7 @@ We will use `inspect.ft` to examine the first specimen column pair of outflow an
 insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing outflow and inflow oxygen in percent air saturation over time in the top panel, and delta oxygen values in the bottom panel, with an initial equilibration period visible before rates stabilise after about 25 minutes."}
 # inspect
 insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6, plot = F)
 plot(insp3, quiet = TRUE)
@@ -290,7 +290,7 @@ No inputs for `to` and `by` means the function will calculate the rate from the 
 rate3 <- calc_rate.ft(insp3, from = 30, flowrate = 0.1)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the selected region from 30 minutes onward highlighted in the top panel, and a close-up of the delta oxygen values in the selected region in the bottom panel."}
 # calculate rate
 rate3 <- suppressMessages(calc_rate.ft(insp3, from = 30, flowrate = 0.1, plot = FALSE))
 print(rate3)
@@ -306,7 +306,7 @@ The fourth column pair contains outflow and inflow oxygen from a blank control c
 bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing outflow and inflow oxygen from a blank control chamber over time in the top panel, and the resulting delta oxygen values in the bottom panel, showing a slight but constant difference due to microbial background respiration."}
 # inspect
 bg <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)))
 plot(bg, quiet = TRUE)
@@ -321,7 +321,7 @@ We use the same `calc_rate.ft` function to calculate and save background rates.
 bgrate <- calc_rate.ft(bg, flowrate = 0.1)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full background control oxygen timeseries with the entire dataset selected in the top panel, and a close-up of the background delta oxygen values in the bottom panel."}
 # calculate rate
 bgrate <- suppressMessages(bgrate <- calc_rate.ft(bg, flowrate = 0.1, plot = FALSE))
 print(bgrate)
@@ -412,7 +412,7 @@ For cases where delta oxygen between outflow and inflow concentrations has alrea
 insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Single-panel plot from inspect.ft showing pre-calculated delta oxygen values over time on a reverse y-axis, with an initial equilibration period before rates stabilise after about 20 minutes."}
 # inspect
 insp4 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)))
 plot(insp4, quiet = TRUE)
@@ -431,7 +431,7 @@ This time we will calculate rates using subsetting by `"row"` which can be see i
 rate4 <- calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full delta oxygen timeseries with the selected row range 2000 to 3000 highlighted in the top panel, and a close-up of the selected delta oxygen region in the bottom panel."}
 # calculate rate
 rate4 <- suppressMessages(calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1, plot = F))
 print(rate4)
@@ -489,7 +489,7 @@ Inspecting the data from the third chamber, we can see a prominent area where th
 insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, and delta oxygen values on a reverse y-axis in the bottom panel, with a prominent region of elevated oxygen uptake visible around 35 to 45 minutes indicating increased specimen activity."}
 # inspect
 insp5 <- suppressWarnings(suppressMessages(inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8, plot = FALSE)))
 plot(insp5, quiet = TRUE)
@@ -505,7 +505,7 @@ insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
   inspect.ft(time = 1, out.oxy = 4, in.oxy = 8)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing a subset of data from 30 to 50 minutes focusing on the active rate period, with outflow and inflow oxygen in the top panel and delta oxygen values in the bottom panel showing the peak activity region around 38 to 42 minutes."}
 # inspect
 insp5 <- suppressWarnings(suppressMessages(subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
                                              inspect.ft(time = 1, out.oxy = 4, in.oxy = 8, plot = FALSE)))
@@ -521,7 +521,7 @@ Note, the row index x-axis now refers to the subset not the original data. We ca
 rate5 <- calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the subsetted oxygen timeseries with the 38 to 42 minute active rate region highlighted in the top panel, and a close-up of the delta oxygen values in this peak activity region in the bottom panel."}
 # calculate rate
 rate5 <- suppressMessages(calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1, plot = FALSE))
 plot(rate5, quiet = TRUE)
@@ -585,7 +585,7 @@ We will inspect the specimen chamber as we normally would, using the header tank
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing specimen outflow and header tank inflow oxygen over time in the top panel, and delta oxygen values in the bottom panel, where the rate appears to continuously increase after equilibration suggesting non-constant background respiration."}
 # inspect
 insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4, plot = FALSE))
 plot(insp6, quiet = TRUE)
@@ -602,7 +602,7 @@ If we examine the background data in the same way:
 bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing blank control chamber outflow and header tank inflow oxygen over time in the top panel, and delta oxygen values in the bottom panel, revealing a linearly increasing background respiration rate over the course of the experiment."}
 # inspect
 bg <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4, plot = FALSE))
 plot(bg, quiet = TRUE)
@@ -617,7 +617,7 @@ We can see the background rate increases as the experiment progresses, in what l
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
 
-```{r eval = T, echo = F, results = "hide"}
+```{r eval = T, echo = F, results = "hide", fig.alt = "Two-panel plot from inspect.ft showing specimen outflow oxygen and blank control outflow oxygen used as the inflow reference in the top panel, and the resulting delta oxygen values in the bottom panel, which now show consistent rates after accounting for the non-constant background."}
 # inspect
 insp6 <- suppressMessages(inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3, plot = FALSE))
 plot(insp6, quiet = TRUE)
@@ -632,7 +632,7 @@ Now we see that when the background is accounted for, the specimen rates are con
 rate6 <- calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```
 
-```{r eval = T, echo = F}
+```{r eval = T, echo = F, fig.alt = "Two-panel plot from calc_rate.ft showing the full background-corrected oxygen timeseries with the selected row range 2000 to 3000 highlighted in the top panel, and a close-up of the consistent delta oxygen values in the selected region in the bottom panel."}
 # calculate rate
 rate6 <- suppressMessages(calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1, plot = FALSE))
 plot(rate6, quiet = TRUE)
@@ -793,7 +793,7 @@ In this example, we want to extract a routine metabolic rate (RMR) which we will
 insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
 ```
 
-```{r eval = T, echo =F, results = "hide", message=FALSE, warning=FALSE}
+```{r eval = T, echo =F, results = "hide", message=FALSE, warning=FALSE, fig.alt = "Two-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, and delta oxygen values on a reverse y-axis in the bottom panel, with an initial equilibration period, a region of consistent routine rates, and a region of elevated active rates around 35 to 45 minutes."}
 ## inspect
 insp8 <- insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7, plot = F)
 plot(insp8)
@@ -842,14 +842,14 @@ summary(roll_rate_ms)
 
 We can see there are 3441 results, which is obviously a lot of information. As of [`respR v2.2`](https://januarharianto.github.io/respR/articles/release_notes.html) `convert_rate.ft` objects can be plotted to help explore the results in three different ways. See `help("convert_rate.ft")` for full details. Here we will use the `type = "rate"` option which plots output rates in a way that you can see how they vary across the dataset. 
 
-```{r eval = T, results='hide'}
+```{r eval = T, results='hide', fig.alt = "Plot of all rolling 5-minute converted mass-specific rates across the entire dataset, showing how rate values vary over time with lower routine rates and a peak of elevated active rates."}
 # plot rates
 plot(roll_rate_ms, type = "rate")
 ```
 
 At a fixed width the rolling rate is obviously closely related to the delta oxygen values. We can use `pos` to more closely examine output rates from particular regions. 
 
-```{r eval = T, results='hide'}
+```{r eval = T, results='hide', fig.alt = "Plot of a subset of rolling rate results from positions 500 to 1700, showing the routine metabolic rate region with rates around 7.30 to 7.40 umol per hour per gram."}
 # plot rates
 plot(roll_rate_ms, type = "rate", pos = 500:1700)
 ```
@@ -904,7 +904,7 @@ Here we have used the `export` option in `summary` which saves the summary table
 
 The `rank` column tells us which result this is and can be used to plot this result using `pos` for a closer look using the `type = "full"` option. 
 
-```{r results="hide"}
+```{r results="hide", fig.alt = "Full detail plot of the single highest rolling rate result at position 2270, showing the oxygen timeseries with the selected 5-minute window highlighted and the corresponding delta oxygen close-up, representing the maximum metabolic rate."}
 plot(roll_rate_ms, pos = 2270, type = "full")
 ```
 
@@ -941,7 +941,7 @@ rate9 <- suppressMessages(calc_rate.ft(insp9,
 
 The different rates can be plotted using the `pos` input. 
 
-```{r eval = T, tidy = FALSE}
+```{r eval = T, tidy = FALSE, fig.alt = "Two-panel plot from calc_rate.ft showing the full oxygen timeseries with the second of three selected time regions highlighted in the top panel, and a close-up of the delta oxygen values in that region in the bottom panel."}
 plot(rate9, pos = 2)
 
 ```
@@ -998,9 +998,9 @@ print(rate3_abs)
 
 - As with `inspect()`, by using the `add.data` input an additional data source (for example temperature) can be plotted in `inspect.ft` alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This input indicates a column number in the same input data frame sharing the same time data. This is a visual aid only to help with selection of regions from which to extract rates. 
 
-```{r , results = "hide", message=FALSE, warning=FALSE}
+```{r , results = "hide", message=FALSE, warning=FALSE, fig.alt = "Three-panel plot from inspect.ft showing outflow and inflow oxygen over time in the top panel, delta oxygen values in the middle panel, and an additional panel displaying temperature data from column 15 alongside the oxygen timeseries to help identify possible rate fluctuations related to temperature changes."}
 ## Plot column 15 (temperature) alongside oxygen timeseries
-inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5, 
+inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5,
            add.data = 15)
 ```
 

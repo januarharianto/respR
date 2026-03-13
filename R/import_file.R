@@ -267,7 +267,7 @@ parse_vernier_txt <- function(path, dec = dec) {
     seq <- c(seq - 1, seq + 7) # Add run data starts
     seq <- sort(seq) # reorder
     seq <- c(1, seq, length(raw[[1]])) ## sequence of Run data row locations
-    seq <- matrix(seq, nrow = length(seq)/2, ncol = 2, byrow = T) # matrix for loop
+    seq <- matrix(seq, nrow = length(seq)/2, ncol = 2, byrow = TRUE) # matrix for loop
 
     nrows <- max(seq[,2] - seq[,1])+1 # nrows of data
     ncols <- length(col_nms) # ncols of data in each run
@@ -350,7 +350,7 @@ parse_vernier_raw <- function(path, dec = dec){
   # Data --------------------------------------------------------------------
 
   data_index <- seq(1:length(raw[[1]]))
-  data_index <- data_index[data_index %in% meta_index == F] # data rows
+  data_index <- data_index[data_index %in% meta_index == FALSE] # data rows
 
   data_starts <- c(data_index[1], data_index[(which(diff(data_index) !=1))+1])
   data_ends <- c(data_index[which(diff(data_index) !=1)], tail(data_index, 1))
@@ -459,7 +459,7 @@ parse_autoresp_witrox <- function(path, dec = dec) {
 
   ## column names - this can differ A LOT depending on what is connected and
   ## number of channels. Best to use original names
-  nms <- fread(path, skip = rowstart - 1, nrows = 1, header = F, dec = dec,
+  nms <- fread(path, skip = rowstart - 1, nrows = 1, header = FALSE, dec = dec,
                showProgress = FALSE)
   nms <- as.character(nms)
 

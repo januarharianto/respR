@@ -85,7 +85,7 @@ pardefault
 ```
 
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "25 randomly generated default-type simulated datasets"}
 knitr::include_graphics("img/auto_rate_perf/arperf01.png")
 ```
 
@@ -111,7 +111,7 @@ replicate(25, sim_data(len = 100, type = "corrupted"))
 pardefault
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "25 randomly generated corrupted-type simulated datasets"}
 knitr::include_graphics("img/auto_rate_perf/arperf02.png")
 ```
 
@@ -135,7 +135,7 @@ replicate(25, sim_data(len = 100, type = "segmented"))
 pardefault
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "25 randomly generated segmented-type simulated datasets"}
 knitr::include_graphics("img/auto_rate_perf/arperf03.png")
 ```
 
@@ -227,7 +227,7 @@ This was evident in **(D)** where roughly, the maximum $\beta_{detected}$ values
 plot(test_lin_data$default100)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on default-type data with 100 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf04.png")
 ```
 
@@ -239,7 +239,7 @@ When used on data with 500 samples, `auto_rate` generally **(A)** detected a lar
 plot(test_lin_data$default500)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on default-type data with 500 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf05.png")
 ```
 
@@ -255,7 +255,7 @@ Thus, the function may incorrectly sample none of the linear segment **(B)**, bu
 plot(test_lin_data$corrupted100)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on corrupted-type data with 100 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf06.png")
 ```
 
@@ -265,7 +265,7 @@ Again, `auto_rate` performed better when provided with bigger data. At 500 sampl
 plot(test_lin_data$corrupted500)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on corrupted-type data with 500 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf07.png")
 ```
 
@@ -281,7 +281,7 @@ However, **(C)** the plot of $\beta_{detected}$ against $\beta_{true}$ showed th
 plot(test_lin_data$segmented100)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on segmented-type data with 100 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf08.png")
 ```
 
@@ -293,7 +293,7 @@ The function **(A)** correctly sampled the right segment most of the time, and r
 plot(test_lin_data$segmented500)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "Performance metrics for auto_rate on segmented-type data with 500 samples"}
 knitr::include_graphics("img/auto_rate_perf/arperf09.png")
 ```
 

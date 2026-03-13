@@ -284,7 +284,7 @@ kernel_method <- function(dt, width, top_only = FALSE) {
   rollreg <- rolling_reg_row(dt, width)
 
   # perform kernel density estimate
-  d <- density(rollreg$slope_b1, na.rm = T, bw = "SJ-ste", adjust = .95)
+  d <- density(rollreg$slope_b1, na.rm = TRUE, bw = "SJ-ste", adjust = .95)
   # extract bandwidth
   bw <- d$bw
   # identify peaks in kernel density:

@@ -74,7 +74,7 @@ conv_o2(o2 = 85,
 
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "Comparison of convert_DO (respR) and conv_o2 (respirometry) outputs"}
 knitr::include_graphics("img/pkg_comp/pkg_comp01.png")
 ```
 
@@ -108,7 +108,7 @@ fish_rmr <- get.witrox.data("fishMR.txt",
 fish_respr <- import_file("fishMR.txt")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "Comparison of rMR and respR data import code"}
 knitr::include_graphics("img/pkg_comp/pkg_comp02.png")
 ```
 
@@ -117,7 +117,7 @@ head(fish_rmr)
 head(fish_respr)
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "Comparison of rMR and respR imported data frames"}
 knitr::include_graphics("img/pkg_comp/pkg_comp03.png")
 ```
 
@@ -185,23 +185,23 @@ metR$MR.summary$MR
 
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "rMR MR.loops rate calculation code"}
 knitr::include_graphics("img/pkg_comp/pkg_comp04.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "rMR MR.loops plot output showing regression fits"}
 knitr::include_graphics("img/pkg_comp/pkg_comp05.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "respR calc_rate code and output for same data regions"}
 knitr::include_graphics("img/pkg_comp/pkg_comp06.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "Comparison of rMR and respR rate results"}
 knitr::include_graphics("img/pkg_comp/pkg_comp07.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "respR calc_rate plot output showing regression fits"}
 knitr::include_graphics("img/pkg_comp/pkg_comp08.png")
 ```
 
@@ -257,11 +257,11 @@ SMR.raw <- import.meas(file = "anch01_raw.txt",
                        plot.oxygen = F)
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "FishResp import.meas code for importing AutoResp data"}
 knitr::include_graphics("img/pkg_comp/pkg_comp09.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "FishResp imported data plot showing oxygen over time"}
 knitr::include_graphics("img/pkg_comp/pkg_comp10.png")
 ```
 
@@ -306,7 +306,7 @@ SMR <- calculate.MR(SMR.slope,
 smr_all <- dplyr::arrange(SMR, Ind, Phase)
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "FishResp analysis workflow code and output"}
 knitr::include_graphics("img/pkg_comp/pkg_comp11.png")
 ```
 
@@ -356,19 +356,19 @@ round(-1*spec1_rates$output, 1)
 
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "respR analysis workflow code for same FishResp data"}
 knitr::include_graphics("img/pkg_comp/pkg_comp12.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "respR calc_rate plot output for FishResp comparison data"}
 knitr::include_graphics("img/pkg_comp/pkg_comp13.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "Comparison of FishResp and respR rate results"}
 knitr::include_graphics("img/pkg_comp/pkg_comp14.png")
 ```
 
-```{r, out.width = "700px", eval = T, echo = FALSE}
+```{r, out.width = "700px", eval = T, echo = FALSE, fig.cap = "respR convert_rate output for FishResp comparison data"}
 knitr::include_graphics("img/pkg_comp/pkg_comp15.png")
 ```
 

@@ -1,6 +1,7 @@
 
-## Version 2.x.x -- 2026-xx-xx
+## Version 2.x.x -- 2026-xx-xx - In preparation.
 
+- FIX: `convert_val()` now supports `mmHg` and `inHg` pressure unit conversions (previously accepted by the parser but silently returned `NA`).
 - FIX: `convert_DO()` fixed typo in calculation values which would cause very minor error converting from `hPa` values.
 - CHANGE: Updated URL in startup message.
 

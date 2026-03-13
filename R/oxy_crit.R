@@ -330,7 +330,7 @@ oxy_crit <- function(x, method = "bsr", time = NULL, oxygen = NULL, rate = NULL,
 
     # speed up large data by subsampling:
     if (!is.null(thin) && nrow(dt_mr) > thin) {
-      sdt <- subsample(dt_mr, length.out = thin, plot = F)
+      sdt <- subsample(dt_mr, length.out = thin, plot = FALSE)
     } else sdt <- dt_mr
     # generate index for iterative sampling.
     lseq <- seq.int(3, nrow(sdt) - 2) # generate sequence for lm
@@ -593,7 +593,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
                         xjust = 1,
                         yjust = 1,
                         bty = "n",
-                        horiz = F,
+                        horiz = FALSE,
                         cex = legcex,
                         y.intersp = leg.y.intersp)
 
@@ -622,7 +622,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
                       lwd = line_wt,
                       #bg = "gray90",
                       xjust = 1, yjust = 1,
-                      bty = "n", horiz = F,
+                      bty = "n", horiz = FALSE,
                       cex = legcex,
                       y.intersp = leg.y.intersp)
     title(main = "Broken-Stick Result (Rate~Oxygen)", line = 0.5)
@@ -637,7 +637,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
          panel.first = grid(lwd = .7), ylim=ylim)
     # subsample fit model otherwise dashed line type is too dense to see
     if (nrow(x$results$seg) > 1000)
-      fitsub <- subsample(x$results$seg, length.out = 1000, plot = F)
+      fitsub <- subsample(x$results$seg, length.out = 1000, plot = FALSE)
     else fitsub <- x$results$seg
 
     lines(fitsub, type = "l", lwd = line_wt_add, lty = line_type_add, col = line_col_add)
@@ -649,7 +649,7 @@ plot.oxy_crit <- function(x, legend = TRUE, quiet = FALSE, panel = NULL,
                       lwd = line_wt,
                       #bg = "gray90",
                       xjust = 1, yjust = 1,
-                      bty = "n", horiz = F,
+                      bty = "n", horiz = FALSE,
                       cex = legcex,
                       y.intersp = leg.y.intersp)
     title(main = "Segmented Result (Rate~Oxygen)", line = 0.5)

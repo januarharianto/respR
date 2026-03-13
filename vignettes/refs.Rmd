@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## respR publication
 
-```{r, echo = F, out.width = "200px", fig.align = "center", out.width= "30%", out.extra='style="float:right; padding:10px"'}
+```{r, echo = F, fig.alt = "Methods in Ecology and Evolution journal cover", fig.align = "center", out.width= "30%", out.extra='style="float:right; padding:10px"'}
 knitr::include_graphics("img/mee_cover.jpg")
 ```
 
@@ -50,7 +50,7 @@ These packages may also help you analyse respirometry data:
 
 Be sure to check out the [**FishResp**](https://fishresp.org) site, where the developers are releasing a variety of amazing free and open source tools for conducting respirometry experiments, including resources for building your own respirometry equipment at a fraction of the cost of commercial systems.
 
-## References
+## References {#refs-list}
 
 The following publications were instrumental in developing `respR` and writing the vignettes on this site, or are referenced in the various vignettes. See [**here**](https://januarharianto.github.io/respR/articles/oxycrit.html#refs) for references specific to critical oxygen analyses (i.e. $P_{crit}$).  \
  \

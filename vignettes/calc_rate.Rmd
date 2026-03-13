@@ -38,7 +38,7 @@ sard[[1]] <- sard[[1]]/60
 
 By default, if no other inputs are entered `calc_rate` will calculate a rate across an entire dataset as entered. The data used here is the `sardine.rd` dataset, but the time data has been converted to minutes to demonstrate the different x-axis values. 
 
-```{r}
+```{r fig.alt = "Four-panel plot of calc_rate results across the entire sardine dataset showing the time series with fitted region highlighted, the close-up of the fitted region with the linear regression, and the residual and Q-Q diagnostic plots."}
 cr <- calc_rate(sard)
 ```
 
@@ -47,9 +47,9 @@ cr <- calc_rate(sard)
 
 The default method by which a rate region can be specified is `by = "time"`. The function finds the closest matching values if these exact values do not occur in the time data. If either of the values lie outside the actual time data range it will use the first or last value instead. 
 
-```{r}
+```{r fig.alt = "Four-panel plot of calc_rate results for the time range 20 to 80 minutes showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots."}
 cr <- calc_rate(sard,
-                from = 20, 
+                from = 20,
                 to = 80,
                 by = "time")
 ```
@@ -58,9 +58,9 @@ cr <- calc_rate(sard,
 
 Similarly the rate region can be specified `by = "row"`.
 
-```{r}
+```{r fig.alt = "Four-panel plot of calc_rate results for the row range 2000 to 6000 showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots."}
 cr <- calc_rate(sard,
-                from = 2000, 
+                from = 2000,
                 to = 6000,
                 by = "row")
 ```
@@ -69,9 +69,9 @@ cr <- calc_rate(sard,
 
 Lastly, the rate region can be specified `by = "oxygen"`. This option finds the first occurrence of the `from` value (or the closest matching value), and the last occurrence of the `to` value. 
 
-```{r}
+```{r fig.alt = "Four-panel plot of calc_rate results for the oxygen range 94 to 92 percent air saturation showing the full time series with the selected region highlighted, the close-up with linear regression, and residual and Q-Q diagnostic plots."}
 cr <- calc_rate(sard,
-                from = 94, 
+                from = 94,
                 to = 92,
                 by = "oxygen")
 ```
@@ -81,9 +81,9 @@ cr <- calc_rate(sard,
 
 `calc_rate` can be used to extract multiple rates by entering vectors of paired values as `from` and `to` in any of these metrics.
 
-```{r}
+```{r fig.alt = "Four-panel plot of calc_rate results showing the first of seven sequential time-window rates with the full time series, the close-up of the fitted region with linear regression, and residual and Q-Q diagnostic plots."}
 cr <- calc_rate(sard,
-                from = c(10, 20, 30, 40, 50, 60, 70), 
+                from = c(10, 20, 30, 40, 50, 60, 70),
                 to = c(20, 30, 40, 50, 60, 70, 80),
                 by = "time")
 
@@ -136,8 +136,8 @@ cr_mean
 
 Here we plot result 2, panel 2, hide the equation legend, rotate the axis labels, give the left axis more space, and increase the space from axis labels to axis ticks.
 
-```{r}
-plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE, 
+```{r fig.alt = "Single-panel close-up plot of calc_rate result 2 showing the oxygen time series subset with the linear regression fit, with rotated axis labels and no legend."}
+plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE,
      las = 1, mai = c(0.3, 0.4, 0.35, 0.15), mgp = c(0, 0.5, 0))
 ```
 

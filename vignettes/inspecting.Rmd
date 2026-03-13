@@ -52,7 +52,7 @@ Most of the following is also relevant to `inspect.ft()` which is a special func
 
 This is what a successful `inspect` check looks like; all columns are numeric and without missing values, and the time data are sequential, unique values and with even spacing. See [plot](#plot) section below for details about the plot. 
 
-```{r}
+```{r, fig.alt = "inspect() output for sardine data showing a successful check with no issues"}
 inspect(sardine.rd)
 ```
 
@@ -89,7 +89,7 @@ These data cannot be used in `respR` until this is remedied. This shows the outp
 inspect(df)
 ```
 
-```{r echo = F, eval = T}
+```{r echo = F, eval = T, fig.alt = "inspect() output showing numeric check failure due to non-numeric time column"}
 insp <- suppressMessages(inspect(df))
 ```
 
@@ -128,7 +128,7 @@ Now we can inspect again, and this time save the result.
 insp <- inspect(df)
 ```
 
-```{r echo = F, eval = T}
+```{r echo = F, eval = T, fig.alt = "inspect() output after fixing non-numeric time values"}
 insp <- suppressMessages(inspect(df))
 ```
 
@@ -147,7 +147,7 @@ data <- sardine.rd[502:600,]
 data[22,2] <- Inf
 ```
 
-```{r fig.show='hide'}
+```{r fig.show='hide', fig.alt = "inspect() output detecting Inf values in oxygen column"}
 inspect(data)
 ```
 
@@ -161,7 +161,7 @@ data[20:25,]
 
 Infinite values **must** be removed or replaced, or it will severely affect rate calculations, and may have other unknown effects in subsequent functions. Depending on how many, where they occur, etc., the appropriate way to do this will vary. Here, we could remove the row entirely, but since it is a single value we can just replace it with an intermediate value which won't affect rate calculations.
 
-```{r fig.show='hide'}
+```{r fig.show='hide', fig.alt = "inspect() output after replacing Inf values with interpolated data"}
 data[22,2] <- (data[21,2] + data[23,2])/2
 
 data[20:25,]
@@ -252,7 +252,7 @@ head(data)
 
 Now we inspect the data using the new numeric time
 
-```{r eval = T, fig.show='hide'}
+```{r eval = T, fig.show='hide', fig.alt = "inspect() output showing non-sequential time values warning"}
 inspect(data, time = 6, oxygen = 4)
 ```
 
@@ -284,7 +284,7 @@ data[297:302,]
 
 If we `inspect` again, the problem is fixed.
 
-```{r eval = T, fig.show='hide'}
+```{r eval = T, fig.show='hide', fig.alt = "inspect() output after fixing non-sequential time values with format_time"}
 inspect(data, time = 5, oxygen = 4)
 ```
 
@@ -357,7 +357,7 @@ data <- data[c(1:100, rep(101, 10), 102:200),]
 insp <- inspect(data)
 ```
 
-```{r eval = T, echo = F, fig.show='hide'}
+```{r eval = T, echo = F, fig.show='hide', fig.alt = "inspect() output showing duplicate time values from row duplication"}
 insp <- suppressMessages(suppressWarnings(inspect(data)))
 ```
 
@@ -374,7 +374,7 @@ data[dupes,]
 
 Like other checks, if or how to amend this issue will depend on the situation. Here, these duplicate rows could affect rate calculations, if for instance we are determining rates over a specific row width across the dataset (by contrast a rate using a `time` width would be unaffected). They could also affect other reported outputs such as the r-squared. It's probably easiest to just remove them, and `inspect` the data again. 
 
-```{r fig.show='hide'}
+```{r fig.show='hide', fig.alt = "inspect() output after removing duplicate rows"}
 ## Remove all but the first duplicate row
 data <- data[-dupes[-1],]
 
@@ -400,7 +400,7 @@ diff(head(flowthrough_mult.rd[[1]]))
 
 These have been converted to minutes and rounded, and we can see the intervals are not numerically consistent. This will cause this check to produce a warning in `inspect`.
 
-```{r fig.show='hide'}
+```{r fig.show='hide', fig.alt = "inspect() output showing unevenly spaced time warning from decimalised minutes"}
 inspect(flowthrough_mult.rd)
 
 ```
@@ -422,7 +422,7 @@ data <- data[-(342:387),]
 insp <- inspect(data)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.alt = "inspect() output showing large time gap in data"}
 insp <- suppressMessages(suppressWarnings(inspect(data)))
 ```
 
@@ -497,14 +497,14 @@ plot.
 
 Some datasets may benefit from changing the `width` to get a better idea of how the rate fluctuates across the data. This is helpful to inform the regions from which to extract rates in later functions, as well as an appropriate time or row window to use when extracting rates.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for sardine data with default 10 percent rolling rate width"}
 ## default width of 10%
 inspect(sardine.rd)
 ```
 
 In these data, after an initial unstable period rates seem to stabilise, but there is still a lot of variability, with rates fluctuating between around -0.0006 and -0.0008.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for sardine data with 20 percent rolling rate width showing smoother rates"}
 ## width of 20%
 inspect(sardine.rd, width = 0.2)
 ```
@@ -517,7 +517,7 @@ If we are interested in the very lowest rate, it seems to occur just before time
 
 Note, intermittent-flow data will include rates across flush periods, which can skew results, and possibly make the output difficult to interpret.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for intermittent-flow data showing rate fluctuations at flush periods"}
 inspect(intermittent.rd)
 ```
 
@@ -525,7 +525,7 @@ Here the flushes skew the rolling rates, but within each replicate rates seem to
 
 However, you can always use `inspect` without saving the result for a closer look at regions of the data, though note the `width` input will apply to the subset, not the original data length.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for a subset of intermittent-flow data showing a single replicate"}
 inspect(intermittent.rd[1:1800,])
 ```
 
@@ -534,13 +534,13 @@ inspect(intermittent.rd[1:1800,])
 
 For really long experiments, both the timeseries and rolling rate plot may be difficult to interpret. This experiment on a zebra fish is 22h long and nearly 80000 rows. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for a 22-hour zebrafish intermittent-flow experiment"}
 inspect(zeb_intermittent.rd)
 ```
 
 `inspect` can be used without saving the result for a closer look at smaller regions of the data, to better see what is going on. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt = "inspect() output for a subset of the zebrafish experiment showing individual replicates"}
 inspect(zeb_intermittent.rd[20000:24000,])
 ```
 
@@ -565,7 +565,7 @@ determine rates from different columns, best practice is to inspect
 and assign each time-oxygen
 column pair as separate `inspect` objects. 
 
-```{r results='hide', message=FALSE, warning=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE, fig.alt = "inspect() output for multiple oxygen columns of urchin data showing all timeseries"}
 inspect(urchins.rd, time = 1, oxygen = 8:19)
 ```
 
@@ -575,7 +575,7 @@ This gives us a quick visual overview of the dataset, allowing us to, for exampl
 
 By using the `add.data` input an additional data source (for example temperature) can be plotted in alongside the oxygen timeseries to help with understanding where rates may or may not have fluctuated. This input indicates a column number in the same input data frame sharing the same time data. This column is not passed through the above checks. It is a visual aid only to help with selection of regions from which to extract rates. 
 
-```{r , results = "hide", message=FALSE, warning=FALSE}
+```{r , results = "hide", message=FALSE, warning=FALSE, fig.alt = "inspect() output for sardine data with temperature plotted alongside oxygen"}
 ## Plot column 4 (temperature) alongside oxygen timeseries
 inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
 ```
@@ -592,9 +592,9 @@ In addition, the generic `par()` inputs `oma`, `mai`, `tck`, `mgp`, `las`, and `
 
 This example examining oxygen production in algae uses some of these options. 
 
-```{r results='hide', message=FALSE, warning=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE, fig.alt = "inspect() output for algae oxygen production data with non-reversed rate axis"}
 inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
-        legend = FALSE, rate.rev = FALSE, 
+        legend = FALSE, rate.rev = FALSE,
         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
 ```
 

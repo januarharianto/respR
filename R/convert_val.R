@@ -169,10 +169,10 @@ convert_val <- function(x, from = NULL, to = NULL) {
     unit.fr <- units.val(from, fr_unit)
     unit.to <- units.val(to, to_unit)
     uns <- c("kPa.p", "hPa.p", "Pa.p", "uBar.p", "mBar.p",
-             "Bar.p", "atm.p", "Torr.p")
+             "Bar.p", "atm.p", "Torr.p", "mmHg.p", "inHg.p")
     # from 1 bar
     multiplier <- c(100, 1000, 100000, 1000000, 1000,
-                    1, 0.98692, 750.06)
+                    1, 0.986923, 750.06, 750.06158, 29.52998)
     mult.fr <- multiplier[match(unit.fr, uns)]
     mult.to <- multiplier[match(unit.to, uns)]
     out <- x * (mult.to/mult.fr)
@@ -247,7 +247,7 @@ unit_type <- function(unit, msg = ""){
   chk <- lapply(all.units, function(x) grepl(x, string))
   chk <- sapply(chk, function(x) isTRUE(any(x)))
 
-  result <- any(chk == T)  # did a match occur?
+  result <- any(chk == TRUE)  # did a match occur?
   if(!result)
     stop(glue::glue("{msg}: '{unit}' unit not recognised."), call. = FALSE)
   out <- names(chk)[which(chk)]  # print unit name
@@ -278,9 +278,9 @@ unit_type_o1 <- function(unit, msg = ""){
   chk <- lapply(all.units, function(x) grepl(x, string))
   chk <- sapply(chk, function(x) isTRUE(any(x)))
 
-  result <- any(chk == T)  # did a match occur?
+  result <- any(chk == TRUE)  # did a match occur?
   if(!result)
-    stop(glue::glue("{msg}: '{unit}' unit not recognised as an oxygen unit that can be used for rates or concentrations.", call. = FALSE))
+    stop(glue::glue("{msg}: '{unit}' unit not recognised as an oxygen unit that can be used for rates or concentrations."), call. = FALSE)
   out <- names(chk)[which(chk)]  # print unit name
   return(out)
 }

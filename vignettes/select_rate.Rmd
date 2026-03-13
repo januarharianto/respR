@@ -73,7 +73,7 @@ sard <-
                p = 1.013) 
 ```
 
-```{r results='hide', message = FALSE}
+```{r results='hide', message = FALSE, fig.alt="Plot of the top-ranked converted rate shown in the context of the full oxygen timeseries, with rate value displayed in the title."}
 plot(sard)
 ```
 
@@ -83,7 +83,7 @@ This lets you see where each rate occurs within the dataset, and the converted r
 
 This plots the entire data timeseries on the upper plot, and on the lower plot the output rate values in the chosen output units. Each rate is plotted against the middle of the region used to determine it. 
 
-```{r results='hide', message = FALSE}
+```{r results='hide', message = FALSE, fig.alt="Rate plot showing the oxygen timeseries in the upper panel and converted rate values plotted against their position in the dataset in the lower panel."}
 plot(sard, type = "rate")
 ```
 
@@ -93,7 +93,7 @@ This lets you see how the rate varies across the dataset and decide how to filte
 
 This plot helps with understanding how rates are distributed across the dataset, particularly the data region each uses and how they may overlap. The top plot is the entire data timeseries. In the lower plot every rate regression in `$summary` is represented by a line showing its location within the timeseries. The y-axis represents the position (i.e. row) of the summary table descending from top to bottom. If no reordering or selection has been performed, this will be equivalent to the `$rep` or `$rank` column. See [above section](#rankcol) for what these may represent, but note as reordering or selection is performed rank and summary table position will not necessarily be equivalent. 
 
-```{r results='hide', message = FALSE}
+```{r results='hide', message = FALSE, fig.alt="Overlap plot showing the oxygen timeseries in the upper panel and horizontal lines indicating the data region of each rate regression in the lower panel, illustrating overlap among detected linear regions."}
 plot(sard, type = "overlap")
 ```
 
@@ -115,19 +115,19 @@ We'll use the `sardine.rd` dataset, and let's say we are interested in extractin
 
 We'll `inspect` the data, pipe the result to `auto_rate` using the default inputs of the `"linear"` method and `width = 0.2`, then adjust the rates for background (using an invented value as an example), then convert the rates to our final units.   
 
-```{r fig.keep='last', results='hide', message=FALSE}
-sard <- 
-  inspect(sardine.rd) |> 
-  auto_rate() |> 
-  adjust_rate(by = -0.00006) |> 
+```{r fig.keep='last', results='hide', message=FALSE, fig.alt="Plot of the top-ranked auto_rate linear result for the sardine dataset, showing the detected linear region in the context of the full oxygen timeseries."}
+sard <-
+  inspect(sardine.rd) |>
+  auto_rate() |>
+  adjust_rate(by = -0.00006) |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
-               p = 1.013) 
+               p = 1.013)
 ```
 
 This is large dataset, from a relatively long experiment of over 2 hours. The `auto_rate` analysis has identified 39 linear regions, of which the above plot is the highest ranked one, or most linear according to the kernel density analysis. This does not mean it's the lowest rate, but is generally the most consistently maintained one. 
@@ -146,7 +146,7 @@ If we are looking for the lowest linear rate, the top ranked result here is actu
 
 We can use the `convert_rate` plotting functionality to get a better idea of rate values and how they are distributed. We'll look at both the rate value plot and the overlap plot.
 
-```{r results='hide'}
+```{r results='hide', fig.alt=c("Rate plot showing higher rates at the start of the sardine dataset and stable lower rates after approximately timepoint 2000.", "Overlap plot showing substantial overlap among the detected linear regions, with many regressions covering similar data regions.")}
 plot(sard, type = "rate")
 plot(sard, type = "overlap")
 ```
@@ -157,8 +157,8 @@ We can see the rates are higher at the start of the dataset, after which they st
 
 `select_rate` allows us to select out only the results that meet certain criteria. If we are interested in the lowest rates we can use this method to select any number of the lowest rates using `n`. Here is the lowest single rate. 
 
-```{r fig.keep='last', message=FALSE}
-sard |> 
+```{r fig.keep='last', message=FALSE, fig.alt="Plot of the single lowest rate selected from the sardine auto_rate results, shown in the context of the full oxygen timeseries."}
+sard |>
   select_rate(method = "lowest", n = 1) |>
   plot(quiet = TRUE) |>
   summary()
@@ -170,8 +170,8 @@ Objectively, this is a perfectly acceptable result and would be fine to report, 
 
 Let's say we are only interested in rate results with an r-squared above 0.95, and also that we are only interested in rates which are sustained for at least 30 minutes (1800s). We can apply multiple selection criteria by using pipes (alternatively you can save the output and process it through `select_rate` multiple times). 
 
-```{r fig.keep='last', message=FALSE}
-sard |> 
+```{r fig.keep='last', message=FALSE, fig.alt="Plot of the lowest rate after filtering by r-squared above 0.95 and duration of at least 30 minutes, shown in the context of the full oxygen timeseries."}
+sard |>
   select_rate(method = "rsq", n = c(0.95,1)) |>
   select_rate(method = "duration", n = c(1800, Inf)) |>
   select_rate(method = "lowest", n = 1) |>
@@ -200,16 +200,16 @@ The SMR rates we extracted above occur over durations of 45 minutes to nearly an
 
 Here we do a rolling regression of 20 minutes (`1200` seconds) `width` in the `"time"` metric. 
 
-```{r fig.keep='last', results='hide', message=FALSE}
-sard <- inspect(sardine.rd) |> 
+```{r fig.keep='last', results='hide', message=FALSE, fig.alt="Plot of the sardine dataset analysed using auto_rate lowest method with a 20-minute rolling regression, showing the top-ranked lowest rate in the context of the full timeseries."}
+sard <- inspect(sardine.rd) |>
   auto_rate(method = "lowest", width = 1200, by = "time") |>
-  adjust_rate(by = -0.00006) |> 
+  adjust_rate(by = -0.00006) |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   summary()
@@ -223,16 +223,16 @@ The function has fit every regression of 1200s width across the entire dataset a
 
 Let's look at the `"overlap"` plot output.
 
-```{r fig.keep='last', results='hide', message=FALSE}
-sard |> 
-  plot(type = "overlap") 
+```{r fig.keep='last', results='hide', message=FALSE, fig.alt="Overlap plot of auto_rate lowest method results showing rate regressions ordered from lowest to highest, with lower rates concentrated towards the end of the dataset."}
+sard |>
+  plot(type = "overlap")
 ```
 
 This plot is perhaps difficult to understand at first, but should become clear. The summary table is ordered from lowest to highest rates descending. The lower plot reflects this, and shows most of these lower rates, the ones at the top of both this plot and the summary table, are towards the end of the dataset. By contrast, high rates are at the start. This plot is essentially the rolling rate (panel 4) of the `auto_rate` plot just above flipped vertically. See how the lowest rates occur around timepoint 6000 in both. 
 
 We are looking for lowest rates, so we don't need to keep any rates before around timepoint 3000. We can remove those using `time_omit`. Let's also only keep those with r-squared above 0.9.
 
-```{r fig.keep='last', message=FALSE}
+```{r fig.keep='last', message=FALSE, fig.alt="Overlap plot after removing rates before timepoint 3000 and filtering for r-squared above 0.9, showing remaining rate regressions concentrated in the latter portion of the dataset."}
 sard |>
   select_rate(method = "time_omit", n = c(0,3000)) |>
   select_rate(method = "rsq", n = c(0.9, 1)) |>
@@ -242,7 +242,7 @@ sard |>
 
 Now we are left with 1853 results. We'll refine our selection criteria further by only taking the 500 lowest of these rates, then removing those which overlap with another by 90% or more (see [Overlapping results](#overlap) section for explanation of this method). We are doing the `"overlap"` method last because it is *extremely* computationally intensive and the time it takes increases exponentially with the number of results remaining. 
 
-```{r fig.keep='last', message=FALSE}
+```{r fig.keep='last', message=FALSE, fig.alt="Overlap plot after applying r-squared, time, lowest, and overlap filters, showing the three remaining non-overlapping rate regressions."}
 sard |>
   select_rate(method = "rsq", n = c(0.9, 1)) |>
   select_rate(method = "time_omit", n = c(0,3000)) |>
@@ -288,24 +288,24 @@ A full analysis of a long intermittent-flow experiment including results filteri
 
 Here we will subset a portion of the `zeb_intermittent.rd` dataset, use `calc_rate.int` to extract a rate from the same time period of each. We'll specify the replicates cycle at every 660 rows using `starts`, use a `wait` phase of two minutes (120 rows), and a `measure` phase of six minutes (360 rows) within each replicate. Then we convert the results, plot them in two different ways, and show the summary table.
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt=c("Full plot showing each of the 20 intermittent-flow replicate rates in the context of the entire zebrafish oxygen timeseries.", "Rate plot showing how the converted metabolic rate values change across the 20 intermittent-flow replicates.")}
 zeb_sub <- subset_data(zeb_intermittent.rd,
                        from = 5840,
                        to = 19039,
-                       by = "row", 
+                       by = "row",
                        quiet = TRUE) |>
-  inspect(plot = FALSE) |> 
+  inspect(plot = FALSE) |>
   calc_rate.int(starts = 660,
                 wait = 120,
                 measure = 360,
-                by = "row",  
+                by = "row",
                 plot = FALSE) |>
-  convert_rate(oxy.unit = "mg/L", 
+  convert_rate(oxy.unit = "mg/L",
                time.unit = "secs",
                output.unit = "mg/h/g",
-               volume = 0.12,         
+               volume = 0.12,
                mass = 0.0009) |>
-  plot(type = "full") |> 
+  plot(type = "full") |>
   plot(type = "rate") |>
   summary()
 ```
@@ -326,7 +326,7 @@ Let's say we are interested in two rates: a maximum metabolic rate (MMR), that i
 
 In this example the rate from the first replicate is clearly the highest, but we can use `select_rate` to extract it. This tells the function we are interested in the highest rates (in absolute value, that is ignoring the sign - see `help("select_rate")` for full details) and to select the single highest one (`n = 1`). We also plot it to check which replicate it comes from, and use `summary` with the `export` option to save the full result as a `data.frame`. 
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', fig.alt="Plot of the single highest rate selected as maximum metabolic rate from the intermittent-flow replicates, shown in the context of the full oxygen timeseries."}
 mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
   plot(type = "full") |>
   summary(export = TRUE)
@@ -342,10 +342,10 @@ mmr
 
 Getting the RMR is just as straightforward. Let's define it as the mean of the lowest 10th percentile of rates (quite common, but usually in studies where there are many more replicates), so this time we pipe the result to `mean()`.
 
-```{r message=FALSE, results='hold'}
+```{r message=FALSE, results='hold', fig.alt="Plot of the lowest 10th percentile of rates selected as routine metabolic rate from the intermittent-flow replicates, shown in the context of the full oxygen timeseries."}
 rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
-  plot(type = "full") |> 
-  mean() 
+  plot(type = "full") |>
+  mean()
 ```
 
 Again, we can export the full results using `summary`.
@@ -371,15 +371,15 @@ It is recommended this method be used after other selection criteria have been a
 
 Here we'll show examples of how it can be used to make `auto_rate` results more manageable. Let's first look at the results of the `auto_rate` `"linear"` method on the `sardine.rd` dataset using the `overlap` plot type in convert rate. 
 
-```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
-sardine.rd |> 
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE, fig.alt="Overlap plot of all auto_rate linear results for the sardine dataset, showing extensive overlap among the detected linear regions."}
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   plot(type = "overlap")
@@ -389,15 +389,15 @@ sardine.rd |>
 
 Now let's remove all results that share 100% of their datapoints with at least one other. Here we pipe the result to `plot()`.
 
-```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
-sardine.rd |> 
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE, fig.alt="Overlap plot after removing results that are completely contained within another, showing reduced but still partially overlapping rate regressions."}
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   select_rate(method = "overlap", n = 1) |>
@@ -406,15 +406,15 @@ sardine.rd |>
 
 This greatly reduces the number of results, but there is still a substantial overlap between them. Therefore, let's adjust the overlap threshold to 0.9, that is regressions which share 90% or more of data with at least one other are removed. 
 
-```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE}
-sardine.rd |> 
+```{r fig.keep='last', message=FALSE, results='hide', warning=FALSE, fig.alt="Overlap plot after removing results sharing 90 percent or more of their data with another, showing a small number of distinct non-overlapping rate regressions."}
+sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
                time.unit = "sec",
                output.unit = "mg/h/kg",
                volume = 12.3,
                mass = 0.0477,
-               S = 35, 
+               S = 35,
                t = 14.8,
                p = 1.013) |>
   select_rate(method = "overlap", n = 0.9) |>

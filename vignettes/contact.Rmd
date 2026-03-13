@@ -78,7 +78,7 @@ opts_chunk$set(collapse = TRUE,
 <div class="wrapper">
 <div class="left">
 <div class="profile-header">
-<a href="https://github.com/nicholascarey"><img src="https://github.com/nicholascarey.png" width="80" style="border-radius: 50%;"></a>
+<a href="https://github.com/nicholascarey"><img src="https://github.com/nicholascarey.png" alt="Nicholas Carey" width="80" style="border-radius: 50%;"></a>
 <div>
 
 **Nicholas Carey**<br>
@@ -90,7 +90,7 @@ opts_chunk$set(collapse = TRUE,
 </div>
 <div class="right">
 <div class="profile-header">
-<a href="https://github.com/januarharianto"><img src="https://github.com/januarharianto.png" width="80" style="border-radius: 50%;"></a>
+<a href="https://github.com/januarharianto"><img src="https://github.com/januarharianto.png" alt="Januar Harianto" width="80" style="border-radius: 50%;"></a>
 <div>
 
 **Januar Harianto**<br>
@@ -106,7 +106,7 @@ opts_chunk$set(collapse = TRUE,
 
 `respR` is designed, programmed, and maintained by [**Nicholas Carey**](https://github.com/nicholascarey) and [**Januar Harianto**](https://github.com/januarharianto). We are working biologists and originally wrote the `respR` code to assist with our own respirometry analyses, before realising it would be useful to the scientific community and developing it as an `R` package. 
 
-## Contact
+## Contact {#contact-info}
 
 If you have any feedback about using `respR` feel free to get in touch: 
 

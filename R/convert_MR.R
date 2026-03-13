@@ -236,7 +236,7 @@ convert_MR <- function(x, from = NULL, to = NULL,
   if(length(from.types) == 2) rate.type <- "abs" else
     if(from.types[3] == "mass") rate.type <- "mass.spec" else
       if(from.types[3] == "area") rate.type <- "area.spec" else
-        stop("convert_MR: unit '", from.sep[3], "' not recognised as a mass or area unit. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = F)
+        stop("convert_MR: unit '", from.sep[3], "' not recognised as a mass or area unit. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = FALSE)
 
   # verify
   from.sep[1] <- units.val(from.sep[1], "o1")

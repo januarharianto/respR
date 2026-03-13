@@ -144,7 +144,7 @@ method.val <- function(method, source = "adjust_rate"){
 
   if(source == "adjust_rate") {
     if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
-      stop("adjust_rate: 'method' input not recognised.", call. = F)
+      stop("adjust_rate: 'method' input not recognised.", call. = FALSE)
     #' create logical for linear/exp methods
     if(method == "linear" | method == "exponential") dynamic <- TRUE else
       dynamic <- FALSE
@@ -154,12 +154,12 @@ method.val <- function(method, source = "adjust_rate"){
   if(source == "auto_rate") {
     if (!(method %in% c("linear", "max", "min", "interval",
                         "rolling", "highest", "lowest", "maximum", "minimum")))
-      stop("auto_rate: 'method' input not recognised.", call. = F)
+      stop("auto_rate: 'method' input not recognised.", call. = FALSE)
   }
 
   if(source == "oxy_crit") {
     if(!(method %in% c("bsr", "segmented")))
-      stop("oxy_crit: 'method' input not recognised.", call. = F)
+      stop("oxy_crit: 'method' input not recognised.", call. = FALSE)
   }
 }
 

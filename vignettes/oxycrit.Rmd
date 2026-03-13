@@ -103,7 +103,7 @@ squid.rd
 
 We can visualise and examine the dataset using the `inspect()` function.
 
-```{r}
+```{r, fig.alt = "inspect() output for squid respirometry data showing oxygen timeseries and rolling rate"}
 squid <- inspect(squid.rd)
 ```
 
@@ -121,7 +121,7 @@ This is the default method, so does not need to be explicitly specified with the
 squid.bsr <- oxy_crit(squid)
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.alt = "oxy_crit broken-stick regression result showing critical oxygen value on timeseries and rate vs oxygen plots"}
 print(squid.bsr)
 plot(squid.bsr, quiet = TRUE)
 ```
@@ -140,7 +140,7 @@ summary(squid.bsr)
 
 Let's change the `width` input to see how it affects the results. We'll try smaller and larger `width` values. We can also use `panel` to output only the rolling rate plot.
 
-```{r message=FALSE, results='hide', fig.height=3}
+```{r message=FALSE, results='hide', fig.height=3, fig.alt = c("Broken-stick result with width 0.05 showing rate vs oxygen", "Broken-stick result with width 0.2 showing rate vs oxygen")}
 oxy_crit(squid, width = 0.05, panel = 2)
 oxy_crit(squid, width = 0.2, panel = 2)
 ```
@@ -157,7 +157,7 @@ Now we'll run the analysis using the `"segmented"` method, again with the defaul
 squid.seg <- oxy_crit(squid, method = "segmented")
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.alt = "oxy_crit segmented regression result showing critical oxygen value on timeseries and rate vs oxygen plots"}
 print(squid.seg)
 plot(squid.seg, quiet = TRUE)
 ```
@@ -176,7 +176,7 @@ summary(squid.seg)
 
 Again, let's try different `width` inputs.
 
-```{r message=FALSE, results='hide', fig.height=3}
+```{r message=FALSE, results='hide', fig.height=3, fig.alt = c("Segmented result with width 0.05 showing rate vs oxygen", "Segmented result with width 0.2 showing rate vs oxygen")}
 oxy_crit(squid, width = 0.05, method = "segmented", panel = 2)
 oxy_crit(squid, width = 0.2, method = "segmented", panel = 2)
 ```
@@ -217,7 +217,7 @@ squid_oxy_rate <- data.frame(oxy,
 
 Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate` inputs to specify the columns.
 
-```{r}
+```{r, fig.alt = "oxy_crit result from pre-calculated rate vs oxygen data showing critical oxygen value"}
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 ```
 

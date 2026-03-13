@@ -28,7 +28,7 @@ opts_chunk$set(collapse = TRUE,
                  digits = 3))
 ```
 
-## Future features
+## Future features {#planned-features}
 
 These features are in development, planned or being considered. We are happy to take any input as to which we should prioritise. Please feel free to chime in via any of the methods listed in `vignette("contact")`. 
 

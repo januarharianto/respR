@@ -206,7 +206,7 @@ bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg() 
 ```
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.keep=2, results='hold'}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.keep=2, results='hold', fig.alt="Inspect plot of background oxygen data from urchins column 18 showing oxygen timeseries and rolling rate, followed by background rate regression fitted across the full timeseries."}
 ## inspect and calculate background rate using calc_rate.bg
 bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg(message = FALSE) |>
@@ -230,7 +230,7 @@ urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
   calc_rate(from = 10, to = 30, by = "time")
 ```
 
-```{r echo = FALSE, warning=FALSE, message=FALSE, fig.keep=1}
+```{r echo = FALSE, warning=FALSE, message=FALSE, fig.keep=1, fig.alt="Plot of calc_rate result showing the fitted linear regression over the selected time region of urchin oxygen data between 10 and 30 minutes."}
 ## inspect and calculate urchin rate using calc_rate
 plot(urch, message = FALSE)
 print(urch)
@@ -355,7 +355,7 @@ In the `urchins.rd` data, there are two control chambers in columns 18 and 19. W
 
 ### Calculate background rates
 
-```{r warning=FALSE, message=FALSE, results='hide', fig.keep=2}
+```{r warning=FALSE, message=FALSE, results='hide', fig.keep=2, fig.alt="Inspect plot of two background oxygen columns 18 and 19 from the urchins dataset showing oxygen timeseries and rolling rates for both columns."}
 ## inspect and calculate background rate from two chambers
 bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
   calc_rate.bg()
@@ -395,7 +395,7 @@ str(bg_exp)
 names(bg_exp) <- c("time.min", "b3", "b4", "b5")
 ```
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt="Plot of calc_rate.bg results showing background rate regressions fitted to three oxygen columns from a separate background experiment."}
 bg2 <- calc_rate.bg(bg_exp)
 ```
 
@@ -583,7 +583,7 @@ sqd_bg <- sqd_bg[,c(1,3)]
 sqd_bg[[1]] <- 0:7512
 ```
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt="Inspect plot of squid respirometry data showing oxygen timeseries and rolling rate over time."}
 sqd_insp <- inspect(sqd)
 ```
 
@@ -591,7 +591,7 @@ sqd_insp <- inspect(sqd)
 
 The background data is in a separate data frame, `sqd_bg`. There is no need to calculate a rate; `adjust_rate` will do this when it identifies the relevant data regions (although it will accept `calc_rate.bg` objects). We could also use a data frame as the `by` input. The only requirement is that the time is in column 1 and all other columns are the oxygen columns you want to use to calculate the concurrent background rate. However it's always a good idea to inspect the data for issues and visualise it using `inspect`, and this function also allows us to extract the columns we are interested in. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt="Inspect plot of squid background data showing oxygen timeseries and rolling rate, with the rolling rate plot revealing an increasing background rate over time."}
 sqd_bg_insp <- inspect(sqd_bg, time = 1, oxygen = 2)
 ```
 
@@ -601,7 +601,7 @@ The rolling rate plot makes clear that the background rate increases over the du
 
 We'll use `auto_rate` on the squid data.
 
-```{r message = FALSE, results='hide'}
+```{r message = FALSE, results='hide', fig.alt="Plot of auto_rate results on squid data showing detected linear regions highlighted on the full timeseries and individual rate regressions."}
 sqd_ar <- auto_rate(sqd_insp)
 ```
 
@@ -625,7 +625,7 @@ Note how the adjustment value differs. The top two adjustments are a good exampl
 
 We can use `calc_rate.bg` and the row numbers from the summary to show that the adjustments for these have been calculated correctly. 
 
-```{r message=FALSE, results='hide', fig.show='asis'}
+```{r message=FALSE, results='hide', fig.show='asis', fig.alt=c("Plot of calc_rate.bg result showing background rate regression fitted to the subset of background data from rows 2425 to 4800.", "Plot of calc_rate.bg result showing background rate regression fitted to the subset of background data from rows 273 to 3057.")}
 subset_data(sqd_bg, from = 2425, to = 4800, by = "row") |>
   calc_rate.bg()
 
@@ -641,7 +641,7 @@ The `"concurrent"` method is ideal for this type of dynamic adjustment, however 
 
 In this example, a concurrent control has been run alongside an intermittent-flow experiment, and been flushed at the same time as the specimen chamber. In this plot the specimen data is in black, the control in orange. 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.keep='last', results='hide'}
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.keep='last', results='hide', fig.alt="Plot showing intermittent-flow respirometry data with specimen data in black and concurrent control data in orange, displaying repeated flush-measure cycles."}
 interm <- zeb_intermittent.rd[16290:18929,]
 interm[[1]] <- 1:nrow(interm)
 interm_insp <- inspect(interm)
@@ -663,11 +663,11 @@ Clearly, fitting slopes to any part of the background data other than within eac
 
 The replicates follow a specific cycle of 9 minutes closed, two minutes flushing. Knowing this, we can use `calc_rate.int` to extract a rate from the same time window within each using the `wait` and `measure` inputs. We use a `wait` of five minutes (300 rows) at the start of each, which excludes the flush and start of the replicate data. We then use a `measure` phase of six minutes (360 rows) to extract a rate from the rest of the replicate.
 
-```{r message=FALSE, results='hide'}
+```{r message=FALSE, results='hide', fig.alt="Plot of calc_rate.int results showing extracted rates from each replicate of the intermittent-flow experiment with wait and measure phases indicated."}
 # replicate start times - seq(from, to, by)
-# starts <- seq(120, 2100, 660) 
+# starts <- seq(120, 2100, 660)
 # # three minute buffer of data to exclude at the start of each replicate
-# buffer <- 180 
+# buffer <- 180
 # # period to measure after buffer
 # measure <- 360
 
@@ -705,20 +705,20 @@ The `urchins.rd` data contains two columns of background data in columns 18 and 
 
 #### Calculate specimen rate
 
-```{r results='hide', message=FALSE, warning=FALSE, fig.keep=c(2,4)}
+```{r results='hide', message=FALSE, warning=FALSE, fig.keep=c(2,4), fig.alt=c("Inspect plot of urchin oxygen data from column 2 showing full timeseries with rolling rate.", "Plot of calc_rate result showing the fitted linear regression for the urchin rate between 10 and 30 minutes.")}
 # Calculate specimen rate between 10 and 30 mins
 rate <- inspect(urchins.rd, 1, 2) |>
-  calc_rate(from = 10, 
+  calc_rate(from = 10,
             to = 30,
             by = "time")
 ```
 
 #### Inspect background data
 
-```{r results='hide', message=FALSE, warning=FALSE, fig.keep=1}
+```{r results='hide', message=FALSE, warning=FALSE, fig.keep=1, fig.alt="Inspect plot of two background oxygen columns 18 and 19 from the urchins dataset showing oxygen timeseries for both columns."}
 ## Inspect background columns
-bg_data <- inspect(urchins.rd, 
-                   time = 1, 
+bg_data <- inspect(urchins.rd,
+                   time = 1,
                    oxygen = 18:19)
 ```
 
@@ -800,15 +800,15 @@ In this example the rate and background inputs to adjust_rate will be `respR` ob
 
 The first replicate up to timepoint 4999 is the pre-experiment background data, and from timepoints 75140 to 79251 the post-experiment background data. We'll subset both of these and calculate the pre- and post-experiment background rates. 
 
-```{r message = FALSE, results ='hide', fig.keep=c(2,4)}
+```{r message = FALSE, results ='hide', fig.keep=c(2,4), fig.alt=c("Plot of calc_rate.bg result showing the background rate regression fitted to pre-experiment control data from 1 to 4999 seconds.", "Plot of calc_rate.bg result showing the background rate regression fitted to post-experiment control data from 75140 to 79251 seconds.")}
 # pre
 bg_pre <- subset_data(zeb_intermittent.rd, 1, 4999, "time") |>
-  inspect() |> 
+  inspect() |>
   calc_rate.bg()
 
 # post
 bg_post <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") |>
-  inspect() |> 
+  inspect() |>
   calc_rate.bg()
 
 ```
@@ -827,15 +827,15 @@ We can see the background rate increases by around 70% over the course of the ex
 
 This replicate occurs roughly half way through the experiment. Like above, we'll subset out the replicate. We'll also apply a 'wait' phase of 2 minutes (120s) from the start that we don't want to use in the analysis, and a 'measure' phase of 7 minutes (420s) to exclude the 2 minutes of flushing at the end. 
 
-```{r message=FALSE, warning=FALSE, results="hide", fig.keep='last'}
+```{r message=FALSE, warning=FALSE, results="hide", fig.keep='last', fig.alt="Plot of auto_rate results on a single zebrafish replicate showing detected linear regions and their fitted regressions."}
 # define rep start time, buffer and measure periods
 start <- 38180 # start time of replicate
 wait <- 120   # 2 mins buffer
 measure <- 420  # 7 mins measure
 
-rate <- subset_data(zeb_intermittent.rd, 
-                    from = start + wait, 
-                    to = start + wait + measure, 
+rate <- subset_data(zeb_intermittent.rd,
+                    from = start + wait,
+                    to = start + wait + measure,
                     by = "time") |>
   inspect() |>
   auto_rate()
@@ -908,7 +908,7 @@ An exponential increase in background rate is quite common in experiments done a
 
 The `background_exp.rd` example dataset shows background data with a rate that increases exponentially. 
 
-```{r results='hide', message=FALSE}
+```{r results='hide', message=FALSE, fig.alt="Inspect plot of exponential background data showing oxygen timeseries and rolling rate, with the rolling rate plot revealing an exponentially increasing background rate over time."}
 inspect(background_exp.rd)
 ```
 
@@ -942,7 +942,7 @@ All of the above methods of adjustment will also work on oxygen production data.
 
 The `algae.rd` dataset contains a recording from a respirometry experiment on algae exposed to light, and so producing oxygen via photosynthesis. We'll calculate a production rate from these data.
 
-```{r results='hide', message=FALSE, warning=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE, fig.alt="Plot of calc_rate result on algae data showing a positive slope indicating oxygen production via photosynthesis."}
 alg_rt <- calc_rate(algae.rd)
 ```
 
@@ -959,7 +959,7 @@ alg_bg <- subsample(background_con.rd[1:4000], length.out = 1200)
 alg_bg[[1]] <- algae.rd[[1]]
 ```
 
-```{r results='hide', message=FALSE, warning=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE, fig.alt="Plot of calc_rate.bg result showing the background rate regression fitted to the algae control experiment data with a negative slope indicating oxygen consumption."}
 bg_rt <- calc_rate.bg(alg_bg)
 ```
 

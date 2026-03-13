@@ -1,4 +1,4 @@
-# <a href='https://github.com/januarharianto/respR'> <img src='man/figures/logo.png' align="right" width="11%" /></a> <font style="font-family:'Courier New'">respR : Processing and analysis of respirometry data</font> 
+# <a href='https://github.com/januarharianto/respR'> <img src='man/figures/logo.png' alt="respR package logo" align="right" width="11%" /></a> <font style="font-family:'Courier New'">respR : Processing and analysis of respirometry data</font> 
 
 <!-- badges: start -->
 <!-- [![metacran downloads](https://cranlogs.r-pkg.org/badges/respR)](https://cran.r-project.org/package=respR) -->
@@ -57,7 +57,7 @@ We are also happy to help directly. If you have problems using the package or ge
 
 ## Publication 
 
-<a href='https://doi.org/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' align="right" width="22%" hspace = "20" /></a>
+<a href='https://doi.org/10.1111/2041-210X.13162'><img src='man/figures/mee_cover.jpg' alt="Methods in Ecology and Evolution journal cover" align="right" width="22%" hspace = "20" /></a>
 
 The package has also been [**peer reviewed and published**](https://doi.org/10.1111/2041-210X.13162) in *Methods in Ecology and Evolution*. Please cite this publication if you use `respR` in your published work. 
 

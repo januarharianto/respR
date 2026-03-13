@@ -68,11 +68,11 @@ pcrit_rMR$SummaryCrit$Pcrit.lm
 pcrit_rMR$SummaryCrit$Pcrit.midpoint
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "rMR PCrit analysis code output"}
 knitr::include_graphics("img/oxy_crit_comp/oxy_crit_comp_01.png")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "rMR PCrit analysis plot output"}
 knitr::include_graphics("img/oxy_crit_comp/oxy_crit_comp_02.png")
 ```
 
@@ -88,11 +88,11 @@ fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
 oxy_crit(fishMR_respR)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "respR oxy_crit analysis console output"}
 knitr::include_graphics("img/oxy_crit_comp/oxy_crit_comp_03.png")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "respR oxy_crit analysis plot output"}
 knitr::include_graphics("img/oxy_crit_comp/oxy_crit_comp_04.png")
 ```
 

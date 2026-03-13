@@ -82,7 +82,7 @@ urchin[[1]] <- urchin[[1]] / 60 # change time values to minutes
 
 This is what the whole dataset look like. There are three replicates of different duration.
 
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE, results='hide', fig.alt="inspect output plot showing the complete intermittent-flow respirometry dataset with three replicates of oxygen over time and a rolling rate plot below"}
 urchin <- inspect(urchin)
 ```
 
@@ -92,7 +92,7 @@ Therefore in the following examples we specify three locations in `starts`. See 
 
 By default, if no inputs other than `x`, `starts`, and `width` are entered, the `auto_rate` default of `method = "linear"` is applied to all the data in each replicate. This finds the most linear region of a dataset (see `vignette("auto_rate")`).
 
-```{r results='hold'}
+```{r results='hold', fig.alt="auto_rate.int plot showing the most linear rate extracted from each of three replicates using default settings with flush data included"}
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               width = 400) |>
@@ -105,12 +105,12 @@ Here it performs well in identifying linear regions. However, these inputs mean 
 
 It is usually a good idea to use the `measure` input to ensure flushes are excluded and that only relevant data is included in the analysis. We also typically want to exclude some data at the start of a replicate right after the flush, which we can do using `wait`. All of these are applied in the default units of `by = "row"`. (We also pass `legend = TRUE` so that the phases are labelled on the plots). 
 
-```{r results='hold'}
+```{r results='hold', fig.alt="auto_rate.int plot showing the most linear rate in each replicate with wait and measure phases highlighted and labelled, excluding flush data"}
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               legend = TRUE) |>
   summary()
 ```
@@ -121,12 +121,12 @@ Note how the rates (yellow points) do not use the entire `measure` phase. This i
 
 These results show the single top-ranked linear region in each replicate and we can see the rates are fairly consistent. Note there is one result per replicate, with the replicate number in the `rep` column. The `rank` column shows ranking of rates *within* a replicate for the particular `method` used, and are all `1` here because only one rate has been extracted. You can modify the `n` input to output more than one rate per replicate. This is what the analysis looks like if it is changed. 
 
-```{r results='hold'}
+```{r results='hold', fig.alt="auto_rate.int plot showing the top three ranked linear rates extracted from each replicate with wait and measure phases labelled"}
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               n = 3,
               plot = TRUE,
               legend = TRUE) |>
@@ -143,7 +143,7 @@ Often in intermittent-flow respirometry we want to get the lowest or highest rat
 
 In these examples we use `by = "time"` selection of regions. This is the `lowest` rate over a period of 8 minutes from each replicate:
 
-```{r results='hold'}
+```{r results='hold', fig.alt="auto_rate.int plot showing the lowest rate over an 8-minute window extracted from each of three replicates using time-based selection"}
 auto_rate.int(urchin,
               starts = c(0, 35, 65),
               wait = 5,
@@ -156,7 +156,7 @@ auto_rate.int(urchin,
 
 This is the `highest` rate over a period of 8 minutes from each replicate:
 
-```{r results='hold'}
+```{r results='hold', fig.alt="auto_rate.int plot showing the highest rate over an 8-minute window extracted from each of three replicates using time-based selection"}
 auto_rate.int(urchin,
               starts = c(0, 35, 65),
               wait = 5,
@@ -176,19 +176,19 @@ For intermittent-flow experiments where the replicates are regularly spaced you 
 
 The `zeb_intermittent.rd` example dataset uses a regular replicate structure of 9 minutes measure and 2 minutes flush (660 rows total) for most of its length. See `help("zeb_intermittent.rd")` for exact locations, but essentially after a background control and a single replicate of 14 minutes this structure is maintained until the ending background recording. Therefore to use this option we need to use `subset_data()` (or other methods in `R` to subset data) to extract only the regular replicates, and pipe the result to `auto_rate.int`. We use `starts` to specify that replicates cycle at 660 rows, impose a `wait` phase of 2 minutes, a `measure` phase of 7 minutes to exclude the flush, and use the other inputs to extract the lowest rate of 3 minutes duration.
 
-```{r results='hide', fig.keep='last', message=FALSE}
+```{r results='hide', fig.keep='last', message=FALSE, fig.alt="auto_rate.int plot showing the lowest 3-minute rate from the first three and last three replicates of a zebrafish intermittent-flow experiment with 105 regularly spaced replicates"}
 zeb_all <- zeb_intermittent.rd |>
-  
+
   # Inspect the data
   inspect() |>
-  
+
   # Subset regular replicates from larger dataset
   subset_data(from = 5840,
               to = 75139,
               by = "row",
               quiet = TRUE) |>
-  
-  # Use auto_rate.int to get lowest 3 minute rate from each replicate, 
+
+  # Use auto_rate.int to get lowest 3 minute rate from each replicate,
   # plotting first 3 and last 3 (using 'pos')
   auto_rate.int(starts = 660,
                 wait = 120,
@@ -196,7 +196,7 @@ zeb_all <- zeb_intermittent.rd |>
                 width = 180,
                 method = "lowest",
                 plot = TRUE,
-                pos = c(1:3, 103:105)) 
+                pos = c(1:3, 103:105))
 ```
 
 Here we use the `pos` input which is passed to `plot` to select the first and last three replicates for plotting to check everything looks okay. This is only for illustration here. In an actual experiment we **strongly** recommend every replicate rate result be examined visually. Up to 20 results at a time can be plotted using the `pos` input. See [Plot](#plot) section below for further details. 
@@ -215,7 +215,7 @@ This object is now ready to be passed to `adjust_rate()` and `convert_rate()`. F
 
 If `plot = TRUE`, a plot is produced of each replicate rate result on a grid up to a total of 20. By default this is the first 20 (i.e. `pos = 1:20`). Others can be selected by modifying the `pos` input, either in the main function call or when calling `plot()` on output objects. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt="auto_rate.int plot showing rate results for replicates 50 to 69 of the zebrafish intermittent-flow experiment"}
 plot(zeb_all, pos = 50:69)
 ```
 
@@ -226,12 +226,12 @@ For all plots, the bottom blue time axis shows the time values of the original l
 
 The default is `type = "rep"` in which each replicate is plotted individually with the rate region highlighted. The rate data is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase.  
 
-```{r results='hide'}
+```{r results='hide', fig.alt="auto_rate.int replicate-level plot showing each replicate individually with rate region highlighted and wait and measure phases shaded and labelled"}
 urch <- auto_rate.int(urchin,
                       starts = c(1, 2101, 3901),
                       wait = 300,
                       measure = c(1500, 1100, 600),
-                      width = 400, 
+                      width = 400,
                       plot = TRUE,
                       type = "rep",
                       legend = TRUE)
@@ -241,19 +241,19 @@ urch <- auto_rate.int(urchin,
 
 Entering `type = "full"` will show each replicate rate highlighted in the context of the entire dataset.
 
-```{r results='hide'}
+```{r results='hide', fig.alt="auto_rate.int full dataset plot showing each replicate rate highlighted in the context of the entire urchin oxygen timeseries"}
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
               measure = c(1500, 1100, 600),
-              width = 400, 
+              width = 400,
               plot = TRUE,
               type = "full")
 ```
 
 Note this may be of limited use when the dataset is large. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt="auto_rate.int full dataset plot showing replicate 50 rate result highlighted in the context of the entire zebrafish dataset"}
 plot(zeb_all, type = "full", pos = 50)
 ```
 
@@ -261,7 +261,7 @@ plot(zeb_all, type = "full", pos = 50)
 
 Lastly, the `auto_rate` result (as found in the `$results` element of the output) for each individual row of the summary table can be plotted using `type = "ar"` and the `pos` input. Note these plots show only the `measure` phase of the data and the rate result from within it. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt="auto_rate diagnostic plot for replicate 50 showing the auto_rate result with rolling rate, residuals, and fitted rate within the measure phase"}
 plot(zeb_all, type = "ar", pos = 50)
 ```
 

@@ -166,7 +166,7 @@ adjust_scale <- function(x, input, output) {
   aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
   # Check that conversion is possible
   if (bef[3] != aft[3])
-    stop("adjust_scale: Units do not match and cannot be converted.", call. = F)
+    stop("adjust_scale: Units do not match and cannot be converted.", call. = FALSE)
   # Convert!
   a <- multip[match(bef[2], prefix)]  # get multiplier from input
   b <- multip[match(aft[2], prefix)]  # get multiplier from output
@@ -203,7 +203,7 @@ adjust_scale_area <- function(x, input, output) {
   aft <- unlist(regmatches(aft, regexec(string, aft)))  # split up
   # Check that conversion is possible
   if (bef[3] != aft[3])
-    stop("adjust_scale_area: Units do not match and cannot be converted.", call. = F)
+    stop("adjust_scale_area: Units do not match and cannot be converted.", call. = FALSE)
   # Convert!
   a <- multip[match(bef[2], prefix)]  # get multiplier from input
   b <- multip[match(aft[2], prefix)]  # get multiplier from output
@@ -230,20 +230,20 @@ check_timeseries <- function(x, type = "time") {
     if(!num[[1]][1]) evn <- sapply(x, function(y) check_evn(y)) else
       evn <- sapply(x, function(y) return(list(check = "skip", which = integer(0))))
     checks <- rbind(
-      num[1, , drop = F],
-      inf[1, , drop = F],
-      nan[1, , drop = F],
-      seq[1, , drop = F],
-      dup[1, , drop = F],
-      evn[1, , drop = F]
+      num[1, , drop = FALSE],
+      inf[1, , drop = FALSE],
+      nan[1, , drop = FALSE],
+      seq[1, , drop = FALSE],
+      dup[1, , drop = FALSE],
+      evn[1, , drop = FALSE]
     )
     locs <- rbind(
       NA,
-      inf[2, , drop = F],
-      nan[2, , drop = F],
-      seq[2, , drop = F],
-      dup[2, , drop = F],
-      evn[2, , drop = F]
+      inf[2, , drop = FALSE],
+      nan[2, , drop = FALSE],
+      seq[2, , drop = FALSE],
+      dup[2, , drop = FALSE],
+      evn[2, , drop = FALSE]
     )
   } else if (type == "oxygen") {
     num <- sapply(x, function(y) check_num(y))
@@ -265,16 +265,16 @@ check_timeseries <- function(x, type = "time") {
     dup <- NA
     evn <- NA
     checks <- rbind(
-      num[1, , drop = F],
-      inf[1, , drop = F],
-      nan[1, , drop = F],
+      num[1, , drop = FALSE],
+      inf[1, , drop = FALSE],
+      nan[1, , drop = FALSE],
       seq[1],
       dup[1],
       evn[1])
     locs <- rbind(
       NA,
-      inf[2, , drop = F],
-      nan[2, , drop = F],
+      inf[2, , drop = FALSE],
+      nan[2, , drop = FALSE],
       seq[1],
       dup[1],
       evn[1])

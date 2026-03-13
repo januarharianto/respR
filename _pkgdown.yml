@@ -83,6 +83,7 @@ navbar:
   left:
     - icon: fa-home
       href: index.html
+      aria-label: Home
 
     - text: "Getting Started"
       href: articles/respR.html

@@ -264,17 +264,17 @@ convert_rate.ft <- function(x,
   ## Apply output unit defaults
   if (is.null(output.unit) && is.null(mass) && is.null(area)) {
     warning("convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h'.",
-            call. = F)
+            call. = FALSE)
     output.unit <- "mg/h"
   }
   if (is.null(output.unit) && !is.null(mass) && is.null(area)) {
     warning("convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h/kg'.",
-            call. = F)
+            call. = FALSE)
     output.unit <- "mg/h/kg"
   }
   if (is.null(output.unit) && is.null(mass) && !is.null(area)) {
     warning("convert_rate.ft: the 'output.unit' is not provided, applying default 'mgO2/h/m2'.",
-            call. = F)
+            call. = FALSE)
     output.unit <- "mg/h/m2"
   }
 

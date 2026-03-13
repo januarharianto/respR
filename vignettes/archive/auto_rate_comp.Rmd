@@ -60,7 +60,7 @@ Thus, even though both packages can perform linear metric analysis and determine
 The main function in `LoLinR` is called `rankLocReg()`. 
 The time it takes this function to process data follows an exponential relationship with its length, illustrated below:
 
-```{r, echo = F, out.width = "700px"}
+```{r, echo = F, out.width = "700px", fig.cap = "LoLinR processing times"}
 knitr::include_graphics("img/auto_rate_comp/lolinr_times.png")
 ```
 
@@ -104,7 +104,7 @@ set.seed(769)
 sim1 <- sim_data(150)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate comparison: simulated data"}
 knitr::include_graphics("img/auto_rate_comp/arcomp01.png")
 ```
 
@@ -120,7 +120,7 @@ cat("\n")
 cat("\n7 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp02.png")
 ```
 
@@ -135,7 +135,7 @@ plot(lir1)
 cat("rankLocReg fitted 7260 local regressions.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "LoLinR results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp03.png")
 ```
 
@@ -195,7 +195,7 @@ set.seed(112)
 sim2 <- sim_data(150, type = "corrupted")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate comparison: sardine data"}
 knitr::include_graphics("img/auto_rate_comp/arcomp04.png")
 ```
 
@@ -211,7 +211,7 @@ cat("\n")
 cat("\n31 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate sardine results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp05.png")
 ```
 
@@ -227,7 +227,7 @@ plot(lir2)
 cat("rankLocReg fitted 7260 local regressions.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "LoLinR sardine results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp06.png")
 ```
 
@@ -287,7 +287,7 @@ set.seed(546)
 sim3 <- sim_data(150, type = "segmented")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate comparison: urchin data"}
 knitr::include_graphics("img/auto_rate_comp/arcomp07.png")
 ```
 
@@ -303,7 +303,7 @@ cat("\n")
 cat("\n6 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate urchin results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp08.png")
 ```
 
@@ -319,7 +319,7 @@ plot(lir3)
 cat("rankLocReg fitted 7260 local regressions.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "LoLinR urchin results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp09.png")
 ```
 
@@ -388,7 +388,7 @@ cat("\n")
 cat("\n4 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate comparison: squid data"}
 knitr::include_graphics("img/auto_rate_comp/arcomp10.png")
 ```
 
@@ -405,7 +405,7 @@ plot(lolinr_urchindata)
 cat("rankLocReg fitted 8911 local regressions.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate squid results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp11.png")
 ```
 
@@ -473,7 +473,7 @@ cat("\n")
 cat("\n43 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate comparison: intermittent data"}
 knitr::include_graphics("img/auto_rate_comp/arcomp12.png")
 ```
 
@@ -488,7 +488,7 @@ lcoregs  <-  reRank(lcoregs, newMethod='pc')
 plot(lcoregs)
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "auto_rate intermittent results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp13.png")
 ```
 
@@ -556,7 +556,7 @@ cat("\n")
 cat("\n32 kernel density peaks detected and ranked.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "LoLinR intermittent results"}
 knitr::include_graphics("img/auto_rate_comp/arcomp14.png")
 ```
 
@@ -575,7 +575,7 @@ plot(lsquidregs)
 cat("rankLocReg fitted 7260 local regressions.")
 ```
 
-```{r, echo = F}
+```{r, echo = F, fig.cap = "LoLinR intermittent rate extraction"}
 knitr::include_graphics("img/auto_rate_comp/arcomp15.png")
 ```
 

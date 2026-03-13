@@ -48,7 +48,7 @@ Importantly, `auto_rate` has been optimised to be *extremely fast*. Other method
 
 This illustrates the main processes involved in `auto_rate`:
 
-```{r, echo = F, fig.height = 6, fig.align = "center"}
+```{r, echo = F, fig.height = 6, fig.align = "center", fig.alt = "Flowchart showing the auto_rate process: raw data passes through rolling linear regression, which branches into four methods - linear detection via kernel density and bandwidth resampling, highest or lowest ordering, interval filtering, and unordered rolling output."}
 library(DiagrammeR)
 grViz("
 digraph a_nice_graph {
@@ -194,12 +194,12 @@ normx <- auto_rate(sardine.rd)
 overx <- auto_rate(sardine.rd, width = 0.6)
 ```
 
-```{r echo = F, message=FALSE, results='hide'}
+```{r echo = F, message=FALSE, results='hide', fig.alt = "Side-by-side comparison of rolling rate plots showing overfitting. Left panel uses default width of 0.2 showing a clear pattern of rate stabilisation. Right panel uses width of 0.6 where rate detail is lost due to oversmoothing."}
 # rolling regression
 
-r2 <- adjustcolor("goldenrod1", alpha.f = 1)  
+r2 <- adjustcolor("goldenrod1", alpha.f = 1)
 
-rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE, 
+rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
                          xlim = NULL, ylim = NULL) {
   if(is.null(xlim)) xlim <- range(rolldf[[1]])
   if(is.null(ylim)) ylim <- range(rolldf[[2]])
@@ -208,10 +208,10 @@ rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
        xlim = xlim,
        ylim = ylim,
        pch = 21,
-       lwd = 1, 
-       cex = 0.9, 
+       lwd = 1,
+       cex = 0.9,
        panel.first = grid(lwd = .7),
-       tck = -0.02, 
+       tck = -0.02,
        mgp = c(0, 0.4, 0))
   # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
   abline(h = ranked.b1, lty = 2)
@@ -219,22 +219,22 @@ rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
 }
 
 # Plot ONLY the rolling regression plots for comparison:
-par(mfrow = c(1, 2), 
+par(mfrow = c(1, 2),
     mai = c(0.4, 0.4, 0.3, 0.3),
     oma = c(0.4, 0.4, 0.3, 0.3),
     cex.main = 1,
     cex = 0.9)
 
-rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2, 
+rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2,
                                       y = normx$roll$slope_b1)
 rate_norm <- normx$summary$slope_b1[1]
 rollreg.plot(rolldt_norm, rate_norm, rate.rev = TRUE)
 
-rolldt_over <- data.table::data.table(x = (overx$roll$endtime + overx$roll$time)/2, 
+rolldt_over <- data.table::data.table(x = (overx$roll$endtime + overx$roll$time)/2,
                                       y = overx$roll$slope_b1)
 rate_over <- overx$summary$slope_b1[1]
-rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE, 
-             xlim = range(rolldt_norm[[1]]), 
+rollreg.plot(rolldt_over, rate_over, rate.rev = TRUE,
+             xlim = range(rolldt_norm[[1]]),
              ylim = range(rolldt_norm[[2]]))
 
 ```
@@ -260,12 +260,12 @@ normx <- auto_rate(sardine.rd)
 underx <- auto_rate(sardine.rd, width = 0.05)
 ```
 
-```{r echo = F, message=FALSE, results='hide'}
+```{r echo = F, message=FALSE, results='hide', fig.alt = "Side-by-side comparison of rolling rate plots showing underfitting. Left panel uses default width of 0.2 with moderate variability. Right panel uses width of 0.05 showing highly unstable and noisy rolling rate estimates."}
 # rolling regression
 
-r2 <- adjustcolor("goldenrod1", alpha.f = 1)  
+r2 <- adjustcolor("goldenrod1", alpha.f = 1)
 
-rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE, 
+rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
                          xlim = NULL, ylim = NULL) {
   if(is.null(xlim)) xlim <- range(rolldf[[1]])
   if(is.null(ylim)) ylim <- range(rolldf[[2]])
@@ -274,10 +274,10 @@ rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
        xlim = xlim,
        ylim = ylim,
        pch = 21,
-       lwd = 1, 
-       cex = 0.9, 
+       lwd = 1,
+       cex = 0.9,
        panel.first = grid(lwd = .7),
-       tck = -0.02, 
+       tck = -0.02,
        mgp = c(0, 0.4, 0))
   # rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col = r3)
   abline(h = ranked.b1, lty = 2)
@@ -285,17 +285,17 @@ rollreg.plot <- function(rolldf, ranked.b1, rate.rev = TRUE,
 }
 
 # Plot ONLY the rolling regression plots for comparison:
-par(mfrow = c(1, 2), 
+par(mfrow = c(1, 2),
     mai = c(0.4, 0.4, 0.3, 0.3),
     oma = c(0.4, 0.4, 0.3, 0.3),
     cex.main = 1,
     cex = 0.9)
 
-rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2, 
+rolldt_norm <- data.table::data.table(x = (normx$roll$endtime + normx$roll$time)/2,
                                       y = normx$roll$slope_b1)
 rate_norm <- normx$summary$slope_b1[1]
 
-rolldt_over <- data.table::data.table(x = (underx$roll$endtime + underx$roll$time)/2, 
+rolldt_over <- data.table::data.table(x = (underx$roll$endtime + underx$roll$time)/2,
                                       y = underx$roll$slope_b1)
 rate_over <- underx$summary$slope_b1[1]
 
@@ -325,7 +325,7 @@ Here we'll run through examples of how to use `auto_rate` to extract rates from 
 
 By default, `auto_rate` identifies the *most linear* regions of the data (i.e. `method = "linear"`):
 
-```{r results='hide', warning=FALSE}
+```{r results='hide', warning=FALSE, fig.alt = "Six-panel auto_rate output for sardine data using the linear method. Panels show the full timeseries with the detected linear region highlighted, a close-up of that region, the rolling rate across the dataset, residual diagnostic plots, and the kernel density estimate identifying linear regions."}
 sard_ar <- auto_rate(sardine.rd)
 ```
 
@@ -348,7 +348,7 @@ Typically, `auto_rate` will identify multiple linear regions. These are ranked u
 print(sard_ar, pos = 2)
 ```
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "Six-panel auto_rate plot for the second-ranked linear region detected in the sardine data, showing the timeseries with the highlighted rate region, close-up, rolling rate, residual diagnostics, and kernel density estimate."}
 plot(sard_ar, pos = 2)
 ```
 
@@ -395,7 +395,7 @@ Here we want to know the highest rates sustained over 15 minutes, or 900s, in th
 sard_insp <- inspect(sardine.rd)
 ```
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "Five-panel auto_rate output for the highest rate method on sardine data with a 900-row width. Panels show the full timeseries with the highest rate region highlighted, a close-up of that region, the rolling rate ordered by absolute value, and residual diagnostic plots."}
 high_rate <- auto_rate(sard_insp, width = 900, by = "row", method = "highest")
 ```
 
@@ -409,7 +409,7 @@ In the `highest` and `lowest` methods the rates are ordered by the *absolute* ra
 
 We can similarly find the `lowest` rate over 15 minutes.
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "Five-panel auto_rate output for the lowest rate method on sardine data with a 900-row width. Panels show the full timeseries with the lowest rate region highlighted, a close-up of that region, the rolling rate ordered by absolute value, and residual diagnostic plots."}
 low_rate <- auto_rate(sard_insp, width = 900, method = "lowest")
 ```
 
@@ -427,7 +427,7 @@ Note, the output objects of the `highest` and `lowest` methods are essentially i
 
 The `rolling` method allows a rolling regression of the specified `width` to be returned in sequential order. 
 
-```{r results='hide'}
+```{r results='hide', fig.alt = "Five-panel auto_rate output for the rolling rate method on sardine data with a 900-row width. Panels show the full timeseries with the first sequential rate region highlighted, a close-up of that region, the sequential rolling rate, and residual diagnostic plots."}
 roll_rate <- auto_rate(sard_insp, width = 900, method = "rolling")
 ```
 

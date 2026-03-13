@@ -338,7 +338,7 @@ grid.p <- function(x, pos = NULL, msg = "grid.p",
       if(i %in% bt) ax <- c(ax, 1)
       if(i %in% lf) ax <- c(ax, 2)
       if(i %in% tp) ax <- c(ax, 3)
-      multi.p(dt, sdt, legend = F, title = "", axes = ax,
+      multi.p(dt, sdt, legend = FALSE, title = "", axes = ax,
               tck = -0.005,
               mgp = c(0, 0.2, 0),
               tp_mgp = c(0, 2, 0),
