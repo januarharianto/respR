@@ -262,7 +262,7 @@ broken-line relationships. R News 8:20–25.
 oxy_crit(squid.rd)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 3.8 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 4 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 
 #> 
@@ -363,7 +363,7 @@ insp <- inspect(squid.rd, time = 1, oxygen = 2)
 oxy_crit(insp)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 3.6 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 4.2 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 
 #> 
