@@ -57,6 +57,15 @@ main {
   max-width: none !important;
 }
 
+/* pkgdown 2.2.0 also adds margin-left:5rem to .col-md-3 at ≥1400px, designed
+   to work with the 50rem main constraint. Without that constraint the sidebar
+   overflows and wraps to the bottom — remove the extra margin. */
+@media (min-width: 1400px) {
+  .col-md-3 {
+    margin-left: 0 !important;
+  }
+}
+
 /* More horizontal spacing between navbar menu items */
 .navbar-nav .nav-item {
   margin-left: 1em !important;
