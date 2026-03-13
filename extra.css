@@ -52,6 +52,11 @@ form[role="search"],
   margin-left: 5px !important;
 }
 
+/* DIAGNOSTIC: red background to see actual container extent */
+.container.template-home {
+  background-color: red !important;
+}
+
 /* Wider, fluid-up-to-max container for all Bootstrap 5 container variants */
 .container,
 .container-sm,
