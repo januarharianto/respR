@@ -440,7 +440,7 @@ inputs to specify the columns.
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 #> oxy_crit: Performing analysis using Rate ~ Oxygen data.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 3.8 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 3.7 seconds.
 #> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.
 ```
 

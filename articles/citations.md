@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**161
+In the seven years since publication, `respR` has been cited [**162
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -28,6 +28,12 @@ know**](https://januarharianto.github.io/respR/articles/contact.html).
 Respiration-based development of an activated sludge model for
 degradation of an organic solvent. *Water Resources and Industry*, 35,
 100344. <https://doi.org/10.1016/j.wri.2026.100344>
+
+****Sinclair, AR**, **Gorrondona, MW**, **Maguire, JB**, & **Frederich,
+M****. **2026**. Thermal boundaries of survival: A case study in a
+marine invertebrate. *Comparative Biochemistry and Physiology Part A:
+Molecular & Integrative Physiology*, 111994.
+<https://doi.org/10.1016/j.cbpa.2026.111994>
 
 ****Ahnert, M**, & **Schalk, T****. **2026**. A simple respirometer
 based on standard lab equipment for practical use in operation of
