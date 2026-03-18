@@ -1,7 +1,7 @@
 Package: respR
 Type: Package
 Title: Import, Process, Analyse, and Calculate Rates from Respirometry Data
-Date: 2025-10-09
+Date: 2026-03-18
 Version: 2.3.4
 Maintainer: Nicholas Carey <nicholascarey@gmail.com>
 Authors@R: c(
