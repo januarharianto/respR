@@ -26,6 +26,7 @@ If you need to install the final v1 release of `respR` to run older
 code, the easiest way is to use this command:
 
 ``` r
+
 devtools::install_github("januarharianto/respR@v1.1.1")
 ```
 
@@ -49,7 +50,7 @@ these local functions.
 v1.1.1 contains a function called `installation_help()`. This simply
 opens a help file which contains further installation instructions. This
 includes a list of dependencies. These will have been installed if the
-[`devtools::install_github`](https://remotes.r-lib.org/reference/install_github.html)
+[`devtools::install_github`](https://devtools.r-lib.org/reference/install-deprecated.html)
 command above was used, but they will be the most recent versions. We
 cannot guarantee these will not eventually make code changes that break
 v1.1.1 functionality.

@@ -4,10 +4,10 @@
 
 ![Methods in Ecology and Evolution journal cover](img/mee_cover.jpg)
 
-  
+\
 `respR` has been peer reviewed and published. Please
 [**cite**](https://januarharianto.github.io/respR/authors.html#citation)
-this paper if you use it in your work:  
+this paper if you use it in your work:\
  
 
 **Harianto, J., Carey, N., & Byrne, M.** respR - An R Package for the
@@ -15,8 +15,8 @@ Manipulation and Analysis of Respirometry Data. *Methods in Ecology and
 Evolution*, 10(6), 912–920. [doi:
 10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
 
-   
-   
+ \
+ \
  
 
 ## See also
@@ -44,8 +44,8 @@ writing the vignettes on this site, or are referenced in the various
 vignettes. See
 [**here**](https://januarharianto.github.io/respR/articles/oxycrit.html#refs)
 for references specific to critical oxygen analyses (i.e. $`P_{crit}`$).
-   
-   
+ \
+ \
 
 ****Killen, SS**, **Christensen, EAF**, **Cortese, D**, **Závorka, L**,
 **Norin, T**, **Cotgrove, L**, **Crespel, A**, **Munson, A**, **Nati,
@@ -127,7 +127,7 @@ University Press.
 <https://doi.org/10.1093/acprof:oso/9780195310610.001.0001>
 
 ****Zivot, E**, & **Wang, J****. **2006**. *Modeling financial time
-series with S-PLUS* (Second). Springer-Verlag.
+series with S-PLUS®* (Second). Springer-Verlag.
 
 ****Muggeo, VMR****. **2003**. Estimating regression models with unknown
 break-points. *Statistics in Medicine*, 22(19), 3055–3071.

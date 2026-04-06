@@ -75,6 +75,7 @@ found in the data help file:
 [`?intermittent.rd`](https://januarharianto.github.io/respR/reference/intermittent.rd.md).
 
 ``` r
+
 urchin <- intermittent.rd
 urchin[[1]] <- round(urchin[[1]] / 60, 2) # change time values to minutes and round them
 ```
@@ -83,6 +84,7 @@ This is what the whole dataset look like. There are three replicates,
 and note they are of different duration.
 
 ``` r
+
 urchin <- inspect(urchin)
 ```
 
@@ -97,6 +99,7 @@ If no inputs other than `x` and `starts` (in the default units of
 across all the data in each replicate.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(1, 2101, 3901))
 #> calc_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.
@@ -113,6 +116,7 @@ replicate. The default is to specify this in row widths, that is
 `by = "row"`.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(1, 2101, 3901),
               measure = c(1800, 1200, 800))
@@ -128,6 +132,7 @@ settling or acclimation after the flush. We can enter the `wait` and
 `measure` inputs as single values to acheive this.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 180,
@@ -144,6 +149,7 @@ settling periods](calc_rate.int_files/figure-html/unnamed-chunk-5-1.png)
 of the original data by using `by = "time"`.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(0,35,64),
               wait = 3,
@@ -186,6 +192,7 @@ from the following 6 minutes using `measure`, leaving the flush
 excluded.
 
 ``` r
+
 zeb_all <- zeb_intermittent.rd |>
 
   # inspect the data
@@ -225,6 +232,7 @@ Each replicate result is saved in the `$summary` element of the output,
 or we can use [`summary()`](https://rdrr.io/r/base/summary.html).
 
 ``` r
+
 summary(zeb_all)
 #> 
 #> # summary.calc_rate.int # ---------------
@@ -262,6 +270,7 @@ input, either in the main function call or when calling
 objects.
 
 ``` r
+
 plot(zeb_all, pos = 50:69)
 ```
 
@@ -285,6 +294,7 @@ The default is `type = "rep"` in which each replicate is plotted
 individually with the rate region highlighted.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(0,35,64),
               wait = 5,
@@ -302,6 +312,7 @@ Entering `type = "full"` will show each replicate rate highlighted in
 the context of the entire dataset.
 
 ``` r
+
 calc_rate.int(urchin,
               starts = c(0,35,64),
               wait = 5,
@@ -317,6 +328,7 @@ dataset](calc_rate.int_files/figure-html/unnamed-chunk-11-1.png)
 Note this may be of limited use when the dataset is large.
 
 ``` r
+
 plot(zeb_all, type = "full", pos = 50)
 ```
 
@@ -332,6 +344,7 @@ in the `$results` element of the output) can be plotted using
 of the initial data.
 
 ``` r
+
 plot(zeb_all, type = "cr", pos = 50)
 ```
 
@@ -360,6 +373,7 @@ This simply prints a single replicate rate result to the console, by
 default the first one. The `pos` input can be used to print others.
 
 ``` r
+
 print(zeb_all)
 #> 
 #> # print.calc_rate.int # -----------------
@@ -387,6 +401,7 @@ coefficients and other metadata for each replicate rate. The `pos` input
 can be used to select which replicates (`$rep` column) to include.
 
 ``` r
+
 summary(zeb_all)
 #> 
 #> # summary.calc_rate.int # ---------------
@@ -422,12 +437,14 @@ summary(zeb_all, pos = 1:4)
 or those rows selected using `pos`
 
 ``` r
+
 zeb_exp <- summary(zeb_all, 
                    pos = 1:4, 
                    export = TRUE)
 ```
 
 ``` r
+
 zeb_exp
 #>      rep  rank intercept_b0 slope_b1   rsq   row endrow  time endtime   oxy endoxy rate.2pt     rate
 #>    <int> <int>        <num>    <num> <num> <num>  <num> <num>   <num> <num>  <num>    <num>    <num>
@@ -444,6 +461,7 @@ selected using `pos`. The result can be saved as a value by using
 `export = TRUE`.
 
 ``` r
+
 zeb_mean <- mean(zeb_all, pos = 1:4, export = TRUE)
 #> 
 #> # mean.calc_rate.int # ------------------

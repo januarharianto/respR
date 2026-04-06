@@ -18,6 +18,7 @@ rate across an entire dataset as entered. The data used here is the
 demonstrate the different x-axis values.
 
 ``` r
+
 cr <- calc_rate(sard)
 ```
 
@@ -35,6 +36,7 @@ outside the actual time data range it will use the first or last value
 instead.
 
 ``` r
+
 cr <- calc_rate(sard,
                 from = 20,
                 to = 80,
@@ -51,6 +53,7 @@ diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-2-1.png)
 Similarly the rate region can be specified `by = "row"`.
 
 ``` r
+
 cr <- calc_rate(sard,
                 from = 2000,
                 to = 6000,
@@ -69,6 +72,7 @@ finds the first occurrence of the `from` value (or the closest matching
 value), and the last occurrence of the `to` value.
 
 ``` r
+
 cr <- calc_rate(sard,
                 from = 94,
                 to = 92,
@@ -87,6 +91,7 @@ plots.](calc_rate_files/figure-html/unnamed-chunk-4-1.png)
 paired values as `from` and `to` in any of these metrics.
 
 ``` r
+
 cr <- calc_rate(sard,
                 from = c(10, 20, 30, 40, 50, 60, 70),
                 to = c(20, 30, 40, 50, 60, 70, 80),
@@ -99,6 +104,7 @@ the fitted region with linear regression, and residual and Q-Q
 diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
+
 
 summary(cr)
 #> 
@@ -128,6 +134,7 @@ rates it will print the first one. The `pos` input can be used to print
 others.
 
 ``` r
+
 print(cr)
 #> 
 #> # print.calc_rate # ---------------------
@@ -157,6 +164,7 @@ input can be used to export the `pos` selected rows as a dataframe, or
 the entire table if this is left `NULL`.
 
 ``` r
+
 summary(cr)
 #> 
 #> # summary.calc_rate # -------------------
@@ -185,10 +193,12 @@ summary(cr, pos = 1:4)
 ```
 
 ``` r
+
 cr_exp <- summary(cr, pos = 1:4, export = TRUE)
 ```
 
 ``` r
+
 cr_exp
 #>       rep  rank intercept_b0 slope_b1   rsq   row endrow  time endtime   oxy endoxy rate.2pt    rate
 #>    <lgcl> <int>        <num>    <num> <num> <int>  <int> <num>   <num> <num>  <num>    <num>   <num>
@@ -205,6 +215,7 @@ using `pos`. The result can be saved as a value by using
 `export = TRUE`.
 
 ``` r
+
 cr_mean <- mean(cr, pos = 1:4, export = TRUE)
 #> 
 #> # mean.calc_rate # ----------------------
@@ -230,6 +241,7 @@ axis labels, give the left axis more space, and increase the space from
 axis labels to axis ticks.
 
 ``` r
+
 plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE,
      las = 1, mai = c(0.3, 0.4, 0.35, 0.15), mgp = c(0, 0.5, 0))
 ```

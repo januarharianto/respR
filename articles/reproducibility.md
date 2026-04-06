@@ -43,6 +43,7 @@ concise. This example uses the native `|>` pipes introduced in [R
 v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/)):
 
 ``` r
+
 urchins.rd |>                                            # Using the urchins data,
   inspect(1, 15) |>                                      # inspect columns 1 and 15, then
   calc_rate(from = 4, to = 29, by = "time") |>           # calculate rate between times 4 and 29
@@ -117,6 +118,7 @@ most linear rate, and the maximum rate over a 10 minute period, and
 finally convert rates to mass-specific units.
 
 ``` r
+
 ## Load the package
 library(respR)
 
@@ -151,6 +153,7 @@ exp_1_max_rate_conv <- convert_rate(exp_1_max_rate,
 ```
 
 ``` r
+
 ## Results
 exp_1_linear_rate_conv
 #> 
@@ -211,6 +214,7 @@ with a colleague who can then import it into their own R project using
 units they wish without having to run any other parts of the workflow.
 
 ``` r
+
 ## Running this code will show how saveRDS and readRDS preserves values 
 ## correctly, and gives the exact same results when used in further 
 ## stages of the workflow
@@ -246,6 +250,7 @@ all objects from the analysis of a single experiment, or multiple
 experiments, can be saved to a single file.
 
 ``` r
+
 ## Will save entire environment to current working directory
 save.image(file = "experiment_1.rda")
 ```
@@ -255,6 +260,7 @@ The environment can be reimported by double clicking on the file
 project), or [`load()`](https://rdrr.io/r/base/load.html) command.
 
 ``` r
+
 ## Will load entire environment to current working project. 
 ## Path to the file must be specified, or it must be in current working directory.
 load(file = "experiment_1.rda")

@@ -95,7 +95,7 @@ When working with respirometry data, you will often need to:
     air.
 4.  **Convert** the resulting unitless rate to an absolute (i.e. whole
     specimen or chamber) rate, a mass-specific rate, or an area-specific
-    rate in appropriate units.  
+    rate in appropriate units.\
 5.  **Select** and summarise the resulting rates according to various
     criteria for reporting a final rate.
 
@@ -135,37 +135,37 @@ To get started check out one of these vignettes describing typical
 analysis workflows:
 
 **[Closed-chamber
-respirometry](https://januarharianto.github.io/respR/articles/closed.html)**  
+respirometry](https://januarharianto.github.io/respR/articles/closed.html)**\
 Even if you are not conducting this particular type of experiment, this
 is the best place to start to understand the full functionality of
 `respR`. It describes an entire workflow to process and analyse a
 closed-chamber respirometry dataset.
 
 **[auto_rate: Automatic detection of metabolic
-rates](https://januarharianto.github.io/respR/articles/auto_rate.html)**  
+rates](https://januarharianto.github.io/respR/articles/auto_rate.html)**\
 Here we detail the function
 [`auto_rate()`](https://januarharianto.github.io/respR/reference/auto_rate.md)
 which automatically identifies the *highest*, *lowest* and *most linear*
 rates in a dataset.
 
 **[Intermittent-flow respirometry: Short
-experiment](https://januarharianto.github.io/respR/articles/intermittent_short.html)**  
+experiment](https://januarharianto.github.io/respR/articles/intermittent_short.html)**\
 **[Intermittent-flow respirometry: Long
-experiment](https://januarharianto.github.io/respR/articles/intermittent_long.html)**  
+experiment](https://januarharianto.github.io/respR/articles/intermittent_long.html)**\
 How to analyse and extract rates from relatively simple and much longer
 intermittent-flow respirometry experiments.
 
 **[Flowthrough
-respirometry](https://januarharianto.github.io/respR/articles/flowthrough.html)**  
+respirometry](https://januarharianto.github.io/respR/articles/flowthrough.html)**\
 Several complete analyses of different types of flowthrough respirometry
 experiments.
 
 **[Critical oxygen
-values](https://januarharianto.github.io/respR/articles/oxycrit.html)**  
+values](https://januarharianto.github.io/respR/articles/oxycrit.html)**\
 Determine critical oxygen values, for example $`P_{crit}`$.
 
 **[Adjusting rates for
-background](https://januarharianto.github.io/respR/articles/adjust_rate.html)**  
+background](https://januarharianto.github.io/respR/articles/adjust_rate.html)**\
 How `adjust_rate` allows you to perform all sorts of different
 adjustments to account for the background oxygen use of microbial
 organisms.

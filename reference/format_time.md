@@ -72,16 +72,16 @@ spaces, forward slashes, hyphens, dots, commas, colons, semicolons, or
 underscores. E.g. all these are parsed as the same date-time:
 `"2010-02-28 13:10:23", "20100228131023", "2010,02/28 13.10;23", "2010 02 28 13_10-23"`.
 
-- Times can be in 24H or 12H with AM/PM  
+- Times can be in 24H or 12H with AM/PM\
   E.g. "2010-02-28 13:10:23" or "2010-02-28 1:10:23 PM"
 
-- Times without initial zero are parsed as 24H time  
+- Times without initial zero are parsed as 24H time\
   E.g. "1:10:23" is same as "1:10:23 AM" or "01:10:23"
 
-- AM/PM take precedence over 24H formatting for 01-12h  
+- AM/PM take precedence over 24H formatting for 01-12h\
   E.g. "1:10:23 PM" and "01:10:23 PM" are both same as "13:10:23"
 
-- However, 24H formatting for 13-24h takes precedence over AM/PM  
+- However, 24H formatting for 13-24h takes precedence over AM/PM\
   E.g. "13:10:23 AM" is identified as "1:10:23 PM" or "13:10:23"
 
 ### Syntax of 'format' input

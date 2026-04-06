@@ -116,6 +116,7 @@ Before progressing, we’ll inspect a portion of the data at the start
 without saving the result to show the structure.
 
 ``` r
+
 zeb_intermittent.rd |>
   subset_data(from = 1, to = 18000, by = "row") |>
   inspect()
@@ -136,6 +137,7 @@ multiple replicates.
 We can similarly have a quick look at the end of the dataset.
 
 ``` r
+
 zeb_intermittent.rd |>
   subset_data(from = 65000, by = "row") |>
   inspect(width = 0.01)
@@ -158,6 +160,7 @@ inspect the entire dataset and this time save the result to an object we
 will use for the rest of the analysis.
 
 ``` r
+
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
@@ -184,6 +187,7 @@ We subset these regions from the `inspect` object we just saved above,
 and save them as separate `calc_rate.bg` objects.
 
 ``` r
+
 bg_pre <- zeb |>
   subset_data(from = 1, to = 4999, by = "row") |>
   calc_rate.bg()
@@ -202,6 +206,7 @@ shown above) have been saved to these two objects. We can see the actual
 values by printing them:
 
 ``` r
+
 bg_pre
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -213,6 +218,7 @@ bg_pre
 ```
 
 ``` r
+
 bg_post
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -241,6 +247,7 @@ two minutes of flush (120 rows) at the end, and plot it to see how the
 rate changes over the replicate.
 
 ``` r
+
 # subset rep 1
 zeb_rep_1 <- subset_data(zeb,
                          from = 5000,
@@ -292,6 +299,7 @@ respirometry studies and perfectly acceptable, in that it is objective
 and consistent.
 
 ``` r
+
 zeb_mmr <- calc_rate(zeb_rep_1,
                      from = 180, # three minutes 'wait' after start
                      to = 480,   # five minutes later = 'measure' phase
@@ -334,6 +342,7 @@ could also have done this when we first subset and inspected the data
 [above](#mmrsubset)).
 
 ``` r
+
 zeb_mmr <- zeb_rep_1 |>
   subset_data(from = 180, by = "row") |>
   auto_rate(method = "highest",
@@ -385,6 +394,7 @@ modify the defaults. We again subset the data to remove the initial 3
 minutes.
 
 ``` r
+
 zeb_mmr <- zeb_rep_1 |>
   subset_data(from = 180, by = "row") |>
   auto_rate() |>
@@ -415,6 +425,7 @@ replicate, so is probably the result we are most interested in. We can
 plot it using `pos`.
 
 ``` r
+
 plot(zeb_mmr, pos = 5)
 ```
 
@@ -453,6 +464,7 @@ for an excellent discussion of appropriate widths in rolling regressions
 to determine MMR.
 
 ``` r
+
 zeb_mmr <- zeb_rep_1 |>
   subset_data(from = 180, by = "row") |>
   auto_rate(width = 0.5) |>
@@ -480,6 +492,7 @@ a good estimation of MMR. Note how the rolling rate plot is smoother
 with this higher width.
 
 ``` r
+
 plot(zeb_mmr, pos = 5)
 ```
 
@@ -525,6 +538,7 @@ so it’s relatively easy to adjust. We just need to enter the two
 background rate objects we saved earlier and specify the method.
 
 ``` r
+
 zeb_mmr_adj <- adjust_rate(zeb_mmr, 
                            by = bg_pre,     # first background rate
                            by2 = bg_post,   # second background rate
@@ -533,6 +547,7 @@ zeb_mmr_adj <- adjust_rate(zeb_mmr,
 ```
 
 ``` r
+
 summary(zeb_mmr_adj)
 #> 
 #> # summary.adjust_rate # -----------------
@@ -599,6 +614,7 @@ Here we use the `adjust_rate` object saved in the previous step, and
 we’ll convert to a mass-specific rate.
 
 ``` r
+
 zeb_mmr_adj_conv <- convert_rate(zeb_mmr_adj,
                                  oxy.unit = "mg/L",       # oxygen units of the original raw data
                                  time.unit = "secs",      # time units of the original raw data
@@ -641,6 +657,7 @@ multiple rates we determined using the `linear` method. We saw
 the MMR rates, the 5th in the summary table, was higher than the others.
 
 ``` r
+
 summary(zeb_mmr_adj_conv)
 #> 
 #> # summary.convert_rate # ----------------
@@ -667,6 +684,7 @@ example, but see later and
 for more advanced examples including how to apply multiple criteria.
 
 ``` r
+
 MMR <- select_rate(zeb_mmr_adj_conv,
                    method = "highest",
                    n = 1)
@@ -681,10 +699,12 @@ saved as a separate data frame. Here, we’ll use this on the final object
 to export the coefficients and other data for this rate.
 
 ``` r
+
 mmr_results <- summary(MMR, export = TRUE)
 ```
 
 ``` r
+
 mmr_results
 #>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
 #>    <num> <int>        <num>    <num> <num>   <num> <int>  <int> <num>   <num> <num>  <num>    <num>      <num>         <num>      <num>   <char>    <char>  <num>  <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
@@ -696,6 +716,7 @@ mmr_results
 This is the complete analysis we have just conducted to get MMR.
 
 ``` r
+
 mmr_results <- 
   zeb_rep_1 |>                              # using the inspected replicate 1 data...
   subset_data(from = 180, 
@@ -773,6 +794,7 @@ recording, the first replicate for MMR, and the end background
 recording. We then `inspect` it.
 
 ``` r
+
 zeb_insp <- zeb_intermittent.rd |>
   subset_data(from = 5840,
               to = 75139,
@@ -796,6 +818,7 @@ minutes. To do this we specify a 180 row `wait` phase and 300 row
 `measure` phase.
 
 ``` r
+
 zeb_cr.int <- calc_rate.int(zeb_insp,
                             starts = 660,
                             wait = 180,
@@ -818,6 +841,7 @@ We can use [`summary()`](https://rdrr.io/r/base/summary.html) to view
 the results.
 
 ``` r
+
 summary(zeb_cr.int)
 #> 
 #> # summary.calc_rate.int # ---------------
@@ -853,6 +877,7 @@ post-experiment background recordings assuming the background rate
 increases linearly from the initial to ending background rates.
 
 ``` r
+
 zeb_cr.int_adj <- adjust_rate(zeb_cr.int,
                               by = bg_pre, 
                               by2 = bg_post,
@@ -867,6 +892,7 @@ of the ending background rate (`-0.000120`). Let’s look at the summary
 to check, and use `pos` to pick out one from the start, middle and end.
 
 ``` r
+
 summary(zeb_cr.int_adj, pos = c(1, 50, 105))
 #> 
 #> # summary.adjust_rate # -----------------
@@ -890,6 +916,7 @@ Now we will convert the rates, then plot the values to decide how to
 select a final RMR rate.
 
 ``` r
+
 zeb_cr.int_conv <- convert_rate(zeb_cr.int_adj,
                                 oxy.unit = "mg/L",       # oxygen units of the original raw data
                                 time.unit = "secs",      # time units of the original raw data
@@ -901,6 +928,7 @@ zeb_cr.int_conv <- convert_rate(zeb_cr.int_adj,
 The converted rates can be seen in the summary table.
 
 ``` r
+
 summary(zeb_cr.int_conv)
 #> 
 #> # summary.convert_rate # ----------------
@@ -944,6 +972,7 @@ explore rate results. For intermittent-flow results the most useful of
 these is `type = "rate"`.
 
 ``` r
+
 plot(zeb_cr.int_conv, type = "rate")
 ```
 
@@ -971,6 +1000,7 @@ r-squared of 0.97 and above, select the lowest 20, and finally take the
 mean of them.
 
 ``` r
+
 RMR <- zeb_cr.int_conv |>
   select_rate(method = "time", n = c(20000, 60000)) |>
   select_rate(method = "rsq", n = c(0.97, 1)) |>
@@ -1062,6 +1092,7 @@ We again subset the data so that the 105 regularly-spaced replicates
 start at row 1.
 
 ``` r
+
 zeb_insp <- zeb_intermittent.rd |>
   subset_data(from = 5840, 
               to = 75139,
@@ -1094,6 +1125,7 @@ specify a 2 minute (120 row) `wait` phase, and six minute (360 row)
 `measure` phase.
 
 ``` r
+
 zeb_ar.int <- auto_rate.int(zeb_insp,
                             starts = 660,
                             wait = 120,
@@ -1119,6 +1151,7 @@ above](#crintadj).
 ### Adjust
 
 ``` r
+
 zeb_ar.int_adj <- adjust_rate(zeb_ar.int,
                               by = bg_pre, 
                               by2 = bg_post,
@@ -1129,6 +1162,7 @@ zeb_ar.int_adj <- adjust_rate(zeb_ar.int,
 ### Convert
 
 ``` r
+
 zeb_ar.int_conv <- convert_rate(zeb_ar.int_adj,
                                 oxy.unit = "mg/L",       # oxygen units of the original raw data
                                 time.unit = "secs",      # time units of the original raw data
@@ -1138,6 +1172,7 @@ zeb_ar.int_conv <- convert_rate(zeb_ar.int_adj,
 ```
 
 ``` r
+
 summary(zeb_ar.int_conv)
 #> 
 #> # summary.convert_rate # ----------------
@@ -1164,6 +1199,7 @@ We can plot the `convert_rate` object for a quick look at how rates vary
 across the data.
 
 ``` r
+
 plot(zeb_ar.int_conv, type = "rate")
 ```
 
@@ -1183,6 +1219,7 @@ using `pos` and the y-axis range will adapt to provide a more detailed
 view of the range of rates.
 
 ``` r
+
 plot(zeb_ar.int_conv, type = "rate", pos = 30:80)
 ```
 
@@ -1198,6 +1235,7 @@ Firstly the rate in the context of the whole replicate, secondly the
 plots, but only shows the `measure` phase.
 
 ``` r
+
 plot(zeb_ar.int, type = "rep", pos = 48)
 ```
 
@@ -1206,6 +1244,7 @@ trace and auto_rate analysis output for that
 replicate](intermittent_long_files/figure-html/unnamed-chunk-40-1.png)
 
 ``` r
+
 plot(zeb_ar.int, type = "ar", pos = 48)
 ```
 
@@ -1246,6 +1285,7 @@ all replicates *except* this one. There is a specific `rep_omit` method
 however to remove particular replicates.
 
 ``` r
+
 SMR <- zeb_ar.int_conv |>
   select_rate(method = "rep_omit", n = 48) |>
   select_rate(method = "lowest_percentile", n = 0.1) |>
@@ -1306,6 +1346,7 @@ be. This code block shows the entire analysis for SMR.
 ### Complete analysis
 
 ``` r
+
 # Inspect data ------------------------------------------------------------
 zeb <- inspect(zeb_intermittent.rd)
 

@@ -43,6 +43,7 @@ contains the temperature, salinity and atmospheric pressure inputs to
 allow it to be converted.
 
 ``` r
+
 sardine.rd
 #>        Time Oxygen Temperature
 #>       <int>  <num>       <num>
@@ -63,6 +64,7 @@ We will convert it to `umol/kg`. In `convert_DO`, the `t`, `S` and `P`
 inputs must be in °C, ppt (‰), and bar.
 
 ``` r
+
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    from = "%Air",     # oxygen unit to convert from
                    to = "umol/kg",    # oxygen unit to convert to
@@ -79,6 +81,7 @@ which can be saved as it’s own object. In this case we will add it to
 the original data frame.
 
 ``` r
+
 sardine_new <- cbind(sardine.rd,
                      umol_kg = conv)
 
@@ -102,6 +105,7 @@ Alternatively, if `simplify = FALSE` the output is a `list` object which
 can be used with `print` for a convenient summary output.
 
 ``` r
+
 conv <- convert_DO(sardine.rd$Oxygen, # data to convert
                    from = "%Air",     # oxygen unit to convert from
                    to = "umol/kg",    # oxygen unit to convert to
@@ -134,6 +138,7 @@ air saturated water is ~20.946% *oxygen* saturated. In other words,
 or tend to use one over the other, so take care not to confuse them.
 
 ``` r
+
 convert_DO(100, "%Air", "%Oxy",
            t = 15,
            S = 35,            
@@ -148,6 +153,7 @@ We will add a column of the same oxygen values in hectopascals,
 converting from the `umol/kg` column we just added.
 
 ``` r
+
 sardine_new$hPa <- convert_DO(sardine_new$umol_kg,  
                               from = "umol per kg",    
                               to = "hPa",  
@@ -181,6 +187,7 @@ For quick conversions, `convert_DO` also accepts single values. These
 particular units here do not require temperature, salinity and pressure.
 
 ``` r
+
 convert_DO(8, 
            "mg/L",
            "mmol/L")
@@ -209,6 +216,7 @@ online converter to do this, but `convert_val` can help do it right
 within the `convert_DO` function call.
 
 ``` r
+
 convert_DO(4.6, 
            from = "ml/L",  
            to = "mg/L",
@@ -245,6 +253,7 @@ function can also be used for general conversions of temperature,
 volume, mass, area, and atmospheric pressure in many common units:
 
 ``` r
+
 convert_val(0, from = "C", to = "K")
 #> [1] 273.15
 convert_val(1, from = "L", to = "ml")

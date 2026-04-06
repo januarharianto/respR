@@ -156,6 +156,7 @@ including its source and methods, can be obtained with
 [`?squid.rd`](https://januarharianto.github.io/respR/reference/squid.rd.md).
 
 ``` r
+
 squid.rd
 #>         Time Oxygen
 #>        <int>  <num>
@@ -179,6 +180,7 @@ We can visualise and examine the dataset using the
 function.
 
 ``` r
+
 squid <- inspect(squid.rd)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -223,10 +225,11 @@ with the `method` input, and we will let the default `width = 0.1` be
 applied.
 
 ``` r
+
 squid.bsr <- oxy_crit(squid)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 3.9 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 4.1 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 ```
 
@@ -261,6 +264,7 @@ Full analysis results can be seen using
 [`summary()`](https://rdrr.io/r/base/summary.html).
 
 ``` r
+
 summary(squid.bsr)
 #> 
 #> # summary.oxy_crit # --------------------
@@ -281,6 +285,7 @@ try smaller and larger `width` values. We can also use `panel` to output
 only the rolling rate plot.
 
 ``` r
+
 oxy_crit(squid, width = 0.05, panel = 2)
 ```
 
@@ -288,6 +293,7 @@ oxy_crit(squid, width = 0.05, panel = 2)
 oxygen](oxycrit_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
+
 oxy_crit(squid, width = 0.2, panel = 2)
 ```
 
@@ -313,6 +319,7 @@ Now we’ll run the analysis using the `"segmented"` method, again with
 the default `width = 0.1`.
 
 ``` r
+
 squid.seg <- oxy_crit(squid, method = "segmented")
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Segmented breakpoint analysis (Muggeo 2003)...
@@ -343,6 +350,7 @@ Full analysis results can be seen using
 [`summary()`](https://rdrr.io/r/base/summary.html).
 
 ``` r
+
 summary(squid.seg)
 #> 
 #> # summary.oxy_crit # --------------------
@@ -359,6 +367,7 @@ summary(squid.seg)
 Again, let’s try different `width` inputs.
 
 ``` r
+
 oxy_crit(squid, width = 0.05, method = "segmented", panel = 2)
 ```
 
@@ -366,6 +375,7 @@ oxy_crit(squid, width = 0.05, method = "segmented", panel = 2)
 oxygen](oxycrit_files/figure-html/unnamed-chunk-10-1.png)
 
 ``` r
+
 oxy_crit(squid, width = 0.2, method = "segmented", panel = 2)
 ```
 
@@ -409,6 +419,7 @@ of the data, which can result in questionable outputs and is not really
 necessary here).
 
 ``` r
+
 ## Perform rolling rate analysis 
 squid_ar <- auto_rate(squid.rd, method = "rolling", width = 0.1, plot = FALSE)
 ## Convert rates
@@ -437,10 +448,11 @@ Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate`
 inputs to specify the columns.
 
 ``` r
+
 oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
 #> oxy_crit: Performing analysis using Rate ~ Oxygen data.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 3.7 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 3.9 seconds.
 #> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.
 ```
 
@@ -471,6 +483,7 @@ method has been used it will contain both results, if the `"segmented"`
 method it is a single value.
 
 ``` r
+
 ## bsr results
 squid.bsr$crit
 #> $crit.intercept
@@ -489,6 +502,7 @@ Summary results can also be exported to a `data.frame` by using the
 `export = TRUE`.
 
 ``` r
+
 ## bsr
 bsr_res <- summary(squid.bsr, export = TRUE)
 ```
@@ -498,6 +512,7 @@ bsr_res <- summary(squid.bsr, export = TRUE)
     #> 1:     2.6089 6.4041e-07 0.00021172 -0.00018433 -0.00023767 -1.2152e-05         2.6101        2.6097
 
 ``` r
+
 ## seg
 seg_res <- summary(squid.seg, export = TRUE)
 ```

@@ -1,8 +1,8 @@
 # Release Notes
 
 This page contains the release notes for the latest updates to `respR`.
-   
-   
+ \
+ \
 
 ## Version 2.x.x – 2026-xx-xx - In preparation.
 
@@ -25,7 +25,7 @@ This page contains the release notes for the latest updates to `respR`.
   anchors”) and rather than apply this new policy as packages are
   updated and submitted, apparently this is important enough to apply
   retroactively to the entirety of the CRAN repository and if not done
-  warrants removal of the package entirely.  
+  warrants removal of the package entirely.\
 - NEW: Tested with `R` 4.5.
 
 ## Version 2.3.3 – 2024-05-11
@@ -337,13 +337,13 @@ for examples.
   You can still use `export = TRUE` to export the table as a data frame
   for easier viewing.
 - CHANGE: `subset_data` - No longer prints a subset summary to the
-  console (i.e. `quiet = TRUE` is the default).  
+  console (i.e. `quiet = TRUE` is the default).\
 - CHANGE: `select_rate` - The `"time_omit"` and `"row_omit"` methods
   have a progress bar when `n` is a vector of three or more values. This
   is because these methods are extremely computationally intensive when
   this is the case and may take some time. If possible you should always
   use a time or row range of lower and upper values instead
-  (e.g. `n = c(10, 20)` instead of `10:20`).  
+  (e.g. `n = c(10, 20)` instead of `10:20`).\
 - CHANGE: The `by = "proportion"` method has been removed from
   `calc_rate` and `subset_data`.
 - CHANGE: Some warnings have now been made messages instead.
@@ -421,9 +421,9 @@ newest function `subset_rate`.
   fit across any time or row value in `n` will be omitted. A continuous
   range of rows or time can still be entered by using regular R syntax
   for creating vectors such as `n = 10:20` or
-  [`seq()`](https://rdrr.io/r/base/seq.html).  
+  [`seq()`](https://rdrr.io/r/base/seq.html).\
 - CHANGE: For the `rate`, `rsq`, `row`, `time`, and `density` methods
-  the `n` input of two values can now be entered in any order.  
+  the `n` input of two values can now be entered in any order.\
 - CHANGE: The `plot` input default has been changed to `FALSE`, and the
   internal plotting for this function has been revised to be much
   quicker and show more plots (up to a max of 20 from 9). See help file
@@ -1074,19 +1074,19 @@ NEW: New example datasets
 ================================= S3 Methods
 ===================================
 
-- `mean.adjust_rate`  
+- `mean.adjust_rate`\
 
-- `mean.adjust_rate.ft`  
+- `mean.adjust_rate.ft`\
 
-- `mean.auto_rate`  
+- `mean.auto_rate`\
 
-- `mean.calc_rate`  
+- `mean.calc_rate`\
 
-- `mean.calc_rate.bg`  
+- `mean.calc_rate.bg`\
 
-- `mean.calc_rate.ft`  
+- `mean.calc_rate.ft`\
 
-- `mean.convert_rate`  
+- `mean.convert_rate`\
 
 - `mean.convert_rate.ft`
 

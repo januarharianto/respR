@@ -41,6 +41,7 @@ unique values and with even spacing. See [plot](#plot) section below for
 details about the plot.
 
 ``` r
+
 inspect(sardine.rd)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -96,6 +97,7 @@ at all obvious if you view a portion of the data not containing the
 missing value.
 
 ``` r
+
 head(df)
 #>   time  oxy
 #> 1    1 7.86
@@ -109,6 +111,7 @@ head(df)
 Only by checking the structure is this obvious.
 
 ``` r
+
 str(df)
 #> 'data.frame':    100 obs. of  2 variables:
 #>  $ time: chr  "1" "2" "3" "4" ...
@@ -119,6 +122,7 @@ These data cannot be used in `respR` until this is remedied. This shows
 the output when this dataset is checked using `inspect`.
 
 ``` r
+
 inspect(df)
 ```
 
@@ -149,6 +153,7 @@ cannot, replace them with an `NA`.
 The problem value is in position 50.
 
 ``` r
+
 df[48:52,]
 #>    time  oxy
 #> 48   48 7.63
@@ -162,6 +167,7 @@ We can try fixing the column with `as.numeric`, view the same rows, and
 check the structure.
 
 ``` r
+
 df[,1] <- as.numeric(df[,1])
 #> Warning: NAs introduced by coercion
 
@@ -193,12 +199,14 @@ will identify locations of `NA` values (see [here](#nacheck)). In this
 case it is easy to fix, as it is obvious what the missing value is.
 
 ``` r
+
 df[50,1] <- 50
 ```
 
 Now we can inspect again, and this time save the result.
 
 ``` r
+
 insp <- inspect(df)
 ```
 
@@ -232,6 +240,7 @@ comes to calculating rates, so need to be removed.
 This datasets contains an infinite oxygen value.
 
 ``` r
+
 inspect(data)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -257,6 +266,7 @@ numbers) of the `Inf` values (up to the first 20), and we can use this
 to view it and check.
 
 ``` r
+
 data[20:25,]
 #>     Time Oxygen Temperature
 #>    <int>  <num>       <num>
@@ -278,6 +288,7 @@ entirely, but since it is a single value we can just replace it with an
 intermediate value which won’t affect rate calculations.
 
 ``` r
+
 data[22,2] <- (data[21,2] + data[23,2])/2
 
 data[20:25,]
@@ -337,6 +348,7 @@ This dataset has two columns of oxygen, one with a single `NA` and one
 with a larger chunk of values missing.
 
 ``` r
+
 insp <- inspect(df, time = 1, oxygen = 2:3, plot = FALSE)
 ```
 
@@ -365,6 +377,7 @@ The locations can also be found in the output object in the `$locs`
 element with the name of the column.
 
 ``` r
+
 insp$locs$oxy1$`NA/NaN`
 #> [1] 23
 
@@ -398,6 +411,7 @@ This imported dataset contains time~oxygen data values, but no numeric
 time.
 
 ``` r
+
 print(data)
 ```
 
@@ -430,6 +444,7 @@ to a date-time format R understands, then an elapsed time from the first
 entry is calculated.
 
 ``` r
+
 # parse to posix
 data$parsed_time <- lubridate::parse_date_time(data[[1]], "HMS")
 # convert to numeric difference in seconds from start
@@ -450,6 +465,7 @@ head(data)
 Now we inspect the data using the new numeric time
 
 ``` r
+
 inspect(data, time = 6, oxygen = 4)
 #> Warning: inspect: Non-sequential Time values found.
 #> Warning: inspect: Time values are not evenly-spaced (numerically).
@@ -482,6 +498,7 @@ fail.
 If we look at this region, it is clear what the problem is.
 
 ``` r
+
 data[297:302,]
 #>        Time Comment Temperature Oxygen_Data_Ch_1         parsed_time num_time
 #>      <char>  <lgcl>       <num>            <num>              <POSc>    <num>
@@ -515,6 +532,7 @@ converts the times to numeric and adds them as a new column.
     #> Warning in import_file("zebrafish.csv"): NOTE: 'import_file' function has been deprecated, will not be updated, and will be removed in a future version of 'respR'.
 
 ``` r
+
 data <- format_time(data, time = 1, format = "HMS")
 #> Times cross midnight, attempting to parse correctly...
 
@@ -532,6 +550,7 @@ data[297:302,]
 If we `inspect` again, the problem is fixed.
 
 ``` r
+
 inspect(data, time = 5, oxygen = 4)
 #> inspect: No issues detected while inspecting data frame.
 #> 
@@ -569,6 +588,7 @@ at 0.1s precision, and when rounded to the nearest second this leads to
 lots of duplicated values.
 
 ``` r
+
 ## original data
 head(data_orig, 5)
 #>   times  oxy
@@ -587,6 +607,7 @@ head(data_round$times, 10)
 ```
 
 ``` r
+
 inspect(data_round)
 ```
 
@@ -624,6 +645,7 @@ call detects and identifies these, allowing them to be checked or
 amended.
 
 ``` r
+
 insp <- inspect(data)
 ```
 
@@ -650,6 +672,7 @@ We can check these rows by extracting the relevant locations from the
 row has been duplicated.
 
 ``` r
+
 dupes <- insp$locs$Time$duplicated
 
 data[dupes,]
@@ -678,6 +701,7 @@ r-squared. It’s probably easiest to just remove them, and `inspect` the
 data again.
 
 ``` r
+
 ## Remove all but the first duplicate row
 data <- data[-dupes[-1],]
 
@@ -719,6 +743,7 @@ but converted to minutes is used in the `flowthrough_mult.rd` example
 data.
 
 ``` r
+
 # seconds in decimal minutes
 head(flowthrough_mult.rd[[1]])
 #> [1] 0.02 0.03 0.05 0.07 0.08 0.10
@@ -733,6 +758,7 @@ intervals are not numerically consistent. This will cause this check to
 produce a warning in `inspect`.
 
 ``` r
+
 inspect(flowthrough_mult.rd)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -769,6 +795,7 @@ If there were a larger time gap in the data, this check would flag it
 up. This dataset is missing a large number of rows.
 
 ``` r
+
 insp <- inspect(data)
 ```
 
@@ -795,6 +822,7 @@ While there is only one time gap location at row 341, we can see this is
 a large gap of 47 seconds.
 
 ``` r
+
 data[340:344, ]
 #>     Time    O2
 #>    <int> <num>
@@ -823,11 +851,13 @@ calculated in a complete region of the data before the gap will be
 identical for either method.
 
 ``` r
+
 cr_row <- calc_rate(data, 100, 300, "row")
 cr_time <- calc_rate(data, 100, 300, "time")
 ```
 
 ``` r
+
 summary(cr_row)
 #> 
 #> # summary.calc_rate # -------------------
@@ -850,6 +880,7 @@ This will not be the case across the gap, or *after* it where row
 numbers will now *not* be equivalent to the time values.
 
 ``` r
+
 cr_row <- calc_rate(data, 200, 400, "row")
 ```
 
@@ -858,6 +889,7 @@ range and by time range producing equivalent
 results](inspecting_files/figure-html/unnamed-chunk-46-1.png)
 
 ``` r
+
 cr_time <- calc_rate(data, 200, 400, "time")
 ```
 
@@ -866,6 +898,7 @@ range and by time range producing equivalent
 results](inspecting_files/figure-html/unnamed-chunk-46-2.png)
 
 ``` r
+
 summary(cr_row)
 #> 
 #> # summary.calc_rate # -------------------
@@ -938,6 +971,7 @@ the regions from which to extract rates in later functions, as well as
 an appropriate time or row window to use when extracting rates.
 
 ``` r
+
 ## default width of 10%
 inspect(sardine.rd)
 ```
@@ -950,6 +984,7 @@ but there is still a lot of variability, with rates fluctuating between
 around -0.0006 and -0.0008.
 
 ``` r
+
 ## width of 20%
 inspect(sardine.rd, width = 0.2)
 ```
@@ -976,6 +1011,7 @@ which can skew results, and possibly make the output difficult to
 interpret.
 
 ``` r
+
 inspect(intermittent.rd)
 ```
 
@@ -990,6 +1026,7 @@ closer look at regions of the data, though note the `width` input will
 apply to the subset, not the original data length.
 
 ``` r
+
 inspect(intermittent.rd[1:1800,])
 ```
 
@@ -1003,6 +1040,7 @@ may be difficult to interpret. This experiment on a zebra fish is 22h
 long and nearly 80000 rows.
 
 ``` r
+
 inspect(zeb_intermittent.rd)
 ```
 
@@ -1013,6 +1051,7 @@ experiment](inspecting_files/figure-html/unnamed-chunk-52-1.png)
 smaller regions of the data, to better see what is going on.
 
 ``` r
+
 inspect(zeb_intermittent.rd[20000:24000,])
 ```
 
@@ -1046,6 +1085,7 @@ best practice is to inspect and assign each time-oxygen column pair as
 separate `inspect` objects.
 
 ``` r
+
 inspect(urchins.rd, time = 1, oxygen = 8:19)
 ```
 
@@ -1067,6 +1107,7 @@ is a visual aid only to help with selection of regions from which to
 extract rates.
 
 ``` r
+
 ## Plot column 4 (temperature) alongside oxygen timeseries
 inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
 ```
@@ -1104,6 +1145,7 @@ This example examining oxygen production in algae uses some of these
 options.
 
 ``` r
+
 inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
         legend = FALSE, rate.rev = FALSE,
         las = 1, mai = c(0.3, 0.35, 0.35, 0.15))

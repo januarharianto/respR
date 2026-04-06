@@ -3,7 +3,7 @@
 [![Nicholas
 Carey](https://github.com/nicholascarey.png)](https://github.com/nicholascarey)
 
-**Nicholas Carey**  
+**Nicholas Carey**\
 [@nicholascarey](https://github.com/nicholascarey)
 
 [![Nicholas’s
@@ -12,7 +12,7 @@ Stats](https://github-profile-summary-cards.vercel.app/api/cards/stats?username=
 [![Januar
 Harianto](https://github.com/januarharianto.png)](https://github.com/januarharianto)
 
-**Januar Harianto**  
+**Januar Harianto**\
 [@januarharianto](https://github.com/januarharianto)
 
 [![Januar’s

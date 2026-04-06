@@ -28,6 +28,7 @@ $`P_{crit}`$ for the included `fishMR` dataset, which we compare with
 the results from `respR` using the same data.
 
 ``` r
+
 ## rMR PCrit Analysis
 
 # load data
@@ -60,6 +61,7 @@ output](img/oxy_crit_comp/oxy_crit_comp_02.png)
 rMR PCrit analysis plot output
 
 ``` r
+
 ## respR PCrit Analysis
 
 # extract time and oxygen column, and format to numeric time starting at zero

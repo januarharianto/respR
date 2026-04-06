@@ -68,6 +68,7 @@ depending on the data. See
 [`vignette("inspecting")`](https://januarharianto.github.io/respR/articles/inspecting.md).
 
 ``` r
+
 urchin_int <- inspect(intermittent.rd)
 ```
 
@@ -116,6 +117,7 @@ without saving the result to check regions of the data, which can help
 us decide how we are going to proceed.
 
 ``` r
+
 intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect()
@@ -135,6 +137,7 @@ purposes of the rolling rate plot. Let’s try a wider window of 50% of
 the data.
 
 ``` r
+
 intermittent.rd |>
   subset_data(from = 1, to = 1800, by = "row") |>
   inspect(width = 0.5)
@@ -186,6 +189,7 @@ Here is what happens if we only specify the starting location of each
 using `starts`:
 
 ``` r
+
 calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901)) 
 ```
@@ -211,6 +215,7 @@ even specify a different `measure` phase in each, and in this case use
 all data except the flush.
 
 ``` r
+
 calc_rate.int(urchin_int,
               starts = c(1, 2101, 3901),
               measure = c(1800, 1400, 900)) |>
@@ -255,6 +260,7 @@ rows). In these data where oxygen is recorded every second this will be
 we do not need to specify this.
 
 ``` r
+
 urch_rates <- calc_rate.int(urchin_int,
                             starts = c(1, 2101, 3901),
                             wait = 300,
@@ -283,6 +289,7 @@ flush to worry about.
 We can view the full results using `summary`:
 
 ``` r
+
 summary(urch_rates)
 #> 
 #> # summary.calc_rate.int # ---------------
@@ -309,6 +316,7 @@ we can see each rate in context of the whole dataset. For larger
 datasets this may be of limited utility.
 
 ``` r
+
 plot(urch_rates,
      type = "full")
 ```
@@ -332,6 +340,7 @@ as an example. We just need to convert it to the same units as our
 urchin data.
 
 ``` r
+
 bg_data <- background_con.rd
 bg_data[[2]] <- convert_DO(bg_data[[2]],
                            from = "%Air",
@@ -342,6 +351,7 @@ bg_data[[2]] <- convert_DO(bg_data[[2]],
 Now we calculate a background rate.
 
 ``` r
+
 bg_rate <- calc_rate.bg(bg_data)
 ```
 
@@ -350,6 +360,7 @@ control
 data](intermittent_short_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 print(bg_rate)
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -363,6 +374,7 @@ print(bg_rate)
 And use it to adjust our urchin rates.
 
 ``` r
+
 urch_rates_adj <- adjust_rate(urch_rates,
                               by = bg_rate) |>
   summary()
@@ -395,6 +407,7 @@ data.
 Lastly, we convert the rates to units.
 
 ``` r
+
 urch_rates_conv <- convert_rate(urch_rates_adj,
                                 oxy.unit = "mg/l",
                                 time.unit = "s",
@@ -421,6 +434,7 @@ to each experiment. As an example we can use the mean of all three
 replicates.
 
 ``` r
+
 mean(urch_rates_conv)
 #> 
 #> # mean.convert_rate # -------------------
@@ -486,6 +500,7 @@ after some testing of different values. See
 for discussion of appropriate widths to use with `auto_rate`.
 
 ``` r
+
 urch_rates <- auto_rate.int(urchin_int,
                             starts = c(1, 2101, 3901),
                             wait = 300,
@@ -522,6 +537,7 @@ adjustment method calculates a background rate from the exact same
 region in the background data that each rate was calculated from.
 
 ``` r
+
 urch_rates_adj <- adjust_rate(urch_rates,
                               by = bg_rate,
                               method = "concurrent") |>
@@ -554,6 +570,7 @@ intermittent-flow analyses.
 Last step is to convert.
 
 ``` r
+
 urch_rates_conv <- convert_rate(urch_rates_adj,
                                 oxy.unit = "mg/l",
                                 time.unit = "s",

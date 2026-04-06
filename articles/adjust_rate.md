@@ -166,6 +166,7 @@ using one of these background chambers.
 ### Calculate background rate
 
 ``` r
+
 ## inspect and calculate background rate using calc_rate.bg
 bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg() 
@@ -212,6 +213,7 @@ and has its own column identifier inputs. This code will perform exactly
 the same rate calculation.
 
 ``` r
+
 ## inspect and calculate background rate using calc_rate.bg
 calc_rate.bg(urchins.rd, time = 1, oxygen = 18) 
 #> 
@@ -232,6 +234,7 @@ calc_rate.bg(urchins.rd, time = 1, oxygen = 18)
 Now we calculate the rate of one of the specimens.
 
 ``` r
+
 ## inspect and calculate urchin rate using calc_rate
 urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
   calc_rate(from = 10, to = 30, by = "time")
@@ -264,6 +267,7 @@ result. However, there is a specific `"value"` method to specify single
 background values.
 
 ``` r
+
 ## adjust rate
 urch_adj <- adjust_rate(urch, by = bg, method = "value")
 print(urch_adj)
@@ -288,6 +292,7 @@ when entering values manually to use the correct *sign* with the rate.
 See note [above](#sign).
 
 ``` r
+
 ## adjust rate
 urch_adj <- adjust_rate(-0.0286, by = -0.000765, method = "value")
 print(urch_adj)
@@ -326,6 +331,7 @@ time
 ### Calculate background and specimen rates
 
 ``` r
+
 ## inspect and calculate background rate using calc_rate.bg
 bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg()
@@ -338,6 +344,7 @@ urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
 ### Adjust rates
 
 ``` r
+
 ## adjust rate
 urch_adj <- adjust_rate(urch, by = bg, method = "value")
 summary(urch_adj)
@@ -363,6 +370,7 @@ Again, this same operation can be performed using values, if a vector of
 rates is passed.
 
 ``` r
+
 ## adjust rate
 urch_adj <- adjust_rate(c(-0.02927, -0.02534, -0.03239, -0.03195), 
                         by = -0.000765, 
@@ -399,6 +407,7 @@ two of the urchins in the `urchins.rd` dataset.
 ### Calculate background and specimen rates
 
 ``` r
+
 ## inspect and calculate background rate
 bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg()
@@ -418,6 +427,7 @@ Now we can use the `bg` object to adjust both specimen rates. As
 separate objects we have to do this in two operations.
 
 ``` r
+
 ## adjust rate
 urch1_adj <- adjust_rate(urch1, by = bg)
 urch2_adj <- adjust_rate(urch2, by = bg)
@@ -455,6 +465,7 @@ specimens in one operation by using a vector of values for the two
 specimen rates.
 
 ``` r
+
 urch_adj <- adjust_rate(c(-0.0278, -0.0206), by = bg)
 summary(urch_adj)
 #> 
@@ -499,6 +510,7 @@ to select multiple background columns via regular R syntax.
 ### Calculate background rates
 
 ``` r
+
 ## inspect and calculate background rate from two chambers
 bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
   calc_rate.bg()
@@ -514,6 +526,7 @@ print the result we can see both calculated background rates, and the
 mean value.
 
 ``` r
+
 print(bg)
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -535,6 +548,7 @@ and has its own column identifier inputs. This code will perform exactly
 the same rate calculation.
 
 ``` r
+
 ## inspect and calculate background rate from two chambers
 calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19, plot = FALSE)
 #> 
@@ -558,6 +572,7 @@ above. We want to use them with the two above to apply a mean adjustment
 value based on all five controls.
 
 ``` r
+
 bg2 <- calc_rate.bg(bg_exp)
 ```
 
@@ -593,6 +608,7 @@ single adjustment value. We’ll adjust one of the specimen rates we
 calculated above.
 
 ``` r
+
 adj <- mean(
   c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832)
 )
@@ -616,6 +632,7 @@ Or alternatively, enter the five background rates directly as a numeric
 vector and let the default `method = "mean"` be applied.
 
 ``` r
+
 adjust_rate(urch1, by = c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832))
 #> 
 #> # print.adjust_rate # -------------------
@@ -636,6 +653,7 @@ Or we could use the object names and extract the `$rate.bg` element
 directly while combining to a vector.
 
 ``` r
+
 adjust_rate(urch1, by = c(bg$rate.bg,
                           bg2$rate.bg))
 #> 
@@ -679,6 +697,7 @@ two background columns (18 & 19) are paired with the first two specimen
 columns (2 & 3), that is 2 will be adjusted by 18, and 3 adjusted by 19.
 
 ``` r
+
 ## Calculate both background rates
 bg1 <- inspect(urchins.rd, time = 1, oxygen = 18) |>
   calc_rate.bg()
@@ -695,6 +714,7 @@ urch2 <- inspect(urchins.rd, time = 1, oxygen = 3) |>
 We’ll print the values for a quick look.
 
 ``` r
+
 urch1$rate
 #> [1] -0.0271
 urch2$rate
@@ -713,6 +733,7 @@ and combine them to a vector using
 [`c()`](https://rdrr.io/r/base/c.html).
 
 ``` r
+
 urch_adj <- adjust_rate(c(urch1$rate, urch2$rate),
                         by = c(bg1$rate.bg, bg2$rate.bg),
                         method = "paired")
@@ -740,6 +761,7 @@ repeat the above example but use `calc_rate.bg` to extract the rates
 from both background columns.
 
 ``` r
+
 ## Calculate both background rates
 bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
   calc_rate.bg()
@@ -751,6 +773,7 @@ urch_adj <- adjust_rate(c(urch1$rate, urch2$rate),
 ```
 
 ``` r
+
 summary(urch_adj)
 #> 
 #> # summary.adjust_rate # -----------------
@@ -788,6 +811,7 @@ extract three rates from different, though overlapping, twenty minute
 regions.
 
 ``` r
+
 ## Set from and to times
 from <- c(0, 10, 20) 
 to <- c(20, 30, 40) 
@@ -812,6 +836,7 @@ Now we have three background rates, and three specimen rates all from
 the same respective regions. We’ll print for a quick look.
 
 ``` r
+
 bg1$summary
 #>       rep  rank intercept_b0 slope_b1    rsq   row endrow  time endtime   oxy endoxy  rate.bg
 #>    <lgcl> <int>        <num>    <num>  <num> <num>  <int> <num>   <num> <num>  <num>    <num>
@@ -850,12 +875,14 @@ Here, we adjust the `calc_rate` object which contains three rates with a
 vector of the background rates.
 
 ``` r
+
 urch_adj <- adjust_rate(urch,
                         by = c(bg1$rate.bg, bg2$rate.bg, bg3$rate.bg),
                         method = "paired")
 ```
 
 ``` r
+
 summary(urch_adj)
 #> 
 #> # summary.adjust_rate # -----------------
@@ -933,6 +960,7 @@ This example (using the initial part of the `squid.rd` data) is a closed
 chamber respirometry experiment on a squid.
 
 ``` r
+
 sqd_insp <- inspect(sqd)
 ```
 
@@ -953,6 +981,7 @@ issues and visualise it using `inspect`, and this function also allows
 us to extract the columns we are interested in.
 
 ``` r
+
 sqd_bg_insp <- inspect(sqd_bg, time = 1, oxygen = 2)
 ```
 
@@ -972,6 +1001,7 @@ More localised estimations would therefore be more representative.
 We’ll use `auto_rate` on the squid data.
 
 ``` r
+
 sqd_ar <- auto_rate(sqd_insp)
 ```
 
@@ -988,12 +1018,14 @@ All we need to do is enter the background `inspect` object as the `by`
 input and specify the method.
 
 ``` r
+
 sqd_ar_adj <- adjust_rate(sqd_ar, by = sqd_bg_insp, method = "concurrent")
 ```
 
 We’ll look at the top 5 rows of the summary table.
 
 ``` r
+
 summary(sqd_ar_adj, pos = 1:5)
 #> 
 #> # summary.adjust_rate # -----------------
@@ -1022,6 +1054,7 @@ We can use `calc_rate.bg` and the row numbers from the summary to show
 that the adjustments for these have been calculated correctly.
 
 ``` r
+
 subset_data(sqd_bg, from = 2425, to = 4800, by = "row") |>
   calc_rate.bg()
 ```
@@ -1031,6 +1064,7 @@ to the subset of background data from rows 2425 to
 4800.](adjust_rate_files/figure-html/unnamed-chunk-39-1.png)
 
 ``` r
+
 
 subset_data(sqd_bg, from = 273, to = 3057, by = "row") |>
   calc_rate.bg()
@@ -1077,6 +1111,7 @@ which excludes the flush and start of the replicate data. We then use a
 rest of the replicate.
 
 ``` r
+
 # replicate start times - seq(from, to, by)
 # starts <- seq(120, 2100, 660)
 # # three minute buffer of data to exclude at the start of each replicate
@@ -1096,6 +1131,7 @@ replicate of the intermittent-flow experiment with wait and measure
 phases indicated.](adjust_rate_files/figure-html/unnamed-chunk-41-1.png)
 
 ``` r
+
 summary(rates)
 #> 
 #> # summary.calc_rate.int # ---------------
@@ -1115,6 +1151,7 @@ Now we have a rate from each replicate, we can adjust them using the
 `"concurrent"` method, and the background dataset.
 
 ``` r
+
 adj <- adjust_rate(rates,
                    interm_bg,
                    "concurrent")
@@ -1156,6 +1193,7 @@ the same window.
 #### Calculate specimen rate
 
 ``` r
+
 # Calculate specimen rate between 10 and 30 mins
 rate <- inspect(urchins.rd, 1, 2) |>
   calc_rate(from = 10,
@@ -1170,6 +1208,7 @@ rate.](adjust_rate_files/figure-html/unnamed-chunk-44-1.png)
 #### Inspect background data
 
 ``` r
+
 ## Inspect background columns
 bg_data <- inspect(urchins.rd,
                    time = 1,
@@ -1183,6 +1222,7 @@ columns.](adjust_rate_files/figure-html/unnamed-chunk-45-1.png)
 #### Adjust rate
 
 ``` r
+
 rate_adj <- adjust_rate(rate,
                         by = bg_data,
                         method = "concurrent")
@@ -1212,6 +1252,7 @@ This performs the same adjustment using a different approach, and again
 demonstrates that the `"concurrent"` method results are as expected.
 
 ``` r
+
 # Subset background data between same timepoints
 bg_rate <- inspect(urchins.rd, 1, 18:19) |>
   subset_data(from = 10, to = 30, by = "time") |>
@@ -1227,6 +1268,7 @@ bg_rate <- inspect(urchins.rd, 1, 18:19) |>
     #> -----------------------------------------
 
 ``` r
+
 rate_adj <- adjust_rate(rate,
                         by = bg_rate,
                         method = "mean")
@@ -1359,6 +1401,7 @@ background data. We’ll subset both of these and calculate the pre- and
 post-experiment background rates.
 
 ``` r
+
 # pre
 bg_pre <- subset_data(zeb_intermittent.rd, 1, 4999, "time") |>
   inspect() |>
@@ -1371,6 +1414,7 @@ seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-1.png)
 
 ``` r
 
+
 # post
 bg_post <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") |>
   inspect() |>
@@ -1382,6 +1426,7 @@ fitted to post-experiment control data from 75140 to 79251
 seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-2.png)
 
 ``` r
+
 bg_pre
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -1393,6 +1438,7 @@ bg_pre
 ```
 
 ``` r
+
 bg_post
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -1416,6 +1462,7 @@ analysis, and a ‘measure’ phase of 7 minutes (420s) to exclude the 2
 minutes of flushing at the end.
 
 ``` r
+
 # define rep start time, buffer and measure periods
 start <- 38180 # start time of replicate
 wait <- 120   # 2 mins buffer
@@ -1441,6 +1488,7 @@ Now we’ll adjust the specimen rates using the two background rates and
 the `"linear"` method.
 
 ``` r
+
 rate_adj <- adjust_rate(rate,
                         by = bg_pre,
                         by2 = bg_post,
@@ -1470,6 +1518,7 @@ own linear model, and using the coefficients to calculate the rate for a
 given time, that of the first result in the summary table above.
 
 ``` r
+
 ## background rates and midpoint times
 bg1_rt <- bg_pre$rate.bg
 bg2_rt <- bg_post$rate.bg
@@ -1503,6 +1552,7 @@ enter the rates, and the *midpoints* of the time ranges over which they
 were determined.
 
 ``` r
+
 rate_adj <- adjust_rate(c(-0.00191, -0.00217, -0.00292),
                         by = -0.0000742,
                         by2 = -0.0001217,
@@ -1551,6 +1601,7 @@ The `background_exp.rd` example dataset shows background data with a
 rate that increases exponentially.
 
 ``` r
+
 inspect(background_exp.rd)
 ```
 
@@ -1571,6 +1622,7 @@ We will use the same example as [above](#lineareg1), but this time
 assume an exponential increase in background rate.
 
 ``` r
+
 rate_adj <- adjust_rate(rate,
                         by = bg_pre,
                         by2 = bg_post,
@@ -1620,6 +1672,7 @@ experiment on algae exposed to light, and so producing oxygen via
 photosynthesis. We’ll calculate a production rate from these data.
 
 ``` r
+
 alg_rt <- calc_rate(algae.rd)
 ```
 
@@ -1628,6 +1681,7 @@ indicating oxygen production via
 photosynthesis.](adjust_rate_files/figure-html/unnamed-chunk-59-1.png)
 
 ``` r
+
 print(alg_rt)
 #> 
 #> # print.calc_rate # ---------------------
@@ -1644,6 +1698,7 @@ A blank control experiment has also been conducted over the same time
 period, so we’ll calculate a background rate.
 
 ``` r
+
 bg_rt <- calc_rate.bg(alg_bg)
 ```
 
@@ -1653,6 +1708,7 @@ indicating oxygen
 consumption.](adjust_rate_files/figure-html/unnamed-chunk-62-1.png)
 
 ``` r
+
 print(bg_rt)
 #> 
 #> # print.calc_rate.bg # ------------------
@@ -1669,10 +1725,12 @@ respirometer is consuming some of the produced oxygen. We can adjust the
 rate to see.
 
 ``` r
+
 rt_adj <- adjust_rate(alg_rt, bg_rt)
 ```
 
 ``` r
+
 print(rt_adj)
 #> 
 #> # print.adjust_rate # -------------------
@@ -1694,6 +1752,7 @@ do this same adjustment using numeric values, but we must be careful to
 use the correct signs.
 
 ``` r
+
 adjust_rate(0.0887, -0.0145)
 #> 
 #> # print.adjust_rate # -------------------
@@ -1725,6 +1784,7 @@ al. 1999](https://januarharianto.github.io/respR/articles/refs.html#references)
 `adjust_rate` can therefore accept positive background rate values.
 
 ``` r
+
 adjust_rate(-0.0176, 0.0042)
 #> 
 #> # print.adjust_rate # -------------------
@@ -1769,6 +1829,7 @@ column (`18`).
 We’ll inspect both to see the structure.
 
 ``` r
+
 inspect(urchins.rd, 1, 2)
 ```
 
@@ -1777,6 +1838,7 @@ channel and background channel
 timeseries](adjust_rate_files/figure-html/unnamed-chunk-68-1.png)
 
 ``` r
+
 inspect(urchins.rd, 1, 18)
 ```
 
@@ -1792,6 +1854,7 @@ oxygen values in the specimen data. Finally we’ll calculate a rate from
 the new data between 10 minutes and 30 minutes.
 
 ``` r
+
 ## background difference in oxygen from initial value
 bg_diff <- urchins.rd[[18]] - urchins.rd[[18]][1]
 
@@ -1819,6 +1882,7 @@ Now we do the adjustment from the same data region using `respR`
 functions.
 
 ``` r
+
 ## calculate urchin rate
 urch_rt <- urchins.rd |>
   inspect(1, 2) |>
@@ -1877,6 +1941,7 @@ until the researcher was ready to start the experiment proper at around
 timepoint 5000, so the initial stages are not useful.
 
 ``` r
+
 inspect(bg_data)
 ```
 
@@ -1890,6 +1955,7 @@ we are interested in and pass it to `calc_rate.bg`. This subsetting can
 be performed using `"time"`, `"row"`, or `"oxygen"` ranges.
 
 ``` r
+
 bg <- subset_data(bg_data, from = 5000) |>
   calc_rate.bg()
 ```
@@ -1905,12 +1971,14 @@ is to subset to the end of the dataset.
 Now we can use this background rate to adjust a specimen rate.
 
 ``` r
+
 sard <- inspect(sardine.rd) |>
   calc_rate(from = 2000, to = 4000) |>
   adjust_rate(by = bg) 
 ```
 
 ``` r
+
 print(sard)
 #> 
 #> # print.adjust_rate # -------------------
@@ -1947,6 +2015,7 @@ background rates above 10% of specimen rates are unacceptably high. We
 can estimate how long it will take for this to occur.
 
 ``` r
+
 duration <- 70000 # starting duration
 under10 <- TRUE # This will hold our logical test result
 

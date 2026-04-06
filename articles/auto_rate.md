@@ -260,6 +260,7 @@ when using the default `width = 0.2` versus a value of `0.6` with the
 dataset `sardine.rd`:
 
 ``` r
+
 # Perform linear detection; default width when not specified is 0.2:
 normx <- auto_rate(sardine.rd)
 #> auto_rate: Applying default 'width' of 0.2
@@ -300,6 +301,7 @@ Here we’ll compare the default `width = 0.2` to a lower value of 5% of
 the data, `width = 0.05`.
 
 ``` r
+
 # Perform linear detection; default width when not specified is 0.2:
 normx <- auto_rate(sardine.rd)
 #> auto_rate: Applying default 'width' of 0.2
@@ -347,6 +349,7 @@ By default, `auto_rate` identifies the *most linear* regions of the data
 (i.e. `method = "linear"`):
 
 ``` r
+
 sard_ar <- auto_rate(sardine.rd)
 #> auto_rate: Applying default 'width' of 0.2
 ```
@@ -399,6 +402,7 @@ highest ranked result is returned when `print` or `plot` are used, but
 other results can be output using the `pos` input with those functions.
 
 ``` r
+
 print(sard_ar, pos = 2)
 #> 
 #> # print.auto_rate # ---------------------
@@ -415,6 +419,7 @@ print(sard_ar, pos = 2)
 ```
 
 ``` r
+
 plot(sard_ar, pos = 2)
 ```
 
@@ -431,6 +436,7 @@ can be viewed by calling
 [`summary()`](https://rdrr.io/r/base/summary.html)
 
 ``` r
+
 summary(sard_ar)
 #> 
 #> # summary.auto_rate # -------------------
@@ -479,6 +485,7 @@ The `pos` input can also be used in `summary` to view particular row
 ranges. We’ll look at the first 10.
 
 ``` r
+
 summary(sard_ar, pos = 1:10)
 #> 
 #> # summary.auto_rate # -------------------
@@ -518,6 +525,7 @@ ourselves, but the `mean` function will also work with `auto_rate`
 objects and accepts the `pos` input.
 
 ``` r
+
 mean(sard_ar, pos = 1:3)
 #> 
 #> # mean.auto_rate # ----------------------
@@ -563,6 +571,7 @@ tells us the time data is gapless and evenly spaced, we can simply
 specify width in the same number of rows.
 
 ``` r
+
 sard_insp <- inspect(sardine.rd)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -581,6 +590,7 @@ sard_insp <- inspect(sardine.rd)
 ```
 
 ``` r
+
 high_rate <- auto_rate(sard_insp, width = 900, by = "row", method = "highest")
 ```
 
@@ -591,6 +601,7 @@ rate ordered by absolute value, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-11-1.png)
 
 ``` r
+
 summary(high_rate)
 #> 
 #> # summary.auto_rate # -------------------
@@ -630,6 +641,7 @@ here the top results all come from the same region of the data.
 We can similarly find the `lowest` rate over 15 minutes.
 
 ``` r
+
 low_rate <- auto_rate(sard_insp, width = 900, method = "lowest")
 ```
 
@@ -640,6 +652,7 @@ ordered by absolute value, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
+
 print(low_rate)
 #> 
 #> # print.auto_rate # ---------------------
@@ -655,6 +668,7 @@ print(low_rate)
 ```
 
 ``` r
+
 summary(low_rate)
 #> 
 #> # summary.auto_rate # -------------------
@@ -687,6 +701,7 @@ The `rolling` method allows a rolling regression of the specified
 `width` to be returned in sequential order.
 
 ``` r
+
 roll_rate <- auto_rate(sard_insp, width = 900, method = "rolling")
 ```
 
@@ -697,6 +712,7 @@ sequential rolling rate, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 summary(roll_rate)
 #> 
 #> # summary.auto_rate # -------------------

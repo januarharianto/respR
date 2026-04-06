@@ -123,6 +123,7 @@ region.
 ### Simulated data: default
 
 ``` r
+
 set.seed(769)
 sim1 <- sim_data(150)
 ```
@@ -132,6 +133,7 @@ sim1 <- sim_data(150)
 auto_rate comparison: simulated data
 
 ``` r
+
 ## respR:
 rspr1 <- auto_rate(sim1$df)
 ```
@@ -144,6 +146,7 @@ rspr1 <- auto_rate(sim1$df)
 auto_rate results
 
 ``` r
+
 ## LoLinR:
 lir1 <- rankLocReg(xall = sim1$df$x, yall = sim1$df$y, 0.2, method = 'pc')
 plot(lir1)
@@ -170,6 +173,7 @@ LoLinR results
 ### Simulated data: corrupted
 
 ``` r
+
 set.seed(112)
 sim2 <- sim_data(150, type = "corrupted")
 ```
@@ -179,6 +183,7 @@ sim2 <- sim_data(150, type = "corrupted")
 auto_rate comparison: sardine data
 
 ``` r
+
 ## respR:
 rspr2 <- auto_rate(sim2$df)
 ```
@@ -191,6 +196,7 @@ rspr2 <- auto_rate(sim2$df)
 auto_rate sardine results
 
 ``` r
+
 ## LoLinR:
 lir2 <- rankLocReg(xall = sim2$df$x, yall = sim2$df$y, 0.2, "pc")
 plot(lir2)
@@ -217,6 +223,7 @@ LoLinR sardine results
 ### Simulated data: segmented
 
 ``` r
+
 set.seed(546)
 sim3 <- sim_data(150, type = "segmented")
 ```
@@ -226,6 +233,7 @@ sim3 <- sim_data(150, type = "segmented")
 auto_rate comparison: urchin data
 
 ``` r
+
 ## respR:
 rspr3 <- auto_rate(sim3$df)
 ```
@@ -238,6 +246,7 @@ rspr3 <- auto_rate(sim3$df)
 auto_rate urchin results
 
 ``` r
+
 ## LoLinR:
 lir3 <- rankLocReg(xall = sim3$df$x, yall = sim3$df$y, 0.2, "pc")
 plot(lir3)
@@ -264,6 +273,7 @@ LoLinR urchin results
 ### Experimental data: UrchinData from LoLinR
 
 ``` r
+
 ## respR:
 Urch1 <- select(UrchinData, 1, 4)
 
@@ -278,6 +288,7 @@ respr_urchindata <- auto_rate(Urch1)
 auto_rate comparison: squid data
 
 ``` r
+
 ## LoLinR:
 lolinr_urchindata  <-  rankLocReg(xall=UrchinData$time, yall=UrchinData$C, alpha=0.2, method="z")
 plot(lolinr_urchindata)
@@ -304,6 +315,7 @@ auto_rate squid results
 ### Experimental data: CormorantData from LoLinR
 
 ``` r
+
 ## respR:
 rcor <- auto_rate(CormorantData)
 ```
@@ -317,6 +329,7 @@ data](img/auto_rate_comp/arcomp12.png)
 auto_rate comparison: intermittent data
 
 ``` r
+
 ## LoLinR:
 lcor  <-  thinData(CormorantData, by = nrow(CormorantData)/150)$newData1 # thin data
 lcoregs <- rankLocReg(xall=lcor$Time, yall=lcor$VO2.ml.min, alpha=0.2, 
@@ -344,6 +357,7 @@ auto_rate intermittent results
 ### Experimental data: squid.rd from respR
 
 ``` r
+
 ## respR:
 rsquid <- auto_rate(squid.rd)
 ```
@@ -356,6 +370,7 @@ rsquid <- auto_rate(squid.rd)
 LoLinR intermittent results
 
 ``` r
+
 ## LoLinR:
 lsquid <- thinData(squid.rd, by = nrow(squid.rd)/150)$newData1
 lsquidregs <- rankLocReg(xall=lsquid$Time, yall=lsquid$o2, alpha=0.2, 

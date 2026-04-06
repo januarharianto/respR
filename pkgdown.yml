@@ -1,4 +1,4 @@
-pandoc: 3.6.3
+pandoc: 3.9.0.2
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -38,7 +38,7 @@ articles:
   archive/usage: archive/usage.html
   archive/v1_code: archive/v1_code.html
   archive/v2_code_change: archive/v2_code_change.html
-last_built: 2026-03-15T15:25Z
+last_built: 2026-04-06T10:27Z
 urls:
   reference: https://januarharianto.github.io/respR/reference
   article: https://januarharianto.github.io/respR/articles

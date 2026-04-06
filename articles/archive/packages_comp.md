@@ -210,7 +210,7 @@ While we are obviously somewhat biased, we see clear benefits of using
 `respR` over `rMR`. These include, but are not limited to -
 
 - **Imports multiple data types, as well as general R data structures
-  (data frames, tibbles, data tables, etc.)**  
+  (data frames, tibbles, data tables, etc.)**\
   While use of other data types in `rMR` is possible, it is not
   intuitive, and time data must be in a specific, complex format. It
   does not allow the use of simple numeric time-elapsed values.
@@ -229,7 +229,7 @@ While we are obviously somewhat biased, we see clear benefits of using
 
 - **Insisting on use of numeric time elapsed, rather than POSIX
   formatted time-data (e.g. “2015-07-03 06:15:00 GMT”) is a clear
-  usability advantage and reduces error**.  
+  usability advantage and reduces error**.\
   `respR` has a function for formatting POSIX data to numeric
   time-elapsed, after which the user need not concern themselves with
   date-time formats. Date-time and POSIX data are notoriously difficult
@@ -399,13 +399,13 @@ once.
 It does however have a couple of advantages over `respR` which may
 influence user choice on which to use:
 
-- **A GUI (Graphical User Interface) Verison.**  
+- **A GUI (Graphical User Interface) Verison.**\
   If you are not comfortable with code or prefer a user interface,
   `FishResp` has an application available that runs on Mac, Windows and
   Linux computers. We have no specific plans to create a GUI version of
   `respR`.
 
-- **Support for dynamic background correction.**  
+- **Support for dynamic background correction.**\
   Pre- and post-experiment background rates can be applied as average,
   linear or exponential interpolations. Dynamic background correction is
   not specifically supported in `respR` as yet, but this is planned.
@@ -428,11 +428,11 @@ However, we feel `FishResp` has substantial drawbacks in comparison to
 
 - It is designed for intermittent-flow respirometry with set width of
   cycled replicates. There is no easy way to analyse closed, flowthrough
-  or irregularly timed intermittent-flow respirometry data.  
+  or irregularly timed intermittent-flow respirometry data.\
 - It supports importing data from some specific systems, but limited or
   no support for regular R data structures.
 - Complex inputs: as with `rMR`, complex date-time inputs are a
-  particular source of frustration and potential error.  
+  particular source of frustration and potential error.\
 - Manual selection of data regions only; there is no equivalent to the
   [`respR::auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)
   function in `FishResp`

@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**162
+In the seven years since publication, `respR` has been cited [**165
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -21,8 +21,8 @@ it**](https://januarharianto.github.io/respR/articles/contact.html).
 
 The following publications (most recent first) have used and cited
 `respR`. If we have missed any [**let us
-know**](https://januarharianto.github.io/respR/articles/contact.html).  
-  
+know**](https://januarharianto.github.io/respR/articles/contact.html).\
+\
 
 ****Ahnert, M**, **Schalk, T**, & **Krebs, P****. **2026**.
 Respiration-based development of an activated sludge model for
@@ -32,8 +32,18 @@ degradation of an organic solvent. *Water Resources and Industry*, 35,
 ****Sinclair, AR**, **Gorrondona, MW**, **Maguire, JB**, & **Frederich,
 M****. **2026**. Thermal boundaries of survival: A case study in a
 marine invertebrate. *Comparative Biochemistry and Physiology Part A:
-Molecular & Integrative Physiology*, 111994.
+Molecular & Integrative Physiology*, 316, 111994.
 <https://doi.org/10.1016/j.cbpa.2026.111994>
+
+****Pin, AO**, **Clark, GF**, **Burkart-Radtke, R**, **Quade, J**, &
+**Gardner, SG****. **2026**. Benthic bacteria communities of coral reefs
+are shaped by sediment properties rather than coral trophic state. *PLOS
+ONE*, 21(4), e0346135. <https://doi.org/10.1371/journal.pone.0346135>
+
+****Yang, JCC**, & **Marshall, KE****. **2026**. Energetic consequences
+of single and repeated freezing in the intertidal mussel, Mytilus
+trossulus. *Journal of Comparative Physiology B*.
+<https://doi.org/10.1007/s00360-026-01656-1>
 
 ****Ahnert, M**, & **Schalk, T****. **2026**. A simple respirometer
 based on standard lab equipment for practical use in operation of
@@ -103,13 +113,6 @@ expression in *Daphnia* *Magna*. *Aquatic Toxicology*, 107664.
 acidification and marine heatwaves shape individual energetics and rates
 of herbivory in a dominant ecosystem engineer.* Research Square.
 <https://doi.org/10.21203/rs.3.rs-8349339/v1>
-
-****Dellisanti, W**, **Zhang, Q**, **Bollati, E**, **Seveso, D**,
-**Ferrier-Pagès, C**, **Younis, C**, **Camp, EF**, & **Kühl, M****.
-**2025**. *Interactive effects of warming and iron supplementation on O2
-dynamics, trace metal content, and microbial diversity within different
-compartments of two Mediterranean corals*. Research Square.
-<https://doi.org/10.21203/rs.3.rs-7904375/v1>
 
 ****Easwaramoorthy, M**, **Thompson, WA**, **Fraz, S**, **Nederveen,
 JP**, **Hartenstein, P**, **Laframboise, L**, **Manzon, RG**, **Somers,
@@ -238,11 +241,6 @@ American Fisheries Society*, vnaf016.
 **Collin, R****. **2025**. Locally Adapted Coral Species Withstand a
 2-Week Hypoxic Event. *Oceans*, 6(1), 5.
 <https://doi.org/10.3390/oceans6010005>
-
-****Yang, JCC**, & **Marshall, KE****. **2025**. *Energetic consequences
-of single and repeated freezing in the intertidal mussel, Mytilus
-trossulus* (p. 2025.02.10.637536). bioRxiv.
-<https://doi.org/10.1101/2025.02.10.637536>
 
 ****Zulian, M**, **Kennedy, EG**, **Hamilton, SL**, **Hill, TM**,
 **Grisby, GV**, **Ricart, AM**, **Sanford, E**, **Spalding, AK**,

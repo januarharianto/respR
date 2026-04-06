@@ -40,6 +40,7 @@ Here’s an example of a 2-column data frame with date-time data and
 oxygen.
 
 ``` r
+
 head(data, n = 5)
 #>               Date_Time O2_mg/L
 #>                  <char>   <num>
@@ -53,6 +54,7 @@ head(data, n = 5)
 We will convert these as both `vector` and `data.frame` inputs.
 
 ``` r
+
 ## Pass as vector
 data_2 <- format_time(data[[1]], format = "dmyHMSp")
 head(data_2)
@@ -80,6 +82,7 @@ simply want to link a specific numeric time value to the start of the
 experiment.
 
 ``` r
+
 ## as data frame
 data_4 <- format_time(data, time = 1, format = "dmyHMSp", start = 1000)
 head(data_4)
@@ -104,6 +107,7 @@ input. Note, the `format` should reflect the correct order.
 These data have dates and times in different columns.
 
 ``` r
+
 data
 #>        date  time    oxy
 #> 1 5/11/2017 23:00 10.056
@@ -118,6 +122,7 @@ We use `time` to specify both columns, and have `format` in the same
 order.
 
 ``` r
+
 format_time(data, time = 1:2, format = "dmyHM")
 #>        date  time    oxy time_num
 #> 1 5/11/2017 23:00 10.056        1
@@ -135,6 +140,7 @@ also be parsed. This even works if the time values cross midnight. Note
 time data with AM/PM should have a `p` appended to the format.
 
 ``` r
+
 format_time(data, time = 1, format = "HMSp")
 #> Times cross midnight, attempting to parse correctly...
 #>          time    oxy time_num
@@ -162,6 +168,7 @@ can be entered in the software, and so may be included in output files,
 or they could be copied from a lab book into a csv file and imported).
 
 ``` r
+
 exp_notes
 #>                times                    events
 #> 1  8/17/2016 9:42:02          Experiment start
@@ -188,6 +195,7 @@ the *same start time* used to format the experimental time data, and
 using the correct `format` setting.
 
 ``` r
+
 format_time(exp_notes, format = "HM")
 #>   times                    events time_num
 #> 1  9:42          Experiment start        1

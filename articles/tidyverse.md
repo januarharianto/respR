@@ -23,6 +23,7 @@ simpler for the user.
 Typical analysis using regular `R` syntax:
 
 ``` r
+
 # 1. check data for errors, select cols 1 and 15:
 urch <- inspect(urchins.rd, 1, 15) 
 # 2. automatically determine linear segment:
@@ -34,6 +35,7 @@ out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
 Alternatively, use `tidyverse` pipes:
 
 ``` r
+
 urchins.rd %>%        # using the urchins dataset,
   select(1, 15) %>%   # select columns 1 and 15
   inspect()     %>%   # inspect the data, then

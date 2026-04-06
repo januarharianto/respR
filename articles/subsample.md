@@ -31,6 +31,7 @@ suppressed with `plot = FALSE`.
 ## Subsample by every n’th element
 
 ``` r
+
 #' # Subsample by every 200th row:
 subsample(squid.rd, n = 200, plot = FALSE)
 ```
@@ -38,6 +39,7 @@ subsample(squid.rd, n = 200, plot = FALSE)
 ## Subsample to a specific length
 
 ``` r
+
 #' # Subsample to 100 rows:
 subsample(sardine.rd, length.out = 100)
 #> subsample: plotting first column of data only.
@@ -49,6 +51,7 @@ rows](subsample_files/figure-html/unnamed-chunk-2-1.png)
 ## Subsample a vector
 
 ``` r
+
 subsample(sardine.rd[[2]], length.out = 500)
 ```
 

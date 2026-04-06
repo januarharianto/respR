@@ -105,7 +105,7 @@ convert_val(c(2,4,6,8), "C", "F")
 
 # Convert pressure
 convert_val(1, "atm", "bar")
-#> [1] 1.013253
+#> [1] 1.01325
 convert_val(1010, "hpa", "bar")
 #> [1] 1.01
 convert_val(735, "torr", "kpa")

@@ -65,6 +65,7 @@ Time is in hours, and oxygen in `mg/L`. Let’s
 the data.
 
 ``` r
+
 lake_insp <- inspect(lake, rate.rev = FALSE)
 ```
 
@@ -86,6 +87,7 @@ will use `calc_rate` as we normally would to get the rate between these
 two timepoints.
 
 ``` r
+
 lake_rate <- calc_rate(lake_insp,
                        from = 12,
                        to = 36,
@@ -101,6 +103,7 @@ misrepresents the overall oxygen flux and instead of a small net oxygen
 flux, suggests there is a large net oxygen consumption.
 
 ``` r
+
 summary(lake_rate)
 #> 
 #> # summary.calc_rate # -------------------
@@ -124,6 +127,7 @@ This two-point rate will not be the one converted if we pass the
 rate as a value to convert the rate to units.
 
 ``` r
+
 lake_rate_conv <- convert_rate(0.02213001,
                                oxy.unit = "mg/l",
                                time.unit = "hrs",
@@ -134,6 +138,7 @@ lake_rate_conv <- convert_rate(0.02213001,
 Alternatively, extract it directly.
 
 ``` r
+
 lake_rate_conv <- convert_rate(lake_rate$rate.2pt,
                                oxy.unit = "mg/l",
                                time.unit = "hrs",
@@ -171,6 +176,7 @@ divide the difference by the time taken (24h) then we should get the
 same result.
 
 ``` r
+
 # start conc
 convert_DO(7.16, from = "mg/l", to = "umol/L")
 #> [1] 223.8

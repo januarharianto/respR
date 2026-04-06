@@ -139,6 +139,7 @@ found in the data help file:
 [`?intermittent.rd`](https://januarharianto.github.io/respR/reference/intermittent.rd.md).
 
 ``` r
+
 urchin <- intermittent.rd
 urchin[[1]] <- urchin[[1]] / 60 # change time values to minutes
 ```
@@ -147,6 +148,7 @@ This is what the whole dataset look like. There are three replicates of
 different duration.
 
 ``` r
+
 urchin <- inspect(urchin)
 ```
 
@@ -168,6 +170,7 @@ dataset (see
 [`vignette("auto_rate")`](https://januarharianto.github.io/respR/articles/auto_rate.md)).
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               width = 400) |>
@@ -206,6 +209,7 @@ applied in the default units of `by = "row"`. (We also pass
 `legend = TRUE` so that the phases are labelled on the plots).
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
@@ -250,6 +254,7 @@ extracted. You can modify the `n` input to output more than one rate per
 replicate. This is what the analysis looks like if it is changed.
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
@@ -304,6 +309,7 @@ In these examples we use `by = "time"` selection of regions. This is the
 `lowest` rate over a period of 8 minutes from each replicate:
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(0, 35, 65),
               wait = 5,
@@ -336,6 +342,7 @@ This is the `highest` rate over a period of 8 minutes from each
 replicate:
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(0, 35, 65),
               wait = 5,
@@ -395,6 +402,7 @@ minutes, a `measure` phase of 7 minutes to exclude the flush, and use
 the other inputs to extract the lowest rate of 3 minutes duration.
 
 ``` r
+
 zeb_all <- zeb_intermittent.rd |>
 
   # Inspect the data
@@ -435,6 +443,7 @@ Each replicate result is saved in the `$summary` element of the output,
 or we can use [`summary()`](https://rdrr.io/r/base/summary.html).
 
 ``` r
+
 summary(zeb_all)
 #> 
 #> # summary.auto_rate.int # ---------------
@@ -477,6 +486,7 @@ input, either in the main function call or when calling
 objects.
 
 ``` r
+
 plot(zeb_all, pos = 50:69)
 ```
 
@@ -500,6 +510,7 @@ yellow points, the red shaded region is the `wait` phase, and the green
 shaded region the `measure` phase.
 
 ``` r
+
 urch <- auto_rate.int(urchin,
                       starts = c(1, 2101, 3901),
                       wait = 300,
@@ -520,6 +531,7 @@ Entering `type = "full"` will show each replicate rate highlighted in
 the context of the entire dataset.
 
 ``` r
+
 auto_rate.int(urchin,
               starts = c(1, 2101, 3901),
               wait = 300,
@@ -536,6 +548,7 @@ timeseries](auto_rate.int_files/figure-html/unnamed-chunk-12-1.png)
 Note this may be of limited use when the dataset is large.
 
 ``` r
+
 plot(zeb_all, type = "full", pos = 50)
 ```
 
@@ -551,6 +564,7 @@ using `type = "ar"` and the `pos` input. Note these plots show only the
 `measure` phase of the data and the rate result from within it.
 
 ``` r
+
 plot(zeb_all, type = "ar", pos = 50)
 ```
 
@@ -579,6 +593,7 @@ This simply prints a single summary row rate result to the console, by
 default the first one. The `pos` input can be used to print others.
 
 ``` r
+
 print(zeb_all)
 #> 
 #> # print.auto_rate.int # -----------------
@@ -608,6 +623,7 @@ coefficients and other metadata for each replicate rate. The `pos` input
 can be used to select which replicates (`$rep` column) to include.
 
 ``` r
+
 summary(zeb_all)
 #> 
 #> # summary.auto_rate.int # ---------------
@@ -643,12 +659,14 @@ summary(zeb_all, pos = 1:4)
 or those rows selected using `pos`
 
 ``` r
+
 zeb_exp <- summary(zeb_all, 
                    pos = 1:4, 
                    export = TRUE)
 ```
 
 ``` r
+
 zeb_exp
 #>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate
 #>    <num> <int>        <num>    <num> <num>  <lgcl> <num>  <num> <num>   <num> <num>  <num>    <num>
@@ -665,6 +683,7 @@ selected using `pos`. The result can be saved as a value by using
 `export = TRUE`.
 
 ``` r
+
 zeb_mean <- mean(zeb_all, pos = 1:4, export = TRUE)
 #> 
 #> # mean.auto_rate.int # ------------------

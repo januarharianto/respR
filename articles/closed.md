@@ -14,6 +14,7 @@ contain background recordings (i.e. from empty or “blank” control
 chambers).
 
 ``` r
+
 head(urchins.rd)
 #>    time.min     a     b     c     d     e     f     g     h     i     j     k     l     m     n     o     p    b1    b2
 #>       <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
@@ -96,6 +97,7 @@ columns. Here, we inspect all columns without `<-` assigning
 (i.e. saving) the result.
 
 ``` r
+
 inspect(urchins.rd, time = 1, oxygen = 2:19)
 #> inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.
 #> Warning: inspect: Time values are not evenly-spaced (numerically).
@@ -149,6 +151,7 @@ individually as a separate `inspect` object. Using the `time` and
 number or, as shown here, by name.
 
 ``` r
+
 urchin <- inspect(urchins.rd, time =  "time.min", oxygen = "n")
 ```
 
@@ -208,6 +211,7 @@ with no additional inputs, will prompt the function to perform a linear
 regression on the entire data series.
 
 ``` r
+
 calc_rate(urchin)
 #> 
 #> # print.calc_rate # ---------------------
@@ -271,6 +275,7 @@ Here, to calculate our rate we’ll select a 25 minute period before the
 interference occurred.
 
 ``` r
+
 urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
 ```
 
@@ -278,6 +283,7 @@ Plotting the output provides a series of diagnostic plots of the data
 subset that was analysed.
 
 ``` r
+
 plot(urch_rate)
 #> 
 #> # plot.calc_rate # ----------------------
@@ -291,6 +297,7 @@ minutes](closed_files/figure-html/unnamed-chunk-7-1.png)
 The saved object can also be explored using generic `S3` R methods.
 
 ``` r
+
 print(urch_rate)
 #> 
 #> # print.calc_rate # ---------------------
@@ -376,6 +383,7 @@ wanted to only use part of it we could pass it through
 first). We save the output as a separate object.
 
 ``` r
+
 bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
 bg_rate <- calc_rate.bg(bg_insp)
 ```
@@ -415,6 +423,7 @@ one we want here, since we want to apply the average of the two
 background rates we just calculated.
 
 ``` r
+
 urch_rate_adj <- adjust_rate(urch_rate, by = bg_rate, method = "mean")
 ```
 
@@ -443,6 +452,7 @@ Background rates are usually (though not always) also negative. In this
 case, the default `"mean"` method will not alter the `by` value.
 
 ``` r
+
 urch_rate_adj_num <- adjust_rate(-0.0218, by = -0.000833)
 ```
 
@@ -520,6 +530,7 @@ of
 to oxygen consumed by the whole urchin in *mg per hour*:
 
 ``` r
+
 convert_rate(urch_rate_adj,         # urchin rate adjusted for background
              oxy.unit = "mg/L",     # oxygen units of the original raw data
              time.unit = "min",     # time units of the original raw data
@@ -546,6 +557,7 @@ We can also convert to a mass-specific rate by adding a specimen `mass`
 and specifying a mass-specific `output.unit`:
 
 ``` r
+
 convert_rate(urch_rate_adj, 
              oxy.unit = "mg l-1", 
              time.unit = "m", 
@@ -581,6 +593,7 @@ various functions, see
 [`unit_args()`](https://januarharianto.github.io/respR/reference/unit_args.md).
 
 ``` r
+
 unit_args()
 #> Note: A string-matching algorithm is used to identify units. 
 #> Example 1: These are recognised as the same: 'mg/L', 'mg/l', 'mg L-1', 'mg per litre', 'mg.L-1'
@@ -637,6 +650,7 @@ keeping track of results across different experiments.
 This time we will save (i.e. assign) the result to an object.
 
 ``` r
+
 urch_rate_final <- convert_rate(urch_rate_adj, 
                                 oxy.unit = "mg/L", 
                                 time.unit = "mins", 
@@ -650,6 +664,7 @@ urch_rate_final <- convert_rate(urch_rate_adj,
 ```
 
 ``` r
+
 print(urch_rate_final)
 #> 
 #> # print.convert_rate # ------------------
@@ -682,6 +697,7 @@ extracted for further use from the saved object where it is
 `$rate.output`:
 
 ``` r
+
 urch_rate_final$rate.output
 #> [1] -5.43
 ```
@@ -693,6 +709,7 @@ units, and more. This is a great way of exporting all the relevant data
 for your final results.
 
 ``` r
+
 urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
 ```
 
@@ -731,6 +748,7 @@ works on numeric values but also `convert_rate` objects, in which case
 we simply need to specify a different output unit via `to`.
 
 ``` r
+
 convert_MR(urch_rate_final, 
            to = "umol/h/g",
            t = 20,
@@ -768,6 +786,7 @@ documented and shared in only a few lines of code, making it easily
 reproducible if the original data file is included:
 
 ``` r
+
 # import and inspect
 urchin <- inspect(urchins.rd, time = 1, oxygen = 15)
 
@@ -799,6 +818,7 @@ v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) or
 even further:
 
 ``` r
+
 urch_rate <- urchins.rd |>                                   # Using the urchins data,
   inspect(1, 15) |>                                          # inspect, then
   calc_rate(from = 4, to = 29, by = "time") |>               # calculate rate, then

@@ -350,6 +350,7 @@ For additional help, documentation, vignettes, and more visit the
 ## Examples
 
 ``` r
+
 # Inspect outflow and inflow oxygen data
 x <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2,
                 in.oxy = 3)

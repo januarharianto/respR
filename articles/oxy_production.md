@@ -25,6 +25,7 @@ Like all analyses in `respR` the first step is to inspect the data for
 common issues.
 
 ``` r
+
 inspect(algae.rd, rate.rev = FALSE)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -73,6 +74,7 @@ we can pick a more appropriate width that will give a better idea of the
 true rate.
 
 ``` r
+
 algae_insp <- inspect(algae.rd, width = 0.5, rate.rev = FALSE)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -97,6 +99,7 @@ use
 to identify the most linear region.
 
 ``` r
+
 algae_rate <- auto_rate(algae_insp, rate.rev = FALSE)
 #> auto_rate: Applying default 'width' of 0.2
 ```
@@ -120,6 +123,7 @@ ranked rates tend to be over widths greater than the input `width`, as
 can be seen here with the top ranked result.
 
 ``` r
+
 summary(algae_rate)
 #> 
 #> # summary.auto_rate # -------------------
@@ -146,6 +150,7 @@ two are very much lower and narrower. Let’s look at the second ranked
 result using `pos`.
 
 ``` r
+
 plot(algae_rate, pos = 2, rate.rev = FALSE)
 ```
 
@@ -180,6 +185,7 @@ identical to the one in the `inspect` plot [above](#inspect) but on
 different axes ranges.
 
 ``` r
+
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
 ```
 
@@ -209,6 +215,7 @@ range of the data. We can visualise this using the internal
 function.
 
 ``` r
+
 auto_rate(algae_insp, width = 0.5, rate.rev = FALSE, plot = FALSE) |>
   respR:::overlap.p()
 #> overlap.p: Plotting all rate(s)...
@@ -257,6 +264,7 @@ The uptake background is negative, which means the production rates have
 been *under*-estimated.
 
 ``` r
+
 algae_rate_adj <- adjust_rate(algae_rate, by = -0.007)  
 #> adjust_rate: Rate adjustments applied using "mean" method.
 summary(algae_rate_adj)
@@ -278,6 +286,7 @@ entered as a positive value, in which case the specimen production rates
 have been *over-*estimated.
 
 ``` r
+
 adjust_rate(algae_rate, by = 0.009) |>
   summary()
 #> adjust_rate: Rate adjustments applied using "mean" method.
@@ -321,6 +330,7 @@ can rely on `convert_val`. We don’t even need to tell it this is an area
 conversion - it detects this automatically from the input units.
 
 ``` r
+
 algae_rate_conv <- convert_rate(algae_rate_adj, 
                                 oxy.unit = "%Air", 
                                 time.unit = "hr", 
@@ -336,6 +346,7 @@ can extract it using `summary` and the `pos` and `export` inputs. We can
 see the converted `area` input in $`m^2`$ in the summary table.
 
 ``` r
+
 summary(algae_rate_conv, pos = 1, export = TRUE)
 #> 
 #> # summary.convert_rate # ----------------

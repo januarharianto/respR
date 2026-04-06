@@ -100,6 +100,7 @@ maximum of 20. These can be selected using `pos`, which represents rows
 of the summary table with the default being `pos = 1:20`.
 
 ``` r
+
 plot(sard)
 ```
 
@@ -119,6 +120,7 @@ lower plot the output rate values in the chosen output units. Each rate
 is plotted against the middle of the region used to determine it.
 
 ``` r
+
 plot(sard, type = "rate")
 ```
 
@@ -145,6 +147,7 @@ these may represent, but note as reordering or selection is performed
 rank and summary table position will not necessarily be equivalent.
 
 ``` r
+
 plot(sard, type = "overlap")
 ```
 
@@ -197,6 +200,7 @@ the rates for background (using an invented value as an example), then
 convert the rates to our final units.
 
 ``` r
+
 sard <-
   inspect(sardine.rd) |>
   auto_rate() |>
@@ -226,6 +230,7 @@ regression parameters and data locations, adjustments (if applied),
 units, and more.
 
 ``` r
+
 summary(sard)
 #> 
 #> # summary.convert_rate # ----------------
@@ -297,6 +302,7 @@ idea of rate values and how they are distributed. We’ll look at both the
 rate value plot and the overlap plot.
 
 ``` r
+
 plot(sard, type = "rate")
 #> plot.convert_rate: Plotting all rate(s)...
 ```
@@ -306,6 +312,7 @@ stable lower rates after approximately timepoint
 2000.](select_rate_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
+
 plot(sard, type = "overlap")
 #> plot.convert_rate: Plotting all rate(s)...
 ```
@@ -328,6 +335,7 @@ method to select any number of the lowest rates using `n`. Here is the
 lowest single rate.
 
 ``` r
+
 sard |>
   select_rate(method = "lowest", n = 1) |>
   plot(quiet = TRUE) |>
@@ -360,6 +368,7 @@ criteria by using pipes (alternatively you can save the output and
 process it through `select_rate` multiple times).
 
 ``` r
+
 sard |>
   select_rate(method = "rsq", n = c(0.95,1)) |>
   select_rate(method = "duration", n = c(1800, Inf)) |>
@@ -422,6 +431,7 @@ Here we do a rolling regression of 20 minutes (`1200` seconds) `width`
 in the `"time"` metric.
 
 ``` r
+
 sard <- inspect(sardine.rd) |>
   auto_rate(method = "lowest", width = 1200, by = "time") |>
   adjust_rate(by = -0.00006) |>
@@ -470,6 +480,7 @@ not showing the full summary table but it ranges from around 0.88 to
 Let’s look at the `"overlap"` plot output.
 
 ``` r
+
 sard |>
   plot(type = "overlap")
 ```
@@ -493,6 +504,7 @@ before around timepoint 3000. We can remove those using `time_omit`.
 Let’s also only keep those with r-squared above 0.9.
 
 ``` r
+
 sard |>
   select_rate(method = "time_omit", n = c(0,3000)) |>
   select_rate(method = "rsq", n = c(0.9, 1)) |>
@@ -535,6 +547,7 @@ intensive and the time it takes increases exponentially with the number
 of results remaining.
 
 ``` r
+
 sard |>
   select_rate(method = "rsq", n = c(0.9, 1)) |>
   select_rate(method = "time_omit", n = c(0,3000)) |>
@@ -588,6 +601,7 @@ totally different results. What happens if we repeat the above but take
 the lowest 500 results first, *then* apply our r-squared range?
 
 ``` r
+
 sard |>
   select_rate(method = "lowest", n = 500) |>
   select_rate(method = "rsq", n = c(0.9, 1)) 
@@ -640,6 +654,7 @@ minutes (360 rows) within each replicate. Then we convert the results,
 plot them in two different ways, and show the summary table.
 
 ``` r
+
 zeb_sub <- subset_data(zeb_intermittent.rd,
                        from = 5840,
                        to = 19039,
@@ -677,6 +692,7 @@ The summary, which is quite a large table, shows us how these rates
 change across the 20 replicates.
 
 ``` r
+
 summary(zeb_sub)
 #> 
 #> # summary.convert_rate # ----------------
@@ -723,6 +739,7 @@ also plot it to check which replicate it comes from, and use `summary`
 with the `export` option to save the full result as a `data.frame`.
 
 ``` r
+
 mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
   plot(type = "full") |>
   summary(export = TRUE)
@@ -741,6 +758,7 @@ mass, and of course the output rate and its units. This is a great way
 of saving the results.
 
 ``` r
+
 mmr
 #>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
 #>    <int> <int>        <num>    <num> <num>  <lgcl> <num>  <num> <num>   <num> <num>  <num>    <num>     <lgcl>        <lgcl>      <num>   <char>    <char>  <num>  <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
@@ -755,6 +773,7 @@ studies where there are many more replicates), so this time we pipe the
 result to [`mean()`](https://rdrr.io/r/base/mean.html).
 
 ``` r
+
 rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
   plot(type = "full") |>
   mean()
@@ -780,6 +799,7 @@ timeseries.](select_rate_files/figure-html/unnamed-chunk-20-1.png)
 Again, we can export the full results using `summary`.
 
 ``` r
+
 summary(rmr, export = TRUE)
 #> 
 #> # summary.convert_rate # ----------------
@@ -826,6 +846,7 @@ results more manageable. Let’s first look at the results of the
 `overlap` plot type in convert rate.
 
 ``` r
+
 sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
@@ -848,6 +869,7 @@ least one other. Here we pipe the result to
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
 ``` r
+
 sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",
@@ -872,6 +894,7 @@ threshold to 0.9, that is regressions which share 90% or more of data
 with at least one other are removed.
 
 ``` r
+
 sardine.rd |>
   auto_rate() |>
   convert_rate(oxy.unit = "%Air",

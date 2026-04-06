@@ -53,6 +53,7 @@ delta oxygen and plots them on a reverse y-axis. However, we can use the
 `rate.rev` input to override this
 
 ``` r
+
 inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
 #> inspect.ft: Applying column default of 'time = 1'
 #> inspect.ft: Applying column default of all non-time column(s) as 'delta.oxy'
@@ -131,6 +132,7 @@ data, can be obtained with the command
 [`?flowthrough.rd`](https://januarharianto.github.io/respR/reference/flowthrough.rd.md).
 
 ``` r
+
 head(flowthrough.rd, n = 4)
 #>     time oxy.out oxy.in oxy.delta
 #>    <int>   <num>  <num>     <num>
@@ -153,6 +155,7 @@ pressure is also required, but we will use the default value).
 Obviously, we want the same oxygen units as the outflow recording.
 
 ``` r
+
 convert_DO(100, from = "%Air", to = "mg/L",
            t = 12, S = 30)
 #> convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). 
@@ -171,6 +174,7 @@ oxygen delta. We use `time` and `out.oxy` to specify the respective
 columns.
 
 ``` r
+
 # inspect
 insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92)
 ```
@@ -209,6 +213,7 @@ representing a proportion of the total data length, and smooths the
 delta oxygen values by performing a rolling mean.
 
 ``` r
+
 # inspect
 plot(insp1, width = 0.05)
 ```
@@ -234,6 +239,7 @@ you an idea of what it takes to get a viable rate via flowthrough
 respirometry from a small coldwater mollusc!).
 
 ``` r
+
 # calculate rate
 rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
 ```
@@ -270,6 +276,7 @@ data and of the flowrate, as well as the mass of the specimen in `kg`.
 Lastly, we specify the output units.
 
 ``` r
+
 # absolute rate
 rate1_abs <- convert_rate.ft(rate1,  
                              oxy.unit = "mg/L",  
@@ -314,6 +321,7 @@ rate1_ms <- convert_rate.ft(rate1,
 Rates can easily be extracted from the output using `$rate.output`.
 
 ``` r
+
 rate1_final <- rate1_ms$rate.output
 print(rate1_final)
 #> [1] -1.49
@@ -325,10 +333,12 @@ data locations, adjustments (if applied), units, and more. This is a
 great way of exporting all the relevant data for your final results.
 
 ``` r
+
 rate1_final <- summary(rate1_ms, export = TRUE)
 ```
 
 ``` r
+
 rate1_final
 #>       rep  rank intercept_b0   slope_b1   rsq   row endrow  time endtime   oxy endoxy delta_mean flowrate  rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit    mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
 #>    <lgcl> <int>        <num>      <num> <num> <int>  <int> <int>   <int> <num>  <num>      <num>    <num> <num>     <lgcl>        <lgcl>      <num>   <char>        <char>   <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
@@ -348,6 +358,7 @@ otherwise the same: `inspect.ft`, `calc_rate.ft`, and `convert_rate.ft`.
 ### Inspect data
 
 ``` r
+
 # inspect
 insp2 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
@@ -384,6 +395,7 @@ running `calc_rate.ft` using the default values will calculate rate as
 the average of every delta oxygen value multiplied by the flowrate.
 
 ``` r
+
 # calculate rate
 rate2 <- calc_rate.ft(insp2, flowrate = 2.34)
 ```
@@ -412,6 +424,7 @@ inflow water or shared water source if it is practical to do so.
 We will convert to only the mass-specific rate this time.
 
 ``` r
+
 # mass-specific rate  
 rate2_ms <- convert_rate.ft(rate2,  
                             oxy.unit = "mg/L",  
@@ -456,6 +469,7 @@ We will use `inspect.ft` to examine the first specimen column pair of
 outflow and inflow oxygen.
 
 ``` r
+
 # inspect
 insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6)
 ```
@@ -488,6 +502,7 @@ from the `from` input to the end of the dataset in the default units of
 `"time"`.
 
 ``` r
+
 # calculate rate
 rate3 <- calc_rate.ft(insp3, from = 30, flowrate = 0.1)
 ```
@@ -519,6 +534,7 @@ concurrently; `respR` allows you to save a background rate to adjust
 multiple different experiments.
 
 ``` r
+
 # inspect
 bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)
 ```
@@ -538,6 +554,7 @@ We use the same `calc_rate.ft` function to calculate and save background
 rates.
 
 ``` r
+
 # calculate rate
 bgrate <- calc_rate.ft(bg, flowrate = 0.1)
 ```
@@ -561,6 +578,7 @@ Now we use the saved background rate object to adjust the specimen rate
 we determined earlier.
 
 ``` r
+
 # adjust rate
 rate3adj <- adjust_rate.ft(rate3, by = bgrate)
 ```
@@ -587,6 +605,7 @@ they are collected under the same conditions. However, it also accepts
 numeric values. This will give the exact same result.
 
 ``` r
+
 # adjust rate
 rate3adj <- adjust_rate.ft(rate3, by = -0.03174)
 ```
@@ -609,6 +628,7 @@ background experiments. In fact, if you enter multiple background rates
 this is the default behaviour.
 
 ``` r
+
 # adjust rate
 adjust_rate.ft(rate3, by = c(-0.030, -0.032, -0.038, -0.040))
 ```
@@ -645,6 +665,7 @@ can be found the data help file:
 [`?flowthrough_mult.rd`](https://januarharianto.github.io/respR/reference/flowthrough_mult.rd.md).
 
 ``` r
+
 # absolute rate  
 rate3_abs <- convert_rate.ft(rate3adj,  
                              oxy.unit = "%Air",  
@@ -680,6 +701,7 @@ these.
 ### Inspect data
 
 ``` r
+
 # inspect
 insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)
 ```
@@ -705,6 +727,7 @@ This time we will calculate rates using subsetting by `"row"` which can
 be see in the top red x-axis.
 
 ``` r
+
 # calculate rate
 rate4 <- calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```
@@ -728,6 +751,7 @@ We already determined background rate in [Case 3](#case3bg), so we can
 use the same object here.
 
 ``` r
+
 # adjust rate
 rate4adj <- adjust_rate.ft(rate4, by = bgrate)
 ```
@@ -749,6 +773,7 @@ rate4adj <- adjust_rate.ft(rate4, by = bgrate)
 Now we convert the adjusted rate.
 
 ``` r
+
 # mass-specific rate  
 rate4_abs <- convert_rate.ft(rate4adj,  
                              oxy.unit = "%Air",  
@@ -783,6 +808,7 @@ where the specimen’s oxygen consumption rate increased, before slowly
 recovering to routine levels.
 
 ``` r
+
 # inspect 
 insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8)
 ```
@@ -804,6 +830,7 @@ Since we are only interested in this active region, we can use the
 function and pipe (`%>%`) the result to `inspect.ft` for a closer look.
 
 ``` r
+
 # subset and inspect
 insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
   inspect.ft(time = 1, out.oxy = 4, in.oxy = 8)
@@ -822,6 +849,7 @@ minutes, so we will use this region to calculate the active rate.
 ### Calculate rate
 
 ``` r
+
 # calculate rate
 rate5 <- calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1)
 ```
@@ -837,6 +865,7 @@ panel.](flowthrough_files/figure-html/unnamed-chunk-50-1.png)
 We can also adjust this rate by the background rate we saved earlier.
 
 ``` r
+
 # adjust rate
 rate5adj <- adjust_rate.ft(rate5, by = bgrate)
 ```
@@ -859,6 +888,7 @@ Lastly we convert the adjusted rate, this time to a mass-specific rate,
 and try another different oxygen amount metric in the output units.
 
 ``` r
+
 # mass-specific rate  
 rate5_ms <- convert_rate.ft(rate5adj,  
                             oxy.unit = "%Air",  
@@ -906,6 +936,7 @@ We will inspect the specimen chamber as we normally would, using the
 header tank as the inflow recording.
 
 ``` r
+
 # inspect 
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4)
 ```
@@ -925,6 +956,7 @@ suggests that the background rate may not be constant.
 If we examine the background data in the same way:
 
 ``` r
+
 # inspect 
 bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4)
 ```
@@ -944,6 +976,7 @@ this.
 ### Account for background
 
 ``` r
+
 # inspect 
 insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3)
 ```
@@ -960,6 +993,7 @@ are consistent, and we can go ahead and calculate a rate.
 ### Calculate rate
 
 ``` r
+
 # calculate rate
 rate6 <- calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1)
 ```
@@ -1015,6 +1049,7 @@ just need to put these into a data frame with any `time` value to be
 able to process them in `inspect.ft`.
 
 ``` r
+
 ## Single spot checks of outflow and inflow
 ## Create dataframe
 df <- data.frame(time = 1,
@@ -1028,6 +1063,7 @@ Now all we need to do is the usual workflow: `inspect.ft` \>
 `calc_rate.ft` \> `convert_rate.ft`.
 
 ``` r
+
 insp7 <- inspect.ft(df, time = 1, out.oxy = 2, in.oxy = 3)
 rate7 <- calc_rate.ft(insp7, flowrate = 0.25)
 rate7_abs <- convert_rate.ft(rate7,
@@ -1064,6 +1100,7 @@ adjust the rate in `adjust_rate.ft` using a rate calculated from similar
 spot readings from a control chamber.
 
 ``` r
+
 ## specimen delta oxygen = outflow minus inflow
 del7 <- 7.32 - 8.04
 ## control delta oxygen
@@ -1120,6 +1157,7 @@ rate7_abs <- convert_rate.ft(rate7_adj,
 You can even use vectorised operations to convert multiple rates.
 
 ``` r
+
 ## specimen delta oxygen = outflow minus inflow
 outflows <- c(7.32, 7.45, 7.19, 7.27)
 ## control delta oxygen
@@ -1201,6 +1239,7 @@ rate sustained across a five minute window.
 ### Inspect data
 
 ``` r
+
 ## inspect
 insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
 ```
@@ -1226,6 +1265,7 @@ results, and in the following sections filter them to get a final RMR
 and MMR.
 
 ``` r
+
 # calculate rolling 5-minute rate
 roll_rate <- calc_rate.ft(insp8, width = 300, by = "row", flowrate = 0.1)
 # adjust rates
@@ -1268,6 +1308,7 @@ plots output rates in a way that you can see how they vary across the
 dataset.
 
 ``` r
+
 # plot rates
 plot(roll_rate_ms, type = "rate")
 #> plot.convert_rate.ft: Plotting all rate(s)...
@@ -1283,6 +1324,7 @@ delta oxygen values. We can use `pos` to more closely examine output
 rates from particular regions.
 
 ``` r
+
 # plot rates
 plot(roll_rate_ms, type = "rate", pos = 500:1700)
 #> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
@@ -1308,6 +1350,7 @@ how the `respR` functions are flexible and adaptable. An alternative
 approach might be to select only the single lowest rate, for instance.
 
 ``` r
+
 rmr <- 
   roll_rate_ms |>
   select_rate.ft(method = "time", n = c(10,30)) |>
@@ -1359,6 +1402,7 @@ To get MMR we will simply extract the single highest 5-minute rate from
 the region of elevated rates at around 40 minutes.
 
 ``` r
+
 mmr <- 
   roll_rate_ms |>
   select_rate.ft(method = "time", n = c(30,50)) |>
@@ -1387,6 +1431,7 @@ this result using `pos` for a closer look using the `type = "full"`
 option.
 
 ``` r
+
 plot(roll_rate_ms, pos = 2270, type = "full")
 #> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
 ```
@@ -1411,6 +1456,7 @@ can be done by entering vectors of paired start and end values as the
 ### Inspect and calculate rates
 
 ``` r
+
 # inspect 
 insp9 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 3, in.oxy = 7)
 # calculate rates
@@ -1426,6 +1472,7 @@ rate9 <- calc_rate.ft(insp9,
 The different rates can be plotted using the `pos` input.
 
 ``` r
+
 plot(rate9, pos = 2)
 #> 
 #> # plot.calc_rate.ft # -------------------
@@ -1442,6 +1489,7 @@ bottom panel.](flowthrough_files/figure-html/unnamed-chunk-85-1.png)
 And they can all be viewed using `summary`.
 
 ``` r
+
 summary(rate9)
 #> 
 #> # summary.calc_rate.ft # ----------------
@@ -1478,6 +1526,7 @@ v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) work
 just as well.
 
 ``` r
+
 ## calc background rate 
 ## (might only need to be done once and used for multiple experiments)
 bgrate <- 
@@ -1533,6 +1582,7 @@ print(rate3_abs)
   help with selection of regions from which to extract rates.
 
 ``` r
+
 ## Plot column 15 (temperature) alongside oxygen timeseries
 inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5,
            add.data = 15)

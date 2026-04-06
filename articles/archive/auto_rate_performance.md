@@ -172,6 +172,7 @@ data points. The output of our performance test is avaliable from within
 the package as a data object called `test_lin_data`.
 
 ``` r
+
 # NOTE: Functions take some time to run
 
 # Test on data of length 100 samples -------------------------------------------
@@ -222,6 +223,7 @@ The argument `plot`, when set to TRUE, can show us exactly the detected
 segments at every iteration. Try it!
 
 ``` r
+
 # Try this code below. WARNING: Will run and plot visuals 20 times.
 x <- test_lin(reps = 20, len = 500, type = "segmented", plot = TRUE)
 ```
@@ -241,6 +243,7 @@ deviation from the $`\beta_{detected}`$ values across all values of
 $`\pm 0.06`$, even for values close to zero:
 
 ``` r
+
 plot(test_lin_data$default100)
 ```
 
@@ -258,6 +261,7 @@ $`R^2`$ of 0.999, and **(D)** deviation was 10$`\times`$ smaller than
 when sample size was at 100:
 
 ``` r
+
 plot(test_lin_data$default500)
 ```
 
@@ -283,6 +287,7 @@ true rate across all slopes when compared to its performance with
 was genrally poorer at values close to zero.
 
 ``` r
+
 plot(test_lin_data$corrupted100)
 ```
 
@@ -302,6 +307,7 @@ substantially smaller with seemingly fewer poor estimates when slope
 values approach zero.
 
 ``` r
+
 plot(test_lin_data$corrupted500)
 ```
 
@@ -327,6 +333,7 @@ and **(D)** the deviance from the true rate appeared to be poorer when
 slope values are closer to zero.
 
 ``` r
+
 plot(test_lin_data$segmented100)
 ```
 
@@ -346,6 +353,7 @@ $`R^2`$ of 0.999, and **(D)** deviations from $`\beta_{true}`$ were much
 smaller in magnitude.
 
 ``` r
+
 plot(test_lin_data$segmented500)
 ```
 

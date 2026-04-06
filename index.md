@@ -36,6 +36,7 @@ for more details.
 installed via the ‘Packages’ tab in RStudio or by running this command:
 
 ``` r
+
 install.packages("respR")
 ```
 
@@ -43,6 +44,7 @@ You can also install the latest version direct from
 [**Github**](https://github.com/januarharianto/respr/):
 
 ``` r
+
 devtools::install_github("januarharianto/respR")
 ```
 
@@ -74,8 +76,8 @@ studies. Check the [**respR
 Citations**](https://januarharianto.github.io/respR/articles/citations.html)
 page to see a list of published studies which have used the package.
 
-   
-   
+ \
+ \
  
 
 ## Contact, feedback and help
@@ -103,6 +105,7 @@ a beer to say thanks see
 For a quick evaluation of the package, try out the following code:
 
 ``` r
+
 library(respR) # load the package
 
 # 1. Check data for errors, selecting cols 1 and 15:

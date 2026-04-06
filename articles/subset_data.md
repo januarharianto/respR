@@ -41,6 +41,7 @@ way.
 The `squid.rd` dataset is extremely long.
 
 ``` r
+
 inspect(squid.rd)
 #> inspect: Applying column default of 'time = 1'
 #> inspect: Applying column default of 'oxygen = 2'
@@ -53,6 +54,7 @@ oxygen timeseries](subset_data_files/figure-html/unnamed-chunk-1-1.png)
 Let’s say we are only interested in the initial stages.
 
 ``` r
+
 x <- subset_data(squid.rd, from = 1, to = 10000, by = "time")
 inspect(x)
 ```
@@ -69,6 +71,7 @@ We can do the same thing using rows, which in this dataset which is
 per-second happen to be the same values.
 
 ``` r
+
 x <- subset_data(squid.rd, from = 1, to = 10000, by = "row")
 inspect(x)
 ```
@@ -83,6 +86,7 @@ conditions. In this long experiment oxygen declines to very low levels,
 so let’s only select the higher values.
 
 ``` r
+
 x <- subset_data(squid.rd, from = 8, to = 6.5, by = "oxygen")
 inspect(x)
 ```
@@ -92,6 +96,7 @@ and 6.5 mg/L showing higher-oxygen
 portion](subset_data_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
+
 print(x)
 #>        Time Oxygen
 #>       <int>  <num>
@@ -120,6 +125,7 @@ subset a single replicate from an intermittent flow experiment to
 calculate a rate.
 
 ``` r
+
 x <- inspect(intermittent.rd)
 ```
 
@@ -132,6 +138,7 @@ replicate, pipe the data to `calc_rate` and other functions and output
 our final rate, all without having to create a new object.
 
 ``` r
+
 x |>
   subset_data(from = 2100, to = 3500, by = "time") |>
   auto_rate() |>
@@ -162,6 +169,7 @@ We can also use `subset_data` and pipes just to have a quick look at
 portions of big datasets without having to save anything.
 
 ``` r
+
 zeb_intermittent.rd |>
   subset_data(from = 10000, to = 13000, by = "time") |>
   inspect()
@@ -178,6 +186,7 @@ check](subset_data_files/figure-html/unnamed-chunk-8-1.png)
 only, but all other columns are subset to the same rows).
 
 ``` r
+
 urchins.rd |> 
   subset_data(from = 10, to = 20, by = "time") |>
   print(nrows = 10)

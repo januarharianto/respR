@@ -33,6 +33,7 @@ We can use the same replicate start and end locations as in the example
 to extract a rate from each complete replicate.
 
 ``` r
+
 # inspect data
 urchin_int <- inspect(intermittent.rd)
 #> inspect: Applying column default of 'time = 1'
@@ -46,6 +47,7 @@ regions](intermittent_old_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
 
+
 # calc rates
 urchin_int_rates <- calc_rate(urchin_int,
                               from = c(1, 2101, 3901),
@@ -58,6 +60,7 @@ data showing three replicate rate
 regions](intermittent_old_files/figure-html/unnamed-chunk-2-2.png)
 
 ``` r
+
 summary(urchin_int_rates)
 #> 
 #> # summary.calc_rate # -------------------
@@ -83,6 +86,7 @@ We can also extract by time values, and here we will also apply a
 different time window within each replicate.
 
 ``` r
+
 urchin_int_rates <- calc_rate(urchin_int,
                               from = c(200, 2300, 4100),
                               to = c(1800, 3000, 4400),
@@ -97,6 +101,7 @@ By default, the first is shown in `print` and `plot`, but the `pos`
 input can be used to view others.
 
 ``` r
+
 plot(urchin_int_rates, pos = 3)
 ```
 
@@ -108,6 +113,7 @@ Calling [`summary()`](https://rdrr.io/r/base/summary.html) will show the
 coefficients, locations and values of all rates:
 
 ``` r
+
 summary(urchin_int_rates)
 #> 
 #> # summary.calc_rate # -------------------
@@ -140,6 +146,7 @@ be treated like any other `inspect` object, including being passed to
 `print` and `plot`.
 
 ``` r
+
 # Create separate replicate data frames
 u_rep1 <- subset_data(urchin_int, from = 1, to = 1900, by = "time")
 u_rep2 <- subset_data(urchin_int, from = 2100, to = 3500, by = "time")
@@ -153,6 +160,7 @@ replicate. In addition, this approach allows you to use the
 `by = "oxygen"` method.
 
 ``` r
+
 u_rate1 <- calc_rate(u_rep1, from = 7.1, to = 6.7, by = "oxygen")
 u_rate2 <- calc_rate(u_rep2, from = 7.1, to = 6.8, by = "oxygen")
 u_rate3 <- calc_rate(u_rep3, from = 7.0, to = 6.8, by = "oxygen")
@@ -169,12 +177,14 @@ your local environment with redundant objects and overall makes for a
 tidier workflow.
 
 ``` r
+
 u_rate3 <- urchin_int |>
   subset_data(from = 3700, to = 4831, by = "time") |>
   calc_rate(from = 7.0, to = 6.8, by = "oxygen")
 ```
 
 ``` r
+
 summary(u_rate3)
 #> 
 #> # summary.calc_rate # -------------------
@@ -206,6 +216,7 @@ object for every replicate, which will be quite large (several MB).
 ### Inspect data
 
 ``` r
+
 zeb <- inspect(zeb_intermittent.rd)
 ```
 
@@ -216,6 +227,7 @@ rate](intermittent_old_files/figure-html/unnamed-chunk-12-1.png)
 ### Analysis loop
 
 ``` r
+
 # define wait and measure periods
 wait <- 120   # 2 mins wait
 measure <- 420  # 7 mins measure
@@ -247,6 +259,7 @@ We can extract and view the top-ranked rate result from each replicate
 using the `sapply` function.
 
 ``` r
+
 ## extract rates
 rmr_rate <- sapply(zeb_rmr, function(z) z$rate[1])
 plot(rmr_rate, ylim = rev(range(rmr_rate)))
@@ -266,6 +279,7 @@ This saves pre- and post-experiment background rates for use in the next
 step.
 
 ``` r
+
 bg_pre <- zeb |>
   subset_data(from = 1, to = 4999, by = "row") |>
   calc_rate.bg()
@@ -282,6 +296,7 @@ results list of `auto_rate` objects and return a new list of
 `adjust_rate` objects.
 
 ``` r
+
 zeb_rmr_adj <- lapply(zeb_rmr, function(z) adjust_rate(z,
                                                        by = bg_pre,
                                                        by2 = bg_post,
@@ -294,6 +309,7 @@ Once again we will use `lapply` to loop through the SMR list of
 `adjust_rate` objects and convert the rates for each replicate.
 
 ``` r
+
 zeb_rmr_conv <- lapply(zeb_rmr_adj, function(z) convert_rate(z,
                                                              oxy.unit = "mg/L",
                                                              time.unit = "secs",
@@ -306,6 +322,7 @@ We’ll look at two examples. This is the top-ranked result from these two
 replicates, though the actual object will contain more.
 
 ``` r
+
 summary(zeb_rmr_conv[[10]], pos = 1)
 #> 
 #> # summary.convert_rate # ----------------
@@ -331,12 +348,14 @@ function to extract the top ranked final converted rate from each
 replicate.
 
 ``` r
+
 zeb_rmr_all <- sapply(zeb_rmr_conv, function(z) z$rate.output[1])
 ```
 
 Now we can plot them. Again, we reverse the y-axis.
 
 ``` r
+
 plot(zeb_rmr_all, ylim = rev(range(zeb_rmr_all)))
 ```
 
@@ -350,6 +369,7 @@ routine behaviour. Here, rates are very consistent after number 20,
 apart from one obvious outlier in number 89.
 
 ``` r
+
 zeb_rmr_all[88:90]
 #> [1] -0.9576 -1.2966 -0.9336
 ```
@@ -359,6 +379,7 @@ from 20 onwards. This is just one approach of many we could apply. See
 [here](https://januarharianto.github.io/respR/articles/intermittent_long.html).
 
 ``` r
+
 zeb_rmr_final <- mean(zeb_rmr_all[c(20:88,90:105)])
 zeb_rmr_final
 #> [1] -0.9547
@@ -372,6 +393,7 @@ Thius is the same analysis as above but using exclusively the `apply`
 family of functions.
 
 ``` r
+
 # Import and inspect raw data ---------------------------------------------
 # Importing would normally be the first step, e.g. read.csv("path/to/file")
 zeb <- inspect(zeb_intermittent.rd)
