@@ -45,6 +45,21 @@ of single and repeated freezing in the intertidal mussel, Mytilus
 trossulus. *Journal of Comparative Physiology B*.
 <https://doi.org/10.1007/s00360-026-01656-1>
 
+****Dunlop, K**, **Gomes, A**, **Laroche, O**, **Järnegren, J**,
+**Meier, S**, **Sævik, P**, **Schuppe, B**, **Reiss, H**, **Oskars, T**,
+**Olsen, S**, **Baussant, T**, **Kutti, T**, **Olsvik, P**, **Pochon,
+X**, **Keeley, N**, **Ullgren, J**, **Fuhrmann, M**, **Blévin, P**,
+**Palerud, J**, & **Husa, V****. **2026**. *Metoder for å vurdere
+følsomheten til forvaltningsrelevante bunnarter overfor
+akvakulturaktiviteter*. Havforknings Instituttet.
+<https://doi.org/10.13140/RG.2.2.30086.64324>
+
+****Nishizaki, MT**, **Leuchtenberger, S**, **Na, W**, & **Armstrong,
+M****. **2026**. Thermal variability: How realistic temperature
+fluctuations alter physiological performance in intertidal mussels.
+*Philosophical Transactions of the Royal Society B: Biological
+Sciences*, 381(1946), 20250261. <https://doi.org/10.1098/rstb.2025.0261>
+
 ****Ahnert, M**, & **Schalk, T****. **2026**. A simple respirometer
 based on standard lab equipment for practical use in operation of
 wastewater treatment plants. *Measurement Science and Technology*,
