@@ -1,6 +1,6 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**165
+In the seven years since publication, `respR` has been cited [**170
 times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
 
 We are happy to see the package being used to conduct quality,
@@ -35,10 +35,20 @@ marine invertebrate. *Comparative Biochemistry and Physiology Part A:
 Molecular & Integrative Physiology*, 316, 111994.
 <https://doi.org/10.1016/j.cbpa.2026.111994>
 
+****LeBlanc, R**, & **Cohen, JH****. **2026**. Thermal sensitivity of
+visual speed and oxygen consumption rate across a latitudinal gradient
+along the Atlantic coast of the US in the fiddler crab Minuca pugnax
+(Smith, 1870) (Decapoda: Brachyura: Ocypodidae). *Journal of Crustacean
+Biology*, 46(2), ruag017. <https://doi.org/10.1093/jcbiol/ruag017>
+
 ****Pin, AO**, **Clark, GF**, **Burkart-Radtke, R**, **Quade, J**, &
 **Gardner, SG****. **2026**. Benthic bacteria communities of coral reefs
 are shaped by sediment properties rather than coral trophic state. *PLOS
 ONE*, 21(4), e0346135. <https://doi.org/10.1371/journal.pone.0346135>
+
+****Robichaud, K****. **2026**. *Investigating mitochondrial microRNAs
+in response to metabolic disruption* \[PhD thesis\]. University of
+Waterloo.
 
 ****Yang, JCC**, & **Marshall, KE****. **2026**. Energetic consequences
 of single and repeated freezing in the intertidal mussel, Mytilus

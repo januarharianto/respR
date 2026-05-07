@@ -14,7 +14,7 @@ Source:
 Harianto J, Carey N, Byrne M (2019). “respR — An R package for the
 manipulation and analysis of respirometry data.” *Methods in Ecology and
 Evolution*, **10**(6), 912-920.
-[doi:10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162),
+[doi:10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
 <https://doi.org/10.1111/2041-210X.13162>.
 
     @Article{,
