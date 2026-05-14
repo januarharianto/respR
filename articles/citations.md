@@ -5,11 +5,12 @@ citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_
 and been downloaded from [**CRAN 20,153
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
-We are happy to see the package being used to conduct quality,
-reproducible science, and excited to see what experiments and data users
-will put it towards in the future. It’s been especially encouraging to
-see it used for calculating the respiration rates of a wide range of
-species, as well as oxygen production rates of algae and corals.
+It’s great to see the package being used to conduct quality,
+reproducible science, and exciting to see what experiments and data
+users will put it towards in the future. It’s been especially
+encouraging to see it used for calculating the respiration rates of a
+wide range of species, as well as oxygen production rates of algae and
+corals.
 
 If you use the package please
 [**cite**](https://januarharianto.github.io/respR/authors.html#citation)
