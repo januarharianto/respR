@@ -1,7 +1,9 @@
 # respR Citations
 
-In the seven years since publication, `respR` has been cited [**170
-times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+In the seven years since publication, `respR` has received [**170
+citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
+and been downloaded from [**CRAN 20,153
+times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 We are happy to see the package being used to conduct quality,
 reproducible science, and excited to see what experiments and data users
