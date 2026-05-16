@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**170
 citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from [**CRAN 20,153
+and been downloaded from CRAN [**20,156
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -22,8 +22,8 @@ it**](https://januarharianto.github.io/respR/articles/contact.html).
 
 ## Studies using `respR`
 
-The following publications (most recent first) have used and cited
-`respR`. If we have missed any [**let us
+The following publications have used and cited `respR`. If we have
+missed any [**let us
 know**](https://januarharianto.github.io/respR/articles/contact.html).\
 \
 

@@ -50,16 +50,14 @@ Like to buy us a beer to say thanks? You can now support us directly via
 [![Github
 sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&style=social)](https://github.com/sponsors/nicholascarey)
 
-You can also use [**Paypal**](https://www.paypal.me/njcarey) or
-[**Starling**](https://settleup.starlingbank.com/nicholascarey).
+You can also use [**Paypal**](https://www.paypal.me/njcarey).
 
-Any support will be very much appreciated and shared equally between us.
-This could be anything from a one-off tip to buy us a beer, an ongoing
-few bucks a month for as long as you want, or if you have a big fat
-research grant you are struggling to spend as the end date approaches we
-are happy to help out as data analysis consultants (seriously - if you
-need an official invoice [**get in
-touch**](mailto:nicholascarey@gmail.com)).
+Any support will be very much appreciated! This could be anything from a
+one-off tip to buy us a beer, an ongoing few bucks a month for as long
+as you want, or if you have a big fat research grant you are struggling
+to spend as the end date approaches we are happy to help out as data
+analysis consultants (seriously - if you need an official invoice [**get
+in touch**](mailto:nicholascarey@gmail.com)).
 
 ## Respirometry Analysis Training
 

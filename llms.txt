@@ -23,7 +23,7 @@ Use `respR` to:
 A highlight of the package is the
 [`auto_rate()`](https://januarharianto.github.io/respR/reference/auto_rate.md)
 function. This uses machine learning (kernel density estimation) to
-*automatically* identify linear regions of data, that is regions where
+automatically identify linear regions of data, that is regions where
 oxygen uptake or production rates are stable and consistent. This allows
 metabolic rates to be extracted in an objective manner. See
 [`vignette("auto_rate")`](https://januarharianto.github.io/respR/articles/auto_rate.md)
@@ -31,7 +31,7 @@ for more details.
 
 ## Installation
 
-`respR` is now available on
+`respR` is available on
 [**CRAN**](https://CRAN.R-project.org/package=respR), and can be
 installed via the ‘Packages’ tab in RStudio or by running this command:
 

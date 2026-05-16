@@ -22,10 +22,8 @@ imported using generic functions after which the relevant columns can be
 specified when used in `respR` functions.
 
 There is a wealth of information online about importing data to `R`. See
-[here](https://r4ds.hadley.nz/data-import.html),
-[here](https://intro2r.com/importing-data.html) and
-[here](https://www.statmethods.net/input/importingdata.html) for just a
-few examples.
+[here](https://r4ds.hadley.nz/data-import.html) and
+[here](https://intro2r.com/importing-data.html) for examples.
 
 The following functions may help with importing your data:
 
