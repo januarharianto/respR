@@ -23,4 +23,6 @@ Useful links:
 
 Authors:
 
+- Nicholas Carey <nicholascarey@gmail.com>
+
 - Januar Harianto <januar.harianto@sydney.edu.au>

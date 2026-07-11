@@ -1,4 +1,4 @@
-# Cleans units from units.val to remove the suffix (.o2, .flow, etc)
+# Cleans units from units_val to remove the suffix (.o2, .flow, etc)
 
 These are the 'clean' or parsed names we want to use in outputs. All
 input units get parsed to these.
@@ -6,8 +6,7 @@ input units get parsed to these.
 ## Usage
 
 ``` r
-# S3 method for class 'clean'
-units(unit, is)
+units_clean(unit, is)
 ```
 
 ## Details

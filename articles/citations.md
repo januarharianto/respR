@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**170
+In the seven years since publication, `respR` has received [**172
 citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from CRAN [**20,156
+and been downloaded from CRAN [**20,833
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -26,6 +26,14 @@ The following publications have used and cited `respR`. If we have
 missed any [**let us
 know**](https://januarharianto.github.io/respR/articles/contact.html).\
 \
+
+****Marquez, JA**, **Penn, JL**, **Stockey, RG**, **Boag, TH**,
+**Duncan, MI**, **McClure, KN**, **Matsumoto, K**, **Ashing-Giwa, KF**,
+**Noll, CP**, **Deutsch, C**, **Payne, JL**, & **Sperling, EA****.
+**2026**. Differences in physiological tolerance to global warming
+caused the Permian–Triassic transition between the Paleozoic and Modern
+faunas. *Proceedings of the National Academy of Sciences*, 123(28),
+e2533086123. <https://doi.org/10.1073/pnas.2533086123>
 
 ****Ahnert, M**, **Schalk, T**, & **Krebs, P****. **2026**.
 Respiration-based development of an activated sludge model for
@@ -123,11 +131,20 @@ Mechanisms of the Copepod Acartia tonsa Under Low Salinity Stress.
 Transcriptome, Heart Regeneration and Whole Animal Metabolic Rates. *The
 FASEB Journal*, 40(1), e71424. <https://doi.org/10.1096/fj.202503482RR>
 
+****Hill, RT**, **Pettersen, A**, & **Byrne, M****. **2026**. Warming
+but not Food Limitation Alters Metabolism During Larval Development in
+Crown-of-Thorns Sea Stars (Acanthaster cf. Solaris). *Ecology and
+Evolution*, 16(7), e73934. <https://doi.org/10.1002/ece3.73934>
+
 ****Spindel, NB**, **Galloway, AWE**, **Schram, JB**, **McNeill, GD**,
 **Bellis, SgKV**, **Guujaaw, N**, **Yakgujanaas, J**, **Pontier, O**,
 **Thompson, M**, **Lee, LC**, & **Okamoto, DK****. **2026**. Consumer
 resilience suppresses the recovery of overgrazed ecosystems. *Ecological
 Applications*, 36(2), e70196. <https://doi.org/10.1002/eap.70196>
+
+****Williams, CE****. **2026**. *Climate change and animal microbiomes:
+Implications for physiology and survival* \[PhD thesis\]. University of
+Nevada.
 
 ****Belfor, AHR**, & **Schaack, S****. **2025**. The effects of
 fluoxetine and metformin pollution on phenotypic traits and gene

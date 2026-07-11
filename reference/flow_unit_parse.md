@@ -1,7 +1,7 @@
-# Extracts time and volume units from flowrate unit already parsed by units.val
+# Extracts time and volume units from flowrate unit already parsed by units_val
 
 Extracts time and volume units from flowrate unit already parsed by
-units.val
+units_val
 
 ## Usage
 
