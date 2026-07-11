@@ -145,7 +145,7 @@ method.val <- function(method, source = "adjust_rate"){
   if(source == "adjust_rate") {
     if(!(method %in% c("value", "mean", "paired", "concurrent", "linear", "exponential")))
       stop("adjust_rate: 'method' input not recognised.", call. = FALSE)
-    #' create logical for linear/exp methods
+    # create logical for linear/exp methods
     if(method == "linear" | method == "exponential") dynamic <- TRUE else
       dynamic <- FALSE
     return(dynamic)
@@ -328,10 +328,10 @@ class.val <- function(x,
 #' patterns
 #'
 #' These names (before the .o2, .vol, etc.) are the 'clean' or parsed names we
-#' want to use in outputs. All inputs units get parsed to these in units.clean
+#' want to use in outputs. All inputs units get parsed to these in units_clean
 #'
 #' @keywords internal
-units.val <- function(unit, is, msg = "units.val") {
+units_val <- function(unit, is, msg = "units_val") {
 
   # time --------------------------------------------------------------------
   if (is == 'time') all.units <- list(min.time = min.time.rgx,
@@ -455,7 +455,7 @@ units.val <- function(unit, is, msg = "units.val") {
   return(out)
 }
 
-#' Cleans units from units.val to remove the suffix (.o2, .flow, etc)
+#' Cleans units from units_val to remove the suffix (.o2, .flow, etc)
 #'
 #' These are the 'clean' or parsed names we want to use in outputs. All input
 #' units get parsed to these.
@@ -464,7 +464,7 @@ units.val <- function(unit, is, msg = "units.val") {
 #' like the specificity of this.
 #'
 #' @keywords internal
-units.clean <- function(unit, is) {
+units_clean <- function(unit, is) {
 
   if (is == 'o2') out <- unit %>%
       gsub(".o2p", ".o2", x = .) %>%

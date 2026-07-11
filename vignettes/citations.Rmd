@@ -31,15 +31,21 @@ strng <- stringr::str_extract(dump[loc], "About [0-9]+ results \\(")
 ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
 ```
 
-In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has been cited [**`r ncites` times**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en).
+```{r echo = F, warning=FALSE, message=FALSE}
+# Fetch grand-total CRAN downloads from cranlogs API
+dl_data <- jsonlite::fromJSON("https://cranlogs.r-pkg.org/downloads/total/2000-01-01:last-day/respR")
+ndownloads <- format(dl_data$downloads, big.mark = ",")
+```
 
-We are  happy to see the package being used to conduct quality, reproducible science, and excited to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
+In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has received [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en) and been downloaded from CRAN [**`r ndownloads` times**](https://cran.r-project.org/web/packages/respR/index.html).
+
+It's great to see the package being used to conduct quality, reproducible science, and exciting to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
 If you use the package please [**cite**](https://januarharianto.github.io/respR/authors.html#citation) the publication in [**Methods in Ecology and Evolution**](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.13162). If you use it for any other purpose (e.g. teaching, industry use, environmental reports and monitoring, etc.) [**we'd love to hear about it**](https://januarharianto.github.io/respR/articles/contact.html).
 
 ## Studies using `respR`
 
-The following publications (most recent first) have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).  
+The following publications have used and cited `respR`. If we have missed any [**let us know**](https://januarharianto.github.io/respR/articles/contact.html).  
 \
    
 <!-- 

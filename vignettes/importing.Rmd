@@ -35,7 +35,7 @@ In fact the entire package, with the exception of the final conversion step in `
 To our knowledge, every oxygen probe system allows data to be exported in easily readable formats (e.g. `.csv`, `.txt`, `.xlsx`) which contain the numeric time and oxygen data `respR` requires. These files are best imported using generic functions after which the relevant columns can be specified when used in `respR` functions.
 
 There is a wealth of information online about importing data to `R`. See 
-[here](https://r4ds.hadley.nz/data-import.html), [here](https://intro2r.com/importing-data.html) and [here](https://www.statmethods.net/input/importingdata.html) for just a few examples. 
+[here](https://r4ds.hadley.nz/data-import.html) and [here](https://intro2r.com/importing-data.html) for examples. 
 
 The following functions may help with importing your data:
 

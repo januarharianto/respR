@@ -9,9 +9,4 @@ method.val(method, source = "adjust_rate")
 \description{
 Validate adjust_rate or auto_rate or oxy_crit method input
 }
-\keyword{create}
-\keyword{for}
 \keyword{internal}
-\keyword{linear/exp}
-\keyword{logical}
-\keyword{methods}

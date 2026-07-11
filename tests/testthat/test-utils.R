@@ -4,23 +4,23 @@
 
 if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
 skip_on_cran()
-# units.val ------------------------------------------------------------
+# units_val ------------------------------------------------------------
 
-test_that("units.val - works", {
-  expect_is(units.val("mg/l", "o2"), "character")
-  expect_is(units.val("ml", "vol"), "character")
-  expect_is(units.val("mg", "mass"), "character")
-  expect_is(units.val("mg", "o1"), "character")
+test_that("units_val - works", {
+  expect_is(units_val("mg/l", "o2"), "character")
+  expect_is(units_val("ml", "vol"), "character")
+  expect_is(units_val("mg", "mass"), "character")
+  expect_is(units_val("mg", "o1"), "character")
 
-  expect_equal(units.val("mg/l", "o2"), "mg/L.o2")
-  expect_equal(units.val("ml", "vol"), "mL.vol")
-  expect_equal(units.val("mg", "mass"), "mg.mass")
-  expect_equal(units.val("mg", "o1"), "mg.o2")
+  expect_equal(units_val("mg/l", "o2"), "mg/L.o2")
+  expect_equal(units_val("ml", "vol"), "mL.vol")
+  expect_equal(units_val("mg", "mass"), "mg.mass")
+  expect_equal(units_val("mg", "o1"), "mg.o2")
 })
 
 # time
 
-test_that("units.val - time inputs are parsed correctly", {
+test_that("units_val - time inputs are parsed correctly", {
   # variations
   # we want all these to be recognised
   sec.vars  = c('seconds', 'second', 'sec', 'secs', 's',
@@ -32,27 +32,27 @@ test_that("units.val - time inputs are parsed correctly", {
   day.vars = c('days', 'day', 'dy', 'dys', 'd',
                'Days', 'Day', 'Dy', 'Dys', 'D')
 
-  sapply(sec.vars, function(z) expect_equal(units.val(z, "time"),
+  sapply(sec.vars, function(z) expect_equal(units_val(z, "time"),
                                             "sec.time"))
-  sapply(min.vars, function(z) expect_equal(units.val(z, "time"),
+  sapply(min.vars, function(z) expect_equal(units_val(z, "time"),
                                             "min.time"))
-  sapply(hour.vars, function(z) expect_equal(units.val(z, "time"),
+  sapply(hour.vars, function(z) expect_equal(units_val(z, "time"),
                                              "hr.time"))
-  sapply(day.vars, function(z) expect_equal(units.val(z, "time"),
+  sapply(day.vars, function(z) expect_equal(units_val(z, "time"),
                                             "day.time"))
 
   # partial matching should not work
-  expect_error(units.val("secon", "time"),
-               "units.val: unit 'secon' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("mi", "time"),
-               "units.val: unit 'mi' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("ours", "time"),
-               "units.val: unit 'ours' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("Da", "time"),
-               "units.val: unit 'Da' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("secon", "time"),
+               "units_val: unit 'secon' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("mi", "time"),
+               "units_val: unit 'mi' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("ours", "time"),
+               "units_val: unit 'ours' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("Da", "time"),
+               "units_val: unit 'Da' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - volume inputs are parsed correctly", {
+test_that("units_val - volume inputs are parsed correctly", {
 
   # variations
   uL.vars = c("uL.vol","ul","uL","microlitre","microliter",
@@ -61,55 +61,55 @@ test_that("units.val - volume inputs are parsed correctly", {
               "milli liter")
   L.vars  = c("L.vol","l","L","liter","litre","Litre","Liter")
 
-  sapply(uL.vars, function(z) expect_equal(units.val(z, "vol"),
+  sapply(uL.vars, function(z) expect_equal(units_val(z, "vol"),
                                            "uL.vol")
   )
-  sapply(mL.vars, function(z) expect_equal(units.val(z, "vol"),
+  sapply(mL.vars, function(z) expect_equal(units_val(z, "vol"),
                                            "mL.vol"))
-  sapply(L.vars, function(z) expect_equal(units.val(z, "vol"),
+  sapply(L.vars, function(z) expect_equal(units_val(z, "vol"),
                                           "L.vol"))
   # partial matching should not work
-  expect_error(units.val("micro", "vol"),
-               "units.val: unit 'micro' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("mil", "vol"),
-               "units.val: unit 'mil' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("lit", "vol"),
-               "units.val: unit 'lit' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("micro", "vol"),
+               "units_val: unit 'micro' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("mil", "vol"),
+               "units_val: unit 'mil' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("lit", "vol"),
+               "units_val: unit 'lit' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - mass inputs are parsed correctly", {
+test_that("units_val - mass inputs are parsed correctly", {
   # variations
   ug.vars  <- c('ug.mass','ug','UG','ugram','microgram','microgramme','micro gram','micro gramme')
   mg.vars  <- c('mg.mass','mg','MG','mgram','milligram','milligramme','milli gram','milli gramme')
   g.vars   <- c('g.mass','g','G','gram','gramme')
   kg.vars  <- c('kg.mass','kg','KG','kilogram','kilogramme','kilo gram','kilo gramme','kgram')
 
-  sapply(ug.vars, function(z) expect_equal(units.val(z, "mass"),
+  sapply(ug.vars, function(z) expect_equal(units_val(z, "mass"),
                                            "ug.mass"))
-  sapply(mg.vars, function(z) expect_equal(units.val(z, "mass"),
+  sapply(mg.vars, function(z) expect_equal(units_val(z, "mass"),
                                            "mg.mass"))
-  sapply(g.vars, function(z) expect_equal(units.val(z, "mass"),
+  sapply(g.vars, function(z) expect_equal(units_val(z, "mass"),
                                           "g.mass"))
-  sapply(kg.vars, function(z) expect_equal(units.val(z, "mass"),
+  sapply(kg.vars, function(z) expect_equal(units_val(z, "mass"),
                                            "kg.mass"))
 
   # partial matching should not work
-  expect_error(units.val("microg", "time"),
-               "units.val: unit 'microg' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("mi", "time"),
-               "units.val: unit 'mi' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("amme", "time"),
-               "units.val: unit 'amme' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("kilo", "time"),
-               "units.val: unit 'kilo' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("microg", "time"),
+               "units_val: unit 'microg' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("mi", "time"),
+               "units_val: unit 'mi' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("amme", "time"),
+               "units_val: unit 'amme' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("kilo", "time"),
+               "units_val: unit 'kilo' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - o2 inputs are parsed correctly", {
+test_that("units_val - o2 inputs are parsed correctly", {
 
   # error with old % input
   perc.vars <- c("%", "perc", "percent","percentage")
-  sapply(perc.vars, function(z) expect_error(units.val(z, "o2"),
-                                             "units.val: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args()."))
+  sapply(perc.vars, function(z) expect_error(units_val(z, "o2"),
+                                             "units_val: unit \"%\" has been deprecated. Please use \"%Air\" or \"%Oxy\" instead. See unit_args()."))
 
   # variations
   percair.vars  <- c("%Air.o2",
@@ -302,95 +302,95 @@ test_that("units.val - o2 inputs are parsed correctly", {
                     "inHgO2","in HgO2","inhgO2","in hgO2","INHGO2","IN HGO2",
                     "inches of mercuryO2","in mercuryO2")
 
-  sapply(percair.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(percair.vars, function(z) expect_equal(units_val(z, "o2"),
                                                 "%Air.o2"))
-  sapply(percoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(percoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                 "%Oxy.o2"))
-  sapply(ugperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(ugperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                   "ug/L.o2"))
-  sapply(mgperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mgperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                   "mg/L.o2"))
-  sapply(molperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(molperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                    "mol/L.o2"))
-  sapply(mmolperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mmolperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                     "mmol/L.o2"))
-  sapply(umolperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(umolperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                     "umol/L.o2"))
-  sapply(nmolperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(nmolperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                     "nmol/L.o2"))
-  sapply(pmolperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(pmolperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                     "pmol/L.o2"))
-  sapply(mlperloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mlperloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                   "mL/L.o2"))
-  sapply(cm3perloxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(cm3perloxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                    "cm3/L.o2"))
-  sapply(mgperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mgperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                    "mg/kg.o2"))
-  sapply(ugperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(ugperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                    "ug/kg.o2"))
-  sapply(mlperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mlperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                    "mL/kg.o2"))
-  sapply(molperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(molperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                     "mol/kg.o2"))
-  sapply(mmolperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mmolperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                      "mmol/kg.o2"))
-  sapply(umolperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(umolperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                      "umol/kg.o2"))
-  sapply(nmolperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(nmolperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                      "nmol/kg.o2"))
-  sapply(pmolperkgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(pmolperkgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                      "pmol/kg.o2"))
-  sapply(torroxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(torroxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                 "Torr.o2p"))
-  sapply(hpaoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(hpaoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                "hPa.o2p"))
-  sapply(kpaoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(kpaoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                "kPa.o2p"))
-  sapply(mmHgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(mmHgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                 "mmHg.o2p"))
-  sapply(inHgoxy.vars, function(z) expect_equal(units.val(z, "o2"),
+  sapply(inHgoxy.vars, function(z) expect_equal(units_val(z, "o2"),
                                                 "inHg.o2p"))
 
   # partial matching should not work
-  expect_error(units.val("%ai", "o2"),
-               "units.val: unit '%ai' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("_%air", "o2"),
-               "units.val: unit '_%air' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("%oxyg", "o2"),
-               "units.val: unit '%oxyg' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("ugO2 per lit", "o2"),
-               "units.val: unit 'ugO2 per lit' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("mgO2 per lit", "o2"),
-               "units.val: unit 'mgO2 per lit' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("molO2 per lit", "o2"),
-               "units.val: unit 'molO2 per lit' not recognised. Check it is valid for the input or output type.")
-  expect_error(units.val("mmolO2 per lit", "o2"),
-               "units.val: unit 'mmolO2 per lit' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("%ai", "o2"),
+               "units_val: unit '%ai' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("_%air", "o2"),
+               "units_val: unit '_%air' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("%oxyg", "o2"),
+               "units_val: unit '%oxyg' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("ugO2 per lit", "o2"),
+               "units_val: unit 'ugO2 per lit' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("mgO2 per lit", "o2"),
+               "units_val: unit 'mgO2 per lit' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("molO2 per lit", "o2"),
+               "units_val: unit 'molO2 per lit' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("mmolO2 per lit", "o2"),
+               "units_val: unit 'mmolO2 per lit' not recognised. Check it is valid for the input or output type.")
 
 })
 
-test_that("units.val - area inputs are parsed correctly", {
+test_that("units_val - area inputs are parsed correctly", {
   # variations
   mm.vars  <- c('mm2.area','mmsq','mm2','MM2','millimetre2')
   cm.vars  <- c('cm2.area','cmsq','cm2','CM2','centimetre2')
   m.vars   <- c('m2.area','msq','m2','M2','metre2')
   km.vars  <- c('km2.area','kmsq','km2','KM2','kilometre2')
 
-  sapply(mm.vars, function(z) expect_equal(units.val(z, "area"),
+  sapply(mm.vars, function(z) expect_equal(units_val(z, "area"),
                                            "mm2.area"))
-  sapply(cm.vars, function(z) expect_equal(units.val(z, "area"),
+  sapply(cm.vars, function(z) expect_equal(units_val(z, "area"),
                                            "cm2.area"))
-  sapply(m.vars, function(z) expect_equal(units.val(z, "area"),
+  sapply(m.vars, function(z) expect_equal(units_val(z, "area"),
                                            "m2.area"))
-  sapply(km.vars, function(z) expect_equal(units.val(z, "area"),
+  sapply(km.vars, function(z) expect_equal(units_val(z, "area"),
                                            "km2.area"))
 
   # partial matching should not work
-  expect_error(units.val("millim", "area"),
-               "units.val: unit 'millim' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("millim", "area"),
+               "units_val: unit 'millim' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - o1 inputs are parsed correctly", {
+test_that("units_val - o1 inputs are parsed correctly", {
   # variations
   mg.vars  <- c('mg.o2','mgo2','mgO2','mg','Milligram','milligramme','milligrams','milligrammes')
   ug.vars  <- c('ug.o2','ugo2','ugO2','ug','microgram','microgramme','micrograms','microgrammes')
@@ -407,31 +407,31 @@ test_that("units.val - o1 inputs are parsed correctly", {
                  'CM3.o2','CM3o2','CM3.O2','CM3O2','CM3',
                  'cm^3')
 
-  sapply(mg.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(mg.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "mg.o2"))
-  sapply(ug.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(ug.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "ug.o2"))
-  sapply(mol.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(mol.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "mol.o2"))
-  sapply(mmol.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(mmol.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "mmol.o2"))
-  sapply(umol.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(umol.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "umol.o2"))
-  sapply(nmol.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(nmol.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "nmol.o2"))
-  sapply(pmol.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(pmol.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "pmol.o2"))
-  sapply(ml.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(ml.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "mL.o2"))
-  sapply(cm3.vars, function(z) expect_equal(units.val(z, "o1"),
+  sapply(cm3.vars, function(z) expect_equal(units_val(z, "o1"),
                                            "cm3.o2"))
 
   # partial matching should not work
-  expect_error(units.val("micro", "o1"),
-               "units.val: unit 'micro' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("micro", "o1"),
+               "units_val: unit 'micro' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - flow inputs are parsed correctly", {
+test_that("units_val - flow inputs are parsed correctly", {
   # variations
   ulpersec.vars  <- c("ul/S.flow",
                       "ul/Sec","ul/secs","ul / second","ul / s","ulS-1",
@@ -518,37 +518,37 @@ test_that("units.val - flow inputs are parsed correctly", {
                       "litre d-1","Litre D-1","liters_days -1","Liter per day","L per days",
                       "l per d")
 
-  sapply(ulpersec.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(ulpersec.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "uL/sec.flow"))
-  sapply(mlpersec.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(mlpersec.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "mL/sec.flow"))
-  sapply(lpersec.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(lpersec.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "L/sec.flow"))
-  sapply(ulpermin.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(ulpermin.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "uL/min.flow"))
-  sapply(mlpermin.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(mlpermin.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "mL/min.flow"))
-  sapply(lpermin.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(lpermin.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "L/min.flow"))
-  sapply(ulperhr.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(ulperhr.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "uL/hr.flow"))
-  sapply(mlperhr.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(mlperhr.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "mL/hr.flow"))
-  sapply(lperhr.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(lperhr.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "L/hr.flow"))
-  sapply(ulperday.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(ulperday.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "uL/day.flow"))
-  sapply(mlperday.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(mlperday.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "mL/day.flow"))
-  sapply(lperday.vars, function(z) expect_equal(units.val(z, "flow"),
+  sapply(lperday.vars, function(z) expect_equal(units_val(z, "flow"),
                                                  "L/day.flow"))
 
   # partial matching should not work
-  expect_error(units.val("micro", "flow"),
-               "units.val: unit 'micro' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("micro", "flow"),
+               "units_val: unit 'micro' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - pressure inputs are parsed correctly", {
+test_that("units_val - pressure inputs are parsed correctly", {
   # variations
   kpa.vars  <- c('kPa.p', 'kPa','kpa', 'KPA')
   hpa.vars  <- c('hPa.p', 'hPa','hpa', 'HPA')
@@ -561,33 +561,33 @@ test_that("units.val - pressure inputs are parsed correctly", {
   mmhg.vars <- c('mmHg.p', 'mmHg','mm Hg','mmhg','mm hg','MMHG','MM HG')
   inhg.vars <- c('inHg.p', 'inHg','in Hg','inhg','in hg','INHG','IN HG')
 
-  sapply(kpa.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(kpa.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "kPa.p"))
-  sapply(hpa.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(hpa.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "hPa.p"))
-  sapply(pa.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(pa.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "Pa.p"))
-  sapply(ubar.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(ubar.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "uBar.p"))
-  sapply(mbar.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(mbar.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "mBar.p"))
-  sapply(bar.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(bar.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "Bar.p"))
-  sapply(atm.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(atm.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "atm.p"))
-  sapply(torr.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(torr.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "Torr.p"))
-  sapply(mmhg.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(mmhg.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "mmHg.p"))
-  sapply(inhg.vars, function(z) expect_equal(units.val(z, "pressure"),
+  sapply(inhg.vars, function(z) expect_equal(units_val(z, "pressure"),
                                                  "inHg.p"))
 
   # partial matching should not work
-  expect_error(units.val("micro", "flow"),
-               "units.val: unit 'micro' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("micro", "flow"),
+               "units_val: unit 'micro' not recognised. Check it is valid for the input or output type.")
 })
 
-test_that("units.val - temperature inputs are parsed correctly", {
+test_that("units_val - temperature inputs are parsed correctly", {
   # variations
   c.vars  <- c('C','c', 'dgrc', 'DGRC', 'dgr c', 'DGR C',
               'degrees c', 'DEGREES C',
@@ -600,15 +600,15 @@ test_that("units.val - temperature inputs are parsed correctly", {
               'degrees f', 'DEGREES F',
               'fahrenheit', 'Fahrenheit', 'FAHRENHEIT')
 
-  sapply(c.vars, function(z) expect_equal(units.val(z, "temperature"),
+  sapply(c.vars, function(z) expect_equal(units_val(z, "temperature"),
                                                  "C.temp"))
-  sapply(k.vars, function(z) expect_equal(units.val(z, "temperature"),
+  sapply(k.vars, function(z) expect_equal(units_val(z, "temperature"),
                                                  "K.temp"))
-  sapply(f.vars, function(z) expect_equal(units.val(z, "temperature"),
+  sapply(f.vars, function(z) expect_equal(units_val(z, "temperature"),
                                                  "F.temp"))
   # partial matching should not work
-  expect_error(units.val("celc", "temperature"),
-               "units.val: unit 'celc' not recognised. Check it is valid for the input or output type.")
+  expect_error(units_val("celc", "temperature"),
+               "units_val: unit 'celc' not recognised. Check it is valid for the input or output type.")
 })
 
 

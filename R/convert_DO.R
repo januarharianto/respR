@@ -77,8 +77,8 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
   call <- match.call()
 
   # Verify the units:
-  fru <- units.val(from, 'o2', msg = "convert_DO")
-  tou <- units.val(to, 'o2', msg = "convert_DO")
+  fru <- units_val(from, 'o2', msg = "convert_DO")
+  tou <- units_val(to, 'o2', msg = "convert_DO")
 
   # Check t, S and P needed for units, issue errors
   # and apply default P
@@ -114,70 +114,70 @@ convert_DO <- function(x, from = NULL, to = NULL, S = NULL, t = NULL,
 
   # Perform conversions
   # First we convert all values to a standard unit, mg/L:
-  if (fru == units.val('mg/L',   'o2', msg = "convert_DO")) {conc <-  z}
-  if (fru == units.val('ug/L',   'o2', msg = "convert_DO")) {conc <-  z / 1e3}
-  if (fru == units.val('mol/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt * 1e3}
-  if (fru == units.val('mmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt}
-  if (fru == units.val('umol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e3}
-  if (fru == units.val('nmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e6}
-  if (fru == units.val('pmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e9}
-  if (fru == units.val('mL/L',   'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl}
-  if (fru == units.val('uL/L',   'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl / 1e3}
-  if (fru == units.val('cm3/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl}
-  if (fru == units.val('mm3/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl / 1e3}
-  if (fru == units.val('mg/kg',  'o2', msg = "convert_DO")) {conc <-  z * swDn / 1e3}
-  if (fru == units.val('ug/kg',  'o2', msg = "convert_DO")) {conc <-  z * swDn / 1e6}
-  if (fru == units.val('mol/kg', 'o2', msg = "convert_DO")) {conc <-  z * swDn * omWt}
-  if (fru == units.val('mmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e3}
-  if (fru == units.val('umol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e6}
-  if (fru == units.val('nmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e9}
-  if (fru == units.val('pmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e12}
-  if (fru == units.val('%Air',   'o2', msg = "convert_DO")) {conc <-  z * oGas * omWt / 1e3 / 100}
-  if (fru == units.val('%Oxy',   'o2', msg = "convert_DO")) {conc <-  z * oGas * omWt / oAtm / 1e3 / 100}
-  if (fru == units.val('mL/kg',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e3}
-  if (fru == units.val('uL/kg',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e6}
-  if (fru == units.val('cm3/kg', 'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e3}
-  if (fru == units.val('mm3/kg', 'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e6}
-  if (fru == units.val('Torr',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
-  if (fru == units.val('hPa',    'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.253}
-  if (fru == units.val('kPa',    'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
-  if (fru == units.val('mmHg',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
-  if (fru == units.val('inHg',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
+  if (fru == units_val('mg/L',   'o2', msg = "convert_DO")) {conc <-  z}
+  if (fru == units_val('ug/L',   'o2', msg = "convert_DO")) {conc <-  z / 1e3}
+  if (fru == units_val('mol/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt * 1e3}
+  if (fru == units_val('mmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt}
+  if (fru == units_val('umol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e3}
+  if (fru == units_val('nmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e6}
+  if (fru == units_val('pmol/L', 'o2', msg = "convert_DO")) {conc <-  z * omWt / 1e9}
+  if (fru == units_val('mL/L',   'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl}
+  if (fru == units_val('uL/L',   'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl / 1e3}
+  if (fru == units_val('cm3/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl}
+  if (fru == units_val('mm3/L',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl / 1e3}
+  if (fru == units_val('mg/kg',  'o2', msg = "convert_DO")) {conc <-  z * swDn / 1e3}
+  if (fru == units_val('ug/kg',  'o2', msg = "convert_DO")) {conc <-  z * swDn / 1e6}
+  if (fru == units_val('mol/kg', 'o2', msg = "convert_DO")) {conc <-  z * swDn * omWt}
+  if (fru == units_val('mmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e3}
+  if (fru == units_val('umol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e6}
+  if (fru == units_val('nmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e9}
+  if (fru == units_val('pmol/kg','o2', msg = "convert_DO")) {conc <-  z * swDn * omWt / 1e12}
+  if (fru == units_val('%Air',   'o2', msg = "convert_DO")) {conc <-  z * oGas * omWt / 1e3 / 100}
+  if (fru == units_val('%Oxy',   'o2', msg = "convert_DO")) {conc <-  z * oGas * omWt / oAtm / 1e3 / 100}
+  if (fru == units_val('mL/kg',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e3}
+  if (fru == units_val('uL/kg',  'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e6}
+  if (fru == units_val('cm3/kg', 'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e3}
+  if (fru == units_val('mm3/kg', 'o2', msg = "convert_DO")) {conc <-  z * omWt / omVl * swDn / 1e6}
+  if (fru == units_val('Torr',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 760.000066005}
+  if (fru == units_val('hPa',    'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 1013.253}
+  if (fru == units_val('kPa',    'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 101.3235}
+  if (fru == units_val('mmHg',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 759.999951996}
+  if (fru == units_val('inHg',   'o2', msg = "convert_DO")) {conc <-  z / (P - vpor) / oAtm * oGas * omWt / 1e3 / 29.9212583001}
 
   # Then we convert mg/L to the final desired unit:
-  if(tou == units.val('mg/L',   'o2', msg = "convert_DO")) {out <- conc}
-  if(tou == units.val('ug/L',   'o2', msg = "convert_DO")) {out <- conc * 1e3}
-  if(tou == units.val('mol/L',  'o2', msg = "convert_DO")) {out <- conc / omWt / 1e3}
-  if(tou == units.val('mmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt}
-  if(tou == units.val('umol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e3}
-  if(tou == units.val('nmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e6}
-  if(tou == units.val('pmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e9}
-  if(tou == units.val('mL/L',   'o2', msg = "convert_DO")) {out <- conc / omWt * omVl}
-  if(tou == units.val('uL/L',   'o2', msg = "convert_DO")) {out <- conc / omWt * omVl * 1e3}
-  if(tou == units.val('cm3/L',  'o2', msg = "convert_DO")) {out <- conc / omWt * omVl}
-  if(tou == units.val('mm3/L',  'o2', msg = "convert_DO")) {out <- conc / omWt * omVl * 1e3}
-  if(tou == units.val('mg/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * 1e3}
-  if(tou == units.val('ug/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * 1e6}
-  if(tou == units.val('mol/kg', 'o2', msg = "convert_DO")) {out <- conc / omWt / swDn}
-  if(tou == units.val('mmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e3}
-  if(tou == units.val('umol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e6}
-  if(tou == units.val('nmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e9}
-  if(tou == units.val('pmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e12}
-  if(tou == units.val('%Air',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * 1e3 * 100}
-  if(tou == units.val('%Oxy',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * 1e3 * 100}
-  if(tou == units.val('mL/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e3}
-  if(tou == units.val('uL/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e6}
-  if(tou == units.val('cm3/kg', 'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e3}
-  if(tou == units.val('mm3/kg', 'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e6}
-  if(tou == units.val('Torr',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
-  if(tou == units.val('hPa',    'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
-  if(tou == units.val('kPa',    'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
-  if(tou == units.val('mmHg',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
-  if(tou == units.val('inHg',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
+  if(tou == units_val('mg/L',   'o2', msg = "convert_DO")) {out <- conc}
+  if(tou == units_val('ug/L',   'o2', msg = "convert_DO")) {out <- conc * 1e3}
+  if(tou == units_val('mol/L',  'o2', msg = "convert_DO")) {out <- conc / omWt / 1e3}
+  if(tou == units_val('mmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt}
+  if(tou == units_val('umol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e3}
+  if(tou == units_val('nmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e6}
+  if(tou == units_val('pmol/L', 'o2', msg = "convert_DO")) {out <- conc / omWt * 1e9}
+  if(tou == units_val('mL/L',   'o2', msg = "convert_DO")) {out <- conc / omWt * omVl}
+  if(tou == units_val('uL/L',   'o2', msg = "convert_DO")) {out <- conc / omWt * omVl * 1e3}
+  if(tou == units_val('cm3/L',  'o2', msg = "convert_DO")) {out <- conc / omWt * omVl}
+  if(tou == units_val('mm3/L',  'o2', msg = "convert_DO")) {out <- conc / omWt * omVl * 1e3}
+  if(tou == units_val('mg/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * 1e3}
+  if(tou == units_val('ug/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * 1e6}
+  if(tou == units_val('mol/kg', 'o2', msg = "convert_DO")) {out <- conc / omWt / swDn}
+  if(tou == units_val('mmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e3}
+  if(tou == units_val('umol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e6}
+  if(tou == units_val('nmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e9}
+  if(tou == units_val('pmol/kg','o2', msg = "convert_DO")) {out <- conc / omWt / swDn * 1e12}
+  if(tou == units_val('%Air',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * 1e3 * 100}
+  if(tou == units_val('%Oxy',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * 1e3 * 100}
+  if(tou == units_val('mL/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e3}
+  if(tou == units_val('uL/kg',  'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e6}
+  if(tou == units_val('cm3/kg', 'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e3}
+  if(tou == units_val('mm3/kg', 'o2', msg = "convert_DO")) {out <- conc / swDn * omVl / omWt * 1e6}
+  if(tou == units_val('Torr',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 760.000066005}
+  if(tou == units_val('hPa',    'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 1013.253}
+  if(tou == units_val('kPa',    'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 101.3253}
+  if(tou == units_val('mmHg',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 759.999951996}
+  if(tou == units_val('inHg',   'o2', msg = "convert_DO")) {out <- conc / omWt / oGas * oAtm * (P - vpor) * 1e3 * 29.9212583001}
 
   # Clean units for output
-  fru_clean <- units.clean(fru, 'o2')
-  tou_clean <- units.clean(tou, 'o2')
+  fru_clean <- units_clean(fru, 'o2')
+  tou_clean <- units_clean(tou, 'o2')
 
   # Generate output
   out <- list(call = call,

@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Nicholas Carey \email{nicholascarey@gmail.com}
   \item Januar Harianto \email{januar.harianto@sydney.edu.au}
 }
 

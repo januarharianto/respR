@@ -239,15 +239,15 @@ convert_MR <- function(x, from = NULL, to = NULL,
         stop("convert_MR: unit '", from.sep[3], "' not recognised as a mass or area unit. Check it is valid for the input or output type. \nOutput rate unit strings should be in correct order: O2/Time or O2/Time/Mass or O2/Time/Area.\nSee unit_args() for details.", call. = FALSE)
 
   # verify
-  from.sep[1] <- units.val(from.sep[1], "o1")
-  from.sep[2] <- units.val(from.sep[2], "time")
-  if(rate.type == "mass.spec") from.sep[3] <- units.val(from.sep[3], "mass") else
-    if(rate.type == "area.spec") from.sep[3] <- units.val(from.sep[3], "area")
+  from.sep[1] <- units_val(from.sep[1], "o1")
+  from.sep[2] <- units_val(from.sep[2], "time")
+  if(rate.type == "mass.spec") from.sep[3] <- units_val(from.sep[3], "mass") else
+    if(rate.type == "area.spec") from.sep[3] <- units_val(from.sep[3], "area")
 
-  to.sep[1] <- units.val(to.sep[1], "o1")
-  to.sep[2] <- units.val(to.sep[2], "time")
-  if(rate.type == "mass.spec") to.sep[3] <- units.val(to.sep[3], "mass") else
-    if(rate.type == "area.spec") to.sep[3] <- units.val(to.sep[3], "area")
+  to.sep[1] <- units_val(to.sep[1], "o1")
+  to.sep[2] <- units_val(to.sep[2], "time")
+  if(rate.type == "mass.spec") to.sep[3] <- units_val(to.sep[3], "mass") else
+    if(rate.type == "area.spec") to.sep[3] <- units_val(to.sep[3], "area")
 
 
   # Convert -----------------------------------------------------------------
@@ -257,7 +257,7 @@ convert_MR <- function(x, from = NULL, to = NULL,
     rate.adj <- adjust_scale(rates, from.sep[2], "hr.time")
 
     # parse oxygen unit - make it a per l conc - then we use 1 l as volume
-    ox.unit <- units.val(paste0(from.sep[1], "/l"), "o2")
+    ox.unit <- units_val(paste0(from.sep[1], "/l"), "o2")
 
     # S,t,P missing errors
     # this also applies default P if it is NULL
@@ -283,7 +283,7 @@ convert_MR <- function(x, from = NULL, to = NULL,
     rate.adj <- adjust_scale(rate.adj, "kg.mass", from.sep[3])
 
     # parse oxygen unit - make it a per l conc - then we use 1 l as volume
-    ox.unit <- units.val(paste0(from.sep[1], "/l"), "o2")
+    ox.unit <- units_val(paste0(from.sep[1], "/l"), "o2")
 
     # Check S,t,P
     #P <- StP.val(ox.unit, "oxy", S, t, P, msg = "convert_MR")
@@ -322,7 +322,7 @@ convert_MR <- function(x, from = NULL, to = NULL,
     rate.adj <- adjust_scale_area(rate.adj, "m2.area", from.sep[3])
 
     # parse oxygen unit - make it a per l conc - then we use 1 l as volume
-    ox.unit <- units.val(paste0(from.sep[1], "/l"), "o2")
+    ox.unit <- units_val(paste0(from.sep[1], "/l"), "o2")
     # errors
     #P <- StP.val(ox.unit, "oxy", S, t, P, msg = "convert_MR")
     # adjust rate to mg/l oxygen

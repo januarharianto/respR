@@ -8,7 +8,7 @@ summ_rows <- 50
 
 # Regex patterns for units
 # Put here so don't have to update them in multiple places
-# Used in units.val and unit_type and unit_type_o1 etc.
+# Used in units_val and unit_type and unit_type_o1 etc.
 
 # Allowed unit separators - used in splitting units up
 unit.sep.rgx  <- "(?:-1|[_/.[:space:]]|per)+"

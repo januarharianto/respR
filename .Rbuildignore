@@ -11,7 +11,6 @@
 ^index\.Rmd$
 ^data-raw$
 ^.DS_Store$
-^t5.rda$
 cran-comments.md
 
 # Insurance
@@ -26,3 +25,4 @@ Changelog
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
 ^\.claude$
+^\.positai$

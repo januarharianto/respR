@@ -283,8 +283,8 @@ convert_rate.ft <- function(x,
     stop("convert_rate.ft: Cannot have inputs for both 'mass' and 'area'.")
 
   # Validate oxy.unit & flowrate.unit
-  oxy <- units.val(oxy.unit, "o2")
-  flow <- units.val(flowrate.unit, "flow")
+  oxy <- units_val(oxy.unit, "o2")
+  flow <- units_val(flowrate.unit, "flow")
 
   # Validate output.unit
   out.unit <- as.matrix(read.table(text = gsub(unit.sep.rgx,
@@ -309,14 +309,14 @@ convert_rate.ft <- function(x,
     is.area.spec <- FALSE
   }
 
-  A <- units.val(out.unit[1], "o1")
-  B <- units.val(out.unit[2], "time")
+  A <- units_val(out.unit[1], "o1")
+  B <- units_val(out.unit[2], "time")
   if(is.spec){
     if (is.mass.spec) {
-      C <- units.val(out.unit[3], "mass")
+      C <- units_val(out.unit[3], "mass")
       out.unit <- as.matrix(data.frame(A, B, C))
     } else if (is.area.spec) {
-      C <- units.val(out.unit[3], "area")
+      C <- units_val(out.unit[3], "area")
       out.unit <- as.matrix(data.frame(A, B, C))
     }
   } else out.unit <- as.matrix(data.frame(A, B))
@@ -330,8 +330,8 @@ convert_rate.ft <- function(x,
     stop("convert_rate.ft: an 'area' has been entered, but an area-specific unit has not been specified in 'output.unit'.")
 
   # Format unit strings to clean format
-  oxy.unit <- units.clean(oxy, "o2")
-  flowrate.unit <- units.clean(flow, "flow")
+  oxy.unit <- units_clean(oxy, "o2")
+  flowrate.unit <- units_clean(flow, "flow")
 
   ## Add "O2" to output O2 unit string for clarity
   output.unit <- stringr::str_replace(out.unit, "\\..*", "")
@@ -644,7 +644,7 @@ plot.convert_rate.ft <- function(x, type = "full", pos = NULL, quiet = FALSE,
 }
 
 
-#' Extracts time and volume units from flowrate unit already parsed by units.val
+#' Extracts time and volume units from flowrate unit already parsed by units_val
 #'
 #' @param unit flowrate unit input to be parsed
 #' @param which parse which component of unit? "time" or "vol"

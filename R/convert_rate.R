@@ -343,8 +343,8 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
   } else stop("convert_rate: 'x' is not an accepted input.", call. = FALSE)
 
   # Validate oxy.unit & time.unit
-  oxy <- units.val(oxy.unit, "o2")
-  time <- units.val(time.unit, "time")
+  oxy <- units_val(oxy.unit, "o2")
+  time <- units_val(time.unit, "time")
 
   # Validate output.unit
   ou <- as.matrix(read.table(text = gsub(unit.sep.rgx,
@@ -369,14 +369,14 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
     is.area.spec <- FALSE
   }
 
-  A <- units.val(ou[1], "o1")
-  B <- units.val(ou[2], "time")
+  A <- units_val(ou[1], "o1")
+  B <- units_val(ou[2], "time")
   if(is.spec){
     if (is.mass.spec) {
-      C <- units.val(ou[3], "mass")
+      C <- units_val(ou[3], "mass")
       ou <- as.matrix(data.frame(A, B, C))
     } else if (is.area.spec) {
-      C <- units.val(ou[3], "area")
+      C <- units_val(ou[3], "area")
       ou <- as.matrix(data.frame(A, B, C))
     }
   } else ou <- as.matrix(data.frame(A, B))
@@ -392,8 +392,8 @@ convert_rate <- function(x, oxy.unit = NULL, time.unit = NULL, output.unit = NUL
          call. = FALSE)
 
   # Format unit strings to clean format
-  oxy.unit <- units.clean(oxy, "o2")
-  time.unit <- units.clean(time, "time")
+  oxy.unit <- units_clean(oxy, "o2")
+  time.unit <- units_clean(time, "time")
 
   ## Add "O2" to output O2 unit string for clarity
   output.unit <- stringr::str_replace(ou, "\\..*", "")

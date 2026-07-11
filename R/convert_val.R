@@ -151,23 +151,23 @@ convert_val <- function(x, from = NULL, to = NULL) {
 
   # Perform conversion ------------------------------------------------------
   if(to_unit == "vol"){
-    unit.fr <- units.val(from, fr_unit)
-    unit.to <- units.val(to, to_unit)
+    unit.fr <- units_val(from, fr_unit)
+    unit.to <- units_val(to, to_unit)
     out <- adjust_scale(x, unit.fr, unit.to)
   }
   if(to_unit == "mass"){
-    unit.fr <- units.val(from, fr_unit)
-    unit.to <- units.val(to, to_unit)
+    unit.fr <- units_val(from, fr_unit)
+    unit.to <- units_val(to, to_unit)
     out <- adjust_scale(x, unit.fr, unit.to)
   }
   if(to_unit == "area"){
-    unit.fr <- units.val(from, fr_unit)
-    unit.to <- units.val(to, to_unit)
+    unit.fr <- units_val(from, fr_unit)
+    unit.to <- units_val(to, to_unit)
     out <- adjust_scale_area(x, unit.fr, unit.to)
   }
   if(to_unit == "pressure"){
-    unit.fr <- units.val(from, fr_unit)
-    unit.to <- units.val(to, to_unit)
+    unit.fr <- units_val(from, fr_unit)
+    unit.to <- units_val(to, to_unit)
     uns <- c("kPa.p", "hPa.p", "Pa.p", "uBar.p", "mBar.p",
              "Bar.p", "atm.p", "Torr.p", "mmHg.p", "inHg.p")
     # from 1 bar
@@ -178,8 +178,8 @@ convert_val <- function(x, from = NULL, to = NULL) {
     out <- x * (mult.to/mult.fr)
   }
   if(to_unit == "temperature"){
-    unit.fr <- units.val(from, fr_unit)
-    unit.to <- units.val(to, to_unit)
+    unit.fr <- units_val(from, fr_unit)
+    unit.to <- units_val(to, to_unit)
 
     if(unit.fr == "C.temp"){
       if(unit.to == "K.temp") out <- x + 273.15

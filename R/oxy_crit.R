@@ -180,8 +180,7 @@
 #'   section.
 #'
 #' @importFrom data.table data.table as.data.table setnames setorder rbindlist
-#' @importFrom parallel detectCores makeCluster clusterExport parLapply
-#'   stopCluster
+#' @importFrom parallel detectCores makeCluster clusterExport parLapply stopCluster
 #'
 #' @export
 #'

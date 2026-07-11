@@ -33,11 +33,11 @@ Use `respR` to:
 - **Export** results quickly for reporting
 - Identify **critical oxygen values**, such as $P_{crit}$
 
-A highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to *automatically* identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows metabolic rates to be extracted in an objective manner. See `vignette("auto_rate")` for more details.
+A highlight of the package is the `auto_rate()` function. This uses machine learning (kernel density estimation) to automatically identify linear regions of data, that is regions where oxygen uptake or production rates are stable and consistent. This allows metabolic rates to be extracted in an objective manner. See `vignette("auto_rate")` for more details.
 
 ## Installation
 
-`respR` is now available on [**CRAN**](https://CRAN.R-project.org/package=respR), and can be installed via the 'Packages' tab in RStudio or by running this command:
+`respR` is available on [**CRAN**](https://CRAN.R-project.org/package=respR), and can be installed via the 'Packages' tab in RStudio or by running this command:
 
 ```r
 install.packages("respR")
@@ -80,33 +80,5 @@ If you would like to help support the package development or just buy us a beer 
 - [**Nicholas Carey**](https://github.com/nicholascarey), Marine Scotland Science
 - [**Januar Harianto**](https://github.com/januarharianto), University of Sydney
 
-## Usage
-
-For a quick evaluation of the package, try out the following code:
-
-```r
-library(respR) # load the package
-
-# 1. Check data for errors, selecting cols 1 and 15:
-urch <- inspect(urchins.rd, time = 1, oxygen = 15) 
-# 2. Automatically determine most linear regions:
-rate <- auto_rate(urch)
-# 3. Convert
-out <- convert_rate(rate, 
-                    oxy.unit = "mg/L", 
-                    time.unit = "min", 
-                    output.unit = "mg/h/kg", 
-                    volume = 0.6, 
-                    mass = 0.4)
-print(out)
-
-## Alternatively, use pipes:
-urchins.rd %>%        # using the urchins dataset,
-  select(1, 15) %>%   # select columns 1 and 15
-  inspect()     %>%   # inspect the data, then
-  auto_rate()   %>%   # automatically determine most linear segment
-  print()       %>%   # a quick preview
-  convert_rate("mg/L", "min", "mg/h/kg", 0.6, 0.4) # convert to units
-```
 
 
