@@ -76,10 +76,6 @@ studies. Check the [**respR
 Citations**](https://januarharianto.github.io/respR/articles/citations.html)
 page to see a list of published studies which have used the package.
 
- \
- \
- 
-
 ## Contact, feedback and help
 
 See
