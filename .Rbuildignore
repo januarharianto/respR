@@ -7,7 +7,6 @@
 ^docs$              # Folder that stores HTML vignettes
 ^doc$               # Folder that stores HTML vignettes
 ^vignettes$         # Vignettes folder
-^_pkgdown\.yml$
 ^index\.Rmd$
 ^data-raw$
 ^.DS_Store$

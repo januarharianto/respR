@@ -63,10 +63,6 @@ The package has also been [**peer reviewed and published**](https://doi.org/10.1
 
 `respR` has been used to examine metabolic rates and photosynthesis in corals, plankton, micro- and macro-algae, fish, crustaceans, echinoderms, cephalopods, bivalves and more, in both lab and field studies. Check the [**respR Citations**](https://januarharianto.github.io/respR/articles/citations.html) page to see a list of published studies which have used the package.
 
- \
- \
- 
-
 ## Contact, feedback and help
 
 See [**here**](https://januarharianto.github.io/respR/articles/contact.html) for more ways of providing feedback and getting in touch if you are having issues.
