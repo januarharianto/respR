@@ -26,6 +26,7 @@ jobs:
           - {os: macos-latest,   r: '4.3.3'}
           - {os: macos-latest,   r: '4.4.3'}
           - {os: macos-latest,   r: '4.5.2'}
+          - {os: macos-latest,   r: '4.6.1'}
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel', allow-failure: true}
           - {os: windows-latest, r: 'oldrel-1'}
@@ -35,9 +36,16 @@ jobs:
           - {os: windows-latest, r: '4.3.3'}
           - {os: windows-latest, r: '4.4.3'}
           - {os: windows-latest, r: '4.5.2'}
+          - {os: windows-latest, r: '4.6.1'}
+          # Windows arm64. No CRAN binaries exist for this platform, so
+          # dependencies come from R-universe (see repository config step).
+          # Only R >= 4.6 has R-universe aarch64 binaries, hence no older rows.
+          - {os: windows-11-arm, r: 'release', allow-failure: true}
+          - {os: windows-11-arm, r: 'devel', allow-failure: true}
           - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release', allow-failure: true}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: '4.6.1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -59,17 +67,25 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
-          use-public-rspm: true
+          # P3M has no Windows arm64 binaries; setup-r defaults this off there
+          use-public-rspm: ${{ matrix.config.os != 'windows-11-arm' }}
 
       # Configure R package repository for macOS/Windows
       - name: Configure R package repository for macOS/Windows
         if: runner.os != 'Linux'
         run: |
+          # CRAN has no Windows arm64 binaries, so use R-universe there, which
+          # serves them under bin/windows/aarch64/. R resolves that path itself.
+          arm <- Sys.getenv("RUNNER_OS") == "Windows" && Sys.getenv("RUNNER_ARCH") == "ARM64"
+          repo <- if (arm) "https://cran.r-universe.dev" else "https://cloud.r-project.org"
+
           # Set binary package type
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          options(repos = c(CRAN = repo))
           options(pkgType = "binary")
 
           # Create a .Rprofile to force binary packages
+          # On arm64 the repo must persist to later steps too, as nothing else sets it
+          if (arm) cat(sprintf('options(repos = c(CRAN = "%s"))\n', repo), file = "~/.Rprofile", append = TRUE)
           cat('options(pkgType="binary")\n', file = "~/.Rprofile", append = TRUE)
           cat('options(install.packages.compile.from.source="never")\n', file = "~/.Rprofile", append = TRUE)
           cat('Sys.setenv(PKG_TYPE="binary")\n', file = "~/.Rprofile", append = TRUE)
@@ -96,7 +112,9 @@ jobs:
       - name: Pre-install data.table binary
         if: (runner.os == 'Windows' || (runner.os == 'macOS' && matrix.config.r != 'devel'))
         run: |
-          install.packages("data.table", type = "binary", repos = "https://cloud.r-project.org")
+          arm <- Sys.getenv("RUNNER_OS") == "Windows" && Sys.getenv("RUNNER_ARCH") == "ARM64"
+          repo <- if (arm) "https://cran.r-universe.dev" else "https://cloud.r-project.org"
+          install.packages("data.table", type = "binary", repos = repo)
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
