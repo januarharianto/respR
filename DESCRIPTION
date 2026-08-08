@@ -21,7 +21,7 @@ Description: Provides a structural, reproducible workflow for the
 URL: https://github.com/januarharianto/respr,
     https://januarharianto.github.io/respR/,
     https://doi.org/10.1111/2041-210X.13162
-Depends: R (>= 3.3)
+Depends: R (>= 4.1)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
