@@ -1,7 +1,7 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [\*\*
-citations\*\*](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
+In the seven years since publication, `respR` has received [**176
+citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
 and been downloaded from CRAN [**21,090
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 

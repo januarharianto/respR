@@ -340,7 +340,7 @@ necessary here).
 Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate`
 inputs to specify the columns.
 
-[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid_oxy_rate``, oxygen ``=`` ``1``, rate ``=`` ``2``)`` ``#> oxy_crit: Performing analysis using Rate ~ Oxygen data.`` ``#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...`` ``#> oxy_crit: Broken-Stick analysis completed in 4.3 seconds.`` ``#> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.`
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid_oxy_rate``, oxygen ``=`` ``1``, rate ``=`` ``2``)`` ``#> oxy_crit: Performing analysis using Rate ~ Oxygen data.`` ``#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...`` ``#> oxy_crit: Broken-Stick analysis completed in 4.2 seconds.`` ``#> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.`
 
 ![oxy_crit result from pre-calculated rate vs oxygen data showing
 critical oxygen value](oxycrit_files/figure-html/unnamed-chunk-12-1.png)
