@@ -19,25 +19,46 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r echo = F, warning=FALSE, message=FALSE}
+# Last known good values, acting as a floor on the numbers reported below.
+# Google Scholar intermittently serves a degraded page which parses fine but
+# reports a far lower count (e.g. 58 or 60 against a true 176), and sometimes
+# returns nothing at all. Bump these whenever the live values have moved on.
+ncites_floor     <- 176   # as of 2026-08-13
+ndownloads_floor <- 21090 # as of 2026-08-13
+```
+
+```{r echo = F, warning=FALSE, message=FALSE}
 # This is ridiculously over the top to get this number, but good to learn :D
 # Quite slow tho...
-# Dump GScholar page
-dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732", encoding = "latin1"))
-# Find location of n citations line
-loc <- grep("About [0-9]+ results \\(", dump)
-# Extract it
-strng <- stringr::str_extract(dump[loc], "About [0-9]+ results \\(")
-# Extract the number
-ncites <- as.numeric(stringr::str_extract_all(strng, "\\d+"))
+ncites <- tryCatch({
+  # Dump GScholar page
+  dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732", encoding = "latin1"))
+  # Count reads e.g. "About 1,176 results (0.05 sec)". "About" is not always
+  # present, and the number carries a comma once past 999.
+  strng <- stringr::str_extract(paste(dump, collapse = "\n"), "[0-9,]+(?= results \\()")
+  as.numeric(gsub(",", "", strng))
+}, error = function(e) NA_real_)
+
+# Only trust the scrape if it gave a single number no lower than the floor
+if (length(ncites) != 1 || is.na(ncites) || ncites < ncites_floor) ncites <- ncites_floor
 ```
 
 ```{r echo = F, warning=FALSE, message=FALSE}
 # Fetch grand-total CRAN downloads from cranlogs API
-dl_data <- jsonlite::fromJSON("https://cranlogs.r-pkg.org/downloads/total/2000-01-01:last-day/respR")
-ndownloads <- format(dl_data$downloads, big.mark = ",")
+ndownloads <- tryCatch({
+  dl_data <- jsonlite::fromJSON("https://cranlogs.r-pkg.org/downloads/total/2000-01-01:last-day/respR")
+  as.numeric(dl_data$downloads)
+}, error = function(e) NA_real_)
+
+if (length(ndownloads) != 1 || is.na(ndownloads) || ndownloads < ndownloads_floor) ndownloads <- ndownloads_floor
+
+# Build the bolded link text in R. An empty inline value would leave a "** " with
+# a trailing space, which pandoc renders as literal asterisks rather than bold.
+cites_txt <- paste0("**", format(ncites, big.mark = ","), " citations**")
+dl_txt    <- paste0("**", format(ndownloads, big.mark = ","), " times**")
 ```
 
-In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has received [**`r ncites` citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en) and been downloaded from CRAN [**`r ndownloads` times**](https://cran.r-project.org/web/packages/respR/index.html).
+In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has received [`r cites_txt`](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en) and been downloaded from CRAN [`r dl_txt`](https://cran.r-project.org/web/packages/respR/index.html).
 
 It's great to see the package being used to conduct quality, reproducible science, and exciting to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
