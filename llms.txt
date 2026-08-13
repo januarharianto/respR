@@ -35,18 +35,12 @@ for more details.
 [**CRAN**](https://CRAN.R-project.org/package=respR), and can be
 installed via the ‘Packages’ tab in RStudio or by running this command:
 
-``` r
-
-install.packages("respR")
-```
+[`install.packages`](https://rdrr.io/r/utils/install.packages.html)`(``"respR"``)`
 
 You can also install the latest version direct from
 [**Github**](https://github.com/januarharianto/respr/):
 
-``` r
-
-devtools::install_github("januarharianto/respR")
-```
+`devtools``::`[`install_github`](https://devtools.r-lib.org/reference/install-deprecated.html)`(``"januarharianto/respR"``)`
 
 ## Getting started
 

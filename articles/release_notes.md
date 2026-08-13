@@ -15,6 +15,9 @@ This page contains the release notes for the latest updates to `respR`.
   fixed typo in calculation values which would cause very minor error
   converting from `hPa` values.
 - CHANGE: Updated URL in startup message.
+- CHANGE: Minimum `R` version raised to 4.1. Several dependencies
+  (`dplyr`, `glue`, `purrr`, `stringr`) already require 4.1, so this
+  reflects what was in practice already the case.
 
 ## Version 2.3.4 – 2025-10-08
 

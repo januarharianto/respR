@@ -22,23 +22,8 @@ simpler for the user.
 
 Typical analysis using regular `R` syntax:
 
-``` r
-
-# 1. check data for errors, select cols 1 and 15:
-urch <- inspect(urchins.rd, 1, 15) 
-# 2. automatically determine linear segment:
-rate <- auto_rate(urch)
-# 3. convert units
-out <- convert_rate(rate, "mg/l", "s", "mg/h/kg", 0.6, 0.4)
-```
+`# 1. check data for errors, select cols 1 and 15:`` ``urch`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, ``1``, ``15``)`` `` ``# 2. automatically determine linear segment:`` ``rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``urch``)`` ``# 3. convert units`` ``out`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``rate``, ``"mg/l"``, ``"s"``, ``"mg/h/kg"``, ``0.6``, ``0.4``)`
 
 Alternatively, use `tidyverse` pipes:
 
-``` r
-
-urchins.rd %>%        # using the urchins dataset,
-  select(1, 15) %>%   # select columns 1 and 15
-  inspect()     %>%   # inspect the data, then
-  auto_rate()   %>%   # automatically determine most linear segment
-  convert_rate("mg/l", "s", "mg/h/kg", 0.6, 0.4) # convert units
-```
+`urchins.rd`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)` ``# using the urchins dataset,`` `` ``select``(``1``, ``15``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)` ``# select columns 1 and 15`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)` ``# inspect the data, then`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)` ``# automatically determine most linear segment`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``"mg/l"``, ``"s"``, ``"mg/h/kg"``, ``0.6``, ``0.4``)`` ``# convert units`

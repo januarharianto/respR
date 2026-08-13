@@ -17,14 +17,9 @@ Evolution*, **10**(6), 912-920.
 [doi:10.1111/2041-210X.13162](https://doi.org/10.1111/2041-210X.13162).
 <https://doi.org/10.1111/2041-210X.13162>.
 
-    @Article{,
-      title = {respR — An R package for the manipulation and analysis of respirometry data},
-      author = {Januar Harianto and Nicholas Carey and Maria Byrne},
-      journal = {Methods in Ecology and Evolution},
-      year = {2019},
-      volume = {10},
-      number = {6},
-      pages = {912-920},
-      url = {https://doi.org/10.1111/2041-210X.13162},
-      doi = {10.1111/2041-210X.13162},
-    }
+@Article{, title = {respR — An R package for the manipulation and
+analysis of respirometry data}, author = {Januar Harianto and Nicholas
+Carey and Maria Byrne}, journal = {Methods in Ecology and Evolution},
+year = {2019}, volume = {10}, number = {6}, pages = {912-920}, url =
+{https://doi.org/10.1111/2041-210X.13162}, doi =
+{10.1111/2041-210X.13162}, }

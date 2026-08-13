@@ -25,10 +25,7 @@ wanting to run the code or reproduce analyses.
 If you need to install the final v1 release of `respR` to run older
 code, the easiest way is to use this command:
 
-``` r
-
-devtools::install_github("januarharianto/respR@v1.1.1")
-```
+`devtools``::`[`install_github`](https://devtools.r-lib.org/reference/install-deprecated.html)`(``"januarharianto/respR@v1.1.1"``)`
 
 This will install v1.1.1 of the package and its dependencies (see
 [below](#deps)) as normal.

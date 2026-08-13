@@ -24,29 +24,7 @@ running
 Like all analyses in `respR` the first step is to inspect the data for
 common issues.
 
-``` r
-
-inspect(algae.rd, rate.rev = FALSE)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> Warning: inspect: Time values are not evenly-spaced (numerically).
-#> inspect: Data issues detected. For more information use print().
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   WARN      -
-#> 
-#> Uneven Time data locations (first 20 shown) in column: Time 
-#>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-#> Minimum and Maximum intervals in uneven Time data: 
-#> [1] 0.01 0.02
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``algae.rd``, rate.rev ``=`` ``FALSE``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> Warning: inspect: Time values are not evenly-spaced (numerically).`` ``#> inspect: Data issues detected. For more information use print().`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced WARN -`` ``#> `` ``#> Uneven Time data locations (first 20 shown) in column: Time `` ``#> [1] 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20`` ``#> Minimum and Maximum intervals in uneven Time data: `` ``#> [1] 0.01 0.02`` ``#> -----------------------------------------`
 
 ![inspect() output for algae oxygen production data showing raw
 timeseries and variable rolling rate over 20
@@ -73,14 +51,7 @@ rates over narrow time windows would be expected to be variable. Instead
 we can pick a more appropriate width that will give a better idea of the
 true rate.
 
-``` r
-
-algae_insp <- inspect(algae.rd, width = 0.5, rate.rev = FALSE)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> Warning: inspect: Time values are not evenly-spaced (numerically).
-#> inspect: Data issues detected. For more information use print().
-```
+`algae_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``algae.rd``, width ``=`` ``0.5``, rate.rev ``=`` ``FALSE``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> Warning: inspect: Time values are not evenly-spaced (numerically).`` ``#> inspect: Data issues detected. For more information use print().`
 
 ![inspect() output for algae data with 50% rolling rate window showing
 highly stable production
@@ -98,11 +69,7 @@ use
 [`auto_rate()`](https://januarharianto.github.io/respR/reference/auto_rate.md)
 to identify the most linear region.
 
-``` r
-
-algae_rate <- auto_rate(algae_insp, rate.rev = FALSE)
-#> auto_rate: Applying default 'width' of 0.2
-```
+`algae_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``algae_insp``, rate.rev ``=`` ``FALSE``)`` ``#> auto_rate: Applying default 'width' of 0.2`
 
 ![auto_rate() output for algae data showing most linear region and KDE
 analysis identifying stable production
@@ -122,21 +89,7 @@ arrive at a final rate for this region. This is why the final, high
 ranked rates tend to be over widths greater than the input `width`, as
 can be seen here with the top ranked result.
 
-``` r
-
-summary(algae_rate)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of Results by Kernel Density Rank ===
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy   rate
-#> 1:  NA    1         95.8   0.0911 0.849   27.76  59    980  0.98    16.3 96.0   97.3 0.0911
-#> 2:  NA    2         96.4   0.0507 0.128    8.92 891   1144 14.85    19.1 97.1   97.3 0.0507
-#> 3:  NA    3         95.5   0.1194 0.441    6.86 460    714  7.67    11.9 96.2   96.6 0.1194
-#> 
-#> Regressions : 961 | Results : 3 | Method : linear | Roll width : 240 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``algae_rate``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of Results by Kernel Density Rank ===`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 95.8 0.0911 0.849 27.76 59 980 0.98 16.3 96.0 97.3 0.0911`` ``#> 2: NA 2 96.4 0.0507 0.128 8.92 891 1144 14.85 19.1 97.1 97.3 0.0507`` ``#> 3: NA 3 95.5 0.1194 0.441 6.86 460 714 7.67 11.9 96.2 96.6 0.1194`` ``#> `` ``#> Regressions : 961 | Results : 3 | Method : linear | Roll width : 240 | Roll type : row `` ``#> -----------------------------------------`
 
 Here, we have a very good top ranked result; it is calculated over a
 large part of the dataset, is around the value we expected from
@@ -149,10 +102,7 @@ region. We can see three peaks in the KDE (panel 6). However, the other
 two are very much lower and narrower. Let’s look at the second ranked
 result using `pos`.
 
-``` r
-
-plot(algae_rate, pos = 2, rate.rev = FALSE)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``algae_rate``, pos ``=`` ``2``, rate.rev ``=`` ``FALSE``)`
 
 ![auto_rate() plot of second ranked result showing narrow low-rate
 region near end of algae
@@ -184,10 +134,7 @@ highly variable is now on a much narrower y-axis range. In fact, it is
 identical to the one in the `inspect` plot [above](#inspect) but on
 different axes ranges.
 
-``` r
-
-auto_rate(algae_insp, width = 0.5, rate.rev = FALSE)$summary
-```
+[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``algae_insp``, width ``=`` ``0.5``, rate.rev ``=`` ``FALSE``)``$``summary`
 
 ![auto_rate() output for algae data with 50% width showing rate results
 and KDE analysis
@@ -214,12 +161,7 @@ range of the data. We can visualise this using the internal
 [`overlap.p()`](https://januarharianto.github.io/respR/reference/overlap.p.md)
 function.
 
-``` r
-
-auto_rate(algae_insp, width = 0.5, rate.rev = FALSE, plot = FALSE) |>
-  respR:::overlap.p()
-#> overlap.p: Plotting all rate(s)...
-```
+[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``algae_insp``, width ``=`` ``0.5``, rate.rev ``=`` ``FALSE``, plot ``=`` ``FALSE``)`` ``|>`` `` ``respR``:::`[`overlap.p`](https://januarharianto.github.io/respR/reference/overlap.p.md)`(``)`` ``#> overlap.p: Plotting all rate(s)...`
 
 ![Overlap plot showing rate regions identified by auto_rate() with
 increased width across algae oxygen production
@@ -263,45 +205,13 @@ This is how you would adjust for a oxygen *uptake* by micro-organisms.
 The uptake background is negative, which means the production rates have
 been *under*-estimated.
 
-``` r
-
-algae_rate_adj <- adjust_rate(algae_rate, by = -0.007)  
-#> adjust_rate: Rate adjustments applied using "mean" method.
-summary(algae_rate_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'mean' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy   rate adjustment rate.adjusted
-#> 1:  NA    1         95.8   0.0911 0.849   27.76  59    980  0.98    16.3 96.0   97.3 0.0911     -0.007        0.0981
-#> 2:  NA    2         96.4   0.0507 0.128    8.92 891   1144 14.85    19.1 97.1   97.3 0.0507     -0.007        0.0577
-#> 3:  NA    3         95.5   0.1194 0.441    6.86 460    714  7.67    11.9 96.2   96.6 0.1194     -0.007        0.1264
-#> -----------------------------------------
-```
+`algae_rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``algae_rate``, by ``=`` ``-``0.007``)`` `` ``#> adjust_rate: Rate adjustments applied using "mean" method.`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``algae_rate_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'mean' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 95.8 0.0911 0.849 27.76 59 980 0.98 16.3 96.0 97.3 0.0911 -0.007 0.0981`` ``#> 2: NA 2 96.4 0.0507 0.128 8.92 891 1144 14.85 19.1 97.1 97.3 0.0507 -0.007 0.0577`` ``#> 3: NA 3 95.5 0.1194 0.441 6.86 460 714 7.67 11.9 96.2 96.6 0.1194 -0.007 0.1264`` ``#> -----------------------------------------`
 
 If however you find the control has a background *input* of oxygen it is
 entered as a positive value, in which case the specimen production rates
 have been *over-*estimated.
 
-``` r
-
-adjust_rate(algae_rate, by = 0.009) |>
-  summary()
-#> adjust_rate: Rate adjustments applied using "mean" method.
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'mean' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy   rate adjustment rate.adjusted
-#> 1:  NA    1         95.8   0.0911 0.849   27.76  59    980  0.98    16.3 96.0   97.3 0.0911      0.009        0.0821
-#> 2:  NA    2         96.4   0.0507 0.128    8.92 891   1144 14.85    19.1 97.1   97.3 0.0507      0.009        0.0417
-#> 3:  NA    3         95.5   0.1194 0.441    6.86 460    714  7.67    11.9 96.2   96.6 0.1194      0.009        0.1104
-#> -----------------------------------------
-```
+[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``algae_rate``, by ``=`` ``0.009``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`` ``#> adjust_rate: Rate adjustments applied using "mean" method.`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'mean' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 95.8 0.0911 0.849 27.76 59 980 0.98 16.3 96.0 97.3 0.0911 0.009 0.0821`` ``#> 2: NA 2 96.4 0.0507 0.128 8.92 891 1144 14.85 19.1 97.1 97.3 0.0507 0.009 0.0417`` ``#> 3: NA 3 95.5 0.1194 0.441 6.86 460 714 7.67 11.9 96.2 96.6 0.1194 0.009 0.1104`` ``#> -----------------------------------------`
 
 See also [Case
 9](https://januarharianto.github.io/respR/articles/adjust_rate.html#case-9-adjusting-oxygen-production-rates)
@@ -329,33 +239,13 @@ algae is 10 $`cm^2`$. We don’t have to do this conversion ourselves, but
 can rely on `convert_val`. We don’t even need to tell it this is an area
 conversion - it detects this automatically from the input units.
 
-``` r
-
-algae_rate_conv <- convert_rate(algae_rate_adj, 
-                                oxy.unit = "%Air", 
-                                time.unit = "hr", 
-                                output.unit = "mg/h/m2",
-                                area = convert_val(10, "cm2"),
-                                volume = 0.1,
-                                t = 12, S = 30, P =1.01)
-#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
-```
+`algae_rate_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``algae_rate_adj``, `` `` oxy.unit ``=`` ``"%Air"``, `` `` time.unit ``=`` ``"hr"``, `` `` output.unit ``=`` ``"mg/h/m2"``,`` `` area ``=`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``10``, ``"cm2"``)``,`` `` volume ``=`` ``0.1``,`` `` t ``=`` ``12``, S ``=`` ``30``, P ``=``1.01``)`` ``#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.`
 
 In this case, we were only interested in the top ranked rate result. We
 can extract it using `summary` and the `pos` and `export` inputs. We can
 see the converted `area` input in $`m^2`$ in the summary table.
 
-``` r
-
-summary(algae_rate_conv, pos = 1, export = TRUE)
-#> 
-#> # summary.convert_rate # ----------------
-#> Summary of converted rates from entered 'pos' rank(s):
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime oxy endoxy   rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass  area  S  t    P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#> 1:  NA    1         95.8   0.0911 0.849    27.8  59    980 0.98    16.3  96   97.3 0.0911     -0.007        0.0981     0.0981     %Air        hr    0.1   NA 0.001 30 12 1.01 0.000872          NA       0.872  mgO2/hr/m2       0.872
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``algae_rate_conv``, pos ``=`` ``1``, export ``=`` ``TRUE``)`` ``#> `` ``#> # summary.convert_rate # ----------------`` ``#> Summary of converted rates from entered 'pos' rank(s):`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> 1: NA 1 95.8 0.0911 0.849 27.8 59 980 0.98 16.3 96 97.3 0.0911 -0.007 0.0981 0.0981 %Air hr 0.1 NA 0.001 30 12 1.01 0.000872 NA 0.872 mgO2/hr/m2 0.872`` ``#> -----------------------------------------`
 
 The exported data frame will contain all rate regression parameters and
 data locations, adjustments (if applied), units, and more. This is a

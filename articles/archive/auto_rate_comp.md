@@ -122,21 +122,13 @@ region.
 
 ### Simulated data: default
 
-``` r
-
-set.seed(769)
-sim1 <- sim_data(150)
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``769``)`` ``sim1`` ``<-`` `[`sim_data`](https://januarharianto.github.io/respR/reference/sim_data.md)`(``150``)`
 
 ![auto_rate comparison: simulated data](img/auto_rate_comp/arcomp01.png)
 
 auto_rate comparison: simulated data
 
-``` r
-
-## respR:
-rspr1 <- auto_rate(sim1$df)
-```
+`## respR:`` ``rspr1`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sim1``$``df``)`
 
     #> 
     #> 7 kernel density peaks detected and ranked.
@@ -145,12 +137,7 @@ rspr1 <- auto_rate(sim1$df)
 
 auto_rate results
 
-``` r
-
-## LoLinR:
-lir1 <- rankLocReg(xall = sim1$df$x, yall = sim1$df$y, 0.2, method = 'pc')
-plot(lir1)
-```
+`## LoLinR:`` ``lir1`` ``<-`` ``rankLocReg``(``xall ``=`` ``sim1``$``df``$``x``, yall ``=`` ``sim1``$``df``$``y``, ``0.2``, method ``=`` ``'pc'``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lir1``)`
 
     #> rankLocReg fitted 7260 local regressions.
 
@@ -172,21 +159,13 @@ LoLinR results
 
 ### Simulated data: corrupted
 
-``` r
-
-set.seed(112)
-sim2 <- sim_data(150, type = "corrupted")
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``112``)`` ``sim2`` ``<-`` `[`sim_data`](https://januarharianto.github.io/respR/reference/sim_data.md)`(``150``, type ``=`` ``"corrupted"``)`
 
 ![auto_rate comparison: sardine data](img/auto_rate_comp/arcomp04.png)
 
 auto_rate comparison: sardine data
 
-``` r
-
-## respR:
-rspr2 <- auto_rate(sim2$df)
-```
+`## respR:`` ``rspr2`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sim2``$``df``)`
 
     #> 
     #> 31 kernel density peaks detected and ranked.
@@ -195,12 +174,7 @@ rspr2 <- auto_rate(sim2$df)
 
 auto_rate sardine results
 
-``` r
-
-## LoLinR:
-lir2 <- rankLocReg(xall = sim2$df$x, yall = sim2$df$y, 0.2, "pc")
-plot(lir2)
-```
+`## LoLinR:`` ``lir2`` ``<-`` ``rankLocReg``(``xall ``=`` ``sim2``$``df``$``x``, yall ``=`` ``sim2``$``df``$``y``, ``0.2``, ``"pc"``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lir2``)`
 
     #> rankLocReg fitted 7260 local regressions.
 
@@ -222,21 +196,13 @@ LoLinR sardine results
 
 ### Simulated data: segmented
 
-``` r
-
-set.seed(546)
-sim3 <- sim_data(150, type = "segmented")
-```
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``546``)`` ``sim3`` ``<-`` `[`sim_data`](https://januarharianto.github.io/respR/reference/sim_data.md)`(``150``, type ``=`` ``"segmented"``)`
 
 ![auto_rate comparison: urchin data](img/auto_rate_comp/arcomp07.png)
 
 auto_rate comparison: urchin data
 
-``` r
-
-## respR:
-rspr3 <- auto_rate(sim3$df)
-```
+`## respR:`` ``rspr3`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sim3``$``df``)`
 
     #> 
     #> 6 kernel density peaks detected and ranked.
@@ -245,12 +211,7 @@ rspr3 <- auto_rate(sim3$df)
 
 auto_rate urchin results
 
-``` r
-
-## LoLinR:
-lir3 <- rankLocReg(xall = sim3$df$x, yall = sim3$df$y, 0.2, "pc")
-plot(lir3)
-```
+`## LoLinR:`` ``lir3`` ``<-`` ``rankLocReg``(``xall ``=`` ``sim3``$``df``$``x``, yall ``=`` ``sim3``$``df``$``y``, ``0.2``, ``"pc"``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lir3``)`
 
     #> rankLocReg fitted 7260 local regressions.
 
@@ -272,13 +233,7 @@ LoLinR urchin results
 
 ### Experimental data: UrchinData from LoLinR
 
-``` r
-
-## respR:
-Urch1 <- select(UrchinData, 1, 4)
-
-respr_urchindata <- auto_rate(Urch1)
-```
+`## respR:`` ``Urch1`` ``<-`` ``select``(``UrchinData``, ``1``, ``4``)`` `` ``respr_urchindata`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``Urch1``)`
 
     #> 
     #> 4 kernel density peaks detected and ranked.
@@ -287,12 +242,7 @@ respr_urchindata <- auto_rate(Urch1)
 
 auto_rate comparison: squid data
 
-``` r
-
-## LoLinR:
-lolinr_urchindata  <-  rankLocReg(xall=UrchinData$time, yall=UrchinData$C, alpha=0.2, method="z")
-plot(lolinr_urchindata)
-```
+`## LoLinR:`` ``lolinr_urchindata`` ``<-`` ``rankLocReg``(``xall``=``UrchinData``$``time``, yall``=``UrchinData``$``C``, alpha``=``0.2``, method``=``"z"``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lolinr_urchindata``)`
 
     #> rankLocReg fitted 8911 local regressions.
 
@@ -314,11 +264,7 @@ auto_rate squid results
 
 ### Experimental data: CormorantData from LoLinR
 
-``` r
-
-## respR:
-rcor <- auto_rate(CormorantData)
-```
+`## respR:`` ``rcor`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``CormorantData``)`
 
     #> 
     #> 43 kernel density peaks detected and ranked.
@@ -328,15 +274,7 @@ data](img/auto_rate_comp/arcomp12.png)
 
 auto_rate comparison: intermittent data
 
-``` r
-
-## LoLinR:
-lcor  <-  thinData(CormorantData, by = nrow(CormorantData)/150)$newData1 # thin data
-lcoregs <- rankLocReg(xall=lcor$Time, yall=lcor$VO2.ml.min, alpha=0.2, 
-  method="eq", verbose=FALSE)
-lcoregs  <-  reRank(lcoregs, newMethod='pc')
-plot(lcoregs)
-```
+`## LoLinR:`` ``lcor`` ``<-`` ``thinData``(``CormorantData``, by ``=`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``CormorantData``)``/``150``)``$``newData1`` ``# thin data`` ``lcoregs`` ``<-`` ``rankLocReg``(``xall``=``lcor``$``Time``, yall``=``lcor``$``VO2.ml.min``, alpha``=``0.2``, `` `` method``=``"eq"``, verbose``=``FALSE``)`` ``lcoregs`` ``<-`` ``reRank``(``lcoregs``, newMethod``=``'pc'``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lcoregs``)`
 
 ![auto_rate intermittent results](img/auto_rate_comp/arcomp13.png)
 
@@ -356,11 +294,7 @@ auto_rate intermittent results
 
 ### Experimental data: squid.rd from respR
 
-``` r
-
-## respR:
-rsquid <- auto_rate(squid.rd)
-```
+`## respR:`` ``rsquid`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``squid.rd``)`
 
     #> 
     #> 32 kernel density peaks detected and ranked.
@@ -369,14 +303,7 @@ rsquid <- auto_rate(squid.rd)
 
 LoLinR intermittent results
 
-``` r
-
-## LoLinR:
-lsquid <- thinData(squid.rd, by = nrow(squid.rd)/150)$newData1
-lsquidregs <- rankLocReg(xall=lsquid$Time, yall=lsquid$o2, alpha=0.2, 
-  method="eq")
-plot(lsquidregs)
-```
+`## LoLinR:`` ``lsquid`` ``<-`` ``thinData``(``squid.rd``, by ``=`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``squid.rd``)``/``150``)``$``newData1`` ``lsquidregs`` ``<-`` ``rankLocReg``(``xall``=``lsquid``$``Time``, yall``=``lsquid``$``o2``, alpha``=``0.2``, `` `` method``=``"eq"``)`` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``lsquidregs``)`
 
     #> rankLocReg fitted 7260 local regressions.
 

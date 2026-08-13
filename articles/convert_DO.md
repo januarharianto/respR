@@ -42,92 +42,23 @@ and the accompanying help file,
 contains the temperature, salinity and atmospheric pressure inputs to
 allow it to be converted.
 
-``` r
-
-sardine.rd
-#>        Time Oxygen Temperature
-#>       <int>  <num>       <num>
-#>    1:     0   95.6      15.192
-#>    2:     1   95.6      15.199
-#>    3:     2   95.6      15.203
-#>    4:     3   95.6      15.193
-#>    5:     4   95.6      15.200
-#>   ---                         
-#> 7509:  7508   90.0      15.106
-#> 7510:  7509   90.1      15.106
-#> 7511:  7510   90.1      15.106
-#> 7512:  7511   90.2      15.109
-#> 7513:  7512   90.3      15.099
-```
+`sardine.rd`` ``#> Time Oxygen Temperature`` ``#> <int> <num> <num>`` ``#> 1: 0 95.6 15.192`` ``#> 2: 1 95.6 15.199`` ``#> 3: 2 95.6 15.203`` ``#> 4: 3 95.6 15.193`` ``#> 5: 4 95.6 15.200`` ``#> --- `` ``#> 7509: 7508 90.0 15.106`` ``#> 7510: 7509 90.1 15.106`` ``#> 7511: 7510 90.1 15.106`` ``#> 7512: 7511 90.2 15.109`` ``#> 7513: 7512 90.3 15.099`
 
 We will convert it to `umol/kg`. In `convert_DO`, the `t`, `S` and `P`
 inputs must be in °C, ppt (‰), and bar.
 
-``` r
-
-conv <- convert_DO(sardine.rd$Oxygen, # data to convert
-                   from = "%Air",     # oxygen unit to convert from
-                   to = "umol/kg",    # oxygen unit to convert to
-                   t = 15,            # in C
-                   S = 35,            # in ppt
-                   P = 1.013)         # in bar
-
-head(conv)
-#> [1] 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437
-```
+`conv`` ``<-`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``sardine.rd``$``Oxygen``, ``# data to convert`` `` from ``=`` ``"%Air"``, ``# oxygen unit to convert from`` `` to ``=`` ``"umol/kg"``, ``# oxygen unit to convert to`` `` t ``=`` ``15``, ``# in C`` `` S ``=`` ``35``, ``# in ppt`` `` P ``=`` ``1.013``)`` ``# in bar`` `` `[`head`](https://rdrr.io/r/utils/head.html)`(``conv``)`` ``#> [1] 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437`
 
 By default the function outputs a numeric vector of converted values,
 which can be saved as it’s own object. In this case we will add it to
 the original data frame.
 
-``` r
-
-sardine_new <- cbind(sardine.rd,
-                     umol_kg = conv)
-
-sardine_new
-#>        Time Oxygen Temperature  umol_kg
-#>       <int>  <num>       <num>    <num>
-#>    1:     0   95.6      15.192 236.5437
-#>    2:     1   95.6      15.199 236.5437
-#>    3:     2   95.6      15.203 236.5437
-#>    4:     3   95.6      15.193 236.5437
-#>    5:     4   95.6      15.200 236.5437
-#>   ---                                  
-#> 7509:  7508   90.0      15.106 222.6876
-#> 7510:  7509   90.1      15.106 222.9350
-#> 7511:  7510   90.1      15.106 222.9350
-#> 7512:  7511   90.2      15.109 223.1824
-#> 7513:  7512   90.3      15.099 223.4299
-```
+`sardine_new`` ``<-`` `[`cbind`](https://rdrr.io/r/base/cbind.html)`(``sardine.rd``,`` `` umol_kg ``=`` ``conv``)`` `` ``sardine_new`` ``#> Time Oxygen Temperature umol_kg`` ``#> <int> <num> <num> <num>`` ``#> 1: 0 95.6 15.192 236.5437`` ``#> 2: 1 95.6 15.199 236.5437`` ``#> 3: 2 95.6 15.203 236.5437`` ``#> 4: 3 95.6 15.193 236.5437`` ``#> 5: 4 95.6 15.200 236.5437`` ``#> --- `` ``#> 7509: 7508 90.0 15.106 222.6876`` ``#> 7510: 7509 90.1 15.106 222.9350`` ``#> 7511: 7510 90.1 15.106 222.9350`` ``#> 7512: 7511 90.2 15.109 223.1824`` ``#> 7513: 7512 90.3 15.099 223.4299`
 
 Alternatively, if `simplify = FALSE` the output is a `list` object which
 can be used with `print` for a convenient summary output.
 
-``` r
-
-conv <- convert_DO(sardine.rd$Oxygen, # data to convert
-                   from = "%Air",     # oxygen unit to convert from
-                   to = "umol/kg",    # oxygen unit to convert to
-                   t = 15,            # in C
-                   S = 35,            # in ppt
-                   P = 1.013,         # in bar
-                   simplify = FALSE)  # output vector of values
-
-print(conv)
-#> 
-#> # print.convert_DO # --------------------
-#> Showing only the first 20 conversions:
-#> 
-#> Input values:
-#>  [1] 95.6 95.6 95.6 95.6 95.6 95.6 95.6 95.5 95.5 95.5 95.6 95.6 95.5 95.5 95.6 95.6 95.6 95.4 95.6 95.6
-#> Output values:
-#>  [1] 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437 236.2963 236.2963 236.2963 236.5437 236.5437 236.2963 236.2963 236.5437 236.5437 236.5437 236.0488 236.5437 236.5437
-#> 
-#> Input unit:  %Air
-#> Output unit: umol/kg
-#> -----------------------------------------
-```
+`conv`` ``<-`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``sardine.rd``$``Oxygen``, ``# data to convert`` `` from ``=`` ``"%Air"``, ``# oxygen unit to convert from`` `` to ``=`` ``"umol/kg"``, ``# oxygen unit to convert to`` `` t ``=`` ``15``, ``# in C`` `` S ``=`` ``35``, ``# in ppt`` `` P ``=`` ``1.013``, ``# in bar`` `` simplify ``=`` ``FALSE``)`` ``# output vector of values`` `` `[`print`](https://rdrr.io/r/base/print.html)`(``conv``)`` ``#> `` ``#> # print.convert_DO # --------------------`` ``#> Showing only the first 20 conversions:`` ``#> `` ``#> Input values:`` ``#> [1] 95.6 95.6 95.6 95.6 95.6 95.6 95.6 95.5 95.5 95.5 95.6 95.6 95.5 95.5 95.6 95.6 95.6 95.4 95.6 95.6`` ``#> Output values:`` ``#> [1] 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437 236.5437 236.2963 236.2963 236.2963 236.5437 236.5437 236.2963 236.2963 236.5437 236.5437 236.5437 236.0488 236.5437 236.5437`` ``#> `` ``#> Input unit: %Air`` ``#> Output unit: umol/kg`` ``#> -----------------------------------------`
 
 #### Percent oxygen saturation
 
@@ -137,14 +68,7 @@ air saturated water is ~20.946% *oxygen* saturated. In other words,
 `%Oxy = %Air * 0.20946`. Some oxygen probe systems output in both units,
 or tend to use one over the other, so take care not to confuse them.
 
-``` r
-
-convert_DO(100, "%Air", "%Oxy",
-           t = 15,
-           S = 35,            
-           P = 1.013)         
-#> [1] 20.946
-```
+[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``100``, ``"%Air"``, ``"%Oxy"``,`` `` t ``=`` ``15``,`` `` S ``=`` ``35``, `` `` P ``=`` ``1.013``)`` `` ``#> [1] 20.946`
 
 ### Example 2 - Oxygen pressure units
 
@@ -152,30 +76,7 @@ convert_DO(100, "%Air", "%Oxy",
 We will add a column of the same oxygen values in hectopascals,
 converting from the `umol/kg` column we just added.
 
-``` r
-
-sardine_new$hPa <- convert_DO(sardine_new$umol_kg,  
-                              from = "umol per kg",    
-                              to = "hPa",  
-                              t = 15,            
-                              S = 35,            
-                              P = 1.013)     
-
-sardine_new
-#>        Time Oxygen Temperature  umol_kg      hPa
-#>       <int>  <num>       <num>    <num>    <num>
-#>    1:     0   95.6      15.192 236.5437 202.1883
-#>    2:     1   95.6      15.199 236.5437 202.1883
-#>    3:     2   95.6      15.203 236.5437 202.1883
-#>    4:     3   95.6      15.193 236.5437 202.1883
-#>    5:     4   95.6      15.200 236.5437 202.1883
-#>   ---                                           
-#> 7509:  7508   90.0      15.106 222.6876 190.3446
-#> 7510:  7509   90.1      15.106 222.9350 190.5561
-#> 7511:  7510   90.1      15.106 222.9350 190.5561
-#> 7512:  7511   90.2      15.109 223.1824 190.7676
-#> 7513:  7512   90.3      15.099 223.4299 190.9791
-```
+`sardine_new``$``hPa`` ``<-`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``sardine_new``$``umol_kg``, `` `` from ``=`` ``"umol per kg"``, `` `` to ``=`` ``"hPa"``, `` `` t ``=`` ``15``, `` `` S ``=`` ``35``, `` `` P ``=`` ``1.013``)`` `` `` ``sardine_new`` ``#> Time Oxygen Temperature umol_kg hPa`` ``#> <int> <num> <num> <num> <num>`` ``#> 1: 0 95.6 15.192 236.5437 202.1883`` ``#> 2: 1 95.6 15.199 236.5437 202.1883`` ``#> 3: 2 95.6 15.203 236.5437 202.1883`` ``#> 4: 3 95.6 15.193 236.5437 202.1883`` ``#> 5: 4 95.6 15.200 236.5437 202.1883`` ``#> --- `` ``#> 7509: 7508 90.0 15.106 222.6876 190.3446`` ``#> 7510: 7509 90.1 15.106 222.9350 190.5561`` ``#> 7511: 7510 90.1 15.106 222.9350 190.5561`` ``#> 7512: 7511 90.2 15.109 223.1824 190.7676`` ``#> 7513: 7512 90.3 15.099 223.4299 190.9791`
 
 Note how the `from` unit is formatted differently but still recognised.
 Unit conversions in `respR` use a forgiving, fuzzy algorithm to
@@ -186,13 +87,7 @@ recognise different variations of unit strings.
 For quick conversions, `convert_DO` also accepts single values. These
 particular units here do not require temperature, salinity and pressure.
 
-``` r
-
-convert_DO(8, 
-           "mg/L",
-           "mmol/L")
-#> [1] 0.2500094
-```
+[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``8``, `` `` ``"mg/L"``,`` `` ``"mmol/L"``)`` ``#> [1] 0.2500094`
 
 ### Example 4 - Enter additional inputs in correct units
 
@@ -215,27 +110,7 @@ in `convert_DO` these must be in °C and bar. We could easily go to an
 online converter to do this, but `convert_val` can help do it right
 within the `convert_DO` function call.
 
-``` r
-
-convert_DO(4.6, 
-           from = "ml/L",  
-           to = "mg/L",
-           t = convert_val(65, from = "F"), # needs to be in C
-           S = 30, 
-           P = convert_val(775, from = "Torr"), # needs to be in bar
-           simplify = FALSE) 
-#> 
-#> # print.convert_DO # --------------------
-#> 
-#> Input values:
-#> [1] 4.6
-#> Output values:
-#> [1] 6.282206
-#> 
-#> Input unit:  mL/L
-#> Output unit: mg/L
-#> -----------------------------------------
-```
+[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``4.6``, `` `` from ``=`` ``"ml/L"``, `` `` to ``=`` ``"mg/L"``,`` `` t ``=`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``65``, from ``=`` ``"F"``)``, ``# needs to be in C`` `` S ``=`` ``30``, `` `` P ``=`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``775``, from ``=`` ``"Torr"``)``, ``# needs to be in bar`` `` simplify ``=`` ``FALSE``)`` `` ``#> `` ``#> # print.convert_DO # --------------------`` ``#> `` ``#> Input values:`` ``#> [1] 4.6`` ``#> Output values:`` ``#> [1] 6.282206`` ``#> `` ``#> Input unit: mL/L`` ``#> Output unit: mg/L`` ``#> -----------------------------------------`
 
 Notice two convenient aspects:
 
@@ -252,19 +127,7 @@ The
 function can also be used for general conversions of temperature,
 volume, mass, area, and atmospheric pressure in many common units:
 
-``` r
-
-convert_val(0, from = "C", to = "K")
-#> [1] 273.15
-convert_val(1, from = "L", to = "ml")
-#> [1] 1000
-convert_val(10000, from = "mg", to = "kg")
-#> [1] 0.01
-convert_val(0.0077, from = "m2", to = "mm2")
-#> [1] 7700
-convert_val(775, from = "Torr", to = "mbar")
-#> [1] 1033.251
-```
+[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``0``, from ``=`` ``"C"``, to ``=`` ``"K"``)`` ``#> [1] 273.15`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``1``, from ``=`` ``"L"``, to ``=`` ``"ml"``)`` ``#> [1] 1000`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``10000``, from ``=`` ``"mg"``, to ``=`` ``"kg"``)`` ``#> [1] 0.01`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``0.0077``, from ``=`` ``"m2"``, to ``=`` ``"mm2"``)`` ``#> [1] 7700`` `[`convert_val`](https://januarharianto.github.io/respR/reference/convert_val.md)`(``775``, from ``=`` ``"Torr"``, to ``=`` ``"mbar"``)`` ``#> [1] 1033.251`
 
 See also
 [`convert_rate()`](https://januarharianto.github.io/respR/reference/convert_rate.md)

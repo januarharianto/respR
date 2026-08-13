@@ -155,23 +155,7 @@ market squid, *Doryteuthis opalescens*. More information about the data,
 including its source and methods, can be obtained with
 [`?squid.rd`](https://januarharianto.github.io/respR/reference/squid.rd.md).
 
-``` r
-
-squid.rd
-#>         Time Oxygen
-#>        <int>  <num>
-#>     1:     0 7.7264
-#>     2:     1 7.7264
-#>     3:     2 7.7264
-#>     4:     3 7.7264
-#>     5:     4 7.7264
-#>    ---             
-#> 34116: 34115 1.2310
-#> 34117: 34116 1.2310
-#> 34118: 34117 1.2310
-#> 34119: 34118 1.2310
-#> 34120: 34119 1.2310
-```
+`squid.rd`` ``#> Time Oxygen`` ``#> <int> <num>`` ``#> 1: 0 7.7264`` ``#> 2: 1 7.7264`` ``#> 3: 2 7.7264`` ``#> 4: 3 7.7264`` ``#> 5: 4 7.7264`` ``#> --- `` ``#> 34116: 34115 1.2310`` ``#> 34117: 34116 1.2310`` ``#> 34118: 34117 1.2310`` ``#> 34119: 34118 1.2310`` ``#> 34120: 34119 1.2310`
 
 ### Inspecting data
 
@@ -179,24 +163,7 @@ We can visualise and examine the dataset using the
 [`inspect()`](https://januarharianto.github.io/respR/reference/inspect.md)
 function.
 
-``` r
-
-squid <- inspect(squid.rd)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> -----------------------------------------
-```
+`squid`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``squid.rd``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
 ![inspect() output for squid respirometry data showing oxygen timeseries
 and rolling rate](oxycrit_files/figure-html/unnamed-chunk-2-1.png)
@@ -224,14 +191,7 @@ This is the default method, so does not need to be explicitly specified
 with the `method` input, and we will let the default `width = 0.1` be
 applied.
 
-``` r
-
-squid.bsr <- oxy_crit(squid)
-#> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
-#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.5 seconds.
-#> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
-```
+`squid.bsr`` ``<-`` `[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``)`` ``#> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.`` ``#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...`` ``#> oxy_crit: Broken-Stick analysis completed in 4.5 seconds.`` ``#> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.`
 
     #> 
     #> # print.oxy_crit # ----------------------
@@ -263,20 +223,7 @@ different BSR methods may provide different results.
 Full analysis results can be seen using
 [`summary()`](https://rdrr.io/r/base/summary.html).
 
-``` r
-
-summary(squid.bsr)
-#> 
-#> # summary.oxy_crit # --------------------
-#> 
-#> --Broken-Stick Analysis Summary--
-#> Top ranked result shown. Others available in '$results' element of output.
-#> 
-#>    splitpoint     sumRSS l1_coef.b0  l1_coef.b1  l2_coef.b0  l2_coef.b1 crit.intercept crit.midpoint
-#> 1:     2.6089 6.4041e-07 0.00021172 -0.00018433 -0.00023767 -1.2152e-05         2.6101        2.6097
-#> 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``squid.bsr``)`` ``#> `` ``#> # summary.oxy_crit # --------------------`` ``#> `` ``#> --Broken-Stick Analysis Summary--`` ``#> Top ranked result shown. Others available in '$results' element of output.`` ``#> `` ``#> splitpoint sumRSS l1_coef.b0 l1_coef.b1 l2_coef.b0 l2_coef.b1 crit.intercept crit.midpoint`` ``#> 1: 2.6089 6.4041e-07 0.00021172 -0.00018433 -0.00023767 -1.2152e-05 2.6101 2.6097`` ``#> `` ``#> -----------------------------------------`
 
 #### Changing the width
 
@@ -284,18 +231,12 @@ Let’s change the `width` input to see how it affects the results. We’ll
 try smaller and larger `width` values. We can also use `panel` to output
 only the rolling rate plot.
 
-``` r
-
-oxy_crit(squid, width = 0.05, panel = 2)
-```
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``, width ``=`` ``0.05``, panel ``=`` ``2``)`
 
 ![Broken-stick result with width 0.05 showing rate vs
 oxygen](oxycrit_files/figure-html/unnamed-chunk-6-1.png)
 
-``` r
-
-oxy_crit(squid, width = 0.2, panel = 2)
-```
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``, width ``=`` ``0.2``, panel ``=`` ``2``)`
 
 ![Broken-stick result with width 0.2 showing rate vs
 oxygen](oxycrit_files/figure-html/unnamed-chunk-6-2.png)
@@ -318,14 +259,7 @@ the analysis methods alongside results.
 Now we’ll run the analysis using the `"segmented"` method, again with
 the default `width = 0.1`.
 
-``` r
-
-squid.seg <- oxy_crit(squid, method = "segmented")
-#> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
-#> oxy_crit: Performing Segmented breakpoint analysis (Muggeo 2003)...
-#> oxy_crit: Segmented analysis convergence attained in 1 iterations.
-#> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
-```
+`squid.seg`` ``<-`` `[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``, method ``=`` ``"segmented"``)`` ``#> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.`` ``#> oxy_crit: Performing Segmented breakpoint analysis (Muggeo 2003)...`` ``#> oxy_crit: Segmented analysis convergence attained in 1 iterations.`` ``#> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.`
 
     #> 
     #> # print.oxy_crit # ----------------------
@@ -349,35 +283,18 @@ method: 2.61 mg L⁻¹. This will not be the case with every dataset.
 Full analysis results can be seen using
 [`summary()`](https://rdrr.io/r/base/summary.html).
 
-``` r
-
-summary(squid.seg)
-#> 
-#> # summary.oxy_crit # --------------------
-#> 
-#> --Segmented Analysis Summary--
-#>     Intercept           x       U1.x psi1.x   std.err crit.segmented
-#> 1: 0.00021175 -0.00018435 0.00017219      0 0.0017852         2.6099
-#> 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``squid.seg``)`` ``#> `` ``#> # summary.oxy_crit # --------------------`` ``#> `` ``#> --Segmented Analysis Summary--`` ``#> Intercept x U1.x psi1.x std.err crit.segmented`` ``#> 1: 0.00021175 -0.00018435 0.00017219 0 0.0017852 2.6099`` ``#> `` ``#> -----------------------------------------`
 
 #### Changing the width
 
 Again, let’s try different `width` inputs.
 
-``` r
-
-oxy_crit(squid, width = 0.05, method = "segmented", panel = 2)
-```
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``, width ``=`` ``0.05``, method ``=`` ``"segmented"``, panel ``=`` ``2``)`
 
 ![Segmented result with width 0.05 showing rate vs
 oxygen](oxycrit_files/figure-html/unnamed-chunk-10-1.png)
 
-``` r
-
-oxy_crit(squid, width = 0.2, method = "segmented", panel = 2)
-```
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid``, width ``=`` ``0.2``, method ``=`` ``"segmented"``, panel ``=`` ``2``)`
 
 ![Segmented result with width 0.2 showing rate vs
 oxygen](oxycrit_files/figure-html/unnamed-chunk-10-2.png)
@@ -418,43 +335,12 @@ but it necessarily involves using partial windows at the start and end
 of the data, which can result in questionable outputs and is not really
 necessary here).
 
-``` r
-
-## Perform rolling rate analysis 
-squid_ar <- auto_rate(squid.rd, method = "rolling", width = 0.1, plot = FALSE)
-## Convert rates
-squid_conv <- convert_rate(squid_ar,
-                           time.unit = "sec",
-                           oxy.unit = "mg/L",
-                           output.unit = "ml/h/g",
-                           volume = 12.3,
-                           mass = 0.02141,
-                           t = 15,
-                           S = 30,
-                           P = 1.01)
-#> convert_rate: Object of class 'auto_rate' detected. Converting all rates in '$rate'.
-## Extract rates
-rate <- squid_conv$rate.output
-
-## Rolling mean of oxygen value
-oxy <- na.omit(roll::roll_mean(squid.rd[[2]], width = 0.1 * nrow(squid.rd)))
-  
-## Combine to data.frame
-squid_oxy_rate <- data.frame(oxy,
-                             rate)
-```
+`## Perform rolling rate analysis `` ``squid_ar`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``squid.rd``, method ``=`` ``"rolling"``, width ``=`` ``0.1``, plot ``=`` ``FALSE``)`` ``## Convert rates`` ``squid_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``squid_ar``,`` `` time.unit ``=`` ``"sec"``,`` `` oxy.unit ``=`` ``"mg/L"``,`` `` output.unit ``=`` ``"ml/h/g"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.02141``,`` `` t ``=`` ``15``,`` `` S ``=`` ``30``,`` `` P ``=`` ``1.01``)`` ``#> convert_rate: Object of class 'auto_rate' detected. Converting all rates in '$rate'.`` ``## Extract rates`` ``rate`` ``<-`` ``squid_conv``$``rate.output`` `` ``## Rolling mean of oxygen value`` ``oxy`` ``<-`` `[`na.omit`](https://rdrr.io/r/stats/na.fail.html)`(``roll``::`[`roll_mean`](https://rdrr.io/pkg/roll/man/roll_mean.html)`(``squid.rd``[[``2``]``]``, width ``=`` ``0.1`` ``*`` `[`nrow`](https://rdrr.io/r/base/nrow.html)`(``squid.rd``)``)``)`` `` `` ``## Combine to data.frame`` ``squid_oxy_rate`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``oxy``,`` `` ``rate``)`
 
 Now we run the `oxy_crit` analysis. We use the `oxygen` and `rate`
 inputs to specify the columns.
 
-``` r
-
-oxy_crit(squid_oxy_rate, oxygen = 1, rate = 2)
-#> oxy_crit: Performing analysis using Rate ~ Oxygen data.
-#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.5 seconds.
-#> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.
-```
+[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``squid_oxy_rate``, oxygen ``=`` ``1``, rate ``=`` ``2``)`` ``#> oxy_crit: Performing analysis using Rate ~ Oxygen data.`` ``#> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...`` ``#> oxy_crit: Broken-Stick analysis completed in 4.3 seconds.`` ``#> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.`
 
 ![oxy_crit result from pre-calculated rate vs oxygen data showing
 critical oxygen value](oxycrit_files/figure-html/unnamed-chunk-12-1.png)
@@ -482,40 +368,19 @@ The critical oxygen value is in the `$crit` element. If the `"bsr"`
 method has been used it will contain both results, if the `"segmented"`
 method it is a single value.
 
-``` r
-
-## bsr results
-squid.bsr$crit
-#> $crit.intercept
-#> [1] 2.6101
-#> 
-#> $crit.midpoint
-#> [1] 2.6097
-
-## segmented result
-squid.seg$crit
-#> [1] 2.6099
-```
+`## bsr results`` ``squid.bsr``$``crit`` ``#> $crit.intercept`` ``#> [1] 2.6101`` ``#> `` ``#> $crit.midpoint`` ``#> [1] 2.6097`` `` ``## segmented result`` ``squid.seg``$``crit`` ``#> [1] 2.6099`
 
 Summary results can also be exported to a `data.frame` by using the
 [`summary()`](https://rdrr.io/r/base/summary.html) function and
 `export = TRUE`.
 
-``` r
-
-## bsr
-bsr_res <- summary(squid.bsr, export = TRUE)
-```
+`## bsr`` ``bsr_res`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``squid.bsr``, export ``=`` ``TRUE``)`
 
     #>    splitpoint     sumRSS l1_coef.b0  l1_coef.b1  l2_coef.b0  l2_coef.b1 crit.intercept crit.midpoint
     #>         <num>      <num>      <num>       <num>       <num>       <num>          <num>         <num>
     #> 1:     2.6089 6.4041e-07 0.00021172 -0.00018433 -0.00023767 -1.2152e-05         2.6101        2.6097
 
-``` r
-
-## seg
-seg_res <- summary(squid.seg, export = TRUE)
-```
+`## seg`` ``seg_res`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``squid.seg``, export ``=`` ``TRUE``)`
 
     #>     Intercept           x       U1.x psi1.x   std.err crit.segmented
     #>         <num>       <num>      <num>  <num>     <num>          <num>

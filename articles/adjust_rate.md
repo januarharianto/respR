@@ -165,12 +165,7 @@ using one of these background chambers.
 
 ### Calculate background rate
 
-``` r
-
-## inspect and calculate background rate using calc_rate.bg
-bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
-  calc_rate.bg() 
-```
+`## inspect and calculate background rate using calc_rate.bg`` ``bg`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `
 
 ![Inspect plot of background oxygen data from urchins column 18 showing
 oxygen timeseries and rolling rate, followed by background rate
@@ -212,33 +207,13 @@ is optional. `calc_rate.bg` will also accept a `data.frame` directly,
 and has its own column identifier inputs. This code will perform exactly
 the same rate calculation.
 
-``` r
-
-## inspect and calculate background rate using calc_rate.bg
-calc_rate.bg(urchins.rd, time = 1, oxygen = 18) 
-#> 
-#> # plot.calc_rate.bg # -------------------
-#> plot.calc_rate.bg: Plotting all 1 background rates ...
-#> -----------------------------------------
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.000765
-#> Mean background rate:
-#> [1] -0.000765
-#> -----------------------------------------
-```
+`## inspect and calculate background rate using calc_rate.bg`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``)`` `` ``#> `` ``#> # plot.calc_rate.bg # -------------------`` ``#> plot.calc_rate.bg: Plotting all 1 background rates ...`` ``#> -----------------------------------------`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.000765`` ``#> Mean background rate:`` ``#> [1] -0.000765`` ``#> -----------------------------------------`
 
 ### Calculate specimen rate
 
 Now we calculate the rate of one of the specimens.
 
-``` r
-
-## inspect and calculate urchin rate using calc_rate
-urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
-  calc_rate(from = 10, to = 30, by = "time")
-```
+`## inspect and calculate urchin rate using calc_rate`` ``urch`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``10``, to ``=`` ``30``, by ``=`` ``"time"``)`
 
     #> 
     #> # plot.calc_rate # ----------------------
@@ -266,50 +241,14 @@ which determines how the `by` input is applied. The default for this is
 result. However, there is a specific `"value"` method to specify single
 background values.
 
-``` r
-
-## adjust rate
-urch_adj <- adjust_rate(urch, by = bg, method = "value")
-print(urch_adj)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'value' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0286
-#> Adjustment    : -0.000765
-#> Adjusted Rate : -0.0278 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`## adjust rate`` ``urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch``, by ``=`` ``bg``, method ``=`` ``"value"``)`` `[`print`](https://rdrr.io/r/base/print.html)`(``urch_adj``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'value' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0286`` ``#> Adjustment : -0.000765`` ``#> Adjusted Rate : -0.0278 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 This same adjustment operation can be conducted by entering numeric
 inputs, or a mix of objects and numeric inputs. Care should be taken
 when entering values manually to use the correct *sign* with the rate.
 See note [above](#sign).
 
-``` r
-
-## adjust rate
-urch_adj <- adjust_rate(-0.0286, by = -0.000765, method = "value")
-print(urch_adj)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'value' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0286
-#> Adjustment    : -0.000765
-#> Adjusted Rate : -0.0278 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`## adjust rate`` ``urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``-``0.0286``, by ``=`` ``-``0.000765``, method ``=`` ``"value"``)`` `[`print`](https://rdrr.io/r/base/print.html)`(``urch_adj``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'value' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0286`` ``#> Adjustment : -0.000765`` ``#> Adjusted Rate : -0.0278 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 The saved `urch_adj` object has a `$rate.adjusted` element which is the
 rate that will be converted when it is passed to
@@ -330,37 +269,11 @@ time
 
 ### Calculate background and specimen rates
 
-``` r
-
-## inspect and calculate background rate using calc_rate.bg
-bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
-  calc_rate.bg()
-
-## inspect and calculate urchin rate using auto_rate and default inputs
-urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
-  auto_rate() 
-```
+`## inspect and calculate background rate using calc_rate.bg`` ``bg`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` ``## inspect and calculate urchin rate using auto_rate and default inputs`` ``urch`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``)`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` `
 
 ### Adjust rates
 
-``` r
-
-## adjust rate
-urch_adj <- adjust_rate(urch, by = bg, method = "value")
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'value' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy    rate adjustment rate.adjusted
-#> 1:  NA    1         7.84  -0.0293 0.992   240.4  25    165  4.0    27.3 7.71   7.03 -0.0293  -0.000765       -0.0285
-#> 2:  NA    2         7.74  -0.0253 0.990   184.4 135    268 22.3    44.5 7.18   6.64 -0.0253  -0.000765       -0.0246
-#> 3:  NA    3         7.86  -0.0324 0.952    15.6   6     54  0.8     8.8 7.82   7.55 -0.0324  -0.000765       -0.0316
-#> 4:  NA    4         7.86  -0.0319 0.958    14.5   8     60  1.2     9.8 7.84   7.56 -0.0319  -0.000765       -0.0312
-#> -----------------------------------------
-```
+`## adjust rate`` ``urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch``, by ``=`` ``bg``, method ``=`` ``"value"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'value' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 7.84 -0.0293 0.992 240.4 25 165 4.0 27.3 7.71 7.03 -0.0293 -0.000765 -0.0285`` ``#> 2: NA 2 7.74 -0.0253 0.990 184.4 135 268 22.3 44.5 7.18 6.64 -0.0253 -0.000765 -0.0246`` ``#> 3: NA 3 7.86 -0.0324 0.952 15.6 6 54 0.8 8.8 7.82 7.55 -0.0324 -0.000765 -0.0316`` ``#> 4: NA 4 7.86 -0.0319 0.958 14.5 8 60 1.2 9.8 7.84 7.56 -0.0319 -0.000765 -0.0312`` ``#> -----------------------------------------`
 
 Note how the single `$adjustment` value has been applied to each `$rate`
 to give a `$rate.adjusted`. This is the rate that will be converted when
@@ -369,26 +282,7 @@ the object is passed to `convert_rate`.
 Again, this same operation can be performed using values, if a vector of
 rates is passed.
 
-``` r
-
-## adjust rate
-urch_adj <- adjust_rate(c(-0.02927, -0.02534, -0.03239, -0.03195), 
-                        by = -0.000765, 
-                        method = "value")
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'value' method.
-#> Summary of all rate results:
-#> 
-#>    rank    rate adjustment rate.adjusted
-#> 1:    1 -0.0293  -0.000765       -0.0285
-#> 2:    2 -0.0253  -0.000765       -0.0246
-#> 3:    3 -0.0324  -0.000765       -0.0316
-#> 4:    4 -0.0319  -0.000765       -0.0312
-#> -----------------------------------------
-```
+`## adjust rate`` ``urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``-``0.02927``, ``-``0.02534``, ``-``0.03239``, ``-``0.03195``)``, `` `` by ``=`` ``-``0.000765``, `` `` method ``=`` ``"value"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'value' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rank rate adjustment rate.adjusted`` ``#> 1: 1 -0.0293 -0.000765 -0.0285`` ``#> 2: 2 -0.0253 -0.000765 -0.0246`` ``#> 3: 3 -0.0324 -0.000765 -0.0316`` ``#> 4: 4 -0.0319 -0.000765 -0.0312`` ``#> -----------------------------------------`
 
 Obviously in this case there are no regression coefficients or other
 data to report.
@@ -406,32 +300,14 @@ two of the urchins in the `urchins.rd` dataset.
 
 ### Calculate background and specimen rates
 
-``` r
-
-## inspect and calculate background rate
-bg <- inspect(urchins.rd, time = 1, oxygen = 18) |>
-  calc_rate.bg()
-
-## inspect and calculate FIRST urchin rate
-urch1 <- inspect(urchins.rd, time = 1, oxygen = 2) |>
-  calc_rate()
-
-## inspect and calculate SECOND urchin rate
-urch2 <- inspect(urchins.rd, time = 1, oxygen = 3) |>
-  calc_rate()
-```
+`## inspect and calculate background rate`` ``bg`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` ``## inspect and calculate FIRST urchin rate`` ``urch1`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``)`` `` ``## inspect and calculate SECOND urchin rate`` ``urch2`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``3``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``)`
 
 ### Adjust rates
 
 Now we can use the `bg` object to adjust both specimen rates. As
 separate objects we have to do this in two operations.
 
-``` r
-
-## adjust rate
-urch1_adj <- adjust_rate(urch1, by = bg)
-urch2_adj <- adjust_rate(urch2, by = bg)
-```
+`## adjust rate`` ``urch1_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch1``, by ``=`` ``bg``)`` ``urch2_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch2``, by ``=`` ``bg``)`
 
     #> 
     #> # print.adjust_rate # -------------------
@@ -464,21 +340,7 @@ Of course, it is possible to perform this same adjustment for both
 specimens in one operation by using a vector of values for the two
 specimen rates.
 
-``` r
-
-urch_adj <- adjust_rate(c(-0.0278, -0.0206), by = bg)
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'mean' method.
-#> Summary of all rate results:
-#> 
-#>    rank    rate adjustment rate.adjusted
-#> 1:    1 -0.0278  -0.000765       -0.0270
-#> 2:    2 -0.0206  -0.000765       -0.0198
-#> -----------------------------------------
-```
+`urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``-``0.0278``, ``-``0.0206``)``, by ``=`` ``bg``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'mean' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rank rate adjustment rate.adjusted`` ``#> 1: 1 -0.0278 -0.000765 -0.0270`` ``#> 2: 2 -0.0206 -0.000765 -0.0198`` ``#> -----------------------------------------`
 
 Note, we haven’t specified a `method` in this example. The default
 method is `"mean"` which averages all the background rates in `by` (see
@@ -509,12 +371,7 @@ to select multiple background columns via regular R syntax.
 
 ### Calculate background rates
 
-``` r
-
-## inspect and calculate background rate from two chambers
-bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
-  calc_rate.bg()
-```
+`## inspect and calculate background rate from two chambers`` ``bg`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``:``19``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![Inspect plot of two background oxygen columns 18 and 19 from the
 urchins dataset showing oxygen timeseries and rolling rates for both
@@ -525,17 +382,7 @@ columns (though you can use the `pos` input to select which). If we
 print the result we can see both calculated background rates, and the
 mean value.
 
-``` r
-
-print(bg)
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.000765 -0.000902
-#> Mean background rate:
-#> [1] -0.000833
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``bg``)`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.000765 -0.000902`` ``#> Mean background rate:`` ``#> [1] -0.000833`` ``#> -----------------------------------------`
 
 ### Data frame input
 
@@ -547,18 +394,7 @@ is optional. `calc_rate.bg` will also accept a `data.frame` directly,
 and has its own column identifier inputs. This code will perform exactly
 the same rate calculation.
 
-``` r
-
-## inspect and calculate background rate from two chambers
-calc_rate.bg(urchins.rd, time = 1, oxygen = 18:19, plot = FALSE)
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.000765 -0.000902
-#> Mean background rate:
-#> [1] -0.000833
-#> -----------------------------------------
-```
+`## inspect and calculate background rate from two chambers`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``:``19``, plot ``=`` ``FALSE``)`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.000765 -0.000902`` ``#> Mean background rate:`` ``#> [1] -0.000833`` ``#> -----------------------------------------`
 
 ### Background data structure
 
@@ -571,10 +407,7 @@ times on the x-axis; these are ~30 minutes as opposed to ~40 for the two
 above. We want to use them with the two above to apply a mean adjustment
 value based on all five controls.
 
-``` r
-
-bg2 <- calc_rate.bg(bg_exp)
-```
+`bg2`` ``<-`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``bg_exp``)`
 
 ![Plot of calc_rate.bg results showing background rate regressions
 fitted to three oxygen columns from a separate background
@@ -607,69 +440,17 @@ with three. We could calculate the mean rate ourselves and enter it as a
 single adjustment value. We’ll adjust one of the specimen rates we
 calculated above.
 
-``` r
-
-adj <- mean(
-  c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832)
-)
-adjust_rate(urch1, by = adj, method = "value")
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'value' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0278
-#> Adjustment    : -0.000816
-#> Adjusted Rate : -0.027 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`adj`` ``<-`` `[`mean`](https://rdrr.io/r/base/mean.html)`(`` `` `[`c`](https://rdrr.io/r/base/c.html)`(``-``0.000765``, ``-``0.000902``, ``-``0.000805``, ``-``0.000774``, ``-``0.000832``)`` ``)`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch1``, by ``=`` ``adj``, method ``=`` ``"value"``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'value' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0278`` ``#> Adjustment : -0.000816`` ``#> Adjusted Rate : -0.027 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 Or alternatively, enter the five background rates directly as a numeric
 vector and let the default `method = "mean"` be applied.
 
-``` r
-
-adjust_rate(urch1, by = c(-0.000765, -0.000902, -0.000805, -0.000774, -0.000832))
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0278
-#> Adjustment    : -0.000816
-#> Adjusted Rate : -0.027 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch1``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``-``0.000765``, ``-``0.000902``, ``-``0.000805``, ``-``0.000774``, ``-``0.000832``)``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0278`` ``#> Adjustment : -0.000816`` ``#> Adjusted Rate : -0.027 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 Or we could use the object names and extract the `$rate.bg` element
 directly while combining to a vector.
 
-``` r
-
-adjust_rate(urch1, by = c(bg$rate.bg,
-                          bg2$rate.bg))
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0278
-#> Adjustment    : -0.000816
-#> Adjusted Rate : -0.027 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch1``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``bg``$``rate.bg``,`` `` ``bg2``$``rate.bg``)``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0278`` ``#> Adjustment : -0.000816`` ``#> Adjusted Rate : -0.027 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 The fact that `adjust_rate` (as well as most `respR` functions) accepts
 numeric values, vectors and other data structures means there can be
@@ -696,34 +477,11 @@ Again, we’ll use the `urchins.rd` dataset, and we will assume that the
 two background columns (18 & 19) are paired with the first two specimen
 columns (2 & 3), that is 2 will be adjusted by 18, and 3 adjusted by 19.
 
-``` r
-
-## Calculate both background rates
-bg1 <- inspect(urchins.rd, time = 1, oxygen = 18) |>
-  calc_rate.bg()
-bg2 <- inspect(urchins.rd, time = 1, oxygen = 19) |>
-  calc_rate.bg()
-
-## Calculate both urchin rates
-urch1 <- inspect(urchins.rd, time = 1, oxygen = 2) |>
-  calc_rate(from = 10, to = 40)
-urch2 <- inspect(urchins.rd, time = 1, oxygen = 3) |>
-  calc_rate(from = 10, to = 40)
-```
+`## Calculate both background rates`` ``bg1`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` ``bg2`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``19``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` ``## Calculate both urchin rates`` ``urch1`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``10``, to ``=`` ``40``)`` ``urch2`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``3``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``10``, to ``=`` ``40``)`
 
 We’ll print the values for a quick look.
 
-``` r
-
-urch1$rate
-#> [1] -0.0271
-urch2$rate
-#> [1] -0.0195
-bg1$rate.bg
-#> [1] -0.000765
-bg2$rate.bg
-#> [1] -0.000902
-```
+`urch1``$``rate`` ``#> [1] -0.0271`` ``urch2``$``rate`` ``#> [1] -0.0195`` ``bg1``$``rate.bg`` ``#> [1] -0.000765`` ``bg2``$``rate.bg`` ``#> [1] -0.000902`
 
 ### Adjust rates - numeric inputs
 
@@ -732,23 +490,7 @@ numerics. Here we can extract them directly from the objects using `$`
 and combine them to a vector using
 [`c()`](https://rdrr.io/r/base/c.html).
 
-``` r
-
-urch_adj <- adjust_rate(c(urch1$rate, urch2$rate),
-                        by = c(bg1$rate.bg, bg2$rate.bg),
-                        method = "paired")
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'paired' method.
-#> Summary of all rate results:
-#> 
-#>    rank    rate adjustment rate.adjusted
-#> 1:    1 -0.0271  -0.000765       -0.0264
-#> 2:    2 -0.0195  -0.000902       -0.0186
-#> -----------------------------------------
-```
+`urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``urch1``$``rate``, ``urch2``$``rate``)``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``bg1``$``rate.bg``, ``bg2``$``rate.bg``)``,`` `` method ``=`` ``"paired"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'paired' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rank rate adjustment rate.adjusted`` ``#> 1: 1 -0.0271 -0.000765 -0.0264`` ``#> 2: 2 -0.0195 -0.000902 -0.0186`` ``#> -----------------------------------------`
 
 We can see each specimen rate has been adjusted by the background rate
 at the same position in `by`.
@@ -760,32 +502,9 @@ object, as long as it contains the correct number of rates. We can
 repeat the above example but use `calc_rate.bg` to extract the rates
 from both background columns.
 
-``` r
+`## Calculate both background rates`` ``bg`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``:``19``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` ``## Adjust specimen rates (as calculated above)`` ``urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``urch1``$``rate``, ``urch2``$``rate``)``,`` `` by ``=`` ``bg``, ``# bg object instead of values`` `` method ``=`` ``"paired"``)`
 
-## Calculate both background rates
-bg <- inspect(urchins.rd, time = 1, oxygen = 18:19) |>
-  calc_rate.bg()
-
-## Adjust specimen rates (as calculated above)
-urch_adj <- adjust_rate(c(urch1$rate, urch2$rate),
-                        by = bg, # bg object instead of values
-                        method = "paired")
-```
-
-``` r
-
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'paired' method.
-#> Summary of all rate results:
-#> 
-#>    rank    rate adjustment rate.adjusted
-#> 1:    1 -0.0271  -0.000765       -0.0264
-#> 2:    2 -0.0195  -0.000902       -0.0186
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'paired' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rank rate adjustment rate.adjusted`` ``#> 1: 1 -0.0271 -0.000765 -0.0264`` ``#> 2: 2 -0.0195 -0.000902 -0.0186`` ``#> -----------------------------------------`
 
 We can see this is the same result as above.
 
@@ -810,56 +529,12 @@ We’ll use `urchins.rd` column 2 and its paired background column 18 to
 extract three rates from different, though overlapping, twenty minute
 regions.
 
-``` r
-
-## Set from and to times
-from <- c(0, 10, 20) 
-to <- c(20, 30, 40) 
-
-## Extract three background rates
-bg1 <- subset_data(urchins.rd, from = from[1], to = to[1]) |>
-  inspect(time = 1, oxygen = 18) |>
-  calc_rate.bg()
-bg2 <- subset_data(urchins.rd, from = from[2], to = to[2]) |>
-  inspect(time = 1, oxygen = 18) |>
-  calc_rate.bg()
-bg3 <- subset_data(urchins.rd, from = from[3], to = to[3]) |>
-  inspect(time = 1, oxygen = 18) |>
-  calc_rate.bg()
-
-# Calculate specimen rates 
-urch <- inspect(urchins.rd, time = 1, oxygen = 2) |>
-  calc_rate(from = from, to = to)
-```
+`## Set from and to times`` ``from`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``10``, ``20``)`` `` ``to`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``20``, ``30``, ``40``)`` `` `` ``## Extract three background rates`` ``bg1`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``urchins.rd``, from ``=`` ``from``[``1``]``, to ``=`` ``to``[``1``]``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` ``bg2`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``urchins.rd``, from ``=`` ``from``[``2``]``, to ``=`` ``to``[``2``]``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` ``bg3`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``urchins.rd``, from ``=`` ``from``[``3``]``, to ``=`` ``to``[``3``]``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``time ``=`` ``1``, oxygen ``=`` ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` ``# Calculate specimen rates `` ``urch`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``from``, to ``=`` ``to``)`
 
 Now we have three background rates, and three specimen rates all from
 the same respective regions. We’ll print for a quick look.
 
-``` r
-
-bg1$summary
-#>       rep  rank intercept_b0 slope_b1    rsq   row endrow  time endtime   oxy endoxy  rate.bg
-#>    <lgcl> <int>        <num>    <num>  <num> <num>  <int> <num>   <num> <num>  <num>    <num>
-#> 1:     NA     1          7.9 -0.00031 0.0108     1    121     0      20   7.9   7.89 -0.00031
-bg2$summary
-#>       rep  rank intercept_b0  slope_b1    rsq   row endrow  time endtime   oxy endoxy   rate.bg
-#>    <lgcl> <int>        <num>     <num>  <num> <num>  <int> <num>   <num> <num>  <num>     <num>
-#> 1:     NA     1         7.91 -0.000912 0.0817     1    121    10      30   7.9   7.84 -0.000912
-bg3$summary
-#>       rep  rank intercept_b0 slope_b1   rsq   row endrow  time endtime   oxy endoxy  rate.bg
-#>    <lgcl> <int>        <num>    <num> <num> <num>  <int> <num>   <num> <num>  <num>    <num>
-#> 1:     NA     1         7.92 -0.00117 0.139     1    121    20      40  7.89   7.89 -0.00117
-summary(urch)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt    rate
-#> 1:  NA    1         7.85  -0.0303 0.988   1    121    0      20 7.86   7.31  -0.0275 -0.0303
-#> 2:  NA    2         7.83  -0.0286 0.987  61    181   10      30 7.58   7.00  -0.0290 -0.0286
-#> 3:  NA    3         7.76  -0.0257 0.984 121    241   20      40 7.31   6.72  -0.0295 -0.0257
-#> -----------------------------------------
-```
+`bg1``$``summary`` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.bg`` ``#> <lgcl> <int> <num> <num> <num> <num> <int> <num> <num> <num> <num> <num>`` ``#> 1: NA 1 7.9 -0.00031 0.0108 1 121 0 20 7.9 7.89 -0.00031`` ``bg2``$``summary`` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.bg`` ``#> <lgcl> <int> <num> <num> <num> <num> <int> <num> <num> <num> <num> <num>`` ``#> 1: NA 1 7.91 -0.000912 0.0817 1 121 10 30 7.9 7.84 -0.000912`` ``bg3``$``summary`` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.bg`` ``#> <lgcl> <int> <num> <num> <num> <num> <int> <num> <num> <num> <num> <num>`` ``#> 1: NA 1 7.92 -0.00117 0.139 1 121 20 40 7.89 7.89 -0.00117`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.85 -0.0303 0.988 1 121 0 20 7.86 7.31 -0.0275 -0.0303`` ``#> 2: NA 2 7.83 -0.0286 0.987 61 181 10 30 7.58 7.00 -0.0290 -0.0286`` ``#> 3: NA 3 7.76 -0.0257 0.984 121 241 20 40 7.31 6.72 -0.0295 -0.0257`` ``#> -----------------------------------------`
 
 Note how the background rates vary quite a lot. This is because they
 have been determined over short timescales, and is a good example of why
@@ -874,28 +549,9 @@ specimen rates.
 Here, we adjust the `calc_rate` object which contains three rates with a
 vector of the background rates.
 
-``` r
+`urch_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch``,`` `` by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``bg1``$``rate.bg``, ``bg2``$``rate.bg``, ``bg3``$``rate.bg``)``,`` `` method ``=`` ``"paired"``)`
 
-urch_adj <- adjust_rate(urch,
-                        by = c(bg1$rate.bg, bg2$rate.bg, bg3$rate.bg),
-                        method = "paired")
-```
-
-``` r
-
-summary(urch_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'paired' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt    rate adjustment rate.adjusted
-#> 1:  NA    1         7.85  -0.0303 0.988   1    121    0      20 7.86   7.31  -0.0275 -0.0303  -0.000310       -0.0300
-#> 2:  NA    2         7.83  -0.0286 0.987  61    181   10      30 7.58   7.00  -0.0290 -0.0286  -0.000912       -0.0277
-#> 3:  NA    3         7.76  -0.0257 0.984 121    241   20      40 7.31   6.72  -0.0295 -0.0257  -0.001168       -0.0246
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'paired' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate adjustment rate.adjusted`` ``#> 1: NA 1 7.85 -0.0303 0.988 1 121 0 20 7.86 7.31 -0.0275 -0.0303 -0.000310 -0.0300`` ``#> 2: NA 2 7.83 -0.0286 0.987 61 181 10 30 7.58 7.00 -0.0290 -0.0286 -0.000912 -0.0277`` ``#> 3: NA 3 7.76 -0.0257 0.984 121 241 20 40 7.31 6.72 -0.0295 -0.0257 -0.001168 -0.0246`` ``#> -----------------------------------------`
 
 Again each specimen rate has been adjusted by the background rate at the
 same position.
@@ -959,10 +615,7 @@ controls can be used to adjust specimen rates.
 This example (using the initial part of the `squid.rd` data) is a closed
 chamber respirometry experiment on a squid.
 
-``` r
-
-sqd_insp <- inspect(sqd)
-```
+`sqd_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sqd``)`
 
 ![Inspect plot of squid respirometry data showing oxygen timeseries and
 rolling rate over
@@ -980,10 +633,7 @@ background rate. However it’s always a good idea to inspect the data for
 issues and visualise it using `inspect`, and this function also allows
 us to extract the columns we are interested in.
 
-``` r
-
-sqd_bg_insp <- inspect(sqd_bg, time = 1, oxygen = 2)
-```
+`sqd_bg_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sqd_bg``, time ``=`` ``1``, oxygen ``=`` ``2``)`
 
 ![Inspect plot of squid background data showing oxygen timeseries and
 rolling rate, with the rolling rate plot revealing an increasing
@@ -1000,10 +650,7 @@ More localised estimations would therefore be more representative.
 
 We’ll use `auto_rate` on the squid data.
 
-``` r
-
-sqd_ar <- auto_rate(sqd_insp)
-```
+`sqd_ar`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sqd_insp``)`
 
 ![Plot of auto_rate results on squid data showing detected linear
 regions highlighted on the full timeseries and individual rate
@@ -1017,30 +664,11 @@ be adjusted.
 All we need to do is enter the background `inspect` object as the `by`
 input and specify the method.
 
-``` r
-
-sqd_ar_adj <- adjust_rate(sqd_ar, by = sqd_bg_insp, method = "concurrent")
-```
+`sqd_ar_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``sqd_ar``, by ``=`` ``sqd_bg_insp``, method ``=`` ``"concurrent"``)`
 
 We’ll look at the top 5 rows of the summary table.
 
-``` r
-
-summary(sqd_ar_adj, pos = 1:5)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'concurrent' method.
-#> Summary of rate results from entered 'pos' rank(s):
-#> 
-#>    rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate adjustment rate.adjusted
-#> 1:  NA    1         7.77 -0.000322 0.999  128042 2425   4800 2424    4799 6.97   6.23 -0.000322 -0.0000296     -0.000293
-#> 2:  NA    2         7.75 -0.000316 0.999   68047  274   3058  273    3057 7.67   6.80 -0.000316 -0.0000156     -0.000300
-#> 3:  NA    3         7.76 -0.000322 0.998   64297 3111   4466 3110    4465 6.76   6.33 -0.000322 -0.0000310     -0.000291
-#> 4:  NA    4         7.77 -0.000322 0.999   56331 2424   4810 2423    4809 6.97   6.21 -0.000322 -0.0000296     -0.000293
-#> 5:  NA    5         7.74 -0.000312 0.998   43240 1556   3060 1555    3059 7.26   6.78 -0.000312 -0.0000189     -0.000293
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``sqd_ar_adj``, pos ``=`` ``1``:``5``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'concurrent' method.`` ``#> Summary of rate results from entered 'pos' rank(s):`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 7.77 -0.000322 0.999 128042 2425 4800 2424 4799 6.97 6.23 -0.000322 -0.0000296 -0.000293`` ``#> 2: NA 2 7.75 -0.000316 0.999 68047 274 3058 273 3057 7.67 6.80 -0.000316 -0.0000156 -0.000300`` ``#> 3: NA 3 7.76 -0.000322 0.998 64297 3111 4466 3110 4465 6.76 6.33 -0.000322 -0.0000310 -0.000291`` ``#> 4: NA 4 7.77 -0.000322 0.999 56331 2424 4810 2423 4809 6.97 6.21 -0.000322 -0.0000296 -0.000293`` ``#> 5: NA 5 7.74 -0.000312 0.998 43240 1556 3060 1555 3059 7.26 6.78 -0.000312 -0.0000189 -0.000293`` ``#> -----------------------------------------`
 
 Note how the adjustment value differs. The top two adjustments are a
 good example of what we would expect concurrently calculated background
@@ -1053,22 +681,13 @@ dataset.
 We can use `calc_rate.bg` and the row numbers from the summary to show
 that the adjustments for these have been calculated correctly.
 
-``` r
-
-subset_data(sqd_bg, from = 2425, to = 4800, by = "row") |>
-  calc_rate.bg()
-```
+[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``sqd_bg``, from ``=`` ``2425``, to ``=`` ``4800``, by ``=`` ``"row"``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![Plot of calc_rate.bg result showing background rate regression fitted
 to the subset of background data from rows 2425 to
 4800.](adjust_rate_files/figure-html/unnamed-chunk-39-1.png)
 
-``` r
-
-
-subset_data(sqd_bg, from = 273, to = 3057, by = "row") |>
-  calc_rate.bg()
-```
+` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``sqd_bg``, from ``=`` ``273``, to ``=`` ``3057``, by ``=`` ``"row"``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![Plot of calc_rate.bg result showing background rate regression fitted
 to the subset of background data from rows 273 to
@@ -1110,65 +729,20 @@ which excludes the flush and start of the replicate data. We then use a
 `measure` phase of six minutes (360 rows) to extract a rate from the
 rest of the replicate.
 
-``` r
-
-# replicate start times - seq(from, to, by)
-# starts <- seq(120, 2100, 660)
-# # three minute buffer of data to exclude at the start of each replicate
-# buffer <- 180
-# # period to measure after buffer
-# measure <- 360
-
-rates <- calc_rate.int(interm_insp,
-                       starts = 660,
-                       wait = 180,
-                       measure = 420,
-                       by = "row")
-```
+`# replicate start times - seq(from, to, by)`` ``# starts <- seq(120, 2100, 660)`` ``# # three minute buffer of data to exclude at the start of each replicate`` ``# buffer <- 180`` ``# # period to measure after buffer`` ``# measure <- 360`` `` ``rates`` ``<-`` `[`calc_rate.int`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)`(``interm_insp``,`` `` starts ``=`` ``660``,`` `` wait ``=`` ``180``,`` `` measure ``=`` ``420``,`` `` by ``=`` ``"row"``)`
 
 ![Plot of calc_rate.int results showing extracted rates from each
 replicate of the intermittent-flow experiment with wait and measure
 phases indicated.](adjust_rate_files/figure-html/unnamed-chunk-41-1.png)
 
-``` r
-
-summary(rates)
-#> 
-#> # summary.calc_rate.int # ---------------
-#> Summary of all replicate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt     rate
-#> 1:   1    1         8.27 -0.00223 0.983  181    600  181     600 7.88   6.96 -0.00221 -0.00223
-#> 2:   2    1         9.80 -0.00228 0.979  841   1260  841    1260 7.89   7.02 -0.00208 -0.00228
-#> 3:   3    1        11.25 -0.00224 0.981 1501   1920 1501    1920 8.00   6.96 -0.00248 -0.00224
-#> 4:   4    1        12.81 -0.00227 0.979 2161   2580 2161    2580 7.91   6.97 -0.00225 -0.00227
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``rates``)`` ``#> `` ``#> # summary.calc_rate.int # ---------------`` ``#> Summary of all replicate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: 1 1 8.27 -0.00223 0.983 181 600 181 600 7.88 6.96 -0.00221 -0.00223`` ``#> 2: 2 1 9.80 -0.00228 0.979 841 1260 841 1260 7.89 7.02 -0.00208 -0.00228`` ``#> 3: 3 1 11.25 -0.00224 0.981 1501 1920 1501 1920 8.00 6.96 -0.00248 -0.00224`` ``#> 4: 4 1 12.81 -0.00227 0.979 2161 2580 2161 2580 7.91 6.97 -0.00225 -0.00227`` ``#> -----------------------------------------`
 
 #### Adjust rates
 
 Now we have a rate from each replicate, we can adjust them using the
 `"concurrent"` method, and the background dataset.
 
-``` r
-
-adj <- adjust_rate(rates,
-                   interm_bg,
-                   "concurrent")
-summary(adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'concurrent' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt     rate adjustment rate.adjusted
-#> 1:   1    1         8.27 -0.00223 0.983  181    600  181     600 7.88   6.96 -0.00221 -0.00223  -0.000452      -0.00178
-#> 2:   2    1         9.80 -0.00228 0.979  841   1260  841    1260 7.89   7.02 -0.00208 -0.00228  -0.000456      -0.00182
-#> 3:   3    1        11.25 -0.00224 0.981 1501   1920 1501    1920 8.00   6.96 -0.00248 -0.00224  -0.000444      -0.00180
-#> 4:   4    1        12.81 -0.00227 0.979 2161   2580 2161    2580 7.91   6.97 -0.00225 -0.00227  -0.000453      -0.00182
-#> -----------------------------------------
-```
+`adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``rates``,`` `` ``interm_bg``,`` `` ``"concurrent"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'concurrent' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate adjustment rate.adjusted`` ``#> 1: 1 1 8.27 -0.00223 0.983 181 600 181 600 7.88 6.96 -0.00221 -0.00223 -0.000452 -0.00178`` ``#> 2: 2 1 9.80 -0.00228 0.979 841 1260 841 1260 7.89 7.02 -0.00208 -0.00228 -0.000456 -0.00182`` ``#> 3: 3 1 11.25 -0.00224 0.981 1501 1920 1501 1920 8.00 6.96 -0.00248 -0.00224 -0.000444 -0.00180`` ``#> 4: 4 1 12.81 -0.00227 0.979 2161 2580 2161 2580 7.91 6.97 -0.00225 -0.00227 -0.000453 -0.00182`` ``#> -----------------------------------------`
 
 A background adjustment has been calculated from the same time window in
 the background data for each replicate. We can see they are very
@@ -1192,14 +766,7 @@ the same window.
 
 #### Calculate specimen rate
 
-``` r
-
-# Calculate specimen rate between 10 and 30 mins
-rate <- inspect(urchins.rd, 1, 2) |>
-  calc_rate(from = 10,
-            to = 30,
-            by = "time")
-```
+`# Calculate specimen rate between 10 and 30 mins`` ``rate`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, ``1``, ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``10``,`` `` to ``=`` ``30``,`` `` by ``=`` ``"time"``)`
 
 ![Inspect plot of urchin oxygen data from column 2 showing full
 timeseries with rolling
@@ -1207,13 +774,7 @@ rate.](adjust_rate_files/figure-html/unnamed-chunk-44-1.png)
 
 #### Inspect background data
 
-``` r
-
-## Inspect background columns
-bg_data <- inspect(urchins.rd,
-                   time = 1,
-                   oxygen = 18:19)
-```
+`## Inspect background columns`` ``bg_data`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``,`` `` time ``=`` ``1``,`` `` oxygen ``=`` ``18``:``19``)`
 
 ![Inspect plot of two background oxygen columns 18 and 19 from the
 urchins dataset showing oxygen timeseries for both
@@ -1221,26 +782,7 @@ columns.](adjust_rate_files/figure-html/unnamed-chunk-45-1.png)
 
 #### Adjust rate
 
-``` r
-
-rate_adj <- adjust_rate(rate,
-                        by = bg_data,
-                        method = "concurrent")
-print(rate_adj)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'concurrent' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0286
-#> Adjustment    : -0.00065
-#> Adjusted Rate : -0.0279 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``rate``,`` `` by ``=`` ``bg_data``,`` `` method ``=`` ``"concurrent"``)`` `[`print`](https://rdrr.io/r/base/print.html)`(``rate_adj``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'concurrent' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0286`` ``#> Adjustment : -0.00065`` ``#> Adjusted Rate : -0.0279 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 The adjustment value here is the mean of the two background rates from
 the same time window of the background columns that the specimen rate
@@ -1251,13 +793,7 @@ was determined from. We show this is the case in the next section.
 This performs the same adjustment using a different approach, and again
 demonstrates that the `"concurrent"` method results are as expected.
 
-``` r
-
-# Subset background data between same timepoints
-bg_rate <- inspect(urchins.rd, 1, 18:19) |>
-  subset_data(from = 10, to = 30, by = "time") |>
-  calc_rate.bg() 
-```
+`# Subset background data between same timepoints`` ``bg_rate`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, ``1``, ``18``:``19``)`` ``|>`` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``10``, to ``=`` ``30``, by ``=`` ``"time"``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `
 
     #> 
     #> # print.calc_rate.bg # ------------------
@@ -1267,26 +803,7 @@ bg_rate <- inspect(urchins.rd, 1, 18:19) |>
     #> [1] -0.00065
     #> -----------------------------------------
 
-``` r
-
-rate_adj <- adjust_rate(rate,
-                        by = bg_rate,
-                        method = "mean")
-print(rate_adj)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0286
-#> Adjustment    : -0.00065
-#> Adjusted Rate : -0.0279 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``rate``,`` `` by ``=`` ``bg_rate``,`` `` method ``=`` ``"mean"``)`` `[`print`](https://rdrr.io/r/base/print.html)`(``rate_adj``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0286`` ``#> Adjustment : -0.00065`` ``#> Adjusted Rate : -0.0279 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 We can see this is the same result as the example above using the
 `"concurrent"` method. This is a good example of how the functions in
@@ -1400,54 +917,21 @@ background data, and from timepoints 75140 to 79251 the post-experiment
 background data. We’ll subset both of these and calculate the pre- and
 post-experiment background rates.
 
-``` r
-
-# pre
-bg_pre <- subset_data(zeb_intermittent.rd, 1, 4999, "time") |>
-  inspect() |>
-  calc_rate.bg()
-```
+`# pre`` ``bg_pre`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``zeb_intermittent.rd``, ``1``, ``4999``, ``"time"``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![Plot of calc_rate.bg result showing the background rate regression
 fitted to pre-experiment control data from 1 to 4999
 seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-1.png)
 
-``` r
-
-
-# post
-bg_post <- subset_data(zeb_intermittent.rd, 75140, 79251, "time") |>
-  inspect() |>
-  calc_rate.bg()
-```
+` ``# post`` ``bg_post`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``zeb_intermittent.rd``, ``75140``, ``79251``, ``"time"``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![Plot of calc_rate.bg result showing the background rate regression
 fitted to post-experiment control data from 75140 to 79251
 seconds.](adjust_rate_files/figure-html/unnamed-chunk-50-2.png)
 
-``` r
+`bg_pre`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.0000742`` ``#> Mean background rate:`` ``#> [1] -0.0000742`` ``#> -----------------------------------------`
 
-bg_pre
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.0000742
-#> Mean background rate:
-#> [1] -0.0000742
-#> -----------------------------------------
-```
-
-``` r
-
-bg_post
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.0001217
-#> Mean background rate:
-#> [1] -0.0001217
-#> -----------------------------------------
-```
+`bg_post`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.0001217`` ``#> Mean background rate:`` ``#> [1] -0.0001217`` ``#> -----------------------------------------`
 
 We can see the background rate increases by around 70% over the course
 of the experiment. These objects are saved, so now we’ll calculate the
@@ -1461,20 +945,7 @@ of 2 minutes (120s) from the start that we don’t want to use in the
 analysis, and a ‘measure’ phase of 7 minutes (420s) to exclude the 2
 minutes of flushing at the end.
 
-``` r
-
-# define rep start time, buffer and measure periods
-start <- 38180 # start time of replicate
-wait <- 120   # 2 mins buffer
-measure <- 420  # 7 mins measure
-
-rate <- subset_data(zeb_intermittent.rd,
-                    from = start + wait,
-                    to = start + wait + measure,
-                    by = "time") |>
-  inspect() |>
-  auto_rate()
-```
+`# define rep start time, buffer and measure periods`` ``start`` ``<-`` ``38180`` ``# start time of replicate`` ``wait`` ``<-`` ``120`` ``# 2 mins buffer`` ``measure`` ``<-`` ``420`` ``# 7 mins measure`` `` ``rate`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``zeb_intermittent.rd``,`` `` from ``=`` ``start`` ``+`` ``wait``,`` `` to ``=`` ``start`` ``+`` ``wait`` ``+`` ``measure``,`` `` by ``=`` ``"time"``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`
 
 ![Plot of auto_rate results on a single zebrafish replicate showing
 detected linear regions and their fitted
@@ -1487,25 +958,7 @@ regressions.](adjust_rate_files/figure-html/unnamed-chunk-53-1.png)
 Now we’ll adjust the specimen rates using the two background rates and
 the `"linear"` method.
 
-``` r
-
-rate_adj <- adjust_rate(rate,
-                        by = bg_pre,
-                        by2 = bg_post,
-                        method = "linear")
-summary(rate_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'linear' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted
-#> 1:  NA    1         81.0 -0.00191 0.909    1263 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000971      -0.00182
-#> 2:  NA    2         90.8 -0.00217 0.978     966   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000971      -0.00207
-#> 3:  NA    3        119.6 -0.00292 0.823     420  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000970      -0.00282
-#> -----------------------------------------
-```
+`rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``rate``,`` `` by ``=`` ``bg_pre``,`` `` by2 ``=`` ``bg_post``,`` `` method ``=`` ``"linear"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``rate_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'linear' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 81.0 -0.00191 0.909 1263 218 398 38517 38697 7.28 6.98 -0.00191 -0.0000971 -0.00182`` ``#> 2: NA 2 90.8 -0.00217 0.978 966 4 375 38303 38674 7.80 6.97 -0.00217 -0.0000971 -0.00207`` ``#> 3: NA 3 119.6 -0.00292 0.823 420 47 132 38346 38431 7.69 7.46 -0.00292 -0.0000970 -0.00282`` ``#> -----------------------------------------`
 
 Note the adjustment values are very close though not identical in value,
 and they are roughly numerically midway between the pre- and
@@ -1517,25 +970,7 @@ We can show this using the background times and rates by creating our
 own linear model, and using the coefficients to calculate the rate for a
 given time, that of the first result in the summary table above.
 
-``` r
-
-## background rates and midpoint times
-bg1_rt <- bg_pre$rate.bg
-bg2_rt <- bg_post$rate.bg
-bg1_tm <- (1 + 4999)/2
-bg2_tm <- (75140 + 79251)/2
-
-## extract slope and intercept
-bg_lm_int <- lm(c(bg1_rt, bg2_rt) ~ c(bg1_tm, bg2_tm))$coefficients[[1]]
-bg_lm_slp <- lm(c(bg1_rt, bg2_rt) ~ c(bg1_tm, bg2_tm))$coefficients[[2]]
-
-## midpoint time of the first rate in summary
-rate_time <- (rate$summary$time[1] + rate$summary$endtime[1])/2
-
-## Background rate 
-rate_time * bg_lm_slp + bg_lm_int
-#> [1] -0.0000971
-```
+`## background rates and midpoint times`` ``bg1_rt`` ``<-`` ``bg_pre``$``rate.bg`` ``bg2_rt`` ``<-`` ``bg_post``$``rate.bg`` ``bg1_tm`` ``<-`` ``(``1`` ``+`` ``4999``)``/``2`` ``bg2_tm`` ``<-`` ``(``75140`` ``+`` ``79251``)``/``2`` `` ``## extract slope and intercept`` ``bg_lm_int`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``bg1_rt``, ``bg2_rt``)`` ``~`` `[`c`](https://rdrr.io/r/base/c.html)`(``bg1_tm``, ``bg2_tm``)``)``$``coefficients``[[``1``]``]`` ``bg_lm_slp`` ``<-`` `[`lm`](https://rdrr.io/r/stats/lm.html)`(`[`c`](https://rdrr.io/r/base/c.html)`(``bg1_rt``, ``bg2_rt``)`` ``~`` `[`c`](https://rdrr.io/r/base/c.html)`(``bg1_tm``, ``bg2_tm``)``)``$``coefficients``[[``2``]``]`` `` ``## midpoint time of the first rate in summary`` ``rate_time`` ``<-`` ``(``rate``$``summary``$``time``[``1``]`` ``+`` ``rate``$``summary``$``endtime``[``1``]``)``/``2`` `` ``## Background rate `` ``rate_time`` ``*`` ``bg_lm_slp`` ``+`` ``bg_lm_int`` ``#> [1] -0.0000971`
 
 This is the same as the adjustment value in the summary above.
 
@@ -1551,28 +986,7 @@ numerics in `adjust_rate` to show they output the same result. Here we
 enter the rates, and the *midpoints* of the time ranges over which they
 were determined.
 
-``` r
-
-rate_adj <- adjust_rate(c(-0.00191, -0.00217, -0.00292),
-                        by = -0.0000742,
-                        by2 = -0.0001217,
-                        time_x = (c(38517, 38303, 38346) + c(38697, 38674, 38431))/2,
-                        time_by = (1 + 4999)/2,
-                        time_by2 = (75140 + 79251)/2,
-                        method = "linear")
-summary(rate_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'linear' method.
-#> Summary of all rate results:
-#> 
-#>    rank     rate adjustment rate.adjusted
-#> 1:    1 -0.00191 -0.0000972      -0.00181
-#> 2:    2 -0.00217 -0.0000971      -0.00207
-#> 3:    3 -0.00292 -0.0000970      -0.00282
-#> -----------------------------------------
-```
+`rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`[`c`](https://rdrr.io/r/base/c.html)`(``-``0.00191``, ``-``0.00217``, ``-``0.00292``)``,`` `` by ``=`` ``-``0.0000742``,`` `` by2 ``=`` ``-``0.0001217``,`` `` time_x ``=`` ``(`[`c`](https://rdrr.io/r/base/c.html)`(``38517``, ``38303``, ``38346``)`` ``+`` `[`c`](https://rdrr.io/r/base/c.html)`(``38697``, ``38674``, ``38431``)``)``/``2``,`` `` time_by ``=`` ``(``1`` ``+`` ``4999``)``/``2``,`` `` time_by2 ``=`` ``(``75140`` ``+`` ``79251``)``/``2``,`` `` method ``=`` ``"linear"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``rate_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'linear' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rank rate adjustment rate.adjusted`` ``#> 1: 1 -0.00191 -0.0000972 -0.00181`` ``#> 2: 2 -0.00217 -0.0000971 -0.00207`` ``#> 3: 3 -0.00292 -0.0000970 -0.00282`` ``#> -----------------------------------------`
 
 We get the same result as above (the small mismatch in the first is
 simply due to the lower precision of entered values compared to internal
@@ -1600,10 +1014,7 @@ strongly recommend.
 The `background_exp.rd` example dataset shows background data with a
 rate that increases exponentially.
 
-``` r
-
-inspect(background_exp.rd)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``background_exp.rd``)`
 
 ![Inspect plot of exponential background data showing oxygen timeseries
 and rolling rate, with the rolling rate plot revealing an exponentially
@@ -1621,25 +1032,7 @@ time, that is increases exponentially.
 We will use the same example as [above](#lineareg1), but this time
 assume an exponential increase in background rate.
 
-``` r
-
-rate_adj <- adjust_rate(rate,
-                        by = bg_pre,
-                        by2 = bg_post,
-                        method = "exponential")
-summary(rate_adj)
-#> 
-#> # summary.adjust_rate # -----------------
-#> 
-#> Adjustment was applied using 'exponential' method.
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted
-#> 1:  NA    1         81.0 -0.00191 0.909    1263 218    398 38517   38697 7.28   6.98 -0.00191 -0.0000942      -0.00182
-#> 2:  NA    2         90.8 -0.00217 0.978     966   4    375 38303   38674 7.80   6.97 -0.00217 -0.0000941      -0.00207
-#> 3:  NA    3        119.6 -0.00292 0.823     420  47    132 38346   38431 7.69   7.46 -0.00292 -0.0000941      -0.00282
-#> -----------------------------------------
-```
+`rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``rate``,`` `` by ``=`` ``bg_pre``,`` `` by2 ``=`` ``bg_post``,`` `` method ``=`` ``"exponential"``)`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``rate_adj``)`` ``#> `` ``#> # summary.adjust_rate # -----------------`` ``#> `` ``#> Adjustment was applied using 'exponential' method.`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted`` ``#> 1: NA 1 81.0 -0.00191 0.909 1263 218 398 38517 38697 7.28 6.98 -0.00191 -0.0000942 -0.00182`` ``#> 2: NA 2 90.8 -0.00217 0.978 966 4 375 38303 38674 7.80 6.97 -0.00217 -0.0000941 -0.00207`` ``#> 3: NA 3 119.6 -0.00292 0.823 420 47 132 38346 38431 7.69 7.46 -0.00292 -0.0000941 -0.00282`` ``#> -----------------------------------------`
 
 Under an exponential vs. a linear background relationship we would
 expect the background rate to be lower at all stages of an experiment
@@ -1671,103 +1064,42 @@ The `algae.rd` dataset contains a recording from a respirometry
 experiment on algae exposed to light, and so producing oxygen via
 photosynthesis. We’ll calculate a production rate from these data.
 
-``` r
-
-alg_rt <- calc_rate(algae.rd)
-```
+`alg_rt`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``algae.rd``)`
 
 ![Plot of calc_rate result on algae data showing a positive slope
 indicating oxygen production via
 photosynthesis.](adjust_rate_files/figure-html/unnamed-chunk-59-1.png)
 
-``` r
-
-print(alg_rt)
-#> 
-#> # print.calc_rate # ---------------------
-#> Rank 1 of 1 rates:
-#> Rate: 0.0887 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``alg_rt``)`` ``#> `` ``#> # print.calc_rate # ---------------------`` ``#> Rank 1 of 1 rates:`` ``#> Rate: 0.0887 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 Note how the rate is positive, unlike all the other examples before now.
 
 A blank control experiment has also been conducted over the same time
 period, so we’ll calculate a background rate.
 
-``` r
-
-bg_rt <- calc_rate.bg(alg_bg)
-```
+`bg_rt`` ``<-`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``alg_bg``)`
 
 ![Plot of calc_rate.bg result showing the background rate regression
 fitted to the algae control experiment data with a negative slope
 indicating oxygen
 consumption.](adjust_rate_files/figure-html/unnamed-chunk-62-1.png)
 
-``` r
-
-print(bg_rt)
-#> 
-#> # print.calc_rate.bg # ------------------
-#> Background rate(s):
-#> [1] -0.0145
-#> Mean background rate:
-#> [1] -0.0145
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``bg_rt``)`` ``#> `` ``#> # print.calc_rate.bg # ------------------`` ``#> Background rate(s):`` ``#> [1] -0.0145`` ``#> Mean background rate:`` ``#> [1] -0.0145`` ``#> -----------------------------------------`
 
 Note, this rate is negative. This suggests the production rate of the
 specimen is being underestimated, because the microbial community in the
 respirometer is consuming some of the produced oxygen. We can adjust the
 rate to see.
 
-``` r
+`rt_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``alg_rt``, ``bg_rt``)`
 
-rt_adj <- adjust_rate(alg_rt, bg_rt)
-```
-
-``` r
-
-print(rt_adj)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : 0.0887
-#> Adjustment    : -0.0145
-#> Adjusted Rate : 0.103 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``rt_adj``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : 0.0887`` ``#> Adjustment : -0.0145`` ``#> Adjusted Rate : 0.103 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 We see this is indeed the case, and the adjusted rate is higher. We can
 do this same adjustment using numeric values, but we must be careful to
 use the correct signs.
 
-``` r
-
-adjust_rate(0.0887, -0.0145)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : 0.0887
-#> Adjustment    : -0.0145
-#> Adjusted Rate : 0.103 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``0.0887``, ``-``0.0145``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : 0.0887`` ``#> Adjustment : -0.0145`` ``#> Adjusted Rate : 0.103 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 ## Case 10: Oxygen input adjustments
 
@@ -1783,23 +1115,7 @@ al. 1999](https://januarharianto.github.io/respR/articles/refs.html#references)
 
 `adjust_rate` can therefore accept positive background rate values.
 
-``` r
-
-adjust_rate(-0.0176, 0.0042)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.0176
-#> Adjustment    : 0.0042
-#> Adjusted Rate : -0.0218 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``-``0.0176``, ``0.0042``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.0176`` ``#> Adjustment : 0.0042`` ``#> Adjusted Rate : -0.0218 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 ## Case 11: Manual subtraction of background differences
 
@@ -1828,19 +1144,13 @@ column (`18`).
 
 We’ll inspect both to see the structure.
 
-``` r
-
-inspect(urchins.rd, 1, 2)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, ``1``, ``2``)`
 
 ![inspect() output for urchin data showing specimen oxygen uptake
 channel and background channel
 timeseries](adjust_rate_files/figure-html/unnamed-chunk-68-1.png)
 
-``` r
-
-inspect(urchins.rd, 1, 18)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, ``1``, ``18``)`
 
 ![inspect() output for urchin data showing specimen oxygen uptake
 channel and background channel
@@ -1853,20 +1163,7 @@ oxygen data from the initial value. Then we subtract this from the
 oxygen values in the specimen data. Finally we’ll calculate a rate from
 the new data between 10 minutes and 30 minutes.
 
-``` r
-
-## background difference in oxygen from initial value
-bg_diff <- urchins.rd[[18]] - urchins.rd[[18]][1]
-
-## make new dataframe of specimen data
-urch <- urchins.rd[,c(1,2)]
-
-## subtract background difference from specimen oxygen
-urch[[2]] <- urch[[2]] - bg_diff
-
-## calculate rate
-urch_rt <- calc_rate(urch, 10, 30)
-```
+`## background difference in oxygen from initial value`` ``bg_diff`` ``<-`` ``urchins.rd``[[``18``]``]`` ``-`` ``urchins.rd``[[``18``]``]``[``1``]`` `` ``## make new dataframe of specimen data`` ``urch`` ``<-`` ``urchins.rd``[``,`[`c`](https://rdrr.io/r/base/c.html)`(``1``,``2``)``]`` `` ``## subtract background difference from specimen oxygen`` ``urch``[[``2``]``]`` ``<-`` ``urch``[[``2``]``]`` ``-`` ``bg_diff`` `` ``## calculate rate`` ``urch_rt`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``urch``, ``10``, ``30``)`
 
     #> 
     #> # print.calc_rate # ---------------------
@@ -1881,22 +1178,7 @@ urch_rt <- calc_rate(urch, 10, 30)
 Now we do the adjustment from the same data region using `respR`
 functions.
 
-``` r
-
-## calculate urchin rate
-urch_rt <- urchins.rd |>
-  inspect(1, 2) |>
-  calc_rate(10, 30) 
-
-## calculate background rate from same region
-bg_rt <- urchins.rd |>
-  subset_data(10, 30) |>
-  inspect(1, 18) |>
-  calc_rate.bg() 
-
-## adjust rate
-urch_rt_adj <- adjust_rate(urch_rt, bg_rt)
-```
+`## calculate urchin rate`` ``urch_rt`` ``<-`` ``urchins.rd`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``1``, ``2``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``10``, ``30``)`` `` `` ``## calculate background rate from same region`` ``bg_rt`` ``<-`` ``urchins.rd`` ``|>`` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``10``, ``30``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``1``, ``18``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`` `` `` ``## adjust rate`` ``urch_rt_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch_rt``, ``bg_rt``)`
 
     #> 
     #> # print.adjust_rate # -------------------
@@ -1940,10 +1222,7 @@ Here, we have a background recording, but the chamber was left open
 until the researcher was ready to start the experiment proper at around
 timepoint 5000, so the initial stages are not useful.
 
-``` r
-
-inspect(bg_data)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``bg_data``)`
 
 ![inspect() output for background data showing oxygen timeseries with
 initial spike before stable background measurement
@@ -1954,11 +1233,7 @@ estimation. Instead we use `subset_data` to subset only the data region
 we are interested in and pass it to `calc_rate.bg`. This subsetting can
 be performed using `"time"`, `"row"`, or `"oxygen"` ranges.
 
-``` r
-
-bg <- subset_data(bg_data, from = 5000) |>
-  calc_rate.bg()
-```
+`bg`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``bg_data``, from ``=`` ``5000``)`` ``|>`` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``)`
 
 ![calc_rate.bg() output showing background oxygen consumption rate
 calculated from stable region of background data after row
@@ -1970,30 +1245,9 @@ is to subset to the end of the dataset.
 
 Now we can use this background rate to adjust a specimen rate.
 
-``` r
+`sard`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` ``|>`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``2000``, to ``=`` ``4000``)`` ``|>`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``by ``=`` ``bg``)`` `
 
-sard <- inspect(sardine.rd) |>
-  calc_rate(from = 2000, to = 4000) |>
-  adjust_rate(by = bg) 
-```
-
-``` r
-
-print(sard)
-#> 
-#> # print.adjust_rate # -------------------
-#> NOTE: Consider the sign of the adjustment value when adjusting the rate.
-#> 
-#> Adjustment was applied using the 'mean' method.
-#> 
-#> Rank 1 of 1 adjusted rate(s):
-#> Rate          : -0.000705
-#> Adjustment    : -0.000115
-#> Adjusted Rate : -0.000591 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``sard``)`` ``#> `` ``#> # print.adjust_rate # -------------------`` ``#> NOTE: Consider the sign of the adjustment value when adjusting the rate.`` ``#> `` ``#> Adjustment was applied using the 'mean' method.`` ``#> `` ``#> Rank 1 of 1 adjusted rate(s):`` ``#> Rate : -0.000705`` ``#> Adjustment : -0.000115`` ``#> Adjusted Rate : -0.000591 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 If you just want to extract a single rate, using `calc_rate` and its
 region selection inputs to calculate a background rate from a specific
@@ -2014,37 +1268,7 @@ linearly increasing background rate of our zebrafish, and decide
 background rates above 10% of specimen rates are unacceptably high. We
 can estimate how long it will take for this to occur.
 
-``` r
-
-duration <- 70000 # starting duration
-under10 <- TRUE # This will hold our logical test result
-
-# Is the background rate under 10% of the specimen rate?
-# while it is, repeat, adding 1 hour to duration each time 
-while (under10) {
-  
-  rate_adj <- 
-    suppressWarnings(
-      suppressMessages(
-        adjust_rate(-0.00191, # typical specimen rate
-                    by = -0.0000742, # initial background rate
-                    by2 = -0.0001217, # end background rate
-                    time_x = duration, # this is what we vary
-                    time_by = (1 + 4999)/2, # initial background time
-                    time_by2 = (75140 + 79251)/2, # end background time
-                    method = "linear")
-      ))
-  
-  # Is background rate under 10% of specimen rate?
-  under10 <- rate_adj$adjustment/rate_adj$rate * 100 < 10
-  # Increase duration by 1 hour
-  duration <- duration + 3600
-  # if bg NOT under 10% of specimen rate print the duration in hours
-  # The while loop will also stop here
-  if(!under10) print(duration/60/60) 
-}
-#> [1] 53.4
-```
+`duration`` ``<-`` ``70000`` ``# starting duration`` ``under10`` ``<-`` ``TRUE`` ``# This will hold our logical test result`` `` ``# Is the background rate under 10% of the specimen rate?`` ``# while it is, repeat, adding 1 hour to duration each time `` ``while`` ``(``under10``)`` ``{`` `` `` `` ``rate_adj`` ``<-`` `` `` `[`suppressWarnings`](https://rdrr.io/r/base/warning.html)`(`` `` `[`suppressMessages`](https://rdrr.io/r/base/message.html)`(`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``-``0.00191``, ``# typical specimen rate`` `` by ``=`` ``-``0.0000742``, ``# initial background rate`` `` by2 ``=`` ``-``0.0001217``, ``# end background rate`` `` time_x ``=`` ``duration``, ``# this is what we vary`` `` time_by ``=`` ``(``1`` ``+`` ``4999``)``/``2``, ``# initial background time`` `` time_by2 ``=`` ``(``75140`` ``+`` ``79251``)``/``2``, ``# end background time`` `` method ``=`` ``"linear"``)`` `` ``)``)`` `` `` `` ``# Is background rate under 10% of specimen rate?`` `` ``under10`` ``<-`` ``rate_adj``$``adjustment``/``rate_adj``$``rate`` ``*`` ``100`` ``<`` ``10`` `` ``# Increase duration by 1 hour`` `` ``duration`` ``<-`` ``duration`` ``+`` ``3600`` `` ``# if bg NOT under 10% of specimen rate print the duration in hours`` `` ``# The while loop will also stop here`` `` ``if``(``!``under10``)`` `[`print`](https://rdrr.io/r/base/print.html)`(``duration``/``60``/``60``)`` `` ``}`` ``#> [1] 53.4`
 
 Now we can see this level of background rate will be reached in around
 53 hours, so our current experiments of 24h are well within this. If we

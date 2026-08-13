@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**172
-citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from CRAN [**20,858
+In the seven years since publication, `respR` has received [\*\*
+citations\*\*](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
+and been downloaded from CRAN [**21,090
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -34,6 +34,13 @@ know**](https://januarharianto.github.io/respR/articles/contact.html).\
 caused the Permian–Triassic transition between the Paleozoic and Modern
 faunas. *Proceedings of the National Academy of Sciences*, 123(28),
 e2533086123. <https://doi.org/10.1073/pnas.2533086123>
+
+****Rogissart, H**, **Daufresne, M**, **Evanno, G**, **Guillard, J**,
+**Lubin, F-R**, **Chancerel, E**, & **Raffard, A****. **2026**. A
+century of allopatry: Plasticity and rapid selection shape phenotypic
+trait variability under contrasting environments. *Proceedings of the
+Royal Society B: Biological Sciences*, 293(2075), 20260692.
+<https://doi.org/10.1098/rspb.2026.0692>
 
 ****Ahnert, M**, **Schalk, T**, & **Krebs, P****. **2026**.
 Respiration-based development of an activated sludge model for
@@ -136,6 +143,10 @@ but not Food Limitation Alters Metabolism During Larval Development in
 Crown-of-Thorns Sea Stars (Acanthaster cf. Solaris). *Ecology and
 Evolution*, 16(7), e73934. <https://doi.org/10.1002/ece3.73934>
 
+****Ianniello, Caroline Fleming****. **2026**. *Energetic Physiology in
+the Anthropocene: Integrating Environment, Behavior, and Energy Flow in
+Coastal Marine Organisms* \[PhD thesis\]. Boston University.
+
 ****Spindel, NB**, **Galloway, AWE**, **Schram, JB**, **McNeill, GD**,
 **Bellis, SgKV**, **Guujaaw, N**, **Yakgujanaas, J**, **Pontier, O**,
 **Thompson, M**, **Lee, LC**, & **Okamoto, DK****. **2026**. Consumer
@@ -223,11 +234,11 @@ responses to marine heatwave conditions in southern New Zealand. *Marine
 Environmental Research*, 107410.
 <https://doi.org/10.1016/j.marenvres.2025.107410>
 
-****Ianniello, CF**, **Beery, G**, **Chen, T-H(Denny)**, **Deyle, E**,
-**Heiger-Bernays, W**, **Motter, I**, **McAlister, JS**, & **Rotjan,
-RD****. **2025**. Stress in the City: Disentangling multi-stressor
-effects on an urbanized coral in a changing ocean. *Marine Pollution
-Bulletin*, 216, 117918.
+****Ianniello, Caroline F**, **Beery, G**, **Chen, T-H(Denny)**,
+**Deyle, E**, **Heiger-Bernays, W**, **Motter, I**, **McAlister, JS**, &
+**Rotjan, RD****. **2025**. Stress in the City: Disentangling
+multi-stressor effects on an urbanized coral in a changing ocean.
+*Marine Pollution Bulletin*, 216, 117918.
 <https://doi.org/10.1016/j.marpolbul.2025.117918>
 
 ****Butler, MC**, **Santos-Ortega, Y**, **Vary, CPH**, **Guntur, AR**,

@@ -64,10 +64,7 @@ Time is in hours, and oxygen in `mg/L`. Let’s
 [`inspect()`](https://januarharianto.github.io/respR/reference/inspect.md)
 the data.
 
-``` r
-
-lake_insp <- inspect(lake, rate.rev = FALSE)
-```
+`lake_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``lake``, rate.rev ``=`` ``FALSE``)`
 
 ![inspect() output for eutrophic lake oxygen data showing diurnal
 fluctuation over 40 hours and corresponding rolling
@@ -86,13 +83,7 @@ noon on the first day (hour 12) and 12 noon on the next (hour 36). We
 will use `calc_rate` as we normally would to get the rate between these
 two timepoints.
 
-``` r
-
-lake_rate <- calc_rate(lake_insp,
-                       from = 12,
-                       to = 36,
-                       by = "time")
-```
+`lake_rate`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``lake_insp``,`` `` from ``=`` ``12``,`` `` to ``=`` ``36``,`` `` by ``=`` ``"time"``)`
 
 ![calc_rate() plot showing linear regression fit to lake oxygen data
 between hours 12 and 36 misrepresenting net oxygen
@@ -102,17 +93,7 @@ It is immediately clear the linear regression based rate completely
 misrepresents the overall oxygen flux and instead of a small net oxygen
 flux, suggests there is a large net oxygen consumption.
 
-``` r
-
-summary(lake_rate)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt   rate
-#> 1:  NA    1           16   -0.323 0.456  42    147 11.9      36 7.16   7.69   0.0221 -0.323
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``lake_rate``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 16 -0.323 0.456 42 147 11.9 36 7.16 7.69 0.0221 -0.323`` ``#> -----------------------------------------`
 
 However, looking at the summary we can see the `$rate.2pt` as the second
 from last column. This is simply the oxygen differential between the two
@@ -126,41 +107,11 @@ This two-point rate will not be the one converted if we pass the
 `calc_rate` object to `convert_rate`, however we can enter the two-point
 rate as a value to convert the rate to units.
 
-``` r
-
-lake_rate_conv <- convert_rate(0.02213001,
-                               oxy.unit = "mg/l",
-                               time.unit = "hrs",
-                               output.unit = "umol/h",
-                               volume = 1)
-```
+`lake_rate_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``0.02213001``,`` `` oxy.unit ``=`` ``"mg/l"``,`` `` time.unit ``=`` ``"hrs"``,`` `` output.unit ``=`` ``"umol/h"``,`` `` volume ``=`` ``1``)`
 
 Alternatively, extract it directly.
 
-``` r
-
-lake_rate_conv <- convert_rate(lake_rate$rate.2pt,
-                               oxy.unit = "mg/l",
-                               time.unit = "hrs",
-                               output.unit = "umol/h",
-                               volume = 1)
-#> convert_rate: Numeric input detected. Converting all numeric rates.
-# print
-lake_rate_conv
-#> 
-#> # print.convert_rate # ------------------
-#> Rank 1 of 1 rates:
-#> 
-#> Input:
-#> [1] 0.0221
-#> [1] "mg/L" "hr"  
-#> Converted:
-#> [1] 0.692
-#> [1] "umolO2/hr"
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`lake_rate_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``lake_rate``$``rate.2pt``,`` `` oxy.unit ``=`` ``"mg/l"``,`` `` time.unit ``=`` ``"hrs"``,`` `` output.unit ``=`` ``"umol/h"``,`` `` volume ``=`` ``1``)`` ``#> convert_rate: Numeric input detected. Converting all numeric rates.`` ``# print`` ``lake_rate_conv`` ``#> `` ``#> # print.convert_rate # ------------------`` ``#> Rank 1 of 1 rates:`` ``#> `` ``#> Input:`` ``#> [1] 0.0221`` ``#> [1] "mg/L" "hr" `` ``#> Converted:`` ``#> [1] 0.692`` ``#> [1] "umolO2/hr"`` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 Note here the `volume` input. This is not a respirometry experiment, so
 there is no “volume” as such. In this situation this should refer to the
@@ -175,24 +126,7 @@ values from the summary table. If we convert these to `umol/L`, then
 divide the difference by the time taken (24h) then we should get the
 same result.
 
-``` r
-
-# start conc
-convert_DO(7.16, from = "mg/l", to = "umol/L")
-#> [1] 223.8
-
-# end conc
-convert_DO(7.69, from = "mg/l", to = "umol/L")
-#> [1] 240.3
-
-# Total in umol produced over this 24h period per L
-240.3 - 223.8
-#> [1] 16.5
-
-# umol produced per hour per Litre of lake over 24h
-16.5/24
-#> [1] 0.6875
-```
+`# start conc`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``7.16``, from ``=`` ``"mg/l"``, to ``=`` ``"umol/L"``)`` ``#> [1] 223.8`` `` ``# end conc`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``7.69``, from ``=`` ``"mg/l"``, to ``=`` ``"umol/L"``)`` ``#> [1] 240.3`` `` ``# Total in umol produced over this 24h period per L`` ``240.3`` ``-`` ``223.8`` ``#> [1] 16.5`` `` ``# umol produced per hour per Litre of lake over 24h`` ``16.5``/``24`` ``#> [1] 0.6875`
 
 We can see this is very close to the same result. The difference is
 simply due to the higher precision of internal values compared to what

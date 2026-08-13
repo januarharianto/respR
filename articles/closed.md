@@ -13,18 +13,7 @@ are dissolved oxygen data in *mg/L*. Columns 18 and 19 (`b1` and `b2`)
 contain background recordings (i.e. from empty or “blank” control
 chambers).
 
-``` r
-
-head(urchins.rd)
-#>    time.min     a     b     c     d     e     f     g     h     i     j     k     l     m     n     o     p    b1    b2
-#>       <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#> 1:      0.0  7.86  7.86  7.64  7.65  7.87  7.74  7.62  7.65  7.96  7.75  7.72  7.71  7.87  7.61  6.96  7.04  7.90  7.70
-#> 2:      0.2  7.87  7.79  7.60  7.71  7.87  7.72  7.61  7.66  7.97  7.72  7.71  7.71  7.89  7.61  6.96  7.01  7.89  7.70
-#> 3:      0.3  7.89  7.70  7.60  7.70  7.90  7.72  7.61  7.63  7.98  7.72  7.69  7.77  7.89  7.65  6.97  7.05  7.90  7.69
-#> 4:      0.5  7.90  7.68  7.60  7.72  7.92  7.74  7.62  7.66  7.97  7.72  7.70  7.77  7.89  7.67  6.96  7.09  7.89  7.69
-#> 5:      0.7  7.87  7.64  7.60  7.67  7.90  7.73  7.59  7.65  7.95  7.71  7.66  7.76  7.86  7.62  6.95  7.00  7.90  7.68
-#> 6:      0.8  7.82  7.69  7.61  7.61  7.88  7.70  7.60  7.65  7.94  7.70  7.63  7.72  7.86  7.61  6.94  6.99  7.90  7.67
-```
+[`head`](https://rdrr.io/r/utils/head.html)`(``urchins.rd``)`` ``#> time.min a b c d e f g h i j k l m n o p b1 b2`` ``#> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>`` ``#> 1: 0.0 7.86 7.86 7.64 7.65 7.87 7.74 7.62 7.65 7.96 7.75 7.72 7.71 7.87 7.61 6.96 7.04 7.90 7.70`` ``#> 2: 0.2 7.87 7.79 7.60 7.71 7.87 7.72 7.61 7.66 7.97 7.72 7.71 7.71 7.89 7.61 6.96 7.01 7.89 7.70`` ``#> 3: 0.3 7.89 7.70 7.60 7.70 7.90 7.72 7.61 7.63 7.98 7.72 7.69 7.77 7.89 7.65 6.97 7.05 7.90 7.69`` ``#> 4: 0.5 7.90 7.68 7.60 7.72 7.92 7.74 7.62 7.66 7.97 7.72 7.70 7.77 7.89 7.67 6.96 7.09 7.89 7.69`` ``#> 5: 0.7 7.87 7.64 7.60 7.67 7.90 7.73 7.59 7.65 7.95 7.71 7.66 7.76 7.86 7.62 6.95 7.00 7.90 7.68`` ``#> 6: 0.8 7.82 7.69 7.61 7.61 7.88 7.70 7.60 7.65 7.94 7.70 7.63 7.72 7.86 7.61 6.94 6.99 7.90 7.67`
 
 ## A typical respR workflow
 
@@ -96,13 +85,7 @@ multiple columns. You can use either numbers or the names of the
 columns. Here, we inspect all columns without `<-` assigning
 (i.e. saving) the result.
 
-``` r
-
-inspect(urchins.rd, time = 1, oxygen = 2:19)
-#> inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.
-#> Warning: inspect: Time values are not evenly-spaced (numerically).
-#> inspect: Data issues detected. For more information use print().
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``2``:``19``)`` ``#> inspect: Multiple 'oxygen' columns selected. Note that subsequent functions in respR will by default use first oxygen column only.`` ``#> Warning: inspect: Time values are not evenly-spaced (numerically).`` ``#> inspect: Data issues detected. For more information use print().`
 
 ![inspect() output showing all 18 oxygen columns of the urchins
 dataset](closed_files/figure-html/unnamed-chunk-3-1.png)
@@ -150,10 +133,7 @@ individually as a separate `inspect` object. Using the `time` and
 `oxygen` inputs we can select particular columns either by the column
 number or, as shown here, by name.
 
-``` r
-
-urchin <- inspect(urchins.rd, time =  "time.min", oxygen = "n")
-```
+`urchin`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``"time.min"``, oxygen ``=`` ``"n"``)`
 
 ![inspect() output for a single urchin showing oxygen timeseries and
 rolling rate](closed_files/figure-html/unnamed-chunk-4-1.png)
@@ -210,17 +190,7 @@ Using the `inspect` object `urchin` that we just created in
 with no additional inputs, will prompt the function to perform a linear
 regression on the entire data series.
 
-``` r
-
-calc_rate(urchin)
-#> 
-#> # print.calc_rate # ---------------------
-#> Rank 1 of 1 rates:
-#> Rate: -0.0175 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``urchin``)`` ``#> `` ``#> # print.calc_rate # ---------------------`` ``#> Rank 1 of 1 rates:`` ``#> Rate: -0.0175 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 ![calc_rate() output showing linear regression across entire urchin
 dataset](closed_files/figure-html/unnamed-chunk-5-1.png)
@@ -274,48 +244,19 @@ simply apply a `to` value of 45 instead.
 Here, to calculate our rate we’ll select a 25 minute period before the
 interference occurred.
 
-``` r
-
-urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
-```
+`urch_rate`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``urchin``, from ``=`` ``4``, to ``=`` ``29``, by ``=`` ``"time"``)`
 
 Plotting the output provides a series of diagnostic plots of the data
 subset that was analysed.
 
-``` r
-
-plot(urch_rate)
-#> 
-#> # plot.calc_rate # ----------------------
-#> plot.calc_rate: Plotting rate from position 1 of 1 ...
-#> -----------------------------------------
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``urch_rate``)`` ``#> `` ``#> # plot.calc_rate # ----------------------`` ``#> plot.calc_rate: Plotting rate from position 1 of 1 ...`` ``#> -----------------------------------------`
 
 ![calc_rate() diagnostic plots for urchin rate from 4 to 29
 minutes](closed_files/figure-html/unnamed-chunk-7-1.png)
 
 The saved object can also be explored using generic `S3` R methods.
 
-``` r
-
-print(urch_rate)
-#> 
-#> # print.calc_rate # ---------------------
-#> Rank 1 of 1 rates:
-#> Rate: -0.0218 
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-
-summary(urch_rate)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt    rate
-#> 1:  NA    1         7.64  -0.0218 0.987  25    175    4      29 7.58   6.98   -0.024 -0.0218
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``urch_rate``)`` ``#> `` ``#> # print.calc_rate # ---------------------`` ``#> Rank 1 of 1 rates:`` ``#> Rate: -0.0218 `` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_rate``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.64 -0.0218 0.987 25 175 4 29 7.58 6.98 -0.024 -0.0218`` ``#> -----------------------------------------`
 
 The rate, which at this stage is unitless, can be seen as the final
 column, and other summary data and model coefficients are saved in the
@@ -382,11 +323,7 @@ wanted to only use part of it we could pass it through
 [`subset_data()`](https://januarharianto.github.io/respR/reference/subset_data.md)
 first). We save the output as a separate object.
 
-``` r
-
-bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
-bg_rate <- calc_rate.bg(bg_insp)
-```
+`bg_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``:``19``)`` ``bg_rate`` ``<-`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``bg_insp``)`
 
 ![calc_rate.bg() plot of background respiration rates from two blank
 controls](closed_files/figure-html/unnamed-chunk-9-1.png)
@@ -422,10 +359,7 @@ how the `by` is applied, but the default one is `"mean"`, which is the
 one we want here, since we want to apply the average of the two
 background rates we just calculated.
 
-``` r
-
-urch_rate_adj <- adjust_rate(urch_rate, by = bg_rate, method = "mean")
-```
+`urch_rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch_rate``, by ``=`` ``bg_rate``, method ``=`` ``"mean"``)`
 
     #> 
     #> # print.adjust_rate # -------------------
@@ -451,10 +385,7 @@ negative since they represent a negative slope of oxygen against time.
 Background rates are usually (though not always) also negative. In this
 case, the default `"mean"` method will not alter the `by` value.
 
-``` r
-
-urch_rate_adj_num <- adjust_rate(-0.0218, by = -0.000833)
-```
+`urch_rate_adj_num`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``-``0.0218``, by ``=`` ``-``0.000833``)`
 
     #> 
     #> # print.adjust_rate # -------------------
@@ -529,14 +460,7 @@ of
 [`adjust_rate()`](https://januarharianto.github.io/respR/reference/adjust_rate.md)
 to oxygen consumed by the whole urchin in *mg per hour*:
 
-``` r
-
-convert_rate(urch_rate_adj,         # urchin rate adjusted for background
-             oxy.unit = "mg/L",     # oxygen units of the original raw data
-             time.unit = "min",     # time units of the original raw data
-             output.unit = "mg/h",  # output unit
-             volume = 1.09)         # effective volume of the respirometer
-```
+[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rate_adj``, ``# urchin rate adjusted for background`` `` oxy.unit ``=`` ``"mg/L"``, ``# oxygen units of the original raw data`` `` time.unit ``=`` ``"min"``, ``# time units of the original raw data`` `` output.unit ``=`` ``"mg/h"``, ``# output unit`` `` volume ``=`` ``1.09``)`` ``# effective volume of the respirometer`
 
     #> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
     #> 
@@ -556,15 +480,7 @@ convert_rate(urch_rate_adj,         # urchin rate adjusted for background
 We can also convert to a mass-specific rate by adding a specimen `mass`
 and specifying a mass-specific `output.unit`:
 
-``` r
-
-convert_rate(urch_rate_adj, 
-             oxy.unit = "mg l-1", 
-             time.unit = "m", 
-             output.unit = "mg/s/kg",
-             volume = 1.09, 
-             mass = 0.19)
-```
+[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rate_adj``, `` `` oxy.unit ``=`` ``"mg l-1"``, `` `` time.unit ``=`` ``"m"``, `` `` output.unit ``=`` ``"mg/s/kg"``,`` `` volume ``=`` ``1.09``, `` `` mass ``=`` ``0.19``)`
 
     #> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
     #> 
@@ -592,54 +508,7 @@ equally recognised as `mL/kg`. To see what units are available to use in
 various functions, see
 [`unit_args()`](https://januarharianto.github.io/respR/reference/unit_args.md).
 
-``` r
-
-unit_args()
-#> Note: A string-matching algorithm is used to identify units. 
-#> Example 1: These are recognised as the same: 'mg/L', 'mg/l', 'mg L-1', 'mg per litre', 'mg.L-1'
-#> Example 2: These are recognised as the same: 'Hour', 'hr', 'h'
-#> 
-#> # Input Units # --------------------------------------
-#> Oxygen concentration units should use SI units (`L` or `kg`) for the denominator.
-#> 
-#> Oxygen Concentration or Pressure Units - Do not require t, S and P
-#> [1] "mg/L"   "ug/L"   "mol/L"  "mmol/L" "umol/L" "nmol/L" "pmol/L"
-#> Oxygen Concentration or Pressure Units - Require t, S and P
-#>  [1] "uL/L"    "mL/L"    "mm3/L"   "cm3/L"   "cc/L"    "mg/kg"   "ug/kg"   "ppm"     "mol/kg"  "mmol/kg" "umol/kg" "nmol/kg" "pmol/kg" "uL/kg"   "mL/kg"   "%Air"    "%Oxy"    "Torr"    "hPa"     "kPa"     "mmHg"    "inHg"   
-#> 
-#> Volume units for use in flow rates in calc_rate.ft and convert_rate.ft
-#> (e.g. as in 'ml/min', 'L/s', etc.)
-#> [1] "uL" "mL" "L" 
-#> 
-#> Time units (for 'time.unit' or as part of 'flowrate.unit')
-#> [1] "sec"  "min"  "hour" "day" 
-#> 
-#> Mass units
-#> [1] "ug" "mg" "g"  "kg"
-#> 
-#> Area units
-#> [1] "mm2" "cm2" "m2"  "km2"
-#> 
-#> # Metabolic Rate Units # -----------------------------
-#> For use in 'convert_rate', 'convert_rate.ft', 'convert_MR'
-#> 
-#> Must be in correct order:
-#> Absolute rates:        Oxygen/Time       e.g. 'mg/sec',     'umol/min',     'mL/h'
-#> Mass-specific rates:   Oxygen/Time/Mass  e.g. 'mg/sec/ug',  'umol/min/g',   'mL/h/kg'
-#> Area-specific rates:   Oxygen/Time/Area  e.g. 'mg/sec/mm2', 'umol/min/cm2', 'mL/h/m2'
-#> 
-#> Output Oxygen amount units
-#>  [1] "ug"   "mg"   "pmol" "nmol" "umol" "mmol" "mol"  "uL"   "mL"   "mm3"  "cm3" 
-#> 
-#> Output Time units
-#> [1] "sec"  "min"  "hour" "day" 
-#> 
-#> Output Mass units for mass-specific rates
-#> [1] "ug" "mg" "g"  "kg"
-#> 
-#> Output Area units for surface area-specific rates
-#> [1] "mm2" "cm2" "m2"  "km2"
-```
+[`unit_args`](https://januarharianto.github.io/respR/reference/unit_args.md)`(``)`` ``#> Note: A string-matching algorithm is used to identify units. `` ``#> Example 1: These are recognised as the same: 'mg/L', 'mg/l', 'mg L-1', 'mg per litre', 'mg.L-1'`` ``#> Example 2: These are recognised as the same: 'Hour', 'hr', 'h'`` ``#> `` ``#> # Input Units # --------------------------------------`` ``` #> Oxygen concentration units should use SI units (`L` or `kg`) for the denominator. ``` ``#> `` ``#> Oxygen Concentration or Pressure Units - Do not require t, S and P`` ``#> [1] "mg/L" "ug/L" "mol/L" "mmol/L" "umol/L" "nmol/L" "pmol/L"`` ``#> Oxygen Concentration or Pressure Units - Require t, S and P`` ``#> [1] "uL/L" "mL/L" "mm3/L" "cm3/L" "cc/L" "mg/kg" "ug/kg" "ppm" "mol/kg" "mmol/kg" "umol/kg" "nmol/kg" "pmol/kg" "uL/kg" "mL/kg" "%Air" "%Oxy" "Torr" "hPa" "kPa" "mmHg" "inHg" `` ``#> `` ``#> Volume units for use in flow rates in calc_rate.ft and convert_rate.ft`` ``#> (e.g. as in 'ml/min', 'L/s', etc.)`` ``#> [1] "uL" "mL" "L" `` ``#> `` ``#> Time units (for 'time.unit' or as part of 'flowrate.unit')`` ``#> [1] "sec" "min" "hour" "day" `` ``#> `` ``#> Mass units`` ``#> [1] "ug" "mg" "g" "kg"`` ``#> `` ``#> Area units`` ``#> [1] "mm2" "cm2" "m2" "km2"`` ``#> `` ``#> # Metabolic Rate Units # -----------------------------`` ``#> For use in 'convert_rate', 'convert_rate.ft', 'convert_MR'`` ``#> `` ``#> Must be in correct order:`` ``#> Absolute rates: Oxygen/Time e.g. 'mg/sec', 'umol/min', 'mL/h'`` ``#> Mass-specific rates: Oxygen/Time/Mass e.g. 'mg/sec/ug', 'umol/min/g', 'mL/h/kg'`` ``#> Area-specific rates: Oxygen/Time/Area e.g. 'mg/sec/mm2', 'umol/min/cm2', 'mL/h/m2'`` ``#> `` ``#> Output Oxygen amount units`` ``#> [1] "ug" "mg" "pmol" "nmol" "umol" "mmol" "mol" "uL" "mL" "mm3" "cm3" `` ``#> `` ``#> Output Time units`` ``#> [1] "sec" "min" "hour" "day" `` ``#> `` ``#> Output Mass units for mass-specific rates`` ``#> [1] "ug" "mg" "g" "kg"`` ``#> `` ``#> Output Area units for surface area-specific rates`` ``#> [1] "mm2" "cm2" "m2" "km2"`
 
 Note that some units of oxygen require temperature, salinity and
 atmospheric pressure to perform the conversion. One handy tip: you may
@@ -649,46 +518,9 @@ keeping track of results across different experiments.
 
 This time we will save (i.e. assign) the result to an object.
 
-``` r
+`urch_rate_final`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rate_adj``, `` `` oxy.unit ``=`` ``"mg/L"``, `` `` time.unit ``=`` ``"mins"``, `` `` output.unit ``=`` ``"ml/h/kg"``,`` `` volume ``=`` ``1.09``, `` `` mass ``=`` ``0.19``,`` `` t ``=`` ``20``,`` `` S ``=`` ``30``,`` `` P ``=`` ``1.01``)`` ``#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.`
 
-urch_rate_final <- convert_rate(urch_rate_adj, 
-                                oxy.unit = "mg/L", 
-                                time.unit = "mins", 
-                                output.unit = "ml/h/kg",
-                                volume = 1.09, 
-                                mass = 0.19,
-                                t = 20,
-                                S = 30,
-                                P = 1.01)
-#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
-```
-
-``` r
-
-print(urch_rate_final)
-#> 
-#> # print.convert_rate # ------------------
-#> Rank 1 of 1 rates:
-#> 
-#> Input:
-#> [1] -0.0209
-#> [1] "mg/L" "min" 
-#> Converted:
-#> [1] -5.43
-#> [1] "mLO2/hr/kg"
-#> 
-#> To see full results use summary().
-#> -----------------------------------------
-
-summary(urch_rate_final)
-#> 
-#> # summary.convert_rate # ----------------
-#> Summary of all converted rates:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density row endrow time endtime  oxy endoxy    rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area  S  t    P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#> 1:  NA    1         7.64  -0.0218 0.987      NA  25    175    4      29 7.58   6.98 -0.0218  -0.000833       -0.0209    -0.0209     mg/L       min   1.09 0.19   NA 30 20 1.01    -1.03       -5.43          NA  mLO2/hr/kg       -5.43
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``urch_rate_final``)`` ``#> `` ``#> # print.convert_rate # ------------------`` ``#> Rank 1 of 1 rates:`` ``#> `` ``#> Input:`` ``#> [1] -0.0209`` ``#> [1] "mg/L" "min" `` ``#> Converted:`` ``#> [1] -5.43`` ``#> [1] "mLO2/hr/kg"`` ``#> `` ``#> To see full results use summary().`` ``#> -----------------------------------------`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_rate_final``)`` ``#> `` ``#> # summary.convert_rate # ----------------`` ``#> Summary of all converted rates:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> 1: NA 1 7.64 -0.0218 0.987 NA 25 175 4 29 7.58 6.98 -0.0218 -0.000833 -0.0209 -0.0209 mg/L min 1.09 0.19 NA 30 20 1.01 -1.03 -5.43 NA mLO2/hr/kg -5.43`` ``#> -----------------------------------------`
 
 ### Final rate
 
@@ -696,11 +528,7 @@ The final rate can be seen above in these console outputs. It can be
 extracted for further use from the saved object where it is
 `$rate.output`:
 
-``` r
-
-urch_rate_final$rate.output
-#> [1] -5.43
-```
+`urch_rate_final``$``rate.output`` ``#> [1] -5.43`
 
 Alternatively, use the `summary` function with `export = TRUE` to save
 the summary table as a separate data frame which contains all rate
@@ -708,10 +536,7 @@ regression parameters and data locations, adjustments (if applied),
 units, and more. This is a great way of exporting all the relevant data
 for your final results.
 
-``` r
-
-urch_rate_final_df <- summary(urch_rate_final, export = TRUE)
-```
+`urch_rate_final_df`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_rate_final``, export ``=`` ``TRUE``)`
 
 ### Check the result
 
@@ -747,14 +572,7 @@ function which converts between different units of oxygen uptake. This
 works on numeric values but also `convert_rate` objects, in which case
 we simply need to specify a different output unit via `to`.
 
-``` r
-
-convert_MR(urch_rate_final, 
-           to = "umol/h/g",
-           t = 20,
-           S = 30,
-           P = 1.01)
-```
+[`convert_MR`](https://januarharianto.github.io/respR/reference/convert_MR.md)`(``urch_rate_final``, `` `` to ``=`` ``"umol/h/g"``,`` `` t ``=`` ``20``,`` `` S ``=`` ``30``,`` `` P ``=`` ``1.01``)`
 
     #> 
     #> # print.convert_MR # --------------------
@@ -785,50 +603,11 @@ closed-chamber respirometry experiment. This entire analysis can be
 documented and shared in only a few lines of code, making it easily
 reproducible if the original data file is included:
 
-``` r
-
-# import and inspect
-urchin <- inspect(urchins.rd, time = 1, oxygen = 15)
-
-# Background
-bg_insp <- inspect(urchins.rd, time = 1, oxygen = 18:19)
-bg_rate <- calc_rate.bg(bg_insp)
-
-# Specimen rate
-urch_rate <- calc_rate(urchin, from = 4, to = 29, by = "time")
-
-# Adjust rate
-urch_rate_adj <- adjust_rate(urch_rate, bg_rate)
-
-# Convert to final rate units
-urch_rate_final <- convert_rate(urch_rate_adj,
-                                oxy.unit = "mgl-1", 
-                                time.unit = "m", 
-                                output.unit = "mg/s/kg", 
-                                volume = 1.09, 
-                                mass = 0.19)
-
-# Extract full results for archiving or further analysis
-urch_rate_final_summary <- summary(urch_rate_final, export = TRUE)
-```
+`# import and inspect`` ``urchin`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``15``)`` `` ``# Background`` ``bg_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``18``:``19``)`` ``bg_rate`` ``<-`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``bg_insp``)`` `` ``# Specimen rate`` ``urch_rate`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``urchin``, from ``=`` ``4``, to ``=`` ``29``, by ``=`` ``"time"``)`` `` ``# Adjust rate`` ``urch_rate_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch_rate``, ``bg_rate``)`` `` ``# Convert to final rate units`` ``urch_rate_final`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rate_adj``,`` `` oxy.unit ``=`` ``"mgl-1"``, `` `` time.unit ``=`` ``"m"``, `` `` output.unit ``=`` ``"mg/s/kg"``, `` `` volume ``=`` ``1.09``, `` `` mass ``=`` ``0.19``)`` `` ``# Extract full results for archiving or further analysis`` ``urch_rate_final_summary`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_rate_final``, export ``=`` ``TRUE``)`
 
 Using pipes, either the new native `|>` pipes introduced in [R
 v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) or
 `%>%` [`dplyr`](https://dplyr.tidyverse.org) pipes, can condense this
 even further:
 
-``` r
-
-urch_rate <- urchins.rd |>                                   # Using the urchins data,
-  inspect(1, 15) |>                                          # inspect, then
-  calc_rate(from = 4, to = 29, by = "time") |>               # calculate rate, then
-  print() |>                                                 # print for quick look,
-  adjust_rate(  
-    calc_rate.bg(urchins.rd, time = 1,                       # calculate the background,
-                 oxygen = 18:19)) |>                         # adjust the rate, then
-  print() |>                                                 # print for another check,
-  convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
-               output.unit = "mg/s/kg", volume = 1.09, 
-               mass = 0.19) |>                               # then convert,
-  summary(export = TRUE)                                     # and finally save
-```
+`urch_rate`` ``<-`` ``urchins.rd`` ``|>`` ``# Using the urchins data,`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``1``, ``15``)`` ``|>`` ``# inspect, then`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``4``, to ``=`` ``29``, by ``=`` ``"time"``)`` ``|>`` ``# calculate rate, then`` `` `[`print`](https://rdrr.io/r/base/print.html)`(``)`` ``|>`` ``# print for quick look,`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(`` `` `` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``urchins.rd``, time ``=`` ``1``, ``# calculate the background,`` `` oxygen ``=`` ``18``:``19``)``)`` ``|>`` ``# adjust the rate, then`` `` `[`print`](https://rdrr.io/r/base/print.html)`(``)`` ``|>`` ``# print for another check,`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"mgl-1"``, time.unit ``=`` ``"m"``, `` `` output.unit ``=`` ``"mg/s/kg"``, volume ``=`` ``1.09``, `` `` mass ``=`` ``0.19``)`` ``|>`` ``# then convert,`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``export ``=`` ``TRUE``)`` ``# and finally save`

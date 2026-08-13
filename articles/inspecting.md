@@ -40,24 +40,7 @@ numeric and without missing values, and the time data are sequential,
 unique values and with even spacing. See [plot](#plot) section below for
 details about the plot.
 
-``` r
-
-inspect(sardine.rd)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
 ![inspect() output for sardine data showing a successful check with no
 issues](inspecting_files/figure-html/unnamed-chunk-2-1.png)
@@ -96,35 +79,16 @@ which causes the entire column to be classed as `character`. This is not
 at all obvious if you view a portion of the data not containing the
 missing value.
 
-``` r
-
-head(df)
-#>   time  oxy
-#> 1    1 7.86
-#> 2    2 7.87
-#> 3    3 7.89
-#> 4    4 7.90
-#> 5    5 7.87
-#> 6    6 7.82
-```
+[`head`](https://rdrr.io/r/utils/head.html)`(``df``)`` ``#> time oxy`` ``#> 1 1 7.86`` ``#> 2 2 7.87`` ``#> 3 3 7.89`` ``#> 4 4 7.90`` ``#> 5 5 7.87`` ``#> 6 6 7.82`
 
 Only by checking the structure is this obvious.
 
-``` r
-
-str(df)
-#> 'data.frame':    100 obs. of  2 variables:
-#>  $ time: chr  "1" "2" "3" "4" ...
-#>  $ oxy : num  7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...
-```
+[`str`](https://rdrr.io/r/utils/str.html)`(``df``)`` ``#> 'data.frame': 100 obs. of 2 variables:`` ``#> $ time: chr "1" "2" "3" "4" ...`` ``#> $ oxy : num 7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...`
 
 These data cannot be used in `respR` until this is remedied. This shows
 the output when this dataset is checked using `inspect`.
 
-``` r
-
-inspect(df)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``df``)`
 
     #> Warning: inspect: Time column not numeric. Other column checks skipped. 
     #> Data cannot be analysed by respR functions if not numeric. 
@@ -152,38 +116,12 @@ cannot, replace them with an `NA`.
 
 The problem value is in position 50.
 
-``` r
-
-df[48:52,]
-#>    time  oxy
-#> 48   48 7.63
-#> 49   49 7.58
-#> 50  --- 7.60
-#> 51   51 7.60
-#> 52   52 7.59
-```
+`df``[``48``:``52``,``]`` ``#> time oxy`` ``#> 48 48 7.63`` ``#> 49 49 7.58`` ``#> 50 --- 7.60`` ``#> 51 51 7.60`` ``#> 52 52 7.59`
 
 We can try fixing the column with `as.numeric`, view the same rows, and
 check the structure.
 
-``` r
-
-df[,1] <- as.numeric(df[,1])
-#> Warning: NAs introduced by coercion
-
-df[48:52,]
-#>    time  oxy
-#> 48   48 7.63
-#> 49   49 7.58
-#> 50   NA 7.60
-#> 51   51 7.60
-#> 52   52 7.59
-
-str(df)
-#> 'data.frame':    100 obs. of  2 variables:
-#>  $ time: num  1 2 3 4 5 6 7 8 9 10 ...
-#>  $ oxy : num  7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...
-```
+`df``[``,``1``]`` ``<-`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(``df``[``,``1``]``)`` ``#> Warning: NAs introduced by coercion`` `` ``df``[``48``:``52``,``]`` ``#> time oxy`` ``#> 48 48 7.63`` ``#> 49 49 7.58`` ``#> 50 NA 7.60`` ``#> 51 51 7.60`` ``#> 52 52 7.59`` `` `[`str`](https://rdrr.io/r/utils/str.html)`(``df``)`` ``#> 'data.frame': 100 obs. of 2 variables:`` ``#> $ time: num 1 2 3 4 5 6 7 8 9 10 ...`` ``#> $ oxy : num 7.86 7.87 7.89 7.9 7.87 7.82 7.84 7.84 7.86 7.81 ...`
 
 Now the column is numeric, but contains an `NA` value. `respR` has been
 designed to work with `NA` values in datasets, so analysing this one
@@ -198,17 +136,11 @@ replaced where possible before proceeding. Later checks in `inspect`
 will identify locations of `NA` values (see [here](#nacheck)). In this
 case it is easy to fix, as it is obvious what the missing value is.
 
-``` r
-
-df[50,1] <- 50
-```
+`df``[``50``,``1``]`` ``<-`` ``50`
 
 Now we can inspect again, and this time save the result.
 
-``` r
-
-insp <- inspect(df)
-```
+`insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``df``)`
 
     #> 
     #> # print.inspect # -----------------------
@@ -239,44 +171,13 @@ comes to calculating rates, so need to be removed.
 
 This datasets contains an infinite oxygen value.
 
-``` r
-
-inspect(data)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> Warning: inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.
-#> inspect: Data issues detected. For more information use print().
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   WARN
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> Inf/-Inf locations in Oxygen column: Oxygen 
-#> [1] 22
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> Warning: inspect: Inf/-Inf values detected in Oxygen column(s). Remove or replace before proceeding.`` ``#> inspect: Data issues detected. For more information use print().`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass WARN`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> Inf/-Inf locations in Oxygen column: Oxygen `` ``#> [1] 22`` ``#> -----------------------------------------`
 
 We can see a warning, and the output also lists the locations (row
 numbers) of the `Inf` values (up to the first 20), and we can use this
 to view it and check.
 
-``` r
-
-data[20:25,]
-#>     Time Oxygen Temperature
-#>    <int>  <num>       <num>
-#> 1:   520   95.3        15.1
-#> 2:   521   95.0        15.0
-#> 3:   522    Inf        15.1
-#> 4:   523   95.2        15.1
-#> 5:   524   95.2        15.1
-#> 6:   525   95.3        15.1
-```
+`data``[``20``:``25``,``]`` ``#> Time Oxygen Temperature`` ``#> <int> <num> <num>`` ``#> 1: 520 95.3 15.1`` ``#> 2: 521 95.0 15.0`` ``#> 3: 522 Inf 15.1`` ``#> 4: 523 95.2 15.1`` ``#> 5: 524 95.2 15.1`` ``#> 6: 525 95.3 15.1`
 
 ### Remedies
 
@@ -287,36 +188,7 @@ appropriate way to do this will vary. Here, we could remove the row
 entirely, but since it is a single value we can just replace it with an
 intermediate value which won’t affect rate calculations.
 
-``` r
-
-data[22,2] <- (data[21,2] + data[23,2])/2
-
-data[20:25,]
-#>     Time Oxygen Temperature
-#>    <int>  <num>       <num>
-#> 1:   520   95.3        15.1
-#> 2:   521   95.0        15.0
-#> 3:   522   95.1        15.1
-#> 4:   523   95.2        15.1
-#> 5:   524   95.2        15.1
-#> 6:   525   95.3        15.1
-
-insp <- inspect(data)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> -----------------------------------------
-```
+`data``[``22``,``2``]`` ``<-`` ``(``data``[``21``,``2``]`` ``+`` ``data``[``23``,``2``]``)``/``2`` `` ``data``[``20``:``25``,``]`` ``#> Time Oxygen Temperature`` ``#> <int> <num> <num>`` ``#> 1: 520 95.3 15.1`` ``#> 2: 521 95.0 15.0`` ``#> 3: 522 95.1 15.1`` ``#> 4: 523 95.2 15.1`` ``#> 5: 524 95.2 15.1`` ``#> 6: 525 95.3 15.1`` `` ``insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
 Now the saved object `insp` can be passed to functions such as
 [`calc_rate()`](https://januarharianto.github.io/respR/reference/calc_rate.md).
@@ -347,10 +219,7 @@ to assist with removing or filling them.
 This dataset has two columns of oxygen, one with a single `NA` and one
 with a larger chunk of values missing.
 
-``` r
-
-insp <- inspect(df, time = 1, oxygen = 2:3, plot = FALSE)
-```
+`insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``df``, time ``=`` ``1``, oxygen ``=`` ``2``:``3``, plot ``=`` ``FALSE``)`
 
     #> 
     #> # print.inspect # -----------------------
@@ -376,14 +245,7 @@ to the first 20) of the missing values in the respective column.
 The locations can also be found in the output object in the `$locs`
 element with the name of the column.
 
-``` r
-
-insp$locs$oxy1$`NA/NaN`
-#> [1] 23
-
-insp$locs$oxy2$`NA/NaN`
-#> [1] 57 58 59 60 61
-```
+`insp``$``locs``$``oxy1``$``` `NA/NaN` ``` ``#> [1] 23`` `` ``insp``$``locs``$``oxy2``$``` `NA/NaN` ``` ``#> [1] 57 58 59 60 61`
 
 These can be used to extract or fill the missing values, or simply
 remove these rows. See above [example](#inffix).
@@ -410,10 +272,7 @@ recommend the data be amended to be sequential.
 This imported dataset contains time~oxygen data values, but no numeric
 time.
 
-``` r
-
-print(data)
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``data``)`
 
     #> Warning in import_file("zebrafish.csv"): NOTE: 'import_file' function has been deprecated, will not be updated, and will be removed in a future version of 'respR'.
     #> 
@@ -443,51 +302,11 @@ The details are not that important, but briefly the times are converted
 to a date-time format R understands, then an elapsed time from the first
 entry is calculated.
 
-``` r
-
-# parse to posix
-data$parsed_time <- lubridate::parse_date_time(data[[1]], "HMS")
-# convert to numeric difference in seconds from start
-data$num_time <- as.numeric(difftime(data[[5]], data[[1,5]], units = "secs"))
-
-# check
-head(data)
-#>        Time Comment Temperature Oxygen_Data_Ch_1         parsed_time num_time
-#>      <char>  <lgcl>       <num>            <num>              <POSc>    <num>
-#> 1: 23:50:02      NA        13.5             9.79 0000-01-01 23:50:02        0
-#> 2: 23:50:04      NA        13.5             9.79 0000-01-01 23:50:04        2
-#> 3: 23:50:06      NA        13.5             9.79 0000-01-01 23:50:06        4
-#> 4: 23:50:08      NA        13.5             9.78 0000-01-01 23:50:08        6
-#> 5: 23:50:10      NA        13.5             9.79 0000-01-01 23:50:10        8
-#> 6: 23:50:12      NA        13.5             9.78 0000-01-01 23:50:12       10
-```
+`# parse to posix`` ``data``$``parsed_time`` ``<-`` ``lubridate``::`[`parse_date_time`](https://lubridate.tidyverse.org/reference/parse_date_time.html)`(``data``[[``1``]``]``, ``"HMS"``)`` ``# convert to numeric difference in seconds from start`` ``data``$``num_time`` ``<-`` `[`as.numeric`](https://rdrr.io/r/base/numeric.html)`(`[`difftime`](https://rdrr.io/r/base/difftime.html)`(``data``[[``5``]``]``, ``data``[[``1``,``5``]``]``, units ``=`` ``"secs"``)``)`` `` ``# check`` `[`head`](https://rdrr.io/r/utils/head.html)`(``data``)`` ``#> Time Comment Temperature Oxygen_Data_Ch_1 parsed_time num_time`` ``#> <char> <lgcl> <num> <num> <POSc> <num>`` ``#> 1: 23:50:02 NA 13.5 9.79 0000-01-01 23:50:02 0`` ``#> 2: 23:50:04 NA 13.5 9.79 0000-01-01 23:50:04 2`` ``#> 3: 23:50:06 NA 13.5 9.79 0000-01-01 23:50:06 4`` ``#> 4: 23:50:08 NA 13.5 9.78 0000-01-01 23:50:08 6`` ``#> 5: 23:50:10 NA 13.5 9.79 0000-01-01 23:50:10 8`` ``#> 6: 23:50:12 NA 13.5 9.78 0000-01-01 23:50:12 10`
 
 Now we inspect the data using the new numeric time
 
-``` r
-
-inspect(data, time = 6, oxygen = 4)
-#> Warning: inspect: Non-sequential Time values found.
-#> Warning: inspect: Time values are not evenly-spaced (numerically).
-#> inspect: Data issues detected. For more information use print().
-#> 
-#> # print.inspect # -----------------------
-#>                 num_time Oxygen_Data_Ch_1
-#> numeric             pass             pass
-#> Inf/-Inf            pass             pass
-#> NA/NaN              pass             pass
-#> sequential          WARN                -
-#> duplicated          pass                -
-#> evenly-spaced       WARN                -
-#> 
-#> Non-sequential Time data locations in column: num_time 
-#> [1] 299
-#> Uneven Time data locations in column: num_time 
-#> [1] 299
-#> Minimum and Maximum intervals in uneven Time data: 
-#> [1] -86398      2
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``, time ``=`` ``6``, oxygen ``=`` ``4``)`` ``#> Warning: inspect: Non-sequential Time values found.`` ``#> Warning: inspect: Time values are not evenly-spaced (numerically).`` ``#> inspect: Data issues detected. For more information use print().`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> num_time Oxygen_Data_Ch_1`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential WARN -`` ``#> duplicated pass -`` ``#> evenly-spaced WARN -`` ``#> `` ``#> Non-sequential Time data locations in column: num_time `` ``#> [1] 299`` ``#> Uneven Time data locations in column: num_time `` ``#> [1] 299`` ``#> Minimum and Maximum intervals in uneven Time data: `` ``#> [1] -86398 2`` ``#> -----------------------------------------`
 
 Clearly there is something wrong, and the location where non-sequential
 time data has been found is row 299. The issue has also caused the
@@ -497,18 +316,7 @@ fail.
 
 If we look at this region, it is clear what the problem is.
 
-``` r
-
-data[297:302,]
-#>        Time Comment Temperature Oxygen_Data_Ch_1         parsed_time num_time
-#>      <char>  <lgcl>       <num>            <num>              <POSc>    <num>
-#> 1: 23:59:54      NA        13.6             9.99 0000-01-01 23:59:54      592
-#> 2: 23:59:56      NA        13.6             9.98 0000-01-01 23:59:56      594
-#> 3: 23:59:58      NA        13.5             9.99 0000-01-01 23:59:58      596
-#> 4: 00:00:00      NA        13.6             9.99 0000-01-01 00:00:00   -85802
-#> 5: 00:00:02      NA        13.6             9.99 0000-01-01 00:00:02   -85800
-#> 6: 00:00:04      NA        13.6            10.00 0000-01-01 00:00:04   -85798
-```
+`data``[``297``:``302``,``]`` ``#> Time Comment Temperature Oxygen_Data_Ch_1 parsed_time num_time`` ``#> <char> <lgcl> <num> <num> <POSc> <num>`` ``#> 1: 23:59:54 NA 13.6 9.99 0000-01-01 23:59:54 592`` ``#> 2: 23:59:56 NA 13.6 9.98 0000-01-01 23:59:56 594`` ``#> 3: 23:59:58 NA 13.5 9.99 0000-01-01 23:59:58 596`` ``#> 4: 00:00:00 NA 13.6 9.99 0000-01-01 00:00:00 -85802`` ``#> 5: 00:00:02 NA 13.6 9.99 0000-01-01 00:00:02 -85800`` ``#> 6: 00:00:04 NA 13.6 10.00 0000-01-01 00:00:04 -85798`
 
 Where times have crossed midnight, our code has failed to parse it
 correctly. The lack of dates along with times means we have incorrectly
@@ -531,40 +339,11 @@ converts the times to numeric and adds them as a new column.
 
     #> Warning in import_file("zebrafish.csv"): NOTE: 'import_file' function has been deprecated, will not be updated, and will be removed in a future version of 'respR'.
 
-``` r
-
-data <- format_time(data, time = 1, format = "HMS")
-#> Times cross midnight, attempting to parse correctly...
-
-data[297:302,]
-#>        Time Comment Temperature Oxygen_Data_Ch_1 time_num
-#>      <char>  <lgcl>       <num>            <num>    <num>
-#> 1: 23:59:54      NA        13.6             9.99      593
-#> 2: 23:59:56      NA        13.6             9.98      595
-#> 3: 23:59:58      NA        13.5             9.99      597
-#> 4: 00:00:00      NA        13.6             9.99      599
-#> 5: 00:00:02      NA        13.6             9.99      601
-#> 6: 00:00:04      NA        13.6            10.00      603
-```
+`data`` ``<-`` `[`format_time`](https://januarharianto.github.io/respR/reference/format_time.md)`(``data``, time ``=`` ``1``, format ``=`` ``"HMS"``)`` ``#> Times cross midnight, attempting to parse correctly...`` `` ``data``[``297``:``302``,``]`` ``#> Time Comment Temperature Oxygen_Data_Ch_1 time_num`` ``#> <char> <lgcl> <num> <num> <num>`` ``#> 1: 23:59:54 NA 13.6 9.99 593`` ``#> 2: 23:59:56 NA 13.6 9.98 595`` ``#> 3: 23:59:58 NA 13.5 9.99 597`` ``#> 4: 00:00:00 NA 13.6 9.99 599`` ``#> 5: 00:00:02 NA 13.6 9.99 601`` ``#> 6: 00:00:04 NA 13.6 10.00 603`
 
 If we `inspect` again, the problem is fixed.
 
-``` r
-
-inspect(data, time = 5, oxygen = 4)
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 time_num Oxygen_Data_Ch_1
-#> numeric             pass             pass
-#> Inf/-Inf            pass             pass
-#> NA/NaN              pass             pass
-#> sequential          pass                -
-#> duplicated          pass                -
-#> evenly-spaced       pass                -
-#> 
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``, time ``=`` ``5``, oxygen ``=`` ``4``)`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> time_num Oxygen_Data_Ch_1`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
 ## Duplicate Time
 
@@ -587,29 +366,9 @@ This dataset has been recorded at approximately 1 second intervals, but
 at 0.1s precision, and when rounded to the nearest second this leads to
 lots of duplicated values.
 
-``` r
+`## original data`` `[`head`](https://rdrr.io/r/utils/head.html)`(``data_orig``, ``5``)`` ``#> times oxy`` ``#> 1 1.1 7.20`` ``#> 2 2.5 7.21`` ``#> 3 4.0 7.15`` ``#> 4 5.0 7.13`` ``#> 5 5.8 7.18`` `` ``## Before rounding`` `[`head`](https://rdrr.io/r/utils/head.html)`(``data_orig``$``times``, ``10``)`` ``#> [1] 1.1 2.5 4.0 5.0 5.8 6.7 7.8 8.0 9.9 11.0`` ``## After rounding to nearest second`` `[`head`](https://rdrr.io/r/utils/head.html)`(``data_round``$``times``, ``10``)`` ``#> [1] 1 2 4 5 6 7 8 8 10 11`
 
-## original data
-head(data_orig, 5)
-#>   times  oxy
-#> 1   1.1 7.20
-#> 2   2.5 7.21
-#> 3   4.0 7.15
-#> 4   5.0 7.13
-#> 5   5.8 7.18
-
-## Before rounding
-head(data_orig$times, 10)
-#>  [1]  1.1  2.5  4.0  5.0  5.8  6.7  7.8  8.0  9.9 11.0
-## After rounding to nearest second
-head(data_round$times, 10)
-#>  [1]  1  2  4  5  6  7  8  8 10 11
-```
-
-``` r
-
-inspect(data_round)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data_round``)`
 
     #> 
     #> # print.inspect # -----------------------
@@ -644,10 +403,7 @@ This dataset by contrast contains several duplicated rows. The `inspect`
 call detects and identifies these, allowing them to be checked or
 amended.
 
-``` r
-
-insp <- inspect(data)
-```
+`insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``)`
 
     #> 
     #> # print.inspect # -----------------------
@@ -671,24 +427,7 @@ We can check these rows by extracting the relevant locations from the
 `$locs` element of the saved output, and we see that for some reason the
 row has been duplicated.
 
-``` r
-
-dupes <- insp$locs$Time$duplicated
-
-data[dupes,]
-#>      Time Oxygen Temperature
-#>     <int>  <num>       <num>
-#>  1:  2100   93.7        14.5
-#>  2:  2100   93.7        14.5
-#>  3:  2100   93.7        14.5
-#>  4:  2100   93.7        14.5
-#>  5:  2100   93.7        14.5
-#>  6:  2100   93.7        14.5
-#>  7:  2100   93.7        14.5
-#>  8:  2100   93.7        14.5
-#>  9:  2100   93.7        14.5
-#> 10:  2100   93.7        14.5
-```
+`dupes`` ``<-`` ``insp``$``locs``$``Time``$``duplicated`` `` ``data``[``dupes``,``]`` ``#> Time Oxygen Temperature`` ``#> <int> <num> <num>`` ``#> 1: 2100 93.7 14.5`` ``#> 2: 2100 93.7 14.5`` ``#> 3: 2100 93.7 14.5`` ``#> 4: 2100 93.7 14.5`` ``#> 5: 2100 93.7 14.5`` ``#> 6: 2100 93.7 14.5`` ``#> 7: 2100 93.7 14.5`` ``#> 8: 2100 93.7 14.5`` ``#> 9: 2100 93.7 14.5`` ``#> 10: 2100 93.7 14.5`
 
 ### Remedies
 
@@ -700,28 +439,7 @@ unaffected). They could also affect other reported outputs such as the
 r-squared. It’s probably easiest to just remove them, and `inspect` the
 data again.
 
-``` r
-
-## Remove all but the first duplicate row
-data <- data[-dupes[-1],]
-
-## inspect again
-inspect(data)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> -----------------------------------------
-```
+`## Remove all but the first duplicate row`` ``data`` ``<-`` ``data``[``-``dupes``[``-``1``]``,``]`` `` ``## inspect again`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
 ## Evenly Spaced Time
 
@@ -742,44 +460,13 @@ such as decimalised minutes. For example, data recorded once per second,
 but converted to minutes is used in the `flowthrough_mult.rd` example
 data.
 
-``` r
-
-# seconds in decimal minutes
-head(flowthrough_mult.rd[[1]])
-#> [1] 0.02 0.03 0.05 0.07 0.08 0.10
-
-# difference between each value
-diff(head(flowthrough_mult.rd[[1]]))
-#> [1] 0.01 0.02 0.02 0.01 0.02
-```
+`# seconds in decimal minutes`` `[`head`](https://rdrr.io/r/utils/head.html)`(``flowthrough_mult.rd``[[``1``]``]``)`` ``#> [1] 0.02 0.03 0.05 0.07 0.08 0.10`` `` ``# difference between each value`` `[`diff`](https://rdrr.io/r/base/diff.html)`(`[`head`](https://rdrr.io/r/utils/head.html)`(``flowthrough_mult.rd``[[``1``]``]``)``)`` ``#> [1] 0.01 0.02 0.02 0.01 0.02`
 
 These have been converted to minutes and rounded, and we can see the
 intervals are not numerically consistent. This will cause this check to
 produce a warning in `inspect`.
 
-``` r
-
-inspect(flowthrough_mult.rd)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> Warning: inspect: Time values are not evenly-spaced (numerically).
-#> inspect: Data issues detected. For more information use print().
-#> 
-#> # print.inspect # -----------------------
-#>                 num.time oxy.out.1
-#> numeric             pass      pass
-#> Inf/-Inf            pass      pass
-#> NA/NaN              pass      pass
-#> sequential          pass         -
-#> duplicated          pass         -
-#> evenly-spaced       WARN         -
-#> 
-#> Uneven Time data locations (first 20 shown) in column: num.time 
-#>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-#> Minimum and Maximum intervals in uneven Time data: 
-#> [1] 0.01 0.02
-#> -----------------------------------------
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``flowthrough_mult.rd``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> Warning: inspect: Time values are not evenly-spaced (numerically).`` ``#> inspect: Data issues detected. For more information use print().`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> num.time oxy.out.1`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced WARN -`` ``#> `` ``#> Uneven Time data locations (first 20 shown) in column: num.time `` ``#> [1] 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20`` ``#> Minimum and Maximum intervals in uneven Time data: `` ``#> [1] 0.01 0.02`` ``#> -----------------------------------------`
 
 ### Remedies
 
@@ -794,10 +481,7 @@ are fine to pass to subsequent functions.
 If there were a larger time gap in the data, this check would flag it
 up. This dataset is missing a large number of rows.
 
-``` r
-
-insp <- inspect(data)
-```
+`insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``data``)`
 
     #> 
     #> # print.inspect # -----------------------
@@ -821,17 +505,7 @@ data](inspecting_files/figure-html/unnamed-chunk-42-1.png)
 While there is only one time gap location at row 341, we can see this is
 a large gap of 47 seconds.
 
-``` r
-
-data[340:344, ]
-#>     Time    O2
-#>    <int> <num>
-#> 1:   340  6.94
-#> 2:   341  6.96
-#> 3:   388  6.90
-#> 4:   389  6.90
-#> 5:   390  6.90
-```
+`data``[``340``:``344``, ``]`` ``#> Time O2`` ``#> <int> <num>`` ``#> 1: 340 6.94`` ``#> 2: 341 6.96`` ``#> 3: 388 6.90`` ``#> 4: 389 6.90`` ``#> 5: 390 6.90`
 
 ### Remedies
 
@@ -850,72 +524,26 @@ per second, they are therefore equivalent to the row numbers. Any rates
 calculated in a complete region of the data before the gap will be
 identical for either method.
 
-``` r
+`cr_row`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``data``, ``100``, ``300``, ``"row"``)`` ``cr_time`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``data``, ``100``, ``300``, ``"time"``)`
 
-cr_row <- calc_rate(data, 100, 300, "row")
-cr_time <- calc_rate(data, 100, 300, "time")
-```
-
-``` r
-
-summary(cr_row)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0  slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt      rate
-#> 1:  NA    1         7.14 -0.000489 0.645 100    300  100     300 7.08   6.98  -0.0005 -0.000489
-#> -----------------------------------------
-summary(cr_time)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0  slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt      rate
-#> 1:  NA    1         7.14 -0.000489 0.645 100    300  100     300 7.08   6.98  -0.0005 -0.000489
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``cr_row``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.14 -0.000489 0.645 100 300 100 300 7.08 6.98 -0.0005 -0.000489`` ``#> -----------------------------------------`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``cr_time``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.14 -0.000489 0.645 100 300 100 300 7.08 6.98 -0.0005 -0.000489`` ``#> -----------------------------------------`
 
 This will not be the case across the gap, or *after* it where row
 numbers will now *not* be equivalent to the time values.
 
-``` r
-
-cr_row <- calc_rate(data, 200, 400, "row")
-```
+`cr_row`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``data``, ``200``, ``400``, ``"row"``)`
 
 ![calc_rate() plots showing rates extracted from the same dataset by row
 range and by time range producing equivalent
 results](inspecting_files/figure-html/unnamed-chunk-46-1.png)
 
-``` r
-
-cr_time <- calc_rate(data, 200, 400, "time")
-```
+`cr_time`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``data``, ``200``, ``400``, ``"time"``)`
 
 ![calc_rate() plots showing rates extracted from the same dataset by row
 range and by time range producing equivalent
 results](inspecting_files/figure-html/unnamed-chunk-46-2.png)
 
-``` r
-
-summary(cr_row)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0  slope_b1   rsq row endrow time endtime  oxy endoxy  rate.2pt      rate
-#> 1:  NA    1         7.19 -0.000712 0.879 200    400  200     446 7.05   6.87 -0.000732 -0.000712
-#> -----------------------------------------
-summary(cr_time)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0  slope_b1   rsq row endrow time endtime  oxy endoxy rate.2pt      rate
-#> 1:  NA    1         7.18 -0.000676 0.719 200    354  200     400 7.05   6.89  -0.0008 -0.000676
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``cr_row``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.19 -0.000712 0.879 200 400 200 446 7.05 6.87 -0.000732 -0.000712`` ``#> -----------------------------------------`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``cr_time``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 7.18 -0.000676 0.719 200 354 200 400 7.05 6.89 -0.0008 -0.000676`` ``#> -----------------------------------------`
 
 Note how the interval is correct in the respective metric, but now
 differs in the other.
@@ -970,11 +598,7 @@ of how the rate fluctuates across the data. This is helpful to inform
 the regions from which to extract rates in later functions, as well as
 an appropriate time or row window to use when extracting rates.
 
-``` r
-
-## default width of 10%
-inspect(sardine.rd)
-```
+`## default width of 10%`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`
 
 ![inspect() output for sardine data with default 10 percent rolling rate
 width](inspecting_files/figure-html/unnamed-chunk-48-1.png)
@@ -983,11 +607,7 @@ In these data, after an initial unstable period rates seem to stabilise,
 but there is still a lot of variability, with rates fluctuating between
 around -0.0006 and -0.0008.
 
-``` r
-
-## width of 20%
-inspect(sardine.rd, width = 0.2)
-```
+`## width of 20%`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``, width ``=`` ``0.2``)`
 
 ![inspect() output for sardine data with 20 percent rolling rate width
 showing smoother
@@ -1010,10 +630,7 @@ Note, intermittent-flow data will include rates across flush periods,
 which can skew results, and possibly make the output difficult to
 interpret.
 
-``` r
-
-inspect(intermittent.rd)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``intermittent.rd``)`
 
 ![inspect() output for intermittent-flow data showing rate fluctuations
 at flush periods](inspecting_files/figure-html/unnamed-chunk-50-1.png)
@@ -1025,10 +642,7 @@ However, you can always use `inspect` without saving the result for a
 closer look at regions of the data, though note the `width` input will
 apply to the subset, not the original data length.
 
-``` r
-
-inspect(intermittent.rd[1:1800,])
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``intermittent.rd``[``1``:``1800``,``]``)`
 
 ![inspect() output for a subset of intermittent-flow data showing a
 single replicate](inspecting_files/figure-html/unnamed-chunk-51-1.png)
@@ -1039,10 +653,7 @@ For really long experiments, both the timeseries and rolling rate plot
 may be difficult to interpret. This experiment on a zebra fish is 22h
 long and nearly 80000 rows.
 
-``` r
-
-inspect(zeb_intermittent.rd)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``zeb_intermittent.rd``)`
 
 ![inspect() output for a 22-hour zebrafish intermittent-flow
 experiment](inspecting_files/figure-html/unnamed-chunk-52-1.png)
@@ -1050,10 +661,7 @@ experiment](inspecting_files/figure-html/unnamed-chunk-52-1.png)
 `inspect` can be used without saving the result for a closer look at
 smaller regions of the data, to better see what is going on.
 
-``` r
-
-inspect(zeb_intermittent.rd[20000:24000,])
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``zeb_intermittent.rd``[``20000``:``24000``,``]``)`
 
 ![inspect() output for a subset of the zebrafish experiment showing
 individual
@@ -1084,10 +692,7 @@ only use the *first two* columns (`time`, and the first specified
 best practice is to inspect and assign each time-oxygen column pair as
 separate `inspect` objects.
 
-``` r
-
-inspect(urchins.rd, time = 1, oxygen = 8:19)
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``8``:``19``)`
 
 ![inspect() output for multiple oxygen columns of urchin data showing
 all timeseries](inspecting_files/figure-html/unnamed-chunk-54-1.png)
@@ -1106,11 +711,7 @@ same time data. This column is not passed through the above checks. It
 is a visual aid only to help with selection of regions from which to
 extract rates.
 
-``` r
-
-## Plot column 4 (temperature) alongside oxygen timeseries
-inspect(sardine.rd, time = 1, oxygen = 2, add.data = 3)
-```
+`## Plot column 4 (temperature) alongside oxygen timeseries`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``, time ``=`` ``1``, oxygen ``=`` ``2``, add.data ``=`` ``3``)`
 
 ![inspect() output for sardine data with temperature plotted alongside
 oxygen](inspecting_files/figure-html/unnamed-chunk-55-1.png)
@@ -1144,12 +745,7 @@ readable.
 This example examining oxygen production in algae uses some of these
 options.
 
-``` r
-
-inspect(algae.rd, time = 1, oxygen = 2, width = 0.4,
-        legend = FALSE, rate.rev = FALSE,
-        las = 1, mai = c(0.3, 0.35, 0.35, 0.15))
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``algae.rd``, time ``=`` ``1``, oxygen ``=`` ``2``, width ``=`` ``0.4``,`` `` legend ``=`` ``FALSE``, rate.rev ``=`` ``FALSE``,`` `` las ``=`` ``1``, mai ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.3``, ``0.35``, ``0.35``, ``0.15``)``)`
 
 ![inspect() output for algae oxygen production data with non-reversed
 rate axis](inspecting_files/figure-html/unnamed-chunk-56-1.png)

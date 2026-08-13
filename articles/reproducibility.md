@@ -42,17 +42,7 @@ consist of only a few lines of code. Combine this with
 concise. This example uses the native `|>` pipes introduced in [R
 v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/)):
 
-``` r
-
-urchins.rd |>                                            # Using the urchins data,
-  inspect(1, 15) |>                                      # inspect columns 1 and 15, then
-  calc_rate(from = 4, to = 29, by = "time") |>           # calculate rate between times 4 and 29
-  adjust_rate(by = calc_rate.bg(urchins.rd, time = 1,    # calculate the background...
-                                oxygen = 18:19)) |>      # ... and adjust rate
-  convert_rate(oxy.unit = "mgl-1", time.unit = "m",     
-               output.unit = "mg/s/kg", 
-               volume = 1.09, mass = 0.19)               # and finally convert
-```
+`urchins.rd`` ``|>`` ``# Using the urchins data,`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``1``, ``15``)`` ``|>`` ``# inspect columns 1 and 15, then`` `` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``from ``=`` ``4``, to ``=`` ``29``, by ``=`` ``"time"``)`` ``|>`` ``# calculate rate between times 4 and 29`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``by ``=`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``urchins.rd``, time ``=`` ``1``, ``# calculate the background...`` `` oxygen ``=`` ``18``:``19``)``)`` ``|>`` ``# ... and adjust rate`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"mgl-1"``, time.unit ``=`` ``"m"``, `` `` output.unit ``=`` ``"mg/s/kg"``, `` `` volume ``=`` ``1.09``, mass ``=`` ``0.19``)`` ``# and finally convert`
 
 ## Transparent, open analyses
 
@@ -117,76 +107,9 @@ dataset included in the package. We inspect the data, determine both the
 most linear rate, and the maximum rate over a 10 minute period, and
 finally convert rates to mass-specific units.
 
-``` r
+`## Load the package`` `[`library`](https://rdrr.io/r/base/library.html)`(`[`respR`](https://github.com/januarharianto/respr)`)`` `` ``## Import data`` ``## Here we would typically use import_file() to import a data file, `` ``## but sardine.rd is already loaded`` `` ``## Experiment parameters (this might be an existing object containing data for many experiments)`` ``exp_param`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``volume ``=`` ``12.3``, mass ``=`` ``21.41``, DO.unit ``=`` ``"mg/l"``, time.unit ``=`` ``"s"``)`` `` ``## Inspect the data, and save it as an object`` ``exp_1`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` `` ``## Determine rates - most linear, and highest rate over 15 mins (900 rows)`` ``exp_1_linear_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``exp_1``)`` ``exp_1_max_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``exp_1``, method ``=`` ``"highest"``, width ``=`` ``900``)`` `` ``## Convert rates to mass-specific units using the experimental parameters`` ``exp_1_linear_rate_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``exp_1_linear_rate``, `` `` output.unit ``=`` ``"mg/h/kg"``,`` `` oxy.unit ``=`` ``exp_param``$``DO.unit``,`` `` time.unit ``=`` ``exp_param``$``time.unit``,`` `` volume ``=`` ``exp_param``$``volume``,`` `` mass ``=`` ``exp_param``$``mass``)`` `` ``exp_1_max_rate_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``exp_1_max_rate``, `` `` output.unit ``=`` ``"mg/h/kg"``,`` `` oxy.unit ``=`` ``exp_param``$``DO.unit``,`` `` time.unit ``=`` ``exp_param``$``time.unit``,`` `` volume ``=`` ``exp_param``$``volume``,`` `` mass ``=`` ``exp_param``$``mass``)`
 
-## Load the package
-library(respR)
-
-## Import data
-## Here we would typically use import_file() to import a data file, 
-## but sardine.rd is already loaded
-
-## Experiment parameters (this might be an existing object containing data for many experiments)
-exp_param <- data.frame(volume = 12.3, mass = 21.41, DO.unit = "mg/l", time.unit = "s")
-
-## Inspect the data, and save it as an object
-exp_1 <- inspect(sardine.rd)
-
-## Determine rates - most linear, and highest rate over 15 mins (900 rows)
-exp_1_linear_rate <- auto_rate(exp_1)
-exp_1_max_rate <- auto_rate(exp_1, method = "highest", width = 900)
-
-## Convert rates to mass-specific units using the experimental parameters
-exp_1_linear_rate_conv <- convert_rate(exp_1_linear_rate, 
-                                       output.unit = "mg/h/kg",
-                                       oxy.unit = exp_param$DO.unit,
-                                       time.unit = exp_param$time.unit,
-                                       volume = exp_param$volume,
-                                       mass = exp_param$mass)
-
-exp_1_max_rate_conv <- convert_rate(exp_1_max_rate, 
-                                    output.unit = "mg/h/kg",
-                                    oxy.unit = exp_param$DO.unit,
-                                    time.unit = exp_param$time.unit,
-                                    volume = exp_param$volume,
-                                    mass = exp_param$mass)
-```
-
-``` r
-
-## Results
-exp_1_linear_rate_conv
-#> 
-#> # print.convert_rate # ------------------
-#> Rank 1 of 39 rates:
-#> 
-#> Input:
-#> [1] -0.000661
-#> [1] "mg/L" "sec" 
-#> Converted:
-#> [1] -1.37
-#> [1] "mgO2/hr/kg"
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-
-exp_1_max_rate_conv
-#> 
-#> # print.convert_rate # ------------------
-#> Rank 1 of 6614 rates:
-#> 
-#> Input:
-#> [1] -0.00114
-#> [1] "mg/L" "sec" 
-#> Converted:
-#> [1] -2.35
-#> [1] "mgO2/hr/kg"
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+`## Results`` ``exp_1_linear_rate_conv`` ``#> `` ``#> # print.convert_rate # ------------------`` ``#> Rank 1 of 39 rates:`` ``#> `` ``#> Input:`` ``#> [1] -0.000661`` ``#> [1] "mg/L" "sec" `` ``#> Converted:`` ``#> [1] -1.37`` ``#> [1] "mgO2/hr/kg"`` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`` `` ``exp_1_max_rate_conv`` ``#> `` ``#> # print.convert_rate # ------------------`` ``#> Rank 1 of 6614 rates:`` ``#> `` ``#> Input:`` ``#> [1] -0.00114`` ``#> [1] "mg/L" "sec" `` ``#> Converted:`` ``#> [1] -2.35`` ``#> [1] "mgO2/hr/kg"`` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 This shows how an entire analysis workflow can be conducted in only a
 few lines of code.
@@ -213,24 +136,7 @@ with a colleague who can then import it into their own R project using
 `readRDS`, and feed it into `convert_rate` to convert it to whatever
 units they wish without having to run any other parts of the workflow.
 
-``` r
-
-## Running this code will show how saveRDS and readRDS preserves values 
-## correctly, and gives the exact same results when used in further 
-## stages of the workflow
-
-## Inspect
-urch_data <- inspect(urchins.rd, time = 1, oxygen = 15)
-
-## Export resulting object to working directory
-saveRDS(urch_data, file = "urch_data.rds")
-
-## Re-import it to new object
-urch_data_in <- readRDS(file = "urch_data.rds")
-
-## Check values are preserved - should be TRUE
-all.equal(urch_data, urch_data_in)
-```
+`## Running this code will show how saveRDS and readRDS preserves values `` ``## correctly, and gives the exact same results when used in further `` ``## stages of the workflow`` `` ``## Inspect`` ``urch_data`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchins.rd``, time ``=`` ``1``, oxygen ``=`` ``15``)`` `` ``## Export resulting object to working directory`` `[`saveRDS`](https://rdrr.io/r/base/readRDS.html)`(``urch_data``, file ``=`` ``"urch_data.rds"``)`` `` ``## Re-import it to new object`` ``urch_data_in`` ``<-`` `[`readRDS`](https://rdrr.io/r/base/readRDS.html)`(``file ``=`` ``"urch_data.rds"``)`` `` ``## Check values are preserved - should be TRUE`` `[`all.equal`](https://rdrr.io/r/base/all.equal.html)`(``urch_data``, ``urch_data_in``)`
 
 One example of using this method to document a reproducible workflow,
 would be to save the object created by `inpect` and include that along
@@ -249,22 +155,13 @@ current R environment (though not scripts, i.e. `.R` files.). This way,
 all objects from the analysis of a single experiment, or multiple
 experiments, can be saved to a single file.
 
-``` r
-
-## Will save entire environment to current working directory
-save.image(file = "experiment_1.rda")
-```
+`## Will save entire environment to current working directory`` `[`save.image`](https://rdrr.io/r/base/save.html)`(``file ``=`` ``"experiment_1.rda"``)`
 
 The environment can be reimported by double clicking on the file
 (usually RStudio will ask if you want to import it to the current
 project), or [`load()`](https://rdrr.io/r/base/load.html) command.
 
-``` r
-
-## Will load entire environment to current working project. 
-## Path to the file must be specified, or it must be in current working directory.
-load(file = "experiment_1.rda")
-```
+`## Will load entire environment to current working project. `` ``## Path to the file must be specified, or it must be in current working directory.`` `[`load`](https://rdrr.io/r/base/load.html)`(``file ``=`` ``"experiment_1.rda"``)`
 
 This avoids having to save every object individually.
 

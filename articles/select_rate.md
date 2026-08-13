@@ -99,10 +99,7 @@ row) in order in the context of the entire data timeseries up to a
 maximum of 20. These can be selected using `pos`, which represents rows
 of the summary table with the default being `pos = 1:20`.
 
-``` r
-
-plot(sard)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard``)`
 
 ![Plot of the top-ranked converted rate shown in the context of the full
 oxygen timeseries, with rate value displayed in the
@@ -119,10 +116,7 @@ This plots the entire data timeseries on the upper plot, and on the
 lower plot the output rate values in the chosen output units. Each rate
 is plotted against the middle of the region used to determine it.
 
-``` r
-
-plot(sard, type = "rate")
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard``, type ``=`` ``"rate"``)`
 
 ![Rate plot showing the oxygen timeseries in the upper panel and
 converted rate values plotted against their position in the dataset in
@@ -146,10 +140,7 @@ the `$rep` or `$rank` column. See [above section](#rankcol) for what
 these may represent, but note as reordering or selection is performed
 rank and summary table position will not necessarily be equivalent.
 
-``` r
-
-plot(sard, type = "overlap")
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard``, type ``=`` ``"overlap"``)`
 
 ![Overlap plot showing the oxygen timeseries in the upper panel and
 horizontal lines indicating the data region of each rate regression in
@@ -199,21 +190,7 @@ default inputs of the `"linear"` method and `width = 0.2`, then adjust
 the rates for background (using an invented value as an example), then
 convert the rates to our final units.
 
-``` r
-
-sard <-
-  inspect(sardine.rd) |>
-  auto_rate() |>
-  adjust_rate(by = -0.00006) |>
-  convert_rate(oxy.unit = "%Air",
-               time.unit = "sec",
-               output.unit = "mg/h/kg",
-               volume = 12.3,
-               mass = 0.0477,
-               S = 35,
-               t = 14.8,
-               p = 1.013)
-```
+`sard`` ``<-`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` ``|>`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``by ``=`` ``-``0.00006``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"%Air"``,`` `` time.unit ``=`` ``"sec"``,`` `` output.unit ``=`` ``"mg/h/kg"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.0477``,`` `` S ``=`` ``35``,`` `` t ``=`` ``14.8``,`` `` p ``=`` ``1.013``)`
 
 ![Plot of the top-ranked auto_rate linear result for the sardine
 dataset, showing the detected linear region in the context of the full
@@ -229,56 +206,7 @@ Let’s look at the `convert_rate` summary table, which contains all rate
 regression parameters and data locations, adjustments (if applied),
 units, and more.
 
-``` r
-
-summary(sard)
-#> 
-#> # summary.convert_rate # ----------------
-#> Summary of all converted rates:
-#> 
-#>     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S    t    P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#>  1:  NA    1         94.9 -0.000661 0.982   19069 3659   6736 3658    6735 92.6   90.4 -0.000661   -0.00006     -0.000601  -0.000601     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.17       -45.5          NA  mgO2/hr/kg       -45.5
-#>  2:  NA    2         95.1 -0.000688 0.986   17461 2242   5543 2241    5542 93.7   91.2 -0.000688   -0.00006     -0.000628  -0.000628     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.27       -47.5          NA  mgO2/hr/kg       -47.5
-#>  3:  NA    3         94.9 -0.000662 0.987   15969 3628   7164 3627    7163 92.5   90.2 -0.000662   -0.00006     -0.000602  -0.000602     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.17       -45.6          NA  mgO2/hr/kg       -45.6
-#>  4:  NA    4         95.1 -0.000708 0.979    9204 1578   4236 1577    4235 94.2   92.2 -0.000708   -0.00006     -0.000648  -0.000648     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.34       -49.1          NA  mgO2/hr/kg       -49.1
-#>  5:  NA    5         95.1 -0.000706 0.971    7555 1947   4236 1946    4235 93.8   92.2 -0.000706   -0.00006     -0.000646  -0.000646     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.33       -48.9          NA  mgO2/hr/kg       -48.9
-#>  6:  NA    6         95.7 -0.001047 0.961    6862  601   1969  600    1968 95.1   93.7 -0.001047   -0.00006     -0.000987  -0.000987     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.56       -74.7          NA  mgO2/hr/kg       -74.7
-#>  7:  NA    7         95.1 -0.000709 0.978    6395 1578   4196 1577    4195 94.2   92.2 -0.000709   -0.00006     -0.000649  -0.000649     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.34       -49.1          NA  mgO2/hr/kg       -49.1
-#>  8:  NA    8         94.8 -0.000628 0.929    6285 5050   6613 5049    6612 91.4   90.5 -0.000628   -0.00006     -0.000568  -0.000568     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.05       -43.0          NA  mgO2/hr/kg       -43.0
-#>  9:  NA    9         94.7 -0.000619 0.912    2609 5123   6507 5122    6506 91.5   90.6 -0.000619   -0.00006     -0.000559  -0.000559     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.02       -42.4          NA  mgO2/hr/kg       -42.4
-#> 10:  NA   10         95.7 -0.001043 0.961    1917  596   1981  595    1980 95.0   93.6 -0.001043   -0.00006     -0.000983  -0.000983     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.55       -74.4          NA  mgO2/hr/kg       -74.4
-#> 11:  NA   11         95.7 -0.001040 0.961    1733  589   1983  588    1982 95.1   93.8 -0.001040   -0.00006     -0.000980  -0.000980     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.54       -74.2          NA  mgO2/hr/kg       -74.2
-#> 12:  NA   12         95.7 -0.001035 0.962    1674  571   1989  570    1988 95.1   93.9 -0.001035   -0.00006     -0.000975  -0.000975     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.52       -73.8          NA  mgO2/hr/kg       -73.8
-#> 13:  NA   13         95.7 -0.001042 0.961    1460  594   1982  593    1981 95.0   93.8 -0.001042   -0.00006     -0.000982  -0.000982     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.55       -74.3          NA  mgO2/hr/kg       -74.3
-#> 14:  NA   14         95.7 -0.001039 0.961    1368  587   1987  586    1986 95.0   93.8 -0.001039   -0.00006     -0.000979  -0.000979     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.53       -74.1          NA  mgO2/hr/kg       -74.1
-#> 15:  NA   15         95.7 -0.001037 0.961    1271  582   1988  581    1987 95.2   93.8 -0.001037   -0.00006     -0.000977  -0.000977     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.53       -74.0          NA  mgO2/hr/kg       -74.0
-#> 16:  NA   16         95.7 -0.001034 0.962    1268  570   1992  569    1991 95.0   93.8 -0.001034   -0.00006     -0.000974  -0.000974     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.52       -73.8          NA  mgO2/hr/kg       -73.8
-#> 17:  NA   17         95.1 -0.000705 0.915     723 1578   2900 1577    2899 94.2   93.0 -0.000705   -0.00006     -0.000645  -0.000645     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.33       -48.9          NA  mgO2/hr/kg       -48.9
-#> 18:  NA   18         95.2 -0.000717 0.918     590 1518   2831 1517    2830 94.1   93.2 -0.000717   -0.00006     -0.000657  -0.000657     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.37       -49.8          NA  mgO2/hr/kg       -49.8
-#> 19:  NA   19         95.2 -0.000716 0.918     581 1518   2838 1517    2837 94.1   93.2 -0.000716   -0.00006     -0.000656  -0.000656     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.37       -49.7          NA  mgO2/hr/kg       -49.7
-#> 20:  NA   20         95.4 -0.000855 0.935     580 1185   2499 1184    2498 94.6   93.3 -0.000855   -0.00006     -0.000795  -0.000795     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.87       -60.2          NA  mgO2/hr/kg       -60.2
-#> 21:  NA   21         95.1 -0.000702 0.915     577 1584   2908 1583    2907 94.1   93.2 -0.000702   -0.00006     -0.000642  -0.000642     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.32       -48.6          NA  mgO2/hr/kg       -48.6
-#> 22:  NA   22         95.4 -0.000855 0.935     576 1185   2497 1184    2496 94.6   93.2 -0.000855   -0.00006     -0.000795  -0.000795     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.87       -60.2          NA  mgO2/hr/kg       -60.2
-#> 23:  NA   23         95.2 -0.000721 0.918     575 1514   2823 1513    2822 94.2   93.0 -0.000721   -0.00006     -0.000661  -0.000661     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.39       -50.0          NA  mgO2/hr/kg       -50.0
-#> 24:  NA   24         95.5 -0.000892 0.936     550 1083   2391 1082    2390 94.6   93.3 -0.000892   -0.00006     -0.000832  -0.000832     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.0          NA  mgO2/hr/kg       -63.0
-#> 25:  NA   25         95.3 -0.000803 0.927     541 1327   2634 1326    2633 94.3   93.3 -0.000803   -0.00006     -0.000743  -0.000743     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.3          NA  mgO2/hr/kg       -56.3
-#> 26:  NA   26         95.5 -0.000894 0.937     501 1067   2390 1066    2389 94.6   93.6 -0.000894   -0.00006     -0.000834  -0.000834     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.1          NA  mgO2/hr/kg       -63.1
-#> 27:  NA   27         95.5 -0.000894 0.938     498 1067   2389 1066    2388 94.6   93.3 -0.000894   -0.00006     -0.000834  -0.000834     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.2          NA  mgO2/hr/kg       -63.2
-#> 28:  NA   28         95.3 -0.000803 0.928     496 1324   2634 1323    2633 94.3   93.3 -0.000803   -0.00006     -0.000743  -0.000743     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.3          NA  mgO2/hr/kg       -56.3
-#> 29:  NA   29         95.5 -0.000894 0.937     495 1069   2389 1068    2388 94.5   93.3 -0.000894   -0.00006     -0.000834  -0.000834     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.2          NA  mgO2/hr/kg       -63.2
-#> 30:  NA   30         95.3 -0.000802 0.927     488 1328   2636 1327    2635 94.3   93.3 -0.000802   -0.00006     -0.000742  -0.000742     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.2          NA  mgO2/hr/kg       -56.2
-#> 31:  NA   31         95.3 -0.000802 0.928     488 1323   2638 1322    2637 94.3   93.3 -0.000802   -0.00006     -0.000742  -0.000742     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.2          NA  mgO2/hr/kg       -56.2
-#> 32:  NA   32         95.3 -0.000802 0.928     476 1323   2637 1322    2636 94.3   93.3 -0.000802   -0.00006     -0.000742  -0.000742     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.2          NA  mgO2/hr/kg       -56.2
-#> 33:  NA   33         95.4 -0.000854 0.935     471 1185   2501 1184    2500 94.6   93.4 -0.000854   -0.00006     -0.000794  -0.000794     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.87       -60.1          NA  mgO2/hr/kg       -60.1
-#> 34:  NA   34         95.4 -0.000854 0.935     447 1186   2500 1185    2499 94.4   93.3 -0.000854   -0.00006     -0.000794  -0.000794     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.87       -60.1          NA  mgO2/hr/kg       -60.1
-#> 35:  NA   35         95.5 -0.000894 0.938     421 1063   2394 1062    2393 94.5   93.5 -0.000894   -0.00006     -0.000834  -0.000834     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.1          NA  mgO2/hr/kg       -63.1
-#> 36:  NA   36         95.5 -0.000894 0.937     388 1066   2393 1065    2392 94.7   93.4 -0.000894   -0.00006     -0.000834  -0.000834     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -3.01       -63.1          NA  mgO2/hr/kg       -63.1
-#> 37:  NA   37         95.3 -0.000803 0.929     375 1315   2641 1314    2640 94.3   93.3 -0.000803   -0.00006     -0.000743  -0.000743     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.3          NA  mgO2/hr/kg       -56.3
-#> 38:  NA   38         95.3 -0.000803 0.929     369 1317   2641 1316    2640 94.3   93.3 -0.000803   -0.00006     -0.000743  -0.000743     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.2          NA  mgO2/hr/kg       -56.2
-#> 39:  NA   39         95.3 -0.000803 0.928     322 1325   2635 1324    2634 94.2   93.3 -0.000803   -0.00006     -0.000743  -0.000743     %Air       sec   12.3 0.0477   NA 35 14.8 1.01    -2.68       -56.2          NA  mgO2/hr/kg       -56.2
-#>     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S    t    P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``sard``)`` ``#> `` ``#> # summary.convert_rate # ----------------`` ``#> Summary of all converted rates:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> 1: NA 1 94.9 -0.000661 0.982 19069 3659 6736 3658 6735 92.6 90.4 -0.000661 -0.00006 -0.000601 -0.000601 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.17 -45.5 NA mgO2/hr/kg -45.5`` ``#> 2: NA 2 95.1 -0.000688 0.986 17461 2242 5543 2241 5542 93.7 91.2 -0.000688 -0.00006 -0.000628 -0.000628 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.27 -47.5 NA mgO2/hr/kg -47.5`` ``#> 3: NA 3 94.9 -0.000662 0.987 15969 3628 7164 3627 7163 92.5 90.2 -0.000662 -0.00006 -0.000602 -0.000602 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.17 -45.6 NA mgO2/hr/kg -45.6`` ``#> 4: NA 4 95.1 -0.000708 0.979 9204 1578 4236 1577 4235 94.2 92.2 -0.000708 -0.00006 -0.000648 -0.000648 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.34 -49.1 NA mgO2/hr/kg -49.1`` ``#> 5: NA 5 95.1 -0.000706 0.971 7555 1947 4236 1946 4235 93.8 92.2 -0.000706 -0.00006 -0.000646 -0.000646 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.33 -48.9 NA mgO2/hr/kg -48.9`` ``#> 6: NA 6 95.7 -0.001047 0.961 6862 601 1969 600 1968 95.1 93.7 -0.001047 -0.00006 -0.000987 -0.000987 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.56 -74.7 NA mgO2/hr/kg -74.7`` ``#> 7: NA 7 95.1 -0.000709 0.978 6395 1578 4196 1577 4195 94.2 92.2 -0.000709 -0.00006 -0.000649 -0.000649 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.34 -49.1 NA mgO2/hr/kg -49.1`` ``#> 8: NA 8 94.8 -0.000628 0.929 6285 5050 6613 5049 6612 91.4 90.5 -0.000628 -0.00006 -0.000568 -0.000568 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.05 -43.0 NA mgO2/hr/kg -43.0`` ``#> 9: NA 9 94.7 -0.000619 0.912 2609 5123 6507 5122 6506 91.5 90.6 -0.000619 -0.00006 -0.000559 -0.000559 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.02 -42.4 NA mgO2/hr/kg -42.4`` ``#> 10: NA 10 95.7 -0.001043 0.961 1917 596 1981 595 1980 95.0 93.6 -0.001043 -0.00006 -0.000983 -0.000983 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.55 -74.4 NA mgO2/hr/kg -74.4`` ``#> 11: NA 11 95.7 -0.001040 0.961 1733 589 1983 588 1982 95.1 93.8 -0.001040 -0.00006 -0.000980 -0.000980 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.54 -74.2 NA mgO2/hr/kg -74.2`` ``#> 12: NA 12 95.7 -0.001035 0.962 1674 571 1989 570 1988 95.1 93.9 -0.001035 -0.00006 -0.000975 -0.000975 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.52 -73.8 NA mgO2/hr/kg -73.8`` ``#> 13: NA 13 95.7 -0.001042 0.961 1460 594 1982 593 1981 95.0 93.8 -0.001042 -0.00006 -0.000982 -0.000982 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.55 -74.3 NA mgO2/hr/kg -74.3`` ``#> 14: NA 14 95.7 -0.001039 0.961 1368 587 1987 586 1986 95.0 93.8 -0.001039 -0.00006 -0.000979 -0.000979 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.53 -74.1 NA mgO2/hr/kg -74.1`` ``#> 15: NA 15 95.7 -0.001037 0.961 1271 582 1988 581 1987 95.2 93.8 -0.001037 -0.00006 -0.000977 -0.000977 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.53 -74.0 NA mgO2/hr/kg -74.0`` ``#> 16: NA 16 95.7 -0.001034 0.962 1268 570 1992 569 1991 95.0 93.8 -0.001034 -0.00006 -0.000974 -0.000974 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.52 -73.8 NA mgO2/hr/kg -73.8`` ``#> 17: NA 17 95.1 -0.000705 0.915 723 1578 2900 1577 2899 94.2 93.0 -0.000705 -0.00006 -0.000645 -0.000645 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.33 -48.9 NA mgO2/hr/kg -48.9`` ``#> 18: NA 18 95.2 -0.000717 0.918 590 1518 2831 1517 2830 94.1 93.2 -0.000717 -0.00006 -0.000657 -0.000657 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.37 -49.8 NA mgO2/hr/kg -49.8`` ``#> 19: NA 19 95.2 -0.000716 0.918 581 1518 2838 1517 2837 94.1 93.2 -0.000716 -0.00006 -0.000656 -0.000656 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.37 -49.7 NA mgO2/hr/kg -49.7`` ``#> 20: NA 20 95.4 -0.000855 0.935 580 1185 2499 1184 2498 94.6 93.3 -0.000855 -0.00006 -0.000795 -0.000795 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.87 -60.2 NA mgO2/hr/kg -60.2`` ``#> 21: NA 21 95.1 -0.000702 0.915 577 1584 2908 1583 2907 94.1 93.2 -0.000702 -0.00006 -0.000642 -0.000642 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.32 -48.6 NA mgO2/hr/kg -48.6`` ``#> 22: NA 22 95.4 -0.000855 0.935 576 1185 2497 1184 2496 94.6 93.2 -0.000855 -0.00006 -0.000795 -0.000795 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.87 -60.2 NA mgO2/hr/kg -60.2`` ``#> 23: NA 23 95.2 -0.000721 0.918 575 1514 2823 1513 2822 94.2 93.0 -0.000721 -0.00006 -0.000661 -0.000661 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.39 -50.0 NA mgO2/hr/kg -50.0`` ``#> 24: NA 24 95.5 -0.000892 0.936 550 1083 2391 1082 2390 94.6 93.3 -0.000892 -0.00006 -0.000832 -0.000832 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.0 NA mgO2/hr/kg -63.0`` ``#> 25: NA 25 95.3 -0.000803 0.927 541 1327 2634 1326 2633 94.3 93.3 -0.000803 -0.00006 -0.000743 -0.000743 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.3 NA mgO2/hr/kg -56.3`` ``#> 26: NA 26 95.5 -0.000894 0.937 501 1067 2390 1066 2389 94.6 93.6 -0.000894 -0.00006 -0.000834 -0.000834 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.1 NA mgO2/hr/kg -63.1`` ``#> 27: NA 27 95.5 -0.000894 0.938 498 1067 2389 1066 2388 94.6 93.3 -0.000894 -0.00006 -0.000834 -0.000834 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.2 NA mgO2/hr/kg -63.2`` ``#> 28: NA 28 95.3 -0.000803 0.928 496 1324 2634 1323 2633 94.3 93.3 -0.000803 -0.00006 -0.000743 -0.000743 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.3 NA mgO2/hr/kg -56.3`` ``#> 29: NA 29 95.5 -0.000894 0.937 495 1069 2389 1068 2388 94.5 93.3 -0.000894 -0.00006 -0.000834 -0.000834 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.2 NA mgO2/hr/kg -63.2`` ``#> 30: NA 30 95.3 -0.000802 0.927 488 1328 2636 1327 2635 94.3 93.3 -0.000802 -0.00006 -0.000742 -0.000742 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.2 NA mgO2/hr/kg -56.2`` ``#> 31: NA 31 95.3 -0.000802 0.928 488 1323 2638 1322 2637 94.3 93.3 -0.000802 -0.00006 -0.000742 -0.000742 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.2 NA mgO2/hr/kg -56.2`` ``#> 32: NA 32 95.3 -0.000802 0.928 476 1323 2637 1322 2636 94.3 93.3 -0.000802 -0.00006 -0.000742 -0.000742 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.2 NA mgO2/hr/kg -56.2`` ``#> 33: NA 33 95.4 -0.000854 0.935 471 1185 2501 1184 2500 94.6 93.4 -0.000854 -0.00006 -0.000794 -0.000794 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.87 -60.1 NA mgO2/hr/kg -60.1`` ``#> 34: NA 34 95.4 -0.000854 0.935 447 1186 2500 1185 2499 94.4 93.3 -0.000854 -0.00006 -0.000794 -0.000794 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.87 -60.1 NA mgO2/hr/kg -60.1`` ``#> 35: NA 35 95.5 -0.000894 0.938 421 1063 2394 1062 2393 94.5 93.5 -0.000894 -0.00006 -0.000834 -0.000834 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.1 NA mgO2/hr/kg -63.1`` ``#> 36: NA 36 95.5 -0.000894 0.937 388 1066 2393 1065 2392 94.7 93.4 -0.000894 -0.00006 -0.000834 -0.000834 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -3.01 -63.1 NA mgO2/hr/kg -63.1`` ``#> 37: NA 37 95.3 -0.000803 0.929 375 1315 2641 1314 2640 94.3 93.3 -0.000803 -0.00006 -0.000743 -0.000743 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.3 NA mgO2/hr/kg -56.3`` ``#> 38: NA 38 95.3 -0.000803 0.929 369 1317 2641 1316 2640 94.3 93.3 -0.000803 -0.00006 -0.000743 -0.000743 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.2 NA mgO2/hr/kg -56.2`` ``#> 39: NA 39 95.3 -0.000803 0.928 322 1325 2635 1324 2634 94.2 93.3 -0.000803 -0.00006 -0.000743 -0.000743 %Air sec 12.3 0.0477 NA 35 14.8 1.01 -2.68 -56.2 NA mgO2/hr/kg -56.2`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> -----------------------------------------`
 
 Obviously this is a lot of information. The `rate.output`, which is the
 primary output we are interested in, varies in value by quite a lot. The
@@ -301,21 +229,13 @@ We can use the `convert_rate` plotting functionality to get a better
 idea of rate values and how they are distributed. We’ll look at both the
 rate value plot and the overlap plot.
 
-``` r
-
-plot(sard, type = "rate")
-#> plot.convert_rate: Plotting all rate(s)...
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard``, type ``=`` ``"rate"``)`` ``#> plot.convert_rate: Plotting all rate(s)...`
 
 ![Rate plot showing higher rates at the start of the sardine dataset and
 stable lower rates after approximately timepoint
 2000.](select_rate_files/figure-html/unnamed-chunk-7-1.png)
 
-``` r
-
-plot(sard, type = "overlap")
-#> plot.convert_rate: Plotting all rate(s)...
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard``, type ``=`` ``"overlap"``)`` ``#> plot.convert_rate: Plotting all rate(s)...`
 
 ![Overlap plot showing substantial overlap among the detected linear
 regions, with many regressions covering similar data
@@ -334,13 +254,7 @@ criteria. If we are interested in the lowest rates we can use this
 method to select any number of the lowest rates using `n`. Here is the
 lowest single rate.
 
-``` r
-
-sard |>
-  select_rate(method = "lowest", n = 1) |>
-  plot(quiet = TRUE) |>
-  summary()
-```
+`sard`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"lowest"``, n ``=`` ``1``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``quiet ``=`` ``TRUE``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![Plot of the single lowest rate selected from the sardine auto_rate
 results, shown in the context of the full oxygen
@@ -367,15 +281,7 @@ for at least 30 minutes (1800s). We can apply multiple selection
 criteria by using pipes (alternatively you can save the output and
 process it through `select_rate` multiple times).
 
-``` r
-
-sard |>
-  select_rate(method = "rsq", n = c(0.95,1)) |>
-  select_rate(method = "duration", n = c(1800, Inf)) |>
-  select_rate(method = "lowest", n = 1) |>
-  plot(quiet = TRUE) |>
-  summary()
-```
+`sard`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"rsq"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.95``,``1``)``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"duration"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1800``, ``Inf``)``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"lowest"``, n ``=`` ``1``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``quiet ``=`` ``TRUE``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![Plot of the lowest rate after filtering by r-squared above 0.95 and
 duration of at least 30 minutes, shown in the context of the full oxygen
@@ -430,21 +336,7 @@ these, then apply some additional selection criteria.
 Here we do a rolling regression of 20 minutes (`1200` seconds) `width`
 in the `"time"` metric.
 
-``` r
-
-sard <- inspect(sardine.rd) |>
-  auto_rate(method = "lowest", width = 1200, by = "time") |>
-  adjust_rate(by = -0.00006) |>
-  convert_rate(oxy.unit = "%Air",
-               time.unit = "sec",
-               output.unit = "mg/h/kg",
-               volume = 12.3,
-               mass = 0.0477,
-               S = 35,
-               t = 14.8,
-               p = 1.013) |>
-  summary()
-```
+`sard`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``method ``=`` ``"lowest"``, width ``=`` ``1200``, by ``=`` ``"time"``)`` ``|>`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``by ``=`` ``-``0.00006``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"%Air"``,`` `` time.unit ``=`` ``"sec"``,`` `` output.unit ``=`` ``"mg/h/kg"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.0477``,`` `` S ``=`` ``35``,`` `` t ``=`` ``14.8``,`` `` p ``=`` ``1.013``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![Plot of the sardine dataset analysed using auto_rate lowest method
 with a 20-minute rolling regression, showing the top-ranked lowest rate
@@ -479,11 +371,7 @@ not showing the full summary table but it ranges from around 0.88 to
 
 Let’s look at the `"overlap"` plot output.
 
-``` r
-
-sard |>
-  plot(type = "overlap")
-```
+`sard`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`
 
 ![Overlap plot of auto_rate lowest method results showing rate
 regressions ordered from lowest to highest, with lower rates
@@ -503,16 +391,7 @@ We are looking for lowest rates, so we don’t need to keep any rates
 before around timepoint 3000. We can remove those using `time_omit`.
 Let’s also only keep those with r-squared above 0.9.
 
-``` r
-
-sard |>
-  select_rate(method = "time_omit", n = c(0,3000)) |>
-  select_rate(method = "rsq", n = c(0.9, 1)) |>
-  plot(type = "overlap") |>
-  summary()
-#> 
-#> # plot.convert_rate # -------------------
-```
+`sard`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"time_omit"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``,``3000``)``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"rsq"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.9``, ``1``)``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`` ``#> `` ``#> # plot.convert_rate # -------------------`
 
 ![Overlap plot after removing rates before timepoint 3000 and filtering
 for r-squared above 0.9, showing remaining rate regressions concentrated
@@ -546,19 +425,7 @@ the `"overlap"` method last because it is *extremely* computationally
 intensive and the time it takes increases exponentially with the number
 of results remaining.
 
-``` r
-
-sard |>
-  select_rate(method = "rsq", n = c(0.9, 1)) |>
-  select_rate(method = "time_omit", n = c(0,3000)) |>
-  select_rate(method = "lowest", n = 500) |>
-  select_rate(method = "overlap", n = 0.9) |>
-  plot(type = "overlap") |>
-  summary() |>
-  mean()
-#> 
-#> # plot.convert_rate # -------------------
-```
+`sard`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"rsq"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.9``, ``1``)``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"time_omit"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``,``3000``)``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"lowest"``, n ``=`` ``500``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"overlap"``, n ``=`` ``0.9``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`` ``|>`` `` `[`mean`](https://rdrr.io/r/base/mean.html)`(``)`` ``#> `` ``#> # plot.convert_rate # -------------------`
 
 ![Overlap plot after applying r-squared, time, lowest, and overlap
 filters, showing the three remaining non-overlapping rate
@@ -600,16 +467,7 @@ important*. Applying the same criteria in a different order can give
 totally different results. What happens if we repeat the above but take
 the lowest 500 results first, *then* apply our r-squared range?
 
-``` r
-
-sard |>
-  select_rate(method = "lowest", n = 500) |>
-  select_rate(method = "rsq", n = c(0.9, 1)) 
-#> select_rate: Selecting lowest 500 *absolute* rate values...
-#> ----- Selection complete. 5813 rate(s) removed, 500 rate(s) remaining -----
-#> select_rate: Selecting rates with rsq values between 0.9 and 1...
-#> ----- Selection complete. 500 rate(s) removed, 0 rate(s) remaining -----
-```
+`sard`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"lowest"``, n ``=`` ``500``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"rsq"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.9``, ``1``)``)`` `` ``#> select_rate: Selecting lowest 500 *absolute* rate values...`` ``#> ----- Selection complete. 5813 rate(s) removed, 500 rate(s) remaining -----`` ``#> select_rate: Selecting rates with rsq values between 0.9 and 1...`` ``#> ----- Selection complete. 500 rate(s) removed, 0 rate(s) remaining -----`
 
 Now we have no results! This is because in the original ordered results,
 none of the lowest 500 rates had an r-squared above 0.9.
@@ -653,28 +511,7 @@ a `wait` phase of two minutes (120 rows), and a `measure` phase of six
 minutes (360 rows) within each replicate. Then we convert the results,
 plot them in two different ways, and show the summary table.
 
-``` r
-
-zeb_sub <- subset_data(zeb_intermittent.rd,
-                       from = 5840,
-                       to = 19039,
-                       by = "row",
-                       quiet = TRUE) |>
-  inspect(plot = FALSE) |>
-  calc_rate.int(starts = 660,
-                wait = 120,
-                measure = 360,
-                by = "row",
-                plot = FALSE) |>
-  convert_rate(oxy.unit = "mg/L",
-               time.unit = "secs",
-               output.unit = "mg/h/g",
-               volume = 0.12,
-               mass = 0.0009) |>
-  plot(type = "full") |>
-  plot(type = "rate") |>
-  summary()
-```
+`zeb_sub`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``zeb_intermittent.rd``,`` `` from ``=`` ``5840``,`` `` to ``=`` ``19039``,`` `` by ``=`` ``"row"``,`` `` quiet ``=`` ``TRUE``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``plot ``=`` ``FALSE``)`` ``|>`` `` `[`calc_rate.int`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)`(``starts ``=`` ``660``,`` `` wait ``=`` ``120``,`` `` measure ``=`` ``360``,`` `` by ``=`` ``"row"``,`` `` plot ``=`` ``FALSE``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"mg/L"``,`` `` time.unit ``=`` ``"secs"``,`` `` output.unit ``=`` ``"mg/h/g"``,`` `` volume ``=`` ``0.12``,`` `` mass ``=`` ``0.0009``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"full"``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"rate"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![Full plot showing each of the 20 intermittent-flow replicate rates in
 the context of the entire zebrafish oxygen
@@ -691,36 +528,7 @@ replicates.
 The summary, which is quite a large table, shows us how these rates
 change across the 20 replicates.
 
-``` r
-
-summary(zeb_sub)
-#> 
-#> # summary.convert_rate # ----------------
-#> Summary of all converted rates:
-#> 
-#>     rep rank intercept_b0 slope_b1   rsq density   row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#>  1:   1    1         53.2 -0.00785 0.997      NA   121    480  5960    6319 6.45   3.57 -0.00785         NA            NA   -0.00785     mg/L       sec   0.12 0.0009   NA NA NA NA   -3.390       -3.77          NA   mgO2/hr/g       -3.77
-#>  2:   2    1         51.9 -0.00684 0.975      NA   781   1140  6620    6979 6.82   4.41 -0.00684         NA            NA   -0.00684     mg/L       sec   0.12 0.0009   NA NA NA NA   -2.956       -3.28          NA   mgO2/hr/g       -3.28
-#>  3:   3    1         53.6 -0.00641 0.994      NA  1441   1800  7280    7639 6.99   4.64 -0.00641         NA            NA   -0.00641     mg/L       sec   0.12 0.0009   NA NA NA NA   -2.767       -3.07          NA   mgO2/hr/g       -3.07
-#>  4:   4    1         42.1 -0.00442 0.989      NA  2101   2460  7940    8299 7.16   5.45 -0.00442         NA            NA   -0.00442     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.909       -2.12          NA   mgO2/hr/g       -2.12
-#>  5:   5    1         40.0 -0.00382 0.989      NA  2761   3120  8600    8959 7.31   5.88 -0.00382         NA            NA   -0.00382     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.648       -1.83          NA   mgO2/hr/g       -1.83
-#>  6:   6    1         37.3 -0.00323 0.986      NA  3421   3780  9260    9619 7.47   6.31 -0.00323         NA            NA   -0.00323     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.395       -1.55          NA   mgO2/hr/g       -1.55
-#>  7:   7    1         34.9 -0.00276 0.985      NA  4081   4440  9920   10279 7.56   6.62 -0.00276         NA            NA   -0.00276     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.191       -1.32          NA   mgO2/hr/g       -1.32
-#>  8:   8    1         34.0 -0.00250 0.979      NA  4741   5100 10580   10939 7.64   6.67 -0.00250         NA            NA   -0.00250     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.078       -1.20          NA   mgO2/hr/g       -1.20
-#>  9:   9    1         35.1 -0.00245 0.973      NA  5401   5760 11240   11599 7.60   6.70 -0.00245         NA            NA   -0.00245     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.057       -1.17          NA   mgO2/hr/g       -1.17
-#> 10:  10    1         35.2 -0.00231 0.984      NA  6061   6420 11900   12259 7.64   6.88 -0.00231         NA            NA   -0.00231     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.999       -1.11          NA   mgO2/hr/g       -1.11
-#> 11:  11    1         36.9 -0.00232 0.983      NA  6721   7080 12560   12919 7.74   6.88 -0.00232         NA            NA   -0.00232     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.002       -1.11          NA   mgO2/hr/g       -1.11
-#> 12:  12    1         39.5 -0.00240 0.982      NA  7381   7740 13220   13579 7.76   6.91 -0.00240         NA            NA   -0.00240     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.038       -1.15          NA   mgO2/hr/g       -1.15
-#> 13:  13    1         40.0 -0.00232 0.981      NA  8041   8400 13880   14239 7.77   6.89 -0.00232         NA            NA   -0.00232     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.003       -1.11          NA   mgO2/hr/g       -1.11
-#> 14:  14    1         40.8 -0.00228 0.979      NA  8701   9060 14540   14899 7.69   6.92 -0.00228         NA            NA   -0.00228     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.984       -1.09          NA   mgO2/hr/g       -1.09
-#> 15:  15    1         46.5 -0.00255 0.984      NA  9361   9720 15200   15559 7.77   6.83 -0.00255         NA            NA   -0.00255     mg/L       sec   0.12 0.0009   NA NA NA NA   -1.100       -1.22          NA   mgO2/hr/g       -1.22
-#> 16:  16    1         43.6 -0.00227 0.982      NA 10021  10380 15860   16219 7.63   6.84 -0.00227         NA            NA   -0.00227     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.979       -1.09          NA   mgO2/hr/g       -1.09
-#> 17:  17    1         44.0 -0.00220 0.977      NA 10681  11040 16520   16879 7.73   6.97 -0.00220         NA            NA   -0.00220     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.949       -1.05          NA   mgO2/hr/g       -1.05
-#> 18:  18    1         45.5 -0.00220 0.975      NA 11341  11700 17180   17539 7.84   6.97 -0.00220         NA            NA   -0.00220     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.949       -1.05          NA   mgO2/hr/g       -1.05
-#> 19:  19    1         45.8 -0.00213 0.978      NA 12001  12360 17840   18199 7.79   7.03 -0.00213         NA            NA   -0.00213     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.920       -1.02          NA   mgO2/hr/g       -1.02
-#> 20:  20    1         47.7 -0.00216 0.976      NA 12661  13020 18500   18859 7.83   6.99 -0.00216         NA            NA   -0.00216     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.932       -1.04          NA   mgO2/hr/g       -1.04
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``zeb_sub``)`` ``#> `` ``#> # summary.convert_rate # ----------------`` ``#> Summary of all converted rates:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> 1: 1 1 53.2 -0.00785 0.997 NA 121 480 5960 6319 6.45 3.57 -0.00785 NA NA -0.00785 mg/L sec 0.12 0.0009 NA NA NA NA -3.390 -3.77 NA mgO2/hr/g -3.77`` ``#> 2: 2 1 51.9 -0.00684 0.975 NA 781 1140 6620 6979 6.82 4.41 -0.00684 NA NA -0.00684 mg/L sec 0.12 0.0009 NA NA NA NA -2.956 -3.28 NA mgO2/hr/g -3.28`` ``#> 3: 3 1 53.6 -0.00641 0.994 NA 1441 1800 7280 7639 6.99 4.64 -0.00641 NA NA -0.00641 mg/L sec 0.12 0.0009 NA NA NA NA -2.767 -3.07 NA mgO2/hr/g -3.07`` ``#> 4: 4 1 42.1 -0.00442 0.989 NA 2101 2460 7940 8299 7.16 5.45 -0.00442 NA NA -0.00442 mg/L sec 0.12 0.0009 NA NA NA NA -1.909 -2.12 NA mgO2/hr/g -2.12`` ``#> 5: 5 1 40.0 -0.00382 0.989 NA 2761 3120 8600 8959 7.31 5.88 -0.00382 NA NA -0.00382 mg/L sec 0.12 0.0009 NA NA NA NA -1.648 -1.83 NA mgO2/hr/g -1.83`` ``#> 6: 6 1 37.3 -0.00323 0.986 NA 3421 3780 9260 9619 7.47 6.31 -0.00323 NA NA -0.00323 mg/L sec 0.12 0.0009 NA NA NA NA -1.395 -1.55 NA mgO2/hr/g -1.55`` ``#> 7: 7 1 34.9 -0.00276 0.985 NA 4081 4440 9920 10279 7.56 6.62 -0.00276 NA NA -0.00276 mg/L sec 0.12 0.0009 NA NA NA NA -1.191 -1.32 NA mgO2/hr/g -1.32`` ``#> 8: 8 1 34.0 -0.00250 0.979 NA 4741 5100 10580 10939 7.64 6.67 -0.00250 NA NA -0.00250 mg/L sec 0.12 0.0009 NA NA NA NA -1.078 -1.20 NA mgO2/hr/g -1.20`` ``#> 9: 9 1 35.1 -0.00245 0.973 NA 5401 5760 11240 11599 7.60 6.70 -0.00245 NA NA -0.00245 mg/L sec 0.12 0.0009 NA NA NA NA -1.057 -1.17 NA mgO2/hr/g -1.17`` ``#> 10: 10 1 35.2 -0.00231 0.984 NA 6061 6420 11900 12259 7.64 6.88 -0.00231 NA NA -0.00231 mg/L sec 0.12 0.0009 NA NA NA NA -0.999 -1.11 NA mgO2/hr/g -1.11`` ``#> 11: 11 1 36.9 -0.00232 0.983 NA 6721 7080 12560 12919 7.74 6.88 -0.00232 NA NA -0.00232 mg/L sec 0.12 0.0009 NA NA NA NA -1.002 -1.11 NA mgO2/hr/g -1.11`` ``#> 12: 12 1 39.5 -0.00240 0.982 NA 7381 7740 13220 13579 7.76 6.91 -0.00240 NA NA -0.00240 mg/L sec 0.12 0.0009 NA NA NA NA -1.038 -1.15 NA mgO2/hr/g -1.15`` ``#> 13: 13 1 40.0 -0.00232 0.981 NA 8041 8400 13880 14239 7.77 6.89 -0.00232 NA NA -0.00232 mg/L sec 0.12 0.0009 NA NA NA NA -1.003 -1.11 NA mgO2/hr/g -1.11`` ``#> 14: 14 1 40.8 -0.00228 0.979 NA 8701 9060 14540 14899 7.69 6.92 -0.00228 NA NA -0.00228 mg/L sec 0.12 0.0009 NA NA NA NA -0.984 -1.09 NA mgO2/hr/g -1.09`` ``#> 15: 15 1 46.5 -0.00255 0.984 NA 9361 9720 15200 15559 7.77 6.83 -0.00255 NA NA -0.00255 mg/L sec 0.12 0.0009 NA NA NA NA -1.100 -1.22 NA mgO2/hr/g -1.22`` ``#> 16: 16 1 43.6 -0.00227 0.982 NA 10021 10380 15860 16219 7.63 6.84 -0.00227 NA NA -0.00227 mg/L sec 0.12 0.0009 NA NA NA NA -0.979 -1.09 NA mgO2/hr/g -1.09`` ``#> 17: 17 1 44.0 -0.00220 0.977 NA 10681 11040 16520 16879 7.73 6.97 -0.00220 NA NA -0.00220 mg/L sec 0.12 0.0009 NA NA NA NA -0.949 -1.05 NA mgO2/hr/g -1.05`` ``#> 18: 18 1 45.5 -0.00220 0.975 NA 11341 11700 17180 17539 7.84 6.97 -0.00220 NA NA -0.00220 mg/L sec 0.12 0.0009 NA NA NA NA -0.949 -1.05 NA mgO2/hr/g -1.05`` ``#> 19: 19 1 45.8 -0.00213 0.978 NA 12001 12360 17840 18199 7.79 7.03 -0.00213 NA NA -0.00213 mg/L sec 0.12 0.0009 NA NA NA NA -0.920 -1.02 NA mgO2/hr/g -1.02`` ``#> 20: 20 1 47.7 -0.00216 0.976 NA 12661 13020 18500 18859 7.83 6.99 -0.00216 NA NA -0.00216 mg/L sec 0.12 0.0009 NA NA NA NA -0.932 -1.04 NA mgO2/hr/g -1.04`` ``#> -----------------------------------------`
 
 ### Extract rates
 
@@ -738,12 +546,7 @@ for full details) and to select the single highest one (`n = 1`). We
 also plot it to check which replicate it comes from, and use `summary`
 with the `export` option to save the full result as a `data.frame`.
 
-``` r
-
-mmr <- select_rate(zeb_sub, method = "highest", n = 1) |>
-  plot(type = "full") |>
-  summary(export = TRUE)
-```
+`mmr`` ``<-`` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``zeb_sub``, method ``=`` ``"highest"``, n ``=`` ``1``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"full"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``export ``=`` ``TRUE``)`
 
 ![Plot of the single highest rate selected as maximum metabolic rate
 from the intermittent-flow replicates, shown in the context of the full
@@ -757,13 +560,7 @@ apply here), experimental data such as respirometer volume and specimen
 mass, and of course the output rate and its units. This is a great way
 of saving the results.
 
-``` r
-
-mmr
-#>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#>    <int> <int>        <num>    <num> <num>  <lgcl> <num>  <num> <num>   <num> <num>  <num>    <num>     <lgcl>        <lgcl>      <num>   <char>    <char>  <num>  <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
-#> 1:     1     1         53.2 -0.00785 0.997      NA   121    480  5960    6319  6.45   3.57 -0.00785         NA            NA   -0.00785     mg/L       sec   0.12 0.0009     NA     NA     NA     NA    -3.39       -3.77          NA   mgO2/hr/g       -3.77
-```
+`mmr`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> <int> <int> <num> <num> <num> <lgcl> <num> <num> <num> <num> <num> <num> <num> <lgcl> <lgcl> <num> <char> <char> <num> <num> <lgcl> <lgcl> <lgcl> <lgcl> <num> <num> <lgcl> <char> <num>`` ``#> 1: 1 1 53.2 -0.00785 0.997 NA 121 480 5960 6319 6.45 3.57 -0.00785 NA NA -0.00785 mg/L sec 0.12 0.0009 NA NA NA NA -3.39 -3.77 NA mgO2/hr/g -3.77`
 
 #### RMR
 
@@ -772,12 +569,7 @@ of the lowest 10th percentile of rates (quite common, but usually in
 studies where there are many more replicates), so this time we pipe the
 result to [`mean()`](https://rdrr.io/r/base/mean.html).
 
-``` r
-
-rmr <- select_rate(zeb_sub, method = "lowest_percentile", n = 0.1) |>
-  plot(type = "full") |>
-  mean()
-```
+`rmr`` ``<-`` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``zeb_sub``, method ``=`` ``"lowest_percentile"``, n ``=`` ``0.1``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"full"``)`` ``|>`` `` `[`mean`](https://rdrr.io/r/base/mean.html)`(``)`
 
 ![Plot of the lowest 10th percentile of rates selected as routine
 metabolic rate from the intermittent-flow replicates, shown in the
@@ -798,18 +590,7 @@ timeseries.](select_rate_files/figure-html/unnamed-chunk-20-1.png)
 
 Again, we can export the full results using `summary`.
 
-``` r
-
-summary(rmr, export = TRUE)
-#> 
-#> # summary.convert_rate # ----------------
-#> Summary of all converted rates:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density   row endrow  time endtime  oxy endoxy     rate adjustment rate.adjusted rate.input oxy.unit time.unit volume   mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output
-#> 1:  19    1         45.8 -0.00213 0.978      NA 12001  12360 17840   18199 7.79   7.03 -0.00213         NA            NA   -0.00213     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.920       -1.02          NA   mgO2/hr/g       -1.02
-#> 2:  20    1         47.7 -0.00216 0.976      NA 12661  13020 18500   18859 7.83   6.99 -0.00216         NA            NA   -0.00216     mg/L       sec   0.12 0.0009   NA NA NA NA   -0.932       -1.04          NA   mgO2/hr/g       -1.04
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``rmr``, export ``=`` ``TRUE``)`` ``#> `` ``#> # summary.convert_rate # ----------------`` ``#> Summary of all converted rates:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate adjustment rate.adjusted rate.input oxy.unit time.unit volume mass area S t P rate.abs rate.m.spec rate.a.spec output.unit rate.output`` ``#> 1: 19 1 45.8 -0.00213 0.978 NA 12001 12360 17840 18199 7.79 7.03 -0.00213 NA NA -0.00213 mg/L sec 0.12 0.0009 NA NA NA NA -0.920 -1.02 NA mgO2/hr/g -1.02`` ``#> 2: 20 1 47.7 -0.00216 0.976 NA 12661 13020 18500 18859 7.83 6.99 -0.00216 NA NA -0.00216 mg/L sec 0.12 0.0009 NA NA NA NA -0.932 -1.04 NA mgO2/hr/g -1.04`` ``#> -----------------------------------------`
 
 ## More examples
 
@@ -845,20 +626,7 @@ results more manageable. Let’s first look at the results of the
 `auto_rate` `"linear"` method on the `sardine.rd` dataset using the
 `overlap` plot type in convert rate.
 
-``` r
-
-sardine.rd |>
-  auto_rate() |>
-  convert_rate(oxy.unit = "%Air",
-               time.unit = "sec",
-               output.unit = "mg/h/kg",
-               volume = 12.3,
-               mass = 0.0477,
-               S = 35,
-               t = 14.8,
-               p = 1.013) |>
-  plot(type = "overlap")
-```
+`sardine.rd`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"%Air"``,`` `` time.unit ``=`` ``"sec"``,`` `` output.unit ``=`` ``"mg/h/kg"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.0477``,`` `` S ``=`` ``35``,`` `` t ``=`` ``14.8``,`` `` p ``=`` ``1.013``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`
 
 ![Overlap plot of all auto_rate linear results for the sardine dataset,
 showing extensive overlap among the detected linear
@@ -868,21 +636,7 @@ Now let’s remove all results that share 100% of their datapoints with at
 least one other. Here we pipe the result to
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
-``` r
-
-sardine.rd |>
-  auto_rate() |>
-  convert_rate(oxy.unit = "%Air",
-               time.unit = "sec",
-               output.unit = "mg/h/kg",
-               volume = 12.3,
-               mass = 0.0477,
-               S = 35,
-               t = 14.8,
-               p = 1.013) |>
-  select_rate(method = "overlap", n = 1) |>
-  plot(type = "overlap")
-```
+`sardine.rd`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"%Air"``,`` `` time.unit ``=`` ``"sec"``,`` `` output.unit ``=`` ``"mg/h/kg"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.0477``,`` `` S ``=`` ``35``,`` `` t ``=`` ``14.8``,`` `` p ``=`` ``1.013``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"overlap"``, n ``=`` ``1``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`
 
 ![Overlap plot after removing results that are completely contained
 within another, showing reduced but still partially overlapping rate
@@ -893,21 +647,7 @@ substantial overlap between them. Therefore, let’s adjust the overlap
 threshold to 0.9, that is regressions which share 90% or more of data
 with at least one other are removed.
 
-``` r
-
-sardine.rd |>
-  auto_rate() |>
-  convert_rate(oxy.unit = "%Air",
-               time.unit = "sec",
-               output.unit = "mg/h/kg",
-               volume = 12.3,
-               mass = 0.0477,
-               S = 35,
-               t = 14.8,
-               p = 1.013) |>
-  select_rate(method = "overlap", n = 0.9) |>
-  plot(type = "overlap")
-```
+`sardine.rd`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"%Air"``,`` `` time.unit ``=`` ``"sec"``,`` `` output.unit ``=`` ``"mg/h/kg"``,`` `` volume ``=`` ``12.3``,`` `` mass ``=`` ``0.0477``,`` `` S ``=`` ``35``,`` `` t ``=`` ``14.8``,`` `` p ``=`` ``1.013``)`` ``|>`` `` `[`select_rate`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"overlap"``, n ``=`` ``0.9``)`` ``|>`` `` `[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``type ``=`` ``"overlap"``)`
 
 ![Overlap plot after removing results sharing 90 percent or more of
 their data with another, showing a small number of distinct

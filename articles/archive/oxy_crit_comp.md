@@ -27,28 +27,7 @@ example code taken from the documentation for `rMR` calculating
 $`P_{crit}`$ for the included `fishMR` dataset, which we compare with
 the results from `respR` using the same data.
 
-``` r
-
-## rMR PCrit Analysis
-
-# load data
-data(fishMR)
-# format time
-fishMR$std.time <- as.POSIXct(fishMR$Date.time,
-                              format = "%d/%m/%Y %I:%M:%S %p")
-# calc pcrit
-pcrit_rMR <-get.pcrit(data = fishMR, 
-                   DO.var.name = "DO.mgL",
-                   Pcrit.below = 2,
-                   time.var = "std.time",
-                   time.interval = 120,
-                   start.time = "2015-07-03 04:45:00",
-                   stop.time = "2015-07-03 08:05:00")
-
-# print results
-pcrit_rMR$SummaryCrit$Pcrit.lm
-pcrit_rMR$SummaryCrit$Pcrit.midpoint
-```
+`## rMR PCrit Analysis`` `` ``# load data`` `[`data`](https://rdrr.io/r/utils/data.html)`(``fishMR``)`` ``# format time`` ``fishMR``$``std.time`` ``<-`` `[`as.POSIXct`](https://rdrr.io/r/base/as.POSIXlt.html)`(``fishMR``$``Date.time``,`` `` format ``=`` ``"%d/%m/%Y %I:%M:%S %p"``)`` ``# calc pcrit`` ``pcrit_rMR`` ``<-``get.pcrit``(``data ``=`` ``fishMR``, `` `` DO.var.name ``=`` ``"DO.mgL"``,`` `` Pcrit.below ``=`` ``2``,`` `` time.var ``=`` ``"std.time"``,`` `` time.interval ``=`` ``120``,`` `` start.time ``=`` ``"2015-07-03 04:45:00"``,`` `` stop.time ``=`` ``"2015-07-03 08:05:00"``)`` `` ``# print results`` ``pcrit_rMR``$``SummaryCrit``$``Pcrit.lm`` ``pcrit_rMR``$``SummaryCrit``$``Pcrit.midpoint`
 
 ![rMR PCrit analysis code
 output](img/oxy_crit_comp/oxy_crit_comp_01.png)
@@ -60,17 +39,7 @@ output](img/oxy_crit_comp/oxy_crit_comp_02.png)
 
 rMR PCrit analysis plot output
 
-``` r
-
-## respR PCrit Analysis
-
-# extract time and oxygen column, and format to numeric time starting at zero
-fishMR_respR <- fishMR[46000:58000, c(2,6)]
-fishMR_respR[,1] <- fishMR_respR[,1] - fishMR_respR[1,1]
-
-# perform respR pcrit analysis
-oxy_crit(fishMR_respR)
-```
+`## respR PCrit Analysis`` `` ``# extract time and oxygen column, and format to numeric time starting at zero`` ``fishMR_respR`` ``<-`` ``fishMR``[``46000``:``58000``, `[`c`](https://rdrr.io/r/base/c.html)`(``2``,``6``)``]`` ``fishMR_respR``[``,``1``]`` ``<-`` ``fishMR_respR``[``,``1``]`` ``-`` ``fishMR_respR``[``1``,``1``]`` `` ``# perform respR pcrit analysis`` `[`oxy_crit`](https://januarharianto.github.io/respR/reference/oxy_crit.md)`(``fishMR_respR``)`
 
 ![respR oxy_crit analysis console
 output](img/oxy_crit_comp/oxy_crit_comp_03.png)

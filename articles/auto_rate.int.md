@@ -138,19 +138,12 @@ volume, weight, and row locations of replicates, flushes etc. can be
 found in the data help file:
 [`?intermittent.rd`](https://januarharianto.github.io/respR/reference/intermittent.rd.md).
 
-``` r
-
-urchin <- intermittent.rd
-urchin[[1]] <- urchin[[1]] / 60 # change time values to minutes
-```
+`urchin`` ``<-`` ``intermittent.rd`` ``urchin``[[``1``]``]`` ``<-`` ``urchin``[[``1``]``]`` ``/`` ``60`` ``# change time values to minutes`
 
 This is what the whole dataset look like. There are three replicates of
 different duration.
 
-``` r
-
-urchin <- inspect(urchin)
-```
+`urchin`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``urchin``)`
 
 ![inspect output plot showing the complete intermittent-flow
 respirometry dataset with three replicates of oxygen over time and a
@@ -169,14 +162,7 @@ all the data in each replicate. This finds the most linear region of a
 dataset (see
 [`vignette("auto_rate")`](https://januarharianto.github.io/respR/articles/auto_rate.md)).
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(1, 2101, 3901),
-              width = 400) |>
-  summary()
-#> auto_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`` `` width ``=`` ``400``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`` ``` #> auto_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate. ``
 
 ![auto_rate.int plot showing the most linear rate extracted from each of
 three replicates using default settings with flush data
@@ -208,16 +194,7 @@ right after the flush, which we can do using `wait`. All of these are
 applied in the default units of `by = "row"`. (We also pass
 `legend = TRUE` so that the phases are labelled on the plots).
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(1, 2101, 3901),
-              wait = 300,
-              measure = c(1500, 1100, 600),
-              width = 400,
-              legend = TRUE) |>
-  summary()
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`` `` wait ``=`` ``300``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1500``, ``1100``, ``600``)``,`` `` width ``=`` ``400``,`` `` legend ``=`` ``TRUE``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![auto_rate.int plot showing the most linear rate in each replicate with
 wait and measure phases highlighted and labelled, excluding flush
@@ -253,18 +230,7 @@ column shows ranking of rates *within* a replicate for the particular
 extracted. You can modify the `n` input to output more than one rate per
 replicate. This is what the analysis looks like if it is changed.
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(1, 2101, 3901),
-              wait = 300,
-              measure = c(1500, 1100, 600),
-              width = 400,
-              n = 3,
-              plot = TRUE,
-              legend = TRUE) |>
-  summary()
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`` `` wait ``=`` ``300``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1500``, ``1100``, ``600``)``,`` `` width ``=`` ``400``,`` `` n ``=`` ``3``,`` `` plot ``=`` ``TRUE``,`` `` legend ``=`` ``TRUE``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![auto_rate.int plot showing the top three ranked linear rates extracted
 from each replicate with wait and measure phases
@@ -308,17 +274,7 @@ active metabolic rates. We can do that using the `method`, `width`, and
 In these examples we use `by = "time"` selection of regions. This is the
 `lowest` rate over a period of 8 minutes from each replicate:
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(0, 35, 65),
-              wait = 5,
-              measure = c(25, 15, 15),
-              method = "lowest",
-              width = 8,
-              by = "time") |>
-  summary()
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``35``, ``65``)``,`` `` wait ``=`` ``5``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``25``, ``15``, ``15``)``,`` `` method ``=`` ``"lowest"``,`` `` width ``=`` ``8``,`` `` by ``=`` ``"time"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![auto_rate.int plot showing the lowest rate over an 8-minute window
 extracted from each of three replicates using time-based
@@ -341,17 +297,7 @@ selection](auto_rate.int_files/figure-html/unnamed-chunk-6-1.png)
 This is the `highest` rate over a period of 8 minutes from each
 replicate:
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(0, 35, 65),
-              wait = 5,
-              measure = c(25, 15, 15),
-              method = "highest",
-              width = 8,
-              by = "time") |>
-  summary()
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``35``, ``65``)``,`` `` wait ``=`` ``5``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``25``, ``15``, ``15``)``,`` `` method ``=`` ``"highest"``,`` `` width ``=`` ``8``,`` `` by ``=`` ``"time"``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
 
 ![auto_rate.int plot showing the highest rate over an 8-minute window
 extracted from each of three replicates using time-based
@@ -401,29 +347,7 @@ specify that replicates cycle at 660 rows, impose a `wait` phase of 2
 minutes, a `measure` phase of 7 minutes to exclude the flush, and use
 the other inputs to extract the lowest rate of 3 minutes duration.
 
-``` r
-
-zeb_all <- zeb_intermittent.rd |>
-
-  # Inspect the data
-  inspect() |>
-
-  # Subset regular replicates from larger dataset
-  subset_data(from = 5840,
-              to = 75139,
-              by = "row",
-              quiet = TRUE) |>
-
-  # Use auto_rate.int to get lowest 3 minute rate from each replicate,
-  # plotting first 3 and last 3 (using 'pos')
-  auto_rate.int(starts = 660,
-                wait = 120,
-                measure = 420,
-                width = 180,
-                method = "lowest",
-                plot = TRUE,
-                pos = c(1:3, 103:105))
-```
+`zeb_all`` ``<-`` ``zeb_intermittent.rd`` ``|>`` `` `` ``# Inspect the data`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`` ``|>`` `` `` ``# Subset regular replicates from larger dataset`` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``5840``,`` `` to ``=`` ``75139``,`` `` by ``=`` ``"row"``,`` `` quiet ``=`` ``TRUE``)`` ``|>`` `` `` ``# Use auto_rate.int to get lowest 3 minute rate from each replicate,`` `` ``# plotting first 3 and last 3 (using 'pos')`` `` `[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``starts ``=`` ``660``,`` `` wait ``=`` ``120``,`` `` measure ``=`` ``420``,`` `` width ``=`` ``180``,`` `` method ``=`` ``"lowest"``,`` `` plot ``=`` ``TRUE``,`` `` pos ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``:``3``, ``103``:``105``)``)`
 
 ![auto_rate.int plot showing the lowest 3-minute rate from the first
 three and last three replicates of a zebrafish intermittent-flow
@@ -442,27 +366,7 @@ Up to 20 results at a time can be plotted using the `pos` input. See
 Each replicate result is saved in the `$summary` element of the output,
 or we can use [`summary()`](https://rdrr.io/r/base/summary.html).
 
-``` r
-
-summary(zeb_all)
-#> 
-#> # summary.auto_rate.int # ---------------
-#> Summary of all rate results:
-#> 
-#>      rep rank intercept_b0 slope_b1   rsq density   row endrow  time endtime  oxy endoxy     rate
-#>   1:   1    1         48.5 -0.00707 0.992      NA   157    336  5996    6175 6.10   4.81 -0.00707
-#>   2:   2    1         33.1 -0.00411 0.957      NA  1021   1200  6860    7039 5.00   4.10 -0.00411
-#>   3:   3    1         47.4 -0.00559 0.966      NA  1681   1860  7520    7699 5.44   4.35 -0.00559
-#>   4:   4    1         38.1 -0.00392 0.977      NA  2202   2381  8041    8220 6.59   5.89 -0.00392
-#>   5:   5    1         36.0 -0.00336 0.958      NA  2967   3146  8806    8985 6.40   5.74 -0.00336
-#>  ---                                                                                             
-#> 101: 101    1        157.0 -0.00207 0.927      NA 66271  66450 72110   72289 7.36   7.02 -0.00207
-#> 102: 102    1        163.1 -0.00214 0.921      NA 67021  67200 72860   73039 7.20   6.85 -0.00214
-#> 103: 103    1        162.9 -0.00212 0.933      NA 67677  67856 73516   73695 7.22   6.82 -0.00212
-#> 104: 104    1        170.0 -0.00220 0.941      NA 68209  68388 74048   74227 7.48   7.10 -0.00220
-#> 105: 105    1        155.5 -0.00198 0.920      NA 68917  69096 74756   74935 7.39   6.99 -0.00198
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``zeb_all``)`` ``#> `` ``#> # summary.auto_rate.int # ---------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: 1 1 48.5 -0.00707 0.992 NA 157 336 5996 6175 6.10 4.81 -0.00707`` ``#> 2: 2 1 33.1 -0.00411 0.957 NA 1021 1200 6860 7039 5.00 4.10 -0.00411`` ``#> 3: 3 1 47.4 -0.00559 0.966 NA 1681 1860 7520 7699 5.44 4.35 -0.00559`` ``#> 4: 4 1 38.1 -0.00392 0.977 NA 2202 2381 8041 8220 6.59 5.89 -0.00392`` ``#> 5: 5 1 36.0 -0.00336 0.958 NA 2967 3146 8806 8985 6.40 5.74 -0.00336`` ``#> --- `` ``#> 101: 101 1 157.0 -0.00207 0.927 NA 66271 66450 72110 72289 7.36 7.02 -0.00207`` ``#> 102: 102 1 163.1 -0.00214 0.921 NA 67021 67200 72860 73039 7.20 6.85 -0.00214`` ``#> 103: 103 1 162.9 -0.00212 0.933 NA 67677 67856 73516 73695 7.22 6.82 -0.00212`` ``#> 104: 104 1 170.0 -0.00220 0.941 NA 68209 68388 74048 74227 7.48 7.10 -0.00220`` ``#> 105: 105 1 155.5 -0.00198 0.920 NA 68917 69096 74756 74935 7.39 6.99 -0.00198`` ``#> -----------------------------------------`
 
 This object is now ready to be passed to
 [`adjust_rate()`](https://januarharianto.github.io/respR/reference/adjust_rate.md)
@@ -485,10 +389,7 @@ input, either in the main function call or when calling
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) on output
 objects.
 
-``` r
-
-plot(zeb_all, pos = 50:69)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``zeb_all``, pos ``=`` ``50``:``69``)`
 
 ![auto_rate.int plot showing rate results for replicates 50 to 69 of the
 zebrafish intermittent-flow
@@ -509,17 +410,7 @@ individually with the rate region highlighted. The rate data is the
 yellow points, the red shaded region is the `wait` phase, and the green
 shaded region the `measure` phase.
 
-``` r
-
-urch <- auto_rate.int(urchin,
-                      starts = c(1, 2101, 3901),
-                      wait = 300,
-                      measure = c(1500, 1100, 600),
-                      width = 400,
-                      plot = TRUE,
-                      type = "rep",
-                      legend = TRUE)
-```
+`urch`` ``<-`` `[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`` `` wait ``=`` ``300``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1500``, ``1100``, ``600``)``,`` `` width ``=`` ``400``,`` `` plot ``=`` ``TRUE``,`` `` type ``=`` ``"rep"``,`` `` legend ``=`` ``TRUE``)`
 
 ![auto_rate.int replicate-level plot showing each replicate individually
 with rate region highlighted and wait and measure phases shaded and
@@ -530,16 +421,7 @@ labelled](auto_rate.int_files/figure-html/unnamed-chunk-11-1.png)
 Entering `type = "full"` will show each replicate rate highlighted in
 the context of the entire dataset.
 
-``` r
-
-auto_rate.int(urchin,
-              starts = c(1, 2101, 3901),
-              wait = 300,
-              measure = c(1500, 1100, 600),
-              width = 400,
-              plot = TRUE,
-              type = "full")
-```
+[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin``,`` `` starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`` `` wait ``=`` ``300``,`` `` measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1500``, ``1100``, ``600``)``,`` `` width ``=`` ``400``,`` `` plot ``=`` ``TRUE``,`` `` type ``=`` ``"full"``)`
 
 ![auto_rate.int full dataset plot showing each replicate rate
 highlighted in the context of the entire urchin oxygen
@@ -547,10 +429,7 @@ timeseries](auto_rate.int_files/figure-html/unnamed-chunk-12-1.png)
 
 Note this may be of limited use when the dataset is large.
 
-``` r
-
-plot(zeb_all, type = "full", pos = 50)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``zeb_all``, type ``=`` ``"full"``, pos ``=`` ``50``)`
 
 ![auto_rate.int full dataset plot showing replicate 50 rate result
 highlighted in the context of the entire zebrafish
@@ -563,10 +442,7 @@ the output) for each individual row of the summary table can be plotted
 using `type = "ar"` and the `pos` input. Note these plots show only the
 `measure` phase of the data and the rate result from within it.
 
-``` r
-
-plot(zeb_all, type = "ar", pos = 50)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``zeb_all``, type ``=`` ``"ar"``, pos ``=`` ``50``)`
 
 ![auto_rate diagnostic plot for replicate 50 showing the auto_rate
 result with rolling rate, residuals, and fitted rate within the measure
@@ -592,29 +468,7 @@ S3 methods `print`, `summary`, and `mean`
 This simply prints a single summary row rate result to the console, by
 default the first one. The `pos` input can be used to print others.
 
-``` r
-
-print(zeb_all)
-#> 
-#> # print.auto_rate.int # -----------------
-#> 
-#> Replicate 1 of 105, Rank 1 of 1:
-#> Rate: -0.00707 
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-print(zeb_all, pos = 50)
-#> 
-#> # print.auto_rate.int # -----------------
-#> 
-#> Replicate 50 of 105, Rank 1 of 1:
-#> Rate: -0.00179 
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``zeb_all``)`` ``#> `` ``#> # print.auto_rate.int # -----------------`` ``#> `` ``#> Replicate 1 of 105, Rank 1 of 1:`` ``#> Rate: -0.00707 `` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`` `[`print`](https://rdrr.io/r/base/print.html)`(``zeb_all``, pos ``=`` ``50``)`` ``#> `` ``#> # print.auto_rate.int # -----------------`` ``#> `` ``#> Replicate 50 of 105, Rank 1 of 1:`` ``#> Rate: -0.00179 `` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 ### `summary`
 
@@ -622,59 +476,14 @@ This prints the summary table to the console which contains linear model
 coefficients and other metadata for each replicate rate. The `pos` input
 can be used to select which replicates (`$rep` column) to include.
 
-``` r
-
-summary(zeb_all)
-#> 
-#> # summary.auto_rate.int # ---------------
-#> Summary of all rate results:
-#> 
-#>      rep rank intercept_b0 slope_b1   rsq density   row endrow  time endtime  oxy endoxy     rate
-#>   1:   1    1         48.5 -0.00707 0.992      NA   157    336  5996    6175 6.10   4.81 -0.00707
-#>   2:   2    1         33.1 -0.00411 0.957      NA  1021   1200  6860    7039 5.00   4.10 -0.00411
-#>   3:   3    1         47.4 -0.00559 0.966      NA  1681   1860  7520    7699 5.44   4.35 -0.00559
-#>   4:   4    1         38.1 -0.00392 0.977      NA  2202   2381  8041    8220 6.59   5.89 -0.00392
-#>   5:   5    1         36.0 -0.00336 0.958      NA  2967   3146  8806    8985 6.40   5.74 -0.00336
-#>  ---                                                                                             
-#> 101: 101    1        157.0 -0.00207 0.927      NA 66271  66450 72110   72289 7.36   7.02 -0.00207
-#> 102: 102    1        163.1 -0.00214 0.921      NA 67021  67200 72860   73039 7.20   6.85 -0.00214
-#> 103: 103    1        162.9 -0.00212 0.933      NA 67677  67856 73516   73695 7.22   6.82 -0.00212
-#> 104: 104    1        170.0 -0.00220 0.941      NA 68209  68388 74048   74227 7.48   7.10 -0.00220
-#> 105: 105    1        155.5 -0.00198 0.920      NA 68917  69096 74756   74935 7.39   6.99 -0.00198
-#> -----------------------------------------
-summary(zeb_all, pos = 1:4)
-#> 
-#> # summary.auto_rate.int # ---------------
-#> Summary of results from entered 'pos' row(s):
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq density  row endrow time endtime  oxy endoxy     rate
-#> 1:   1    1         48.5 -0.00707 0.992      NA  157    336 5996    6175 6.10   4.81 -0.00707
-#> 2:   2    1         33.1 -0.00411 0.957      NA 1021   1200 6860    7039 5.00   4.10 -0.00411
-#> 3:   3    1         47.4 -0.00559 0.966      NA 1681   1860 7520    7699 5.44   4.35 -0.00559
-#> 4:   4    1         38.1 -0.00392 0.977      NA 2202   2381 8041    8220 6.59   5.89 -0.00392
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``zeb_all``)`` ``#> `` ``#> # summary.auto_rate.int # ---------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: 1 1 48.5 -0.00707 0.992 NA 157 336 5996 6175 6.10 4.81 -0.00707`` ``#> 2: 2 1 33.1 -0.00411 0.957 NA 1021 1200 6860 7039 5.00 4.10 -0.00411`` ``#> 3: 3 1 47.4 -0.00559 0.966 NA 1681 1860 7520 7699 5.44 4.35 -0.00559`` ``#> 4: 4 1 38.1 -0.00392 0.977 NA 2202 2381 8041 8220 6.59 5.89 -0.00392`` ``#> 5: 5 1 36.0 -0.00336 0.958 NA 2967 3146 8806 8985 6.40 5.74 -0.00336`` ``#> --- `` ``#> 101: 101 1 157.0 -0.00207 0.927 NA 66271 66450 72110 72289 7.36 7.02 -0.00207`` ``#> 102: 102 1 163.1 -0.00214 0.921 NA 67021 67200 72860 73039 7.20 6.85 -0.00214`` ``#> 103: 103 1 162.9 -0.00212 0.933 NA 67677 67856 73516 73695 7.22 6.82 -0.00212`` ``#> 104: 104 1 170.0 -0.00220 0.941 NA 68209 68388 74048 74227 7.48 7.10 -0.00220`` ``#> 105: 105 1 155.5 -0.00198 0.920 NA 68917 69096 74756 74935 7.39 6.99 -0.00198`` ``#> -----------------------------------------`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``zeb_all``, pos ``=`` ``1``:``4``)`` ``#> `` ``#> # summary.auto_rate.int # ---------------`` ``#> Summary of results from entered 'pos' row(s):`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: 1 1 48.5 -0.00707 0.992 NA 157 336 5996 6175 6.10 4.81 -0.00707`` ``#> 2: 2 1 33.1 -0.00411 0.957 NA 1021 1200 6860 7039 5.00 4.10 -0.00411`` ``#> 3: 3 1 47.4 -0.00559 0.966 NA 1681 1860 7520 7699 5.44 4.35 -0.00559`` ``#> 4: 4 1 38.1 -0.00392 0.977 NA 2202 2381 8041 8220 6.59 5.89 -0.00392`` ``#> -----------------------------------------`
 
 `export = TRUE` can be used to export the summary table as a data frame,
 or those rows selected using `pos`
 
-``` r
+`zeb_exp`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``zeb_all``, `` `` pos ``=`` ``1``:``4``, `` `` export ``=`` ``TRUE``)`
 
-zeb_exp <- summary(zeb_all, 
-                   pos = 1:4, 
-                   export = TRUE)
-```
-
-``` r
-
-zeb_exp
-#>      rep  rank intercept_b0 slope_b1   rsq density   row endrow  time endtime   oxy endoxy     rate
-#>    <num> <int>        <num>    <num> <num>  <lgcl> <num>  <num> <num>   <num> <num>  <num>    <num>
-#> 1:     1     1         48.5 -0.00707 0.992      NA   157    336  5996    6175  6.10   4.81 -0.00707
-#> 2:     2     1         33.1 -0.00411 0.957      NA  1021   1200  6860    7039  5.00   4.10 -0.00411
-#> 3:     3     1         47.4 -0.00559 0.966      NA  1681   1860  7520    7699  5.44   4.35 -0.00559
-#> 4:     4     1         38.1 -0.00392 0.977      NA  2202   2381  8041    8220  6.59   5.89 -0.00392
-```
+`zeb_exp`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> <num> <int> <num> <num> <num> <lgcl> <num> <num> <num> <num> <num> <num> <num>`` ``#> 1: 1 1 48.5 -0.00707 0.992 NA 157 336 5996 6175 6.10 4.81 -0.00707`` ``#> 2: 2 1 33.1 -0.00411 0.957 NA 1021 1200 6860 7039 5.00 4.10 -0.00411`` ``#> 3: 3 1 47.4 -0.00559 0.966 NA 1681 1860 7520 7699 5.44 4.35 -0.00559`` ``#> 4: 4 1 38.1 -0.00392 0.977 NA 2202 2381 8041 8220 6.59 5.89 -0.00392`
 
 ### `mean`
 
@@ -682,19 +491,7 @@ This averages all replicate rates in the `$rate` column, or those
 selected using `pos`. The result can be saved as a value by using
 `export = TRUE`.
 
-``` r
-
-zeb_mean <- mean(zeb_all, pos = 1:4, export = TRUE)
-#> 
-#> # mean.auto_rate.int # ------------------
-#> Mean of rate results from entered 'pos' rows:
-#> 
-#> Mean of 4 rates:
-#> [1] -0.00517
-#> -----------------------------------------
-zeb_mean
-#> [1] -0.00517
-```
+`zeb_mean`` ``<-`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``zeb_all``, pos ``=`` ``1``:``4``, export ``=`` ``TRUE``)`` ``#> `` ``#> # mean.auto_rate.int # ------------------`` ``#> Mean of rate results from entered 'pos' rows:`` ``#> `` ``#> Mean of 4 rates:`` ``#> [1] -0.00517`` ``#> -----------------------------------------`` ``zeb_mean`` ``#> [1] -0.00517`
 
 This could be passed as a numeric value to later functions such as
 [`convert_rate()`](https://januarharianto.github.io/respR/reference/convert_rate.md),

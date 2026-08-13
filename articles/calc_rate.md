@@ -17,10 +17,7 @@ rate across an entire dataset as entered. The data used here is the
 `sardine.rd` dataset, but the time data has been converted to minutes to
 demonstrate the different x-axis values.
 
-``` r
-
-cr <- calc_rate(sard)
-```
+`cr`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``sard``)`
 
 ![Four-panel plot of calc_rate results across the entire sardine dataset
 showing the time series with fitted region highlighted, the close-up of
@@ -35,13 +32,7 @@ exact values do not occur in the time data. If either of the values lie
 outside the actual time data range it will use the first or last value
 instead.
 
-``` r
-
-cr <- calc_rate(sard,
-                from = 20,
-                to = 80,
-                by = "time")
-```
+`cr`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``sard``,`` `` from ``=`` ``20``,`` `` to ``=`` ``80``,`` `` by ``=`` ``"time"``)`
 
 ![Four-panel plot of calc_rate results for the time range 20 to 80
 minutes showing the full time series with the selected region
@@ -52,13 +43,7 @@ diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-2-1.png)
 
 Similarly the rate region can be specified `by = "row"`.
 
-``` r
-
-cr <- calc_rate(sard,
-                from = 2000,
-                to = 6000,
-                by = "row")
-```
+`cr`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``sard``,`` `` from ``=`` ``2000``,`` `` to ``=`` ``6000``,`` `` by ``=`` ``"row"``)`
 
 ![Four-panel plot of calc_rate results for the row range 2000 to 6000
 showing the full time series with the selected region highlighted, the
@@ -71,13 +56,7 @@ Lastly, the rate region can be specified `by = "oxygen"`. This option
 finds the first occurrence of the `from` value (or the closest matching
 value), and the last occurrence of the `to` value.
 
-``` r
-
-cr <- calc_rate(sard,
-                from = 94,
-                to = 92,
-                by = "oxygen")
-```
+`cr`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``sard``,`` `` from ``=`` ``94``,`` `` to ``=`` ``92``,`` `` by ``=`` ``"oxygen"``)`
 
 ![Four-panel plot of calc_rate results for the oxygen range 94 to 92
 percent air saturation showing the full time series with the selected
@@ -90,37 +69,14 @@ plots.](calc_rate_files/figure-html/unnamed-chunk-4-1.png)
 `calc_rate` can be used to extract multiple rates by entering vectors of
 paired values as `from` and `to` in any of these metrics.
 
-``` r
-
-cr <- calc_rate(sard,
-                from = c(10, 20, 30, 40, 50, 60, 70),
-                to = c(20, 30, 40, 50, 60, 70, 80),
-                by = "time")
-```
+`cr`` ``<-`` `[`calc_rate`](https://januarharianto.github.io/respR/reference/calc_rate.md)`(``sard``,`` `` from ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``10``, ``20``, ``30``, ``40``, ``50``, ``60``, ``70``)``,`` `` to ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``20``, ``30``, ``40``, ``50``, ``60``, ``70``, ``80``)``,`` `` by ``=`` ``"time"``)`
 
 ![Four-panel plot of calc_rate results showing the first of seven
 sequential time-window rates with the full time series, the close-up of
 the fitted region with linear regression, and residual and Q-Q
 diagnostic plots.](calc_rate_files/figure-html/unnamed-chunk-5-1.png)
 
-``` r
-
-
-summary(cr)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt    rate
-#> 1:  NA    1         95.7  -0.0593 0.799  601   1201   10      20 95.1   94.4    -0.07 -0.0593
-#> 2:  NA    2         95.8  -0.0643 0.838 1201   1801   20      30 94.4   93.8    -0.06 -0.0643
-#> 3:  NA    3         95.2  -0.0456 0.727 1801   2401   30      40 93.8   93.4    -0.04 -0.0456
-#> 4:  NA    4         94.9  -0.0375 0.649 2401   3001   40      50 93.4   93.1    -0.03 -0.0375
-#> 5:  NA    5         95.0  -0.0399 0.691 3001   3601   50      60 93.1   92.6    -0.05 -0.0399
-#> 6:  NA    6         95.3  -0.0450 0.744 3601   4201   60      70 92.6   92.2    -0.04 -0.0450
-#> 7:  NA    7         95.3  -0.0445 0.745 4201   4801   70      80 92.2   91.8    -0.04 -0.0445
-#> -----------------------------------------
-```
+` `[`summary`](https://rdrr.io/r/base/summary.html)`(``cr``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 95.7 -0.0593 0.799 601 1201 10 20 95.1 94.4 -0.07 -0.0593`` ``#> 2: NA 2 95.8 -0.0643 0.838 1201 1801 20 30 94.4 93.8 -0.06 -0.0643`` ``#> 3: NA 3 95.2 -0.0456 0.727 1801 2401 30 40 93.8 93.4 -0.04 -0.0456`` ``#> 4: NA 4 94.9 -0.0375 0.649 2401 3001 40 50 93.4 93.1 -0.03 -0.0375`` ``#> 5: NA 5 95.0 -0.0399 0.691 3001 3601 50 60 93.1 92.6 -0.05 -0.0399`` ``#> 6: NA 6 95.3 -0.0450 0.744 3601 4201 60 70 92.6 92.2 -0.04 -0.0450`` ``#> 7: NA 7 95.3 -0.0445 0.745 4201 4801 70 80 92.2 91.8 -0.04 -0.0445`` ``#> -----------------------------------------`
 
 ## S3 generic methods
 
@@ -133,27 +89,7 @@ This simply prints the result to the console. If there are multiple
 rates it will print the first one. The `pos` input can be used to print
 others.
 
-``` r
-
-print(cr)
-#> 
-#> # print.calc_rate # ---------------------
-#> Rank 1 of 7 rates:
-#> Rate: -0.0593 
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-print(cr, pos = 2)
-#> 
-#> # print.calc_rate # ---------------------
-#> Rank 2 of 7 rates:
-#> Rate: -0.0643 
-#> 
-#> To see other results use 'pos' input. 
-#> To see full results use summary().
-#> -----------------------------------------
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``cr``)`` ``#> `` ``#> # print.calc_rate # ---------------------`` ``#> Rank 1 of 7 rates:`` ``#> Rate: -0.0593 `` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`` `[`print`](https://rdrr.io/r/base/print.html)`(``cr``, pos ``=`` ``2``)`` ``#> `` ``#> # print.calc_rate # ---------------------`` ``#> Rank 2 of 7 rates:`` ``#> Rate: -0.0643 `` ``#> `` ``#> To see other results use 'pos' input. `` ``#> To see full results use summary().`` ``#> -----------------------------------------`
 
 ### `summary`
 
@@ -163,50 +99,11 @@ rates the `pos` input can be used to select which to print. The `export`
 input can be used to export the `pos` selected rows as a dataframe, or
 the entire table if this is left `NULL`.
 
-``` r
+[`summary`](https://rdrr.io/r/base/summary.html)`(``cr``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of all rate results:`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 95.7 -0.0593 0.799 601 1201 10 20 95.1 94.4 -0.07 -0.0593`` ``#> 2: NA 2 95.8 -0.0643 0.838 1201 1801 20 30 94.4 93.8 -0.06 -0.0643`` ``#> 3: NA 3 95.2 -0.0456 0.727 1801 2401 30 40 93.8 93.4 -0.04 -0.0456`` ``#> 4: NA 4 94.9 -0.0375 0.649 2401 3001 40 50 93.4 93.1 -0.03 -0.0375`` ``#> 5: NA 5 95.0 -0.0399 0.691 3001 3601 50 60 93.1 92.6 -0.05 -0.0399`` ``#> 6: NA 6 95.3 -0.0450 0.744 3601 4201 60 70 92.6 92.2 -0.04 -0.0450`` ``#> 7: NA 7 95.3 -0.0445 0.745 4201 4801 70 80 92.2 91.8 -0.04 -0.0445`` ``#> -----------------------------------------`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``cr``, pos ``=`` ``1``:``4``)`` ``#> `` ``#> # summary.calc_rate # -------------------`` ``#> Summary of rate results from entered 'pos' rank(s):`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> 1: NA 1 95.7 -0.0593 0.799 601 1201 10 20 95.1 94.4 -0.07 -0.0593`` ``#> 2: NA 2 95.8 -0.0643 0.838 1201 1801 20 30 94.4 93.8 -0.06 -0.0643`` ``#> 3: NA 3 95.2 -0.0456 0.727 1801 2401 30 40 93.8 93.4 -0.04 -0.0456`` ``#> 4: NA 4 94.9 -0.0375 0.649 2401 3001 40 50 93.4 93.1 -0.03 -0.0375`` ``#> -----------------------------------------`
 
-summary(cr)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of all rate results:
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt    rate
-#> 1:  NA    1         95.7  -0.0593 0.799  601   1201   10      20 95.1   94.4    -0.07 -0.0593
-#> 2:  NA    2         95.8  -0.0643 0.838 1201   1801   20      30 94.4   93.8    -0.06 -0.0643
-#> 3:  NA    3         95.2  -0.0456 0.727 1801   2401   30      40 93.8   93.4    -0.04 -0.0456
-#> 4:  NA    4         94.9  -0.0375 0.649 2401   3001   40      50 93.4   93.1    -0.03 -0.0375
-#> 5:  NA    5         95.0  -0.0399 0.691 3001   3601   50      60 93.1   92.6    -0.05 -0.0399
-#> 6:  NA    6         95.3  -0.0450 0.744 3601   4201   60      70 92.6   92.2    -0.04 -0.0450
-#> 7:  NA    7         95.3  -0.0445 0.745 4201   4801   70      80 92.2   91.8    -0.04 -0.0445
-#> -----------------------------------------
-summary(cr, pos = 1:4)
-#> 
-#> # summary.calc_rate # -------------------
-#> Summary of rate results from entered 'pos' rank(s):
-#> 
-#>    rep rank intercept_b0 slope_b1   rsq  row endrow time endtime  oxy endoxy rate.2pt    rate
-#> 1:  NA    1         95.7  -0.0593 0.799  601   1201   10      20 95.1   94.4    -0.07 -0.0593
-#> 2:  NA    2         95.8  -0.0643 0.838 1201   1801   20      30 94.4   93.8    -0.06 -0.0643
-#> 3:  NA    3         95.2  -0.0456 0.727 1801   2401   30      40 93.8   93.4    -0.04 -0.0456
-#> 4:  NA    4         94.9  -0.0375 0.649 2401   3001   40      50 93.4   93.1    -0.03 -0.0375
-#> -----------------------------------------
-```
+`cr_exp`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``cr``, pos ``=`` ``1``:``4``, export ``=`` ``TRUE``)`
 
-``` r
-
-cr_exp <- summary(cr, pos = 1:4, export = TRUE)
-```
-
-``` r
-
-cr_exp
-#>       rep  rank intercept_b0 slope_b1   rsq   row endrow  time endtime   oxy endoxy rate.2pt    rate
-#>    <lgcl> <int>        <num>    <num> <num> <int>  <int> <num>   <num> <num>  <num>    <num>   <num>
-#> 1:     NA     1         95.7  -0.0593 0.799   601   1201    10      20  95.1   94.4    -0.07 -0.0593
-#> 2:     NA     2         95.8  -0.0643 0.838  1201   1801    20      30  94.4   93.8    -0.06 -0.0643
-#> 3:     NA     3         95.2  -0.0456 0.727  1801   2401    30      40  93.8   93.4    -0.04 -0.0456
-#> 4:     NA     4         94.9  -0.0375 0.649  2401   3001    40      50  93.4   93.1    -0.03 -0.0375
-```
+`cr_exp`` ``#> rep rank intercept_b0 slope_b1 rsq row endrow time endtime oxy endoxy rate.2pt rate`` ``#> <lgcl> <int> <num> <num> <num> <int> <int> <num> <num> <num> <num> <num> <num>`` ``#> 1: NA 1 95.7 -0.0593 0.799 601 1201 10 20 95.1 94.4 -0.07 -0.0593`` ``#> 2: NA 2 95.8 -0.0643 0.838 1201 1801 20 30 94.4 93.8 -0.06 -0.0643`` ``#> 3: NA 3 95.2 -0.0456 0.727 1801 2401 30 40 93.8 93.4 -0.04 -0.0456`` ``#> 4: NA 4 94.9 -0.0375 0.649 2401 3001 40 50 93.4 93.1 -0.03 -0.0375`
 
 ### `mean`
 
@@ -214,19 +111,7 @@ This averages all the values in the `$rate` column, or those selected
 using `pos`. The result can be saved as a value by using
 `export = TRUE`.
 
-``` r
-
-cr_mean <- mean(cr, pos = 1:4, export = TRUE)
-#> 
-#> # mean.calc_rate # ----------------------
-#> Mean of rate results from entered 'pos' ranks:
-#> 
-#> Mean of 4 output rates:
-#> [1] -0.0517
-#> -----------------------------------------
-cr_mean
-#> [1] -0.0517
-```
+`cr_mean`` ``<-`` `[`mean`](https://rdrr.io/r/base/mean.html)`(``cr``, pos ``=`` ``1``:``4``, export ``=`` ``TRUE``)`` ``#> `` ``#> # mean.calc_rate # ----------------------`` ``#> Mean of rate results from entered 'pos' ranks:`` ``#> `` ``#> Mean of 4 output rates:`` ``#> [1] -0.0517`` ``#> -----------------------------------------`` ``cr_mean`` ``#> [1] -0.0517`
 
 ### `plot`
 
@@ -240,11 +125,7 @@ Here we plot result 2, panel 2, hide the equation legend, rotate the
 axis labels, give the left axis more space, and increase the space from
 axis labels to axis ticks.
 
-``` r
-
-plot(cr, pos = 2, panel = 2, legend = FALSE, quiet = TRUE,
-     las = 1, mai = c(0.3, 0.4, 0.35, 0.15), mgp = c(0, 0.5, 0))
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``cr``, pos ``=`` ``2``, panel ``=`` ``2``, legend ``=`` ``FALSE``, quiet ``=`` ``TRUE``,`` `` las ``=`` ``1``, mai ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0.3``, ``0.4``, ``0.35``, ``0.15``)``, mgp ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``, ``0.5``, ``0``)``)`
 
 ![Single-panel close-up plot of calc_rate result 2 showing the oxygen
 time series subset with the linear regression fit, with rotated axis

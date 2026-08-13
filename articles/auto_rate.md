@@ -259,15 +259,7 @@ Below, we show the differences in the shape of the rolling regressions
 when using the default `width = 0.2` versus a value of `0.6` with the
 dataset `sardine.rd`:
 
-``` r
-
-# Perform linear detection; default width when not specified is 0.2:
-normx <- auto_rate(sardine.rd)
-#> auto_rate: Applying default 'width' of 0.2
-
-# Perform linear detection using manual width of 0.6:
-overx <- auto_rate(sardine.rd, width = 0.6)
-```
+`# Perform linear detection; default width when not specified is 0.2:`` ``normx`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sardine.rd``)`` ``#> auto_rate: Applying default 'width' of 0.2`` `` ``# Perform linear detection using manual width of 0.6:`` ``overx`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sardine.rd``, width ``=`` ``0.6``)`
 
 ![Side-by-side comparison of rolling rate plots showing overfitting.
 Left panel uses default width of 0.2 showing a clear pattern of rate
@@ -300,15 +292,7 @@ under the other methods.
 Here we’ll compare the default `width = 0.2` to a lower value of 5% of
 the data, `width = 0.05`.
 
-``` r
-
-# Perform linear detection; default width when not specified is 0.2:
-normx <- auto_rate(sardine.rd)
-#> auto_rate: Applying default 'width' of 0.2
-
-# Perform linear detection using manual width of 0.05:
-underx <- auto_rate(sardine.rd, width = 0.05)
-```
+`# Perform linear detection; default width when not specified is 0.2:`` ``normx`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sardine.rd``)`` ``#> auto_rate: Applying default 'width' of 0.2`` `` ``# Perform linear detection using manual width of 0.05:`` ``underx`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sardine.rd``, width ``=`` ``0.05``)`
 
 ![Side-by-side comparison of rolling rate plots showing underfitting.
 Left panel uses default width of 0.2 with moderate variability. Right
@@ -348,11 +332,7 @@ rates from respirometry data.
 By default, `auto_rate` identifies the *most linear* regions of the data
 (i.e. `method = "linear"`):
 
-``` r
-
-sard_ar <- auto_rate(sardine.rd)
-#> auto_rate: Applying default 'width' of 0.2
-```
+`sard_ar`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sardine.rd``)`` ``#> auto_rate: Applying default 'width' of 0.2`
 
 ![Six-panel auto_rate output for sardine data using the linear method.
 Panels show the full timeseries with the detected linear region
@@ -401,27 +381,9 @@ region, and subsequent rows progressively lower rank. By default, this
 highest ranked result is returned when `print` or `plot` are used, but
 other results can be output using the `pos` input with those functions.
 
-``` r
+[`print`](https://rdrr.io/r/base/print.html)`(``sard_ar``, pos ``=`` ``2``)`` ``#> `` ``#> # print.auto_rate # ---------------------`` ``#> Data extracted by 'row' using 'width' of 1502.`` ``#> Rates computed using 'linear' method.39 linear regions detected in the kernel density estimate.`` ``#> To see all results use summary().`` ``#> `` ``#> Position 2 of 39 :`` ``#> Rate: -0.000688 `` ``#> R.sq: 0.986 `` ``#> Rows: 2242 to 5543 `` ``#> Time: 2241 to 5542 `` ``#> -----------------------------------------`
 
-print(sard_ar, pos = 2)
-#> 
-#> # print.auto_rate # ---------------------
-#> Data extracted by 'row' using 'width' of 1502.
-#> Rates computed using 'linear' method.39 linear regions detected in the kernel density estimate.
-#> To see all results use summary().
-#> 
-#> Position 2 of 39 :
-#> Rate: -0.000688 
-#> R.sq: 0.986 
-#> Rows: 2242 to 5543 
-#> Time: 2241 to 5542 
-#> -----------------------------------------
-```
-
-``` r
-
-plot(sard_ar, pos = 2)
-```
+[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``sard_ar``, pos ``=`` ``2``)`
 
 ![Six-panel auto_rate plot for the second-ranked linear region detected
 in the sardine data, showing the timeseries with the highlighted rate
@@ -435,29 +397,7 @@ this case the function has identified a total of 46 linear regions. They
 can be viewed by calling
 [`summary()`](https://rdrr.io/r/base/summary.html)
 
-``` r
-
-summary(sard_ar)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of Results by Kernel Density Rank ===
-#>     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate
-#>  1:  NA    1         94.9 -0.000661 0.982   19069 3659   6736 3658    6735 92.6   90.4 -0.000661
-#>  2:  NA    2         95.1 -0.000688 0.986   17461 2242   5543 2241    5542 93.7   91.2 -0.000688
-#>  3:  NA    3         94.9 -0.000662 0.987   15969 3628   7164 3627    7163 92.5   90.2 -0.000662
-#>  4:  NA    4         95.1 -0.000708 0.979    9204 1578   4236 1577    4235 94.2   92.2 -0.000708
-#>  5:  NA    5         95.1 -0.000706 0.971    7555 1947   4236 1946    4235 93.8   92.2 -0.000706
-#> ---                                                                                             
-#> 35:  NA   35         95.5 -0.000894 0.938     421 1063   2394 1062    2393 94.5   93.5 -0.000894
-#> 36:  NA   36         95.5 -0.000894 0.937     388 1066   2393 1065    2392 94.7   93.4 -0.000894
-#> 37:  NA   37         95.3 -0.000803 0.929     375 1315   2641 1314    2640 94.3   93.3 -0.000803
-#> 38:  NA   38         95.3 -0.000803 0.929     369 1317   2641 1316    2640 94.3   93.3 -0.000803
-#> 39:  NA   39         95.3 -0.000803 0.928     322 1325   2635 1324    2634 94.2   93.3 -0.000803
-#> 
-#> Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``sard_ar``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of Results by Kernel Density Rank ===`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 94.9 -0.000661 0.982 19069 3659 6736 3658 6735 92.6 90.4 -0.000661`` ``#> 2: NA 2 95.1 -0.000688 0.986 17461 2242 5543 2241 5542 93.7 91.2 -0.000688`` ``#> 3: NA 3 94.9 -0.000662 0.987 15969 3628 7164 3627 7163 92.5 90.2 -0.000662`` ``#> 4: NA 4 95.1 -0.000708 0.979 9204 1578 4236 1577 4235 94.2 92.2 -0.000708`` ``#> 5: NA 5 95.1 -0.000706 0.971 7555 1947 4236 1946 4235 93.8 92.2 -0.000706`` ``#> --- `` ``#> 35: NA 35 95.5 -0.000894 0.938 421 1063 2394 1062 2393 94.5 93.5 -0.000894`` ``#> 36: NA 36 95.5 -0.000894 0.937 388 1066 2393 1065 2392 94.7 93.4 -0.000894`` ``#> 37: NA 37 95.3 -0.000803 0.929 375 1315 2641 1314 2640 94.3 93.3 -0.000803`` ``#> 38: NA 38 95.3 -0.000803 0.929 369 1317 2641 1316 2640 94.3 93.3 -0.000803`` ``#> 39: NA 39 95.3 -0.000803 0.928 322 1325 2635 1324 2634 94.2 93.3 -0.000803`` ``#> `` ``#> Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row `` ``#> -----------------------------------------`
 
 In this case the first rate result looks good: it has a high r-squared,
 is sustained over a duration of 50 minutes, and the rate value is
@@ -484,29 +424,7 @@ for discussion of r-squared values in metabolic rate measurements.
 The `pos` input can also be used in `summary` to view particular row
 ranges. We’ll look at the first 10.
 
-``` r
-
-summary(sard_ar, pos = 1:10)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of results from entered 'pos' rank(s) ===
-#> 
-#>     rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate
-#>  1:  NA    1         94.9 -0.000661 0.982   19069 3659   6736 3658    6735 92.6   90.4 -0.000661
-#>  2:  NA    2         95.1 -0.000688 0.986   17461 2242   5543 2241    5542 93.7   91.2 -0.000688
-#>  3:  NA    3         94.9 -0.000662 0.987   15969 3628   7164 3627    7163 92.5   90.2 -0.000662
-#>  4:  NA    4         95.1 -0.000708 0.979    9204 1578   4236 1577    4235 94.2   92.2 -0.000708
-#>  5:  NA    5         95.1 -0.000706 0.971    7555 1947   4236 1946    4235 93.8   92.2 -0.000706
-#>  6:  NA    6         95.7 -0.001047 0.961    6862  601   1969  600    1968 95.1   93.7 -0.001047
-#>  7:  NA    7         95.1 -0.000709 0.978    6395 1578   4196 1577    4195 94.2   92.2 -0.000709
-#>  8:  NA    8         94.8 -0.000628 0.929    6285 5050   6613 5049    6612 91.4   90.5 -0.000628
-#>  9:  NA    9         94.7 -0.000619 0.912    2609 5123   6507 5122    6506 91.5   90.6 -0.000619
-#> 10:  NA   10         95.7 -0.001043 0.961    1917  596   1981  595    1980 95.0   93.6 -0.001043
-#> 
-#> Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``sard_ar``, pos ``=`` ``1``:``10``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of results from entered 'pos' rank(s) ===`` ``#> `` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 94.9 -0.000661 0.982 19069 3659 6736 3658 6735 92.6 90.4 -0.000661`` ``#> 2: NA 2 95.1 -0.000688 0.986 17461 2242 5543 2241 5542 93.7 91.2 -0.000688`` ``#> 3: NA 3 94.9 -0.000662 0.987 15969 3628 7164 3627 7163 92.5 90.2 -0.000662`` ``#> 4: NA 4 95.1 -0.000708 0.979 9204 1578 4236 1577 4235 94.2 92.2 -0.000708`` ``#> 5: NA 5 95.1 -0.000706 0.971 7555 1947 4236 1946 4235 93.8 92.2 -0.000706`` ``#> 6: NA 6 95.7 -0.001047 0.961 6862 601 1969 600 1968 95.1 93.7 -0.001047`` ``#> 7: NA 7 95.1 -0.000709 0.978 6395 1578 4196 1577 4195 94.2 92.2 -0.000709`` ``#> 8: NA 8 94.8 -0.000628 0.929 6285 5050 6613 5049 6612 91.4 90.5 -0.000628`` ``#> 9: NA 9 94.7 -0.000619 0.912 2609 5123 6507 5122 6506 91.5 90.6 -0.000619`` ``#> 10: NA 10 95.7 -0.001043 0.961 1917 596 1981 595 1980 95.0 93.6 -0.001043`` ``#> `` ``#> Regressions : 6012 | Results : 39 | Method : linear | Roll width : 1502 | Roll type : row `` ``#> -----------------------------------------`
 
 Here, the 6th ranked result, while being a valid linear region, is
 conspicuously higher in rate value and occurs close to the start of the
@@ -524,17 +442,7 @@ it is possible here too). We could just average the top 3 values
 ourselves, but the `mean` function will also work with `auto_rate`
 objects and accepts the `pos` input.
 
-``` r
-
-mean(sard_ar, pos = 1:3)
-#> 
-#> # mean.auto_rate # ----------------------
-#> Mean of rate results from entered 'pos' ranks:
-#> 
-#> Mean of 3 output rates:
-#> [1] -0.00067
-#> -----------------------------------------
-```
+[`mean`](https://rdrr.io/r/base/mean.html)`(``sard_ar``, pos ``=`` ``1``:``3``)`` ``#> `` ``#> # mean.auto_rate # ----------------------`` ``#> Mean of rate results from entered 'pos' ranks:`` ``#> `` ``#> Mean of 3 output rates:`` ``#> [1] -0.00067`` ``#> -----------------------------------------`
 
 Any rate value determined after such selection can be saved as a
 variable, or entered manually as a value in later functions such as
@@ -570,29 +478,9 @@ every second and
 tells us the time data is gapless and evenly spaced, we can simply
 specify width in the same number of rows.
 
-``` r
+`sard_insp`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``sardine.rd``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`` ``#> `` ``#> # print.inspect # -----------------------`` ``#> Time Oxygen`` ``#> numeric pass pass`` ``#> Inf/-Inf pass pass`` ``#> NA/NaN pass pass`` ``#> sequential pass -`` ``#> duplicated pass -`` ``#> evenly-spaced pass -`` ``#> `` ``#> -----------------------------------------`
 
-sard_insp <- inspect(sardine.rd)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-#> 
-#> # print.inspect # -----------------------
-#>                 Time Oxygen
-#> numeric         pass   pass
-#> Inf/-Inf        pass   pass
-#> NA/NaN          pass   pass
-#> sequential      pass      -
-#> duplicated      pass      -
-#> evenly-spaced   pass      -
-#> 
-#> -----------------------------------------
-```
-
-``` r
-
-high_rate <- auto_rate(sard_insp, width = 900, by = "row", method = "highest")
-```
+`high_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sard_insp``, width ``=`` ``900``, by ``=`` ``"row"``, method ``=`` ``"highest"``)`
 
 ![Five-panel auto_rate output for the highest rate method on sardine
 data with a 900-row width. Panels show the full timeseries with the
@@ -600,29 +488,7 @@ highest rate region highlighted, a close-up of that region, the rolling
 rate ordered by absolute value, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-11-1.png)
 
-``` r
-
-summary(high_rate)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of Results by Highest Rate ===
-#>       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate
-#>    1:  NA    1         95.8 -0.001138 0.924      NA  791   1690  790    1689 95.0   93.9 -0.001138
-#>    2:  NA    2         95.8 -0.001138 0.924      NA  798   1697  797    1696 95.0   93.8 -0.001138
-#>    3:  NA    3         95.8 -0.001138 0.924      NA  792   1691  791    1690 95.0   93.9 -0.001138
-#>    4:  NA    4         95.8 -0.001138 0.924      NA  793   1692  792    1691 95.0   93.9 -0.001138
-#>    5:  NA    5         95.8 -0.001138 0.924      NA  797   1696  796    1695 95.0   93.8 -0.001138
-#>   ---                                                                                             
-#> 6610:  NA 6610         94.7 -0.000615 0.793      NA 5717   6616 5716    6615 91.3   90.6 -0.000615
-#> 6611:  NA 6611         94.7 -0.000615 0.792      NA 5723   6622 5722    6621 91.1   90.7 -0.000615
-#> 6612:  NA 6612         94.7 -0.000615 0.793      NA 5715   6614 5714    6613 91.1   90.5 -0.000615
-#> 6613:  NA 6613         94.7 -0.000614 0.792      NA 5720   6619 5719    6618 91.1   90.5 -0.000614
-#> 6614:  NA 6614         94.7 -0.000613 0.792      NA 5719   6618 5718    6617 91.2   90.7 -0.000613
-#> 
-#> Regressions : 6614 | Results : 6614 | Method : highest | Roll width : 900 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``high_rate``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of Results by Highest Rate ===`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 95.8 -0.001138 0.924 NA 791 1690 790 1689 95.0 93.9 -0.001138`` ``#> 2: NA 2 95.8 -0.001138 0.924 NA 798 1697 797 1696 95.0 93.8 -0.001138`` ``#> 3: NA 3 95.8 -0.001138 0.924 NA 792 1691 791 1690 95.0 93.9 -0.001138`` ``#> 4: NA 4 95.8 -0.001138 0.924 NA 793 1692 792 1691 95.0 93.9 -0.001138`` ``#> 5: NA 5 95.8 -0.001138 0.924 NA 797 1696 796 1695 95.0 93.8 -0.001138`` ``#> --- `` ``#> 6610: NA 6610 94.7 -0.000615 0.793 NA 5717 6616 5716 6615 91.3 90.6 -0.000615`` ``#> 6611: NA 6611 94.7 -0.000615 0.792 NA 5723 6622 5722 6621 91.1 90.7 -0.000615`` ``#> 6612: NA 6612 94.7 -0.000615 0.793 NA 5715 6614 5714 6613 91.1 90.5 -0.000615`` ``#> 6613: NA 6613 94.7 -0.000614 0.792 NA 5720 6619 5719 6618 91.1 90.5 -0.000614`` ``#> 6614: NA 6614 94.7 -0.000613 0.792 NA 5719 6618 5718 6617 91.2 90.7 -0.000613`` ``#> `` ``#> Regressions : 6614 | Results : 6614 | Method : highest | Roll width : 900 | Roll type : row `` ``#> -----------------------------------------`
 
 In the `highest` and `lowest` methods the rates are ordered by the
 *absolute* rate value, regardless of the sign. The top results here have
@@ -640,10 +506,7 @@ here the top results all come from the same region of the data.
 
 We can similarly find the `lowest` rate over 15 minutes.
 
-``` r
-
-low_rate <- auto_rate(sard_insp, width = 900, method = "lowest")
-```
+`low_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sard_insp``, width ``=`` ``900``, method ``=`` ``"lowest"``)`
 
 ![Five-panel auto_rate output for the lowest rate method on sardine data
 with a 900-row width. Panels show the full timeseries with the lowest
@@ -651,45 +514,9 @@ rate region highlighted, a close-up of that region, the rolling rate
 ordered by absolute value, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-13-1.png)
 
-``` r
+[`print`](https://rdrr.io/r/base/print.html)`(``low_rate``)`` ``#> `` ``#> # print.auto_rate # ---------------------`` ``#> Data extracted by 'row' using 'width' of 900.`` ``#> Rates computed using 'lowest' method.To see all results use summary().`` ``#> `` ``#> Position 1 of 6614 :`` ``#> Rate: -0.000613 `` ``#> R.sq: 0.792 `` ``#> Rows: 5719 to 6618 `` ``#> Time: 5718 to 6617 `` ``#> -----------------------------------------`
 
-print(low_rate)
-#> 
-#> # print.auto_rate # ---------------------
-#> Data extracted by 'row' using 'width' of 900.
-#> Rates computed using 'lowest' method.To see all results use summary().
-#> 
-#> Position 1 of 6614 :
-#> Rate: -0.000613 
-#> R.sq: 0.792 
-#> Rows: 5719 to 6618 
-#> Time: 5718 to 6617 
-#> -----------------------------------------
-```
-
-``` r
-
-summary(low_rate)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of Results by Lowest Rate ===
-#>       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate
-#>    1:  NA    1         94.7 -0.000613 0.792      NA 5719   6618 5718    6617 91.2   90.7 -0.000613
-#>    2:  NA    2         94.7 -0.000614 0.792      NA 5720   6619 5719    6618 91.1   90.5 -0.000614
-#>    3:  NA    3         94.7 -0.000615 0.793      NA 5715   6614 5714    6613 91.1   90.5 -0.000615
-#>    4:  NA    4         94.7 -0.000615 0.792      NA 5723   6622 5722    6621 91.1   90.7 -0.000615
-#>    5:  NA    5         94.7 -0.000615 0.793      NA 5717   6616 5716    6615 91.3   90.6 -0.000615
-#>   ---                                                                                             
-#> 6610:  NA 6610         95.8 -0.001138 0.924      NA  797   1696  796    1695 95.0   93.8 -0.001138
-#> 6611:  NA 6611         95.8 -0.001138 0.924      NA  793   1692  792    1691 95.0   93.9 -0.001138
-#> 6612:  NA 6612         95.8 -0.001138 0.924      NA  792   1691  791    1690 95.0   93.9 -0.001138
-#> 6613:  NA 6613         95.8 -0.001138 0.924      NA  798   1697  797    1696 95.0   93.8 -0.001138
-#> 6614:  NA 6614         95.8 -0.001138 0.924      NA  791   1690  790    1689 95.0   93.9 -0.001138
-#> 
-#> Regressions : 6614 | Results : 6614 | Method : lowest | Roll width : 900 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``low_rate``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of Results by Lowest Rate ===`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 94.7 -0.000613 0.792 NA 5719 6618 5718 6617 91.2 90.7 -0.000613`` ``#> 2: NA 2 94.7 -0.000614 0.792 NA 5720 6619 5719 6618 91.1 90.5 -0.000614`` ``#> 3: NA 3 94.7 -0.000615 0.793 NA 5715 6614 5714 6613 91.1 90.5 -0.000615`` ``#> 4: NA 4 94.7 -0.000615 0.792 NA 5723 6622 5722 6621 91.1 90.7 -0.000615`` ``#> 5: NA 5 94.7 -0.000615 0.793 NA 5717 6616 5716 6615 91.3 90.6 -0.000615`` ``#> --- `` ``#> 6610: NA 6610 95.8 -0.001138 0.924 NA 797 1696 796 1695 95.0 93.8 -0.001138`` ``#> 6611: NA 6611 95.8 -0.001138 0.924 NA 793 1692 792 1691 95.0 93.9 -0.001138`` ``#> 6612: NA 6612 95.8 -0.001138 0.924 NA 792 1691 791 1690 95.0 93.9 -0.001138`` ``#> 6613: NA 6613 95.8 -0.001138 0.924 NA 798 1697 797 1696 95.0 93.8 -0.001138`` ``#> 6614: NA 6614 95.8 -0.001138 0.924 NA 791 1690 790 1689 95.0 93.9 -0.001138`` ``#> `` ``#> Regressions : 6614 | Results : 6614 | Method : lowest | Roll width : 900 | Roll type : row `` ``#> -----------------------------------------`
 
 Note, the output objects of the `highest` and `lowest` methods are
 essentially identical, the only difference being the results are ordered
@@ -700,10 +527,7 @@ descending or ascending by absolute rate value.
 The `rolling` method allows a rolling regression of the specified
 `width` to be returned in sequential order.
 
-``` r
-
-roll_rate <- auto_rate(sard_insp, width = 900, method = "rolling")
-```
+`roll_rate`` ``<-`` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``sard_insp``, width ``=`` ``900``, method ``=`` ``"rolling"``)`
 
 ![Five-panel auto_rate output for the rolling rate method on sardine
 data with a 900-row width. Panels show the full timeseries with the
@@ -711,29 +535,7 @@ first sequential rate region highlighted, a close-up of that region, the
 sequential rolling rate, and residual diagnostic
 plots.](auto_rate_files/figure-html/unnamed-chunk-16-1.png)
 
-``` r
-
-summary(roll_rate)
-#> 
-#> # summary.auto_rate # -------------------
-#> 
-#> === Summary of Results by Rolling Order ===
-#>       rep rank intercept_b0  slope_b1   rsq density  row endrow time endtime  oxy endoxy      rate
-#>    1:  NA    1         95.6 -0.000817 0.871      NA    1    900    0     899 95.6   94.9 -0.000817
-#>    2:  NA    2         95.6 -0.000818 0.871      NA    2    901    1     900 95.6   94.7 -0.000818
-#>    3:  NA    3         95.6 -0.000817 0.871      NA    3    902    2     901 95.6   94.9 -0.000817
-#>    4:  NA    4         95.6 -0.000817 0.871      NA    4    903    3     902 95.6   94.7 -0.000817
-#>    5:  NA    5         95.6 -0.000817 0.871      NA    5    904    4     903 95.6   94.8 -0.000817
-#>   ---                                                                                             
-#> 6610:  NA 6610         95.0 -0.000666 0.845      NA 6610   7509 6609    7508 90.6   90.0 -0.000666
-#> 6611:  NA 6611         95.0 -0.000665 0.844      NA 6611   7510 6610    7509 90.7   90.1 -0.000665
-#> 6612:  NA 6612         94.9 -0.000663 0.843      NA 6612   7511 6611    7510 90.7   90.1 -0.000663
-#> 6613:  NA 6613         94.9 -0.000660 0.841      NA 6613   7512 6612    7511 90.5   90.2 -0.000660
-#> 6614:  NA 6614         94.9 -0.000658 0.837      NA 6614   7513 6613    7512 90.5   90.3 -0.000658
-#> 
-#> Regressions : 6614 | Results : 6614 | Method : rolling | Roll width : 900 | Roll type : row 
-#> -----------------------------------------
-```
+[`summary`](https://rdrr.io/r/base/summary.html)`(``roll_rate``)`` ``#> `` ``#> # summary.auto_rate # -------------------`` ``#> `` ``#> === Summary of Results by Rolling Order ===`` ``#> rep rank intercept_b0 slope_b1 rsq density row endrow time endtime oxy endoxy rate`` ``#> 1: NA 1 95.6 -0.000817 0.871 NA 1 900 0 899 95.6 94.9 -0.000817`` ``#> 2: NA 2 95.6 -0.000818 0.871 NA 2 901 1 900 95.6 94.7 -0.000818`` ``#> 3: NA 3 95.6 -0.000817 0.871 NA 3 902 2 901 95.6 94.9 -0.000817`` ``#> 4: NA 4 95.6 -0.000817 0.871 NA 4 903 3 902 95.6 94.7 -0.000817`` ``#> 5: NA 5 95.6 -0.000817 0.871 NA 5 904 4 903 95.6 94.8 -0.000817`` ``#> --- `` ``#> 6610: NA 6610 95.0 -0.000666 0.845 NA 6610 7509 6609 7508 90.6 90.0 -0.000666`` ``#> 6611: NA 6611 95.0 -0.000665 0.844 NA 6611 7510 6610 7509 90.7 90.1 -0.000665`` ``#> 6612: NA 6612 94.9 -0.000663 0.843 NA 6612 7511 6611 7510 90.7 90.1 -0.000663`` ``#> 6613: NA 6613 94.9 -0.000660 0.841 NA 6613 7512 6612 7511 90.5 90.2 -0.000660`` ``#> 6614: NA 6614 94.9 -0.000658 0.837 NA 6614 7513 6613 7512 90.5 90.3 -0.000658`` ``#> `` ``#> Regressions : 6614 | Results : 6614 | Method : rolling | Roll width : 900 | Roll type : row `` ``#> -----------------------------------------`
 
 This outputs every regression of the `width` in order. The main utility
 of this method is for passing to `select_rate` after conversion in

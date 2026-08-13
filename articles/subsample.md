@@ -30,30 +30,18 @@ suppressed with `plot = FALSE`.
 
 ## Subsample by every n’th element
 
-``` r
-
-#' # Subsample by every 200th row:
-subsample(squid.rd, n = 200, plot = FALSE)
-```
+`#' # Subsample by every 200th row:`` `[`subsample`](https://januarharianto.github.io/respR/reference/subsample.md)`(``squid.rd``, n ``=`` ``200``, plot ``=`` ``FALSE``)`
 
 ## Subsample to a specific length
 
-``` r
-
-#' # Subsample to 100 rows:
-subsample(sardine.rd, length.out = 100)
-#> subsample: plotting first column of data only.
-```
+`#' # Subsample to 100 rows:`` `[`subsample`](https://januarharianto.github.io/respR/reference/subsample.md)`(``sardine.rd``, length.out ``=`` ``100``)`` ``#> subsample: plotting first column of data only.`
 
 ![Plot of sardine.rd respirometry data subsampled to 100 evenly-spaced
 rows](subsample_files/figure-html/unnamed-chunk-2-1.png)
 
 ## Subsample a vector
 
-``` r
-
-subsample(sardine.rd[[2]], length.out = 500)
-```
+[`subsample`](https://januarharianto.github.io/respR/reference/subsample.md)`(``sardine.rd``[[``2``]``]``, length.out ``=`` ``500``)`
 
 ![Plot of sardine.rd oxygen vector subsampled to 500 evenly-spaced data
 points](subsample_files/figure-html/unnamed-chunk-3-1.png)

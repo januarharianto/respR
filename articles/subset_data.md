@@ -40,24 +40,14 @@ way.
 
 The `squid.rd` dataset is extremely long.
 
-``` r
-
-inspect(squid.rd)
-#> inspect: Applying column default of 'time = 1'
-#> inspect: Applying column default of 'oxygen = 2'
-#> inspect: No issues detected while inspecting data frame.
-```
+[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``squid.rd``)`` ``#> inspect: Applying column default of 'time = 1'`` ``#> inspect: Applying column default of 'oxygen = 2'`` ``#> inspect: No issues detected while inspecting data frame.`
 
 ![inspect() output for squid.rd dataset showing full long-duration
 oxygen timeseries](subset_data_files/figure-html/unnamed-chunk-1-1.png)
 
 Let’s say we are only interested in the initial stages.
 
-``` r
-
-x <- subset_data(squid.rd, from = 1, to = 10000, by = "time")
-inspect(x)
-```
+`x`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``squid.rd``, from ``=`` ``1``, to ``=`` ``10000``, by ``=`` ``"time"``)`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``x``)`
 
 ![inspect() output for squid.rd data subset to first 10000 time units
 showing initial oxygen
@@ -70,11 +60,7 @@ Now we can pass this object to further functions.
 We can do the same thing using rows, which in this dataset which is
 per-second happen to be the same values.
 
-``` r
-
-x <- subset_data(squid.rd, from = 1, to = 10000, by = "row")
-inspect(x)
-```
+`x`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``squid.rd``, from ``=`` ``1``, to ``=`` ``10000``, by ``=`` ``"row"``)`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``x``)`
 
 ![inspect() output for squid.rd data subset to first 10000
 rows](subset_data_files/figure-html/unnamed-chunk-3-1.png)
@@ -85,33 +71,13 @@ Let’s say we are only interested in routine metabolic rates in normal
 conditions. In this long experiment oxygen declines to very low levels,
 so let’s only select the higher values.
 
-``` r
-
-x <- subset_data(squid.rd, from = 8, to = 6.5, by = "oxygen")
-inspect(x)
-```
+`x`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``squid.rd``, from ``=`` ``8``, to ``=`` ``6.5``, by ``=`` ``"oxygen"``)`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``x``)`
 
 ![inspect() output for squid.rd data subset to oxygen values between 8
 and 6.5 mg/L showing higher-oxygen
 portion](subset_data_files/figure-html/unnamed-chunk-4-1.png)
 
-``` r
-
-print(x)
-#>        Time Oxygen
-#>       <int>  <num>
-#>    1:     0 7.7264
-#>    2:     1 7.7264
-#>    3:     2 7.7264
-#>    4:     3 7.7264
-#>    5:     4 7.7264
-#>   ---             
-#> 3941:  3940 6.5035
-#> 3942:  3941 6.4954
-#> 3943:  3942 6.4954
-#> 3944:  3943 6.5035
-#> 3945:  3944 6.5035
-```
+[`print`](https://rdrr.io/r/base/print.html)`(``x``)`` ``#> Time Oxygen`` ``#> <int> <num>`` ``#> 1: 0 7.7264`` ``#> 2: 1 7.7264`` ``#> 3: 2 7.7264`` ``#> 4: 3 7.7264`` ``#> 5: 4 7.7264`` ``#> --- `` ``#> 3941: 3940 6.5035`` ``#> 3942: 3941 6.4954`` ``#> 3943: 3942 6.4954`` ``#> 3944: 3943 6.5035`` ``#> 3945: 3944 6.5035`
 
 Note how even though we use a value well above what is in the dataset
 (8.0) the function simply subsets from the start of the data, Similarly,
@@ -124,10 +90,7 @@ This is perhaps where `subset_data` comes into its own. We want to
 subset a single replicate from an intermittent flow experiment to
 calculate a rate.
 
-``` r
-
-x <- inspect(intermittent.rd)
-```
+`x`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``intermittent.rd``)`
 
 ![inspect() output for intermittent.rd dataset showing multi-replicate
 urchin oxygen
@@ -137,19 +100,7 @@ We have already inspected the dataset. Now we just subset out one
 replicate, pipe the data to `calc_rate` and other functions and output
 our final rate, all without having to create a new object.
 
-``` r
-
-x |>
-  subset_data(from = 2100, to = 3500, by = "time") |>
-  auto_rate() |>
-  adjust_rate(by = -0.00071) |>
-  convert_rate(oxy.unit = "mg/L",
-               time.unit = "s",
-               output.unit = "mg/h/g",
-               volume = 2.379,
-               mass = 0.006955) |>
-  summary(pos = 1:3)
-```
+`x`` ``|>`` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``2100``, to ``=`` ``3500``, by ``=`` ``"time"``)`` ``|>`` `` `[`auto_rate`](https://januarharianto.github.io/respR/reference/auto_rate.md)`(``)`` ``|>`` `` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``by ``=`` ``-``0.00071``)`` ``|>`` `` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``oxy.unit ``=`` ``"mg/L"``,`` `` time.unit ``=`` ``"s"``,`` `` output.unit ``=`` ``"mg/h/g"``,`` `` volume ``=`` ``2.379``,`` `` mass ``=`` ``0.006955``)`` ``|>`` `` `[`summary`](https://rdrr.io/r/base/summary.html)`(``pos ``=`` ``1``:``3``)`
 
 ![auto_rate() output for a single replicate subset from intermittent.rd
 showing rate calculation via piped
@@ -168,12 +119,7 @@ workflow](subset_data_files/figure-html/unnamed-chunk-7-1.png)
 We can also use `subset_data` and pipes just to have a quick look at
 portions of big datasets without having to save anything.
 
-``` r
-
-zeb_intermittent.rd |>
-  subset_data(from = 10000, to = 13000, by = "time") |>
-  inspect()
-```
+`zeb_intermittent.rd`` ``|>`` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``10000``, to ``=`` ``13000``, by ``=`` ``"time"``)`` ``|>`` `` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`
 
 ![inspect() output for zeb_intermittent.rd data subset to time 10000 to
 13000 for a quick visual
@@ -185,22 +131,4 @@ check](subset_data_files/figure-html/unnamed-chunk-8-1.png)
 `by = "oxygen"` it bases the subsetting on the first column of oxygen
 only, but all other columns are subset to the same rows).
 
-``` r
-
-urchins.rd |> 
-  subset_data(from = 10, to = 20, by = "time") |>
-  print(nrows = 10)
-#>     time.min     a     b     c     d     e     f     g     h     i     j     k     l     m     n     o     p    b1    b2
-#>        <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>
-#>  1:     10.0  7.58  7.45  7.51  7.36  7.65  7.43  7.51  7.46  7.80  7.46  7.50  7.54  7.61  7.43  6.79  6.89  7.90  7.67
-#>  2:     10.2  7.54  7.42  7.48  7.36  7.66  7.47  7.50  7.45  7.80  7.49  7.48  7.59  7.61  7.40  6.81  6.89  7.88  7.65
-#>  3:     10.3  7.52  7.46  7.51  7.34  7.65  7.46  7.52  7.41  7.79  7.49  7.46  7.54  7.60  7.36  6.80  6.89  7.88  7.66
-#>  4:     10.5  7.53  7.43  7.50  7.38  7.61  7.45  7.47  7.42  7.75  7.48  7.44  7.54  7.61  7.40  6.81  6.85  7.87  7.66
-#>  5:     10.7  7.52  7.43  7.50  7.34  7.61  7.42  7.46  7.44  7.74  7.46  7.46  7.49  7.58  7.39  6.78  6.88  7.87  7.67
-#> ---                                                                                                                     
-#> 57:     19.3  7.25  7.24  7.40  7.12  7.48  7.29  7.32  7.32  7.60  7.30  7.32  7.37  7.43  7.22  6.70  6.78  7.92  7.64
-#> 58:     19.5  7.27  7.23  7.42  7.14  7.45  7.30  7.31  7.33  7.60  7.26  7.30  7.37  7.40  7.20  6.73  6.76  7.90  7.64
-#> 59:     19.7  7.27  7.24  7.41  7.13  7.45  7.30  7.28  7.29  7.61  7.24  7.30  7.37  7.38  7.20  6.71  6.76  7.89  7.65
-#> 60:     19.8  7.27  7.23  7.40  7.16  7.43  7.27  7.36  7.32  7.63  7.25  7.31  7.37  7.36  7.18  6.69  6.76  7.89  7.66
-#> 61:     20.0  7.31  7.20  7.41  7.11  7.45  7.24  7.33  7.37  7.63  7.26  7.30  7.36  7.41  7.19  6.70  6.75  7.89  7.65
-```
+`urchins.rd`` ``|>`` `` `` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``10``, to ``=`` ``20``, by ``=`` ``"time"``)`` ``|>`` `` `[`print`](https://rdrr.io/r/base/print.html)`(``nrows ``=`` ``10``)`` ``#> time.min a b c d e f g h i j k l m n o p b1 b2`` ``#> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num> <num>`` ``#> 1: 10.0 7.58 7.45 7.51 7.36 7.65 7.43 7.51 7.46 7.80 7.46 7.50 7.54 7.61 7.43 6.79 6.89 7.90 7.67`` ``#> 2: 10.2 7.54 7.42 7.48 7.36 7.66 7.47 7.50 7.45 7.80 7.49 7.48 7.59 7.61 7.40 6.81 6.89 7.88 7.65`` ``#> 3: 10.3 7.52 7.46 7.51 7.34 7.65 7.46 7.52 7.41 7.79 7.49 7.46 7.54 7.60 7.36 6.80 6.89 7.88 7.66`` ``#> 4: 10.5 7.53 7.43 7.50 7.38 7.61 7.45 7.47 7.42 7.75 7.48 7.44 7.54 7.61 7.40 6.81 6.85 7.87 7.66`` ``#> 5: 10.7 7.52 7.43 7.50 7.34 7.61 7.42 7.46 7.44 7.74 7.46 7.46 7.49 7.58 7.39 6.78 6.88 7.87 7.67`` ``#> --- `` ``#> 57: 19.3 7.25 7.24 7.40 7.12 7.48 7.29 7.32 7.32 7.60 7.30 7.32 7.37 7.43 7.22 6.70 6.78 7.92 7.64`` ``#> 58: 19.5 7.27 7.23 7.42 7.14 7.45 7.30 7.31 7.33 7.60 7.26 7.30 7.37 7.40 7.20 6.73 6.76 7.90 7.64`` ``#> 59: 19.7 7.27 7.24 7.41 7.13 7.45 7.30 7.28 7.29 7.61 7.24 7.30 7.37 7.38 7.20 6.71 6.76 7.89 7.65`` ``#> 60: 19.8 7.27 7.23 7.40 7.16 7.43 7.27 7.36 7.32 7.63 7.25 7.31 7.37 7.36 7.18 6.69 6.76 7.89 7.66`` ``#> 61: 20.0 7.31 7.20 7.41 7.11 7.45 7.24 7.33 7.37 7.63 7.26 7.30 7.36 7.41 7.19 6.70 6.75 7.89 7.65`
