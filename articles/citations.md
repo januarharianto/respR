@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**176
 citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from CRAN [**21,090
+and been downloaded from CRAN [**21,137
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -26,6 +26,13 @@ The following publications have used and cited `respR`. If we have
 missed any [**let us
 know**](https://januarharianto.github.io/respR/articles/contact.html).\
 \
+
+****Jimenez, PJ**, **Albarran-Melzer, N**, **Lagos-Oróstica, M**, **Xie,
+N**, **Wang, Q**, **Ruan, Y**, **Gaitán-Espitia, JD**, & **Yasuhara,
+M****. **2026**. Toxic metals and perfluorobutane sulfonate acid (PFBS)
+suppress aerobic metabolic capacity and alter hypoxia sensitivity in the
+marine ostracod *Stigmatocythere* *Costa*. *Marine Pollution Bulletin*,
+233, 120258. <https://doi.org/10.1016/j.marpolbul.2026.120258>
 
 ****Marquez, JA**, **Penn, JL**, **Stockey, RG**, **Boag, TH**,
 **Duncan, MI**, **McClure, KN**, **Matsumoto, K**, **Ashing-Giwa, KF**,
