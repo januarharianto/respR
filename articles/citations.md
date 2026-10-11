@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**176
+In the seven years since publication, `respR` has received [**179
 citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from CRAN [**21,137
+and been downloaded from CRAN [**21,855
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -33,6 +33,18 @@ M****. **2026**. Toxic metals and perfluorobutane sulfonate acid (PFBS)
 suppress aerobic metabolic capacity and alter hypoxia sensitivity in the
 marine ostracod *Stigmatocythere* *Costa*. *Marine Pollution Bulletin*,
 233, 120258. <https://doi.org/10.1016/j.marpolbul.2026.120258>
+
+****Mantulak, RK**, **Gill, SK**, **Rossi, GS**, & **Little, AG****.
+**2026**. Exercise training induces muscle remodeling independent of
+estrogen-related receptor (ERR) expression in adult zebrafish. *Journal
+of Experimental Biology*, 229(19), jeb252349.
+<https://doi.org/10.1242/jeb.252349>
+
+****Martin-Bideguren, G**, **Cabido, C**, **Kohl, K**, **Alberdi, A**, &
+**Aizpurua, O****. **2026**. *Interspecific faecal microbiota
+transplantation tests microbial contributions to thermal physiology in
+lizards* (p. 2026.10.05.756751). bioRxiv.
+<https://doi.org/10.64898/2026.10.05.756751>
 
 ****Marquez, JA**, **Penn, JL**, **Stockey, RG**, **Boag, TH**,
 **Duncan, MI**, **McClure, KN**, **Matsumoto, K**, **Ashing-Giwa, KF**,

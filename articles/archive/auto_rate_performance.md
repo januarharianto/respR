@@ -171,7 +171,47 @@ different data lengths, we repeated the tests using 100, 200 and 500
 data points. The output of our performance test is avaliable from within
 the package as a data object called `test_lin_data`.
 
-`# NOTE: Functions take some time to run`` `` ``# Test on data of length 100 samples -------------------------------------------`` ``# This performs 1,000 iterations of auto_rate on a "default"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`` ``default100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"default"``)`` `` ``# This performs 1,000 iterations of auto_rate on a "corrupted"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`` ``corrupted100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"corrupted"``)`` `` ``# This performs 1,000 iterations of auto_rate on a "segmented"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`` ``segmented100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"segmented"``)`` `` ``# Test on data of length 200 samples -------------------------------------------`` ``# This performs 1,000 iterations of auto_rate on a "default"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`` ``default200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"default"``)`` `` ``# This performs 1,000 iterations of auto_rate on a "corrupted"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`` ``corrupted200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"corrupted"``)`` `` ``# This performs 1,000 iterations of auto_rate on a "segmented"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`` ``segmented200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"segmented"``)`` `` ``# Test on data of length 500 samples -------------------------------------------`` ``# This performs 1,000 iterations of auto_rate on a "default"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`` ``default500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"default"``)`` `` ``# This performs 100 iterations of auto_rate on a "corrupted"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`` ``corrupted500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"corrupted"``)`` `` ``# This performs 100 iterations of auto_rate on a "segmented"-type data`` `[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`` ``segmented500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"segmented"``)`
+\
+`# NOTE: Functions take some time to run`\
+\
+`# Test on data of length 100 samples -------------------------------------------`\
+`# This performs 1,000 iterations of auto_rate on a "default"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`\
+`default100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"default"``)`\
+\
+`# This performs 1,000 iterations of auto_rate on a "corrupted"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`\
+`corrupted100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"corrupted"``)`\
+\
+`# This performs 1,000 iterations of auto_rate on a "segmented"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`\
+`segmented100`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``100``, type ``=`` ``"segmented"``)`\
+\
+`# Test on data of length 200 samples -------------------------------------------`\
+`# This performs 1,000 iterations of auto_rate on a "default"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`\
+`default200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"default"``)`\
+\
+`# This performs 1,000 iterations of auto_rate on a "corrupted"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`\
+`corrupted200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"corrupted"``)`\
+\
+`# This performs 1,000 iterations of auto_rate on a "segmented"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`\
+`segmented200`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``200``, type ``=`` ``"segmented"``)`\
+\
+`# Test on data of length 500 samples -------------------------------------------`\
+`# This performs 1,000 iterations of auto_rate on a "default"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``123``)`\
+`default500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"default"``)`\
+\
+`# This performs 100 iterations of auto_rate on a "corrupted"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``456``)`\
+`corrupted500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"corrupted"``)`\
+\
+`# This performs 100 iterations of auto_rate on a "segmented"-type data`\
+[`set.seed`](https://rdrr.io/r/base/Random.html)`(``789``)`\
+`segmented500`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``1000``, len ``=`` ``500``, type ``=`` ``"segmented"``)`
 
 ## How do I know if the tests are actually running and detecting segments?
 
@@ -180,7 +220,9 @@ can perform tests in a very cool and visual way – at the cost of speed.
 The argument `plot`, when set to TRUE, can show us exactly the detected
 segments at every iteration. Try it!
 
-`# Try this code below. WARNING: Will run and plot visuals 20 times.`` ``x`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``20``, len ``=`` ``500``, type ``=`` ``"segmented"``, plot ``=`` ``TRUE``)`
+\
+`# Try this code below. WARNING: Will run and plot visuals 20 times.`\
+`x`` ``<-`` `[`test_lin`](https://januarharianto.github.io/respR/reference/test_lin.md)`(``reps ``=`` ``20``, len ``=`` ``500``, type ``=`` ``"segmented"``, plot ``=`` ``TRUE``)`
 
 ## Results
 
@@ -196,6 +238,7 @@ roughly, the maximum $`\beta_{detected}`$ values had $`\pm 0.004`$
 deviation from the $`\beta_{detected}`$ values across all values of
 $`\pm 0.06`$, even for values close to zero:
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``default100``)`
 
 ![Performance metrics for auto_rate on default-type data with 100
@@ -211,6 +254,7 @@ sampling incorrect portions of the data. **(C)** Linear regression had a
 $`R^2`$ of 0.999, and **(D)** deviation was 10$`\times`$ smaller than
 when sample size was at 100:
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``default500``)`
 
 ![Performance metrics for auto_rate on default-type data with 500
@@ -234,6 +278,7 @@ true rate across all slopes when compared to its performance with
 “default”-type data. **(D)** The deviation plot showed that performance
 was genrally poorer at values close to zero.
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``corrupted100``)`
 
 ![Performance metrics for auto_rate on corrupted-type data with 100
@@ -251,6 +296,7 @@ fit and **(D)** deviation values from $`\beta_{true}`$ were
 substantially smaller with seemingly fewer poor estimates when slope
 values approach zero.
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``corrupted500``)`
 
 ![Performance metrics for auto_rate on corrupted-type data with 500
@@ -274,6 +320,7 @@ still performed surprisingly well most of the time, despite the errors,
 and **(D)** the deviance from the true rate appeared to be poorer when
 slope values are closer to zero.
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``segmented100``)`
 
 ![Performance metrics for auto_rate on segmented-type data with 100
@@ -291,6 +338,7 @@ regression of $`\beta_{detected}`$ against $`\beta_{true}`$ had a
 $`R^2`$ of 0.999, and **(D)** deviations from $`\beta_{true}`$ were much
 smaller in magnitude.
 
+\
 [`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``test_lin_data``$``segmented500``)`
 
 ![Performance metrics for auto_rate on segmented-type data with 500
