@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**179
+In the seven years since publication, `respR` has received [**176
 citations**](https://scholar.google.co.uk/scholar?cites=15799904892345725732&as_sdt=2005&sciodt=0,5&hl=en)
-and been downloaded from CRAN [**21,855
+and been downloaded from CRAN [**21,997
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -34,6 +34,18 @@ suppress aerobic metabolic capacity and alter hypoxia sensitivity in the
 marine ostracod *Stigmatocythere* *Costa*. *Marine Pollution Bulletin*,
 233, 120258. <https://doi.org/10.1016/j.marpolbul.2026.120258>
 
+****Bahr, KD**, **Bretzing-Tungate, RJ**, **Matthews, BM**, **TenBrink,
+EG**, **Gallagher, CL**, & **Cannon, AL****. **2026**. Hierarchical
+physiological sensitivity of the coral, Orbicella faveolata, to
+suspended sediment and elevated temperature. *Environmental Monitoring
+and Assessment*, 198(11), 1185.
+<https://doi.org/10.1007/s10661-026-15969-9>
+
+****Hahn, A****. **2026**. *Integrating physiology, transcriptomics, and
+seascape genomics to study adaptation in the copepod Acartia tonsa along
+the Baltic Sea salinity gradient* \[PhD thesis\]. GEOMAR Helmholtz
+Centre for Ocean Research.
+
 ****Mantulak, RK**, **Gill, SK**, **Rossi, GS**, & **Little, AG****.
 **2026**. Exercise training induces muscle remodeling independent of
 estrogen-related receptor (ERR) expression in adult zebrafish. *Journal
@@ -45,6 +57,12 @@ of Experimental Biology*, 229(19), jeb252349.
 transplantation tests microbial contributions to thermal physiology in
 lizards* (p. 2026.10.05.756751). bioRxiv.
 <https://doi.org/10.64898/2026.10.05.756751>
+
+****Nishizaki, M**, **Wehrle, B**, **Bryant, E**, **Woodruff, E**,
+**Connor, K**, & **Patterson, L****. **2026**. Fluctuating temperatures
+promote growth and modify physiological processes in marine mussels.
+*Marine Ecology Progress Series*, 796, 1–20.
+<https://doi.org/10.3354/meps15266>
 
 ****Marquez, JA**, **Penn, JL**, **Stockey, RG**, **Boag, TH**,
 **Duncan, MI**, **McClure, KN**, **Matsumoto, K**, **Ashing-Giwa, KF**,
