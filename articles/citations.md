@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**182
 citations**](https://scholar.google.com/scholar?cites=15799904892345725732&hl=en)
-and been downloaded from CRAN [**21,997
+and been downloaded from CRAN [**22,620
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -41,6 +41,19 @@ suspended sediment and elevated temperature. *Environmental Monitoring
 and Assessment*, 198(11), 1185.
 <https://doi.org/10.1007/s10661-026-15969-9>
 
+****Berry, AA**, **Williams, LJ**, **Richards, SJ**, **Sherman, CDH**, &
+**Ellis, RP****. **2026**. MeGaH: A novel system for concurrent
+measurement of metabolic rate, valve gape and heart rate in aquatic
+bivalves, and its application in assessing mussel responses to
+environmental change. *Journal of Experimental Biology*, 229(21),
+jeb252963. <https://doi.org/10.1242/jeb.252963>
+
+****Bihun, CJ**, **Faust, MD**, **Hintz, WD**, **Ritchie, EB**,
+**Brownscombe, JW**, & **Raby, GD****. **2026**. Metabolic scaling in a
+freshwater predator is robust across wild and hatchery-reared
+populations and experimental designs. *Oecologia*, 208(11), 152.
+<https://doi.org/10.1007/s00442-026-05988-1>
+
 ****Hahn, A****. **2026**. *Integrating physiology, transcriptomics, and
 seascape genomics to study adaptation in the copepod Acartia tonsa along
 the Baltic Sea salinity gradient* \[PhD thesis\]. GEOMAR Helmholtz
@@ -63,6 +76,11 @@ lizards* (p. 2026.10.05.756751). bioRxiv.
 promote growth and modify physiological processes in marine mussels.
 *Marine Ecology Progress Series*, 796, 1–20.
 <https://doi.org/10.3354/meps15266>
+
+****Yasutake, Y**, **Schmidt, E**, & **Donelson, J****. **2026**.
+*Marine heatwaves and chronic warming induce differing impacts to
+populations in a coral reef fish*. Authorea.
+<https://doi.org/10.22541/authorea.15011101/v1>
 
 ****Marquez, JA**, **Penn, JL**, **Stockey, RG**, **Boag, TH**,
 **Duncan, MI**, **McClure, KN**, **Matsumoto, K**, **Ashing-Giwa, KF**,
