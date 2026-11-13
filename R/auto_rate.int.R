@@ -932,6 +932,10 @@ auto_rate.rep <- function(x,
                           rep_data = NULL,
                           ...){
 
+  # Add replicate context to window errors; leave single-row checks to auto_rate.
+  if(nrow(x) > 1)
+    suppressMessages(calc_win(x, width, by, "auto_rate.int", rep = rep))
+
   # run auto_rate
   out <- suppressMessages(auto_rate(x,
                                     method = method,

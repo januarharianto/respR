@@ -969,6 +969,116 @@ capture.output({  ## stops printing outputs on assigning
                    "auto_rate.int: 'width' input is between 0 and 1. Check this value is what you intend.")
   })
 
+  test_that("auto_rate.int - oversized windows identify the final replicate", {
+    insp <- inspect(intermittent.rd, plot = FALSE)
+    for (input in list(intermittent.rd, insp)) {
+      expect_error(
+        auto_rate.int(input, starts = c(1, 2100, 3899), wait = 100,
+                      measure = 1400, width = 1000, plot = FALSE),
+        paste0("auto_rate.int: The analysis window is too long for replicate 3.\n",
+               "You requested 1000 rows (width = 1000), but only 833 rows ",
+               "are available for analysis."),
+        fixed = TRUE)
+    }
+  })
+
+  test_that("auto_rate.int - a window equal to the measurement section is rejected", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
+    expect_error(
+      auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+                    width = 50, method = "rolling", plot = FALSE),
+      paste0("auto_rate.int: The analysis window must be shorter than the ",
+             "measurement section for replicate 2.\n",
+             "You requested 50 rows (width = 50), which is all 50 rows ",
+             "available for analysis."),
+      fixed = TRUE)
+  })
+
+  test_that("auto_rate.int - oversized windows identify a non-final replicate", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
+    expect_error(
+      auto_rate.int(data, starts = c(1, 81, 121), wait = 10, measure = 80,
+                    width = 40, method = "rolling", plot = FALSE),
+      paste0("auto_rate.int: The analysis window is too long for replicate 2.\n",
+             "You requested 40 rows (width = 40), but only 30 rows ",
+             "are available for analysis."),
+      fixed = TRUE)
+  })
+
+  test_that("auto_rate.int - time window errors use the actual measurement span", {
+    time <- cumsum(c(0, rep(c(0.5, 1.5), length.out = 159)))
+    data <- data.frame(time = time, oxygen = 10 - 0.01 * time)
+    for (width in c(60, 48.5)) {
+      problem <- if (width == 48.5)
+        "The analysis window must be shorter than the measurement section" else
+          "The analysis window is too long"
+      expect_error(
+        auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
+                      width = width, by = "time", method = "rolling",
+                      plot = FALSE),
+        paste0("auto_rate.int: ", problem, " for replicate 2.\n",
+               "You requested ", width, " time units (width = ", width, "), ",
+               "but only 48.5 are available for analysis."),
+        fixed = TRUE)
+    }
+  })
+
+  test_that("auto_rate.int - valid partial replicates retain rates and row indices", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
+    row <- auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+                         width = 20, method = "rolling", n = 100,
+                         plot = FALSE)
+    expect_equal(row$rate, rep(-0.01, 92))
+    expect_equal(as.integer(table(row$summary$rep)), c(61L, 31L))
+    expect_equal(as.numeric(tapply(row$summary$row, row$summary$rep, min)),
+                 c(11, 111))
+    expect_equal(as.numeric(tapply(row$summary$endrow, row$summary$rep, max)),
+                 c(90, 160))
+
+    time <- auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
+                          width = 20, by = "time", method = "rolling",
+                          n = 100, plot = FALSE)
+    expect_equal(time$rate, rep(-0.01, 91))
+    expect_equal(as.integer(table(time$summary$rep)), c(61L, 30L))
+    expect_equal(as.numeric(tapply(time$summary$row, time$summary$rep, min)),
+                 c(11, 111))
+    expect_equal(as.numeric(tapply(time$summary$endrow, time$summary$rep, max)),
+                 c(91, 160))
+  })
+
+  test_that("auto_rate.int - proportional widths still follow each measurement section", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
+    out <- auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+                         width = 0.5, method = "rolling", n = 100,
+                         plot = FALSE)
+    expect_equal(out$rate, rep(-0.01, 67))
+    expect_equal(as.integer(table(out$summary$rep)), c(41L, 26L))
+    widths <- out$summary$endrow - out$summary$row + 1
+    expect_equal(unique(widths[out$summary$rep == 1]), 40)
+    expect_equal(unique(widths[out$summary$rep == 2]), 25)
+    expect_equal(as.numeric(tapply(out$summary$endrow, out$summary$rep, max)),
+                 c(90, 160))
+  })
+
+  test_that("standalone auto_rate retains its existing window errors", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
+    expect_error(auto_rate(data, width = 161, plot = FALSE),
+                 "auto_rate: 'width' exceeds length of dataset", fixed = TRUE)
+    expect_error(auto_rate(data, width = 160, plot = FALSE),
+                 "auto_rate: 'width' cannot be the total number of rows in the input data",
+                 fixed = TRUE)
+    for (width in c(159, 160)) {
+      expect_error(auto_rate(data, width = width, by = "time", plot = FALSE),
+                   "auto_rate: 'width' cannot exceed or equal total time data range",
+                   fixed = TRUE)
+    }
+    expect_error(
+      auto_rate.int(data, starts = c(1, 160), width = 20,
+                    method = "rolling", plot = FALSE),
+      "auto_rate: Input data contains only 1 row. Please check inputs.",
+      fixed = TRUE)
+  })
+
   # 'n' input tests ---------------------------------------------------------
 
   test_that("auto_rate.int - stops with incorrect 'n' inputs", {

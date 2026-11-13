@@ -499,35 +499,56 @@ time_lm <- function(df, start, end) {
 #' @param width numeric.
 #' @param by string.
 #' @param msg string. Attach function name for message (usually auto_rate)
+#' @param rep optional replicate number to include in window-size errors.
 #'
 #' @return a numeric
 #' @keywords internal
-calc_win <- function(dt, width, by, msg) {
+calc_win <- function(dt, width, by, msg, rep = NULL) {
+
+  window_error <- function(available, default) {
+    if(is.null(rep))
+      stop(glue::glue("{msg}: {default}"), call. = FALSE)
+
+    if(width == available)
+      problem <- "The analysis window must be shorter than the measurement section" else
+        problem <- "The analysis window is too long"
+
+    if(by == "row") {
+      if(width == available)
+        detail <- glue::glue("You requested {width} rows (width = {width}), which is all {available} rows available for analysis.") else
+          detail <- glue::glue("You requested {width} rows (width = {width}), but only {available} rows are available for analysis.")
+    } else {
+      detail <- glue::glue("You requested {width} time units (width = {width}), but only {available} are available for analysis.")
+    }
+
+    stop(glue::glue("{msg}: {problem} for replicate {rep}.\n{detail}"), call. = FALSE)
+  }
 
   if(by == "row"){
     if (is.null(width)) {
       width <- 0.2  # if no width is specified, set to 20 %
       message(glue::glue("{msg}: Applying default 'width' of 0.2"))}
     if(width > 1 && width > nrow(dt))
-      stop(glue::glue("{msg}: 'width' exceeds length of dataset"), call. = FALSE)
+      window_error(nrow(dt), "'width' exceeds length of dataset")
     if(width > 1 && !(width %% 1 == 0))
       stop(glue::glue("{msg}: 'width' should be an integer of 2 or higher"), call. = FALSE)
     if(width == 1)
       stop(glue::glue("{msg}: 'width' cannot be 1 row"), call. = FALSE)
     if(width == nrow(dt))
-      stop(glue::glue("{msg}: 'width' cannot be the total number of rows in the input data"), call. = FALSE)
+      window_error(nrow(dt), "'width' cannot be the total number of rows in the input data")
 
     if (width < 1) win <- floor(width * nrow(dt))  # set to proportion of length of data
     else win <- width
   }
 
   if(by == "time"){
+    available <- diff(range(nainf.omit(dt[[1]])))
     if (is.null(width)) {
       # if no width is specified, set to 20 % of total time data range
-      width <- 0.2 * diff(range(nainf.omit(dt[[1]])))
+      width <- 0.2 * available
       message(glue::glue("{msg}: Applying default 'width' of 20% of time data range"))}
-    if(width >= diff(range(nainf.omit(dt[[1]]))))
-      stop(glue::glue("{msg}: 'width' cannot exceed or equal total time data range"), call. = FALSE)
+    if(width >= available)
+      window_error(available, "'width' cannot exceed or equal total time data range")
 
     win <- width
   }
