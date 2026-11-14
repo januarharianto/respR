@@ -488,6 +488,10 @@ auto_rate.int <- function(x,
 
   if(by == "row")
     res <- mapply(function(p,q,r,s,t) {
+      if(r > nrow(p))
+        stop(glue::glue("auto_rate.int: Replicate {q} contains only {nrow(p)} rows. ",
+                        "A wait of {r - 1} rows leaves no measurement data."), call. = FALSE)
+
       sub <- truncate_data(p,
                          from = r,
                          to = s,
@@ -525,10 +529,9 @@ auto_rate.int <- function(x,
       from_rel <- r + p[[1,1]] # time relative to this rep
       to_rel <- s + p[[1,1]]
 
-      # above from is start of rep plus wait
-      # to is to plus wait
-      # both of these are past last value in last rep as it's only 19 rows
-      # so truncate data matches to last row as it's closest value
+      if(from_rel > max(p[[1]], na.rm = TRUE))
+        stop(glue::glue("auto_rate.int: Replicate {q} spans only {diff(range(p[[1]], na.rm = TRUE))} time units. ",
+                        "A wait of {r} time units leaves no measurement data."), call. = FALSE)
 
       sub <- truncate_data(p,
                          from = from_rel,
@@ -551,7 +554,6 @@ auto_rate.int <- function(x,
       #           & dt[[1]] <= dt[[1]][which.min(abs(dt[[1]] - to))]]
 
 
-      # Check - wait is not longer than rep
       # Check - measure is not longer than rep
       # Check - wait + measure is not longer than rep
       # Any rep 50% or so of length others

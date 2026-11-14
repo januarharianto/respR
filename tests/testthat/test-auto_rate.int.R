@@ -1079,6 +1079,32 @@ capture.output({  ## stops printing outputs on assigning
       fixed = TRUE)
   })
 
+  test_that("auto_rate.int - waits leaving no measurement data identify the replicate", {
+    data <- zeb_intermittent.rd[16290:18950,]
+    data[[1]] <- seq_len(nrow(data))
+    expect_error(
+      suppressMessages(auto_rate.int(data, starts = 660, wait = 300,
+                                     measure = 300, width = 5, method = "rolling", plot = FALSE)),
+      paste0("auto_rate.int: Replicate 5 contains only 21 rows. ",
+             "A wait of 300 rows leaves no measurement data."),
+      fixed = TRUE)
+
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
+    for (by in c("row", "time")) {
+      starts <- if(by == "row") c(1, 101) else c(0, 100)
+      available <- if(by == "row") "contains only 60 rows" else "spans only 59 time units"
+      units <- if(by == "row") "rows" else "time units"
+      for (wait in list(60, c(10, 60))) {
+        expect_error(
+          suppressMessages(auto_rate.int(data, starts = starts, wait = wait,
+                                         measure = 20, by = by, width = 5, method = "rolling", plot = FALSE)),
+          paste0("auto_rate.int: Replicate 2 ", available, ". ",
+                 "A wait of 60 ", units, " leaves no measurement data."),
+          fixed = TRUE)
+      }
+    }
+  })
+
   # 'n' input tests ---------------------------------------------------------
 
   test_that("auto_rate.int - stops with incorrect 'n' inputs", {
