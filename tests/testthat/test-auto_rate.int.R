@@ -6,6 +6,11 @@
 # covr::report(cvr)
 # covr::report(covr::package_coverage())
 
+# Note: many calls below are wrapped in suppressWarnings() because 'measure'
+# overruns the short final replicate of the test data, which raises the
+# 'measure' exceeds the data available warning. That warning is tested
+# separately; it is not the subject of these tests.
+
 capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
@@ -250,7 +255,7 @@ capture.output({  ## stops printing outputs on assigning
   # if wait = NULL all start rows should be equal to subset start rows
   test_that("auto_rate.int - properly parses 'wait = NULL'", {
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = NULL,
                                       measure = 1000,
@@ -258,7 +263,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 1,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     expect_equal(sapply(ar.int.obj.3reps$subsets, function(z) z[[1,1]]),
@@ -286,7 +291,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate.int - properly parses single 'wait' values", {
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = 100,
                                       measure = 1000,
@@ -294,7 +299,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 1,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     expect_equal(sapply(ar.int.obj.3reps$subsets, function(z) z[[1,1]]),
@@ -322,7 +327,7 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate.int - properly parses multiple 'wait' values", {
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = c(100, 120, 140),
                                       measure = 1000,
@@ -330,7 +335,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 1,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     expect_equal(sapply(ar.int.obj.3reps$subsets, function(z) z[[1,1]]),
@@ -508,7 +513,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses single 'measure' values", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = 100,
                                       measure = 1000,
@@ -516,7 +521,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -554,7 +559,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses multiple 'measure' values", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = 100,
                                       measure = c(800, 900, 1000),
@@ -562,7 +567,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -600,7 +605,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses multiple 'measure' values with multiple wait values", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = c(100, 150, 200),
                                       measure = c(800, 900, 1000),
@@ -608,7 +613,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "row",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -693,7 +698,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses single 'measure' values and by = 'time'", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = 100,
                                       measure = 1000,
@@ -701,7 +706,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "time",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -739,7 +744,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses multiple 'measure' values and by = 'time'", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = 100,
                                       measure = c(800, 900, 1000),
@@ -747,7 +752,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "time",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -785,7 +790,7 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - properly parses multiple 'measure' values with multiple wait values and by = 'time'", {
     skip_on_cran()
     # by row
-    ar.int.obj.3reps <- auto_rate.int(x = dt.sec.insp,
+    ar.int.obj.3reps <- suppressWarnings(auto_rate.int(x = dt.sec.insp,
                                       starts = sts,
                                       wait = c(100, 150, 200),
                                       measure = c(800, 900, 1000),
@@ -793,7 +798,7 @@ capture.output({  ## stops printing outputs on assigning
                                       by = "time",
                                       method = "rolling",
                                       n = 10000,
-                                      plot = F)
+                                      plot = F))
     #summary(ar.int.obj.3reps)
     # locs
     # If we calc all possible rates with this measure last endrows should be starts + wait + measure
@@ -959,13 +964,13 @@ capture.output({  ## stops printing outputs on assigning
   })
 
   test_that("auto_rate.int - message if 'width' input between 0 and 1 and by = 'time'", {
-    expect_message(auto_rate.int(dt.hr,
+    expect_message(suppressWarnings(auto_rate.int(dt.hr,
                                  starts = sts.hr,
                                  wait = 0.01,
                                  measure = 0.4,
                                  width = 0.05,
                                  by = "time",
-                                 plot = F),
+                                 plot = F)),
                    "auto_rate.int: 'width' input is between 0 and 1. Check this value is what you intend.")
   })
 
@@ -973,11 +978,10 @@ capture.output({  ## stops printing outputs on assigning
     insp <- inspect(intermittent.rd, plot = FALSE)
     for (input in list(intermittent.rd, insp)) {
       expect_error(
-        auto_rate.int(input, starts = c(1, 2100, 3899), wait = 100,
-                      measure = 1400, width = 1000, plot = FALSE),
-        paste0("auto_rate.int: The analysis window is too long for replicate 3.\n",
-               "You requested 1000 rows (width = 1000), but only 833 rows ",
-               "are available for analysis."),
+        suppressWarnings(auto_rate.int(input, starts = c(1, 2100, 3899), wait = 100,
+                      measure = 1400, width = 1000, plot = FALSE)),
+        paste0("auto_rate.int: 'width' exceeds the rows available for analysis ",
+               "in replicate 3 ('width = 1000', 833 rows available)."),
         fixed = TRUE)
     }
   })
@@ -985,23 +989,20 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int - a window equal to the measurement section is rejected", {
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
     expect_error(
-      auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
-                    width = 50, method = "rolling", plot = FALSE),
-      paste0("auto_rate.int: The analysis window must be shorter than the ",
-             "measurement section for replicate 2.\n",
-             "You requested 50 rows (width = 50), which is all 50 rows ",
-             "available for analysis."),
+      suppressWarnings(auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+                    width = 50, method = "rolling", plot = FALSE)),
+      paste0("auto_rate.int: 'width' cannot equal the rows available for analysis ",
+             "in replicate 2 ('width = 50', 50 rows available)."),
       fixed = TRUE)
   })
 
   test_that("auto_rate.int - oversized windows identify a non-final replicate", {
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
     expect_error(
-      auto_rate.int(data, starts = c(1, 81, 121), wait = 10, measure = 80,
-                    width = 40, method = "rolling", plot = FALSE),
-      paste0("auto_rate.int: The analysis window is too long for replicate 2.\n",
-             "You requested 40 rows (width = 40), but only 30 rows ",
-             "are available for analysis."),
+      suppressWarnings(auto_rate.int(data, starts = c(1, 81, 121), wait = 10, measure = 80,
+                    width = 40, method = "rolling", plot = FALSE)),
+      paste0("auto_rate.int: 'width' exceeds the rows available for analysis ",
+             "in replicate 2 ('width = 40', 30 rows available)."),
       fixed = TRUE)
   })
 
@@ -1009,25 +1010,22 @@ capture.output({  ## stops printing outputs on assigning
     time <- cumsum(c(0, rep(c(0.5, 1.5), length.out = 159)))
     data <- data.frame(time = time, oxygen = 10 - 0.01 * time)
     for (width in c(60, 48.5)) {
-      problem <- if (width == 48.5)
-        "The analysis window must be shorter than the measurement section" else
-          "The analysis window is too long"
       expect_error(
-        auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
+        suppressWarnings(auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
                       width = width, by = "time", method = "rolling",
-                      plot = FALSE),
-        paste0("auto_rate.int: ", problem, " for replicate 2.\n",
-               "You requested ", width, " time units (width = ", width, "), ",
-               "but only 48.5 are available for analysis."),
+                      plot = FALSE)),
+        paste0("auto_rate.int: 'width' cannot exceed or equal the time ",
+               "available for analysis in replicate 2 ('width = ", width,
+               "', 48.5 time units available)."),
         fixed = TRUE)
     }
   })
 
   test_that("auto_rate.int - valid partial replicates retain rates and row indices", {
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
-    row <- auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+    row <- suppressWarnings(auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
                          width = 20, method = "rolling", n = 100,
-                         plot = FALSE)
+                         plot = FALSE))
     expect_equal(row$rate, rep(-0.01, 92))
     expect_equal(as.integer(table(row$summary$rep)), c(61L, 31L))
     expect_equal(as.numeric(tapply(row$summary$row, row$summary$rep, min)),
@@ -1035,9 +1033,9 @@ capture.output({  ## stops printing outputs on assigning
     expect_equal(as.numeric(tapply(row$summary$endrow, row$summary$rep, max)),
                  c(90, 160))
 
-    time <- auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
+    time <- suppressWarnings(auto_rate.int(data, starts = c(0, 100), wait = 10, measure = 80,
                           width = 20, by = "time", method = "rolling",
-                          n = 100, plot = FALSE)
+                          n = 100, plot = FALSE))
     expect_equal(time$rate, rep(-0.01, 91))
     expect_equal(as.integer(table(time$summary$rep)), c(61L, 30L))
     expect_equal(as.numeric(tapply(time$summary$row, time$summary$rep, min)),
@@ -1048,9 +1046,9 @@ capture.output({  ## stops printing outputs on assigning
 
   test_that("auto_rate.int - proportional widths still follow each measurement section", {
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159))
-    out <- auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
+    out <- suppressWarnings(auto_rate.int(data, starts = c(1, 101), wait = 10, measure = 80,
                          width = 0.5, method = "rolling", n = 100,
-                         plot = FALSE)
+                         plot = FALSE))
     expect_equal(out$rate, rep(-0.01, 67))
     expect_equal(as.integer(table(out$summary$rep)), c(41L, 26L))
     widths <- out$summary$endrow - out$summary$row + 1
@@ -1085,24 +1083,59 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(
       suppressMessages(auto_rate.int(data, starts = 660, wait = 300,
                                      measure = 300, width = 5, method = "rolling", plot = FALSE)),
-      paste0("auto_rate.int: Replicate 5 contains only 21 rows. ",
-             "A wait of 300 rows leaves no measurement data."),
+      paste0("auto_rate.int: 'wait' of 300 rows exceeds the 21 rows ",
+             "in replicate 5, leaving no data for 'measure'."),
       fixed = TRUE)
 
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
     for (by in c("row", "time")) {
       starts <- if(by == "row") c(1, 101) else c(0, 100)
-      available <- if(by == "row") "contains only 60 rows" else "spans only 59 time units"
+      available <- if(by == "row") "60 rows" else "59 time units"
       units <- if(by == "row") "rows" else "time units"
       for (wait in list(60, c(10, 60))) {
         expect_error(
           suppressMessages(auto_rate.int(data, starts = starts, wait = wait,
                                          measure = 20, by = by, width = 5, method = "rolling", plot = FALSE)),
-          paste0("auto_rate.int: Replicate 2 ", available, ". ",
-                 "A wait of 60 ", units, " leaves no measurement data."),
+          paste0("auto_rate.int: 'wait' of 60 ", units, " exceeds the ",
+                 available, " in replicate 2, leaving no data for 'measure'."),
           fixed = TRUE)
       }
     }
+  })
+
+  test_that("auto_rate.int - warns when 'measure' overruns a replicate", {
+    data <- zeb_intermittent.rd[16290:18950,]
+    data[[1]] <- seq_len(nrow(data))
+    # replicate 5 holds 21 rows, so a 600 row 'measure' is clipped to 11
+    expect_warning(
+      suppressMessages(auto_rate.int(data, starts = 660, wait = 10, measure = 600,
+                                     width = 5, method = "rolling", plot = FALSE)),
+      paste0("auto_rate.int: 'measure' exceeds the data available in 1 of 5 replicates.\n",
+             " Replicate 5: 'measure' phase set to 11 rows instead of the 600 requested."),
+      fixed = TRUE)
+  })
+
+  test_that("auto_rate.int - stops where 'measure' leaves too few rows for a rate", {
+    data <- zeb_intermittent.rd[16290:18950,]
+    data[[1]] <- seq_len(nrow(data))
+    expect_error(
+      suppressMessages(auto_rate.int(data, starts = 660, wait = 20, measure = 5,
+                                     width = 3, method = "rolling", plot = FALSE)),
+      paste0("auto_rate.int: 'measure' leaves only 1 row in replicate 5, ",
+             "which is too few to calculate a rate.\n",
+             " Adjust 'wait' or 'measure', or exclude this replicate from 'starts'."),
+      fixed = TRUE)
+  })
+
+  test_that("auto_rate.int - 'measure' fitting within every replicate is silent", {
+    expect_no_warning(
+      suppressMessages(auto_rate.int(intermittent.rd, starts = c(1, 2100, 3899),
+                                     wait = 100, measure = 500, width = 200,
+                                     plot = FALSE)))
+    # a NULL 'measure' clips to the end of each replicate by design
+    expect_no_warning(
+      suppressMessages(auto_rate.int(intermittent.rd, starts = c(1, 2100, 3899),
+                                     wait = 100, width = 200, plot = FALSE)))
   })
 
   # 'n' input tests ---------------------------------------------------------
@@ -1406,9 +1439,11 @@ capture.output({  ## stops printing outputs on assigning
   test_that("auto_rate.int identifies the replicate with mixed rates", {
     for (method in c("lowest", "highest")) {
       expected <- paste0(
-        "auto_rate.int: Replicate 1 (of 3) has both positive and negative rates.\n",
-        "The '", method, "' method requires rates with the same sign.\n",
-        "Adjust 'wait' or 'measure' so the rates are all positive or all negative."
+        "auto_rate.int: Analysis of replicate 1 (of 3) produces both negative and positive rates. \n",
+        " The '", method, "' method is intended to order by the ", method,
+        " *absolute* rate amongst rates all having the same sign.\n",
+        " Use 'maximum' or 'minimum' method to order rates by *numerical* value,",
+        " or adjust 'wait' and 'measure' to exclude the flush."
       )
       expect_error(auto_rate.int(dt.min.1.insp, starts = sts, width = 400,
                                  method = method, by = "row", plot = FALSE),
@@ -1416,7 +1451,7 @@ capture.output({  ## stops printing outputs on assigning
     }
     expect_error(auto_rate.int(dt.sec, starts = sts, measure = c(1000, 1700, 900),
                                width = 400, method = "lowest", by = "time", plot = FALSE),
-                 "Replicate 2 (of 3)", fixed = TRUE)
+                 "Analysis of replicate 2 (of 3)", fixed = TRUE)
   })
 
   test_that("auto_rate.int - expected results with method = 'lowest' and excluded flushes", {
@@ -1439,13 +1474,13 @@ capture.output({  ## stops printing outputs on assigning
                              by = "time",
                              plot = F)
     #auto_rate.int object
-    ar.int.obj <- auto_rate.int(dt.sec.insp,
+    ar.int.obj <- suppressWarnings(auto_rate.int(dt.sec.insp,
                                 starts = sts,
                                 measure = ens.measure - sts +1,
                                 method = "lowest",
                                 width = 300,
                                 by = "time",
-                                plot = F)
+                                plot = F))
     # test
     # first rows of summary should match
     # except these columns: rep, rank, row, endrow

@@ -10,9 +10,12 @@ subset_data(x, from = NULL, to = NULL, by = "time", quiet = TRUE)
 \item{x}{\code{data.frame}, \code{inspect}, or \code{inspect.ft} object. The data from which
 to produce a subset.}
 
-\item{from}{numeric. The lower bounds of the subset based on the \code{by} input.}
+\item{from}{numeric. Defaults to \code{NULL}. The lower bounds of the subset based
+on the \code{by} input. If \code{NULL} the subset starts at the beginning of the
+data.}
 
-\item{to}{numeric. The upper bounds of the subset based on the \code{by} input.}
+\item{to}{numeric. Defaults to \code{NULL}. The upper bounds of the subset based
+on the \code{by} input. If \code{NULL} the subset runs to the end of the data.}
 
 \item{by}{string. \code{"time"}, \code{"row"}, or \code{"oxygen"}. Method by which to apply
 the \code{from} and \code{to} inputs.}
@@ -51,6 +54,12 @@ columns of oxygen data, the subset object will include \emph{all} columns. In th
 case of subsetting \code{by = "oxygen"}, subsetting is based on the \emph{first} column
 of oxygen data only (i.e. column 2), and all subsequent columns are subset
 between the same rows regardless of oxygen values.
+
+Both \code{from} and \code{to} default to \code{NULL}, and either can be left \code{NULL} on its
+own. A \code{NULL} \code{from} subsets from the start of the data, and a \code{NULL} \code{to}
+subsets to the end of it. If both are \code{NULL} the entire dataset is returned.
+The start and end used depend on the \code{by} input: the first and last time
+values, row 1 and the final row, or the first and last oxygen values.
 
 For all methods, if exact matching values of \code{from} and \code{to} are not present
 in the data, the closest values are used. For \code{"time"} and \code{"row"}

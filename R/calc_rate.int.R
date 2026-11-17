@@ -356,6 +356,7 @@ calc_rate.int <- function(x,
   # Could make this an error and force input
   # For now make it whole replicate
   # These will cover any eventuality and make it max value
+  measure_null <- is.null(measure) # clipping is intended, so is not warned about
   if(is.null(measure)) {
     message("calc_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.")
     if(by == "row") measure <- nrow(df)
@@ -379,6 +380,10 @@ calc_rate.int <- function(x,
                  p = starts,
                  q = ends,
                  SIMPLIFY = FALSE)
+
+  # warn where 'measure' overruns a replicate and the rate will be calculated
+  # from fewer rows than requested
+  if(!measure_null) check_measure(reps, from, to, by, "calc_rate.int")
 
   # Run calc_rate on reps ---------------------------------------------------
 
@@ -698,11 +703,12 @@ calc_rate.rep <- function(x,
                           supp.mess = TRUE,
                           ...){
   if(by == "row" && !is.null(from) && from > nrow(x))
-    stop(glue::glue("calc_rate.int: Replicate {rep} contains only {nrow(x)} rows. ",
-                    "A wait of {from - 1} rows leaves no measurement data."), call. = FALSE)
+    stop(glue::glue("calc_rate.int: 'wait' of {from - 1} rows exceeds the {nrow(x)} rows ",
+                    "in replicate {rep}, leaving no data for 'measure'."), call. = FALSE)
   if(by == "time" && !is.null(from) && from > max(x[[1]], na.rm = TRUE))
-    stop(glue::glue("calc_rate.int: Replicate {rep} spans only {diff(range(x[[1]], na.rm = TRUE))} time units. ",
-                    "A wait of {from - x[[1]][1]} time units leaves no measurement data."), call. = FALSE)
+    stop(glue::glue("calc_rate.int: 'wait' of {from - x[[1]][1]} time units exceeds the ",
+                    "{diff(range(x[[1]], na.rm = TRUE))} time units in replicate {rep}, ",
+                    "leaving no data for 'measure'."), call. = FALSE)
 
   if(supp.mess) out <- suppressMessages(calc_rate(x,
                                                   from = from,

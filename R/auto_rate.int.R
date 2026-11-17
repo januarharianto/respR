@@ -453,6 +453,7 @@ auto_rate.int <- function(x,
   # Could make this an error and force input
   # For now make it whole replicate
   # These will cover any eventuality and make it max value
+  measure_null <- is.null(measure) # clipping is intended, so is not warned about
   if(is.null(measure)) {
     message("auto_rate.int: The `measure` input is NULL. Calculating rate to the end of the replicate.")
     if(by == "row") measure <- nrow(df)
@@ -477,6 +478,11 @@ auto_rate.int <- function(x,
                  q = ends,
                  SIMPLIFY = FALSE)
 
+  # warn where 'measure' overruns a replicate and the rate will be calculated
+  # from fewer rows than requested, and stop where too few rows remain
+  if(!measure_null)
+    check_measure(reps, from, to, by, "auto_rate.int", allow_single = FALSE)
+
   # last one too short
 
   # if by = "time", remove last row of each (except last rep) since this "belongs" to
@@ -489,8 +495,8 @@ auto_rate.int <- function(x,
   if(by == "row")
     res <- mapply(function(p,q,r,s,t) {
       if(r > nrow(p))
-        stop(glue::glue("auto_rate.int: Replicate {q} contains only {nrow(p)} rows. ",
-                        "A wait of {r - 1} rows leaves no measurement data."), call. = FALSE)
+        stop(glue::glue("auto_rate.int: 'wait' of {r - 1} rows exceeds the {nrow(p)} rows ",
+                        "in replicate {q}, leaving no data for 'measure'."), call. = FALSE)
 
       sub <- truncate_data(p,
                          from = r,
@@ -531,8 +537,9 @@ auto_rate.int <- function(x,
       to_rel <- s + p[[1,1]]
 
       if(from_rel > max(p[[1]], na.rm = TRUE))
-        stop(glue::glue("auto_rate.int: Replicate {q} spans only {diff(range(p[[1]], na.rm = TRUE))} time units. ",
-                        "A wait of {r} time units leaves no measurement data."), call. = FALSE)
+        stop(glue::glue("auto_rate.int: 'wait' of {r} time units exceeds the ",
+                        "{diff(range(p[[1]], na.rm = TRUE))} time units in replicate {q}, ",
+                        "leaving no data for 'measure'."), call. = FALSE)
 
       sub <- truncate_data(p,
                          from = from_rel,
@@ -942,15 +949,11 @@ auto_rate.rep <- function(x,
     suppressMessages(calc_win(x, width, by, "auto_rate.int", rep = rep))
 
   # run auto_rate
+  # re-raise the mixed rates error naming the replicate it came from
   out <- tryCatch(
     suppressMessages(auto_rate(x, method = method, width = width, by = by, plot = plot, ...)),
-    respR_mixed_rates = function(e) {
-      stop(sprintf(paste0(
-        "auto_rate.int: Replicate %d (of %d) has both positive and negative rates.\n",
-        "The '%s' method requires rates with the same sign.\n",
-        "Adjust 'wait' or 'measure' so the rates are all positive or all negative."
-      ), rep, total_reps, method), call. = FALSE)
-    }
+    respR_mixed_rates = function(e)
+      stop_mixed_rates(method, "auto_rate.int", rep, total_reps)
   )
   # add rep
   out$summary$rep <- rep

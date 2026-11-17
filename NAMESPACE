@@ -89,36 +89,46 @@ import(graphics)
 import(parallel)
 import(stats)
 import(utils)
-importFrom(data.table,as.data.table)
-importFrom(data.table,between)
-importFrom(data.table,data.table)
-importFrom(data.table,fread)
-importFrom(data.table,rbindlist)
-importFrom(data.table,setnames)
-importFrom(data.table,setorder)
-importFrom(dplyr,arrange)
-importFrom(dplyr,desc)
+importFrom(data.table,
+  as.data.table,
+  between,
+  data.table,
+  fread,
+  rbindlist,
+  setnames,
+  setorder
+)
+importFrom(dplyr,
+  arrange,
+  desc
+)
 importFrom(glue,glue)
 importFrom(lubridate,parse_date_time)
 importFrom(magrittr,"%>%")
-importFrom(marelac,atmComp)
-importFrom(marelac,convert_T)
-importFrom(marelac,convert_p)
-importFrom(marelac,gas_satconc)
-importFrom(marelac,molvol)
-importFrom(marelac,molweight)
-importFrom(marelac,sw_dens)
-importFrom(marelac,vapor)
-importFrom(parallel,clusterExport)
-importFrom(parallel,detectCores)
-importFrom(parallel,makeCluster)
-importFrom(parallel,parLapply)
-importFrom(parallel,stopCluster)
+importFrom(marelac,
+  atmComp,
+  convert_T,
+  convert_p,
+  gas_satconc,
+  molvol,
+  molweight,
+  sw_dens,
+  vapor
+)
+importFrom(parallel,
+  clusterExport,
+  detectCores,
+  makeCluster,
+  parLapply,
+  stopCluster
+)
 importFrom(purrr,reduce)
 importFrom(roll,roll_lm)
 importFrom(stats,quantile)
 importFrom(stringr,str_replace)
 importFrom(tools,file_path_sans_ext)
 importFrom(utils,packageDescription)
-importFrom(xml2,read_html)
-importFrom(xml2,xml_text)
+importFrom(xml2,
+  read_html,
+  xml_text
+)

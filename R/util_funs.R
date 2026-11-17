@@ -425,6 +425,78 @@ truncate_data <- function(x, from, to, by) {
   return(out)
 }
 
+#' Check the measurement section fits within each replicate
+#'
+#' Used by `calc_rate.int` and `auto_rate.int`. A `measure` input can extend
+#' past the end of a replicate, in which case the measurement section is
+#' quietly clipped to the data that remains and the rate calculated from fewer
+#' rows than were asked for. This warns when that happens and names the
+#' replicates affected. Replicates where `wait` itself overruns are left to the
+#' errors in the calling functions.
+#'
+#' @param reps list. Data frames, one per replicate.
+#' @param from numeric. Start of the measurement section within each replicate.
+#' @param to numeric. End of the measurement section within each replicate.
+#' @param by string.
+#' @param msg string. Attach function name for message.
+#' @param allow_single logical. `FALSE` stops with an error where a replicate
+#'   is left with fewer than 2 rows, for functions which cannot use one row.
+#'
+#' @return Called for its warning
+#' @keywords internal
+check_measure <- function(reps, from, to, by, msg, allow_single = TRUE) {
+
+  n <- length(reps)
+  from <- rep_len(from, n)
+  to <- rep_len(to, n)
+
+  # data left in each replicate once 'wait' has been applied, against how much
+  # 'measure' asked for
+  if(by == "row") {
+    total <- sapply(reps, nrow)
+    avail <- total - from + 1
+    want <- to - from + 1
+  } else {
+    total <- sapply(reps, function(z) diff(range(nainf.omit(z[[1]]))))
+    avail <- total - from
+    want <- to - from
+  }
+
+  # tolerance stops floating point time values reporting a shortfall.
+  # replicates where 'wait' overruns are reported by the calling function
+  short <- which(from <= total & avail < want - 1e-8)
+  if(length(short) == 0) return(invisible(NULL))
+
+  # rows actually used in the affected replicates, to find any left with too
+  # little data to calculate a rate at all
+  rows <- sapply(short, function(i) {
+    offset <- if(by == "time") reps[[i]][[1,1]] else 0
+    nrow(truncate_data(reps[[i]], from[i] + offset, to[i] + offset, by))
+  })
+
+  if(!allow_single && any(rows < 2)) {
+    i <- which(rows < 2)[1]
+    stop(glue::glue("{msg}: 'measure' leaves only {rows[i]} row in replicate {short[i]}, ",
+                    "which is too few to calculate a rate.\n",
+                    " Adjust 'wait' or 'measure', or exclude this replicate from 'starts'.",
+                    .trim = FALSE), call. = FALSE)
+  }
+
+  if(by == "row") units <- "rows" else units <- "time units"
+
+  lines <- glue::glue(" Replicate {short}: 'measure' phase set to {avail[short]} {units} ",
+                      "instead of the {want[short]} requested.")
+  # a replicate left with a single row cannot give a rate
+  lines[rows < 2] <- glue::glue(" Replicate {short[rows < 2]}: 'measure' phase set to ",
+                                "{rows[rows < 2]} row, too few to calculate a rate, ",
+                                "so the rate is NA.")
+  if(length(lines) > 20) lines <- c(lines[1:20], " (first 20 shown)")
+
+  warning(paste0(glue::glue("{msg}: 'measure' exceeds the data available in ",
+                            "{length(short)} of {n} replicates."),
+                 "\n", paste(lines, collapse = "\n")), call. = FALSE)
+}
+
 
 # FUNCTIONS for P_crit----------------------------
 

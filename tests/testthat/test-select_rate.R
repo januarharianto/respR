@@ -2747,7 +2747,9 @@ capture.output({  ## stops printing outputs on assigning
   # Multiple adjusted rates
   test_that("select_rate: calc_rate.int-to-adjust_rate-to-convert_rate object with multiple rates works", {
 
-    cr.int_mult_adj <-
+    # 'measure' overruns the short final replicate, which is not what this
+    # test is about
+    cr.int_mult_adj <- suppressWarnings(
       intermittent.rd %>%
       inspect(plot = FALSE)%>%
       calc_rate.int(starts = c(1, 2101, 3901),
@@ -2760,7 +2762,7 @@ capture.output({  ## stops printing outputs on assigning
                    time.unit = "s",
                    output.unit = "mg/h/g",
                    mass = 0.006955,
-                   volume = 2.379)
+                   volume = 2.379))
 
     # should not remove any rates
     expect_error(select_rate(cr.int_mult_adj, method = "rate", n = c(-0.6, -0.8)),

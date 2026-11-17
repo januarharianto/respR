@@ -2,6 +2,11 @@
 ## Version 2.x.x -- 2026-xx-xx - In preparation.
 
 - FIX: `convert_val()` now supports `mmHg` and `inHg` pressure unit conversions (previously accepted by the parser but silently returned `NA`).
+- CHANGE: `auto_rate.int()` and `calc_rate.int()` now give clearer errors when the `starts`, `wait`, `measure` and `width` inputs do not fit the data. Previously these surfaced as errors from internal functions which referred to inputs (such as `from` and `to`) that are not inputs of these functions, and did not say which replicate was the problem. Errors now name the replicate and report what was requested against what is available. See [#193](https://github.com/januarharianto/respR/issues/193).
+- CHANGE: `auto_rate.int()` now stops with an error, rather than one from `auto_rate()`, where `measure` leaves a replicate with too few rows to calculate a rate.
+- NEW: `auto_rate.int()` and `calc_rate.int()` now warn when `measure` extends past the end of a replicate and the measurement phase is therefore shortened. This clipping was previously silent, so a rate could be returned from much less data than requested without any indication. Entering `measure = NULL` to use the whole replicate is unaffected.
+- FIX: The `auto_rate()` `'highest'` method's mixed positive/negative rates error incorrectly referred to ordering by the *lowest* absolute rate. It now says *highest*.
+- NEW: Documented the behaviour of `NULL` `from` and `to` inputs in `calc_rate()`, `calc_rate.ft()`, and `subset_data()`. Either input can be left `NULL` on its own, in which case the region starts at the beginning of the data or runs to the end of it. This was previously only mentioned in the vignettes.
 - FIX: `convert_DO()` fixed typo in calculation values which would cause very minor error converting from `hPa` values.
 - CHANGE: Updated URL in startup message.
 - CHANGE: Minimum `R` version raised to 4.1. Several dependencies (`dplyr`, `glue`, `purrr`, `stringr`) already require 4.1, so this reflects what was in practice already the case.

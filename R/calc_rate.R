@@ -33,7 +33,8 @@
 #' case, `$rate` in the output will be a vector of multiple rates with each
 #' result corresponding to the position of the paired `from` and `to` inputs. If
 #' `from` and `to` are `NULL` (the default), the rate is determined over the
-#' entire dataset.
+#' entire dataset. Either input can be left `NULL` on its own: a `NULL` `from`
+#' starts at the beginning of the data, and a `NULL` `to` runs to the end of it.
 #'
 #' ## Plot
 #'
@@ -87,10 +88,12 @@
 #'   paired values of oxygen against time from which to calculate rates.
 #' @param from numeric value or vector. Defaults to `NULL`. The start of the
 #'   region(s) over which you want to calculate the rate in the units specified
-#'   in `by`. If a vector, each value must have a paired value in `to`.
+#'   in `by`. If a vector, each value must have a paired value in `to`. If
+#'   `NULL` the region starts at the beginning of the data.
 #' @param to numeric value or vector. Defaults to `NULL`. The end of the
 #'   region(s) over which you want to calculate the rate in the units specified
-#'   in `by`. If a vector, each value must have a paired value in `from`.
+#'   in `by`. If a vector, each value must have a paired value in `from`. If
+#'   `NULL` the region runs to the end of the data.
 #' @param by string. `"time"`, `"row"`, or `"oxygen"`. Defaults to `"time"`.
 #'   This is the method used to subset the data region between `from` and `to`.
 #' @param plot logical. Defaults to `TRUE`. Plot the results.

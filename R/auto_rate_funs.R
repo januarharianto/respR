@@ -98,13 +98,39 @@ auto_rate_max <- function(dt, width, by = 'row') {
   return(out)
 }
 
-stop_mixed_rates <- function(method) {
-  message <- sprintf(paste0(
-    "auto_rate: Analysis produces both negative and positive rates. \n",
-    " The '%s' method is intended to order by the %s *absolute* rate amongst rates all having the same sign.\n",
-    " Use 'maximum' or 'minimum' method to order rates by *numerical* value."
-  ), method, method)
-  error <- simpleError(message)
+#' Stop with the mixed positive/negative rates error
+#'
+#' Raises a classed condition so that `auto_rate.rep` can catch it and re-raise
+#' it with the replicate it came from. Both forms of the message are built here
+#' so the wording stays in one place.
+#'
+#' @param method string. The `auto_rate` method in use ('highest' or 'lowest').
+#' @param msg string. Attach function name for message (usually auto_rate).
+#' @param rep optional replicate number. Passed by the intermittent-flow
+#'   functions, and adds the replicate and a 'wait'/'measure' hint.
+#' @param total_reps optional total number of replicates.
+#'
+#' @return Called for its error
+#' @keywords internal
+stop_mixed_rates <- function(method, msg = "auto_rate", rep = NULL,
+                             total_reps = NULL) {
+
+  if(is.null(rep)) {
+    subject <- "Analysis"
+    extra <- ""
+  } else {
+    subject <- glue::glue("Analysis of replicate {rep} (of {total_reps})")
+    extra <- ", or adjust 'wait' and 'measure' to exclude the flush"
+  }
+
+  # .trim = FALSE keeps the leading space on the continuation lines, which glue
+  # would otherwise strip
+  txt <- glue::glue("{msg}: {subject} produces both negative and positive rates. \n",
+                    " The '{method}' method is intended to order by the {method} *absolute* rate amongst rates all having the same sign.\n",
+                    " Use 'maximum' or 'minimum' method to order rates by *numerical* value{extra}.",
+                    .trim = FALSE)
+
+  error <- simpleError(as.character(txt))
   class(error) <- c("respR_mixed_rates", class(error))
   stop(error)
 }
@@ -516,23 +542,24 @@ time_lm <- function(df, start, end) {
 #' @keywords internal
 calc_win <- function(dt, width, by, msg, rep = NULL) {
 
+  # 'rep' is only passed by the intermittent-flow functions, which analyse each
+  # replicate separately. Without it the original dataset-wide errors are used.
   window_error <- function(available, default) {
     if(is.null(rep))
       stop(glue::glue("{msg}: {default}"), call. = FALSE)
 
-    if(width == available)
-      problem <- "The analysis window must be shorter than the measurement section" else
-        problem <- "The analysis window is too long"
+    if(by == "row" && width == available)
+      problem <- "'width' cannot equal the rows available for analysis"
+    if(by == "row" && width > available)
+      problem <- "'width' exceeds the rows available for analysis"
+    if(by == "time")
+      problem <- "'width' cannot exceed or equal the time available for analysis"
 
-    if(by == "row") {
-      if(width == available)
-        detail <- glue::glue("You requested {width} rows (width = {width}), which is all {available} rows available for analysis.") else
-          detail <- glue::glue("You requested {width} rows (width = {width}), but only {available} rows are available for analysis.")
-    } else {
-      detail <- glue::glue("You requested {width} time units (width = {width}), but only {available} are available for analysis.")
-    }
+    if(by == "row") units <- "rows" else units <- "time units"
 
-    stop(glue::glue("{msg}: {problem} for replicate {rep}.\n{detail}"), call. = FALSE)
+    stop(glue::glue("{msg}: {problem} in replicate {rep} ",
+                    "('width = {width}', {available} {units} available)."),
+         call. = FALSE)
   }
 
   if(by == "row"){

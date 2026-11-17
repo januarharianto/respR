@@ -6,6 +6,11 @@
 # covr::report(cvr)
 # covr::report(covr::package_coverage())
 
+# Note: many calls below are wrapped in suppressWarnings() because 'measure'
+# overruns the short final replicate of the test data, which raises the
+# 'measure' exceeds the data available warning. That warning is tested
+# separately; it is not the subject of these tests.
+
 capture.output({  ## stops printing outputs on assigning
 
   if (!identical(Sys.getenv("NOT_CRAN"), "true")) return()
@@ -237,12 +242,12 @@ capture.output({  ## stops printing outputs on assigning
                         by = "time",
                         plot = F)
     #calc_rate.int object
-    cr.int.obj <- calc_rate.int(dt.insp,
+    cr.int.obj <- suppressWarnings(calc_rate.int(dt.insp,
                                 starts = sts,
                                 wait = 500,
                                 measure = 500,
                                 by = "time",
-                                plot = F)
+                                plot = F))
     # test
     expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
                  cr.int.obj$summary[,3:ncol(cr.obj$summary)])
@@ -375,12 +380,12 @@ capture.output({  ## stops printing outputs on assigning
                         by = "time",
                         plot = F)
     #calc_rate.int object
-    cr.int.obj <- calc_rate.int(dt.insp,
+    cr.int.obj <- suppressWarnings(calc_rate.int(dt.insp,
                                 starts = sts,
                                 wait = c(200, 300, 400),
                                 measure = 600,
                                 by = "time",
-                                plot = F)
+                                plot = F))
     # test
     expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
                  cr.int.obj$summary[,3:ncol(cr.obj$summary)])
@@ -437,12 +442,12 @@ capture.output({  ## stops printing outputs on assigning
                         by = "row",
                         plot = F)
     #calc_rate.int object
-    cr.int.obj <- calc_rate.int(dt.insp,
+    cr.int.obj <- suppressWarnings(calc_rate.int(dt.insp,
                                 starts = sts,
                                 wait = 500,
                                 measure = 500,
                                 by = "row",
-                                plot = F)
+                                plot = F))
     # test
     expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
                  cr.int.obj$summary[,3:ncol(cr.obj$summary)])
@@ -573,12 +578,12 @@ capture.output({  ## stops printing outputs on assigning
                         by = "row",
                         plot = F)
     #calc_rate.int object
-    cr.int.obj <- calc_rate.int(dt.insp,
+    cr.int.obj <- suppressWarnings(calc_rate.int(dt.insp,
                                 starts = sts,
                                 wait = c(200, 300, 400),
                                 measure = 601,
                                 by = "row",
-                                plot = F)
+                                plot = F))
     # test
     expect_equal(cr.obj$summary[,3:ncol(cr.obj$summary)],
                  cr.int.obj$summary[,3:ncol(cr.obj$summary)])
@@ -789,32 +794,71 @@ capture.output({  ## stops printing outputs on assigning
     expect_error(
       suppressMessages(calc_rate.int(data, starts = 660, wait = 300,
                                      measure = 300, plot = FALSE)),
-      paste0("calc_rate.int: Replicate 5 contains only 21 rows. ",
-             "A wait of 300 rows leaves no measurement data."),
+      paste0("calc_rate.int: 'wait' of 300 rows exceeds the 21 rows ",
+             "in replicate 5, leaving no data for 'measure'."),
       fixed = TRUE)
 
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
     for (by in c("row", "time")) {
       starts <- if(by == "row") c(1, 101) else c(0, 100)
-      available <- if(by == "row") "contains only 60 rows" else "spans only 59 time units"
+      available <- if(by == "row") "60 rows" else "59 time units"
       units <- if(by == "row") "rows" else "time units"
       for (wait in list(60, c(10, 60))) {
         expect_error(
           suppressMessages(calc_rate.int(data, starts = starts, wait = wait,
                                          measure = 20, by = by, plot = FALSE)),
-          paste0("calc_rate.int: Replicate 2 ", available, ". ",
-                 "A wait of 60 ", units, " leaves no measurement data."),
+          paste0("calc_rate.int: 'wait' of 60 ", units, " exceeds the ",
+                 available, " in replicate 2, leaving no data for 'measure'."),
           fixed = TRUE)
       }
     }
+  })
+
+  test_that("calc_rate.int - warns when 'measure' overruns a replicate", {
+    data <- zeb_intermittent.rd[16290:18950,]
+    data[[1]] <- seq_len(nrow(data))
+    # replicate 5 holds 21 rows, so a 600 row 'measure' is clipped to 11
+    expect_warning(
+      suppressMessages(calc_rate.int(data, starts = 660, wait = 10,
+                                     measure = 600, plot = FALSE)),
+      paste0("calc_rate.int: 'measure' exceeds the data available in 1 of 5 replicates.\n",
+             " Replicate 5: 'measure' phase set to 11 rows instead of the 600 requested."),
+      fixed = TRUE)
+
+    # a replicate left with one row returns NA rather than stopping
+    expect_warning(
+      out <- suppressMessages(calc_rate.int(data, starts = 660, wait = 20,
+                                            measure = 5, plot = FALSE)),
+      paste0("calc_rate.int: 'measure' exceeds the data available in 1 of 5 replicates.\n",
+             " Replicate 5: 'measure' phase set to 1 row, too few to calculate a rate, ",
+             "so the rate is NA."),
+      fixed = TRUE)
+    expect_equal(out$rate[5], NA_real_)
+    expect_length(out$rate, 5)
+
+    # by = "time" reports the shortfall in time units
+    expect_warning(
+      suppressMessages(calc_rate.int(data, starts = 660, wait = 10,
+                                     measure = 600, by = "time", plot = FALSE)),
+      "time units instead of the 600 requested", fixed = TRUE)
+  })
+
+  test_that("calc_rate.int - 'measure' fitting within every replicate is silent", {
+    expect_no_warning(
+      suppressMessages(calc_rate.int(intermittent.rd, starts = c(1, 2100, 3899),
+                                     wait = 100, measure = 500, plot = FALSE)))
+    # a NULL 'measure' clips to the end of each replicate by design
+    expect_no_warning(
+      suppressMessages(calc_rate.int(intermittent.rd, starts = c(1, 2100, 3899),
+                                     wait = 100, plot = FALSE)))
   })
 
   test_that("calc_rate.int - valid measurement sections still clip at the final row", {
     data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
     for (by in c("row", "time")) {
       starts <- if(by == "row") c(1, 101) else c(0, 100)
-      out <- suppressMessages(calc_rate.int(data, starts = starts, wait = 10,
-                                            measure = 80, by = by, plot = FALSE))
+      out <- suppressMessages(suppressWarnings(calc_rate.int(data, starts = starts, wait = 10,
+                                            measure = 80, by = by, plot = FALSE)))
       expected <- unname(coef(lm(oxygen ~ time, data = data[111:160,]))[2])
       expect_length(out$rate, 2)
       expect_equal(out$rate[2], expected)

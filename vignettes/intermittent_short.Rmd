@@ -158,7 +158,7 @@ urch_rates <-  calc_rate.int(urchin_int,
                              legend = TRUE)
 ```
 
-In this plot, the data used to calculate the rate is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase (we added `legend = TRUE` so we can see labels for this example).
+In this plot, the data used to calculate the rate is the yellow points, the red shaded region is the `wait` phase, and the green shaded region the `measure` phase (we added `legend = TRUE` so we can see labels for this example). Note the warning: the default behaviour of the function is to calculate a rate for a replicate with all available data even when this may be less than the specified `measure` phase.
 
 In these data of oxygen recorded once per second the time and row values are equivalent, so in the first replicate we can see the rate has been determined from timepoints 300 to 900 timepoints later (i.e. 1200). In the other replicates it is from the same equivalent time or row window. Note the third replicate is not long enough to *have* a timepoint of 1200. The default is to use the closest value which in this case is the final row of the dataset, and is acceptable here because there is no flush to worry about.
 

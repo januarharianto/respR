@@ -12,11 +12,13 @@ paired values of oxygen against time from which to calculate rates.}
 
 \item{from}{numeric value or vector. Defaults to \code{NULL}. The start of the
 region(s) over which you want to calculate the rate in the units specified
-in \code{by}. If a vector, each value must have a paired value in \code{to}.}
+in \code{by}. If a vector, each value must have a paired value in \code{to}. If
+\code{NULL} the region starts at the beginning of the data.}
 
 \item{to}{numeric value or vector. Defaults to \code{NULL}. The end of the
 region(s) over which you want to calculate the rate in the units specified
-in \code{by}. If a vector, each value must have a paired value in \code{from}.}
+in \code{by}. If a vector, each value must have a paired value in \code{from}. If
+\code{NULL} the region runs to the end of the data.}
 
 \item{by}{string. \code{"time"}, \code{"row"}, or \code{"oxygen"}. Defaults to \code{"time"}.
 This is the method used to subset the data region between \code{from} and \code{to}.}
@@ -65,7 +67,8 @@ and \code{to} as vectors of paired values to specify different regions. In this
 case, \verb{$rate} in the output will be a vector of multiple rates with each
 result corresponding to the position of the paired \code{from} and \code{to} inputs. If
 \code{from} and \code{to} are \code{NULL} (the default), the rate is determined over the
-entire dataset.
+entire dataset. Either input can be left \code{NULL} on its own: a \code{NULL} \code{from}
+starts at the beginning of the data, and a \code{NULL} \code{to} runs to the end of it.
 }
 
 \subsection{Plot}{

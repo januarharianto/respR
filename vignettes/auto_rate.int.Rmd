@@ -154,6 +154,8 @@ auto_rate.int(urchin,
   summary()
 ```
 
+Note the warning: the default behaviour of the function is to calculate a rate for a replicate with all available data even when this may be less than the specified `measure` phase.
+
 This is the `highest` rate over a period of 8 minutes from each replicate:
 
 ```{r results='hold', fig.alt="auto_rate.int plot showing the highest rate over an 8-minute window extracted from each of three replicates using time-based selection"}

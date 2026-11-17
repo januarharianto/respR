@@ -26,13 +26,15 @@ but will be specified in \code{\link{convert_rate.ft}}.}
 
 \item{from}{numeric value or vector. Defaults to \code{NULL}. The start of the
 region(s) over which you want to calculate the rate in either time or row
-units. If a vector, each value must have a paired value in \code{to}. For use
-with \code{inspect.ft} inputs only.}
+units. If a vector, each value must have a paired value in \code{to}. If \code{NULL}
+the region starts at the beginning of the data. For use with \code{inspect.ft}
+inputs only.}
 
 \item{to}{numeric value or vector. Defaults to \code{NULL}. The end of the
 region(s) over which you want to calculate the rate in either time or row
-units. If a vector, each value must have a paired value in \code{from}. For use
-with \code{inspect.ft} inputs only.}
+units. If a vector, each value must have a paired value in \code{from}. If
+\code{NULL} the region runs to the end of the data. For use with \code{inspect.ft}
+inputs only.}
 
 \item{by}{\code{"time"} or \code{"row"}. Defaults to \code{"time"}. Specifies the units of
 the \code{from} and \code{by}, or \code{width} value. For use with \code{inspect.ft} inputs
@@ -99,7 +101,9 @@ dataset by entering \code{from} and \code{to} as vectors of paired values to spe
 different regions. In this case, \verb{$rate} in the output will be a vector of
 multiple rates with each result corresponding to the position of the paired
 \code{from} and \code{to} inputs. If \code{from} and \code{to} are \code{NULL} (the default), the rate
-is determined over the entire dataset.
+is determined over the entire dataset. Either input can be left \code{NULL} on its
+own: a \code{NULL} \code{from} starts at the beginning of the data, and a \code{NULL} \code{to}
+runs to the end of it.
 
 Alternatively a \code{width} input can be specified, in which case a rolling rate
 is calculated using this window size (in the relevant \code{by} units) across the
