@@ -4,7 +4,7 @@
 \alias{calc_win}
 \title{Automatically calculate rolling window}
 \usage{
-calc_win(dt, width, by, msg)
+calc_win(dt, width, by, msg, rep = NULL)
 }
 \arguments{
 \item{dt}{data.frame object.}
@@ -14,6 +14,8 @@ calc_win(dt, width, by, msg)
 \item{by}{string.}
 
 \item{msg}{string. Attach function name for message (usually auto_rate)}
+
+\item{rep}{optional replicate number to include in window-size errors.}
 }
 \value{
 a numeric

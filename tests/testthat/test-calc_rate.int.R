@@ -783,6 +783,46 @@ capture.output({  ## stops printing outputs on assigning
                  cr.int.adj$summary$adjustment)
   })
 
+  test_that("calc_rate.int - waits leaving no measurement data identify the replicate", {
+    data <- zeb_intermittent.rd[16290:18950,]
+    data[[1]] <- seq_len(nrow(data))
+    expect_error(
+      suppressMessages(calc_rate.int(data, starts = 660, wait = 300,
+                                     measure = 300, plot = FALSE)),
+      paste0("calc_rate.int: Replicate 5 contains only 21 rows. ",
+             "A wait of 300 rows leaves no measurement data."),
+      fixed = TRUE)
+
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
+    for (by in c("row", "time")) {
+      starts <- if(by == "row") c(1, 101) else c(0, 100)
+      available <- if(by == "row") "contains only 60 rows" else "spans only 59 time units"
+      units <- if(by == "row") "rows" else "time units"
+      for (wait in list(60, c(10, 60))) {
+        expect_error(
+          suppressMessages(calc_rate.int(data, starts = starts, wait = wait,
+                                         measure = 20, by = by, plot = FALSE)),
+          paste0("calc_rate.int: Replicate 2 ", available, ". ",
+                 "A wait of 60 ", units, " leaves no measurement data."),
+          fixed = TRUE)
+      }
+    }
+  })
+
+  test_that("calc_rate.int - valid measurement sections still clip at the final row", {
+    data <- data.frame(time = 0:159, oxygen = 10 - 0.01 * (0:159) + 0.0001 * sin(0:159))
+    for (by in c("row", "time")) {
+      starts <- if(by == "row") c(1, 101) else c(0, 100)
+      out <- suppressMessages(calc_rate.int(data, starts = starts, wait = 10,
+                                            measure = 80, by = by, plot = FALSE))
+      expected <- unname(coef(lm(oxygen ~ time, data = data[111:160,]))[2])
+      expect_length(out$rate, 2)
+      expect_equal(out$rate[2], expected)
+      expect_equal(out$summary$row[2], 111)
+      expect_equal(out$summary$endrow[2], 160)
+    }
+  })
+
 }) ## end capture output
 
 

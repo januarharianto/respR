@@ -488,6 +488,10 @@ auto_rate.int <- function(x,
 
   if(by == "row")
     res <- mapply(function(p,q,r,s,t) {
+      if(r > nrow(p))
+        stop(glue::glue("auto_rate.int: Replicate {q} contains only {nrow(p)} rows. ",
+                        "A wait of {r - 1} rows leaves no measurement data."), call. = FALSE)
+
       sub <- truncate_data(p,
                          from = r,
                          to = s,
@@ -499,6 +503,7 @@ auto_rate.int <- function(x,
                            by = by,
                            plot = FALSE,
                            rep = q,
+                           total_reps = length(reps),
                            n = n,
                            rep_row = t,
                            meas_row = r,
@@ -525,10 +530,9 @@ auto_rate.int <- function(x,
       from_rel <- r + p[[1,1]] # time relative to this rep
       to_rel <- s + p[[1,1]]
 
-      # above from is start of rep plus wait
-      # to is to plus wait
-      # both of these are past last value in last rep as it's only 19 rows
-      # so truncate data matches to last row as it's closest value
+      if(from_rel > max(p[[1]], na.rm = TRUE))
+        stop(glue::glue("auto_rate.int: Replicate {q} spans only {diff(range(p[[1]], na.rm = TRUE))} time units. ",
+                        "A wait of {r} time units leaves no measurement data."), call. = FALSE)
 
       sub <- truncate_data(p,
                          from = from_rel,
@@ -551,7 +555,6 @@ auto_rate.int <- function(x,
       #           & dt[[1]] <= dt[[1]][which.min(abs(dt[[1]] - to))]]
 
 
-      # Check - wait is not longer than rep
       # Check - measure is not longer than rep
       # Check - wait + measure is not longer than rep
       # Any rep 50% or so of length others
@@ -562,6 +565,7 @@ auto_rate.int <- function(x,
                            by = by,
                            plot = FALSE,
                            rep = q,
+                           total_reps = length(reps),
                            n = n,
                            rep_row = t,
                            meas_row = meas_row,
@@ -908,6 +912,7 @@ mean.auto_rate.int <- function(x, pos = NULL, export = FALSE, ...){
 #' @param by auto_rate by
 #' @param plot auto_rate plot
 #' @param rep The replicate
+#' @param total_reps Total number of replicates
 #' @param n number of results to return
 #' @param rep_row start row of this rep in the larger dataset
 #' @param meas_row start row of the measure phase in *this* rep
@@ -930,15 +935,23 @@ auto_rate.rep <- function(x,
                           meas_row = NULL,
                           meas_endrow = NULL,
                           rep_data = NULL,
-                          ...){
+                          ..., total_reps = 1){
+
+  # Add replicate context to window errors; leave single-row checks to auto_rate.
+  if(nrow(x) > 1)
+    suppressMessages(calc_win(x, width, by, "auto_rate.int", rep = rep))
 
   # run auto_rate
-  out <- suppressMessages(auto_rate(x,
-                                    method = method,
-                                    width = width,
-                                    by = by,
-                                    plot = plot,
-                                    ...))
+  out <- tryCatch(
+    suppressMessages(auto_rate(x, method = method, width = width, by = by, plot = plot, ...)),
+    respR_mixed_rates = function(e) {
+      stop(sprintf(paste0(
+        "auto_rate.int: Replicate %d (of %d) has both positive and negative rates.\n",
+        "The '%s' method requires rates with the same sign.\n",
+        "Adjust 'wait' or 'measure' so the rates are all positive or all negative."
+      ), rep, total_reps, method), call. = FALSE)
+    }
+  )
   # add rep
   out$summary$rep <- rep
 

@@ -697,6 +697,13 @@ calc_rate.rep <- function(x,
                           rep = 1,
                           supp.mess = TRUE,
                           ...){
+  if(by == "row" && !is.null(from) && from > nrow(x))
+    stop(glue::glue("calc_rate.int: Replicate {rep} contains only {nrow(x)} rows. ",
+                    "A wait of {from - 1} rows leaves no measurement data."), call. = FALSE)
+  if(by == "time" && !is.null(from) && from > max(x[[1]], na.rm = TRUE))
+    stop(glue::glue("calc_rate.int: Replicate {rep} spans only {diff(range(x[[1]], na.rm = TRUE))} time units. ",
+                    "A wait of {from - x[[1]][1]} time units leaves no measurement data."), call. = FALSE)
+
   if(supp.mess) out <- suppressMessages(calc_rate(x,
                                                   from = from,
                                                   to = to,
