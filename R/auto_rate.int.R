@@ -503,6 +503,7 @@ auto_rate.int <- function(x,
                            by = by,
                            plot = FALSE,
                            rep = q,
+                           total_reps = length(reps),
                            n = n,
                            rep_row = t,
                            meas_row = r,
@@ -564,6 +565,7 @@ auto_rate.int <- function(x,
                            by = by,
                            plot = FALSE,
                            rep = q,
+                           total_reps = length(reps),
                            n = n,
                            rep_row = t,
                            meas_row = meas_row,
@@ -910,6 +912,7 @@ mean.auto_rate.int <- function(x, pos = NULL, export = FALSE, ...){
 #' @param by auto_rate by
 #' @param plot auto_rate plot
 #' @param rep The replicate
+#' @param total_reps Total number of replicates
 #' @param n number of results to return
 #' @param rep_row start row of this rep in the larger dataset
 #' @param meas_row start row of the measure phase in *this* rep
@@ -932,19 +935,23 @@ auto_rate.rep <- function(x,
                           meas_row = NULL,
                           meas_endrow = NULL,
                           rep_data = NULL,
-                          ...){
+                          ..., total_reps = 1){
 
   # Add replicate context to window errors; leave single-row checks to auto_rate.
   if(nrow(x) > 1)
     suppressMessages(calc_win(x, width, by, "auto_rate.int", rep = rep))
 
   # run auto_rate
-  out <- suppressMessages(auto_rate(x,
-                                    method = method,
-                                    width = width,
-                                    by = by,
-                                    plot = plot,
-                                    ...))
+  out <- tryCatch(
+    suppressMessages(auto_rate(x, method = method, width = width, by = by, plot = plot, ...)),
+    respR_mixed_rates = function(e) {
+      stop(sprintf(paste0(
+        "auto_rate.int: Replicate %d (of %d) has both positive and negative rates.\n",
+        "The '%s' method requires rates with the same sign.\n",
+        "Adjust 'wait' or 'measure' so the rates are all positive or all negative."
+      ), rep, total_reps, method), call. = FALSE)
+    }
+  )
   # add rep
   out$summary$rep <- rep
 

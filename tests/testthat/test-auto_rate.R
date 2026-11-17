@@ -270,7 +270,7 @@ capture.output({  ## stops printing outputs on assigning
                  218)
     ## stops when mix of positive and negative rates
     expect_error(auto_rate(intermittent.rd, method = "highest", plot = FALSE),
-                 regexp = "auto_rate: Analysis produces both negative and positive rates.")
+                 regexp = "highest *absolute* rate", fixed = TRUE)
     ## correctly orders by absolute rate
     expect_equal(ar_obj_high$rate,
                  -1 * auto_rate(urch_data_rev, method = "highest", plot = FALSE)$rate)

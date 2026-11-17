@@ -1403,6 +1403,22 @@ capture.output({  ## stops printing outputs on assigning
                  ar.int.obj$summary[3,9:ncol(ar.int.obj$summary)])
   })
 
+  test_that("auto_rate.int identifies the replicate with mixed rates", {
+    for (method in c("lowest", "highest")) {
+      expected <- paste0(
+        "auto_rate.int: Replicate 1 (of 3) has both positive and negative rates.\n",
+        "The '", method, "' method requires rates with the same sign.\n",
+        "Adjust 'wait' or 'measure' so the rates are all positive or all negative."
+      )
+      expect_error(auto_rate.int(dt.min.1.insp, starts = sts, width = 400,
+                                 method = method, by = "row", plot = FALSE),
+                   expected, fixed = TRUE)
+    }
+    expect_error(auto_rate.int(dt.sec, starts = sts, measure = c(1000, 1700, 900),
+                               width = 400, method = "lowest", by = "time", plot = FALSE),
+                 "Replicate 2 (of 3)", fixed = TRUE)
+  })
+
   test_that("auto_rate.int - expected results with method = 'lowest' and excluded flushes", {
     skip_on_cran()
     # Whole replicate
