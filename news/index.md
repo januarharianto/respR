@@ -18,7 +18,7 @@ CRAN release: 2025-10-10
 
 CRAN release: 2024-05-10
 
-- FIX: Fix for `convert_DO` not accepting vectors for the `P` input.
+- FIX: Fix for `convert_DO` not accepting vectors for the `P` input.\
 - FIX: `convert_rate`, `convert_rate.ft`, and `convert_MR` now stop with
   an error if vectors have been entered for `S`, `t`, or `P` (instead of
   silently accepting them, but only using the first value in actual

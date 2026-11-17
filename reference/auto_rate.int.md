@@ -359,6 +359,8 @@ auto_rate.int(urch_insp,
               method = "lowest",
               width = 300) %>%
   summary()
+#> Warning: auto_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.
+#>  Replicate 3: 'measure' phase set to 931 rows instead of the 1000 requested.
 #> 
 #> # plot.auto_rate.int # ------------------
 #> plot.auto_rate.int: Plotting all rates ...

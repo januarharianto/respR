@@ -292,6 +292,8 @@ calc_rate.int(urch_insp,
 calc_rate.int(urch_insp,
               starts = c(1, 2101, 3901),
               measure = 1000)
+#> Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.
+#>  Replicate 3: 'measure' phase set to 931 rows instead of the 1000 requested.
 #> 
 #> # plot.calc_rate.int # ------------------
 #> plot.calc_rate.int: Plotting rate from all replicates ...

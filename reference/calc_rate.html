@@ -113,13 +113,15 @@ paired values of oxygen against time from which to calculate rates.</p></dd>
 <dt id="arg-from">from<a class="anchor" aria-label="anchor" href="#arg-from"></a></dt>
 <dd><p>numeric value or vector. Defaults to <code>NULL</code>. The start of the
 region(s) over which you want to calculate the rate in the units specified
-in <code>by</code>. If a vector, each value must have a paired value in <code>to</code>.</p></dd>
+in <code>by</code>. If a vector, each value must have a paired value in <code>to</code>. If
+<code>NULL</code> the region starts at the beginning of the data.</p></dd>
 
 
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
 <dd><p>numeric value or vector. Defaults to <code>NULL</code>. The end of the
 region(s) over which you want to calculate the rate in the units specified
-in <code>by</code>. If a vector, each value must have a paired value in <code>from</code>.</p></dd>
+in <code>by</code>. If a vector, each value must have a paired value in <code>from</code>. If
+<code>NULL</code> the region runs to the end of the data.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
@@ -168,7 +170,8 @@ and <code>to</code> as vectors of paired values to specify different regions. In
 case, <code>$rate</code> in the output will be a vector of multiple rates with each
 result corresponding to the position of the paired <code>from</code> and <code>to</code> inputs. If
 <code>from</code> and <code>to</code> are <code>NULL</code> (the default), the rate is determined over the
-entire dataset.</p>
+entire dataset. Either input can be left <code>NULL</code> on its own: a <code>NULL</code> <code>from</code>
+starts at the beginning of the data, and a <code>NULL</code> <code>to</code> runs to the end of it.</p>
 </div>
 
 <div class="section">

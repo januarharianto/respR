@@ -25,13 +25,14 @@ calc_rate(x, from = NULL, to = NULL, by = "time", plot = TRUE, ...)
   numeric value or vector. Defaults to `NULL`. The start of the
   region(s) over which you want to calculate the rate in the units
   specified in `by`. If a vector, each value must have a paired value in
-  `to`.
+  `to`. If `NULL` the region starts at the beginning of the data.
 
 - to:
 
   numeric value or vector. Defaults to `NULL`. The end of the region(s)
   over which you want to calculate the rate in the units specified in
-  `by`. If a vector, each value must have a paired value in `from`.
+  `by`. If a vector, each value must have a paired value in `from`. If
+  `NULL` the region runs to the end of the data.
 
 - by:
 
@@ -86,7 +87,9 @@ Multiple regions can be examined within the same dataset by entering
 regions. In this case, `$rate` in the output will be a vector of
 multiple rates with each result corresponding to the position of the
 paired `from` and `to` inputs. If `from` and `to` are `NULL` (the
-default), the rate is determined over the entire dataset.
+default), the rate is determined over the entire dataset. Either input
+can be left `NULL` on its own: a `NULL` `from` starts at the beginning
+of the data, and a `NULL` `to` runs to the end of it.
 
 ### Plot
 

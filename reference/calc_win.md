@@ -6,7 +6,7 @@ regressions.
 ## Usage
 
 ``` r
-calc_win(dt, width, by, msg)
+calc_win(dt, width, by, msg, rep = NULL)
 ```
 
 ## Arguments
@@ -26,6 +26,10 @@ calc_win(dt, width, by, msg)
 - msg:
 
   string. Attach function name for message (usually auto_rate)
+
+- rep:
+
+  optional replicate number to include in window-size errors.
 
 ## Value
 

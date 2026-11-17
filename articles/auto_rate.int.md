@@ -306,7 +306,9 @@ In these examples we use `by = "time"` selection of regions. This is the
 `              method ``=`` ``"lowest"``,`\
 `              width ``=`` ``8``,`\
 `              by ``=`` ``"time"``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
+`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
+`#> Warning: auto_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.`\
+`#>  Replicate 3: 'measure' phase set to 10.5 time units instead of the 15 requested.`
 
 ![auto_rate.int plot showing the lowest rate over an 8-minute window
 extracted from each of three replicates using time-based
@@ -326,6 +328,10 @@ selection](auto_rate.int_files/figure-html/unnamed-chunk-6-1.png)
     #> 3:   3    1         9.44  -0.0353 0.965      NA 4351   4831 72.5    80.5 6.92   6.59 -0.0353
     #> -----------------------------------------
 
+Note the warning: the default behaviour of the function is to calculate
+a rate for a replicate with all available data even when this may be
+less than the specified `measure` phase.
+
 This is the `highest` rate over a period of 8 minutes from each
 replicate:
 
@@ -337,7 +343,9 @@ replicate:
 `              method ``=`` ``"highest"``,`\
 `              width ``=`` ``8``,`\
 `              by ``=`` ``"time"``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
+`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
+`#> Warning: auto_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.`\
+`#>  Replicate 3: 'measure' phase set to 10.5 time units instead of the 15 requested.`
 
 ![auto_rate.int plot showing the highest rate over an 8-minute window
 extracted from each of three replicates using time-based

@@ -280,7 +280,9 @@ individually with the rate region highlighted.
 `              starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``0``,``35``,``64``)``,`\
 `              wait ``=`` ``5``,`\
 `              measure ``=`` ``15``,`\
-`              by ``=`` ``"time"``)`
+`              by ``=`` ``"time"``)`\
+`#> Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.`\
+`#>  Replicate 3: 'measure' phase set to 11.5 time units instead of the 15 requested.`
 
 ![calc_rate.int() plot type rep showing three urchin replicates
 individually with time-based rate regions
@@ -297,7 +299,9 @@ the context of the entire dataset.
 `              wait ``=`` ``5``,`\
 `              measure ``=`` ``15``,`\
 `              by ``=`` ``"time"``,`\
-`              type ``=`` ``"full"``)`
+`              type ``=`` ``"full"``)`\
+`#> Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.`\
+`#>  Replicate 3: 'measure' phase set to 11.5 time units instead of the 15 requested.`
 
 ![calc_rate.int() plot type full showing three urchin replicate rates
 highlighted in context of the complete

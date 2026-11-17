@@ -256,6 +256,9 @@ we do not need to specify this.
 `                            measure ``=`` ``900``,`\
 `                            legend ``=`` ``TRUE``)`` `
 
+    #> Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.
+    #>  Replicate 3: 'measure' phase set to 631 rows instead of the 900 requested.
+
 ![calc_rate.int() plot showing rates from wait and measure phases of
 each urchin replicate with legend indicating data
 regions](intermittent_short_files/figure-html/unnamed-chunk-12-1.png)
@@ -263,7 +266,9 @@ regions](intermittent_short_files/figure-html/unnamed-chunk-12-1.png)
 In this plot, the data used to calculate the rate is the yellow points,
 the red shaded region is the `wait` phase, and the green shaded region
 the `measure` phase (we added `legend = TRUE` so we can see labels for
-this example).
+this example). Note the warning: the default behaviour of the function
+is to calculate a rate for a replicate with all available data even when
+this may be less than the specified `measure` phase.
 
 In these data of oxygen recorded once per second the time and row values
 are equivalent, so in the first replicate we can see the rate has been

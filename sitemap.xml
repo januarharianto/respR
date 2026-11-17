@@ -67,6 +67,7 @@
 <url><loc>https://januarharianto.github.io/respR/reference/calc_rate.int.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/calc_rate.rep.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/calc_win.html</loc></url>
+<url><loc>https://januarharianto.github.io/respR/reference/check_measure.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/class.val.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/convert_DO.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/convert_MR.html</loc></url>
@@ -148,6 +149,7 @@
 <url><loc>https://januarharianto.github.io/respR/reference/sim_data.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/squid.rd.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/static_roll.html</loc></url>
+<url><loc>https://januarharianto.github.io/respR/reference/stop_mixed_rates.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/subsample.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/subset_data.html</loc></url>
 <url><loc>https://januarharianto.github.io/respR/reference/summary.adjust_rate.ft.html</loc></url>

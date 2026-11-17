@@ -20,7 +20,8 @@ auto_rate.rep(
   meas_row = NULL,
   meas_endrow = NULL,
   rep_data = NULL,
-  ...
+  ...,
+  total_reps = 1
 )
 ```
 
@@ -73,6 +74,10 @@ auto_rate.rep(
 - ...:
 
   pass plot stuff
+
+- total_reps:
+
+  Total number of replicates
 
 ## Value
 

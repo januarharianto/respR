@@ -27,11 +27,14 @@ subset_data(x, from = NULL, to = NULL, by = "time", quiet = TRUE)
 
 - from:
 
-  numeric. The lower bounds of the subset based on the `by` input.
+  numeric. Defaults to `NULL`. The lower bounds of the subset based on
+  the `by` input. If `NULL` the subset starts at the beginning of the
+  data.
 
 - to:
 
-  numeric. The upper bounds of the subset based on the `by` input.
+  numeric. Defaults to `NULL`. The upper bounds of the subset based on
+  the `by` input. If `NULL` the subset runs to the end of the data.
 
 - by:
 
@@ -71,6 +74,13 @@ columns. In the case of subsetting `by = "oxygen"`, subsetting is based
 on the *first* column of oxygen data only (i.e. column 2), and all
 subsequent columns are subset between the same rows regardless of oxygen
 values.
+
+Both `from` and `to` default to `NULL`, and either can be left `NULL` on
+its own. A `NULL` `from` subsets from the start of the data, and a
+`NULL` `to` subsets to the end of it. If both are `NULL` the entire
+dataset is returned. The start and end used depend on the `by` input:
+the first and last time values, row 1 and the final row, or the first
+and last oxygen values.
 
 For all methods, if exact matching values of `from` and `to` are not
 present in the data, the closest values are used. For `"time"` and

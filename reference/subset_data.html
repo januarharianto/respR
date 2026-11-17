@@ -117,11 +117,14 @@ to produce a subset.</p></dd>
 
 
 <dt id="arg-from">from<a class="anchor" aria-label="anchor" href="#arg-from"></a></dt>
-<dd><p>numeric. The lower bounds of the subset based on the <code>by</code> input.</p></dd>
+<dd><p>numeric. Defaults to <code>NULL</code>. The lower bounds of the subset based
+on the <code>by</code> input. If <code>NULL</code> the subset starts at the beginning of the
+data.</p></dd>
 
 
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
-<dd><p>numeric. The upper bounds of the subset based on the <code>by</code> input.</p></dd>
+<dd><p>numeric. Defaults to <code>NULL</code>. The upper bounds of the subset based
+on the <code>by</code> input. If <code>NULL</code> the subset runs to the end of the data.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
@@ -156,6 +159,11 @@ columns of oxygen data, the subset object will include <em>all</em> columns. In 
 case of subsetting <code>by = "oxygen"</code>, subsetting is based on the <em>first</em> column
 of oxygen data only (i.e. column 2), and all subsequent columns are subset
 between the same rows regardless of oxygen values.</p>
+<p>Both <code>from</code> and <code>to</code> default to <code>NULL</code>, and either can be left <code>NULL</code> on its
+own. A <code>NULL</code> <code>from</code> subsets from the start of the data, and a <code>NULL</code> <code>to</code>
+subsets to the end of it. If both are <code>NULL</code> the entire dataset is returned.
+The start and end used depend on the <code>by</code> input: the first and last time
+values, row 1 and the final row, or the first and last oxygen values.</p>
 <p>For all methods, if exact matching values of <code>from</code> and <code>to</code> are not present
 in the data, the closest values are used. For <code>"time"</code> and <code>"row"</code>
 subsetting, <code>from</code> and <code>to</code> should be in the correct order. No warning or

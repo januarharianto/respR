@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**185
+In the seven years since publication, `respR` has received [**182
 citations**](https://scholar.google.com/scholar?cites=15799904892345725732&hl=en)
-and been downloaded from CRAN [**22,620
+and been downloaded from CRAN [**22,985
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,

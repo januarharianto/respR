@@ -123,6 +123,33 @@
 <li>FIX: <code><a href="../reference/convert_val.html">convert_val()</a></code> now supports <code>mmHg</code> and
 <code>inHg</code> pressure unit conversions (previously accepted by the
 parser but silently returned <code>NA</code>).</li>
+<li>CHANGE: <code><a href="../reference/auto_rate.int.html">auto_rate.int()</a></code> and
+<code><a href="../reference/calc_rate.int.html">calc_rate.int()</a></code> now give clearer errors when the
+<code>starts</code>, <code>wait</code>, <code>measure</code> and
+<code>width</code> inputs do not fit the data. Previously these surfaced
+as errors from internal functions which referred to inputs (such as
+<code>from</code> and <code>to</code>) that are not inputs of these
+functions, and did not say which replicate was the problem. Errors now
+name the replicate and report what was requested against what is
+available. See <a href="https://github.com/januarharianto/respR/issues/193" class="external-link">#193</a>.</li>
+<li>CHANGE: <code><a href="../reference/auto_rate.int.html">auto_rate.int()</a></code> now stops with an error, rather
+than one from <code><a href="../reference/auto_rate.html">auto_rate()</a></code>, where <code>measure</code>
+leaves a replicate with too few rows to calculate a rate.</li>
+<li>NEW: <code><a href="../reference/auto_rate.int.html">auto_rate.int()</a></code> and <code><a href="../reference/calc_rate.int.html">calc_rate.int()</a></code>
+now warn when <code>measure</code> extends past the end of a replicate
+and the measurement phase is therefore shortened. This clipping was
+previously silent, so a rate could be returned from much less data than
+requested without any indication. Entering <code>measure = NULL</code>
+to use the whole replicate is unaffected.</li>
+<li>FIX: The <code><a href="../reference/auto_rate.html">auto_rate()</a></code> <code>'highest'</code> method’s
+mixed positive/negative rates error incorrectly referred to ordering by
+the <em>lowest</em> absolute rate. It now says <em>highest</em>.</li>
+<li>NEW: Documented the behaviour of <code>NULL</code> <code>from</code>
+and <code>to</code> inputs in <code><a href="../reference/calc_rate.html">calc_rate()</a></code>,
+<code><a href="../reference/calc_rate.ft.html">calc_rate.ft()</a></code>, and <code><a href="../reference/subset_data.html">subset_data()</a></code>. Either
+input can be left <code>NULL</code> on its own, in which case the region
+starts at the beginning of the data or runs to the end of it. This was
+previously only mentioned in the vignettes.</li>
 <li>FIX: <code><a href="../reference/convert_DO.html">convert_DO()</a></code> fixed typo in calculation values
 which would cause very minor error converting from <code>hPa</code>
 values.</li>
@@ -154,7 +181,8 @@ warrants removal of the package entirely.<br>
 </h2>
 <ul>
 <li>FIX: Fix for <code>convert_DO</code> not accepting vectors for the
-<code>P</code> input.</li>
+<code>P</code> input.<br>
+</li>
 <li>FIX: <code>convert_rate</code>, <code>convert_rate.ft</code>, and
 <code>convert_MR</code> now stop with an error if vectors have been
 entered for <code>S</code>, <code>t</code>, or <code>P</code> (instead

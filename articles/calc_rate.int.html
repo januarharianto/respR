@@ -369,7 +369,9 @@ plotted individually with the rate region highlighted.</p>
 <span>              starts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">35</span>,<span class="fl">64</span><span class="op">)</span>,</span>
 <span>              wait <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
+<span>              by <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.</span></span>
+<span><span class="co">#&gt;  Replicate 3: 'measure' phase set to 11.5 time units instead of the 15 requested.</span></span></code></pre></div>
 <p><img src="calc_rate.int_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="calc_rate.int() plot type rep showing three urchin replicates individually with time-based rate regions highlighted" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -384,7 +386,9 @@ highlighted in the context of the entire dataset.</p>
 <span>              wait <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>              measure <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>              by <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>              type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span></code></pre></div>
+<span>              type <span class="op">=</span> <span class="st">"full"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.</span></span>
+<span><span class="co">#&gt;  Replicate 3: 'measure' phase set to 11.5 time units instead of the 15 requested.</span></span></code></pre></div>
 <p><img src="calc_rate.int_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="calc_rate.int() plot type full showing three urchin replicate rates highlighted in context of the complete dataset" width="960" style="display: block; margin: auto;"></p>
 <p>Note this may be of limited use when the dataset is large.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
