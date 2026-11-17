@@ -98,6 +98,17 @@ auto_rate_max <- function(dt, width, by = 'row') {
   return(out)
 }
 
+stop_mixed_rates <- function(method) {
+  message <- sprintf(paste0(
+    "auto_rate: Analysis produces both negative and positive rates. \n",
+    " The '%s' method is intended to order by the %s *absolute* rate amongst rates all having the same sign.\n",
+    " Use 'maximum' or 'minimum' method to order rates by *numerical* value."
+  ), method, method)
+  error <- simpleError(message)
+  class(error) <- c("respR_mixed_rates", class(error))
+  stop(error)
+}
+
 #' Perform rolling regression and rank from ABSOLUTE highest to lowest
 #'
 #' i.e. ignores sign. should only be used when rates are all negative or all
@@ -121,7 +132,7 @@ auto_rate_highest <- function(dt, width, by = 'row') {
 
   # stop if mix of -ve and +ve
   if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
-    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'highest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.", call. = FALSE)
+    stop_mixed_rates("highest")
   # order data by absolute value, from highest
   results <- rollreg[order(-rank(abs(rollreg$slope_b1)))] ## note abs() operation
   out <- list(roll = rollreg, results = results)
@@ -152,7 +163,7 @@ auto_rate_lowest <- function(dt, width, by = 'row') {
 
   # stop if mix of -ve and +ve
   if(any(rollreg$slope_b1 > 0) && any(rollreg$slope_b1 < 0))
-    stop("auto_rate: Analysis produces both negative and positive rates. \n The 'lowest' method is intended to order by the lowest *absolute* rate amongst rates all having the same sign.\n Use 'maximum' or 'minimum' method to order rates by *numerical* value.", call. = FALSE)
+    stop_mixed_rates("lowest")
 
   # order data by absolute value, from lowest
   results <- rollreg[order(rank(abs(rollreg$slope_b1)))] ## note abs() operation

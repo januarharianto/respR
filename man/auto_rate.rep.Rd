@@ -17,7 +17,8 @@ auto_rate.rep(
   meas_row = NULL,
   meas_endrow = NULL,
   rep_data = NULL,
-  ...
+  ...,
+  total_reps = 1
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ auto_rate.rep(
 \item{rep_data}{df of the entire replicate. Used in plotting.}
 
 \item{...}{pass plot stuff}
+
+\item{total_reps}{Total number of replicates}
 }
 \value{
 a \code{auto_rate} object with \code{summary$rep} filled in with appropriate
