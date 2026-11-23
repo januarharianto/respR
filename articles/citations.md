@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**182
 citations**](https://scholar.google.com/scholar?cites=15799904892345725732&hl=en)
-and been downloaded from CRAN [**22,985
+and been downloaded from CRAN [**23,148
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -33,6 +33,12 @@ M****. **2026**. Toxic metals and perfluorobutane sulfonate acid (PFBS)
 suppress aerobic metabolic capacity and alter hypoxia sensitivity in the
 marine ostracod *Stigmatocythere* *Costa*. *Marine Pollution Bulletin*,
 233, 120258. <https://doi.org/10.1016/j.marpolbul.2026.120258>
+
+****Hahn, A**, **Nascimento-Schulze, JC**, **Avgerinou, G**,
+**Schmittmann, L**, **Rethemeier, J**, **Rath, W**, & **Brennan, RS****.
+**2026**. *Salinity adaptation in a copepod reveals contrasting genomic
+architectures and the limits of genomic offsets* (p. 2026.11.13.766083).
+bioRxiv. <https://doi.org/10.64898/2026.11.13.766083>
 
 ****Bahr, KD**, **Bretzing-Tungate, RJ**, **Matthews, BM**, **TenBrink,
 EG**, **Gallagher, CL**, & **Cannon, AL****. **2026**. Hierarchical
