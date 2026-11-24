@@ -24,7 +24,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: develop
 
@@ -70,3 +70,4 @@ jobs:
           clean: false
           branch: gh-pages
           folder: docs
+          commit-message: Deploy pkgdown site from develop
