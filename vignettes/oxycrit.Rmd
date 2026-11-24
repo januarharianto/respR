@@ -19,7 +19,6 @@ nocite: |
 ```{r setup, echo = F, message=FALSE}
 library(knitr) # load knitr to enable options
 library(respR) # load respR
-library(rMR) 
 
 opts_chunk$set(collapse = TRUE, 
                comment = "#>", 

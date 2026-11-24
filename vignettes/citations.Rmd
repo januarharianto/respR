@@ -19,27 +19,24 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r echo = F, warning=FALSE, message=FALSE}
-# Last known good values, acting as a floor on the numbers reported below.
-# Google Scholar intermittently serves a degraded page which parses fine but
-# reports a far lower count (e.g. 14 or 58 against a true 182), and sometimes
-# returns nothing at all. Bump these whenever the live values have moved on.
-ncites_floor     <- 182   # as of 2026-10-21
-ndownloads_floor <- 21997 # as of 2026-10-21
+# Last known good values, acting as a floor on the numbers reported below, in
+# case either API is unreachable at build time. Bump them whenever the live
+# values have moved on.
+ncites_floor     <- 171   # as of 2026-11-23
+ndownloads_floor <- 23148 # as of 2026-11-23
 ```
 
 ```{r echo = F, warning=FALSE, message=FALSE}
-# This is ridiculously over the top to get this number, but good to learn :D
-# Quite slow tho...
+# Fetch citation count from the OpenAlex API, keyed on the paper's DOI. Google
+# Scholar used to be scraped here for its higher count, but it now answers plain
+# HTTP clients with a JS bot-check page carrying no count, so the number was
+# never actually retrieved on the machine that builds the site.
 ncites <- tryCatch({
-  # Dump GScholar page
-  dump <- suppressWarnings(readLines("https://scholar.google.co.uk/scholar?cites=15799904892345725732", encoding = "latin1"))
-  # Count reads e.g. "About 1,176 results (0.05 sec)". "About" is not always
-  # present, and the number carries a comma once past 999.
-  strng <- stringr::str_extract(paste(dump, collapse = "\n"), "[0-9,]+(?= results \\()")
-  as.numeric(gsub(",", "", strng))
+  cite_data <- jsonlite::fromJSON("https://api.openalex.org/works/doi:10.1111/2041-210X.13162")
+  as.numeric(cite_data$cited_by_count)
 }, error = function(e) NA_real_)
 
-# Only trust the scrape if it gave a single number no lower than the floor
+# Only trust the fetch if it gave a single number no lower than the floor
 if (length(ncites) != 1 || is.na(ncites) || ncites < ncites_floor) ncites <- ncites_floor
 ```
 
@@ -58,7 +55,7 @@ cites_txt <- paste0("**", format(ncites, big.mark = ","), " citations**")
 dl_txt    <- paste0("**", format(ndownloads, big.mark = ","), " times**")
 ```
 
-In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has received [`r cites_txt`](https://scholar.google.com/scholar?cites=15799904892345725732&hl=en) and been downloaded from CRAN [`r dl_txt`](https://cran.r-project.org/web/packages/respR/index.html).
+In the `r xfun::numbers_to_words(lubridate::year(Sys.Date())-2019)` years since publication, `respR` has received [`r cites_txt`](https://openalex.org/works/W2914382202) and been downloaded from CRAN [`r dl_txt`](https://cran.r-project.org/web/packages/respR/index.html).
 
 It's great to see the package being used to conduct quality, reproducible science, and exciting to see what experiments and data users will put it towards in the future. It's been especially encouraging to see it used for calculating the respiration rates of a wide range of species, as well as oxygen production rates of algae and corals.
 
