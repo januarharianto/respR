@@ -1,10 +1,14 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# Rebuilds the citations list from OpenAlex and deploys the pkgdown site to
+# gh-pages, daily and on demand (Actions tab > pkgdown > Run workflow).
+# The site is always built from develop.
+#
+# GitHub only fires scheduled runs from the copy of this file on the default
+# branch (master), so the file must be on master as well as develop.
+#
+# Derived from https://github.com/r-lib/actions/tree/v2/examples
 on:
-  push:
-    branches: [main, master]
-  release:
-    types: [published]
+  schedule:
+    - cron: "0 5 * * *" # daily, 05:00 UTC
   workflow_dispatch:
 
 name: pkgdown
@@ -12,24 +16,51 @@ name: pkgdown
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+    # Never let a slow run overlap the next one
+    concurrency:
+      group: pkgdown
+    permissions:
+      contents: write
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      # The vignettes are pkgdown-only articles, so the packages they use are not
+      # in DESCRIPTION and are listed here instead
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: pkgdown
+          extra-packages: |
+            any::pkgdown
+            any::knitr
+            any::rmarkdown
+            any::jsonlite
+            any::curl
+            any::xfun
+            any::DiagrammeR
+            local::.
           needs: website
 
-      - name: Deploy package
-        run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+      # Fails the run, and so skips the deploy, if OpenAlex cannot be reached
+      - name: Rebuild citations list from OpenAlex
+        run: source("pkgdown/update_citations_bib.R")
+        shell: Rscript {0}
+
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0}
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs
