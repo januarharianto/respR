@@ -262,7 +262,7 @@ broken-line relationships. R News 8:20–25.
 oxy_crit(squid.rd)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.4 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 11 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 
 #> 
@@ -270,7 +270,7 @@ oxy_crit(squid.rd)
 #> 
 #> Broken-Stick (Yeager & Ultsch 1989):
 #> 
-#> Sum RSS      0.0000006404122 
+#> Sum RSS      6.404122e-07 
 #> Intercept    2.610095 
 #> Midpoint     2.609737 
 #> 
@@ -280,7 +280,7 @@ oxy_crit(squid.rd)
 oxy_crit(squid.rd, thin = 1000)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 0.9 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 1.8 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 
 #> 
@@ -288,7 +288,7 @@ oxy_crit(squid.rd, thin = 1000)
 #> 
 #> Broken-Stick (Yeager & Ultsch 1989):
 #> 
-#> Sum RSS      0.0000001280328 
+#> Sum RSS      1.280328e-07 
 #> Intercept    2.612272 
 #> Midpoint     2.614072 
 #> 
@@ -363,7 +363,7 @@ insp <- inspect(squid.rd, time = 1, oxygen = 2)
 oxy_crit(insp)
 #> oxy_crit: Applying column defaults of 'time = 1' and 'oxygen = 2'.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.3 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 10.2 seconds.
 #> plot.oxy_crit: Plotting Oxygen ~ Time derived critical oxygen results.
 
 #> 
@@ -371,7 +371,7 @@ oxy_crit(insp)
 #> 
 #> Broken-Stick (Yeager & Ultsch 1989):
 #> 
-#> Sum RSS      0.0000006404122 
+#> Sum RSS      6.404122e-07 
 #> Intercept    2.610095 
 #> Midpoint     2.609737 
 #> 
@@ -393,7 +393,7 @@ squid_rate_oxy <- data.frame(oxy, rate)
 oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
 #> oxy_crit: Performing analysis using Rate ~ Oxygen data.
 #> oxy_crit: Performing Broken-Stick analysis (Yeager and Ultsch 1989)...
-#> oxy_crit: Broken-Stick analysis completed in 4.4 seconds.
+#> oxy_crit: Broken-Stick analysis completed in 10.3 seconds.
 #> plot.oxy_crit: Plotting Rate ~ Oxygen derived critical oxygen results.
 
 #> 
@@ -401,7 +401,7 @@ oxy_crit(squid_rate_oxy, oxygen = 1, rate = 2)
 #> 
 #> Broken-Stick (Yeager & Ultsch 1989):
 #> 
-#> Sum RSS      0.0000006404122 
+#> Sum RSS      6.404122e-07 
 #> Intercept    2.610095 
 #> Midpoint     2.609737 
 #> 

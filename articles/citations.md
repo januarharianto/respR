@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**171
 citations**](https://openalex.org/works/W2914382202) and been downloaded
-from CRAN [**23,148
+from CRAN [**23,159
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -24,8 +24,8 @@ it**](https://januarharianto.github.io/respR/articles/contact.html).
 
 The following publications have used and cited `respR`. If we have
 missed any [**let us
-know**](https://januarharianto.github.io/respR/articles/contact.html).\
-\
+know**](https://januarharianto.github.io/respR/articles/contact.html).  
+  
 
 ****Jimenez, PJ**, **Albarran-Melzer, N**, **Lagos-Oróstica, M**, **Xie,
 N**, **Wang, Q**, **Ruan, Y**, **Gaitán-Espitia, JD**, & **Yasuhara,

@@ -476,9 +476,9 @@ bg_start <- subset_data(zeb_intermittent.rd, 1, 4999, "time") %>%
 #> 
 #> # print.calc_rate.bg # ------------------
 #> Background rate(s):
-#> [1] -0.00007417108
+#> [1] -7.417108e-05
 #> Mean background rate:
-#> [1] -0.00007417108
+#> [1] -7.417108e-05
 #> -----------------------------------------
 
 # Calculate background rate at end of experiment
@@ -527,10 +527,10 @@ adjust_rate(zeb_rate, by = bg_start, by2 = bg_end,
 #> Adjustment was applied using 'linear' method.
 #> Summary of all rate results:
 #> 
-#>    rep rank intercept_b0     slope_b1   rsq  density row endrow  time endtime      oxy   endoxy         rate     adjustment rate.adjusted
-#> 1:  NA    1     80.99546 -0.001914038 0.909 1262.785 218    398 38517   38697 7.276907 6.981903 -0.001914038 -0.00009712636  -0.001816912
-#> 2:  NA    2     90.75258 -0.002166859 0.978  966.454   4    375 38303   38674 7.799663 6.968113 -0.002166859 -0.00009705102  -0.002069808
-#> 3:  NA    3    119.55548 -0.002917213 0.823  420.313  47    132 38346   38431 7.691533 7.461897 -0.002917213 -0.00009698745  -0.002820226
+#>    rep rank intercept_b0     slope_b1   rsq  density row endrow  time endtime      oxy   endoxy         rate    adjustment rate.adjusted
+#> 1:  NA    1     80.99546 -0.001914038 0.909 1262.785 218    398 38517   38697 7.276907 6.981903 -0.001914038 -9.712636e-05  -0.001816912
+#> 2:  NA    2     90.75258 -0.002166859 0.978  966.454   4    375 38303   38674 7.799663 6.968113 -0.002166859 -9.705102e-05  -0.002069808
+#> 3:  NA    3    119.55548 -0.002917213 0.823  420.313  47    132 38346   38431 7.691533 7.461897 -0.002917213 -9.698745e-05  -0.002820226
 #> -----------------------------------------
 
 # Note the adjustment values applied are somewhere between the

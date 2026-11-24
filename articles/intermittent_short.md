@@ -67,8 +67,10 @@ the analysis. Passing all of these checks is not strictly necessary
 depending on the data. See
 [`vignette("inspecting")`](https://januarharianto.github.io/respR/articles/inspecting.md).
 
-\
-`urchin_int`` ``<-`` `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``intermittent.rd``)`
+``` r
+
+urchin_int <- inspect(intermittent.rd)
+```
 
     #> inspect: Applying column default of 'time = 1'
     #> inspect: Applying column default of 'oxygen = 2'
@@ -114,10 +116,12 @@ and
 without saving the result to check regions of the data, which can help
 us decide how we are going to proceed.
 
-\
-`intermittent.rd`` ``|>`\
-`  `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``1``, to ``=`` ``1800``, by ``=`` ``"row"``)`` ``|>`\
-`  `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``)`
+``` r
+
+intermittent.rd |>
+  subset_data(from = 1, to = 1800, by = "row") |>
+  inspect()
+```
 
 ![inspect() output for first 1800 rows of intermittent-flow urchin data
 showing stable oxygen decline within first
@@ -132,10 +136,12 @@ of a 10% window of the inspected data, and so are sensitive to noise.
 purposes of the rolling rate plot. Let’s try a wider window of 50% of
 the data.
 
-\
-`intermittent.rd`` ``|>`\
-`  `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``from ``=`` ``1``, to ``=`` ``1800``, by ``=`` ``"row"``)`` ``|>`\
-`  `[`inspect`](https://januarharianto.github.io/respR/reference/inspect.md)`(``width ``=`` ``0.5``)`
+``` r
+
+intermittent.rd |>
+  subset_data(from = 1, to = 1800, by = "row") |>
+  inspect(width = 0.5)
+```
 
 ![inspect() output for first urchin replicate with 50% rolling rate
 window showing consistently stable rate around
@@ -182,9 +188,11 @@ help file
 Here is what happens if we only specify the starting location of each
 using `starts`:
 
-\
-[`calc_rate.int`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)`(``urchin_int``,`\
-`              starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``)`` `
+``` r
+
+calc_rate.int(urchin_int,
+              starts = c(1, 2101, 3901)) 
+```
 
 ![calc_rate.int() plot showing rates calculated across all three
 complete urchin replicates including flush
@@ -206,11 +214,13 @@ phase to exclude the flushes. With irregular replicates like this we can
 even specify a different `measure` phase in each, and in this case use
 all data except the flush.
 
-\
-[`calc_rate.int`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)`(``urchin_int``,`\
-`              starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`\
-`              measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1800``, ``1400``, ``900``)``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
+``` r
+
+calc_rate.int(urchin_int,
+              starts = c(1, 2101, 3901),
+              measure = c(1800, 1400, 900)) |>
+  summary()
+```
 
 ![calc_rate.int() plot showing rates from specified measure phases of
 each urchin replicate excluding flush
@@ -249,12 +259,14 @@ rows). In these data where oxygen is recorded every second this will be
 `wait = 300, measure = 900`. The default `by` method is `by = "row"` so
 we do not need to specify this.
 
-\
-`urch_rates`` ``<-`` `[`calc_rate.int`](https://januarharianto.github.io/respR/reference/calc_rate.int.md)`(``urchin_int``,`\
-`                            starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`\
-`                            wait ``=`` ``300``,`\
-`                            measure ``=`` ``900``,`\
-`                            legend ``=`` ``TRUE``)`` `
+``` r
+
+urch_rates <- calc_rate.int(urchin_int,
+                            starts = c(1, 2101, 3901),
+                            wait = 300,
+                            measure = 900,
+                            legend = TRUE) 
+```
 
     #> Warning: calc_rate.int: 'measure' exceeds the data available in 1 of 3 replicates.
     #>  Replicate 3: 'measure' phase set to 631 rows instead of the 900 requested.
@@ -281,17 +293,19 @@ flush to worry about.
 
 We can view the full results using `summary`:
 
-\
-[`summary`](https://rdrr.io/r/base/summary.html)`(``urch_rates``)`\
-`#> `\
-`#> # summary.calc_rate.int # ---------------`\
-`#> Summary of all replicate results:`\
-`#> `\
-`#>    rep rank intercept_b0   slope_b1   rsq  row endrow time endtime  oxy endoxy   rate.2pt       rate`\
-`#> 1:   1    1        7.134 -0.0005894 0.990  301   1200  300    1199 6.98   6.43 -0.0006118 -0.0005894`\
-`#> 2:   2    1        8.536 -0.0006122 0.991 2401   3300 2400    3299 7.05   6.52 -0.0005895 -0.0006122`\
-`#> 3:   3    1        9.564 -0.0006155 0.980 4201   4831 4200    4830 6.95   6.59 -0.0005714 -0.0006155`\
-`#> -----------------------------------------`
+``` r
+
+summary(urch_rates)
+#> 
+#> # summary.calc_rate.int # ---------------
+#> Summary of all replicate results:
+#> 
+#>    rep rank intercept_b0   slope_b1   rsq  row endrow time endtime  oxy endoxy   rate.2pt       rate
+#> 1:   1    1        7.134 -0.0005894 0.990  301   1200  300    1199 6.98   6.43 -0.0006118 -0.0005894
+#> 2:   2    1        8.536 -0.0006122 0.991 2401   3300 2400    3299 7.05   6.52 -0.0005895 -0.0006122
+#> 3:   3    1        9.564 -0.0006155 0.980 4201   4831 4200    4830 6.95   6.59 -0.0005714 -0.0006155
+#> -----------------------------------------
+```
 
 The replicate number is indicated by the `$rep` column. The `$rank`
 column indicates ranking or ordering of rates *within* each individual
@@ -306,9 +320,11 @@ The output object can also be plotted, and if we change the `type` input
 we can see each rate in context of the whole dataset. For larger
 datasets this may be of limited utility.
 
-\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``urch_rates``,`\
-`     type ``=`` ``"full"``)`
+``` r
+
+plot(urch_rates,
+     type = "full")
+```
 
 ![calc_rate.int() plot showing three urchin replicate rates in context
 of the full intermittent-flow
@@ -328,50 +344,58 @@ There is no specific background data associated with the
 as an example. We just need to convert it to the same units as our
 urchin data.
 
-\
-`bg_data`` ``<-`` ``background_con.rd`\
-`bg_data``[[``2``]``]`` ``<-`` `[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``bg_data``[[``2``]``]``,`\
-`                           from ``=`` ``"%Air"``,`\
-`                           to ``=`` ``"mg/l"``,`\
-`                           S ``=`` ``30``, t ``=`` ``15``)`
+``` r
+
+bg_data <- background_con.rd
+bg_data[[2]] <- convert_DO(bg_data[[2]],
+                           from = "%Air",
+                           to = "mg/l",
+                           S = 30, t = 15)
+```
 
 Now we calculate a background rate.
 
-\
-`bg_rate`` ``<-`` `[`calc_rate.bg`](https://januarharianto.github.io/respR/reference/calc_rate.bg.md)`(``bg_data``)`
+``` r
+
+bg_rate <- calc_rate.bg(bg_data)
+```
 
 ![calc_rate.bg() output showing background oxygen consumption rate from
 control
 data](intermittent_short_files/figure-html/unnamed-chunk-16-1.png)
 
-\
-[`print`](https://rdrr.io/r/base/print.html)`(``bg_rate``)`\
-`#> `\
-`#> # print.calc_rate.bg # ------------------`\
-`#> Background rate(s):`\
-`#> [1] -0.000008988`\
-`#> Mean background rate:`\
-`#> [1] -0.000008988`\
-`#> -----------------------------------------`
+``` r
+
+print(bg_rate)
+#> 
+#> # print.calc_rate.bg # ------------------
+#> Background rate(s):
+#> [1] -0.000008988
+#> Mean background rate:
+#> [1] -0.000008988
+#> -----------------------------------------
+```
 
 And use it to adjust our urchin rates.
 
-\
-`urch_rates_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch_rates``,`\
-`                              by ``=`` ``bg_rate``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
-`#> adjust_rate: Rate adjustments applied using "mean" method.`\
-`#> `\
-`#> # summary.adjust_rate # -----------------`\
-`#> `\
-`#> Adjustment was applied using 'mean' method.`\
-`#> Summary of all rate results:`\
-`#> `\
-`#>    rep rank intercept_b0   slope_b1   rsq  row endrow time endtime  oxy endoxy   rate.2pt       rate   adjustment rate.adjusted`\
-`#> 1:   1    1        7.134 -0.0005894 0.990  301   1200  300    1199 6.98   6.43 -0.0006118 -0.0005894 -0.000008988    -0.0005804`\
-`#> 2:   2    1        8.536 -0.0006122 0.991 2401   3300 2400    3299 7.05   6.52 -0.0005895 -0.0006122 -0.000008988    -0.0006032`\
-`#> 3:   3    1        9.564 -0.0006155 0.980 4201   4831 4200    4830 6.95   6.59 -0.0005714 -0.0006155 -0.000008988    -0.0006066`\
-`#> -----------------------------------------`
+``` r
+
+urch_rates_adj <- adjust_rate(urch_rates,
+                              by = bg_rate) |>
+  summary()
+#> adjust_rate: Rate adjustments applied using "mean" method.
+#> 
+#> # summary.adjust_rate # -----------------
+#> 
+#> Adjustment was applied using 'mean' method.
+#> Summary of all rate results:
+#> 
+#>    rep rank intercept_b0   slope_b1   rsq  row endrow time endtime  oxy endoxy   rate.2pt       rate   adjustment rate.adjusted
+#> 1:   1    1        7.134 -0.0005894 0.990  301   1200  300    1199 6.98   6.43 -0.0006118 -0.0005894 -0.000008988    -0.0005804
+#> 2:   2    1        8.536 -0.0006122 0.991 2401   3300 2400    3299 7.05   6.52 -0.0005895 -0.0006122 -0.000008988    -0.0006032
+#> 3:   3    1        9.564 -0.0006155 0.980 4201   4831 4200    4830 6.95   6.59 -0.0005714 -0.0006155 -0.000008988    -0.0006066
+#> -----------------------------------------
+```
 
 Note how the `rep` column is carried forward to the results. We can see
 a small adjustment to the rates in the final column. Here we are
@@ -387,24 +411,26 @@ data.
 
 Lastly, we convert the rates to units.
 
-\
-`urch_rates_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rates_adj``,`\
-`                                oxy.unit ``=`` ``"mg/l"``,`\
-`                                time.unit ``=`` ``"s"``,`\
-`                                output.unit ``=`` ``"mg/h/g"``,`\
-`                                mass ``=`` ``0.006955``,`\
-`                                volume ``=`` ``2.379``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
-`#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.`\
-`#> `\
-`#> # summary.convert_rate # ----------------`\
-`#> Summary of all converted rates:`\
-`#> `\
-`#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted rate.input oxy.unit time.unit volume     mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output`\
-`#> 1:   1    1        7.134 -0.0005894 0.990      NA  301   1200  300    1199 6.98   6.43 -0.0005894 -0.000008988    -0.0005804 -0.0005804     mg/L       sec  2.379 0.006955   NA NA NA NA   -4.971     -0.7147          NA   mgO2/hr/g     -0.7147`\
-`#> 2:   2    1        8.536 -0.0006122 0.991      NA 2401   3300 2400    3299 7.05   6.52 -0.0006122 -0.000008988    -0.0006032 -0.0006032     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.166     -0.7428          NA   mgO2/hr/g     -0.7428`\
-`#> 3:   3    1        9.564 -0.0006155 0.980      NA 4201   4831 4200    4830 6.95   6.59 -0.0006155 -0.000008988    -0.0006066 -0.0006066     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.195     -0.7469          NA   mgO2/hr/g     -0.7469`\
-`#> -----------------------------------------`
+``` r
+
+urch_rates_conv <- convert_rate(urch_rates_adj,
+                                oxy.unit = "mg/l",
+                                time.unit = "s",
+                                output.unit = "mg/h/g",
+                                mass = 0.006955,
+                                volume = 2.379) |>
+  summary()
+#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
+#> 
+#> # summary.convert_rate # ----------------
+#> Summary of all converted rates:
+#> 
+#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted rate.input oxy.unit time.unit volume     mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output
+#> 1:   1    1        7.134 -0.0005894 0.990      NA  301   1200  300    1199 6.98   6.43 -0.0005894 -0.000008988    -0.0005804 -0.0005804     mg/L       sec  2.379 0.006955   NA NA NA NA   -4.971     -0.7147          NA   mgO2/hr/g     -0.7147
+#> 2:   2    1        8.536 -0.0006122 0.991      NA 2401   3300 2400    3299 7.05   6.52 -0.0006122 -0.000008988    -0.0006032 -0.0006032     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.166     -0.7428          NA   mgO2/hr/g     -0.7428
+#> 3:   3    1        9.564 -0.0006155 0.980      NA 4201   4831 4200    4830 6.95   6.59 -0.0006155 -0.000008988    -0.0006066 -0.0006066     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.195     -0.7469          NA   mgO2/hr/g     -0.7469
+#> -----------------------------------------
+```
 
 Again note how the `rep` column is carried forward.
 
@@ -412,16 +438,18 @@ A final rate can be determined in a number of ways and will be specific
 to each experiment. As an example we can use the mean of all three
 replicates.
 
-\
-[`mean`](https://rdrr.io/r/base/mean.html)`(``urch_rates_conv``)`\
-`#> `\
-`#> # mean.convert_rate # -------------------`\
-`#> Mean of all rate results:`\
-`#> `\
-`#> Mean of 3 output rates:`\
-`#> [1] -0.7348`\
-`#> [1] "mgO2/hr/g"`\
-`#> -----------------------------------------`
+``` r
+
+mean(urch_rates_conv)
+#> 
+#> # mean.convert_rate # -------------------
+#> Mean of all rate results:
+#> 
+#> Mean of 3 output rates:
+#> [1] -0.7348
+#> [1] "mgO2/hr/g"
+#> -----------------------------------------
+```
 
 See also
 [`vignette("select_rate")`](https://januarharianto.github.io/respR/articles/select_rate.md)
@@ -476,15 +504,17 @@ after some testing of different values. See
 [here](https://januarharianto.github.io/respR/articles/auto_rate.html#width)
 for discussion of appropriate widths to use with `auto_rate`.
 
-\
-`urch_rates`` ``<-`` `[`auto_rate.int`](https://januarharianto.github.io/respR/reference/auto_rate.int.md)`(``urchin_int``,`\
-`                            starts ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1``, ``2101``, ``3901``)``,`\
-`                            wait ``=`` ``300``,`\
-`                            measure ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``1500``, ``1100``, ``600``)``,`\
-`                            method ``=`` ``"linear"``,`\
-`                            width ``=`` ``400``, `\
-`                            legend ``=`` ``TRUE``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`
+``` r
+
+urch_rates <- auto_rate.int(urchin_int,
+                            starts = c(1, 2101, 3901),
+                            wait = 300,
+                            measure = c(1500, 1100, 600),
+                            method = "linear",
+                            width = 400, 
+                            legend = TRUE) |>
+  summary()
+```
 
 ![auto_rate.int() output showing most linear rates extracted from each
 urchin replicate using linear
@@ -511,26 +541,28 @@ control. Assuming that the data have the same starting timepoint, this
 adjustment method calculates a background rate from the exact same
 region in the background data that each rate was calculated from.
 
-\
-`urch_rates_adj`` ``<-`` `[`adjust_rate`](https://januarharianto.github.io/respR/reference/adjust_rate.md)`(``urch_rates``,`\
-`                              by ``=`` ``bg_rate``,`\
-`                              method ``=`` ``"concurrent"``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
-`#> Warning: adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. `\
-`#> method = "concurrent" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. `\
-`#> Adjustments have been attempted anyway, using shared or closest time values in the 'x' and 'by' inputs.`\
-`#> adjust_rate: Rate adjustments applied using "concurrent" method.`\
-`#> `\
-`#> # summary.adjust_rate # -----------------`\
-`#> `\
-`#> Adjustment was applied using 'concurrent' method.`\
-`#> Summary of all rate results:`\
-`#> `\
-`#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted`\
-`#> 1:   1    1        7.119 -0.0005736 0.988   13610  495   1291  494    1290 6.84   6.40 -0.0005736 -0.000008391    -0.0005652`\
-`#> 2:   2    1        8.549 -0.0006169 0.988   15354 2402   3186 2401    3185 7.06   6.60 -0.0006169 -0.000003028    -0.0006139`\
-`#> 3:   3    1        9.715 -0.0006501 0.956   24601 4251   4663 4250    4662 6.93   6.68 -0.0006501 -0.000001678    -0.0006484`\
-`#> -----------------------------------------`
+``` r
+
+urch_rates_adj <- adjust_rate(urch_rates,
+                              by = bg_rate,
+                              method = "concurrent") |>
+  summary()
+#> Warning: adjust_rate: 'x' and 'by' inputs differ in length by more than 5%. 
+#> method = "concurrent" is intended for background experiments that have been run in parallel and so should be approximately the same length, and share the same 'time' data. 
+#> Adjustments have been attempted anyway, using shared or closest time values in the 'x' and 'by' inputs.
+#> adjust_rate: Rate adjustments applied using "concurrent" method.
+#> 
+#> # summary.adjust_rate # -----------------
+#> 
+#> Adjustment was applied using 'concurrent' method.
+#> Summary of all rate results:
+#> 
+#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted
+#> 1:   1    1        7.119 -0.0005736 0.988   13610  495   1291  494    1290 6.84   6.40 -0.0005736 -0.000008391    -0.0005652
+#> 2:   2    1        8.549 -0.0006169 0.988   15354 2402   3186 2401    3185 7.06   6.60 -0.0006169 -0.000003028    -0.0006139
+#> 3:   3    1        9.715 -0.0006501 0.956   24601 4251   4663 4250    4662 6.93   6.68 -0.0006501 -0.000001678    -0.0006484
+#> -----------------------------------------
+```
 
 We can see there has been a very small, but different, adjustment made
 to each rate. See
@@ -542,24 +574,26 @@ intermittent-flow analyses.
 
 Last step is to convert.
 
-\
-`urch_rates_conv`` ``<-`` `[`convert_rate`](https://januarharianto.github.io/respR/reference/convert_rate.md)`(``urch_rates_adj``,`\
-`                                oxy.unit ``=`` ``"mg/l"``,`\
-`                                time.unit ``=`` ``"s"``,`\
-`                                output.unit ``=`` ``"mg/h/g"``,`\
-`                                mass ``=`` ``0.006955``,`\
-`                                volume ``=`` ``2.379``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`\
-`#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.`\
-`#> `\
-`#> # summary.convert_rate # ----------------`\
-`#> Summary of all converted rates:`\
-`#> `\
-`#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted rate.input oxy.unit time.unit volume     mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output`\
-`#> 1:   1    1        7.119 -0.0005736 0.988   13610  495   1291  494    1290 6.84   6.40 -0.0005736 -0.000008391    -0.0005652 -0.0005652     mg/L       sec  2.379 0.006955   NA NA NA NA   -4.841     -0.6960          NA   mgO2/hr/g     -0.6960`\
-`#> 2:   2    1        8.549 -0.0006169 0.988   15354 2402   3186 2401    3185 7.06   6.60 -0.0006169 -0.000003028    -0.0006139 -0.0006139     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.258     -0.7560          NA   mgO2/hr/g     -0.7560`\
-`#> 3:   3    1        9.715 -0.0006501 0.956   24601 4251   4663 4250    4662 6.93   6.68 -0.0006501 -0.000001678    -0.0006484 -0.0006484     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.553     -0.7984          NA   mgO2/hr/g     -0.7984`\
-`#> -----------------------------------------`
+``` r
+
+urch_rates_conv <- convert_rate(urch_rates_adj,
+                                oxy.unit = "mg/l",
+                                time.unit = "s",
+                                output.unit = "mg/h/g",
+                                mass = 0.006955,
+                                volume = 2.379) |>
+  summary()
+#> convert_rate: Object of class 'adjust_rate' detected. Converting all adjusted rates in '$rate.adjusted'.
+#> 
+#> # summary.convert_rate # ----------------
+#> Summary of all converted rates:
+#> 
+#>    rep rank intercept_b0   slope_b1   rsq density  row endrow time endtime  oxy endoxy       rate   adjustment rate.adjusted rate.input oxy.unit time.unit volume     mass area  S  t  P rate.abs rate.m.spec rate.a.spec output.unit rate.output
+#> 1:   1    1        7.119 -0.0005736 0.988   13610  495   1291  494    1290 6.84   6.40 -0.0005736 -0.000008391    -0.0005652 -0.0005652     mg/L       sec  2.379 0.006955   NA NA NA NA   -4.841     -0.6960          NA   mgO2/hr/g     -0.6960
+#> 2:   2    1        8.549 -0.0006169 0.988   15354 2402   3186 2401    3185 7.06   6.60 -0.0006169 -0.000003028    -0.0006139 -0.0006139     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.258     -0.7560          NA   mgO2/hr/g     -0.7560
+#> 3:   3    1        9.715 -0.0006501 0.956   24601 4251   4663 4250    4662 6.93   6.68 -0.0006501 -0.000001678    -0.0006484 -0.0006484     mg/L       sec  2.379 0.006955   NA NA NA NA   -5.553     -0.7984          NA   mgO2/hr/g     -0.7984
+#> -----------------------------------------
+```
 
 This method could also be easily adapted to extract the lowest or
 highest rates of a specific duration from each replicate.

@@ -52,27 +52,29 @@ Note, if you do not tell it otherwise, the function assumes data are
 delta oxygen and plots them on a reverse y-axis. However, we can use the
 `rate.rev` input to override this
 
-\
-[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, rate.rev ``=`` ``FALSE``)`\
-`#> inspect.ft: Applying column default of 'time = 1'`\
-`#> inspect.ft: Applying column default of all non-time column(s) as 'delta.oxy'`\
-`#> Warning: inspect.ft: Time values are not evenly-spaced (numerically).`\
-`#> inspect.ft: Data issues detected. For more information use print().`\
-`#> `\
-`#> # print.inspect.ft # --------------------`\
-`#>                 num.time oxy.out.1 oxy.out.2 oxy.out.3 oxy.out.blank oxy.in.1 oxy.in.2 oxy.in.3 oxy.in.blank oxy.delta.1 oxy.delta.2 oxy.delta.3 oxy.delta.blank oxy.header temperature`\
-`#> numeric             pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass`\
-`#> Inf/-Inf            pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass`\
-`#> NA/NaN              pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass`\
-`#> sequential          pass         -         -         -             -        -        -        -            -           -           -           -               -          -           -`\
-`#> duplicated          pass         -         -         -             -        -        -        -            -           -           -           -               -          -           -`\
-`#> evenly-spaced       WARN         -         -         -             -        -        -        -            -           -           -           -               -          -           -`\
-`#> `\
-`#> Uneven Time data locations (first 20 shown) in column: num.time `\
-`#>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20`\
-`#> Minimum and Maximum intervals in uneven Time data: `\
-`#> [1] 0.01 0.02`\
-`#> -----------------------------------------`
+``` r
+
+inspect.ft(flowthrough_mult.rd, rate.rev = FALSE)
+#> inspect.ft: Applying column default of 'time = 1'
+#> inspect.ft: Applying column default of all non-time column(s) as 'delta.oxy'
+#> Warning: inspect.ft: Time values are not evenly-spaced (numerically).
+#> inspect.ft: Data issues detected. For more information use print().
+#> 
+#> # print.inspect.ft # --------------------
+#>                 num.time oxy.out.1 oxy.out.2 oxy.out.3 oxy.out.blank oxy.in.1 oxy.in.2 oxy.in.3 oxy.in.blank oxy.delta.1 oxy.delta.2 oxy.delta.3 oxy.delta.blank oxy.header temperature
+#> numeric             pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass
+#> Inf/-Inf            pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass
+#> NA/NaN              pass      pass      pass      pass          pass     pass     pass     pass         pass        pass        pass        pass            pass       pass        pass
+#> sequential          pass         -         -         -             -        -        -        -            -           -           -           -               -          -           -
+#> duplicated          pass         -         -         -             -        -        -        -            -           -           -           -               -          -           -
+#> evenly-spaced       WARN         -         -         -             -        -        -        -            -           -           -           -               -          -           -
+#> 
+#> Uneven Time data locations (first 20 shown) in column: num.time 
+#>  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+#> Minimum and Maximum intervals in uneven Time data: 
+#> [1] 0.01 0.02
+#> -----------------------------------------
+```
 
 ![Multi-panel plot showing inspect.ft output for all columns of the
 flowthrough_mult.rd dataset, displaying time series of outflow oxygen,
@@ -129,14 +131,16 @@ a species of chiton, (*Mopalia lignosa*). Detailed information about the
 data, can be obtained with the command
 [`?flowthrough.rd`](https://januarharianto.github.io/respR/reference/flowthrough.rd.md).
 
-\
-[`head`](https://rdrr.io/r/utils/head.html)`(``flowthrough.rd``, n ``=`` ``4``)`\
-`#>     time oxy.out oxy.in oxy.delta`\
-`#>    <int>   <num>  <num>     <num>`\
-`#> 1:     0    8.17   8.88    -0.710`\
-`#> 2:     1    8.17   8.88    -0.714`\
-`#> 3:     2    8.17   8.90    -0.731`\
-`#> 4:     3    8.17   8.88    -0.710`
+``` r
+
+head(flowthrough.rd, n = 4)
+#>     time oxy.out oxy.in oxy.delta
+#>    <int>   <num>  <num>     <num>
+#> 1:     0    8.17   8.88    -0.710
+#> 2:     1    8.17   8.88    -0.714
+#> 3:     2    8.17   8.90    -0.731
+#> 4:     3    8.17   8.88    -0.710
+```
 
 We can see this dataset contains time values (`secs`), both outflow and
 inflow oxygen concentrations (`mg/L`), and an oxygen delta, which is
@@ -150,12 +154,14 @@ calculate the saturated concentration (strictly speaking atmospheric
 pressure is also required, but we will use the default value).
 Obviously, we want the same oxygen units as the outflow recording.
 
-\
-[`convert_DO`](https://januarharianto.github.io/respR/reference/convert_DO.md)`(``100``, from ``=`` ``"%Air"``, to ``=`` ``"mg/L"``,`\
-`           t ``=`` ``12``, S ``=`` ``30``)`\
-`#> convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). `\
-`#> Default value of P = 1.013253 bar has been used.`\
-`#> [1] 8.92`
+``` r
+
+convert_DO(100, from = "%Air", to = "mg/L",
+           t = 12, S = 30)
+#> convert_DO: Input or output units require Atmospheric Pressure input (i.e. P = ??). 
+#> Default value of P = 1.013253 bar has been used.
+#> [1] 8.92
+```
 
 Therefore we know the theoretical concentration of the header tank in
 these conditions and this can be used as an inflow oxygen value.
@@ -167,9 +173,11 @@ The concentration of the header tank can be entered as the
 oxygen delta. We use `time` and `out.oxy` to specify the respective
 columns.
 
-\
-`# inspect`\
-`insp1`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy.value ``=`` ``8.92``)`
+``` r
+
+# inspect
+insp1 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy.value = 8.92)
+```
 
     #> 
     #> # print.inspect.ft # --------------------
@@ -204,9 +212,11 @@ plotting the output object. This should be a value between 0 and 1
 representing a proportion of the total data length, and smooths the
 delta oxygen values by performing a rolling mean.
 
-\
-`# inspect`\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``insp1``, width ``=`` ``0.05``)`
+``` r
+
+# inspect
+plot(insp1, width = 0.05)
+```
 
 ![Two-panel plot from inspect.ft with rolling mean smoothing applied to
 delta oxygen values, showing stabilised rate regions more
@@ -228,9 +238,11 @@ is extremely low! It was controlled with a peristaltic pump, and gives
 you an idea of what it takes to get a viable rate via flowthrough
 respirometry from a small coldwater mollusc!).
 
-\
-`# calculate rate`\
-`rate1`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp1``, from ``=`` ``1``, to ``=`` ``400``, by ``=`` ``"row"``, flowrate ``=`` ``2.34``)`
+``` r
+
+# calculate rate
+rate1 <- calc_rate.ft(insp1, from = 1, to = 400, by = "row", flowrate = 2.34)
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -263,18 +275,20 @@ Here we need to tell the function the units of oxygen of the original
 data and of the flowrate, as well as the mass of the specimen in `kg`.
 Lastly, we specify the output units.
 
-\
-`# absolute rate`\
-`rate1_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate1``,  `\
-`                             oxy.unit ``=`` ``"mg/L"``,  `\
-`                             flowrate.unit ``=`` ``"ml/min"``,  `\
-`                             output.unit ``=`` ``"mg/h"``)``  `\
-`# mass-specific rate  `\
-`rate1_ms`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate1``,  `\
-`                            oxy.unit ``=`` ``"mg/L"``,  `\
-`                            flowrate.unit ``=`` ``"ml/min"``,  `\
-`                            mass ``=`` ``0.000070``,  ``# mass must always be in kg`\
-`                            output.unit ``=`` ``"mg/h/g"``)``  `
+``` r
+
+# absolute rate
+rate1_abs <- convert_rate.ft(rate1,  
+                             oxy.unit = "mg/L",  
+                             flowrate.unit = "ml/min",  
+                             output.unit = "mg/h")  
+# mass-specific rate  
+rate1_ms <- convert_rate.ft(rate1,  
+                            oxy.unit = "mg/L",  
+                            flowrate.unit = "ml/min",  
+                            mass = 0.000070,  # mass must always be in kg
+                            output.unit = "mg/h/g")  
+```
 
     #> ########### Absolute rate ##########
     #> 
@@ -306,24 +320,30 @@ Lastly, we specify the output units.
 
 Rates can easily be extracted from the output using `$rate.output`.
 
-\
-`rate1_final`` ``<-`` ``rate1_ms``$``rate.output`\
-[`print`](https://rdrr.io/r/base/print.html)`(``rate1_final``)`\
-`#> [1] -1.49`
+``` r
+
+rate1_final <- rate1_ms$rate.output
+print(rate1_final)
+#> [1] -1.49
+```
 
 Or you can use `summary` and `export = TRUE` to save the summary table
 as a new data frame which contains all rate regression parameters and
 data locations, adjustments (if applied), units, and more. This is a
 great way of exporting all the relevant data for your final results.
 
-\
-`rate1_final`` ``<-`` `[`summary`](https://rdrr.io/r/base/summary.html)`(``rate1_ms``, export ``=`` ``TRUE``)`
+``` r
 
-\
-`rate1_final`\
-`#>       rep  rank intercept_b0   slope_b1   rsq   row endrow  time endtime   oxy endoxy delta_mean flowrate  rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit    mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output`\
-`#>    <lgcl> <int>        <num>      <num> <num> <int>  <int> <int>   <int> <num>  <num>      <num>    <num> <num>     <lgcl>        <lgcl>      <num>   <char>        <char>   <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>`\
-`#> 1:     NA     1       -0.742 -0.0000123 0.079     1    400     0     399 -0.75 -0.741     -0.745     2.34 -1.74         NA            NA      -1.74     mg/L        mL/min 0.00007     NA     NA     NA     NA   -0.105       -1.49          NA   mgO2/hr/g       -1.49`
+rate1_final <- summary(rate1_ms, export = TRUE)
+```
+
+``` r
+
+rate1_final
+#>       rep  rank intercept_b0   slope_b1   rsq   row endrow  time endtime   oxy endoxy delta_mean flowrate  rate adjustment rate.adjusted rate.input oxy.unit flowrate.unit    mass   area      S      t      P rate.abs rate.m.spec rate.a.spec output.unit rate.output
+#>    <lgcl> <int>        <num>      <num> <num> <int>  <int> <int>   <int> <num>  <num>      <num>    <num> <num>     <lgcl>        <lgcl>      <num>   <char>        <char>   <num> <lgcl> <lgcl> <lgcl> <lgcl>    <num>       <num>      <lgcl>      <char>       <num>
+#> 1:     NA     1       -0.742 -0.0000123 0.079     1    400     0     399 -0.75 -0.741     -0.745     2.34 -1.74         NA            NA      -1.74     mg/L        mL/min 0.00007     NA     NA     NA     NA   -0.105       -1.49          NA   mgO2/hr/g       -1.49
+```
 
 ## Case 2: Outflow and inflow oxygen
 
@@ -337,9 +357,11 @@ otherwise the same: `inspect.ft`, `calc_rate.ft`, and `convert_rate.ft`.
 
 ### Inspect data
 
-\
-`# inspect`\
-`insp2`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``3``)`
+``` r
+
+# inspect
+insp2 <- inspect.ft(flowthrough.rd, time = 1, out.oxy = 2, in.oxy = 3)
+```
 
     #> 
     #> # print.inspect.ft # --------------------
@@ -372,9 +394,11 @@ Since we are happy the rate is consistent across the whole datatset,
 running `calc_rate.ft` using the default values will calculate rate as
 the average of every delta oxygen value multiplied by the flowrate.
 
-\
-`# calculate rate`\
-`rate2`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp2``, flowrate ``=`` ``2.34``)`
+``` r
+
+# calculate rate
+rate2 <- calc_rate.ft(insp2, flowrate = 2.34)
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -399,13 +423,15 @@ inflow water or shared water source if it is practical to do so.
 
 We will convert to only the mass-specific rate this time.
 
-\
-`# mass-specific rate  `\
-`rate2_ms`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate2``,  `\
-`                            oxy.unit ``=`` ``"mg/L"``,  `\
-`                            flowrate.unit ``=`` ``"ml/min"``,  `\
-`                            mass ``=`` ``0.000070``,  `\
-`                            output.unit ``=`` ``"mg/h/g"``)``  `
+``` r
+
+# mass-specific rate  
+rate2_ms <- convert_rate.ft(rate2,  
+                            oxy.unit = "mg/L",  
+                            flowrate.unit = "ml/min",  
+                            mass = 0.000070,  
+                            output.unit = "mg/h/g")  
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -442,9 +468,11 @@ we convert the rate.
 We will use `inspect.ft` to examine the first specimen column pair of
 outflow and inflow oxygen.
 
-\
-`# inspect`\
-`insp3`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``6``)`
+``` r
+
+# inspect
+insp3 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6)
+```
 
     #> Warning: inspect.ft: Time values are not evenly-spaced (numerically).
     #> inspect.ft: Data issues detected. For more information use print().
@@ -473,9 +501,11 @@ No inputs for `to` and `by` means the function will calculate the rate
 from the `from` input to the end of the dataset in the default units of
 `"time"`.
 
-\
-`# calculate rate`\
-`rate3`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp3``, from ``=`` ``30``, flowrate ``=`` ``0.1``)`
+``` r
+
+# calculate rate
+rate3 <- calc_rate.ft(insp3, from = 30, flowrate = 0.1)
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -503,9 +533,11 @@ and data are in the same units. They do not necessarily have to be run
 concurrently; `respR` allows you to save a background rate to adjust
 multiple different experiments.
 
-\
-`# inspect`\
-`bg`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``5``, in.oxy ``=`` ``9``)`
+``` r
+
+# inspect
+bg <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9)
+```
 
 ![Two-panel plot from inspect.ft showing outflow and inflow oxygen from
 a blank control chamber over time in the top panel, and the resulting
@@ -521,9 +553,11 @@ rate.
 We use the same `calc_rate.ft` function to calculate and save background
 rates.
 
-\
-`# calculate rate`\
-`bgrate`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``bg``, flowrate ``=`` ``0.1``)`
+``` r
+
+# calculate rate
+bgrate <- calc_rate.ft(bg, flowrate = 0.1)
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -543,9 +577,11 @@ panel.](flowthrough_files/figure-html/unnamed-chunk-28-1.png)
 Now we use the saved background rate object to adjust the specimen rate
 we determined earlier.
 
-\
-`# adjust rate`\
-`rate3adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate3``, by ``=`` ``bgrate``)`
+``` r
+
+# adjust rate
+rate3adj <- adjust_rate.ft(rate3, by = bgrate)
+```
 
     #> 
     #> # print.adjust_rate.ft # ----------------
@@ -568,9 +604,11 @@ other specimen experiments in this dataset, or indeed other datasets if
 they are collected under the same conditions. However, it also accepts
 numeric values. This will give the exact same result.
 
-\
-`# adjust rate`\
-`rate3adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate3``, by ``=`` ``-``0.03174``)`
+``` r
+
+# adjust rate
+rate3adj <- adjust_rate.ft(rate3, by = -0.03174)
+```
 
     #> 
     #> # print.adjust_rate.ft # ----------------
@@ -589,9 +627,11 @@ to many experiments as you see fit, for example the mean rate of several
 background experiments. In fact, if you enter multiple background rates
 this is the default behaviour.
 
-\
-`# adjust rate`\
-[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate3``, by ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``-``0.030``, ``-``0.032``, ``-``0.038``, ``-``0.040``)``)`
+``` r
+
+# adjust rate
+adjust_rate.ft(rate3, by = c(-0.030, -0.032, -0.038, -0.040))
+```
 
     #> 
     #> # print.adjust_rate.ft # ----------------
@@ -624,13 +664,15 @@ pressure to convert these to actual concentration units of oxygen. These
 can be found the data help file:
 [`?flowthrough_mult.rd`](https://januarharianto.github.io/respR/reference/flowthrough_mult.rd.md).
 
-\
-`# absolute rate  `\
-`rate3_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate3adj``,  `\
-`                             oxy.unit ``=`` ``"%Air"``,  `\
-`                             flowrate.unit ``=`` ``"L/min"``,  `\
-`                             output.unit ``=`` ``"ml/h"``,`\
-`                             t ``=`` ``18``, S ``=`` ``0``, P ``=`` ``1.013``)``  `
+``` r
+
+# absolute rate  
+rate3_abs <- convert_rate.ft(rate3adj,  
+                             oxy.unit = "%Air",  
+                             flowrate.unit = "L/min",  
+                             output.unit = "ml/h",
+                             t = 18, S = 0, P = 1.013)  
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -658,9 +700,11 @@ these.
 
 ### Inspect data
 
-\
-`# inspect`\
-`insp4`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, delta.oxy ``=`` ``11``)`
+``` r
+
+# inspect
+insp4 <- inspect.ft(flowthrough_mult.rd, time = 1, delta.oxy = 11)
+```
 
 ![Single-panel plot from inspect.ft showing pre-calculated delta oxygen
 values over time on a reverse y-axis, with an initial equilibration
@@ -682,9 +726,11 @@ around 20 minutes, so we will not use any data before this.
 This time we will calculate rates using subsetting by `"row"` which can
 be see in the top red x-axis.
 
-\
-`# calculate rate`\
-`rate4`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp4``, from ``=`` ``2000``, to ``=`` ``3000``, by ``=`` ``"row"``, flowrate ``=`` ``0.1``)`
+``` r
+
+# calculate rate
+rate4 <- calc_rate.ft(insp4, from = 2000, to = 3000, by = "row", flowrate = 0.1)
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -704,9 +750,11 @@ bottom panel.](flowthrough_files/figure-html/unnamed-chunk-40-1.png)
 We already determined background rate in [Case 3](#case3bg), so we can
 use the same object here.
 
-\
-`# adjust rate`\
-`rate4adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate4``, by ``=`` ``bgrate``)`
+``` r
+
+# adjust rate
+rate4adj <- adjust_rate.ft(rate4, by = bgrate)
+```
 
     #> 
     #> # print.adjust_rate.ft # ----------------
@@ -724,13 +772,15 @@ use the same object here.
 
 Now we convert the adjusted rate.
 
-\
-`# mass-specific rate  `\
-`rate4_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate4adj``,  `\
-`                             oxy.unit ``=`` ``"%Air"``,  `\
-`                             flowrate.unit ``=`` ``"L/min"``,  `\
-`                             output.unit ``=`` ``"ml/h"``,`\
-`                             t ``=`` ``18``, S ``=`` ``0``, P ``=`` ``1.013``)``  `
+``` r
+
+# mass-specific rate  
+rate4_abs <- convert_rate.ft(rate4adj,  
+                             oxy.unit = "%Air",  
+                             flowrate.unit = "L/min",  
+                             output.unit = "ml/h",
+                             t = 18, S = 0, P = 1.013)  
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -757,9 +807,11 @@ Inspecting the data from the third chamber, we can see a prominent area
 where the specimen’s oxygen consumption rate increased, before slowly
 recovering to routine levels.
 
-\
-`# inspect `\
-`insp5`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``4``, in.oxy ``=`` ``8``)`
+``` r
+
+# inspect 
+insp5 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 8)
+```
 
 ![Two-panel plot from inspect.ft showing outflow and inflow oxygen over
 time in the top panel, and delta oxygen values on a reverse y-axis in
@@ -777,10 +829,12 @@ Since we are only interested in this active region, we can use the
 [`subset_data()`](https://januarharianto.github.io/respR/reference/subset_data.md)
 function and pipe (`%>%`) the result to `inspect.ft` for a closer look.
 
-\
-`# subset and inspect`\
-`insp5`` ``<-`` `[`subset_data`](https://januarharianto.github.io/respR/reference/subset_data.md)`(``flowthrough_mult.rd``, from ``=`` ``30``, to ``=`` ``50``, by ``=`` ``"time"``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)\
-`  `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``time ``=`` ``1``, out.oxy ``=`` ``4``, in.oxy ``=`` ``8``)`
+``` r
+
+# subset and inspect
+insp5 <- subset_data(flowthrough_mult.rd, from = 30, to = 50, by = "time") %>%
+  inspect.ft(time = 1, out.oxy = 4, in.oxy = 8)
+```
 
 ![Two-panel plot from inspect.ft showing a subset of data from 30 to 50
 minutes focusing on the active rate period, with outflow and inflow
@@ -794,9 +848,11 @@ minutes, so we will use this region to calculate the active rate.
 
 ### Calculate rate
 
-\
-`# calculate rate`\
-`rate5`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp5``, from ``=`` ``38``, to ``=`` ``42``, by ``=`` ``"time"``, flowrate ``=`` ``0.1``)`
+``` r
+
+# calculate rate
+rate5 <- calc_rate.ft(insp5, from = 38, to = 42, by = "time", flowrate = 0.1)
+```
 
 ![Two-panel plot from calc_rate.ft showing the subsetted oxygen
 timeseries with the 38 to 42 minute active rate region highlighted in
@@ -808,9 +864,11 @@ panel.](flowthrough_files/figure-html/unnamed-chunk-50-1.png)
 
 We can also adjust this rate by the background rate we saved earlier.
 
-\
-`# adjust rate`\
-`rate5adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate5``, by ``=`` ``bgrate``)`
+``` r
+
+# adjust rate
+rate5adj <- adjust_rate.ft(rate5, by = bgrate)
+```
 
     #> 
     #> # print.adjust_rate.ft # ----------------
@@ -829,14 +887,16 @@ We can also adjust this rate by the background rate we saved earlier.
 Lastly we convert the adjusted rate, this time to a mass-specific rate,
 and try another different oxygen amount metric in the output units.
 
-\
-`# mass-specific rate  `\
-`rate5_ms`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate5adj``,  `\
-`                            oxy.unit ``=`` ``"%Air"``,  `\
-`                            flowrate.unit ``=`` ``"L/min"``,  `\
-`                            output.unit ``=`` ``"umol/h/g"``,`\
-`                            mass ``=`` ``0.020``,`\
-`                            t ``=`` ``18``, S ``=`` ``0``, P ``=`` ``1.013``)``  `
+``` r
+
+# mass-specific rate  
+rate5_ms <- convert_rate.ft(rate5adj,  
+                            oxy.unit = "%Air",  
+                            flowrate.unit = "L/min",  
+                            output.unit = "umol/h/g",
+                            mass = 0.020,
+                            t = 18, S = 0, P = 1.013)  
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -875,9 +935,11 @@ and the inflow oxygen in a header tank supplying both.
 We will inspect the specimen chamber as we normally would, using the
 header tank as the inflow recording.
 
-\
-`# inspect `\
-`insp6`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_sim.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``4``)`
+``` r
+
+# inspect 
+insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 4)
+```
 
 ![Two-panel plot from inspect.ft showing specimen outflow and header
 tank inflow oxygen over time in the top panel, and delta oxygen values
@@ -893,9 +955,11 @@ suggests that the background rate may not be constant.
 
 If we examine the background data in the same way:
 
-\
-`# inspect `\
-`bg`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_sim.rd``, time ``=`` ``1``, out.oxy ``=`` ``3``, in.oxy ``=`` ``4``)`
+``` r
+
+# inspect 
+bg <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 3, in.oxy = 4)
+```
 
 ![Two-panel plot from inspect.ft showing blank control chamber outflow
 and header tank inflow oxygen over time in the top panel, and delta
@@ -911,9 +975,11 @@ this.
 
 ### Account for background
 
-\
-`# inspect `\
-`insp6`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_sim.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``3``)`
+``` r
+
+# inspect 
+insp6 <- inspect.ft(flowthrough_sim.rd, time = 1, out.oxy = 2, in.oxy = 3)
+```
 
 ![Two-panel plot from inspect.ft showing specimen outflow oxygen and
 blank control outflow oxygen used as the inflow reference in the top
@@ -926,9 +992,11 @@ are consistent, and we can go ahead and calculate a rate.
 
 ### Calculate rate
 
-\
-`# calculate rate`\
-`rate6`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp6``, from ``=`` ``2000``, to ``=`` ``3000``, by ``=`` ``"row"``, flowrate ``=`` ``0.1``)`
+``` r
+
+# calculate rate
+rate6 <- calc_rate.ft(insp6, from = 2000, to = 3000, by = "row", flowrate = 0.1)
+```
 
 ![Two-panel plot from calc_rate.ft showing the full background-corrected
 oxygen timeseries with the selected row range 2000 to 3000 highlighted
@@ -980,25 +1048,29 @@ In this example, we have a spot sample of outflow and inflow oxygen. We
 just need to put these into a data frame with any `time` value to be
 able to process them in `inspect.ft`.
 
-\
-`## Single spot checks of outflow and inflow`\
-`## Create dataframe`\
-`df`` ``<-`` `[`data.frame`](https://rdrr.io/r/base/data.frame.html)`(``time ``=`` ``1``,`\
-`                 outflow ``=`` ``7.32``,`\
-`                 inflow ``=`` ``8.04``)`
+``` r
+
+## Single spot checks of outflow and inflow
+## Create dataframe
+df <- data.frame(time = 1,
+                 outflow = 7.32,
+                 inflow = 8.04)
+```
 
 ### Inspect, calculate rate, convert
 
 Now all we need to do is the usual workflow: `inspect.ft` \>
 `calc_rate.ft` \> `convert_rate.ft`.
 
-\
-`insp7`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``df``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``3``)`\
-`rate7`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp7``, flowrate ``=`` ``0.25``)`\
-`rate7_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate7``,`\
-`                             oxy.unit ``=`` ``"mg/l"``,  `\
-`                             flowrate.unit ``=`` ``"L/min"``,  `\
-`                             output.unit ``=`` ``"mg/h"``)`
+``` r
+
+insp7 <- inspect.ft(df, time = 1, out.oxy = 2, in.oxy = 3)
+rate7 <- calc_rate.ft(insp7, flowrate = 0.25)
+rate7_abs <- convert_rate.ft(rate7,
+                             oxy.unit = "mg/l",  
+                             flowrate.unit = "L/min",  
+                             output.unit = "mg/h")
+```
 
     #> 
     #> # print.calc_rate.ft # ------------------
@@ -1027,21 +1099,23 @@ oxygen values, as `calc_rate.ft` can convert these directly. We can also
 adjust the rate in `adjust_rate.ft` using a rate calculated from similar
 spot readings from a control chamber.
 
-\
-`## specimen delta oxygen = outflow minus inflow`\
-`del7`` ``<-`` ``7.32`` ``-`` ``8.04`\
-`## control delta oxygen`\
-`delbg`` ``<-`` ``7.97`` ``-`` ``8.04`\
-\
-`rate7`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``del7``, flowrate ``=`` ``0.25``)`\
-`ratebg`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``delbg``, flowrate ``=`` ``0.25``)`\
-\
-`rate7_adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``rate7``, by ``=`` ``ratebg``)`\
-\
-`rate7_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rate7_adj``,`\
-`                             oxy.unit ``=`` ``"mg/l"``,  `\
-`                             flowrate.unit ``=`` ``"L/min"``,  `\
-`                             output.unit ``=`` ``"mg/h"``)`
+``` r
+
+## specimen delta oxygen = outflow minus inflow
+del7 <- 7.32 - 8.04
+## control delta oxygen
+delbg <- 7.97 - 8.04
+
+rate7 <- calc_rate.ft(del7, flowrate = 0.25)
+ratebg <- calc_rate.ft(delbg, flowrate = 0.25)
+
+rate7_adj <- adjust_rate.ft(rate7, by = ratebg)
+
+rate7_abs <- convert_rate.ft(rate7_adj,
+                             oxy.unit = "mg/l",  
+                             flowrate.unit = "L/min",  
+                             output.unit = "mg/h")
+```
 
     #> [1] "# del7"
     #> [1] -0.72
@@ -1082,18 +1156,20 @@ spot readings from a control chamber.
 
 You can even use vectorised operations to convert multiple rates.
 
-\
-`## specimen delta oxygen = outflow minus inflow`\
-`outflows`` ``<-`` `[`c`](https://rdrr.io/r/base/c.html)`(``7.32``, ``7.45``, ``7.19``, ``7.27``)`\
-`## control delta oxygen`\
-`inflows`` ``<-`` ``8.04`\
-\
-`deltas`` ``<-`` ``outflows`` ``-`` ``inflows`\
-`rates`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``deltas``, flowrate ``=`` ``0.25``)`\
-`rates_abs`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``rates``,`\
-`                             oxy.unit ``=`` ``"mg/l"``,  `\
-`                             flowrate.unit ``=`` ``"L/min"``,  `\
-`                             output.unit ``=`` ``"mg/h"``)`
+``` r
+
+## specimen delta oxygen = outflow minus inflow
+outflows <- c(7.32, 7.45, 7.19, 7.27)
+## control delta oxygen
+inflows <- 8.04
+
+deltas <- outflows - inflows
+rates <- calc_rate.ft(deltas, flowrate = 0.25)
+rates_abs <- convert_rate.ft(rates,
+                             oxy.unit = "mg/l",  
+                             flowrate.unit = "L/min",  
+                             output.unit = "mg/h")
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -1162,9 +1238,11 @@ rate sustained across a five minute window.
 
 ### Inspect data
 
-\
-`## inspect`\
-`insp8`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``4``, in.oxy ``=`` ``7``)`
+``` r
+
+## inspect
+insp8 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 4, in.oxy = 7)
+```
 
 ![Two-panel plot from inspect.ft showing outflow and inflow oxygen over
 time in the top panel, and delta oxygen values on a reverse y-axis in
@@ -1186,18 +1264,20 @@ calculate a rolling rate across this window, adjust and convert the
 results, and in the following sections filter them to get a final RMR
 and MMR.
 
-\
-`# calculate rolling 5-minute rate`\
-`roll_rate`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp8``, width ``=`` ``300``, by ``=`` ``"row"``, flowrate ``=`` ``0.1``)`\
-`# adjust rates`\
-`roll_rate_adj`` ``<-`` `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``roll_rate``, by ``=`` ``bgrate``)`\
-`# convert rates to mass-specific`\
-`roll_rate_ms`` ``<-`` `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``roll_rate_adj``,  `\
-`                                oxy.unit ``=`` ``"%Air"``,  `\
-`                                flowrate.unit ``=`` ``"L/min"``,  `\
-`                                output.unit ``=`` ``"umol/h/g"``,`\
-`                                mass ``=`` ``0.020``,`\
-`                                t ``=`` ``18``, S ``=`` ``0``, P ``=`` ``1.013``)`
+``` r
+
+# calculate rolling 5-minute rate
+roll_rate <- calc_rate.ft(insp8, width = 300, by = "row", flowrate = 0.1)
+# adjust rates
+roll_rate_adj <- adjust_rate.ft(roll_rate, by = bgrate)
+# convert rates to mass-specific
+roll_rate_ms <- convert_rate.ft(roll_rate_adj,  
+                                oxy.unit = "%Air",  
+                                flowrate.unit = "L/min",  
+                                output.unit = "umol/h/g",
+                                mass = 0.020,
+                                t = 18, S = 0, P = 1.013)
+```
 
     #> 
     #> # summary.convert_rate.ft # -------------
@@ -1227,10 +1307,12 @@ for full details. Here we will use the `type = "rate"` option which
 plots output rates in a way that you can see how they vary across the
 dataset.
 
-\
-`# plot rates`\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``roll_rate_ms``, type ``=`` ``"rate"``)`\
-`#> plot.convert_rate.ft: Plotting all rate(s)...`
+``` r
+
+# plot rates
+plot(roll_rate_ms, type = "rate")
+#> plot.convert_rate.ft: Plotting all rate(s)...
+```
 
 ![Plot of all rolling 5-minute converted mass-specific rates across the
 entire dataset, showing how rate values vary over time with lower
@@ -1241,10 +1323,12 @@ At a fixed width the rolling rate is obviously closely related to the
 delta oxygen values. We can use `pos` to more closely examine output
 rates from particular regions.
 
-\
-`# plot rates`\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``roll_rate_ms``, type ``=`` ``"rate"``, pos ``=`` ``500``:``1700``)`\
-`#> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...`
+``` r
+
+# plot rates
+plot(roll_rate_ms, type = "rate", pos = 500:1700)
+#> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
+```
 
 ![Plot of a subset of rolling rate results from positions 500 to 1700,
 showing the routine metabolic rate region with rates around 7.30 to 7.40
@@ -1265,13 +1349,15 @@ an RMR from your own data; it is simply an example of one approach and
 how the `respR` functions are flexible and adaptable. An alternative
 approach might be to select only the single lowest rate, for instance.
 
-\
-`rmr`` ``<-`` `\
-`  ``roll_rate_ms`` ``|>`\
-`  `[`select_rate.ft`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"time"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``10``,``30``)``)`` ``|>`\
-`  `[`select_rate.ft`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"lowest_percentile"``, n ``=`` ``0.1``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``)`` ``|>`\
-`  `[`mean`](https://rdrr.io/r/base/mean.html)`(``)`
+``` r
+
+rmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(10,30)) |>
+  select_rate.ft(method = "lowest_percentile", n = 0.1) |>
+  summary() |>
+  mean()
+```
 
     #> select_rate: Selecting rates which occur only between times 10 and 30...
     #> ----- Selection complete. 2539 rate(s) removed, 902 rate(s) remaining -----
@@ -1315,12 +1401,14 @@ stable values.
 To get MMR we will simply extract the single highest 5-minute rate from
 the region of elevated rates at around 40 minutes.
 
-\
-`mmr`` ``<-`` `\
-`  ``roll_rate_ms`` ``|>`\
-`  `[`select_rate.ft`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"time"``, n ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``30``,``50``)``)`` ``|>`\
-`  `[`select_rate.ft`](https://januarharianto.github.io/respR/reference/select_rate.md)`(``method ``=`` ``"highest"``, n ``=`` ``1``)`` ``|>`\
-`  `[`summary`](https://rdrr.io/r/base/summary.html)`(``export ``=`` ``TRUE``)`
+``` r
+
+mmr <- 
+  roll_rate_ms |>
+  select_rate.ft(method = "time", n = c(30,50)) |>
+  select_rate.ft(method = "highest", n = 1) |>
+  summary(export = TRUE)
+```
 
     #> select_rate: Selecting rates which occur only between times 30 and 50...
     #> ----- Selection complete. 2539 rate(s) removed, 902 rate(s) remaining -----
@@ -1342,9 +1430,11 @@ The `rank` column tells us which result this is and can be used to plot
 this result using `pos` for a closer look using the `type = "full"`
 option.
 
-\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``roll_rate_ms``, pos ``=`` ``2270``, type ``=`` ``"full"``)`\
-`#> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...`
+``` r
+
+plot(roll_rate_ms, pos = 2270, type = "full")
+#> plot.convert_rate.ft: Plotting rate(s) from selected 'pos' rows...
+```
 
 ![Full detail plot of the single highest rolling rate result at position
 2270, showing the oxygen timeseries with the selected 5-minute window
@@ -1365,25 +1455,29 @@ can be done by entering vectors of paired start and end values as the
 
 ### Inspect and calculate rates
 
-\
-`# inspect `\
-`insp9`` ``<-`` `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``3``, in.oxy ``=`` ``7``)`\
-`# calculate rates`\
-`rate9`` ``<-`` `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``insp9``, `\
-`                      from ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``25``, ``35``, ``45``)``, `\
-`                      to ``=`` `[`c`](https://rdrr.io/r/base/c.html)`(``30``, ``40``, ``50``)``, `\
-`                      by ``=`` ``"time"``, `\
-`                      flowrate ``=`` ``0.1``)`
+``` r
+
+# inspect 
+insp9 <- inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 3, in.oxy = 7)
+# calculate rates
+rate9 <- calc_rate.ft(insp9, 
+                      from = c(25, 35, 45), 
+                      to = c(30, 40, 50), 
+                      by = "time", 
+                      flowrate = 0.1)
+```
 
 ### Examine output
 
 The different rates can be plotted using the `pos` input.
 
-\
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)`(``rate9``, pos ``=`` ``2``)`\
-`#> `\
-`#> # plot.calc_rate.ft # -------------------`\
-`#> calc_rate.ft: Plotting rate from position 2 of 3 ...`
+``` r
+
+plot(rate9, pos = 2)
+#> 
+#> # plot.calc_rate.ft # -------------------
+#> calc_rate.ft: Plotting rate from position 2 of 3 ...
+```
 
 ![Two-panel plot from calc_rate.ft showing the full oxygen timeseries
 with the second of three selected time regions highlighted in the top
@@ -1394,17 +1488,19 @@ bottom panel.](flowthrough_files/figure-html/unnamed-chunk-85-1.png)
 
 And they can all be viewed using `summary`.
 
-\
-[`summary`](https://rdrr.io/r/base/summary.html)`(``rate9``)`\
-`#> `\
-`#> # summary.calc_rate.ft # ----------------`\
-`#> Summary of all rate results:`\
-`#> `\
-`#>    rep rank intercept_b0 slope_b1     rsq  row endrow time endtime   oxy endoxy delta_mean flowrate   rate`\
-`#> 1:  NA    1        -9.31  0.04164 0.08033 1500   1800   25      30 -8.24  -7.86      -8.17      0.1 -0.817`\
-`#> 2:  NA    2        -8.30  0.00565 0.00164 2100   2400   35      40 -7.78  -7.97      -8.09      0.1 -0.809`\
-`#> 3:  NA    3        -8.38  0.00922 0.00410 2700   3000   45      50 -8.03  -7.95      -7.95      0.1 -0.795`\
-`#> -----------------------------------------`
+``` r
+
+summary(rate9)
+#> 
+#> # summary.calc_rate.ft # ----------------
+#> Summary of all rate results:
+#> 
+#>    rep rank intercept_b0 slope_b1     rsq  row endrow time endtime   oxy endoxy delta_mean flowrate   rate
+#> 1:  NA    1        -9.31  0.04164 0.08033 1500   1800   25      30 -8.24  -7.86      -8.17      0.1 -0.817
+#> 2:  NA    2        -8.30  0.00565 0.00164 2100   2400   35      40 -7.78  -7.97      -8.09      0.1 -0.809
+#> 3:  NA    3        -8.38  0.00922 0.00410 2700   3000   45      50 -8.03  -7.95      -7.95      0.1 -0.795
+#> -----------------------------------------
+```
 
 ### Convert results
 
@@ -1429,24 +1525,26 @@ feed the results of one function into the next. We will use `%>%` or
 v4.1](https://www.r-bloggers.com/2021/05/new-features-in-r-4-1-0/) work
 just as well.
 
-\
-`## calc background rate `\
-`## (might only need to be done once and used for multiple experiments)`\
-`bgrate`` ``<-`` `\
-`  `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``5``, in.oxy ``=`` ``9``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)\
-`  `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``flowrate ``=`` ``0.1``)`\
-\
-`# inspect > calc rate > adjust > convert`\
-`rate3_abs`` ``<-`` `\
-`  `[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``6``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)\
-`  `[`calc_rate.ft`](https://januarharianto.github.io/respR/reference/calc_rate.ft.md)`(``from ``=`` ``30``, flowrate ``=`` ``0.1``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)\
-`  `[`adjust_rate.ft`](https://januarharianto.github.io/respR/reference/adjust_rate.ft.md)`(``by ``=`` ``bgrate``)`` `[`%>%`](https://januarharianto.github.io/respR/reference/grapes-greater-than-grapes.md)\
-`  `[`convert_rate.ft`](https://januarharianto.github.io/respR/reference/convert_rate.ft.md)`(``oxy.unit ``=`` ``"%Air"``,  `\
-`                  flowrate.unit ``=`` ``"L/min"``,  `\
-`                  output.unit ``=`` ``"ml/h"``,`\
-`                  t ``=`` ``18``, S ``=`` ``0``, P ``=`` ``1.013``)`\
-\
-[`print`](https://rdrr.io/r/base/print.html)`(``rate3_abs``)`
+``` r
+
+## calc background rate 
+## (might only need to be done once and used for multiple experiments)
+bgrate <- 
+  inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 5, in.oxy = 9) %>%
+  calc_rate.ft(flowrate = 0.1)
+
+# inspect > calc rate > adjust > convert
+rate3_abs <- 
+  inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 6) %>%
+  calc_rate.ft(from = 30, flowrate = 0.1) %>%
+  adjust_rate.ft(by = bgrate) %>%
+  convert_rate.ft(oxy.unit = "%Air",  
+                  flowrate.unit = "L/min",  
+                  output.unit = "ml/h",
+                  t = 18, S = 0, P = 1.013)
+
+print(rate3_abs)
+```
 
     #> 
     #> # print.convert_rate.ft # ---------------
@@ -1483,10 +1581,12 @@ just as well.
   data frame sharing the same time data. This is a visual aid only to
   help with selection of regions from which to extract rates.
 
-\
-`## Plot column 15 (temperature) alongside oxygen timeseries`\
-[`inspect.ft`](https://januarharianto.github.io/respR/reference/inspect.ft.md)`(``flowthrough_mult.rd``, time ``=`` ``1``, out.oxy ``=`` ``2``, in.oxy ``=`` ``5``,`\
-`           add.data ``=`` ``15``)`
+``` r
+
+## Plot column 15 (temperature) alongside oxygen timeseries
+inspect.ft(flowthrough_mult.rd, time = 1, out.oxy = 2, in.oxy = 5,
+           add.data = 15)
+```
 
 ![Three-panel plot from inspect.ft showing outflow and inflow oxygen
 over time in the top panel, delta oxygen values in the middle panel, and
