@@ -54,6 +54,12 @@ jobs:
         run: source("pkgdown/update_citations_bib.R")
         shell: Rscript {0}
 
+      # The archive articles need packages no longer on CRAN, and LoLinR is very
+      # slow. Drop them from this run's copy only: their pages already on gh-pages
+      # stay live, as the deploy below does not delete files.
+      - name: Skip archive articles
+        run: rm -rf vignettes/archive
+
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
