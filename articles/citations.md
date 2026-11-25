@@ -2,7 +2,7 @@
 
 In the seven years since publication, `respR` has received [**171
 citations**](https://openalex.org/works/W2914382202) and been downloaded
-from CRAN [**23,159
+from CRAN [**23,185
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
