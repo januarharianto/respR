@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**171
+In the seven years since publication, `respR` has received [**174
 citations**](https://openalex.org/works/W2914382202) and been downloaded
-from CRAN [**23,185
+from CRAN [**23,224
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -641,6 +641,10 @@ concentration in coral reefs of Gorgona Island (Eastern Tropical
 Pacific) and its effect on the coral *Pocillopora capitata*. *PeerJ*,
 11, e14586. <https://doi.org/10.7717/peerj.14586>
 
+****Andreassen, AH****. **2023**. *Mechanisms and evolution of thermal
+tolerance in fish* \[PhD thesis, NVA (Nasjonalt vitenarkiv)\].
+<https://openalex.org/works/W7236916085>
+
 ****Connelly, MT**, **Snyder, G**, **Palacio‐Castro, AM**, **Gillette,
 PR**, **Baker, AC**, & **Traylor‐Knowles, N****. **2023**. Antibiotics
 reduce *Pocillopora* coral‐associated bacteria diversity, decrease
@@ -762,7 +766,7 @@ SF****. **2022**. Regulation of heart rate following genetic deletion of
 the ß1 adrenergic receptor in larval zebrafish. *Acta Physiologica*,
 235(4). <https://doi.org/10.1111/apha.13849>
 
-****Kelly, E****. **2022**. *Testing the olfactory attraction and
+****Kelly, ERM****. **2022**. *Testing the olfactory attraction and
 physiological impact of biofilm-coated microplastics on juvenile Seriola
 lalandi (yellowtail kingfish)* \[PhD thesis, Otago University Research
 Archive (University of Otago)\].
