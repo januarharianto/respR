@@ -1,8 +1,8 @@
 # respR Citations
 
-In the seven years since publication, `respR` has received [**174
+In the seven years since publication, `respR` has received [**175
 citations**](https://openalex.org/works/W2914382202) and been downloaded
-from CRAN [**23,256
+from CRAN [**23,268
 times**](https://cran.r-project.org/web/packages/respR/index.html).
 
 It’s great to see the package being used to conduct quality,
@@ -382,6 +382,11 @@ Y****. **2025**. Mass scaling of standard metabolic rate within and
 among individuals in Western mosquitofish (Gambusia affinis). *Journal
 of Comparative Physiology B*, 195(4), 445–455.
 <https://doi.org/10.1007/s00360-025-01628-x>
+
+****Hunvik, G****. **2025**. *Impacts of new aquaculture antifouling
+agents tralopyril and zinc pyrithione on the deep-water coral Lophelia
+pertusa (Linnaeus, 1758)* \[PhD thesis, NVA (Nasjonalt vitenarkiv)\].
+<https://openalex.org/works/W7236894503>
 
 ****Ianniello, CF**, **Beery, G**, **Chen, T-H(Denny)**, **Deyle, E**,
 **Heiger-Bernays, W**, **Motter, I**, **McAlister, JS**, & **Rotjan,
